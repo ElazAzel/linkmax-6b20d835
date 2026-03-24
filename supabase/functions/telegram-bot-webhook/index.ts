@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
 // Mini App base URL
@@ -248,6 +249,24 @@ function getSettings(supabase: any, chatId: string) {
 }
 
 const tempLanguageStore: Record<string, string> = {};
+
+async function getUserProfile(supabase: any, chatId: string) {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('id, telegram_language, is_premium')
+    .eq('telegram_chat_id', chatId)
+    .maybeSingle();
+
+  if (error) {
+    console.error(`[DB Error] Fetching profile for ${chatId}:`, error);
+  }
+  
+  if (!data) {
+    console.log(`[Webhook] No profile found for ${chatId}`);
+  }
+  
+  return data;
+}
 const userActionStore: Record<string, string | null> = {};
 
 async function getUserLanguage(supabase: any, chatId: string): Promise<Language> {
@@ -385,7 +404,7 @@ serve(async (req: Request) => {
 
     const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
     const update: TelegramUpdate = await req.json();
-    console.log('Received Telegram update:', JSON.stringify(update));
+    console.log(`[Webhook] Update from ${update.message?.chat.id || update.callback_query?.from.id}:`, JSON.stringify(update));
 
     // Handle callback queries (button clicks)
     if (update.callback_query) {
@@ -510,11 +529,7 @@ serve(async (req: Request) => {
         }
       } else if (data?.startsWith('leads_page:')) {
         const page = parseInt(data.split(':')[1]);
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (profile) {
           const { data: leads, count } = await supabase
@@ -589,12 +604,7 @@ serve(async (req: Request) => {
       } else if (data === 'delete_link:') {
         // (Existing delete_link logic)
       } else if (data === 'pages') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
-
+        const profile = await getUserProfile(supabase, chatIdStr);
         if (profile) {
           const { data: pages } = await supabase
             .from('pages')
@@ -611,6 +621,8 @@ serve(async (req: Request) => {
           } else {
             responseText = m.no_page;
           }
+        } else {
+          responseText = m.not_linked;
         }
       } else if (data === 'links') {
         const activePageId = await getActivePageId(supabase, chatIdStr);
@@ -659,7 +671,7 @@ serve(async (req: Request) => {
         responseText = lang === 'ru' ? '✅ Уведомления включены' : '✅ Notifications enabled';
       } else if (data === 'stats') {
         // Trigger stats command logic
-        const { data: profile } = await supabase.from('user_profiles').select('id').eq('telegram_chat_id', chatIdStr).maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
         if (profile) {
           const activePageId = await getActivePageId(supabase, chatIdStr);
           let pageIds: string[] = [];
@@ -779,11 +791,7 @@ serve(async (req: Request) => {
         responseText = m.greeting_miniapp(firstName);
         replyMarkup = getMiniAppKeyboard(lang);
       } else if (text === '/page') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -846,11 +854,7 @@ serve(async (req: Request) => {
           ]
         };
       } else if (text === '/wallet' || text === '/balance') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -880,11 +884,7 @@ serve(async (req: Request) => {
         }
       } else if (text === '/zone' || text === '/deals' || text === '/tasks' || text === '/contacts') {
         // Zone commands — find user's zone through linked profile
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -994,11 +994,7 @@ serve(async (req: Request) => {
           }
         }
       } else if (text === '/bookings') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -1032,11 +1028,7 @@ serve(async (req: Request) => {
           }
         }
       } else if (text === '/pages') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -1064,11 +1056,7 @@ serve(async (req: Request) => {
         responseText = m.add_link_prompt;
         userActionStore[chatIdStr] = 'add_link';
       } else if (userActionStore[chatIdStr] === 'edit_bio') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
         
         if (profile) {
           await supabase.from('user_profiles').update({ bio: text }).eq('id', profile.id);
@@ -1080,11 +1068,7 @@ serve(async (req: Request) => {
         if (parts.length >= 2) {
           const title = parts[0].trim();
           const url = parts[1].trim();
-          const { data: profile } = await supabase
-            .from('user_profiles')
-            .select('id')
-            .eq('telegram_chat_id', chatIdStr)
-            .maybeSingle();
+          const profile = await getUserProfile(supabase, chatIdStr);
           
           if (profile) {
             let pageId = await getActivePageId(supabase, chatIdStr);
@@ -1110,11 +1094,7 @@ serve(async (req: Request) => {
           responseText = m.add_link_prompt;
         }
       } else if (text === '/leads' || text === '/crm') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -1147,11 +1127,7 @@ serve(async (req: Request) => {
           }
         }
       } else if (text === '/stats') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -1248,8 +1224,7 @@ serve(async (req: Request) => {
           ]
         };
       } else if (text === '/admin_broadcast_crm') {
-        // Admin-only (check chatId against some whitelist or role)
-        const { data: profile } = await supabase.from('user_profiles').select('role').eq('telegram_chat_id', chatIdStr).maybeSingle();
+        const profile = await getUserProfile(supabase, chatIdStr);
         if (profile?.role === 'admin') {
           // This will be handled by a separate function, but here we can at least confirm
           responseText = "⚠️ Running broadcast via separate function is recommended. Use 'supabase functions invoke broadcast-update'";
