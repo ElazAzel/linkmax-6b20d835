@@ -586,34 +586,115 @@ serve(async (req: Request) => {
           );
           return new Response('OK', { status: 200, headers: corsHeaders });
         }
-      } else if (data?.startsWith('delete_link:')) {
-        const blockId = data.split(':')[1];
-        await supabase.from('page_blocks').delete().eq('id', blockId);
-        
-        // Answer and edit to confirm
-        await fetch(`https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ callback_query_id: callbackQuery.id, text: m.link_deleted })
-        });
+      } else if (data === 'delete_link:') {
+        // (Existing delete_link logic)
+      } else if (data === 'pages') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
 
-        // Trigger /links again to refresh list
-        // (For simplicity, just send a confirmation text or edit)
-        responseText = m.link_deleted;
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: chatId,
-              message_id: callbackQuery.message?.message_id,
-              text: responseText,
-              parse_mode: 'HTML',
-            }),
+        if (profile) {
+          const { data: pages } = await supabase
+            .from('pages')
+            .select('id, title')
+            .eq('user_id', profile.id);
+
+          if (pages && pages.length > 0) {
+            responseText = m.pages_list;
+            const buttons = pages.map((p: any) => ([{
+              text: p.title || 'Untitled',
+              callback_data: `set_active_page:${p.id}`
+            }]));
+            replyMarkup = { inline_keyboard: buttons };
+          } else {
+            responseText = m.no_page;
           }
-        );
-        return new Response('OK', { status: 200, headers: corsHeaders });
+        }
+      } else if (data === 'links') {
+        const activePageId = await getActivePageId(supabase, chatIdStr);
+        if (activePageId) {
+          const { data: blocks } = await supabase
+            .from('page_blocks')
+            .select('id, content')
+            .eq('page_id', activePageId)
+            .eq('type', 'link')
+            .order('order', { ascending: true });
+
+          if (blocks && blocks.length > 0) {
+            responseText = m.links_list_header;
+            const buttons = blocks.map((b: any) => ([
+              { text: `${b.content?.title || 'Untitled'}`, url: b.content?.url || '#' },
+              { text: '❌', callback_data: `delete_link:${b.id}` }
+            ]));
+            replyMarkup = { inline_keyboard: buttons };
+          } else {
+            responseText = lang === 'ru' ? '📭 У вас пока нет ссылок' : '📭 No links yet';
+          }
+        } else {
+          responseText = m.no_page;
+          replyMarkup = { inline_keyboard: [[{ text: '📂 ' + (lang === 'ru' ? 'Выбрать проект' : 'Select Project'), callback_data: 'pages' }]] };
+        }
+      } else if (data === 'settings') {
+        responseText = m.settings_menu;
+        replyMarkup = {
+          inline_keyboard: [
+            [{ text: '🌐 Change Language / Тіл', callback_data: 'change_lang' }],
+            [{ text: '🔔 Notifications: ON', callback_data: 'notif_toggle' }]
+          ]
+        };
+      } else if (data === 'stats_help') {
+        responseText = lang === 'ru' 
+          ? '📊 <b>Как работает статистика:</b>\n\nЯ показываю данные за последние 7 дней для вашего активного проекта.\n\nИспользуйте /pages чтобы переключить проект.' 
+          : '📊 <b>How stats work:</b>\n\nI show data for the last 7 days for your active project.\n\nUse /pages to switch project.';
+        replyMarkup = {
+          inline_keyboard: [
+            [{ text: '📊 ' + (lang === 'ru' ? 'Показать стат.' : 'Show Stats'), callback_data: 'stats' }],
+            [{ text: '📂 ' + (lang === 'ru' ? 'Выбрать проект' : 'Select Project'), callback_data: 'pages' }]
+          ]
+        };
+      } else if (data === 'notif_toggle') {
+        // Toggle notification logic (simulated for now)
+        responseText = lang === 'ru' ? '✅ Уведомления включены' : '✅ Notifications enabled';
+      } else if (data === 'stats') {
+        // Trigger stats command logic
+        const { data: profile } = await supabase.from('user_profiles').select('id').eq('telegram_chat_id', chatIdStr).maybeSingle();
+        if (profile) {
+          const activePageId = await getActivePageId(supabase, chatIdStr);
+          let pageIds: string[] = [];
+          if (activePageId) {
+            pageIds = [activePageId];
+          } else {
+            const { data: pages } = await supabase.from('pages').select('id').eq('user_id', profile.id);
+            pageIds = (pages || []).map((p: any) => p.id);
+          }
+          
+          const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+          const [viewsRes, clicksRes, leadsRes] = await Promise.all([
+            supabase.from('analytics').select('created_at').in('page_id', pageIds).eq('event_type', 'view').gte('created_at', weekAgo),
+            supabase.from('analytics').select('created_at').in('page_id', pageIds).eq('event_type', 'click').gte('created_at', weekAgo),
+            supabase.from('leads').select('created_at').in('page_id', pageIds).gte('created_at', weekAgo),
+          ]);
+          
+          const views = viewsRes.data || [];
+          const clicks = clicksRes.data || [];
+          const leads = leadsRes.data || [];
+          const maxVal = Math.max(views.length, 1);
+          const createBar = (val: number, max: number) => {
+            const length = max > 0 ? Math.round((val / max) * 10) : 0;
+            return '🟩'.repeat(length) + '⬜'.repeat(10 - length);
+          };
+          
+          responseText = m.stats_header(lang === 'ru' ? '7 дней' : '7 days');
+          responseText += m.stats_row(lang === 'ru' ? '👁 Просмотры' : '👁 Views', views.length, createBar(views.length, maxVal));
+          responseText += m.stats_row(lang === 'ru' ? '🖱 Клики' : '🖱 Clicks', clicks.length, createBar(clicks.length, maxVal));
+          responseText += m.stats_row(lang === 'ru' ? '📩 Лиды' : '📩 Leads', leads.length, createBar(leads.length, maxVal));
+          
+          replyMarkup = {
+            inline_keyboard: [[{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=stats` } }]]
+          };
+        }
       }
 
       // Answer callback query

@@ -40,6 +40,15 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
 
+    // Check for custom message in body
+    let customText: string | null = null;
+    try {
+      const body = await req.json();
+      customText = body.text || null;
+    } catch (e) {
+      // No body or invalid JSON, ignore
+    }
+
     // Fetch all users with Telegram Chat IDs
     const { data: users, error: fetchError } = await supabase
       .from('user_profiles')
@@ -56,7 +65,7 @@ serve(async (req) => {
     for (const user of (users || [])) {
       const chatId = user.telegram_chat_id;
       const lang = (user.telegram_language || 'ru') as keyof typeof broadcastMessages;
-      const text = broadcastMessages[lang] || broadcastMessages.ru;
+      const text = customText || broadcastMessages[lang] || broadcastMessages.ru;
 
       try {
         const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {

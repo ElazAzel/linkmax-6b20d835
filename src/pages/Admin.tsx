@@ -11,6 +11,7 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import Shield from 'lucide-react/dist/esm/icons/shield';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import Users from 'lucide-react/dist/esm/icons/users';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Activity from 'lucide-react/dist/esm/icons/activity';
@@ -38,6 +39,7 @@ const AdminPartnersTab = lazy(() => import('@/components/admin/AdminPartnersTab'
 const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTab').then(m => ({ default: m.AdminTemplatesTab })));
 const AdminFintechTab = lazy(() => import('@/components/admin/AdminFintechTab').then(m => ({ default: m.AdminFintechTab })));
 const AdminSearchDiagnosticsTab = lazy(() => import('@/components/admin/AdminSearchDiagnosticsTab').then(m => ({ default: m.AdminSearchDiagnosticsTab })));
+const AdminBroadcastTab = lazy(() => import('@/components/admin/AdminBroadcastTab').then(m => ({ default: m.AdminBroadcastTab })));
 
 function TabLoader() {
   return (
@@ -98,6 +100,7 @@ export default function Admin() {
     { value: 'partners', label: t('admin.partners.title', 'Партнёры'), icon: Handshake },
     { value: 'templates', label: t('admin.templates', 'Templates'), icon: FileText },
     { value: 'fintech', label: t('admin.fintech', 'Финансы'), icon: Banknote },
+    { value: 'broadcast', label: t('admin.broadcast', 'Рассылка'), icon: Megaphone },
     { value: 'seo', label: 'SEO', icon: Search },
   ];
 
@@ -211,6 +214,10 @@ export default function Admin() {
 
               <TabsContent value="fintech">
                 <AdminFintechTab />
+              </TabsContent>
+
+              <TabsContent value="broadcast">
+                <AdminBroadcastTab />
               </TabsContent>
 
               <TabsContent value="seo">
