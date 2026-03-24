@@ -68,6 +68,7 @@ const messages = {
     links_list_header: '🔗 <b>Ваши ссылки:</b>\nНажмите ❌ для удаления',
     link_deleted: '✅ Ссылка удалена',
     settings_menu: '⚙️ <b>Настройки бота:</b>',
+    broadcast_crm: "🚀 <b>Обновление LinkMAX: Это больше не просто конструктор!</b>\n\nМы превратили ваш сайт в полноценную <b>Мини-CRM</b>. Теперь прямо в Telegram вы можете:\n\n✅ Управлять лидами и бронированиями\n✅ Быстро редактировать ссылки и БИО\n✅ Видеть детальную аналитику по каждому проекту\n\nПопробуйте новые команды в меню! 👇",
   },
   en: {
     welcome: "🌐 Welcome to LinkMAX!\n\nChoose your language:",
@@ -82,7 +83,17 @@ const messages = {
       `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to LinkMAX and paste it into the registration field.`,
     greeting_miniapp: (name: string) =>
       `👋 Hello, ${name}!\n\n🚀 <b>LinkMAX — your Business OS in Telegram</b>\n\nOpen the Mini App to:\n• Create your page\n• Manage leads\n• Handle bookings\n• View analytics`,
-    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/app - Open Mini App\n/pages - Switch project\n/page - My page\n/leads - Leads / CRM\n/bookings - Bookings\n/stats - Detailed Analytics\n/edit_bio - Update Bio\n/add_link - New Link\n/wallet - Wallet / Balance\n/pay - Payments\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
+    help: `<b>Available commands:</b>\n\n` +
+            `📊 /stats — Active project stats\n` +
+            `📩 /leads — Recent leads\n` +
+            `📅 /bookings — Bookings\n\n` +
+            `📂 /pages — Select active project\n` +
+            `🔗 /links — Manage links\n` +
+            `➕ /add_link — Add link\n` +
+            `📝 /edit_bio — Update Profile BIO\n` +
+            `🌐 /toggle_publish — Site status\n\n` +
+            `⚙️ /settings — Language & Alerts\n` +
+            `❓ /help — Commands list`,
     help_full: (chatId: number) =>
       `ℹ️ <b>How to connect Telegram to LinkMAX:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
     chat_id: (chatId: number) =>
@@ -104,12 +115,18 @@ const messages = {
     bookings_list: (found: number) => `📅 <b>Bookings:</b>\n\nFound: ${found}`,
     booking_item: (b: any) => `🗓 ${b.slot_date} ${b.slot_time}\n👤 ${b.client_name}\n📞 ${b.client_phone || '-'}\n🏷 ${b.status}`,
     lead_error: '❌ Error updating lead. Please try again.',
-    pages_list: '📄 <b>Your Projects:</b>\n\nChoose active page to manage:',
-    active_page_set: (title: string) => `✅ Active project set to: <b>${title}</b>\nCommands /stats and /leads now refer to this project.`,
-    edit_bio_prompt: '📝 Send your new BIO in one message:',
-    bio_updated: '✅ BIO updated successfully!',
-    add_link_prompt: '➕ To add a link, send a message in format:\n\n<code>Name | URL</code>\n\nExample:\n<code>My Instagram | https://instagr.am/me</code>',
+    pages_list: '📋 <b>Your Projects:</b>\nChoose active project to manage:',
+    active_page_set: (title: string) => `✅ Active project set to: <b>${title}</b>\nCommands /stats, /leads and /bookings refer to this project.`,
+    edit_bio_prompt: '📝 Send new description (BIO) for your profile:',
+    bio_updated: '✅ Profile BIO updated successfully!',
+    add_link_prompt: '🔗 Send name and URL in format:\n<code>Name | https://link.com</code>',
     link_added: '✅ Link added to your page!',
+    toggle_publish_confirm: (status: string) => `Page status: <b>${status === 'published' ? 'Published 🟢' : 'Draft ⚪'}</b>\nWant to change status?`,
+    status_updated: (status: string) => `✅ Status updated: <b>${status === 'published' ? 'Published 🟢' : 'Draft ⚪'}</b>`,
+    links_list_header: '🔗 <b>Your links:</b>\nTap ❌ to delete',
+    link_deleted: '✅ Link deleted',
+    settings_menu: '⚙️ <b>Bot settings:</b>',
+    broadcast_crm: "🚀 <b>LinkMAX Update: It's now a Mini-CRM!</b>\n\nWe've transformed your site into a powerful <b>Mini-CRM</b>. Now directly in Telegram you can:\n\n✅ Manage leads & bookings\n✅ Quickly edit links and BIO\n✅ See detailed analytics for each project\n\nTry new commands in the menu! 👇",
   },
   kk: {
     welcome: "🌐 LinkMAX-қа қош келдіңіз!\n\nТілді таңдаңыз:",
@@ -167,6 +184,7 @@ const messages = {
     links_list_header: '🔗 <b>Сілтемелеріңіз:</b>\nӨшіру үшін ❌ басыңыз',
     link_deleted: '✅ Сілтеме өшірілді',
     settings_menu: '⚙️ <b>Бот баптаулары:</b>',
+    broadcast_crm: "🚀 <b>LinkMAX жаңартуы: Бұл енді жай ғана конструктор емес!</b>\n\nБіз сіздің сайтыңызды толыққанды <b>Мини-CRM</b>-ге айналдырдық. Енді тікелей Telegram-да:\n\n✅ Лидтер мен брондауларды басқара аласыз\n✅ Сілтемелер мен БИО-ны жылдам өңдей аласыз\n✅ Әр жоба бойынша толық аналитиканы көре аласыз\n\nМәзірдегі жаңа командаларды қолданып көріңіз! 👇",
   },
 };
 
@@ -542,6 +560,58 @@ serve(async (req: Request) => {
         const { data: page } = await supabase.from('pages').select('title').eq('id', pageId).single();
         responseText = m.active_page_set(page?.title || 'Untitled');
         replyMarkup = getMainKeyboard(lang);
+      } else if (data === 'toggle_publish') {
+        const activePageId = await getActivePageId(supabase, chatIdStr);
+        if (activePageId) {
+          const { data: page } = await supabase.from('pages').select('status').eq('id', activePageId).single();
+          const newStatus = page?.status === 'published' ? 'draft' : 'published';
+          await supabase.from('pages').update({ status: newStatus }).eq('id', activePageId);
+          
+          responseText = m.status_updated(newStatus);
+          // Edit message to show success
+          await fetch(
+            `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: chatId,
+                message_id: callbackQuery.message?.message_id,
+                text: responseText,
+                parse_mode: 'HTML',
+              }),
+            }
+          );
+          return new Response('OK', { status: 200, headers: corsHeaders });
+        }
+      } else if (data?.startsWith('delete_link:')) {
+        const blockId = data.split(':')[1];
+        await supabase.from('page_blocks').delete().eq('id', blockId);
+        
+        // Answer and edit to confirm
+        await fetch(`https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ callback_query_id: callbackQuery.id, text: m.link_deleted })
+        });
+
+        // Trigger /links again to refresh list
+        // (For simplicity, just send a confirmation text or edit)
+        responseText = m.link_deleted;
+        await fetch(
+          `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              message_id: callbackQuery.message?.message_id,
+              text: responseText,
+              parse_mode: 'HTML',
+            }),
+          }
+        );
+        return new Response('OK', { status: 200, headers: corsHeaders });
       }
 
       // Answer callback query
@@ -1099,6 +1169,57 @@ serve(async (req: Request) => {
           replyMarkup = {
             inline_keyboard: [[{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=stats` } }]]
           };
+        }
+      } else if (text === '/toggle_publish') {
+        const activePageId = await getActivePageId(supabase, chatIdStr);
+        if (activePageId) {
+          const { data: page } = await supabase.from('pages').select('status, title').eq('id', activePageId).single();
+          responseText = m.toggle_publish_confirm(page?.status);
+          replyMarkup = {
+            inline_keyboard: [[{ text: '🔄 Toggle', callback_data: 'toggle_publish' }]]
+          };
+        } else {
+          responseText = m.no_page;
+        }
+      } else if (text === '/links') {
+        const activePageId = await getActivePageId(supabase, chatIdStr);
+        if (activePageId) {
+          const { data: blocks } = await supabase
+            .from('page_blocks')
+            .select('id, content')
+            .eq('page_id', activePageId)
+            .eq('type', 'link')
+            .order('order', { ascending: true });
+
+          if (blocks && blocks.length > 0) {
+            responseText = m.links_list_header;
+            const buttons = blocks.map((b: any) => ([
+              { text: `${b.content?.title || 'Untitled'}`, url: b.content?.url || '#' },
+              { text: '❌', callback_data: `delete_link:${b.id}` }
+            ]));
+            replyMarkup = { inline_keyboard: buttons };
+          } else {
+            responseText = lang === 'ru' ? '📭 У вас пока нет ссылок' : '📭 No links yet';
+          }
+        } else {
+          responseText = m.no_page;
+        }
+      } else if (text === '/settings') {
+        responseText = m.settings_menu;
+        replyMarkup = {
+          inline_keyboard: [
+            [{ text: '🌐 Change Language / Тіл', callback_data: 'change_lang' }],
+            [{ text: '🔔 Notifications: ON', callback_data: 'notif_toggle' }]
+          ]
+        };
+      } else if (text === '/admin_broadcast_crm') {
+        // Admin-only (check chatId against some whitelist or role)
+        const { data: profile } = await supabase.from('user_profiles').select('role').eq('telegram_chat_id', chatIdStr).maybeSingle();
+        if (profile?.role === 'admin') {
+          // This will be handled by a separate function, but here we can at least confirm
+          responseText = "⚠️ Running broadcast via separate function is recommended. Use 'supabase functions invoke broadcast-update'";
+        } else {
+          responseText = m.admin_only;
         }
       } else {
         // Any other message - just show the ID
