@@ -25,7 +25,17 @@ const messages = {
       `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в LinkMAX и вставьте его в поле регистрации.`,
     greeting_miniapp: (name: string) =>
       `👋 Привет, ${name}!\n\n🚀 <b>LinkMAX — ваш Business OS в Telegram</b>\n\nОткройте Mini App чтобы:\n• Создать страницу\n• Работать с лидами\n• Управлять бронированиями\n• Смотреть аналитику`,
-    help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/app - Открыть Mini App\n/page - Моя страница\n/leads - Лиды / CRM\n/bookings - Бронирования\n/stats - Аналитика\n/wallet - Кошелек / Баланс\n/pay - Платежи\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID\n/zone - Сводка по зоне\n/deals - Открытые сделки\n/tasks - Задачи на сегодня\n/contacts - Последние контакты`,
+    help: `<b>Доступные команды:</b>\n\n` +
+            `📊 /stats — Аналитика активного проекта\n` +
+            `📩 /leads — Последние лиды\n` +
+            `📅 /bookings — Бронирования\n\n` +
+            `📂 /pages — Выбор активного проекта\n` +
+            `🔗 /links — Управление ссылками\n` +
+            `➕ /add_link — Добавить ссылку\n` +
+            `📝 /edit_bio — Изменить БИО\n` +
+            `🌐 /toggle_publish — Статус сайта\n\n` +
+            `⚙️ /settings — Язык и уведомления\n` +
+            `❓ /help — Список команд`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Как подключить Telegram к LinkMAX:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
     chat_id: (chatId: number) =>
@@ -47,6 +57,17 @@ const messages = {
     bookings_list: (found: number) => `📅 <b>Бронирования:</b>\n\nНайдено: ${found}`,
     booking_item: (b: any) => `🗓 ${b.slot_date} ${b.slot_time}\n👤 ${b.client_name}\n📞 ${b.client_phone || '-'}\n🏷 ${b.status}`,
     lead_error: '❌ Ошибка при обновлении лида. Попробуйте еще раз.',
+    pages_list: '📋 <b>Ваши проекты:</b>\nВыберите проект для управления:',
+    active_page_set: (title: string) => `✅ Активный проект установлен: <b>${title}</b>\nТеперь команды /stats, /leads и /bookings работают для этого проекта.`,
+    edit_bio_prompt: '📝 Отправьте новое описание (BIO) для вашего профиля:',
+    bio_updated: '✅ Описание профиля успешно обновлено!',
+    add_link_prompt: '🔗 Отправьте название и ссылку в формате:\n<code>Название | https://link.com</code>',
+    link_added: '✅ Ссылка успешно добавлена на вашу страницу!',
+    toggle_publish_confirm: (status: string) => `Статус страницы: <b>${status === 'published' ? 'Опубликовано 🟢' : 'Черновик ⚪'}</b>\nХотите изменить статус?`,
+    status_updated: (status: string) => `✅ Статус обновлен: <b>${status === 'published' ? 'Опубликовано 🟢' : 'Черновик ⚪'}</b>`,
+    links_list_header: '🔗 <b>Ваши ссылки:</b>\nНажмите ❌ для удаления',
+    link_deleted: '✅ Ссылка удалена',
+    settings_menu: '⚙️ <b>Настройки бота:</b>',
   },
   en: {
     welcome: "🌐 Welcome to LinkMAX!\n\nChoose your language:",
@@ -61,7 +82,7 @@ const messages = {
       `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to LinkMAX and paste it into the registration field.`,
     greeting_miniapp: (name: string) =>
       `👋 Hello, ${name}!\n\n🚀 <b>LinkMAX — your Business OS in Telegram</b>\n\nOpen the Mini App to:\n• Create your page\n• Manage leads\n• Handle bookings\n• View analytics`,
-    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/app - Open Mini App\n/page - My page\n/leads - Leads / CRM\n/bookings - Bookings\n/wallet - Wallet / Balance\n/pay - Payments\n/stats - Detailed Analytics\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
+    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/app - Open Mini App\n/pages - Switch project\n/page - My page\n/leads - Leads / CRM\n/bookings - Bookings\n/stats - Detailed Analytics\n/edit_bio - Update Bio\n/add_link - New Link\n/wallet - Wallet / Balance\n/pay - Payments\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
     help_full: (chatId: number) =>
       `ℹ️ <b>How to connect Telegram to LinkMAX:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
     chat_id: (chatId: number) =>
@@ -83,6 +104,12 @@ const messages = {
     bookings_list: (found: number) => `📅 <b>Bookings:</b>\n\nFound: ${found}`,
     booking_item: (b: any) => `🗓 ${b.slot_date} ${b.slot_time}\n👤 ${b.client_name}\n📞 ${b.client_phone || '-'}\n🏷 ${b.status}`,
     lead_error: '❌ Error updating lead. Please try again.',
+    pages_list: '📄 <b>Your Projects:</b>\n\nChoose active page to manage:',
+    active_page_set: (title: string) => `✅ Active project set to: <b>${title}</b>\nCommands /stats and /leads now refer to this project.`,
+    edit_bio_prompt: '📝 Send your new BIO in one message:',
+    bio_updated: '✅ BIO updated successfully!',
+    add_link_prompt: '➕ To add a link, send a message in format:\n\n<code>Name | URL</code>\n\nExample:\n<code>My Instagram | https://instagr.am/me</code>',
+    link_added: '✅ Link added to your page!',
   },
   kk: {
     welcome: "🌐 LinkMAX-қа қош келдіңіз!\n\nТілді таңдаңыз:",
@@ -97,7 +124,17 @@ const messages = {
       `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін lnkmx.my-қа оралып, тіркеу өрісіне қойыңыз.`,
     greeting_miniapp: (name: string) =>
       `👋 Сәлем, ${name}!\n\n🚀 <b>LinkMAX — сіздің Business OS Telegram-да</b>\n\nMini App ашыңыз:\n• Бет жасау\n• Лидтерді басқару\n• Брондауларды басқару\n• Аналитика көру`,
-    help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/app - Mini App ашу\n/page - Менің бетім\n/leads - Лидтер / CRM\n/bookings - Брондаулар\n/pay - Төлемдер\n/stats - Толық аналитика\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету\n/zone - Аймақ шолуы\n/deals - Ашық мәмілелер\n/tasks - Бүгінгі тапсырмалар\n/contacts - Соңғы контактілер`,
+    help: `<b>Қолжетімді командалар:</b>\n\n` +
+            `📊 /stats — Белсенді жоба аналитикасы\n` +
+            `📩 /leads — Соңғы лидтер\n` +
+            `📅 /bookings — Брондаулар\n\n` +
+            `📂 /pages — Белсенді жобаны таңдау\n` +
+            `🔗 /links — Сілтемелерді басқару\n` +
+            `➕ /add_link — Сілтеме қосу\n` +
+            `📝 /edit_bio — Бионы өзгерту\n` +
+            `🌐 /toggle_publish — Сайт статусы\n\n` +
+            `⚙️ /settings — Тіл және хабарландырулар\n` +
+            `❓ /help — Командалар тізімі`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Telegram-ды LinkMAX-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
     chat_id: (chatId: number) =>
@@ -119,6 +156,17 @@ const messages = {
     bookings_list: (found: number) => `📅 <b>Брондаулар:</b>\n\nТабылды: ${found}`,
     booking_item: (b: any) => `🗓 ${b.slot_date} ${b.slot_time}\n👤 ${b.client_name}\n📞 ${b.client_phone || '-'}\n🏷 ${b.status}`,
     lead_error: '❌ Лидті жаңарту кезінде қате кетті. Қайталап көріңіз.',
+    pages_list: '📋 <b>Сіздің жобаларыңыз:</b>\nБасқару үшін белсенді жобаны таңдаңыз:',
+    active_page_set: (title: string) => `✅ Белсенді жоба: <b>${title}</b>\nЕнді /stats және /leads осы жоба үшін жұмыс істейді.`,
+    edit_bio_prompt: '📝 Профиліңіз үшін жаңа БИО жіберіңіз:',
+    bio_updated: '✅ БИО сәтті жаңартылды!',
+    add_link_prompt: '🔗 Сілтеме қосу үшін форматта жіберіңіз:\n<code>Атауы | https://link.com</code>',
+    link_added: '✅ Сілтеме бетіңізге қосылды!',
+    toggle_publish_confirm: (status: string) => `Бет статусы: <b>${status === 'published' ? 'Жарияланды 🟢' : 'Черновик ⚪'}</b>\nСтатусты өзгерткіңіз келе ме?`,
+    status_updated: (status: string) => `✅ Статус жаңартылды: <b>${status === 'published' ? 'Жарияланды 🟢' : 'Черновик ⚪'}</b>`,
+    links_list_header: '🔗 <b>Сілтемелеріңіз:</b>\nӨшіру үшін ❌ басыңыз',
+    link_deleted: '✅ Сілтеме өшірілді',
+    settings_menu: '⚙️ <b>Бот баптаулары:</b>',
   },
 };
 
@@ -155,12 +203,34 @@ interface TelegramUpdate {
     };
     message?: {
       chat: { id: number };
+      message_id: number;
     };
     data?: string;
   };
 }
 
+async function getActivePageId(supabase: any, chatId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from('telegram_bot_settings')
+    .select('active_page_id')
+    .eq('chat_id', chatId)
+    .maybeSingle();
+  return data?.active_page_id || null;
+}
+
+async function setActivePageId(supabase: any, chatId: string, pageId: string): Promise<void> {
+  await supabase.rpc('upsert_telegram_bot_active_page', {
+    p_chat_id: chatId,
+    p_page_id: pageId
+  });
+}
+
+function getSettings(supabase: any, chatId: string) {
+  return supabase.from('telegram_bot_settings').select('*').eq('chat_id', chatId).maybeSingle();
+}
+
 const tempLanguageStore: Record<string, string> = {};
+const userActionStore: Record<string, string | null> = {};
 
 async function getUserLanguage(supabase: any, chatId: string): Promise<Language> {
   try {
@@ -465,6 +535,13 @@ serve(async (req: Request) => {
             return new Response('OK', { status: 200, headers: corsHeaders });
           }
         }
+      } else if (data?.startsWith('set_active_page:')) {
+        const pageId = data.split(':')[1];
+        await setActivePageId(supabase, chatIdStr, pageId);
+        
+        const { data: page } = await supabase.from('pages').select('title').eq('id', pageId).single();
+        responseText = m.active_page_set(page?.title || 'Untitled');
+        replyMarkup = getMainKeyboard(lang);
       }
 
       // Answer callback query
@@ -558,11 +635,17 @@ serve(async (req: Request) => {
         if (!profile) {
           responseText = m.not_linked;
         } else {
-          const { data: page } = await supabase
-            .from('pages')
-            .select('id, title, slug, is_published')
-            .eq('user_id', profile.id)
-            .maybeSingle();
+          // Check for active page first
+          const activePageId = await getActivePageId(supabase, chatIdStr);
+          let query = supabase.from('pages').select('id, title, slug, is_published');
+          
+          if (activePageId) {
+            query = query.eq('id', activePageId);
+          } else {
+            query = query.eq('user_id', profile.id).limit(1);
+          }
+
+          const { data: page } = await query.maybeSingle();
 
           if (!page) {
             responseText = m.no_page;
@@ -805,37 +888,6 @@ serve(async (req: Request) => {
             }
           }
         }
-      } else if (text === '/leads' || text === '/crm') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
-
-        if (!profile) {
-          responseText = m.not_linked;
-        } else {
-          const { data: leads, count } = await supabase
-            .from('leads')
-            .select('*', { count: 'exact' })
-            .eq('user_id', profile.id)
-            .order('created_at', { ascending: false })
-            .range(0, 4);
-
-          if (!leads || leads.length === 0) {
-            responseText = lang === 'ru' ? '📭 У вас пока нет лидов' : lang === 'kk' ? '📭 Сізде әлі лидтер жоқ' : '📭 No leads yet';
-          } else {
-            const leadLines = leads.map((l: any) => m.lead_item(l));
-            responseText = `${m.leads_list(0, count || 0)}\n\n${leadLines.join('\n\n')}`;
-            
-            const buttons = [];
-            if (count && count > 5) {
-              buttons.push([{ text: '➡️', callback_data: 'leads_page:1' }]);
-            }
-            buttons.push([{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=crm` } }]);
-            replyMarkup = { inline_keyboard: buttons };
-          }
-        }
       } else if (text === '/bookings') {
         const { data: profile } = await supabase
           .from('user_profiles')
@@ -846,9 +898,15 @@ serve(async (req: Request) => {
         if (!profile) {
           responseText = m.not_linked;
         } else {
-          // Fetch pages for user to get bookings
-          const { data: pages } = await supabase.from('pages').select('id').eq('user_id', profile.id);
-          const pageIds = pages?.map(p => p.id) || [];
+          const activePageId = await getActivePageId(supabase, chatIdStr);
+          let pageIds: string[] = [];
+
+          if (activePageId) {
+            pageIds = [activePageId];
+          } else {
+            const { data: pages } = await supabase.from('pages').select('id').eq('user_id', profile.id);
+            pageIds = (pages || []).map((p: any) => p.id);
+          }
           
           const { data: bookings } = await supabase
             .from('bookings')
@@ -868,6 +926,121 @@ serve(async (req: Request) => {
             };
           }
         }
+      } else if (text === '/pages') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          const { data: pages } = await supabase
+            .from('pages')
+            .select('id, title')
+            .eq('user_id', profile.id);
+
+          if (!pages || pages.length === 0) {
+            responseText = m.no_page;
+          } else {
+            responseText = m.pages_list;
+            const buttons = pages.map((p: any) => ([{
+              text: p.title || 'Untitled',
+              callback_data: `set_active_page:${p.id}`
+            }]));
+            replyMarkup = { inline_keyboard: buttons };
+          }
+        }
+      } else if (text === '/edit_bio' || text === '/edit_profile') {
+        responseText = m.edit_bio_prompt;
+        userActionStore[chatIdStr] = 'edit_bio';
+      } else if (text === '/add_link') {
+        responseText = m.add_link_prompt;
+        userActionStore[chatIdStr] = 'add_link';
+      } else if (userActionStore[chatIdStr] === 'edit_bio') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+        
+        if (profile) {
+          await supabase.from('user_profiles').update({ bio: text }).eq('id', profile.id);
+          responseText = m.bio_updated;
+          userActionStore[chatIdStr] = null;
+        }
+      } else if (userActionStore[chatIdStr] === 'add_link') {
+        const parts = text.split('|');
+        if (parts.length >= 2) {
+          const title = parts[0].trim();
+          const url = parts[1].trim();
+          const { data: profile } = await supabase
+            .from('user_profiles')
+            .select('id')
+            .eq('telegram_chat_id', chatIdStr)
+            .maybeSingle();
+          
+          if (profile) {
+            let pageId = await getActivePageId(supabase, chatIdStr);
+            if (!pageId) {
+              const { data: firstPage } = await supabase.from('pages').select('id').eq('user_id', profile.id).limit(1).maybeSingle();
+              pageId = firstPage?.id;
+            }
+
+            if (pageId) {
+              await supabase.from('page_blocks').insert({
+                page_id: pageId,
+                type: 'link',
+                content: { title, url },
+                order: 99
+              });
+              responseText = m.link_added;
+              userActionStore[chatIdStr] = null;
+            } else {
+              responseText = m.no_page;
+            }
+          }
+        } else {
+          responseText = m.add_link_prompt;
+        }
+      } else if (text === '/leads' || text === '/crm') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          const activePageId = await getActivePageId(supabase, chatIdStr);
+          let query = supabase.from('leads').select('*', { count: 'exact' });
+          
+          if (activePageId) {
+            query = query.eq('page_id', activePageId);
+          } else {
+            query = query.eq('user_id', profile.id);
+          }
+
+          const { data: leads, count } = await query
+            .order('created_at', { ascending: false })
+            .range(0, 4);
+
+          if (!leads || leads.length === 0) {
+            responseText = lang === 'ru' ? '📭 У вас пока нет лидов' : lang === 'kk' ? '📭 Сізде әлі лидтер жоқ' : '📭 No leads yet';
+          } else {
+            const leadLines = leads.map((l: any) => m.lead_item(l));
+            responseText = `${m.leads_list(0, count || 0)}\n\n${leadLines.join('\n\n')}`;
+            
+            const buttons = [];
+            if (count && count > 5) {
+              buttons.push([{ text: '➡️', callback_data: 'leads_page:1' }]);
+            }
+            buttons.push([{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=crm` } }]);
+            replyMarkup = { inline_keyboard: buttons };
+          }
+        }
       } else if (text === '/stats') {
         const { data: profile } = await supabase
           .from('user_profiles')
@@ -878,14 +1051,21 @@ serve(async (req: Request) => {
         if (!profile) {
           responseText = m.not_linked;
         } else {
-          const { data: pages } = await supabase.from('pages').select('id').eq('user_id', profile.id);
-          const pageIds = pages?.map(p => p.id) || [];
+          const activePageId = await getActivePageId(supabase, chatIdStr);
+          let pageIds: string[] = [];
+          if (activePageId) {
+            pageIds = [activePageId];
+          } else {
+            const { data: pages } = await supabase.from('pages').select('id').eq('user_id', profile.id);
+            pageIds = (pages || []).map((p: any) => p.id);
+          }
+          
           const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
           const [viewsRes, clicksRes, leadsRes] = await Promise.all([
             supabase.from('analytics').select('created_at').in('page_id', pageIds).eq('event_type', 'view').gte('created_at', weekAgo),
             supabase.from('analytics').select('created_at').in('page_id', pageIds).eq('event_type', 'click').gte('created_at', weekAgo),
-            supabase.from('leads').select('created_at').eq('user_id', profile.id).gte('created_at', weekAgo),
+            supabase.from('leads').select('created_at').in('page_id', pageIds).gte('created_at', weekAgo),
           ]);
 
           const views = viewsRes.data || [];
@@ -893,9 +1073,9 @@ serve(async (req: Request) => {
           const leads = leadsRes.data || [];
 
           const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-          const v24 = views.filter(v => v.created_at >= dayAgo).length;
-          const c24 = clicks.filter(c => c.created_at >= dayAgo).length;
-          const l24 = leads.filter(l => l.created_at >= dayAgo).length;
+          const v24 = views.filter((v: any) => v.created_at >= dayAgo).length;
+          const c24 = clicks.filter((c: any) => c.created_at >= dayAgo).length;
+          const l24 = leads.filter((l: any) => l.created_at >= dayAgo).length;
 
           const createBar = (val: number, max: number) => {
             const length = max > 0 ? Math.round((val / max) * 10) : 0;

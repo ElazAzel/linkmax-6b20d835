@@ -205,12 +205,15 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 
 **Features:**
 - **Advanced Lead Management**: `/leads` command with pagination (interactive buttons).
-- **Professional Analytics**: `/stats` command with visual progress bars for 7-day metrics (Views, Clicks, Leads).
-- **Booking Management**: `/bookings` command for quick access to upcoming slots.
-- **Page Insights**: `/page` command with real-time status and view counts.
-- **Interactive CRM Notifications**: Buttons for "✅ In Progress", "💰 Won" directly in the chat.
-- **Direct Contacts**: Instant links to customer's WhatsApp/Telegram from notification.
-- **Financial Commands**: `/wallet` and `/balance` to see balance and pending GMV.
+- **Operational HQ (Telegram Bot)**:
+    - `/stats`: Поддержка выбора проекта (`active_page_id`). Визуальные отчеты (прогресс-бары) по просмотрам, кликам и лидам за 7д/24ч.
+    - `/leads`: Пагинация лидов с фильтрацией по выбранному проекту.
+    - `/bookings`: Просмотр предстоящих бронирований для активного проекта.
+    - `/pages`: [NEW] Переключение между несколькими проектами пользователя.
+    - `/edit_bio`: [NEW] Редактирование био профиля прямо в боте.
+    - `/add_link`: [NEW] Добавление новых ссылок на страницу (`Название | URL`).
+    - `/page`: Детальный отчет по статусу (Draft/Published) и просмотрам.
+    - `/wallet`: Баланс и ожидаемый доход (GMV).
 - **Operational Commands**: `/zone`, `/deals`, `/tasks`, `/contacts` for on-the-go status checks.
 - **Webhook Logic**: High-reliability processing in Supabase Edge Functions.
 

@@ -1,6 +1,15 @@
 # Changelog
 
-## [1.5.0] - 2026-03-24
+## [1.7.0] - 2026-03-24
+### Added
+- **Multi-project support**: New `/pages` command to switch between user projects.
+- **Active project context**: All operational commands (`/stats`, `/leads`, `/bookings`) now automatically filter results by the active project.
+- **Direct profile editing**: `/edit_bio` command to update user bio in real-time.
+- **Content management**: `/add_link` command for quick link addition (`Name | URL`).
+- **New SQL Migration**: Persistence of `active_page_id` in `telegram_bot_settings`.
+- **Improved UX**: Updated help menu and interactive project selection buttons.
+
+## [1.6.0] - 2026-03-24
 ### Added
 - **Telegram Bot HQ (Deterministic):**
   - Интерактивные уведомления о лидах с кнопками управления статусом (`В работу`, `Продано`).
