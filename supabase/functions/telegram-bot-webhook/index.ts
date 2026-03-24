@@ -383,7 +383,10 @@ function getHelpKeyboard(lang: Language) {
 serve(async (req: Request) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { 
+      status: 200, 
+      headers: corsHeaders 
+    });
   }
 
   // Warm-up ping — return immediately to prevent cold start

@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, prefer',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
@@ -29,7 +29,10 @@ function getMainKeyboard(lang: string) {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { 
+      status: 200, 
+      headers: corsHeaders 
+    });
   }
 
   try {
@@ -90,22 +93,26 @@ serve(async (req) => {
         
         // Small delay to prevent rate limits (30 msgs per second limit for TG)
         await new Promise(resolve => setTimeout(resolve, 50)); 
-      } catch (e) {
+      } catch (e: any) {
         console.error(`Error sending message to ${chatId}:`, e);
         failCount++;
       }
     }
 
-    return new Response(JSON.stringify({ 
-      message: 'Broadcast completed', 
-      successCount, 
-      failCount 
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({ 
+        message: `Broadcast completed.`,
+        total: (users || []).length,
+        success: successCount,
+        failed: failCount
+      }),
+      { 
+        status: 200, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    )
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Broadcast error:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
