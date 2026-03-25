@@ -264,9 +264,17 @@ serve(async (req: Request) => {
         }
 
         // ---- Step 3: Generate session for the client ----
+        // Use signInWithPassword with the deterministic email/password
+        const tgEmail = `tg_${validatedData.id}@telegram.linkmax.user`;
+        const tgPassword = crypto.randomUUID();
+
+        // Update user password so we can sign in
+        await supabase.auth.admin.updateUserById(userId, { password: tgPassword });
+
         const { data: sessionData, error: sessionError } =
-            await supabase.auth.admin.createSession({
-                userId: userId,
+            await supabase.auth.signInWithPassword({
+                email: tgEmail,
+                password: tgPassword,
             });
 
         if (sessionError || !sessionData?.session) {

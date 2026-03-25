@@ -40,16 +40,15 @@ serve(async (req: Request) => {
             global: { headers: { Authorization: authHeader } },
         });
 
-        const token = authHeader.replace('Bearer ', '');
-        const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
-        if (claimsError || !claimsData?.claims) {
+        const { data: { user }, error: userError } = await authClient.auth.getUser();
+        if (userError || !user) {
             return new Response(
                 JSON.stringify({ error: 'Unauthorized' }),
                 { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
 
-        const authenticatedUserId = claimsData.claims.sub;
+        const authenticatedUserId = user.id;
 
         const payload = await req.json() as PaymentRequest;
         const { type = 'subscription', userId, plan, period, amount, description: customDescription, relatedId, tokenAmount } = payload;
