@@ -42,8 +42,8 @@ serve(async (req) => {
                 // Here we would check against our static IP if we had one
                 console.log(`A records for ${hostname}:`, aRecords)
             }
-        } catch (e) {
-            console.warn(`DNS Resolution failed for ${hostname}:`, e.message)
+        } catch (e: unknown) {
+            console.warn(`DNS Resolution failed for ${hostname}:`, e instanceof Error ? e.message : String(e))
         }
 
         const status = isConfigured ? 'active' : 'configuring'
