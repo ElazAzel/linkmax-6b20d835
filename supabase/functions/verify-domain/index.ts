@@ -42,8 +42,8 @@ serve(async (req) => {
                 // Here we would check against our static IP if we had one
                 console.log(`A records for ${hostname}:`, aRecords)
             }
-        } catch (e) {
-            console.warn(`DNS Resolution failed for ${hostname}:`, e.message)
+        } catch (e: unknown) {
+            console.warn(`DNS Resolution failed for ${hostname}:`, e instanceof Error ? e.message : String(e))
         }
 
         const status = isConfigured ? 'active' : 'configuring'
@@ -72,10 +72,11 @@ serve(async (req) => {
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
         )
 
-    } catch (error) {
-        console.error(`Error in verify-domain: ${error.message}`)
+    } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : String(error);
+        console.error(`Error in verify-domain: ${msg}`)
         return new Response(
-            JSON.stringify({ error: error.message }),
+            JSON.stringify({ error: msg }),
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
         )
     }

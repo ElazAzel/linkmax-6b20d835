@@ -1,7 +1,5 @@
-// @ts-ignore
-import { serve } from "http/server";
-// @ts-ignore
-import { createClient } from "supabase";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
 
 const corsHeaders = {
@@ -67,9 +65,7 @@ serve(async (req: Request) => {
             throw new Error('Payload too large');
         }
 
-        // @ts-ignore
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
-        // @ts-ignore
         const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
         if (!supabaseUrl || !supabaseServiceKey) {
@@ -227,7 +223,6 @@ serve(async (req: Request) => {
 
             // 6. Send Telegram Notification if enabled
             if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
-                // @ts-ignore
                 const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
                 if (telegramBotToken) {
 

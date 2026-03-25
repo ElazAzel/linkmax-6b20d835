@@ -1,6 +1,5 @@
-import { serve } from "http/server";
-import { createClient } from "supabase";
-import { crypto } from "crypto";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders, createErrorResponse, createSuccessResponse, getSupabaseUser } from "../_shared/utils.ts";
 
 // Simplified ZONE_PLANS for server-side validation

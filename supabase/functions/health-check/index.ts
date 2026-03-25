@@ -45,9 +45,9 @@ serve(async (req) => {
         health.services.storage = storageError ? `error: ${storageError.message}` : "online";
         if (storageError) health.status = "error";
 
-    } catch (err) {
+    } catch (err: unknown) {
         health.status = "error";
-        health.error = err.message;
+        health.error = err instanceof Error ? err.message : String(err);
     }
 
     return new Response(JSON.stringify(health), {

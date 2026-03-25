@@ -375,10 +375,15 @@ serve(async (req: Request) => {
         }
 
         // ---- Step 5: Generate session for the Mini App ----
-        // This allows the frontend SDK to be fully authenticated
+        const tgEmail = `tg_${data.user.id}@telegram.linkmax.user`;
+        const tgPassword = crypto.randomUUID();
+
+        await supabase.auth.admin.updateUserById(userId, { password: tgPassword });
+
         const { data: sessionData, error: sessionError } =
-            await supabase.auth.admin.createSession({
-                userId: userId,
+            await supabase.auth.signInWithPassword({
+                email: tgEmail,
+                password: tgPassword,
             });
 
         if (sessionError || !sessionData?.session) {

@@ -64,7 +64,7 @@ async function sendTelegramNotification(
   message += `📍 *Источник:* ${sourceLabels[source] || source}`;
 
   // Inline keyboard for quick actions
-  const inline_keyboard = [
+  const inline_keyboard: Array<Array<{ text: string; callback_data?: string; url?: string }>> = [
     [
       { text: "✅ В работу", callback_data: `lead_status:contacted:${leadId}` },
       { text: "💰 Продано", callback_data: `lead_status:won:${leadId}` }
