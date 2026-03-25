@@ -223,7 +223,6 @@ serve(async (req: Request) => {
 
             // 6. Send Telegram Notification if enabled
             if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
-                // @ts-ignore
                 const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
                 if (telegramBotToken) {
 
