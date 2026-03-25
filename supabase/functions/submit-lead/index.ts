@@ -65,9 +65,7 @@ serve(async (req: Request) => {
             throw new Error('Payload too large');
         }
 
-        // @ts-ignore
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
-        // @ts-ignore
         const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
         if (!supabaseUrl || !supabaseServiceKey) {
