@@ -42,8 +42,6 @@ async function sendTelegramMessage(chatId: string, message: string): Promise<boo
 
   try {
     const response = await sendMessage(chatId, message, { parse_mode: "Markdown" });
-
-    const result = await response.json();
     if (!result.ok) {
       console.error("Telegram API error:", result);
       return false;

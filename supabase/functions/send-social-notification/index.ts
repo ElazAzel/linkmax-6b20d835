@@ -90,8 +90,6 @@ serve(async (req: Request) => {
 
     // Send Telegram message
     const response = await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
-
-    const result = await response.json();
     console.log('Telegram API response:', JSON.stringify(result));
 
     if (!result.ok) {
