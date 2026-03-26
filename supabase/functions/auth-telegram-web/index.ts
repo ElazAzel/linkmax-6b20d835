@@ -105,10 +105,8 @@ serve(async (req: Request) => {
         const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
         if (!isConfigured()) {
-      console.log("Telegram gateway not configured");
-          return new Response(JSON.stringify({ error: "not_configured" }), { status: 500 });
-                }
-            );
+            console.log("Telegram gateway not configured");
+            return new Response(JSON.stringify({ error: "not_configured" }), { status: 500 });
         }
 
         const { telegramData } = await req.json();
