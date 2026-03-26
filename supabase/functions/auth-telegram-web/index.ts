@@ -106,10 +106,7 @@ serve(async (req: Request) => {
 
         if (!isConfigured()) {
       console.log("Telegram gateway not configured");
-    }),
-                {
-                    status: 500,
-                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+          return new Response(JSON.stringify({ error: "not_configured" }), { status: 500 });
                 }
             );
         }
