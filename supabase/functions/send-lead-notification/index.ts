@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -43,9 +44,8 @@ async function sendTelegramNotification(
   source: string,
   leadId: string
 ): Promise<{ success: boolean; error?: string }> {
-  const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
-  if (!botToken) {
-    console.log("TELEGRAM_BOT_TOKEN not configured");
+  if (!isConfigured()) {
+    console.log("Telegram gateway not configured");
     return { success: false, error: "Telegram not configured" };
   }
 
@@ -63,7 +63,6 @@ async function sendTelegramNotification(
   if (leadPhone) message += `📱 *Телефон:* ${leadPhone}\n`;
   message += `📍 *Источник:* ${sourceLabels[source] || source}`;
 
-  // Inline keyboard for quick actions
   const inline_keyboard: Array<Array<{ text: string; callback_data?: string; url?: string }>> = [
     [
       { text: "✅ В работу", callback_data: `lead_status:contacted:${leadId}` },
@@ -71,7 +70,6 @@ async function sendTelegramNotification(
     ]
   ];
 
-  // Add contact buttons if phone exists
   if (leadPhone) {
     const cleanPhone = leadPhone.replace(/\D/g, '');
     inline_keyboard.push([
@@ -81,28 +79,16 @@ async function sendTelegramNotification(
   }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: "Markdown",
-        reply_markup: { inline_keyboard }
-      })
+    await sendMessage(chatId, message, {
+      parse_mode: "Markdown",
+      reply_markup: { inline_keyboard }
     });
-
-    const result = await response.json();
-    if (!result.ok) {
-      console.error("Telegram API error:", result);
-      return { success: false, error: result.description };
-    }
-
     console.log("Telegram notification sent successfully");
     return { success: true };
-  } catch (error: any) {
-    console.error("Telegram send error:", error);
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Telegram send error:", errMsg);
+    return { success: false, error: errMsg };
   }
 }
 
