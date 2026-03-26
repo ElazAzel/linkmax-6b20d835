@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -20,9 +21,8 @@ async function sendTelegramNotification(
   message: string | undefined,
   type: 'request' | 'accepted' | 'rejected'
 ): Promise<{ success: boolean; error?: string }> {
-  const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
-  if (!botToken) {
-    console.log("TELEGRAM_BOT_TOKEN not configured");
+  if (!isConfigured()) {
+    console.log("Telegram gateway not configured");
     return { success: false, error: "Telegram not configured" };
   }
 
@@ -42,21 +42,7 @@ async function sendTelegramNotification(
   }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        parse_mode: "Markdown"
-      })
-    });
-
-    const result = await response.json();
-    if (!result.ok) {
-      console.error("Telegram API error:", result);
-      return { success: false, error: result.description };
-    }
+    await sendMessage(chatId, text, { parse_mode: "Markdown" });
 
     console.log("Telegram collab notification sent successfully");
     return { success: true };

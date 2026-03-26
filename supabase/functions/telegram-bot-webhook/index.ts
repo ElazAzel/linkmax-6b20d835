@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendMessage, answerCallbackQuery, editMessageText, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -396,12 +397,8 @@ serve(async (req: Request) => {
   }
 
   try {
-    const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
-    if (!telegramBotToken) {
-      console.error('TELEGRAM_BOT_TOKEN not configured');
+    if (!isConfigured()) {
+      console.error('Telegram gateway not configured');
       return new Response('Bot not configured', { status: 500 });
     }
 
@@ -430,72 +427,28 @@ serve(async (req: Request) => {
         await setUserLanguage(supabase, chatIdStr, newLang);
 
         // Answer callback
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ callback_query_id: callbackQuery.id }),
-          }
-        );
+        await answerCallbackQuery(callbackQuery.id);
 
         // Send confirmation and greeting
         const newM = messages[newLang];
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: newM.language_changed,
-              parse_mode: 'HTML',
-            }),
-          }
-        );
+        await sendMessage(chatId, newM.language_changed, { parse_mode: 'HTML' });
 
-        // Send greeting with ID
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: newM.greeting(firstName, chatId),
-              parse_mode: 'HTML',
-              reply_markup: getMainKeyboard(newLang),
-            }),
-          }
-        );
+        await sendMessage(chatId, newM.greeting(firstName, chatId), {
+          parse_mode: 'HTML',
+          reply_markup: getMainKeyboard(newLang),
+        });
 
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
 
       // Handle change language button
       if (data === 'change_lang') {
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ callback_query_id: callbackQuery.id }),
-          }
-        );
+        await answerCallbackQuery(callbackQuery.id);
 
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: '🌐 ' + messages.ru.welcome.split('\n\n')[1],
-              parse_mode: 'HTML',
-              reply_markup: getLanguageKeyboard(),
-            }),
-          }
-        );
+        await sendMessage(chatId, '🌐 ' + messages.ru.welcome.split('\n\n')[1], {
+          parse_mode: 'HTML',
+          reply_markup: getLanguageKeyboard(),
+        });
 
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
@@ -556,20 +509,10 @@ serve(async (req: Request) => {
             replyMarkup = { inline_keyboard: buttons };
 
             // Edit original message instead of sending new one if possible
-            await fetch(
-              `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
-              {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  chat_id: chatId,
-                  message_id: callbackQuery.message?.message_id,
-                  text: responseText,
-                  parse_mode: 'HTML',
-                  reply_markup: replyMarkup,
-                }),
-              }
-            );
+            await editMessageText(chatId, callbackQuery.message?.message_id!, responseText, {
+              parse_mode: 'HTML',
+              reply_markup: replyMarkup,
+            });
             return new Response('OK', { status: 200, headers: corsHeaders });
           }
         }
@@ -589,19 +532,9 @@ serve(async (req: Request) => {
           
           responseText = m.status_updated(newStatus);
           // Edit message to show success
-          await fetch(
-            `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: chatId,
-                message_id: callbackQuery.message?.message_id,
-                text: responseText,
-                parse_mode: 'HTML',
-              }),
-            }
-          );
+          await editMessageText(chatId, callbackQuery.message?.message_id!, responseText, {
+            parse_mode: 'HTML',
+          });
           return new Response('OK', { status: 200, headers: corsHeaders });
         }
       } else if (data === 'delete_link:') {
@@ -713,18 +646,7 @@ serve(async (req: Request) => {
       }
 
       // Answer callback query
-      await fetch(
-        `https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            callback_query_id: callbackQuery.id,
-            text: m.copied,
-            show_alert: false
-          }),
-        }
-      );
+      await answerCallbackQuery(callbackQuery.id, { text: m.copied, show_alert: false });
 
       // Send response message
       if (responseText) {
@@ -735,14 +657,10 @@ serve(async (req: Request) => {
         };
         if (replyMarkup) messageBody.reply_markup = replyMarkup;
 
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(messageBody),
-          }
-        );
+        await sendMessage(chatId, responseText, {
+          parse_mode: 'HTML',
+          reply_markup: replyMarkup || undefined,
+        });
       }
 
       return new Response('OK', { status: 200, headers: corsHeaders });
@@ -1241,32 +1159,13 @@ serve(async (req: Request) => {
       }
 
       // Send response
-      const messageBody: Record<string, unknown> = {
-        chat_id: chatId,
-        text: responseText,
+      await sendMessage(chatId, responseText, {
         parse_mode: 'HTML',
         disable_web_page_preview: true,
-      };
+        reply_markup: replyMarkup || undefined,
+      });
 
-      if (replyMarkup) {
-        messageBody.reply_markup = replyMarkup;
-      }
-
-      const sendResponse = await fetch(
-        `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(messageBody),
-        }
-      );
-
-      const sendResult = await sendResponse.json();
-      console.log('Send message result:', JSON.stringify(sendResult));
-
-      if (!sendResult.ok) {
-        console.error('Failed to send message:', sendResult.description);
-      }
+      // Message sent via gateway
     }
 
     return new Response('OK', {

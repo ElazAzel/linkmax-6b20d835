@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -38,8 +39,6 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
-
     if (!telegramBotToken) throw new Error('Bot token not set');
 
     const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
@@ -72,16 +71,7 @@ serve(async (req) => {
       const text = customText || broadcastMessages[lang] || broadcastMessages.ru;
 
       try {
-        const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: text,
-            parse_mode: 'HTML',
-            reply_markup: getMainKeyboard(lang)
-          }),
-        });
+        const response = await sendMessage(chatId, text, { parse_mode: 'HTML' });
 
         if (response.ok) {
           successCount++;

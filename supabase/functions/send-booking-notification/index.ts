@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -25,7 +26,6 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const telegramBotToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body: BookingNotificationRequest = await req.json();
@@ -70,7 +70,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send Telegram notification if enabled
     if (
-      telegramBotToken &&
+      isConfigured() &&
       owner.telegram_notifications_enabled &&
       owner.telegram_chat_id
     ) {
@@ -86,25 +86,10 @@ ${body.notes ? `📝 *Комментарий:* ${body.notes}` : ""}
 _Управляйте записями в CRM вашей страницы._`;
 
       try {
-        const telegramResponse = await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: owner.telegram_chat_id,
-              text: message,
-              parse_mode: "Markdown",
-            }),
-          }
-        );
-
-        if (!telegramResponse.ok) {
-          const errorData = await telegramResponse.text();
-          console.error("Telegram API error:", errorData);
-        } else {
-          console.log("Telegram notification sent successfully");
-        }
+        await sendMessage(owner.telegram_chat_id, message, {
+          parse_mode: "Markdown",
+        });
+        console.log("Telegram notification sent successfully");
       } catch (telegramError) {
         console.error("Error sending Telegram notification:", telegramError);
       }

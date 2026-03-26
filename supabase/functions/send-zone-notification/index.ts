@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -18,7 +19,6 @@ serve(async (req: Request) => {
     }
 
     try {
-        const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
         const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -130,18 +130,7 @@ serve(async (req: Request) => {
 
             if (message && profile.telegram_chat_id) {
                 try {
-                    const res = await fetch(
-                        `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-                        {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                chat_id: profile.telegram_chat_id,
-                                text: message,
-                                parse_mode: 'HTML',
-                            }),
-                        }
-                    );
+                    const res = await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
                     if (res.ok) sentCount++;
                 } catch (e) {
                     console.error(`Failed to send to ${profile.telegram_chat_id}:`, e);

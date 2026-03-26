@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -22,28 +23,13 @@ function generateToken(): string {
 }
 
 async function sendTelegramMessage(chatId: string, text: string): Promise<boolean> {
-  const botToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
-  if (!botToken) {
-    console.error('TELEGRAM_BOT_TOKEN not configured');
+  if (!isConfigured()) {
+    console.log("Telegram gateway not configured");
     return false;
   }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        parse_mode: 'HTML'
-      })
-    });
-
-    const result = await response.json();
-    if (!result.ok) {
-      console.error('Telegram API error:', result);
-      return false;
-    }
+    await sendMessage(chatId, text, { parse_mode: 'HTML' });
     return true;
   } catch (error) {
     console.error('Telegram send error:', error);

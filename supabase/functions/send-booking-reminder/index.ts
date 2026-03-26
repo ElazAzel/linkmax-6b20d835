@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,12 +16,10 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const telegramBotToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
-
-    if (!telegramBotToken) {
-      console.error("TELEGRAM_BOT_TOKEN not configured");
+    if (!isConfigured()) {
+      console.log("Telegram gateway not configured");
       return new Response(
-        JSON.stringify({ success: false, error: "Telegram not configured" }),
+        JSON.stringify({ error: "Telegram not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -182,18 +181,7 @@ const handler = async (req: Request): Promise<Response> => {
       message += successWish;
 
       try {
-        const telegramResponse = await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: owner.telegram_chat_id,
-              text: message,
-              parse_mode: "Markdown",
-            }),
-          }
-        );
+        const telegramResponse = await sendMessage(owner.telegram_chat_id, message, { parse_mode: "Markdown" });
 
         if (!telegramResponse.ok) {
           const errorData = await telegramResponse.text();

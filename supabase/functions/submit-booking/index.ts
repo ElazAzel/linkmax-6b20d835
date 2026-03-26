@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -178,8 +179,7 @@ serve(async (req: Request) => {
         .single();
 
       if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
-        const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
-        if (telegramBotToken) {
+        if (isConfigured()) {
           const lang = profile.telegram_language || 'ru';
           const text = lang === 'en'
             ? `📅 <b>New booking!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">View</a>`
@@ -187,11 +187,7 @@ serve(async (req: Request) => {
               ? `📅 <b>Жаңа жазба!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Көру</a>`
               : `📅 <b>Новая запись!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть</a>`;
 
-          await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: profile.telegram_chat_id, text, parse_mode: 'HTML', disable_web_page_preview: true }),
-          });
+          await sendMessage(profile.telegram_chat_id, text, { parse_mode: 'HTML', disable_web_page_preview: true });
         }
       }
     } catch (e) {

@@ -6,6 +6,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -155,7 +156,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const telegramBotToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -220,7 +220,7 @@ const handler = async (req: Request): Promise<Response> => {
     const results = { telegram: false, email: false };
 
     // 1. Send Telegram notification
-    if (telegramBotToken && profile?.telegram_chat_id && profile?.telegram_notifications_enabled) {
+    if (isConfigured() && profile?.telegram_chat_id && profile?.telegram_notifications_enabled) {
       const message = `🎫 *Новая регистрация!*\n\n` +
         `📌 *${eventTitle}*\n\n` +
         `👤 ${regData.attendee_name}\n` +
@@ -231,15 +231,7 @@ const handler = async (req: Request): Promise<Response> => {
         (eventData.location_value ? `📍 ${eventData.location_value}` : '');
 
       try {
-        const tgResponse = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: profile.telegram_chat_id,
-            text: message,
-            parse_mode: "Markdown",
-          }),
-        });
+        const tgResponse = await sendMessage(profile.telegram_chat_id, message, { parse_mode: "Markdown" });
         results.telegram = tgResponse.ok;
       } catch (telegramError) {
         console.error("Telegram notification failed:", telegramError);
