@@ -509,20 +509,10 @@ serve(async (req: Request) => {
             replyMarkup = { inline_keyboard: buttons };
 
             // Edit original message instead of sending new one if possible
-            await fetch(
-              'editMessageText_GATEWAY',
-              {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  chat_id: chatId,
-                  message_id: callbackQuery.message?.message_id,
-                  text: responseText,
-                  parse_mode: 'HTML',
-                  reply_markup: replyMarkup,
-                }),
-              }
-            );
+            await editMessageText(chatId, callbackQuery.message?.message_id!, responseText, {
+              parse_mode: 'HTML',
+              reply_markup: replyMarkup,
+            });
             return new Response('OK', { status: 200, headers: corsHeaders });
           }
         }
@@ -542,19 +532,9 @@ serve(async (req: Request) => {
           
           responseText = m.status_updated(newStatus);
           // Edit message to show success
-          await fetch(
-            'editMessageText_GATEWAY',
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: chatId,
-                message_id: callbackQuery.message?.message_id,
-                text: responseText,
-                parse_mode: 'HTML',
-              }),
-            }
-          );
+          await editMessageText(chatId, callbackQuery.message?.message_id!, responseText, {
+            parse_mode: 'HTML',
+          });
           return new Response('OK', { status: 200, headers: corsHeaders });
         }
       } else if (data === 'delete_link:') {
@@ -677,14 +657,10 @@ serve(async (req: Request) => {
         };
         if (replyMarkup) messageBody.reply_markup = replyMarkup;
 
-        await fetch(
-          'sendMessage_GATEWAY',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(messageBody),
-          }
-        );
+        await sendMessage(chatId, responseText, {
+          parse_mode: 'HTML',
+          reply_markup: replyMarkup || undefined,
+        });
       }
 
       return new Response('OK', { status: 200, headers: corsHeaders });
@@ -1183,25 +1159,11 @@ serve(async (req: Request) => {
       }
 
       // Send response
-      const messageBody: Record<string, unknown> = {
-        chat_id: chatId,
-        text: responseText,
+      await sendMessage(chatId, responseText, {
         parse_mode: 'HTML',
         disable_web_page_preview: true,
-      };
-
-      if (replyMarkup) {
-        messageBody.reply_markup = replyMarkup;
-      }
-
-      const sendResponse = await fetch(
-        'sendMessage_GATEWAY',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(messageBody),
-        }
-      );
+        reply_markup: replyMarkup || undefined,
+      });
 
       // Message sent via gateway
     }
