@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendMessage, getChat, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -50,9 +51,8 @@ serve(async (req: Request) => {
       );
     }
 
-    const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
-    if (!telegramBotToken) {
-      console.error('TELEGRAM_BOT_TOKEN not configured');
+    if (!isConfigured()) {
+      console.error('Telegram gateway not configured');
       return new Response(
         JSON.stringify({ valid: false, error: 'bot_not_configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -61,38 +61,18 @@ serve(async (req: Request) => {
 
     console.log(`Validating Telegram chat ID: ${chatId}`);
 
-    // Try to get chat info to validate the chat ID
-    const response = await fetch(
-      `https://api.telegram.org/bot${telegramBotToken}/getChat`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId }),
-      }
-    );
+    try {
+      // Try to get chat info to validate the chat ID
+      const result = await getChat(chatId);
+      console.log('Telegram API response:', JSON.stringify(result));
 
-    const result = await response.json();
-    console.log('Telegram API response:', JSON.stringify(result));
-
-    if (result.ok) {
       // Send a test message to confirm the bot can reach this chat
-      const testMessageResponse = await fetch(
-        `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: '✅ lnkmx.my подключен! Теперь вы будете получать уведомления о новых заявках.\n\n✅ lnkmx.my connected! You will now receive notifications about new leads.',
-            parse_mode: 'HTML',
-          }),
-        }
-      );
+      try {
+        await sendMessage(chatId,
+          '✅ lnkmx.my подключен! Теперь вы будете получать уведомления о новых заявках.\n\n✅ lnkmx.my connected! You will now receive notifications about new leads.',
+          { parse_mode: 'HTML' }
+        );
 
-      const testResult = await testMessageResponse.json();
-      console.log('Test message result:', JSON.stringify(testResult));
-
-      if (testResult.ok) {
         return new Response(
           JSON.stringify({
             valid: true,
@@ -105,24 +85,26 @@ serve(async (req: Request) => {
           }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
-      } else {
-        console.log('Failed to send test message:', testResult.description);
+      } catch (sendErr: unknown) {
+        const errMsg = sendErr instanceof Error ? sendErr.message : String(sendErr);
+        console.log('Failed to send test message:', errMsg);
         return new Response(
           JSON.stringify({
             valid: false,
             error: 'cannot_send_message',
-            description: testResult.description
+            description: errMsg
           }),
           { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-    } else {
-      console.log('Invalid chat ID:', result.description);
+    } catch (chatErr: unknown) {
+      const errMsg = chatErr instanceof Error ? chatErr.message : String(chatErr);
+      console.log('Invalid chat ID:', errMsg);
       return new Response(
         JSON.stringify({
           valid: false,
           error: 'invalid_chat_id',
-          description: result.description
+          description: errMsg
         }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
