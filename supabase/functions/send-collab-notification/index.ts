@@ -22,8 +22,8 @@ async function sendTelegramNotification(
   type: 'request' | 'accepted' | 'rejected'
 ): Promise<{ success: boolean; error?: string }> {
   if (!isConfigured()) {
-      console.log("Telegram gateway not configured");
-    };
+    console.log("Telegram gateway not configured");
+    return { success: false, error: "Telegram not configured" };
   }
 
   let text: string;
@@ -42,21 +42,7 @@ async function sendTelegramNotification(
   }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        parse_mode: "Markdown"
-      })
-    });
-
-    const result = await response.json();
-    if (!result.ok) {
-      console.error("Telegram API error:", result);
-      return { success: false, error: result.description };
-    }
+    await sendMessage(chatId, text, { parse_mode: "Markdown" });
 
     console.log("Telegram collab notification sent successfully");
     return { success: true };

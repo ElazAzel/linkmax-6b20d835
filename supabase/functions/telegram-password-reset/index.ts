@@ -24,25 +24,12 @@ function generateToken(): string {
 
 async function sendTelegramMessage(chatId: string, text: string): Promise<boolean> {
   if (!isConfigured()) {
-      console.log("Telegram gateway not configured");
-    }
+    console.log("Telegram gateway not configured");
+    return false;
+  }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        parse_mode: 'HTML'
-      })
-    });
-
-    const result = await response.json();
-    if (!result.ok) {
-      console.error('Telegram API error:', result);
-      return false;
-    }
+    await sendMessage(chatId, text, { parse_mode: 'HTML' });
     return true;
   } catch (error) {
     console.error('Telegram send error:', error);
