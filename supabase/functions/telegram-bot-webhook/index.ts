@@ -1233,12 +1233,7 @@ serve(async (req: Request) => {
         }
       );
 
-      const sendResult = await sendResponse.json();
-      console.log('Send message result:', JSON.stringify(sendResult));
-
-      if (!sendResult.ok) {
-        console.error('Failed to send message:', sendResult.description);
-      }
+      // Message sent via gateway
     }
 
     return new Response('OK', {
