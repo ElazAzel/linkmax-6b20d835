@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -223,7 +224,6 @@ serve(async (req: Request) => {
 
             // 6. Send Telegram Notification if enabled
             if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
-                const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
                 if (telegramBotToken) {
 
                     let text = '';
@@ -247,16 +247,7 @@ serve(async (req: Request) => {
                     }
 
                     try {
-                        await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                chat_id: profile.telegram_chat_id,
-                                text: text,
-                                parse_mode: 'HTML',
-                                disable_web_page_preview: true
-                            }),
-                        });
+                        await sendMessage(profile.telegram_chat_id, text, { parse_mode: 'HTML' });
                         console.log(`Telegram notification sent to ${profile.telegram_chat_id}`);
                     } catch (e) {
                         console.error('Failed to send Telegram notification', e);

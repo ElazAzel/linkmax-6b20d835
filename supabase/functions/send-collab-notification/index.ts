@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -20,10 +21,9 @@ async function sendTelegramNotification(
   message: string | undefined,
   type: 'request' | 'accepted' | 'rejected'
 ): Promise<{ success: boolean; error?: string }> {
-  const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
-  if (!botToken) {
-    console.log("TELEGRAM_BOT_TOKEN not configured");
-    return { success: false, error: "Telegram not configured" };
+  if (!isConfigured()) {
+      console.log("Telegram gateway not configured");
+    };
   }
 
   let text: string;

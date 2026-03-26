@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -100,14 +101,12 @@ serve(async (req: Request) => {
     }
 
     try {
-        const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
         const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
         const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-        if (!botToken) {
-            console.error("TELEGRAM_BOT_TOKEN not configured");
-            return new Response(
-                JSON.stringify({ valid: false, error: "bot_not_configured" }),
+        if (!isConfigured()) {
+      console.log("Telegram gateway not configured");
+    }),
                 {
                     status: 500,
                     headers: { ...corsHeaders, "Content-Type": "application/json" },

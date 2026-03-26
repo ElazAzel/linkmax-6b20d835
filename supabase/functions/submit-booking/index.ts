@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -178,7 +179,6 @@ serve(async (req: Request) => {
         .single();
 
       if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
-        const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
         if (telegramBotToken) {
           const lang = profile.telegram_language || 'ru';
           const text = lang === 'en'
