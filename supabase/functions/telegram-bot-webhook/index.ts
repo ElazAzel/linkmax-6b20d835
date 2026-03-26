@@ -431,33 +431,12 @@ serve(async (req: Request) => {
 
         // Send confirmation and greeting
         const newM = messages[newLang];
-        await fetch(
-          'sendMessage_GATEWAY',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: newM.language_changed,
-              parse_mode: 'HTML',
-            }),
-          }
-        );
+        await sendMessage(chatId, newM.language_changed, { parse_mode: 'HTML' });
 
-        // Send greeting with ID
-        await fetch(
-          'sendMessage_GATEWAY',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: newM.greeting(firstName, chatId),
-              parse_mode: 'HTML',
-              reply_markup: getMainKeyboard(newLang),
-            }),
-          }
-        );
+        await sendMessage(chatId, newM.greeting(firstName, chatId), {
+          parse_mode: 'HTML',
+          reply_markup: getMainKeyboard(newLang),
+        });
 
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
@@ -466,19 +445,10 @@ serve(async (req: Request) => {
       if (data === 'change_lang') {
         await answerCallbackQuery(callbackQuery.id);
 
-        await fetch(
-          'sendMessage_GATEWAY',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: '🌐 ' + messages.ru.welcome.split('\n\n')[1],
-              parse_mode: 'HTML',
-              reply_markup: getLanguageKeyboard(),
-            }),
-          }
-        );
+        await sendMessage(chatId, '🌐 ' + messages.ru.welcome.split('\n\n')[1], {
+          parse_mode: 'HTML',
+          reply_markup: getLanguageKeyboard(),
+        });
 
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
