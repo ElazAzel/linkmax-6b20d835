@@ -83,19 +83,15 @@ Deno.serve(async (req) => {
 
     // Send Telegram notification
     if (!isConfigured()) {
-      console.log("Telegram gateway not configured");
-    }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: "Telegram not configured" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const telegramResponse = await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
-
-    const telegramResult = await telegramResponse.json();
-    if (!telegramResult.ok) {
-      console.error('Telegram API error:', telegramResult);
+    try {
+      await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
+    } catch (tgErr) {
+      console.error('Telegram send error:', tgErr);
       return new Response(
-        JSON.stringify({ success: false, error: telegramResult.description }),
+        JSON.stringify({ success: false, error: String(tgErr) }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
