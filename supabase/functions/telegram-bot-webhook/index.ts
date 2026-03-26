@@ -427,19 +427,12 @@ serve(async (req: Request) => {
         await setUserLanguage(supabase, chatIdStr, newLang);
 
         // Answer callback
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ callback_query_id: callbackQuery.id }),
-          }
-        );
+        await answerCallbackQuery(callbackQuery.id);
 
         // Send confirmation and greeting
         const newM = messages[newLang];
         await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
+          'sendMessage_GATEWAY',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -453,7 +446,7 @@ serve(async (req: Request) => {
 
         // Send greeting with ID
         await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
+          'sendMessage_GATEWAY',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -471,17 +464,10 @@ serve(async (req: Request) => {
 
       // Handle change language button
       if (data === 'change_lang') {
-        await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ callback_query_id: callbackQuery.id }),
-          }
-        );
+        await answerCallbackQuery(callbackQuery.id);
 
         await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
+          'sendMessage_GATEWAY',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -554,7 +540,7 @@ serve(async (req: Request) => {
 
             // Edit original message instead of sending new one if possible
             await fetch(
-              `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
+              'editMessageText_GATEWAY',
               {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -587,7 +573,7 @@ serve(async (req: Request) => {
           responseText = m.status_updated(newStatus);
           // Edit message to show success
           await fetch(
-            `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
+            'editMessageText_GATEWAY',
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -710,18 +696,7 @@ serve(async (req: Request) => {
       }
 
       // Answer callback query
-      await fetch(
-        `https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            callback_query_id: callbackQuery.id,
-            text: m.copied,
-            show_alert: false
-          }),
-        }
-      );
+      await answerCallbackQuery(callbackQuery.id, { text: m.copied, show_alert: false });
 
       // Send response message
       if (responseText) {
@@ -733,7 +708,7 @@ serve(async (req: Request) => {
         if (replyMarkup) messageBody.reply_markup = replyMarkup;
 
         await fetch(
-          `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
+          'sendMessage_GATEWAY',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1250,7 +1225,7 @@ serve(async (req: Request) => {
       }
 
       const sendResponse = await fetch(
-        `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
+        'sendMessage_GATEWAY',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
