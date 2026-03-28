@@ -1,7 +1,4 @@
 {
-  "2": {
-    "5 MB": "5 MB"
-  },
   "achievements": {
     "categories": {
       "all": "All",
@@ -3041,12 +3038,13 @@
   },
   "install": {
     "android": {
-      "step1": "Open browser menu",
+      "step1": "Tap the browser menu (⋮) in the top right corner",
       "step1desc": "Click on the three dots in the corner",
-      "step2": "Install the application",
+      "step2": "Select \"Install app\" or \"Add to Home Screen\"",
       "step2desc": "Select \"Install\" or \"To Home Screen\"",
       "step3": "Confirm installation",
-      "step3desc": "Click \"Install\" in the pop-up window"
+      "step3desc": "Click \"Install\" in the pop-up window",
+      "title": "Instructions for Android"
     },
     "copyLink": "Copy link",
     "description": "Install the LinkMAX.my application on your device for quick access",
@@ -3057,24 +3055,45 @@
       "step1desc": "It is usually located in the address bar (Chrome, Edge)",
       "step2": "Click \"Install\"",
       "step2desc": "Add LinkMAX.my to your desktop",
-      "title": "Desktop"
+      "title": "Instructions for Desktop",
+      "desc": "Look for the install icon in the browser address bar or select \"Install LinkMAX.my\" from the browser menu"
     },
     "ios": {
-      "step1": "Open in Safari",
+      "step1": "Tap the \"Share\" button ⬆️ at the bottom of Safari",
       "step1desc": "Make sure you open the site in Safari",
-      "step2": "Click Share",
+      "step2": "Scroll down and select \"Add to Home Screen\"",
       "step2desc": "Safari bottom arrow button",
-      "step3": "To the Home screen",
-      "step3desc": "Scroll down and select \"Add to Home Screen\""
+      "step3": "Tap \"Add\" in the top right corner",
+      "step3desc": "Scroll down and select \"Add to Home Screen\"",
+      "title": "Instructions for iOS"
     },
     "later": "Later",
     "seo": {
       "description": "Install LinkMAX as a PWA for quick access.",
       "title": "Installing LinkMAX"
     },
-    "subtitle": "The page has been published! Install the app for quick access and offline editing.",
+    "subtitle": "Add the app to your home screen for a better experience",
     "title": "Install LinkMAX.my",
-    "yourLink": "Your link:"
+    "yourLink": "Your link:",
+    "backHome": "Back to home",
+    "features": {
+      "quickAccess": "Quick access",
+      "quickAccessDesc": "One-click launch from home screen",
+      "offline": "Offline mode",
+      "offlineDesc": "Access content without internet",
+      "native": "Native interface",
+      "nativeDesc": "Full-screen mode without browser"
+    },
+    "installed": {
+      "title": "App installed!",
+      "desc": "LinkMAX.my is ready. Find the icon on your home screen.",
+      "open": "Open app"
+    },
+    "ready": {
+      "title": "Ready to install",
+      "desc": "Click the button below to install LinkMAX.my on your device",
+      "button": "Install now"
+    }
   },
   "kaspi": {
     "amount": "Amount",

@@ -1,7 +1,4 @@
 {
-  "2": {
-    "5 MB": "5 MB"
-  },
   "achievements": {
     "categories": {
       "all": "Hammasi",
@@ -3040,12 +3037,13 @@
   },
   "install": {
     "android": {
-      "step1": "Brauzer menyusini oching",
+      "step1": "Yuqori oʻng burchakdagi brauzer menyusini (⋮) bosing",
       "step1desc": "Burchakdagi uchta nuqta ustiga bosing",
-      "step2": "Ilovani o'rnating",
+      "step2": "«Ilovani oʻrnatish» yoki «Bosh ekranga qoʻshish»ni tanlang",
       "step2desc": "\"O'rnatish\" yoki \"Bosh ekranga\" ni tanlang.",
-      "step3": "O'rnatishni tasdiqlang",
-      "step3desc": "Qalqib chiquvchi oynada \"O'rnatish\" tugmasini bosing"
+      "step3": "Oʻrnatishni tasdiqlang",
+      "step3desc": "Qalqib chiquvchi oynada \"O'rnatish\" tugmasini bosing",
+      "title": "Android uchun koʻrsatmalar"
     },
     "copyLink": "Havolani nusxalash",
     "description": "Tez kirish uchun qurilmangizga LinkMAX.my ilovasini oʻrnating",
@@ -3056,24 +3054,45 @@
       "step1desc": "Odatda u manzil satrida joylashgan (Chrome, Edge)",
       "step2": "\"O'rnatish\" tugmasini bosing",
       "step2desc": "LinkMAX.my-ni ish stolingizga qo'shing",
-      "title": "Ish stoli"
+      "title": "Desktop uchun koʻrsatmalar",
+      "desc": "Brauzer manzil satrida oʻrnatish belgisini toping yoki brauzer menyusidan «LinkMAX.my oʻrnatish»ni tanlang"
     },
     "ios": {
-      "step1": "Safari-da oching",
+      "step1": "Safari pastidagi «Ulashish» ⬆️ tugmasini bosing",
       "step1desc": "Saytni Safari-da ochganingizga ishonch hosil qiling",
-      "step2": "Ulashish-ni bosing",
+      "step2": "Pastga aylantiring va «Bosh ekranga qoʻshish»ni tanlang",
       "step2desc": "Safari pastki o'q tugmasi",
-      "step3": "Asosiy ekranga",
-      "step3desc": "Pastga aylantiring va \"Bosh ekranga qo'shish\" ni tanlang."
+      "step3": "Yuqori oʻng burchakdagi «Qoʻshish» tugmasini bosing",
+      "step3desc": "Pastga aylantiring va \"Bosh ekranga qo'shish\" ni tanlang.",
+      "title": "iOS uchun koʻrsatmalar"
     },
     "later": "Keyinchalik",
     "seo": {
       "description": "Tez kirish uchun LinkMAX-ni PWA sifatida o'rnating.",
       "title": "LinkMAX o'rnatilmoqda"
     },
-    "subtitle": "Sahifa nashr etildi! Tez kirish va oflayn tahrirlash uchun ilovani oʻrnating.",
-    "title": "LinkMAX.my ni o'rnating",
-    "yourLink": "Sizning havolangiz:"
+    "subtitle": "Yaxshi tajriba uchun ilovani bosh ekranga qoʻshing",
+    "title": "LinkMAX.my oʻrnatish",
+    "yourLink": "Sizning havolangiz:",
+    "backHome": "Bosh sahifaga qaytish",
+    "features": {
+      "quickAccess": "Tezkor kirish",
+      "quickAccessDesc": "Bosh ekrandan bir bosish bilan ishga tushirish",
+      "offline": "Oflayn rejim",
+      "offlineDesc": "Internetsiz kontentga kirish",
+      "native": "Mahalliy interfeys",
+      "nativeDesc": "Brauzersiz toʻliq ekran rejimi"
+    },
+    "installed": {
+      "title": "Ilova oʻrnatildi!",
+      "desc": "LinkMAX.my tayyor. Bosh ekrandagi belgini toping.",
+      "open": "Ilovani ochish"
+    },
+    "ready": {
+      "title": "Oʻrnatishga tayyor",
+      "desc": "LinkMAX.my-ni qurilmangizga oʻrnatish uchun quyidagi tugmani bosing",
+      "button": "Hozir oʻrnatish"
+    }
   },
   "kaspi": {
     "amount": "Summa",

@@ -70,18 +70,18 @@ export default function Install() {
   const features = [
     {
       icon: Zap,
-      title: 'Быстрый доступ',
-      description: 'Запуск в один клик с главного экрана',
+      title: t('install.features.quickAccess', 'Quick access'),
+      description: t('install.features.quickAccessDesc', 'One-click launch from home screen'),
     },
     {
       icon: Cloud,
-      title: 'Работа оффлайн',
-      description: 'Доступ к контенту без интернета',
+      title: t('install.features.offline', 'Offline mode'),
+      description: t('install.features.offlineDesc', 'Access content without internet'),
     },
     {
       icon: Smartphone,
-      title: 'Нативный интерфейс',
-      description: 'Полноэкранный режим без браузера',
+      title: t('install.features.native', 'Native interface'),
+      description: t('install.features.nativeDesc', 'Full-screen mode without browser'),
     },
   ];
 
@@ -107,9 +107,9 @@ export default function Install() {
           <div className="h-20 w-20 rounded-2xl bg-primary/10 mx-auto flex items-center justify-center">
             <Download className="h-10 w-10 text-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold">Установить LinkMAX.my</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold">{t('install.title', 'Install LinkMAX.my')}</h1>
           <p className="text-muted-foreground text-lg">
-            Добавьте приложение на главный экран для лучшего опыта
+            {t('install.subtitle', 'Add the app to your home screen for a better experience')}
           </p>
         </div>
 
@@ -132,13 +132,13 @@ export default function Install() {
                 <Check className="h-8 w-8 text-green-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Приложение установлено!</h3>
+                <h3 className="font-semibold text-lg mb-2">{t('install.installed.title', 'App installed!')}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  LinkMAX.my готов к работе. Найдите иконку на главном экране.
+                  {t('install.installed.desc', 'LinkMAX.my is ready. Find the icon on your home screen.')}
                 </p>
               </div>
               <Button onClick={() => navigate('/dashboard')} className="w-full sm:w-auto">
-                Открыть приложение
+                {t('install.installed.open', 'Open app')}
               </Button>
             </div>
           ) : (
@@ -146,13 +146,13 @@ export default function Install() {
               {/* Android/Desktop - Browser Install */}
               {deferredPrompt && platform !== 'ios' && (
                 <div className="text-center space-y-4">
-                  <h3 className="font-semibold text-lg">Готово к установке</h3>
+                  <h3 className="font-semibold text-lg">{t('install.ready.title', 'Ready to install')}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Нажмите кнопку ниже, чтобы установить LinkMAX.my на устройство
+                    {t('install.ready.desc', 'Click the button below to install LinkMAX.my on your device')}
                   </p>
                   <Button onClick={handleInstall} className="w-full" size="lg">
                     <Download className="h-5 w-5 mr-2" />
-                    Установить сейчас
+                    {t('install.ready.button', 'Install now')}
                   </Button>
                 </div>
               )}
@@ -160,19 +160,19 @@ export default function Install() {
               {/* iOS Instructions */}
               {platform === 'ios' && (
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-lg text-center">Инструкция для iOS</h3>
+                  <h3 className="font-semibold text-lg text-center">{t('install.ios.title', 'Instructions for iOS')}</h3>
                   <ol className="space-y-2 text-sm">
                     <li className="flex items-start gap-2">
                       <span className="font-semibold min-w-[24px]">1.</span>
-                      <span>Нажмите кнопку "Поделиться" <span className="inline-block">⬆️</span> внизу Safari</span>
+                      <span>{t('install.ios.step1', 'Tap the "Share" button ⬆️ at the bottom of Safari')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="font-semibold min-w-[24px]">2.</span>
-                      <span>Прокрутите вниз и выберите "На экран Домой"</span>
+                      <span>{t('install.ios.step2', 'Scroll down and select "Add to Home Screen"')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="font-semibold min-w-[24px]">3.</span>
-                      <span>Нажмите "Добавить" в правом верхнем углу</span>
+                      <span>{t('install.ios.step3', 'Tap "Add" in the top right corner')}</span>
                     </li>
                   </ol>
                 </div>
@@ -181,19 +181,19 @@ export default function Install() {
               {/* Android Manual Instructions */}
               {platform === 'android' && !deferredPrompt && (
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-lg text-center">Инструкция для Android</h3>
+                  <h3 className="font-semibold text-lg text-center">{t('install.android.title', 'Instructions for Android')}</h3>
                   <ol className="space-y-2 text-sm">
                     <li className="flex items-start gap-2">
                       <span className="font-semibold min-w-[24px]">1.</span>
-                      <span>Нажмите меню браузера (⋮) в правом верхнем углу</span>
+                      <span>{t('install.android.step1', 'Tap the browser menu (⋮) in the top right corner')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="font-semibold min-w-[24px]">2.</span>
-                      <span>Выберите "Установить приложение" или "Добавить на главный экран"</span>
+                      <span>{t('install.android.step2', 'Select "Install app" or "Add to Home Screen"')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="font-semibold min-w-[24px]">3.</span>
-                      <span>Подтвердите установку</span>
+                      <span>{t('install.android.step3', 'Confirm installation')}</span>
                     </li>
                   </ol>
                 </div>
@@ -202,17 +202,16 @@ export default function Install() {
               {/* Desktop Instructions */}
               {platform === 'desktop' && !deferredPrompt && (
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-lg text-center">Инструкция для Desktop</h3>
+                  <h3 className="font-semibold text-lg text-center">{t('install.desktop.title', 'Instructions for Desktop')}</h3>
                   <p className="text-sm text-muted-foreground text-center">
-                    В адресной строке браузера найдите иконку установки <Monitor className="inline h-4 w-4" /> 
-                    {' '}или в меню браузера выберите "Установить LinkMAX.my"
+                    {t('install.desktop.desc', 'Look for the install icon in the browser address bar or select "Install LinkMAX.my" from the browser menu')}
                   </p>
                 </div>
               )}
 
               <div className="pt-4 border-t">
                 <Button variant="outline" onClick={() => navigate('/')} className="w-full">
-                  Вернуться на главную
+                  {t('install.backHome', 'Back to home')}
                 </Button>
               </div>
             </div>
