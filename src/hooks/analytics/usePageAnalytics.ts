@@ -73,16 +73,21 @@ export interface DeviceBreakdown {
 
 export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
 
-export function usePageAnalytics() {
+export function usePageAnalytics(externalPageId?: string) {
   const { user } = useAuth();
   const { i18n } = useTranslation();
-  const [pageId, setPageId] = useState<string | null>(null);
+  const [pageId, setPageId] = useState<string | null>(externalPageId || null);
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [period, setPeriod] = useState<TimePeriod>('week');
 
-  // Fetch user's page ID
+  // Fetch user's page ID only if not provided externally
   useEffect(() => {
+    if (externalPageId) {
+      setPageId(externalPageId);
+      return;
+    }
+
     async function fetchPageId() {
       if (!user) return;
 
@@ -90,6 +95,7 @@ export function usePageAnalytics() {
         .from('pages')
         .select('id')
         .eq('user_id', user.id)
+        .limit(1)
         .maybeSingle();
 
       if (data) {
@@ -98,7 +104,7 @@ export function usePageAnalytics() {
     }
 
     fetchPageId();
-  }, [user]);
+  }, [user, externalPageId]);
 
   const fetchAnalytics = useCallback(async () => {
     if (!user || !pageId) return;
@@ -177,11 +183,11 @@ export function usePageAnalytics() {
         ? ((totalClicks - prevClicks) / prevClicks) * 100 
         : (totalClicks > 0 ? 100 : 0);
 
-      // Unique visitors (by IP in metadata or session)
-      const uniqueIPs = new Set(events
-        .filter(e => e.event_type === 'view' && e.metadata?.ip)
-        .map(e => e.metadata.ip));
-      const uniqueVisitors = uniqueIPs.size || Math.ceil(totalViews * 0.7); // Estimate if no IP data
+      // Unique visitors by visitorId from metadata
+      const uniqueVisitorIds = new Set(events
+        .filter(e => e.event_type === 'view' && e.metadata?.visitorId)
+        .map(e => e.metadata.visitorId as string));
+      const uniqueVisitors = uniqueVisitorIds.size || Math.ceil(totalViews * 0.7);
 
       // Days in period for average
       const daysInPeriod = Math.max(1, Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
@@ -284,10 +290,19 @@ export function usePageAnalytics() {
         }))
         .sort((a, b) => b.count - a.count);
 
-      // Calculate session metrics from real data
-      const sessionsWithClicks = events.filter(e => e.event_type === 'click').length;
-      const bounceRate = totalViews > 0
-        ? Math.max(0, Math.min(100, ((totalViews - sessionsWithClicks) / totalViews) * 100))
+      // Calculate bounce rate based on sessions (a bounce = session with view but no click)
+      const sessionEvents = new Map<string, Set<string>>();
+      events.forEach(e => {
+        const sid = (e.metadata?.sessionId as string) || e.id;
+        if (!sessionEvents.has(sid)) sessionEvents.set(sid, new Set());
+        sessionEvents.get(sid)!.add(e.event_type);
+      });
+      const totalSessions = sessionEvents.size;
+      const bouncedSessions = Array.from(sessionEvents.values()).filter(
+        types => types.has('view') && !types.has('click')
+      ).length;
+      const bounceRate = totalSessions > 0
+        ? Math.max(0, Math.min(100, (bouncedSessions / totalSessions) * 100))
         : 0;
 
       // Calculate average session duration from session_end events or view metadata
@@ -318,13 +333,15 @@ export function usePageAnalytics() {
         ? Math.round(allDurations.reduce((sum, d) => sum + d, 0) / allDurations.length)
         : (totalViews > 0 ? 45 : 0); // Default estimate only if there are views
 
-      // Calculate returning visitors
-      const visitorCounts = new Map<string, number>();
-      events.filter(e => e.event_type === 'view').forEach(e => {
-        const visitorId = (e.metadata?.visitorId as string) || e.id;
-        visitorCounts.set(visitorId, (visitorCounts.get(visitorId) || 0) + 1);
+      // Calculate returning visitors — visitorId with >1 unique sessionId
+      const visitorSessions = new Map<string, Set<string>>();
+      events.filter(e => e.event_type === 'view' && e.metadata?.visitorId).forEach(e => {
+        const vid = e.metadata.visitorId as string;
+        const sid = (e.metadata?.sessionId as string) || e.id;
+        if (!visitorSessions.has(vid)) visitorSessions.set(vid, new Set());
+        visitorSessions.get(vid)!.add(sid);
       });
-      const returningCount = Array.from(visitorCounts.values()).filter(c => c > 1).length;
+      const returningCount = Array.from(visitorSessions.values()).filter(s => s.size > 1).length;
       const returningVisitorsPercent = uniqueVisitors > 0 ? (returningCount / uniqueVisitors) * 100 : 0;
 
       // Fetch conversions (leads + bookings + event_registrations)
@@ -332,21 +349,20 @@ export function usePageAnalytics() {
         .from('leads')
         .select('id')
         .eq('user_id', user.id)
-        .contains('metadata', { pageId: pageId })
         .gte('created_at', startDate.toISOString());
 
       const { data: bookings } = await supabase
         .from('bookings')
         .select('id')
         .eq('owner_id', user.id)
-        .contains('metadata', { pageId: pageId })
+        .eq('page_id', pageId)
         .gte('created_at', startDate.toISOString());
 
       const { data: eventRegistrations } = await supabase
         .from('event_registrations')
         .select('id')
         .eq('owner_id', user.id)
-        .contains('metadata', { pageId: pageId })
+        .eq('page_id', pageId)
         .gte('created_at', startDate.toISOString());
 
       const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);
