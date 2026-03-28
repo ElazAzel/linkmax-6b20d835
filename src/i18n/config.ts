@@ -137,10 +137,11 @@ i18n
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',
     fallbackLng: {
-      'kz': ['kk', 'en'],
-      'uk': ['en'],
-      'be': ['en'],
-      'uz': ['en'],
+      'kz': ['kk', 'ru', 'en'],
+      'kk': ['ru', 'en'],
+      'uz': ['ru', 'en'],
+      'uk': ['ru', 'en'],
+      'be': ['ru', 'en'],
       'default': ['en']
     },
     interpolation: {
