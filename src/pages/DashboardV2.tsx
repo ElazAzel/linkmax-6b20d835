@@ -33,7 +33,8 @@ import {
   PageSwitcher,
 } from '@/components/dashboard-v2/layout';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
-
+import { Button } from '@/components/ui/button';
+import Crown from 'lucide-react/dist/esm/icons/crown';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
 const HomeScreen = lazy(() => import('@/components/dashboard-v2/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
