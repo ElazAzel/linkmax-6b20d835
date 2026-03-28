@@ -604,7 +604,7 @@ function DashboardV2Inner() {
               <ScreenErrorBoundary screenName="Monetize">
                 <MonetizeScreen
                   isPremium={dashboard.isPremium}
-                  tier={(dashboard.premiumTier as 'identity' | 'starter' | 'pro' | 'business') || (dashboard.isPremium ? 'pro' : 'identity')}
+                  tier={(dashboard.currentTier as 'identity' | 'starter' | 'pro' | 'business') || 'identity'}
                   limits={{
                     pagesUsed: multiPage.limits?.currentPages || 1,
                     pagesLimit: multiPage.limits?.maxPages || 1,
