@@ -2,8 +2,12 @@
 
 import { useNavigate } from 'react-router-dom';
 
-import { memo, useState } from 'react';
+import { memo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { supabase } from '@/platform/supabase/client';
+import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 
 import User from 'lucide-react/dist/esm/icons/user';
 import Crown from 'lucide-react/dist/esm/icons/crown';
@@ -138,6 +142,34 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [showVerification, setShowVerification] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordSaving, setPasswordSaving] = useState(false);
+
+    const handleChangePassword = useCallback(async () => {
+        if (newPassword.length < 6) {
+            toast.error(t('dashboard.accountSettings.passwordTooShort', 'Password must be at least 6 characters'));
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            toast.error(t('dashboard.accountSettings.passwordMismatch', 'Passwords do not match'));
+            return;
+        }
+        setPasswordSaving(true);
+        try {
+            const { error } = await supabase.auth.updateUser({ password: newPassword });
+            if (error) throw error;
+            toast.success(t('dashboard.accountSettings.passwordChanged', 'Password changed successfully'));
+            setShowChangePassword(false);
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (error: any) {
+            toast.error(error.message || t('common.error', 'Error'));
+        } finally {
+            setPasswordSaving(false);
+        }
+    }, [newPassword, confirmPassword, t]);
     const [showTelegramVerification, setShowTelegramVerification] = useState(false);
 
     return (
@@ -336,7 +368,8 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                             iconBg="bg-slate-500/15"
                             iconColor="text-slate-500"
                             label={t('dashboard.accountSettings.billingHistory', 'Billing History')}
-                            onClick={() => {/* TODO: Open billing history */ }}
+                            description={t('dashboard.accountSettings.billingHistoryDesc', 'View past payments')}
+                            onClick={() => navigate('/pricing')}
                         />
                     )}
                 </Card>
@@ -356,7 +389,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         iconBg="bg-red-500/15"
                         iconColor="text-red-500"
                         label={t('dashboard.accountSettings.changePassword', 'Change Password')}
-                        onClick={() => {/* TODO: Open password change */ }}
+                        onClick={() => setShowChangePassword(true)}
                     />
                 </Card>
             </div>
@@ -370,6 +403,44 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                 <LogOut className="h-5 w-5 mr-2" />
                 {t('dashboard.accountSettings.signOut', 'Sign Out')}
             </Button>
+
+            {/* Change Password Dialog */}
+            <Dialog open={showChangePassword} onOpenChange={setShowChangePassword}>
+                <DialogContent className="sm:max-w-md rounded-3xl">
+                    <DialogHeader>
+                        <DialogTitle>{t('dashboard.accountSettings.changePassword', 'Change Password')}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-2">
+                        <div className="space-y-2">
+                            <Label>{t('dashboard.accountSettings.newPassword', 'New password')}</Label>
+                            <Input
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="rounded-xl"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>{t('dashboard.accountSettings.confirmPassword', 'Confirm password')}</Label>
+                            <Input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="rounded-xl"
+                            />
+                        </div>
+                        <Button
+                            onClick={handleChangePassword}
+                            disabled={passwordSaving || !newPassword}
+                            className="w-full rounded-xl"
+                        >
+                            {passwordSaving ? t('common.saving', 'Saving...') : t('dashboard.accountSettings.updatePassword', 'Update Password')}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
 
             {/* Verification Panel */}
             {showVerification && (

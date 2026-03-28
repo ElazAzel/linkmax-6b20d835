@@ -234,7 +234,7 @@ export default function PublicPage() {
           <EnhancedSEOHead
             pageData={pageData}
             pageUrl={canonicalUrl}
-            updatedAt={new Date().toISOString()}
+            updatedAt={pageData?.updatedAt || new Date().toISOString()}
             isNewAccount={false}
           />
           <SEOMetaEnhancer
@@ -271,7 +271,7 @@ export default function PublicPage() {
           <CrawlerFriendlyContent
             blocks={displayBlocks}
             slug={slug || ''}
-            updatedAt={new Date().toISOString()}
+            updatedAt={pageData?.updatedAt || new Date().toISOString()}
           />
 
           {/* GEO Enhanced Content - visible to crawlers even with JS enabled */}

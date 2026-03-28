@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/user/useAuth';
 import { fintechService, WalletOverview, WalletTransaction } from '@/services/fintech';
@@ -6,6 +6,7 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { Card } from '@/components/ui/card';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { EmptyState, LoadingState } from '@/components/ui/states';
+import { useQuery } from '@tanstack/react-query';
 import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import ArrowDownLeft from 'lucide-react/dist/esm/icons/arrow-down-left';
@@ -29,19 +30,16 @@ import { FinanceInsightsWidget } from '../widgets/FinanceInsightsWidget';
 export const FinanceScreen = memo(function FinanceScreen() {
     const { t, i18n } = useTranslation();
     const { user } = useAuth();
-    const [data, setData] = useState<WalletOverview | null>(null);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (!user) return;
-        setLoading(true);
-        fintechService.getWalletOverview(user.id)
-            .then(res => setData(res))
-            .catch(err => console.error('Failed to load wallet', err))
-            .finally(() => setLoading(false));
-    }, [user]);
+    const { data, isLoading } = useQuery({
+        queryKey: ['walletOverview', user?.id],
+        queryFn: () => fintechService.getWalletOverview(user!.id),
+        enabled: !!user,
+        staleTime: 2 * 60 * 1000,
+        retry: 2,
+    });
 
-    if (loading) return <LoadingState skeleton={<LoadingSkeleton />} />;
+    if (isLoading) return <LoadingState skeleton={<LoadingSkeleton />} />;
 
     const balance = data?.wallet?.balance || 0;
     const currency = data?.wallet?.currency || 'KZT';

@@ -385,12 +385,12 @@ function DashboardV2Inner() {
         <div className="text-center p-6">
           <h2 className="text-xl font-bold mb-2">{t('dashboard.errors.loadFailed', 'Loading failed')}</h2>
           <p className="text-muted-foreground mb-4">{t('dashboard.errors.loadFailedDesc', 'Could not load page data')}</p>
-          <button
+          <Button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-xl"
+            className="rounded-xl"
           >
             {t('common.retry', 'Try again')}
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -603,7 +603,7 @@ function DashboardV2Inner() {
               <ScreenErrorBoundary screenName="Monetize">
                 <MonetizeScreen
                   isPremium={dashboard.isPremium}
-                  tier={dashboard.isPremium ? 'pro' : 'identity'}
+                  tier={(dashboard.premiumTier as 'identity' | 'starter' | 'pro' | 'business') || (dashboard.isPremium ? 'pro' : 'identity')}
                   limits={{
                     pagesUsed: multiPage.limits?.currentPages || 1,
                     pagesLimit: multiPage.limits?.maxPages || 1,
@@ -615,6 +615,7 @@ function DashboardV2Inner() {
                     aiGenerationsLimit: freemiumLimits.maxAIPageGenerationsPerMonth === Infinity ? 999 : freemiumLimits.maxAIPageGenerationsPerMonth,
                   }}
                   onUpgrade={() => navigate('/pricing')}
+                  onManageBilling={() => navigate('/pricing')}
                 />
               </ScreenErrorBoundary>
             )}
@@ -746,6 +747,16 @@ function DashboardV2Inner() {
             )}
 
             {/* Zone Screens - Business tier only */}
+            {currentTab.startsWith('zone-') && !canUseBusinessZone() && (
+              <div className="flex flex-col items-center justify-center py-24 px-6 text-center">
+                <Crown className="h-12 w-12 text-amber-500 mb-4" />
+                <h2 className="text-xl font-bold mb-2">{t('dashboard.zone.businessOnly', 'Business Plan Required')}</h2>
+                <p className="text-muted-foreground mb-6 max-w-md">{t('dashboard.zone.businessOnlyDesc', 'Zone features are available on the Business plan. Upgrade to manage teams, deals, and more.')}</p>
+                <Button onClick={() => navigate('/pricing')} className="rounded-xl">
+                  {t('dashboard.zone.upgrade', 'Upgrade to Business')}
+                </Button>
+              </div>
+            )}
             {currentTab === 'zone-dashboard' && canUseBusinessZone() && <ZoneDashboardWrapper />}
             {currentTab === 'zone-analytics' && canUseBusinessZone() && <ZoneAnalyticsScreenWrapper />}
             {currentTab === 'zone-deals' && canUseBusinessZone() && <ZoneDealsScreenWrapper />}
