@@ -70,11 +70,12 @@ function InsertBetweenDivider({
         isMobile ? "opacity-100" : "opacity-0 group-hover/divider:opacity-100"
       )}>
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        <button
+        <Button
+          variant="ghost"
           type="button"
           onClick={() => onOpenInsert(position)}
           className={cn(
-            "shrink-0 flex items-center justify-center rounded-full transition-all duration-300",
+            "shrink-0 p-0 flex items-center justify-center rounded-full transition-all duration-300",
             "glass-subtle bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
             "active:scale-95 hover:scale-110",
             isMobile ? "h-11 w-11" : "h-7 w-7"
@@ -82,7 +83,7 @@ function InsertBetweenDivider({
           aria-label="Insert block here"
         >
           <Plus className={isMobile ? "h-5 w-5" : "h-4 w-4"} strokeWidth={3} />
-        </button>
+        </Button>
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </div>
     </div>
@@ -227,9 +228,10 @@ function SortableGridBlockItem({
         </div>
 
         {/* Click Overlay */}
-        <button
+        <Button
+          variant="ghost"
           type="button"
-          className="absolute inset-0 z-20 cursor-pointer rounded-2xl ring-offset-background transition-colors hover:bg-black/5 active:bg-black/10"
+          className="absolute inset-0 z-20 cursor-pointer rounded-2xl ring-offset-background transition-colors hover:bg-black/5 active:bg-black/10 h-auto p-0"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -388,12 +390,12 @@ function SectionHeader({
 }) {
   return (
     <div className="col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-muted/30 border border-border/10">
-      <button onClick={onToggleCollapse} className="p-0.5">
+      <Button variant="ghost" className="h-auto p-0.5 hover:bg-transparent" onClick={onToggleCollapse}>
         <ChevronRight className={cn(
           'h-4 w-4 text-muted-foreground transition-transform',
           !isCollapsed && 'rotate-90'
         )} />
-      </button>
+      </Button>
       <FolderOpen className="h-4 w-4 text-primary shrink-0" />
       <span className="text-xs font-bold text-foreground flex-1 truncate">{label}</span>
       <span className="text-xs text-muted-foreground">{blockCount}</span>

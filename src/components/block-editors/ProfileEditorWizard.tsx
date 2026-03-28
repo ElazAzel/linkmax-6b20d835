@@ -69,6 +69,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
   const [cropperOpen, setCropperOpen] = useState(false);
   const [cropperImage, setCropperImage] = useState('');
   const [cropperType, setCropperType] = useState<'avatar' | 'cover'>('avatar');
+  const [errors, setErrors] = useState<{name?: string; bio?: string}>({});
   
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
@@ -94,12 +95,39 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
     .slice(0, 2) || 'ME';
 
   const goNext = useCallback(() => {
+    if (currentStep === 'info') {
+      const nameObj = typeof formData.name === 'object' ? formData.name : {};
+      const bioObj = typeof formData.bio === 'object' ? formData.bio : {};
+      const MAX_NAME_LENGTH = 50;
+      const MAX_BIO_LENGTH = 500;
+      
+      let hasError = false;
+      const newErrors: {name?: string, bio?: string} = {};
+      
+      if (Object.values(nameObj).some(v => v && v.length > MAX_NAME_LENGTH)) {
+        newErrors.name = t('profile.validation.nameTooLong', 'Name must be under {{count}} characters', { count: MAX_NAME_LENGTH });
+        hasError = true;
+      }
+      
+      if (Object.values(bioObj).some(v => v && v.replace(/(<([^>]+)>)/ig, '').length > MAX_BIO_LENGTH)) {
+        newErrors.bio = t('profile.validation.bioTooLong', 'Bio must be under {{count}} characters', { count: MAX_BIO_LENGTH });
+        hasError = true;
+      }
+      
+      if (hasError) {
+        setErrors(newErrors);
+        toast.error(t('common.errors.fillRequired', 'Please fix all errors before saving'));
+        return;
+      }
+      setErrors({});
+    }
+
     if (isLastStep) {
       onComplete?.();
     } else {
       setCurrentStep(STEPS[currentStepIndex + 1]);
     }
-  }, [currentStepIndex, isLastStep, onComplete]);
+  }, [currentStep, currentStepIndex, isLastStep, onComplete, formData, t]);
 
   const goPrev = useCallback(() => {
     if (!isFirstStep) {
@@ -215,7 +243,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
       >
         {formData.coverImage ? (
           <>
-            <img src={formData.coverImage} alt="" className="w-full h-full object-cover" />
+            <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
             {formData.coverGradient && formData.coverGradient !== 'none' && (
               <div className={cn(
                 "absolute inset-0",
@@ -383,34 +411,44 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
 
       {/* Name input */}
       <div className="space-y-2">
-        <Label>{t('fields.name', 'Имя')}</Label>
+        <Label className={cn(errors.name && "text-destructive")}>{t('fields.name', 'Имя')}</Label>
         <Input
           value={nameValue}
           onChange={(e) => {
             const newName = migrateToMultilingual(e.target.value);
             onChange({ ...formData, name: newName });
+            if (errors.name) setErrors(prev => ({ ...prev, name: undefined }));
           }}
           placeholder={t('placeholders.yourName', 'Ваше имя')}
-          className="h-14 text-lg rounded-2xl border-2 focus:border-primary"
+          className={cn(
+            "h-14 text-lg rounded-2xl border-2 focus:border-primary",
+            errors.name && "border-destructive focus-visible:ring-destructive focus:border-destructive"
+          )}
         />
+        {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
       </div>
 
       {/* Bio input */}
       <div className="space-y-2">
-        <Label>{t('fields.bio', 'О себе')}</Label>
+        <Label className={cn(errors.bio && "text-destructive")}>{t('fields.bio', 'О себе')}</Label>
         <Textarea
           value={bioValue}
           onChange={(e) => {
             const newBio = migrateToMultilingual(e.target.value);
             onChange({ ...formData, bio: newBio });
+            if (errors.bio) setErrors(prev => ({ ...prev, bio: undefined }));
           }}
           placeholder={t('placeholders.tellAboutYourself', 'Расскажите о себе...')}
-          className="min-h-[120px] text-base rounded-2xl border-2 focus:border-primary resize-none"
+          className={cn(
+            "min-h-[120px] text-base rounded-2xl border-2 focus:border-primary resize-none",
+            errors.bio && "border-destructive focus-visible:ring-destructive focus:border-destructive"
+          )}
           rows={4}
         />
-        <p className="text-xs text-muted-foreground text-right">
-          {bioValue.length}/200
-        </p>
+        {errors.bio && <p className="text-xs text-destructive">{errors.bio}</p>}
+        {!errors.bio && <p className="text-xs text-muted-foreground text-right">
+          {bioValue.length}/500
+        </p>}
       </div>
     </div>
   );
@@ -435,7 +473,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
           formData.coverImage ? '' : 'bg-muted'
         )}>
           {formData.coverImage && (
-            <img src={formData.coverImage} alt="" className="w-full h-full object-cover" />
+            <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
           )}
         </div>
         

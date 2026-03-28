@@ -368,7 +368,7 @@ export const HomeScreen = memo(function HomeScreen({
 
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-2 md:gap-5">
-            <button onClick={onOpenEditor} className="text-left transition-smooth active:scale-95 group/stat">
+            <Button variant="ghost" onClick={onOpenEditor} className="h-auto p-0 hover:bg-transparent text-left transition-smooth active:scale-95 group/stat">
               <StatCard
                 icon={<LayoutGrid className="w-5 h-5 group-hover/stat:scale-110 group-hover/stat:text-primary transition-all" />}
                 value={blockCount}
@@ -376,8 +376,8 @@ export const HomeScreen = memo(function HomeScreen({
                 variant="glass"
                 compact
               />
-            </button>
-            <button onClick={onOpenInsights} className="text-left transition-smooth active:scale-95 group/stat">
+            </Button>
+            <Button variant="ghost" onClick={onOpenInsights} className="h-auto p-0 hover:bg-transparent text-left transition-smooth active:scale-95 group/stat">
               <StatCard
                 icon={<Eye className="h-5 w-5 text-emerald-500 group-hover/stat:scale-110 transition-transform" />}
                 value={viewCount}
@@ -385,8 +385,8 @@ export const HomeScreen = memo(function HomeScreen({
                 variant="glass"
                 compact
               />
-            </button>
-            <button onClick={onOpenActivity} className="text-left transition-smooth active:scale-95 group/stat">
+            </Button>
+            <Button variant="ghost" onClick={onOpenActivity} className="h-auto p-0 hover:bg-transparent text-left transition-smooth active:scale-95 group/stat">
               <StatCard
                 icon={<MessageSquare className="h-5 w-5 text-violet-500 group-hover/stat:scale-110 transition-transform" />}
                 value={weeklyStats.leads}
@@ -394,7 +394,7 @@ export const HomeScreen = memo(function HomeScreen({
                 variant="glass"
                 compact
               />
-            </button>
+            </Button>
           </div>
 
           {/* Primary Actions — Premium pill buttons */}

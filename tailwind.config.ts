@@ -62,7 +62,8 @@ export default {
           'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
-        }
+        },
+        kaspi: '#f14635'
       },
       borderRadius: {
         '2xl': 'calc(var(--radius) + 0.5rem)',

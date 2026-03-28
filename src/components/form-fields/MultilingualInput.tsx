@@ -23,6 +23,7 @@ import {
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils/utils';
 import { RichTextEditor } from './RichTextEditor';
 import {
   Popover,
@@ -83,6 +84,7 @@ interface MultilingualInputProps {
   /** Callback for Magic Wand assistant */
   onMagicWand?: () => void;
   magicWandTitle?: string;
+  error?: string;
 }
 
 export function MultilingualInput({
@@ -98,6 +100,7 @@ export function MultilingualInput({
   compact = false,
   onMagicWand,
   magicWandTitle,
+  error,
 }: MultilingualInputProps) {
   const { t } = useTranslation();
 
@@ -206,7 +209,7 @@ export function MultilingualInput({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <Label>
+        <Label className={cn(error && "text-destructive")}>
           {label}
           {required && <span className="text-destructive ml-1">*</span>}
         </Label>
@@ -333,13 +336,17 @@ export function MultilingualInput({
                   placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
                   type={type}
                   variant="glass"
+                  className={error ? 'border-destructive ring-destructive focus-visible:ring-destructive' : undefined}
                 />
               ) : (
                 <InputComponent
                   value={(value as I18nText)[langCode] || ''}
                   onChange={(e) => handleChange(langCode, e.target.value)}
                   placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
-                  className={type === 'textarea' ? 'min-h-[100px]' : ''}
+                  className={cn(
+                    type === 'textarea' && 'min-h-[100px]',
+                    error && 'border-destructive ring-destructive focus-visible:ring-destructive focus-visible:border-destructive'
+                  )}
                   variant="glass"
                 />
               )}
@@ -353,9 +360,14 @@ export function MultilingualInput({
         })}
       </Tabs>
 
-      {enableRichText && (
+      {enableRichText && !error && (
         <p className="text-xs text-muted-foreground">
           {t('hints.richTextVisual', 'Используйте кнопку 🔗 для добавления ссылок. Переносы строк сохраняются.')}
+        </p>
+      )}
+      {error && (
+        <p className="text-xs font-medium text-destructive mt-1.5 animate-in slide-in-from-top-1">
+          {error}
         </p>
       )}
     </div>

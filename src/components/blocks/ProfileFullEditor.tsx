@@ -119,6 +119,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
   const [cropperOpen, setCropperOpen] = useState(false);
   const [cropperImage, setCropperImage] = useState('');
   const [activeTab, setActiveTab] = useState('cover');
+  const [errors, setErrors] = useState<{name?: string; bio?: string}>({});
 
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
@@ -225,6 +226,33 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
   }, [handleFileUpload]);
 
   const handleSave = () => {
+    let hasError = false;
+    const newErrors: {name?: string, bio?: string} = {};
+
+    const nameObj = typeof formData.name === 'object' ? formData.name : {};
+    const bioObj = typeof formData.bio === 'object' ? formData.bio : {};
+    
+    const MAX_NAME_LENGTH = 50;
+    const MAX_BIO_LENGTH = 500;
+    
+    if (Object.values(nameObj).some(v => v && v.length > MAX_NAME_LENGTH)) {
+      newErrors.name = t('profile.validation.nameTooLong', 'Name must be under {{count}} characters', { count: MAX_NAME_LENGTH });
+      hasError = true;
+    }
+    
+    if (Object.values(bioObj).some(v => v && v.replace(/(<([^>]+)>)/ig, '').length > MAX_BIO_LENGTH)) {
+      newErrors.bio = t('profile.validation.bioTooLong', 'Bio must be under {{count}} characters', { count: MAX_BIO_LENGTH });
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      setActiveTab('info');
+      toast.error(t('common.errors.fillRequired', 'Please fix all errors before saving'));
+      return;
+    }
+    
+    setErrors({});
     onSave(formData);
     onClose();
   };
@@ -282,7 +310,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
               >
                 {formData.coverImage ? (
                   <>
-                    <img src={formData.coverImage} alt="" className="w-full h-full object-cover" />
+                    <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
                     {formData.coverGradient && formData.coverGradient !== 'none' && (
                       <div className={cn(
                         "absolute inset-0",
@@ -480,19 +508,27 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
               <MultilingualInput
                 label={t('fields.name', 'Имя')}
                 value={isMultilingualString(formData.name) ? formData.name : createMultilingualString(name)}
-                onChange={(newName: MultilingualString) => setFormData(prev => ({ ...prev, name: newName }))}
+                onChange={(newName: MultilingualString) => {
+                  setFormData(prev => ({ ...prev, name: newName }));
+                  if (errors.name) setErrors(prev => ({ ...prev, name: undefined }));
+                }}
                 type="input"
                 placeholder={t('profile.namePlaceholder', 'Ваше имя')}
+                error={errors.name}
               />
 
               {/* Multilingual Bio Input with Rich Text (link insertion) */}
               <MultilingualInput
                 label={t('fields.bio', 'О себе')}
                 value={isMultilingualString(formData.bio) ? formData.bio : createMultilingualString(bio)}
-                onChange={(newBio: MultilingualString) => setFormData(prev => ({ ...prev, bio: newBio }))}
+                onChange={(newBio: MultilingualString) => {
+                  setFormData(prev => ({ ...prev, bio: newBio }));
+                  if (errors.bio) setErrors(prev => ({ ...prev, bio: undefined }));
+                }}
                 type="textarea"
                 placeholder={t('profile.bioPlaceholder', 'Расскажите о себе...')}
                 enableRichText={true}
+                error={errors.bio}
               />
             </TabsContent>
 
@@ -510,7 +546,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                   formData.coverImage ? '' : 'bg-muted'
                 )}>
                   {formData.coverImage && (
-                    <img src={formData.coverImage} alt="" className="w-full h-full object-cover" />
+                    <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
                   )}
                 </div>
 

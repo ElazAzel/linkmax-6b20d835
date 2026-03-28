@@ -86,12 +86,12 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
             <CardHeader className="pb-4 border-b border-white/5">
                 <CardTitle className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-2xl bg-[#F14635]/10 text-[#F14635] shadow-inner">
+                        <div className="p-2.5 rounded-2xl bg-kaspi/10 text-kaspi shadow-inner">
                             <Smartphone className="h-5 w-5" />
                         </div>
                         <span className="text-sm font-bold tracking-tight">{t('dashboard.kaspi_qr', 'Kaspi QR')}</span>
                     </div>
-                    <Badge variant="secondary" className="bg-[#F14635]/10 text-[#F14635] border-[#F14635]/20 font-bold text-[10px] tracking-wider py-1 px-3 rounded-lg">
+                    <Badge variant="secondary" className="bg-kaspi/10 text-kaspi border-kaspi/20 font-bold text-[10px] tracking-wider py-1 px-3 rounded-lg">
                         {t('dashboard.instant', 'МГНОВЕННО')}
                     </Badge>
                 </CardTitle>

@@ -242,7 +242,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
       <div className="p-4 space-y-3">
         {/* Today's bookings */}
         {todayBookings.length > 0 && (
-          <button onClick={onOpenActivity} className="w-full flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10 text-left">
+          <Button variant="ghost" onClick={onOpenActivity} className="w-full h-auto flex items-center gap-3 p-3 rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/10 text-left font-normal whitespace-normal">
             <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
               <CalendarDays className="h-4 w-4 text-primary" />
             </div>
@@ -257,12 +257,12 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
                 })}
               </span>
             </div>
-          </button>
+          </Button>
         )}
 
         {/* Unanswered leads alert */}
         {unansweredLeads > 0 && (
-          <button onClick={onOpenActivity} className="w-full flex items-center gap-3 p-3 rounded-xl bg-destructive/5 border border-destructive/10 text-left">
+          <Button variant="ghost" onClick={onOpenActivity} className="w-full h-auto flex items-center gap-3 p-3 rounded-xl bg-destructive/5 hover:bg-destructive/10 border border-destructive/10 text-left font-normal whitespace-normal">
             <div className="h-9 w-9 rounded-lg bg-destructive/10 flex items-center justify-center shrink-0">
               <Clock className="h-4 w-4 text-destructive" />
             </div>
@@ -282,7 +282,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
                 {aging.urgentTotal}
               </Badge>
             )}
-          </button>
+          </Button>
         )}
 
         {/* Post-service follow-up with rebook link */}
@@ -378,15 +378,15 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
 
         {/* Stale page alert */}
         {pageIsStale && (
-          <button
+          <Button variant="ghost" 
             onClick={onOpenEditor}
-            className="w-full flex items-center gap-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10 text-left"
+            className="w-full h-auto flex items-center gap-3 p-3 rounded-xl bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 text-left font-normal whitespace-normal"
           >
             <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
             <span className="text-xs text-amber-700 font-medium">
               {t('operator.stale.page', 'Страница не обновлялась более 2 недель — обновите контент')}
             </span>
-          </button>
+          </Button>
         )}
       </div>
     </Card>

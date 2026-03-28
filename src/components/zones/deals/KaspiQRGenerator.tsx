@@ -125,7 +125,7 @@ export const KaspiQRGenerator = memo(function KaspiQRGenerator({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Smartphone className="h-5 w-5 text-[#F14635]" />
+            <Smartphone className="h-5 w-5 text-kaspi" />
             {t('kaspi.title', 'Kaspi QR Payment')}
           </DialogTitle>
           <DialogDescription>
