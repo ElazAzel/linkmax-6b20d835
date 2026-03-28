@@ -1,86 +1,87 @@
 
 
-# Анализ аналитики профиля — найденные проблемы и план исправлений
+# UX/UI Аудит платформы LinkMAX — Найденные проблемы
 
-## Найденные баги и проблемы
+## КРИТИЧНО: Нерабочие функции
 
-### 1. КРИТИЧНО: `sendBeacon` для `session_end` не работает
-**Файл:** `src/services/analytics.ts:152-155`
+### 1. Кнопки-заглушки без действия (TODO в коде)
+**Файлы:** `AccountSettingsTab.tsx:339, 359`
+- **"Billing History"** — `onClick={() => {/* TODO */}}` — кнопка ничего не делает
+- **"Change Password"** — `onClick={() => {/* TODO */}}` — кнопка ничего не делает
+- Пользователь нажимает — ноль обратной связи. Это выглядит как баг.
 
-`sendBeacon` отправляет POST на `/rest/v1/analytics` без заголовков авторизации (`apikey`, `Authorization`). Supabase требует как минимум `apikey` в query-параметрах. Результат: все `session_end` события молча теряются, и `avgSessionDuration` в дашборде всегда показывает дефолтное значение 45 секунд.
+### 2. MonetizeScreen: `onManageBilling` никогда не передаётся
+**Файлы:** `DashboardV2.tsx:604`, `MonetizeScreen.tsx:221`
+- `MonetizeScreen` принимает `onManageBilling` проп, но `DashboardV2` **не передаёт его** → кнопка "Manage Billing" = undefined onClick → ничего не происходит.
 
-Для сравнения, `useLandingAnalytics.ts:272-273` делает это правильно — добавляет `?apikey=...` к URL.
+### 3. MonetizeScreen: tier всегда "identity" или "pro"
+**Файл:** `DashboardV2.tsx:606`
+- `tier={dashboard.isPremium ? 'pro' : 'identity'}` — игнорирует реальные тиры Starter и Business. Пользователь Starter видит "PRO", а Business видит "PRO".
 
-**Исправление:** Добавить `?apikey=${VITE_SUPABASE_PUBLISHABLE_KEY}` к URL в `sendBeacon`, а также заголовок `Prefer: return=minimal`.
+### 4. Zone-табы: пустой экран без фидбека для не-Business
+**Файл:** `DashboardV2.tsx:749-761`
+- Если `canUseBusinessZone()` = false, при переходе на zone-таб рендерится **пустота** — ни сообщения, ни редиректа. Белый экран.
 
-### 2. КРИТИЧНО: Конверсии всегда = 0
-**Файл:** `src/hooks/analytics/usePageAnalytics.ts:331-351`
+## ПРОБЛЕМЫ UX
 
-Три запроса на конверсии используют `.contains('metadata', { pageId: pageId })`:
-- `leads` — имеет `metadata` JSONB, но `pageId` туда никогда не записывается (в `submit-lead` нет такого поля в metadata)
-- `bookings` — вообще **не имеет** столбца `metadata` в схеме. Запрос падает молча.
-- `event_registrations` — тоже **не имеет** `metadata`. Запрос падает молча.
+### 5. PublicPage: `updatedAt` всегда `new Date().toISOString()`
+**Файл:** `PublicPage.tsx:238, 274`
+- SEO-компоненты получают текущую дату вместо реальной даты обновления страницы → поисковики видят "страница обновляется каждую секунду" → вредит SEO.
 
-**Исправление:** 
-- Для `leads`: фильтровать по `user_id` (уже есть) без `contains`
-- Для `bookings`: использовать `.eq('page_id', pageId)` вместо `contains`
-- Для `event_registrations`: использовать `.eq('page_id', pageId)` вместо `contains`
+### 6. PublicPage: `as any` каскад
+**Файл:** `PublicPage.tsx:152-154`
+- `translateBlocksToLanguage(experimentalBlocks as any[])` и сравнение `translated !== experimentalBlocks as any` — TypeScript обходится, и проверка на равенство ссылок тоже может быть некорректной (Promise всегда возвращает новый массив).
 
-### 3. ПРОБЛЕМА: `analytics_block_id_fkey` всё ещё в types.ts
-Типы показывают FK `analytics.block_id → blocks.id`, хотя миграция `20260308010000` его удалила. Это может приводить к ошибкам INSERT если block_id не совпадает с реальным UUID из таблицы blocks (content-based IDs типа `profile-xxx`). Нужно проверить актуальное состояние БД.
+### 7. FinanceScreen: useEffect вместо React Query
+**Файл:** `FinanceScreen.tsx:35-42`
+- Данные кошелька загружаются через `useEffect` + `useState` вместо React Query → нет кэширования, нет retry, нет stale-time. При переключении табов данные перезагружаются каждый раз.
 
-### 4. ПРОБЛЕМА: `usePageAnalytics` берёт только первую страницу пользователя
-**Файл:** `src/hooks/analytics/usePageAnalytics.ts:89-93`
+### 8. DashboardV2: 925 строк — God Component
+**Файл:** `DashboardV2.tsx`
+- Один файл содержит 925 строк, ~30 useState, ~15 useCallback, ~20 lazy imports. Сложно поддерживать. Рекомендуется разбить на под-хуки (useDashboardModals, useDashboardNavigation).
 
-`.maybeSingle()` возвращает первую страницу. Если у пользователя несколько страниц (pro-план до 6), аналитика показывается только для одной, произвольной.
+### 9. NotFound: минимальный UI без навигации
+**Файл:** `NotFound.tsx`
+- Нет кнопки "Go to Dashboard", нет поиска, нет анимации. Просто текст и ссылка. Не соответствует Liquid Glass стилистике остальной платформы.
 
-**Исправление:** Передавать `pageId` явно из контекста дашборда, а не автоопределять.
+### 10. DashboardV2 error state: нативный `<button>` вместо DS Button
+**Файл:** `DashboardV2.tsx:388-393`
+- Используется `<button>` вместо `<Button>` из дизайн-системы. Нарушает audit из `design-system-audit.md`.
 
-### 5. ПРОБЛЕМА: Bounce Rate считается неверно
-**Файл:** `src/hooks/analytics/usePageAnalytics.ts:288-291`
+## ОПТИМИЗАЦИИ
 
-```ts
-const bounceRate = ((totalViews - sessionsWithClicks) / totalViews) * 100
-```
+### 11. HeroSection: scroll-параллакс через useState
+**Файл:** `HeroSection.tsx:20-43`
+- `useScrollParallax` вызывает 4 × `setState` на каждый кадр скролла → до 240 рендеров в секунду. Нужно заменить на `useTransform` из framer-motion или ref-based CSS variables.
 
-Это считает "просмотры без кликов" как отказы, но один пользователь может сгенерировать несколько view-событий. Правильнее считать по уникальным сессиям: сессия без клика = bounce.
-
-### 6. ПРОБЛЕМА: Unique Visitors — ненадёжное вычисление
-**Файл:** `src/hooks/analytics/usePageAnalytics.ts:181-184`
-
-Считает уникальных по `metadata.ip`, но IP никогда не записывается в metadata (проверено в `trackEvent`). Фолбек `Math.ceil(totalViews * 0.7)` — грубая оценка. Реально нужно считать по `metadata.visitorId`.
-
-### 7. МЕЛОЧЬ: Returning Visitors считается по view-событиям, а не сессиям
-Если один visitorId имеет 2+ view-событий в одном визите, он уже считается "returning". Нужно группировать по `sessionId`.
-
-### 8. МЕЛОЧЬ: `_sessionDurationTracked` — глобальный флаг
-Если пользователь навигируется между страницами (SPA), `initSessionDurationTracking` вызовется только для первой страницы. Длительность сессии для последующих страниц не трекается.
+### 12. `window.addEventListener` для межкомпонентной коммуникации
+**Файл:** `DashboardV2.tsx:312-332`
+- 5 глобальных event listeners (`openFriends`, `openTemplates` и т.д.) вместо Context или Zustand. Хрупко, нетипизированно, сложно дебажить.
 
 ## План исправлений
 
-### Шаг 1. Починить `sendBeacon` для session_end
-В `src/services/analytics.ts` — добавить apikey к URL и `Content-Type` через `Blob` headers.
+### Шаг 1. Починить нерабочие кнопки (пп. 1-2)
+- "Change Password": реализовать вызов `supabase.auth.updateUser` через модалку
+- "Billing History": либо реализовать, либо скрыть, либо показать toast "Coming soon"
+- Передать `onManageBilling` в MonetizeScreen
 
-### Шаг 2. Починить запросы конверсий  
-В `src/hooks/analytics/usePageAnalytics.ts` — заменить `.contains('metadata', { pageId })` на `.eq('page_id', pageId)` для bookings и event_registrations, и убрать `contains` для leads (оставить только `user_id` фильтр).
+### Шаг 2. Исправить tier в MonetizeScreen (п. 3)
+- Передавать `dashboard.currentTier` вместо тернарника
 
-### Шаг 3. Исправить подсчёт уникальных посетителей
-Считать по `metadata.visitorId` вместо `metadata.ip`.
+### Шаг 3. Добавить fallback для zone-табов (п. 4)
+- При `!canUseBusinessZone()` показывать upgrade-промпт вместо пустого экрана
 
-### Шаг 4. Исправить bounce rate
-Группировать по `sessionId`: bounce = сессия с view но без click.
+### Шаг 4. Исправить updatedAt в PublicPage (п. 5)
+- Использовать `pageData.updatedAt` или `pageData.updated_at` из БД
 
-### Шаг 5. Исправить returning visitors
-Считать visitorId, у которых >1 уникальных sessionId.
+### Шаг 5. Заменить нативный button на DS Button (п. 10)
+- В error state DashboardV2
 
-### Шаг 6. Передавать pageId явно в usePageAnalytics
-Добавить параметр `pageId` в хук вместо автоопределения через запрос.
+### Шаг 6. Оптимизировать scroll-параллакс (п. 11)
+- Заменить useState на CSS custom properties через ref
 
-### Шаг 7. Сбросить `_sessionDurationTracked` при смене страницы
-Привязать флаг к конкретному pageId.
+### Шаг 7. Улучшить NotFound (п. 9)
+- Добавить Liquid Glass стиль, кнопку Dashboard, анимацию
 
-### Оценка
-- Шаги 1-2: критические, без них данные просто отсутствуют
-- Шаги 3-5: метрики показывают мусор
-- Шаги 6-7: edge cases для мультистраничных пользователей
+### Шаг 8. Заменить useEffect на React Query в FinanceScreen (п. 7)
 
