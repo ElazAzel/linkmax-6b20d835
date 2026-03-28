@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { supabase } from '@/platform/supabase/client';
 import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
@@ -10,6 +13,7 @@ import Key from 'lucide-react/dist/esm/icons/key';
 import Save from 'lucide-react/dist/esm/icons/save';
 
 export function AdminBroadcastTab() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [savingToken, setSavingToken] = useState(false);
   const [message, setMessage] = useState('');
@@ -34,7 +38,7 @@ export function AdminBroadcastTab() {
 
   const handleSaveToken = async () => {
     if (!botToken.trim()) {
-      toast.error('Введите токен!');
+      toast.error(t('adminBroadcast.botSettings.errEmptyToken'));
       return;
     }
     setSavingToken(true);
@@ -44,9 +48,9 @@ export function AdminBroadcastTab() {
         .upsert({ key: 'TELEGRAM_BOT_TOKEN', value: botToken.trim() });
       
       if (error) throw error;
-      toast.success('Токен сохранен!');
+      toast.success(t('adminBroadcast.botSettings.successSave'));
     } catch (err: any) {
-      toast.error('Ошибка сохранения: ' + err.message);
+      toast.error(t('adminBroadcast.botSettings.errSave', { error: err.message }));
     } finally {
       setSavingToken(false);
     }
@@ -55,8 +59,8 @@ export function AdminBroadcastTab() {
   const handleRunBroadcast = async () => {
     const isCustom = message.trim().length > 0;
     const confirmMsg = isCustom 
-      ? `Вы уверены, что хотите отправить КАСТОМНОЕ сообщение всем пользователям?\n\nТекст: "${message.slice(0, 50)}..."`
-      : 'Вы уверены, что хотите запустить СТАНДАРТНУЮ рассылку (обновление Mini CRM)?';
+      ? t('adminBroadcast.massBroadcast.confirmCustom', { text: message.slice(0, 50) })
+      : t('adminBroadcast.massBroadcast.confirmDefault');
 
     if (!confirm(confirmMsg)) {
       return;
@@ -74,10 +78,10 @@ export function AdminBroadcastTab() {
       if (error) throw error;
 
       setResult(data as any);
-      toast.success('Рассылка поставлена в очередь!');
+      toast.success(t('adminBroadcast.massBroadcast.successRun'));
     } catch (err: any) {
       console.error('Broadcast error:', err);
-      toast.error('Ошибка при запуске рассылки: ' + err.message);
+      toast.error(t('adminBroadcast.massBroadcast.errRun', { error: err.message }));
     } finally {
       setLoading(false);
     }
@@ -89,24 +93,24 @@ export function AdminBroadcastTab() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Key className="h-5 w-5 text-primary" />
-            <CardTitle>Настройка бота</CardTitle>
+            <CardTitle>{t('adminBroadcast.botSettings.title')}</CardTitle>
           </div>
           <CardDescription>
-            Введите ваш Telegram Bot Token для работы рассылки через базу данных.
+            {t('adminBroadcast.botSettings.description')}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-2">
-            <input
+        <CardContent>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Input
               type="password"
-              className="flex-1 h-10 px-3 py-2 rounded-md border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              placeholder="1234567890:ABCDEFG..."
+              className="flex-1"
+              placeholder={t('adminBroadcast.botSettings.tokenPlaceholder')}
               value={botToken}
               onChange={(e) => setBotToken(e.target.value)}
             />
             <Button onClick={handleSaveToken} disabled={savingToken} variant="secondary">
-              {savingToken ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-              Сохранить
+              {savingToken ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+              {savingToken ? t('adminBroadcast.botSettings.savingBtn') : t('adminBroadcast.botSettings.saveBtn')}
             </Button>
           </div>
         </CardContent>
@@ -116,32 +120,32 @@ export function AdminBroadcastTab() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Megaphone className="h-5 w-5 text-primary" />
-            <CardTitle>Массовая рассылка</CardTitle>
+            <CardTitle>{t('adminBroadcast.massBroadcast.title')}</CardTitle>
           </div>
           <CardDescription>
-            Отправка уведомлений всем пользователям LinkMAX через SQL (pg_net).
+            {t('adminBroadcast.massBroadcast.description')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Текст сообщения (необязательно)</label>
-            <textarea
-              className="w-full min-h-[120px] p-3 rounded-md border border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              placeholder="Введите текст для рассылки. Если оставить пустым, будет отправлено стандартное сообщение об обновлении CRM."
+            <label className="text-sm font-medium">{t('adminBroadcast.massBroadcast.msgLabel')}</label>
+            <Textarea
+              className="min-h-[120px]"
+              placeholder={t('adminBroadcast.massBroadcast.msgPlaceholder')}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               disabled={loading}
             />
             <p className="text-[10px] text-muted-foreground italic">
-              * Поддерживается HTML разметка Telegram (b, i, code, a).
+              {t('adminBroadcast.massBroadcast.htmlHint')}
             </p>
           </div>
 
           <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg flex gap-3 text-amber-800">
             <AlertTriangle className="h-5 w-5 shrink-0" />
             <div className="text-sm">
-              <p className="font-semibold">Внимание!</p>
-              <p>Это действие поставит в очередь сообщения для всех активных пользователей в БД.</p>
+              <p className="font-semibold">{t('adminBroadcast.massBroadcast.warningTitle')}</p>
+              <p>{t('adminBroadcast.massBroadcast.warningBody')}</p>
             </div>
           </div>
 
@@ -149,27 +153,27 @@ export function AdminBroadcastTab() {
             <Button 
               onClick={handleRunBroadcast} 
               disabled={loading || !botToken} 
-              className="w-full md:w-auto"
+              className="w-full sm:w-auto self-start"
             >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Запуск...
+                  {t('adminBroadcast.massBroadcast.runningBtn')}
                 </>
               ) : (
-                '🚀 Запустить рассылку (через SQL)'
+                t('adminBroadcast.massBroadcast.runBtn')
               )}
             </Button>
 
             {result && (
-              <div className="mt-4 p-4 bg-muted rounded-lg space-y-2">
-                <p className="font-semibold text-sm">Статус очереди:</p>
+              <div className="mt-4 p-4 bg-muted border rounded-lg space-y-2">
+                <p className="font-semibold text-sm">{t('adminBroadcast.massBroadcast.statusTitle')}</p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="text-blue-600">Всего пользователей: {result.total_count}</div>
-                  <div className="text-green-600">В очереди: {result.queued_count}</div>
+                  <div className="text-blue-600 font-medium">{t('adminBroadcast.massBroadcast.totalUsers')} {result.total_count}</div>
+                  <div className="text-green-600 font-medium">{t('adminBroadcast.massBroadcast.queuedMsgs')} {result.queued_count}</div>
                 </div>
                 <p className="text-[10px] text-muted-foreground">
-                  * Сообщения отправляются асинхронно через pg_net.
+                  {t('adminBroadcast.massBroadcast.asyncHint')}
                 </p>
               </div>
             )}
@@ -179,17 +183,12 @@ export function AdminBroadcastTab() {
       
       <Card>
         <CardHeader>
-          <CardTitle>Предпросмотр сообщения</CardTitle>
-          <CardDescription>Текст, который увидят пользователи (на их языке):</CardDescription>
+          <CardTitle>{t('adminBroadcast.preview.title')}</CardTitle>
+          <CardDescription>{t('adminBroadcast.preview.description')}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-4 border rounded-lg bg-card text-sm font-mono whitespace-pre-wrap">
-            🚀 <b>Обновление LinkMAX: Это больше не просто конструктор!</b>{"\n\n"}
-            Мы превратили ваш сайт в полноценную <b>Мини-CRM</b>. Теперь прямо в Telegram вы можете:{"\n\n"}
-            ✅ Управлять лидами и бронированиями{"\n"}
-            ✅ Быстро редактировать ссылки и БИО{"\n"}
-            ✅ Видеть детальную аналитику по каждому проекту{"\n\n"}
-            Попробуйте новые команды в меню! 👇
+        <CardContent>
+          <div className="p-4 border border-border/50 rounded-lg bg-muted text-sm font-mono whitespace-pre-wrap leading-relaxed">
+            {t('adminBroadcast.preview.sampleText')}
           </div>
         </CardContent>
       </Card>

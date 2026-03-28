@@ -462,6 +462,42 @@
     "userNote": "Note from user:",
     "view": "View"
   },
+  "adminBroadcast": {
+    "botSettings": {
+      "description": "Enter your Telegram Bot Token for database-driven broadcasting.",
+      "errEmptyToken": "Please enter the token!",
+      "errSave": "Error saving: {{error}}",
+      "saveBtn": "Save",
+      "savingBtn": "Saving...",
+      "successSave": "Token saved successfully!",
+      "title": "Bot Settings",
+      "tokenPlaceholder": "1234567890:ABCDEFG..."
+    },
+    "massBroadcast": {
+      "asyncHint": "* Messages are sent asynchronously via pg_net.",
+      "confirmCustom": "Are you sure you want to send a CUSTOM message to all users?\n\nText: \"{{text}}...\"",
+      "confirmDefault": "Are you sure you want to run the DEFAULT broadcast (Mini CRM update)?",
+      "description": "Send notifications to all LinkMAX users via SQL (pg_net).",
+      "errRun": "Error running broadcast: {{error}}",
+      "htmlHint": "* Telegram HTML markup is supported (b, i, code, a).",
+      "msgLabel": "Message Text (optional)",
+      "msgPlaceholder": "Enter broadcast text. If left empty, a default CRM update message will be sent.",
+      "queuedMsgs": "Queued:",
+      "runBtn": "🚀 Run Broadcast (via SQL)",
+      "runningBtn": "Running...",
+      "statusTitle": "Queue Status:",
+      "successRun": "Broadcast queued successfully!",
+      "title": "Mass Broadcast",
+      "totalUsers": "Total users:",
+      "warningBody": "This action will queue messages to all active users in the database.",
+      "warningTitle": "Warning!"
+    },
+    "preview": {
+      "description": "Text users will see (in their language):",
+      "sampleText": "🚀 <b>LinkMAX Update: It's now a Mini-CRM!</b>\n\nWe've transformed your site into a powerful <b>Mini-CRM</b>. Now directly in Telegram you can:\n\n✅ Manage leads & bookings\n✅ Quickly edit links and BIO\n✅ See detailed analytics for each project\n\nTry new commands in the menu! 👇",
+      "title": "Message Preview"
+    }
+  },
   "ai": {
     "bio": "Bio",
     "bioPlaceholder": "Page description...",

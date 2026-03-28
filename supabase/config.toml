@@ -212,8 +212,5 @@ verify_jwt = false # Public: accepts bookings from public pages without auth
 verify_jwt = false # Public: accepts leads from public pages without auth
 
 # --- Admin / Internal (Manual Trigger) ---
-[functions.broadcast-update]
-verify_jwt = false # Internal: manually triggered via CURL/Dashboard
-
 [functions.process-transaction-fee]
 verify_jwt = true
