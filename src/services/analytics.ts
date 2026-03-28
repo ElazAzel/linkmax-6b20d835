@@ -116,7 +116,7 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
 // ============================================
 
 let _pageLoadTime = Date.now();
-let _sessionDurationTracked = false;
+let _sessionDurationTrackedPageId: string | null = null;
 
 /**
  * Get time spent on page in seconds
@@ -129,8 +129,8 @@ function getTimeOnPage(): number {
  * Initialize session duration tracking — sends duration on page hide/unload
  */
 export function initSessionDurationTracking(pageId: string) {
-  if (_sessionDurationTracked) return;
-  _sessionDurationTracked = true;
+  if (_sessionDurationTrackedPageId === pageId) return;
+  _sessionDurationTrackedPageId = pageId;
   _pageLoadTime = Date.now();
 
   const sendDuration = () => {
@@ -150,8 +150,11 @@ export function initSessionDurationTracking(pageId: string) {
 
     // Use sendBeacon for reliable delivery on page unload
     if (navigator.sendBeacon) {
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`;
-      const blob = new Blob([payload], { type: 'application/json' });
+      const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
+      const blob = new Blob([payload], {
+        type: 'application/json',
+      });
       navigator.sendBeacon(url, blob);
     }
   };
