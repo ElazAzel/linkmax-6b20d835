@@ -6,6 +6,8 @@ import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Users from 'lucide-react/dist/esm/icons/users';
 import Check from 'lucide-react/dist/esm/icons/check';
 import X from 'lucide-react/dist/esm/icons/x';
+import Download from 'lucide-react/dist/esm/icons/download';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import {
   Dialog,
   DialogContent,
@@ -73,82 +75,122 @@ export function ShareAfterPublishDialog({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: t('share.title', 'Check out my lnkmx.my page!'),
+          title: t('share.title', '🎉 Готово! Твоя ссылка работает'),
           url: publishedUrl,
         });
       } catch (e) {
-        // fire-and-forget: user cancelled share dialog, non-critical
+        // fire-and-forget
       }
     } else {
       handleCopyPageLink();
     }
   };
 
+  const handleDownloadQR = async () => {
+    try {
+      const response = await fetch(`https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=${encodeURIComponent(publishedUrl)}`);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `inkmax-qr-${niche || 'page'}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch(e) {
+      toast.error(t('share.copyError', 'Error downloading QR'));
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-card/95 backdrop-blur-2xl border-border/40">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <Share2 className="h-5 w-5 text-primary" />
-            </div>
-            {t('share.published', 'Page Published!')}
+      <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto bg-card/98 backdrop-blur-3xl border-border/40 shadow-2xl rounded-[32px] p-6 sm:p-8">
+        <DialogHeader className="pt-4 text-center items-center">
+          <div className="mx-auto h-16 w-16 mb-2 rounded-full bg-primary/10 flex items-center justify-center animate-bounce">
+            <Sparkles className="h-8 w-8 text-primary" />
+          </div>
+          <DialogTitle className="text-2xl font-black text-center leading-tight">
+            {t('share.title', '🎉 Готово! Твоя ссылка работает')}
           </DialogTitle>
-          <DialogDescription className="sr-only">
-            {t('share.publishedDesc', 'Share your published page with others')}
+          <DialogDescription className="text-center text-base mt-2">
+            {t('share.publishedDesc', 'Добавь её в bio Instagram, Telegram или WhatsApp, чтобы получать клики.')}
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
-          {/* Share page link */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">
-              {t('share.yourPageLink', 'Your page link')}
+        <div className="space-y-6 py-4 px-1">
+          {/* Main Copy Action */}
+          <div className="bg-primary/5 rounded-[24px] p-5 border border-primary/20 hover:border-primary/40 transition-colors shadow-inner">
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 block ml-1">
+              {t('share.yourPageLink', 'Твоя ссылка')}
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Input 
                 value={publishedUrl} 
                 readOnly 
-                className="bg-muted/50 border-border/50"
+                className="bg-background h-14 text-sm md:text-base font-semibold border-border/50 rounded-2xl flex-1 focus-visible:ring-primary/30"
               />
               <Button 
-                variant="outline" 
-                size="icon"
                 onClick={handleCopyPageLink}
-                className="flex-shrink-0"
+                className="h-14 px-8 rounded-2xl font-black text-base bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all active:scale-95"
               >
-                {copiedPage ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                {copiedPage ? <Check className="h-5 w-5 mr-2" /> : <Copy className="h-5 w-5 mr-2" />}
+                {copiedPage ? t('share.linkCopied', 'Скопировано!') : t('common.copy', 'Копировать')}
               </Button>
             </div>
-            <div className="flex gap-2">
-              <Button
-                className="flex-1 rounded-xl bg-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,40%)] text-white"
-                onClick={() => {
-                  const msg = encodeURIComponent(getNicheShareText(niche, publishedUrl));
-                  window.open(`https://wa.me/?text=${msg}`, '_blank');
-                }}
-              >
-                WhatsApp
-              </Button>
-              <Button
-                className="flex-1 rounded-xl bg-[hsl(200,80%,50%)] hover:bg-[hsl(200,80%,45%)] text-white"
-                onClick={() => {
-                  const shareText = getNicheShareText(niche, '');
-                  window.open(`https://t.me/share/url?url=${encodeURIComponent(publishedUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
-                }}
-              >
-                Telegram
-              </Button>
-            </div>
-            <Button 
-              variant="outline"
-              className="w-full rounded-xl" 
-              onClick={handleShare}
-            >
-              <Share2 className="h-4 w-4 mr-2" />
-              {t('share.shareNow', 'Share Now')}
-            </Button>
           </div>
+
+          {/* Socials & QR Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             {/* QR Code */}
+             <div className="flex flex-col items-center justify-center gap-3 bg-muted/30 p-5 rounded-[24px] border border-border/40">
+                <div className="bg-white p-2 rounded-xl shadow-sm">
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(publishedUrl)}&format=svg`} 
+                    alt="QR Code" 
+                    className="w-32 h-32"
+                  />
+                </div>
+                <Button variant="ghost" size="sm" onClick={handleDownloadQR} className="w-full text-sm font-semibold h-10 rounded-xl hover:bg-muted/50">
+                  <Download className="h-4 w-4 mr-2" />
+                  {t('share.downloadQR', 'Скачать QR-код')}
+                </Button>
+             </div>
+
+             {/* Social Sharing */}
+             <div className="flex flex-col gap-3 justify-center">
+                <Button
+                  className="w-full rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white h-12 font-medium transition-all hover:scale-[1.02] active:scale-98"
+                  onClick={() => {
+                    const msg = encodeURIComponent(getNicheShareText(niche, publishedUrl));
+                    window.open(`https://wa.me/?text=${msg}`, '_blank');
+                  }}
+                >
+                  WhatsApp
+                </Button>
+                <Button
+                  className="w-full rounded-xl bg-[#0088cc] hover:bg-[#0077b5] text-white h-12 font-medium transition-all hover:scale-[1.02] active:scale-98"
+                  onClick={() => {
+                    const shareText = getNicheShareText(niche, '');
+                    window.open(`https://t.me/share/url?url=${encodeURIComponent(publishedUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+                  }}
+                >
+                  Telegram
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full rounded-xl h-12 font-medium bg-card" 
+                  onClick={handleShare}
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  {t('share.shareNow', 'Поделиться...')}
+                </Button>
+             </div>
+          </div>
+
+          <p className="text-center text-sm font-black text-primary/80 bg-primary/10 py-3 rounded-2xl mx-1 shadow-sm">
+            📈 {t('share.returnTomorrow', 'Вернись завтра, чтобы посмотреть статистику!')}
+          </p>
 
           {/* Referral section */}
           {stats?.code && (
