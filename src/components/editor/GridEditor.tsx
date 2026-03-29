@@ -216,7 +216,7 @@ function SortableGridBlockItem({
         {...attributes}
         {...listeners}
       >
-        <div className="bg-background/80 backdrop-blur-md p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
+        <div className="bg-card p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
           <GripVertical className="h-5 w-5 text-muted-foreground" />
         </div>
       </div>

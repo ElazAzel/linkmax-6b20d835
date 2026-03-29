@@ -245,7 +245,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
         <div
           className={cn(
             "relative group",
-            block.type !== 'separator' && block.type !== 'socials' && "bg-card/70 backdrop-blur-xl rounded-3xl border border-border/20 shadow-glass",
+            block.type !== 'separator' && block.type !== 'socials' && "bg-card rounded-3xl border border-border/20 shadow-glass",
             isDragging && "opacity-50 scale-95 shadow-glass-lg",
             isTransitioning && "transition-transform duration-300 ease-out"
           )}
@@ -261,14 +261,14 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
         >
           {/* Hover/Touch overlay with controls */}
           {showControls && !isDragging && (
-            <div className="absolute inset-0 bg-primary/10 border-2 border-primary/40 rounded-3xl pointer-events-none z-10 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-primary/10 border-2 border-primary/40 rounded-3xl pointer-events-none z-10" />
           )}
 
           {/* Control buttons - Desktop */}
           {showControls && !isDragging && !isMobile && (
             <div className="absolute -top-3 right-2 flex gap-2 z-20">
               {!isProfileBlock && onMoveUp && onMoveDown && (
-                <div className="flex gap-1 bg-card/90 backdrop-blur-xl rounded-2xl shadow-glass border border-border/20 p-1">
+                <div className="flex gap-1 bg-card rounded-2xl shadow-glass border border-border/20 p-1">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -325,7 +325,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
                 <Button
                   variant="destructive"
                   size="sm"
-                  className="h-9 w-9 p-0 shadow-glass backdrop-blur-xl rounded-xl"
+                  className="h-9 w-9 p-0 shadow-glass rounded-xl"
                   onClick={() => {
                     haptic.warning();
                     onDelete(block.id);
