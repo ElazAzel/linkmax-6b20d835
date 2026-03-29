@@ -1,40 +1,63 @@
 
 
-# Исправление видимых языковых ключей и непереведённых строк
+# Исправление визуальных проблем редактора
 
-## Проблема
-В `ru.json` (основной язык продукта) обнаружено **~120+ строк на английском** в секции `zones`, которые пользователь видит как непереведённые. Также в `en.json` в `zones.analytics` все строки корректны, но в `ru.json` они остались на английском.
+## Корневая причина
 
-## Масштаб проблемы
+Редактор рендерится внутри `DashboardLayout.tsx` (строка 73), который оборачивает **весь контент** в контейнер с классом `glass`:
 
-### 1. `zones` в `ru.json` — английские строки вместо русских (~120 мест)
-Затронутые подсекции:
-- **`zones.analytics`** — почти весь блок на английском (30+ ключей)
-- **`zones.contacts`** — ~20 английских строк (`"andMore"`, `"call"`, `"created"`, `"emptyFile"`, `"export"`, `"exportSuccess"`, `"import"`, `"importButton"`, `"imported"`, `"importing"`, `"noNameColumn"`, `"parseError"`, `"presets.*"`, `"requiredColumns"`, `"rows"`, `"unsupportedFormat"`, `"uploadFile"`)
-- **`zones.deals`** — ~15 (`"dateTo"`, `"dateFrom"`, `"export"`, `"exportSuccess"`, `"markAsWonOrLost"`, `"newDealDescription"`, `"nextStepPlaceholder"`, `"noComments"`, `"noStages"`, `"selectContact"`, `"valueMax"`, `"valueMin"`)
-- **`zones.documents`** — почти весь блок на английском (~25 ключей)
-- **`zones.invites`** — весь блок на английском (8 ключей)
-- **`zones.settings`** — ~30 английских строк (`"billing"`, `"currentPlan"`, `"cycle"`, `"dangerZone"`, `"general"`, `"invite"`, `"fields.*"`, `"dealFields.*"`, `"pipelines.*"` частично)
-- **`zones.plans`** — 2 ключа (`"monthly"`, `"yearly"`)
-- **`zones.invoices`** — несколько (`"downloadPDF"`, `"pdfSuccess"`, `"urlGenerated"`)
+```
+<div className="max-w-7xl mx-auto glass rounded-[2.5rem] min-h-full shadow-glass-lg border border-white/5 overflow-hidden">
+```
 
-### 2. `kk.json` и `uz.json` — fallback на русский уже настроен
-Благодаря предыдущей оптимизации, `kk` и `uz` fallback'ят в `ru`, поэтому достаточно перевести `ru.json`.
+Это создаёт **3 визуальных бага одновременно**:
+
+### 1. Двойной backdrop-blur размывает содержимое
+Класс `glass` применяет `backdrop-filter: blur(16px)` ко всему контейнеру. Внутри него EditorScreen добавляет ещё слои blur:
+- `glass-nav` на хедере (ещё blur)
+- `backdrop-blur-md` на тулбаре
+- `bg-card/50 backdrop-blur-xl` на отдельных блоках (InlineEditableBlock)
+
+Наложение blur-слоёв друг на друга = мутное, размытое содержимое.
+
+### 2. `overflow-hidden` обрезает элементы управления
+Кнопки редактирования блоков (`-top-3 right-2`) и контекстные тулбары выходят за границы блоков. `overflow-hidden` на внешнем glass-контейнере **обрезает** их.
+
+### 3. Полупрозрачный фон (`glass-bg: ... / 0.65`) делает контент тусклым
+Glass-фон с альфа-каналом накладывается на CanvasBackground, создавая эффект "грязного стекла" поверх контента.
 
 ## План исправлений
 
-### Шаг 1. Перевести все английские строки в `zones` секции `ru.json`
-Полный перевод ~120 ключей на русский. Это основной объём работы.
+### Шаг 1. Убрать `glass` с обёртки контента в DashboardLayout
+**Файл:** `src/components/dashboard-v2/layout/DashboardLayout.tsx:73`
 
-### Шаг 2. Проверить и перевести `kk.json` и `uz.json` zones секции
-`kk.json` zones скорее всего имеет аналогичные непереведённые строки. Проверить и перевести основные пользовательские строки.
+Заменить `glass rounded-[2.5rem] min-h-full shadow-glass-lg border border-white/5 overflow-hidden` на `bg-background/95 rounded-[2.5rem] min-h-full border border-white/5 overflow-visible`.
 
-### Шаг 3. Проверить другие секции на английские строки в `ru.json`
-Пройти по остальным секциям и убедиться, что нет скрытых английских строк.
+- Убирает backdrop-blur с корневого контейнера
+- Меняет `overflow-hidden` → `overflow-visible` чтобы не обрезать контролы
+- Заменяет полупрозрачный glass-bg на почти непрозрачный bg-background
 
-## Оценка объёма
-- ~120 строк для перевода в `ru.json`
-- ~120 строк для `kk.json` (если не покрыто fallback)
-- ~120 строк для `uz.json` (если не покрыто fallback)
-- Основное изменение — только JSON-файлы локалей
+### Шаг 2. Оптимизировать backdrop-blur в InlineEditableBlock
+**Файл:** `src/components/editor/InlineEditableBlock.tsx:248`
+
+Убрать `backdrop-blur-xl` с основного wrapper блока (`bg-card/70 backdrop-blur-xl`). Заменить на `bg-card` — непрозрачный фон без blur. Блоки в редакторе не нуждаются в glass-эффекте, это вредит читаемости.
+
+### Шаг 3. Убрать backdrop-blur с hover-оверлея
+**Файл:** `src/components/editor/InlineEditableBlock.tsx:264`
+
+Заменить `backdrop-blur-sm` в hover-оверлее на простой полупрозрачный фон без blur.
+
+### Шаг 4. Упростить blur в контролах блоков
+Заменить `backdrop-blur-xl` и `backdrop-blur-md` в кнопках управления (drag handle, move controls, delete button) на `bg-card` или `bg-background` — solid backgrounds без blur. Это не только исправляет визуал, но и улучшает производительность (см. stack overflow hint).
+
+### Затронутые файлы
+- `src/components/dashboard-v2/layout/DashboardLayout.tsx` — 1 строка
+- `src/components/editor/InlineEditableBlock.tsx` — ~5 мест
+- `src/components/editor/GridEditor.tsx` — 1 место (drag handle, строка 219)
+
+### Что НЕ трогаем
+- EditorScreen header (`glass-nav`) — это sticky nav, ему blur нужен
+- BlockInsertButton sheet — модалка, blur уместен
+- MobileSettingsSheet — модалка, blur уместен
+- CanvasBackground — фоновый слой, не влияет
 
