@@ -182,7 +182,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
               .filter(([key]) => !key.startsWith('utm_') && key !== 'referrer')
               .map(([key, value]) => (
               <div key={key} className="flex flex-col gap-0.5 p-2 bg-accent/50 rounded-lg">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase">{key}</span>
+                <span className="text-xs font-bold text-muted-foreground uppercase">{key}</span>
                 <span className="text-xs sm:text-sm break-words">{String(value)}</span>
               </div>
             ))}
@@ -191,7 +191,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
           {/* Attribution Section */}
           {Object.keys(lead.metadata).some(k => k.startsWith('utm_') || k === 'referrer') && (
             <div className="mt-4 pt-4 border-t border-white/5 space-y-3">
-              <h4 className="font-medium text-[10px] uppercase tracking-widest text-muted-foreground/60 mb-2 flex items-center gap-2">
+              <h4 className="font-medium text-xs uppercase tracking-widest text-muted-foreground/60 mb-2 flex items-center gap-2">
                 <Megaphone className="h-3 w-3" />
                 {t('crm.attribution', 'Атрибуция')}
               </h4>
@@ -199,25 +199,25 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
               <div className="grid grid-cols-2 gap-2">
                 {lead.metadata.utm_source && (
                   <div className="p-2 bg-blue-500/5 rounded-xl border border-blue-500/10">
-                    <span className="text-[9px] font-black text-blue-400 block mb-0.5 uppercase">Source</span>
+                    <span className="text-xs font-black text-blue-400 block mb-0.5 uppercase">Source</span>
                     <span className="text-xs font-bold truncate block">{lead.metadata.utm_source}</span>
                   </div>
                 )}
                 {lead.metadata.utm_medium && (
                   <div className="p-2 bg-purple-500/5 rounded-xl border border-purple-500/10">
-                    <span className="text-[9px] font-black text-purple-400 block mb-0.5 uppercase">Medium</span>
+                    <span className="text-xs font-black text-purple-400 block mb-0.5 uppercase">Medium</span>
                     <span className="text-xs font-bold truncate block">{lead.metadata.utm_medium}</span>
                   </div>
                 )}
                 {lead.metadata.utm_campaign && (
                   <div className="p-2 bg-violet-500/5 rounded-xl border border-violet-500/10 col-span-2">
-                    <span className="text-[9px] font-black text-violet-400 block mb-0.5 uppercase">Campaign</span>
+                    <span className="text-xs font-black text-violet-400 block mb-0.5 uppercase">Campaign</span>
                     <span className="text-xs font-bold truncate block">{lead.metadata.utm_campaign}</span>
                   </div>
                 )}
                 {lead.metadata.referrer && (
                   <div className="p-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 col-span-2">
-                    <span className="text-[9px] font-black text-emerald-400 block mb-0.5 uppercase flex items-center gap-1">
+                    <span className="text-xs font-black text-emerald-400 block mb-0.5 uppercase flex items-center gap-1">
                       <Globe className="h-2 w-2" />
                       Referrer
                     </span>
@@ -234,7 +234,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
       <div>
         <Label className="text-xs sm:text-sm">{t('crm.status.label', 'Status')}</Label>
         <Select value={status} onValueChange={handleStatusChange}>
-          <SelectTrigger className="mt-1 h-9 sm:h-10">
+          <SelectTrigger className="mt-1 h-11">
             <SelectValue>
               <Badge variant="outline" className={`${statusColors[status]} text-xs sm:text-xs`}>
                 {t(`crm.status.${status}`, status)}
@@ -258,7 +258,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
         <div className="flex items-center justify-between mb-1">
           <Label className="text-xs sm:text-sm">{t('crm.notes', 'Notes')}</Label>
           {hasChanges && (
-            <Button size="sm" variant="ghost" onClick={handleSaveNotes} disabled={saving} className="h-7 text-xs">
+            <Button size="sm" variant="ghost" onClick={handleSaveNotes} disabled={saving} className="h-10 px-4 text-xs bg-primary/5">
               {t('editor.save', 'Save')}
             </Button>
           )}
@@ -289,7 +289,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
                 size="sm"
                 variant={newInteractionType === type ? 'default' : 'outline'}
                 onClick={() => setNewInteractionType(type)}
-                className="h-8 sm:h-9 p-0"
+                className="h-11 p-0"
               >
                 {interactionIcons[type]}
               </Button>
@@ -301,9 +301,9 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
               onChange={(e) => setNewInteractionContent(e.target.value)}
               placeholder={t('crm.interactionPlaceholder', 'What happened?')}
               onKeyDown={(e) => e.key === 'Enter' && handleAddInteraction()}
-              className="h-9 sm:h-10 text-sm"
+              className="h-11 text-sm bg-white/5"
             />
-            <Button onClick={handleAddInteraction} disabled={!newInteractionContent.trim()} size="icon" className="h-9 w-9 sm:h-10 sm:w-10 shrink-0">
+            <Button onClick={handleAddInteraction} disabled={!newInteractionContent.trim()} size="icon" className="h-11 w-11 shrink-0">
               <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </Button>
           </div>
@@ -350,7 +350,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
       {/* Delete - Full width */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="destructive" className="w-full h-9 sm:h-10 text-sm">
+          <Button variant="destructive" className="w-full h-11 text-sm">
             <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-2" />
             {t('crm.deleteLead', 'Delete Lead')}
           </Button>
@@ -363,8 +363,8 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2 sm:gap-0">
-            <AlertDialogCancel className="h-9 sm:h-10 text-sm">{t('editor.cancel', 'Cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground h-9 sm:h-10 text-sm">
+            <AlertDialogCancel className="h-11 text-sm">{t('editor.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground h-11 text-sm">
               {t('editor.delete', 'Delete')}
             </AlertDialogAction>
           </AlertDialogFooter>

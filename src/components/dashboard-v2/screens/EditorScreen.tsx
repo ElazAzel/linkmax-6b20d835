@@ -404,7 +404,7 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm border-white/10 glass"
+              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm border-white/10 glass"
               onClick={onOpenTemplates}
             >
               <LayoutTemplate className="h-4 w-4" />
@@ -417,7 +417,7 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm border-white/10 glass"
+              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm border-white/10 glass"
               onClick={onOpenVersions}
             >
               <History className="h-4 w-4" />
@@ -430,7 +430,7 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm border-white/10 glass"
+              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm border-white/10 glass"
               onClick={() => setStructureOpen(true)}
             >
               <Layers className="h-4 w-4" />
@@ -445,7 +445,7 @@ export const EditorScreen = memo(function EditorScreen({
                 variant={reviewMode === 'problematic' ? 'default' : 'outline'}
                 size="sm"
                 className={cn(
-                  "h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm transition-all",
+                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm transition-all",
                   reviewMode === 'problematic' ? "bg-red-500 text-white border-none" : "border-white/10 glass"
                 )}
                 onClick={() => toggleReviewMode('problematic')}
@@ -457,7 +457,7 @@ export const EditorScreen = memo(function EditorScreen({
                 variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
                 size="sm"
                 className={cn(
-                  "h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm transition-all",
+                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm transition-all",
                   reviewMode === 'cta_contact' ? "bg-emerald-500 text-white border-none" : "border-white/10 glass"
                 )}
                 onClick={() => toggleReviewMode('cta_contact')}
@@ -510,9 +510,9 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               type="button"
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={() => setDismissedHint(top.id)}
-              className="p-1.5 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+              className="h-10 w-10 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -578,7 +578,7 @@ export const EditorScreen = memo(function EditorScreen({
                 <p className="text-xs font-black uppercase tracking-wider">{hint.title}</p>
                 <p className="text-xs text-muted-foreground mt-1">{hint.description}</p>
               </div>
-              <Button size="sm" className="h-8 rounded-lg text-xs font-black uppercase tracking-wider" onClick={hint.onCta}>
+              <Button size="sm" className="h-11 px-5 rounded-xl text-xs font-black uppercase tracking-wider" onClick={hint.onCta}>
                 {hint.ctaLabel}
               </Button>
               <button

@@ -39,7 +39,7 @@ export const DashboardHeader = memo(function DashboardHeader({
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
+            className="h-11 w-11 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
             onClick={onBack}
           >
             <ArrowLeft className="h-5 w-5" />
@@ -48,7 +48,7 @@ export const DashboardHeader = memo(function DashboardHeader({
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden h-10 w-10 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
+            className="md:hidden h-11 w-11 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
             onClick={onMenuClick}
           >
             <Menu className="h-5 w-5" />

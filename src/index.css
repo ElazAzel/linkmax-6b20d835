@@ -1004,3 +1004,38 @@
   80% { transform: translate(3%, 35%) }
   90% { transform: translate(-10%, 10%) }
 }
+
+/* Scan line animation for QR/scanning effects */
+@keyframes scan-line {
+  0% { top: 0% }
+  100% { top: 100% }
+}
+
+.animate-scan-line {
+  animation: scan-line 3s linear infinite;
+}
+
+/* Glass shimmer effect for premium cards */
+@keyframes glass-shimmer {
+  0% { transform: translateX(-100%) skewX(-20deg); opacity: 0; }
+  20% { opacity: 0.5; }
+  50% { opacity: 0.5; }
+  100% { transform: translateX(200%) skewX(-20deg); opacity: 0; }
+}
+
+.glass-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: glass-shimmer 4s infinite;
+  z-index: 10;
+}

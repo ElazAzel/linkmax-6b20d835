@@ -91,7 +91,7 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                         </div>
                         <span className="text-sm font-bold tracking-tight">{t('dashboard.kaspi_qr', 'Kaspi QR')}</span>
                     </div>
-                    <Badge variant="secondary" className="bg-kaspi/10 text-kaspi border-kaspi/20 font-bold text-xs tracking-wider py-1 px-3 rounded-lg">
+                    <Badge variant="secondary" className="bg-kaspi text-white border-none font-black text-xs tracking-[0.15em] py-1 px-3 rounded-full shadow-lg shadow-kaspi/20">
                         {t('dashboard.instant', 'МГНОВЕННО')}
                     </Badge>
                 </CardTitle>
@@ -131,32 +131,52 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                     </div>
 
                     {amount && amount > 0 ? (
-                        <div className="flex flex-col items-center justify-center p-5 rounded-[2rem] bg-white border border-white/10 shadow-glass-lg animate-in fade-in zoom-in duration-500">
-                            <div className="p-3 bg-white rounded-2xl shadow-inner border border-stone-100">
-                                <QRCodeSVG
-                                    value={kaspiDeeplink}
-                                    size={150}
-                                    level="H"
-                                    includeMargin
-                                    bgColor="#ffffff"
-                                    fgColor="#000000"
-                                />
-                            </div>
-                            <div className="mt-5 flex gap-3 w-full">
-                                <Button variant="outline" size="lg" onClick={handleCopyLink} className="flex-1 h-12 rounded-2xl border-stone-200 hover:bg-stone-50 font-bold text-sm">
-                                    <Copy className="h-4 w-4 mr-2" />
-                                    {t('common.copy', 'Link')}
-                                </Button>
-                                <Button size="lg" onClick={handleSimulatePayment} disabled={isSimulating} className="flex-1 h-12 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold text-sm shadow-lg shadow-primary/20">
-                                    {isSimulating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wallet className="h-4 w-4 mr-2" />}
-                                    {t('kaspi.pay', 'Pay')}
-                                </Button>
+                        <div className="relative group/qr">
+                            {/* Animated backdrop glow */}
+                            <div className="absolute -inset-1 bg-gradient-to-r from-kaspi via-kaspi/50 to-kaspi rounded-[2.5rem] blur opacity-20 group-hover/qr:opacity-40 transition duration-1000 group-hover/qr:duration-500" />
+                            
+                            <div className="relative flex flex-col items-center justify-center p-6 rounded-[2rem] bg-card border border-white/10 shadow-glass-lg animate-in fade-in zoom-in duration-500 overflow-hidden">
+                                {/* Scan line animation overlay */}
+                                <div className="absolute top-0 inset-x-0 h-[2px] bg-kaspi/20 shadow-[0_0_15px_rgba(235,25,36,0.5)] animate-scan-line z-10" />
+
+                                <div className="p-4 bg-white rounded-3xl shadow-inner border-4 border-kaspi/5 relative">
+                                    <QRCodeSVG
+                                        value={kaspiDeeplink}
+                                        size={160}
+                                        level="H"
+                                        includeMargin
+                                        bgColor="#ffffff"
+                                        fgColor="#000000"
+                                    />
+                                    {/* Small Kaspi dot in corner */}
+                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-kaspi rounded-full border-2 border-white shadow-sm" />
+                                </div>
+                                <div className="mt-6 flex gap-3 w-full">
+                                    <Button 
+                                        variant="outline" 
+                                        onClick={handleCopyLink} 
+                                        className="flex-1 h-12 rounded-2xl border-white/10 glass hover:bg-white/10 font-black text-xs uppercase tracking-widest gap-2"
+                                    >
+                                        <Copy className="h-4 w-4" />
+                                        {t('common.copy', 'Link')}
+                                    </Button>
+                                    <Button 
+                                        onClick={handleSimulatePayment} 
+                                        disabled={isSimulating} 
+                                        className="flex-1 h-12 rounded-2xl bg-kaspi hover:bg-kaspi/90 text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-kaspi/20 gap-2 border-none"
+                                    >
+                                        {isSimulating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wallet className="h-4 w-4" />}
+                                        {t('kaspi.pay', 'Pay')}
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-12 px-6 rounded-[2rem] bg-white/5 border border-dashed border-white/20 text-center text-muted-foreground group hover:border-primary/30 transition-colors">
-                            <Smartphone className="h-10 w-10 mb-4 opacity-20 group-hover:opacity-40 transition-opacity" />
-                            <p className="text-xs font-semibold max-w-[160px] leading-relaxed">
+                        <div className="flex flex-col items-center justify-center py-16 px-6 rounded-[2rem] bg-white/[0.02] border border-dashed border-white/10 text-center group hover:border-kaspi/40 transition-all duration-500">
+                            <div className="w-16 h-16 rounded-full bg-kaspi/5 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-kaspi/10 transition-all duration-500">
+                                <Smartphone className="h-8 w-8 text-kaspi opacity-20 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                            <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/60 max-w-[180px] leading-relaxed">
                                 {t('kaspi.enter_amount', 'Введите сумму для генерации QR')}
                             </p>
                         </div>

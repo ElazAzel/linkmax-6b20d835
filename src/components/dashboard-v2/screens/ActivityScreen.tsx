@@ -284,7 +284,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 text-xs font-bold text-primary"
+                  className="h-10 px-4 text-xs font-bold text-primary bg-primary/5 rounded-lg"
                   onClick={() => navigate('/pricing')}
                 >
                   {t('crm.leadLimit.upgrade', 'Снять лимит →')}
@@ -298,7 +298,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                 <button
                   onClick={() => setStatusFilter('all')}
                   className={cn(
-                    "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
+                    "h-11 px-5 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
                     statusFilter === 'all'
                       ? "bg-foreground text-background shadow-lg scale-105"
                       : "bg-muted/60 text-muted-foreground hover:bg-muted"
@@ -316,7 +316,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                       key={status}
                       onClick={() => setStatusFilter(status as LeadStatus)}
                       className={cn(
-                        "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
+                        "h-11 px-5 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
                         statusFilter === status
                           ? `${config.bg} ${config.text} shadow-lg scale-105`
                           : "bg-muted/60 text-muted-foreground hover:bg-muted"
@@ -581,7 +581,7 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
           </div>
         </div>
 
-        <div className="self-center h-10 w-10 flex items-center justify-center rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1 group-hover:scale-110">
+        <div className="self-center h-11 w-11 flex items-center justify-center rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1 group-hover:scale-110">
           <ChevronRight className="h-5 w-5 text-primary/60" />
         </div>
       </div>

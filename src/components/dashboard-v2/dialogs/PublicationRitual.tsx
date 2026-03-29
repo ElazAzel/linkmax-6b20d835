@@ -161,7 +161,7 @@ export function PublicationRitual({
                   size="sm"
                   variant="ghost"
                   className={cn(
-                    "h-10 rounded-xl px-4 gap-2 transition-all shrink-0",
+                    "h-11 rounded-xl px-5 gap-2 transition-all shrink-0",
                     copied ? "text-emerald-500 bg-emerald-500/10" : "hover:bg-primary/10 text-primary"
                   )}
                 >
@@ -198,7 +198,7 @@ export function PublicationRitual({
                   variant="ghost"
                   size="sm"
                   onClick={handleDownloadQR}
-                  className="w-full h-8 text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
+                  className="w-full h-10 text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
                 >
                   <Download className="h-3.5 w-3.5 mr-1.5" />
                   {t('ritual.downloadQR', 'Скачать QR')}

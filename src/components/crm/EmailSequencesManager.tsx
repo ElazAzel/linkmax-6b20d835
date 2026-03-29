@@ -119,7 +119,7 @@ export function EmailSequencesManager() {
               >
                 <div className="flex items-center gap-2">
                   <h4 className="font-medium text-sm">{seq.name}</h4>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                     seq.status === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-amber-500/10 text-amber-500'
                   }`}>
                     {seq.status}
@@ -153,7 +153,7 @@ export function EmailSequencesManager() {
                           <Mail className="h-3 w-3 text-muted-foreground" />
                           <span className="text-xs">{step.template?.name || 'Template'}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                           <Clock className="h-3 w-3" />
                           {step.delay_hours}h
                         </div>
@@ -165,7 +165,7 @@ export function EmailSequencesManager() {
                     <Card className="p-3 bg-primary/5 border-dashed border-primary/30 mt-2">
                       <div className="space-y-3">
                         <div className="space-y-1">
-                          <Label className="text-[10px]">{t('sequences.selectTemplate', 'Select Template')}</Label>
+                          <Label className="text-xs">{t('sequences.selectTemplate', 'Select Template')}</Label>
                           <Select 
                             value={newStep.template_id} 
                             onValueChange={(val: string) => setNewStep({...newStep, template_id: val})}
@@ -181,7 +181,7 @@ export function EmailSequencesManager() {
                           </Select>
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-[10px]">{t('sequences.delayHours', 'Delay (hours)')}</Label>
+                          <Label className="text-xs">{t('sequences.delayHours', 'Delay (hours)')}</Label>
                           <Input 
                             type="number" 
                             className="h-8 text-xs bg-background"
@@ -190,10 +190,10 @@ export function EmailSequencesManager() {
                           />
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" className="h-7 text-[10px] flex-1" onClick={handleAddStep}>
+                          <Button size="sm" className="h-7 text-xs flex-1" onClick={handleAddStep}>
                             {t('common.add', 'Add')}
                           </Button>
-                          <Button size="sm" variant="ghost" className="h-7 text-[10px]" onClick={() => setIsAddingStep(false)}>
+                          <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={() => setIsAddingStep(false)}>
                             {t('common.cancel', 'Cancel')}
                           </Button>
                         </div>

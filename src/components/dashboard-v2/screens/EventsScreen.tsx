@@ -301,7 +301,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
           <Button
             variant="outline"
             size="sm"
-            className="h-10 flex-1 rounded-xl text-xs font-black uppercase tracking-widest gap-2 glass border-white/10"
+            className="h-11 flex-1 rounded-xl text-xs font-black uppercase tracking-widest gap-2 glass border-white/10"
             onClick={(e) => {
               e.stopPropagation();
               handleExportRegistrations(event.id, event.title);
