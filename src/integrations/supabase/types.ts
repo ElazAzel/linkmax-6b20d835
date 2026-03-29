@@ -2382,6 +2382,71 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_transactions: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          fee_amount: number
+          gross_amount: number
+          id: string
+          metadata: Json | null
+          net_amount: number
+          related_entity_id: string | null
+          related_entity_type: string | null
+          status: string
+          type: string
+          updated_at: string
+          user_id: string
+          wallet_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          fee_amount?: number
+          gross_amount?: number
+          id?: string
+          metadata?: Json | null
+          net_amount?: number
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id: string
+          wallet_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          fee_amount?: number
+          gross_amount?: number
+          id?: string
+          metadata?: Json | null
+          net_amount?: number
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallet_transactions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "user_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       weekly_challenges: {
         Row: {
           challenge_key: string
