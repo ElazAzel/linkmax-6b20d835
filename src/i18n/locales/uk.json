@@ -4622,10 +4622,10 @@
   "niche": {
     "barber": "Барбер",
     "beauty": "Майстер краси",
-    "chef": "Повар/Кондитер",
+    "chef": "Кухар/Кондитер",
     "designer": "Дизайнер",
-    "expert": "Expert",
-    "fitness": "Фитнес-тренер",
+    "expert": "Експерт",
+    "fitness": "Фітнес-тренер",
     "marketer": "Маркетолог",
     "musician": "Музикант",
     "photographer": "Фотограф",
@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "Завантажити QR",
+    "linkCopied": "Посилання скопійовано!",
+    "niches": {
+      "beauty": "Записатися до мене онлайн: {{url}}",
+      "default": "Мої послуги та запис: {{url}}",
+      "education": "Записатися на заняття: {{url}}",
+      "fitness": "Запишись на тренування: {{url}}",
+      "food": "Забронювати столик / замовити: {{url}}",
+      "health": "Записатися на прийом: {{url}}"
+    },
+    "promo": "Поверніться завтра за першою статистикою! 🚀",
+    "shareMore": "Ще...",
+    "subtitle": "Додай посилання в bio соцмереж, щоб клієнти могли знайти тебе та залишити заявку.",
+    "title": "🎉 Опубліковано! Твоя сторінка в мережі"
+  },
   "share": {
-    "defaultTitle": "Перегляньте мою сторінку",
+    "defaultTitle": "Подивіться мою сторінку",
     "linkCopied": "Посилання скопійовано",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
+    "published": "Сторінку опубліковано!",
+    "publishedDesc": "Поділіться опублікованою сторінкою з іншими",
     "qrCode": "QR-код",
     "qrDialogDescription": "Відскануйте цей код, щоб поділитися сторінкою",
     "qrDialogTitle": "QR-код",
     "scanQR": "Відскануйте код для переходу",
     "shareLink": "Поділитися",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "shareNow": "Поділитися зараз",
+    "title": "🎉 Готово! Твоє посилання працює",
+    "yourPageLink": "Посилання на вашу сторінку"
   },
   "shoutout": {
     "blockDescription": "Рекомендуйте інших користувачів своїй аудиторії",

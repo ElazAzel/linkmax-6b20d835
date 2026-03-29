@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "Спампаваць QR",
+    "linkCopied": "Спасылка скапіявана!",
+    "niches": {
+      "beauty": "Запісацца да мяне онлайн: {{url}}",
+      "default": "Мае паслугі і запіс: {{url}}",
+      "education": "Запісацца на заняткі: {{url}}",
+      "fitness": "Запішыся на трэніроўку: {{url}}",
+      "food": "Забраніраваць столік / заказаць: {{url}}",
+      "health": "Запісацца на прыём: {{url}}"
+    },
+    "promo": "Вярніцеся заўтра за першай статыстыкай! 🚀",
+    "shareMore": "Яшчэ...",
+    "subtitle": "Дадай спасылку ў bio сацсетак, каб кліенты маглі знайсці цябе і пакінуць заяўку.",
+    "title": "🎉 Апублікавана! Твая старонка ў сетцы"
+  },
   "share": {
-    "defaultTitle": "Check out my page",
-    "linkCopied": "Link copied",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page",
-    "qrDialogTitle": "QR Code",
-    "scanQR": "Scan to open the page",
-    "shareLink": "Share",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "defaultTitle": "Паглядзіце маю старонку",
+    "linkCopied": "Спасылка скапіявана",
+    "published": "Старонка апублікавана!",
+    "publishedDesc": "Падзяліцеся апублікаванай старонкай з іншымі",
+    "qrCode": "QR-код",
+    "qrDialogDescription": "Адсканіруйце гэты код, каб падзяліцца старонкай",
+    "qrDialogTitle": "QR-код",
+    "scanQR": "Адсканіруйце код для пераходу",
+    "shareLink": "Падзяліцца",
+    "shareNow": "Падзяліцца зараз",
+    "title": "🎉 Гатова! Твая спасылка працуе",
+    "yourPageLink": "Спасылка на вашу старонку"
   },
   "shoutout": {
     "blockDescription": "Recommend other users to your audience",

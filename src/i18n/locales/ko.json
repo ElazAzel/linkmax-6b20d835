@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "QR 다운로드",
+    "linkCopied": "링크가 복사되었습니다!",
+    "niches": {
+      "beauty": "온라인 예약하기: {{url}}",
+      "default": "내 서비스 및 예약: {{url}}",
+      "education": "수업 신청하기: {{url}}",
+      "fitness": "트레이닝 신청하기: {{url}}",
+      "food": "테이블 예약 / 주문하기: {{url}}",
+      "health": "예약하기: {{url}}"
+    },
+    "promo": "첫 통계를 확인하려면 내일 다시 오세요! 🚀",
+    "shareMore": "더 보기...",
+    "subtitle": "소설 미디어 프로필에 링크를 추가하여 고객이 나를 찾고 문의를 남길 수 있도록 하세요.",
+    "title": "🎉 게시되었습니다! 귀하의 페이지가 라이브 상태입니다"
+  },
   "share": {
-    "defaultTitle": "Check out my page",
-    "linkCopied": "Link copied",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page",
-    "qrDialogTitle": "QR Code",
-    "scanQR": "Scan to open the page",
-    "shareLink": "Share",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "defaultTitle": "제 페이지를 확인해 보세요",
+    "linkCopied": "링크가 복사되었습니다",
+    "published": "페이지가 게시되었습니다!",
+    "publishedDesc": "게시된 페이지를 다른 사람과 공유하세요",
+    "qrCode": "QR 코드",
+    "qrDialogDescription": "이 코드를 스캔하여 페이지를 공유하세요",
+    "qrDialogTitle": "QR 코드",
+    "scanQR": "스캔하여 열기",
+    "shareLink": "공유하기",
+    "shareNow": "지금 공유",
+    "title": "🎉 라이브 상태입니다! 링크가 준비되었습니다",
+    "yourPageLink": "페이지 링크"
   },
   "shoutout": {
     "blockDescription": "Recommend other users to your audience",

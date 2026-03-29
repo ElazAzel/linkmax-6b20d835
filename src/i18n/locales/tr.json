@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "QR İndir",
+    "linkCopied": "Bağlantı kopyalandı!",
+    "niches": {
+      "beauty": "Benden online randevu al: {{url}}",
+      "default": "Hizmetlerim ve randevu: {{url}}",
+      "education": "Derse kaydol: {{url}}",
+      "fitness": "Antrenmana kaydol: {{url}}",
+      "food": "Masa ayırt / Sipariş ver: {{url}}",
+      "health": "Randevu al: {{url}}"
+    },
+    "promo": "İlk istatistiklerini görmek için yarın gel! 🚀",
+    "shareMore": "Daha fazla...",
+    "subtitle": "Müşterilerin seni bulabilmesi ve talep bırakabilmesi için bağlantıyı sosyal medya bio'na ekle.",
+    "title": "🎉 Yayınlandı! Sayfan artık yayında"
+  },
   "share": {
-    "defaultTitle": "Check out my page",
-    "linkCopied": "Link copied",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page",
-    "qrDialogTitle": "QR Code",
-    "scanQR": "Scan to open the page",
-    "shareLink": "Share",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "defaultTitle": "Sayfama göz at",
+    "linkCopied": "Bağlantı kopyalandı",
+    "published": "Sayfa yayınlandı!",
+    "publishedDesc": "Yayınlanan sayfanı başkalarıyla paylaş",
+    "qrCode": "QR Kod",
+    "qrDialogDescription": "Sayfayı paylaşmak için bu kodu tara",
+    "qrDialogTitle": "QR Kod",
+    "scanQR": "Açmak için kodu tara",
+    "shareLink": "Paylaş",
+    "shareNow": "Şimdi paylaş",
+    "title": "🎉 Yayındasın! Bağlantın hazır",
+    "yourPageLink": "Sayfa bağlantın"
   },
   "shoutout": {
     "blockDescription": "Recommend other users to your audience",

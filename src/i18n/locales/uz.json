@@ -5196,6 +5196,22 @@
     "loadDetailError": "Ma'lumotlarni yuklashda xatolik",
     "new": "Yangi xabar",
     "noDesc": "Tavsif yo'q",
+    "ritual": {
+      "downloadQR": "QR yuklab olish",
+      "linkCopied": "Havola nusxalandi!",
+      "niches": {
+        "beauty": "Onlayn yozilish: {{url}}",
+        "default": "Xizmatlarim va yozilish: {{url}}",
+        "education": "Darsga yozilish: {{url}}",
+        "fitness": "Mashg'ulotga yozilish: {{url}}",
+        "food": "Stol band qilish / buyurtma: {{url}}",
+        "health": "Qabulga yozilish: {{url}}"
+      },
+      "promo": "Birinchi statistikani ko'rish uchun ertaga qayting! 🚀",
+      "shareMore": "Yana...",
+      "subtitle": "Mijozlar sizni topishi va ariza qoldirishi uchun ushbu havolani bio-ga qo'shing.",
+      "title": "🎉 Nashr etildi! Sahifangiz tarmoqda live"
+    },
     "selectTemplate": "Shablonni tanlang",
     "statusUpdated": "Holat yangilandi",
     "stepAdded": "Qadam qo'shildi",

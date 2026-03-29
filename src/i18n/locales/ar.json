@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "تحميل QR",
+    "linkCopied": "تم نسخ الرابط!",
+    "niches": {
+      "beauty": "احجز معي عبر الإنترنت: {{url}}",
+      "default": "خدماتي والحجز: {{url}}",
+      "education": "سجل في الحصة: {{url}}",
+      "fitness": "سجل في التدريب: {{url}}",
+      "food": "احجز طاولة / اطلب الآن: {{url}}",
+      "health": "حجز موعد: {{url}}"
+    },
+    "promo": "عُد غداً لمشاهدة أولى إحصائياتك! 🚀",
+    "shareMore": "المزيد...",
+    "subtitle": "أضف الرابط إلى سيرتك الذاتية في وسائل التواصل الاجتماعي ليتمكن العملاء من العثور عليك وترك طلب.",
+    "title": "🎉 تم النشر! صفحتك الآن مباشرة"
+  },
   "share": {
-    "defaultTitle": "Check out my page",
-    "linkCopied": "Link copied",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page",
-    "qrDialogTitle": "QR Code",
-    "scanQR": "Scan to open the page",
-    "shareLink": "Share",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "defaultTitle": "تحقق من صفحتي",
+    "linkCopied": "تم نسخ الرابط",
+    "published": "تم نشر الصفحة!",
+    "publishedDesc": "شارك صفحتك المنشورة مع الآخرين",
+    "qrCode": "رمز QR",
+    "qrDialogDescription": "امسح هذا الرمز لمشاركة الصفحة",
+    "qrDialogTitle": "رمز QR",
+    "scanQR": "امسح الرمز للفتح",
+    "shareLink": "مشاركة",
+    "shareNow": "شارك الآن",
+    "title": "🎉 أنت مباشر! رابطك جاهز",
+    "yourPageLink": "رابط صفحتك"
   },
   "shoutout": {
     "blockDescription": "Recommend other users to your audience",

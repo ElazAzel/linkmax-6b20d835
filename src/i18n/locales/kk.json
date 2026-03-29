@@ -2751,21 +2751,38 @@
     "wave": "Толқын"
   },
   "freemium": {
-    "aiGenerationsRemaining": "Осы айда AI ұрпақтары қалды: {{count}}",
-    "aiLimitReached": "AI генерациялау шегіне жетті",
+    "blockLimitReached": "Бастау үшін 5 блок жеткілікті 🚀",
+    "blockLimitDesc": "Өтінім формасын, тауарларды қосу және шектеусіз толық лендинг жасау үшін PRO қосыңыз.",
+    "blocksRemaining": "Қалған блоктар: {{count}}/{{max}}",
+    "aiLimitReached": "Алғашқы AI генерациясы таусылды",
+    "aiLimitDesc": "PRO тарифімен AI кликтерді көбейту үшін ондаған сататын тақырыптар жазады.",
+    "aiGenerationsRemaining": "Қалған AI генерациялары: {{count}}",
     "aiLimitResetMonthlyPro": "Шектеу келесі айда жаңартылады",
     "aiLimitResetsMonthly": "Лимит ай сайын жаңартылып отырады",
-    "blockLimitReached": "Блоктау шегіне жетті. Шексіз мөлшерде премиумға жаңартыңыз.",
-    "blocksRemaining": "Қалған блоктар: {{count}}/{{max}}",
+    "moreAIGenerations": "PRO-мен айына 10 генерация",
+    "upgradeForMoreGenerations": "Айына 5 буынға Premium нұсқасына жаңартыңыз",
+    "watermarkEnabled": "LinkMAX логотипін алып тастау",
+    "watermarkDesc": "Бетті 100% өзіңіздікі етіңіз — PRO көмегімен клиенттер сенімін арттырыңыз.",
+    "removeWatermark": "Логотипті өшіру",
+    "upgradePro": "PRO қосу",
     "getPremium": "Premium алыңыз",
     "left": "қалды",
     "limit": "Шектеу",
-    "moreAIGenerations": "Айына 5 ұрпақ",
-    "upgradeForMoreGenerations": "Айына 5 буынға Premium нұсқасына жаңартыңыз",
-    "upgradeToEdit": "Өңдеу үшін {{деңгей}} деңгейіне дейін жаңартыңыз {{tier}}",
+    "upgradeToEdit": "Өңдеу үшін {{tier}} деңгейіне дейін жаңартыңыз",
     "upgradeToPremium": "Premium нұсқасына жаңартыңыз",
     "viewOnly": "Көру",
-    "viewOnlyHint": "Өңдеу үшін {{tier}} қажет"
+    "viewOnlyHint": "Өңдеу үшін {{tier}} қажет",
+    "gate": {
+      "forms": "Форма = өтінімдер. PRO оларды CRM + Telegram-ға жібереді.",
+      "crm": "Клиенттерді жоғалтпау үшін статустар мен жылдам жауаптар.",
+      "analytics": "Жай қаралым емес, клиент кім әкелетінін біліңіз.",
+      "booking": "Жазысқанша тікелей жазылу. Клиент өз уақытын таңдайды.",
+      "design": "Бетті \"өзіңдікі\" қыл. PRO премиум тақырыптарды ашады.",
+      "ai": "Көбірек AI = бастау үшін көбірек креатив.",
+      "export": "Клиенттер тізімін жүктеп алып, бизнесті басқарыңыз.",
+      "domain": "Өз доменіңіз = сенім. Бренд ретінде көрініңіз.",
+      "generic": "Бұл функция PRO тарифінде көбірек клик пен өтінім әкеледі."
+    }
   },
   "friction": {
     "try": "Байқап көру"
@@ -5397,19 +5414,35 @@
     "rounded": "Дөңгеленген",
     "square": "Шаршы"
   },
+  "ritual": {
+    "downloadQR": "QR жүктеу",
+    "linkCopied": "Сілтеме көшірілді!",
+    "niches": {
+      "beauty": "Маған онлайн жазылу: {{url}}",
+      "default": "Менің қызметтерім мен жазылу: {{url}}",
+      "education": "Сабаққа жазылу: {{url}}",
+      "fitness": "Жаттығуға жазылу: {{url}}",
+      "food": "Үстел брондау / тапсырыс беру: {{url}}",
+      "health": "Қабылдауға жазылу: {{url}}"
+    },
+    "promo": "Алғашқы статистиканы көру үшін ертең оралыңыз! 🚀",
+    "shareMore": "Тағы...",
+    "subtitle": "Клиенттер сізді тауып, өтінім қалдыруы үшін бұл сілтемені әлеуметтік желілердегі bio-ға қосыңыз.",
+    "title": "🎉 Жарияланды! Сіздің парақшаңыз желіде"
+  },
   "share": {
     "defaultTitle": "Менің парақшамды қараңыз",
     "linkCopied": "Сілтеме көшірілді",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR коды",
-    "qrDialogDescription": "Бетті ортақ пайдалану үшін осы кодты сканерлеңіз",
-    "qrDialogTitle": "QR коды",
-    "scanQR": "Бару үшін кодты сканерлеңіз",
+    "published": "Парақша жарияланды!",
+    "publishedDesc": "Жарияланған парақшаны басқалармен бөлісіңіз",
+    "qrCode": "QR-код",
+    "qrDialogDescription": "Парақшаны бөлісу үшін мына кодты сканерлеңіз",
+    "qrDialogTitle": "QR-код",
+    "scanQR": "Өту үшін кодты сканерлеңіз",
     "shareLink": "Бөлісу",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Сіздің бет сілтемеңіз"
+    "shareNow": "Қазір бөлісу",
+    "title": "🎉 Дайын! Сіздің сілтемеңіз жұмыс істейді",
+    "yourPageLink": "Парақшаңыздың сілтемесі"
   },
   "shoutout": {
     "blockDescription": "Аудиторияңыздағы басқа пайдаланушыларды ұсыныңыз",

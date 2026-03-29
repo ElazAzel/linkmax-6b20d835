@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "下载二维码",
+    "linkCopied": "链接已复制！",
+    "niches": {
+      "beauty": "在线预约我的服务: {{url}}",
+      "default": "我的服务与预约: {{url}}",
+      "education": "报名参加课程: {{url}}",
+      "fitness": "报名参加训练: {{url}}",
+      "food": "订座 / 订餐: {{url}}",
+      "health": "预约挂号: {{url}}"
+    },
+    "promo": "明天回来查看您的第一份统计数据！ 🚀",
+    "shareMore": "更多...",
+    "subtitle": "将链接添加到您的社交媒体个人资料中，让客户可以找到您并提交申请。",
+    "title": "🎉 已发布！您的页面现在已上线"
+  },
   "share": {
-    "defaultTitle": "Check out my page",
-    "linkCopied": "Link copied",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page",
-    "qrDialogTitle": "QR Code",
-    "scanQR": "Scan to open the page",
-    "shareLink": "Share",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "defaultTitle": "看看我的页面",
+    "linkCopied": "链接已复制",
+    "published": "页面已发布！",
+    "publishedDesc": "与他人分享您发布的页面",
+    "qrCode": "二维码",
+    "qrDialogDescription": "扫描此代码分享页面",
+    "qrDialogTitle": "二维码",
+    "scanQR": "扫描二维码访问",
+    "shareLink": "分享",
+    "shareNow": "立即分享",
+    "title": "🎉 您已上线！您的链接已就绪",
+    "yourPageLink": "页面链接"
   },
   "shoutout": {
     "blockDescription": "Recommend other users to your audience",

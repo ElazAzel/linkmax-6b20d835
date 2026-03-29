@@ -32,6 +32,7 @@ import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
+import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
 import { BLOCK_PRESETS, type BlockPreset, getPresetsForType } from '@/lib/editor/editor-presets';
@@ -454,16 +455,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                   <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
                 </SheetHeader>
 
-                <div className="px-6 pb-5 bg-muted/20">
-                  <div className="flex items-center justify-between gap-3 mb-3">
-                    {!isPremium && (
-                      <Badge
-                        variant={isAtBlockLimit ? 'destructive' : 'secondary'}
-                        className="rounded-full px-3 py-1 text-xs font-semibold"
-                      >
-                        {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
-                      </Badge>
-                    )}
+                <div className="px-6 pb-5 bg-background">
+                  <div className="mb-4">
+                    <FreemiumBlockLimit currentBlocks={currentBlockCount} isPremium={isPremium} />
                   </div>
                   <div className="relative">
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />

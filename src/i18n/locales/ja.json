@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "QRコードをダウンロード",
+    "linkCopied": "リンクをコピーしました！",
+    "niches": {
+      "beauty": "オンライン予約はこちら: {{url}}",
+      "default": "サービス内容と予約: {{url}}",
+      "education": "レッスンに申し込む: {{url}}",
+      "fitness": "トレーニングに申し込む: {{url}}",
+      "food": "席を予約する / 注文する: {{url}}",
+      "health": "予約を入れる: {{url}}"
+    },
+    "promo": "最初の統計を確認するために、明日またお越しください！ 🚀",
+    "shareMore": "もっと見る...",
+    "subtitle": "SNSのプロフィールにリンクを追加して、顧客があなたを見つけ、リクエストを送れるようにしましょう。",
+    "title": "🎉 公開されました！ あなたのページがライブになりました"
+  },
   "share": {
-    "defaultTitle": "Check out my page",
-    "linkCopied": "Link copied",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page",
-    "qrDialogTitle": "QR Code",
-    "scanQR": "Scan to open the page",
-    "shareLink": "Share",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "defaultTitle": "私のページをチェックしてください",
+    "linkCopied": "リンクをコピーしました",
+    "published": "ページを公開しました！",
+    "publishedDesc": "公開したページを他の人と共有する",
+    "qrCode": "QRコード",
+    "qrDialogDescription": "このコードをスキャンしてページを共有する",
+    "qrDialogTitle": "QRコード",
+    "scanQR": "スキャンして開く",
+    "shareLink": "共有",
+    "shareNow": "今すぐ共有",
+    "title": "🎉 ライブ配信中！ リンクの準備ができました",
+    "yourPageLink": "あなたのページへのリンク"
   },
   "shoutout": {
     "blockDescription": "Recommend other users to your audience",

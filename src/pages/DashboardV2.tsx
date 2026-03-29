@@ -32,6 +32,7 @@ import {
   DashboardLayout,
   PageSwitcher,
 } from '@/components/dashboard-v2/layout';
+import { PublicationRitual } from '@/components/dashboard-v2/dialogs/PublicationRitual';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
 import { Button } from '@/components/ui/button';
 import Crown from 'lucide-react/dist/esm/icons/crown';
@@ -881,11 +882,11 @@ function DashboardV2Inner() {
           )}
 
           {dashboard.sharingState.showShareDialog && (
-            <ShareAfterPublishDialog
+            <PublicationRitual
               open={dashboard.sharingState.showShareDialog}
               onOpenChange={dashboard.sharingState.closeShareDialog}
-              userId={dashboard.user?.id}
               publishedUrl={dashboard.sharingState.publishedUrl}
+              niche={dashboard.pageData?.niche}
             />
           )}
 

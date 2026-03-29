@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { NicheSelector } from '@/components/settings/NicheSelector';
+import { PremiumFeatureGate } from '@/components/billing/PremiumFeatureGate';
 import type { ProfileBlock } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 
@@ -346,10 +347,8 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                 </div>
 
-                <Card className={cn("p-4 space-y-4", !isPremium && "opacity-60 cursor-not-allowed relative")}>
-                    {!isPremium && (
-                        <div className="absolute inset-0 z-10" onClick={onUpgradePage} />
-                    )}
+                <PremiumFeatureGate requiredTier="pro" outcomeKey="domain">
+                    <Card className="p-4 space-y-4">
                     <div className="space-y-2">
                         <Label className="flex items-center gap-2">
                             <Globe className="w-4 h-4" />
@@ -403,6 +402,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         )}
                     </div>
                 </Card>
+                </PremiumFeatureGate>
             </div>
 
             {/* SEO */}
@@ -643,10 +643,8 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     </h3>
                     {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                 </div>
-                <Card className={cn("p-4 space-y-4 glass-card border-white/10 shadow-glass", !isPremium && "opacity-60 cursor-not-allowed relative")}>
-                    {!isPremium && (
-                        <div className="absolute inset-0 z-10" onClick={onUpgradePage} />
-                    )}
+                <PremiumFeatureGate requiredTier="pro" outcomeKey="design">
+                <Card className="p-4 space-y-4 glass-card border-white/10 shadow-glass">
 
                     <div className="space-y-2">
                         <Label className="flex items-center gap-2">
@@ -667,13 +665,13 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     </div>
 
                     <div className="flex items-center justify-between py-2">
-                        <div className="space-y-0.5">
-                            <Label className="flex items-center gap-2">
-                                <Eye className="w-4 h-4" />
-                                {t('dashboard.pageSettings.hideBranding', 'Hide lnkmx branding')}
+                        <div className="space-y-1">
+                            <Label className="flex items-center gap-2 text-base">
+                                <Crown className="w-4 h-4 text-amber-500" />
+                                {t('freemium.watermarkEnabled', 'Убери логотип LinkMAX')}
                             </Label>
-                            <p className="text-xs text-muted-foreground">
-                                {t('dashboard.pageSettings.hideBrandingHint', 'Remove "Made with lnkmx" watermark and links')}
+                            <p className="text-sm text-muted-foreground leading-snug max-w-[250px]">
+                                {t('freemium.watermarkDesc', 'Сделай страницу 100% своей — выгляди статуснее и повышай доверие клиентов с PRO.')}
                             </p>
                         </div>
                         <Switch
@@ -689,6 +687,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         />
                     </div>
                 </Card>
+                </PremiumFeatureGate>
             </div>
 
             {/* Webhooks (PRO Only) */}
@@ -699,10 +698,8 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     </h3>
                     {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                 </div>
-                <Card className={cn("p-4 space-y-4 glass-card border-white/10 shadow-glass", !isPremium && "opacity-60 cursor-not-allowed relative")}>
-                    {!isPremium && (
-                        <div className="absolute inset-0 z-10" onClick={onUpgradePage} />
-                    )}
+                <PremiumFeatureGate requiredTier="pro" outcomeKey="generic">
+                <Card className="p-4 space-y-4 glass-card border-white/10 shadow-glass">
 
                     <div className="space-y-2">
                         <Label className="flex items-center gap-2">
@@ -741,6 +738,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         </p>
                     </div>
                 </Card>
+                </PremiumFeatureGate>
             </div>
         </div>
     );

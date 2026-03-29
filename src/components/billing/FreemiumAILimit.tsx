@@ -47,25 +47,30 @@ export const FreemiumAILimit = memo(function FreemiumAILimit({
             </span>
           </Badge>
         </TooltipTrigger>
-        <TooltipContent side="bottom" className="max-w-xs p-3">
-          <div className="space-y-2">
-            <p className="text-sm font-medium">
-              {isAtLimit 
-                ? t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')
-                : t('freemium.aiGenerationsRemaining', 'Осталось AI генераций в этом месяце: {{count}}', { count: remainingGenerations })
-              }
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {t('freemium.aiLimitResetsMonthly', 'Лимит обновляется каждый месяц')}
-            </p>
+        <TooltipContent side="bottom" className="max-w-xs p-4 rounded-xl border border-primary/20 bg-background/95 backdrop-blur-md shadow-xl">
+          <div className="space-y-3">
+            {isAtLimit ? (
+              <>
+                <p className="text-sm font-bold text-foreground">
+                  {t('freemium.aiLimitReached', 'Стартовая генерация исчерпана')}
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {t('freemium.aiLimitDesc', 'С PRO-тарифом наш AI генерирует десятки продающих заголовков и описаний, чтобы увеличить клики.')}
+                </p>
+              </>
+            ) : (
+              <p className="text-xs font-semibold text-muted-foreground">
+                {t('freemium.aiGenerationsRemaining', 'Осталось AI генераций: {{count}}', { count: remainingGenerations })}
+              </p>
+            )}
+            
             <Button 
               size="sm" 
-              variant="outline"
               onClick={openPremiumPurchase}
-              className="w-full mt-2"
+              className="w-full h-9 rounded-lg font-bold bg-gradient-to-r from-violet-500 to-purple-600 shadow-md shadow-primary/20 hover:scale-[1.02] transition-transform"
             >
-              <Crown className="h-3 w-3 mr-1.5 text-amber-500" />
-              {t('freemium.moreAIGenerations', '5 генераций в месяц')}
+              <Crown className="h-4 w-4 mr-1.5" />
+              {t('freemium.moreAIGenerations', '10 генераций в месяц с PRO')}
             </Button>
           </div>
         </TooltipContent>

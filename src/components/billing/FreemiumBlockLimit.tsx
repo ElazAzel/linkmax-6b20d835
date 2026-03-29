@@ -43,10 +43,14 @@ export const FreemiumBlockLimit = memo(function FreemiumBlockLimit({
         <div className="flex-1 space-y-2">
           <AlertDescription className="text-sm">
             {isAtLimit ? (
-              <span>{t('freemium.blockLimitReached', 'Достигнут лимит блоков. Перейдите на Premium для неограниченного количества.')}</span>
+              <div className="space-y-1 mt-1">
+                <p className="font-bold text-foreground">{t('freemium.blockLimitReached', 'Базовых 5 блоков достаточно для старта 🚀')}</p>
+                <p className="text-muted-foreground leading-snug">{t('freemium.blockLimitDesc', 'Включи PRO, чтобы добавить форму заявок, товары и собрать полноценный лендинг без ограничений.')}</p>
+              </div>
             ) : (
               <span>
                 {t('freemium.blocksRemaining', 'Осталось блоков: {{count}} из {{max}}', {
+
                   count: remaining,
                   max: FREE_LIMITS.maxBlocks,
                 })}
@@ -60,10 +64,10 @@ export const FreemiumBlockLimit = memo(function FreemiumBlockLimit({
             <Button 
               size="sm" 
               onClick={openPremiumPurchase}
-              className="mt-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+              className="mt-4 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 w-full font-bold shadow-lg shadow-primary/25 rounded-xl h-10"
             >
-              <Crown className="h-3.5 w-3.5 mr-1.5" />
-              {t('common.cta.upgradeToTier', 'Upgrade to {{tier}}', { tier: 'Premium' })}
+              <Crown className="h-4 w-4 mr-2" />
+              {t('freemium.upgradePro', 'Включить PRO')}
             </Button>
           )}
         </div>

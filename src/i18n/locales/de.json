@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "QR herunterladen",
+    "linkCopied": "Link kopiert!",
+    "niches": {
+      "beauty": "Online-Buchung bei mir: {{url}}",
+      "default": "Meine Services & Buchung: {{url}}",
+      "education": "Für den Kurs anmelden: {{url}}",
+      "fitness": "Melde dich zum Training an: {{url}}",
+      "food": "Tisch reservieren / Bestellen: {{url}}",
+      "health": "Termin vereinbaren: {{url}}"
+    },
+    "promo": "Komm morgen wieder für deine ersten Statistiken! 🚀",
+    "shareMore": "Mehr...",
+    "subtitle": "Füge den Link zu deiner Social-Media-Bio hinzu, damit Kunden dich finden und eine Anfrage stellen können.",
+    "title": "🎉 Veröffentlicht! Deine Seite ist live"
+  },
   "share": {
-    "defaultTitle": "Schauen Sie sich meine Seite an",
+    "defaultTitle": "Schau dir meine Seite an",
     "linkCopied": "Link kopiert",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
+    "published": "Seite veröffentlicht!",
+    "publishedDesc": "Teile deine veröffentlichte Seite mit anderen",
     "qrCode": "QR-Code",
-    "qrDialogDescription": "Scannen Sie diesen Code, um die Seite zu teilen",
+    "qrDialogDescription": "Scanne diesen Code, um die Seite zu teilen",
     "qrDialogTitle": "QR-Code",
-    "scanQR": "Scannen Sie den Code, um zu öffnen",
+    "scanQR": "Code scannen zum Öffnen",
     "shareLink": "Teilen",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "shareNow": "Jetzt teilen",
+    "title": "🎉 Du bist live! Dein Link ist bereit",
+    "yourPageLink": "Link zu deiner Seite"
   },
   "shoutout": {
     "blockDescription": "Рекомендуйте других пользователей вашей аудитории",

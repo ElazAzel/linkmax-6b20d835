@@ -216,15 +216,15 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
         return (
           <div className="space-y-3">
             {!canGenerate && (
-              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-sm">
-                <div className="flex items-center gap-2 text-destructive font-medium mb-1">
+              <div className="p-4 rounded-xl bg-violet-500/5 border border-violet-500/20 text-sm">
+                <div className="flex items-center gap-2 text-violet-600 font-bold mb-2">
                   <Lock className="h-4 w-4" />
                   {t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')}
                 </div>
-                <p className="text-muted-foreground text-xs mb-2">
+                <p className="text-muted-foreground text-sm mb-3">
                   {isPremium
-                    ? t('freemium.aiLimitResetMonthlyPro', 'Лимит обновится в следующем месяце')
-                    : t('freemium.upgradeForMoreGenerations', 'Обновите до Premium для 5 генераций в месяц')
+                    ? t('freemium.moreAIGenerations', '10 генераций в месяц с PRO')
+                    : t('freemium.aiLimitDesc', 'С PRO-тарифом наш AI генерирует десятки продающих заголовков и описаний, чтобы увеличить клики.')
                   }
                 </p>
                 {!isPremium && (

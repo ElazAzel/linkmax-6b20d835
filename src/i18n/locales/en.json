@@ -2751,21 +2751,38 @@
     "wave": "Wave"
   },
   "freemium": {
-    "aiGenerationsRemaining": "AI generations left this month: {{count}}",
-    "aiLimitReached": "AI generation limit has been reached",
+    "blockLimitReached": "5 blocks is enough to start 🚀",
+    "blockLimitDesc": "Go PRO to add lead forms, products, and build a full landing page with no limits.",
+    "blocksRemaining": "Blocks remaining: {{count}} out of {{max}}",
+    "aiLimitReached": "Free AI generation used up",
+    "aiLimitDesc": "With PRO, our AI generates dozens of converting headlines and descriptions to boost your clicks.",
+    "aiGenerationsRemaining": "AI generations remaining: {{count}}",
     "aiLimitResetMonthlyPro": "The limit will be updated next month",
     "aiLimitResetsMonthly": "The limit is updated every month",
-    "blockLimitReached": "Block limit reached. Upgrade to Premium for unlimited quantities.",
-    "blocksRemaining": "Blocks left: {{count}} of {{max}}",
+    "moreAIGenerations": "10 generations/mo with PRO",
+    "upgradeForMoreGenerations": "Upgrade to Premium for 5 generations per month",
+    "watermarkEnabled": "Remove LinkMAX logo",
+    "watermarkDesc": "Make the page 100% yours. Build trust and look premium with PRO.",
+    "removeWatermark": "Remove Logo",
+    "upgradePro": "Go PRO",
     "getPremium": "Get Premium",
     "left": "left",
     "limit": "Limit",
-    "moreAIGenerations": "5 generations per month",
-    "upgradeForMoreGenerations": "Upgrade to Premium for 5 generations per month",
     "upgradeToEdit": "Upgrade to {{tier}} for editing",
     "upgradeToPremium": "Upgrade to Premium",
     "viewOnly": "View",
-    "viewOnlyHint": "Requires {{tier}} to edit"
+    "viewOnlyHint": "Requires {{tier}} to edit",
+    "gate": {
+      "forms": "Forms = leads. PRO sends them to CRM + Telegram.",
+      "crm": "Statuses & quick replies to never lose a client.",
+      "analytics": "Know what brings clients, not just views.",
+      "booking": "Bookings over DMs. Clients pick their own slot.",
+      "design": "Make it yours. PRO unlocks premium themes & backgrounds.",
+      "ai": "More AI = more great copy to start selling.",
+      "export": "Download your client list and manage your business.",
+      "domain": "Custom domain = trust. Look like a true brand.",
+      "generic": "This feature brings more clicks and leads with PRO."
+    }
   },
   "friction": {
     "try": "Try"

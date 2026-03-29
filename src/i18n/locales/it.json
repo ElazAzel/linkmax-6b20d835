@@ -5420,19 +5420,35 @@
     "rounded": "Rounded",
     "square": "Square"
   },
+  "ritual": {
+    "downloadQR": "Scarica QR",
+    "linkCopied": "Link copiato!",
+    "niches": {
+      "beauty": "Prenota con me online: {{url}}",
+      "default": "I miei servizi e prenotazione: {{url}}",
+      "education": "Iscriviti alla lezione: {{url}}",
+      "fitness": "Iscriviti all'allenamento: {{url}}",
+      "food": "Prenota un tavolo / Ordina: {{url}}",
+      "health": "Prenota un appuntamento: {{url}}"
+    },
+    "promo": "Torna domani per le tue prime statistiche! 🚀",
+    "shareMore": "Altro...",
+    "subtitle": "Aggiungi il link alla tua bio dei social media così i clienti potranno trovarti e lasciare una richiesta.",
+    "title": "🎉 Pubblicato! La tua pagina è online"
+  },
   "share": {
-    "defaultTitle": "Check out my page",
-    "linkCopied": "Link copied",
-    "published": "Page Published!",
-    "publishedDesc": "Share your published page with others",
-    "qrCode": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page",
-    "qrDialogTitle": "QR Code",
-    "scanQR": "Scan to open the page",
-    "shareLink": "Share",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX.my page!",
-    "yourPageLink": "Your page link"
+    "defaultTitle": "Dai un'occhiata alla mia pagina",
+    "linkCopied": "Link copiato",
+    "published": "Pagina pubblicata!",
+    "publishedDesc": "Condividi la tua pagina pubblicata con altri",
+    "qrCode": "Codice QR",
+    "qrDialogDescription": "Scansiona questo codice per condividere la pagina",
+    "qrDialogTitle": "Codice QR",
+    "scanQR": "Scansiona il codice per aprire",
+    "shareLink": "Condividi",
+    "shareNow": "Condividi ora",
+    "title": "🎉 Sei live! Il tuo link è pronto",
+    "yourPageLink": "Link alla tua pagina"
   },
   "shoutout": {
     "blockDescription": "Recommend other users to your audience",

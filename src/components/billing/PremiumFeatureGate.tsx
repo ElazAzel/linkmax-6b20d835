@@ -13,7 +13,8 @@ import { useFreemiumLimits, type FreeTier } from '@/hooks/user/useFreemiumLimits
 
 interface PremiumFeatureGateProps {
   requiredTier: FreeTier;
-  feature: string;
+  feature?: string;
+  outcomeKey?: 'forms' | 'crm' | 'analytics' | 'booking' | 'design' | 'ai' | 'export' | 'domain' | 'generic';
   children: React.ReactNode;
   showUpgradeButton?: boolean;
   compact?: boolean;
@@ -22,6 +23,7 @@ interface PremiumFeatureGateProps {
 export function PremiumFeatureGate({
   requiredTier,
   feature,
+  outcomeKey = 'generic',
   children,
   showUpgradeButton = true,
   compact = false,
@@ -66,10 +68,15 @@ export function PremiumFeatureGate({
               </div>
             </div>
           </TooltipTrigger>
-          <TooltipContent>
-            <p>
-              {t('premium.requiresTier', 'Требуется {{tier}}', { tier: tierNames[requiredTier] })}
-            </p>
+          <TooltipContent side="bottom" className="max-w-xs p-3">
+            <div className="space-y-1">
+              <p className="font-semibold text-sm">
+                {t(`freemium.gate.${outcomeKey}`, 'Эта функция приносит больше кликов и заявок в PRO.')}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {t('premium.requiresTier', 'Требуется {{tier}}', { tier: tierNames[requiredTier] })}
+              </p>
+            </div>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -81,24 +88,30 @@ export function PremiumFeatureGate({
       <div className="opacity-50 pointer-events-none select-none">
         {children}
       </div>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/90 backdrop-blur-sm rounded-lg p-4">
-        <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gradient-to-br from-violet-500 to-purple-600">
-          <TierIcon className="h-5 w-5 text-white" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/95 backdrop-blur-md rounded-lg p-5 border border-primary/20 shadow-xl z-20 transition-all hover:bg-background/98">
+        <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-primary/20">
+          <TierIcon className="h-6 w-6 text-white" />
         </div>
-        <p className="text-sm font-medium text-center">
-          {t('premium.featureRequires', '{{feature}} доступно в {{tier}}', {
-            feature,
-            tier: tierNames[requiredTier]
-          })}
-        </p>
+        <div className="space-y-1.5 text-center">
+          <p className="text-base font-bold text-foreground max-w-[280px] leading-tight">
+            {t(`freemium.gate.${outcomeKey}`, 'Эта функция приносит больше кликов и заявок в PRO.')}
+          </p>
+          <p className="text-xs text-muted-foreground font-medium">
+            {t('premium.requiresTier', 'Требуется тариф {{tier}}', {
+              tier: tierNames[requiredTier]
+            })}
+          </p>
+        </div>
         {showUpgradeButton && (
           <Button
-            size="sm"
-            variant="default"
-            className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700"
-            onClick={() => navigate('/pricing')}
+            size="default"
+            className="mt-2 w-full max-w-[200px] h-10 font-bold bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 shadow-md transition-transform hover:scale-[1.02] rounded-xl"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate('/pricing');
+            }}
           >
-            {t('common.cta.upgradeToTier', 'Upgrade to {{tier}}', { tier: tierNames[requiredTier] })}
+            {t('freemium.upgradePro', 'Включить PRO')}
           </Button>
         )}
       </div>
