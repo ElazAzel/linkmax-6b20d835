@@ -1,0 +1,11 @@
+{
+  "achievements": {
+    "categories": {
+      "all": "Усі",
+      "blocks": "Блоки",
+      "features": "Функції",
+      "milestones": "Досягнення",
+      "social": "Соціальні"
+    }
+  }
+}
