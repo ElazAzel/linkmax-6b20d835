@@ -1275,7 +1275,7 @@
     "nicheUsers": "Користувачі в нише \"{{niche}}\"",
     "noActiveCollabs": "Ні активних коллабораций",
     "noMembers": "Ні участников",
-    "o    "activity": {
+    "activity": {
       "all": "Усі",
       "export": "Експорт",
       "exportError": "Помилка експорту",
