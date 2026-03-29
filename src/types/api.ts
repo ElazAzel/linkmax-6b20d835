@@ -52,6 +52,7 @@ export interface DbUserProfile {
   avatar_url: string | null;
   is_premium: boolean | null;
   trial_ends_at: string | null;
+  kaspi_widget_enabled: boolean | null;
   created_at: string | null;
   updated_at: string | null;
 }

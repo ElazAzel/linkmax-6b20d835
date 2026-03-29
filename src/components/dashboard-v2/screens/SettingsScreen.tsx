@@ -81,6 +81,8 @@ interface SettingsScreenProps {
   onOpenMyTemplates: () => void;
   onOpenTokens: () => void;
   onOpenAchievements: () => void;
+  kaspiWidgetEnabled: boolean;
+  onKaspiWidgetChange: (enabled: boolean) => void;
   onOpenTheme?: () => void;
   onOpenMarketplace?: () => void;
   onOpenTemplates?: () => void;
@@ -218,6 +220,8 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               onOpenMyTemplates={props.onOpenMyTemplates}
               onOpenTokens={props.onOpenTokens}
               onOpenAchievements={props.onOpenAchievements}
+              kaspiWidgetEnabled={props.kaspiWidgetEnabled}
+              onKaspiWidgetChange={props.onKaspiWidgetChange}
             />
           </TabsContent>
         </Tabs>

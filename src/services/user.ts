@@ -19,6 +19,7 @@ export interface UserProfile {
   push_notifications_enabled: boolean | null;
   push_subscription: unknown | null;
   friends_count: number | null;
+  kaspi_widget_enabled: boolean | null;
 }
 
 export interface UpdateUsernameResult {
@@ -245,6 +246,29 @@ export async function updateTelegramNotifications(
         telegram_notifications_enabled: enabled,
         telegram_chat_id: chatId
       })
+      .eq('id', userId);
+
+    if (error) {
+      return { data: null, error: wrapError(error) };
+    }
+
+    return { data: enabled, error: null };
+  } catch (error) {
+    return { data: null, error: wrapError(error) };
+  }
+}
+
+/**
+ * Update Kaspi QR widget visibility preference
+ */
+export async function updateKaspiWidget(
+  userId: string,
+  enabled: boolean
+): Promise<ApiResult<boolean>> {
+  try {
+    const { error } = await supabase
+      .from('user_profiles')
+      .update({ kaspi_widget_enabled: enabled })
       .eq('id', userId);
 
     if (error) {

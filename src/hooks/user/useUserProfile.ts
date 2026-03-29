@@ -3,6 +3,7 @@ import {
   loadUserProfile,
   updateEmailNotifications,
   updateTelegramNotifications,
+  updateKaspiWidget,
   type UserProfile
 } from '@/services/user';
 import { toast } from 'sonner';
@@ -81,6 +82,27 @@ export function useUserProfile(userId: string | undefined) {
     }
   }, [userId]);
 
+  const handleUpdateKaspiWidget = useCallback(async (enabled: boolean) => {
+    if (!userId) return;
+
+    setSaving(true);
+    try {
+      const { error } = await updateKaspiWidget(userId, enabled);
+      if (error) {
+        toast.error('Failed to update Kaspi settings');
+        return;
+      }
+
+      setProfile(prev => prev ? { ...prev, kaspi_widget_enabled: enabled } : null);
+      toast.success(enabled ? 'Kaspi QR enabled' : 'Kaspi QR disabled');
+    } catch (error) {
+      logger.error('Error updating Kaspi widget preference', error, { context: 'useUserProfile' });
+      toast.error('Failed to update Kaspi settings');
+    } finally {
+      setSaving(false);
+    }
+  }, [userId]);
+
   return {
     profile,
     loading,
@@ -90,5 +112,6 @@ export function useUserProfile(userId: string | undefined) {
     refresh: loadProfile,
     updateEmailNotifications: handleUpdateEmailNotifications,
     updateTelegramNotifications: handleUpdateTelegramNotifications,
+    updateKaspiWidget: handleUpdateKaspiWidget,
   };
 }

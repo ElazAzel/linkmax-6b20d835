@@ -38,6 +38,18 @@ export type AppDatabase = Omit<Database, 'public'> & {
         zone_notifications: GenericTable;
         zone_bookings: GenericTable;
         zone_analytics: GenericTable;
+        user_profiles: {
+          Row: Database['public']['Tables']['user_profiles']['Row'] & {
+            kaspi_widget_enabled: boolean | null;
+          };
+          Insert: Database['public']['Tables']['user_profiles']['Insert'] & {
+            kaspi_widget_enabled?: boolean | null;
+          };
+          Update: Database['public']['Tables']['user_profiles']['Update'] & {
+            kaspi_widget_enabled?: boolean | null;
+          };
+          Relationships: Database['public']['Tables']['user_profiles']['Relationships'];
+        };
       }
     >
   }

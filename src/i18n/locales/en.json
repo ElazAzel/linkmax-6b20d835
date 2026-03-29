@@ -1680,7 +1680,10 @@
       "upgradeForMore": "Upgrade for more",
       "user": "User",
       "username": "Username",
-      "verification": "Verification"
+      "verification": "Verification",
+      "regional": "Regional",
+      "kaspiQr": "Kaspi QR Widget",
+      "kaspiQrDesc": "Show Kaspi.kz QR on dashboard"
     },
     "activity": {
       "all": "All",

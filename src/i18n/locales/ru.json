@@ -1680,7 +1680,10 @@
       "upgradeForMore": "Обновитесь для большего",
       "user": "Пользователь",
       "username": "Имя пользователя",
-      "verification": "Верификация"
+      "verification": "Верификация",
+      "regional": "Региональные",
+      "kaspiQr": "Виджет Kaspi QR",
+      "kaspiQrDesc": "Показывать Kaspi.kz QR на панели"
     },
     "activity": {
       "all": "Все",

@@ -60,6 +60,10 @@ interface AccountSettingsTabProps {
     telegramChatId: string;
     onTelegramChange: (enabled: boolean, chatId?: string) => void;
 
+    // Regional
+    kaspiWidgetEnabled: boolean;
+    onKaspiWidgetChange: (enabled: boolean) => void;
+
     // Actions
     onSignOut: () => void;
     onOpenFriends: () => void;
@@ -138,6 +142,8 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     onOpenMyTemplates,
     onOpenTokens,
     onOpenAchievements,
+    kaspiWidgetEnabled,
+    onKaspiWidgetChange,
 }: AccountSettingsTabProps) {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -344,6 +350,28 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         iconColor="text-emerald-500"
                         label={t('dashboard.accountSettings.language', 'Language')}
                         rightElement={<LanguageSwitcher />}
+                    />
+                </Card>
+            </div>
+
+            {/* Regional Settings */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    {t('dashboard.accountSettings.regional', 'Regional')}
+                </h3>
+                <Card className="divide-y divide-border/50 overflow-hidden">
+                    <SettingsItem
+                        icon={Globe}
+                        iconBg="bg-blue-500/15"
+                        iconColor="text-blue-500"
+                        label={t('dashboard.accountSettings.kaspiQr', 'Kaspi QR Widget')}
+                        description={t('dashboard.accountSettings.kaspiQrDesc', 'Show Kaspi.kz QR on dashboard')}
+                        rightElement={
+                            <Switch
+                                checked={kaspiWidgetEnabled}
+                                onCheckedChange={onKaspiWidgetChange}
+                            />
+                        }
                     />
                 </Card>
             </div>

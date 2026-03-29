@@ -66,6 +66,7 @@ interface HomeScreenProps {
   onOpenVersions?: () => void;
   onOpenInsights?: () => void;
   onOpenActivity?: () => void;
+  kaspiWidgetEnabled: boolean;
   onNavigate?: (tabId: string) => void;
 }
 
@@ -83,6 +84,7 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenInsights,
   onOpenActivity,
   onNavigate,
+  kaspiWidgetEnabled,
   realLeadsCount = 0,
   telegramChatId,
 }: HomeScreenProps) {
@@ -310,10 +312,12 @@ export const HomeScreen = memo(function HomeScreen({
                 className="glass border-white/10 shadow-glass h-full"
               />
               
-              <KaspiQRWidget
-                ownerId={pageData?.userId || ''}
-                className="glass border-white/10 shadow-glass h-full"
-              />
+              {kaspiWidgetEnabled && (
+                <KaspiQRWidget
+                  ownerId={pageData?.userId || ''}
+                  className="glass border-white/10 shadow-glass h-full"
+                />
+              )}
             </div>
 
             {/* Performance Hub / Metrics */}

@@ -484,6 +484,7 @@ function DashboardV2Inner() {
                   onOpenInsights={() => handleTabChange('insights')}
                   onOpenActivity={() => handleTabChange('activity')}
                   telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
+                  kaspiWidgetEnabled={dashboard.userProfile.profile?.kaspi_widget_enabled ?? false}
                   onNavigate={handleTabChange}
                 />
               </ScreenErrorBoundary>
@@ -650,6 +651,8 @@ function DashboardV2Inner() {
                   onOpenMyTemplates={() => setShowMyTemplates(true)}
                   onOpenTokens={() => setShowTokens(true)}
                   onOpenAchievements={() => setShowAchievements(true)}
+                  kaspiWidgetEnabled={dashboard.userProfile.profile?.kaspi_widget_enabled ?? false}
+                  onKaspiWidgetChange={dashboard.userProfile.updateKaspiWidget}
                   onOpenTheme={() => setShowTheme(true)}
                   onOpenMarketplace={() => setShowMarketplace(true)}
                   onOpenTemplates={() => setTemplateGalleryOpen(true)}
