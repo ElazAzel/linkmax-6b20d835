@@ -20,6 +20,22 @@ export const NICHES = [
 
 export type Niche = typeof NICHES[number];
 
+export const ONBOARDING_GOALS = [
+  'leads',   // Get more leads
+  'sales',   // Sell products/services
+  'brand',   // Personal brand/Business card
+  'events',  // Events & Registration
+] as const;
+
+export type OnboardingGoal = typeof ONBOARDING_GOALS[number];
+
+export const GOAL_ICONS: Record<OnboardingGoal, string> = {
+  leads: '🎯',
+  sales: '💰',
+  brand: '👤',
+  events: '🎫',
+};
+
 // Niche icons mapping
 export const NICHE_ICONS: Record<Niche, string> = {
   expert: '🚀',

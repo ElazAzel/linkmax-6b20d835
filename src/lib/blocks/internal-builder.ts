@@ -26,6 +26,7 @@ import {
 interface UserInfo {
     name: string;
     bio: string;
+    goal?: string;
     contacts: string;
     services: string;
     socials: string;
@@ -50,8 +51,8 @@ function hydrateProfileBlock(block: any, userInfo: UserInfo) {
     }
 }
 
-function hydrateCatalogOrPricingBlock(block: any, parsedServices: any[]) {
-    block.title = 'Мои услуги';
+function hydrateCatalogOrPricingBlock(block: any, parsedServices: any[], goal?: string) {
+    block.title = goal === 'sales' ? 'Каталог товаров' : 'Мои услуги';
     const items = parsedServices.map((srv, i) => ({
         id: `item-${Date.now()}-${i}`,
         name: srv.title,
@@ -61,8 +62,8 @@ function hydrateCatalogOrPricingBlock(block: any, parsedServices: any[]) {
     block.items = items;
 }
 
-function hydrateMessengerBlock(block: any, parsedContacts: any[], rawContacts: string) {
-    block.title = 'Связаться со мной';
+function hydrateMessengerBlock(block: any, parsedContacts: any[], rawContacts: string, goal?: string) {
+    block.title = goal === 'leads' ? 'Записаться / Связаться' : 'Связаться со мной';
     if (parsedContacts.length > 0) {
         block.messengers = parsedContacts.map((c: any) => ({
             platform: c.platform,
@@ -216,7 +217,7 @@ export function generateBlocksFromTemplate(
         // Services
         if (!state.injectedServices && (block.type === 'catalog' || block.type === 'pricing')) {
             if (hasPrices) {
-                hydrateCatalogOrPricingBlock(block, parsedServices);
+                hydrateCatalogOrPricingBlock(block, parsedServices, userInfo.goal);
             } else {
                 // Convert existing block to Text list
                 const featureListText = (createFeatureListBlock(parsedServices) as any).content;
@@ -228,10 +229,10 @@ export function generateBlocksFromTemplate(
 
         // Contacts
         if (!state.injectedContacts && block.type === 'messenger') {
-            hydrateMessengerBlock(block, parsedContacts, remainderContacts || userInfo.contacts);
+            hydrateMessengerBlock(block, parsedContacts, remainderContacts || userInfo.contacts, userInfo.goal);
             state.injectedContacts = true;
         } else if (!state.injectedContacts && block.type === 'form') {
-            (block as any).title = 'Оставить заявку';
+            (block as any).title = userInfo.goal === 'leads' ? 'Оставить заявку на запись' : 'Оставить заявку';
             state.injectedContacts = true;
         }
 
@@ -324,7 +325,14 @@ export function generateBlocksFromTemplate(
         mapBlock.address = extractedAddress;
         mapBlock.blockStyle = { animation: 'fade-in', padding: 'md', borderRadius: 'lg', shadow: 'sm', hoverEffect: 'lift' };
         (mapBlock as any).blockSize = 'small'; // Responsive grid paired with messenger naturally
+        
+        // If goal is leads/sales, make it wide to emphasize physical location
+        if (userInfo.goal === 'leads' || userInfo.goal === 'sales') {
+            (mapBlock as any).blockSize = 'wide';
+        }
+        
         blocks.push({ ...mapBlock, id: `map-fallback-${Date.now()}` } as Block);
+        state.injectedAddress = true;
     }
 
     // Socials fallback

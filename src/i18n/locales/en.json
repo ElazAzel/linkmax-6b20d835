@@ -533,6 +533,24 @@
     "translationSuccess": "Translation completed"
   },
   "aiBuilder": {
+    "goals": {
+      "title": "What's your main goal? ✨",
+      "subtitle": "We'll tailor your interface and blocks to fit your needs",
+      "leads": "Get more leads",
+      "leadsDesc": "Forms, bookings, consultations",
+      "sales": "Sell products/services",
+      "salesDesc": "Product catalog, price list",
+      "brand": "Personal brand",
+      "brandDesc": "Business card, social links",
+      "events": "Events & Info",
+      "eventsDesc": "Registration, announcements, tickets"
+    },
+    "descStep": {
+      "title": "Tell us about yourself ✨",
+      "label": "Magic Description",
+      "placeholder": "For example: I'm a stylist from New York, doing haircuts and color. I want clients to book via WhatsApp.",
+      "hint": "The more detail you provide, the more precisely AI will set up your blocks (buttons, contacts, services)."
+    },
     "bio": "About me / Description",
     "bioPlaceholder": "Brief description of your activity",
     "blocks": "blocks",

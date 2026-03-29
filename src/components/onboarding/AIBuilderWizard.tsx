@@ -28,9 +28,6 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
-import User from 'lucide-react/dist/esm/icons/user';
-import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
-import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
@@ -38,7 +35,7 @@ import { cn } from '@/lib/utils/utils';
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import { generateBlocksFromTemplate } from '@/lib/blocks/internal-builder';
 import type { Block } from '@/types/page';
-import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
+import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { storage } from '@/lib/storage';
 
@@ -64,6 +61,7 @@ interface DBTemplate {
 interface UserInfo {
   name: string;
   bio: string;
+  goal?: OnboardingGoal;
   contacts: string;
   services: string;
   socials: string;
@@ -73,9 +71,9 @@ interface UserInfo {
   expertChannel?: 'telegram' | 'email';
 }
 
-type Step = 'niche' | 'template' | 'dynamic_form' | 'generating' | 'complete';
+type Step = 'goal' | 'niche' | 'description' | 'generating' | 'complete';
 
-const STEPS: Step[] = ['niche', 'template', 'dynamic_form', 'generating', 'complete'];
+const STEPS: Step[] = ['goal', 'niche', 'description', 'generating', 'complete'];
 
 function getStepProgress(step: Step): number {
   const idx = STEPS.indexOf(step);
@@ -86,10 +84,11 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   const { t } = useTranslation();
   const { canUseAIPageGeneration, incrementAIPageGeneration } = useFreemiumLimits();
 
-  const [step, setStep] = useState<Step>('niche');
+  const [step, setStep] = useState<Step>('goal');
   const [userInfo, setUserInfo] = useState<UserInfo>({
     name: '',
     bio: '',
+    goal: undefined,
     contacts: '',
     services: '',
     socials: '',
@@ -98,50 +97,33 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     expertOffer: '',
     expertChannel: 'telegram',
   });
+  const [selectedGoal, setSelectedGoal] = useState<OnboardingGoal | null>(null);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
-  const [templates, setTemplates] = useState<DBTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<DBTemplate | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
-  const [carouselIndex, setCarouselIndex] = useState(0);
   const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
 
   // Reset state when dialog opens
   useEffect(() => {
     if (open) {
-      setStep('niche');
+      setStep('goal');
+      setSelectedGoal(null);
       setSelectedNiche(null);
       setSelectedTemplate(null);
-      setTemplates([]);
-      setCarouselIndex(0);
     }
   }, [open]);
 
-  // Determine which fields to ask based on template blocks
-  const formFields = useMemo(() => {
-    let needsServices = false;
-    let needsContacts = false;
-    let needsSocials = false;
-    let needsMedia = false;
 
-    if (selectedTemplate && Array.isArray(selectedTemplate.blocks)) {
-      for (const b of selectedTemplate.blocks) {
-        if (b.type === 'catalog' || b.type === 'pricing') needsServices = true;
-        if (b.type === 'messenger' || b.type === 'form') needsContacts = true;
-        if (b.type === 'socials') needsSocials = true;
-        if (b.type === 'video' || b.type === 'link') needsMedia = true;
-      }
-    }
-    return { needsServices, needsContacts, needsSocials, needsMedia };
-  }, [selectedTemplate]);
+  const handleSelectGoal = (goal: OnboardingGoal) => {
+    setSelectedGoal(goal);
+    setUserInfo(p => ({ ...p, goal }));
+    setStep('niche');
+  };
 
-  // Filtered templates for selected niche
-  const nicheTemplates = useMemo(() => {
-    if (!selectedNiche) return [];
-    return templates.filter(t => t.category === selectedNiche);
-  }, [templates, selectedNiche]);
-
-  // Load templates from DB when niche is selected
-  const loadTemplates = useCallback(async (niche: Niche) => {
+  const handleSelectNiche = async (niche: Niche) => {
+    setSelectedNiche(niche);
+    
+    // Automatically pick the first template for the niche to reduce friction
     setLoadingTemplates(true);
     try {
       const { data, error } = await supabase
@@ -149,69 +131,48 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
         .select('id, name, description, category, blocks, preview_image, is_premium')
         .eq('category', niche)
         .eq('is_public', true)
-        .order('sort_order', { ascending: true });
+        .order('sort_order', { ascending: true })
+        .limit(1);
 
       if (error) throw error;
-      setTemplates(data || []);
-
-      // Auto-select if only one template
-      if (data && data.length === 1) {
+      if (data && data.length > 0) {
         setSelectedTemplate(data[0]);
       } else {
-        setSelectedTemplate(null);
+        // Fallback for niches without templates
+        setSelectedTemplate({
+          id: 'basic-niche-template',
+          name: t(`niches.${niche}`, niche),
+          description: null,
+          category: niche,
+          blocks: [
+            { type: 'profile' },
+            { type: 'catalog' },
+            { type: 'messenger' },
+            { type: 'socials' }
+          ],
+          preview_image: null,
+          is_premium: false,
+        });
       }
-      setCarouselIndex(0);
     } catch (err) {
-      console.error('Failed to load templates:', err);
-      setTemplates([]);
+      console.error('Failed to auto-select template:', err);
     } finally {
       setLoadingTemplates(false);
     }
-  }, []);
 
-  const handleSelectNiche = async (niche: Niche) => {
-    setSelectedNiche(niche);
-    
-    // SMART-WRITING 2.0: For expert strategy, we use a deterministic, ultra-fast pre-configured layout 
-    // and skip the template carousel to minimize friction in the funnel.
-    if (niche === 'expert' || niche === 'business' || niche === 'education') {
-      setSelectedTemplate({
-        id: 'fast-expert-template',
-        name: 'LinkMAX Expert Pro',
-        description: 'Optimized high-converting funnel',
-        category: niche,
-        blocks: [
-          { type: 'profile' },                     // Hero
-          { type: 'catalog', overrides: { title: 'Услуги и Обучение' } }, // Courses
-          { type: 'scratch' },                     // Lead Magnet (Gamification)
-          { type: 'form', overrides: { title: 'Оставить заявку' } },     // Lead Form
-          { type: 'messenger' },                   // Telegram / WhatsApp
-          { type: 'socials' }                      // Socials
-        ],
-        preview_image: null,
-        is_premium: false,
-      });
-      setStep('dynamic_form');
-      return;
-    }
-
-    await loadTemplates(niche);
-    setStep('template');
+    setStep('description');
   };
 
-  const handleSelectTemplateContinue = () => {
-    if (!selectedTemplate) return;
-    setStep('dynamic_form');
+  const handleBackToGoal = () => {
+    setStep('goal');
   };
 
   const handleBackToNiche = () => {
     setStep('niche');
-    setSelectedNiche(null);
-    setSelectedTemplate(null);
   };
 
   const handleBackToTemplate = () => {
-    setStep('template');
+    setStep('niche'); // Since we skip template selection, back from description goes to niche
   };
 
   const handleGenerate = useCallback(async () => {
@@ -229,28 +190,17 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
     try {
       // Build user description for AI
-      let finalBio = userInfo.bio;
-      if (selectedNiche === 'expert') {
-        finalBio = [
-          userInfo.expertGoal && `${t('aiBuilder.nicheQuestions.expertGoalLabel', 'Target')}: ${userInfo.expertGoal}`,
-          userInfo.expertOffer && `${t('aiBuilder.nicheQuestions.expertOfferLabel', 'Offer')}: ${userInfo.expertOffer}`,
-          userInfo.bio
-        ].filter(Boolean).join('\n\n');
-      }
-
       const userDescription = [
+        `Цель: ${selectedGoal ? t(`aiBuilder.goals.${selectedGoal}`) : ''}`,
+        `Ниша: ${selectedNiche ? t(`niches.${selectedNiche}`) : ''}`,
         `Имя/Название: ${userInfo.name}`,
-        finalBio && `О себе: ${finalBio}`,
-        userInfo.services && `Услуги/Товары: ${userInfo.services}`,
-        userInfo.contacts && `Контакты: ${userInfo.contacts}`,
-        userInfo.socials && `Соцсети: ${userInfo.socials}`,
-        userInfo.mediaLinks && `Медиа: ${userInfo.mediaLinks}`,
+        `Описание: ${userInfo.bio}`,
       ].filter(Boolean).join('\n');
 
       // Generate structural layout and inject user data synchronously
       const finalBlocks: Block[] = generateBlocksFromTemplate(
         Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
-        { ...userInfo, bio: finalBio }
+        { ...userInfo, bio: userInfo.bio }
       );
 
       // Brief delay to simulate generation and keep UX smooth
@@ -269,9 +219,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     } catch (err) {
       console.error('AI Builder error:', err);
       toast.error(t('aiBuilder.error', 'Ошибка генерации. Попробуйте ещё раз.'));
-      setStep('template');
+      setStep('description');
     }
-  }, [selectedNiche, selectedTemplate, userInfo, canUseAIPageGeneration, incrementAIPageGeneration, onComplete, onClose, t]);
+  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, canUseAIPageGeneration, incrementAIPageGeneration, onComplete, onClose, t]);
 
   const handleSkip = () => {
     storage.set('niche_onboarding_completed', 'true');
@@ -279,9 +229,6 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     onClose();
   };
 
-  // Carousel navigation
-  const carouselPrev = () => setCarouselIndex(i => Math.max(0, i - 1));
-  const carouselNext = () => setCarouselIndex(i => Math.min(nicheTemplates.length - 1, i + 1));
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
@@ -301,361 +248,141 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
 
 
+        {/* Step 1: Goal Selection */}
+        {step === 'goal' && (
+          <div className="p-6 pt-4 animate-fade-in text-center sm:text-left">
+            <div className="mb-6">
+              <h2 className="text-2xl font-black mb-1">
+                {t('aiBuilder.goals.title')}
+              </h2>
+              <p className="text-muted-foreground text-sm">
+                {t('aiBuilder.goals.subtitle')}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-4">
+              {ONBOARDING_GOALS.map((goal) => (
+                <button
+                  key={goal}
+                  onClick={() => handleSelectGoal(goal)}
+                  className={cn(
+                    "group p-5 rounded-3xl border-2 border-border/50 bg-card/40 backdrop-blur-xl transition-all duration-300",
+                    "hover:scale-[1.02] hover:border-primary/50 hover:bg-card/80 hover:shadow-glass-lg",
+                    "active:scale-[0.98]",
+                    "flex items-center gap-4 text-left"
+                  )}
+                >
+                  <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                    {GOAL_ICONS[goal]}
+                  </div>
+                  <div>
+                    <p className="font-bold text-lg leading-tight">
+                      {t(`aiBuilder.goals.${goal}`)}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
+                      {t(`aiBuilder.goals.${goal}Desc`)}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Step 2: Niche Selection */}
         {step === 'niche' && (
           <div className="p-6 pt-4 animate-fade-in">
             <div className="flex items-center gap-3 mb-6">
+              <Button variant="ghost" size="icon" onClick={handleBackToGoal} className="h-10 w-10 rounded-xl shrink-0">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
               <div>
                 <h2 className="text-xl font-black">
-                  {t('aiBuilder.nicheTitle', 'Выберите сферу')}
+                  {t('aiBuilder.nicheTitle', 'Выберите сферню')}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  {t('aiBuilder.nicheDesc', 'Подберём шаблон для вашей ниши')}
+                  {t('aiBuilder.nicheDesc', 'Подберём оформление под вашу деятельность')}
                 </p>
               </div>
             </div>
 
             <ScrollArea className="max-h-[55vh]">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pb-4 px-1">
                 {NICHES.map((niche) => (
                   <button
                     key={niche}
                     onClick={() => handleSelectNiche(niche)}
                     className={cn(
-                      "p-4 rounded-2xl border-2 border-border transition-all duration-200",
-                      "hover:scale-[1.02] hover:border-primary/50 hover:shadow-md",
+                      "p-4 rounded-3xl border-2 border-border/50 bg-card/20 backdrop-blur-md transition-all duration-200",
+                      "hover:scale-[1.02] hover:border-primary/40 hover:bg-card/40",
                       "active:scale-[0.98]",
                       "flex flex-col items-center gap-2"
                     )}
                   >
-                    <span className="text-2xl">{NICHE_ICONS[niche]}</span>
-                    <p className="font-semibold text-sm text-center">
+                    <span className="text-3xl">{NICHE_ICONS[niche]}</span>
+                    <p className="font-semibold text-xs text-center">
                       {t(`niches.${niche}`, niche)}
                     </p>
                   </button>
                 ))}
               </div>
             </ScrollArea>
-
-            {/* Skip removed for new users — niche selection drives activation */}
           </div>
         )}
 
-        {/* Step 3: Template Selection (Carousel) */}
-        {step === 'template' && (
-          <div className="p-6 pt-4 animate-fade-in">
-            <div className="flex items-center gap-3 mb-6">
+        {/* Step 3: Simplified Description */}
+        {step === 'description' && (
+          <div className="p-6 pt-4 animate-fade-in flex flex-col">
+            <div className="flex items-center gap-3 mb-6 shrink-0">
               <Button variant="ghost" size="icon" onClick={handleBackToNiche} className="h-10 w-10 rounded-xl shrink-0">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h2 className="text-xl font-black">
-                  {t('aiBuilder.templateTitle', 'Выберите шаблон')}
-                </h2>
+                <h2 className="text-xl font-black mb-0.5">{t('aiBuilder.descStep.title')} ✨</h2>
                 <p className="text-muted-foreground text-sm">
-                  {t('aiBuilder.templateDesc', 'AI заполнит шаблон вашим контентом')}
+                  {t('aiBuilder.descStep.hint')}
                 </p>
               </div>
             </div>
 
-            {loadingTemplates ? (
-              <div className="py-16 flex flex-col items-center gap-3">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="text-muted-foreground">{t('common.loading', 'Загрузка...')}</p>
-              </div>
-            ) : nicheTemplates.length === 0 ? (
-              <div className="py-16 text-center">
-                <LayoutTemplate className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
-                <h3 className="font-bold mb-2">
-                  {t('aiBuilder.noTemplates', 'Шаблонов пока нет')}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {t('aiBuilder.noTemplatesDesc', 'Для этой ниши ещё не добавлены шаблоны. Попробуйте другую нишу.')}
-                </p>
-                <Button variant="outline" onClick={handleBackToNiche}>
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  {t('aiBuilder.changeNiche', 'Выбрать другую нишу')}
-                </Button>
-              </div>
-            ) : (
-              <>
-                {/* Carousel */}
-                <div className="relative">
-                  {nicheTemplates.length > 1 && (
-                    <>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={carouselPrev}
-                        disabled={carouselIndex === 0}
-                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-background/80 backdrop-blur shadow-md"
-                      >
-                        <ChevronLeft className="h-5 w-5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={carouselNext}
-                        disabled={carouselIndex >= nicheTemplates.length - 1}
-                        className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-background/80 backdrop-blur shadow-md"
-                      >
-                        <ChevronRight className="h-5 w-5" />
-                      </Button>
-                    </>
-                  )}
-
-                  <div className="overflow-hidden rounded-2xl">
-                    <div
-                      className="flex transition-transform duration-300"
-                      style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
-                    >
-                      {nicheTemplates.map((template) => (
-                        <div key={template.id} className="w-full flex-shrink-0 px-1">
-                          <Card
-                            className={cn(
-                              "p-5 cursor-pointer border-2 transition-all",
-                              selectedTemplate?.id === template.id
-                                ? "border-primary shadow-lg"
-                                : "border-border hover:border-primary/50"
-                            )}
-                            onClick={() => setSelectedTemplate(template)}
-                          >
-                            {template.preview_image && (
-                              <img
-                                src={template.preview_image}
-                                alt={template.name}
-                                className="w-full h-40 object-cover rounded-xl mb-4"
-                              />
-                            )}
-                            <h3 className="font-bold text-lg mb-1">{template.name}</h3>
-                            {template.description && (
-                              <p className="text-sm text-muted-foreground mb-3">
-                                {template.description}
-                              </p>
-                            )}
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <LayoutTemplate className="h-3 w-3" />
-                              {Array.isArray(template.blocks) ? template.blocks.length : 0} {t('aiBuilder.blocks', 'блоков')}
-                            </div>
-                            {selectedTemplate?.id === template.id && (
-                              <div className="mt-3 flex items-center gap-1 text-primary text-sm font-medium">
-                                <Check className="h-4 w-4" />
-                                {t('aiBuilder.selected', 'Выбрано')}
-                              </div>
-                            )}
-                          </Card>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Dots */}
-                  {nicheTemplates.length > 1 && (
-                    <div className="flex justify-center gap-1.5 mt-4">
-                      {nicheTemplates.map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCarouselIndex(idx)}
-                          className={cn(
-                            "h-2 rounded-full transition-all",
-                            idx === carouselIndex ? "w-6 bg-primary" : "w-2 bg-muted-foreground/30"
-                          )}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="pt-6 flex gap-3">
-                  <Button
-                    onClick={handleSelectTemplateContinue}
-                    disabled={!selectedTemplate}
-                    className="flex-1 h-12 rounded-xl font-bold"
-                  >
-                    {t('common.next', 'Далее')}
-                    <ArrowRight className="h-5 w-5 ml-2" />
-                  </Button>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Step 3: Dynamic Form */}
-        {step === 'dynamic_form' && (
-          <div className="p-6 pt-4 animate-fade-in flex flex-col h-[75vh]">
-            <div className="flex items-center gap-3 mb-4 shrink-0">
-              <Button variant="ghost" size="icon" onClick={handleBackToTemplate} className="h-10 w-10 rounded-xl shrink-0">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h2 className="text-xl font-black mb-0.5">{t('aiBuilder.nicheQuestions.title', 'Расскажите о себе ✨')}</h2>
-                <p className="text-muted-foreground text-sm">
-                  {t('aiBuilder.nicheQuestions.desc', 'Эти данные нужны для заполнения блоков. Вы можете пропустить любой шаг.')}
-                </p>
-              </div>
-            </div>
-
-            <ScrollArea className="flex-1 pr-4 -mr-4">
-              <div className="space-y-6 pb-6">
-                {/* 1. NAME (Always Required) */}
-                <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50">
-                  <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.nameLabel', 'Как вас зовут или как называется ваш проект?')} <span className="text-destructive">*</span></Label>
-                  <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.nameHint', 'Это будет заголовок вашего профиля')}</p>
+            <div className="space-y-6">
+              <div className="space-y-4 bg-muted/30 p-5 rounded-[32px] border border-border/50 shadow-inner">
+                <div className="space-y-2">
+                  <Label className="text-base font-bold ml-1">{t('aiBuilder.name')} <span className="text-destructive">*</span></Label>
                   <Input
                     value={userInfo.name}
                     onChange={(e) => setUserInfo(p => ({ ...p, name: e.target.value }))}
-                    placeholder={t('aiBuilder.nicheQuestions.namePlaceholder', 'Например: Иван Иванов или Студия "Красота"')}
-                    className="h-12 rounded-xl bg-background"
+                    placeholder={t('aiBuilder.namePlaceholder')}
+                    className="h-14 rounded-2xl bg-background/80 border-border/30 focus:border-primary/50 text-lg"
                     autoFocus
                   />
                 </div>
 
-                {/* 2. BIO (Depends on niche) */}
-                {selectedNiche === 'expert' ? (
-                  <>
-                    <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in">
-                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.expertGoalLabel', 'Кому вы помогаете?')}</Label>
-                      <Input
-                        value={userInfo.expertGoal}
-                        onChange={(e) => setUserInfo(p => ({ ...p, expertGoal: e.target.value }))}
-                        placeholder={t('aiBuilder.nicheQuestions.expertGoalPlaceholder', 'Например: предпринимателям...')}
-                        className="h-12 rounded-xl bg-background"
-                      />
-                    </div>
-                    <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-75">
-                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.expertOfferLabel', 'Какой результат вы даете?')}</Label>
-                      <Textarea
-                        value={userInfo.expertOffer}
-                        onChange={(e) => setUserInfo(p => ({ ...p, expertOffer: e.target.value }))}
-                        placeholder={t('aiBuilder.nicheQuestions.expertOfferPlaceholder', 'Например: помогаю запустить бизнес...')}
-                        className="rounded-xl min-h-[80px] bg-background resize-none"
-                      />
-                    </div>
-                    <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-100">
-                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.expertChannelLabel', 'Куда слать уведомления?')}</Label>
-                      <div className="flex gap-2">
-                        <Button
-                          type="button"
-                          variant={userInfo.expertChannel === 'telegram' ? 'default' : 'outline'}
-                          className="flex-1 rounded-xl"
-                          onClick={() => setUserInfo(p => ({ ...p, expertChannel: 'telegram' }))}
-                        >
-                          {t('aiBuilder.nicheQuestions.expertChannelTelegram', 'Telegram')}
-                        </Button>
-                        <Button
-                          type="button"
-                          variant={userInfo.expertChannel === 'email' ? 'default' : 'outline'}
-                          className="flex-1 rounded-xl"
-                          onClick={() => setUserInfo(p => ({ ...p, expertChannel: 'email' }))}
-                        >
-                          {t('aiBuilder.nicheQuestions.expertChannelEmail', 'Email')}
-                        </Button>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold">
-                        {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.bioBeauty', 'Кратко о вашем опыте (Бьюти)') :
-                          (selectedNiche === 'art') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :
-                            selectedNiche === 'business' ? t('aiBuilder.nicheQuestions.bioBusiness', 'Опишите ваш бизнес в 2-х словах') :
-                              t('aiBuilder.nicheQuestions.bioGeneric', 'О себе / Описание')}
-                      </Label>
-                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
-                    </div>
-                    <Textarea
-                      value={userInfo.bio}
-                      onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
-                      placeholder={t('aiBuilder.nicheQuestions.bioPlaceholder', 'Напишите пару предложений... Можно добавить ссылку, алгоритм сам сделает из неё красивую кнопку.')}
-                      className="rounded-xl flex-1 min-h-[80px] bg-background resize-none"
-                    />
-                  </div>
-                )}
-
-                {/* 3. SERVICES (If required by template) */}
-                {formFields.needsServices && (
-                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-75">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold">
-                        {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.srvBeauty', 'Какие услуги вы оказываете? (С ценами)') :
-                          (selectedNiche === 'art') ? t('aiBuilder.nicheQuestions.srvFreelance', 'Навыки или Тарифы') :
-                            t('aiBuilder.nicheQuestions.srvGeneric', 'Услуги или Навыки')}
-                      </Label>
-                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.srvHint', 'Алгоритм сам раскидает их по карточкам. Если указать слово "скидка" или "подарок" — будет создан бонусный блок!')}</p>
-                    <Textarea
-                      value={userInfo.services}
-                      onChange={(e) => setUserInfo(p => ({ ...p, services: e.target.value }))}
-                      placeholder={t('aiBuilder.nicheQuestions.srvPlaceholder', 'Маникюр - 5000 тг\nПедикюр - 7000 тг\nСкидка 10% на первый визит')}
-                      className="rounded-xl min-h-[100px] bg-background resize-none"
-                    />
-                  </div>
-                )}
-
-                {/* 4. CONTACTS & LOCATION */}
-                {formFields.needsContacts && (
-                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-100">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.contactsLabel', 'Где вас найти? (Контакты и Адрес)')}</Label>
-                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.contactsHint', 'Укажите номер телефона, почту или физический адрес (начиная с "г." или "ул." — для карты)')}</p>
-                    <Textarea
-                      value={userInfo.contacts}
-                      onChange={(e) => setUserInfo(p => ({ ...p, contacts: e.target.value }))}
-                      placeholder={t('aiBuilder.nicheQuestions.contactsPlaceholder', '+7 777 123 45 67\nг. Алматы, пр. Абая 10')}
-                      className="rounded-xl min-h-[80px] bg-background resize-none"
-                    />
-                  </div>
-                )}
-
-                {/* 5. SOCIALS */}
-                {formFields.needsSocials && (
-                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-150">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.socialsLabel', 'Ваши соцсети')}</Label>
-                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
-                    </div>
-                    <Input
-                      value={userInfo.socials}
-                      onChange={(e) => setUserInfo(p => ({ ...p, socials: e.target.value }))}
-                      placeholder={t('aiBuilder.nicheQuestions.socialsPlaceholder', 'inst: @nickname, t.me/username, youtube.com/...')}
-                      className="h-12 rounded-xl bg-background"
-                    />
-                  </div>
-                )}
-
-                {/* 6. MEDIA */}
-                {formFields.needsMedia && (
-                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-200">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.mediaLabel', 'Ссылки на полезные материалы (Медиа)')}</Label>
-                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.mediaHint', 'Ссылки на YouTube, портфолио или картинки (через запятую)')}</p>
-                    <Textarea
-                      value={userInfo.mediaLinks}
-                      onChange={(e) => setUserInfo(p => ({ ...p, mediaLinks: e.target.value }))}
-                      placeholder={t('aiBuilder.nicheQuestions.mediaPlaceholder', 'https://youtube.com/watch?v=..., https://my-portfolio.com')}
-                      className="rounded-xl min-h-[80px] bg-background resize-none"
-                    />
-                  </div>
-                )}
+                <div className="space-y-2">
+                  <Label className="text-base font-bold ml-1">{t('aiBuilder.descStep.label')}</Label>
+                  <Textarea
+                    value={userInfo.bio}
+                    onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
+                    placeholder={t('aiBuilder.descStep.placeholder')}
+                    className="rounded-2xl min-h-[120px] bg-background/80 border-border/30 focus:border-primary/50 text-base resize-none leading-relaxed"
+                  />
+                </div>
               </div>
-            </ScrollArea>
 
-            <div className="pt-4 shrink-0 mt-auto bg-card">
-              <Button
-                onClick={handleGenerate}
-                disabled={!userInfo.name.trim()}
-                className="w-full h-14 rounded-2xl font-black text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95"
-              >
-                <Sparkles className="h-5 w-5 mr-2" />
-                {t('aiBuilder.nicheQuestions.generateBtn', 'Сгенерировать магию ✨')}
-              </Button>
+              <div className="pt-2">
+                <Button
+                  onClick={handleGenerate}
+                  disabled={!userInfo.name.trim() || loadingTemplates}
+                  className="w-full h-16 rounded-[24px] font-black text-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 group relative overflow-hidden bg-primary"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-transparent animate-shimmer" />
+                  <Sparkles className="h-6 w-6 mr-3 group-hover:rotate-12 transition-transform" />
+                  {t('aiBuilder.nicheQuestions.generateBtn', 'Магия InkMAX ✨')}
+                </Button>
+                <p className="text-center text-xs text-muted-foreground mt-4 px-8">
+                  {t('aiBuilder.generatingDesc')}
+                </p>
+              </div>
             </div>
           </div>
         )}
