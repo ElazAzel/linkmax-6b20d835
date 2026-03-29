@@ -76,7 +76,7 @@ function InsertBetweenDivider({
           onClick={() => onOpenInsert(position)}
           className={cn(
             "shrink-0 p-0 flex items-center justify-center rounded-full transition-all duration-300",
-            "glass-subtle bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
+            "bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
             "active:scale-95 hover:scale-110",
             isMobile ? "h-11 w-11" : "h-7 w-7"
           )}
@@ -190,8 +190,8 @@ function SortableGridBlockItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'relative group overflow-hidden transition-all duration-300 rounded-2xl border-0',
-        !isFrameless && 'bg-card/50',
+        'relative group transition-all duration-300 rounded-2xl border-0',
+        !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
         isDragging && 'opacity-50 ring-4 ring-primary/30 scale-95 z-50',
@@ -264,7 +264,7 @@ function SortableGridBlockItem({
 
       {/* Block type label - bottom-left */}
       <div className="absolute bottom-2 left-2 z-30 pointer-events-none">
-        <span className="inline-block px-2 py-0.5 rounded-md bg-background/70 backdrop-blur-sm text-xs font-bold text-muted-foreground uppercase tracking-wider border border-border/10">
+        <span className="inline-block px-2 py-0.5 rounded-md bg-background text-xs font-bold text-muted-foreground uppercase tracking-wider border border-border/10">
           {typeLabel}
         </span>
       </div>
@@ -368,7 +368,7 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
         <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
       </div>
       <div className="absolute top-0 right-0 z-40 p-3 pt-3 pr-3">
-        <div className="bg-primary/20 backdrop-blur-md p-2 rounded-xl">
+        <div className="bg-primary/20 p-2 rounded-xl">
           <GripVertical className="h-5 w-5 text-primary" />
         </div>
       </div>

@@ -75,7 +75,7 @@ export const InlineTextEditor = memo(function InlineTextEditor({
 
   return (
     <div
-      className="absolute inset-0 z-30 flex items-center p-3 bg-background/95 backdrop-blur-sm rounded-2xl"
+      className="absolute inset-0 z-30 flex items-center p-3 bg-background rounded-2xl"
       onClick={(e) => e.stopPropagation()}
     >
       {isMultiline ? (

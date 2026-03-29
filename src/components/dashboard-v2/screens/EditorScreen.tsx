@@ -398,13 +398,13 @@ export const EditorScreen = memo(function EditorScreen({
         </div>
 
         {/* Quick tools bar */}
-        <div className="px-4 py-2.5 flex gap-2.5 overflow-x-auto scrollbar-hide border-t border-white/5 bg-white/5 backdrop-blur-md">
+        <div className="px-4 py-2.5 flex gap-2.5 overflow-x-auto scrollbar-hide border-t border-border/10 bg-card">
           {/* Show templates only for pages without content */}
           {!hasContent && (
             <Button
               variant="outline"
               size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm border-white/10 glass"
+              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
               onClick={onOpenTemplates}
             >
               <LayoutTemplate className="h-4 w-4" />
@@ -417,7 +417,7 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm border-white/10 glass"
+              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
               onClick={onOpenVersions}
             >
               <History className="h-4 w-4" />
@@ -430,7 +430,7 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm border-white/10 glass"
+              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
               onClick={() => setStructureOpen(true)}
             >
               <Layers className="h-4 w-4" />

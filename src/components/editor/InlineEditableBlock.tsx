@@ -203,7 +203,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
               style={{ transform: `scale(${offsetX < 0 ? actionScale : 0.85})` }}
             >
               <div className={cn(
-                "h-14 w-14 rounded-2xl bg-white/25 flex items-center justify-center backdrop-blur-sm",
+                "h-14 w-14 rounded-2xl bg-white/25 flex items-center justify-center",
                 isAtThreshold && "animate-pulse"
               )}>
                 <Trash2 className="h-7 w-7" />
@@ -231,7 +231,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
               style={{ transform: `scale(${offsetX > 0 ? actionScale : 0.85})` }}
             >
               <div className={cn(
-                "h-14 w-14 rounded-2xl bg-white/25 flex items-center justify-center backdrop-blur-sm",
+                "h-14 w-14 rounded-2xl bg-white/25 flex items-center justify-center",
                 isAtThreshold && "animate-pulse"
               )}>
                 <Pencil className="h-7 w-7" />
@@ -375,7 +375,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
 
           {/* Mobile swipe hint */}
           {isMobile && !isProfileBlock && isTouched && offsetX === 0 && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-5 py-2.5 bg-card/95 backdrop-blur-xl rounded-full text-sm text-muted-foreground shadow-glass border border-border/30 flex items-center gap-3 animate-fade-in font-medium">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-5 py-2.5 bg-card rounded-full text-sm text-muted-foreground shadow-sm border border-border/30 flex items-center gap-3 animate-fade-in font-medium">
               <span className="text-primary text-lg">←</span>
               <span>Свайп для действий</span>
               <span className="text-primary text-lg">→</span>

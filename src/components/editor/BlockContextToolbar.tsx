@@ -54,7 +54,7 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
   const transformTargets = getTransformTargets(block.type as BlockType);
 
   return (
-    <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-40 flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-card/95 backdrop-blur-xl border border-border shadow-lg">
+    <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-40 flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-card border border-border shadow-lg">
       <Button
         size="sm"
         variant="ghost"
