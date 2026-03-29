@@ -70,7 +70,7 @@ export const DashboardLayout = memo(function DashboardLayout({
             }}
             className="w-full h-full p-2 md:p-8"
           >
-            <div className="max-w-7xl mx-auto glass rounded-[2.5rem] min-h-full shadow-glass-lg border border-white/5 overflow-hidden">
+            <div className="max-w-7xl mx-auto bg-background/95 rounded-[2.5rem] min-h-full border border-white/5 overflow-visible">
               {children}
             </div>
           </motion.div>
