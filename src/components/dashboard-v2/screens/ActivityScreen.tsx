@@ -203,7 +203,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   );
                 }}
               >
-                <span className="hidden md:inline font-bold uppercase tracking-widest text-[10px]">{t('dashboard.activity.export', 'Экспорт')}</span>
+                <span className="hidden md:inline font-bold uppercase tracking-widest text-xs">{t('dashboard.activity.export', 'Экспорт')}</span>
                 <span className="md:hidden font-bold">EX</span>
               </Button>
             )}
@@ -229,19 +229,19 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
           <TabsList className="grid grid-cols-2 h-12 bg-white/5 backdrop-blur-xl p-1 gap-1 border border-white/10 shadow-glass rounded-2xl">
             <TabsTrigger
               value="leads"
-              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-[10px] uppercase tracking-widest transition-all duration-300"
+              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-xs uppercase tracking-widest transition-all duration-300"
             >
               <MessageCircle className="h-4 w-4 mr-2" />
               {t('dashboard.activity.tabs.leads', 'Заявки')}
               {stats.new > 0 && (
-                <Badge className="ml-2 h-5 px-1.5 bg-blue-500 text-white text-[10px] font-black border-none ring-offset-0 animate-pulse">
+                <Badge className="ml-2 h-5 px-1.5 bg-blue-500 text-white text-xs font-black border-none ring-offset-0 animate-pulse">
                   {stats.new}
                 </Badge>
               )}
             </TabsTrigger>
             <TabsTrigger
               value="bookings"
-              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-[10px] uppercase tracking-widest transition-all duration-300"
+              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-xs uppercase tracking-widest transition-all duration-300"
             >
               <Calendar className="h-4 w-4 mr-2" />
               {t('dashboard.activity.tabs.bookings', 'Записи')}
@@ -504,14 +504,14 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-lg font-black tracking-tight truncate text-foreground/90">{lead.name}</span>
               {isRepeat && (
-                <Badge className="h-5 px-2 bg-violet-500/10 text-violet-500 text-[9px] font-black uppercase tracking-wider border-violet-500/20 shrink-0 rounded-full">
+                <Badge className="h-5 px-2 bg-violet-500/10 text-violet-500 text-xs font-black uppercase tracking-wider border-violet-500/20 shrink-0 rounded-full">
                   <Repeat className="h-3 w-3 mr-1" />
                   {t('operator.repeat.badge', 'Повторный')}
                 </Badge>
               )}
             </div>
             <div className="flex flex-col items-end gap-1 shrink-0">
-              <span className="text-[10px] font-black tabular-nums text-muted-foreground/60 uppercase tracking-widest">{formatTime(lead.created_at)}</span>
+              <span className="text-xs font-black tabular-nums text-muted-foreground/60 uppercase tracking-widest">{formatTime(lead.created_at)}</span>
               <ResponseTimeTag createdAt={lead.created_at} status={lead.status} />
             </div>
           </div>
@@ -536,7 +536,7 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
               <span className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-base border border-white/10 shadow-inner">
                 {sourceInfo.emoji}
               </span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors">
+              <span className="text-xs font-black uppercase tracking-widest text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors">
                 {t(sourceInfo.i18nKey)}
               </span>
             </div>
@@ -567,14 +567,14 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
                 </button>
                 <button
                   onClick={handleMarkContacted}
-                  className="h-11 px-4 rounded-xl bg-foreground/5 text-foreground/60 border border-foreground/10 hover:bg-foreground/10 flex items-center justify-center transition-all text-[10px] font-black uppercase tracking-widest"
+                  className="h-11 px-4 rounded-xl bg-foreground/5 text-foreground/60 border border-foreground/10 hover:bg-foreground/10 flex items-center justify-center transition-all text-xs font-black uppercase tracking-widest"
                 >
                   <CheckCheck className="h-4 w-4 mr-1.5 text-emerald-500" />
                   {t('crm.quickReply.done', 'Готово')}
                 </button>
               </div>
             ) : (
-              <Badge className={cn("text-[10px] font-black uppercase tracking-widest h-10 px-4 rounded-xl shadow-glass-sm", statusConfig.bg, statusConfig.text, "border-none")}>
+              <Badge className={cn("text-xs font-black uppercase tracking-widest h-10 px-4 rounded-xl shadow-glass-sm", statusConfig.bg, statusConfig.text, "border-none")}>
                 {t(statusConfig.i18nKey)}
               </Badge>
             )}

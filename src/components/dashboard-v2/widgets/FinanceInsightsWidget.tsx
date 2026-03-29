@@ -70,7 +70,7 @@ export const FinanceInsightsWidget = memo(function FinanceInsightsWidget({ class
           </div>
           <span className="text-sm font-bold tracking-tight uppercase tracking-widest">{t('dashboard.finance.insights', 'Finance Insights')}</span>
         </CardTitle>
-        <CardDescription className="text-[10px] opacity-70 font-bold uppercase tracking-wider ml-12">
+        <CardDescription className="text-xs opacity-70 font-bold uppercase tracking-wider ml-12">
           {t('dashboard.finance.insights_desc', 'Аналитика за последние 30 дней')}
         </CardDescription>
       </CardHeader>
@@ -79,7 +79,7 @@ export const FinanceInsightsWidget = memo(function FinanceInsightsWidget({ class
         {/* Ключевые метрики */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="space-y-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-60">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-60">
               {t('dashboard.finance.total_revenue', 'Выручка (Gross)')}
             </span>
             <div className="text-2xl font-black tracking-tighter text-white">
@@ -87,7 +87,7 @@ export const FinanceInsightsWidget = memo(function FinanceInsightsWidget({ class
             </div>
           </div>
           <div className="space-y-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary opacity-80">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary opacity-80">
               {t('dashboard.finance.net_profit', 'Чистая прибыль')}
             </span>
             <div className="text-2xl font-black tracking-tighter text-primary">
@@ -95,7 +95,7 @@ export const FinanceInsightsWidget = memo(function FinanceInsightsWidget({ class
             </div>
           </div>
           <div className="space-y-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-60">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-60">
               {t('dashboard.finance.conversion', 'Конверсия')}
             </span>
             <div className="text-2xl font-black tracking-tighter text-white">
@@ -103,7 +103,7 @@ export const FinanceInsightsWidget = memo(function FinanceInsightsWidget({ class
             </div>
           </div>
           <div className="space-y-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-60">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-60">
               {t('dashboard.finance.fees_paid', 'Комиссии')}
             </span>
             <div className="text-2xl font-black tracking-tighter text-destructive/80">
@@ -137,13 +137,13 @@ export const FinanceInsightsWidget = memo(function FinanceInsightsWidget({ class
                 axisLine={false} 
                 tickMargin={12} 
                 minTickGap={40}
-                className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground/50"
+                className="text-xs font-bold uppercase tracking-tighter text-muted-foreground/50"
               />
               <YAxis 
                 tickLine={false} 
                 axisLine={false} 
                 tickMargin={12}
-                className="text-[10px] font-bold text-muted-foreground/50"
+                className="text-xs font-bold text-muted-foreground/50"
                 tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val}
               />
               <ChartTooltip content={<ChartTooltipContent className="glass shadow-2xl border-white/10" />} />

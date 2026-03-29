@@ -101,7 +101,7 @@ export const SourcesWidget = memo(function SourcesWidget({ className }: SourcesW
             <div className="flex items-center justify-between text-xs font-bold">
               <div className="flex items-center gap-2">
                 <span className="capitalize">{source}</span>
-                <span className="text-[10px] text-muted-foreground opacity-60">
+                <span className="text-xs text-muted-foreground opacity-60">
                   {Math.round((count / leads.length) * 100)}%
                 </span>
               </div>
@@ -120,7 +120,7 @@ export const SourcesWidget = memo(function SourcesWidget({ className }: SourcesW
       </div>
 
       <div className="mt-6 pt-6 border-t border-white/5">
-        <p className="text-[10px] font-medium text-muted-foreground/60 leading-tight">
+        <p className="text-xs font-medium text-muted-foreground/60 leading-tight">
           {t('crm.sources.footer', 'Статистика основана на последних полученных лидах с учетом UTM-меток и рефереров.')}
         </p>
       </div>

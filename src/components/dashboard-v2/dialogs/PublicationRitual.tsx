@@ -166,7 +166,7 @@ export function PublicationRitual({
                   )}
                 >
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  <span className="text-[10px] font-black uppercase tracking-widest">
+                  <span className="text-xs font-black uppercase tracking-widest">
                     {copied ? t('common.copied', 'Готово') : t('common.copy', 'Копировать')}
                   </span>
                 </Button>
@@ -198,7 +198,7 @@ export function PublicationRitual({
                   variant="ghost"
                   size="sm"
                   onClick={handleDownloadQR}
-                  className="w-full h-8 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
+                  className="w-full h-8 text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
                 >
                   <Download className="h-3.5 w-3.5 mr-1.5" />
                   {t('ritual.downloadQR', 'Скачать QR')}
@@ -244,7 +244,7 @@ export function PublicationRitual({
           </div>
 
           <div className="mt-8 pt-6 border-t border-white/5">
-            <p className="text-center text-[10px] font-black text-primary uppercase tracking-[0.2em] animate-pulse">
+            <p className="text-center text-xs font-black text-primary uppercase tracking-[0.2em] animate-pulse">
               🚀 {t('ritual.promo', 'Вернись завтра за первой статистикой!')}
             </p>
           </div>

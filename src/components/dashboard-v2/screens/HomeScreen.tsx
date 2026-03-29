@@ -239,7 +239,7 @@ export const HomeScreen = memo(function HomeScreen({
             <div className="grid grid-cols-3 gap-3">
               <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenActivity}>
                 <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{realLeadsCount}</span>
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
+                <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
               </Card>
               
               <Card 
@@ -252,19 +252,19 @@ export const HomeScreen = memo(function HomeScreen({
                 {telegramChatId ? (
                   <div className="flex flex-col items-center space-y-1">
                     <StatusBadge status="published" size="sm" className="bg-emerald-500/20 text-emerald-500 border-none px-2" />
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('settings.notifications', 'Уведомления')}</span>
+                    <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('settings.notifications', 'Уведомления')}</span>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center space-y-1">
                     <AlertTriangle className="h-5 w-5 text-amber-500 animate-pulse" />
-                    <span className="text-[10px] uppercase font-bold text-amber-500/80 tracking-widest">{t('common.enable', 'Включить')}</span>
+                    <span className="text-xs uppercase font-bold text-amber-500/80 tracking-widest">{t('common.enable', 'Включить')}</span>
                   </div>
                 )}
               </Card>
 
               <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenInsights}>
                 <span className="text-2xl font-black text-violet-500 group-hover:scale-110 transition-transform">{viewCount}</span>
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
+                <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
               </Card>
             </div>
 
@@ -353,7 +353,7 @@ export const HomeScreen = memo(function HomeScreen({
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-3xl font-black tracking-tighter truncate text-foreground drop-shadow-sm">{name}</h2>
                 {isPremium && (
-                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-glass-lg shrink-0 font-black text-[10px] px-3 py-1 rounded-full">
+                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-glass-lg shrink-0 font-black text-xs px-3 py-1 rounded-full">
                     <Crown className="h-3 w-3 mr-1.5" />
                     PRO
                   </Badge>

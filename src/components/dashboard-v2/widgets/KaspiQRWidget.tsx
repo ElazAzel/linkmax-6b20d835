@@ -91,7 +91,7 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                         </div>
                         <span className="text-sm font-bold tracking-tight">{t('dashboard.kaspi_qr', 'Kaspi QR')}</span>
                     </div>
-                    <Badge variant="secondary" className="bg-kaspi/10 text-kaspi border-kaspi/20 font-bold text-[10px] tracking-wider py-1 px-3 rounded-lg">
+                    <Badge variant="secondary" className="bg-kaspi/10 text-kaspi border-kaspi/20 font-bold text-xs tracking-wider py-1 px-3 rounded-lg">
                         {t('dashboard.instant', 'МГНОВЕННО')}
                     </Badge>
                 </CardTitle>
@@ -99,7 +99,7 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
             <CardContent className="pt-6 space-y-5">
                 <div className="space-y-5">
                     <div className="space-y-2.5">
-                        <Label htmlFor="qr-amount" className="text-[10px] text-muted-foreground uppercase font-bold tracking-[0.2em] opacity-70 pl-1">
+                        <Label htmlFor="qr-amount" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.2em] opacity-70 pl-1">
                             {t('kaspi.amount', 'Сумма')}
                         </Label>
                         <div className="flex gap-2.5">
@@ -118,7 +118,7 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                     </div>
 
                     <div className="space-y-2.5">
-                        <Label htmlFor="qr-comment" className="text-[10px] text-muted-foreground uppercase font-bold tracking-[0.2em] opacity-70 pl-1">
+                        <Label htmlFor="qr-comment" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.2em] opacity-70 pl-1">
                             {t('kaspi.comment', 'Комментарий')}
                         </Label>
                         <Input

@@ -90,8 +90,7 @@ export const StatCard = memo(function StatCard({
       </div>
       <div className="flex items-center justify-between">
         <span className={cn(
-          "font-black uppercase tracking-[0.1em] text-muted-foreground/60",
-          compact ? "text-[8px]" : "text-[10px]"
+          "font-black uppercase tracking-[0.1em] text-muted-foreground/60 text-xs"
         )}>{label}</span>
         {renderTrendBadge()}
       </div>

@@ -64,7 +64,7 @@ export const FinanceScreen = memo(function FinanceScreen() {
                     <div className="absolute inset-0 bg-primary/5 -z-10" />
                     <div className="flex items-center gap-2 text-muted-foreground mb-4">
                         <Wallet className="h-4 w-4" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                        <span className="text-xs font-black uppercase tracking-[0.2em]">
                             {t('finance.wallet_balance', 'Ваш баланс')}
                         </span>
                     </div>
@@ -78,7 +78,7 @@ export const FinanceScreen = memo(function FinanceScreen() {
 
                 {/* Transactions History */}
                 <div className="space-y-5">
-                    <h3 className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em] px-1 flex items-center gap-2">
+                    <h3 className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] px-1 flex items-center gap-2">
                         <TrendingUp className="h-4 w-4" />
                         {t('finance.transactions', 'История транзакций')}
                     </h3>
@@ -139,7 +139,7 @@ const TransactionItem = ({ tx, currency, lang }: { tx: WalletTransaction; curren
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-4 text-[10px] text-muted-foreground font-black uppercase tracking-widest">
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground font-black uppercase tracking-widest">
                         <div className="flex items-center gap-1.5">
                             <Clock className="h-3 w-3" />
                             {format(new Date(tx.created_at), 'dd MMM, HH:mm', { locale: GET_DATE_LOCALE(lang) })}

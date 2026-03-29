@@ -73,14 +73,14 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
                     <span className="text-4xl font-black tracking-tighter text-gradient pb-1">
                         {formatAmount(balance)} {getCurrencySymbol(currency)}
                     </span>
-                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-70">
+                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-70">
                         {t('dashboard.fintech.net_balance', 'Доступно к выводу')}
                     </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-[1.5rem] glass-subtle border-white/5 space-y-2 group/stat">
-                        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-60">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-widest opacity-60">
                             <TrendingUp className="h-3 w-3" />
                             {t('dashboard.fintech.gmv', 'Оборот')}
                         </div>
@@ -89,7 +89,7 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
                         </div>
                     </div>
                     <div className="p-4 rounded-[1.5rem] glass-subtle border-white/5 space-y-2 group/stat">
-                        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-60">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-widest opacity-60">
                             <Percent className="h-3 w-3" />
                             {t('dashboard.fintech.fees', 'Комиссия')}
                         </div>

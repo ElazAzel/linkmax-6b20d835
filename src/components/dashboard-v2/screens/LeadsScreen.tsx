@@ -174,7 +174,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                     key={status}
                                     onClick={() => setStatusFilter(status)}
                                     className={cn(
-                                        "h-11 px-5 rounded-2xl text-[10px] uppercase font-black tracking-widest whitespace-nowrap transition-all flex items-center gap-2.5 shadow-glass-sm",
+                                        "h-11 px-5 rounded-2xl text-xs uppercase font-black tracking-widest whitespace-nowrap transition-all flex items-center gap-2.5 shadow-glass-sm",
                                         isActive
                                             ? "bg-primary text-primary-foreground shadow-lg scale-105"
                                             : "bg-white/5 text-muted-foreground/60 hover:bg-white/10 border border-white/10"
@@ -185,7 +185,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                         : t(`crm.status.${status}`)
                                     }
                                     <Badge variant="secondary" className={cn(
-                                        "h-5 min-w-[20px] px-1 rounded-md text-[9px] border-none",
+                                        "h-5 min-w-[20px] px-1 rounded-md text-xs border-none",
                                         isActive ? "bg-white/20 text-white" : "bg-white/10"
                                     )}>
                                         {count}
@@ -253,7 +253,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             </Avatar>
                                             <div>
                                                 <span className="font-bold text-base block mb-0.5">{lead.name}</span>
-                                                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+                                                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-muted-foreground/60">
                                                     <Clock className="h-3 w-3" />
                                                     {new Date(lead.created_at).toLocaleDateString()}
                                                 </div>
@@ -263,7 +263,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                         {/* Status Dropdown */}
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Badge className={cn("cursor-pointer text-[10px] font-black uppercase tracking-widest h-9 px-4 rounded-xl shadow-glass-sm border-none", config.bg, config.text)}>
+                                                <Badge className={cn("cursor-pointer text-xs font-black uppercase tracking-widest h-9 px-4 rounded-xl shadow-glass-sm border-none", config.bg, config.text)}>
                                                     <StatusIcon className="h-3.5 w-3.5 mr-2" />
                                                     {t(`crm.status.${lead.status}`)}
                                                 </Badge>
@@ -313,7 +313,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                                 <Button
                                                     variant="secondary"
                                                     size="sm"
-                                                    className="h-11 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
+                                                    className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
                                                     onClick={() => openWhatsApp(lead.phone!)}
                                                 >
                                                     <MessageCircle className="h-4 w-4 mr-2" />
@@ -322,7 +322,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                                 <Button
                                                     variant="secondary"
                                                     size="sm"
-                                                    className="h-11 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
+                                                    className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
                                                     onClick={() => openTelegram(lead.phone!)}
                                                 >
                                                     <Send className="h-4 w-4 mr-2" />

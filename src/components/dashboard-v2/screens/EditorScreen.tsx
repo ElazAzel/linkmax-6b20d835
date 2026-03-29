@@ -385,7 +385,7 @@ export const EditorScreen = memo(function EditorScreen({
               <Button
                 size="sm"
                 className={cn(
-                  "h-11 md:h-9 rounded-2xl md:rounded-xl font-black text-[10px] uppercase tracking-widest px-5 md:px-4",
+                  "h-11 md:h-9 rounded-2xl md:rounded-xl font-black text-xs uppercase tracking-widest px-5 md:px-4",
                   !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-glass"
                 )}
                 onClick={onShare}
@@ -408,7 +408,7 @@ export const EditorScreen = memo(function EditorScreen({
               onClick={onOpenTemplates}
             >
               <LayoutTemplate className="h-4 w-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.templates', 'Шаблоны')}</span>
+              <span className="text-xs font-black uppercase tracking-widest">{t('editor.templates', 'Шаблоны')}</span>
             </Button>
           )}
 
@@ -421,7 +421,7 @@ export const EditorScreen = memo(function EditorScreen({
               onClick={onOpenVersions}
             >
               <History className="h-4 w-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.versions', 'История')}</span>
+              <span className="text-xs font-black uppercase tracking-widest">{t('editor.versions', 'История')}</span>
             </Button>
           )}
 
@@ -434,7 +434,7 @@ export const EditorScreen = memo(function EditorScreen({
               onClick={() => setStructureOpen(true)}
             >
               <Layers className="h-4 w-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.structure', 'Структура')}</span>
+              <span className="text-xs font-black uppercase tracking-widest">{t('editor.structure', 'Структура')}</span>
             </Button>
           )}
 
@@ -451,7 +451,7 @@ export const EditorScreen = memo(function EditorScreen({
                 onClick={() => toggleReviewMode('problematic')}
               >
                 <AlertCircle className="h-4 w-4" />
-                <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.problematic', 'Проблемные')}</span>
+                <span className="text-xs font-black uppercase tracking-widest">{t('editor.problematic', 'Проблемные')}</span>
               </Button>
               <Button
                 variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
@@ -463,7 +463,7 @@ export const EditorScreen = memo(function EditorScreen({
                 onClick={() => toggleReviewMode('cta_contact')}
               >
                 <MousePointerClick className="h-4 w-4" />
-                <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.cta', 'CTA')}</span>
+                <span className="text-xs font-black uppercase tracking-widest">{t('editor.cta', 'CTA')}</span>
               </Button>
             </>
           )}
@@ -504,7 +504,7 @@ export const EditorScreen = memo(function EditorScreen({
             <span className="text-xs font-medium text-foreground/80 flex-1 leading-relaxed">
               {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
             </span>
-            <Badge variant="outline" className="text-[10px] font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
+            <Badge variant="outline" className="text-xs font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
               {top.priority}
             </Badge>
             <Button
@@ -578,7 +578,7 @@ export const EditorScreen = memo(function EditorScreen({
                 <p className="text-xs font-black uppercase tracking-wider">{hint.title}</p>
                 <p className="text-xs text-muted-foreground mt-1">{hint.description}</p>
               </div>
-              <Button size="sm" className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider" onClick={hint.onCta}>
+              <Button size="sm" className="h-8 rounded-lg text-xs font-black uppercase tracking-wider" onClick={hint.onCta}>
                 {hint.ctaLabel}
               </Button>
               <button

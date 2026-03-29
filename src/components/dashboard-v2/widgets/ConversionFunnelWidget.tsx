@@ -102,7 +102,7 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
         <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground/80">
           {t('metrics.funnel.title', 'Воронка конверсии')}
         </h3>
-        <span className="text-[10px] font-bold text-muted-foreground bg-white/5 px-2 py-1 rounded-full border border-white/5">
+        <span className="text-xs font-bold text-muted-foreground bg-white/5 px-2 py-1 rounded-full border border-white/5">
           {t('metrics.funnel.last30Days', 'Последние 30 дней')}
         </span>
       </div>
@@ -132,7 +132,7 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
             </div>
 
             {idx > 0 && totalViews > 0 && (
-              <div className="absolute -top-4 right-0 text-[10px] font-black text-muted-foreground">
+              <div className="absolute -top-4 right-0 text-xs font-black text-muted-foreground">
                 {step.percent}%
               </div>
             )}

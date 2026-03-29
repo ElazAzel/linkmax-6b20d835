@@ -232,17 +232,17 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <h3 className="text-base font-bold truncate">{event.title}</h3>
-              <Badge className={cn('text-[9px] font-black uppercase tracking-widest px-2 h-5 rounded-md border-none', statusColors[event.status])}>
+              <Badge className={cn('text-xs font-black uppercase tracking-widest px-2 h-5 rounded-md border-none', statusColors[event.status])}>
                 {t(`events.status.${event.status}`, event.status)}
               </Badge>
               {event.isPaid && (
-                <Badge variant="outline" className="text-[9px] font-black border-white/10">
+                <Badge variant="outline" className="text-xs font-black border-white/10">
                   {event.price} {event.currency}
                 </Badge>
               )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mb-4">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-black uppercase tracking-widest text-muted-foreground/60 mb-4">
               {event.startAt && (
                 <span className="flex items-center gap-1.5">
                   <CalendarDays className="h-3.5 w-3.5" />
@@ -271,7 +271,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
                 <span className="font-bold">{event.checkedIn}</span>
               </div>
               {event.pendingApproval > 0 && (
-                <Badge variant="secondary" className="text-[9px] font-black bg-amber-500/10 text-amber-600 border-none">
+                <Badge variant="secondary" className="text-xs font-black bg-amber-500/10 text-amber-600 border-none">
                   {event.pendingApproval} {t('events.pending', 'ожидают')}
                 </Badge>
               )}
@@ -288,7 +288,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
           <Button
             variant="outline"
             size="sm"
-            className="h-10 flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest gap-2 glass border-white/10"
+            className="h-10 flex-1 rounded-xl text-xs font-black uppercase tracking-widest gap-2 glass border-white/10"
             onClick={(e) => {
               e.stopPropagation();
               handleOpenScanner(event.id);
@@ -301,7 +301,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
           <Button
             variant="outline"
             size="sm"
-            className="h-10 flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest gap-2 glass border-white/10"
+            className="h-10 flex-1 rounded-xl text-xs font-black uppercase tracking-widest gap-2 glass border-white/10"
             onClick={(e) => {
               e.stopPropagation();
               handleExportRegistrations(event.id, event.title);
@@ -395,7 +395,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
             <div className="space-y-8 pb-24">
               {upcomingEvents.length > 0 && (
                 <section>
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
+                  <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
                     <Clock className="h-4 w-4" />
                     {t('events.upcoming', 'Предстоящие')}
                     <Badge variant="secondary" className="ml-auto bg-primary/10 text-primary border-none shadow-glass-sm h-5 font-black">{upcomingEvents.length}</Badge>
@@ -408,7 +408,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
               {draftEvents.length > 0 && (
                 <section>
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
+                  <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
                     <PenTool className="h-4 w-4" />
                     {t('events.drafts', 'Черновики')}
                     <Badge variant="outline" className="ml-auto border-white/10 bg-white/5 h-5 font-black">{draftEvents.length}</Badge>
@@ -421,7 +421,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
               {pastEvents.length > 0 && (
                 <section>
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
+                  <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
                     <History className="h-4 w-4" />
                     {t('events.past', 'Прошедшие')}
                     <Badge variant="outline" className="ml-auto border-white/10 bg-white/5 h-5 font-black">{pastEvents.length}</Badge>
