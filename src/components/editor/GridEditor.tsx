@@ -865,6 +865,33 @@ export const GridEditor = memo(function GridEditor({
           block={experimentBlock}
         />
       )}
+
+      {/* Section Name Dialog */}
+      <AlertDialog open={sectionDialogOpen} onOpenChange={setSectionDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('editor.sectionName', 'Имя секции')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('editor.sectionNameDescription', 'Введите название для новой секции')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={sectionNameInput}
+            onChange={(e) => setSectionNameInput(e.target.value)}
+            placeholder={t('editor.newSection', 'Новая секция')}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleCreateSectionConfirm();
+            }}
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleCreateSectionConfirm}>
+              {t('common.create', 'Создать')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });
