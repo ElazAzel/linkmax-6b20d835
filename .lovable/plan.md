@@ -1,44 +1,70 @@
 
 
-# Исправление размытия и визуальных багов в редакторе блоков
+# Полный UX/UI аудит редактора страницы и блоков
 
-## Проблема
-Несмотря на предыдущие фиксы DashboardLayout, внутри самого редактора осталось множество источников размытия и визуальных проблем:
-- Полупрозрачные фоны блоков (`bg-card/50`) создают эффект "грязного стекла"
-- `backdrop-blur-*` в ~8 местах внутри редактора
-- `overflow-hidden` на блоках обрезает контролы
-- `glass` / `glass-subtle` CSS-классы с blur на кнопках тулбара
+## Обнаруженные проблемы
 
-## План исправлений
+---
 
-### Файл 1: `src/components/editor/GridEditor.tsx`
+### КРИТИЧНЫЕ (нерабочий функционал)
 
-**SortableGridBlockItem (строка 193-194):**
-- `overflow-hidden` → убрать (обрезает кнопки управления)
-- `bg-card/50` → `bg-card` (непрозрачный фон)
+#### 1. `prompt()` для создания секции — блокирует UI
+**Файл:** `GridEditor.tsx:613`
+`const label = prompt(...)` — нативный `prompt()` блокирует поток, выглядит чужеродно, не работает в некоторых мобильных браузерах. Нужно заменить на модальный диалог.
 
-**Block type label (строка 267):**
-- `bg-background/70 backdrop-blur-sm` → `bg-background`
+#### 2. `window.confirm()` для удаления блока из редактора
+**Файл:** `BlockEditorV2.tsx:243`
+`window.confirm(...)` — аналогично, нативный диалог. Нужен кастомный AlertDialog.
 
-**DragOverlay grip (строка 371):**
-- `bg-primary/20 backdrop-blur-md` → `bg-primary/20`
+#### 3. FormBlock: ref warning в консоли
+**Консоль:** `Function components cannot be given refs` в `TurnstileWidget` внутри `FormBlock`. Компонент не обёрнут в `forwardRef`. Это React warning, но может привести к потере функциональности Turnstile captcha.
 
-**Insert divider button (строка 79):**
-- `glass-subtle` → убрать (содержит backdrop-blur через CSS)
+#### 4. Hardcoded русские строки в swipe-подсказках
+**Файл:** `InlineEditableBlock.tsx:211,239,378`
+- `"Удалить"`, `"Изменить"`, `"Свайп для действий"` — захардкожены, не используют `t()`. Для не-русскоязычных пользователей — непонятно.
 
-### Файл 2: `src/components/editor/InlineEditableBlock.tsx`
+#### 5. Двойные контролы на блоках в GridEditor
+**GridEditor:** каждый `SortableGridBlockItem` имеет: drag handle (top-left), edit/duplicate/delete кнопки (top-right), type label (bottom-left), context toolbar (top-center при выделении), inline text editor (overlay). На мобильном ВСЕ видны одновременно (`opacity-100`) — перегрузка интерфейса и перекрытие контента.
 
-**Swipe action icons (строки 206, 234):**
-- `backdrop-blur-sm` → убрать (на иконках удаления/редактирования при свайпе)
+---
 
-**Swipe hint (строка 378):**
-- `bg-card/95 backdrop-blur-xl shadow-glass` → `bg-card shadow-sm`
+### ВЫСОКИЙ ПРИОРИТЕТ (UX-проблемы)
 
-### Файл 3: `src/components/editor/InlineTextEditor.tsx`
+#### 6. BulkActionBar: кнопки слишком мелкие на мобильном
+**Файл:** `BulkActionBar.tsx:48`
+Кнопки `h-8 w-8` (32px) — меньше рекомендованного минимума 44px для touch targets. Backdrop-blur всё ещё есть (`backdrop-blur-xl`).
 
-**Overlay (строка 78):**
-- `bg-background/95 backdrop-blur-sm` → `bg-background`
+#### 7. BlockContextToolbar: `-top-10` обрезается
+**Файл:** `BlockContextToolbar.tsx:57`
+Тулбар позиционируется `-top-10` от блока. Для блоков в верхней части экрана он уходит за viewport. Нет проверки положения.
 
-### Файл 4: `src/components/editor/BlockContextToolbar.tsx`
+#### 8. EditorScreen: review mode кнопки используют `glass` и `shadow-glass-sm`
+**Файл:** `EditorScreen.tsx:448-449, 459-461`
+Кнопки "Проблемные" и "CTA" всё ещё используют `glass` класс в неактивном состоянии. Это осталось после предыдущего фикса — `glass` добавляет backdrop-blur.
 
-**Toolbar (
+#### 9. MobileSettingsSheet: избыточный blur на каждом элементе
+**Файл:** `MobileSettingsSheet.tsx:208-238`
+Sheet, header, tabs, каждый tab trigger, карточки внутри — все с `backdrop-blur-xl` или `backdrop-blur-2xl`. 7+ слоёв blur на одном экране.
+
+#### 10. InlineEditableBlock: `shadow-glass` на блоках
+**Файл:** `InlineEditableBlock.tsx:248`
+Основной wrapper блока использует `shadow-glass` — кастомный класс, который может включать blur-related стили. Нужно заменить на `shadow-sm`.
+
+---
+
+### СРЕДНИЙ ПРИОРИТЕТ (улучшения)
+
+#### 11. EditorCommandPalette: GROUP_LABELS на английском
+**Файл:** `EditorCommandPalette.tsx:29-35`
+`'Actions'`, `'Edit Block'`, `'Add Block'` и т.д. захардкожены на EN. Нужно обернуть в `t()`.
+
+#### 12. BlockInsertButton Sheet: `backdrop-blur` в sticky header
+**Файл:** `BlockInsertButton.tsx:436`
+Header панели добавления блоков имеет `backdrop-blur` — допустимо для sticky, но `bg-background/95` + `supports-[backdrop-filter]:bg-background/80` создаёт мерцание при скролле на слабых устройствах.
+
+#### 13. DragOverlay: `overflow-hidden` обрезает контент
+**Файл:** `GridEditor.tsx:362**
+`DragOverlayBlockItem` использует `overflow-hidden` — может обрезать содержимое при перетаскивании крупных блоков.
+
+#### 14. EditorScreen header: нет кнопки "назад" на мобильном
+Пользователь на мобильном в редакторе не имеет явного способа вернуться к спис
