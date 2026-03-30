@@ -1428,7 +1428,12 @@
   },
   "commands": {
     "noResults": "No matching commands",
-    "searchPlaceholder": "Search commands, blocks, presets..."
+    "searchPlaceholder": "Search commands, blocks, presets...",
+    "groupActions": "Harakatlar",
+    "groupEdit": "Blokni tahrirlash",
+    "groupInsert": "Blok qo'shish",
+    "groupPreset": "Tezkor presetlar",
+    "groupNavigate": "Navigatsiya"
   },
   "common": {
     "actions": "Harakatlar",
@@ -1529,7 +1534,8 @@
     "user": "Foydalanuvchi",
     "verify": "Tasdiqlash",
     "view": "Ko'rish",
-    "yes": "Ha"
+    "yes": "Ha",
+    "deleteConfirmTitle": "Blokni o'chirish?"
   },
   "cookies": {
     "accept": "Qabul qiling",
@@ -2132,7 +2138,9 @@
     "unsaved": "Saqlanmagan",
     "unsavedChanges": "Saqlanmagan o'zgarishlar",
     "unsavedDescription": "Sizda hali saqlanmagan o'zgarishlar mavjud. Nima qilmoqchisiz?",
-    "versions": "Hikoya"
+    "versions": "Hikoya",
+    "swipeForActions": "Harakatlar uchun suring",
+    "sectionNameDescription": "Yangi bo'lim nomini kiriting"
   },
   "errors": {
     "createYourPage": "O'z sahifangizni yaratmoqchimisiz?",

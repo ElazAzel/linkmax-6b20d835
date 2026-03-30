@@ -1483,7 +1483,12 @@
   },
   "commands": {
     "noResults": "Сәйкес командалар табылмады",
-    "searchPlaceholder": "Командаларды, блоктарды, пресеттерді іздеу..."
+    "searchPlaceholder": "Командаларды, блоктарды, пресеттерді іздеу...",
+    "groupActions": "Әрекеттер",
+    "groupEdit": "Блокты өңдеу",
+    "groupInsert": "Блок қосу",
+    "groupPreset": "Жылдам пресеттер",
+    "groupNavigate": "Навигация"
   },
   "common": {
     "actions": "Әрекеттер",
@@ -1584,7 +1589,8 @@
     "user": "Пайдаланушы",
     "verify": "Растау",
     "view": "Көру",
-    "yes": "Иә"
+    "yes": "Иә",
+    "deleteConfirmTitle": "Блокты жою керек пе?"
   },
   "cookies": {
     "accept": "Қабылдау",
@@ -2187,7 +2193,9 @@
     "unsaved": "Сақталмаған",
     "unsavedChanges": "Сақталмаған өзгертулер",
     "unsavedDescription": "Сізде әлі сақталмаған өзгертулер бар. Сіз не істегіңіз келеді?",
-    "versions": "Әңгіме"
+    "versions": "Әңгіме",
+    "swipeForActions": "Әрекеттер үшін сырғытыңыз",
+    "sectionNameDescription": "Жаңа бөлімнің атауын енгізіңіз"
   },
   "errors": {
     "createYourPage": "Өз парақшаңызды жасағыңыз келе ме?",

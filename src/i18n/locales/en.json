@@ -1483,7 +1483,12 @@
   },
   "commands": {
     "noResults": "No matching commands",
-    "searchPlaceholder": "Search commands, blocks, presets..."
+    "searchPlaceholder": "Search commands, blocks, presets...",
+    "groupActions": "Actions",
+    "groupEdit": "Edit Block",
+    "groupInsert": "Add Block",
+    "groupPreset": "Quick Presets",
+    "groupNavigate": "Navigate"
   },
   "common": {
     "actions": "Status Actions",
@@ -1584,7 +1589,8 @@
     "user": "User",
     "verify": "Verify",
     "view": "View",
-    "yes": "Yes"
+    "yes": "Yes",
+    "deleteConfirmTitle": "Delete block?"
   },
   "cookies": {
     "accept": "Accept",
@@ -2187,7 +2193,9 @@
     "unsaved": "Not saved",
     "unsavedChanges": "Unsaved changes",
     "unsavedDescription": "You have changes that have not yet been saved. What do you want to do?",
-    "versions": "Story"
+    "versions": "Story",
+    "swipeForActions": "Swipe for actions",
+    "sectionNameDescription": "Enter a name for the new section"
   },
   "errors": {
     "createYourPage": "Want to create your own page?",
