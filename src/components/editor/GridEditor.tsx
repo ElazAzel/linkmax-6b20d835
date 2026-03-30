@@ -29,6 +29,17 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { BlockInsertButton } from './BlockInsertButton';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
@@ -424,6 +435,8 @@ export const GridEditor = memo(function GridEditor({
   const isMobile = useIsMobile();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [experimentBlock, setExperimentBlock] = useState<Block | null>(null);
+  const [sectionDialogOpen, setSectionDialogOpen] = useState(false);
+  const [sectionNameInput, setSectionNameInput] = useState('');
 
   const dndContextId = useId();
 
@@ -607,20 +620,24 @@ export const GridEditor = memo(function GridEditor({
     }
   }, [blocks, selectedBlockIds, onReorderBlocks]);
 
-  // P5: Create section from selection
-  const handleCreateSection = useCallback(() => {
+  // P5: Create section from selection - open dialog
+  const handleCreateSectionClick = useCallback(() => {
     if (!canGroup) return;
-    const label = prompt(t('editor.sectionName', 'Имя секции:'), t('editor.newSection', 'Новая секция'));
-    if (!label) return;
+    setSectionNameInput(t('editor.newSection', 'Новая секция'));
+    setSectionDialogOpen(true);
+  }, [canGroup, t]);
 
+  const handleCreateSectionConfirm = useCallback(() => {
+    const label = sectionNameInput.trim();
+    if (!label) return;
     const result = createSection(blocks, selectedBlockIds, label);
-    // Update blocks via reorder (which replaces entire block array)
     onReorderBlocks?.(result.blocks);
-    // Store section metadata
     setSectionMeta(result.section.id, result.section);
     clearSelection();
     trackEditorAction('section_created', { source: 'grid' });
-  }, [canGroup, blocks, selectedBlockIds, onReorderBlocks, setSectionMeta, clearSelection, t]);
+    setSectionDialogOpen(false);
+    setSectionNameInput('');
+  }, [sectionNameInput, blocks, selectedBlockIds, onReorderBlocks, setSectionMeta, clearSelection]);
 
   // P5: Transform handler
   const handleTransform = useCallback((block: Block, toType: BlockType) => {
@@ -835,7 +852,7 @@ export const GridEditor = memo(function GridEditor({
         onMoveUp={handleBulkMoveUp}
         onMoveDown={handleBulkMoveDown}
         onClearSelection={clearSelection}
-        onCreateSection={handleCreateSection}
+        onCreateSection={handleCreateSectionClick}
         canCreateSection={canGroup}
       />
 
@@ -848,6 +865,33 @@ export const GridEditor = memo(function GridEditor({
           block={experimentBlock}
         />
       )}
+
+      {/* Section Name Dialog */}
+      <AlertDialog open={sectionDialogOpen} onOpenChange={setSectionDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('editor.sectionName', 'Имя секции')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('editor.sectionNameDescription', 'Введите название для новой секции')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={sectionNameInput}
+            onChange={(e) => setSectionNameInput(e.target.value)}
+            placeholder={t('editor.newSection', 'Новая секция')}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleCreateSectionConfirm();
+            }}
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleCreateSectionConfirm}>
+              {t('common.create', 'Создать')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });

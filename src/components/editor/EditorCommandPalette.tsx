@@ -26,12 +26,12 @@ interface EditorCommandPaletteProps {
   context: EditorContext;
 }
 
-const GROUP_LABELS: Record<string, string> = {
-  action: 'Actions',
-  edit: 'Edit Block',
-  insert: 'Add Block',
-  preset: 'Quick Presets',
-  navigate: 'Navigate',
+const GROUP_LABEL_KEYS: Record<string, { key: string; fallback: string }> = {
+  action: { key: 'commands.groupActions', fallback: 'Действия' },
+  edit: { key: 'commands.groupEdit', fallback: 'Редактировать блок' },
+  insert: { key: 'commands.groupInsert', fallback: 'Добавить блок' },
+  preset: { key: 'commands.groupPreset', fallback: 'Быстрые пресеты' },
+  navigate: { key: 'commands.groupNavigate', fallback: 'Навигация' },
 };
 
 export const EditorCommandPalette = memo(function EditorCommandPalette({
@@ -96,7 +96,7 @@ export const EditorCommandPalette = memo(function EditorCommandPalette({
           const cmds = grouped[group];
           if (!cmds?.length) return null;
           return (
-            <CommandGroup key={group} heading={GROUP_LABELS[group]}>
+            <CommandGroup key={group} heading={t(GROUP_LABEL_KEYS[group]?.key, GROUP_LABEL_KEYS[group]?.fallback)}>
               {cmds.map((cmd) => {
                 const available = cmd.isAvailable(context);
                 return (

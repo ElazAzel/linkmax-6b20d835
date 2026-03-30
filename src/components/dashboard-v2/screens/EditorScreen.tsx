@@ -445,8 +445,8 @@ export const EditorScreen = memo(function EditorScreen({
                 variant={reviewMode === 'problematic' ? 'default' : 'outline'}
                 size="sm"
                 className={cn(
-                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm transition-all",
-                  reviewMode === 'problematic' ? "bg-red-500 text-white border-none" : "border-white/10 glass"
+                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm transition-all",
+                  reviewMode === 'problematic' ? "bg-red-500 text-white border-none" : "border-border/20 bg-card"
                 )}
                 onClick={() => toggleReviewMode('problematic')}
               >
@@ -457,8 +457,8 @@ export const EditorScreen = memo(function EditorScreen({
                 variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
                 size="sm"
                 className={cn(
-                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-glass-sm transition-all",
-                  reviewMode === 'cta_contact' ? "bg-emerald-500 text-white border-none" : "border-white/10 glass"
+                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm transition-all",
+                  reviewMode === 'cta_contact' ? "bg-emerald-500 text-white border-none" : "border-border/20 bg-card"
                 )}
                 onClick={() => toggleReviewMode('cta_contact')}
               >

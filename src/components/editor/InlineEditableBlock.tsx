@@ -1,4 +1,5 @@
 import { memo, useState, useRef, useCallback, TouchEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
@@ -40,6 +41,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
   isLast = false,
   isOwnerPremium = false,
 }: InlineEditableBlockProps) {
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
   const haptic = useHapticFeedback();
   const [isHovered, setIsHovered] = useState(false);
@@ -208,7 +210,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
               )}>
                 <Trash2 className="h-7 w-7" />
               </div>
-              <span className="text-sm font-bold">Удалить</span>
+              <span className="text-sm font-bold">{t('common.delete', 'Удалить')}</span>
             </div>
           </div>
         )}
@@ -236,7 +238,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
               )}>
                 <Pencil className="h-7 w-7" />
               </div>
-              <span className="text-sm font-bold">Изменить</span>
+              <span className="text-sm font-bold">{t('common.edit', 'Изменить')}</span>
             </div>
           </div>
         )}
@@ -245,8 +247,8 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
         <div
           className={cn(
             "relative group",
-            block.type !== 'separator' && block.type !== 'socials' && "bg-card rounded-3xl border border-border/20 shadow-glass",
-            isDragging && "opacity-50 scale-95 shadow-glass-lg",
+            block.type !== 'separator' && block.type !== 'socials' && "bg-card rounded-3xl border border-border/20 shadow-sm",
+            isDragging && "opacity-50 scale-95 shadow-lg",
             isTransitioning && "transition-transform duration-300 ease-out"
           )}
           style={{
@@ -377,7 +379,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
           {isMobile && !isProfileBlock && isTouched && offsetX === 0 && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-5 py-2.5 bg-card rounded-full text-sm text-muted-foreground shadow-sm border border-border/30 flex items-center gap-3 animate-fade-in font-medium">
               <span className="text-primary text-lg">←</span>
-              <span>Свайп для действий</span>
+              <span>{t('editor.swipeForActions', 'Свайп для действий')}</span>
               <span className="text-primary text-lg">→</span>
             </div>
           )}

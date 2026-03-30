@@ -1483,7 +1483,12 @@
   },
   "commands": {
     "noResults": "Команды не найдены",
-    "searchPlaceholder": "Поиск команд, блоков, пресетов..."
+    "searchPlaceholder": "Поиск команд, блоков, пресетов...",
+    "groupActions": "Действия",
+    "groupEdit": "Редактировать блок",
+    "groupInsert": "Добавить блок",
+    "groupPreset": "Быстрые пресеты",
+    "groupNavigate": "Навигация"
   },
   "common": {
     "actions": "Действия",
@@ -1584,7 +1589,8 @@
     "user": "Пользователь",
     "verify": "Подтвердить",
     "view": "Просмотр",
-    "yes": "Да"
+    "yes": "Да",
+    "deleteConfirmTitle": "Удалить блок?"
   },
   "cookies": {
     "accept": "Принять",
@@ -2187,7 +2193,9 @@
     "unsaved": "Не сохранено",
     "unsavedChanges": "Несохраненные изменения",
     "unsavedDescription": "У вас есть изменения, которые еще не были сохранены. Что вы хотите сделать?",
-    "versions": "История"
+    "versions": "История",
+    "swipeForActions": "Свайп для действий",
+    "sectionNameDescription": "Введите название для новой секции"
   },
   "errors": {
     "createYourPage": "Хотите создать свою страницу?",

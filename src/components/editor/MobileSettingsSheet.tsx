@@ -205,8 +205,8 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="bottom" hideCloseButton className="h-[90vh] p-0 rounded-t-[2.5rem] bg-card/90 backdrop-blur-2xl border-t border-border/30 shadow-glass-xl">
-          <SheetHeader className="p-6 pb-4 border-b border-border/20 sticky top-0 bg-card/80 backdrop-blur-xl z-10">
+        <SheetContent side="bottom" hideCloseButton className="h-[90vh] p-0 rounded-t-[2.5rem] bg-card border-t border-border/30 shadow-xl">
+          <SheetHeader className="p-6 pb-4 border-b border-border/20 sticky top-0 bg-card z-10">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-xl font-black">{t('mobileToolbar.settings', 'Настройки')}</SheetTitle>
               <Button variant="ghost" size="lg" onClick={() => onOpenChange(false)} aria-label={t('common.close', 'Закрыть')} className="rounded-2xl hover:bg-card/60 h-12 w-12">
@@ -218,30 +218,30 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
 
           <div className="overflow-y-auto h-full pb-28">
             <Tabs defaultValue="link" className="w-full">
-              <TabsList className="w-full sticky top-0 bg-card/80 backdrop-blur-xl z-10 h-14 rounded-none border-b border-border/20 px-3 justify-between">
-                <TabsTrigger value="link" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
+              <TabsList className="w-full sticky top-0 bg-card z-10 h-14 rounded-none border-b border-border/20 px-3 justify-between">
+                <TabsTrigger value="link" className="rounded-xl data-[state=active]:bg-primary/10 h-10 w-10 p-0 flex items-center justify-center">
                   <Link2 className="h-5 w-5" />
                 </TabsTrigger>
-                <TabsTrigger value="profile" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
+                <TabsTrigger value="profile" className="rounded-xl data-[state=active]:bg-primary/10 h-10 w-10 p-0 flex items-center justify-center">
                   <User className="h-5 w-5" />
                 </TabsTrigger>
-                <TabsTrigger value="chatbot" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
+                <TabsTrigger value="chatbot" className="rounded-xl data-[state=active]:bg-primary/10 h-10 w-10 p-0 flex items-center justify-center">
                   <MessageCircle className="h-5 w-5" />
                 </TabsTrigger>
-                <TabsTrigger value="collabs" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
+                <TabsTrigger value="collabs" className="rounded-xl data-[state=active]:bg-primary/10 h-10 w-10 p-0 flex items-center justify-center">
                   <Users className="h-5 w-5" />
                 </TabsTrigger>
-                <TabsTrigger value="friends" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
+                <TabsTrigger value="friends" className="rounded-xl data-[state=active]:bg-primary/10 h-10 w-10 p-0 flex items-center justify-center">
                   <UserPlus className="h-5 w-5" />
                 </TabsTrigger>
-                <TabsTrigger value="premium" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
+                <TabsTrigger value="premium" className="rounded-xl data-[state=active]:bg-primary/10 h-10 w-10 p-0 flex items-center justify-center">
                   <Crown className="h-5 w-5" />
                 </TabsTrigger>
               </TabsList>
 
               {/* Link Tab - BOLD */}
               <TabsContent value="link" className="p-5 space-y-5 mt-0">
-                <Card className="p-6 bg-card/50 backdrop-blur-xl border border-border/20 rounded-3xl shadow-glass">
+                <Card className="p-6 bg-card border border-border/20 rounded-3xl shadow-sm">
                   <h3 className="text-lg font-bold mb-5 flex items-center gap-3">
                     <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center">
                       <Link2 className="h-5 w-5 text-primary" />
