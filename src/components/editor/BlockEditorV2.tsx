@@ -14,6 +14,16 @@ import {
     DialogDescription,
 } from '@/components/ui/dialog';
 import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from '@/components/ui/alert-dialog';
+import {
     Drawer,
     DrawerContent,
 } from '@/components/ui/drawer';
@@ -239,12 +249,7 @@ export function BlockEditorV2({
             onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates })}
             enablePreview={block.type !== 'profile'}
             previewComponent={previewComponent}
-            onDelete={onDelete ? () => {
-                if (window.confirm(t('common.deleteConfirm', 'Вы уверены, что хотите удалить этот блок?'))) {
-                    onDelete(block.id);
-                    onClose();
-                }
-            } : undefined}
+            onDelete={onDelete ? () => setShowDeleteDialog(true) : undefined}
         >
 
             {renderEditor()}

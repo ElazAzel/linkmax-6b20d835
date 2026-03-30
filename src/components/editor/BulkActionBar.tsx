@@ -45,7 +45,7 @@ export const BulkActionBar = memo(function BulkActionBar({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-card/95 backdrop-blur-xl border border-border shadow-lg"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-card border border-border shadow-lg"
         >
           <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
             {selectedCount} {t('editor.selected', 'selected')}
@@ -56,53 +56,53 @@ export const BulkActionBar = memo(function BulkActionBar({
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0"
+            className="h-11 w-11 p-0"
             onClick={onMoveUp}
             title={t('editor.moveUp', 'Move up')}
           >
-            <ChevronUp className="h-4 w-4" />
+            <ChevronUp className="h-5 w-5" />
           </Button>
 
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0"
+            className="h-11 w-11 p-0"
             onClick={onMoveDown}
             title={t('editor.moveDown', 'Move down')}
           >
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-5 w-5" />
           </Button>
 
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0"
+            className="h-11 w-11 p-0"
             onClick={onDuplicate}
             title={t('editor.duplicate', 'Duplicate')}
           >
-            <Copy className="h-4 w-4" />
+            <Copy className="h-5 w-5" />
           </Button>
 
           {canCreateSection && onCreateSection && (
             <Button
               size="sm"
               variant="ghost"
-              className="h-8 w-8 p-0 text-primary hover:text-primary"
+              className="h-11 w-11 p-0 text-primary hover:text-primary"
               onClick={onCreateSection}
               title={t('editor.createSection', 'Group into section')}
             >
-              <FolderPlus className="h-4 w-4" />
+              <FolderPlus className="h-5 w-5" />
             </Button>
           )}
 
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+            className="h-11 w-11 p-0 text-destructive hover:text-destructive"
             onClick={onDelete}
             title={t('editor.delete', 'Delete')}
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-5 w-5" />
           </Button>
 
           <div className="w-px h-5 bg-border" />
@@ -110,7 +110,7 @@ export const BulkActionBar = memo(function BulkActionBar({
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0"
+            className="h-11 w-11 p-0"
             onClick={onClearSelection}
             title={t('editor.clearSelection', 'Clear selection')}
           >

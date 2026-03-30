@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, forwardRef, useImperativeHandle } from 'react';
 
 /**
  * Cloudflare Turnstile widget (invisible / managed mode)
@@ -33,9 +33,11 @@ declare global {
     }
 }
 
-export function TurnstileWidget({ onToken, onError, className }: TurnstileWidgetProps) {
+export const TurnstileWidget = forwardRef<HTMLDivElement, TurnstileWidgetProps>(function TurnstileWidget({ onToken, onError, className }, ref) {
     const containerRef = useRef<HTMLDivElement>(null);
     const widgetIdRef = useRef<string | null>(null);
+
+    useImperativeHandle(ref, () => containerRef.current!, []);
 
     useEffect(() => {
         const el = containerRef.current;
@@ -87,7 +89,7 @@ export function TurnstileWidget({ onToken, onError, className }: TurnstileWidget
     }, []);
 
     return <div ref={containerRef} className={className} />;
-}
+});
 
 /**
  * Hook for managing Turnstile token state
