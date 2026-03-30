@@ -852,7 +852,7 @@ export const GridEditor = memo(function GridEditor({
         onMoveUp={handleBulkMoveUp}
         onMoveDown={handleBulkMoveDown}
         onClearSelection={clearSelection}
-        onCreateSection={handleCreateSection}
+        onCreateSection={handleCreateSectionClick}
         canCreateSection={canGroup}
       />
 

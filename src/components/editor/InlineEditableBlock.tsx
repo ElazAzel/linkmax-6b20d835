@@ -41,6 +41,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
   isLast = false,
   isOwnerPremium = false,
 }: InlineEditableBlockProps) {
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
   const haptic = useHapticFeedback();
   const [isHovered, setIsHovered] = useState(false);

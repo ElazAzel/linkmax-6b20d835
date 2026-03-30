@@ -78,6 +78,7 @@ export function BlockEditorV2({
     const [isSaving, setIsSaving] = useState(false);
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const deferredFormData = useDeferredValue(formData);
     const currentBlockIdRef = useRef<string | null>(block ? block.id : null);
@@ -293,6 +294,31 @@ export function BlockEditorV2({
         </Dialog>
     );
 
+    const deleteDialog = onDelete && block ? (
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>{t('common.deleteConfirmTitle', 'Удалить блок?')}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {t('common.deleteConfirm', 'Вы уверены, что хотите удалить этот блок?')}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+                    <AlertDialogAction
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        onClick={() => {
+                            onDelete(block.id);
+                            onClose();
+                        }}
+                    >
+                        {t('common.delete', 'Удалить')}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    ) : null;
+
     // Mobile: Full-screen drawer
     if (isMobile) {
         return (
@@ -303,6 +329,7 @@ export function BlockEditorV2({
                     </DrawerContent>
                 </Drawer>
                 {unsavedDialog}
+                {deleteDialog}
             </>
         );
     }
@@ -322,6 +349,7 @@ export function BlockEditorV2({
                 </DialogContent>
             </Dialog>
             {unsavedDialog}
+            {deleteDialog}
         </>
     );
 }
