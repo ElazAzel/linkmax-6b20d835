@@ -15,33 +15,50 @@ serve(async (req) => {
     try {
         console.log("Fetching exchange rate from National Bank of KZ...");
 
-        const date = new Date();
-        const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, '0');
-        const dd = String(date.getDate()).padStart(2, '0');
-        const formattedDate = `${dd}.${mm}.${yyyy}`;
+        let rate: number;
 
-        const response = await fetch(`https://nationalbank.kz/rss/get_rates.cfm?fdate=${formattedDate}&cur_id=431`);
+        try {
+            const date = new Date();
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const formattedDate = `${dd}.${mm}.${yyyy}`;
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch from NB KZ API: ${response.status} ${response.statusText}`);
+            const response = await fetch(`https://nationalbank.kz/rss/get_rates.cfm?fdate=${formattedDate}&cur_id=431`);
+
+            if (!response.ok) {
+                throw new Error(`NB KZ API: ${response.status} ${response.statusText}`);
+            }
+
+            const xmlText = await response.text();
+            const usdMatch = xmlText.match(/<title>USD<\/title>\s*<description>([\d.]+)<\/description>/i);
+
+            if (!usdMatch || !usdMatch[1]) {
+                throw new Error("Could not parse USD rate from NB KZ XML");
+            }
+
+            rate = parseFloat(usdMatch[1]);
+            if (isNaN(rate)) throw new Error(`Parsed rate is NaN: ${usdMatch[1]}`);
+
+            console.log(`Primary source (NB KZ): USD/KZT = ${rate}`);
+        } catch (primaryError) {
+            // Fallback: open exchangerate API
+            console.warn(`Primary source failed: ${primaryError}. Trying fallback...`);
+
+            const fallbackResp = await fetch('https://open.er-api.com/v6/latest/USD');
+            if (!fallbackResp.ok) {
+                throw new Error(`Both sources failed. Fallback: ${fallbackResp.status}`);
+            }
+
+            const fallbackData = await fallbackResp.json();
+            rate = fallbackData?.rates?.KZT;
+
+            if (!rate || isNaN(rate)) {
+                throw new Error("Fallback did not return KZT rate");
+            }
+
+            console.log(`Fallback source (er-api): USD/KZT = ${rate}`);
         }
-
-        const xmlText = await response.text();
-
-        // Find USD description field in XML: <title>USD</title> <description>497.33</description>
-        const usdMatch = xmlText.match(/<title>USD<\/title>\s*<description>([\d.]+)<\/description>/i);
-
-        if (!usdMatch || !usdMatch[1]) {
-            throw new Error("Could not parse USD exchange rate from XML response");
-        }
-
-        const rate = parseFloat(usdMatch[1]);
-        if (isNaN(rate)) {
-            throw new Error(`Parsed rate is not a number: ${usdMatch[1]}`);
-        }
-
-        console.log(`Parsed USD/KZT rate: ${rate}`);
 
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
         const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');

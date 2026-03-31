@@ -27,12 +27,16 @@ export async function searchUsers(
 
   if (!query || query.length < 2) return [];
 
+  // Sanitize query for PostgREST .or() filter — strip chars that could break filter syntax
+  const sanitized = query.replace(/[(),."'\\%_]/g, '').trim();
+  if (sanitized.length < 2) return [];
+
   const { data: { user } } = await supabase.auth.getUser();
 
   const { data, error } = await supabase
     .from('user_profiles')
     .select('id, username, display_name, avatar_url')
-    .or(`username.ilike.%${query}%,display_name.ilike.%${query}%`)
+    .or(`username.ilike.%${sanitized}%,display_name.ilike.%${sanitized}%`)
     .neq('id', user?.id || '')
     .limit(limit);
 

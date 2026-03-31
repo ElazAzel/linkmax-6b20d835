@@ -46,24 +46,31 @@ const REFERRAL_BONUS_DAYS = 3;
 export async function getReferralStats(userId: string): Promise<ReferralStats | null> {
   try {
     // Get referral code
-    const { data: codeData } = await supabase
+    const { data: codeData, error: codeError } = await supabase
       .from('referral_codes')
       .select('code')
       .eq('user_id', userId)
       .maybeSingle();
 
-    if (!codeData) {
+    if (codeError || !codeData) {
+      if (codeError) logger.error('Error fetching referral code', codeError);
       return null;
     }
 
+    const referralCode = (codeData as any).code;
+
     // Count referrals
-    const { count } = await supabase
+    const { count, error: countError } = await supabase
       .from('referrals')
       .select('*', { count: 'exact', head: true })
       .eq('referrer_id', userId);
 
+    if (countError) {
+      logger.error('Error counting referrals', countError);
+    }
+
     return {
-      code: codeData.code,
+      code: referralCode,
       referralsCount: count || 0,
       bonusDaysEarned: (count || 0) * REFERRAL_BONUS_DAYS
     };

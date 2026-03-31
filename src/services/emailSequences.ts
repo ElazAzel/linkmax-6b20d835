@@ -20,18 +20,24 @@ export interface SequenceStep {
 }
 
 export const emailSequencesService = {
-  async listSequences() {
+  async listSequences(options?: { page?: number; pageSize?: number }) {
     try {
-      const { data, error } = await supabase
+      const page = options?.page || 0;
+      const pageSize = options?.pageSize || 25;
+      const from = page * pageSize;
+      const to = from + pageSize - 1;
+
+      const { data, error, count } = await supabase
         .from('email_sequences')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(from, to);
 
       if (error) throw error;
-      return { data: data as EmailSequence[], error: null };
+      return { data: data as EmailSequence[], total: count || 0, error: null };
     } catch (error) {
       logger.error('Error listing email sequences', error);
-      return { data: null, error };
+      return { data: null, total: 0, error };
     }
   },
 

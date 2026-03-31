@@ -115,6 +115,25 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
     const colorScheme = webApp?.colorScheme || 'light';
     const themeParams = webApp?.themeParams || {};
 
+    // ---- Health check (TMA-13) ----
+    const checkHealth = useCallback(async () => {
+        try {
+            // Simple ping to a public route or health check
+            const { error: healthError } = await supabase
+                .from('app_settings')
+                .select('id')
+                .limit(1)
+                .maybeSingle();
+
+            if (healthError && healthError.code !== 'PGRST116') {
+              console.error('[TelegramApp] Health check failed:', healthError);
+              // We don't block the whole app, but log it
+            }
+        } catch (err) {
+            console.error('[TelegramApp] Health check exception:', err);
+        }
+    }, []);
+
     // ---- Initialize Telegram WebApp ----
     useEffect(() => {
         const tg = window.Telegram?.WebApp;
@@ -145,7 +164,10 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
         tg.onEvent('safeAreaChanged', () => applySafeArea(tg));
         tg.onEvent('contentSafeAreaChanged', () => applySafeArea(tg));
 
-        // Validate initData on server
+        // 1. Health check (Supabase connection) (LOW-13 fix)
+        checkHealth();
+
+        // 2. Validate initData on server
         validateAuth(tg);
 
         return () => {

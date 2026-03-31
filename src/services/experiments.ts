@@ -12,6 +12,20 @@ export async function createExperiment(
     variants: Omit<BlockVariation, 'id' | 'experiment_id' | 'base_block_id'>[]
 ) {
     try {
+        // 0. Verify auth + page ownership (LOW-7 fix)
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('User not authenticated');
+
+        const { data: page } = await supabase
+            .from('pages')
+            .select('user_id')
+            .eq('id', pageId)
+            .single();
+
+        if (!page || page.user_id !== user.id) {
+            throw new Error('Not authorized to create experiment on this page');
+        }
+
         // 1. Create the experiment
         const { data: experiment, error: expError } = await supabase
             .from('experiments')
@@ -19,7 +33,8 @@ export async function createExperiment(
                 page_id: pageId,
                 block_id: baseBlockId,
                 name,
-                status: 'draft'
+                status: 'draft',
+                created_by: user.id
             })
             .select()
             .single();

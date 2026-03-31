@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.8.0] - 2026-03-31 (Platform Audit Remediation)
+
+### Security (Hardening)
+- **SQL/PostgREST Injection**: Implemented strict input sanitization for all search queries (`userSearch.ts`, `useGlobalSearch.ts`) to prevent filter-breaking injection via `.or()` and `.ilike()`.
+- **JWT Enforcement**: Enabled mandatory JWT authentication for AI Edge Functions (`ai-content-generator`, `image-generator`).
+- **Secrets Management**: Removed hardcoded Cloudflare and Supabase IDs from `wrangler.toml` and GitHub Workflows; migrated to environment variables and repo secrets.
+- **Access Control**: Added `owner_id` verification to `experiments.ts` and hardened `seed-demo-accounts` against unauthorized execution.
+- **Idempotency**: Implemented `message_id` based idempotency in `process-email-sequences` to prevent duplicate emails.
+
+### CI/CD & Infrastructure
+- **Pipeline Optimization**: Parallelized E2E and Unit tests in `ci.yml`. Added `staging` environment support and post-deploy smoke tests in `deploy.yml`.
+- **Supabase Connectivity**: Added a secondary fallback API (exchangerate-api.com) for `currency-rates` to ensure uptime during National Bank of KZ outages.
+- **Wrangler**: Pinned `wrangler@latest` for deployment stability.
+
+### Telegram Mini App (TMA)
+- **Health Check**: Integrated a Supabase connectivity health check during TMA initialization. Improved error reporting for SDK/API failures.
+- **UX**: Fixed currency symbol display (₽→₸) and reduced console noise by making SDK warnings DEV-only.
+- **Testing**: Added initial unit test suite (`TelegramApp.test.tsx`) for core initialization logic.
+
+### Quality & Type Safety
+- **State Management**: Fixed Zustand DevTools serialization for `Set` and `Map` types in `EditorStore`.
+- **Type Safety**: Eliminated `as any` in zone automations and fixed stale Supabase types in `referral.ts`.
+- **Collaboration**: Implemented a retry loop for `collab_slug` to guarantee uniqueness on collision.
+- **Email Marketing**: Added pagination support to `emailSequencesService.listSequences`.
+- **Code Hygiene**: Fixed mutable `Date` bug in `social.ts` (`getWeekStart`) and added `.github/CODEOWNERS` for critical paths.
+
 ## [1.7.0] - 2026-03-24
  
 ### Added

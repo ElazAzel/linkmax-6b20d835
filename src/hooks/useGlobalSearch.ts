@@ -29,6 +29,9 @@ export function useGlobalSearch() {
 
     setLoading(true);
     const lowercaseQuery = query.toLowerCase();
+    // Sanitize for PostgREST filters — strip chars that break .or()/.ilike() syntax (MED-3 fix)
+    const sanitized = lowercaseQuery.replace(/[(),."'\\%_]/g, '').trim();
+    if (sanitized.length < 2) { setLoading(false); setResults([]); return; }
     const searchResults: SearchResult[] = [];
 
     try {
@@ -37,7 +40,7 @@ export function useGlobalSearch() {
         .from('pages')
         .select('id, slug, title, updated_at') as any)
         .eq('owner_id', user.id)
-        .ilike('title', `%${lowercaseQuery}%`)
+        .ilike('title', `%${sanitized}%`)
         .limit(5);
 
       if (pages) {
@@ -60,7 +63,7 @@ export function useGlobalSearch() {
           .from('zone_contacts')
           .select('id, name, email, phone') as any)
           .eq('zone_id', currentZone.id)
-          .or(`name.ilike.%${lowercaseQuery}%,email.ilike.%${lowercaseQuery}%,phone.ilike.%${lowercaseQuery}%`)
+          .or(`name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,phone.ilike.%${sanitized}%`)
           .limit(5);
 
         if (contacts) {
@@ -81,7 +84,7 @@ export function useGlobalSearch() {
           .from('zone_deals')
           .select('id, title, value_amount, currency') as any)
           .eq('zone_id', currentZone.id)
-          .ilike('title', `%${lowercaseQuery}%`)
+          .ilike('title', `%${sanitized}%`)
           .limit(5);
 
         if (deals) {
@@ -102,7 +105,7 @@ export function useGlobalSearch() {
           .from('zone_tasks')
           .select('id, title, status') as any)
           .eq('zone_id', currentZone.id)
-          .ilike('title', `%${lowercaseQuery}%`)
+          .ilike('title', `%${sanitized}%`)
           .limit(5);
 
         if (tasks) {

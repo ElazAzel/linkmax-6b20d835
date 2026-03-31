@@ -185,8 +185,26 @@ export async function respondToCollab(
 
   if (accept && pageId) {
     updates.target_page_id = pageId;
-    // Generate unique collab_slug when accepting
-    const slug = `collab-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`;
+    
+    // Generate unique collab_slug when accepting (LOW-10 fix)
+    let isUnique = false;
+    let slug = '';
+    let attempts = 0;
+    
+    while (!isUnique && attempts < 5) {
+      slug = `collab-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`;
+      const { data: existing } = await supabase
+        .from('collaborations')
+        .select('id')
+        .eq('collab_slug', slug)
+        .maybeSingle();
+      
+      if (!existing) {
+        isUnique = true;
+      }
+      attempts++;
+    }
+    
     updates.collab_slug = slug;
   }
 
