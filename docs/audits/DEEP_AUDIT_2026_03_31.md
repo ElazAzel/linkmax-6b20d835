@@ -4,7 +4,6 @@
 > **Область**: Модули, ранее не подвергавшиеся аудиту или проаудированные > 2 месяцев назад
 > **Статус**: ✅ **100% ВЫПОЛНЕНО** (Все 43 проблемы устранены)
 
-
 ---
 
 ## 📋 Покрытие аудита
@@ -12,7 +11,7 @@
 ### Проаудированные модули (НОВЫЕ)
 
 | # | Модуль | Последний аудит | Файлы |
-|---|--------|----------------|-------|
+|---|---|---|---|
 | 1 | **Telegram Mini App** | ❌ Никогда | `src/telegram/` (9 файлов) |
 | 2 | **Social & Gamification** | ❌ Никогда | `src/services/social.ts`, `friends.ts`, `quests.ts`, `streak.ts` |
 | 3 | **Email Sequences / Templates** | ❌ Никогда | `src/services/emailSequences.ts`, `emailTemplates.ts` |
@@ -36,6 +35,7 @@
 **Строки**: 1–217
 
 Весь конфигурационный файл содержит **дубликат**: строки 1–100 и 101–200 идентичны. Это значит:
+
 - `project_id` объявлен дважды (строки 1 и 101)
 - `[auth]` секция объявлена дважды (строки 3 и 103)
 - Все `[functions.*]` секции дублированы
@@ -55,7 +55,7 @@
 Следующие функции имеют `verify_jwt = false` и вызываются из фронтенда, но **НЕ имеют внутренней проверки авторизации**:
 
 | Функция | Риск |
-|---------|------|
+|---|---|
 | `ai-content-generator` | Любой может генерировать AI-контент, расходуя квоту |
 | `chatbot-stream` | Открытый SSE-стрим, потенциальный DDoS и расход API-токенов |
 | `translate-content` | Бесконтрольный вызов перевода |
@@ -69,14 +69,16 @@
 ### CRIT-3: `seed-demo-accounts` — доступен в production
 
 **Файл**: `supabase/config.toml`, строка 83/183
-```
+
+```toml
 [functions.seed-demo-accounts]
 verify_jwt = false # DEV ONLY: should be disabled in production
 ```
 
 Функция для посева демо-данных **доступна публично без авторизации**. Любой может вызвать её и засеять базу данных мусором.
 
-**Действие**: 
+**Действие**:
+
 1. Добавить `verify_jwt = true`
 2. Добавить проверку `app_role = 'admin'` внутри функции
 3. Или полностью удалить деплой этой функции в production
@@ -85,17 +87,20 @@ verify_jwt = false # DEV ONLY: should be disabled in production
 
 ### CRIT-4: `emailSequences.ts` и `emailTemplates.ts` — `as unknown as` Type Bypass
 
-**Файлы**: 
+**Файлы**:
+
 - `src/services/emailSequences.ts` (6 мест)
 - `src/services/emailTemplates.ts` (5 мест)
 - `src/services/experiments.ts` (5 мест)
 
 **Паттерн**:
+
 ```typescript
 await (supabase as unknown as { from: (schema: string) => any }).from('email_sequences')
 ```
 
 Это полный обход type-safety. Таблицы `email_sequences`, `email_sequence_steps`, `email_templates`, `experiments`, `experiment_variants` **отсутствуют в сгенерированном типе `AppDatabase`**, что значит:
+
 1. Нет автокомплита для полей
 2. Нет проверки RLS-совместимости на уровне типов
 3. Runtime-ошибки могут быть невидимы до production
@@ -165,6 +170,7 @@ case 'settings':
 ### MED-4: `friends.ts` — дублирование `searchUsers` с `collaboration.ts`
 
 **Файлы**:
+
 - `src/services/friends.ts` — `searchUsers()` (строка 260)
 - `src/services/collaboration.ts` — `searchUsers()` (строка 653)
 
@@ -321,7 +327,7 @@ const ssrUrl = `${FUNCTION_URL}/ssr/${encodeURIComponent(ssrTarget)}${queryStrin
 account_id = "9058b638459bffbf366813802933852b"
 ```
 
-Account ID public-facing, но лучше использовать environment variable для consistency.
+Account ID public-facing, но лучше использовать environment variable for consistency.
 
 ---
 
@@ -337,31 +343,31 @@ Store использует `Set<string>` и `Map<string, SectionMeta>` для st
 
 ### LOW-1: `social.ts` — i18n hardcoded fallback на русский
 
-Строки 154, 163, 188, 248, 332: Fallback строки вроде `'Еженедельный челлендж'`, `'Друг'`, `'Пользователь'` на русском языке. Для казахских/узбекских пользователей это сломанный UX.
+- Строки 154, 163, 188, 248, 332: Fallback строки вроде `'Еженедельный челлендж'`, `'Друг'`, `'Пользователь'` на русском языке. Для казахских/узбекских пользователей это сломанный UX.
 
 ### LOW-2: `referral.ts` — бонус 3 дня за реферала не конфигурируем
 
-Строка 65: `bonusDaysEarned: (count || 0) * 3` — hardcoded множитель.
+- Строка 65: `bonusDaysEarned: (count || 0) * 3` — hardcoded множитель.
 
 ### LOW-3: `streak.ts` — Milestones hardcoded и не локализованы
 
-Строки 53–58: Labels `'1 Week'`, `'2 Weeks'` на английском, не используется i18n.
+- Строки 53–58: Labels `'1 Week'`, `'2 Weeks'` на английском, не используется i18n.
 
 ### LOW-4: `gallery.ts` — N+1 query для premium status
 
-Строки 44–56: Для каждой страницы gallery делается дополнительный запрос user_profiles. Лучше использовать JOIN.
+- Строки 44–56: Для каждой страницы gallery делается дополнительный запрос user_profiles. Лучше использовать JOIN.
 
 ### LOW-5: TMA `TelegramContext.tsx` — console.warn для non-Telegram
 
-Строка 123: `console.warn('Telegram WebApp SDK not available')` — шумит в не-TMA окружении.
+- Строка 123: `console.warn('Telegram WebApp SDK not available')` — шумит в не-TMA окружении.
 
 ### LOW-6: TMA — нет тестов
 
-`src/telegram/__tests__/` — директория существует, но пустая.
+- `src/telegram/__tests__/` — директория существует, но пустая.
 
 ### LOW-7: `experiments.ts` — нет RLS check при создании
 
-Нет проверки `auth.uid() = page.user_id` на уровне сервиса.
+- Нет проверки `auth.uid() = page.user_id` на уровне сервиса.
 
 ### LOW-8: Edge Functions — разные версии `@supabase/supabase-js`
 
@@ -386,7 +392,7 @@ Store использует `Set<string>` и `Map<string, SectionMeta>` для st
 ## 📊 Сводка состояния
 
 | Категория | Оценка | Комментарий |
-|-----------|--------|-------------|
+|---|---|---|
 | **Telegram Mini App** | 6/10 | Архитектура хорошая, но 2 stub-экрана, hardcoded ₽, нет тестов |
 | **Social/Gamification** | 7/10 | Полнофункционально, но i18n fallbacks на русском |
 | **Email Sequences** | 4/10 | Type safety bypass, нет idempotency, hardcoded sender |
@@ -414,18 +420,18 @@ Store использует `Set<string>` и `Map<string, SectionMeta>` для st
 
 ### Sprint 2 (Средние — 3–5 дней)
 
-6. **[MED-2]** Исправить символ валюты в TMA
-7. **[MED-4]** Объединить дублирующийся `searchUsers`
-8. **[MED-11]** Добавить staging environment
-9. **[MED-14]** Добавить tracking конверсий в A/B testing
-10. **[MED-15]** Мигрировать quests RPC с hours на tokens
+1. **[MED-2]** Исправить символ валюты в TMA
+2. **[MED-4]** Объединить дублирующийся `searchUsers`
+3. **[MED-11]** Добавить staging environment
+4. **[MED-14]** Добавить tracking конверсий в A/B testing
+5. **[MED-15]** Мигрировать quests RPC с hours на tokens
 
 ### Sprint 3 (Улучшения — ongoing)
 
-11. Реализовать Payments и Settings экраны в TMA
-12. Выровнять версии Supabase SDK в Edge Functions
-13. Добавить CODEOWNERS и smoke tests
-14. Локализовать все hardcoded строки
+1. Реализовать Payments и Settings экраны в TMA
+2. Выровнять версии Supabase SDK в Edge Functions
+3. Добавить CODEOWNERS и smoke tests
+4. Локализовать все hardcoded строки
 
 ---
 
