@@ -77,11 +77,12 @@ export async function completeQuest(userId: string, questKey: string): Promise<{
     return { success: false, tokensEarned: 0 };
   }
 
-  // Use bonus_hours param but it will be converted to tokens in the DB function
+  // TODO: Migrate RPC 'complete_daily_quest' to accept p_tokens instead of p_bonus_hours
+  // Temporary backward-compat: convert tokens to hours (5 tokens = 1 hour)
   const { data, error } = await supabase.rpc('complete_daily_quest', {
     p_user_id: userId,
     p_quest_key: questKey,
-    p_bonus_hours: Math.ceil(quest.tokens / 5), // Convert tokens to hours for backward compat
+    p_bonus_hours: Math.ceil(quest.tokens / 5),
   });
 
   if (error) {

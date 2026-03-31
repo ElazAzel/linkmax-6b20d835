@@ -1,0 +1,15 @@
+# CODEOWNERS — defines code ownership for PR reviews
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+* @ElazAzel
+
+# Critical infrastructure
+supabase/ @ElazAzel
+.github/workflows/ @ElazAzel
+cloudflare-worker/ @ElazAzel
+
+# Core business logic
+src/services/ @ElazAzel
+src/platform/ @ElazAzel
+src/store/ @ElazAzel

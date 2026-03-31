@@ -649,38 +649,12 @@ export async function deleteShoutout(shoutoutId: string): Promise<boolean> {
   return !error;
 }
 
-// Search users for collaboration
-export async function searchUsers(query: string): Promise<Array<{
-  id: string;
-  username: string | null;
-  display_name: string | null;
-  avatar_url: string | null;
-  niche?: string | null;
-}>> {
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const { data, error } = await supabase
-    .from('user_profiles')
-    .select('id, username, display_name, avatar_url')
-    .or(`username.ilike.%${query}%,display_name.ilike.%${query}%`)
-    .neq('id', user?.id || '')
-    .limit(10);
-
-  if (error) return [];
-
-  // Get niches from pages
-  const userIds = data?.map(u => u.id) || [];
-  const { data: pages } = await supabase
-    .from('pages')
-    .select('user_id, niche')
-    .in('user_id', userIds);
-
-  const nicheMap = new Map(pages?.map(p => [p.user_id, p.niche]) || []);
-
-  return data?.map(u => ({
-    ...u,
-    niche: nicheMap.get(u.id),
-  })) || [];
+// Search users for collaboration — delegates to shared service (MED-4 fix)
+export { searchUsers } from '@/services/userSearch';
+// Re-export with niche by default for collaboration context
+import { searchUsers as _searchUsersBase } from '@/services/userSearch';
+export async function searchUsersWithNiche(query: string) {
+  return _searchUsersBase(query, { includeNiche: true });
 }
 
 // Get users by niche for mutual promo

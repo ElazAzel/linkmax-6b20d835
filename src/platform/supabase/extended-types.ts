@@ -38,6 +38,23 @@ export type AppDatabase = Omit<Database, 'public'> & {
         zone_notifications: GenericTable;
         zone_bookings: GenericTable;
         zone_analytics: GenericTable;
+        // Email marketing tables (CRIT-4 fix)
+        email_sequences: GenericTable;
+        email_sequence_steps: GenericTable;
+        email_templates: GenericTable;
+        email_logs: GenericTable;
+        lead_sequence_subscriptions: GenericTable;
+        // A/B testing tables (CRIT-4 fix)
+        experiments: GenericTable;
+        experiment_variants: GenericTable;
+        experiment_events: GenericTable;
+        // Social/gamification tables
+        premium_gifts: GenericTable;
+        page_boosts: GenericTable;
+        friend_activities: GenericTable;
+        // Referral tables
+        referral_codes: GenericTable;
+        referrals: GenericTable;
         user_profiles: {
           Row: Database['public']['Tables']['user_profiles']['Row'] & {
             kaspi_widget_enabled: boolean | null;

@@ -5,8 +5,8 @@ name = "lnkmx-prerender"
 main = "prerender-worker.js"
 compatibility_date = "2024-01-01"
 
-# Cloudflare Account ID
-account_id = "9058b638459bffbf366813802933852b"
+# Cloudflare Account ID — set via CLOUDFLARE_ACCOUNT_ID env var or wrangler.toml override
+# account_id = "" # Use: CLOUDFLARE_ACCOUNT_ID env var in CI
 
 # Production routes (if using custom domain)
 # To enable routes, uncomment and update with your zone_id and domain
@@ -16,8 +16,8 @@ account_id = "9058b638459bffbf366813802933852b"
 
 # Environment variables (use wrangler secret for token in production)
 [vars]
-SUPABASE_PROJECT = "pphdcfxucfndmwulpfwv"
-# PRERENDER_TOKEN = "your-token-here"
+# SUPABASE_PROJECT — set via `wrangler secret put SUPABASE_PROJECT`
+# PRERENDER_TOKEN — set via `wrangler secret put PRERENDER_TOKEN`
 
 # To set secret: wrangler secret put PRERENDER_TOKEN
 

@@ -26,8 +26,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-const INDEXNOW_KEY = 'linkmax-indexnow-key-2026';
-const HOST = 'lnkmx.my';
+const INDEXNOW_KEY = Deno.env.get('INDEXNOW_KEY') || 'linkmax-indexnow-key-2026';
+const HOST = Deno.env.get('PUBLIC_HOST') || 'lnkmx.my';
 
 interface ChildEntry {
   url: string;

@@ -37,6 +37,9 @@ export async function getOrCreateReferralCode(userId: string): Promise<string | 
   }
 }
 
+/** Days of premium per successful referral — configurable */
+const REFERRAL_BONUS_DAYS = 3;
+
 /**
  * Get referral stats for user
  */
@@ -62,7 +65,7 @@ export async function getReferralStats(userId: string): Promise<ReferralStats | 
     return {
       code: codeData.code,
       referralsCount: count || 0,
-      bonusDaysEarned: (count || 0) * 3
+      bonusDaysEarned: (count || 0) * REFERRAL_BONUS_DAYS
     };
   } catch (error) {
     logger.error('Error getting referral stats', error, { context: 'referral', data: { userId } });

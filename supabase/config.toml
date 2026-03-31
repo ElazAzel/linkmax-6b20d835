@@ -15,13 +15,13 @@ enable_manual_linking = true
 
 # --- AI / Content generation (called from authenticated frontend, but uses service_role internally) ---
 [functions.ai-content-generator]
-verify_jwt = false # TODO: enable JWT — frontend should pass user token
+verify_jwt = true # FIXED 2026-03-31: requires authenticated user
 
 [functions.chatbot-stream]
-verify_jwt = false # TODO: enable JWT — frontend should pass user token
+verify_jwt = true # FIXED 2026-03-31: requires authenticated user
 
 [functions.translate-content]
-verify_jwt = false # TODO: enable JWT — frontend should pass user token
+verify_jwt = true # FIXED 2026-03-31: requires authenticated user
 
 # --- Lead capture (public forms, no auth required) ---
 [functions.create-lead]
@@ -80,107 +80,7 @@ verify_jwt = false # Internal: triggered by DB webhook
 
 # --- Seed/admin (development only) ---
 [functions.seed-demo-accounts]
-verify_jwt = false # DEV ONLY: should be disabled in production
-
-# --- SEO / public endpoints ---
-[functions.generate-sitemap]
-verify_jwt = false # Public: sitemap must be accessible without auth
-
-[functions.seo-ssr]
-verify_jwt = false # Public: SSR pages must be accessible without auth
-
-[functions.gcal-callback]
-verify_jwt = false  # OAuth callback from Google, no JWT
-
-[functions.google-calendar-sync]
-verify_jwt = false  # Handles auth internally via supabaseClient.auth.getUser()
-
-[functions.google-forms-parser]
-verify_jwt = false # Webhook: called by Google Forms
-
-project_id = "pphdcfxucfndmwulpfwv"
-
-[auth]
-enable_manual_linking = true
-
-# ──────────────────────────────────────────────────────────────
-# Edge Functions JWT Configuration
-#
-# verify_jwt = false  → public endpoint, no auth required
-# verify_jwt = true   → requires valid Supabase JWT in Authorization header
-#
-# Functions that accept external webhooks or public traffic MUST
-# implement their own auth (API key, signature verification, etc.)
-# ──────────────────────────────────────────────────────────────
-
-# --- AI / Content generation (called from authenticated frontend, but uses service_role internally) ---
-[functions.ai-content-generator]
-verify_jwt = false # TODO: enable JWT — frontend should pass user token
-
-[functions.chatbot-stream]
-verify_jwt = false # TODO: enable JWT — frontend should pass user token
-
-[functions.translate-content]
-verify_jwt = false # TODO: enable JWT — frontend should pass user token
-
-# --- Lead capture (public forms, no auth required) ---
-[functions.create-lead]
-verify_jwt = false # Public: accepts leads from public pages without auth
-
-[functions.send-lead-notification]
-verify_jwt = false # Internal: triggered by DB webhook/cron
-
-# --- Scheduled/cron functions (invoked by Supabase scheduler) ---
-[functions.send-weekly-digest]
-verify_jwt = false # Cron: invoked by pg_cron, no user context
-
-[functions.send-trial-ending-notification]
-verify_jwt = false # Cron: invoked by pg_cron
-
-[functions.send-weekly-motivation]
-verify_jwt = false # Cron: invoked by pg_cron
-
-[functions.process-crm-automations]
-verify_jwt = false # Cron: invoked by pg_cron
-
-# --- Telegram integration (external webhook) ---
-[functions.validate-telegram]
-verify_jwt = false # Webhook: called by Telegram API
-
-[functions.telegram-password-reset]
-verify_jwt = false # Webhook: called by Telegram API
-
-[functions.telegram-bot-webhook]
-verify_jwt = false # Webhook: called by Telegram API
-
-# --- Notification functions (triggered by DB triggers/webhooks) ---
-[functions.send-collab-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-team-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-friend-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-social-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-booking-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-booking-reminder]
-verify_jwt = false # Cron: invoked by pg_cron
-
-[functions.send-event-confirmation]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-attendee-email]
-verify_jwt = false # Internal: triggered by DB webhook
-
-# --- Seed/admin (development only) ---
-[functions.seed-demo-accounts]
-verify_jwt = false # DEV ONLY: should be disabled in production
+verify_jwt = true # FIXED 2026-03-31: protected, requires admin JWT
 
 # --- SEO / public endpoints ---
 [functions.generate-sitemap]

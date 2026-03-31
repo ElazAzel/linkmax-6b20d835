@@ -151,7 +151,7 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
           type: 'challenge_completed',
           recipientId: user.id,
           data: {
-            challengeTitle: challengeInfo?.title || i18n.t('social.weeklyChallenge', 'Еженедельный челлендж')
+            challengeTitle: challengeInfo?.title || i18n.t('social.weeklyChallenge')
           }
         }
       });
@@ -160,7 +160,7 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
     }
 
     // Notify friends about completed challenge
-    await notifyFriendsAboutChallenge(user.id, challengeInfo?.title || i18n.t('social.challenge', 'Челлендж'));
+    await notifyFriendsAboutChallenge(user.id, challengeInfo?.title || i18n.t('social.challenge'));
   }
 
   return result;
@@ -185,7 +185,7 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
   if (!friendships || friendships.length === 0) return;
 
   const friendIds = friendships.map(f => f.user_id === userId ? f.friend_id : f.user_id);
-  const friendName = userProfile?.display_name || userProfile?.username || i18n.t('common.friend', 'Друг');
+  const friendName = userProfile?.display_name || userProfile?.username || i18n.t('common.friend');
 
   // Notify each friend (in parallel, but limited)
   await Promise.all(
@@ -245,7 +245,7 @@ export async function sendPremiumGift(
         type: 'gift_received',
         recipientId,
         data: {
-          senderName: senderProfile?.display_name || senderProfile?.username || i18n.t('common.user', 'Пользователь'),
+          senderName: senderProfile?.display_name || senderProfile?.username || i18n.t('common.user'),
           days,
           message
         }
@@ -329,7 +329,7 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
             type: 'gift_claimed',
             recipientId: giftInfo.sender_id,
             data: {
-              senderName: recipientProfile?.display_name || recipientProfile?.username || i18n.t('common.recipient', 'Получатель')
+              senderName: recipientProfile?.display_name || recipientProfile?.username || i18n.t('common.recipient')
             }
           }
         });
@@ -449,6 +449,6 @@ function getWeekStart(): string {
   const now = new Date();
   const day = now.getDay();
   const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-  const monday = new Date(now.setDate(diff));
+  const monday = new Date(now.getFullYear(), now.getMonth(), diff);
   return monday.toISOString().split('T')[0];
 }

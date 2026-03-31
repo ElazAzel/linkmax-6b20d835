@@ -127,7 +127,7 @@ serve(async (req: Request) => {
             currency: deal.currency || "KZT",
             status: 'created',
             title: `Invoice: ${deal.title}`
-          } as any);
+          });
           if (!invErr) runCount++;
         }
       } else if (auto.action_type === "notify_owner") {

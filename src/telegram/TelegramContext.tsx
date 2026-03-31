@@ -120,7 +120,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
         const tg = window.Telegram?.WebApp;
 
         if (!tg) {
-            console.warn('Telegram WebApp SDK not available — running outside Telegram');
+            if (import.meta.env.DEV) console.debug('Telegram WebApp SDK not available — running outside Telegram');
             setIsLoading(false);
             setError('not_in_telegram');
             setRoute({ screen: 'error' });

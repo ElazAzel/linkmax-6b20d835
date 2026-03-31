@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { corsHeaders } from "../_shared/utils.ts";
 
 interface Step {
   id: string;
@@ -25,16 +21,20 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    const senderEmail = Deno.env.get('EMAIL_SENDER') || 'LinkMAX <noreply@lnkmx.my>';
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     console.log("Processing email sequences...");
 
     // 1. Fetch active subscriptions scheduled for now or earlier
+    //    Idempotency: skip subscriptions already being processed (processing_started_at within last 5 min)
+    const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
     const { data: subscriptions, error: subError } = await supabase
       .from('lead_sequence_subscriptions')
       .select('*, lead:leads(*), sequence:email_sequences(*)')
       .eq('status', 'running')
       .lte('next_run_at', new Date().toISOString())
+      .or(`processing_started_at.is.null,processing_started_at.lt.${fiveMinAgo}`)
       .limit(MAX_EMAILS_PER_RUN);
 
     if (subError) throw subError;
@@ -44,6 +44,13 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
+
+    // 2. Atomically mark subscriptions as processing (idempotency lock)
+    const subIds = subscriptions.map((s: any) => s.id);
+    await supabase
+      .from('lead_sequence_subscriptions')
+      .update({ processing_started_at: new Date().toISOString() })
+      .in('id', subIds);
 
     const processed = [];
 
@@ -107,7 +114,7 @@ serve(async (req) => {
                 'Authorization': `Bearer ${resendApiKey}`
               },
               body: JSON.stringify({
-                from: 'LinkMAX <noreply@lnkmx.my>',
+                from: senderEmail,
                 to: sub.lead.email,
                 subject: template.subject.replace('{lead_name}', leadName),
                 html: template.content_html

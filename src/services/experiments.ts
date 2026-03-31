@@ -13,7 +13,7 @@ export async function createExperiment(
 ) {
     try {
         // 1. Create the experiment
-        const { data: experiment, error: expError } = await (supabase as unknown as { from: (schema: string) => any })
+        const { data: experiment, error: expError } = await supabase
             .from('experiments')
             .insert({
                 page_id: pageId,
@@ -33,13 +33,13 @@ export async function createExperiment(
             block_data: v.block_data as unknown as Json
         }));
 
-        const { error: varError } = await (supabase as unknown as { from: (schema: string) => any })
+        const { error: varError } = await supabase
             .from('experiment_variants')
             .insert(variantsToInsert);
 
         if (varError) {
             // Cleanup experiment if variants fail
-            await (supabase as unknown as { from: (schema: string) => any }).from('experiments').delete().eq('id', experiment.id);
+            await supabase.from('experiments').delete().eq('id', experiment.id);
             throw varError;
         }
 
@@ -64,7 +64,7 @@ export async function updateExperimentStatus(
             updateData.ended_at = new Date().toISOString();
         }
 
-        const { data, error } = await (supabase as unknown as { from: (schema: string) => any })
+        const { data, error } = await supabase
             .from('experiments')
             .update(updateData)
             .eq('id', experimentId)
@@ -83,7 +83,7 @@ export async function updateExperimentStatus(
  */
 export async function deleteExperiment(experimentId: string) {
     try {
-        const { error } = await (supabase as unknown as { from: (schema: string) => any })
+        const { error } = await supabase
             .from('experiments')
             .delete()
             .eq('id', experimentId);
@@ -105,7 +105,7 @@ export async function setWinningVariant(
 ) {
     try {
         // 1. Mark experiment as ended with winner
-        const { data: experiment, error: expError } = await (supabase as unknown as { from: (schema: string) => any })
+        const { data: experiment, error: expError } = await supabase
             .from('experiments')
             .update({
                 status: 'ended',
@@ -134,6 +134,100 @@ export async function setWinningVariant(
         }
 
         return { data: experiment, error: null };
+    } catch (error) {
+        return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
+    }
+}
+
+/**
+ * Track an impression (view) for an experiment variant.
+ * Called when a visitor sees a specific variant of an A/B test.
+ */
+export async function trackImpression(
+    experimentId: string,
+    variantId: string,
+    visitorId?: string
+) {
+    try {
+        const { error } = await supabase
+            .from('experiment_events')
+            .insert({
+                experiment_id: experimentId,
+                variant_id: variantId,
+                event_type: 'impression',
+                visitor_id: visitorId || crypto.randomUUID(),
+                created_at: new Date().toISOString()
+            });
+
+        if (error) {
+            console.warn('Failed to track impression:', error.message);
+        }
+    } catch {
+        // Non-blocking — tracking should never break user experience
+    }
+}
+
+/**
+ * Track a conversion event for an experiment variant.
+ * Called when a visitor performs the desired action (click, signup, purchase).
+ */
+export async function trackConversion(
+    experimentId: string,
+    variantId: string,
+    conversionType: string = 'click',
+    visitorId?: string
+) {
+    try {
+        const { error } = await supabase
+            .from('experiment_events')
+            .insert({
+                experiment_id: experimentId,
+                variant_id: variantId,
+                event_type: 'conversion',
+                conversion_type: conversionType,
+                visitor_id: visitorId || crypto.randomUUID(),
+                created_at: new Date().toISOString()
+            });
+
+        if (error) {
+            console.warn('Failed to track conversion:', error.message);
+        }
+    } catch {
+        // Non-blocking
+    }
+}
+
+/**
+ * Get experiment stats: impressions and conversions per variant.
+ */
+export async function getExperimentStats(experimentId: string) {
+    try {
+        const { data, error } = await supabase
+            .from('experiment_events')
+            .select('variant_id, event_type, conversion_type')
+            .eq('experiment_id', experimentId);
+
+        if (error) throw error;
+
+        const stats: Record<string, { impressions: number; conversions: number; conversionRate: number }> = {};
+
+        (data || []).forEach((event: any) => {
+            if (!stats[event.variant_id]) {
+                stats[event.variant_id] = { impressions: 0, conversions: 0, conversionRate: 0 };
+            }
+            if (event.event_type === 'impression') {
+                stats[event.variant_id].impressions++;
+            } else if (event.event_type === 'conversion') {
+                stats[event.variant_id].conversions++;
+            }
+        });
+
+        // Calculate conversion rates
+        Object.values(stats).forEach(s => {
+            s.conversionRate = s.impressions > 0 ? (s.conversions / s.impressions) * 100 : 0;
+        });
+
+        return { data: stats, error: null };
     } catch (error) {
         return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
     }

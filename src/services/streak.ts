@@ -51,11 +51,11 @@ export async function getStreakData(userId: string): Promise<StreakData | null> 
 }
 
 export const STREAK_MILESTONES = [
-  { days: 7, bonus: 1, label: '1 Week' },
-  { days: 14, bonus: 2, label: '2 Weeks' },
-  { days: 30, bonus: 3, label: '1 Month' },
-  { days: 60, bonus: 5, label: '2 Months' },
-  { days: 100, bonus: 7, label: '100 Days' },
+  { days: 7, bonus: 1, labelKey: 'streak.milestone.1week' },
+  { days: 14, bonus: 2, labelKey: 'streak.milestone.2weeks' },
+  { days: 30, bonus: 3, labelKey: 'streak.milestone.1month' },
+  { days: 60, bonus: 5, labelKey: 'streak.milestone.2months' },
+  { days: 100, bonus: 7, labelKey: 'streak.milestone.100days' },
 ];
 
 export function getNextMilestone(currentStreak: number) {

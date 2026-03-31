@@ -257,25 +257,8 @@ async function updateFriendsCount(userId: string) {
     .eq('id', userId);
 }
 
-export async function searchUsers(query: string): Promise<Array<{ id: string; username: string | null; display_name: string | null; avatar_url: string | null }>> {
-  if (!query || query.length < 2) return [];
-
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const { data, error } = await supabase
-    .from('user_profiles')
-    .select('id, username, display_name, avatar_url')
-    .or(`username.ilike.%${query}%,display_name.ilike.%${query}%`)
-    .neq('id', user?.id || '')
-    .limit(10);
-
-  if (error) {
-    logger.error('Search users error', error, { context: 'friends', data: { query } });
-    return [];
-  }
-
-  return data || [];
-}
+// Search users — delegates to shared service (MED-4 fix)
+export { searchUsers } from '@/services/userSearch';
 
 export async function getUserPageSlug(userId: string): Promise<string | null> {
   const { data, error } = await supabase

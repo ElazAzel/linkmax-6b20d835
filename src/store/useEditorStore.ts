@@ -259,6 +259,12 @@ export const useEditorStore = create<EditorState>()(
                 reviewMode: 'normal' as ReviewMode,
             }, false, 'reset'),
         }),
-        { name: 'EditorStore' }
+        { name: 'EditorStore', serialize: {
+            replacer: (_key: string, value: unknown) => {
+                if (value instanceof Set) return Array.from(value);
+                if (value instanceof Map) return Object.fromEntries(value);
+                return value;
+            }
+        } as any }
     )
 );

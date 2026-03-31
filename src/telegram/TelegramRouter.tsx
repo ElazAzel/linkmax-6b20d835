@@ -179,7 +179,7 @@ function HomeScreen() {
                 </div>
                 <div className="tg-stat-card">
                     <span className="tg-stat-value">
-                        {loading ? '...' : (metrics?.invoices?.totalPaidAmount ? `${metrics.invoices.totalPaidAmount}₽` : '0₽')}
+                        {loading ? '...' : (metrics?.invoices?.totalPaidAmount ? `${metrics.invoices.totalPaidAmount.toLocaleString()} ₸` : '0 ₸')}
                     </span>
                     <span className="tg-stat-label">{t('tma.stats_revenue')}</span>
                 </div>
