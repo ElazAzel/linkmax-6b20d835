@@ -1,86 +1,25 @@
-/**
- * Page service - handles all page-related API operations
- */
 import { supabase } from '@/platform/supabase/client';
+import type { AppDatabase } from '@/platform/supabase/extended-types';
 import type { PageData, Block, ProfileBlock, PageTheme, EditorMode, GridConfig, PageExperiment } from '@/types/page';
 import { createDefaultPageData } from '@/lib/constants';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
+import type { Json } from '@/platform/supabase/types';
 
 // ============= Types (exported for backward compatibility) =============
-export interface DbPage {
-  id: string;
-  user_id: string;
-  slug: string;
-  title: string | null;
-  description: string | null;
-  avatar_url: string | null;
-  avatar_style: Json;
-  theme_settings: Json;
-  seo_meta: Json;
-  is_published: boolean;
-  view_count: number;
-  favicon_url: string | null;
-  hide_branding: boolean;
-  webhook_url: string | null;
-  webhook_secret: string | null;
-  organization_id: string | null;
-  custom_domain?: string | null;
-  grid_config?: GridConfig | null;
-  niche?: string | null;
-  integrations?: Record<string, string> | null;
-  city?: string | null;
-  profession?: string | null;
-  entity_type?: string | null;
-  contact_email?: string | null;
-  contact_phone?: string | null;
-  contact_whatsapp?: string | null;
-  quality_score?: number | null;
-  quality_breakdown?: Record<string, any> | null;
-  index_exclusion_reasons?: string[] | null;
-  last_indexnow_at?: string | null;
-  service_slugs?: Record<string, any> | null;
+export type DbPage = AppDatabase['public']['Tables']['pages']['Row'] & {
   blocks?: DbBlock[];
-  private_page_data?: { chatbot_context?: string }[] | { chatbot_context?: string } | null;
-  created_at: string;
-  updated_at: string;
-  preview_url: string | null;
-  experiments?: RawExperiment[]; // Raw experiments from DB
-}
+  experiments?: RawExperiment[];
+  private_page_data?: { chatbot_context?: string | null }[] | { chatbot_context?: string | null } | null;
+};
 
-export interface RawExperiment {
-  id: string;
-  page_id: string;
-  name: string;
-  status: string;
-  started_at: string;
-  ended_at: string;
+export type DbBlock = AppDatabase['public']['Tables']['blocks']['Row'];
+
+export type RawExperiment = AppDatabase['public']['Tables']['experiments']['Row'] & {
   experiment_variants: RawExperimentVariant[];
-}
+};
 
-export interface RawExperimentVariant {
-  id: string;
-  experiment_id: string;
-  base_block_id: string;
-  variant_label: string;
-  block_data: Partial<Block>;
-  traffic_weight: number;
-}
-
-export interface DbBlock {
-  id: string;
-  page_id: string;
-  type: string;
-  position: number;
-  title: string | null;
-  content: Json;
-  style: Json;
-  is_premium: boolean;
-  click_count: number;
-  created_at: string;
-  schedule?: Json;
-}
+export type RawExperimentVariant = AppDatabase['public']['Tables']['experiment_variants']['Row'];
 
 export interface SavePageResult {
   data: DbPage | null;
@@ -126,15 +65,15 @@ function mapExperimentData(experiments: RawExperiment[]): PageExperiment[] {
     page_id: exp.page_id,
     name: exp.name,
     status: exp.status as PageExperiment['status'],
-    started_at: exp.started_at,
-    ended_at: exp.ended_at,
+    started_at: exp.started_at || undefined,
+    ended_at: exp.ended_at || undefined,
     variants: (exp.experiment_variants || []).map((v) => ({
       id: v.id,
       experiment_id: v.experiment_id,
-      base_block_id: v.base_block_id,
-      variant_label: v.variant_label,
-      block_data: v.block_data,
-      traffic_weight: v.traffic_weight
+      base_block_id: v.base_block_id || '',
+      variant_label: v.variant_label || '',
+      block_data: (v.block_data as unknown) as Partial<Block>,
+      traffic_weight: v.traffic_weight ?? 0
     }))
   }));
 }
@@ -378,10 +317,10 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: pg.grid_config || undefined,
+      gridConfig: (pg.grid_config as unknown as GridConfig) || undefined,
       niche: pg.niche || 'other',
       previewUrl: pg.preview_url || undefined,
-      integrations: pg.integrations || undefined,
+      integrations: (pg.integrations as unknown as PageData['integrations']) || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       webhook_url: pg.webhook_url || undefined,
@@ -431,10 +370,10 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: pg.grid_config || undefined,
+      gridConfig: (pg.grid_config as unknown as GridConfig) || undefined,
       niche: pg.niche || 'other',
       previewUrl: pg.preview_url || undefined,
-      integrations: pg.integrations || undefined,
+      integrations: (pg.integrations as unknown as PageData['integrations']) || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       webhook_url: pg.webhook_url || undefined,
@@ -478,20 +417,8 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
         error: null,
       };
     }
-
     const pg = page as unknown as DbPage;
     const blocks = pg.blocks as unknown as DbBlock[];
-
-    // Map experiments and variants
-    const experiments: PageExperiment[] = (pg.experiments || []).map((exp) => ({
-      id: exp.id,
-      page_id: exp.page_id,
-      name: exp.name,
-      status: exp.status as PageExperiment['status'],
-      started_at: exp.started_at,
-      ended_at: exp.ended_at,
-      variants: exp.experiment_variants || []
-    }));
 
     const pageData: PageData = {
       id: pg.id,
@@ -504,17 +431,17 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: (pg as unknown as { grid_config?: GridConfig }).grid_config || undefined,
-      niche: (pg as unknown as { niche?: string }).niche || 'other',
-      previewUrl: (pg as unknown as { preview_url?: string }).preview_url || undefined,
-      integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      gridConfig: (pg.grid_config as unknown as GridConfig) || undefined,
+      niche: pg.niche || 'other',
+      previewUrl: pg.preview_url || undefined,
+      integrations: (pg.integrations as unknown as Record<string, string>) || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       webhook_url: pg.webhook_url || undefined,
       webhook_secret: pg.webhook_secret || undefined,
       organization_id: pg.organization_id || undefined,
       updatedAt: pg.updated_at || null,
-      experiments,
+      experiments: mapExperimentData(pg.experiments || []),
       // Entity fields
       city: pg.city || undefined,
       profession: pg.profession || undefined,
@@ -525,15 +452,15 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       quality_score: pg.quality_score ?? undefined,
       // Diagnostics fields
       _diagnostics: {
-        quality_breakdown: pg.quality_breakdown || {},
+        quality_breakdown: (pg.quality_breakdown as unknown as Record<string, { passed: boolean; points: number; count?: number }>) || {},
         index_exclusion_reasons: pg.index_exclusion_reasons || [],
         last_indexnow_at: pg.last_indexnow_at || null,
-        service_slugs: pg.service_slugs || {},
+        service_slugs: (pg.service_slugs as unknown as Record<string, string>) || {},
       },
     };
 
     // Extract chatbot context
-    const privateData = pg.private_page_data as unknown as { chatbot_context?: string }[] | { chatbot_context?: string } | null;
+    const privateData = pg.private_page_data;
     const chatbotContext = Array.isArray(privateData)
       ? privateData[0]?.chatbot_context
       : privateData?.chatbot_context;

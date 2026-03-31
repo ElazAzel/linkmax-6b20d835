@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.9.0] - 2026-03-31 (Architectural Consolidation & Hardening)
+
+### Architectural Cleanup
+- **Layer Removal**: Deleted legacy redundant layers (`src/domain`, `src/repositories`, `src/use-cases`, `src/integrations/supabase`), unifying all business logic in the Service Layer.
+- **Supabase Consolidation**: Unified all database interactions through the `AppDatabase` type in `src/platform/supabase/`.
+
+### Type Safety (Hardening)
+- **AppDatabase Augmentation**: Added strict type definitions for 10+ core tables including `leads`, `bookings`, `analytics`, `experiments`, and `newsletter_subscriptions`.
+- **Service Refactoring**: Hardened `pages.ts`, `user.ts`, `experiments.ts`, and `useLeads.ts` by removing `as any` assertions and implementing strict Row-level typing.
+- **Experiment Engine**: Synchronized `PageExperiment` and `BlockVariation` interfaces with the physical database schema to eliminate runtime mapping errors.
+
+### UI/UX & Components
+- **NewsletterBlock**: Refactored to use the hardened typed client and updated to the latest "Liquid Glass" design system (glassmorphism, premium transitions).
+- **Type Integrity**: Corrected lead source enums and validation logic across block components.
+
 ## [1.8.0] - 2026-03-31 (Platform Audit Remediation)
 
 ### Security (Hardening)

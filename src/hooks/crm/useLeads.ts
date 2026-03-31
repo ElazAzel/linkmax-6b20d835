@@ -5,32 +5,13 @@ import { useAuth } from '@/hooks/user/useAuth';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
-export type LeadSource = 'page_view' | 'form' | 'messenger' | 'manual' | 'other';
-export type InteractionType = 'note' | 'call' | 'email' | 'message' | 'meeting';
+import type { AppDatabase } from '@/platform/supabase/extended-types';
 
-export interface Lead {
-  id: string;
-  user_id: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  source: LeadSource;
-  status: LeadStatus;
-  notes: string | null;
-  metadata: Record<string, any>;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface LeadInteraction {
-  id: string;
-  lead_id: string;
-  user_id: string;
-  type: InteractionType;
-  content: string;
-  created_at: string;
-}
+export type Lead = AppDatabase['public']['Tables']['leads']['Row'];
+export type LeadStatus = Lead['status'];
+export type LeadSource = Lead['source'];
+export type LeadInteraction = AppDatabase['public']['Tables']['lead_interactions']['Row'];
+export type InteractionType = LeadInteraction['type'];
 
 export function useLeads() {
   const { user } = useAuth();
@@ -51,7 +32,7 @@ export function useLeads() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setLeads((data as Lead[]) || []);
+      setLeads(data || []);
     } catch (error) {
       logger.error('Error fetching leads', error, { context: 'useLeads' });
       toast.error(t('toasts.leads.loadError'));
@@ -76,8 +57,8 @@ export function useLeads() {
           name: leadData.name || '',
           email: leadData.email || null,
           phone: leadData.phone || null,
-          source: leadData.source || 'manual',
-          status: leadData.status || 'new',
+          source: (leadData.source as any) || 'manual',
+          status: (leadData.status as any) || 'new',
           notes: leadData.notes || null,
           metadata: leadData.metadata || {},
         })
@@ -86,9 +67,11 @@ export function useLeads() {
 
       if (error) throw error;
 
-      setLeads(prev => [data as Lead, ...prev]);
-      toast.success(t('toasts.leads.created'));
-      return data as Lead;
+      if (data) {
+        setLeads(prev => [data, ...prev]);
+        toast.success(t('toasts.leads.created'));
+      }
+      return data;
     } catch (error) {
       logger.error('Error creating lead', error, { context: 'useLeads' });
       toast.error(t('toasts.leads.createError'));
@@ -105,7 +88,7 @@ export function useLeads() {
       setSaving(true);
       const { error } = await supabase
         .from('leads')
-        .update(updates)
+        .update(updates as any)
         .eq('id', id)
         .eq('user_id', user.id);
 
@@ -131,12 +114,12 @@ export function useLeads() {
     try {
       const { error } = await supabase
         .from('leads')
-        .update({ status: 'contacted' as LeadStatus })
+        .update({ status: 'contacted' })
         .eq('id', id)
         .eq('user_id', user.id);
       if (error) throw error;
       setLeads(prev => prev.map(lead =>
-        lead.id === id ? { ...lead, status: 'contacted' as LeadStatus } : lead
+        lead.id === id ? { ...lead, status: 'contacted' } : lead
       ));
       return true;
     } catch (error) {
@@ -189,8 +172,8 @@ export function useLeads() {
     createLead,
     updateLead,
     deleteLead,
-    quickReply,
     refreshLeads: fetchLeads,
+    quickReply,
     getLeadStats,
   };
 }
@@ -213,7 +196,7 @@ export function useLeadInteractions(leadId: string | null) {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setInteractions((data as LeadInteraction[]) || []);
+      setInteractions(data || []);
     } catch (error) {
       logger.error('Error fetching interactions', error, { context: 'useLeads', data: { leadId } });
     } finally {
@@ -242,8 +225,10 @@ export function useLeadInteractions(leadId: string | null) {
 
       if (error) throw error;
 
-      setInteractions(prev => [data as LeadInteraction, ...prev]);
-      return data as LeadInteraction;
+      if (data) {
+        setInteractions(prev => [data, ...prev]);
+      }
+      return data;
     } catch (error) {
       logger.error('Error adding interaction', error, { context: 'useLeads', data: { leadId } });
       toast.error(t('toasts.leads.interactionError'));

@@ -2,25 +2,11 @@
  * User service - handles user profile and authentication-related operations
  */
 import { supabase } from '@/platform/supabase/client';
-import type { DbUserProfile, PremiumStatusResult, ApiResult } from '@/types/api';
+import type { AppDatabase } from '@/platform/supabase/extended-types';
+import type { PremiumStatusResult, ApiResult } from '@/types/api';
 
 // ============= Types =============
-export interface UserProfile {
-  id: string;
-  username: string | null;
-  display_name: string | null;
-  bio: string | null;
-  avatar_url: string | null;
-  is_premium: boolean | null;
-  trial_ends_at: string | null;
-  email_notifications_enabled: boolean | null;
-  telegram_notifications_enabled: boolean | null;
-  telegram_chat_id: string | null;
-  push_notifications_enabled: boolean | null;
-  push_subscription: unknown | null;
-  friends_count: number | null;
-  kaspi_widget_enabled: boolean | null;
-}
+export type UserProfile = AppDatabase['public']['Tables']['user_profiles']['Row'];
 
 export interface UpdateUsernameResult {
   success: boolean;
@@ -90,7 +76,7 @@ export async function loadUserProfile(userId: string): Promise<ApiResult<UserPro
       return { data: null, error: wrapError(error) };
     }
 
-    return { data: data as UserProfile | null, error: null };
+    return { data, error: null };
   } catch (error) {
     return { data: null, error: wrapError(error) };
   }
@@ -170,9 +156,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
 
     const now = new Date();
     const trialEndsAt = data.trial_ends_at ? new Date(data.trial_ends_at) : null;
-    const premiumExpiresAt = (data as { premium_expires_at?: string }).premium_expires_at 
-      ? new Date((data as { premium_expires_at?: string }).premium_expires_at!) 
-      : null;
+    const premiumExpiresAt = data.premium_expires_at ? new Date(data.premium_expires_at) : null;
     
     const inTrial = trialEndsAt ? trialEndsAt > now : false;
     const premiumActive = premiumExpiresAt ? premiumExpiresAt > now : false;
@@ -187,7 +171,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const hasActivePremium = premiumActive || isPremiumFlagValid || inTrial;
     
     // Map tier from profile
-    const profileTier = (data as { premium_tier?: string }).premium_tier;
+    const profileTier = data.premium_tier;
     
     if (hasActivePremium) {
       isPremium = true;
@@ -202,7 +186,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
       isPremium = false; // Starter is not "premium" but has CRM access
     }
 
-    return { isPremium, tier, trialEndsAt: data.trial_ends_at, inTrial };
+    return { isPremium, tier, trialEndsAt: data.trial_ends_at || null, inTrial };
   } catch (error) {
     return { isPremium: false, tier: 'identity', trialEndsAt: null, inTrial: false };
   }

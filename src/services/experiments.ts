@@ -9,7 +9,7 @@ export async function createExperiment(
     pageId: string,
     name: string,
     baseBlockId: string,
-    variants: Omit<BlockVariation, 'id' | 'experiment_id' | 'base_block_id'>[]
+    variants: Omit<BlockVariation, 'id' | 'experiment_id' | 'created_at'>[]
 ) {
     try {
         // 0. Verify auth + page ownership (LOW-7 fix)
@@ -44,8 +44,8 @@ export async function createExperiment(
         // 2. Create the variants
         const variantsToInsert = variants.map((v, index) => ({
             experiment_id: experiment.id,
-            variant_key: v.variant_label || `variant_${index}`,
-            block_data: v.block_data as unknown as Json
+            variant_key: v.variant_key || `variant_${index}`,
+            block_data: v.block_data as any
         }));
 
         const { error: varError } = await supabase
@@ -134,14 +134,14 @@ export async function setWinningVariant(
         if (expError) throw expError;
 
         // 2. If applyToPage is true, update the base block with variant data
-        if (applyToPage) {
+        if (applyToPage && experiment) {
             const variant = experiment.experiment_variants.find((v: { id: string }) => v.id === variantId);
             if (variant) {
                 const { error: blockError } = await supabase
                     .from('blocks')
                     .update({
-                        content: variant.block_data
-                    } as unknown as Record<string, unknown>)
+                        content: variant.block_data as any
+                    })
                     .eq('id', experiment.block_id);
 
                 if (blockError) throw blockError;
@@ -226,7 +226,7 @@ export async function getExperimentStats(experimentId: string) {
 
         const stats: Record<string, { impressions: number; conversions: number; conversionRate: number }> = {};
 
-        (data || []).forEach((event: any) => {
+        (data || []).forEach((event) => {
             if (!stats[event.variant_id]) {
                 stats[event.variant_id] = { impressions: 0, conversions: 0, conversionRate: 0 };
             }

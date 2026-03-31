@@ -29,7 +29,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const description = getI18nText(block.description, i18n.language as SupportedLanguage);
-  const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage) || t('actions.subscribe', 'Subscribe');
+  const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage) || t('newsletter.subscribe', 'Подписаться');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,16 +49,16 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
     setIsSubmitting(true);
 
     try {
-      // Save newsletter subscription using raw insert (types not yet generated)
+      // Save newsletter subscription using typed client
       const { error: subscriptionError } = await supabase
-        .from('newsletter_subscriptions' as any)
+        .from('newsletter_subscriptions')
         .insert({
           email: trimmedEmail,
           page_id: pageId,
           block_id: block.id,
           owner_id: pageOwnerId,
           status: 'active',
-        } as any);
+        });
 
       if (subscriptionError) {
         // Check if already subscribed (unique constraint violation)
@@ -78,7 +78,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
           name: trimmedEmail.split('@')[0], // Use email prefix as name
           email: trimmedEmail,
           user_id: pageOwnerId,
-          source: 'form', // Using 'form' as newsletter source
+          source: 'form',
           status: 'new',
           metadata: {
             block_id: block.id,
@@ -86,7 +86,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
             subscribed_at: new Date().toISOString(),
             source_type: 'newsletter',
           },
-        } as any);
+        });
 
       // Lead creation failure is not critical, just log it
       if (leadError) {
@@ -106,12 +106,14 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
   if (isSubscribed) {
     return (
-      <Card className="p-5 sm:p-6 bg-card border-border shadow-sm rounded-xl">
-        <div className="flex flex-col items-center gap-3 text-center py-4">
-          <CheckCircle className="h-10 w-10 text-primary" />
-          <h3 className="font-semibold text-lg">{t('newsletter.thankYou', 'Thank you!')}</h3>
-          <p className="text-sm text-muted-foreground">
-            {t('newsletter.subscriptionConfirmed', 'Your subscription has been confirmed.')}
+      <Card className="p-5 sm:p-6 bg-card/60 backdrop-blur-xl border-white/10 shadow-glass rounded-[2rem] animate-in zoom-in-95 duration-500">
+        <div className="flex flex-col items-center gap-3 text-center py-6">
+          <div className="p-4 rounded-full bg-primary/20 text-primary shadow-inner">
+            <CheckCircle className="h-8 w-8" />
+          </div>
+          <h3 className="font-bold text-xl tracking-tight mt-2">{t('newsletter.thankYou', 'Спасибо!')}</h3>
+          <p className="text-sm text-foreground/60 max-w-[200px]">
+            {t('newsletter.subscriptionConfirmed', 'Ваша подписка успешно подтверждена.')}
           </p>
         </div>
       </Card>
@@ -119,27 +121,28 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
   }
 
   return (
-    <div className="w-full p-6 sm:p-8 rounded-[2rem] glass-card backdrop-blur-xl border-white/10 shadow-glass-xl relative overflow-hidden group">
-      {/* Background glow effect */}
-      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-colors duration-500" />
+    <div className="w-full p-6 sm:p-8 rounded-[2.2rem] glass-card backdrop-blur-2xl border-white/10 shadow-glass-xl relative overflow-hidden group transition-all duration-500 hover:shadow-primary/5">
+      {/* Background glow effects */}
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-all duration-700" />
+      <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/5 blur-[80px] rounded-full group-hover:bg-blue-500/10 transition-all duration-700" />
 
       <div className="relative z-10">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 rounded-xl bg-primary/10 text-primary shadow-sm shadow-primary/20">
+        <div className="flex items-center gap-3.5 mb-5">
+          <div className="p-2.5 rounded-2xl bg-primary/15 text-primary shadow-[0_0_20px_rgba(var(--primary),0.15)] group-hover:scale-110 transition-transform duration-300">
             <Mail className="h-6 w-6" />
           </div>
-          <h3 className="text-xl font-bold tracking-tight text-gradient">
+          <h3 className="text-xl font-extrabold tracking-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
             {title || t('newsletter.title', 'Подпишитесь')}
           </h3>
         </div>
 
         {description && (
-          <p className="text-sm text-foreground/70 mb-6 leading-relaxed font-medium">
+          <p className="text-[0.95rem] text-foreground/60 mb-7 leading-relaxed font-medium">
             {description}
           </p>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           <div className="relative group/input">
             <Input
               type="email"
@@ -147,38 +150,37 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t('newsletter.emailPlaceholder', 'Ваш email')}
               required
-              disabled={status === 'loading'}
-              className="h-14 rounded-2xl glass-input border-white/5 focus:border-primary/50 text-base font-medium transition-all"
+              disabled={isSubmitting}
+              className="h-14 rounded-2xl glass-input bg-white/5 border-white/5 focus:border-primary/40 focus:bg-white/10 text-base font-semibold transition-all duration-300 placeholder:text-foreground/30"
             />
           </div>
 
           <Button
             type="submit"
-            disabled={status === 'loading'}
-            className="w-full h-14 rounded-2xl text-base font-bold shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2"
-          >
-            {status === 'loading' ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : status === 'success' ? (
-              <Check className="h-5 w-5" />
-            ) : (
-              <Send className="h-5 w-5" />
+            disabled={isSubmitting}
+            variant="default"
+            className={cn(
+              "w-full h-14 rounded-2xl text-base font-bold shadow-xl shadow-primary/25",
+              "hover:scale-[1.01] hover:shadow-primary/35 active:scale-[0.98] transition-all duration-300",
+              "gap-2.5 relative overflow-hidden group/btn"
             )}
-            {buttonText || t('newsletter.subscribe', 'Подписаться')}
+          >
+            {isSubmitting ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Send className="h-5 w-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+            )}
+            {buttonText}
+            
+            {/* Glossy overlay effect */}
+            <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent pointer-events-none opacity-0 group-hover/btn:opacity-100 transition-opacity" />
           </Button>
         </form>
 
-        {status === 'success' && (
-          <p className="text-xs font-bold text-center text-emerald-400 mt-4 animate-in fade-in slide-in-from-top-2">
-            {t('newsletter.success', 'Спасибо за подписку!')}
-          </p>
-        )}
-
-        {status === 'error' && (
-          <p className="text-xs font-bold text-center text-red-400 mt-4 animate-in fade-in slide-in-from-top-2">
-            {t('newsletter.error', 'Ошибка. Попробуйте снова.')}
-          </p>
-        )}
+        <p className="text-[10px] text-center text-foreground/30 mt-5 font-medium flex items-center justify-center gap-1">
+          <Crown className="h-2.5 w-2.5 opacity-50" />
+          {t('newsletter.verified', 'Безопасная подписка от LinkMAX')}
+        </p>
       </div>
     </div>
   );

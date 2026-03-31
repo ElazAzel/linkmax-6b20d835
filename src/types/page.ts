@@ -45,19 +45,19 @@ export interface PageIntegrations {
   webhook_url?: string;
 }
 
-// Experiment types
 export interface BlockVariation {
   id: string;
   experiment_id: string;
-  base_block_id: string;
-  variant_label: string;
+  variant_key: string;
   block_data: Partial<Block>;
-  traffic_weight: number;
+  traffic_weight: number | null;
+  created_at: string;
 }
 
 export interface PageExperiment {
   id: string;
   page_id: string;
+  block_id: string; // The base block being tested
   name: string;
   status: 'draft' | 'running' | 'paused' | 'ended';
   started_at?: string;
