@@ -68,6 +68,13 @@ export function useGallery() {
     }
   }, [t]);
 
+  // Get unique cities from loaded pages
+  const cities = useMemo(() => {
+    const citySet = new Set<string>();
+    pages.forEach(p => { if (p.city) citySet.add(p.city); });
+    return Array.from(citySet).sort();
+  }, [pages]);
+
   return {
     pages,
     loading,
@@ -76,7 +83,10 @@ export function useGallery() {
     refetch: fetchPages,
     selectedNiche,
     setSelectedNiche,
+    selectedCity,
+    setSelectedCity,
     nicheCounts,
+    cities,
   };
 }
 
