@@ -22,10 +22,10 @@ export interface GalleryPage {
 export type LeaderboardPeriod = 'week' | 'month' | 'all';
 
 // Fetch all published pages for gallery with premium and popular pages first
-export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage[]> {
+export async function getGalleryPages(niche?: Niche | null, city?: string | null): Promise<GalleryPage[]> {
   let query = supabase
     .from('pages')
-    .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche, user_id')
+    .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche, user_id, city')
     .eq('is_published', true);
 
   if (niche) {
