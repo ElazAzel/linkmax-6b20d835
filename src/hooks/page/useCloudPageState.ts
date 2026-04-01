@@ -440,6 +440,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     contact_email?: string;
     contact_phone?: string;
     contact_whatsapp?: string;
+    country_code?: string;
   }) => {
     if (!user || !pageData) return;
 

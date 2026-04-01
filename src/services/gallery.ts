@@ -14,20 +14,25 @@ export interface GalleryPage {
   gallery_featured_at: string | null;
   view_count: number | null;
   niche: string | null;
+  city: string | null;
   is_premium?: boolean;
+  last_seen_at?: string | null;
 }
 
 export type LeaderboardPeriod = 'week' | 'month' | 'all';
 
 // Fetch all published pages for gallery with premium and popular pages first
-export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage[]> {
+export async function getGalleryPages(niche?: Niche | null, city?: string | null): Promise<GalleryPage[]> {
   let query = supabase
     .from('pages')
-    .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche, user_id')
+    .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche, user_id, city')
     .eq('is_published', true);
 
   if (niche) {
     query = query.eq('niche', niche);
+  }
+  if (city) {
+    query = query.eq('city', city);
   }
 
   const { data, error } = await query
@@ -50,7 +55,7 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
     .in('id', userIds);
 
   const premiumMap = new Map<string, boolean>();
-  profiles?.forEach(p => {
+  profiles?.forEach((p: any) => {
     const isPremium = !!p.is_premium || (!!p.trial_ends_at && new Date(p.trial_ends_at) > new Date());
     premiumMap.set(p.id, isPremium);
   });
@@ -67,7 +72,9 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
     gallery_featured_at: p.gallery_featured_at,
     view_count: p.view_count || 0,
     niche: p.niche,
-    is_premium: premiumMap.get(p.user_id) || false
+    city: (p as any).city || null,
+    is_premium: premiumMap.get(p.user_id) || false,
+    last_seen_at: null,
   }));
 
   pagesWithPremium.sort((a, b) => {

@@ -145,6 +145,9 @@ export function GalleryPageCard({
                 </Badge>
               )}
             </div>
+            {page.city && (
+              <p className="text-[10px] text-muted-foreground truncate">📍 {page.city}</p>
+            )}
           </div>
         </div>
 

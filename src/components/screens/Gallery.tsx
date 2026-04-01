@@ -39,12 +39,13 @@ export default function Gallery() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { pages, loading, likePage } = useGallery();
+  const { pages, loading, likePage, cities } = useGallery();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNiche, setSelectedNiche] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'gallery' | 'leaderboard'>('gallery');
   const [sortMode, setSortMode] = useState<SortMode>('popular');
   const [showSearch, setShowSearch] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
 
   const nicheLabel = selectedNiche ? t(`niches.${selectedNiche}`, selectedNiche) : null;
   const canonical = selectedNiche
@@ -67,7 +68,8 @@ export default function Gallery() {
         page.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         page.description?.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesNiche = !selectedNiche || page.niche === selectedNiche;
-      return matchesSearch && matchesNiche;
+      const matchesCity = !selectedCity || page.city === selectedCity;
+      return matchesSearch && matchesNiche && matchesCity;
     });
 
     switch (sortMode) {
@@ -87,7 +89,7 @@ export default function Gallery() {
     }
 
     return result;
-  }, [pages, searchQuery, selectedNiche, sortMode]);
+  }, [pages, searchQuery, selectedNiche, sortMode, selectedCity]);
 
   const featuredPages = useMemo(() => [...pages]
     .sort((a, b) => (b.gallery_likes || 0) - (a.gallery_likes || 0))
@@ -313,6 +315,39 @@ export default function Gallery() {
               </div>
             </div>
 
+            {/* City filter pills */}
+            {cities.length > 0 && (
+              <div className="px-4 pb-2 overflow-x-auto scrollbar-hide">
+                <div className="flex gap-1.5 min-w-max">
+                  <button
+                    onClick={() => setSelectedCity(null)}
+                    className={cn(
+                      "h-7 px-3 rounded-full text-[11px] font-medium whitespace-nowrap transition-all",
+                      !selectedCity
+                        ? "bg-accent text-accent-foreground shadow-sm"
+                        : "bg-muted/30 text-muted-foreground hover:bg-muted"
+                    )}
+                  >
+                    📍 {t('gallery.allCities', 'Все города')}
+                  </button>
+                  {cities.slice(0, 15).map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setSelectedCity(selectedCity === c ? null : c)}
+                      className={cn(
+                        "h-7 px-3 rounded-full text-[11px] font-medium whitespace-nowrap transition-all",
+                        selectedCity === c
+                          ? "bg-accent text-accent-foreground shadow-sm"
+                          : "bg-muted/30 text-muted-foreground hover:bg-muted"
+                      )}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Sort buttons */}
             <div className="px-4 pb-3 flex items-center gap-2">
               <div className="flex gap-1 bg-muted/30 rounded-full p-0.5">
@@ -354,6 +389,7 @@ export default function Gallery() {
                   onCtaClick={() => {
                     setSearchQuery('');
                     setSortMode('popular');
+                    setSelectedCity(null);
                     updateNiche(null);
                   }}
                 />

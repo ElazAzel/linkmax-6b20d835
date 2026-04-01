@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { logger } from '@/lib/utils/logger';
@@ -18,13 +18,14 @@ export function useGallery() {
   const [pages, setPages] = useState<GalleryPage[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [nicheCounts, setNicheCounts] = useState<Record<string, number>>({});
 
   const fetchPages = useCallback(async () => {
     setLoading(true);
     try {
       const [pagesData, countsData] = await Promise.all([
-        getGalleryPages(selectedNiche),
+        getGalleryPages(selectedNiche, selectedCity),
         getNicheCounts(),
       ]);
 
@@ -35,7 +36,7 @@ export function useGallery() {
     } finally {
       setLoading(false);
     }
-  }, [selectedNiche]);
+  }, [selectedNiche, selectedCity]);
 
   useEffect(() => {
     fetchPages();
@@ -67,6 +68,13 @@ export function useGallery() {
     }
   }, [t]);
 
+  // Get unique cities from loaded pages
+  const cities = useMemo(() => {
+    const citySet = new Set<string>();
+    pages.forEach(p => { if (p.city) citySet.add(p.city); });
+    return Array.from(citySet).sort();
+  }, [pages]);
+
   return {
     pages,
     loading,
@@ -75,7 +83,10 @@ export function useGallery() {
     refetch: fetchPages,
     selectedNiche,
     setSelectedNiche,
+    selectedCity,
+    setSelectedCity,
     nicheCounts,
+    cities,
   };
 }
 
