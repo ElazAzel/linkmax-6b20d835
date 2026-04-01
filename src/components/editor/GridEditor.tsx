@@ -370,7 +370,7 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
   return (
     <div
       className={cn(
-        'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-hidden cursor-grabbing',
+        'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-visible cursor-grabbing',
         widthClass,
         dimensions.gridRows === 2 ? 'h-[296px]' : 'h-[140px]'
       )}

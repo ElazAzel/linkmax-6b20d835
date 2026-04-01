@@ -497,7 +497,7 @@ export const EditorScreen = memo(function EditorScreen({
         const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
         if (!top) return null;
         return (
-          <div className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3.5 shadow-glass-sm backdrop-blur-sm">
+          <div className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3.5 shadow-sm">
             <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
               <Lightbulb className="h-4.5 w-4.5 text-primary" />
             </div>
