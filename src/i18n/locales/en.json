@@ -132,10 +132,20 @@
     "progress": "{{done}} of {{total}}",
     "steps": {
       "createPage": "Create your page",
+      "addBlock": "Add your first block",
+      "publish": "Publish your page",
+      "connectTelegram": "Connect Telegram",
+      "firstLead": "Get your first lead",
       "firstBooking": "Get your first booking",
       "firstConversion": "Get your first response",
-      "firstVisitor": "Get your first visitor",
-      "publish": "Publish"
+      "firstVisitor": "Get your first visitor"
+    },
+    "cta": {
+      "openEditor": "Open",
+      "addBlock": "Add",
+      "publish": "Publish",
+      "connectTelegram": "Connect",
+      "promotePage": "Promote"
     },
     "tips": {
       "addBlock": "Add your first block — a link, product, or video",
