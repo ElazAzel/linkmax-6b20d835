@@ -10,6 +10,7 @@ import { PaidBlockWrapper } from '@/components/blocks/PaidBlockWrapper';
 import { BlockErrorBoundary } from '@/components/editor/BlockErrorBoundary';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
+import { useRenderContext } from '@/contexts/RenderContext';
 
 // Helper function to check if block should be visible based on schedule
 function isBlockVisible(block: Block): boolean {
