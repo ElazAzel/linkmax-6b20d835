@@ -41,8 +41,10 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
   const { t } = useTranslation();
   const data = formData as Partial<SocialsBlock>;
 
-  // Default platforms if none exist
-  const platforms = data.platforms || [];
+  // Ensure all platforms have IDs
+  const platforms = (data.platforms || []).map(p => 
+    p.id ? p : { ...p, id: crypto.randomUUID() }
+  );
 
   const handleAddPlatform = () => {
     onChange({
