@@ -455,7 +455,7 @@ export const HomeScreen = memo(function HomeScreen({
             {isPublished && (
               <Button
                 variant="ghost"
-                className="h-12 w-12 rounded-xl p-0 glass-subtle border-none hover:bg-white/10 opacity-70 hover:opacity-100"
+                className="h-12 w-12 rounded-xl p-0 bg-muted border-none hover:bg-accent opacity-70 hover:opacity-100"
                 onClick={() => window.open(`/${slug}`, '_blank')}
               >
                 <ExternalLink className="h-4 w-4" />
