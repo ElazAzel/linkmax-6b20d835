@@ -215,7 +215,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   return (
     <motion.aside
       className={cn(
-        "hidden md:flex flex-col h-screen sticky top-0 bg-card/50 backdrop-blur-xl border-r border-border/30 z-50",
+        "hidden md:flex flex-col h-screen sticky top-0 bg-card border-r border-border/10 z-50",
       )}
       initial={false}
       animate={{ width: collapsed ? 80 : 256 }}
