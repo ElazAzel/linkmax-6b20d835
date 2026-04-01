@@ -26,7 +26,7 @@ export function useDashboardV2() {
     if (tab && validTabs.includes(tab as DashboardTab)) {
       return tab as DashboardTab;
     }
-    return 'home';
+    return 'editor';
   }, [searchParams]);
 
   // Change tab
