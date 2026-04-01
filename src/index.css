@@ -3,6 +3,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Disable backdrop-blur inside editor blocks for visual clarity */
+[data-editor-block] *,
+[data-editor-block] .glass-card,
+[data-editor-block] .glass,
+[data-editor-block] .glass-button {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* Shimmer animation for lazy loading */
 @keyframes shimmer {
   0% {
