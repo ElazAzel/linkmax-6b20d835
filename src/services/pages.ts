@@ -75,9 +75,10 @@ function mapExperimentData(experiments: RawExperiment[]): PageExperiment[] {
       base_block_id: v.base_block_id || '',
       variant_label: v.variant_label || '',
       block_data: (v.block_data as unknown) as Partial<Block>,
-      traffic_weight: v.traffic_weight ?? 0
+      traffic_weight: v.traffic_weight ?? 0,
+      created_at: v.created_at || '',
     }))
-  }));
+  })) as PageExperiment[];
 }
 
 /**

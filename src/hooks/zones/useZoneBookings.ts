@@ -76,7 +76,7 @@ async function fetchZoneBookings(zoneId: string): Promise<ZoneBooking[]> {
       page_title: pageMap.get(b.page_id)?.title || '',
       page_slug: pageMap.get(b.page_id)?.slug || '',
     };
-  }) as ZoneBooking[];
+  }) as unknown as ZoneBooking[];
 }
 
 export function useZoneBookings(zoneId: string | null) {

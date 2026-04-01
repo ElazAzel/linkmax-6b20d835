@@ -40,7 +40,7 @@ export function useZoneProducts(zoneId: string | null) {
     const createProduct = useMutation({
         mutationFn: async (product: Partial<ZoneProduct>) => {
             if (!zoneId) throw new Error('No zone selected');
-            const { data, error } = await supabase
+            const { data, error } = await (supabase as any)
                 .from('zone_products')
                 .insert({ ...product, zone_id: zoneId })
                 .select()

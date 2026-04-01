@@ -28,7 +28,7 @@ async function fetchInvoiceItems(zoneId: string, invoiceId: string): Promise<Zon
     .eq('invoice_id', invoiceId)
     .order('created_at');
   if (error) throw error;
-  return (data || []) as ZoneInvoiceItem[];
+  return (data || []) as unknown as ZoneInvoiceItem[];
 }
 
 // ─── Hook: All Zone Invoices ───

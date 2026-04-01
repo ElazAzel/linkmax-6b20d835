@@ -65,7 +65,7 @@ export function useZoneNotifications(zoneId: string | null) {
         .from('zone_notifications')
         .update({ is_read: true })
         .eq('zone_id', zoneId)
-        .eq('user_id', userId)
+        .eq('user_id', userId!)
         .eq('is_read', false);
       if (error) throw error;
     },
