@@ -347,7 +347,7 @@ export const HomeScreen = memo(function HomeScreen({
               <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-2xl blur-md opacity-20 group-hover/avatar:opacity-40 transition duration-1000 animate-pulse" />
               <Avatar className="h-20 w-20 md:h-24 md:w-24 rounded-2xl border-2 border-border/20 relative shadow-sm">
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-black bg-white/10 text-primary backdrop-blur-xl">
+                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-black bg-muted text-primary">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
