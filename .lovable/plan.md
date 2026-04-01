@@ -1,45 +1,57 @@
 
+План: перестать лечить это ещё одним CSS-хаком и исправить источник проблемы. Аудит показал, что размытие в редакторе сейчас приходит не из одного места, а из нескольких слоёв сразу.
 
-# Исправление: размытые блоки, огромные кнопки управления, крупный текст
+1. Что реально ломает чёткость
+- `GridEditor` применяет anti-blur только к обычным блокам через `data-editor-block`, но `profile` рендерится отдельно через `InlineProfileEditor` и вообще не попадает под этот контур.
+- `BlockRenderer` знает только `isPreview`, но не знает, что это именно режим редактора в дашборде. Поэтому блоки продолжают рендерить public/premium glass-стили внутри editor.
+- `PaidBlockWrapper` умеет специально блюрить locked-контент. В редакторе owner/page context не проброшен как отдельный режим, поэтому paid-блоки могут оставаться намеренно размытыми.
+- В `src/lib/blocks/block-styling.ts` `backgroundOpacity` применяется как `style.opacity` ко всему элементу, то есть делает мутным весь блок, включая текст и изображения.
+- Общие примитивы (`Card`, `Button`) и часть блоков (`Text`, `Link`, `Product`, `Image`, `Video`, `FAQ`, `Socials`, `Pricing`, `Newsletter`, `Map`, `Testimonial`) всё ещё задают blur/glass на уровне самих компонентов. Текущий override в `index.css` лишь частично это маскирует.
 
-## Корневая причина размытия
+2. Что нужно перестроить
+- Ввести явный контекст рендера: не просто `isPreview`, а `renderContext: 'editor' | 'public-preview' | 'live'`.
+- Пробросить его по цепочке: `EditorScreen -> GridEditor -> BlockRenderer -> конкретные блоки / PaidBlockWrapper / InlineProfileEditor`.
+- В режиме `editor` отключать blur, glass, animated gradients и прочие “витринные” эффекты на уровне источника, а не давить их глобальным CSS.
 
-CSS-overrides через `[data-editor-block]` в `index.css` пытаются убить `backdrop-filter` и `filter` через `!important`, но это ненадежно: 20+ блок-компонентов используют Tailwind-классы `backdrop-blur-md`, `blur-lg`, `glass-card` и т.д., которые генерируют стили через CSS-переменные Tailwind (`--tw-backdrop-blur`). На мобильных WebKit-движках `!important` override через CSS-attribute-селекторы (`[class*="blur-"]`) может не срабатывать из-за порядка каскада и `@layer`.
+3. Точечные исправления
+- `src/components/dashboard-v2/screens/EditorScreen.tsx`
+  - передать в `GridEditor` owner/page context и `renderContext="editor"`.
+- `src/components/editor/GridEditor.tsx`
+  - пробросить `renderContext` в `BlockRenderer`;
+  - profile-блок тоже перевести в crisp editor mode, а не оставлять вне anti-blur-системы.
+- `src/components/editor/BlockRenderer.tsx`
+  - добавить editor-specific context/props.
+- `src/components/blocks/PaidBlockWrapper.tsx`
+  - в editor-mode всегда показывать контент владельцу без blur/lock overlay.
+- `src/lib/blocks/block-styling.ts`
+  - убрать `style.opacity = backgroundOpacity`;
+  - opacity применять только к фону, а не ко всему содержимому блока.
+- `src/components/blocks/InlineProfileEditor.tsx` и/или `ProfileBlock.tsx`
+  - убрать в editor-mode backdrop-blur, gradient text, glow/frame effects, полупрозрачные chips;
+  - где нужен контраст текста поверх cover-image, использовать непрозрачный chip или `text-shadow`, а не blur.
+- `src/components/ui/card.tsx` и при необходимости `src/components/ui/button.tsx`
+  - добавить editor/crisp variant без `backdrop-blur`.
+- пройтись по блокам с прямыми glass/backdrop классами и дать им editor fallback.
 
-**Надёжное решение**: Вместо CSS-хаков — добавить на обёртку `data-editor-block` непрозрачный фон + `isolation: isolate`. Это делает backdrop-filter бесполезным (нечего размывать через непрозрачный фон), даже если стили технически применены. Плюс, дополнительно переопределить Tailwind blur-переменные напрямую.
+4. Что НЕ делать дальше
+- Не добавлять новые широкие `!important`-правила в `index.css` как основной способ фикса.
+- Не пытаться чинить это только через `[data-editor-block]`, потому что часть проблем вообще обходит этот слой.
 
-## Что делаем
+5. Проверка результата
+- В editor чётко видны: profile, text, image/video, link/button, product, paid blocks.
+- Блоки с кастомным стилем и background opacity остаются читаемыми.
+- На mobile и desktop нет frosted/glass-эффекта на содержимом блока.
+- Контраст текста на изображениях решён через opaque label/text-shadow, а не через blur.
 
-### 1. GridEditor.tsx — обёртка блоков
-**Обёртка `data-editor-block`** (строка 237): добавить `isolation-isolate bg-card rounded-2xl overflow-hidden` — непрозрачный фон не даст backdrop-filter ничего размывать.
+Файлы, которые почти точно затронем:
+- `src/components/dashboard-v2/screens/EditorScreen.tsx`
+- `src/components/editor/GridEditor.tsx`
+- `src/components/editor/BlockRenderer.tsx`
+- `src/components/blocks/PaidBlockWrapper.tsx`
+- `src/components/blocks/InlineProfileEditor.tsx`
+- `src/components/blocks/ProfileBlock.tsx`
+- `src/lib/blocks/block-styling.ts`
+- `src/components/ui/card.tsx`
+- несколько block renderers с прямыми glass/backdrop стилями
 
-### 2. GridEditor.tsx — уменьшить кнопки управления
-Сейчас: 4 кнопки `h-8 w-8` в ряд → занимают ~140px по ширине, перекрывая блок.
-
-Изменения:
-- Кнопки: `h-7 w-7` (с `h-8 w-8`)
-- Иконки: `h-3.5 w-3.5` (с `h-4 w-4`)
-- Gap: `gap-1` (с `gap-1.5`)
-- Позиция: `top-1.5 right-1.5` (с `top-2 right-2`)
-- На мобильном: показывать только Edit + Delete по умолчанию, Copy + Flask — по клику
-
-### 3. GridEditor.tsx — уменьшить label блока
-Сейчас: `text-xs font-bold uppercase tracking-wider` — слишком крупно и жирно.
-
-Изменения:
-- `text-[10px] font-medium` (с `text-xs font-bold`)
-- `tracking-wide` (с `tracking-wider`)
-- `px-1.5 py-px` (с `px-2 py-0.5`)
-
-### 4. index.css — усилить CSS-override
-Добавить к `[data-editor-block]`:
-```css
-isolation: isolate;
-background: hsl(var(--card));
-```
-Это гарантирует что backdrop-filter не имеет прозрачных слоёв для размытия.
-
-## Затронутые файлы
-- `src/components/editor/GridEditor.tsx` — обёртка, кнопки, label (~15 строк)
-- `src/index.css` — 2 строки в `[data-editor-block]`
-
+Итог: прошлые правки били по симптомам. Правильный фикс — разделить public visual style и editor-preview style на уровне рендера, а не пытаться “убить blur сверху”.
