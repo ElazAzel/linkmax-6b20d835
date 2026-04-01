@@ -68,7 +68,8 @@ export default function Gallery() {
         page.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         page.description?.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesNiche = !selectedNiche || page.niche === selectedNiche;
-      return matchesSearch && matchesNiche;
+      const matchesCity = !selectedCity || page.city === selectedCity;
+      return matchesSearch && matchesNiche && matchesCity;
     });
 
     switch (sortMode) {
