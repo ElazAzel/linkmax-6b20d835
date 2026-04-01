@@ -375,5 +375,6 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         </motion.button>
       </div>
     </motion.aside>
+    </TooltipProvider>
   );
 });
