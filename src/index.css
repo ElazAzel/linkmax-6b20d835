@@ -1058,10 +1058,10 @@
   --glass-bg-subtle: var(--card) !important;
   --glass-bg-strong: var(--card) !important;
   /* Kill blur radius */
-  --glass-blur: 0px !important;
-  --glass-blur-sm: 0px !important;
-  --glass-blur-lg: 0px !important;
-  --glass-blur-xl: 0px !important;
+  --glass-blur: 0 !important;
+  --glass-blur-sm: 0 !important;
+  --glass-blur-lg: 0 !important;
+  --glass-blur-xl: 0 !important;
   /* Solid borders */
   --glass-border: var(--border) !important;
   --glass-border-subtle: var(--border) !important;
