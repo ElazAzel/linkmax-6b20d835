@@ -4,6 +4,7 @@
  * P5: Structure view, review modes, friction recovery, sections wired
  */
 import { memo, useCallback, useState, useMemo, lazy, Suspense } from 'react';
+import { RenderContextProvider } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
