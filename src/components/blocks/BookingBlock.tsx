@@ -34,6 +34,8 @@ import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date
 import { fromZonedTime, toZonedTime, formatInTimeZone } from 'date-fns-tz';
 import { ru, kk } from 'date-fns/locale';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import type { BookingBlock as BookingBlockType } from '@/types/page';
 
 interface BookingBlockProps {
@@ -338,6 +340,14 @@ export const BookingBlock = memo(function BookingBlockComponent({
         kaspiPhone: block.kaspiPhone,
       });
 
+      // Trigger WOW effect
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#10b981', '#34d399', '#ffffff']
+      });
+
       setShowForm(false);
       setFormData({ name: '', phone: '', email: '', notes: '' });
       fetchSlots(selectedDate);
@@ -416,111 +426,171 @@ export const BookingBlock = memo(function BookingBlockComponent({
   // If we have a confirmation, show it
   if (confirmation) {
     return (
-      <div className="w-full rounded-2xl overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass">
-        <div className="p-6 text-center space-y-5">
-          {/* Success icon */}
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center animate-in zoom-in duration-300">
-            <CheckCircle2 className="h-8 w-8 text-emerald-500" />
-          </div>
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key="confirmation"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          className="w-full rounded-2xl overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass"
+        >
+          <div className="p-6 text-center space-y-5 relative overflow-hidden">
+            {/* Background glow Decor */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-emerald-500/20 blur-[80px] -z-10 rounded-full" />
+            
+            {/* Success icon */}
+            <motion.div 
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", damping: 12, stiffness: 200, delay: 0.2 }}
+              className="mx-auto w-20 h-20 rounded-3xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shadow-inner"
+            >
+              <CheckCircle2 className="h-10 w-10 text-emerald-500" />
+            </motion.div>
 
-          <div className="space-y-1">
-            <h3 className="text-xl font-bold text-gradient">
-              {t('booking.confirmation.title', 'Вы записаны!')}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              {t('booking.confirmation.subtitle', 'Детали вашей записи')}
-            </p>
-          </div>
-
-          {/* Booking details card */}
-          <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 text-left space-y-3">
-            <div className="flex items-center gap-3">
-              <CalendarDays className="h-4 w-4 text-primary shrink-0" />
-              <span className="text-sm font-bold">{confirmation.date}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Clock className="h-4 w-4 text-primary shrink-0" />
-              <span className="text-sm font-bold">
-                {confirmation.time}
-                {confirmation.endTime && ` — ${confirmation.endTime}`}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <User className="h-4 w-4 text-primary shrink-0" />
-              <span className="text-sm">{confirmation.name}</span>
-            </div>
-            {/* Booking reference */}
-            <div className="flex items-center justify-between pt-2 border-t border-primary/10">
-              <span className="text-xs text-muted-foreground">{t('booking.confirmation.ref', 'Номер записи')}</span>
-              <button onClick={handleCopyBookingId} className="flex items-center gap-1 text-xs font-mono font-bold text-primary hover:underline">
-                {confirmation.bookingId.substring(0, 8).toUpperCase()}
-                <Copy className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
-
-          {/* Prepayment section */}
-          {confirmation.requiresPrepayment && (
-            <div className="space-y-3">
-              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                <div className="flex items-center gap-2 mb-1">
-                  <Wallet className="h-4 w-4 text-amber-600" />
-                  <span className="text-sm font-bold text-amber-700">
-                    {t('booking.confirmation.prepaymentRequired', 'Предоплата для подтверждения')}
-                  </span>
-                </div>
-                <p className="text-lg font-black text-amber-700">
-                  {confirmation.prepaymentAmount} {getCurrencySymbol(confirmation.prepaymentCurrency || 'KZT')}
-                </p>
-                <p className="text-xs text-amber-600/70 mt-1">
-                  {t('booking.confirmation.prepaymentHint', 'Оплатите для гарантии записи. Возвращается при отмене за 24ч.')}
-                </p>
-              </div>
-
-              {/* Payment buttons */}
-              <div className="space-y-2">
-                {(confirmation.prepaymentMethod === 'whatsapp' || !confirmation.prepaymentMethod) && confirmation.ownerPhone && (
-                  <Button
-                    onClick={handleWhatsAppPrepayment}
-                    className="w-full h-12 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/25"
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    {t('booking.confirmation.payWhatsApp', 'Оплатить через WhatsApp')}
-                  </Button>
-                )}
-                {(confirmation.prepaymentMethod === 'kaspi' || (confirmation.kaspiPhone && confirmation.prepaymentMethod !== 'robokassa')) && confirmation.kaspiPhone && (
-                  <Button
-                    onClick={handleKaspiPrepayment}
-                    variant="outline"
-                    className="w-full h-12 rounded-xl font-bold border-red-500/30 text-red-600 hover:bg-red-500/5"
-                  >
-                    <Wallet className="h-5 w-5 mr-2" />
-                    {t('booking.confirmation.payKaspi', 'Оплатить через Kaspi')}
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Non-prepayment confirmation */}
-          {!confirmation.requiresPrepayment && (
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-              <p className="text-sm text-emerald-700 font-medium">
-                {t('booking.confirmation.awaitConfirm', 'Ожидайте подтверждения от специалиста')}
+            <div className="space-y-1">
+              <h3 className="text-2xl font-black text-gradient tracking-tight">
+                {t('booking.confirmation.title', 'Вы записаны!')}
+              </h3>
+              <p className="text-sm font-medium text-muted-foreground/80">
+                {t('booking.confirmation.subtitle', 'Детали вашей записи')}
               </p>
             </div>
-          )}
 
-          {/* Book again button */}
-          <Button
-            variant="ghost"
-            onClick={handleBookAgain}
-            className="w-full h-10 rounded-xl text-sm font-medium"
-          >
-            {t('booking.confirmation.bookAgain', 'Записаться ещё раз')}
-          </Button>
-        </div>
-      </div>
+            {/* Booking details card */}
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="p-5 rounded-3xl bg-emerald-500/[0.03] border border-emerald-500/10 text-left space-y-4 shadow-sm"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <CalendarDays className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('booking.step1', 'Дата')}</span>
+                  <span className="text-sm font-bold">{confirmation.date}</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <Clock className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('booking.step2', 'Время')}</span>
+                  <span className="text-sm font-bold">
+                    {confirmation.time}
+                    {confirmation.endTime && ` — ${confirmation.endTime}`}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <User className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex flex-col">
+                   <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('booking.name', 'Клиент')}</span>
+                   <span className="text-sm font-bold">{confirmation.name}</span>
+                </div>
+              </div>
+
+              {/* Booking reference */}
+              <div className="flex items-center justify-between pt-4 border-t border-emerald-500/10">
+                <span className="text-xs text-muted-foreground font-medium">{t('booking.confirmation.ref', 'Код подтверждения')}</span>
+                <button onClick={handleCopyBookingId} className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary/5 text-xs font-mono font-black text-primary hover:bg-primary/10 transition-colors border border-primary/10">
+                  {confirmation.bookingId.substring(0, 8).toUpperCase()}
+                  <Copy className="h-3 w-3" />
+                </button>
+              </div>
+            </motion.div>
+
+            {/* Prepayment section */}
+            {confirmation.requiresPrepayment && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 }}
+                className="space-y-4"
+              >
+                <div className="p-4 rounded-3xl bg-amber-500/[0.07] border border-amber-500/20 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-3 opacity-10">
+                    <Wallet className="h-12 w-12 text-amber-600 rotate-12" />
+                  </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-1.5 rounded-lg bg-amber-500/20">
+                      <Wallet className="h-4 w-4 text-amber-700" />
+                    </div>
+                    <span className="text-xs font-black uppercase tracking-tight text-amber-800">
+                      {t('booking.confirmation.prepaymentRequired', 'Требуется предоплата')}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-black text-amber-900 tracking-tighter">
+                       {confirmation.prepaymentAmount}
+                    </span>
+                    <span className="text-lg font-bold text-amber-800/70">
+                       {getCurrencySymbol(confirmation.prepaymentCurrency || 'KZT')}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-amber-800/60 mt-2 font-medium leading-tight">
+                    {t('booking.confirmation.prepaymentHint', 'Пожалуйста, внесите предоплату для подтверждения записи.')}
+                  </p>
+                </div>
+
+                {/* Payment buttons */}
+                <div className="space-y-2">
+                  {(confirmation.prepaymentMethod === 'whatsapp' || !confirmation.prepaymentMethod) && confirmation.ownerPhone && (
+                    <Button
+                      onClick={handleWhatsAppPrepayment}
+                      className="w-full h-14 rounded-2xl font-black text-base bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-600/30 hover:scale-[1.02] active:scale-95 transition-all text-white border-0"
+                    >
+                      <MessageCircle className="h-6 w-6 mr-3" />
+                      {t('booking.confirmation.payWhatsApp', 'Оплатить через WhatsApp')}
+                    </Button>
+                  )}
+                  {(confirmation.prepaymentMethod === 'kaspi' || (confirmation.kaspiPhone && confirmation.prepaymentMethod !== 'robokassa')) && confirmation.kaspiPhone && (
+                    <Button
+                      onClick={handleKaspiPrepayment}
+                      variant="outline"
+                      className="w-full h-14 rounded-2xl font-black text-base border-red-500/20 text-red-600 hover:bg-red-500/5 hover:border-red-500/40 hover:scale-[1.02] active:scale-95 transition-all bg-white/40"
+                    >
+                      <Wallet className="h-6 w-6 mr-3" />
+                      {t('booking.confirmation.payKaspi', 'Оплатить через Kaspi')}
+                    </Button>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Non-prepayment confirmation */}
+            {!confirmation.requiresPrepayment && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center gap-3"
+              >
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <p className="text-sm text-emerald-800 font-bold">
+                  {t('booking.confirmation.awaitConfirm', 'Ожидайте подтверждения специалистом')}
+                </p>
+              </motion.div>
+            )}
+
+            {/* Book again button */}
+            <Button
+              variant="ghost"
+              onClick={handleBookAgain}
+              className="w-full h-12 rounded-2xl text-xs font-bold text-muted-foreground hover:text-foreground transition-all"
+            >
+              {t('booking.confirmation.bookAgain', 'Записаться ещё раз')}
+            </Button>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     );
   }
 
@@ -566,178 +636,214 @@ export const BookingBlock = memo(function BookingBlockComponent({
         </div>
       </div>
 
-      <div className="p-5 sm:p-6 pt-2 space-y-6">
-        {/* Step indicator */}
-        <div className="flex items-center gap-2 text-xs font-semibold">
-          <div className={cn(
-            "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
-            selectedDate ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
-          )}>
-            1
-          </div>
-          <span className={selectedDate ? 'text-foreground' : 'text-muted-foreground'}>
-            {t('booking.step1', 'Дата')}
-          </span>
-          {selectedDate && (
-            <>
-              <div className="h-0.5 flex-1 bg-primary/10 rounded-full mx-1" />
-              <div className={cn(
-                "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
-                selectedSlot ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
-              )}>
-                2
-              </div>
-              <span className={selectedSlot ? 'text-foreground' : 'text-muted-foreground'}>
-                {t('booking.step2', 'Время')}
-              </span>
-            </>
-          )}
-        </div>
-
-        {/* Calendar */}
-        <div className="flex justify-center -mx-2 bg-primary/5 rounded-2xl p-2 border border-white/5">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={setSelectedDate}
-            disabled={disabledDays}
-            locale={locale}
-            className="rounded-xl border-0 w-full max-w-[320px]"
-            classNames={{
-              months: "w-full",
-              month: "w-full space-y-2",
-              caption: "flex justify-center pt-1 relative items-center mb-2",
-              caption_label: "text-sm font-bold text-gradient",
-              nav: "space-x-1 flex items-center",
-              nav_button: "h-8 w-8 bg-white/5 p-0 opacity-50 hover:opacity-100 rounded-lg hover:bg-white/10 transition-colors",
-              table: "w-full border-collapse",
-              head_row: "flex w-full",
-              head_cell: "text-primary/60 rounded-md w-full font-bold text-[0.7rem] uppercase tracking-wider",
-              row: "flex w-full mt-1",
-              cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 flex-1 aspect-square",
-              day: "h-full w-full p-0 font-medium hover:bg-primary/10 rounded-xl transition-all text-sm flex items-center justify-center",
-              day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground shadow-lg shadow-primary/30 scale-110 z-10",
-              day_today: "bg-primary/10 text-primary font-bold",
-              day_disabled: "text-muted-foreground/30 opacity-50",
-              day_outside: "text-muted-foreground/20 opacity-50",
-            }}
-          />
-        </div>
-
-        {/* Time slots section */}
-        {selectedDate && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
-                  <CalendarDays className="h-4 w-4" />
-                </div>
-                <span className="font-bold text-sm truncate">{getDateLabel(selectedDate)}</span>
-              </div>
-              {!loading && totalCount > 0 && (
-                <div className="flex items-center gap-2.5 text-xs font-bold px-2 py-1 rounded-lg bg-black/20">
-                  <span className="flex items-center gap-1 text-emerald-400">
-                    <CheckCircle2 className="h-3 w-3" />
-                    {availableCount}
-                  </span>
-                  {bookedCount > 0 && (
-                    <span className="flex items-center gap-1 text-white/40">
-                      <XCircle className="h-3 w-3" />
-                      {bookedCount}
-                    </span>
-                  )}
-                </div>
-              )}
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={selectedDate ? 'date-selected' : 'calendars'}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          className="p-5 sm:p-6 pt-2 space-y-6"
+        >
+          {/* Step indicator */}
+          <div className="flex items-center gap-2 text-xs font-semibold">
+            <div className={cn(
+              "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
+              selectedDate ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
+            )}>
+              1
             </div>
-
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-10 gap-3">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                <span className="text-xs font-medium text-muted-foreground animate-pulse">
-                  {t('booking.loadingSlots', 'Загружаем...')}
+            <span className={selectedDate ? 'text-foreground font-black' : 'text-muted-foreground'}>
+              {t('booking.step1', 'Дата')}
+            </span>
+            {selectedDate && (
+              <>
+                <motion.div initial={{ width: 0 }} animate={{ width: "auto" }} className="h-0.5 flex-1 bg-primary/10 rounded-full mx-1" />
+                <div className={cn(
+                  "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
+                  selectedSlot ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
+                )}>
+                  2
+                </div>
+                <span className={selectedSlot ? 'text-foreground font-black' : 'text-muted-foreground'}>
+                  {t('booking.step2', 'Время')}
                 </span>
-              </div>
-            ) : slots.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-10 gap-3 text-center bg-white/5 rounded-2xl border border-dashed border-white/10">
-                <div className="p-3 rounded-full bg-white/5 text-muted-foreground/50">
-                  <Info className="h-8 w-8" />
+              </>
+            )}
+          </div>
+
+          {/* Calendar */}
+          <div className="flex justify-center -mx-2 bg-primary/5 rounded-3xl p-3 border border-white/5 shadow-inner">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              disabled={disabledDays}
+              locale={locale}
+              className="rounded-xl border-0 w-full max-w-[320px]"
+              classNames={{
+                months: "w-full",
+                month: "w-full space-y-2",
+                caption: "flex justify-center pt-1 relative items-center mb-2",
+                caption_label: "text-sm font-black text-gradient uppercase tracking-widest",
+                nav: "space-x-1 flex items-center",
+                nav_button: "h-9 w-9 bg-white/10 p-0 opacity-50 hover:opacity-100 rounded-xl hover:bg-white/20 transition-all active:scale-95",
+                table: "w-full border-collapse",
+                head_row: "flex w-full mb-2",
+                head_cell: "text-primary/70 rounded-md w-full font-black text-[0.65rem] uppercase tracking-widest",
+                row: "flex w-full mt-1.5",
+                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 flex-1 aspect-square",
+                day: "h-full w-full p-0 font-bold hover:bg-primary/20 rounded-2xl transition-all text-sm flex items-center justify-center",
+                day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground shadow-xl shadow-primary/40 scale-110 z-10 border-0",
+                day_today: "bg-primary/10 text-primary font-black border border-primary/20",
+                day_disabled: "text-muted-foreground/30 opacity-30 select-none",
+                day_outside: "text-muted-foreground/10 opacity-30 invisible",
+              }}
+            />
+          </div>
+
+          {/* Time slots section */}
+          {selectedDate && (
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 shadow-sm">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                    <CalendarDays className="h-4 w-4" />
+                  </div>
+                  <span className="font-bold text-sm truncate">{getDateLabel(selectedDate)}</span>
                 </div>
-                <div>
-                  <p className="text-sm font-bold">{t('booking.noSlotsTitle', 'Нет доступных окон')}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{t('booking.noSlotsHint', 'Попробуйте выбрать другую дату')}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-3 gap-2 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
-                {slots.map((slot, idx) => (
-                  <button
-                    key={idx}
-                    disabled={!slot.available}
-                    onClick={() => handleSelectSlot(slot)}
-                    className={cn(
-                      "relative py-3 px-1 rounded-xl text-center transition-all duration-300",
-                      slot.available
-                        ? selectedSlot?.time === slot.time
-                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/40 scale-105 z-10 border-transparent font-bold"
-                          : "glass-card hover:border-primary/50 hover:bg-primary/5 active:scale-95 border-white/10"
-                        : "bg-white/5 opacity-20 cursor-not-allowed border-transparent"
-                    )}
-                  >
-                    <span className={cn(
-                      "text-sm font-bold tracking-tight",
-                      !slot.available && 'line-through opacity-50'
-                    )}>
-                      {formatTime(slot.time)}
+                {!loading && totalCount > 0 && (
+                  <div className="flex items-center gap-2.5 text-[10px] font-black px-2.5 py-1.5 rounded-xl bg-black/20 uppercase tracking-tight">
+                    <span className="flex items-center gap-1.5 text-emerald-400">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {availableCount}
                     </span>
-                    {slot.endTime && (
-                      <span className="block text-xs opacity-40 mt-1 font-medium">
-                        – {formatTime(slot.endTime)}
+                    {bookedCount > 0 && (
+                      <span className="flex items-center gap-1 text-white/40">
+                        {bookedCount}
                       </span>
                     )}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Selected slot confirmation with price */}
-            {selectedSlot && (
-              <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 shadow-lg shadow-primary/10 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-primary-foreground shadow-md">
-                      <Check className="h-6 w-6" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-bold text-primary uppercase tracking-wider">{t('booking.selectedTime', 'Выбрано время')}</p>
-                      <p className="text-sm font-bold truncate">
-                        {formatTime(selectedSlot.time)}
-                        {selectedSlot.endTime && ` – ${formatTime(selectedSlot.endTime)}`}
-                      </p>
-                    </div>
                   </div>
-                  <Button
-                    size="sm"
-                    onClick={() => setShowForm(true)}
-                    className="h-10 px-5 text-sm font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
-                  >
-                    {t('booking.continue', 'Далее')}
-                  </Button>
-                </div>
-                {/* Inline prepayment info */}
-                {block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0 && (
-                  <p className="text-xs text-primary/70 mt-2 flex items-center gap-1.5">
-                    <Wallet className="h-3 w-3" />
-                    {t('booking.slotPrepaymentHint', 'Предоплата {{amount}} {{currency}} · гарантирует бронь', {
-                      amount: block.prepaymentAmount,
-                      currency: getCurrencySymbol(block.prepaymentCurrency || 'KZT')
-                    })}
-                  </p>
                 )}
               </div>
-            )}
-          </div>
-        )}
-      </div>
+
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-14 gap-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse" />
+                    <Loader2 className="h-8 w-8 animate-spin text-primary relative z-10" />
+                  </div>
+                  <span className="text-xs font-black text-muted-foreground/60 animate-pulse tracking-widest uppercase">
+                    {t('booking.loadingSlots', 'Синхронизация...')}
+                  </span>
+                </div>
+              ) : slots.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 gap-4 text-center bg-white/5 rounded-3xl border border-dashed border-white/10">
+                  <div className="p-4 rounded-full bg-white/5 text-muted-foreground/30 shadow-inner">
+                    <Info className="h-10 w-10" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black tracking-tight">{t('booking.noSlotsTitle', 'Окон нет')}</p>
+                    <p className="text-xs text-muted-foreground mt-1 font-medium">{t('booking.noSlotsHint', 'Попробуйте другую дату')}</p>
+                  </div>
+                </div>
+              ) : (
+                <motion.div 
+                  initial="hidden"
+                  animate="show"
+                  variants={{
+                    show: { transition: { staggerChildren: 0.03 } }
+                  }}
+                  className="grid grid-cols-3 gap-2.5 max-h-[220px] overflow-y-auto pr-3 custom-scrollbar p-1"
+                >
+                  {slots.map((slot, idx) => (
+                    <motion.button
+                      key={idx}
+                      variants={{
+                        hidden: { opacity: 0, scale: 0.9 },
+                        show: { opacity: 1, scale: 1 }
+                      }}
+                      disabled={!slot.available}
+                      onClick={() => handleSelectSlot(slot)}
+                      className={cn(
+                        "relative py-3.5 px-1 rounded-2xl text-center transition-all duration-300 border",
+                        slot.available
+                          ? selectedSlot?.time === slot.time
+                            ? "bg-primary text-primary-foreground shadow-xl shadow-primary/40 scale-105 z-10 border-transparent font-black ring-2 ring-primary/20"
+                            : "glass-card hover:border-primary/40 hover:bg-primary/5 active:scale-95 border-white/5 font-bold"
+                          : "bg-white/5 opacity-10 cursor-not-allowed border-transparent grayscale"
+                      )}
+                    >
+                      <span className={cn(
+                        "text-sm tracking-tight",
+                        !slot.available && 'line-through'
+                      )}>
+                        {formatTime(slot.time)}
+                      </span>
+                      {slot.endTime && (
+                        <span className="block text-[10px] opacity-40 mt-0.5 font-bold">
+                          {formatTime(slot.endTime)}
+                        </span>
+                      )}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+
+              {/* Selected slot confirmation with price */}
+              <AnimatePresence>
+                {selectedSlot && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="p-4 rounded-3xl bg-primary/10 border border-primary/20 shadow-xl shadow-primary/10"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/30 shrink-0">
+                          <Check className="h-7 w-7" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1.5">{t('booking.selectedTime', 'Выбрано')}</p>
+                          <p className="text-base font-black truncate leading-none">
+                            {formatTime(selectedSlot.time)}
+                            {selectedSlot.endTime && ` — ${formatTime(selectedSlot.endTime)}`}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => setShowForm(true)}
+                        className="h-12 px-6 text-sm font-black rounded-2xl shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all text-white"
+                      >
+                        {t('booking.continue', 'Далее')}
+                      </Button>
+                    </div>
+                    {/* Inline prepayment info */}
+                    {block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0 && (
+                      <div className="mt-3.5 pt-3 border-t border-primary/10 flex items-center gap-2">
+                        <div className="p-1 rounded bg-amber-500/20">
+                           <Wallet className="h-3 w-3 text-amber-700" />
+                        </div>
+                        <p className="text-[10px] text-primary/70 font-bold uppercase tracking-tight">
+                          {t('booking.slotPrepaymentHint', 'Предоплата {{amount}} {{currency}} · Гарантия брони', {
+                            amount: block.prepaymentAmount,
+                            currency: getCurrencySymbol(block.prepaymentCurrency || 'KZT')
+                          })}
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </motion.div>
+      </AnimatePresence>
 
       {/* Legend */}
       <div className="flex items-center justify-center gap-6 py-4 px-6 bg-black/5 border-t border-white/5">

@@ -552,6 +552,115 @@ export type AppDatabase = Omit<Database, 'public'> & {
           };
           Relationships: [];
         };
+        // Fintech / Wallet tables (Missing from generated types)
+        user_wallets: {
+          Row: {
+            id: string;
+            user_id: string;
+            balance: number;
+            currency: string;
+            created_at: string;
+            updated_at: string;
+          };
+          Insert: {
+            id?: string;
+            user_id: string;
+            balance?: number;
+            currency?: string;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Update: {
+            id?: string;
+            user_id?: string;
+            balance?: number;
+            currency?: string;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Relationships: [];
+        };
+        wallet_transactions: {
+          Row: {
+            id: string;
+            wallet_id: string;
+            user_id: string;
+            gross_amount: number;
+            fee_amount: number;
+            net_amount: number;
+            type: 'payment' | 'withdrawal' | 'refund' | 'fee';
+            status: 'pending' | 'completed' | 'failed' | 'cancelled';
+            description: string | null;
+            related_entity_id: string | null;
+            related_entity_type: string | null;
+            metadata: any | null;
+            created_at: string;
+          };
+          Insert: {
+            id?: string;
+            wallet_id: string;
+            user_id: string;
+            gross_amount: number;
+            fee_amount: number;
+            net_amount: number;
+            type: 'payment' | 'withdrawal' | 'refund' | 'fee';
+            status?: 'pending' | 'completed' | 'failed' | 'cancelled';
+            description?: string | null;
+            related_entity_id?: string | null;
+            related_entity_type?: string | null;
+            metadata?: any | null;
+            created_at?: string;
+          };
+          Update: {
+            id?: string;
+            wallet_id?: string;
+            user_id?: string;
+            gross_amount?: number;
+            fee_amount?: number;
+            net_amount?: number;
+            type?: 'payment' | 'withdrawal' | 'refund' | 'fee';
+            status?: 'pending' | 'completed' | 'failed' | 'cancelled';
+            description?: string | null;
+            related_entity_id?: string | null;
+            related_entity_type?: string | null;
+            metadata?: any | null;
+            created_at?: string;
+          };
+          Relationships: [];
+        };
+        token_withdrawals: {
+          Row: {
+            id: string;
+            user_id: string;
+            amount: number;
+            payment_method: string;
+            payment_details: any;
+            status: 'pending' | 'approved' | 'rejected' | 'completed';
+            processed_at: string | null;
+            created_at: string;
+          };
+          Insert: {
+            id?: string;
+            user_id: string;
+            amount: number;
+            payment_method: string;
+            payment_details: any;
+            status?: 'pending' | 'approved' | 'rejected' | 'completed';
+            processed_at?: string | null;
+            created_at?: string;
+          };
+          Update: {
+            id?: string;
+            user_id?: string;
+            amount?: number;
+            payment_method?: string;
+            payment_details?: any;
+            status?: 'pending' | 'approved' | 'rejected' | 'completed';
+            processed_at?: string | null;
+            created_at?: string;
+          };
+          Relationships: [];
+        };
       }
     >
   }

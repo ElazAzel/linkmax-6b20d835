@@ -118,6 +118,21 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - **CI/CD Hardening**: Parallelized test execution and multi-environment deployment logic (Staging/Production).
   - **Fallback Connectivity**: Added secondary currency rate API to prevent Downtime.
   - **TMA Health Check**: Proactive Supabase ping and error handling during Telegram Mini App initialization.
+
+- **Fintech Service**: Полностью типизированное управление кошельками, транзакциями и выплатами. Синхронизировано с `AppDatabase`.
+- **Booking Service**: Управление слотами и бронированиями с поддержкой Google Calendar sync. Использует строгую типизацию.
+- **Analytics Service**: Сбор событий, просмотров и кликов с автоматической привязкой к экспериментам.
+- **Experiment Service**: A/B тестирование блоков и страниц с real-time аналитикой.
+
+### 🎨 Design System: Liquid Glass
+
+Все новые и обновленные компоненты следуют стандарту **Liquid Glass**:
+
+- **Glassmorphism**: Использование `backdrop-blur`, полупрозрачных границ и `glass-card` классов.
+- **High-Fidelity Animations**: Использование `framer-motion` для переходов между состояниями (например, в `BookingBlock`).
+- **Dynamic Feedback**: Микро-взаимодействия (confetti, hover-масштабирование, пульсирующие индикаторы).
+- **Typography**: Использование `text-gradient` для заголовков и `tracking-tight` для премиального вида.
+
 - **Technical Debt & UX**:
   - **Type Safety**: Finalized removal of `as any` in business zones and fixed referral stats types.
   - **UX Polish**: Consistent currency symbols (₸), reduced console noise, and stable Zustand serialization.

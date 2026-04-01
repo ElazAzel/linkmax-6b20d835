@@ -15,10 +15,10 @@ export interface WalletTransaction {
     net_amount: number;
     type: TransactionType | string;
     status: TransactionStatus;
-    description: string;
+    description: string | null;
     metadata: Record<string, unknown>;
-    related_entity_id?: string;
-    related_entity_type?: string;
+    related_entity_id?: string | null;
+    related_entity_type?: string | null;
     created_at: string;
 }
 
@@ -108,7 +108,7 @@ export const fintechService = {
 
             // Single insert with gross/fee/net per modern schema
             // NOTE: wallet_transactions might not be in types.ts yet
-            const { data: transaction, error: txError } = await (supabase as unknown as { from: (schema: string) => any })
+            const { data: transaction, error: txError } = await supabase
                 .from('wallet_transactions')
                 .insert({
                     wallet_id: wallet.id,
@@ -119,8 +119,8 @@ export const fintechService = {
                     type: 'payment',
                     status: 'pending',
                     description: params.description,
-                    related_entity_id: params.relatedEntityId,
-                    related_entity_type: params.relatedEntityType,
+                    related_entity_id: params.relatedEntityId || null,
+                    related_entity_type: params.relatedEntityType || null,
                     metadata: (params.metadata || {}) as Json
                 })
                 .select()
@@ -135,7 +135,7 @@ export const fintechService = {
                 throw txError;
             }
 
-            return transaction as WalletTransaction;
+            return transaction;
         } catch (err) {
             logger.error('Failed to record pending income', err);
             throw err;
@@ -157,7 +157,7 @@ export const fintechService = {
                 throw walletError;
             }
 
-            const { data: transactions, error: txError } = await (supabase as unknown as { from: (schema: string) => any })
+            const { data: transactions, error: txError } = await supabase
                 .from('wallet_transactions')
                 .select('*')
                 .eq('user_id', userId)
@@ -175,7 +175,7 @@ export const fintechService = {
                 throw txError;
             }
 
-            const { data: pendingData, error: pendingError } = await (supabase as unknown as { from: (schema: string) => any })
+            const { data: pendingData, error: pendingError } = await supabase
                 .from('wallet_transactions')
                 .select('gross_amount, net_amount')
                 .eq('user_id', userId)
@@ -186,7 +186,7 @@ export const fintechService = {
                 if (pendingError.code === 'PGRST205' || pendingError.code === '42P01') {
                     return {
                         wallet,
-                        transactions: (transactions || []) as WalletTransaction[],
+                        transactions: (transactions || []),
                         pendingGMV: 0,
                     };
                 }
@@ -197,7 +197,7 @@ export const fintechService = {
 
             return {
                 wallet,
-                transactions: (transactions || []) as WalletTransaction[],
+                transactions: (transactions || []),
                 pendingGMV
             };
         } catch (err) {

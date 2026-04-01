@@ -1,8 +1,20 @@
 # Changelog
 
+## [1.12.0] - 2026-03-31
+
+### Phase 12: Fintech Hardening & Booking Polish
+
+- **Fintech Resilience**: Added strict typings for `user_wallets`, `wallet_transactions`, and `token_withdrawals` to `AppDatabase`.
+- **Refactoring**: Completely eliminated `as any` and `as unknown` type assertions in `fintechService`.
+- **Booking UX**: Elevated `BookingBlock` to "Liquid Glass" standard with premium animations, glassy components, and high-fidelity transitions.
+- **Micro-animations**: Integrated `framer-motion` for multi-step flow in `BookingBlock`.
+- **WOW Factor**: Added `canvas-confetti` success effect upon successful booking.
+- **Bug Fixes**: Corrected field nullability in `WalletTransaction` interface to match DB schema.
+
 ## [1.9.0] - 2026-03-31 (Architectural Consolidation & Hardening)
 
 ### Architectural Cleanup
+
 - **Layer Removal**: Deleted legacy redundant layers (`src/domain`, `src/repositories`, `src/use-cases`, `src/integrations/supabase`), unifying all business logic in the Service Layer.
 - **Supabase Consolidation**: Unified all database interactions through the `AppDatabase` type in `src/platform/supabase/`.
 
