@@ -338,7 +338,7 @@ export const HomeScreen = memo(function HomeScreen({
         )}
 
         {/* Primary Page Card */}
-        <Card className="p-5 md:p-8 space-y-6 glass border-white/20 shadow-glass-lg relative overflow-hidden group rounded-[2.5rem] md:rounded-[3rem]">
+        <Card className="p-5 md:p-8 space-y-6 bg-card border-border/10 shadow-sm relative overflow-hidden group rounded-[2.5rem] md:rounded-[3rem]">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-30 group-hover:opacity-50 transition-opacity duration-1000 -z-10" />
           
           {/* Page Header */}
