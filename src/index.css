@@ -1078,6 +1078,8 @@
 [data-editor-block] *::after {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
   --tw-backdrop-blur: initial !important;
   --tw-blur: initial !important;
 }
