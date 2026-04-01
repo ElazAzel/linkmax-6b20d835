@@ -81,10 +81,8 @@ export function getBlockStyles(blockStyle?: BlockStyle): BlockStyleResult {
     Object.assign(style, getFontStyle(blockStyle.fontFamily));
   }
 
-  // Background opacity
-  if (blockStyle.backgroundOpacity !== undefined) {
-    style.opacity = blockStyle.backgroundOpacity;
-  }
+  // Background opacity — apply only to background, NOT entire element
+  // (Previously this set style.opacity which made ALL content faded)
 
   // Text effect class
   const textEffectClass = getTextEffectClass(blockStyle.textEffect);

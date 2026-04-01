@@ -366,7 +366,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
         size="icon"
         variant="secondary"
         onClick={() => setIsFullEditorOpen(true)}
-        className="absolute top-2 left-2 z-20 h-10 w-10 rounded-xl shadow-lg bg-background/90 backdrop-blur-sm hover:bg-background"
+        className="absolute top-2 left-2 z-20 h-10 w-10 rounded-xl shadow-lg bg-background hover:bg-muted"
         title={t('profileEditor.openEditor', 'Открыть редактор')}
       >
         <Pencil className="h-4 w-4" />

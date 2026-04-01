@@ -78,6 +78,8 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
 export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
   const { onBlockClick } = useAnalytics();
   const { i18n } = useTranslation();
+  const renderContext = useRenderContext();
+  const isEditorMode = renderContext === 'editor';
 
   const handleClick = useCallback(() => {
     if (!isPreview) {
