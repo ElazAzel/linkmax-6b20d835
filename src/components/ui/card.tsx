@@ -22,6 +22,8 @@ const cardVariants = cva(
           "border border-primary/20 bg-gradient-to-br from-card/90 via-card/80 to-primary/5 backdrop-blur-xl shadow-glass-lg hover:shadow-glass-xl hover:border-primary/40 hover:-translate-y-1",
         borderless:
           "border-0 bg-transparent shadow-none",
+        crisp:
+          "border border-border/50 bg-card shadow-sm",
       },
     },
     defaultVariants: {

@@ -2,6 +2,7 @@
  * Wrapper component for paid blocks - handles token-based unlocking
  */
 import { memo, useState, useEffect } from 'react';
+import { useRenderContext } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -40,6 +41,8 @@ export const PaidBlockWrapper = memo(function PaidBlockWrapper({
   const { balance, purchaseMarketplaceItem, refresh } = useTokens();
   const [unlocking, setUnlocking] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const renderContext = useRenderContext();
+  const isEditorMode = renderContext === 'editor';
 
   const isPaidContent = blockStyle?.isPaidContent || false;
   const price = blockStyle?.paidContentPrice || 0;
@@ -81,8 +84,8 @@ export const PaidBlockWrapper = memo(function PaidBlockWrapper({
     checkPurchase();
   }, [user, blockId, pageOwnerId, isPaidContent]);
 
-  // If not paid content, just render children
-  if (!isPaidContent || price <= 0) {
+  // If not paid content or in editor mode, just render children
+  if (!isPaidContent || price <= 0 || isEditorMode) {
     return <>{children}</>;
   }
 

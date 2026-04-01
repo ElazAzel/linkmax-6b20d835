@@ -4,6 +4,7 @@
  * P5: Structure view, review modes, friction recovery, sections wired
  */
 import { memo, useCallback, useState, useMemo, lazy, Suspense } from 'react';
+import { RenderContextProvider } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
@@ -576,6 +577,7 @@ export const EditorScreen = memo(function EditorScreen({
 
       {/* Grid Editor */}
       <div className="pt-4">
+      <RenderContextProvider value="editor">
         <Suspense fallback={<EditorCanvasSkeleton />}>
           <GridEditor
             blocks={pageData.blocks}
@@ -593,6 +595,7 @@ export const EditorScreen = memo(function EditorScreen({
             onInsertPreset={handleInsertPresetWithFriction}
           />
         </Suspense>
+      </RenderContextProvider>
       </div>
 
       {/* P5: Structure View 2.0 */}

@@ -10,6 +10,7 @@ import { PaidBlockWrapper } from '@/components/blocks/PaidBlockWrapper';
 import { BlockErrorBoundary } from '@/components/editor/BlockErrorBoundary';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
+import { useRenderContext } from '@/contexts/RenderContext';
 
 // Helper function to check if block should be visible based on schedule
 function isBlockVisible(block: Block): boolean {
@@ -77,6 +78,8 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
 export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
   const { onBlockClick } = useAnalytics();
   const { i18n } = useTranslation();
+  const renderContext = useRenderContext();
+  const isEditorMode = renderContext === 'editor';
 
   const handleClick = useCallback(() => {
     if (!isPreview) {
