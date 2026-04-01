@@ -204,7 +204,8 @@ export function AdminAnalyticsDashboard() {
                 <CardTitle>{t('admin.activityOverview')}</CardTitle>
               </CardHeader>
               <CardContent className="pl-2">
-                <ResponsiveContainer width="100%" height={350}>
+                <div className="h-[350px]">
+                <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={analytics.dailyEvents}>
                     <defs>
                       <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
@@ -253,6 +254,7 @@ export function AdminAnalyticsDashboard() {
                     />
                   </AreaChart>
                 </ResponsiveContainer>
+                </div>
               </CardContent>
             </Card>
 
