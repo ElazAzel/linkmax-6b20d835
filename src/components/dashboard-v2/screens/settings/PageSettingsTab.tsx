@@ -509,7 +509,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                             <Label>{t('dashboard.pageSettings.country', 'Страна')}</Label>
                             <Select
                                 value={countryCodeInput || 'none'}
-                                onValueChange={(value) => {
+                                onValueChange={(value: string) => {
                                     const v = value === 'none' ? '' : value;
                                     setCountryCodeInput(v);
                                     if (onUpdateEntityFields) {
