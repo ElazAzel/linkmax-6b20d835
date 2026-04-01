@@ -309,7 +309,7 @@ export const HomeScreen = memo(function HomeScreen({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <WalletOverviewWidget 
                 onViewFinance={() => navigate('/finance')}
-                className="glass border-white/10 shadow-glass h-full"
+                className="bg-card border-border/10 shadow-sm h-full"
               />
               
               {kaspiWidgetEnabled && (
