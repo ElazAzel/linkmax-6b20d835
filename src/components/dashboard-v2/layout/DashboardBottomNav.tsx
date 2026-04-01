@@ -45,13 +45,6 @@ interface DashboardBottomNavProps {
 
 const TABS: NavTab[] = [
   {
-    id: 'home',
-    icon: Home,
-    labelKey: 'dashboard.nav.home',
-    defaultLabel: 'Главная',
-    path: '/dashboard/home',
-  },
-  {
     id: 'editor',
     icon: PenTool,
     labelKey: 'dashboard.nav.editor',
@@ -71,6 +64,13 @@ const TABS: NavTab[] = [
     labelKey: 'dashboard.nav.insights',
     defaultLabel: 'Аналитика',
     path: '/dashboard/insights',
+  },
+  {
+    id: 'settings',
+    icon: Settings,
+    labelKey: 'dashboard.nav.settings',
+    defaultLabel: 'Настройки',
+    path: '/dashboard/settings',
   },
 ];
 
