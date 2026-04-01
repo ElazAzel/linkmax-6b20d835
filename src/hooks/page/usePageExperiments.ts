@@ -75,7 +75,7 @@ export function usePageExperiments(pageData: PageData | null, visitorId: string 
 
                     assignments.push({
                         experimentId: experiment.id,
-                        variantLabel: selectedVariant.variant_label
+                        variantLabel: selectedVariant.variant_label || selectedVariant.variant_key
                     });
                 }
             }

@@ -334,8 +334,8 @@ export async function getAllWithdrawals(status?: string): Promise<WithdrawalRequ
     status: w.status as 'pending' | 'approved' | 'rejected' | 'completed',
     paymentMethod: w.payment_method || undefined,
     paymentDetails: w.payment_details as Record<string, unknown> || undefined,
-    adminNotes: w.admin_notes || undefined,
-    processedBy: w.processed_by || undefined,
+    adminNotes: (w as any).admin_notes || undefined,
+    processedBy: (w as any).processed_by || undefined,
     processedAt: w.processed_at || undefined,
     createdAt: w.created_at,
   }));
