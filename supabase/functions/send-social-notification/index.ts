@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 interface NotificationRequest {
-  type: 'gift_received' | 'gift_claimed' | 'challenge_completed' | 'friend_challenge_completed';
+  type: 'gift_received' | 'gift_claimed' | 'challenge_completed' | 'friend_challenge_completed' | 'page_liked' | 'newsletter_subscribed';
   recipientId: string;
   data?: {
     senderName?: string;
@@ -16,6 +16,8 @@ interface NotificationRequest {
     challengeTitle?: string;
     friendName?: string;
     message?: string;
+    subscriberEmail?: string;
+    pageName?: string;
   };
 }
 
@@ -83,20 +85,27 @@ serve(async (req: Request) => {
         message = `👏 <b>${data?.friendName || 'Ваш друг'}</b> выполнил челлендж!\n\n"${data?.challengeTitle || 'Еженедельный челлендж'}"`;
         break;
 
+      case 'page_liked':
+        message = `❤️ <b>Новый лайк!</b>\n\nКто-то лайкнул вашу страницу${data?.pageName ? ` "${data.pageName}"` : ''}!\n\n👉 Посмотрите в галерее lnkmx.my`;
+        break;
+
+      case 'newsletter_subscribed':
+        message = `📧 <b>Новый подписчик!</b>\n\n${data?.subscriberEmail || 'Кто-то'} подписался на вашу рассылку${data?.pageName ? ` на странице "${data.pageName}"` : ''}.`;
+        break;
+
       default:
         message = '📬 У вас новое уведомление в lnkmx.my!';
     }
 
     console.log(`Sending ${type} notification to ${profile.telegram_chat_id}`);
 
-    // Send Telegram message
-    const response = await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
-    console.log('Telegram API response:', JSON.stringify(result));
-
-    if (!result.ok) {
-      console.error('Failed to send Telegram message:', result.description);
+    // Send Telegram message — sendMessage returns parsed JSON, not Response
+    try {
+      await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
+    } catch (sendError) {
+      console.error('Failed to send Telegram message:', sendError);
       return new Response(
-        JSON.stringify({ success: false, error: 'telegram_send_failed', description: result.description }),
+        JSON.stringify({ success: false, error: 'telegram_send_failed' }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

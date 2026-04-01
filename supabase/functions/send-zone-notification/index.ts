@@ -22,7 +22,7 @@ serve(async (req: Request) => {
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
         const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-        if (!telegramBotToken || !supabaseUrl || !supabaseServiceKey) {
+        if (!isConfigured() || !supabaseUrl || !supabaseServiceKey) {
             return new Response('Configuration missing', { status: 500, headers: corsHeaders });
         }
 

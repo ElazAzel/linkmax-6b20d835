@@ -209,6 +209,27 @@ export async function likeGalleryPage(pageId: string): Promise<void> {
 
   // Track challenge progress
   incrementChallengeProgress('like_pages');
+
+  // Send Telegram notification to page owner (fire-and-forget)
+  try {
+    const { data: page } = await supabase
+      .from('pages')
+      .select('user_id, title')
+      .eq('id', pageId)
+      .single();
+
+    if (page?.user_id) {
+      supabase.functions.invoke('send-social-notification', {
+        body: {
+          type: 'page_liked',
+          recipientId: page.user_id,
+          data: { pageName: page.title || '' },
+        },
+      }).catch(() => {});
+    }
+  } catch {
+    // Non-critical, ignore
+  }
 }
 
 export async function unlikeGalleryPage(pageId: string): Promise<void> {

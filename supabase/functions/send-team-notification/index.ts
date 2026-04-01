@@ -75,18 +75,16 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "not_configured" }), { status: 500 });
     }
 
-    const telegramResponse = await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
-
-    if (!telegramResponse.ok) {
-      const errorData = await telegramResponse.json();
-      console.error('Telegram API error:', errorData);
+    try {
+      await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
+      console.log('Telegram notification sent successfully');
+    } catch (sendError) {
+      console.error('Telegram API error:', sendError);
       return new Response(
         JSON.stringify({ success: false, error: 'Telegram send failed' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    console.log('Telegram notification sent successfully');
 
     return new Response(
       JSON.stringify({ success: true, sent: true }),

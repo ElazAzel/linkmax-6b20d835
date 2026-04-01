@@ -93,6 +93,21 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
         console.warn('Failed to create lead for newsletter subscription:', leadError);
       }
 
+      // Send Telegram notification to page owner
+      try {
+        await supabase.functions.invoke('send-social-notification', {
+          body: {
+            type: 'newsletter_subscribed',
+            recipientId: pageOwnerId,
+            data: {
+              subscriberEmail: trimmedEmail,
+            },
+          },
+        });
+      } catch (notifError) {
+        console.warn('Newsletter notification failed:', notifError);
+      }
+
       toast.success(t('success.subscribed', 'Successfully subscribed!'));
       setIsSubscribed(true);
       setEmail('');
