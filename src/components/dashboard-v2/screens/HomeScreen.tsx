@@ -315,7 +315,7 @@ export const HomeScreen = memo(function HomeScreen({
               {kaspiWidgetEnabled && (
                 <KaspiQRWidget
                   ownerId={pageData?.userId || ''}
-                  className="glass border-white/10 shadow-glass h-full"
+                  className="bg-card border-border/10 shadow-sm h-full"
                 />
               )}
             </div>
