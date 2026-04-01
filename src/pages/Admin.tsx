@@ -187,9 +187,6 @@ export default function Admin() {
                 <AdminCharts />
               </TabsContent>
 
-              <TabsContent value="charts">
-                <AdminCharts />
-              </TabsContent>
 
               <TabsContent value="detailed">
                 <AdminAnalyticsDashboard />

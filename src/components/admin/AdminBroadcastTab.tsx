@@ -1,83 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { supabase } from '@/platform/supabase/client';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
-import Key from 'lucide-react/dist/esm/icons/key';
-import Save from 'lucide-react/dist/esm/icons/save';
 
 export function AdminBroadcastTab() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [savingToken, setSavingToken] = useState(false);
   const [message, setMessage] = useState('');
-  const [botToken, setBotToken] = useState('');
-  const [result, setResult] = useState<{ total_count: number; queued_count: number } | null>(null);
-
-  // Load existing token on mount
-  useEffect(() => {
-    async function loadToken() {
-      const { data } = await (supabase as any)
-        .from('bot_config')
-        .select('value')
-        .eq('key', 'TELEGRAM_BOT_TOKEN')
-        .maybeSingle();
-      
-      if (data && 'value' in data) {
-        setBotToken(data.value);
-      }
-    }
-    loadToken();
-  }, []);
-
-  const handleSaveToken = async () => {
-    if (!botToken.trim()) {
-      toast.error(t('adminBroadcast.botSettings.errEmptyToken'));
-      return;
-    }
-    setSavingToken(true);
-    try {
-      const { error } = await (supabase as any)
-        .from('bot_config')
-        .upsert({ key: 'TELEGRAM_BOT_TOKEN', value: botToken.trim() });
-      
-      if (error) throw error;
-      toast.success(t('adminBroadcast.botSettings.successSave'));
-    } catch (err: any) {
-      toast.error(t('adminBroadcast.botSettings.errSave', { error: err.message }));
-    } finally {
-      setSavingToken(false);
-    }
-  };
+  const [result, setResult] = useState<{ total: number; success: number; failed: number } | null>(null);
 
   const handleRunBroadcast = async () => {
-    const isCustom = message.trim().length > 0;
-    const confirmMsg = isCustom 
-      ? t('adminBroadcast.massBroadcast.confirmCustom', { text: message.slice(0, 50) })
-      : t('adminBroadcast.massBroadcast.confirmDefault');
-
-    if (!confirm(confirmMsg)) {
-      return;
-    }
-
     setLoading(true);
     setResult(null);
 
     try {
-      // Direct SQL call via RPC (No Edge Function deploy needed!)
-      const { data, error } = await (supabase as any).rpc('send_telegram_broadcast', {
-        p_custom_text: message.trim() || null
+      const { data, error } = await supabase.functions.invoke('broadcast-update', {
+        body: { text: message.trim() || null },
       });
 
       if (error) throw error;
 
-      setResult(data as any);
+      setResult(data as { total: number; success: number; failed: number });
       toast.success(t('adminBroadcast.massBroadcast.successRun'));
     } catch (err: any) {
       console.error('Broadcast error:', err);
@@ -89,33 +49,6 @@ export function AdminBroadcastTab() {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Key className="h-5 w-5 text-primary" />
-            <CardTitle>{t('adminBroadcast.botSettings.title')}</CardTitle>
-          </div>
-          <CardDescription>
-            {t('adminBroadcast.botSettings.description')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Input
-              type="password"
-              className="flex-1"
-              placeholder={t('adminBroadcast.botSettings.tokenPlaceholder')}
-              value={botToken}
-              onChange={(e) => setBotToken(e.target.value)}
-            />
-            <Button onClick={handleSaveToken} disabled={savingToken} variant="secondary">
-              {savingToken ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-              {savingToken ? t('adminBroadcast.botSettings.savingBtn') : t('adminBroadcast.botSettings.saveBtn')}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -141,7 +74,7 @@ export function AdminBroadcastTab() {
             </p>
           </div>
 
-          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg flex gap-3 text-amber-800">
+          <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg flex gap-3 text-amber-800 dark:text-amber-200">
             <AlertTriangle className="h-5 w-5 shrink-0" />
             <div className="text-sm">
               <p className="font-semibold">{t('adminBroadcast.massBroadcast.warningTitle')}</p>
@@ -150,37 +83,54 @@ export function AdminBroadcastTab() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <Button 
-              onClick={handleRunBroadcast} 
-              disabled={loading || !botToken} 
-              className="w-full sm:w-auto self-start"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t('adminBroadcast.massBroadcast.runningBtn')}
-                </>
-              ) : (
-                t('adminBroadcast.massBroadcast.runBtn')
-              )}
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  disabled={loading}
+                  className="w-full sm:w-auto self-start"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {t('adminBroadcast.massBroadcast.runningBtn')}
+                    </>
+                  ) : (
+                    t('adminBroadcast.massBroadcast.runBtn')
+                  )}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t('adminBroadcast.massBroadcast.warningTitle')}</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {message.trim()
+                      ? t('adminBroadcast.massBroadcast.confirmCustom', { text: message.slice(0, 50) })
+                      : t('adminBroadcast.massBroadcast.confirmDefault')}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleRunBroadcast}>
+                    {t('adminBroadcast.massBroadcast.runBtn')}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
 
             {result && (
               <div className="mt-4 p-4 bg-muted border rounded-lg space-y-2">
                 <p className="font-semibold text-sm">{t('adminBroadcast.massBroadcast.statusTitle')}</p>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="text-blue-600 font-medium">{t('adminBroadcast.massBroadcast.totalUsers')} {result.total_count}</div>
-                  <div className="text-green-600 font-medium">{t('adminBroadcast.massBroadcast.queuedMsgs')} {result.queued_count}</div>
+                <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div className="text-blue-600 font-medium">{t('adminBroadcast.massBroadcast.totalUsers')} {result.total}</div>
+                  <div className="text-green-600 font-medium">✅ {result.success}</div>
+                  <div className="text-red-600 font-medium">❌ {result.failed}</div>
                 </div>
-                <p className="text-[10px] text-muted-foreground">
-                  {t('adminBroadcast.massBroadcast.asyncHint')}
-                </p>
               </div>
             )}
           </div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader>
           <CardTitle>{t('adminBroadcast.preview.title')}</CardTitle>

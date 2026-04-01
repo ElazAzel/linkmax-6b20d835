@@ -39,7 +39,7 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!telegramBotToken) throw new Error('Bot token not set');
+    if (!isConfigured()) throw new Error('Telegram connector not configured');
 
     const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
 

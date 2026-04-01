@@ -254,6 +254,7 @@ export function AdminAnalyticsDashboard() {
                     />
                   </AreaChart>
                 </ResponsiveContainer>
+                </div>
               </CardContent>
             </Card>
 
