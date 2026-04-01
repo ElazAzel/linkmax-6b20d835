@@ -274,8 +274,8 @@ function SortableGridBlockItem({
       )}
 
       {/* Block type label - bottom-left */}
-      <div className="absolute bottom-2 left-2 z-30 pointer-events-none">
-        <span className="inline-block px-2 py-0.5 rounded-md bg-background text-xs font-bold text-muted-foreground uppercase tracking-wider border border-border/10">
+      <div className="absolute bottom-1.5 left-1.5 z-30 pointer-events-none">
+        <span className="inline-block px-1.5 py-px rounded-md bg-background text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
           {typeLabel}
         </span>
       </div>
