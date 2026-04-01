@@ -74,7 +74,9 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
     gallery_featured_at: p.gallery_featured_at,
     view_count: p.view_count || 0,
     niche: p.niche,
-    is_premium: premiumMap.get(p.user_id) || false
+    city: (p as any).city || null,
+    is_premium: premiumMap.get(p.user_id) || false,
+    last_seen_at: lastSeenMap.get(p.user_id) || null,
   }));
 
   pagesWithPremium.sort((a, b) => {
