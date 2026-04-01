@@ -89,7 +89,7 @@ export default function Gallery() {
     }
 
     return result;
-  }, [pages, searchQuery, selectedNiche, sortMode]);
+  }, [pages, searchQuery, selectedNiche, sortMode, selectedCity]);
 
   const featuredPages = useMemo(() => [...pages]
     .sort((a, b) => (b.gallery_likes || 0) - (a.gallery_likes || 0))
