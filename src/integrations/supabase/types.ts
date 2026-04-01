@@ -519,6 +519,33 @@ export type Database = {
         }
         Relationships: []
       }
+      currency_rates: {
+        Row: {
+          created_at: string | null
+          currency_pair: string
+          fetched_at: string | null
+          id: string
+          rate: number
+          source: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          currency_pair: string
+          fetched_at?: string | null
+          id?: string
+          rate: number
+          source?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          currency_pair?: string
+          fetched_at?: string | null
+          id?: string
+          rate?: number
+          source?: string | null
+        }
+        Relationships: []
+      }
       daily_quests_completed: {
         Row: {
           completed_date: string
