@@ -375,7 +375,7 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
         dimensions.gridRows === 2 ? 'h-[296px]' : 'h-[140px]'
       )}
     >
-      <div className="w-full h-full overflow-hidden opacity-80">
+      <div className="w-full h-full overflow-hidden opacity-80" data-editor-block>
         <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
       </div>
       <div className="absolute top-0 right-0 z-40 p-3 pt-3 pr-3">
