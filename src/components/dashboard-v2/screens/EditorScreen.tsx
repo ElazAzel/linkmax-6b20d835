@@ -334,7 +334,7 @@ export const EditorScreen = memo(function EditorScreen({
   return (
     <div className="min-h-screen safe-area-top">
       {/* Header with actions */}
-      <div className="sticky top-0 z-40 glass-nav border-b border-white/10">
+      <div className="sticky top-0 z-40 bg-background border-b border-border/10">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             {/* Left: Title */}
