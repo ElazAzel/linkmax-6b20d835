@@ -734,8 +734,9 @@
     }
 
     /* CAP BLUR RADIUS FOR PERFORMANCE — skip editor blocks */
+    /* Exclude *-blur-none utilities so mobile doesn't reintroduce blur on transparent overlays */
     /* Mobile GPUs struggle with large blur radii */
-    [class*="blur-"]:not([data-editor-block] *) {
+    [class*="blur-"]:not([class*="blur-none"]):not([data-editor-block] *) {
       backdrop-filter: blur(min(12px, var(--glass-blur, 12px))) !important;
       -webkit-backdrop-filter: blur(min(12px, var(--glass-blur, 12px))) !important;
     }
