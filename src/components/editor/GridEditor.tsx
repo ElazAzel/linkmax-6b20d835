@@ -738,7 +738,7 @@ export const GridEditor = memo(function GridEditor({
     <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-2 pb-32 md:pb-24">
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
-        <div className="relative isolation-isolate bg-card rounded-2xl overflow-hidden" data-onboarding="profile-block" data-editor-block>
+        <div className="relative isolate bg-card rounded-2xl overflow-hidden" data-onboarding="profile-block" data-editor-block>
           <InlineProfileEditor
             block={profileBlock}
             onUpdate={(updates) => onUpdateBlock(profileBlock.id, updates)}
