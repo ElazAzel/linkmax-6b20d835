@@ -159,7 +159,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         <EditorField label={t('fields.country', 'Страна')}>
           <Select
             value={currentCountry || 'none'}
-            onValueChange={(value) => handleLocationChange('country_code', value === 'none' ? '' : value)}
+            onValueChange={(value: string) => handleLocationChange('country_code', value === 'none' ? '' : value)}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue placeholder={t('fields.selectCountry', 'Выберите страну')} />

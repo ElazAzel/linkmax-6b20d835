@@ -543,7 +543,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                             <Label>{t('dashboard.pageSettings.entityType', 'Тип профиля')}</Label>
                             <Select
                                 value={entityTypeInput}
-                                onValueChange={(value) => {
+                                onValueChange={(value: string) => {
                                     setEntityTypeInput(value);
                                     if (onUpdateEntityFields) {
                                         onUpdateEntityFields({ entity_type: value });
