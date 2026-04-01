@@ -44,6 +44,20 @@ export function useDashboard(options?: UseDashboardOptions) {
   // Auth guard
   useDashboardAuthGuard({ isLoading: cloudState.loading });
 
+  // Update last_seen_at for online status tracking
+  useEffect(() => {
+    if (!user?.id) return;
+    const updateLastSeen = async () => {
+      try {
+        const { supabase } = await import('@/platform/supabase/client');
+        await (supabase.from('user_profiles') as any).update({ last_seen_at: new Date().toISOString() }).eq('id', user.id);
+      } catch { /* non-critical */ }
+    };
+    updateLastSeen();
+    const interval = setInterval(updateLastSeen, 3 * 60 * 1000); // every 3 min
+    return () => clearInterval(interval);
+  }, [user?.id]);
+
   // User profile
   const userProfile = useUserProfile(user?.id);
 
