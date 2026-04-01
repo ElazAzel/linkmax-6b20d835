@@ -75,23 +75,19 @@ const TABS: NavTab[] = [
 ];
 
 const MORE_ITEMS: NavTab[] = [
-  { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Дашборд', path: '' },
-  { id: 'zone-analytics', icon: FileText, labelKey: 'dashboard.sidebar.zoneAnalytics', defaultLabel: 'Отчёты', path: '' },
+  { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор', path: '' },
+  { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
+  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
+  { id: 'finance', icon: Coins, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы', path: '' },
+  { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
   { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты', path: '' },
-  { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь', path: '' },
-  { id: 'zone-events', icon: CalendarDays, labelKey: 'dashboard.sidebar.zoneEvents', defaultLabel: 'Ивенты', path: '' },
-  { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие', path: '' },
   { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи', path: '' },
+  { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь', path: '' },
   { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации', path: '' },
   { id: 'zone-invoices', icon: Receipt, labelKey: 'dashboard.sidebar.zoneInvoices', defaultLabel: 'Инвойсы', path: '' },
   { id: 'zone-products', icon: Package, labelKey: 'dashboard.sidebar.zoneProducts', defaultLabel: 'Продукты', path: '' },
-  { id: 'zone-documents', icon: FileText, labelKey: 'dashboard.sidebar.zoneDocuments', defaultLabel: 'Документы', path: '' },
-  { id: 'zone-settings', icon: Building2, labelKey: 'dashboard.sidebar.zoneSettings', defaultLabel: 'Зона', path: '' },
-  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
-  { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
   { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда', path: '' },
-  { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки', path: '' },
 ];
 
 // Tabs that count as "more" active
