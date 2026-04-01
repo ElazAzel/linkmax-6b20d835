@@ -126,6 +126,7 @@ export function useFeatureAccess(requiredTier: FreeTier): boolean {
 
   const tierLevel = (tier: FreeTier): number => {
     switch (tier) {
+      case 'business': return 3;
       case 'pro': return 2;
       default: return 1;
     }
