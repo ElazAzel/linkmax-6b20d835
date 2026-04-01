@@ -239,10 +239,9 @@ function SortableGridBlockItem({
         </div>
 
         {/* Click Overlay */}
-        <Button
-          variant="ghost"
+        <button
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none ring-offset-background transition-colors hover:bg-accent/20 hover:text-inherit active:scale-100 active:bg-accent/30"
+          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/20 active:bg-accent/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
