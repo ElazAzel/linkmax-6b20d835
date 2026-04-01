@@ -51,13 +51,15 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
 
   const { data: profiles } = await supabase
     .from('user_profiles')
-    .select('id, is_premium, trial_ends_at')
+    .select('id, is_premium, trial_ends_at, last_seen_at')
     .in('id', userIds);
 
   const premiumMap = new Map<string, boolean>();
+  const lastSeenMap = new Map<string, string | null>();
   profiles?.forEach(p => {
     const isPremium = !!p.is_premium || (!!p.trial_ends_at && new Date(p.trial_ends_at) > new Date());
     premiumMap.set(p.id, isPremium);
+    lastSeenMap.set(p.id, (p as any).last_seen_at || null);
   });
 
   // Add premium flag and sort: premium first, then by views
