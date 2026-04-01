@@ -132,10 +132,20 @@
     "progress": "{{done}} из {{total}}",
     "steps": {
       "createPage": "Создайте страницу",
+      "addBlock": "Добавьте первый блок",
+      "publish": "Опубликуйте страницу",
+      "connectTelegram": "Подключите Telegram",
+      "firstLead": "Получите первый отклик",
       "firstBooking": "Получите первую запись",
       "firstConversion": "Получите первый отклик",
-      "firstVisitor": "Получите первого посетителя",
-      "publish": "Опубликуйте"
+      "firstVisitor": "Получите первого посетителя"
+    },
+    "cta": {
+      "openEditor": "Открыть",
+      "addBlock": "Добавить",
+      "publish": "Опубликовать",
+      "connectTelegram": "Подключить",
+      "promotePage": "Продвинуть"
     },
     "tips": {
       "addBlock": "Добавьте первый блок — ссылку, товар или видео",
