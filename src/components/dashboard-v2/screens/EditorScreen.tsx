@@ -386,7 +386,7 @@ export const EditorScreen = memo(function EditorScreen({
                 size="sm"
                 className={cn(
                   "h-11 md:h-9 rounded-2xl md:rounded-xl font-black text-xs uppercase tracking-widest px-5 md:px-4",
-                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-glass"
+                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
                 )}
                 onClick={onShare}
               >
