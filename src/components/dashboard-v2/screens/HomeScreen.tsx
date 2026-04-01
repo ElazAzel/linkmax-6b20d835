@@ -273,7 +273,7 @@ export const HomeScreen = memo(function HomeScreen({
             {realLeadsCount > 0 && (
               <Button 
                 size="lg" 
-                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-glass-lg group overflow-hidden relative"
+                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-lg group overflow-hidden relative"
                 onClick={onOpenActivity}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
