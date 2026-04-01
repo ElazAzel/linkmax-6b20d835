@@ -242,7 +242,7 @@ function SortableGridBlockItem({
         <Button
           variant="ghost"
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none ring-offset-background backdrop-blur-none transition-colors hover:bg-accent/20 hover:text-inherit active:scale-100 active:bg-accent/30"
+          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none ring-offset-background transition-colors hover:bg-accent/20 hover:text-inherit active:scale-100 active:bg-accent/30"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
