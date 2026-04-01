@@ -1,106 +1,56 @@
 
 
-# Исправление размытия блоков + Перестройка дашборда вокруг Редактора
+# Полное исправление размытия блоков в редакторе
 
-## Часть 1: Полное устранение размытия в редакторе
+## Корневая причина (почему предыдущие фиксы не помогли)
 
-### Проблема
-Текущий CSS-overrider `[data-editor-block] * { backdrop-filter: none !important }` убирает только `backdrop-filter`, но **не убирает**:
-- Полупрозрачные фоны (`background: hsl(var(--glass-bg))` = 65% opacity) — создают "молочный" эффект поверх контента блоков
-- `shadow-glass` — тяжёлые тени с цветовыми оттенками
-- `border-white/10` — едва видимые границы, сливающиеся с blur
+Текущий CSS-overrider в `index.css` покрывает только **CSS-классы** `.glass-card`, `.glass`, `.glass-button`, `.glass-strong`. Но 15+ блок-компонентов используют **Tailwind-утилиты напрямую**:
 
-### Решение
-Расширить CSS-overrider в `src/index.css`, чтобы внутри `[data-editor-block]` все glass-классы получали **непрозрачные** фоны:
+- `shadow-glass`, `shadow-glass-lg`, `shadow-glass-xl` — тяжёлые цветные тени с `hsl(211 100% 50% / 0.12)` и множественными слоями
+- `backdrop-blur-md`, `backdrop-blur-xl`, `backdrop-blur-2xl` — применяются **в дополнение** к `.glass-card`, поэтому `[data-editor-block] *` ловит backdrop-filter, но НЕ ловит:
+  - `bg-card/60`, `bg-white/5` — полупрозрачные Tailwind-фоны
+  - `border-white/10` — полупрозрачные границы
+  - `shadow-glass` — Tailwind-утилита через `var(--shadow-glass)`
+
+Итого: backdrop-filter убран, но блоки всё равно выглядят "молочными" из-за полупрозрачных фонов + тяжёлых цветных теней.
+
+## Решение
+
+Расширить CSS-overrider в `src/index.css`, добавив правила для **всех** Tailwind-утилит, используемых блоками:
 
 ```css
+/* Disable ALL glass effects inside editor blocks */
 [data-editor-block] .glass-card,
 [data-editor-block] .glass,
 [data-editor-block] .glass-button,
-[data-editor-block] .glass-strong {
+[data-editor-block] .glass-strong,
+[data-editor-block] .glass-subtle,
+[data-editor-block] .glass-input,
+[data-editor-block] .glass-nav {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   background: hsl(var(--card)) !important;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
+  border-color: hsl(var(--border)) !important;
 }
 
+/* Kill ALL backdrop-filter and glass shadows on any element */
 [data-editor-block] * {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  --shadow-glass: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
+  --shadow-glass-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+  --shadow-glass-xl: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
+}
+
+/* Override semi-transparent Tailwind backgrounds */
+[data-editor-block] [class*="bg-card/"],
+[data-editor-block] [class*="bg-white/"],
+[data-editor-block] [class*="bg-background/"] {
+  background: hsl(var(--card)) !important;
 }
 ```
 
-Это сделает все блоки внутри редактора визуально чёткими, с непрозрачным `bg-card` фоном вместо стеклянного.
+Ключевая идея: переопределяем **CSS-переменные** `--shadow-glass*` внутри `[data-editor-block]`, поэтому все Tailwind-утилиты `shadow-glass`, `shadow-glass-lg` автоматически получают лёгкие тени без цветных оттенков.
 
-### Файл: `src/index.css` — ~10 строк изменений
-
----
-
-## Часть 2: Перестройка дашборда — Editor-first CJM
-
-### Текущая проблема
-Навигация ставит "Главная" (HomeScreen) как точку входа, а Редактор — как одну из 5 вкладок. При этом HomeScreen перегружен виджетами (MetricsGrid, ConversionFunnel, OperatorSummary, WalletOverview, SearchReadiness), которые отвлекают от основной задачи — редактирования страницы.
-
-Сайдбар (desktop) разбит на 4 секции с 20+ пунктов, из которых 13 — зоновые. Мобильный bottom nav показывает 4 табы + "Ещё" (16 пунктов в шите).
-
-### Целевая архитектура: Editor-centric
-
-Мобильный bottom nav (5 табов):
-```text
-┌─────────┬──────────┬──────────┬──────────┬──────┐
-│ Редактор │ Входящие │ Аналитика│ Настройки│ Ещё  │
-└─────────┴──────────┴──────────┴──────────┴──────┘
-```
-
-- **Редактор** — дефолтный таб при входе (вместо Home)
-- **Входящие** — лиды + activity (объединённый inbox)
-- **Аналитика** — insights
-- **Настройки** — settings
-- **Ещё** — бизнес-зоны, страницы, финансы, события, команда
-
-Desktop sidebar:
-```text
-Основное:
-  • Редактор (дефолт)
-  • Входящие
-  • Аналитика
-  
-Страницы:
-  • Мои страницы
-  • Шаблоны
-
-Бизнес-инструменты:  (collapsed by default)
-  • Сделки / Контакты / Задачи / ...
-
-Аккаунт:
-  • Финансы / Настройки / Выход
-```
-
-### Изменения
-
-#### Файл 1: `src/components/dashboard-v2/layout/DashboardBottomNav.tsx`
-- Поменять TABS: Editor первый, убрать Home из основных табов
-- Перенести Home в MORE_ITEMS
-- Сократить MORE_ITEMS — сгруппировать зоновые экраны
-
-#### Файл 2: `src/components/dashboard-v2/layout/DashboardSidebar.tsx`
-- Редактор первым пунктом в MAIN_ITEMS
-- Home убрать или сделать вторичным
-- Бизнес-зона collapsed по дефолту
-
-#### Файл 3: `src/pages/DashboardV2.tsx`
-- Дефолтный таб: `'editor'` вместо `'home'` (строка 187)
-- HomeScreen оставить доступным, но не как точку входа
-
-### Затронутые файлы
-- `src/index.css` — расширить CSS override для editor blocks
-- `src/components/dashboard-v2/layout/DashboardBottomNav.tsx` — переставить табы
-- `src/components/dashboard-v2/layout/DashboardSidebar.tsx` — editor-first в сайдбаре
-- `src/pages/DashboardV2.tsx` — дефолтный таб = editor
-
-### Что НЕ трогаем
-- Код блоков (BlockRenderer, block components) — не меняем
-- Публичная страница — glass-стили работают как раньше
-- HomeScreen — остаётся, но доступен через "Ещё"
-- Зоновые экраны — без изменений, только навигация к ним
-
+##
