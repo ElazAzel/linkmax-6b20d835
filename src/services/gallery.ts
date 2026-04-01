@@ -14,7 +14,9 @@ export interface GalleryPage {
   gallery_featured_at: string | null;
   view_count: number | null;
   niche: string | null;
+  city: string | null;
   is_premium?: boolean;
+  last_seen_at?: string | null;
 }
 
 export type LeaderboardPeriod = 'week' | 'month' | 'all';
