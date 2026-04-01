@@ -2,6 +2,7 @@
  * Wrapper component for paid blocks - handles token-based unlocking
  */
 import { memo, useState, useEffect } from 'react';
+import { useRenderContext } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

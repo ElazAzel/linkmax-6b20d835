@@ -577,6 +577,7 @@ export const EditorScreen = memo(function EditorScreen({
 
       {/* Grid Editor */}
       <div className="pt-4">
+      <RenderContextProvider value="editor">
         <Suspense fallback={<EditorCanvasSkeleton />}>
           <GridEditor
             blocks={pageData.blocks}
@@ -594,7 +595,7 @@ export const EditorScreen = memo(function EditorScreen({
             onInsertPreset={handleInsertPresetWithFriction}
           />
         </Suspense>
-      </div>
+      </RenderContextProvider>
 
       {/* P5: Structure View 2.0 */}
       {structureOpen && (
