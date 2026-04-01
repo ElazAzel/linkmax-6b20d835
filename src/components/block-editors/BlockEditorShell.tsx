@@ -326,8 +326,8 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                         />
                     </div>
 
-                    {/* Block Size Selector */}
-                    {onBlockUpdate && block && (
+                    {/* Block Size Selector - hidden on mobile, shown below title */}
+                    {onBlockUpdate && block && !isMobile && (
                         <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
                     )}
 
@@ -352,6 +352,13 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                         />
                     )}
                 </div>
+
+                {/* Block Size Selector on mobile - separate row */}
+                {onBlockUpdate && block && isMobile && (
+                    <div className="px-4 pb-2 flex justify-center">
+                        <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
+                    </div>
+                )}
 
                 {/* Tabs */}
                 {shouldShowTabs && (
