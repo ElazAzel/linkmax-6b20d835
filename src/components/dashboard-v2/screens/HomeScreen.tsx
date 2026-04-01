@@ -264,7 +264,7 @@ export const HomeScreen = memo(function HomeScreen({
                 )}
               </Card>
 
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenInsights}>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenInsights}>
                 <span className="text-2xl font-black text-violet-500 group-hover:scale-110 transition-transform">{viewCount}</span>
                 <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
               </Card>
