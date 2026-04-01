@@ -41,6 +41,8 @@ export const PaidBlockWrapper = memo(function PaidBlockWrapper({
   const { balance, purchaseMarketplaceItem, refresh } = useTokens();
   const [unlocking, setUnlocking] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const renderContext = useRenderContext();
+  const isEditorMode = renderContext === 'editor';
 
   const isPaidContent = blockStyle?.isPaidContent || false;
   const price = blockStyle?.paidContentPrice || 0;
