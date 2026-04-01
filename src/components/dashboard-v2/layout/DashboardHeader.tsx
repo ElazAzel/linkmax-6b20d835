@@ -72,7 +72,7 @@ export const DashboardHeader = memo(function DashboardHeader({
 
       <div className="flex items-center gap-2 md:gap-4 shrink-0">
         {actions}
-        <div className="hidden lg:flex items-center gap-2.5 px-4 py-2 rounded-full glass-subtle border border-white/5 shadow-inner">
+        <div className="hidden lg:flex items-center gap-2.5 px-4 py-2 rounded-full bg-card border border-border/10">
           <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
           <span className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/80">
             {t('dashboard.header.live', 'Live Platform')}

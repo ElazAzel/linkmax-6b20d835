@@ -490,8 +490,8 @@ function DashboardV2Inner() {
               </ScreenErrorBoundary>
             )}
 
-            {/* Editor Screen */}
-            {currentTab === 'editor' && (
+            {/* Editor Screen — persisted, hidden via CSS to preserve state */}
+            <div style={{ display: currentTab === 'editor' ? 'block' : 'none' }}>
               <ScreenErrorBoundary screenName="Editor">
                 <EditorScreen
                   pageData={dashboard.pageData}
@@ -517,7 +517,7 @@ function DashboardV2Inner() {
                   deepLinkAction={activationAction}
                 />
               </ScreenErrorBoundary>
-            )}
+            </div>
 
             {/* Pages Screen */}
             {currentTab === 'pages' && (
