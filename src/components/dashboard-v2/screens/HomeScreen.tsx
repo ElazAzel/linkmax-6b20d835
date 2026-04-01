@@ -239,7 +239,7 @@ export const HomeScreen = memo(function HomeScreen({
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Minimal Stats Hub */}
             <div className="grid grid-cols-3 gap-3">
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenActivity}>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenActivity}>
                 <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{realLeadsCount}</span>
                 <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
               </Card>
