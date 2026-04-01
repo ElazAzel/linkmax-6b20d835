@@ -1,56 +1,116 @@
 
 
-# Полное исправление размытия блоков в редакторе
+# Полный аудит UX/UI дашборда и редактора блоков
 
-## Корневая причина (почему предыдущие фиксы не помогли)
+## Часть 1: Почему блоки ВСЁ ЕЩЁ размыты
 
-Текущий CSS-overrider в `index.css` покрывает только **CSS-классы** `.glass-card`, `.glass`, `.glass-button`, `.glass-strong`. Но 15+ блок-компонентов используют **Tailwind-утилиты напрямую**:
+CSS-override в `index.css` работает только внутри элементов с `data-editor-block`. Но проблема в **слоях ВЫШЕ блоков**:
 
-- `shadow-glass`, `shadow-glass-lg`, `shadow-glass-xl` — тяжёлые цветные тени с `hsl(211 100% 50% / 0.12)` и множественными слоями
-- `backdrop-blur-md`, `backdrop-blur-xl`, `backdrop-blur-2xl` — применяются **в дополнение** к `.glass-card`, поэтому `[data-editor-block] *` ловит backdrop-filter, но НЕ ловит:
-  - `bg-card/60`, `bg-white/5` — полупрозрачные Tailwind-фоны
-  - `border-white/10` — полупрозрачные границы
-  - `shadow-glass` — Tailwind-утилита через `var(--shadow-glass)`
+### 1.1 `DashboardLayout.tsx:73` — полупрозрачная обёртка контента
+```
+bg-background/95 rounded-[2.5rem] border border-white/5
+```
+Весь контент дашборда (включая редактор) обёрнут в `div` с **95% прозрачностью**. Через него просвечивает `CanvasBackground` (анимированный фон). Это даёт "молочный" эффект на **всём**, включая блоки редактора.
 
-Итого: backdrop-filter убран, но блоки всё равно выглядят "молочными" из-за полупрозрачных фонов + тяжёлых цветных теней.
+### 1.2 `EditorScreen.tsx:337` — sticky header с glass-nav
+```
+<div className="sticky top-0 z-40 glass-nav border-b border-white/10">
+```
+Шапка редактора использует `glass-nav` (backdrop-blur + полупрозрачный фон). Это НЕ внутри `[data-editor-block]`, поэтому CSS-override не действует.
 
-## Решение
+### 1.3 `EditorScreen.tsx:500` — intelligence hint banner
+```
+shadow-glass-sm backdrop-blur-sm
+```
+Баннер подсказок тоже использует blur.
 
-Расширить CSS-overrider в `src/index.css`, добавив правила для **всех** Tailwind-утилит, используемых блоками:
+### 1.4 `CanvasBackground` в `DashboardV2.tsx:444`
+Анимированный фон рендерится под всем дашбордом. В сочетании с `bg-background/95` на контейнере — весь контент выглядит "за стеклом".
 
-```css
-/* Disable ALL glass effects inside editor blocks */
-[data-editor-block] .glass-card,
-[data-editor-block] .glass,
-[data-editor-block] .glass-button,
-[data-editor-block] .glass-strong,
-[data-editor-block] .glass-subtle,
-[data-editor-block] .glass-input,
-[data-editor-block] .glass-nav {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: hsl(var(--card)) !important;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
-  border-color: hsl(var(--border)) !important;
-}
+---
 
-/* Kill ALL backdrop-filter and glass shadows on any element */
-[data-editor-block] * {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  --shadow-glass: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
-  --shadow-glass-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
-  --shadow-glass-xl: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
-}
+## Часть 2: Другие UX/UI проблемы
 
-/* Override semi-transparent Tailwind backgrounds */
-[data-editor-block] [class*="bg-card/"],
-[data-editor-block] [class*="bg-white/"],
-[data-editor-block] [class*="bg-background/"] {
-  background: hsl(var(--card)) !important;
-}
+### 2.1 Sticky header мешает на мобильном
+EditorScreen header (строки 337-471) = **120-140px** sticky-контента:
+- Заголовок + кнопки (≈56px)
+- Quick tools bar (≈52px)
+На экране 573px это **25%** viewport занято панелями, оставляя мало места для редактирования.
+
+### 2.2 Слишком много hint-баннеров одновременно
+EditorScreen рендерит ДО 4 баннеров между header и GridEditor:
+1. ActivationChecklist (строка 474)
+2. Intelligence hint (строка 496)
+3. Friction recovery hint (строка 524)
+4. Primary contextual tip (строка 551)
+5. Onboarding hints (строка 572)
+
+На мобильном это может занять весь viewport, и пользователь вообще не видит блоки.
+
+### 2.3 Три FAB-кнопки "Добавить блок" на мобильном
+GridEditor рендерит:
+1. `InsertBetweenDivider` между каждой парой блоков
+2. Bottom add button (строка 774)
+3. Fixed FAB внизу справа (строка 815)
+4. Hidden insert sheet (строка 834)
+
+Три визуальных способа добавить блок — избыточно.
+
+### 2.4 `overflow-hidden` на DragOverlay (строка 373)
+```
+className="... overflow-hidden cursor-grabbing"
+```
+При перетаскивании крупных блоков контент обрезается.
+
+### 2.5 `pointer-events-none` на блоках (строка 237)
+```
+<div className="pointer-events-none w-full h-full" data-editor-block>
+```
+Правильно для предотвращения кликов, но означает что блоки не могут иметь hover-состояния (например, подсветку ссылок).
+
+### 2.6 Нет кнопки "Назад" на мобильном в EditorScreen
+На мобильном пользователь не может вернуться к другим разделам, кроме как через bottom nav. Header не показывает кнопку назад.
+
+---
+
+## Часть 3: План исправлений
+
+### Шаг 1: Убрать размытие на уровне layout (КРИТИЧНЫЙ)
+
+**`DashboardLayout.tsx:73`** — заменить полупрозрачный фон на непрозрачный:
+```
+bg-background/95 → bg-background
+border-white/5 → border-border/5
 ```
 
-Ключевая идея: переопределяем **CSS-переменные** `--shadow-glass*` внутри `[data-editor-block]`, поэтому все Tailwind-утилиты `shadow-glass`, `shadow-glass-lg` автоматически получают лёгкие тени без цветных оттенков.
+**`EditorScreen.tsx:337`** — заменить glass-nav на непрозрачный header:
+```
+glass-nav border-b border-white/10 → bg-background border-b border-border/10
+```
 
-##
+**`EditorScreen.tsx:500`** — убрать blur с intelligence hint:
+```
+shadow-glass-sm backdrop-blur-sm → shadow-sm
+```
+
+### Шаг 2: Оптимизировать мобильный EditorScreen
+
+- Quick tools bar: скрыть на мобильном или сделать collapsible (сэкономить 52px)
+- Баннеры: показывать **максимум 1** баннер, приоритизировать по важности (Activation > Intelligence > Tips)
+- Убрать fixed FAB если есть InsertBetweenDivider (или наоборот — оставить только FAB)
+
+### Шаг 3: Мелкие фиксы
+- DragOverlay: `overflow-hidden` → `overflow-visible`
+- Оставить CSS-override `[data-editor-block]` как есть (для блоков, которые имеют свои glass-классы)
+
+### Затронутые файлы
+- `src/components/dashboard-v2/layout/DashboardLayout.tsx` — 1 строка
+- `src/components/dashboard-v2/screens/EditorScreen.tsx` — 3-5 строк (header, hints, toolbar)
+- `src/components/editor/GridEditor.tsx` — 1 строка (DragOverlay overflow)
+
+### Что НЕ трогаем
+- `index.css` — текущий override оставляем
+- `CanvasBackground` — оставляем (после непрозрачного `bg-background` он просто не будет видно через контент)
+- Код блоков — не меняем
+- Публичная страница — не затрагивается
+
