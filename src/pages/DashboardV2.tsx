@@ -184,7 +184,7 @@ function DashboardV2Inner() {
     if (ALL_TABS.includes(lastPart)) {
       return lastPart as TabId;
     }
-    return 'home';
+    return 'editor';
   }, [searchParams, location.pathname]);
 
   const activationAction = searchParams.get('action');

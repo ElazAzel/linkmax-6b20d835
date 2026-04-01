@@ -9,7 +9,7 @@ import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { usePageAnalytics } from '@/hooks/analytics/usePageAnalytics';
 import { useLeads } from '@/hooks/crm/useLeads';
 
-export type DashboardTab = 'home' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings';
+export type DashboardTab = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings';
 
 export function useDashboardV2() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ export function useDashboardV2() {
     if (tab && validTabs.includes(tab as DashboardTab)) {
       return tab as DashboardTab;
     }
-    return 'home';
+    return 'editor';
   }, [searchParams]);
 
   // Change tab

@@ -72,29 +72,18 @@ interface DashboardSidebarProps {
 }
 
 const MAIN_ITEMS: SidebarItem[] = [
-  { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Главная' },
+  { id: 'editor', icon: PenTool, labelKey: 'dashboard.nav.editor', defaultLabel: 'Редактор' },
+  { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
+  { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },
 ];
 
 const SECTIONS: SidebarSection[] = [
   {
-    id: 'operations',
-    titleKey: 'dashboard.sidebar.operations',
-    defaultTitle: 'Работа',
-    items: [
-      { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
-      { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды' },
-      { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
-      { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },
-      { id: 'finance', icon: Coins, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы' },
-    ],
-  },
-  {
-    id: 'design',
+    id: 'pages',
     titleKey: 'dashboard.sidebar.design',
-    defaultTitle: 'Дизайн',
+    defaultTitle: 'Страницы',
     items: [
-      { id: 'editor', icon: PenTool, labelKey: 'dashboard.nav.editor', defaultLabel: 'Редактор' },
-      { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы' },
+      { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Мои страницы' },
       { id: 'templates', icon: LayoutTemplate, labelKey: 'dashboard.sidebar.templates', defaultLabel: 'Шаблоны' },
     ],
   },
@@ -103,10 +92,12 @@ const SECTIONS: SidebarSection[] = [
     titleKey: 'dashboard.sidebar.zone',
     defaultTitle: 'Бизнес-инструменты',
     items: [
-      { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События' },
+      { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды' },
+      { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
       { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
-      { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь' },
       { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи' },
+      { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События' },
+      { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь' },
       { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации' },
       { id: 'zone-invoices', icon: Receipt, labelKey: 'dashboard.sidebar.zoneInvoices', defaultLabel: 'Инвойсы' },
       { id: 'zone-products', icon: Package, labelKey: 'dashboard.sidebar.zoneProducts', defaultLabel: 'Продукты' },
@@ -118,9 +109,9 @@ const SECTIONS: SidebarSection[] = [
     titleKey: 'dashboard.sidebar.account',
     defaultTitle: 'Аккаунт',
     items: [
-      { id: 'tokens', icon: Coins, labelKey: 'dashboard.sidebar.tokens', defaultLabel: 'Токены' },
-      { id: 'achievements', icon: Trophy, labelKey: 'dashboard.sidebar.achievements', defaultLabel: 'Достижения' },
+      { id: 'finance', icon: Coins, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы' },
       { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда' },
+      { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор' },
       { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
     ],
   },
