@@ -24,7 +24,7 @@ async function fetchTasks(zoneId: string): Promise<ZoneTask[]> {
 }
 
 async function fetchChecklist(zoneId: string, taskId: string): Promise<ZoneTaskChecklistItem[]> {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('zone_task_checklist')
     .select('*')
     .eq('task_id', taskId)
@@ -34,7 +34,7 @@ async function fetchChecklist(zoneId: string, taskId: string): Promise<ZoneTaskC
 }
 
 async function fetchComments(zoneId: string, taskId: string) {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('zone_task_comments')
     .select('*, user:user_id(email, raw_user_meta_data)')
     .eq('task_id', taskId)

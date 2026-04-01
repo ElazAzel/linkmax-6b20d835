@@ -51,7 +51,7 @@ export function useZoneAutomations(zoneId: string | null) {
   const createMutation = useMutation({
     mutationFn: async (automation: Partial<ZoneAutomation>) => {
       if (!zoneId) throw new Error('No zone');
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('zone_automations')
         .insert({ ...automation, zone_id: zoneId });
       if (error) throw error;

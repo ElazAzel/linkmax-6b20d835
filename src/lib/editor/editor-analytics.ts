@@ -100,9 +100,9 @@ export function trackEditorAction(
         .insert([{
           event_type: `editor.${action}`,
           metadata: (meta ? JSON.parse(JSON.stringify(meta)) : null),
-          page_id: null,
+          page_id: null as any,
           block_id: meta?.blockId ?? null,
-        }])
+        }] as any)
         .then(() => {});
     });
   } catch {

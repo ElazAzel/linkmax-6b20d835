@@ -124,16 +124,15 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
       const fiveDaysAgo = format(subDays(new Date(), 5), 'yyyy-MM-dd');
       const { data: completedData } = await supabase
         .from('bookings')
-        .select('id, client_name, client_phone, slot_date, slot_time, followup_sent_at')
+        .select('id, client_name, client_phone, slot_date, slot_time')
         .eq('owner_id', user.id)
         .eq('status', 'completed')
         .gte('slot_date', fiveDaysAgo)
         .lt('slot_date', today)
-        .is('followup_sent_at' as any, null)
         .order('slot_date', { ascending: false })
         .limit(5);
 
-      if (completedData) setCompletedBookings(completedData as CompletedBooking[]);
+      if (completedData) setCompletedBookings(completedData as unknown as CompletedBooking[]);
 
       // Rebook candidates: completed 14-35 days ago
       const thirtyFiveDaysAgo = format(subDays(new Date(), 35), 'yyyy-MM-dd');

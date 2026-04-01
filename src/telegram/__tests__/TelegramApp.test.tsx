@@ -69,7 +69,7 @@ describe('TelegramApp', () => {
 
   it('calls Telegram.ready() on mount', async () => {
     render(<TelegramApp />);
-    expect(window.Telegram.WebApp.ready).toHaveBeenCalled();
+    expect(window.Telegram!.WebApp.ready).toHaveBeenCalled();
   });
 
   it('validates auth with server on mount', async () => {

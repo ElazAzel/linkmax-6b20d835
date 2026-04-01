@@ -125,7 +125,7 @@ export function useZoneContacts(zoneId: string | null) {
         zone_id: zoneId,
         owner_user_id: userId,
       }));
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('zone_contacts')
         .insert(rows);
       if (error) throw error;

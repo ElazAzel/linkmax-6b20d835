@@ -83,7 +83,7 @@ export function useSavePageMutation(userId: string | undefined) {
       const { data, error } = await savePage(pageData, userId, chatbotContext);
       if (error) throw error;
       return {
-        dbPage: data ? { id: data.id, slug: data.slug, is_published: data.is_published } : null,
+        dbPage: data ? { id: data.id, slug: data.slug, is_published: data.is_published ?? false } : null,
         pageData,
         chatbotContext
       };

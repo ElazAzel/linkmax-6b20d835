@@ -47,7 +47,7 @@ export function usePageExperiments(pageData: PageData | null, visitorId: string 
             let selectedVariant: BlockVariation | null = null;
 
             for (const variant of experiment.variants) {
-                cumulativeWeight += variant.traffic_weight;
+                cumulativeWeight += variant.traffic_weight ?? 0;
                 if (bucket < cumulativeWeight) {
                     selectedVariant = variant;
                     break;
@@ -75,7 +75,7 @@ export function usePageExperiments(pageData: PageData | null, visitorId: string 
 
                     assignments.push({
                         experimentId: experiment.id,
-                        variantLabel: selectedVariant.variant_label
+                        variantLabel: selectedVariant.variant_label || selectedVariant.variant_key
                     });
                 }
             }

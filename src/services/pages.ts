@@ -63,19 +63,22 @@ function mapExperimentData(experiments: RawExperiment[]): PageExperiment[] {
   return (experiments || []).map((exp) => ({
     id: exp.id,
     page_id: exp.page_id,
+    block_id: (exp as any).block_id || '',
     name: exp.name,
     status: exp.status as PageExperiment['status'],
     started_at: exp.started_at || undefined,
     ended_at: exp.ended_at || undefined,
-    variants: (exp.experiment_variants || []).map((v) => ({
+    variants: (exp.experiment_variants || []).map((v: any) => ({
       id: v.id,
       experiment_id: v.experiment_id,
+      variant_key: v.variant_key || '',
       base_block_id: v.base_block_id || '',
       variant_label: v.variant_label || '',
       block_data: (v.block_data as unknown) as Partial<Block>,
-      traffic_weight: v.traffic_weight ?? 0
+      traffic_weight: v.traffic_weight ?? 0,
+      created_at: v.created_at || '',
     }))
-  }));
+  })) as PageExperiment[];
 }
 
 /**

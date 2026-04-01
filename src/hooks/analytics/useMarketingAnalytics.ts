@@ -54,7 +54,7 @@ export function useMarketingAnalytics() {
 
     try {
       await supabase.from('analytics').insert({
-        page_id: null,
+        page_id: null as any,
         block_id: null,
         event_type: eventType,
         metadata: {

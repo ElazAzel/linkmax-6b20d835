@@ -34,7 +34,7 @@ export function useZoneDealFields(zoneId: string | null) {
     const createFieldMutation = useMutation({
         mutationFn: async (field: Partial<ZoneDealField>) => {
             if (!zoneId) throw new Error('No zone selected');
-            const { data, error } = await supabase
+            const { data, error } = await (supabase as any)
                 .from('zone_deal_fields')
                 .insert({
                     ...field,
