@@ -225,6 +225,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   };
 
   return (
+    <TooltipProvider>
     <motion.aside
       className={cn(
         "hidden md:flex flex-col h-screen sticky top-0 bg-card border-r border-border/10 z-50",
