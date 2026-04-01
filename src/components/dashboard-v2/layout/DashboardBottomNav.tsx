@@ -150,7 +150,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                       </span>
                     )}
                   </div>
-                  <span className={cn("text-[8px] font-black leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal break-words text-wrap text-center", isActive && "text-primary")}>
+                  <span className={cn("text-[10px] font-black leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal break-words text-wrap text-center", isActive && "text-primary")}>
                     {t(tab.labelKey, tab.defaultLabel)}
                   </span>
                 </button>
