@@ -18,13 +18,14 @@ export function useGallery() {
   const [pages, setPages] = useState<GalleryPage[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [nicheCounts, setNicheCounts] = useState<Record<string, number>>({});
 
   const fetchPages = useCallback(async () => {
     setLoading(true);
     try {
       const [pagesData, countsData] = await Promise.all([
-        getGalleryPages(selectedNiche),
+        getGalleryPages(selectedNiche, selectedCity),
         getNicheCounts(),
       ]);
 
@@ -35,7 +36,7 @@ export function useGallery() {
     } finally {
       setLoading(false);
     }
-  }, [selectedNiche]);
+  }, [selectedNiche, selectedCity]);
 
   useEffect(() => {
     fetchPages();
