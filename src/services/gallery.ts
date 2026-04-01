@@ -31,6 +31,9 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
   if (niche) {
     query = query.eq('niche', niche);
   }
+  if (city) {
+    query = query.eq('city', city);
+  }
 
   const { data, error } = await query
     .order('view_count', { ascending: false, nullsFirst: false })
