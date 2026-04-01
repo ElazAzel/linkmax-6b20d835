@@ -408,7 +408,7 @@ export const HomeScreen = memo(function HomeScreen({
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-16 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/20 transition-all border-white/10 group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-muted hover:bg-accent transition-all border-border/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
                   <PenTool className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
