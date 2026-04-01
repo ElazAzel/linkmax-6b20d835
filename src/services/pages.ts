@@ -527,6 +527,7 @@ export async function updatePageEntityFields(
     contact_email?: string;
     contact_phone?: string;
     contact_whatsapp?: string;
+    country_code?: string;
   }
 ): Promise<{ error: Error | null }> {
   try {
