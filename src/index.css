@@ -1044,23 +1044,43 @@
 
 /* ============================================================
    EDITOR BLOCK: Kill ALL glass/blur/transparency effects
-   Placed at the very end to guarantee cascade priority
+   Strategy: Override CSS variables so glass classes compute to
+   opaque values natively + force properties as fallback
    ============================================================ */
-[data-editor-block],
-[data-editor-block] *,
-[data-editor-block] *::before,
-[data-editor-block] *::after {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  filter: none !important;
-  --tw-backdrop-blur: none !important;
-  --tw-blur: none !important;
+
+/* 1. Override glass VARIABLES at the container level */
+[data-editor-block] {
+  /* Make glass backgrounds opaque */
+  --glass-bg: var(--card) !important;
+  --glass-bg-subtle: var(--card) !important;
+  --glass-bg-strong: var(--card) !important;
+  /* Kill blur radius */
+  --glass-blur: 0px !important;
+  --glass-blur-sm: 0px !important;
+  --glass-blur-lg: 0px !important;
+  --glass-blur-xl: 0px !important;
+  /* Solid borders */
+  --glass-border: var(--border) !important;
+  --glass-border-subtle: var(--border) !important;
+  /* Simple shadows */
   --shadow-glass: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
   --shadow-glass-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
   --shadow-glass-xl: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
   --shadow-glass-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
 }
 
+/* 2. Force-kill all blur/filter on every descendant */
+[data-editor-block],
+[data-editor-block] *,
+[data-editor-block] *::before,
+[data-editor-block] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  --tw-backdrop-blur: !important;
+  --tw-blur: !important;
+}
+
+/* 3. Force opaque backgrounds on glass utility classes */
 [data-editor-block] .glass-card,
 [data-editor-block] .glass,
 [data-editor-block] .glass-button,
@@ -1075,7 +1095,7 @@
   border-color: hsl(var(--border)) !important;
 }
 
-/* Override Card default variant bg-card/85 and all semi-transparent backgrounds */
+/* 4. Force opaque on ALL semi-transparent bg classes */
 [data-editor-block] [class*="bg-card"],
 [data-editor-block] [class*="bg-white"],
 [data-editor-block] [class*="bg-background"] {
@@ -1083,8 +1103,14 @@
   background: hsl(var(--card)) !important;
 }
 
-/* Override backdrop-blur Tailwind utilities specifically */
+/* 5. Kill backdrop-blur Tailwind utilities */
 [data-editor-block] [class*="backdrop-blur"] {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+
+/* 6. Kill inline blur on decorative elements */
+[data-editor-block] [class*="blur-"] {
+  filter: none !important;
+  -webkit-filter: none !important;
 }
