@@ -315,6 +315,39 @@ export default function Gallery() {
               </div>
             </div>
 
+            {/* City filter pills */}
+            {cities.length > 0 && (
+              <div className="px-4 pb-2 overflow-x-auto scrollbar-hide">
+                <div className="flex gap-1.5 min-w-max">
+                  <button
+                    onClick={() => setSelectedCity(null)}
+                    className={cn(
+                      "h-7 px-3 rounded-full text-[11px] font-medium whitespace-nowrap transition-all",
+                      !selectedCity
+                        ? "bg-accent text-accent-foreground shadow-sm"
+                        : "bg-muted/30 text-muted-foreground hover:bg-muted"
+                    )}
+                  >
+                    📍 {t('gallery.allCities', 'Все города')}
+                  </button>
+                  {cities.slice(0, 15).map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setSelectedCity(selectedCity === c ? null : c)}
+                      className={cn(
+                        "h-7 px-3 rounded-full text-[11px] font-medium whitespace-nowrap transition-all",
+                        selectedCity === c
+                          ? "bg-accent text-accent-foreground shadow-sm"
+                          : "bg-muted/30 text-muted-foreground hover:bg-muted"
+                      )}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Sort buttons */}
             <div className="px-4 pb-3 flex items-center gap-2">
               <div className="flex gap-1 bg-muted/30 rounded-full p-0.5">
