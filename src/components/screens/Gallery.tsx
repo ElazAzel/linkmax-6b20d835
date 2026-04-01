@@ -39,7 +39,7 @@ export default function Gallery() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { pages, loading, likePage } = useGallery();
+  const { pages, loading, likePage, cities } = useGallery();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNiche, setSelectedNiche] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'gallery' | 'leaderboard'>('gallery');
