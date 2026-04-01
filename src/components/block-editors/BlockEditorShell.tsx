@@ -353,6 +353,13 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                     )}
                 </div>
 
+                {/* Block Size Selector on mobile - separate row */}
+                {onBlockUpdate && block && isMobile && (
+                    <div className="px-4 pb-2 flex justify-center">
+                        <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
+                    </div>
+                )}
+
                 {/* Tabs */}
                 {shouldShowTabs && (
                     <div className="px-4 pb-2">

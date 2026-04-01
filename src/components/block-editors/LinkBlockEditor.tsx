@@ -403,6 +403,5 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
 }
 
 export const LinkBlockEditor = withBlockEditor(LinkBlockEditorComponent, {
-  hint: 'Add clickable links to any external page or resource',
   validate: validateLinkBlock,
 });
