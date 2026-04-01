@@ -386,7 +386,7 @@ export const EditorScreen = memo(function EditorScreen({
                 size="sm"
                 className={cn(
                   "h-11 md:h-9 rounded-2xl md:rounded-xl font-black text-xs uppercase tracking-widest px-5 md:px-4",
-                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-glass"
+                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
                 )}
                 onClick={onShare}
               >
@@ -470,109 +470,93 @@ export const EditorScreen = memo(function EditorScreen({
         </div>
       </div>
 
-      {/* P5: Activation Checklist UI */}
-      {activation.isVisible && (
-        <div className="mx-4 mt-4 animate-fade-in">
-          <ActivationChecklist
-            steps={activation.steps}
-            completedCount={activation.completedCount}
-            totalCount={activation.totalCount}
-            progress={activation.progress}
-            canDismiss={activation.canDismiss}
-            onDismiss={activation.dismiss}
-            onStepClick={activation.handleStepClick}
-          />
-        </div>
-      )}
-
-      {/* P5: Activation Celebration */}
-      {activation.showCelebration && (
-        <div className="mx-4 mt-4 animate-fade-in zoom-in-95 duration-500 hover:scale-[1.01] transition-transform">
-          <ActivationCelebration onDismiss={activation.dismissCelebration} />
-        </div>
-      )}
-
-      {/* Intelligence hint banner */}
-      {intelligence && intelligence.nextActions.length > 0 && (() => {
-        const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
-        if (!top) return null;
-        return (
-          <div className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3.5 shadow-sm">
-            <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-              <Lightbulb className="h-4.5 w-4.5 text-primary" />
+      {/* Single priority banner — max 1 at a time */}
+      {(() => {
+        // Priority: Activation > Celebration > Friction > Intelligence > Tips > Onboarding
+        if (activation.isVisible) {
+          return (
+            <div className="mx-4 mt-4 animate-fade-in">
+              <ActivationChecklist
+                steps={activation.steps}
+                completedCount={activation.completedCount}
+                totalCount={activation.totalCount}
+                progress={activation.progress}
+                canDismiss={activation.canDismiss}
+                onDismiss={activation.dismiss}
+                onStepClick={activation.handleStepClick}
+              />
             </div>
-            <span className="text-xs font-medium text-foreground/80 flex-1 leading-relaxed">
-              {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
-            </span>
-            <Badge variant="outline" className="text-xs font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
-              {top.priority}
-            </Badge>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setDismissedHint(top.id)}
-              className="h-10 w-10 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        );
-      })()}
-
-      {/* P5: Friction recovery hint */}
-      {frictionSignal && (
-        <div className="mx-4 mt-2 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2">
-          <Lightbulb className="h-4 w-4 text-amber-500 shrink-0" />
-          <span className="text-xs text-foreground/80 flex-1">
-            {t(`friction.${frictionSignal.suggestedActionKey}`, frictionSignal.suggestedAction)}
-          </span>
-          <Button
-            type="button"
-            variant="link"
-            size="sm"
-            onClick={handleFrictionAction}
-            className="h-auto px-0 py-0 text-xs font-semibold text-primary hover:underline shrink-0"
-          >
-            {t('friction.try', 'Попробовать')}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={dismissFriction}
-            className="p-0.5 h-auto shrink-0"
-          >
-            <X className="h-3 w-3 text-muted-foreground" />
-          </Button>
-        </div>
-      )}
-
-      {primaryTip && (
-        <div className="mx-4 mt-2 flex items-start gap-3 rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
-          <Lightbulb className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold">{primaryTip.title}</p>
-            <p className="text-xs text-muted-foreground mt-1">{primaryTip.description}</p>
-            <div className="mt-2">
-              {primaryTip.href ? (
-                <Link to={primaryTip.href} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</Link>
-              ) : (
-                <button onClick={primaryTip.onAction} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</button>
-              )}
+          );
+        }
+        if (activation.showCelebration) {
+          return (
+            <div className="mx-4 mt-4 animate-fade-in zoom-in-95 duration-500">
+              <ActivationCelebration onDismiss={activation.dismissCelebration} />
             </div>
-          </div>
-          <button onClick={() => dismissTip(primaryTip.id)} className="p-1 rounded hover:bg-white/10">
-            <X className="h-3.5 w-3.5 text-muted-foreground" />
-          </button>
-        </div>
-      )}
-
-      {/* Lightweight onboarding hints */}
-      {onboardingHints.length > 0 && (
-        <div className="mx-4 mt-3 space-y-2">
-          {onboardingHints.map((hint) => (
-            <div key={hint.id} className="flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
+          );
+        }
+        if (frictionSignal) {
+          return (
+            <div className="mx-4 mt-3 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2">
+              <Lightbulb className="h-4 w-4 text-amber-500 shrink-0" />
+              <span className="text-xs text-foreground/80 flex-1">
+                {t(`friction.${frictionSignal.suggestedActionKey}`, frictionSignal.suggestedAction)}
+              </span>
+              <Button type="button" variant="link" size="sm" onClick={handleFrictionAction} className="h-auto px-0 py-0 text-xs font-semibold text-primary hover:underline shrink-0">
+                {t('friction.try', 'Попробовать')}
+              </Button>
+              <Button type="button" variant="ghost" size="sm" onClick={dismissFriction} className="p-0.5 h-auto shrink-0">
+                <X className="h-3 w-3 text-muted-foreground" />
+              </Button>
+            </div>
+          );
+        }
+        if (intelligence && intelligence.nextActions.length > 0) {
+          const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
+          if (top) {
+            return (
+              <div className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3.5 shadow-sm">
+                <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <Lightbulb className="h-4.5 w-4.5 text-primary" />
+                </div>
+                <span className="text-xs font-medium text-foreground/80 flex-1 leading-relaxed">
+                  {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
+                </span>
+                <Badge variant="outline" className="text-xs font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
+                  {top.priority}
+                </Badge>
+                <Button type="button" variant="ghost" size="icon" onClick={() => setDismissedHint(top.id)} className="h-10 w-10 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0">
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            );
+          }
+        }
+        if (primaryTip) {
+          return (
+            <div className="mx-4 mt-3 flex items-start gap-3 rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
+              <Lightbulb className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold">{primaryTip.title}</p>
+                <p className="text-xs text-muted-foreground mt-1">{primaryTip.description}</p>
+                <div className="mt-2">
+                  {primaryTip.href ? (
+                    <Link to={primaryTip.href} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</Link>
+                  ) : (
+                    <button onClick={primaryTip.onAction} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</button>
+                  )}
+                </div>
+              </div>
+              <button onClick={() => dismissTip(primaryTip.id)} className="p-1 rounded hover:bg-white/10">
+                <X className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
+            </div>
+          );
+        }
+        if (onboardingHints.length > 0) {
+          const hint = onboardingHints[0]; // Show only the first hint
+          return (
+            <div className="mx-4 mt-3 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
               <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-black uppercase tracking-wider">{hint.title}</p>
@@ -581,17 +565,14 @@ export const EditorScreen = memo(function EditorScreen({
               <Button size="sm" className="h-11 px-5 rounded-xl text-xs font-black uppercase tracking-wider" onClick={hint.onCta}>
                 {hint.ctaLabel}
               </Button>
-              <button
-                className="p-1 rounded-lg hover:bg-white/10 text-muted-foreground"
-                onClick={() => dismissOnboardingHint(hint.id)}
-                aria-label={t('common.dismiss', 'Скрыть')}
-              >
+              <button className="p-1 rounded-lg hover:bg-white/10 text-muted-foreground" onClick={() => dismissOnboardingHint(hint.id)} aria-label={t('common.dismiss', 'Скрыть')}>
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
-          ))}
-        </div>
-      )}
+          );
+        }
+        return null;
+      })()}
 
       {/* Grid Editor */}
       <div className="pt-4">

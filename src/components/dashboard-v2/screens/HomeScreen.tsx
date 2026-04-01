@@ -239,14 +239,14 @@ export const HomeScreen = memo(function HomeScreen({
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Minimal Stats Hub */}
             <div className="grid grid-cols-3 gap-3">
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenActivity}>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenActivity}>
                 <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{realLeadsCount}</span>
                 <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
               </Card>
               
               <Card 
                 className={cn(
-                  "p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group",
+                  "p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group",
                   !telegramChatId && "border-amber-500/20"
                 )}
                 onClick={() => onNavigate?.('settings')}
@@ -264,7 +264,7 @@ export const HomeScreen = memo(function HomeScreen({
                 )}
               </Card>
 
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenInsights}>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenInsights}>
                 <span className="text-2xl font-black text-violet-500 group-hover:scale-110 transition-transform">{viewCount}</span>
                 <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
               </Card>
@@ -273,7 +273,7 @@ export const HomeScreen = memo(function HomeScreen({
             {realLeadsCount > 0 && (
               <Button 
                 size="lg" 
-                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-glass-lg group overflow-hidden relative"
+                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-lg group overflow-hidden relative"
                 onClick={onOpenActivity}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -309,13 +309,13 @@ export const HomeScreen = memo(function HomeScreen({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <WalletOverviewWidget 
                 onViewFinance={() => navigate('/finance')}
-                className="glass border-white/10 shadow-glass h-full"
+                className="bg-card border-border/10 shadow-sm h-full"
               />
               
               {kaspiWidgetEnabled && (
                 <KaspiQRWidget
                   ownerId={pageData?.userId || ''}
-                  className="glass border-white/10 shadow-glass h-full"
+                  className="bg-card border-border/10 shadow-sm h-full"
                 />
               )}
             </div>
@@ -338,16 +338,16 @@ export const HomeScreen = memo(function HomeScreen({
         )}
 
         {/* Primary Page Card */}
-        <Card className="p-5 md:p-8 space-y-6 glass border-white/20 shadow-glass-lg relative overflow-hidden group rounded-[2.5rem] md:rounded-[3rem]">
+        <Card className="p-5 md:p-8 space-y-6 bg-card border-border/10 shadow-sm relative overflow-hidden group rounded-[2.5rem] md:rounded-[3rem]">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-30 group-hover:opacity-50 transition-opacity duration-1000 -z-10" />
           
           {/* Page Header */}
           <div className="flex items-center gap-6">
             <div className="relative group/avatar shrink-0">
               <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-2xl blur-md opacity-20 group-hover/avatar:opacity-40 transition duration-1000 animate-pulse" />
-              <Avatar className="h-20 w-20 md:h-24 md:w-24 rounded-2xl border-2 border-white/30 relative shadow-glass">
+              <Avatar className="h-20 w-20 md:h-24 md:w-24 rounded-2xl border-2 border-border/20 relative shadow-sm">
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-black bg-white/10 text-primary backdrop-blur-xl">
+                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-black bg-muted text-primary">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -357,7 +357,7 @@ export const HomeScreen = memo(function HomeScreen({
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-3xl font-black tracking-tighter truncate text-foreground drop-shadow-sm">{name}</h2>
                 {isPremium && (
-                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-glass-lg shrink-0 font-black text-xs px-3 py-1 rounded-full">
+                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-lg shrink-0 font-black text-xs px-3 py-1 rounded-full">
                     <Crown className="h-3 w-3 mr-1.5" />
                     PRO
                   </Badge>
@@ -408,7 +408,7 @@ export const HomeScreen = memo(function HomeScreen({
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-16 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/20 transition-all border-white/10 group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-muted hover:bg-accent transition-all border-border/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
                   <PenTool className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
@@ -416,7 +416,7 @@ export const HomeScreen = memo(function HomeScreen({
                 </Button>
                 <Button
                   size="lg"
-                  className="h-16 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-glass-lg hover:shadow-emerald-500/40 transition-all active:scale-[0.98] group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
                   <Share2 className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
@@ -427,7 +427,7 @@ export const HomeScreen = memo(function HomeScreen({
               <>
                 <Button
                   size="lg"
-                  className="h-16 flex-1 rounded-2xl text-base font-black bg-primary hover:bg-primary/90 text-white shadow-glass-lg hover:shadow-primary/40 transition-all active:scale-[0.98] group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-primary/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
                   <PenTool className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
@@ -436,7 +436,7 @@ export const HomeScreen = memo(function HomeScreen({
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-16 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/20 transition-all border-white/10 group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-muted hover:bg-accent transition-all border-border/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
                   <Share2 className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
@@ -448,14 +448,14 @@ export const HomeScreen = memo(function HomeScreen({
 
           {/* Secondary Actions */}
           <div className="flex gap-3">
-            <Button variant="ghost" className="flex-1 h-12 rounded-xl glass-subtle border-none hover:bg-white/10 text-xs font-bold uppercase tracking-widest opacity-70 hover:opacity-100" onClick={onPreview}>
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl bg-muted border-none hover:bg-accent text-xs font-bold uppercase tracking-widest opacity-70 hover:opacity-100" onClick={onPreview}>
               <Eye className="h-4 w-4 mr-2" />
               {t('dashboard.home.preview', 'Предпросмотр')}
             </Button>
             {isPublished && (
               <Button
                 variant="ghost"
-                className="h-12 w-12 rounded-xl p-0 glass-subtle border-none hover:bg-white/10 opacity-70 hover:opacity-100"
+                className="h-12 w-12 rounded-xl p-0 bg-muted border-none hover:bg-accent opacity-70 hover:opacity-100"
                 onClick={() => window.open(`/${slug}`, '_blank')}
               >
                 <ExternalLink className="h-4 w-4" />
