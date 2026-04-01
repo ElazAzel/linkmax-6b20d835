@@ -389,6 +389,7 @@ export default function Gallery() {
                   onCtaClick={() => {
                     setSearchQuery('');
                     setSortMode('popular');
+                    setSelectedCity(null);
                     updateNiche(null);
                   }}
                 />
