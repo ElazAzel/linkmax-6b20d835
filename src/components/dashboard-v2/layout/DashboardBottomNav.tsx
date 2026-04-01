@@ -23,6 +23,7 @@ import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Users from 'lucide-react/dist/esm/icons/users';
+import Coins from 'lucide-react/dist/esm/icons/coins';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import { motion } from 'framer-motion';
