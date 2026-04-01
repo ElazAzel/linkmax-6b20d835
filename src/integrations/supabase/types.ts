@@ -2152,6 +2152,7 @@ export type Database = {
           is_premium: boolean | null
           is_verified: boolean | null
           last_active_date: string | null
+          last_seen_at: string | null
           longest_streak: number | null
           premium_expires_at: string | null
           premium_tier: string | null
@@ -2181,6 +2182,7 @@ export type Database = {
           is_premium?: boolean | null
           is_verified?: boolean | null
           last_active_date?: string | null
+          last_seen_at?: string | null
           longest_streak?: number | null
           premium_expires_at?: string | null
           premium_tier?: string | null
@@ -2210,6 +2212,7 @@ export type Database = {
           is_premium?: boolean | null
           is_verified?: boolean | null
           last_active_date?: string | null
+          last_seen_at?: string | null
           longest_streak?: number | null
           premium_expires_at?: string | null
           premium_tier?: string | null
