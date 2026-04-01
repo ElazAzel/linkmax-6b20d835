@@ -4,7 +4,6 @@ import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
@@ -16,8 +15,11 @@ import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import Bell from 'lucide-react/dist/esm/icons/bell';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import CalendarSync from 'lucide-react/dist/esm/icons/calendar-sync';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Type from 'lucide-react/dist/esm/icons/type';
 import { useTranslation } from 'react-i18next';
 import { BlockEditorWrapper } from './BlockEditorWrapper';
+import { EditorSection, EditorField } from './EditorSection';
 import type { BookingBlock } from '@/types/page';
 import { createMultilingualString, isMultilingualString, type MultilingualString } from '@/lib/i18n-helpers';
 
@@ -46,7 +48,6 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
   const { t } = useTranslation();
   const block = formData;
 
-  // Ensure title and description are MultilingualString
   const titleValue: MultilingualString = isMultilingualString(block.title)
     ? block.title
     : createMultilingualString(typeof block.title === 'string' ? block.title : '');
@@ -55,25 +56,21 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
     ? block.description
     : createMultilingualString(typeof block.description === 'string' ? block.description : '');
 
-  // Merge updates with formData
   const handleChange = (updates: Partial<BookingBlock>) => {
     onChange({ ...formData, ...updates } as any);
   };
+
   const handleAddSlot = () => {
     const newSlot: TimeSlot = {
       id: `slot-${Date.now()}`,
       startTime: '10:00',
       endTime: '11:00',
     };
-    handleChange({
-      slots: [...(block.slots || []), newSlot],
-    });
+    handleChange({ slots: [...(block.slots || []), newSlot] });
   };
 
   const handleRemoveSlot = (slotId: string) => {
-    handleChange({
-      slots: (block.slots || []).filter(s => s.id !== slotId),
-    });
+    handleChange({ slots: (block.slots || []).filter(s => s.id !== slotId) });
   };
 
   const handleSlotChange = (slotId: string, field: 'startTime' | 'endTime', value: string) => {
@@ -98,9 +95,13 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
       isPremium
       description={t('bookingBlock.description', 'Блок для записи на прием с календарем и слотами')}
     >
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Basic Settings */}
-        <div className="space-y-4">
+        <EditorSection
+          title={t('editor.sections.content', 'Контент')}
+          icon={<Type className="h-5 w-5 text-primary" />}
+          collapsible={false}
+        >
           <MultilingualInput
             label={t('bookingBlock.blockTitle', 'Заголовок')}
             value={titleValue}
@@ -126,25 +127,21 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
             type="input"
             placeholder={t('bookingBlock.buttonTextPlaceholder', 'Записаться')}
           />
-        </div>
-
-        <Separator />
+        </EditorSection>
 
         {/* Working Hours */}
-        <div className="space-y-4">
-          <h4 className="font-medium flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            {t('bookingBlock.workingHours', 'Рабочие часы')}
-          </h4>
-
+        <EditorSection
+          title={t('bookingBlock.workingHours', 'Рабочие часы')}
+          icon={<Clock className="h-5 w-5 text-primary" />}
+          defaultOpen={false}
+        >
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>{t('bookingBlock.startHour', 'Начало')}</Label>
+            <EditorField label={t('bookingBlock.startHour', 'Начало')}>
               <Select
                 value={String(block.workingHoursStart || 9)}
                 onValueChange={(v: string) => handleChange({ workingHoursStart: Number(v) })}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-12 rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -155,15 +152,14 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </EditorField>
 
-            <div className="space-y-2">
-              <Label>{t('bookingBlock.endHour', 'Конец')}</Label>
+            <EditorField label={t('bookingBlock.endHour', 'Конец')}>
               <Select
                 value={String(block.workingHoursEnd || 18)}
                 onValueChange={(v: string) => handleChange({ workingHoursEnd: Number(v) })}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-12 rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -174,16 +170,15 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </EditorField>
           </div>
 
-          <div className="space-y-2">
-            <Label>{t('bookingBlock.slotDuration', 'Длительность слота (минут)')}</Label>
+          <EditorField label={t('bookingBlock.slotDuration', 'Длительность слота (минут)')}>
             <Select
               value={String(block.slotDuration || 60)}
               onValueChange={(v: string) => handleChange({ slotDuration: Number(v) })}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-12 rounded-xl">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -195,18 +190,15 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                 <SelectItem value="120">{t('bookingBlock.hour2', '2 часа')}</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-        </div>
+          </EditorField>
+        </EditorSection>
 
-        <Separator />
-
-        {/* Disabled Days */}
-        <div className="space-y-4">
-          <h4 className="font-medium flex items-center gap-2">
-            <CalendarDays className="h-4 w-4" />
-            {t('bookingBlock.workingDays', 'Рабочие дни')}
-          </h4>
-
+        {/* Working Days */}
+        <EditorSection
+          title={t('bookingBlock.workingDays', 'Рабочие дни')}
+          icon={<CalendarDays className="h-5 w-5 text-primary" />}
+          defaultOpen={false}
+        >
           <div className="flex flex-wrap gap-2">
             {DAYS_OF_WEEK.map(day => {
               const isDisabled = (block.disabledWeekdays || []).includes(day.value);
@@ -214,8 +206,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                 <Badge
                   key={day.value}
                   variant={isDisabled ? "outline" : "default"}
-                  className={`cursor-pointer transition-colors ${isDisabled ? 'opacity-50 line-through' : ''
-                    }`}
+                  className={`cursor-pointer transition-colors ${isDisabled ? 'opacity-50 line-through' : ''}`}
                   onClick={() => handleToggleDay(day.value)}
                 >
                   {t(`days.${day.key}`, day.key.substring(0, 2))}
@@ -226,42 +217,45 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
           <p className="text-xs text-muted-foreground">
             {t('bookingBlock.clickToToggle', 'Нажмите на день чтобы включить/выключить')}
           </p>
-        </div>
-
-        <Separator />
+        </EditorSection>
 
         {/* Custom Slots */}
-        <div className="space-y-4">
+        <EditorSection
+          title={t('bookingBlock.customSlots', 'Кастомные слоты')}
+          icon={<Clock className="h-5 w-5 text-primary" />}
+          defaultOpen={false}
+        >
           <div className="flex items-center justify-between">
-            <h4 className="font-medium">{t('bookingBlock.customSlots', 'Кастомные слоты')}</h4>
+            <span className="text-sm text-muted-foreground">
+              {(block.slots || []).length === 0
+                ? t('bookingBlock.noCustomSlots', 'Слоты генерируются автоматически на основе рабочих часов')
+                : `${(block.slots || []).length} ${t('bookingBlock.slotsCount', 'слотов')}`
+              }
+            </span>
             <Button size="sm" variant="outline" onClick={handleAddSlot}>
               <Plus className="h-4 w-4 mr-1" />
               {t('bookingBlock.addSlot', 'Добавить')}
             </Button>
           </div>
 
-          {(block.slots || []).length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              {t('bookingBlock.noCustomSlots', 'Слоты генерируются автоматически на основе рабочих часов')}
-            </p>
-          ) : (
+          {(block.slots || []).length > 0 && (
             <div className="space-y-2">
               {(block.slots || []).map((slot, idx) => (
-                <Card key={slot.id} className="p-3">
+                <Card key={slot.id} className="p-3 rounded-xl">
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">#{idx + 1}</span>
                     <Input
                       type="time"
                       value={slot.startTime}
                       onChange={e => handleSlotChange(slot.id, 'startTime', e.target.value)}
-                      className="w-28"
+                      className="w-28 h-10 rounded-xl"
                     />
                     <span className="text-muted-foreground">—</span>
                     <Input
                       type="time"
                       value={slot.endTime}
                       onChange={e => handleSlotChange(slot.id, 'endTime', e.target.value)}
-                      className="w-28"
+                      className="w-28 h-10 rounded-xl"
                     />
                     <Button
                       size="icon"
@@ -276,15 +270,103 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
               ))}
             </div>
           )}
-        </div>
+        </EditorSection>
 
-        <Separator />
+        {/* Prepayment Settings */}
+        <EditorSection
+          title={t('bookingBlock.prepayment', 'Предоплата')}
+          icon={<Wallet className="h-5 w-5 text-primary" />}
+          defaultOpen={false}
+        >
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label>{t('bookingBlock.requirePrepayment', 'Требовать предоплату')}</Label>
+              <p className="text-xs text-muted-foreground">
+                {t('bookingBlock.prepaymentDesc', 'Клиент увидит способ оплаты после записи')}
+              </p>
+            </div>
+            <Switch
+              checked={block.requirePrepayment || false}
+              onCheckedChange={v => handleChange({ requirePrepayment: v })}
+            />
+          </div>
+
+          {block.requirePrepayment && (
+            <>
+              <EditorField label={t('bookingBlock.prepaymentMethod', 'Способ оплаты')}>
+                <Select
+                  value={block.prepaymentMethod || 'whatsapp'}
+                  onValueChange={(v: string) => handleChange({ prepaymentMethod: v as any })}
+                >
+                  <SelectTrigger className="h-12 rounded-xl">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="whatsapp">{t('bookingBlock.methodWhatsApp', 'WhatsApp (перевод)')}</SelectItem>
+                    <SelectItem value="kaspi">{t('bookingBlock.methodKaspi', 'Kaspi (QR/перевод)')}</SelectItem>
+                    <SelectItem value="robokassa">{t('bookingBlock.methodRobokassa', 'Robokassa (карта)')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </EditorField>
+
+              {(block.prepaymentMethod === 'whatsapp' || !block.prepaymentMethod) && (
+                <EditorField
+                  label={t('bookingBlock.prepaymentPhone', 'WhatsApp для оплаты')}
+                  hint={t('bookingBlock.phoneHint', 'Номер телефона с WhatsApp для приёма оплаты')}
+                >
+                  <Input
+                    value={block.prepaymentPhone || ''}
+                    onChange={e => handleChange({ prepaymentPhone: e.target.value })}
+                    placeholder="+7 777 123 45 67"
+                    type="tel"
+                    className="h-12 rounded-xl"
+                  />
+                </EditorField>
+              )}
+
+              {block.prepaymentMethod === 'kaspi' && (
+                <EditorField
+                  label={t('bookingBlock.kaspiPhone', 'Kaspi номер')}
+                  hint={t('bookingBlock.kaspiHint', 'Номер для перевода через Kaspi')}
+                >
+                  <Input
+                    value={block.kaspiPhone || ''}
+                    onChange={e => handleChange({ kaspiPhone: e.target.value })}
+                    placeholder="+7 777 123 45 67"
+                    type="tel"
+                    className="h-12 rounded-xl"
+                  />
+                </EditorField>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <EditorField label={t('bookingBlock.prepaymentAmount', 'Сумма предоплаты')}>
+                  <Input
+                    type="number"
+                    value={block.prepaymentAmount || ''}
+                    onChange={e => handleChange({ prepaymentAmount: Number(e.target.value) || undefined })}
+                    placeholder="5000"
+                    className="h-12 rounded-xl"
+                  />
+                </EditorField>
+                <EditorField label={t('bookingBlock.currency', 'Валюта')}>
+                  <CurrencySelect
+                    value={block.prepaymentCurrency || 'KZT'}
+                    onValueChange={v => handleChange({ prepaymentCurrency: v as any })}
+                  />
+                </EditorField>
+              </div>
+            </>
+          )}
+        </EditorSection>
 
         {/* Advanced Settings */}
-        <div className="space-y-4">
-          <h4 className="font-medium">{t('bookingBlock.advanced', 'Дополнительно')}</h4>
-
-          <div className="flex items-center justify-between p-3 border rounded-xl bg-primary/5">
+        <EditorSection
+          title={t('bookingBlock.advanced', 'Дополнительно')}
+          icon={<Settings className="h-5 w-5 text-primary" />}
+          defaultOpen={false}
+        >
+          <div className="flex items-center justify-between p-3 border border-border/30 rounded-xl bg-primary/5">
             <div className="space-y-0.5">
               <Label className="flex items-center gap-1.5 font-bold">
                 <CalendarSync className="h-4 w-4 text-primary" />
@@ -300,13 +382,15 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
             />
           </div>
 
-          <div className="space-y-2 mt-4">
-            <Label>{t('bookingBlock.timezone', 'Часовой пояс')}</Label>
+          <EditorField
+            label={t('bookingBlock.timezone', 'Часовой пояс')}
+            hint={t('bookingBlock.timezoneDesc', 'Укажите часовой пояс в котором вы работаете. Клиенты увидят время в своем часовом поясе.')}
+          >
             <Select
               value={block.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone}
               onValueChange={(v: string) => handleChange({ timezone: v })}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-12 rounded-xl">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="max-h-[200px]">
@@ -315,18 +399,14 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-muted-foreground">
-              {t('bookingBlock.timezoneDesc', 'Укажите часовой пояс в котором вы работаете. Клиенты увидят время в своем часовом поясе.')}
-            </p>
-          </div>
+          </EditorField>
 
-          <div className="space-y-2 mt-4">
-            <Label>{t('bookingBlock.maxDays', 'Максимум дней для записи')}</Label>
+          <EditorField label={t('bookingBlock.maxDays', 'Максимум дней для записи')}>
             <Select
               value={String(block.maxBookingDays || 30)}
               onValueChange={(v: string) => handleChange({ maxBookingDays: Number(v) })}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-12 rounded-xl">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -337,7 +417,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                 <SelectItem value="90">{t('bookingBlock.days90', '90 дней')}</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </EditorField>
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
@@ -364,141 +444,40 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
               onCheckedChange={v => handleChange({ requireEmail: v })}
             />
           </div>
-        </div>
+        </EditorSection>
 
-        <Separator />
-
-        {/* Prepayment Settings */}
-        <div className="space-y-4">
-          <h4 className="font-medium flex items-center gap-2">
-            <Wallet className="h-4 w-4" />
-            {t('bookingBlock.prepayment', 'Предоплата')}
-          </h4>
-
+        {/* Telegram Notifications */}
+        <EditorSection
+          title={t('bookingBlock.notifications', 'Уведомления в Telegram')}
+          icon={<Bell className="h-5 w-5 text-primary" />}
+          defaultOpen={false}
+        >
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>{t('bookingBlock.requirePrepayment', 'Требовать предоплату')}</Label>
+              <Label>{t('bookingBlock.dailyReminder', 'Утреннее напоминание')}</Label>
               <p className="text-xs text-muted-foreground">
-                {t('bookingBlock.prepaymentDesc', 'Клиент увидит способ оплаты после записи')}
+                {t('bookingBlock.dailyReminderDesc', 'Получите список записей на сегодня')}
               </p>
             </div>
             <Switch
-              checked={block.requirePrepayment || false}
-              onCheckedChange={v => handleChange({ requirePrepayment: v })}
+              checked={block.dailyReminderEnabled || false}
+              onCheckedChange={v => handleChange({ dailyReminderEnabled: v })}
             />
           </div>
 
-          {block.requirePrepayment && (
-            <>
-              {/* Prepayment method selector */}
-              <div className="space-y-2">
-                <Label>{t('bookingBlock.prepaymentMethod', 'Способ оплаты')}</Label>
-                <Select
-                  value={block.prepaymentMethod || 'whatsapp'}
-                  onValueChange={(v: string) => handleChange({ prepaymentMethod: v as any })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="whatsapp">{t('bookingBlock.methodWhatsApp', 'WhatsApp (перевод)')}</SelectItem>
-                    <SelectItem value="kaspi">{t('bookingBlock.methodKaspi', 'Kaspi (QR/перевод)')}</SelectItem>
-                    <SelectItem value="robokassa">{t('bookingBlock.methodRobokassa', 'Robokassa (карта)')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* WhatsApp phone */}
-              {(block.prepaymentMethod === 'whatsapp' || !block.prepaymentMethod) && (
-                <div className="space-y-2">
-                  <Label>{t('bookingBlock.prepaymentPhone', 'WhatsApp для оплаты')}</Label>
-                  <Input
-                    value={block.prepaymentPhone || ''}
-                    onChange={e => handleChange({ prepaymentPhone: e.target.value })}
-                    placeholder="+7 777 123 45 67"
-                    type="tel"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    {t('bookingBlock.phoneHint', 'Номер телефона с WhatsApp для приёма оплаты')}
-                  </p>
-                </div>
-              )}
-
-              {/* Kaspi phone */}
-              {block.prepaymentMethod === 'kaspi' && (
-                <div className="space-y-2">
-                  <Label>{t('bookingBlock.kaspiPhone', 'Kaspi номер')}</Label>
-                  <Input
-                    value={block.kaspiPhone || ''}
-                    onChange={e => handleChange({ kaspiPhone: e.target.value })}
-                    placeholder="+7 777 123 45 67"
-                    type="tel"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    {t('bookingBlock.kaspiHint', 'Номер для перевода через Kaspi')}
-                  </p>
-                </div>
-              )}
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>{t('bookingBlock.prepaymentAmount', 'Сумма предоплаты')}</Label>
-                  <Input
-                    type="number"
-                    value={block.prepaymentAmount || ''}
-                    onChange={e => handleChange({ prepaymentAmount: Number(e.target.value) || undefined })}
-                    placeholder="5000"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>{t('bookingBlock.currency', 'Валюта')}</Label>
-                  <CurrencySelect
-                    value={block.prepaymentCurrency || 'KZT'}
-                    onValueChange={v => handleChange({ prepaymentCurrency: v as any })}
-                  />
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-
-        <Separator />
-
-        {/* Telegram Notifications */}
-        <div className="space-y-4">
-          <h4 className="font-medium flex items-center gap-2">
-            <Bell className="h-4 w-4" />
-            {t('bookingBlock.notifications', 'Уведомления в Telegram')}
-          </h4>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label>{t('bookingBlock.dailyReminder', 'Утреннее напоминание')}</Label>
-                <p className="text-xs text-muted-foreground">
-                  {t('bookingBlock.dailyReminderDesc', 'Получите список записей на сегодня')}
-                </p>
-              </div>
-              <Switch
-                checked={block.dailyReminderEnabled || false}
-                onCheckedChange={v => handleChange({ dailyReminderEnabled: v })}
+          {block.dailyReminderEnabled && (
+            <div className="flex items-center gap-2 ml-0">
+              <Label className="text-sm text-muted-foreground whitespace-nowrap">
+                {t('bookingBlock.reminderTime', 'Время напоминания')}:
+              </Label>
+              <Input
+                type="time"
+                value={block.dailyReminderTime || '08:50'}
+                onChange={e => handleChange({ dailyReminderTime: e.target.value })}
+                className="w-28 h-10 rounded-xl"
               />
             </div>
-
-            {block.dailyReminderEnabled && (
-              <div className="flex items-center gap-2 ml-0">
-                <Label className="text-sm text-muted-foreground whitespace-nowrap">
-                  {t('bookingBlock.reminderTime', 'Время напоминания')}:
-                </Label>
-                <Input
-                  type="time"
-                  value={block.dailyReminderTime || '08:50'}
-                  onChange={e => handleChange({ dailyReminderTime: e.target.value })}
-                  className="w-28"
-                />
-              </div>
-            )}
-          </div>
+          )}
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
@@ -515,7 +494,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
               onCheckedChange={v => handleChange({ weeklyMotivationEnabled: v })}
             />
           </div>
-        </div>
+        </EditorSection>
       </div>
     </BlockEditorWrapper>
   );
