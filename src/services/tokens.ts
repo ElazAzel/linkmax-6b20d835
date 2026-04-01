@@ -317,7 +317,7 @@ export async function getAllWithdrawals(status?: string): Promise<WithdrawalRequ
     .order('created_at', { ascending: false });
 
   if (status) {
-    query = query.eq('status', status);
+    query = query.eq('status', status as any);
   }
 
   const { data, error } = await query;
