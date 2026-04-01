@@ -234,7 +234,7 @@ function SortableGridBlockItem({
 
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
-        <div className="pointer-events-none w-full h-full">
+        <div className="pointer-events-none w-full h-full" data-editor-block>
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
