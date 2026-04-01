@@ -712,12 +712,13 @@
 
   /* Optimize blur effects on mobile for better performance */
   @media (max-width: 640px) {
-    .backdrop-blur-xl {
+    /* Only apply mobile blur optimizations OUTSIDE editor blocks */
+    .backdrop-blur-xl:not([data-editor-block] *) {
       backdrop-filter: blur(12px) !important;
       -webkit-backdrop-filter: blur(12px) !important;
     }
 
-    .backdrop-blur-2xl {
+    .backdrop-blur-2xl:not([data-editor-block] *) {
       backdrop-filter: blur(16px) !important;
       -webkit-backdrop-filter: blur(16px) !important;
     }
@@ -732,9 +733,9 @@
       background-position: 0% 50% !important;
     }
 
-    /* CAP BLUR RADIUS FOR PERFORMANCE */
+    /* CAP BLUR RADIUS FOR PERFORMANCE — skip editor blocks */
     /* Mobile GPUs struggle with large blur radii */
-    [class*="blur-"] {
+    [class*="blur-"]:not([data-editor-block] *) {
       backdrop-filter: blur(min(12px, var(--glass-blur, 12px))) !important;
       -webkit-backdrop-filter: blur(min(12px, var(--glass-blur, 12px))) !important;
     }
