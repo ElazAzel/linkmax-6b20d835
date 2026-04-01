@@ -152,7 +152,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
     const Icon = item.icon;
     const badge = item.id === 'activity' ? activityBadge : item.badge;
 
-    return (
+    const button = (
       <motion.button
         key={item.id}
         onClick={() => handleItemClick(item.id)}
@@ -166,7 +166,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         data-testid={`${item.id}-tab`}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        layout // animate layout changes
+        layout
       >
         {isActive && (
           <motion.div
@@ -207,10 +207,21 @@ export const DashboardSidebar = memo(function DashboardSidebar({
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Tooltip for collapsed state could go here if using Tooltip component */}
       </motion.button>
     );
+
+    if (collapsed) {
+      return (
+        <Tooltip key={item.id} delayDuration={0}>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent side="right" className="font-medium">
+            {t(item.labelKey, item.defaultLabel)}
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return button;
   };
 
   return (
