@@ -326,8 +326,8 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                         />
                     </div>
 
-                    {/* Block Size Selector */}
-                    {onBlockUpdate && block && (
+                    {/* Block Size Selector - hidden on mobile, shown below title */}
+                    {onBlockUpdate && block && !isMobile && (
                         <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
                     )}
 
