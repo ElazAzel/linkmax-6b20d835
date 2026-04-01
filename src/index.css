@@ -3,11 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Disable glass effects inside editor blocks for visual clarity (crisp, opaque) */
+/* Disable ALL glass effects inside editor blocks for visual clarity */
 [data-editor-block] .glass-card,
 [data-editor-block] .glass,
 [data-editor-block] .glass-button,
-[data-editor-block] .glass-strong {
+[data-editor-block] .glass-strong,
+[data-editor-block] .glass-subtle,
+[data-editor-block] .glass-input,
+[data-editor-block] .glass-nav {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   background: hsl(var(--card)) !important;
@@ -15,9 +18,20 @@
   border-color: hsl(var(--border)) !important;
 }
 
+/* Kill ALL backdrop-filter and override glass shadow variables */
 [data-editor-block] * {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  --shadow-glass: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-glass-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-glass-xl: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Override semi-transparent Tailwind backgrounds inside editor */
+[data-editor-block] [class*="bg-card\/"],
+[data-editor-block] [class*="bg-white\/"],
+[data-editor-block] [class*="bg-background\/"] {
+  background: hsl(var(--card)) !important;
 }
 
 /* Shimmer animation for lazy loading */
