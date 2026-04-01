@@ -416,7 +416,7 @@ export const HomeScreen = memo(function HomeScreen({
                 </Button>
                 <Button
                   size="lg"
-                  className="h-16 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-glass-lg hover:shadow-emerald-500/40 transition-all active:scale-[0.98] group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
                   <Share2 className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
