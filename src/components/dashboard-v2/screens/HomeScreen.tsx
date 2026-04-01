@@ -246,7 +246,7 @@ export const HomeScreen = memo(function HomeScreen({
               
               <Card 
                 className={cn(
-                  "p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group",
+                  "p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group",
                   !telegramChatId && "border-amber-500/20"
                 )}
                 onClick={() => onNavigate?.('settings')}
