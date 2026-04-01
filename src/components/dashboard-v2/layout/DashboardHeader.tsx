@@ -33,7 +33,7 @@ export const DashboardHeader = memo(function DashboardHeader({
   const { t } = useTranslation();
 
   return (
-    <header className="h-16 md:h-24 pt-[env(safe-area-inset-top)] glass-subtle backdrop-blur-3xl border-b border-white/5 sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 shadow-glass translate-z-0">
+    <header className="h-16 md:h-24 pt-[env(safe-area-inset-top)] bg-background border-b border-border/10 sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 translate-z-0">
       <div className="flex items-center gap-3 md:gap-5 min-w-0">
         {showBack && onBack ? (
           <Button

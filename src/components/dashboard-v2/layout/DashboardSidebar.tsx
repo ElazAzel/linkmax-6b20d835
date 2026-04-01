@@ -317,7 +317,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
       </ScrollArea>
 
       {/* Footer */}
-      <div className="p-3 border-t border-border/30 bg-card/30">
+      <div className="p-3 border-t border-border/10 bg-card">
         <AnimatePresence>
           {!isPremium && !collapsed && (
             <motion.div
