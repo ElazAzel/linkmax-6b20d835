@@ -1050,6 +1050,8 @@
 
 /* 1. Override glass VARIABLES at the container level */
 [data-editor-block] {
+  isolation: isolate;
+  background: hsl(var(--card)) !important;
   /* Make glass backgrounds opaque */
   --glass-bg: var(--card) !important;
   --glass-bg-subtle: var(--card) !important;

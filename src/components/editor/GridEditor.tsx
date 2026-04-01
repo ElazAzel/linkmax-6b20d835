@@ -282,13 +282,13 @@ function SortableGridBlockItem({
 
       {/* Controls - top-right */}
       <div className={cn(
-        "absolute top-2 right-2 flex gap-1.5 z-30 transition-opacity",
+        "absolute top-1.5 right-1.5 flex gap-1 z-30 transition-opacity",
         isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
       )}>
         <Button
           size="sm"
           variant="secondary"
-          className="h-8 w-8 p-0 rounded-lg shadow-sm"
+          className="h-7 w-7 p-0 rounded-lg shadow-sm"
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -296,13 +296,13 @@ function SortableGridBlockItem({
           }}
           onTouchEnd={(e) => { e.stopPropagation(); }}
         >
-          <Edit2 className="h-4 w-4" />
+          <Edit2 className="h-3.5 w-3.5" />
         </Button>
         {block.type !== 'profile' && (
           <Button
             size="sm"
             variant="secondary"
-            className="h-8 w-8 p-0 rounded-lg shadow-sm"
+            className="h-7 w-7 p-0 rounded-lg shadow-sm hidden sm:flex"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
@@ -310,27 +310,27 @@ function SortableGridBlockItem({
             }}
             onTouchEnd={(e) => { e.stopPropagation(); }}
           >
-            <Copy className="h-4 w-4" />
+            <Copy className="h-3.5 w-3.5" />
           </Button>
         )}
         {isPremium && block.type !== 'profile' && (
           <Button
             size="sm"
             variant="secondary"
-            className="h-8 w-8 p-0 rounded-lg shadow-sm border-primary/20 hover:border-primary/50"
+            className="h-7 w-7 p-0 rounded-lg shadow-sm border-primary/20 hover:border-primary/50 hidden sm:flex"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
               onStartExperiment?.(block);
             }}
           >
-            <FlaskConical className="h-4 w-4 text-primary" />
+            <FlaskConical className="h-3.5 w-3.5 text-primary" />
           </Button>
         )}
         <Button
           size="sm"
           variant="destructive"
-          className="h-8 w-8 p-0 rounded-lg shadow-sm"
+          className="h-7 w-7 p-0 rounded-lg shadow-sm"
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -338,7 +338,7 @@ function SortableGridBlockItem({
           }}
           onTouchEnd={(e) => { e.stopPropagation(); }}
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 className="h-3.5 w-3.5" />
         </Button>
       </div>
 
