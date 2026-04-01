@@ -93,7 +93,6 @@ export default function Admin() {
     { value: 'pages', label: t('admin.pages'), icon: FileText },
     { value: 'tokens', label: t('admin.tokens', 'Токены'), icon: Coins },
     { value: 'analytics', label: t('admin.analytics'), icon: Activity },
-    { value: 'charts', label: t('admin.charts'), icon: PieChart },
     { value: 'detailed', label: t('admin.detailed'), icon: TrendingUp },
     { value: 'tiers', label: t('admin.tiers'), icon: Crown },
     { value: 'verification', label: t('admin.verification', 'Верификация'), icon: ShieldCheck },
