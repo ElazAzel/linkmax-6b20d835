@@ -1,57 +1,112 @@
 
-План: перестать лечить это ещё одним CSS-хаком и исправить источник проблемы. Аудит показал, что размытие в редакторе сейчас приходит не из одного места, а из нескольких слоёв сразу.
 
-1. Что реально ломает чёткость
-- `GridEditor` применяет anti-blur только к обычным блокам через `data-editor-block`, но `profile` рендерится отдельно через `InlineProfileEditor` и вообще не попадает под этот контур.
-- `BlockRenderer` знает только `isPreview`, но не знает, что это именно режим редактора в дашборде. Поэтому блоки продолжают рендерить public/premium glass-стили внутри editor.
-- `PaidBlockWrapper` умеет специально блюрить locked-контент. В редакторе owner/page context не проброшен как отдельный режим, поэтому paid-блоки могут оставаться намеренно размытыми.
-- В `src/lib/blocks/block-styling.ts` `backgroundOpacity` применяется как `style.opacity` ко всему элементу, то есть делает мутным весь блок, включая текст и изображения.
-- Общие примитивы (`Card`, `Button`) и часть блоков (`Text`, `Link`, `Product`, `Image`, `Video`, `FAQ`, `Socials`, `Pricing`, `Newsletter`, `Map`, `Testimonial`) всё ещё задают blur/glass на уровне самих компонентов. Текущий override в `index.css` лишь частично это маскирует.
+# Аудит и оптимизация редакторов блоков (Block Editors UX/UI)
 
-2. Что нужно перестроить
-- Ввести явный контекст рендера: не просто `isPreview`, а `renderContext: 'editor' | 'public-preview' | 'live'`.
-- Пробросить его по цепочке: `EditorScreen -> GridEditor -> BlockRenderer -> конкретные блоки / PaidBlockWrapper / InlineProfileEditor`.
-- В режиме `editor` отключать blur, glass, animated gradients и прочие “витринные” эффекты на уровне источника, а не давить их глобальным CSS.
+## Обнаруженные проблемы
 
-3. Точечные исправления
-- `src/components/dashboard-v2/screens/EditorScreen.tsx`
-  - передать в `GridEditor` owner/page context и `renderContext="editor"`.
-- `src/components/editor/GridEditor.tsx`
-  - пробросить `renderContext` в `BlockRenderer`;
-  - profile-блок тоже перевести в crisp editor mode, а не оставлять вне anti-blur-системы.
-- `src/components/editor/BlockRenderer.tsx`
-  - добавить editor-specific context/props.
-- `src/components/blocks/PaidBlockWrapper.tsx`
-  - в editor-mode всегда показывать контент владельцу без blur/lock overlay.
-- `src/lib/blocks/block-styling.ts`
-  - убрать `style.opacity = backgroundOpacity`;
-  - opacity применять только к фону, а не ко всему содержимому блока.
-- `src/components/blocks/InlineProfileEditor.tsx` и/или `ProfileBlock.tsx`
-  - убрать в editor-mode backdrop-blur, gradient text, glow/frame effects, полупрозрачные chips;
-  - где нужен контраст текста поверх cover-image, использовать непрозрачный chip или `text-shadow`, а не blur.
-- `src/components/ui/card.tsx` и при необходимости `src/components/ui/button.tsx`
-  - добавить editor/crisp variant без `backdrop-blur`.
-- пройтись по блокам с прямыми glass/backdrop классами и дать им editor fallback.
+### 1. Непоследовательная архитектура редакторов
+Редакторы делятся на 3 «поколения»:
+- **Современные** (Button, Text, Link, Image, Video, Socials) — используют `EditorSection`, `EditorField`, `withBlockEditor` HOC, `h-12 rounded-xl` инпуты
+- **Промежуточные** (FAQ, Product, Download, Carousel, Countdown, BeforeAfter) — используют `withBlockEditor` или `BlockEditorWrapper` напрямую, но без `EditorSection` — голые `Label` + `Input`, нет визуальной группировки
+- **Старые** (Booking) — используют `BlockEditorWrapper` напрямую, `Separator` вместо секций, нестандартные `SelectTrigger` без `h-12 rounded-xl`
 
-4. Что НЕ делать дальше
-- Не добавлять новые широкие `!important`-правила в `index.css` как основной способ фикса.
-- Не пытаться чинить это только через `[data-editor-block]`, потому что часть проблем вообще обходит этот слой.
+### 2. Конкретные проблемы по редакторам
 
-5. Проверка результата
-- В editor чётко видны: profile, text, image/video, link/button, product, paid blocks.
-- Блоки с кастомным стилем и background opacity остаются читаемыми.
-- На mobile и desktop нет frosted/glass-эффекта на содержимом блока.
-- Контраст текста на изображениях решён через opaque label/text-shadow, а не через blur.
+**FAQBlockEditor** — не обёрнут в `withBlockEditor`, нет «Дополнительных настроек» (стиль, анимация, расписание). Карточки используют `Card` с дефолтными стилями вместо `rounded-xl`. AI-кнопки абсолютно позиционированы и могут перекрывать label на маленьких экранах.
 
-Файлы, которые почти точно затронем:
-- `src/components/dashboard-v2/screens/EditorScreen.tsx`
-- `src/components/editor/GridEditor.tsx`
-- `src/components/editor/BlockRenderer.tsx`
-- `src/components/blocks/PaidBlockWrapper.tsx`
-- `src/components/blocks/InlineProfileEditor.tsx`
-- `src/components/blocks/ProfileBlock.tsx`
-- `src/lib/blocks/block-styling.ts`
-- `src/components/ui/card.tsx`
-- несколько block renderers с прямыми glass/backdrop стилями
+**ProductBlockEditor** — голые `Label`+`Input` без `EditorField`. AI-кнопки абсолютно позиционированы. Нет `EditorSection`. `grid-cols-2` для цены/валюты без адаптива (на 320px ширине элементы сжимаются).
 
-Итог: прошлые правки били по симптомам. Правильный фикс — разделить public visual style и editor-preview style на уровне рендера, а не пытаться “убить blur сверху”.
+**BookingBlockEditor** — самый большой (~520 строк), нет `EditorSection`, все настройки плоским списком. Используется `Separator` вместо коллапсируемых секций. На мобильных неудобно — огромный скролл без навигации по секциям. `SelectTrigger` без `h-12 rounded-xl`.
+
+**DownloadBlockEditor** — `grid-cols-2` для имени файла и размера — на мобильных сжимается. `SelectTrigger` без стандартных стилей.
+
+**CarouselBlockEditor** — нативный `<input type="checkbox">` вместо `Switch` компонента. Нет `EditorSection`. Изображения в `border border-border rounded-lg` вместо `rounded-xl`.
+
+**CountdownBlockEditor** — не обёрнут в `withBlockEditor`, нет доступа к дополнительным настройкам. Нет `EditorSection`.
+
+**BeforeAfterBlockEditor** — не обёрнут в `withBlockEditor`, нет дополнительных настроек.
+
+**CatalogBlockEditor** — своя внутренняя Tab-система, но без `EditorSection`.
+
+### 3. Дублирование кода
+`LinkBlockEditor` определяет собственный `AlignmentButton` компонент (строки 33-71), хотя идентичный компонент уже экспортируется из `EditorUtils.tsx`.
+
+### 4. Проблемы мобильного UX в BlockEditorShell
+- Header содержит `BlockSizeSelector` + `Delete` + `Preview` + `Back` + Icon + Title — на мобильном 390px это может не помещаться
+- Footer кнопки `flex-1` + `flex-[2]` — хорошо, но при `isSaving` кнопка сохранения не показывает текст рядом со спиннером на узких экранах
+
+### 5. Подсказки (hints) только на английском
+`withBlockEditor` HOC принимает `hint` строку, но она всегда захардкожена на английском (напр. `'Create an image gallery carousel with auto-play option'`). Нужно либо убрать, либо перевести через i18n.
+
+---
+
+## План оптимизации
+
+### Шаг 1: Стандартизация «отстающих» редакторов
+Привести к единому стандарту (EditorSection + EditorField + h-12 rounded-xl):
+
+**ProductBlockEditor:**
+- Обернуть поля в `EditorSection` (Content, Appearance)
+- Заменить голые `Label` на `EditorField`
+- AI-кнопки через `onMagicWand` проп `MultilingualInput` (как в ButtonBlockEditor)
+- Стандартизировать `SelectTrigger` → `h-12 rounded-xl`
+
+**DownloadBlockEditor:**
+- Добавить `EditorSection` (Content, File)
+- `grid-cols-2` → `grid-cols-1 sm:grid-cols-2` для адаптива
+- Стандартизировать `SelectTrigger`
+
+**CarouselBlockEditor:**
+- Добавить `EditorSection` (Content, Settings)
+- Заменить `<input type="checkbox">` на `Switch`
+- Карточки изображений → `rounded-xl`
+
+**CountdownBlockEditor:**
+- Обернуть в `withBlockEditor` для доступа к дополнительным настройкам
+- Добавить `EditorSection` (Content, Display)
+
+**BeforeAfterBlockEditor:**
+- Обернуть в `withBlockEditor`
+- Добавить `EditorSection`
+
+**FAQBlockEditor:**
+- Обернуть в `withBlockEditor`
+- Добавить `EditorSection`
+- Исправить AI-кнопки: встроить через `onMagicWand` вместо абсолютного позиционирования
+
+### Шаг 2: BookingBlockEditor — рефакторинг
+- Разбить на `EditorSection`: Основное, Рабочие часы, Рабочие дни, Кастомные слоты, Предоплата, Дополнительно
+- Каждая секция коллапсируемая с `defaultOpen={false}` (кроме Основного)
+- Стандартизировать все `SelectTrigger` → `h-12 rounded-xl`
+
+### Шаг 3: Удалить дубликат AlignmentButton
+В `LinkBlockEditor.tsx` удалить локальное определение `AlignmentButton` (строки 33-71), использовать импорт из `EditorUtils`.
+
+### Шаг 4: Перевести hints на i18n
+Заменить английские строки `hint` в `withBlockEditor` вызовах на ключи i18n. Добавить соответствующие ключи в `ru.json` и `en.json`.
+
+### Шаг 5: Оптимизация мобильного BlockEditorShell header
+- `BlockSizeSelector` на мобильном скрывать и показывать в footer или в отдельной строке под заголовком
+- Уменьшить кнопки в header до `h-8 w-8` на мобильном
+
+---
+
+## Затронутые файлы
+- `src/components/block-editors/ProductBlockEditor.tsx`
+- `src/components/block-editors/DownloadBlockEditor.tsx`
+- `src/components/block-editors/CarouselBlockEditor.tsx`
+- `src/components/block-editors/CountdownBlockEditor.tsx`
+- `src/components/block-editors/BeforeAfterBlockEditor.tsx`
+- `src/components/block-editors/FAQBlockEditor.tsx`
+- `src/components/block-editors/BookingBlockEditor.tsx`
+- `src/components/block-editors/LinkBlockEditor.tsx`
+- `src/components/block-editors/BlockEditorShell.tsx`
+- `src/i18n/locales/ru.json`
+- `src/i18n/locales/en.json`
+
+## Что НЕ трогаем
+- `BlockEditorWrapper.tsx` (HOC и advanced settings) — работает корректно
+- `EditorSection.tsx`, `EditorUtils.tsx` — уже качественные
+- `BlockEditorV2.tsx` — контейнер, работает стабильно
+- Редакторы, которые уже в стандарте (Button, Text, Link*, Image, Video, Socials, Messenger, CustomCode)
+
