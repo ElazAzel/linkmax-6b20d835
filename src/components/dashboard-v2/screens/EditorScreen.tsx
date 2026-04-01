@@ -596,6 +596,7 @@ export const EditorScreen = memo(function EditorScreen({
           />
         </Suspense>
       </RenderContextProvider>
+      </div>
 
       {/* P5: Structure View 2.0 */}
       {structureOpen && (
