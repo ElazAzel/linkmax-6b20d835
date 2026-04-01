@@ -84,8 +84,8 @@ export const PaidBlockWrapper = memo(function PaidBlockWrapper({
     checkPurchase();
   }, [user, blockId, pageOwnerId, isPaidContent]);
 
-  // If not paid content, just render children
-  if (!isPaidContent || price <= 0) {
+  // If not paid content or in editor mode, just render children
+  if (!isPaidContent || price <= 0 || isEditorMode) {
     return <>{children}</>;
   }
 
