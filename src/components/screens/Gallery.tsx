@@ -45,6 +45,7 @@ export default function Gallery() {
   const [activeTab, setActiveTab] = useState<'gallery' | 'leaderboard'>('gallery');
   const [sortMode, setSortMode] = useState<SortMode>('popular');
   const [showSearch, setShowSearch] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
 
   const nicheLabel = selectedNiche ? t(`niches.${selectedNiche}`, selectedNiche) : null;
   const canonical = selectedNiche
