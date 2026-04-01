@@ -357,7 +357,7 @@ export const HomeScreen = memo(function HomeScreen({
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-3xl font-black tracking-tighter truncate text-foreground drop-shadow-sm">{name}</h2>
                 {isPremium && (
-                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-glass-lg shrink-0 font-black text-xs px-3 py-1 rounded-full">
+                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-lg shrink-0 font-black text-xs px-3 py-1 rounded-full">
                     <Crown className="h-3 w-3 mr-1.5" />
                     PRO
                   </Badge>
