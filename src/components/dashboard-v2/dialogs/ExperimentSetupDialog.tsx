@@ -88,6 +88,7 @@ export function ExperimentSetupDialog({
                 name,
                 block.id,
                 variants.map(v => ({
+                    variant_key: v.variant_label || `variant_${Math.random().toString(36).slice(2, 8)}`,
                     variant_label: v.variant_label,
                     block_data: v.block_data,
                     traffic_weight: v.traffic_weight

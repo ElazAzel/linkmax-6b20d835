@@ -186,10 +186,10 @@ export const BookingBlock = memo(function BookingBlockComponent({
       } else if (slotTemplates && slotTemplates.length > 0) {
         slotTemplates.forEach(template => {
           const isBookedLocally = bookings?.some(b => b.slot_time === template.start_time);
-          const isBookedGcal = checkGcalConflict(template.start_time, template.end_time);
+          const isBookedGcal = checkGcalConflict(template.start_time, template.end_time ?? undefined);
           generatedSlots.push({
             time: template.start_time,
-            endTime: template.end_time,
+            endTime: template.end_time ?? undefined,
             available: !isBookedLocally && !isBookedGcal,
             bookingId: bookings?.find(b => b.slot_time === template.start_time)?.id
           });

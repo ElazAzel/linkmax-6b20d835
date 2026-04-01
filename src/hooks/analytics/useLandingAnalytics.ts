@@ -120,11 +120,11 @@ async function trackLandingEvent({ eventType, metadata = {} }: TrackLandingEvent
     };
 
     await supabase.from('analytics').insert({
-      page_id: null, // Landing page doesn't have a page_id
+      page_id: null as any,
       block_id: null,
       event_type: eventType,
       metadata: enrichedMetadata as Json,
-    });
+    } as any);
   } catch (error) {
     // Silently fail for analytics
     logger.debug('Landing analytics failed:', { context: 'useLandingAnalytics', data: { error } });

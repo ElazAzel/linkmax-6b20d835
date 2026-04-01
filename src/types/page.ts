@@ -49,6 +49,8 @@ export interface BlockVariation {
   id: string;
   experiment_id: string;
   variant_key: string;
+  variant_label?: string;
+  base_block_id?: string;
   block_data: Partial<Block>;
   traffic_weight: number | null;
   created_at: string;
