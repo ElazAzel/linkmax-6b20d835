@@ -147,7 +147,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
       const userId = (await supabase.auth.getUser()).data.user?.id;
       const { data, error } = await supabase
         .from('zone_deals')
-        .insert({ ...deal, zone_id: zoneId, assigned_to: userId })
+        .insert({ ...deal, zone_id: zoneId, assigned_to: userId } as any)
         .select()
         .single();
       if (error) throw error;

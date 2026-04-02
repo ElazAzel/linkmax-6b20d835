@@ -71,7 +71,7 @@ export function useZoneTasks(zoneId: string | null) {
           created_by: userId || '',
           status: task.status || 'todo',
           priority: task.priority || 'medium',
-        })
+        } as any)
         .select()
         .single();
       if (error) throw error;
