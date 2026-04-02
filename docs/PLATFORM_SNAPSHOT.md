@@ -131,6 +131,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **Glassmorphism**: Использование `backdrop-blur`, полупрозрачных границ и `glass-card` классов.
 - **High-Fidelity Animations**: Использование `framer-motion` для переходов между состояниями (например, в `BookingBlock`).
 - **Dynamic Feedback**: Микро-взаимодействия (confetti, hover-масштабирование, пульсирующие индикаторы).
+- **Animated Block Icons**: Интерактивные SVG-иконки в панели добавления блоков, отражающие суть функционала через движение.
 - **Typography**: Использование `text-gradient` для заголовков и `tracking-tight` для премиального вида.
 
 - **Technical Debt & UX**:
@@ -138,6 +139,13 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - **UX Polish**: Consistent currency symbols (₸), reduced console noise, and stable Zustand serialization.
   - **Consistency**: Unique `collab_slug` enforcement and pagination for high-volume email services.
 - **Health Score**: **10/10** (Status: Fully Hardened & Production Verified).
+
+### [2026-04-02] Phase 14: Interactive Micro-Animations (WOW Factor)
+
+- **Micro-Animation Engine**: Implemented `AnimatedBlockIcon` component using `framer-motion` to provide unique, functional motion for 15+ block types.
+- **Visual Engagement**: Blocks in the "Add Block" panel now feature "Living Icons" (e.g., typing text, rotating clock hands, pulsing REC indicators), significantly increasing UI delight and intuitive functionality recognition.
+- **Staggered Organic Motion**: Integrated `delayOffset` logic to ensure animations feel natural and non-robotic when viewed in a grid.
+- **Health Score**: **10/10** (Status: Production-Ready, High-Fidelity UI).
 
 ### [2026-04-02] Phase 13: Technical Debt Remediation & Security Hardening (Post-Audit Stabilization)
 

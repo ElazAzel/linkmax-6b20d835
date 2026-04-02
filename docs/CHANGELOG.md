@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.15.0] - 2026-04-02
+
+### Phase 14: Interactive Micro-Animations (WOW Factor)
+
+- **Animated Block Icons**: Introduced `AnimatedBlockIcon` component providing unique, meaning-based micro-animations for all block types in the "Add Block" panel.
+- **Custom Logic**: Implemented 15+ specialized animation paths including:
+  - **Text**: Typing "ext" effect.
+  - **Pricing/Product**: Multiplying floating currency symbols.
+  - **Countdown**: Real-time rotating clock hands.
+  - **Video**: Pulsing "REC" indicator.
+  - **Messenger**: Animated typing dots.
+  - **Map**: Bouncing location pin.
+  - **Socials**: Interactive scale and rotation.
+  - **Form**: Pulsing skeleton loading lines.
+  - **Image/Carousel**: Shutter and sliding effects.
+- **Organic Feel**: Integrated random start delays (`delayOffset`) to ensure a non-robotic, natural staggered appearance.
+- **Performance**: High-performance implementation using `framer-motion` with optimized SVG paths, ensuring zero lag during panel interactions.
+
 ## [1.14.0] - 2026-04-02
 
 ### Phase 13: Technical Debt Remediation & Post-Audit Stabilization

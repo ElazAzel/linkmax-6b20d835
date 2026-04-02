@@ -36,6 +36,7 @@ import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
 import { BLOCK_PRESETS, type BlockPreset, getPresetsForType } from '@/lib/editor/editor-presets';
+import { AnimatedBlockIcon } from '@/components/editor/AnimatedBlockIcon';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
 
@@ -309,10 +310,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         )}
       >
         <div className={cn(
-          "w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg",
+          "w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg overflow-hidden",
           block.color
         )}>
-          <IconComponent className="h-7 w-7" />
+          <AnimatedBlockIcon 
+            type={block.type} 
+            icon={block.icon} 
+            className="h-8 w-8" 
+          />
         </div>
 
         <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
@@ -378,10 +383,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         )}
       >
         <div className={cn(
-          "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md",
+          "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md overflow-hidden",
           color
         )}>
-          <IconComponent className="h-6 w-6" />
+          <AnimatedBlockIcon 
+            type={preset.blockType} 
+            icon={manifest.icon} 
+            className="h-6 w-6" 
+          />
         </div>
 
         <div className="flex flex-col items-center gap-0.5">
