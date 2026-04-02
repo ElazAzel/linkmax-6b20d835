@@ -37,6 +37,62 @@ describe('UserService', () => {
         });
     });
 
+    describe('normalizeUsername', () => {
+        it('should convert to lowercase and trim', () => {
+            expect(UserService.normalizeUsername('  JohnDoe  ')).toBe('johndoe');
+        });
+    });
+
+    describe('calculatePremiumStatus', () => {
+        it('should return non-premium for null profile', () => {
+            const status = UserService.calculatePremiumStatus(null);
+            expect(status.isPremium).toBe(false);
+            expect(status.inTrial).toBe(false);
+        });
+
+        it('should return premium for is_premium users', () => {
+            const profile = { is_premium: true, trial_ends_at: null };
+            const status = UserService.calculatePremiumStatus(profile);
+            expect(status.isPremium).toBe(true);
+        });
+
+        it('should return in trial when trial is active', () => {
+            const futureDate = new Date(Date.now() + 86400000).toISOString();
+            const profile = { is_premium: false, trial_ends_at: futureDate };
+            const status = UserService.calculatePremiumStatus(profile);
+            expect(status.isPremium).toBe(true);
+            expect(status.inTrial).toBe(true);
+        });
+    });
+
+    describe('getUserLimits', () => {
+        it('should return pro limits for pro users', () => {
+            const limits = UserService.getUserLimits({ isPremium: true, inTrial: false, trialEndsAt: null, tier: 'pro' });
+            expect(limits.maxAIPageGenerationsPerMonth).toBe(10);
+            expect(limits.showWatermark).toBe(false);
+        });
+
+        it('should return free limits for identity users', () => {
+            const limits = UserService.getUserLimits({ isPremium: false, inTrial: false, trialEndsAt: null, tier: 'identity' });
+            expect(limits.maxAIPageGenerationsPerMonth).toBe(1);
+            expect(limits.showWatermark).toBe(true);
+        });
+    });
+
+    describe('getTierCommissionRate', () => {
+        it('should return 7% for starter', () => {
+            expect(UserService.getTierCommissionRate('starter')).toBe(0.07);
+        });
+
+        it('should return 1% for pro', () => {
+            expect(UserService.getTierCommissionRate('pro')).toBe(0.01);
+        });
+
+        it('should return 0 for business', () => {
+            expect(UserService.getTierCommissionRate('business')).toBe(0);
+        });
+    });
+
     describe('API Functions', () => {
         it('should load user profile', async () => {
             const mockUser = { id: 'u1', username: 'test' };

@@ -1,15 +1,15 @@
 # Changelog
 
-## [1.13.0] - 2026-04-02
+## [1.14.0] - 2026-04-02
 
-### Phase 12: Platform Hardening & Lifecycle Management
+### Phase 13: Technical Debt Remediation & Post-Audit Stabilization
 
-- **Notification Reliability**: Implemented a database-driven **Outbox Pattern** via `notification_queue`. All notification triggers are now asynchronous and idempotent.
-- **Orchestration**: Created `process-notifications` Edge Function to manage delivery, retries, and rate-limiting for Telegram and Email.
-- **Data Persistence**: Refactored `save_page_blocks` to support **Soft-Deletion**. Removing a block from the UI no longer deletes its record, ensuring historical analytics (CLI, Views) are preserved.
-- **Media Lifecycle**: Introduced **Reference Counting** for Supabase Storage assets. `media_assets` and `media_references` tables track which blocks use which files.
-- **Automated Cleanup**: Deployed `cleanup-orphaned-media` worker to identify and prune abandoned files in storage, preventing bloat.
-- **Architecture**: Decoupled business logic from side-effects (notifications/cleanup), significantly improving platform stability and performance.
+- **Architectural Unification**: Eliminated "Architectural Schizophrenia" by migrating all business logic from legacy layers (`src/domain`, `src/repositories`, `src/use-cases`) into a unified **Service-Pattern** architecture in `src/services`.
+- **Logic Migration**: Centralized validation, premium calculations, and page publishing rules into `user.ts` and `pages.ts` services.
+- **Security Hardening**: Created `20260402160000_platform_audit_hardening.sql` to enforce Row Level Security (RLS) on `blocks`, `user_wallets`, and `media_assets`.
+- **Type Safety**: Normalized `extended-types.ts` by replacing `any` with strict `Json` and interface types for 5+ critical tables.
+- **Test Consolidation**: Merged domain unit tests into service-level test suites, maintaining 100% logic verification during refactoring.
+- **Cleanup**: Marked legacy architectural folders for removal (deletion of `src/domain`, etc. pending environment access).
 
 ## [1.12.0] - 2026-03-31
 

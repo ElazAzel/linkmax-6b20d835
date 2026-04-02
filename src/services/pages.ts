@@ -6,6 +6,36 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
 
+// ============= Block & Page Value Objects =============
+
+export interface BlockStyle {
+  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  margin?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+  borderWidth?: 'none' | 'thin' | 'medium' | 'thick';
+  borderColor?: string;
+  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'glow';
+  backgroundColor?: string;
+  backgroundGradient?: string;
+  backgroundOpacity?: number;
+  hoverEffect?: 'none' | 'scale' | 'glow' | 'lift' | 'fade';
+  animation?: 'none' | 'fade-in' | 'slide-up' | 'scale-in' | 'bounce';
+  animationDelay?: number;
+  animationSpeed?: 'slow' | 'normal' | 'fast';
+}
+
+export interface BlockSchedule {
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface GridLayoutData {
+  gridColumn?: number;
+  gridRow?: number;
+  gridWidth?: number;
+  gridHeight?: number;
+}
+
 // ============= Types (exported for backward compatibility) =============
 export type DbPage = AppDatabase['public']['Tables']['pages']['Row'] & {
   blocks?: DbBlock[];
@@ -153,6 +183,82 @@ function extractBlockTitle(block: Block, lang: SupportedLanguage = 'ru'): string
 
   if (typeof rawTitle === 'string') return rawTitle;
   return getI18nText(rawTitle, lang);
+}
+
+/**
+ * Check if block is currently scheduled to be visible (pure function)
+ */
+export function isBlockScheduledVisible(schedule?: BlockSchedule, now: Date = new Date()): boolean {
+  if (!schedule) return true;
+  
+  const { startDate, endDate } = schedule;
+  const currentTime = now.getTime();
+  
+  if (startDate && new Date(startDate).getTime() > currentTime) {
+    return false;
+  }
+  
+  if (endDate && new Date(endDate).getTime() < currentTime) {
+    return false;
+  }
+  
+  return true;
+}
+
+/**
+ * Generate a unique block ID (moved from Block entity)
+ */
+export function generateBlockId(type: string): string {
+  return `${type}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+}
+
+/**
+ * Validate block structure
+ */
+export function validateBlock(block: Partial<Block>): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  if (!block.id) errors.push('Block ID is required');
+  if (!block.type) errors.push('Block type is required');
+  return { valid: errors.length === 0, errors };
+}
+
+/**
+ * Check if page has premium content
+ */
+export function hasPremiumContent(blocks: Block[]): boolean {
+  const PREMIUM_TYPES = ['video', 'carousel', 'custom_code', 'form', 'newsletter', 'testimonial', 'scratch', 'catalog', 'countdown'];
+  return blocks.some(block => PREMIUM_TYPES.includes(block.type));
+}
+
+/**
+ * Check if page can be published
+ */
+export function canPublishPage(blocks: Block[]): { canPublish: boolean; reason?: string } {
+  if (blocks.length === 0) {
+    return { canPublish: false, reason: 'Page must have at least one block' };
+  }
+
+  const hasProfile = blocks.some(block => block.type === 'profile');
+  if (!hasProfile) {
+    return { canPublish: false, reason: 'Page must have a profile block' };
+  }
+
+  return { canPublish: true };
+}
+
+/**
+ * Reorder blocks array by moving a block from one index to another
+ */
+export function reorderBlocks(blocks: Block[], fromIndex: number, toIndex: number): Block[] {
+  if (fromIndex < 0 || fromIndex >= blocks.length || toIndex < 0 || toIndex >= blocks.length) {
+    return blocks;
+  }
+
+  const result = [...blocks];
+  const [removed] = result.splice(fromIndex, 1);
+  result.splice(toIndex, 0, removed);
+
+  return result;
 }
 
 // ============= API Functions =============

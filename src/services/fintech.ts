@@ -1,7 +1,7 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { Json } from '@/platform/supabase/types';
-import { getTierCommissionRate, type PremiumTier } from '@/domain/entities/User';
+import { getTierCommissionRate, type PremiumTier } from '@/services/user';
 
 export type TransactionType = 'income' | 'withdrawal' | 'fee' | 'refund';
 export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'cancelled';

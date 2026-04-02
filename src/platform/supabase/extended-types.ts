@@ -1,4 +1,4 @@
-import type { Database } from '@/platform/supabase/types';
+import type { Database, Json } from '@/platform/supabase/types';
 
 type Merge<A, B> = {
   [K in keyof A | keyof B]: K extends keyof B ? B[K] : K extends keyof A ? A[K] : never;
@@ -146,7 +146,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id: string;
             experiment_id: string;
             variant_key: string;
-            block_data: any;
+            block_data: Json;
             traffic_weight: number | null;
             created_at: string;
           };
@@ -154,7 +154,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             experiment_id: string;
             variant_key: string;
-            block_data: any;
+            block_data: Json;
             traffic_weight?: number | null;
             created_at?: string;
           };
@@ -162,7 +162,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             experiment_id?: string;
             variant_key?: string;
-            block_data?: any;
+            block_data?: Json;
             traffic_weight?: number | null;
             created_at?: string;
           };
@@ -200,7 +200,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id: string;
             user_id: string;
             event_type: string;
-            payload: any;
+            payload: Json;
             status: 'pending' | 'processing' | 'sent' | 'failed' | 'skipped';
             retry_count: number;
             last_error: string | null;
@@ -212,7 +212,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             user_id: string;
             event_type: string;
-            payload: any;
+            payload: Json;
             status?: 'pending' | 'processing' | 'sent' | 'failed' | 'skipped';
             retry_count?: number;
             last_error?: string | null;
@@ -224,7 +224,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             user_id?: string;
             event_type?: string;
-            payload?: any;
+            payload?: Json;
             status?: 'pending' | 'processing' | 'sent' | 'failed' | 'skipped';
             retry_count?: number;
             last_error?: string | null;
@@ -311,7 +311,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             address: string | null;
             source: string | null;
             notes: string | null;
-            custom_fields: any | null;
+            custom_fields: Json | null;
             created_at: string;
             updated_at: string;
           };
@@ -357,9 +357,9 @@ export type AppDatabase = Omit<Database, 'public'> & {
         };
         // Adding placeholders for others to ensure they have at least basic structure, 
         // replacing the GenericTable completely.
-        zone_deals: { Row: any; Insert: any; Update: any; Relationships: []; };
-        zone_tasks: { Row: any; Insert: any; Update: any; Relationships: []; };
-        zone_invoices: { Row: any; Insert: any; Update: any; Relationships: []; };
+        zone_deals: { Row: Record<string, Json>; Insert: Record<string, Json>; Update: Record<string, Json>; Relationships: []; };
+        zone_tasks: { Row: Record<string, Json>; Insert: Record<string, Json>; Update: Record<string, Json>; Relationships: []; };
+        zone_invoices: { Row: Record<string, Json>; Insert: Record<string, Json>; Update: Record<string, Json>; Relationships: []; };
         referral_codes: {
           Row: {
             id: string;

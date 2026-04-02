@@ -5,6 +5,79 @@ import { supabase } from '@/platform/supabase/client';
 import type { AppDatabase } from '@/platform/supabase/extended-types';
 import type { PremiumStatusResult, ApiResult } from '@/types/api';
 
+// ============= Domain Types & Constants =============
+
+export type PremiumTier = 'identity' | 'starter' | 'pro' | 'business';
+
+export interface PremiumStatus {
+  isPremium: boolean;
+  inTrial: boolean;
+  trialEndsAt: string | null;
+  daysRemaining?: number;
+}
+
+export interface FreemiumLimits {
+  maxBlocks: number;
+  maxAIPageGenerationsPerMonth: number;
+  canUseAnalytics: boolean;
+  canUseCRM: boolean;
+  showWatermark: boolean;
+  maxLeadsPerMonth: number;
+  canUseScheduler: boolean;
+  canUsePixels: boolean;
+  canUseCustomDomain: boolean;
+  canUseChatbot: boolean;
+  canUseAutoNotifications: boolean;
+  canUsePayments: boolean;
+  canUseWhiteLabel: boolean;
+  canUseMultiPage: boolean;
+  canUseVerificationBadge: boolean;
+  canUsePremiumFrames: boolean;
+  canUseAdvancedThemes: boolean;
+}
+
+export const CRM_FREE_INBOUND_LIMIT = 50;
+
+export const FREE_TIER_LIMITS: FreemiumLimits = {
+  maxBlocks: Infinity,
+  maxAIPageGenerationsPerMonth: 1,
+  canUseAnalytics: false,
+  canUseCRM: true,
+  showWatermark: true,
+  maxLeadsPerMonth: 50,
+  canUseScheduler: false,
+  canUsePixels: false,
+  canUseCustomDomain: false,
+  canUseChatbot: false,
+  canUseAutoNotifications: false,
+  canUsePayments: false,
+  canUseWhiteLabel: false,
+  canUseMultiPage: false,
+  canUseVerificationBadge: false,
+  canUsePremiumFrames: false,
+  canUseAdvancedThemes: false,
+};
+
+export const PRO_TIER_LIMITS: FreemiumLimits = {
+  maxBlocks: Infinity,
+  maxAIPageGenerationsPerMonth: 10,
+  canUseAnalytics: true,
+  canUseCRM: true,
+  showWatermark: false,
+  maxLeadsPerMonth: Infinity,
+  canUseScheduler: true,
+  canUsePixels: true,
+  canUseCustomDomain: true,
+  canUseChatbot: true,
+  canUseAutoNotifications: true,
+  canUsePayments: true,
+  canUseWhiteLabel: true,
+  canUseMultiPage: true,
+  canUseVerificationBadge: true,
+  canUsePremiumFrames: true,
+  canUseAdvancedThemes: true,
+};
+
 // ============= Types =============
 export type UserProfile = AppDatabase['public']['Tables']['user_profiles']['Row'];
 
@@ -27,15 +100,17 @@ export function validateUsername(username: string): { valid: boolean; error?: st
     return { valid: false, error: 'Username is required' };
   }
 
-  if (username.length < USERNAME_MIN_LENGTH) {
+  const trimmed = username.trim();
+
+  if (trimmed.length < USERNAME_MIN_LENGTH) {
     return { valid: false, error: `Username must be at least ${USERNAME_MIN_LENGTH} characters` };
   }
 
-  if (username.length > USERNAME_MAX_LENGTH) {
+  if (trimmed.length > USERNAME_MAX_LENGTH) {
     return { valid: false, error: `Username must be less than ${USERNAME_MAX_LENGTH} characters` };
   }
 
-  if (!USERNAME_REGEX.test(username)) {
+  if (!USERNAME_REGEX.test(trimmed)) {
     return {
       valid: false,
       error: 'Username can only contain lowercase letters, numbers, hyphens, and underscores',
@@ -43,6 +118,60 @@ export function validateUsername(username: string): { valid: boolean; error?: st
   }
 
   return { valid: true };
+}
+
+/**
+ * Normalize username to lowercase
+ */
+export function normalizeUsername(username: string): string {
+  return username.toLowerCase().trim();
+}
+
+/**
+ * Calculate premium status from profile data (pure function)
+ */
+export function calculatePremiumStatus(profile: { is_premium: boolean; trial_ends_at: string | null } | null): PremiumStatus {
+  if (!profile) {
+    return { isPremium: false, inTrial: false, trialEndsAt: null };
+  }
+
+  const now = new Date();
+  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+  const inTrial = trialEndsAt ? trialEndsAt > now : false;
+  const isPremium = profile.is_premium || inTrial;
+
+  let daysRemaining: number | undefined;
+  if (trialEndsAt && inTrial) {
+    daysRemaining = Math.ceil((trialEndsAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  return {
+    isPremium,
+    inTrial,
+    trialEndsAt: profile.trial_ends_at,
+    daysRemaining,
+  };
+}
+
+/**
+ * Get user's limits based on tier
+ */
+export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): FreemiumLimits {
+  if (status.tier === 'pro' || status.isPremium) return PRO_TIER_LIMITS;
+  return FREE_TIER_LIMITS;
+}
+
+/**
+ * Get commission rate based on tier (per ADR 0026)
+ * Starter: 7%, Pro: 1%, Business: 0%
+ */
+export function getTierCommissionRate(tier: PremiumTier): number {
+  switch (tier) {
+    case 'business': return 0;
+    case 'pro': return 0.01;
+    case 'starter': return 0.07;
+    default: return 0;
+  }
 }
 
 // ============= Helper Functions =============

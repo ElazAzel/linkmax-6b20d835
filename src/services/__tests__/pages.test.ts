@@ -30,6 +30,58 @@ describe('pagesService', () => {
         vi.mocked(supabase.auth.getUser).mockResolvedValue({ data: { user: { id: 'test-user-id' } as any }, error: null });
     });
 
+    describe('Pure Logic Functions', () => {
+        describe('isBlockScheduledVisible', () => {
+            it('should return true when no schedule is set', () => {
+                expect(pagesService.isBlockScheduledVisible()).toBe(true);
+            });
+
+            it('should return false when start date is in the future', () => {
+                const futureDate = new Date(Date.now() + 86400000);
+                expect(pagesService.isBlockScheduledVisible({ startDate: futureDate.toISOString() })).toBe(false);
+            });
+
+            it('should return true when current time is within schedule range', () => {
+                const pastDate = new Date(Date.now() - 86400000).toISOString();
+                const futureDate = new Date(Date.now() + 86400000).toISOString();
+                expect(pagesService.isBlockScheduledVisible({ startDate: pastDate, endDate: futureDate })).toBe(true);
+            });
+        });
+
+        describe('generateBlockId', () => {
+            it('should generate unique IDs starting with type', () => {
+                const id = pagesService.generateBlockId('link');
+                expect(id).toContain('link-');
+                expect(pagesService.generateBlockId('link')).not.toBe(id);
+            });
+        });
+
+        describe('validateBlock', () => {
+            it('should return valid for correct block', () => {
+                const result = pagesService.validateBlock({ id: '1', type: 'link' });
+                expect(result.valid).toBe(true);
+            });
+
+            it('should return error for missing type', () => {
+                const result = pagesService.validateBlock({ id: '1' });
+                expect(result.valid).toBe(false);
+                expect(result.errors).toContain('Block type is required');
+            });
+        });
+
+        describe('canPublishPage', () => {
+            it('should return false for empty blocks', () => {
+                const result = pagesService.canPublishPage([]);
+                expect(result.canPublish).toBe(false);
+            });
+
+            it('should return true if profile block is present', () => {
+                const result = pagesService.canPublishPage([{ id: '1', type: 'profile' } as any]);
+                expect(result.canPublish).toBe(true);
+            });
+        });
+    });
+
     describe('savePage (create/update)', () => {
         it('should save page successfully', async () => {
             const mockPageData = {
