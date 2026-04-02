@@ -71,15 +71,8 @@ serve(async (req) => {
       const text = customText || broadcastMessages[lang] || broadcastMessages.ru;
 
       try {
-        const response = await sendMessage(chatId, text, { parse_mode: 'HTML' });
-
-        if (response.ok) {
-          successCount++;
-        } else {
-          const err = await response.json();
-          console.error(`Failed to send to ${chatId}:`, err);
-          failCount++;
-        }
+        await sendMessage(chatId, text, { parse_mode: 'HTML' });
+        successCount++;
         
         // Small delay to prevent rate limits (30 msgs per second limit for TG)
         await new Promise(resolve => setTimeout(resolve, 50)); 
