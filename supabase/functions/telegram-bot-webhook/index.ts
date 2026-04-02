@@ -1010,13 +1010,13 @@ serve(async (req: Request) => {
       } else if (text === '/add_link') {
         responseText = m.add_link_prompt;
         await setPendingAction(supabase, chatIdStr, 'add_link');
-      } else if (userActionStore[chatIdStr] === 'edit_bio') {
+      } else if ((await getPendingAction(supabase, chatIdStr)) === 'edit_bio') {
         const profile = await getUserProfile(supabase, chatIdStr);
         
         if (profile) {
           await supabase.from('user_profiles').update({ bio: text }).eq('id', profile.id);
           responseText = m.bio_updated;
-          userActionStore[chatIdStr] = null;
+          await setPendingAction(supabase, chatIdStr, null);
         }
       } else if (userActionStore[chatIdStr] === 'add_link') {
         const parts = text.split('|');
