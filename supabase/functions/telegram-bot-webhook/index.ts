@@ -1040,7 +1040,7 @@ serve(async (req: Request) => {
                 order: 99
               });
               responseText = m.link_added;
-              userActionStore[chatIdStr] = null;
+              await setPendingAction(supabase, chatIdStr, null);
             } else {
               responseText = m.no_page;
             }
