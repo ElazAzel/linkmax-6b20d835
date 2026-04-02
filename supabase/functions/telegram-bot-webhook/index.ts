@@ -1006,10 +1006,10 @@ serve(async (req: Request) => {
         }
       } else if (text === '/edit_bio' || text === '/edit_profile') {
         responseText = m.edit_bio_prompt;
-        userActionStore[chatIdStr] = 'edit_bio';
+        await setPendingAction(supabase, chatIdStr, 'edit_bio');
       } else if (text === '/add_link') {
         responseText = m.add_link_prompt;
-        userActionStore[chatIdStr] = 'add_link';
+        await setPendingAction(supabase, chatIdStr, 'add_link');
       } else if (userActionStore[chatIdStr] === 'edit_bio') {
         const profile = await getUserProfile(supabase, chatIdStr);
         
