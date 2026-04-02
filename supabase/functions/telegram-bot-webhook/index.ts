@@ -249,7 +249,7 @@ function getSettings(supabase: any, chatId: string) {
   return supabase.from('telegram_bot_settings').select('*').eq('chat_id', chatId).maybeSingle();
 }
 
-const tempLanguageStore: Record<string, string> = {};
+// Language fallback removed — now fully DB-backed via telegram_bot_settings
 
 async function getUserProfile(supabase: any, chatId: string) {
   const { data, error } = await supabase
@@ -268,7 +268,21 @@ async function getUserProfile(supabase: any, chatId: string) {
   
   return data;
 }
-const userActionStore: Record<string, string | null> = {};
+// Pending action is now stored in telegram_bot_settings.pending_action (DB-backed)
+async function getPendingAction(supabase: any, chatId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from('telegram_bot_settings')
+    .select('pending_action')
+    .eq('chat_id', chatId)
+    .maybeSingle();
+  return data?.pending_action || null;
+}
+
+async function setPendingAction(supabase: any, chatId: string, action: string | null): Promise<void> {
+  await supabase
+    .from('telegram_bot_settings')
+    .upsert({ chat_id: chatId, pending_action: action, updated_at: new Date().toISOString() }, { onConflict: 'chat_id' });
+}
 
 async function getUserLanguage(supabase: any, chatId: string): Promise<Language> {
   try {
@@ -296,7 +310,7 @@ async function getUserLanguage(supabase: any, chatId: string): Promise<Language>
     return 'ru';
   } catch (e) {
     console.error('Error getting language:', e);
-    return (tempLanguageStore[chatId] as Language) || 'ru';
+    return 'ru';
   }
 }
 
@@ -324,7 +338,6 @@ async function setUserLanguage(supabase: any, chatId: string, language: Language
     console.log(`Language set to ${language} for chat ${chatId}`);
   } catch (e) {
     console.error('Error setting language:', e);
-    tempLanguageStore[chatId] = language;
   }
 }
 
@@ -402,7 +415,23 @@ serve(async (req: Request) => {
       return new Response('Bot not configured', { status: 500 });
     }
 
-    const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), { status: 500, headers: corsHeaders });
+    }
+
+    // Handle webhook registration
+    const reqUrl2 = new URL(req.url);
+    if (reqUrl2.searchParams.get('action') === 'register') {
+      const { callTelegram } = await import("../_shared/telegram.ts");
+      const webhookUrl = `${supabaseUrl}/functions/v1/telegram-bot-webhook`;
+      const result = await callTelegram('setWebhook', { url: webhookUrl });
+      return new Response(JSON.stringify({ ok: true, webhook: webhookUrl, result }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const update: TelegramUpdate = await req.json();
     console.log(`[Webhook] Update from ${update.message?.chat.id || update.callback_query?.from.id}:`, JSON.stringify(update));
 
@@ -685,7 +714,12 @@ serve(async (req: Request) => {
         const startappParam = text.startsWith('/start ') ? text.split(' ')[1] : null;
 
         // Check if first time user - show language selection
-        const isFirstTime = !tempLanguageStore[chatIdStr];
+        const { data: existingSettings } = await supabase
+          .from('telegram_bot_settings')
+          .select('language')
+          .eq('chat_id', chatIdStr)
+          .maybeSingle();
+        const isFirstTime = !existingSettings;
 
         // Check database for existing preference
         const { data: userData } = await supabase
@@ -972,19 +1006,19 @@ serve(async (req: Request) => {
         }
       } else if (text === '/edit_bio' || text === '/edit_profile') {
         responseText = m.edit_bio_prompt;
-        userActionStore[chatIdStr] = 'edit_bio';
+        await setPendingAction(supabase, chatIdStr, 'edit_bio');
       } else if (text === '/add_link') {
         responseText = m.add_link_prompt;
-        userActionStore[chatIdStr] = 'add_link';
-      } else if (userActionStore[chatIdStr] === 'edit_bio') {
+        await setPendingAction(supabase, chatIdStr, 'add_link');
+      } else if ((await getPendingAction(supabase, chatIdStr)) === 'edit_bio') {
         const profile = await getUserProfile(supabase, chatIdStr);
         
         if (profile) {
           await supabase.from('user_profiles').update({ bio: text }).eq('id', profile.id);
           responseText = m.bio_updated;
-          userActionStore[chatIdStr] = null;
+          await setPendingAction(supabase, chatIdStr, null);
         }
-      } else if (userActionStore[chatIdStr] === 'add_link') {
+      } else if ((await getPendingAction(supabase, chatIdStr)) === 'add_link') {
         const parts = text.split('|');
         if (parts.length >= 2) {
           const title = parts[0].trim();
@@ -1006,7 +1040,7 @@ serve(async (req: Request) => {
                 order: 99
               });
               responseText = m.link_added;
-              userActionStore[chatIdStr] = null;
+              await setPendingAction(supabase, chatIdStr, null);
             } else {
               responseText = m.no_page;
             }
