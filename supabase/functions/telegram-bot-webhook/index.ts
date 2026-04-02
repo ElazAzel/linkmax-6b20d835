@@ -415,7 +415,23 @@ serve(async (req: Request) => {
       return new Response('Bot not configured', { status: 500 });
     }
 
-    const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), { status: 500, headers: corsHeaders });
+    }
+
+    // Handle webhook registration
+    const reqUrl2 = new URL(req.url);
+    if (reqUrl2.searchParams.get('action') === 'register') {
+      const { callTelegram } = await import("../_shared/telegram.ts");
+      const webhookUrl = `${supabaseUrl}/functions/v1/telegram-bot-webhook`;
+      const result = await callTelegram('setWebhook', { url: webhookUrl });
+      return new Response(JSON.stringify({ ok: true, webhook: webhookUrl, result }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const update: TelegramUpdate = await req.json();
     console.log(`[Webhook] Update from ${update.message?.chat.id || update.callback_query?.from.id}:`, JSON.stringify(update));
 
