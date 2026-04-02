@@ -338,7 +338,6 @@ async function setUserLanguage(supabase: any, chatId: string, language: Language
     console.log(`Language set to ${language} for chat ${chatId}`);
   } catch (e) {
     console.error('Error setting language:', e);
-    tempLanguageStore[chatId] = language;
   }
 }
 
