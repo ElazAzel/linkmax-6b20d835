@@ -249,7 +249,7 @@ function getSettings(supabase: any, chatId: string) {
   return supabase.from('telegram_bot_settings').select('*').eq('chat_id', chatId).maybeSingle();
 }
 
-const tempLanguageStore: Record<string, string> = {};
+// Language fallback removed — now fully DB-backed via telegram_bot_settings
 
 async function getUserProfile(supabase: any, chatId: string) {
   const { data, error } = await supabase
