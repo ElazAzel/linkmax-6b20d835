@@ -714,7 +714,12 @@ serve(async (req: Request) => {
         const startappParam = text.startsWith('/start ') ? text.split(' ')[1] : null;
 
         // Check if first time user - show language selection
-        const isFirstTime = !tempLanguageStore[chatIdStr];
+        const { data: existingSettings } = await supabase
+          .from('telegram_bot_settings')
+          .select('language')
+          .eq('chat_id', chatIdStr)
+          .maybeSingle();
+        const isFirstTime = !existingSettings;
 
         // Check database for existing preference
         const { data: userData } = await supabase
