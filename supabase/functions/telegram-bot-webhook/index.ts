@@ -1018,7 +1018,7 @@ serve(async (req: Request) => {
           responseText = m.bio_updated;
           await setPendingAction(supabase, chatIdStr, null);
         }
-      } else if (userActionStore[chatIdStr] === 'add_link') {
+      } else if ((await getPendingAction(supabase, chatIdStr)) === 'add_link') {
         const parts = text.split('|');
         if (parts.length >= 2) {
           const title = parts[0].trim();
