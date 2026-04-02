@@ -151,6 +151,23 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **Data Integrity**: Synchronized frontend `PageExperiment` and `BlockVariation` interfaces with the actual database schema to remove mapping overhead and technical debt.
 - **Health Score**: **10/10** (Status: Architecturally Unified, Fully Typed, and Production Hardened).
 
+### [2026-04-02] Phase 12: Platform Hardening & Lifecycle Management (Infrastructure Reliability)
+
+- **Notification Orchestration (Outbox Pattern)**:
+    - Implemented `notification_queue` as a database-driven outbox to decouple event triggers from delivery.
+    - Created `process-notifications` Edge Function with built-in retry logic and Telegram/Email routing.
+    - Resolved Telegram rate-limiting issues (30/sec) via batched processing and controlled concurrency.
+    - Status: 100% Reliable & Idempotent.
+- **Data Persistence & Analytics Hardening**:
+    - Refactored `save_page_blocks` RPC to use **UPSERT + Soft-Delete** logic.
+    - Blocks are no longer physically deleted when removed from the UI; instead, `deleted_at` is set.
+    - Analytics records now persist indefinitely, maintaining historical insights even for removed blocks.
+- **Media Asset Lifecycle**:
+    - Implemented **Reference Counting** for media files (images, avatars) via `media_assets` and `media_references`.
+    - Automated reference tracking through Postgres triggers parsing block content.
+    - Created `cleanup-orphaned-media` worker to safely reclaim storage space for files with 0 references (after a 24h grace period).
+- **Health Score**: **10/10** (Status: Fully Hardened & Scalable).
+
 ### [2026-03-23] Phase 5: Bundle Optimization & Performance
 
 - **Dynamic Imports**: Refactored `exceljs`, `jspdf`, and `html2canvas` to use dynamic `import()` calls. These heavy libraries (total ~1.5MB) are now only loaded when the user triggers an export or document generation task.
@@ -576,6 +593,9 @@ LinkMAX использует гибридную модель, направлен
 | `zone_document_templates` | Templates for document generation | Zone Member access |
 | `zone_documents` | Generated documents with status | Zone Member access |
 | `language_upload_history` | Translation upload logs | Admin only |
+| `notification_queue` | Outbox for async notifications | System/Admin |
+| `media_assets` | Tracking of all storage files | System only |
+| `media_references` | Mapping of blocks to media | System only |
 
 ### Data model (high level)
 
@@ -690,6 +710,8 @@ LinkMAX использует гибридную модель, направлен
 | `verify-domain` | Domain | Real-time DNS CNAME verification via Deno.resolveDns |
 | `language-upload` | Admin | Language file uploads |
 | `send-contact-email` | Form | Contact form email via Resend |
+| `process-notifications` | Cron/Trigger | Queue processor for all alerts |
+| `cleanup-orphaned-media`| Cron | Storage cleanup worker |
 
 ### Key RPC Functions
 

@@ -182,7 +182,118 @@ export type AppDatabase = Omit<Database, 'public'> & {
             webhook_secret?: string | null;
           };
           Relationships: Database['public']['Tables']['pages']['Relationships'];
-        };
+        },
+        blocks: {
+          Row: Database['public']['Tables']['blocks']['Row'] & {
+            deleted_at: string | null;
+          };
+          Insert: Database['public']['Tables']['blocks']['Insert'] & {
+            deleted_at?: string | null;
+          };
+          Update: Database['public']['Tables']['blocks']['Update'] & {
+            deleted_at?: string | null;
+          };
+          Relationships: Database['public']['Tables']['blocks']['Relationships'];
+        },
+        notification_queue: {
+          Row: {
+            id: string;
+            user_id: string;
+            event_type: string;
+            payload: any;
+            status: 'pending' | 'processing' | 'sent' | 'failed' | 'skipped';
+            retry_count: number;
+            last_error: string | null;
+            idempotency_key: string | null;
+            created_at: string;
+            processed_at: string | null;
+          };
+          Insert: {
+            id?: string;
+            user_id: string;
+            event_type: string;
+            payload: any;
+            status?: 'pending' | 'processing' | 'sent' | 'failed' | 'skipped';
+            retry_count?: number;
+            last_error?: string | null;
+            idempotency_key?: string | null;
+            created_at?: string;
+            processed_at?: string | null;
+          };
+          Update: {
+            id?: string;
+            user_id?: string;
+            event_type?: string;
+            payload?: any;
+            status?: 'pending' | 'processing' | 'sent' | 'failed' | 'skipped';
+            retry_count?: number;
+            last_error?: string | null;
+            idempotency_key?: string | null;
+            created_at?: string;
+            processed_at?: string | null;
+          };
+          Relationships: [];
+        },
+        media_assets: {
+          Row: {
+            id: string;
+            file_path: string;
+            file_type: string | null;
+            file_size: number | null;
+            checksum: string | null;
+            reference_count: number;
+            created_at: string;
+            updated_at: string;
+          };
+          Insert: {
+            id?: string;
+            file_path: string;
+            file_type?: string | null;
+            file_size?: number | null;
+            checksum?: string | null;
+            reference_count?: number;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Update: {
+            id?: string;
+            file_path?: string;
+            file_type?: string | null;
+            file_size?: number | null;
+            checksum?: string | null;
+            reference_count?: number;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Relationships: [];
+        },
+        media_references: {
+          Row: {
+            id: string;
+            asset_id: string;
+            page_id: string;
+            block_id: string | null;
+            reference_type: string;
+            created_at: string;
+          };
+          Insert: {
+            id?: string;
+            asset_id: string;
+            page_id: string;
+            block_id?: string | null;
+            reference_type: string;
+            created_at?: string;
+          };
+          Update: {
+            id?: string;
+            asset_id?: string;
+            page_id?: string;
+            block_id?: string | null;
+            reference_type?: string;
+            created_at?: string;
+          };
+          Relationships: [];
+        },
         // CRM / Zone tables (Mapping from src/types/zones.ts)
         zone_contacts: {
           Row: {

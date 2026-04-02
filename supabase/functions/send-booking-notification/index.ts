@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
-import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,7 +17,6 @@ interface BookingNotificationRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -26,56 +24,20 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body: BookingNotificationRequest = await req.json();
 
-    console.log("Received booking notification request:", body);
+    console.log("Queuing booking notification request:", body);
 
-    // Basic Input Validation
-    if (body.clientEmail) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(body.clientEmail)) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Invalid clientEmail format" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-    }
-
-    // Get owner profile
-    const { data: owner, error: ownerError } = await supabase
+    const { data: owner } = await supabase
       .from("user_profiles")
-      .select("telegram_chat_id, telegram_notifications_enabled, username, display_name")
+      .select("telegram_chat_id, telegram_notifications_enabled")
       .eq("id", body.ownerId)
       .maybeSingle();
 
-    if (ownerError) {
-      console.error("Error fetching owner:", ownerError);
-      throw new Error("Failed to fetch owner profile");
-    }
-
-    if (!owner) {
-      console.log("Owner not found:", body.ownerId);
-      return new Response(
-        JSON.stringify({ success: false, error: "Owner not found" }),
-        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    console.log("Owner profile:", {
-      telegramEnabled: owner.telegram_notifications_enabled,
-      hasChatId: !!owner.telegram_chat_id
-    });
-
-    // Send Telegram notification if enabled
-    if (
-      isConfigured() &&
-      owner.telegram_notifications_enabled &&
-      owner.telegram_chat_id
-    ) {
+    if (owner?.telegram_notifications_enabled && owner.telegram_chat_id) {
       const message = `📅 *Новая запись!*
-
+      
 👤 *Клиент:* ${body.clientName}
 ${body.clientPhone ? `📞 *Телефон:* ${body.clientPhone}` : ""}
 ${body.clientEmail ? `📧 *Email:* ${body.clientEmail}` : ""}
@@ -85,60 +47,50 @@ ${body.notes ? `📝 *Комментарий:* ${body.notes}` : ""}
 
 _Управляйте записями в CRM вашей страницы._`;
 
-      try {
-        await sendMessage(owner.telegram_chat_id, message, {
-          parse_mode: "Markdown",
-        });
-        console.log("Telegram notification sent successfully");
-      } catch (telegramError) {
-        console.error("Error sending Telegram notification:", telegramError);
-      }
-    }
-
-    // Create a lead from the booking
-    try {
-      const { error: leadError } = await supabase
-        .from("leads")
+      await supabase
+        .from("notification_queue")
         .insert({
           user_id: body.ownerId,
-          name: body.clientName,
-          phone: body.clientPhone || null,
-          email: body.clientEmail || null,
-          source: "form",
-          status: "new",
-          notes: `Запись на ${body.date} в ${body.time}${body.notes ? `\n\nКомментарий: ${body.notes}` : ""}`,
-          metadata: {
-            booking_date: body.date,
-            booking_time: body.time,
-            source_type: "booking"
+          event_type: 'booking_created',
+          payload: {
+            channel: 'telegram',
+            telegram: {
+              chat_id: owner.telegram_chat_id,
+              text: message,
+              parse_mode: 'Markdown'
+            }
           }
         });
-
-      if (leadError) {
-        console.error("Error creating lead:", leadError);
-      } else {
-        console.log("Lead created successfully");
-      }
-    } catch (leadCreationError) {
-      console.error("Error in lead creation:", leadCreationError);
     }
+
+    // Create a lead from the booking (existing business logic)
+    await supabase
+      .from("leads")
+      .insert({
+        user_id: body.ownerId,
+        name: body.clientName,
+        phone: body.clientPhone || null,
+        email: body.clientEmail || null,
+        source: "form",
+        status: "new",
+        notes: `Запись на ${body.date} в ${body.time}${body.notes ? `\n\nКомментарий: ${body.notes}` : ""}`,
+        metadata: {
+          booking_date: body.date,
+          booking_time: body.time,
+          source_type: "booking"
+        }
+      });
 
     return new Response(
       JSON.stringify({ success: true }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      }
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     console.error("Error in send-booking-notification:", errorMessage);
     return new Response(
       JSON.stringify({ success: false, error: errorMessage }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 };

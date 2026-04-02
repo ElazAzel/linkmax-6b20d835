@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,7 +7,6 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-const BOT_USERNAME = 'linkmaxmy_bot';
 const MINIAPP_URL = 'https://lnkmx.my/tg/';
 
 const broadcastMessages = {
@@ -30,73 +28,87 @@ function getMainKeyboard(lang: string) {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { 
-      status: 200, 
-      headers: corsHeaders 
-    });
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!isConfigured()) throw new Error('Telegram connector not configured');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
-
-    // Check for custom message in body
     let customText: string | null = null;
+    let broadcastId = `bcast_${Date.now()}`;
+    
     try {
       const body = await req.json();
       customText = body.text || null;
+      if (body.broadcastId) broadcastId = body.broadcastId;
     } catch (e) {
-      // No body or invalid JSON, ignore
+      // ignore
     }
 
     // Fetch all users with Telegram Chat IDs
     const { data: users, error: fetchError } = await supabase
       .from('user_profiles')
-      .select('telegram_chat_id, telegram_language')
+      .select('id, telegram_chat_id, telegram_language')
       .not('telegram_chat_id', 'is', null);
 
     if (fetchError) throw fetchError;
+    if (!users || users.length === 0) {
+      return new Response(JSON.stringify({ message: "No users to broadcast to" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
-    console.log(`Starting broadcast to ${users?.length || 0} users...`);
+    console.log(`Queuing broadcast for ${users.length} users...`);
 
-    let successCount = 0;
-    let failCount = 0;
-
-    for (const user of (users || [])) {
-      const chatId = user.telegram_chat_id;
+    // Prepare batch insert entries
+    const queueEntries = users.map(user => {
       const lang = (user.telegram_language || 'ru') as keyof typeof broadcastMessages;
       const text = customText || broadcastMessages[lang] || broadcastMessages.ru;
+      
+      return {
+        user_id: user.id,
+        event_type: 'broadcast',
+        payload: {
+          channel: 'telegram',
+          telegram: {
+            chat_id: user.telegram_chat_id,
+            text: text,
+            parse_mode: 'HTML',
+            reply_markup: getMainKeyboard(lang)
+          }
+        },
+        idempotency_key: `${broadcastId}_${user.id}`
+      };
+    });
 
-      try {
-        await sendMessage(chatId, text, { parse_mode: 'HTML' });
-        successCount++;
-        
-        // Small delay to prevent rate limits (30 msgs per second limit for TG)
-        await new Promise(resolve => setTimeout(resolve, 50)); 
-      } catch (e: any) {
-        console.error(`Error sending message to ${chatId}:`, e);
-        failCount++;
+    // Chunked insert (Supabase limit is usually around 1000 rows per insert)
+    const chunkSize = 200;
+    let successCount = 0;
+
+    for (let i = 0; i < queueEntries.length; i += chunkSize) {
+      const chunk = queueEntries.slice(i, i + chunkSize);
+      const { error: insertError } = await supabase
+        .from('notification_queue')
+        .insert(chunk);
+      
+      if (insertError) {
+        console.error(`Error inserting chunk ${i/chunkSize}:`, insertError);
+      } else {
+        successCount += chunk.length;
       }
     }
 
     return new Response(
       JSON.stringify({ 
-        message: `Broadcast completed.`,
-        total: (users || []).length,
-        success: successCount,
-        failed: failCount
+        message: `Broadcast queued successfully.`,
+        total: users.length,
+        queued: successCount
       }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    )
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
 
   } catch (error: any) {
-    console.error('Broadcast error:', error);
+    console.error('Broadcast queuing error:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,

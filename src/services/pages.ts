@@ -137,7 +137,8 @@ function deduplicateBlocks(blocks: DbBlock[]): DbBlock[] {
  */
 function convertDbBlocksToBlocks(dbBlocks: DbBlock[]): Block[] {
   const sorted = [...dbBlocks].sort((a, b) => a.position - b.position);
-  const unique = deduplicateBlocks(sorted);
+  const activeOnly = sorted.filter((block) => !block.deleted_at);
+  const unique = deduplicateBlocks(activeOnly);
   return unique.map((block) => block.content as unknown as Block);
 }
 
@@ -305,7 +306,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
     // Increment view count (fire and forget)
     void supabase.rpc('increment_view_count', { page_slug: pg.slug });
 
-    const blocks = pg.blocks || [];
+    const activeBlocks = (pg.blocks as unknown as DbBlock[] || []).filter((b: DbBlock) => !b.deleted_at);
     const experiments = mapExperimentData(pg.experiments || []);
 
     const pageData: PageData = {
@@ -313,10 +314,10 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       userId: pg.user_id,
       slug: pg.slug,
       custom_domain: pg.custom_domain || undefined,
-      blocks: convertDbBlocksToBlocks(blocks),
+      blocks: convertDbBlocksToBlocks(activeBlocks),
       theme: pg.theme_settings as unknown as PageTheme,
       seo: pg.seo_meta as unknown as PageData['seo'],
-      isPremium: blocks.some((b: DbBlock) => b.is_premium),
+      isPremium: activeBlocks.some((b: DbBlock) => b.is_premium),
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
@@ -358,7 +359,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
     // Increment view count (fire and forget)
     void supabase.rpc('increment_view_count', { page_slug: pg.slug });
 
-    const blocks = pg.blocks || [];
+    const activeBlocks = (pg.blocks as unknown as DbBlock[] || []).filter((b: DbBlock) => !b.deleted_at);
     const experiments = mapExperimentData(pg.experiments || []);
 
     const pageData: PageData = {
@@ -366,10 +367,10 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       userId: pg.user_id,
       slug: pg.slug,
       custom_domain: pg.custom_domain || undefined,
-      blocks: convertDbBlocksToBlocks(blocks),
+      blocks: convertDbBlocksToBlocks(activeBlocks),
       theme: pg.theme_settings as unknown as PageTheme,
       seo: pg.seo_meta as unknown as PageData['seo'],
-      isPremium: blocks.some((b: DbBlock) => b.is_premium),
+      isPremium: activeBlocks.some((b: DbBlock) => b.is_premium),
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
@@ -421,16 +422,16 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       };
     }
     const pg = page as unknown as DbPage;
-    const blocks = pg.blocks as unknown as DbBlock[];
+    const activeBlocks = (pg.blocks as unknown as DbBlock[] || []).filter(b => !b.deleted_at);
 
     const pageData: PageData = {
       id: pg.id,
       userId: pg.user_id,
       slug: pg.slug,
-      blocks: convertDbBlocksToBlocks(blocks),
+      blocks: convertDbBlocksToBlocks(activeBlocks),
       theme: pg.theme_settings as unknown as PageTheme,
       seo: pg.seo_meta as unknown as PageData['seo'],
-      isPremium: blocks.some((b) => b.is_premium),
+      isPremium: activeBlocks.some((b) => b.is_premium),
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',

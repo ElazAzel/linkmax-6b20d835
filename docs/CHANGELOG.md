@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.13.0] - 2026-04-02
+
+### Phase 12: Platform Hardening & Lifecycle Management
+
+- **Notification Reliability**: Implemented a database-driven **Outbox Pattern** via `notification_queue`. All notification triggers are now asynchronous and idempotent.
+- **Orchestration**: Created `process-notifications` Edge Function to manage delivery, retries, and rate-limiting for Telegram and Email.
+- **Data Persistence**: Refactored `save_page_blocks` to support **Soft-Deletion**. Removing a block from the UI no longer deletes its record, ensuring historical analytics (CLI, Views) are preserved.
+- **Media Lifecycle**: Introduced **Reference Counting** for Supabase Storage assets. `media_assets` and `media_references` tables track which blocks use which files.
+- **Automated Cleanup**: Deployed `cleanup-orphaned-media` worker to identify and prune abandoned files in storage, preventing bloat.
+- **Architecture**: Decoupled business logic from side-effects (notifications/cleanup), significantly improving platform stability and performance.
+
 ## [1.12.0] - 2026-03-31
 
 ### Phase 12: Fintech Hardening & Booking Polish
