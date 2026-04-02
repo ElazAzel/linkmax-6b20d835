@@ -268,7 +268,21 @@ async function getUserProfile(supabase: any, chatId: string) {
   
   return data;
 }
-const userActionStore: Record<string, string | null> = {};
+// Pending action is now stored in telegram_bot_settings.pending_action (DB-backed)
+async function getPendingAction(supabase: any, chatId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from('telegram_bot_settings')
+    .select('pending_action')
+    .eq('chat_id', chatId)
+    .maybeSingle();
+  return data?.pending_action || null;
+}
+
+async function setPendingAction(supabase: any, chatId: string, action: string | null): Promise<void> {
+  await supabase
+    .from('telegram_bot_settings')
+    .upsert({ chat_id: chatId, pending_action: action, updated_at: new Date().toISOString() }, { onConflict: 'chat_id' });
+}
 
 async function getUserLanguage(supabase: any, chatId: string): Promise<Language> {
   try {
