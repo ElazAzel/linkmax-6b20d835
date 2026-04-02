@@ -30,34 +30,40 @@
 - **Supabase Consolidation**: Unified all database interactions through the `AppDatabase` type in `src/platform/supabase/`.
 
 ### Type Safety (Hardening)
+
 - **AppDatabase Augmentation**: Added strict type definitions for 10+ core tables including `leads`, `bookings`, `analytics`, `experiments`, and `newsletter_subscriptions`.
 - **Service Refactoring**: Hardened `pages.ts`, `user.ts`, `experiments.ts`, and `useLeads.ts` by removing `as any` assertions and implementing strict Row-level typing.
 - **Experiment Engine**: Synchronized `PageExperiment` and `BlockVariation` interfaces with the physical database schema to eliminate runtime mapping errors.
 
 ### UI/UX & Components
+
 - **NewsletterBlock**: Refactored to use the hardened typed client and updated to the latest "Liquid Glass" design system (glassmorphism, premium transitions).
 - **Type Integrity**: Corrected lead source enums and validation logic across block components.
 
 ## [1.8.0] - 2026-03-31 (Platform Audit Remediation)
 
-### Security (Hardening)
+### [1.8.0] Security (Hardening)
+
 - **SQL/PostgREST Injection**: Implemented strict input sanitization for all search queries (`userSearch.ts`, `useGlobalSearch.ts`) to prevent filter-breaking injection via `.or()` and `.ilike()`.
 - **JWT Enforcement**: Enabled mandatory JWT authentication for AI Edge Functions (`ai-content-generator`, `image-generator`).
 - **Secrets Management**: Removed hardcoded Cloudflare and Supabase IDs from `wrangler.toml` and GitHub Workflows; migrated to environment variables and repo secrets.
 - **Access Control**: Added `owner_id` verification to `experiments.ts` and hardened `seed-demo-accounts` against unauthorized execution.
 - **Idempotency**: Implemented `message_id` based idempotency in `process-email-sequences` to prevent duplicate emails.
 
-### CI/CD & Infrastructure
+### [1.8.0] CI/CD & Infrastructure
+
 - **Pipeline Optimization**: Parallelized E2E and Unit tests in `ci.yml`. Added `staging` environment support and post-deploy smoke tests in `deploy.yml`.
 - **Supabase Connectivity**: Added a secondary fallback API (exchangerate-api.com) for `currency-rates` to ensure uptime during National Bank of KZ outages.
 - **Wrangler**: Pinned `wrangler@latest` for deployment stability.
 
-### Telegram Mini App (TMA)
+### [1.8.0] Telegram Mini App (TMA)
+
 - **Health Check**: Integrated a Supabase connectivity health check during TMA initialization. Improved error reporting for SDK/API failures.
 - **UX**: Fixed currency symbol display (₽→₸) and reduced console noise by making SDK warnings DEV-only.
 - **Testing**: Added initial unit test suite (`TelegramApp.test.tsx`) for core initialization logic.
 
-### Quality & Type Safety
+### [1.8.0] Quality & Type Safety
+
 - **State Management**: Fixed Zustand DevTools serialization for `Set` and `Map` types in `EditorStore`.
 - **Type Safety**: Eliminated `as any` in zone automations and fixed stale Supabase types in `referral.ts`.
 - **Collaboration**: Implemented a retry loop for `collab_slug` to guarantee uniqueness on collision.
@@ -65,9 +71,9 @@
 - **Code Hygiene**: Fixed mutable `Date` bug in `social.ts` (`getWeekStart`) and added `.github/CODEOWNERS` for critical paths.
 
 ## [1.7.0] - 2026-03-24
- 
-### Added
- 
+
+### [1.7.0] Added
+
 - **Multi-project support**: New `/pages` command to switch between user projects.
 - **Active project context**: All operational commands (`/stats`, `/leads`, `/bookings`) now automatically filter results by the active project.
 - **Direct profile editing**: `/edit_bio` command to update user bio in real-time.
@@ -76,11 +82,11 @@
 - **Mass Broadcast**: Implemented `broadcast-update` edge function to notify users of the Mini CRM evolution.
 - **New SQL Migration**: Persistence of `active_page_id` in `telegram_bot_settings`.
 - **Improved UX**: New help menu with quick access to projects, links, and settings.
- 
+
 ## [1.6.0] - 2026-03-24
- 
-### Added
- 
+
+### [1.6.0] Added
+
 - **Telegram Bot HQ (Deterministic):**
   - Интерактивные уведомления о лидах с кнопками управления статусом (`В работу`, `Продано`).
   - Прямые ссылки на WhatsApp/Telegram клиента из уведомления.

@@ -110,7 +110,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 ### [2026-03-31] Phase 1.8.0: Platform Audit Remediation (Full Hardening)
 
-- **Security & Data Integrity**: 
+- **Security & Data Integrity**:
   - **PostgREST Sanitization**: Strict input validation for all filters to prevent injection.
   - **JWT Mandatory Auth**: Hardened AI Edge Functions by enforcing JWT token verification.
   - **Ownership Verification**: Integrated `owner_id` checks for experiments and critical mutations.
@@ -155,18 +155,18 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 ### [2026-04-02] Phase 12: Platform Hardening & Lifecycle Management (Infrastructure Reliability)
 
 - **Notification Orchestration (Outbox Pattern)**:
-    - Implemented `notification_queue` as a database-driven outbox to decouple event triggers from delivery.
-    - Created `process-notifications` Edge Function with built-in retry logic and Telegram/Email routing.
-    - Resolved Telegram rate-limiting issues (30/sec) via batched processing and controlled concurrency.
-    - Status: 100% Reliable & Idempotent.
+  - Implemented `notification_queue` as a database-driven outbox to decouple event triggers from delivery.
+  - Created `process-notifications` Edge Function with built-in retry logic and Telegram/Email routing.
+  - Resolved Telegram rate-limiting issues (30/sec) via batched processing and controlled concurrency.
+  - Status: 100% Reliable & Idempotent.
 - **Data Persistence & Analytics Hardening**:
-    - Refactored `save_page_blocks` RPC to use **UPSERT + Soft-Delete** logic.
-    - Blocks are no longer physically deleted when removed from the UI; instead, `deleted_at` is set.
-    - Analytics records now persist indefinitely, maintaining historical insights even for removed blocks.
+  - Refactored `save_page_blocks` RPC to use **UPSERT + Soft-Delete** logic.
+  - Blocks are no longer physically deleted when removed from the UI; instead, `deleted_at` is set.
+  - Analytics records now persist indefinitely, maintaining historical insights even for removed blocks.
 - **Media Asset Lifecycle**:
-    - Implemented **Reference Counting** for media files (images, avatars) via `media_assets` and `media_references`.
-    - Automated reference tracking through Postgres triggers parsing block content.
-    - Created `cleanup-orphaned-media` worker to safely reclaim storage space for files with 0 references (after a 24h grace period).
+  - Implemented **Reference Counting** for media files (images, avatars) via `media_assets` and `media_references`.
+  - Automated reference tracking through Postgres triggers parsing block content.
+  - Created `cleanup-orphaned-media` worker to safely reclaim storage space for files with 0 references (after a 24h grace period).
 - **Health Score**: **10/10** (Status: Fully Hardened & Scalable).
 
 ### [2026-03-23] Phase 5: Bundle Optimization & Performance
@@ -254,13 +254,13 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 ---
 
 ### 2.4 Telegram Bot (Operational HQ)
- 
+
 **Primary goal:** Deterministic remote control of the business without LLM latency or token costs.
- 
+
 **Features:**
- 
+
 - **Multi-Page Management**: `/pages` command to switch between projects with persistent `active_page_id` state.
-- **Direct Content Editing**: 
+- **Direct Content Editing**:
   - `/edit_bio`: Instant profile BIO update.
   - `/add_link`: Conversational flow (`Title | URL`) to append new blocks.
 - **Advanced Operational Commands**:
@@ -712,7 +712,7 @@ LinkMAX использует гибридную модель, направлен
 | `language-upload` | Admin | Language file uploads |
 | `send-contact-email` | Form | Contact form email via Resend |
 | `process-notifications` | Cron/Trigger | Queue processor for all alerts |
-| `cleanup-orphaned-media`| Cron | Storage cleanup worker |
+| `cleanup-orphaned-media` | Cron | Storage cleanup worker |
 
 ### Key RPC Functions
 
@@ -887,16 +887,20 @@ Located in `src/components/dashboard-v2/`:
 Проект использует систему автономных агентов для автоматизации разработки. Основные правила и роли сосредоточены в директории `.agent/rules/`. Все коммуникации и документация ведутся на **русском языке**.
 
 ### Система ролей
+
 - **Оркестратор**: Декомпозиция задач и управление процессом.
 - **Frontend/Backend Специалисты**: Экспертиза в конкретных слоях (React/Supabase).
 - **Implementer/Planner**: Написание кода и планирование.
 - **Verifier/Reviewer**: Контроль качества и тестирование.
 
 ### Правила взаимодействия (Collaboration)
+
 Файл `rules/collaboration.md` определяет протоколы передачи задач (Handoff), управления контекстом и разрешения конфликтов между агентами и людьми.
 
 ### Команды и Хуки
+
 Все основные команды разработки (`dev`, `build`, `database`, `deploy`, `lint`, `test`) задокументированы в `commands/` и имеют четкие инструкции по выполнению и верификации для AI.
+
 - Common utilities and dialogs
 - **Motion System**: Centralized `framer-motion` variants for staggered entry (`containerVariants`, `itemVariants`) and `AnimatePresence` for smooth layout transitions.
 
