@@ -1889,6 +1889,51 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_bot_settings: {
+        Row: {
+          active_page_id: string | null
+          chat_id: string
+          created_at: string
+          id: string
+          language: string | null
+          pending_action: string | null
+          updated_at: string
+        }
+        Insert: {
+          active_page_id?: string | null
+          chat_id: string
+          created_at?: string
+          id?: string
+          language?: string | null
+          pending_action?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active_page_id?: string | null
+          chat_id?: string
+          created_at?: string
+          id?: string
+          language?: string | null
+          pending_action?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_bot_settings_active_page_id_fkey"
+            columns: ["active_page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "telegram_bot_settings_active_page_id_fkey"
+            columns: ["active_page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       template_likes: {
         Row: {
           created_at: string
@@ -4105,6 +4150,14 @@ export type Database = {
           p_zone_id: string
         }
         Returns: Json
+      }
+      upsert_telegram_bot_active_page: {
+        Args: { p_chat_id: string; p_page_id: string }
+        Returns: undefined
+      }
+      upsert_telegram_bot_settings: {
+        Args: { p_chat_id: string; p_language: string }
+        Returns: undefined
       }
       upsert_user_page: {
         Args: {
