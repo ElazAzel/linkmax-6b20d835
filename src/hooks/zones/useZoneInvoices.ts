@@ -52,7 +52,7 @@ export function useZoneInvoices(zoneId: string | null) {
       if (!zoneId) throw new Error('No zone selected');
       const { data, error } = await supabase
         .from('zone_invoices')
-        .insert({ ...invoice, zone_id: zoneId })
+        .insert({ ...invoice, zone_id: zoneId } as any)
         .select()
         .single();
       if (error) throw error;
@@ -67,7 +67,7 @@ export function useZoneInvoices(zoneId: string | null) {
 
       const { data: invData, error: invError } = await supabase
         .from('zone_invoices')
-        .insert({ ...invoice, zone_id: zoneId })
+        .insert({ ...invoice, zone_id: zoneId } as any)
         .select()
         .single();
       if (invError) throw invError;
