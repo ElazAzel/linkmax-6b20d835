@@ -120,7 +120,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
     <>
       <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden bg-gradient-to-t from-background via-background/80 to-transparent pt-6 pointer-events-none">
         <div className="bg-card border border-border/10 rounded-2xl shadow-2xl shadow-black/10 overflow-hidden pointer-events-auto">
-          <div className="grid grid-cols-5 h-16">
+          <div className="grid grid-cols-5 h-[4.5rem]">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.id;
               const Icon = tab.icon;
@@ -150,7 +150,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                       </span>
                     )}
                   </div>
-                  <span className={cn("text-[10px] font-bold leading-none max-w-full px-0.5 tracking-tight uppercase truncate text-center", isActive && "text-primary")}>
+                  <span className={cn("text-[10px] font-bold leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal text-center break-words", isActive ? "text-primary" : "text-muted-foreground/80")}>
                     {t(tab.labelKey, tab.defaultLabel)}
                   </span>
                 </button>
@@ -172,7 +172,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                 />
               )}
               <MoreHorizontal className={cn("h-5 w-5 shrink-0", isMoreActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
-              <span className={cn("text-[10px] font-bold leading-none max-w-full px-0.5 tracking-tight uppercase truncate text-center", isMoreActive && "text-primary")}>
+              <span className={cn("text-[10px] font-bold leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal text-center break-words", isMoreActive ? "text-primary" : "text-muted-foreground/80")}>
                 {t('dashboard.nav.more', 'Ещё')}
               </span>
             </button>

@@ -93,6 +93,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
     email: '',
     notes: ''
   });
+  const [fullyBookedDates, setFullyBookedDates] = useState<Set<string>>(new Set());
+  const [initLoading, setInitLoading] = useState(true);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
@@ -229,7 +231,81 @@ export const BookingBlock = memo(function BookingBlockComponent({
     } finally {
       setLoading(false);
     }
-  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration]);
+  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, block.timezone, userTimezone]);
+
+  // Pre-calculate fully booked dates for the next 30 days
+  const preCalculateAvailability = useCallback(async () => {
+    if (!pageId || !block.id) return;
+    
+    setInitLoading(true);
+    try {
+      const today = startOfDay(new Date());
+      const maxDays = block.maxBookingDays || 30;
+      const endRange = addDays(today, maxDays);
+      
+      const dateStrStart = format(today, 'yyyy-MM-dd');
+      const dateStrEnd = format(endRange, 'yyyy-MM-dd');
+
+      // 1. Fetch all bookings for the range
+      const { data: allBookings } = await supabase
+        .from('bookings')
+        .select('slot_date, slot_time')
+        .eq('page_id', pageId)
+        .eq('block_id', block.id)
+        .gte('slot_date', dateStrStart)
+        .lte('slot_date', dateStrEnd)
+        .neq('status', 'cancelled');
+
+      // 2. Fetch slot templates
+      const { data: slotTemplates } = await supabase
+        .from('booking_slots')
+        .select('*')
+        .eq('page_id', pageId)
+        .eq('block_id', block.id)
+        .eq('is_available', true);
+
+      const soldOut = new Set<string>();
+      
+      // Calculate daily capacity
+      for (let i = 0; i <= maxDays; i++) {
+        const currentDate = addDays(today, i);
+        const dayOfWeek = currentDate.getDay();
+        const dateStr = format(currentDate, 'yyyy-MM-dd');
+        
+        const dayBookings = allBookings?.filter(b => b.slot_date === dateStr) || [];
+        let totalPossibleSlots = 0;
+
+        if (block.slots && block.slots.length > 0) {
+          totalPossibleSlots = block.slots.length;
+        } else {
+          const templates = slotTemplates?.filter(t => t.day_of_week === dayOfWeek || t.specific_date === dateStr) || [];
+          if (templates.length > 0) {
+            totalPossibleSlots = templates.length;
+          } else {
+            // Default working hours logic
+            const startHour = block.workingHoursStart ?? 9;
+            const endHour = block.workingHoursEnd ?? 18;
+            const duration = block.slotDuration || 60;
+            totalPossibleSlots = Math.floor(((endHour - startHour) * 60) / duration);
+          }
+        }
+
+        if (dayBookings.length >= totalPossibleSlots && totalPossibleSlots > 0) {
+          soldOut.add(dateStr);
+        }
+      }
+      
+      setFullyBookedDates(soldOut);
+    } catch (err) {
+      console.error('Error pre-calculating availability:', err);
+    } finally {
+      setInitLoading(false);
+    }
+  }, [pageId, block.id, block.maxBookingDays, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration]);
+
+  useEffect(() => {
+    preCalculateAvailability();
+  }, [preCalculateAvailability]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -373,6 +449,10 @@ export const BookingBlock = memo(function BookingBlockComponent({
     if (isBefore(startOfDay(date), startOfDay(new Date()))) return true;
     const maxDays = block.maxBookingDays || 30;
     if (isBefore(addDays(new Date(), maxDays), date)) return true;
+    
+    // Check if fully booked
+    if (fullyBookedDates.has(format(date, 'yyyy-MM-dd'))) return true;
+    
     if (block.disabledWeekdays?.includes(date.getDay())) return true;
     return false;
   };
@@ -631,15 +711,23 @@ export const BookingBlock = memo(function BookingBlockComponent({
               })}</span>
             </div>
           )}
-          {block.timezone && (
-            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-tighter font-bold text-muted-foreground bg-muted/20 w-fit px-2 py-0.5 rounded-full border border-border/50">
-              {getFriendlyTZName(block.timezone)}
-            </div>
-          )}
           {userTimezone && userTimezone !== block.timezone && (
-             <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-tighter font-bold text-primary bg-primary/5 w-fit px-2 py-0.5 rounded-full border border-primary/20">
-               {t('booking.yourTimezone', 'Ваш пояс')}: {getFriendlyTZName(userTimezone)}
-             </div>
+             <motion.div 
+               initial={{ opacity: 0, x: -10 }}
+               animate={{ opacity: 1, x: 0 }}
+               className="flex flex-col gap-1 mt-2 p-2.5 rounded-xl bg-primary/5 border border-primary/10"
+             >
+               <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-tighter font-black text-primary">
+                 <Info className="h-3 w-3" />
+                 {t('booking.timezoneMismatch', 'Разница часовых поясов')}
+               </div>
+               <p className="text-[11px] leading-tight text-muted-foreground font-medium">
+                 {t('booking.timezoneHint', 'Запись ведется по местному времени специалиста ({{tz}}). Ваше текущее время: {{userTz}}.', { 
+                   tz: getFriendlyTZName(block.timezone || 'UTC'),
+                   userTz: getFriendlyTZName(userTimezone)
+                 })}
+               </p>
+             </motion.div>
           )}
         </div>
       </div>

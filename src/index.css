@@ -324,9 +324,14 @@
 
   /* Accessibility reset: enforce minimum readable font size on mobile */
   @media (max-width: 640px) {
-    .text-xs, .text-\[10px\], .text-\[11px\], .text-\[9px\], .text-\[8px\] {
+    .text-xs, .text-\[11px\], .text-\[12px\] {
       font-size: 12px !important;
       line-height: min(1.5, 16px) !important;
+    }
+    /* Specifically allow 10px for very dense navigation elements */
+    .text-\[9px\], .text-\[10px\] {
+      font-size: 10px !important;
+      line-height: 12px !important;
     }
   }
 }

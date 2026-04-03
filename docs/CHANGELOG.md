@@ -1,22 +1,18 @@
 # Changelog
-+
-+## [1.17.0] - 2026-04-03
-+
-+### Phase 16: Native Payments & CRM Success Logic
-+
-+- **Booking System Hardening**:
-+  - Implemented absolute double-booking protection via Postgres `PARTIAL UNIQUE INDEX`.
-+  - Updated `submit-booking` Edge Function to handle `23505` (unique violation) errors and return `409 Conflict`.
-+  - Added "Sold Out" visual states and improved error feedback in `BookingBlock.tsx`.
-+- **CRM Webhook Automation**:
-+  - Refactored `robokassa-webhook` to automatically update `leads` (won), `bookings` (confirmed), and `event_registrations` (paid) upon successful payment.
-+  - Switched to the **Outbox Pattern** for notifications to ensure reliability (using `notification_queue`).
-+- **Success-First Financial Intelligence**:
-+  - New localized transaction alerts via Telegram with calculated **Net Earnings** and commission transparency.
-+  - Integrated fee calculation logic (7% Starter / 1% Pro) into the notification processor.
-+- **Stability & UX**:
-+  - Resolved race conditions in high-concurrency booking scenarios.
-+  - Standardized payment-related success/error messaging across the platform.
+
+## [1.18.0] - 2026-04-03
+
+### Mobile UX & Booking Hardening
+- **Mobile Font Fix**: 
+  - Relaxed global "Accessibility Reset" (12px minimum) to allow **10px** for dense navigation elements.
+  - Optimized `DashboardBottomNav`: increased height to `4.5rem`, removed `truncate`, and added `break-words` for labels.
+  - Improved readability on small screens (iPhone SE) by reducing tracking and increasing padding.
+- **BookingBlock Evolution**:
+  - **TimeZone UX**: Added interactive disclaimer and comparison between specialist's and visitor's timezones.
+  - **Inventory Visibility**: Implemented month-view "Sold Out" detection. Dates are now proactively disabled on the calendar if all slots are booked.
+- **Fintech Verification**: Validated `robokassa-webhook` idempotency and Outbox Pattern integrity for Telegram success alerts.
+
+## [1.17.0] - 2026-04-03
 
 ## [1.16.0] - 2026-04-03
 
