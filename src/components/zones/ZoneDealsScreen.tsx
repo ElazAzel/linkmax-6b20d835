@@ -50,7 +50,20 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const { handleError } = useAppError();
   const { members } = useZoneContext();
   const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
-  const { deals, stages, pipelines, loading, createDeal, updateDeal, moveDealToStage, addActivity, createPipeline, updatePipeline, deletePipeline } = useZoneDeals(zoneId, selectedPipelineId);
+  const { contacts } = useZoneContacts(zoneId);
+  const { fields: dealFields } = useZoneDealFields(zoneId);
+  const [selectedDealIds, setSelectedDealIds] = useState<Set<string>>(new Set());
+
+  const toggleDealSelection = useCallback((id: string, selected: boolean) => {
+    setSelectedDealIds(prev => {
+      const next = new Set(prev);
+      if (selected) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }, []);
+
+  const { deals, stages, pipelines, loading, createDeal, updateDeal, moveDealToStage, addActivity, createPipeline, updatePipeline, deletePipeline, bulkDeleteDeals, bulkMoveDealsToStage } = useZoneDeals(zoneId, selectedPipelineId);
 
   useEffect(() => {
     if (!selectedPipelineId && pipelines.length > 0) {
@@ -68,9 +81,6 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     if (!selectedPipelineId) return deals;
     return deals.filter(d => d.pipeline_id === selectedPipelineId || !d.pipeline_id);
   }, [deals, selectedPipelineId]);
-  
-  const { contacts } = useZoneContacts(zoneId);
-  const { fields: dealFields } = useZoneDealFields(zoneId);
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedDeal, setSelectedDeal] = useState<ZoneDeal | null>(null);
   const [activeDragDeal, setActiveDragDeal] = useState<ZoneDeal | null>(null);
@@ -283,6 +293,30 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       setCreateOpen(false);
       setNewDeal({ title: '', contact_id: '', value_amount: 0, next_step: '', custom_fields: {} });
       toast.success(t('zones.deals.created', 'Deal created'));
+    } catch (err: any) {
+      handleError(err);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedDealIds.size === 0) return;
+    if (!confirm(t('zones.deals.bulkDeleteConfirm', `Удалить выбранные сделки (${selectedDealIds.size})?`))) return;
+    
+    try {
+      await bulkDeleteDeals(Array.from(selectedDealIds));
+      setSelectedDealIds(new Set());
+      toast.success(t('zones.deals.bulkDeleted', 'Сделки удалены'));
+    } catch (err: any) {
+      handleError(err);
+    }
+  };
+
+  const handleBulkMove = async (stageId: string) => {
+    if (selectedDealIds.size === 0) return;
+    try {
+      await bulkMoveDealsToStage(Array.from(selectedDealIds), stageId);
+      setSelectedDealIds(new Set());
+      toast.success(t('zones.deals.bulkMoved', 'Сделки перемещены'));
     } catch (err: any) {
       handleError(err);
     }
@@ -531,6 +565,8 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                 stage={stage}
                 deals={dealsByStage.get(stage.id) || []}
                 onDealClick={setSelectedDeal}
+                selectedDealIds={selectedDealIds}
+                onDealSelect={toggleDealSelection}
               />
             ))}
           </div>
@@ -628,32 +664,32 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
 
                     {field.type === 'text' && (
                       <Input
-                        value={newDeal.custom_fields[field.name] || ''}
-                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: e.target.value } }))}
+                        value={newDeal.custom_fields[field.id] || ''}
+                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: e.target.value } }))}
                       />
                     )}
 
                     {field.type === 'number' && (
                       <Input
                         type="number"
-                        value={newDeal.custom_fields[field.name] || ''}
-                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: Number(e.target.value) } }))}
+                        value={newDeal.custom_fields[field.id] || ''}
+                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: Number(e.target.value) } }))}
                       />
                     )}
 
                     {field.type === 'date' && (
                       <Input
                         type="date"
-                        value={newDeal.custom_fields[field.name] || ''}
-                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: e.target.value } }))}
+                        value={newDeal.custom_fields[field.id] || ''}
+                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: e.target.value } }))}
                       />
                     )}
 
                     {field.type === 'boolean' && (
                       <div className="flex items-center space-x-2 h-10">
                         <Checkbox
-                          checked={!!newDeal.custom_fields[field.name]}
-                          onCheckedChange={c => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: !!c } }))}
+                          checked={!!newDeal.custom_fields[field.id]}
+                          onCheckedChange={c => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: !!c } }))}
                         />
                         <span className="text-sm">{t('common.yes', 'Да')}</span>
                       </div>
@@ -732,6 +768,56 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {/* Bulk Actions Bar */}
+      {selectedDealIds.size > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-background/80 backdrop-blur-xl border border-primary/20 shadow-2xl rounded-2xl px-6 py-3 flex items-center gap-6 animate-in fade-in slide-in-from-bottom-4">
+          <div className="flex flex-col">
+            <span className="text-sm font-bold">{selectedDealIds.size} {t('zones.deals.selected', 'выбрано')}</span>
+            <button 
+              className="text-[10px] text-muted-foreground hover:text-primary transition-colors text-left"
+              onClick={() => setSelectedDealIds(new Set())}
+            >
+              {t('common.cancel', 'Отмена')}
+            </button>
+          </div>
+          
+          <div className="h-8 w-px bg-border" />
+          
+          <div className="flex items-center gap-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button size="sm" variant="outline" className="rounded-xl">
+                  {t('zones.deals.bulkMove', 'Переместить')}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-56 p-2">
+                <div className="space-y-1">
+                  {currentStages.map(s => (
+                    <Button 
+                      key={s.id} 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-full justify-start font-normal"
+                      onClick={() => handleBulkMove(s.id)}
+                    >
+                      {s.name}
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+            
+            <Button 
+              size="sm" 
+              variant="destructive" 
+              className="rounded-xl"
+              onClick={handleBulkDelete}
+            >
+              {t('common.delete', 'Удалить')}
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 });

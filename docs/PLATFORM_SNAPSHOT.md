@@ -149,6 +149,17 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Semantic Motion: Animations reflect block function (e.g., typing for text, rotating hands for timer, pulse for REC).
   - Performance: CSS-accelerated SVG transforms with zero JS overhead.
 
+### [2026-04-03] Phase 18: CRM Bulk Actions & Custom Fields 2.0
+
+- **CRM Bulk Actions**: High-performance batch processing for deals.
+  - **Contextual UI**: Floating Action Bar appears upon multi-selection.
+  - **Optimized Mutations**: Batch operations (Move to Stage, Delete) use `.in()` filters for atomic database updates.
+  - **UX Polish**: Shift-click selection and "Select All" logic for rapid pipeline management.
+- **Custom Fields ID-Keyed Logic**: Refactored the underlying JSONB storage mechanism for `custom_fields`.
+  - Keys are now based on persistent `field.id` (UUID) rather than mutable `field.name`.
+  - This ensures zero data loss when renaming fields or changing labels.
+- **Analytics Stability**: Hardened `AnalyticsChart` against layout shifts by enforcing container dimensions.
+
 ### [2026-04-03] Phase 15: Monetization Pivot & PWA V2 Infrastructure
 
 - **Success-First Monetization**: Fully implemented the "Starter" tier ($0/mo + 7% commission).
@@ -684,7 +695,11 @@ LinkMAX использует гибридную модель, направлен
 - `zone_subscriptions`: plan billing cycles and status.
 - `process-lead`, `api-leads` (Public API).
 
-#### 2.2.3. Deals & Pipelines (CRM)
+- **Deals & Pipelines (CRM)**:
+  - Multiple sales pipelines support.
+  - Kanban board (DnD via `@dnd-kit`).
+  - **Bulk Actions**: Batch move and delete functionality via floating action bar.
+  - Custom Fields (JSONB) using **ID-based keys** for data integrity and rename-safety.
 
 - **Tables**: `zone_deals`, `zone_deal_stages`, `zone_activities`, `zone_pipelines`
 - **Features**:

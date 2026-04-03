@@ -12,12 +12,16 @@ interface DealKanbanColumnProps {
   stage: ZoneDealStage;
   deals: ZoneDeal[];
   onDealClick: (deal: ZoneDeal) => void;
+  selectedDealIds: Set<string>;
+  onDealSelect: (id: string, selected: boolean) => void;
 }
 
 export const DealKanbanColumn = memo(function DealKanbanColumn({
   stage,
   deals,
   onDealClick,
+  selectedDealIds,
+  onDealSelect,
 }: DealKanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: stage.id,
@@ -41,7 +45,13 @@ export const DealKanbanColumn = memo(function DealKanbanColumn({
         )}
       >
         {deals.map((deal) => (
-          <DealCard key={deal.id} deal={deal} onClick={() => onDealClick(deal)} />
+          <DealCard 
+            key={deal.id} 
+            deal={deal} 
+            onClick={() => onDealClick(deal)} 
+            selected={selectedDealIds.has(deal.id)}
+            onSelectChange={(selected) => onDealSelect(deal.id, selected)}
+          />
         ))}
       </div>
     </div>

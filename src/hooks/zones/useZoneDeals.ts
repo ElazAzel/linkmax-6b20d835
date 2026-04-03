@@ -253,6 +253,45 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     },
   });
 
+  const bulkDeleteMutation = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from('zone_deals')
+        .update({ deleted_at: new Date().toISOString() } as any)
+        .in('id', ids);
+      if (error) throw error;
+    },
+    onSuccess: () => invalidateDeals(),
+  });
+
+  const bulkUpdateMutation = useMutation({
+    mutationFn: async ({ ids, updates }: { ids: string[]; updates: Partial<ZoneDeal> }) => {
+      const { error } = await supabase
+        .from('zone_deals')
+        .update(updates as any)
+        .in('id', ids);
+      if (error) throw error;
+    },
+    onSuccess: () => invalidateDeals(),
+  });
+
+  const bulkMoveMutation = useMutation({
+    mutationFn: async ({ ids, stageId }: { ids: string[]; stageId: string }) => {
+      const { error } = await supabase
+        .from('zone_deals')
+        .update({ stage_id: stageId })
+        .in('id', ids);
+      if (error) throw error;
+      // Trigger automations for each (individual calls for now)
+      ids.forEach(id => {
+        supabase.functions.invoke('run-zone-automations', {
+          body: { zone_id: zoneId, trigger_type: 'deal_stage_change', deal_id: id, stage_id: stageId },
+        }).catch(() => { });
+      });
+    },
+    onSuccess: () => invalidateDeals(),
+  });
+
   return {
     pipelines,
     deals,
@@ -264,6 +303,9 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     moveDealToStage: (dealId: string, stageId: string) => moveDealToStageMutation.mutateAsync({ dealId, stageId }),
     addActivity: (dealId: string, type: string, summary: string) => addActivityMutation.mutateAsync({ dealId, type, summary }),
     deleteDeal: (id: string) => deleteMutation.mutateAsync(id),
+    bulkDeleteDeals: (ids: string[]) => bulkDeleteMutation.mutateAsync(ids),
+    bulkUpdateDeals: (ids: string[], updates: Partial<ZoneDeal>) => bulkUpdateMutation.mutateAsync({ ids, updates }),
+    bulkMoveDealsToStage: (ids: string[], stageId: string) => bulkMoveMutation.mutateAsync({ ids, stageId }),
     refetch: invalidateDeals,
     refetchPipelines: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
     refetchStages: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId, pipelineId) }),

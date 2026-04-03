@@ -50,7 +50,7 @@ export const AnalyticsChart = memo(function AnalyticsChart({
       {title && (
         <h3 className="font-bold mb-4 text-sm">{title}</h3>
       )}
-      <div className="h-48">
+      <div className="h-48 min-h-[192px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <ChartComponent data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
             <defs>

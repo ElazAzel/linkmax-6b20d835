@@ -1,5 +1,18 @@
 # Changelog
 
+## [Phase 18] - 2026-04-03
+### Added
+- **CRM Bulk Actions**: Implemented batch processing for deals in the Kanban board.
+  - **Selection System**: Multi-select deals via checkboxes with shift-click support and "Select All" logic.
+  - **Bulk Action Bar**: Floating context-aware toolbar for mass operations (Move to Stage, Bulk Delete).
+  - **useZoneDeals Mutations**: Added `bulkMoveDealsToStage`, `bulkDeleteDeals`, and `bulkUpdateDeals` using optimized Supabase RPCs/.in() queries.
+- **Custom Fields 2.0**: Refactored JSONB storage to use unique `field.id` as keys instead of `field.name`, ensuring data persistence during field renames.
+- **Analytics Visualization**: Hardened `AnalyticsChart` against Recharts `ResponsiveContainer` dimension warnings by enforcing parent min-height.
+
+### Fixed
+- **Dashboard Integrity**: Resolved UI layout shifts in analytics charts on initial load.
+- **Data Consistency**: Synchronized custom field logic across `ZoneDealsScreen`, `DealDetailSheet`, and `ContactDetailSheet`.
+
 ## [2026-04-03] Phase 22: Resource Management
 
 ### Added

@@ -504,8 +504,8 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           {field.type === 'text' && (
                             <Input
                               className="h-8 text-sm bg-muted/30"
-                              value={customFieldsValues[field.name] || ''}
-                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.name]: e.target.value }))}
+                              value={customFieldsValues[field.id] || ''}
+                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.id]: e.target.value }))}
                               onBlur={() => onUpdateDeal(deal.id, { custom_fields: customFieldsValues })}
                             />
                           )}
@@ -514,8 +514,8 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                             <Input
                               type="number"
                               className="h-8 text-sm bg-muted/30"
-                              value={customFieldsValues[field.name] || ''}
-                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.name]: Number(e.target.value) }))}
+                              value={customFieldsValues[field.id] || ''}
+                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.id]: Number(e.target.value) }))}
                               onBlur={() => onUpdateDeal(deal.id, { custom_fields: customFieldsValues })}
                             />
                           )}
@@ -524,8 +524,8 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                             <Input
                               type="date"
                               className="h-8 text-sm bg-muted/30"
-                              value={customFieldsValues[field.name] || ''}
-                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.name]: e.target.value }))}
+                              value={customFieldsValues[field.id] || ''}
+                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.id]: e.target.value }))}
                               onBlur={() => onUpdateDeal(deal.id, { custom_fields: customFieldsValues })}
                             />
                           )}
@@ -533,9 +533,9 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           {field.type === 'boolean' && (
                             <div className="flex items-center space-x-2 h-8">
                               <Checkbox
-                                checked={!!customFieldsValues[field.name]}
+                                checked={!!customFieldsValues[field.id]}
                                 onCheckedChange={async (c) => {
-                                  const newVal = { ...customFieldsValues, [field.name]: !!c };
+                                  const newVal = { ...customFieldsValues, [field.id]: !!c };
                                   setCustomFieldsValues(newVal);
                                   await onUpdateDeal(deal.id, { custom_fields: newVal });
                                 }}

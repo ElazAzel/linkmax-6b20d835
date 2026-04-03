@@ -8,11 +8,14 @@ import { cn } from '@/lib/utils/utils';
 import User from 'lucide-react/dist/esm/icons/user';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { ZoneDeal } from '@/types/zones';
 
 interface DealCardProps {
   deal: ZoneDeal;
   onClick: () => void;
+  selected?: boolean;
+  onSelectChange?: (selected: boolean) => void;
 }
 
 function isOverdue(deal: ZoneDeal) {
@@ -20,7 +23,7 @@ function isOverdue(deal: ZoneDeal) {
   return new Date(deal.next_step_at) < new Date();
 }
 
-export const DealCard = memo(function DealCard({ deal, onClick }: DealCardProps) {
+export const DealCard = memo(function DealCard({ deal, onClick, selected, onSelectChange }: DealCardProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: deal.id,
     data: { deal },
@@ -49,9 +52,22 @@ export const DealCard = memo(function DealCard({ deal, onClick }: DealCardProps)
         }
       }}
     >
-      <CardContent className="p-3 space-y-2">
+      <CardContent className="p-3 space-y-2 relative group-card">
+        <div className="absolute top-2 right-2 opacity-0 group-card-hover:opacity-100 transition-opacity z-20">
+          <Checkbox 
+            checked={!!selected} 
+            onCheckedChange={(c) => {
+              onSelectChange?.(!!c);
+            }} 
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+          />
+        </div>
+        {(selected) && (
+          <div className="absolute inset-0 bg-primary/5 rounded-xl border-2 border-primary z-10 pointer-events-none" />
+        )}
         <div className="flex items-start justify-between gap-2">
-          <span className="font-medium text-sm leading-tight">{deal.title}</span>
+          <span className="font-medium text-sm leading-tight pr-6">{deal.title}</span>
           {isOverdue(deal) && <AlertTriangle className="h-4 w-4 text-destructive shrink-0" />}
         </div>
         {deal.value_amount > 0 && (

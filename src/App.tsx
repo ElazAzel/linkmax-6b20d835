@@ -77,6 +77,7 @@ class RouteErrorBoundary extends React.Component<
 
 
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
+import { CommandPalette } from "@/components/dashboard-v2/CommandPalette";
 
 const App = () => {
   // Defer non-critical init until user interacts or after 8s
@@ -134,6 +135,7 @@ const App = () => {
               <SkipToMainContent />
               <Toaster />
               <Sonner />
+              <CommandPalette />
               <RoutePrefetchManager />
               <RouteWebVitalsMonitor />
               <RouteErrorBoundary>
