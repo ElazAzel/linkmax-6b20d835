@@ -591,6 +591,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id: string;
             page_id: string;
             block_id: string;
+            staff_id: string | null;
             day_of_week: number | null;
             specific_date: string | null;
             start_time: string;
@@ -602,6 +603,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             page_id: string;
             block_id: string;
+            staff_id?: string | null;
             day_of_week?: number | null;
             specific_date?: string | null;
             start_time: string;
@@ -613,6 +615,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             page_id?: string;
             block_id?: string;
+            staff_id?: string | null;
             day_of_week?: number | null;
             specific_date?: string | null;
             start_time?: string;
@@ -628,6 +631,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             page_id: string;
             block_id: string;
             user_id: string | null;
+            staff_id: string | null;
             slot_date: string;
             slot_time: string;
             slot_end_time: string | null;
@@ -648,6 +652,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             page_id: string;
             block_id: string;
             user_id?: string | null;
+            staff_id?: string | null;
             slot_date: string;
             slot_time: string;
             slot_end_time?: string | null;
@@ -668,6 +673,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             page_id?: string;
             block_id?: string;
             user_id?: string | null;
+            staff_id?: string | null;
             slot_date?: string;
             slot_time?: string;
             slot_end_time?: string | null;
@@ -847,6 +853,81 @@ export type AppDatabase = Omit<Database, 'public'> & {
             payment_details?: any;
             status?: 'pending' | 'approved' | 'rejected' | 'completed';
             processed_at?: string | null;
+            created_at?: string;
+          };
+          Relationships: [];
+        };
+        zone_staff: {
+          Row: {
+            id: string;
+            zone_id: string;
+            user_id: string | null;
+            name: string;
+            avatar_url: string | null;
+            bio: string | null;
+            specialization: string | null;
+            is_active: boolean;
+            gcal_sync_enabled: boolean;
+            gcal_calendar_id: string;
+            created_at: string;
+            updated_at: string;
+          };
+          Insert: {
+            id?: string;
+            zone_id: string;
+            user_id?: string | null;
+            name: string;
+            avatar_url?: string | null;
+            bio?: string | null;
+            specialization?: string | null;
+            is_active?: boolean;
+            gcal_sync_enabled?: boolean;
+            gcal_calendar_id?: string;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Update: {
+            id?: string;
+            zone_id?: string;
+            user_id?: string | null;
+            name?: string;
+            avatar_url?: string | null;
+            bio?: string | null;
+            specialization?: string | null;
+            is_active?: boolean;
+            gcal_sync_enabled?: boolean;
+            gcal_calendar_id?: string;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Relationships: [];
+        };
+        zone_staff_availability: {
+          Row: {
+            id: string;
+            staff_id: string;
+            day_of_week: number;
+            start_time: string;
+            end_time: string;
+            is_available: boolean;
+            created_at: string;
+          };
+          Insert: {
+            id?: string;
+            staff_id: string;
+            day_of_week: number;
+            start_time: string;
+            end_time: string;
+            is_available?: boolean;
+            created_at?: string;
+          };
+          Update: {
+            id?: string;
+            staff_id?: string;
+            day_of_week?: number;
+            start_time?: string;
+            end_time?: string;
+            is_available?: boolean;
             created_at?: string;
           };
           Relationships: [];

@@ -8,6 +8,7 @@ const corsHeaders = {
 
 interface BookingNotificationRequest {
   ownerId: string;
+  staffId?: string;
   clientName: string;
   clientPhone?: string;
   clientEmail?: string;
@@ -35,8 +36,58 @@ const handler = async (req: Request): Promise<Response> => {
       .eq("id", body.ownerId)
       .maybeSingle();
 
+    let staffName = "";
+    if (body.staffId) {
+      // Lookup staff member details
+      const { data: staff } = await supabase
+        .from("zone_staff")
+        .select("name, linked_user_id")
+        .eq("id", body.staffId)
+        .maybeSingle();
+
+      if (staff) {
+        staffName = staff.name;
+
+        // If staff has a linked user, notify them too
+        if (staff.linked_user_id) {
+          const { data: staffUser } = await supabase
+            .from("user_profiles")
+            .select("telegram_chat_id, telegram_notifications_enabled")
+            .eq("id", staff.linked_user_id)
+            .maybeSingle();
+
+          if (staffUser?.telegram_notifications_enabled && staffUser.telegram_chat_id) {
+            const staffMessage = `✨ *У вас новая запись!*
+
+👤 *Клиент:* ${body.clientName}
+📆 *Дата:* ${body.date}
+🕐 *Время:* ${body.time}
+${body.notes ? `📝 *Комментарий:* ${body.notes}` : ""}
+
+_Подготовьтесь к встрече!_`;
+
+            await supabase
+              .from("notification_queue")
+              .insert({
+                user_id: staff.linked_user_id,
+                event_type: 'booking_created_staff',
+                payload: {
+                  channel: 'telegram',
+                  telegram: {
+                    chat_id: staffUser.telegram_chat_id,
+                    text: staffMessage,
+                    parse_mode: 'Markdown'
+                  }
+                }
+              });
+          }
+        }
+      }
+    }
+
     if (owner?.telegram_notifications_enabled && owner.telegram_chat_id) {
       const message = `📅 *Новая запись!*
+${staffName ? `🎯 *Специалист:* ${staffName}` : ""}
       
 👤 *Клиент:* ${body.clientName}
 ${body.clientPhone ? `📞 *Телефон:* ${body.clientPhone}` : ""}
@@ -77,7 +128,9 @@ _Управляйте записями в CRM вашей страницы._`;
         metadata: {
           booking_date: body.date,
           booking_time: body.time,
-          source_type: "booking"
+          source_type: "booking",
+          staff_id: body.staffId,
+          staff_name: staffName
         }
       });
 

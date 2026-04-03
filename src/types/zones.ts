@@ -90,6 +90,31 @@ export interface ZoneInvite {
   created_at: string;
 }
 
+export interface ZoneStaff {
+  id: string;
+  zone_id: string;
+  user_id: string | null;
+  name: string;
+  avatar_url: string | null;
+  bio: string | null;
+  specialization: string | null;
+  is_active: boolean;
+  gcal_sync_enabled: boolean;
+  gcal_calendar_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ZoneStaffAvailability {
+  id: string;
+  staff_id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  is_available: boolean;
+  created_at: string;
+}
+
 export interface ZoneContact {
   id: string;
   zone_id: string;

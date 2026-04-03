@@ -34,6 +34,8 @@ import { ZoneDealFieldsSettings } from './settings/ZoneDealFieldsSettings';
 import Layers from 'lucide-react/dist/esm/icons/layers';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import { useAppError } from '@/hooks/useAppError';
+import { ZoneStaffSettings } from './settings/ZoneStaffSettings';
+import UserCog from 'lucide-react/dist/esm/icons/user-cog';
 
 interface ZoneSettingsScreenProps {
   zone: Zone;
@@ -207,6 +209,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       <Tabs defaultValue="members">
         <TabsList className="flex flex-wrap h-auto gap-1">
           <TabsTrigger value="members" className="gap-1 flex-1 min-w-[120px]"><Users className="h-4 w-4" />{t('zones.settings.members', 'Members')}</TabsTrigger>
+          <TabsTrigger value="staff" className="gap-1 flex-1 min-w-[120px]"><UserCog className="h-4 w-4" />{t('zones.settings.staffTab', 'Персонал')}</TabsTrigger>
           <TabsTrigger value="billing" className="gap-1 flex-1 min-w-[120px]"><CreditCard className="h-4 w-4" />{t('zones.settings.billing', 'Billing')}</TabsTrigger>
           <TabsTrigger value="pipelines" className="gap-1 flex-1 min-w-[120px]"><Layers className="h-4 w-4" />{t('zones.settings.pipelinesTab', 'Воронки')}</TabsTrigger>
           <TabsTrigger value="fields" className="gap-1 flex-1 min-w-[120px]"><FileText className="h-4 w-4" />{t('zones.settings.fieldsTab', 'Поля')}</TabsTrigger>
@@ -308,6 +311,19 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
               ))}
             </div>
           )}
+        </TabsContent>
+
+        {/* Staff Tab */}
+        <TabsContent value="staff" className="space-y-4 mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">{t('zones.settings.staff.title', 'Управление специалистами')}</CardTitle>
+              <CardDescription>{t('zones.settings.staff.desc', 'Добавляйте сотрудников и ресурсы для онлайн-записи.')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ZoneStaffSettings zoneId={zone.id} members={members} isAdmin={isAdmin} />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Billing Tab */}

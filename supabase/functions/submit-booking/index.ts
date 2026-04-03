@@ -29,7 +29,7 @@ serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body = await req.json();
 
-    const { pageId, blockId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod, userId } = body;
+    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod, userId } = body;
 
     // Validate required fields
     if (!pageId || !isValidUUID(pageId)) throw new Error('Invalid pageId');
@@ -75,6 +75,7 @@ serve(async (req: Request) => {
       .eq('block_id', blockId)
       .eq('slot_date', sanitize(slotDate, 10))
       .eq('slot_time', sanitize(slotTime, 8))
+      .eq('staff_id', staffId || null)
       .neq('status', 'cancelled')
       .maybeSingle();
 
@@ -110,6 +111,7 @@ serve(async (req: Request) => {
         const { data: gcalData, error: gcalInvokeError } = await supabase.functions.invoke('google-calendar-sync', {
           body: {
             action: 'check_availability',
+            staff_id: staffId || null,
             owner_id: pageData.user_id,
             time_min: new Date(`${slotDate}T${slotTime}`).toISOString(),
             time_max: new Date(`${slotDate}T${slotEnd}`).toISOString()
@@ -142,7 +144,8 @@ serve(async (req: Request) => {
         client_name: sanitize(clientName, 200),
         client_phone: clientPhone ? sanitize(clientPhone, 20) : null,
         client_email: clientEmail ? sanitize(clientEmail, 200) : null,
-        client_notes: clientNotes ? sanitize(clientNotes, 1000) : null,
+        client_notes: sanitize(clientNotes, 1000) || null,
+        staff_id: staffId || null,
         payment_status: paymentStatus || 'none',
         payment_amount: paymentAmount || 0,
         payment_method: paymentMethod || null,
@@ -170,7 +173,10 @@ serve(async (req: Request) => {
         await supabase.functions.invoke('google-calendar-sync', {
           body: {
             action: 'push_booking',
-            payload: { booking_id: booking.id }
+            payload: { 
+              booking_id: booking.id,
+              staff_id: staffId || null
+            }
           }
         });
         console.log(`Booking ${booking.id} pushed to GCal`);

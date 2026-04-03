@@ -15,6 +15,7 @@
 ## [1.17.0] - 2026-04-03
 
 ## [0.17.0] - 2026-04-03
+
 ### Added
 - [CRM] Unified `CrmService` for business analytics (Conversion, Pipeline, Avg Check).
 - [UI] "Business Pulse" dashboard widget in `ActivityScreen`.
@@ -38,6 +39,22 @@
   - Global CSS reset: Bumped all micro-fonts (8px, 9px) to **12px** minimum on mobile devices.
   - Dashboard: Increased touch target sizes for `DashboardBottomNav` and standardized navigation labels for better mobile usability.
 - **Stability**: Fixed critical syntax errors in `Pricing.tsx` and optimized the tier selection flow.
+
+## [Phase 20] - 2026-04-03
+### Added
+- **Per-Staff Google Calendar Sync**: Enabled independent calendar synchronization for each specialist in Multi-Staff zones.
+- **Dynamic Token Management**: Refactored `google-calendar-sync` edge function to handle `staff_id` lookups and specialist-specific OAuth tokens.
+- **Specialist Calendar Selection**: Added support for custom `gcal_calendar_id` per staff member (defaults to 'primary').
+- **Staff Editor Integration**: Implemented GCal connection status and "Connect" button directly in `StaffProfileEditor` for linked users.
+- **Atomic Booking Flow**: Updated `submit-booking` to persist `staff_id` and trigger specialist-aware calendar synchronization.
+
+## [Phase 19] - 2026-04-02
+### Added
+- **Multi-Staff Booking Engine**: Support for multiple specialists within a single booking zone.
+- **Staff Management UI**: New section in Zone Settings for adding/editing specialists (name, bio, photo, linked user).
+- **Specialist Selection**: Updated `BookingBlock` with a premium specialist picker with micro-animations.
+- **Staff-Aware Availability**: Availability logic now filters slots based on the selected specialist.
+- **Database Schema**: Created `zone_staff` table and updated `bookings` with `staff_id`.
 
 ## [1.15.0] - 2026-04-02
 
@@ -171,6 +188,7 @@
 - Выполнена полная локализация для приоритетных языков: Русский (RU), Казахский (KK) и Узбекский (UZ).
 - Переведены ключевые интерфейсные элементы (цены, кнопки управления) для всех 16 языков через AI.
 - Внедрена обязательная алфавитная сортировка ключей во всех файлах локализации для удобства поддержки.
+
 ## [Phase 8 & 9: Docs, Infrastructure & UX Polish] - 2026-03-23
 
 ### Added
@@ -332,13 +350,15 @@
 - **Settings Privacy**: Restricted `app_settings` public read access to a whitelist of non-sensitive keys.
 
 ## [2026.03.13] — Performance & Core Improvements
+
 ### Added
 - **Vendor Splitting**: Implemented `manualChunks` in `vite.config.ts` to split large libraries (Supabase, React, Radix, Sentry) into separate chunks. This significantly reduces Total Blocking Time (TBT).
+
 ### Changed
 - **CSS Loading**: Replaced blocking CSS link tags with non-render-blocking media query pattern in production builds.
 - **UI Stabilized**: Fixed layout shifts and interaction issues in "Add Block Sheet" and "Living Canvas" components.
 
-### [2026-03-12] - Phase 4 & 5: "Living Canvas" Expansion & Brand Resonance
+## [2026-03-12] - Phase 4 & 5: "Living Canvas" Expansion & Brand Resonance
 
 * **Mobile Adaptation & Polish (Phase 6)**:
   - Optimized all Dashboard screens (**Home**, **Insights**, **Activity**, **Editor**, **Events**, **Finance**, **Leads**) for mobile devices.
@@ -369,7 +389,7 @@
   - Standardized **Frosted High-Index Glass** tokens (`glass-subtle`, `glass`).
   - Implemented **Canvas Engine**: WebGL-powered reactive backgrounds with fluid dynamics.
 
-### [2026-03-11] - Global Search & Data Export (CRM Depth)
+## [2026-03-11] - Global Search & Data Export (CRM Depth)
 
 * **Command Palette (Cmd+K)**:
   * Implemented a global `CommandPalette` in `DashboardV2` accessible via `Cmd+K` / `Ctrl+K`.

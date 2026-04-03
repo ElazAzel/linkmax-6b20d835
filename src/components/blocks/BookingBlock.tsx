@@ -1,5 +1,6 @@
-import { memo, useState, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+ import { useState, useEffect, useCallback, memo } from 'react';
+ import { useTranslation } from 'react-i18next';
+ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,9 +35,11 @@ import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date
 import { fromZonedTime, toZonedTime, formatInTimeZone } from 'date-fns-tz';
 import { ru, kk } from 'date-fns/locale';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import type { BookingBlock as BookingBlockType } from '@/types/page';
+import type { ZoneStaff } from '@/types/zones';
+import UserCog from 'lucide-react/dist/esm/icons/user-cog';
+import Search from 'lucide-react/dist/esm/icons/search';
 
 interface BookingBlockProps {
   block: BookingBlockType;
@@ -95,33 +98,53 @@ export const BookingBlock = memo(function BookingBlockComponent({
   });
   const [fullyBookedDates, setFullyBookedDates] = useState<Set<string>>(new Set());
   const [initLoading, setInitLoading] = useState(true);
+  const [staff, setStaff] = useState<ZoneStaff[]>([]);
+  const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
+  const [staffLoading, setStaffLoading] = useState(false);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
   // Fetch available slots for selected date
   const fetchSlots = useCallback(async (date: Date) => {
     if (!pageId || !block.id) return;
+    
+    // If multiple staff and none selected, don't fetch slots yet
+    if (staff.length > 1 && !selectedStaffId) return;
 
     setLoading(true);
     try {
       const dayOfWeek = date.getDay();
       const dateStr = format(date, 'yyyy-MM-dd');
 
-      const { data: slotTemplates } = await supabase
+      let query = supabase
         .from('booking_slots')
         .select('*')
         .eq('page_id', pageId)
         .eq('block_id', block.id)
         .eq('is_available', true)
         .or(`day_of_week.eq.${dayOfWeek},specific_date.eq.${dateStr}`);
+      
+      if (selectedStaffId) {
+        query = query.eq('staff_id', selectedStaffId);
+      } else {
+        query = query.is('staff_id', null);
+      }
+      
+      const { data: slotTemplates } = await query;
 
-      const { data: bookings } = await supabase
+      let bookingQuery = supabase
         .from('bookings')
         .select('*')
         .eq('page_id', pageId)
         .eq('block_id', block.id)
         .eq('slot_date', dateStr)
         .neq('status', 'cancelled');
+      
+      if (selectedStaffId) {
+        bookingQuery = bookingQuery.eq('staff_id', selectedStaffId);
+      }
+
+      const { data: bookings } = await bookingQuery;
 
       const generatedSlots: TimeSlot[] = [];
 
@@ -137,6 +160,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
             body: {
               action: 'check_availability',
               owner_id: pageOwnerId,
+              staff_id: selectedStaffId,
               time_min: timeMin,
               time_max: timeMax
             }
@@ -225,13 +249,12 @@ export const BookingBlock = memo(function BookingBlockComponent({
         }
       }
 
-      setSlots(generatedSlots.sort((a, b) => a.time.localeCompare(b.time)));
     } catch (error) {
       console.error('Error fetching slots:', error);
     } finally {
       setLoading(false);
     }
-  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, block.timezone, userTimezone]);
+  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, block.timezone, userTimezone, selectedStaffId, staff.length]);
 
   // Pre-calculate fully booked dates for the next 30 days
   const preCalculateAvailability = useCallback(async () => {
@@ -247,7 +270,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
       const dateStrEnd = format(endRange, 'yyyy-MM-dd');
 
       // 1. Fetch all bookings for the range
-      const { data: allBookings } = await supabase
+      let bookingsQuery = supabase
         .from('bookings')
         .select('slot_date, slot_time')
         .eq('page_id', pageId)
@@ -255,14 +278,28 @@ export const BookingBlock = memo(function BookingBlockComponent({
         .gte('slot_date', dateStrStart)
         .lte('slot_date', dateStrEnd)
         .neq('status', 'cancelled');
+      
+      if (selectedStaffId) {
+        bookingsQuery = bookingsQuery.eq('staff_id', selectedStaffId);
+      }
+
+      const { data: allBookings } = await bookingsQuery;
 
       // 2. Fetch slot templates
-      const { data: slotTemplates } = await supabase
+      let slotsQuery = supabase
         .from('booking_slots')
         .select('*')
         .eq('page_id', pageId)
         .eq('block_id', block.id)
         .eq('is_available', true);
+      
+      if (selectedStaffId) {
+        slotsQuery = slotsQuery.eq('staff_id', selectedStaffId);
+      } else {
+        slotsQuery = slotsQuery.is('staff_id', null);
+      }
+
+      const { data: slotTemplates } = await slotsQuery;
 
       const soldOut = new Set<string>();
       
@@ -301,17 +338,48 @@ export const BookingBlock = memo(function BookingBlockComponent({
     } finally {
       setInitLoading(false);
     }
-  }, [pageId, block.id, block.maxBookingDays, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration]);
+  }, [pageId, block.id, block.maxBookingDays, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, selectedStaffId]);
 
   useEffect(() => {
     preCalculateAvailability();
   }, [preCalculateAvailability]);
 
   useEffect(() => {
+    const fetchStaff = async () => {
+      if (!pageId) return;
+      
+      // Get zone_id from page
+      const { data: pageData } = await supabase
+        .from('pages')
+        .select('organization_id')
+        .eq('id', pageId)
+        .single();
+        
+      if (!pageData?.organization_id) return;
+      
+      const { data: staffData } = await supabase
+        .from('zone_staff')
+        .select('*')
+        .eq('zone_id', pageData.organization_id)
+        .eq('is_active', true);
+        
+      if (staffData) {
+        setStaff(staffData as ZoneStaff[]);
+        // If only 1 staff, select it automatically
+        if (staffData.length === 1) {
+          setSelectedStaffId(staffData[0].id);
+        }
+      }
+    };
+    
+    fetchStaff();
+  }, [pageId]);
+
+  useEffect(() => {
     if (selectedDate) {
       fetchSlots(selectedDate);
     }
-  }, [selectedDate, fetchSlots]);
+  }, [selectedDate, fetchSlots, selectedStaffId]);
 
   const handleSelectSlot = (slot: TimeSlot) => {
     if (!slot.available) return;
@@ -346,6 +414,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
           paymentAmount: hasPrepayment ? block.prepaymentAmount : 0,
           paymentMethod,
           userId: session?.session?.user?.id || null,
+          staffId: selectedStaffId,
         }
       });
 
@@ -744,58 +813,125 @@ export const BookingBlock = memo(function BookingBlockComponent({
           <div className="flex items-center gap-2 text-xs font-semibold">
             <div className={cn(
               "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
-              selectedDate ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
+              (staff.length > 1 ? selectedStaffId : selectedDate) ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
             )}>
               1
             </div>
-            <span className={selectedDate ? 'text-foreground font-black' : 'text-muted-foreground'}>
-              {t('booking.step1', 'Дата')}
-            </span>
-            {selectedDate && (
-              <>
-                <motion.div initial={{ width: 0 }} animate={{ width: "auto" }} className="h-0.5 flex-1 bg-primary/10 rounded-full mx-1" />
-                <div className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
-                  selectedSlot ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
-                )}>
-                  2
-                </div>
-                <span className={selectedSlot ? 'text-foreground font-black' : 'text-muted-foreground'}>
-                  {t('booking.step2', 'Время')}
-                </span>
-              </>
-            )}
+            <div className="h-px w-4 bg-white/5" />
+            <div className={cn(
+              "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
+              selectedDate ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-primary/5 text-primary/50"
+            )}>
+              2
+            </div>
           </div>
 
-          {/* Calendar */}
-          <div className="flex justify-center -mx-2 bg-primary/5 rounded-3xl p-3 border border-white/5 shadow-inner">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              disabled={disabledDays}
-              locale={locale}
-              className="rounded-xl border-0 w-full max-w-[320px]"
-              classNames={{
-                months: "w-full",
-                month: "w-full space-y-2",
-                caption: "flex justify-center pt-1 relative items-center mb-2",
-                caption_label: "text-sm font-black text-gradient uppercase tracking-widest",
-                nav: "space-x-1 flex items-center",
-                nav_button: "h-9 w-9 bg-white/10 p-0 opacity-50 hover:opacity-100 rounded-xl hover:bg-white/20 transition-all active:scale-95",
-                table: "w-full border-collapse",
-                head_row: "flex w-full mb-2",
-                head_cell: "text-primary/70 rounded-md w-full font-black text-[0.65rem] uppercase tracking-widest",
-                row: "flex w-full mt-1.5",
-                cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 flex-1 aspect-square",
-                day: "h-full w-full p-0 font-bold hover:bg-primary/20 rounded-2xl transition-all text-sm flex items-center justify-center",
-                day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground shadow-xl shadow-primary/40 scale-110 z-10 border-0",
-                day_today: "bg-primary/10 text-primary font-black border border-primary/20",
-                day_disabled: "text-muted-foreground/30 opacity-30 select-none",
-                day_outside: "text-muted-foreground/10 opacity-30 invisible",
-              }}
-            />
-          </div>
+          {/* Specialist Selection Step */}
+          {staff.length > 1 && !selectedStaffId && (
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-black uppercase tracking-widest text-primary/70">
+                  {t('booking.selectSpecialist', 'Выберите специалиста')}
+                </h4>
+                <Badge variant="outline" className="text-[10px] bg-primary/5 border-primary/20">
+                  {staff.length} {t('booking.specialistsCount', 'вариантов')}
+                </Badge>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                {staff.map((member) => (
+                  <button
+                    key={member.id}
+                    onClick={() => setSelectedStaffId(member.id)}
+                    className="flex items-center gap-4 p-4 rounded-3xl bg-white/5 border border-white/10 hover:border-primary/40 hover:bg-primary/5 transition-all group text-left"
+                  >
+                    <div className="relative">
+                      {member.avatar_url ? (
+                        <img 
+                          src={member.avatar_url} 
+                          alt={member.name} 
+                          className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/5 group-hover:ring-primary/20 transition-all"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary ring-2 ring-white/5">
+                          <UserCog className="h-6 w-6" />
+                        </div>
+                      )}
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-background" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <p className="font-black text-sm truncate group-hover:text-primary transition-colors">{member.name}</p>
+                        <Search className="h-3 w-3 opacity-0 group-hover:opacity-40 transition-all text-primary" />
+                      </div>
+                      {member.bio && (
+                        <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5 font-medium">{member.bio}</p>
+                      )}
+                      {member.specialization && (
+                        <div className="mt-1.5 inline-flex text-[9px] font-black uppercase tracking-tighter text-primary/60 bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10">
+                          {member.specialization}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Date & Slot selection - only if staff is selected or only 1 staff exists */}
+          {(staff.length <= 1 || selectedStaffId) && (
+            <div className="space-y-6">
+              {/* Back button if multiple staff */}
+              {staff.length > 1 && (
+                <button
+                  onClick={() => {
+                    setSelectedStaffId(null);
+                    setSelectedDate(undefined);
+                    setSelectedSlot(null);
+                  }}
+                  className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors mb-2"
+                >
+                  <ChevronDown className="h-3 w-3 rotate-90" />
+                  {t('common.back', 'Назад к выбору специалиста')}
+                </button>
+              )}
+              
+              {/* Calendar */}
+              <div className="flex justify-center -mx-2 bg-primary/5 rounded-3xl p-3 border border-white/5 shadow-inner">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  disabled={disabledDays}
+                  locale={locale}
+                  className="rounded-xl border-0 w-full max-w-[320px]"
+                  classNames={{
+                    months: "w-full",
+                    month: "w-full space-y-2",
+                    caption: "flex justify-center pt-1 relative items-center mb-2",
+                    caption_label: "text-sm font-black text-gradient uppercase tracking-widest",
+                    nav: "space-x-1 flex items-center",
+                    nav_button: "h-9 w-9 bg-white/10 p-0 opacity-50 hover:opacity-100 rounded-xl hover:bg-white/20 transition-all active:scale-95",
+                    table: "w-full border-collapse",
+                    head_row: "flex w-full mb-2",
+                    head_cell: "text-primary/70 rounded-md w-full font-black text-[0.65rem] uppercase tracking-widest",
+                    row: "flex w-full mt-1.5",
+                    cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 flex-1 aspect-square",
+                    day: "h-full w-full p-0 font-bold hover:bg-primary/20 rounded-2xl transition-all text-sm flex items-center justify-center",
+                    day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground shadow-xl shadow-primary/40 scale-110 z-10 border-0",
+                    day_today: "bg-primary/10 text-primary font-black border border-primary/20",
+                    day_disabled: "text-muted-foreground/30 opacity-30 select-none",
+                    day_outside: "text-muted-foreground/10 opacity-30 invisible",
+                  }}
+                />
+              </div>
+            </div>
+          )}
 
           {/* Time slots section */}
           {selectedDate && (
@@ -909,8 +1045,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
                           <Check className="h-7 w-7" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1.5">{t('booking.selectedTime', 'Выбрано')}</p>
-                          <p className="text-base font-black truncate leading-none">
+                          <p className="text-[9px] sm:text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1 sm:mb-1.5">{t('booking.selectedTime', 'Выбрано')}</p>
+                          <p className="text-sm sm:text-base font-black truncate leading-none">
                             {formatTime(selectedSlot.time)}
                             {selectedSlot.endTime && ` — ${formatTime(selectedSlot.endTime)}`}
                           </p>
@@ -919,7 +1055,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                       <Button
                         size="sm"
                         onClick={() => setShowForm(true)}
-                        className="h-12 px-6 text-sm font-black rounded-2xl shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all text-white"
+                        className="h-10 sm:h-12 px-4 sm:px-6 text-xs sm:text-sm font-black rounded-xl sm:rounded-2xl shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all text-white shrink-0"
                       >
                         {t('booking.continue', 'Далее')}
                       </Button>
@@ -947,14 +1083,14 @@ export const BookingBlock = memo(function BookingBlockComponent({
       </AnimatePresence>
 
       {/* Legend */}
-      <div className="flex items-center justify-center gap-6 py-4 px-6 bg-black/5 border-t border-white/5">
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 py-4 px-4 bg-black/5 border-t border-white/5">
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full border border-primary/40 bg-white/5" />
-          <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t('booking.available', 'Свободно')}</span>
+          <div className="w-2 h-2 rounded-full border border-primary/40 bg-white/5" />
+          <span className="text-[10px] sm:text-xs font-black text-muted-foreground/80 uppercase tracking-tight sm:tracking-widest">{t('booking.available', 'Свободно')}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-          <span className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">{t('booking.booked', 'Занято')}</span>
+          <div className="w-2 h-2 rounded-full bg-white/10" />
+          <span className="text-[10px] sm:text-xs font-black text-muted-foreground/40 uppercase tracking-tight sm:tracking-widest">{t('booking.booked', 'Занято')}</span>
         </div>
       </div>
 

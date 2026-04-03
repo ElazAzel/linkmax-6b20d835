@@ -186,14 +186,25 @@ serve(async (req) => {
 
         // ─── Check availability (pull busy slots) ───
         if (action === "check_availability") {
-            const { time_min, time_max } = payload;
-            const accessToken = await getAccessToken(supabaseAdmin, user.id, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+            const { time_min, time_max, staff_id, owner_id } = payload;
+            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user.id };
+            const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
                 return new Response(JSON.stringify({ error: "Not connected to Google Calendar", connected: false }), {
                     headers: { ...corsHeaders, "Content-Type": "application/json" },
                     status: 401,
                 });
+            }
+
+            let calendarId = "primary";
+            if (staff_id) {
+                const { data: staff } = await supabaseAdmin
+                    .from("zone_staff")
+                    .select("gcal_calendar_id")
+                    .eq("id", staff_id)
+                    .single();
+                if (staff?.gcal_calendar_id) calendarId = staff.gcal_calendar_id;
             }
 
             const calRes = await fetch(
@@ -207,13 +218,13 @@ serve(async (req) => {
                     body: JSON.stringify({
                         timeMin: time_min,
                         timeMax: time_max,
-                        items: [{ id: "primary" }],
+                        items: [{ id: calendarId }],
                     }),
                 }
             );
 
             const calData = await calRes.json();
-            const busySlots = calData?.calendars?.primary?.busy || [];
+            const busySlots = calData?.calendars?.[calendarId]?.busy || [];
 
             return new Response(JSON.stringify({ blocked_slots: busySlots }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -222,8 +233,9 @@ serve(async (req) => {
 
         // ─── Create event in Google Calendar ───
         if (action === "create_event") {
-            const { summary, description, start, end, location, timezone } = payload;
-            const accessToken = await getAccessToken(supabaseAdmin, user.id, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+            const { summary, description, start, end, location, timezone, staff_id, owner_id } = payload;
+            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user.id };
+            const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
                 return new Response(JSON.stringify({ error: "Not connected to Google Calendar", connected: false }), {
@@ -232,8 +244,18 @@ serve(async (req) => {
                 });
             }
 
+            let calendarId = "primary";
+            if (staff_id) {
+                const { data: staff } = await supabaseAdmin
+                    .from("zone_staff")
+                    .select("gcal_calendar_id")
+                    .eq("id", staff_id)
+                    .single();
+                if (staff?.gcal_calendar_id) calendarId = staff.gcal_calendar_id;
+            }
+
             const eventRes = await fetch(
-                `${GOOGLE_CALENDAR_API}/calendars/primary/events`,
+                `${GOOGLE_CALENDAR_API}/calendars/${calendarId}/events`,
                 {
                     method: "POST",
                     headers: {
@@ -263,16 +285,8 @@ serve(async (req) => {
 
         // ─── Push booking to Google Calendar ───
         if (action === "push_booking") {
-            const { booking_id } = payload;
-            const accessToken = await getAccessToken(supabaseAdmin, user.id, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
-
-            if (!accessToken) {
-                return new Response(JSON.stringify({ error: "Not connected", connected: false }), {
-                    headers: { ...corsHeaders, "Content-Type": "application/json" },
-                    status: 401,
-                });
-            }
-
+            const { booking_id, staff_id } = payload;
+            
             // Fetch booking details
             const { data: booking, error: bErr } = await supabaseAdmin
                 .from("bookings")
@@ -282,13 +296,34 @@ serve(async (req) => {
 
             if (bErr || !booking) throw new Error("Booking not found");
 
+            const finalStaffId = staff_id || booking.staff_id;
+            const targetId = finalStaffId ? { staffId: finalStaffId } : { userId: booking.owner_id };
+            const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+
+            if (!accessToken) {
+                return new Response(JSON.stringify({ error: "Not connected", connected: false }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    status: 401,
+                });
+            }
+
+            let calendarId = "primary";
+            if (finalStaffId) {
+                const { data: staff } = await supabaseAdmin
+                    .from("zone_staff")
+                    .select("gcal_calendar_id")
+                    .eq("id", finalStaffId)
+                    .single();
+                if (staff?.gcal_calendar_id) calendarId = staff.gcal_calendar_id;
+            }
+
             const startDT = `${booking.slot_date}T${booking.slot_time}`;
             const endDT = booking.slot_end_time
                 ? `${booking.slot_date}T${booking.slot_end_time}`
                 : new Date(new Date(startDT).getTime() + 3600000).toISOString();
 
             const eventRes = await fetch(
-                `${GOOGLE_CALENDAR_API}/calendars/primary/events`,
+                `${GOOGLE_CALENDAR_API}/calendars/${calendarId}/events`,
                 {
                     method: "POST",
                     headers: {
@@ -333,12 +368,30 @@ serve(async (req) => {
  */
 async function getAccessToken(
     supabaseAdmin: any,
-    userId: string,
+    target: { userId?: string; staffId?: string },
     clientId: string,
     clientSecret: string
 ): Promise<string | null> {
+    let targetUserId = target.userId;
+
+    // If staffId is provided, look up the user_id for that staff
+    if (target.staffId) {
+        const { data: staff } = await supabaseAdmin
+            .from("zone_staff")
+            .select("user_id")
+            .eq("id", target.staffId)
+            .single();
+        if (staff?.user_id) {
+            targetUserId = staff.user_id;
+        } else {
+            return null; // Virtual staff without user_id cannot have OAuth tokens
+        }
+    }
+
+    if (!targetUserId) return null;
+
     const { data, error } = await supabaseAdmin.rpc("get_user_integration_tokens", {
-        p_user_id: userId,
+        p_user_id: targetUserId,
         p_provider: "google_calendar",
     });
 
@@ -374,7 +427,7 @@ async function getAccessToken(
 
     // Update stored token
     await supabaseAdmin.rpc("set_user_integration_tokens", {
-        p_user_id: userId,
+        p_user_id: targetUserId,
         p_provider: "google_calendar",
         p_access_token: refreshData.access_token,
         p_refresh_token: refresh_token, // Keep existing refresh token
