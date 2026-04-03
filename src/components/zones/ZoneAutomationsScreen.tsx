@@ -38,6 +38,8 @@ const ACTION_DEFS = [
   { value: 'change_deal_stage', labelKey: 'zones.automations.actionChangeStage', fallback: 'Изменить стадию сделки', icon: '🚀' },
   { value: 'notify_owner', labelKey: 'zones.automations.actionNotifyOwner', fallback: 'Уведомить владельца', icon: '🔔' },
   { value: 'create_deal', labelKey: 'zones.automations.actionCreateDeal', fallback: 'Создать новую сделку', icon: '➕' },
+  { value: 'send_webhook', labelKey: 'crm.automations.actions.send_webhook', fallback: 'Отправить Webhook', icon: '🔗' },
+  { value: 'send_telegram', labelKey: 'crm.automations.actions.send_telegram', fallback: 'Уведомить в Telegram', icon: '📱' },
 ] as const;
 
 interface Props {
@@ -49,6 +51,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
   const { automations, loading, create, remove, toggle } = useZoneAutomations(zoneId);
   const { stages } = useZoneDeals(zoneId);
   const [showCreate, setShowCreate] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: '',
     trigger_type: '',
@@ -56,21 +59,45 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
     config: {} as Record<string, any>,
   });
 
-  const handleCreate = async () => {
+  const { update } = useZoneAutomations(zoneId);
+
+  const handleOpenCreate = () => {
+    setEditingId(null);
+    setForm({ name: '', trigger_type: '', action_type: '', config: {} });
+    setShowCreate(true);
+  };
+
+  const handleOpenEdit = (a: ZoneAutomation) => {
+    setEditingId(a.id);
+    setForm({
+      name: a.name,
+      trigger_type: a.trigger_type,
+      action_type: a.action_type,
+      config: { ...a.config }
+    });
+    setShowCreate(true);
+  };
+
+  const handleSave = async () => {
     if (!form.name || !form.trigger_type || !form.action_type) {
       toast.error(t('zones.automations.fillRequired', 'Пожалуйста, заполните необходимые поля'));
       return;
     }
     try {
-      await create({
-        ...form,
-        is_active: true
-      });
+      if (editingId) {
+        await update(editingId, form);
+        toast.success(t('zones.automations.updated', 'Автоматизация обновлена'));
+      } else {
+        await create({
+          ...form,
+          is_active: true
+        });
+        toast.success(t('zones.automations.created', 'Автоматизация добавлена'));
+      }
       setShowCreate(false);
       setForm({ name: '', trigger_type: '', action_type: '', config: {} });
-      toast.success(t('zones.automations.created', 'Автоматизация добавлена'));
     } catch {
-      toast.error(t('zones.automations.createError', 'Не удалось создать автоматизацию'));
+      toast.error(t('zones.automations.saveError', 'Не удалось сохранить автоматизацию'));
     }
   };
 
@@ -128,7 +155,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
             <p className="text-sm text-muted-foreground">{t('zones.automations.subtitle', 'Настраивайте правила для вашего CRM')}</p>
           </div>
         </div>
-        <Button onClick={() => setShowCreate(true)} className="rounded-xl shadow-lg shadow-warning/20 hover:scale-105 transition-transform">
+        <Button onClick={handleOpenCreate} className="rounded-xl shadow-lg shadow-warning/20 hover:scale-105 transition-transform">
           <Plus className="h-4 w-4 mr-2" /> {t('zones.automations.addRule', 'Добавить правило')}
         </Button>
       </div>
@@ -226,6 +253,15 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                       className="h-10 w-10 text-destructive/40 hover:text-destructive hover:bg-destructive/10 rounded-xl"
                     >
                       <Trash2 className="h-5 w-5" />
+                    </Button>
+                    <Separator orientation="vertical" className="h-8 hidden md:block" />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleOpenEdit(a)}
+                      className="h-10 w-10 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-xl"
+                    >
+                      <Settings2 className="h-5 w-5" />
                     </Button>
                   </div>
                 </div>
@@ -341,14 +377,52 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                     </Select>
                   </div>
                 )}
+
+                {form.action_type === 'send_webhook' && (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-medium">{t('crm.automations.config.webhookUrl', 'URL для Webhook')}</Label>
+                      <Input
+                        value={form.config.webhook_url || ''}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, config: { ...f.config, webhook_url: e.target.value } }))}
+                        placeholder="https://your-api.com/webhook"
+                        className="bg-background/50 h-9"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-medium">{t('crm.automations.config.webhookSecret', 'Секретный ключ (Secret)')}</Label>
+                      <Input
+                        value={form.config.webhook_secret || ''}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, config: { ...f.config, webhook_secret: e.target.value } }))}
+                        placeholder="Optional secret key"
+                        className="bg-background/50 h-9"
+                        type="password"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {form.action_type === 'send_telegram' && (
+                  <div className="space-y-3">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-medium">{t('crm.automations.config.messageTemplate', 'Шаблон сообщения')}</Label>
+                      <textarea
+                        value={form.config.message_template || ''}
+                        onChange={(e) => setForm(f => ({ ...f, config: { ...f.config, message_template: e.target.value } }))}
+                        placeholder={t('crm.automations.config.variables', 'Используйте {{contact_name}}, {{deal_title}}...')}
+                        className="w-full bg-background/50 rounded-md border border-border/20 p-2 text-sm min-h-[100px] focus:outline-none focus:ring-1 focus:ring-warning/50"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
           <DialogFooter className="pt-4 border-t border-border/10">
             <Button variant="ghost" onClick={() => setShowCreate(false)}>{t('common.cancel', 'Отмена')}</Button>
-            <Button onClick={handleCreate} className="px-8 shadow-lg shadow-warning/20 bg-warning text-warning-foreground hover:bg-warning/90">
-              {t('zones.automations.activate', 'Активировать')}
+            <Button onClick={handleSave} className="px-8 shadow-lg shadow-warning/20 bg-warning text-warning-foreground hover:bg-warning/90">
+              {editingId ? t('common.save', 'Сохранить') : t('zones.automations.activate', 'Активировать')}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -357,8 +357,87 @@ export type AppDatabase = Omit<Database, 'public'> & {
         };
         // Adding placeholders for others to ensure they have at least basic structure, 
         // replacing the GenericTable completely.
-        zone_deals: { Row: Record<string, Json>; Insert: Record<string, Json>; Update: Record<string, Json>; Relationships: []; };
-        zone_tasks: { Row: Record<string, Json>; Insert: Record<string, Json>; Update: Record<string, Json>; Relationships: []; };
+        zone_deals: {
+          Row: {
+            id: string;
+            zone_id: string;
+            contact_id: string | null;
+            pipeline_id: string | null;
+            title: string;
+            stage_id: string | null;
+            value_amount: number;
+            currency: string;
+            status: 'open' | 'won' | 'lost';
+            created_at: string;
+            updated_at: string;
+            deleted_at: string | null;
+          };
+          Insert: {
+            id?: string;
+            zone_id: string;
+            contact_id?: string | null;
+            pipeline_id?: string | null;
+            title: string;
+            stage_id?: string | null;
+            value_amount?: number;
+            currency?: string;
+            status?: 'open' | 'won' | 'lost';
+            created_at?: string;
+            updated_at?: string;
+            deleted_at?: string | null;
+          };
+          Update: {
+            id?: string;
+            zone_id?: string;
+            contact_id?: string | null;
+            pipeline_id?: string | null;
+            title?: string;
+            stage_id?: string | null;
+            value_amount?: number;
+            currency?: string;
+            status?: 'open' | 'won' | 'lost';
+            created_at?: string;
+            updated_at?: string;
+            deleted_at?: string | null;
+          };
+          Relationships: [];
+        };
+        zone_tasks: {
+          Row: {
+            id: string;
+            zone_id: string;
+            title: string;
+            status: 'todo' | 'in_progress' | 'done' | 'cancelled';
+            priority: 'low' | 'medium' | 'high' | 'urgent';
+            due_date: string | null;
+            created_at: string;
+            updated_at: string;
+            deleted_at: string | null;
+          };
+          Insert: {
+            id?: string;
+            zone_id: string;
+            title: string;
+            status?: 'todo' | 'in_progress' | 'done' | 'cancelled';
+            priority?: 'low' | 'medium' | 'high' | 'urgent';
+            due_date?: string | null;
+            created_at?: string;
+            updated_at?: string;
+            deleted_at?: string | null;
+          };
+          Update: {
+            id?: string;
+            zone_id?: string;
+            title?: string;
+            status?: 'todo' | 'in_progress' | 'done' | 'cancelled';
+            priority?: 'low' | 'medium' | 'high' | 'urgent';
+            due_date?: string | null;
+            created_at?: string;
+            updated_at?: string;
+            deleted_at?: string | null;
+          };
+          Relationships: [];
+        };
         zone_invoices: { Row: Record<string, Json>; Insert: Record<string, Json>; Update: Record<string, Json>; Relationships: []; };
         referral_codes: {
           Row: {

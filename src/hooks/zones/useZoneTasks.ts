@@ -18,6 +18,7 @@ async function fetchTasks(zoneId: string): Promise<ZoneTask[]> {
     .from('zone_tasks')
     .select('*')
     .eq('zone_id', zoneId)
+    .is('deleted_at', null)
     .order('created_at', { ascending: false });
   if (error) throw error;
   return (data || []) as unknown as ZoneTask[];
@@ -95,7 +96,7 @@ export function useZoneTasks(zoneId: string | null) {
     mutationFn: async (taskId: string) => {
       const { error } = await supabase
         .from('zone_tasks')
-        .delete()
+        .update({ deleted_at: new Date().toISOString() } as any)
         .eq('id', taskId);
       if (error) throw error;
     },

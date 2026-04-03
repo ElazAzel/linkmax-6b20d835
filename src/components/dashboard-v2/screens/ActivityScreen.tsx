@@ -39,6 +39,8 @@ import { AddLeadDialog } from '@/components/crm/AddLeadDialog';
 import { LeadDetails } from '@/components/crm/LeadDetails';
 import { BookingsPanel } from '@/components/crm/BookingsPanel';
 import { WalletWidget } from '@/components/crm/WalletWidget';
+import { CrmStatsWidget } from '@/components/crm/CrmStatsWidget';
+import { useCrmMetrics } from '@/hooks/crm/useCrmMetrics';
 import { cn } from '@/lib/utils/utils';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import type { Lead } from '@/hooks/crm/useLeads';
@@ -92,6 +94,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const { leads, loading, getLeadStats, refreshLeads, quickReply } = useLeads();
   const { isRepeatCustomer } = useRepeatCustomers();
   const { user } = useAuth();
+  const { data: crmMetrics, isLoading: metricsLoading } = useCrmMetrics();
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -217,6 +220,11 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
           </div>
         }
       />
+
+      {/* CRM Intelligence Widget */}
+      <div className="px-5 pt-2">
+        <CrmStatsWidget metrics={crmMetrics || null} isLoading={metricsLoading} />
+      </div>
 
       {/* Fintech Ledger Widget - Foundation for Fintech Pivot */}
       <div className="px-5 pb-6">

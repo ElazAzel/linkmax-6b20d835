@@ -53,6 +53,7 @@ async function fetchDeals(zoneId: string, pipelineId?: string | null): Promise<Z
 
   const { data, error } = await query
     .eq('zone_id', zoneId)
+    .is('deleted_at', null)
     .order('created_at', { ascending: false });
   if (error) throw error;
   return (data || []).map((d: Record<string, any>) => ({
@@ -243,7 +244,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     mutationFn: async (id: string) => {
       const { error } = await supabase
         .from('zone_deals')
-        .delete()
+        .update({ deleted_at: new Date().toISOString() } as any)
         .eq('id', id);
       if (error) throw error;
     },

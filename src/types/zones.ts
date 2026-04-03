@@ -187,6 +187,7 @@ export interface ZoneDeal {
   custom_fields: Record<string, any>;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
   // Joined
   pipeline?: ZonePipeline;
   contact?: ZoneContact;
@@ -281,6 +282,7 @@ export interface ZoneTask {
   created_by: string;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
   completed_at?: string | null;
   // Joined
   contact?: ZoneContact;

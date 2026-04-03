@@ -14,7 +14,14 @@
 
 ## [1.17.0] - 2026-04-03
 
-## [1.16.0] - 2026-04-03
+## [0.17.0] - 2026-04-03
+### Added
+- [CRM] Unified `CrmService` for business analytics (Conversion, Pipeline, Avg Check).
+- [UI] "Business Pulse" dashboard widget in `ActivityScreen`.
+- [Data] Soft-delete support for `zone_deals` and `zone_tasks`.
+- [i18n] New CRM metrics and status translations.
+
+## [0.16.0] - 2026-04-03
 
 ### Phase 15: "Success-First" Monetization & PWA Infrastructure
 

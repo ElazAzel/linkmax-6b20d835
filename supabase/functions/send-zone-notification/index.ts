@@ -8,9 +8,10 @@ const corsHeaders = {
 };
 
 interface NotificationPayload {
-    type: 'new_deal' | 'invoice_paid' | 'task_overdue' | 'deal_comment_mention';
+    type: 'new_deal' | 'invoice_paid' | 'task_overdue' | 'deal_comment_mention' | 'custom_template';
     zone_id: string;
     data: Record<string, unknown>;
+    message?: string;
 }
 
 serve(async (req: Request) => {
@@ -124,6 +125,10 @@ serve(async (req: Request) => {
                     } else {
                         message = `💬 <b>Mentioned in comment</b>\n\n📋 Deal: ${dealTitle}\n👤 ${commenterName}:\n"${commentPreview}"`;
                     }
+                    break;
+                }
+                case 'custom_template': {
+                    message = payload.message || '';
                     break;
                 }
             }

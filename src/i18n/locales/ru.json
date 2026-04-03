@@ -1615,6 +1615,26 @@
     "createInvoice": "Выставить счет",
     "createLead": "Создать лид",
     "formData": "Данные формы",
+    "metrics": {
+      "conversion": "Конверсия",
+      "avgCheck": "Ср. чек",
+      "pipeline": "Прогноз",
+      "active": "Активные"
+    },
+    "status": {
+      "new": "Новый",
+      "contacted": "В работе",
+      "qualified": "Интерес",
+      "converted": "Оплачено",
+      "lost": "Отказ"
+    },
+    "source": {
+      "form": "Заявка",
+      "messenger": "Мессенджер",
+      "manual": "Вручную",
+      "pageView": "Визит",
+      "other": "Другое"
+    },
     "sources": {
       "ads": "Реклама",
       "direct": "Прямые заходы",
@@ -6328,58 +6348,30 @@
     },
     "automations": {
       "action": "Действие (Тогда)",
+        "stage_changed": "Стадия сделки изменена",
+        "task_done": "Задача выполнена",
+        "deal_stage_change": "Смена этапа сделки",
+        "new_contact": "Новый контакт",
+        "invoice_paid": "Инвойс оплачен",
+        "task_completed": "Задача завершена"
+      },
       "actions": {
         "change_stage": "Изменить стадию сделки",
         "create_deal": "Создать новую сделку",
         "create_task": "Создать задачу",
-        "notify_owner": "Уведомить владельца"
+        "notify_owner": "Уведомить владельца",
+        "send_webhook": "Отправить Webhook",
+        "send_telegram": "Уведомить в Telegram"
       },
-      "activate": "Активировать",
-      "active": "ACTIVE",
-      "addRule": "Добавить правило",
-      "added": "Автоматизация добавлена",
-      "anyStage": "Любая стадия",
-      "automateRoutine": "Автоматизируйте рутину",
-      "automateRoutineDesc": "Создавайте правила, которые будут срабатывать автоматически при определенных событиях.",
-      "changeToStage": "Перевести на стадию",
-      "configParams": "Настройка параметров",
-      "createError": "Не удалось создать автоматизацию",
-      "created": "Автоматизация добавлена",
-      "dealStage": "Стадия сделки",
-      "deleteError": "Ошибка удаления",
-      "deleted": "Правило удалено",
-      "emptyDesc": "Создавайте правила, которые будут срабатывать автоматически при определенных событиях.",
-      "emptyTitle": "Автоматизируйте рутину",
-      "error": "Не удалось создать автоматизацию",
-      "event": "Событие",
-      "fillRequired": "Пожалуйста, заполните необходимые поля",
-      "moveToStage": "Перевести на стадию",
-      "newRule": "Новое правило",
-      "params": "Настройка параметров",
-      "paused": "PAUSED",
-      "presets": {
-        "invoicePaidChip": "Закрывать сделку после оплаты",
-        "invoicePaidName": "Закрывать сделку после оплаты",
-        "overdueTaskChip": "Задача при просрочке шага",
-        "overdueTaskName": "Задача при просрочке шага"
+      "config": {
+        "webhookUrl": "URL для Webhook",
+        "webhookSecret": "Секретный ключ (Secret)",
+        "taskTitle": "Заголовок задачи",
+        "messageTemplate": "Шаблон сообщения",
+        "variables": "Используйте {{contact_name}}, {{deal_title}}, {{zone_name}} для подстановки данных."
       },
-      "reaction": "Реакция",
-      "ruleDesc": "Опишите логику автоматизации: когда срабатывает и что делает.",
-      "ruleName": "Название правила",
-      "ruleNamePlaceholder": "Например: Авто-инвойс при закрытии",
-      "selectStage": "Выберите стадию",
-      "subtitle": "Настраивайте правила для вашего CRM",
-      "taskText": "Текст задачи",
-      "taskTextPlaceholder": "Например: Позвонить и подтвердить оплату",
-      "title": "Автоматизации",
-      "trigger": "Триггер (Когда)",
-      "triggers": {
-        "contact_created": "Новый контакт создан",
-        "deal_stalled": "Просрочен шаг в сделке",
-        "invoice_paid": "Инвойс оплачен",
-        "stage_changed": "Стадия сделки изменена",
-        "task_done": "Задача выполнена"
-      },
+      "updated": "Автоматизация обновлена",
+      "saveError": "Не удалось сохранить",
       "tryFirst": "Попробовать первое правило",
       "tryFirstRule": "Попробовать первое правило"
     },

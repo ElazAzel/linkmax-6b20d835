@@ -130,6 +130,73 @@ serve(async (req: Request) => {
           });
           if (!invErr) runCount++;
         }
+      } else if (auto.action_type === "send_webhook") {
+        const webhookUrl = auto.config?.webhook_url as string;
+        const webhookSecret = auto.config?.webhook_secret as string;
+        if (webhookUrl) {
+          // Prepare payload
+          const payload = {
+            event: trigger_type,
+            automation_id: auto.id,
+            zone_id,
+            deal_id,
+            contact_id,
+            timestamp: new Date().toISOString(),
+          };
+
+          try {
+            const headers: Record<string, string> = { "Content-Type": "application/json" };
+            if (webhookSecret) headers["X-LinkMAX-Secret"] = webhookSecret;
+
+            await fetch(webhookUrl, {
+              method: "POST",
+              headers,
+              body: JSON.stringify(payload),
+            });
+            runCount++;
+          } catch (err) {
+            console.error(`Webhook failed for auto ${auto.id}:`, err);
+          }
+        }
+      } else if (auto.action_type === "send_telegram") {
+        const template = auto.config?.message_template as string;
+        if (template) {
+          // Fetch context for variables
+          let contactName = "Client";
+          let dealTitle = "";
+          let zoneName = "Zone";
+
+          if (contact_id) {
+            const { data: contact } = await supabase.from("zone_contacts").select("first_name, last_name").eq("id", contact_id).single();
+            if (contact) contactName = `${contact.first_name || ""} ${contact.last_name || ""}`.trim() || "Client";
+          }
+          if (deal_id) {
+            const { data: deal } = await supabase.from("zone_deals").select("title").eq("id", deal_id).single();
+            if (deal) dealTitle = deal.title || "";
+          }
+          const { data: zone } = await supabase.from("zones").select("name").eq("id", zone_id).single();
+          if (zone) zoneName = zone.name || "Zone";
+
+          // Variable substitution
+          const message = template
+            .replace(/{{contact_name}}/g, contactName)
+            .replace(/{{deal_title}}/g, dealTitle)
+            .replace(/{{zone_name}}/g, zoneName);
+
+          try {
+            await supabase.functions.invoke("send-zone-notification", {
+              body: {
+                type: "custom_template",
+                zone_id,
+                data: { contact_id, deal_id },
+                message,
+              },
+            });
+            runCount++;
+          } catch (err) {
+            console.error(`Telegram notification failed for auto ${auto.id}:`, err);
+          }
+        }
       } else if (auto.action_type === "notify_owner") {
         runCount++;
       }
