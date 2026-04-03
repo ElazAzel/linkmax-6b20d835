@@ -16,7 +16,7 @@
 
 - [x] Phase 19: Multi-Staff Booking Base (Database, UI, Logic)
 - [x] Phase 20: Per-Staff Google Calendar Sync
-- [ ] Phase 21: Staff Performance Analytics & Notifications
+- [x] Phase 21: Staff Performance Analytics & Notifications
 - [ ] Phase 22: Resource Management (Rooms, Equipment)
 - **[NEW] Capacitor Integration**: Обертка Vite-приложения в нативный контейнер.
 - **[MODIFY] Mobile-First UI Standard**: Унификация всех модальных окон в Bottom Sheets (выдвижные панели).
