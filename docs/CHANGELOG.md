@@ -1,7 +1,9 @@
 # Changelog
 
 ## [Phase 18] - 2026-04-03
+
 ### Added
+
 - **CRM Bulk Actions**: Implemented batch processing for deals in the Kanban board.
   - **Selection System**: Multi-select deals via checkboxes with shift-click support and "Select All" logic.
   - **Bulk Action Bar**: Floating context-aware toolbar for mass operations (Move to Stage, Bulk Delete).
@@ -10,12 +12,14 @@
 - **Analytics Visualization**: Hardened `AnalyticsChart` against Recharts `ResponsiveContainer` dimension warnings by enforcing parent min-height.
 
 ### Fixed
+
 - **Dashboard Integrity**: Resolved UI layout shifts in analytics charts on initial load.
 - **Data Consistency**: Synchronized custom field logic across `ZoneDealsScreen`, `DealDetailSheet`, and `ContactDetailSheet`.
 
 ## [2026-04-03] Phase 22: Resource Management
 
 ### Added
+
 - **Resource Management System**: New "Resources" screen in the dashboard for managing physical assets (rooms, equipment, etc.).
 - **Automatic Resource Assignment**: The booking engine now automatically assigns available resources to booking slots.
 - **Resource Conflict Detection**: Strict validation in the `submit-booking` edge function to prevent overbooking of physical resources.
@@ -23,12 +27,15 @@
 - **useZoneResources Hook**: New custom hook for managing zone physical resources.
 
 ### Changed
+
 - **Database Schema**: Added `zone_resources` table and linked `bookings` to specific resources via `resource_id`.
 - **Edge Functions**: Enhanced `submit-booking` with atomic resource availability logic.
 - **Dashboard Navigation**: Added "Resources" to the Business Zone section of the sidebar.
 
 ## [Phase 21] - 2026-04-03
+
 ### Added
+
 - **Staff Performance Analytics**: Implemented a "Staff-Aware" dashboard in `InsightsScreen`.
   - **Owner View**: Global team performance metrics with progress bars and specialist breakdown.
   - **Specialist View**: Personalized performance card ("Your Stats") showing individual bookings and revenue.
@@ -41,7 +48,8 @@
 ## [1.18.0] - 2026-04-03
 
 ### Mobile UX & Booking Hardening
-- **Mobile Font Fix**: 
+
+- **Mobile Font Fix**:
   - Relaxed global "Accessibility Reset" (12px minimum) to allow **10px** for dense navigation elements.
   - Optimized `DashboardBottomNav`: increased height to `4.5rem`, removed `truncate`, and added `break-words` for labels.
   - Improved readability on small screens (iPhone SE) by reducing tracking and increasing padding.
@@ -55,6 +63,7 @@
 ## [0.17.0] - 2026-04-03
 
 ### Added
+
 - [CRM] Unified `CrmService` for business analytics (Conversion, Pipeline, Avg Check).
 - [UI] "Business Pulse" dashboard widget in `ActivityScreen`.
 - [Data] Soft-delete support for `zone_deals` and `zone_tasks`.
@@ -79,7 +88,9 @@
 - **Stability**: Fixed critical syntax errors in `Pricing.tsx` and optimized the tier selection flow.
 
 ## [Phase 20] - 2026-04-03
+
 ### Added
+
 - **Per-Staff Google Calendar Sync**: Enabled independent calendar synchronization for each specialist in Multi-Staff zones.
 - **Dynamic Token Management**: Refactored `google-calendar-sync` edge function to handle `staff_id` lookups and specialist-specific OAuth tokens.
 - **Specialist Calendar Selection**: Added support for custom `gcal_calendar_id` per staff member (defaults to 'primary').
@@ -87,7 +98,9 @@
 - **Atomic Booking Flow**: Updated `submit-booking` to persist `staff_id` and trigger specialist-aware calendar synchronization.
 
 ## [Phase 19] - 2026-04-02
+
 ### Added
+
 - **Multi-Staff Booking Engine**: Support for multiple specialists within a single booking zone.
 - **Staff Management UI**: New section in Zone Settings for adding/editing specialists (name, bio, photo, linked user).
 - **Specialist Selection**: Updated `BookingBlock` with a premium specialist picker with micro-animations.
@@ -154,7 +167,7 @@
 
 ## [1.8.0] - 2026-03-31 (Platform Audit Remediation)
 
-### [1.8.0] Security (Hardening)
+### Security (Hardening)
 
 - **SQL/PostgREST Injection**: Implemented strict input sanitization for all search queries (`userSearch.ts`, `useGlobalSearch.ts`) to prevent filter-breaking injection via `.or()` and `.ilike()`.
 - **JWT Enforcement**: Enabled mandatory JWT authentication for AI Edge Functions (`ai-content-generator`, `image-generator`).
@@ -162,19 +175,19 @@
 - **Access Control**: Added `owner_id` verification to `experiments.ts` and hardened `seed-demo-accounts` against unauthorized execution.
 - **Idempotency**: Implemented `message_id` based idempotency in `process-email-sequences` to prevent duplicate emails.
 
-### [1.8.0] CI/CD & Infrastructure
+### CI/CD & Infrastructure
 
 - **Pipeline Optimization**: Parallelized E2E and Unit tests in `ci.yml`. Added `staging` environment support and post-deploy smoke tests in `deploy.yml`.
 - **Supabase Connectivity**: Added a secondary fallback API (exchangerate-api.com) for `currency-rates` to ensure uptime during National Bank of KZ outages.
 - **Wrangler**: Pinned `wrangler@latest` for deployment stability.
 
-### [1.8.0] Telegram Mini App (TMA)
+### Telegram Mini App (TMA)
 
 - **Health Check**: Integrated a Supabase connectivity health check during TMA initialization. Improved error reporting for SDK/API failures.
 - **UX**: Fixed currency symbol display (₽→₸) and reduced console noise by making SDK warnings DEV-only.
 - **Testing**: Added initial unit test suite (`TelegramApp.test.tsx`) for core initialization logic.
 
-### [1.8.0] Quality & Type Safety
+### Quality & Type Safety
 
 - **State Management**: Fixed Zustand DevTools serialization for `Set` and `Map` types in `EditorStore`.
 - **Type Safety**: Eliminated `as any` in zone automations and fixed stale Supabase types in `referral.ts`.
@@ -184,7 +197,7 @@
 
 ## [1.7.0] - 2026-03-24
 
-### [1.7.0] Added
+### Added
 
 - **Multi-project support**: New `/pages` command to switch between user projects.
 - **Active project context**: All operational commands (`/stats`, `/leads`, `/bookings`) now automatically filter results by the active project.
@@ -197,7 +210,7 @@
 
 ## [1.6.0] - 2026-03-24
 
-### [1.6.0] Added
+### Added
 
 - **Telegram Bot HQ (Deterministic):**
   - Интерактивные уведомления о лидах с кнопками управления статусом (`В работу`, `Продано`).
@@ -208,19 +221,22 @@
 
 ## [1.4.0] - 2026-03-23
 
-### Исправлено
+### Fixed
+
 - Исправлена критическая ошибка `TypeError: Cannot set properties of undefined (setting 'Children')` путем отката несовместимых версий `react-i18next` и `react-router-dom`.
 - Стабилизирована сборка Vite: `react` и `react-dom` теперь всегда находятся в одном чанке для корректной инициализации.
 - Проведен полный аудит директории `.agent`: устранены "заглушки" в командах и правилах.
 - Локализована вся документация для агентов (переведена на русский язык).
 - Исправлено форматирование (линты) во всех файлах правил и команд.
 
-### Добавлено
+### Added
+
 - Создан свод правил `collaboration.md` для командной работы агентов.
 - Обновлены роли `orchestrator.md` и `123role.md` с интеграцией протоколов делегирования.
 - Добавлены детальные шаги верификации для всех команд AI.
 
-### Локализация (i18n)
+### Localization (i18n)
+
 - Достигнуто 100% покрытие ключей для всех 16 поддерживаемых языков.
 - Синхронизирована структура всех 18 JSON-файлов (основные + фрагменты цен) с эталонным `en.json`.
 - Выполнена полная локализация для приоритетных языков: Русский (RU), Казахский (KK) и Узбекский (UZ).
@@ -238,6 +254,7 @@
 - **Loading UI**: Standardized loading indicators across `FromPage` and `Auth` screens using `Loader2`.
 
 ### Changed
+
 - **Logging**: Replaced multiple `console.log` statements with the `logger` utility for cleaner production output.
 - **README**: Centralized documentation links and updated project overview.
 
@@ -260,10 +277,12 @@
 - **Catch-all Vendor Chunk**: Grouped miscellaneous dependencies into `vendor-other` to keep `main.js` clean.
 
 ### Changed
+
 - **Dynamic Imports**: Converted `exceljs`, `jspdf`, and `html2canvas` from static to dynamic imports in `sheets-export.ts` and `document-generator.ts`.
 - **Vite Configuration**: Optimized `build.rollupOptions` for better code splitting and reduced TBT.
 
 ### Performance
+
 - **Main Bundle Size**: Reduced `main.js` from ~300KB to **210KB (56KB gzip)**.
 - **Initial Load**: Improved performance by deferring ~1.5MB of non-critical JavaScript.
 
