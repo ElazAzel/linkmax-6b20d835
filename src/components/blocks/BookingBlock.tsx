@@ -273,7 +273,15 @@ export const BookingBlock = memo(function BookingBlockComponent({
         }
       });
 
-      if (fnError) throw fnError;
+      if (fnError) {
+        if (fnError.message?.includes('409') || (fnError as any).status === 409) {
+          toast.error(t('booking.error.alreadyBooked', 'Этот слот уже занят. Пожалуйста, выберите другое время.'));
+          fetchSlots(selectedDate); // Refresh slots
+          setSubmitting(false);
+          return;
+        }
+        throw fnError;
+      }
 
       // Handle inbound limit reached
       if (fnResponse && !fnResponse.success && fnResponse.error === 'inbound_limit_reached') {
@@ -715,19 +723,24 @@ export const BookingBlock = memo(function BookingBlockComponent({
                   </div>
                   <span className="font-bold text-sm truncate">{getDateLabel(selectedDate)}</span>
                 </div>
-                {!loading && totalCount > 0 && (
-                  <div className="flex items-center gap-2.5 text-[10px] font-black px-2.5 py-1.5 rounded-xl bg-black/20 uppercase tracking-tight">
+                <div className="flex items-center gap-2.5 text-[10px] font-black px-2.5 py-1.5 rounded-xl bg-black/20 uppercase tracking-tight">
+                  {availableCount > 0 ? (
                     <span className="flex items-center gap-1.5 text-emerald-400">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       {availableCount}
                     </span>
-                    {bookedCount > 0 && (
-                      <span className="flex items-center gap-1 text-white/40">
-                        {bookedCount}
-                      </span>
-                    )}
-                  </div>
-                )}
+                  ) : totalCount > 0 ? (
+                    <span className="flex items-center gap-1.5 text-red-400">
+                      <XCircle className="h-3 w-3" />
+                      {t('booking.soldOut', 'Мест нет')}
+                    </span>
+                  ) : null}
+                  {bookedCount > 0 && availableCount > 0 && (
+                    <span className="flex items-center gap-1 text-white/40">
+                      {bookedCount}
+                    </span>
+                  )}
+                </div>
               </div>
 
               {loading ? (

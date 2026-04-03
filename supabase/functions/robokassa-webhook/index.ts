@@ -196,6 +196,79 @@ serve(async (req: Request) => {
                         updated_at: new Date().toISOString()
                     })
                     .eq('id', wallet.id);
+
+                // --- Phase 16: CRM Status Sync ---
+                if (shp_related_id) {
+                    // 4. Update related Lead if applicable
+                    const { data: lead } = await supabase
+                        .from('leads')
+                        .update({ 
+                            status: 'converted', 
+                            updated_at: new Date().toISOString() 
+                        } as any)
+                        .eq('id', shp_related_id)
+                        .eq('user_id', shp_user)
+                        .select('id')
+                        .maybeSingle();
+
+                    // 5. Update related Booking if applicable
+                    const { data: booking } = await supabase
+                        .from('bookings')
+                        .update({ 
+                            status: 'confirmed', 
+                            payment_status: 'paid',
+                            updated_at: new Date().toISOString() 
+                        } as any)
+                        .eq('id', shp_related_id)
+                        .eq('owner_id', shp_user)
+                        .select('id')
+                        .maybeSingle();
+
+                    // 6. Update Event Registration if applicable
+                    await supabase
+                        .from('event_registrations')
+                        .update({ 
+                            status: 'confirmed',
+                            payment_status: 'paid',
+                            updated_at: new Date().toISOString() 
+                        } as any)
+                        .eq('id', shp_related_id)
+                        .eq('owner_id', shp_user);
+
+                    // 7. Trigger Success Notification (via Outbox Queue)
+                    try {
+                        const lang = profile?.telegram_language || 'ru';
+                        const netTxt = netAmount.toLocaleString('ru-RU');
+                        const feeTxt = feeAmount.toLocaleString('ru-RU');
+
+                        const text = lang === 'en'
+                            ? `💰 <b>Payment Received!</b>\n\nProfit: <b>${netTxt} KZT</b>\nFee: ${feeTxt} KZT\nRef: ${invId}\n\nKeep it up! 🚀`
+                            : lang === 'kk'
+                                ? `💰 <b>Төлем қабылданды!</b>\n\nПайда: <b>${netTxt} KZT</b>\nКомиссия: ${feeTxt} KZT\nID: ${invId}\n\nКеремет! 🚀`
+                                : `💰 <b>Оплата получена!</b>\n\nВаша прибыль: <b>${netTxt} KZT</b>\nКомиссия: ${feeTxt} KZT\nID: ${invId}\n\nТак держать! 🚀`;
+
+                        if (profile?.telegram_chat_id && profile?.telegram_notifications_enabled) {
+                            await supabase
+                                .from('notification_queue')
+                                .insert({
+                                    user_id: shp_user,
+                                    event_type: 'payment_success',
+                                    payload: {
+                                        channel: 'telegram',
+                                        telegram: {
+                                            chat_id: profile.telegram_chat_id,
+                                            text: text,
+                                            parse_mode: 'HTML'
+                                        }
+                                    },
+                                    status: 'pending',
+                                    idempotency_key: `pay_success_${invId}`
+                                });
+                        }
+                    } catch (notifyErr) {
+                        console.error("Failed to queue success notification", notifyErr);
+                    }
+                }
             }
         }
 

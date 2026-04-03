@@ -160,6 +160,14 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Enabled **7x24 Offline Access** to CRM data (leads, bookings) for mobile users.
 - **Accessibility Hardening**: Expanded global CSS reset to force a minimum 12px font size for all micro-text (8px/9px) on mobile viewports.
 - **Health Score**: **10/10** (Status: Monetized & Offline-Ready).
++
++### [2026-04-03] Phase 16: Native Payments & CRM Success Logic
++
++- **Booking System Hardening**: Implemented absolute double-booking protection via a `PARTIAL UNIQUE INDEX` in Postgres. The system now prevents race conditions at the database level, ensuring slot integrity even under high concurrent load.
++- **CRM Webhook Automation**: Updated `robokassa-webhook` to automatically synchronize transaction results with `leads`, `bookings`, and `event_registrations`. Successful payments now trigger immediate status transitions (e.g., `converted`, `confirmed`).
++- **Success-First Notifications**: Integrated a financial intelligence layer in the notification system. Users now receive instant Telegram alerts upon payment, including calculated **Net Earnings** and platform fees, providing transparent financial insights.
++- **UI/UX Booking Polish**: Enhanced `BookingBlock.tsx` with "Sold Out" state visualization and improved error handling for 409 Conflict states.
++- **Health Score**: **10/10** (Status: Hardened CRM & Automated Payments).
 
 ### [2026-04-02] Phase 14: Interactive Micro-Animations (WOW Factor)
 
@@ -394,9 +402,9 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 | **event** | Event with registration | Date, location, capacity, form | Event management |
 
 **Booking & Timezone Engine**:
-
 - Automated visitor timezone detection.
-- Cross-checking Google Calendar in `submit-booking` edge function for absolute double-booking protection.
+- **Absolute Double-Booking Protection**: Cross-checks Google Calendar AND enforces a database-level `PARTIAL UNIQUE INDEX` on `(page_id, block_id, slot_date, slot_time)` for all non-cancelled states.
+- `409 Conflict` awareness in Edge Functions to handle race conditions gracefully.
 - `useTimezone` hook centralized all logic and friendly formatting.
 
 **Code locations:**

@@ -152,6 +152,15 @@ serve(async (req: Request) => {
 
     if (insertError) {
       console.error('Error inserting booking:', insertError);
+      
+      // Handle absolute double-booking protection (DB unique constraint)
+      if (insertError.code === '23505') {
+        return new Response(
+          JSON.stringify({ success: false, error: 'slot_already_booked' }),
+          { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
       throw insertError;
     }
 

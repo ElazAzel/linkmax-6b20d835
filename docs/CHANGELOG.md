@@ -1,4 +1,22 @@
 # Changelog
++
++## [1.17.0] - 2026-04-03
++
++### Phase 16: Native Payments & CRM Success Logic
++
++- **Booking System Hardening**:
++  - Implemented absolute double-booking protection via Postgres `PARTIAL UNIQUE INDEX`.
++  - Updated `submit-booking` Edge Function to handle `23505` (unique violation) errors and return `409 Conflict`.
++  - Added "Sold Out" visual states and improved error feedback in `BookingBlock.tsx`.
++- **CRM Webhook Automation**:
++  - Refactored `robokassa-webhook` to automatically update `leads` (won), `bookings` (confirmed), and `event_registrations` (paid) upon successful payment.
++  - Switched to the **Outbox Pattern** for notifications to ensure reliability (using `notification_queue`).
++- **Success-First Financial Intelligence**:
++  - New localized transaction alerts via Telegram with calculated **Net Earnings** and commission transparency.
++  - Integrated fee calculation logic (7% Starter / 1% Pro) into the notification processor.
++- **Stability & UX**:
++  - Resolved race conditions in high-concurrency booking scenarios.
++  - Standardized payment-related success/error messaging across the platform.
 
 ## [1.16.0] - 2026-04-03
 
