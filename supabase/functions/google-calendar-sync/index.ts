@@ -49,7 +49,18 @@ serve(async (req) => {
             });
         }
 
-        const { action, payload } = await req.json();
+        const rawPayload = await req.text();
+        let action, payload;
+        try {
+            const body = JSON.parse(rawPayload);
+            action = body.action;
+            payload = body.payload;
+        } catch (e) {
+            console.error("[GCAL] Failed to parse request body:", rawPayload);
+            throw new Error("Invalid JSON payload");
+        }
+
+        console.log(`[GCAL] Action: ${action}`, { user_id: user.id });
 
         // ─── Generate Google OAuth URL ───
         if (action === "get_auth_url") {

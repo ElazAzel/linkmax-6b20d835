@@ -9,7 +9,7 @@ export const CanvasBackground = () => {
             <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary/[0.05] blur-[100px] animate-float" />
             
             {/* Grain/Texture Overlay */}
-            <div className="absolute inset-0 opacity-[var(--grain-opacity)] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            <div className="absolute inset-0 opacity-[var(--grain-opacity)] pointer-events-none mix-blend-overlay bg-[url('/noise.svg')]" />
         </div>
     );
 };
