@@ -7,25 +7,16 @@
 ### 🚀 Фаза 16: "Native Payments & CRM Success Logic" (Апрель)
 **Цель**: Замкнуть цикл "Starter" тарифа, сделав оплату и учет комиссий автоматическими.
 
-- **[NEW] Payment Webhook Processor**: Автоматическое обновление статуса сделок в CRM при поступлении оплаты через Robokassa/Kaspi.
-- **[MODIFY] CRM Success Messaging**: Внедрение уведомлений о заработанных средствах и удержанной комиссии (Success-First Philosophy).
-- **[MODIFY] BookingBlock Hardening**: Финализация защиты от double-booking и полная поддержка таймзон для международных экспертов.
+- [x] Payment Webhook Processor: Автоматическое обновление статуса сделок в CRM.
+- [x] CRM Success Messaging: Уведомления о заработанных средствах.
+- [x] BookingBlock Hardening: Защита от double-booking и ресурсы.
 
 ### 📱 Фаза 17: "Mobile Expansion (Capacitor 8)" (Май)
 **Цель**: Превратить PWA в нативное приложение для App Store / Google Play.
 
-### Key Tasks
-- [x] Phase 19: Multi-Staff Booking Base (Database, UI, Logic)
-- [x] Phase 20: Per-Staff Google Calendar Sync
-- [x] Phase 21: Staff Performance Analytics & Notifications
-- [ ] Database Schema: Define `zone_resources` table
-
-## Phase 22: Resource Management (Rooms, Equipment) [IN PROGRESS]
-
-### Goals
 - **[NEW] Capacitor Integration**: Обертка Vite-приложения в нативный контейнер.
 - **[MODIFY] Mobile-First UI Standard**: Унификация всех модальных окон в Bottom Sheets (выдвижные панели).
-- **[NEW] Push Notifications**: Интеграция Firebase/OneSignal для уведомлений о новых лидах в реальном времени.
+- **[NEW] Push Notifications**: Интеграция Firebase/OneSignal для уведомлений.
 
 ## Q3 2026: Глубина продукта (CRM 2.0) (P1)
 
