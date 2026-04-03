@@ -137,8 +137,16 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **Technical Debt & UX**:
   - **Type Safety**: Finalized removal of `as any` in business zones and fixed referral stats types.
   - **UX Polish**: Consistent currency symbols (₸), reduced console noise, and stable Zustand serialization.
-  - **Consistency**: Unique `collab_slug` enforcement and pagination for high-volume email services.
+    - **Consistency**: Unique `collab_slug` enforcement and pagination for high-volume email services.
 - **Health Score**: **10/10** (Status: Fully Hardened & Production Verified).
+
+### Living Canvas (Icon Micro-Animations)
+- **Engine**: `AnimatedBlockIcon.tsx` (Powered by `framer-motion`)
+- **Coverage**: **100%** (All 28+ block types have unique specialized animations)
+- **Key Mechanics**:
+  - `delayOffset`: Random start delays (0-2s) ensure an organic, non-synchronized "living" feel.
+  - Semantic Motion: Animations reflect block function (e.g., typing for text, rotating hands for timer, pulse for REC).
+  - Performance: CSS-accelerated SVG transforms with zero JS overhead.
 
 ### [2026-04-02] Phase 14: Interactive Micro-Animations (WOW Factor)
 

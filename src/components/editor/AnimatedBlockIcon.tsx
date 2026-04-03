@@ -23,6 +23,51 @@ export const AnimatedBlockIcon = ({
 
   // Specific animations for certain block types
   switch (type) {
+    case 'profile':
+    case 'avatar':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <motion.div
+            className="absolute inset-0 rounded-full border border-white/20"
+            animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, delay: delayOffset }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 3, repeat: Infinity, delay: delayOffset }}
+          >
+            <IconComponent className="h-full w-full relative z-10" />
+          </motion.div>
+        </div>
+      );
+
+    case 'link':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <motion.div
+            animate={{ rotate: [0, 45, 0, -45, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: delayOffset }}
+          >
+            <IconComponent className="h-full w-full" />
+          </motion.div>
+        </div>
+      );
+
+    case 'button':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <motion.div
+            animate={{ 
+              scale: [1, 0.9, 1],
+              filter: ["brightness(1)", "brightness(1.5)", "brightness(1)"]
+            }}
+            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: delayOffset }}
+          >
+            <IconComponent className="h-full w-full" />
+          </motion.div>
+        </div>
+      );
+
     case 'text':
       return (
         <div className={cn("relative flex items-center justify-center", className)}>
@@ -328,15 +373,108 @@ export const AnimatedBlockIcon = ({
         </div>
       );
 
-    // Default fallback case with subtle floating/breathing
+    case 'before_after':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <IconComponent className="h-full w-full" />
+          <motion.div
+            className="absolute inset-y-0 w-0.5 bg-white/60 shadow-[0_0_8px_white]"
+            animate={{ left: ["20%", "80%", "20%"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: delayOffset }}
+          />
+        </div>
+      );
+
+    case 'custom_code':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: delayOffset }}
+            className="font-mono font-bold text-xl flex gap-1"
+          >
+            <motion.span animate={{ x: [-2, 0, -2] }}>{"<"}</motion.span>
+            <motion.span animate={{ x: [2, 0, 2] }}>{">"}</motion.span>
+          </motion.div>
+        </div>
+      );
+
+    case 'catalog':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <div className="grid grid-cols-2 gap-0.5 w-4/5 h-4/5">
+            {[0, 1, 2, 3].map((i) => (
+              <motion.div
+                key={i}
+                className="bg-white/60 rounded-[1px]"
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ 
+                  duration: 1, 
+                  repeat: Infinity, 
+                  delay: delayOffset + (i * 0.25) 
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      );
+
+    case 'download':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <IconComponent className="h-full w-full" />
+          <motion.div
+            className="absolute top-0 flex flex-col"
+            initial={{ y: -5, opacity: 0 }}
+            animate={{ y: 5, opacity: [0, 1, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeIn", delay: delayOffset }}
+          >
+            <div className="w-1 h-3 bg-white mx-auto rounded-full" />
+          </motion.div>
+        </div>
+      );
+
+    case 'testimonial':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <IconComponent className="h-full w-full" />
+          <motion.div
+            className="absolute -top-1 -right-1 text-[0.6rem]"
+            animate={{ 
+              scale: [0.8, 1.2, 0.8],
+              rotate: [0, 10, -10, 0]
+            }}
+            transition={{ duration: 2, repeat: Infinity, delay: delayOffset }}
+          >
+            💬
+          </motion.div>
+        </div>
+      );
+
+    case 'newsletter':
+      return (
+        <div className={cn("relative flex items-center justify-center", className)}>
+          <motion.div
+            animate={{ 
+              x: [0, 20, -20, 0],
+              y: [0, -10, 5, 0],
+              rotate: [0, 15, -15, 0]
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: delayOffset }}
+          >
+            <IconComponent className="h-full w-full" />
+          </motion.div>
+        </div>
+      );
+
     default:
       return (
         <motion.div
           className={cn("flex items-center justify-center", className)}
           animate={{ 
-            y: [0, -2, 0],
-            rotate: [0, 1, -1, 0],
-            scale: [1, 1.03, 1]
+            y: [0, -4, 0],
+            scale: [1, 1.05, 1],
+            filter: ["brightness(1)", "brightness(1.2)", "brightness(1)"]
           }}
           transition={{ 
             duration: 4 + Math.random() * 2, 
