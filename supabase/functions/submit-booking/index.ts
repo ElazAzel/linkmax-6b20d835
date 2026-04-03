@@ -67,12 +67,53 @@ serve(async (req: Request) => {
 
     const { gcalSyncEnabled, timezone: blockTz, slotDuration } = block.content || {};
 
-    // 2.5 Check for local double booking
-    const { data: existingBooking, error: checkError } = await supabase
+    // 2.5 Check for local double booking (Staff or Resource)
+    let finalResourceId = body.resourceId || null;
+
+    // If no resourceId provided, try to find an available one if the page has resources
+    const { data: resources } = await supabase
+      .from('zone_resources')
+      .select('id, capacity')
+      .eq('zone_id', pageId)
+      .eq('is_active', true);
+
+    if (resources && resources.length > 0) {
+      // Find all booked resource IDs for this slot
+      const { data: bookedResources } = await supabase
+        .from('bookings')
+        .select('resource_id')
+        .eq('page_id', pageId)
+        .eq('slot_date', sanitize(slotDate, 10))
+        .eq('slot_time', sanitize(slotTime, 8))
+        .neq('status', 'cancelled')
+        .not('resource_id', 'is', null);
+
+      const bookedIds = new Set(bookedResources?.map(b => b.resource_id) || []);
+      
+      if (!finalResourceId) {
+        // Auto-assign first available resource
+        const availableResource = resources.find(r => !bookedIds.has(r.id));
+        if (availableResource) {
+          finalResourceId = availableResource.id;
+        } else {
+          return new Response(
+            JSON.stringify({ success: false, error: 'no_resources_available' }),
+            { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      } else if (bookedIds.has(finalResourceId)) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'resource_already_booked' }),
+          { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // Check for staff double booking
+    const { data: existingStaffBooking, error: checkError } = await supabase
       .from('bookings')
       .select('id')
       .eq('page_id', pageId)
-      .eq('block_id', blockId)
       .eq('slot_date', sanitize(slotDate, 10))
       .eq('slot_time', sanitize(slotTime, 8))
       .eq('staff_id', staffId || null)
@@ -84,7 +125,7 @@ serve(async (req: Request) => {
       throw new Error('Could not verify availability');
     }
 
-    if (existingBooking) {
+    if (existingStaffBooking) {
       return new Response(
         JSON.stringify({ success: false, error: 'slot_already_booked' }),
         { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

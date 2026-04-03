@@ -1,5 +1,19 @@
 # Changelog
 
+## [2026-04-03] Phase 22: Resource Management
+
+### Added
+- **Resource Management System**: New "Resources" screen in the dashboard for managing physical assets (rooms, equipment, etc.).
+- **Automatic Resource Assignment**: The booking engine now automatically assigns available resources to booking slots.
+- **Resource Conflict Detection**: Strict validation in the `submit-booking` edge function to prevent overbooking of physical resources.
+- **UI Availability Checks**: `BookingBlock` now pre-validates resource availability before allowing a user to select a slot.
+- **useZoneResources Hook**: New custom hook for managing zone physical resources.
+
+### Changed
+- **Database Schema**: Added `zone_resources` table and linked `bookings` to specific resources via `resource_id`.
+- **Edge Functions**: Enhanced `submit-booking` with atomic resource availability logic.
+- **Dashboard Navigation**: Added "Resources" to the Business Zone section of the sidebar.
+
 ## [Phase 21] - 2026-04-03
 ### Added
 - **Staff Performance Analytics**: Implemented a "Staff-Aware" dashboard in `InsightsScreen`.

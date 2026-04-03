@@ -592,6 +592,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             page_id: string;
             block_id: string;
             staff_id: string | null;
+            resource_id: string | null;
             day_of_week: number | null;
             specific_date: string | null;
             start_time: string;
@@ -604,6 +605,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             page_id: string;
             block_id: string;
             staff_id?: string | null;
+            resource_id?: string | null;
             day_of_week?: number | null;
             specific_date?: string | null;
             start_time: string;
@@ -616,6 +618,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             page_id?: string;
             block_id?: string;
             staff_id?: string | null;
+            resource_id?: string | null;
             day_of_week?: number | null;
             specific_date?: string | null;
             start_time?: string;
@@ -632,6 +635,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             block_id: string;
             user_id: string | null;
             staff_id: string | null;
+            resource_id: string | null;
             slot_date: string;
             slot_time: string;
             slot_end_time: string | null;
@@ -653,6 +657,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             block_id: string;
             user_id?: string | null;
             staff_id?: string | null;
+            resource_id?: string | null;
             slot_date: string;
             slot_time: string;
             slot_end_time?: string | null;
@@ -674,6 +679,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             block_id?: string;
             user_id?: string | null;
             staff_id?: string | null;
+            resource_id?: string | null;
             slot_date?: string;
             slot_time?: string;
             slot_end_time?: string | null;
@@ -929,6 +935,42 @@ export type AppDatabase = Omit<Database, 'public'> & {
             end_time?: string;
             is_available?: boolean;
             created_at?: string;
+          };
+          Relationships: [];
+        };
+        zone_resources: {
+          Row: {
+            id: string;
+            zone_id: string;
+            name: string;
+            description: string | null;
+            type: 'room' | 'equipment' | 'other';
+            capacity: number;
+            is_active: boolean;
+            created_at: string;
+            updated_at: string;
+          };
+          Insert: {
+            id?: string;
+            zone_id: string;
+            name: string;
+            description?: string | null;
+            type?: 'room' | 'equipment' | 'other';
+            capacity?: number;
+            is_active?: boolean;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Update: {
+            id?: string;
+            zone_id?: string;
+            name?: string;
+            description?: string | null;
+            type?: 'room' | 'equipment' | 'other';
+            capacity?: number;
+            is_active?: boolean;
+            created_at?: string;
+            updated_at?: string;
           };
           Relationships: [];
         };

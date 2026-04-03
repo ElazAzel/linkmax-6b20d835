@@ -14,10 +14,15 @@
 ### 📱 Фаза 17: "Mobile Expansion (Capacitor 8)" (Май)
 **Цель**: Превратить PWA в нативное приложение для App Store / Google Play.
 
+### Key Tasks
 - [x] Phase 19: Multi-Staff Booking Base (Database, UI, Logic)
 - [x] Phase 20: Per-Staff Google Calendar Sync
 - [x] Phase 21: Staff Performance Analytics & Notifications
-- [ ] Phase 22: Resource Management (Rooms, Equipment)
+- [ ] Database Schema: Define `zone_resources` table
+
+## Phase 22: Resource Management (Rooms, Equipment) [IN PROGRESS]
+
+### Goals
 - **[NEW] Capacitor Integration**: Обертка Vite-приложения в нативный контейнер.
 - **[MODIFY] Mobile-First UI Standard**: Унификация всех модальных окон в Bottom Sheets (выдвижные панели).
 - **[NEW] Push Notifications**: Интеграция Firebase/OneSignal для уведомлений о новых лидах в реальном времени.

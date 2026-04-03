@@ -65,6 +65,7 @@ import {
   ZoneEventsScreenWrapper,
   ZoneProductsScreenWrapper,
   ZoneAnalyticsScreenWrapper,
+  ZoneResourcesScreenWrapper,
 } from '@/components/zones/ZoneWrappers';
 import { ZoneCommandPalette } from '@/components/zones/ZoneCommandPalette';
 
@@ -118,9 +119,9 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
 
-const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-analytics'];
+const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-analytics', 'zone-resources'];
 const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'finance', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
@@ -775,6 +776,7 @@ function DashboardV2Inner() {
             {currentTab === 'zone-events' && canUseBusinessZone() && <ZoneEventsScreenWrapper />}
             {currentTab === 'zone-products' && canUseBusinessZone() && <ZoneProductsScreenWrapper />}
             {currentTab === 'zone-settings' && canUseBusinessZone() && <ZoneSettingsScreenWrapper />}
+            {currentTab === 'zone-resources' && canUseBusinessZone() && <ZoneResourcesScreenWrapper />}
           </Suspense>
         </DashboardLayout>
 

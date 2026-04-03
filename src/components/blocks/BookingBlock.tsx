@@ -101,6 +101,9 @@ export const BookingBlock = memo(function BookingBlockComponent({
   const [staff, setStaff] = useState<ZoneStaff[]>([]);
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
   const [staffLoading, setStaffLoading] = useState(false);
+  const [resources, setResources] = useState<any[]>([]);
+  const [zoneId, setZoneId] = useState<string | null>(null);
+  const [zoneBookings, setZoneBookings] = useState<any[]>([]);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
@@ -110,6 +113,19 @@ export const BookingBlock = memo(function BookingBlockComponent({
     
     // If multiple staff and none selected, don't fetch slots yet
     if (staff.length > 1 && !selectedStaffId) return;
+
+    // Fetch zone bookings for resource check
+    const dateStr = format(date, 'yyyy-MM-dd');
+    if (zoneId) {
+      const { data: zb } = await supabase
+        .from('bookings')
+        .select('slot_time, resource_id')
+        .eq('slot_date', dateStr)
+        .neq('status', 'cancelled');
+        // Filter by zone_id if possible, or we rely on page_id for now if schema allows
+        // Actually, for now we match by page_id's organization_id
+      setZoneBookings(zb || []);
+    }
 
     setLoading(true);
     try {
@@ -202,10 +218,23 @@ export const BookingBlock = memo(function BookingBlockComponent({
         block.slots.forEach(slot => {
           const isBookedLocally = bookings?.some(b => b.slot_time === slot.startTime);
           const isBookedGcal = checkGcalConflict(slot.startTime, slot.endTime);
+          
+          // Resource availability check
+          let resourceAvailable = true;
+          if (resources.length > 0) {
+            const bookedResourceIds = new Set(
+              zoneBookings
+                ?.filter(zb => zb.slot_time === slot.startTime)
+                .map(zb => zb.resource_id)
+                .filter(Boolean)
+            );
+            resourceAvailable = resources.some(r => !bookedResourceIds.has(r.id));
+          }
+
           generatedSlots.push({
             time: slot.startTime,
             endTime: slot.endTime,
-            available: !isBookedLocally && !isBookedGcal,
+            available: !isBookedLocally && !isBookedGcal && resourceAvailable,
             bookingId: bookings?.find(b => b.slot_time === slot.startTime)?.id
           });
         });
@@ -213,10 +242,23 @@ export const BookingBlock = memo(function BookingBlockComponent({
         slotTemplates.forEach(template => {
           const isBookedLocally = bookings?.some(b => b.slot_time === template.start_time);
           const isBookedGcal = checkGcalConflict(template.start_time, template.end_time ?? undefined);
+          
+          // Resource availability check
+          let resourceAvailable = true;
+          if (resources.length > 0) {
+            const bookedResourceIds = new Set(
+              zoneBookings
+                ?.filter(zb => zb.slot_time === template.start_time)
+                .map(zb => zb.resource_id)
+                .filter(Boolean)
+            );
+            resourceAvailable = resources.some(r => !bookedResourceIds.has(r.id));
+          }
+
           generatedSlots.push({
             time: template.start_time,
             endTime: template.end_time ?? undefined,
-            available: !isBookedLocally && !isBookedGcal,
+            available: !isBookedLocally && !isBookedGcal && resourceAvailable,
             bookingId: bookings?.find(b => b.slot_time === template.start_time)?.id
           });
         });
@@ -240,10 +282,22 @@ export const BookingBlock = memo(function BookingBlockComponent({
           const isBookedLocally = bookings?.some(b => b.slot_time === timeStr);
           const isBookedGcal = checkGcalConflict(timeStr, endTimeStr);
 
+          // Resource availability check
+          let resourceAvailable = true;
+          if (resources.length > 0) {
+            const bookedResourceIds = new Set(
+              zoneBookings
+                ?.filter(zb => zb.slot_time === timeStr)
+                .map(zb => zb.resource_id)
+                .filter(Boolean)
+            );
+            resourceAvailable = resources.some(r => !bookedResourceIds.has(r.id));
+          }
+
           generatedSlots.push({
             time: timeStr,
             endTime: endTimeStr,
-            available: !isBookedLocally && !isBookedGcal,
+            available: !isBookedLocally && !isBookedGcal && resourceAvailable,
             bookingId: bookings?.find(b => b.slot_time === timeStr)?.id
           });
         }
@@ -254,7 +308,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
     } finally {
       setLoading(false);
     }
-  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, block.timezone, userTimezone, selectedStaffId, staff.length]);
+  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, block.timezone, userTimezone, selectedStaffId, staff.length, resources, zoneId, zoneBookings]);
 
   // Pre-calculate fully booked dates for the next 30 days
   const preCalculateAvailability = useCallback(async () => {
@@ -355,6 +409,19 @@ export const BookingBlock = memo(function BookingBlockComponent({
         .eq('id', pageId)
         .single();
         
+      if (pageData?.organization_id) {
+        setZoneId(pageData.organization_id);
+        
+        // Fetch resources
+        const { data: resData } = await supabase
+          .from('zone_resources')
+          .select('*')
+          .eq('zone_id', pageData.organization_id)
+          .eq('is_active', true);
+        
+        if (resData) setResources(resData);
+      }
+      
       if (!pageData?.organization_id) return;
       
       const { data: staffData } = await supabase

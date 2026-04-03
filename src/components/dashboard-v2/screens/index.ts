@@ -10,3 +10,5 @@ export { AccountSettingsScreen } from './AccountSettingsScreen';
 export { EventsScreen } from './EventsScreen';
 export { EventDetailScreen } from './EventDetailScreen';
 export { FinanceScreen } from './FinanceScreen';
+export { ResourcesScreen } from './ResourcesScreen';
+export { TeamManagementScreen } from './TeamManagementScreen';
