@@ -459,21 +459,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
         }
       }
 
-      // Send notification to owner
-      try {
-        await supabase.functions.invoke('send-booking-notification', {
-          body: {
-            ownerId: pageOwnerId,
-            clientName: formData.name,
-            clientPhone: formData.phone,
-            clientEmail: formData.email,
-            date: format(selectedDate, 'dd.MM.yyyy'),
-            time: selectedSlot.time.substring(0, 5),
-          }
-        });
-      } catch {
-        // Notification failed but booking succeeded
-      }
+      // Notification and lead creation are now handled server-side in submit-booking
 
       // Note: Auto-push is now handled on the server via submit-booking edge function
       // to ensure atomicity and reliability. Client-side push is removed to avoid duplicates.

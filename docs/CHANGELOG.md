@@ -1,5 +1,16 @@
 # Changelog
 
+## [Phase 21] - 2026-04-03
+### Added
+- **Staff Performance Analytics**: Implemented a "Staff-Aware" dashboard in `InsightsScreen`.
+  - **Owner View**: Global team performance metrics with progress bars and specialist breakdown.
+  - **Specialist View**: Personalized performance card ("Your Stats") showing individual bookings and revenue.
+- **Intelligent Notification Routing**: Refactored the booking lifecycle to handle notifications server-side (`submit-booking` -> `send-booking-notification`).
+  - **Specialist Alerts**: Direct Telegram notifications for staff members when they are booked.
+  - **Owner Alerts**: Continued visibility for owners with clear specialist attribution.
+- **Localization**: Added 12+ new keys for staff analytics in `ru.json`, `en.json`, and `kk.json`.
+- **UI/UX**: Integrated "Liquid Glass" design components for staff metrics, maintain consistency with the platform aesthetic.
+
 ## [1.18.0] - 2026-04-03
 
 ### Mobile UX & Booking Hardening

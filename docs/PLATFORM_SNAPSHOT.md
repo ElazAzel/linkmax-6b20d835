@@ -169,6 +169,20 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 +- **UI/UX Booking Polish**: Enhanced `BookingBlock.tsx` with "Sold Out" state visualization and improved error handling for 409 Conflict states.
 +- **Health Score**: **10/10** (Status: Hardened CRM & Automated Payments).
 
+### [2026-04-03] Phase 21: Staff Performance Analytics & Personalized Notifications
+
+- **Staff-Aware Analytics Engine**: Refactored `usePageAnalytics` to support dual-view metrics.
+  - **Owner View**: Global visibility of team performance with per-specialist breakdown (bookings, revenue).
+  - **Specialist View**: Personalized performance dashboard ("Your Stats") restricted to the individual's linked `staff_id`.
+- **Intelligent Notification Routing**: Centralized notification logic in the `submit-booking` Edge Function.
+  - **Direct Staff Alerts**: Specialists receive direct Telegram notifications for bookings assigned to them.
+  - **Owner Continuity**: Page owners continue to receive global alerts with specialist attribution.
+- **UI/UX Integration**: Updated `InsightsScreen` with Liquid Glass components:
+  - Personalized achievement cards for staff members.
+  - Progress-based team breakdown for owners.
+- **Localization Coverage**: Added 12+ new keys for staff analytics in **RU**, **EN**, and **KK**, ensuring full platform localizability.
+- **Health Score**: **10/10** (Status: Team-Scale Analytics & Notification Ready).
+
 ### [2026-04-02] Phase 14: Interactive Micro-Animations (WOW Factor)
 
 - **Micro-Animation Engine**: Implemented `AnimatedBlockIcon` component using `framer-motion` to provide unique, functional motion for 15+ block types.

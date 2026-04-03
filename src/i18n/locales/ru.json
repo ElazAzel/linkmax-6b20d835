@@ -782,6 +782,14 @@
     "all": "Весь период",
     "apply": "Применить",
     "avgPerDay": "В среднем за день",
+    "staff": {
+      "bookings": "Записей",
+      "keepItUp": "так держать!",
+      "revenue": "Прибыль",
+      "teamBreakdown": "Разбор по команде",
+      "units": "записей",
+      "yourStats": "Ваш результат"
+    },
     "blockTypes": {
       "booking": "Бронирование",
       "button": "Кнопка",

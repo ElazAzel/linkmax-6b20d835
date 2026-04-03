@@ -76,7 +76,7 @@ export const InsightsScreen = memo(function InsightsScreen({
   const { t } = useTranslation();
   const [period, setPeriod] = useState<Period>('7d');
   const [activeTab, setActiveTab] = useState<Tab>('overview');
-  const { analytics, loading, setPeriod: setAnalyticsPeriod, refresh } = usePageAnalytics();
+  const { analytics, loading, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics();
 
   const handlePeriodChange = (p: Period) => {
     setPeriod(p);
@@ -324,6 +324,44 @@ export const InsightsScreen = memo(function InsightsScreen({
                   initial="hidden"
                   animate="show"
                 >
+                  {/* Staff Performance Header for Specialists */}
+                  {isStaffMember && analytics?.personalStaffStats && (
+                    <motion.div variants={itemVariants} className="px-1">
+                      <div className="p-5 rounded-[2rem] bg-gradient-to-br from-primary/10 to-violet-500/5 border border-primary/20 shadow-glass-lg relative overflow-hidden group">
+                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 blur-[50px] rounded-full group-hover:bg-primary/20 transition-all duration-700" />
+                        <div className="flex items-center gap-4 relative z-10">
+                          <div className="h-14 w-14 rounded-2xl bg-white/50 backdrop-blur-xl flex items-center justify-center shadow-glass border border-white/20">
+                            <Sparkles className="h-7 w-7 text-primary animate-pulse" />
+                          </div>
+                          <div>
+                            <h3 className="text-sm font-black uppercase tracking-widest text-primary/70 mb-1">
+                              {t('analytics.staff.yourStats', 'Ваш результат')}
+                            </h3>
+                            <p className="text-xl font-black text-gradient">
+                              {staffMemberName}, {t('analytics.staff.keepItUp', 'так держать!')}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4 mt-6 relative z-10">
+                          <div className="space-y-1">
+                            <p className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground opacity-60">
+                              {t('analytics.staff.bookings', 'Записей')}
+                            </p>
+                            <p className="text-2xl font-black tabular-nums">{analytics.personalStaffStats.bookings}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground opacity-60">
+                              {t('analytics.staff.revenue', 'Прибыль')}
+                            </p>
+                            <p className="text-2xl font-black tabular-nums">
+                              {analytics.personalStaffStats.revenue.toLocaleString()} ₸
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
                   <div className="grid grid-cols-2 gap-4">
                     <motion.div variants={itemVariants}>
                       <StatCard
@@ -434,6 +472,52 @@ export const InsightsScreen = memo(function InsightsScreen({
                           </motion.div>
                         ))}
                       </div>
+                    </motion.div>
+                  )}
+
+                  {/* Owner: Staff Breakdown */}
+                  {!isStaffMember && analytics?.staffStats && analytics.staffStats.length > 0 && (
+                    <motion.div variants={itemVariants} className="space-y-4 pt-2">
+                       <div className="flex items-center justify-between px-1">
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <Users className="h-4 w-4 text-primary" />
+                          </div>
+                          <h2 className="text-sm font-black uppercase tracking-[0.2em] opacity-60">
+                            {t('analytics.staff.teamBreakdown', 'Разбор по команде')}
+                          </h2>
+                        </div>
+                      </div>
+
+                      <Card className="glass border-white/20 shadow-glass rounded-[2rem] overflow-hidden">
+                        <div className="divide-y divide-white/5">
+                          {analytics.staffStats.map((staff, i) => (
+                            <div key={staff.staffId} className="p-5 flex items-center gap-4 hover:bg-white/5 transition-colors group/staff">
+                              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-black text-primary border border-primary/20 shrink-0">
+                                {staff.name.charAt(0).toUpperCase()}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between mb-1.5">
+                                  <span className="font-black text-sm truncate">{staff.name}</span>
+                                  <span className="text-xs font-black text-primary">{staff.revenue.toLocaleString()} ₸</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <div className="flex-1 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                                     <motion.div 
+                                       initial={{ width: 0 }}
+                                       animate={{ width: `${Math.min(100, (staff.bookings / (analytics.totalConversions || 1)) * 100)}%` }}
+                                       className="h-full bg-primary"
+                                     />
+                                  </div>
+                                  <span className="text-[10px] font-black opacity-40 shrink-0">
+                                    {staff.bookings} {t('analytics.staff.units', 'записей')}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </Card>
                     </motion.div>
                   )}
 

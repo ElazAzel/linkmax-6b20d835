@@ -57,6 +57,16 @@ export interface AnalyticsSummary {
   bounceRate: number; // percentage
   returningVisitors: number; // percentage
   totalConversions: number;
+  staffStats?: StaffStats[];
+  personalStaffStats?: StaffStats;
+}
+
+export interface StaffStats {
+  staffId: string;
+  name: string;
+  bookings: number;
+  revenue: number;
+  completionRate: number;
 }
 
 export interface TrafficSource {
@@ -80,6 +90,9 @@ export function usePageAnalytics(externalPageId?: string) {
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [period, setPeriod] = useState<TimePeriod>('week');
+  const [isStaffMember, setIsStaffMember] = useState(false);
+  const [currentStaffId, setCurrentStaffId] = useState<string | null>(null);
+  const [staffMemberName, setStaffMemberName] = useState<string | null>(null);
 
   // Fetch user's page ID only if not provided externally
   useEffect(() => {
@@ -105,6 +118,31 @@ export function usePageAnalytics(externalPageId?: string) {
 
     fetchPageId();
   }, [user, externalPageId]);
+
+  // Check if current user is a linked staff member
+  useEffect(() => {
+    async function checkStaffStatus() {
+      if (!user || !pageId) return;
+
+      const { data: staffData } = await supabase
+        .from('zone_staff')
+        .select('id, name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (staffData) {
+        setIsStaffMember(true);
+        setCurrentStaffId(staffData.id);
+        setStaffMemberName(staffData.name);
+      } else {
+        setIsStaffMember(false);
+        setCurrentStaffId(null);
+        setStaffMemberName(null);
+      }
+    }
+
+    checkStaffStatus();
+  }, [user, pageId]);
 
   const fetchAnalytics = useCallback(async () => {
     if (!user || !pageId) return;
@@ -145,6 +183,10 @@ export function usePageAnalytics(externalPageId?: string) {
         .eq('page_id', pageId)
         .gte('created_at', startDate.toISOString())
         .order('created_at', { ascending: true });
+
+      // If user is a staff member, we also want to filter by their staff_id in metadata if possible
+      // But for events, we usually don't have staff_id yet unless we tracked it.
+      // However, we MUST filter bookings and conversions.
 
       if (error) throw error;
 
@@ -367,6 +409,57 @@ export function usePageAnalytics(externalPageId?: string) {
 
       const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);
 
+      // Staff Performance Calculation
+      let staffStats: StaffStats[] = [];
+      let personalStaffStats: StaffStats | undefined;
+
+      if (bookings) {
+        const { data: allStaff } = await supabase
+          .from('zone_staff')
+          .select('id, name')
+          .eq('owner_id', user.id); // Valid if current user is owner
+
+        const staffMap = new Map<string, StaffStats>();
+        
+        // Initialize map with all staff if owner
+        if (allStaff && !isStaffMember) {
+          allStaff.forEach(s => {
+            staffMap.set(s.id, { staffId: s.id, name: s.name, bookings: 0, revenue: 0, completionRate: 0 });
+          });
+        }
+
+        bookings.forEach((b: any) => {
+          const sid = b.staff_id || 'unassigned';
+          const existing = staffMap.get(sid);
+          const amount = b.payment_amount || 0;
+          
+          if (existing) {
+            existing.bookings++;
+            existing.revenue += amount;
+          } else if (!isStaffMember) {
+            staffMap.set(sid, { 
+              staffId: sid, 
+              name: sid === 'unassigned' ? (i18n.language === 'ru' ? 'Без специалиста' : 'Unassigned') : sid, 
+              bookings: 1, 
+              revenue: amount,
+              completionRate: 0 
+            });
+          }
+        });
+
+        staffStats = Array.from(staffMap.values()).sort((a, b) => b.bookings - a.bookings);
+
+        if (isStaffMember && currentStaffId) {
+          personalStaffStats = {
+            staffId: currentStaffId,
+            name: staffMemberName || '',
+            bookings: bookings.filter((b: any) => b.staff_id === currentStaffId).length,
+            revenue: bookings.filter((b: any) => b.staff_id === currentStaffId).reduce((sum: number, b: any) => sum + (b.payment_amount || 0), 0),
+            completionRate: 100 // Default for now
+          };
+        }
+      }
+
       setAnalytics({
         totalViews,
         totalClicks,
@@ -386,6 +479,8 @@ export function usePageAnalytics(externalPageId?: string) {
         bounceRate,
         returningVisitors: returningVisitorsPercent,
         totalConversions,
+        staffStats,
+        personalStaffStats
       });
     } catch (error) {
       logger.error('Error fetching analytics:', error, { context: 'usePageAnalytics' });
@@ -405,6 +500,8 @@ export function usePageAnalytics(externalPageId?: string) {
     loading,
     period,
     setPeriod,
+    isStaffMember,
+    staffMemberName,
     refresh: fetchAnalytics,
   };
 }

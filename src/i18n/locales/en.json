@@ -782,6 +782,14 @@
     "all": "Entire period",
     "apply": "Apply",
     "avgPerDay": "Average per day",
+    "staff": {
+      "bookings": "Bookings",
+      "keepItUp": "keep it up!",
+      "revenue": "Revenue",
+      "teamBreakdown": "Team Breakdown",
+      "units": "bookings",
+      "yourStats": "Your Result"
+    },
     "blockTypes": {
       "booking": "Booking",
       "button": "Button",

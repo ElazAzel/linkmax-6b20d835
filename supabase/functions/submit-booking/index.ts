@@ -185,28 +185,22 @@ serve(async (req: Request) => {
       }
     }
 
-    // 4. Send notification to owner
+    // 4. Send notification and create lead via send-booking-notification
     try {
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('telegram_chat_id, telegram_notifications_enabled, telegram_language')
-        .eq('id', pageData.user_id)
-        .single();
-
-      if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
-        if (isConfigured()) {
-          const lang = profile.telegram_language || 'ru';
-          const text = lang === 'en'
-            ? `📅 <b>New booking!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">View</a>`
-            : lang === 'kk'
-              ? `📅 <b>Жаңа жазба!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Көру</a>`
-              : `📅 <b>Новая запись!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть</a>`;
-
-          await sendMessage(profile.telegram_chat_id, text, { parse_mode: 'HTML', disable_web_page_preview: true });
+      await supabase.functions.invoke('send-booking-notification', {
+        body: {
+          ownerId: pageData.user_id,
+          staffId: staffId || null,
+          clientName: sanitize(clientName, 200),
+          clientPhone: clientPhone || null,
+          clientEmail: clientEmail || null,
+          date: sanitize(slotDate, 10),
+          time: sanitize(slotTime, 5),
+          notes: sanitize(clientNotes, 500) || null
         }
-      }
+      });
     } catch (e) {
-      console.error('Failed to send booking notification', e);
+      console.error('Failed to trigger booking notification function', e);
     }
 
     return new Response(
