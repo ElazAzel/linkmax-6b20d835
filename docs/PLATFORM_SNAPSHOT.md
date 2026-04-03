@@ -171,14 +171,14 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Enabled **7x24 Offline Access** to CRM data (leads, bookings) for mobile users.
 - **Accessibility Hardening**: Expanded global CSS reset to force a minimum 12px font size for all micro-text (8px/9px) on mobile viewports.
 - **Health Score**: **10/10** (Status: Monetized & Offline-Ready).
-+
-+### [2026-04-03] Phase 16: Native Payments & CRM Success Logic
-+
-+- **Booking System Hardening**: Implemented absolute double-booking protection via a `PARTIAL UNIQUE INDEX` in Postgres. The system now prevents race conditions at the database level, ensuring slot integrity even under high concurrent load.
-+- **CRM Webhook Automation**: Updated `robokassa-webhook` to automatically synchronize transaction results with `leads`, `bookings`, and `event_registrations`. Successful payments now trigger immediate status transitions (e.g., `converted`, `confirmed`).
-+- **Success-First Notifications**: Integrated a financial intelligence layer in the notification system. Users now receive instant Telegram alerts upon payment, including calculated **Net Earnings** and platform fees, providing transparent financial insights.
-+- **UI/UX Booking Polish**: Enhanced `BookingBlock.tsx` with "Sold Out" state visualization and improved error handling for 409 Conflict states.
-+- **Health Score**: **10/10** (Status: Hardened CRM & Automated Payments).
+
+### [2026-04-03] Phase 16: Native Payments & CRM Success Logic
+
+- **Booking System Hardening**: Implemented absolute double-booking protection via a `PARTIAL UNIQUE INDEX` in Postgres. The system now prevents race conditions at the database level, ensuring slot integrity even under high concurrent load.
+- **CRM Webhook Automation**: Updated `robokassa-webhook` to automatically synchronize transaction results with `leads`, `bookings`, and `event_registrations`. Successful payments now trigger immediate status transitions (e.g., `converted`, `confirmed`).
+- **Success-First Notifications**: Integrated a financial intelligence layer in the notification system. Users now receive instant Telegram alerts upon payment, including calculated **Net Earnings** and platform fees, providing transparent financial insights.
+- **UI/UX Booking Polish**: Enhanced `BookingBlock.tsx` with "Sold Out" state visualization and improved error handling for 409 Conflict states.
+- **Health Score**: **10/10** (Status: Hardened CRM & Automated Payments).
 
 ### [2026-04-03] Phase 21: Staff Performance Analytics & Personalized Notifications
 
