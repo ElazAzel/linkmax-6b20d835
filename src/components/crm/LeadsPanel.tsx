@@ -259,7 +259,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                         } ${statusColors[status]}`}
                     >
                       <div className="text-base sm:text-lg font-bold">{stats[status]}</div>
-                      <div className="text-[8px] sm:text-xs uppercase opacity-70 whitespace-normal break-words text-wrap leading-tight">
+                      <div className="text-[10px] sm:text-xs uppercase opacity-70 whitespace-normal break-words text-wrap leading-tight">
                         {t(`crm.status.${status}`, status)}
                       </div>
                     </Button>
@@ -274,7 +274,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => setSourceFilter('all')}
-                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full min-h-8 text-[11px] sm:text-xs font-medium transition-all whitespace-normal break-words text-wrap leading-tight shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
+                  className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full min-h-10 text-xs font-medium transition-all whitespace-normal break-words text-wrap leading-tight shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
                     }`}
                 >
                   {t('crm.allSources', 'All')} ({stats.total})

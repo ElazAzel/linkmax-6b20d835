@@ -66,7 +66,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
 
       {/* Progress bar + stepper */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+        <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground">
           <span>{t('activation.progress', '{{done}} из {{total}}', { done: completedCount, total: totalCount })}</span>
           <span>{progress}%</span>
         </div>
@@ -103,7 +103,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
               )}
             >
               <div className={cn(
-                'h-6 w-6 rounded-full flex items-center justify-center shrink-0 text-[10px] font-black',
+                'h-6 w-6 rounded-full flex items-center justify-center shrink-0 text-xs font-black',
                 isCompleted
                   ? 'bg-primary/20 text-primary'
                   : isActive
@@ -116,7 +116,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
                 {t(step.labelKey)}
               </span>
               {!isCompleted && step.action && (
-                <Button size="sm" variant={isActive ? 'default' : 'outline'} className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider" onClick={step.action}>
+                <Button size="sm" variant={isActive ? 'default' : 'outline'} className="h-9 rounded-lg text-xs font-black uppercase tracking-wider" onClick={step.action}>
                   {t(step.ctaKey)}
                 </Button>
               )}

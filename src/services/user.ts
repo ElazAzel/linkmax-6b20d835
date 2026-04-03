@@ -38,7 +38,7 @@ export interface FreemiumLimits {
 
 export const CRM_FREE_INBOUND_LIMIT = 50;
 
-export const FREE_TIER_LIMITS: FreemiumLimits = {
+export const IDENTITY_TIER_LIMITS: FreemiumLimits = {
   maxBlocks: Infinity,
   maxAIPageGenerationsPerMonth: 1,
   canUseAnalytics: false,
@@ -56,6 +56,26 @@ export const FREE_TIER_LIMITS: FreemiumLimits = {
   canUseVerificationBadge: false,
   canUsePremiumFrames: false,
   canUseAdvancedThemes: false,
+};
+
+export const STARTER_TIER_LIMITS: FreemiumLimits = {
+  maxBlocks: Infinity,
+  maxAIPageGenerationsPerMonth: 5,
+  canUseAnalytics: true,
+  canUseCRM: true,
+  showWatermark: false,
+  maxLeadsPerMonth: Infinity,
+  canUseScheduler: true,
+  canUsePixels: true,
+  canUseCustomDomain: true,
+  canUseChatbot: true,
+  canUseAutoNotifications: true,
+  canUsePayments: true,
+  canUseWhiteLabel: false,
+  canUseMultiPage: true,
+  canUseVerificationBadge: true,
+  canUsePremiumFrames: true,
+  canUseAdvancedThemes: true,
 };
 
 export const PRO_TIER_LIMITS: FreemiumLimits = {
@@ -157,8 +177,10 @@ export function calculatePremiumStatus(profile: { is_premium: boolean; trial_end
  * Get user's limits based on tier
  */
 export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): FreemiumLimits {
+  if (status.tier === 'business') return PRO_TIER_LIMITS; // Business uses same feature limits as Pro but for teams
   if (status.tier === 'pro' || status.isPremium) return PRO_TIER_LIMITS;
-  return FREE_TIER_LIMITS;
+  if (status.tier === 'starter') return STARTER_TIER_LIMITS;
+  return IDENTITY_TIER_LIMITS;
 }
 
 /**

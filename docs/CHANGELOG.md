@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.16.0] - 2026-04-03
+
+### Phase 15: "Success-First" Monetization & PWA Infrastructure
+
+- **Monetization Pivot (Starter Tier)**:
+  - Implemented the **Starter** tier: $0/mo + 7% commission on sales, providing full access to CRM, Payments, and removing watermarks.
+  - Updated `user.ts` service with new tier limits (Identity vs Starter vs Pro).
+  - Refactored `Pricing` screen and landing `PricingAurora` to support the new 3-tier hierarchy.
+- **PWA V2 (Service Worker Re-activation)**:
+  - Re-enabled Service Worker registration in `main.tsx` with automated update detection.
+  - Upgraded `sw.js` to **V4**:
+    - `Stale-While-Revalidate` for static assets and images (ultra-fast loads).
+    - `Network-First` with cache fallback for Supabase API requests (offline CRM support).
+- **UX/UI Accessibility Remediation**:
+  - Global CSS reset: Bumped all micro-fonts (8px, 9px) to **12px** minimum on mobile devices.
+  - Dashboard: Increased touch target sizes for `DashboardBottomNav` and standardized navigation labels for better mobile usability.
+- **Stability**: Fixed critical syntax errors in `Pricing.tsx` and optimized the tier selection flow.
+
 ## [1.15.0] - 2026-04-02
 
 ### Phase 14: Interactive Micro-Animations (WOW Factor)

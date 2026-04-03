@@ -212,23 +212,30 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>
 );
 
-// Disable Service Worker to prevent stale offline app-shell causing black-screen loops
+// Re-enable Service Worker for PWA V2 offline support
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map((r) => r.unregister()));
-
-      if ('caches' in window) {
-        const names = await caches.keys();
-        await Promise.all(
-          names
-            .filter((name) => name.startsWith('lnkmx-') || name.startsWith('linkmax-'))
-            .map((name) => caches.delete(name))
-        );
-      }
-    } catch {
-      // Non-blocking cleanup
-    }
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      // Check for updates periodically
+      reg.onupdatefound = () => {
+        const installingWorker = reg.installing;
+        if (installingWorker) {
+          installingWorker.onstatechange = () => {
+            if (installingWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                // New update available - notify user or auto-reload
+                // In this case, we prefer a silent reload after user interaction or next start
+                console.log('New content is available; please refresh.');
+              } else {
+                // Content is cached for offline use
+                console.log('Content is cached for offline use.');
+              }
+            }
+          };
+        }
+      };
+    }).catch((error) => {
+      console.error('SW registration failed:', error);
+    });
   });
 }

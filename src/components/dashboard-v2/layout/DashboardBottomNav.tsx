@@ -145,12 +145,12 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                   <div className="relative">
                     <Icon className={cn("h-5 w-5 shrink-0 transition-transform", isActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
                     {badge && badge > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[8px] font-black border-2 border-background">
+                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-black border-2 border-background">
                         {badge > 99 ? '99+' : badge}
                       </span>
                     )}
                   </div>
-                  <span className={cn("text-[8px] font-bold leading-none max-w-full px-0.5 tracking-tight uppercase truncate text-center", isActive && "text-primary")}>
+                  <span className={cn("text-[10px] font-bold leading-none max-w-full px-0.5 tracking-tight uppercase truncate text-center", isActive && "text-primary")}>
                     {t(tab.labelKey, tab.defaultLabel)}
                   </span>
                 </button>
@@ -172,7 +172,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                 />
               )}
               <MoreHorizontal className={cn("h-5 w-5 shrink-0", isMoreActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
-              <span className={cn("text-[8px] font-bold leading-none max-w-full px-0.5 tracking-tight uppercase truncate text-center", isMoreActive && "text-primary")}>
+              <span className={cn("text-[10px] font-bold leading-none max-w-full px-0.5 tracking-tight uppercase truncate text-center", isMoreActive && "text-primary")}>
                 {t('dashboard.nav.more', 'Ещё')}
               </span>
             </button>
@@ -201,7 +201,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                   data-testid={`${item.id}-tab`}
                 >
                   <Icon className="h-6 w-6" />
-                  <span className="text-[11px] sm:text-xs font-medium text-center whitespace-normal break-words text-wrap leading-tight max-w-[5.5rem]">
+                  <span className="text-xs font-medium text-center whitespace-normal break-words text-wrap leading-tight max-w-[5.5rem]">
                     {t(item.labelKey, item.defaultLabel)}
                   </span>
                 </button>

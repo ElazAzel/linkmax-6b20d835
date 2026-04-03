@@ -81,7 +81,7 @@ export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId 
             <CardContent className="p-3 flex items-center justify-between">
               <div>
                 <p className="font-medium text-sm">{pipeline.name}</p>
-                {pipeline.is_default && <span className="text-[10px] uppercase text-muted-foreground tracking-wider">{t('zones.settings.pipelines.default', 'По умолчанию')}</span>}
+                {pipeline.is_default && <span className="text-xs uppercase text-muted-foreground tracking-wider font-bold">{t('zones.settings.pipelines.default', 'По умолчанию')}</span>}
               </div>
               <div className="flex gap-1">
                 <Button variant="ghost" size="icon" onClick={() => { setIsEditing(pipeline); setName(pipeline.name); }}>

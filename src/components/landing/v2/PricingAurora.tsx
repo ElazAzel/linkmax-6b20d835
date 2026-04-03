@@ -47,7 +47,7 @@ function ProfitCalculator() {
             
             <h3 className="text-xl sm:text-2xl font-black mb-8 text-center flex items-center justify-center gap-3">
                 {t('landing.pricing.calculator.title', 'Profitability Calculator')}
-                <Badge className="bg-green-500/20 text-green-600 dark:text-green-400 border-none uppercase tracking-widest text-[9px] hover:bg-green-500/30">ROI</Badge>
+                <Badge className="bg-green-500/20 text-green-600 dark:text-green-400 border-none uppercase tracking-widest text-xs hover:bg-green-500/30">ROI</Badge>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8 relative z-10 w-full px-2">
@@ -76,19 +76,19 @@ function ProfitCalculator() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 mt-4 border-t border-border/10 relative z-10">
                 <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-background/40">
-                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.revenue', 'Your Revenue:')}</span>
+                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.revenue', 'Your Revenue:')}</span>
                     <span className="text-2xl font-black tabular-nums tracking-tighter">${Math.round(revenue).toLocaleString()}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-background/40 opacity-70">
-                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.competitorCost', 'Competitors (8%):')}</span>
+                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.competitorCost', 'Competitors (8%):')}</span>
                     <span className="text-xl font-black tabular-nums tracking-tighter line-through decoration-red-500/50 decoration-2">${Math.round(competitorCost).toLocaleString()}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center bg-primary/10 rounded-2xl p-4 border border-primary/20 shadow-inner group-hover:bg-primary/15 transition-colors">
-                    <span className="text-[11px] text-primary font-black uppercase tracking-widest mb-1">{t('landing.pricing.calculator.savings', 'Your Savings:')}</span>
+                    <span className="text-xs text-primary font-black uppercase tracking-widest mb-1">{t('landing.pricing.calculator.savings', 'Your Savings:')}</span>
                     <span className="text-3xl font-black tabular-nums tracking-tighter text-primary drop-shadow-sm">
                         +${Math.max(0, Math.round(savings)).toLocaleString()}
                     </span>
-                    <span className="text-[9px] text-primary/60 font-bold uppercase mt-1">/ {t('landing.pricing.perMonth', 'mo')}</span>
+                    <span className="text-xs text-primary/60 font-bold uppercase mt-1">/ {t('landing.pricing.perMonth', 'mo')}</span>
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
     const isKZ = i18n.language === 'ru' || i18n.language === 'kk';
 
     const prices = {
-        free: isKZ ? '0 ₸' : '$0',
+        starter: isKZ ? '0 ₸' : '$0',
         pro: {
             monthly: isKZ ? '4 350 ₸' : '$8.90',
             yearly: isKZ ? '3 045 ₸' : '$5.90',
@@ -176,7 +176,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                         {/* PRO Card */}
                         <div className="glass border-primary/30 rounded-[2.5rem] sm:rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass-lg group">
                             <div className="bg-white/5 backdrop-blur-[40px] rounded-[2.5rem] sm:rounded-[3.3rem] p-6 sm:p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
-                                <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em] shadow-glass">
+                                <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-secondary text-white text-xs font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em] shadow-glass">
                                     {t('landing.pricing.popular', 'POPULAR')}
                                 </div>
                                 
@@ -185,7 +185,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                 <div className="mb-10 relative">
                                     <h3 className="text-3xl font-black mb-4 flex items-center gap-3 tracking-tighter">
                                         {t('landing.pricing.proName', 'Pro')} 
-                                        <Badge className="bg-primary/20 text-primary border-none font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-widest">
+                                        <Badge className="bg-primary/20 text-primary border-none font-black text-xs px-3 py-1 rounded-full uppercase tracking-widest">
                                             {t('landing.pricing.aiPowered', 'AI Powered')}
                                         </Badge>
                                     </h3>
@@ -197,7 +197,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                     </div>
                                     {isYearly && (
                                         <div className="mt-4 px-4 py-1.5 bg-primary/10 rounded-full w-fit">
-                                            <p className="text-[10px] text-primary font-black uppercase tracking-wider">
+                                            <p className="text-xs text-primary font-black uppercase tracking-wider">
                                                 {t('landing.pricing.billedYearly', 'Billed {{price}} yearly', { price: prices.pro.totalYearly })}
                                             </p>
                                         </div>
@@ -224,14 +224,14 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                         {/* BUSINESS Card */}
                         <div className="glass border-white/10 rounded-[2.5rem] sm:rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass group">
                             <div className="bg-white/5 backdrop-blur-[30px] rounded-[2.3rem] sm:rounded-[3.3rem] p-6 sm:p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
-                                <div className="absolute top-0 right-0 bg-white/10 backdrop-blur-md text-foreground/50 text-[10px] font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em]">
+                                <div className="absolute top-0 right-0 bg-white/10 backdrop-blur-md text-foreground/50 text-xs font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em]">
                                     {t('landing.pricing.newBadge', 'NEW')}
                                 </div>
 
                                 <div className="mb-10">
                                     <h3 className="text-3xl font-black mb-4 flex items-center gap-3 tracking-tighter">
                                         {t('landing.pricing.businessName', 'Business')} 
-                                        <Badge variant="outline" className="text-foreground/40 border-white/10 font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-widest">
+                                        <Badge variant="outline" className="text-foreground/40 border-white/10 font-black text-xs px-3 py-1 rounded-full uppercase tracking-widest">
                                             {t('landing.pricing.teamLabel', 'Team')}
                                         </Badge>
                                     </h3>
@@ -243,7 +243,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                     </div>
                                     {isYearly && (
                                         <div className="mt-4 px-4 py-1.5 bg-white/5 rounded-full w-fit">
-                                            <p className="text-[10px] text-muted-foreground/60 font-black uppercase tracking-wider">
+                                            <p className="text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
                                                 {t('landing.pricing.billedYearly', 'Billed {{price}} yearly', { price: prices.business.totalYearly })}
                                             </p>
                                         </div>
@@ -269,15 +269,28 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                     </div>
                 </Reveal>
 
-                {/* Free CTA */}
-                <div className="text-center mt-12">
-                    <Button
-                        variant="ghost"
-                        className="rounded-xl text-muted-foreground/60 hover:text-primary transition-colors text-sm h-auto py-2 font-black uppercase tracking-widest opacity-50 hover:opacity-100"
-                        onClick={() => onPlanSelect('free')}
-                    >
-                        {t('landing.pricing.freeCta', 'Start for free')}
-                    </Button>
+                {/* Starter Tier Info */}
+                <div className="text-center mt-16 max-w-xl mx-auto">
+                    <Reveal delay={300}>
+                        <div className="glass border-primary/10 rounded-2xl p-6 mb-6">
+                            <h4 className="text-lg font-black mb-2 flex items-center justify-center gap-2">
+                                <span className="text-primary">Starter</span> {t('landing.pricing.successFirst', 'Success-First Plan')}
+                            </h4>
+                            <p className="text-xs text-muted-foreground mb-4">
+                                {t('landing.pricing.starterDesc', 'Start for $0/mo. We only take a small 7% commission when you actually make a sale. No hidden fees, no risks.')}
+                            </p>
+                            <Button
+                                variant="outline"
+                                className="rounded-xl border-primary/20 hover:bg-primary/5 text-primary text-xs font-black uppercase tracking-widest px-8"
+                                onClick={() => onPlanSelect('starter')}
+                            >
+                                {t('landing.pricing.starterCta', 'Get Started for Free')}
+                            </Button>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground/40 font-bold uppercase tracking-[0.2em]">
+                            {t('landing.pricing.transactionFeeNote', '* Transaction fees apply to all tiers: Starter (7%), Pro (1%), Business (0.1%)')}
+                        </p>
+                    </Reveal>
                 </div>
             </div>
         </SectionWrapper>

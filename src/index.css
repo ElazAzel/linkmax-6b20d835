@@ -324,7 +324,7 @@
 
   /* Accessibility reset: enforce minimum readable font size on mobile */
   @media (max-width: 640px) {
-    .text-xs, .text-\[10px\], .text-\[11px\] {
+    .text-xs, .text-\[10px\], .text-\[11px\], .text-\[9px\], .text-\[8px\] {
       font-size: 12px !important;
       line-height: min(1.5, 16px) !important;
     }

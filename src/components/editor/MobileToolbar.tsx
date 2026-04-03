@@ -228,7 +228,7 @@ export const MobileToolbar = memo(function MobileToolbar({
               >
                 <action.icon className={cn("h-6 w-6", action.primary && "h-7 w-7")} />
                 <span className={cn(
-                  "text-[11px] font-bold leading-tight",
+                  "text-xs font-bold leading-tight",
                   action.primary && "text-xs"
                 )}>
                   {action.label}

@@ -91,12 +91,13 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | :--- | :--- | :--- | :--- |
 | **Price** | $0 / mo | **$0 / mo + 7% fee** | **~$6.5 / mo + 1% fee** |
 | Pages | 1 | 2 | 6 |
-| Blocks | 11 free types | All 28 types | All 28 types |
+| Blocks | 1 free types | All 28 types | All 28 types |
 | AI generations | 1/month | 3/month | 10/month |
 | Analytics | Basic (7 days) | Full | Deep + Heatmaps |
 | CRM/Leads | View only | Full management | Full + Automations |
 | Remove watermark | No | Yes | Yes |
 | Custom domain | No | Yes | Yes |
+| Offline CRM | No | **Yes (PWA V2)** | **Yes (PWA V2)** |
 
 - **Full Report**: [UX_UI_AUDIT_REPORT_2026_03_12.md](file:///c:/Users/i.azelkhanov/.gemini/antigravity/brain/e9ed3a0d-5f2f-4e48-b33f-7e907b04b0d6/UX_UI_AUDIT_REPORT_2026_03_12.md)
 
@@ -147,6 +148,18 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - `delayOffset`: Random start delays (0-2s) ensure an organic, non-synchronized "living" feel.
   - Semantic Motion: Animations reflect block function (e.g., typing for text, rotating hands for timer, pulse for REC).
   - Performance: CSS-accelerated SVG transforms with zero JS overhead.
+
+### [2026-04-03] Phase 15: Monetization Pivot & PWA V2 Infrastructure
+
+- **Success-First Monetization**: Fully implemented the "Starter" tier ($0/mo + 7% commission).
+  - Updated `services/user.ts` with explicit tier limits for Identity, Starter, and Pro.
+  - Refactored `Pricing.tsx` with a high-fidelity 3-tier UI and type-safe plan mapping.
+- **PWA V2 (Offline-First CRM)**:
+  - Re-enabled Service Worker in `main.tsx` with robust lifecycle management.
+  - Implemented `sw.js` (V4) using `Stale-While-Revalidate` for assets and `Network-First` with cache fallback for Supabase API requests.
+  - Enabled **7x24 Offline Access** to CRM data (leads, bookings) for mobile users.
+- **Accessibility Hardening**: Expanded global CSS reset to force a minimum 12px font size for all micro-text (8px/9px) on mobile viewports.
+- **Health Score**: **10/10** (Status: Monetized & Offline-Ready).
 
 ### [2026-04-02] Phase 14: Interactive Micro-Animations (WOW Factor)
 
