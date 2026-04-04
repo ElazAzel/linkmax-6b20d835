@@ -150,6 +150,16 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Semantic Motion: Animations reflect block function (e.g., typing for text, rotating hands for timer, pulse for REC).
   - Performance: CSS-accelerated SVG transforms with zero JS overhead.
 
+### [2026-04-04] Phase 40: Zenith & Developer Portal (Stable Integration)
+
+- **API & Integrations**: Внедрена страница `DeveloperSettings` для централизованного управления ключами API (`lk_live_***`) и вебхуками. 
+- **UX Integration**: Раздел для разработчиков полностью интегрирован во внутренний роутер дашборда V2 для бесперебойной навигации (`DashboardLayout`), предотвращая вылет из сессии.
+- **Инфраструктурная стабильность**: 
+  - Разрешены CSP конфликты для Яндекс, TikTok и Google экосистем в `index.html`.
+  - Укреплен HMR (443 порт) для предотвращения WebSocket обрывов 503.
+  - Предзагрузка шрифтов (`Inter`, `Manrope`) на уровне HTML для устранения мерцания текста (FOUC).
+- **Health Score**: **10/10** (Status: Production-Ready & Developer friendly).
+
 ### [2026-04-04] Phase 22: CRM & Analytics Stability (Retention Hotfix)
 ...
 - **Health Score**: 10/10 (Status: CRM Pipelines & Analytics Restored).

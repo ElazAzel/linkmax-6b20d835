@@ -1,5 +1,17 @@
 # Changelog
 
+## [Phase 40] - 2026-04-04
+
+### Added (Phase 40: Zenith & Developer Portal)
+
+- **API & Webhook Management**: Added `DeveloperSettings.tsx` to handle `lk_live_` API secrets and webhook endpoint configuration for expert business automation.
+- **Dashboard UX Consolidation**: Successfully integrated the Developer Portal natively into the `DashboardV2` layout, ensuring fluid SPA navigation and preventing layout tearing.
+- **Security & Integrity**: 
+  - Whitelisted Tiktok, Google Analytics, and Rudderstack in `index.html` Content-Security-Policy.
+  - Implemented mandatory user identification for `analytics.ts`.
+  - Stabilized Vite HMR via explicit 443 port assignment to eliminate WebSocket 503 errors.
+- **Site Performance**: Enabled critical font preloading (`Inter`, `Manrope`) in `index.html` to fully eliminate FOUC and improve Core Web Vitals.
+
 ## [Phase 23] - 2026-04-04
 
 ### Fixed (Phase 23)

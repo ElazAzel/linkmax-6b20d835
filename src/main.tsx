@@ -151,7 +151,7 @@ const router = createBrowserRouter([
       { path: "dashboard/zone-contacts", element: <Dashboard /> },
       { path: "dashboard/zone-inbox", element: <Dashboard /> },
       { path: "dashboard/zone-tasks", element: <Dashboard /> },
-      { path: "dashboard/developers", element: <DeveloperSettings /> },
+      { path: "dashboard/developers", element: <Dashboard /> },
       { path: "dashboard/zone-automations", element: <Dashboard /> },
       { path: "dashboard/zone-invoices", element: <Dashboard /> },
       { path: "dashboard/zone-products", element: <Dashboard /> },
