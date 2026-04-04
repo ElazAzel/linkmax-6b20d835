@@ -108,9 +108,10 @@ export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage
 
   const { data, error } = await supabase
     .from('pages')
-    .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche')
+    .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche, quality_score')
     .eq('is_published', true)
     .in('user_id', premiumUserIds)
+    .order('quality_score', { ascending: false })
     .order('view_count', { ascending: false, nullsFirst: false })
     .limit(limit);
 

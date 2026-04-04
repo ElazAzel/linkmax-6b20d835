@@ -10,7 +10,9 @@ Disallow: /settings/
 Disallow: /install/
 Disallow: /team/
 
-# Explicitly allow AI bots to read platform metadata
+# Explicitly allow discovery pathways
+Allow: /experts
+Allow: /gallery
 Allow: /llms.txt
 Allow: /sitemap.xml
 

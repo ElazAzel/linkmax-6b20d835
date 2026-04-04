@@ -759,9 +759,14 @@ async function handleLandingSSR(lang: LanguageKey): Promise<Response> {
   });
 }
 
-// deno-lint-ignore no-explicit-any
 async function handleGallerySSR(supabase: SupabaseClient<any>, lang: LanguageKey, niche: string | null): Promise<Response> {
-  let query = supabase.from('pages').select('slug, title, description, avatar_url, niche').eq('is_published', true).eq('is_in_gallery', true);
+  let query = supabase
+    .from('pages')
+    .select('slug, title, description, avatar_url, niche, quality_score')
+    .eq('is_published', true)
+    .eq('is_in_gallery', true)
+    .gte('quality_score', QUALITY_THRESHOLD);
+
   if (niche) query = query.eq('niche', niche);
   const { data } = await query.order('gallery_likes', { ascending: false }).limit(20);
   const html = buildGalleryHtml(lang, BASE_URL, (data || []) as GalleryItem[], niche);

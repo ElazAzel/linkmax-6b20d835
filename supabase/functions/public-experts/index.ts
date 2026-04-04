@@ -61,12 +61,13 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Query published, indexable pages
+    // Query published, indexable pages with minimum quality
     let query = supabase
       .from('pages')
-      .select('id, slug, title, description, avatar_url, niche, updated_at, seo_meta')
+      .select('id, slug, title, description, avatar_url, niche, updated_at, seo_meta, quality_score')
       .eq('is_published', true)
       .eq('is_indexable', true)
+      .gte('quality_score', 25)
       .order('view_count', { ascending: false })
       .limit(limit);
 

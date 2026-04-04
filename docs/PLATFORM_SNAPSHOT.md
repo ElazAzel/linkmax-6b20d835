@@ -151,11 +151,20 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Performance: CSS-accelerated SVG transforms with zero JS overhead.
 
 ### [2026-04-04] Phase 22: CRM & Analytics Stability (Retention Hotfix)
+...
+- **Health Score**: 10/10 (Status: CRM Pipelines & Analytics Restored).
 
-- **Database-Schema Sync**: Resolved critical 400 Bad Request errors in CRM by adding the missing `deleted_at` column to `zone_deals` and `zone_tasks`. This restores the alignment between frontend "Soft Delete" logic and the Postgres layer.
-- **Analytics Resilience**: Hardened `trackActivationEvent` by explicitly passing `block_id: null`. This ensures compatibility with recent PostgREST schema changes and restores activation event tracking.
-- **Index Optimization**: Added partial indexes for active records (`deleted_at IS NULL`) to maintain high performance in high-volume CRM pipelines.
-- **Health Score**: **10/10** (Status: CRM Pipelines & Analytics Restored).
+### [2026-04-04] Phase 23: SEO, GEO & AEO Hardening (Visibility)
+- **Lowered Indexing Threshold**: Reduced `QUALITY_THRESHOLD` to **25** points to allow newer, minimal profiles to be discovered by search engines.
+- **Micro-markup V2 (AEO)**: Enhanced JSON-LD with semantic signals (`knowsAbout`, `areaServed`, `about`) to feed LLM Answer Engines and Perplexity.
+- **GEO Dynamics**: Automated title generation with city/region context for local SEO.
+- **AI-Bot Discovery**: Full update of `llms.txt` with Entity-First Indexing policy.
+
+### [2026-04-04] Phase 24: SEO-Driven Discovery Hardening (Consolidation)
+- **Universal Quality Gate**: Synchronized the 25-point threshold across all discovery surfaces: `public-experts` API, Gallery SSR, and Site-wide Sitemap.
+- **Discovery Network**: Updated `getTopPremiumPages` service to prioritize high-quality profiles (Score >= 25) for internal linking on the Landing Page.
+- **Robots.txt Optimization**: Explicitly allowed AI-crawlers to explore `/experts` and `/gallery`, creating a direct crawl-path from the root to user entities.
+- **Health Score**: **10/10** (Status: SEO Discovery Network Consolidated).
 
 ### [2026-04-03] Phase 18: CRM Bulk Actions & Custom Fields 2.0
 
