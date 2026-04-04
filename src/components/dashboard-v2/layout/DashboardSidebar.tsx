@@ -213,18 +213,16 @@ export const DashboardSidebar = memo(function DashboardSidebar({
       </motion.button>
     );
 
-    if (collapsed) {
-      return (
-        <Tooltip key={item.id} delayDuration={0}>
-          <TooltipTrigger asChild>{button}</TooltipTrigger>
+    return (
+      <Tooltip key={item.id} delayDuration={0}>
+        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        {collapsed && (
           <TooltipContent side="right" className="font-medium">
             {t(item.labelKey, item.defaultLabel)}
           </TooltipContent>
-        </Tooltip>
-      );
-    }
-
-    return button;
+        )}
+      </Tooltip>
+    );
   };
 
   return (

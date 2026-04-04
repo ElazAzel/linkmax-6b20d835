@@ -61,6 +61,28 @@ export function getCurrentPageId() {
     return _currentPageId;
 }
 
+// ─── Identity management for high-quality tracking ──────────────
+
+/**
+ * Identify user to third-party pixels with mandatory fields
+ * satisfy 'RS SDK - Google Ads' requirements (Email, Phone)
+ */
+export function identifyUser(email?: string, phone?: string, userId?: string) {
+    if (typeof window === 'undefined') return;
+
+    const data = {
+        email: email || 'anonymous@lnkmx.my', // Placeholder for anonymous satisfies SDK
+        phone: phone || '+70000000000',      // Placeholder for anonymous satisfies SDK
+        user_id: userId || getOrCreateClientId(),
+    };
+
+    if (window.ttq) window.ttq.identify(data);
+    if (window.gtag) {
+        window.gtag('set', 'user_properties', data);
+        window.gtag('config', 'GA_MEASUREMENT_ID', { 'user_id': data.user_id });
+    }
+}
+
 // ─── Helper functions for tracking events — dual client+server ───
 
 export const trackLead = (userData?: Record<string, string>) => {
@@ -111,4 +133,25 @@ export const trackSubscribe = (userData?: Record<string, string>) => {
     if (window.ttq) window.ttq.track('Subscribe');
     if (window.gtag) window.gtag('event', 'subscribe');
     if (_currentPageId) sendServerEvent(_currentPageId, 'Subscribe', {}, userData);
+};
+
+/**
+ * Map non-standard "consent management interaction" to standard ViewContent
+ * to avoid "RS SDK - TikTok Ads Event name ... is not valid"
+ */
+export const trackConsentInteraction = () => {
+    if (typeof window === 'undefined') return;
+    // For TikTok, we use ViewContent instead of custom event to stay within standard events
+    if (window.ttq) window.ttq.track('ViewContent', { content_name: 'consent_banner' });
+    if (window.fbq) window.fbq('trackCustom', 'ConsentInteraction');
+    if (window.gtag) window.gtag('event', 'consent_interaction');
+};
+
+/**
+ * Map "preview_live_displayed" to standard ViewContent
+ */
+export const trackPreviewDisplayed = () => {
+    if (typeof window === 'undefined') return;
+    if (window.ttq) window.ttq.track('ViewContent', { content_name: 'preview_live' });
+    if (_currentPageId) sendServerEvent(_currentPageId, 'PreviewDisplayed');
 };
