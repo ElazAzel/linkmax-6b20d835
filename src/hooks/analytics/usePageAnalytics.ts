@@ -242,22 +242,29 @@ export function usePageAnalytics(externalPageId?: string) {
         const currentLang = i18n.language as SupportedLanguage;
         blocks.forEach(block => {
           const content = block.content as any;
-          // Use stable ID from content if available, fallback to DB id
-          const blockId = content?.id || block.id;
+          // Always use DB id as primary key — this is what analytics events store in block_id
+          const dbId = block.id;
+          const contentId = content?.id;
 
           const rawTitle = block.title || content?.title || content?.name || block.type;
           const blockTitle = typeof rawTitle === 'object'
             ? getI18nText(rawTitle, currentLang)
             : rawTitle;
 
-          blockStatsMap.set(blockId, {
-            blockId,
+          const stats: BlockStats = {
+            blockId: dbId,
             blockType: block.type,
             blockTitle,
             clicks: 0,
             views: 0,
             ctr: 0,
-          });
+          };
+          // Register under DB id (primary)
+          blockStatsMap.set(dbId, stats);
+          // Also register under content id as alias so old events match
+          if (contentId && contentId !== dbId) {
+            blockStatsMap.set(contentId, stats);
+          }
         });
       }
 
@@ -277,7 +284,10 @@ export function usePageAnalytics(externalPageId?: string) {
         if (isNaN(stats.ctr)) stats.ctr = 0;
       });
 
+      // Deduplicate — aliases share the same stats object reference
+      const seen = new Set<BlockStats>();
       const topBlocks = Array.from(blockStatsMap.values())
+        .filter(s => { if (seen.has(s)) return false; seen.add(s); return true; })
         .sort((a, b) => b.clicks - a.clicks)
         .slice(0, 10);
 

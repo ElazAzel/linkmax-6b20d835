@@ -31,7 +31,7 @@ export function useZoneResources(zoneId: string) {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setResources(data || []);
+      setResources((data as any) || []);
     } catch (err: any) {
       console.error('Error fetching resources:', err);
     } finally {

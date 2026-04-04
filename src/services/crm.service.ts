@@ -43,11 +43,11 @@ export class CrmService {
       .eq('status', 'confirmed')
       .gte('start_time', new Date().toISOString());
 
-    const allLeads = (leads || []);
+    const allLeads = (leads || []) as any[];
     const totalLeads = allLeads.length;
-    const convertedLeads = allLeads.filter(l => l.status === 'converted' || l.status === 'qualified').length;
+    const convertedLeads = allLeads.filter((l: any) => l.status === 'converted' || l.status === 'qualified').length;
     
-    const pipelineValue = allLeads.reduce((sum, l) => sum + (Number(l.value_amount) || 0), 0) +
+    const pipelineValue = allLeads.reduce((sum: number, l: any) => sum + (Number(l.value_amount) || 0), 0) +
                          (zoneDeals || []).reduce((sum, d) => sum + (Number(d.value_amount) || 0), 0);
 
     const conversionRate = totalLeads > 0 ? (convertedLeads / totalLeads) * 100 : 0;
