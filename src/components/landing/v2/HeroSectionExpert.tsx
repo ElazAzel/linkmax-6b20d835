@@ -97,7 +97,11 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                             <div className="flex -space-x-2">
                                 {[1,2,3,4].map((i) => (
                                     <div key={i} className="w-8 h-8 rounded-full border-2 border-background bg-muted overflow-hidden">
-                                        <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="User" />
+                                        <img 
+                                            src={`https://i.pravatar.cc/100?img=${i + 10}`} 
+                                            alt="User" 
+                                            {...(i === 1 ? { fetchPriority: "high" } as any : {})}
+                                        />
                                     </div>
                                 ))}
                             </div>
