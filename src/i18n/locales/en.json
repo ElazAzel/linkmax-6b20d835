@@ -6925,5 +6925,8 @@
         "lost": "Lost"
       }
     }
+  },
+  "publicPage": {
+    "poweredBy": "Powered by"
   }
 }

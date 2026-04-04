@@ -6642,6 +6642,9 @@
     "monthly": "Ежемесячно",
     "yearly": "Ежегодно"
   },
+  "publicPage": {
+    "poweredBy": "Создано на"
+  },
   "selectOrCreate": "Выберите или создайте зону",
   "selectZone": "Выбрать зону",
   "slug": "Слаг"

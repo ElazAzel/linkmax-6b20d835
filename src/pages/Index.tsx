@@ -9,7 +9,7 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { LoadingSkeleton } from '@/components/dashboard-v2/common/LoadingSkeleton';
 
 // Critical above-fold components - load eagerly
-import { HeroSection } from '@/components/landing/v2/HeroSection';
+import { HeroSectionExpert } from '@/components/landing/v2/HeroSectionExpert';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 
 // Below-fold & non-critical components - lazy loaded
@@ -70,8 +70,8 @@ export default function Index() {
       <Suspense fallback={null}>
         <SEOMetaEnhancer
           pageUrl={`${getAppDomain()}/`}
-          pageTitle={t('landing.v4.hero.title', 'LinkMAX - Your AI Page Builder & Bio Link')}
-          pageDescription={t('landing.v4.hero.subtitle', 'Build professional Bio Link pages in minutes with AI. Конструктор страниц, CRM и аналитика.')}
+          pageTitle={t('landing.v4.hero.title', 'LinkMAX - Ваша Бизнес-ОС')}
+          pageDescription={t('landing.v4.hero.subtitle', 'Замените 10 сервисов одним. Сайт, CRM и финансы для экспертов.')}
           imageUrl={`${getAppDomain()}/og-image.png`}
           imageAlt="LinkMAX"
           type="website"
@@ -96,7 +96,7 @@ export default function Index() {
 
         <main className="flex-grow">
           <div id="hero">
-            <HeroSection
+            <HeroSectionExpert
               onStart={() => handleCreatePage('hero_cta')}
               onExamples={() => handleNav('/gallery', 'hero_examples')}
             />
