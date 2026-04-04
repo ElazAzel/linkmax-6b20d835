@@ -76,8 +76,8 @@ class RouteErrorBoundary extends React.Component<
 }
 
 
+const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalette").then(m => ({ default: m.CommandPalette })));
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
-import { CommandPalette } from "@/components/dashboard-v2/CommandPalette";
 
 const App = () => {
   // Defer non-critical init until user interacts or after 8s
@@ -133,9 +133,11 @@ const App = () => {
           <LanguageProvider>
             <TooltipProvider>
               <SkipToMainContent />
-              <Toaster />
-              <Sonner />
-              <CommandPalette />
+<Suspense fallback={null}>
+                <Toaster />
+                <Sonner />
+                <CommandPalette />
+              </Suspense>
               <RoutePrefetchManager />
               <RouteWebVitalsMonitor />
               <RouteErrorBoundary>

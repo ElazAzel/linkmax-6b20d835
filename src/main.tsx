@@ -13,8 +13,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+const Index = lazy(() => import("./pages/Index"));
+const Auth = lazy(() => import("./pages/Auth"));
 import {
   CHUNK_RECOVERY_KEY,
   isChunkRuntimeError,

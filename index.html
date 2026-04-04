@@ -108,9 +108,13 @@
     }
   </style>
 
-  <!-- Preload fonts to eliminate FOUC -->
+  <!-- Preload fonts to eliminate FOUC/CLS -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" as="style" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" />
+  
+  <!-- Preload critical bundle components -->
+  <link rel="modulepreload" href="/src/main.tsx" />
+  <link rel="modulepreload" href="/src/App.tsx" />
 
   <!-- PWA Meta Tags -->
   <meta name="theme-color" content="#8b5cf6" />
