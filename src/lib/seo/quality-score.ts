@@ -50,7 +50,7 @@ export const EXCLUSION_LABELS: Record<ExclusionReason, string> = {
   unpublished: 'Страница не опубликована',
 };
 
-const INDEXABLE_THRESHOLD = 40;
+const INDEXABLE_THRESHOLD = 25;
 
 export function computeQualityScore(pageData: PageData): QualityBreakdown {
   const profileBlock = pageData.blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;

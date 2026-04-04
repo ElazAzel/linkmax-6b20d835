@@ -29,7 +29,7 @@ import { buildGalleryHtml, buildLandingHtml, buildMarketingPageHtml, type Galler
 const BASE_URL = 'https://lnkmx.my';
 const LANGUAGES = ['ru', 'en', 'kk'] as const;
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
-const QUALITY_THRESHOLD = 40;
+const QUALITY_THRESHOLD = 25;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -129,6 +129,11 @@ function buildProfileTitle(page: PageData, lang: LanguageKey): string {
   if (city) {
     return `${name} — ${city} | LinkMAX`;
   }
+  // AEO Improvement: Descriptive title for AI agents
+  if (page.profession || page.niche) {
+    const expertLabel = lang === 'ru' ? 'Специалист' : lang === 'kk' ? 'Маман' : 'Expert';
+    return `${name} — ${expertLabel} (${page.profession || page.niche}) | LinkMAX`;
+  }
   return `${name} | LinkMAX`;
 }
 
@@ -213,9 +218,16 @@ function buildProfileSchemaGraph(
       'isPartOf': { '@type': 'WebSite', 'name': 'LinkMAX', 'url': BASE_URL },
       'mainEntity': { '@id': entityId },
       'dateModified': page.updated_at || new Date().toISOString(),
+      // AEO: explicit mention for LLMs
+      'about': { '@id': entityId },
     },
     { '@type': 'BreadcrumbList', 'itemListElement': breadcrumbs },
-    mainEntity,
+    {
+      ...mainEntity,
+      // AEO: expertise signals
+      ...(knowsAbout.length > 0 ? { 'knowsAbout': knowsAbout } : {}),
+      'mainEntityOfPage': { '@id': canonical }
+    },
   ];
 
   // FAQ
@@ -797,7 +809,7 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
     .from('pages')
     .select('slug, updated_at, avatar_url, title, quality_score, service_slugs')
     .eq('is_published', true)
-    .gte('quality_score', QUALITY_THRESHOLD)
+    .gte('quality_score', 25)
     .not('slug', 'is', null)
     .order('updated_at', { ascending: false })
     .limit(10000);

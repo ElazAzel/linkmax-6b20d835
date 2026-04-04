@@ -139,7 +139,7 @@ export async function notifyIndexNow(
   previousServiceSlugs?: Record<string, ServiceSlugEntryRaw> | null,
 ): Promise<IndexNowResult> {
   if (!slug) return 'no_slug';
-  if (!isPublished || qualityScore < 40) return 'not_indexable';
+  if (!isPublished || qualityScore < 25) return 'not_indexable';
 
   // Compute child diff
   const diff = computeChildDiff(previousServiceSlugs, currentServiceSlugs);
