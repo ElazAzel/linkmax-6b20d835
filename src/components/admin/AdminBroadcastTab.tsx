@@ -19,25 +19,66 @@ import {
 import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Settings2 from 'lucide-react/dist/esm/icons/settings-2';
+import { Input } from '@/components/ui/input';
 
 export function AdminBroadcastTab() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [result, setResult] = useState<{ total: number; success: number; failed: number } | null>(null);
+  const [botToken, setBotToken] = useState('');
+  const [savingToken, setSavingToken] = useState(false);
+
+  useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        const { data } = await supabase
+          .from('bot_config' as any)
+          .select('value')
+          .eq('key', 'TELEGRAM_BOT_TOKEN')
+          .single();
+        if (data) setBotToken(data.value);
+      } catch (err) {
+        // config might not exist yet
+      }
+    };
+    loadConfig();
+  }, []);
+
+  const handleSaveToken = async () => {
+    if (!botToken.trim()) {
+      toast.error(t('adminBroadcast.botSettings.errEmptyToken', 'Пожалуйста, введите токен!'));
+      return;
+    }
+    setSavingToken(true);
+    try {
+      const { error } = await (supabase.from('bot_config' as any) as any).upsert({
+        key: 'TELEGRAM_BOT_TOKEN',
+        value: botToken.trim()
+      });
+      if (error) throw error;
+      toast.success(t('adminBroadcast.botSettings.successSave', 'Токен успешно сохранен!'));
+    } catch (err: any) {
+      toast.error(t('adminBroadcast.botSettings.errSave', { error: err.message }));
+    } finally {
+      setSavingToken(false);
+    }
+  };
 
   const handleRunBroadcast = async () => {
     setLoading(true);
     setResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('broadcast-update', {
-        body: { text: message.trim() || null },
+      const { data, error } = await supabase.rpc('send_telegram_broadcast', {
+        p_custom_text: message.trim() || null
       });
 
       if (error) throw error;
 
-      setResult(data as { total: number; success: number; failed: number });
+      const res = data as any;
+      setResult({ total: res.total_count, success: res.queued_count, failed: res.total_count - res.queued_count });
       toast.success(t('adminBroadcast.massBroadcast.successRun'));
     } catch (err: any) {
       console.error('Broadcast error:', err);
@@ -49,6 +90,39 @@ export function AdminBroadcastTab() {
 
   return (
     <div className="space-y-6">
+      {/* Bot Settings Card */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Settings2 className="h-5 w-5 text-primary" />
+            <CardTitle>{t('adminBroadcast.botSettings.title', 'Настройки бота')}</CardTitle>
+          </div>
+          <CardDescription>
+            {t('adminBroadcast.botSettings.description', 'Введите токен Telegram бота для рассылок (избегает CORS и деплоев)')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex gap-4">
+          <Input 
+            value={botToken}
+            onChange={(e) => setBotToken(e.target.value)}
+            placeholder={t('adminBroadcast.botSettings.tokenPlaceholder', '1234567890:ABCDEFG...')}
+            type="password"
+            className="font-mono bg-white/5 border-white/10"
+          />
+          <Button 
+            onClick={handleSaveToken} 
+            disabled={savingToken || !botToken.trim()}
+            className="w-32 shrink-0"
+          >
+            {savingToken ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              t('adminBroadcast.botSettings.saveBtn', 'Сохранить')
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
