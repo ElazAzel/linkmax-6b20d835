@@ -234,6 +234,7 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
                         userId={userId}
                         intent={activeIntent}
                         lastQuery={activeQuery}
+                        conversation={messages}
                         onSuccess={handleLeadSuccess}
                       />
                     </div>

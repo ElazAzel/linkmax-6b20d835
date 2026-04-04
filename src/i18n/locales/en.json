@@ -6879,7 +6879,7 @@
         "phone": "Phone",
         "submit": "Submit",
         "success": "Request sent!",
-        "successMsg": "We will contact you soon",
+        "successMsg": "We will contact you soon. The expert has been notified on Telegram ⚡️",
         "disclaimer": "By clicking the button, you agree to the processing of data"
       }
     },
@@ -6907,7 +6907,9 @@
       },
       "chatbot": {
         "commercialDesc": "The user showed commercial interest before submitting the form.",
-        "infoDesc": "The user was asking clarifying questions to the assistant."
+        "infoDesc": "The user was asking clarifying questions to the assistant.",
+        "history": "Conversation History",
+        "hot": "Hot"
       },
       "status": {
         "label": "Status",

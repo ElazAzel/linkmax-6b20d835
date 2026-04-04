@@ -15,10 +15,11 @@ interface ChatLeadFormProps {
   userId: string;
   intent?: string;
   lastQuery?: string;
+  conversation?: any[];
   onSuccess: (name: string) => void;
 }
 
-export const ChatLeadForm = ({ pageId, userId, intent, lastQuery, onSuccess }: ChatLeadFormProps) => {
+export const ChatLeadForm = ({ pageId, userId, intent, lastQuery, conversation, onSuccess }: ChatLeadFormProps) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -33,6 +34,12 @@ export const ChatLeadForm = ({ pageId, userId, intent, lastQuery, onSuccess }: C
 
     setLoading(true);
     try {
+      // Filter conversation to only essential fields and user/assistant roles
+      const history = conversation?.map(m => ({
+        role: m.role,
+        content: m.content
+      })).slice(-10); // Last 10 messages for context
+
       const { error } = await CrmService.createPublicLead({
         userId,
         name: formData.name,
@@ -43,7 +50,8 @@ export const ChatLeadForm = ({ pageId, userId, intent, lastQuery, onSuccess }: C
           page_id: pageId, 
           chat_lead: true,
           intent,
-          last_query: lastQuery
+          last_query: lastQuery,
+          conversation: history
         }
       });
 

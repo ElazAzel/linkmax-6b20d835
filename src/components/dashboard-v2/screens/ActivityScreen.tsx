@@ -70,7 +70,8 @@ const SOURCE_ICONS_KEYS: Record<string, { emoji: string; i18nKey: string }> = {
   form: { emoji: '📝', i18nKey: 'crm.source.form' },
   messenger: { emoji: '💬', i18nKey: 'crm.source.messenger' },
   manual: { emoji: '✏️', i18nKey: 'crm.source.manual' },
-  page_view: { emoji: '👁️', i18nKey: 'crm.source.pageView' },
+  page_view: { emoji: '👁️', i18nKey: 'crm.source.page_view' },
+  chatbot: { emoji: '🤖', i18nKey: 'crm.source.chatbot' },
   other: { emoji: '📌', i18nKey: 'crm.source.other' },
 };
 
@@ -515,6 +516,11 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
                 <Badge className="h-5 px-2 bg-violet-500/10 text-violet-500 text-xs font-black uppercase tracking-wider border-violet-500/20 shrink-0 rounded-full">
                   <Repeat className="h-3 w-3 mr-1" />
                   {t('operator.repeat.badge', 'Повторный')}
+                </Badge>
+              )}
+              {lead.metadata?.intent === 'commercial' && (
+                <Badge className="h-5 px-2 bg-orange-500/10 text-orange-600 text-xs font-black uppercase tracking-wider border-orange-500/20 shrink-0 rounded-full animate-pulse">
+                  🔥 {t('crm.chatbot.hot', 'Hot')}
                 </Badge>
               )}
             </div>

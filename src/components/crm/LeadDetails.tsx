@@ -201,6 +201,30 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
                   ? t('crm.chatbot.commercialDesc', 'Пользователь проявил коммерческий интерес перед отправкой формы.')
                   : t('crm.chatbot.infoDesc', 'Пользователь задавал уточняющие вопросы ассистенту.')}
               </p>
+
+              {/* Chat History - Phase 31 */}
+              {Array.isArray(lead.metadata.conversation) && lead.metadata.conversation.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-primary/10">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60 mb-2 block">
+                    {t('crm.chatbot.history', 'История диалога')}
+                  </span>
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+                    {lead.metadata.conversation.map((msg: any, idx: number) => (
+                      <div 
+                        key={idx} 
+                        className={cn(
+                          "p-2 rounded-xl text-[11px] leading-snug max-w-[90%]",
+                          msg.role === 'user' 
+                            ? "bg-primary/10 ml-auto rounded-tr-none text-right" 
+                            : "bg-accent/50 mr-auto rounded-tl-none border border-white/5"
+                        )}
+                      >
+                        {msg.content}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
