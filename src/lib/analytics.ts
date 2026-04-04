@@ -70,16 +70,23 @@ export function getCurrentPageId() {
 export function identifyUser(email?: string, phone?: string, userId?: string) {
     if (typeof window === 'undefined') return;
 
-    const data = {
-        email: email || 'anonymous@lnkmx.my', // Placeholder for anonymous satisfies SDK
-        phone: phone || '+70000000000',      // Placeholder for anonymous satisfies SDK
+    const data: Record<string, string> = {
         user_id: userId || getOrCreateClientId(),
     };
 
-    if (window.ttq) window.ttq.identify(data);
+    // Only add PII if actually provided to avoid SDK warnings/violations
+    if (email) data.email = email;
+    if (phone) data.phone = phone;
+
+    if (window.ttq && typeof window.ttq.identify === 'function') {
+        window.ttq.identify(data);
+    }
+    
     if (window.gtag) {
         window.gtag('set', 'user_properties', data);
-        window.gtag('config', 'GA_MEASUREMENT_ID', { 'user_id': data.user_id });
+        if (data.user_id) {
+            window.gtag('config', 'GA_MEASUREMENT_ID', { 'user_id': data.user_id });
+        }
     }
 }
 

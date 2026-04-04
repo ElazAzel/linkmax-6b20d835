@@ -92,19 +92,35 @@ export class CrmService {
     notes?: string;
     source?: string;
     metadata?: any;
+    pageId?: string;
+    blockId?: string;
+    formData?: Record<string, any>;
   }): Promise<{ data: any; error: any }> {
+    // Prepare payload compatible with both legacy and new schema
+    const payload = {
+      user_id: data.userId,
+      name: data.name,
+      email: data.email || null,
+      phone: data.phone || null,
+      notes: data.notes || null,
+      source: (data.source as any) || 'form',
+      status: 'new',
+      // form_data is used in the 2026-02-20 schema
+      form_data: {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        ...data.formData
+      },
+      // metadata is used in the 2025-12-06 schema
+      metadata: data.metadata || {},
+      page_id: data.pageId || null,
+      block_id: data.blockId || null,
+    };
+
     const { data: lead, error } = await supabase
       .from('leads')
-      .insert({
-        user_id: data.userId,
-        name: data.name,
-        email: data.email || null,
-        phone: data.phone || null,
-        notes: data.notes || null,
-        source: (data.source as any) || 'form',
-        status: 'new',
-        metadata: data.metadata || {},
-      })
+      .insert(payload as any)
       .select()
       .single();
 

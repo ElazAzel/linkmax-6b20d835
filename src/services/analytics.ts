@@ -111,19 +111,32 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
     for (const api of apis) {
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 3000);
+        const timeout = setTimeout(() => controller.abort(), 2000); // Shorter timeout for better UX
+        
         const response = await fetch(api.url, {
           signal: controller.signal,
-          headers: api.headers,
+          headers: {
+            ...api.headers,
+            'Cache-Control': 'no-cache'
+          },
+        }).catch(err => {
+           // Silently log fetch error (likely CSP or network)
+           logger.debug(`Geo API ${api.url} failed`, { data: err.message });
+           return null;
         });
+
         clearTimeout(timeout);
-        if (!response.ok) continue;
+        if (!response || !response.ok) continue;
+        
         const data = await response.json();
-        _geoCache = api.parse(data);
-        if (_geoCache.countryCode && _geoCache.countryCode !== 'XX') {
+        const parsed = api.parse(data);
+        
+        if (parsed.countryCode && parsed.countryCode !== 'XX') {
+          _geoCache = parsed;
           return _geoCache;
         }
-      } catch {
+      } catch (e: any) {
+        logger.debug('Geo fetch iteration failed', { data: e.message });
         continue;
       }
     }
@@ -400,6 +413,7 @@ export async function logChatQuery(
     const session_data = getOrCreateSession();
     const geo = await getGeoInfo().catch(() => null);
 
+    // Using 'as any' until supabase types are re-generated with expert_queries table
     await (supabase.from('expert_queries' as any) as any).insert({
       page_id: pageId,
       query_text: queryText.substring(0, 500), // Cap length
