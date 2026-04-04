@@ -121,6 +121,7 @@ const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 const ForMasters = lazy(() => import("./pages/ForMasters"));
 const FromPage = lazy(() => import("./pages/FromPage"));
+const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -150,6 +151,7 @@ const router = createBrowserRouter([
       { path: "dashboard/zone-contacts", element: <Dashboard /> },
       { path: "dashboard/zone-inbox", element: <Dashboard /> },
       { path: "dashboard/zone-tasks", element: <Dashboard /> },
+      { path: "dashboard/developers", element: <DeveloperSettings /> },
       { path: "dashboard/zone-automations", element: <Dashboard /> },
       { path: "dashboard/zone-invoices", element: <Dashboard /> },
       { path: "dashboard/zone-products", element: <Dashboard /> },

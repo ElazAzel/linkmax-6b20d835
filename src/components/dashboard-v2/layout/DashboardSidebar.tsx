@@ -38,6 +38,7 @@ import Package from 'lucide-react/dist/esm/icons/package';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import FileSignature from 'lucide-react/dist/esm/icons/file-signature';
+import Code2 from 'lucide-react/dist/esm/icons/code-2';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -112,6 +113,7 @@ const SECTIONS: SidebarSection[] = [
     defaultTitle: 'Аккаунт',
     items: [
       { id: 'finance', icon: Coins, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы' },
+      { id: 'developers', icon: Code2, labelKey: 'dashboard.sidebar.developers', defaultLabel: 'Разработчикам' },
       { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда' },
       { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор' },
       { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
