@@ -64,8 +64,11 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
   if (_geoFetchPromise) return _geoFetchPromise;
 
   _geoFetchPromise = (async () => {
-    // Try multiple free geo APIs with short timeouts
-    const apis = [
+    const apis: Array<{
+      url: string;
+      headers?: Record<string, string>;
+      parse: (d: any) => GeoInfo;
+    }> = [
       {
         url: 'https://ipwho.is/',
         parse: (d: any) => ({
@@ -98,14 +101,33 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
         headers: { Accept: 'application/json' },
         parse: (d: any) => ({
           country: d.location?.country || 'Unknown',
-          countryCode: d2.location?.country_code || 'XX',
-          city: d2.location?.city || undefined,
-        };
-        return _geoCache;
+          countryCode: d.location?.country_code || 'XX',
+          city: d.location?.city || undefined,
+          region: undefined,
+        }),
+      },
+    ];
+
+    for (const api of apis) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
+        const response = await fetch(api.url, {
+          signal: controller.signal,
+          headers: api.headers,
+        });
+        clearTimeout(timeout);
+        if (!response.ok) continue;
+        const data = await response.json();
+        _geoCache = api.parse(data);
+        if (_geoCache.countryCode && _geoCache.countryCode !== 'XX') {
+          return _geoCache;
+        }
       } catch {
-        return null;
+        continue;
       }
     }
+    return null;
   })();
 
   return _geoFetchPromise;
