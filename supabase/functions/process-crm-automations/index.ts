@@ -37,15 +37,12 @@ interface UserProfile {
 // Send Telegram message
 async function sendTelegramMessage(chatId: string, message: string): Promise<boolean> {
   if (!isConfigured()) {
-      console.log("Telegram gateway not configured");
-    }
+    console.log("Telegram gateway not configured");
+    return false;
+  }
 
   try {
-    const response = await sendMessage(chatId, message, { parse_mode: "Markdown" });
-    if (!result.ok) {
-      console.error("Telegram API error:", result);
-      return false;
-    }
+    await sendMessage(chatId, message, { parse_mode: "Markdown" });
     return true;
   } catch (error) {
     console.error("Telegram send error:", error);

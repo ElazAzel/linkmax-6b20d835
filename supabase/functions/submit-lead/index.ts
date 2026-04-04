@@ -223,35 +223,32 @@ serve(async (req: Request) => {
                 .single();
 
             // 6. Send Telegram Notification if enabled
-            if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
-                if (telegramBotToken) {
+            if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id && isConfigured()) {
+                let text = '';
+                const lang = profile.telegram_language || 'ru';
+                const pageName = escapeHtml(pageData.title || pageData.slug || 'lnkmx.my');
 
-                    let text = '';
-                    const lang = profile.telegram_language || 'ru';
-                    const pageName = escapeHtml(pageData.title || pageData.slug || 'lnkmx.my');
+                // Format form data with HTML escaping
+                let formDetails = '';
+                for (const [key, value] of Object.entries(sanitizedFormData)) {
+                    const displayKey = escapeHtml(key.charAt(0).toUpperCase() + key.slice(1));
+                    const displayValue = escapeHtml(value);
+                    formDetails += `\n▪️ ${displayKey}: ${displayValue}`;
+                }
 
-                    // Format form data with HTML escaping
-                    let formDetails = '';
-                    for (const [key, value] of Object.entries(sanitizedFormData)) {
-                        const displayKey = escapeHtml(key.charAt(0).toUpperCase() + key.slice(1));
-                        const displayValue = escapeHtml(value);
-                        formDetails += `\n▪️ ${displayKey}: ${displayValue}`;
-                    }
+                if (lang === 'ru') {
+                    text = `🔔 <b>Новая заявка!</b>\n\nСтраница: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть в CRM</a>`;
+                } else if (lang === 'en') {
+                    text = `🔔 <b>New Lead!</b>\n\nPage: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">View in CRM</a>`;
+                } else if (lang === 'kk') {
+                    text = `🔔 <b>Жаңа өтінім!</b>\n\nПарақ: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">CRM-де көру</a>`;
+                }
 
-                    if (lang === 'ru') {
-                        text = `🔔 <b>Новая заявка!</b>\n\nСтраница: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть в CRM</a>`;
-                    } else if (lang === 'en') {
-                        text = `🔔 <b>New Lead!</b>\n\nPage: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">View in CRM</a>`;
-                    } else if (lang === 'kk') {
-                        text = `🔔 <b>Жаңа өтінім!</b>\n\nПарақ: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">CRM-де көру</a>`;
-                    }
-
-                    try {
-                        await sendMessage(profile.telegram_chat_id, text, { parse_mode: 'HTML' });
-                        console.log(`Telegram notification sent to ${profile.telegram_chat_id}`);
-                    } catch (e) {
-                        console.error('Failed to send Telegram notification', e);
-                    }
+                try {
+                    await sendMessage(profile.telegram_chat_id, text, { parse_mode: 'HTML' });
+                    console.log(`Telegram notification sent to ${profile.telegram_chat_id}`);
+                } catch (e) {
+                    console.error('Failed to send Telegram notification', e);
                 }
             }
         }
