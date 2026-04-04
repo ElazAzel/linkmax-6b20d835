@@ -1,5 +1,18 @@
 # Changelog
 
+## [Phase 41.1] - 2026-04-05
+
+### Fixed (Localization Hardening & Integrity)
+
+- **Structural Normalization**: Normalized the root-level architecture of `en.json` and `ru.json`.
+  - Moved `analytics` from `zones` to the root level to prevent key collision and improve i18next resolution performance.
+  - Synchronized `landingV2` and `publicPageV2` blocks across primary locales.
+- **Merge Conflict Resolution**: Surgically resolved critical Git merge conflicts in `en.json` that broke JSON validity.
+- **Syntax Restoration**: Fixed nested brace imbalances in `stages`, `chatbot`, and `crm` blocks within the `zones` object.
+- **Integrity Audit**: Resolved "Duplicate object key" warnings by reconciling root-level vs. nested block definitions.
+- **Synchronization**: Added missing `publicPageV2` (Powered by) strings to `ru.json` to match the master `en.json` structure.
+
+
 ## [Phase 40] - 2026-04-04
 
 ### Added (Phase 40: Zenith & Developer Portal)

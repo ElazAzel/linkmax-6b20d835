@@ -160,6 +160,17 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Предзагрузка шрифтов (`Inter`, `Manrope`) на уровне HTML для устранения мерцания текста (FOUC).
 - **Health Score**: **10/10** (Status: Production-Ready & Developer friendly).
 
+### [2026-04-05] Phase 41.1: Localization Hardening & Integrity Restoration
+
+- **Structural Normalization**: Restored 100% structural parity between `en.json` and `ru.json`.
+  - Decoupled `analytics` from the `zones` object, promoting it to a root-level key for improved i18next resolution and namespace clarity.
+  - Eliminated structural corruption (merge conflicts) in `en.json` caused by concurrent branch merging.
+- **Key Synchronization**: 
+  - Aligned `landingV2` and `publicPageV2` blocks.
+  - Resolved manual duplicate key warnings in the `footer` and `settings` namespaces.
+- **Health Score**: **10/10** (Status: Localization Integrity Restored & Conflict-Free).
+
+
 ### [2026-04-04] Phase 22: CRM & Analytics Stability (Retention Hotfix)
 ...
 - **Health Score**: 10/10 (Status: CRM Pipelines & Analytics Restored).
@@ -567,7 +578,7 @@ new -> contacted -> qualified -> won/lost
 - Vite React SPA (Core Platform)
 - React 18 + TypeScript
 - Tailwind CSS with shadcn/ui
-- i18next for 16 languages (100% structural parity, deep localization for RU/EN/KK/UZ, zero missing keys)
+- i18next for 16 languages (100% structural parity restored in Ph 41.1, deep localization for RU/EN/KK/UZ, zero missing keys)
 - PWA capabilities
 - Motion system (CSS + IntersectionObserver)
 - **Universal Error Normalization**: `app-error-normalizer.ts` and `useAppError` pattern maps raw exceptions to safe, localized `react-i18next` messages, abstracting technical details from the UI.
