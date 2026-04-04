@@ -1,16 +1,18 @@
 # 📚 Индекс документации LinkMAX (ex-lnkmx)
 
-**Версия:** 2.5.1
-**Дата обновления:** 10 марта 2026
-**Статус:** Updated ✅
+**Версия:** 3.1.0
+**Дата обновления:** 4 апреля 2026
+**Статус:** Production Ready (Phase 40: Zenith) ✅
 
-Добро пожаловать в портал документации **LinkMAX**. Это единая точка входа для всех технических, архитектурных и продуктовых руководств.
+Добро пожаловать в портал документации **LinkMAX**.
+ Это единая точка входа для всех технических, архитектурных и продуктовых руководств.
 Вместо множества разрозненных индексов (INDEX.md, DOCUMENTATION-INDEX-FULL.md), все ключевые ссылки теперь агрегированы здесь.
 
 > [!IMPORTANT]
-> **Текущая стратегия (Q1-Q2 2026):** Переход на модель **"Step-by-Growth"** (транзакционная монетизация через Kaspi/Robokassa) и позиционирование приложения как **"Anti-Bitrix/AmoCRM"** для соло-предпринимателей (Mobile First Business Zone).
+> **Текущая стратегия (Q1-Q2 2026):** Переход на модель **"Step-by-Growth"** (транзакционная монетизация) и позиционирование как **"Business OS"** для экспертов и микро-бизнеса. Внедрена **Phase 40: Zenith**, включающая Developer Portal (API & Webhooks) для глубоких интеграций.
 
 ---
+
 
 ## 🚀 Начните отсюда
 
@@ -25,7 +27,8 @@
 ### Для разработчиков
 
 1. **[COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — Подробнейшая документация по всем подсистемам платформы.
-2. **[UI-COMPONENTS.md](features/UI-COMPONENTS.md)** — Компоненты UI (Liquid Glass Design System).
+2. **[UI-COMPONENTS.md](features/UI-COMPONENTS.md)** — Библиотека компонентов (**Living Canvas** Design System).
+
 3. **[UI_MODAL_CONTRACT.md](architecture/UI_MODAL_CONTRACT.md)** — Единый контракт для `Dialog/Sheet` (крестик, `onOpenChange`, закрытие по overlay/ESC/button).
 4. **[API.md](implementation/API.md)** — Edge Functions, RPCs, интеграции.
 5. **[DATABASE_SCHEMA_GUIDE.md](implementation/DATABASE_SCHEMA_GUIDE.md)** — Схема БД, таблицы, RLS.

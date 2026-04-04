@@ -1,7 +1,8 @@
 # Technology Stack & References
 
-> **Objective:** Centralized list of official documentation, guides, and best practices for the libraries used in lnkmx.
-> **Last Updated:** February 28, 2026
+> **Objective:** Centralized list of official documentation, guides, and best practices for the libraries used in LinkMAX.
+> **Last Updated:** April 4, 2026 (Phase 40 Sync)
+
 
 ## 1. Core Framework
 
@@ -11,6 +12,8 @@
 | **React** | 18.3.x | [React Docs](https://react.dev/) | UI Library. |
 | **TypeScript** | 5.8.x | [TS Handbook](https://www.typescriptlang.org/docs/) | Static Typing. |
 | **React Router** | 6.30.x | [React Router](https://reactrouter.com/) | SPA routing, lazy-loaded routes. |
+| **Capacitor** | 8.1.x | [Capacitor Docs](https://capacitorjs.com/) | Native Mobile Bridge (iOS/Android). |
+
 
 ## 2. UI & Styling
 
@@ -19,14 +22,16 @@
 | **Tailwind CSS** | [tailwindcss.com](https://tailwindcss.com/docs) | Utility-first styling. Focus on `flex`, `grid`, and responsive prefixes (`md:`, `lg:`). |
 | **shadcn/ui** | [ui.shadcn.com](https://ui.shadcn.com/docs) | Re-usable component blocks based on Radix UI. Accessible by default. |
 | **Radix UI** | [radix-ui.com](https://www.radix-ui.com/primitives/docs/overview) | Headless primitives for complex components (Dialogs, Popovers) if shadcn needs extension. |
-| **Framer Motion** | [framer.com/motion](https://www.framer.com/motion/) | Advanced animations (drag reorder, layout changes). Use conservatively for performance. |
+| **Framer Motion** | [framer.com/motion](https://www.framer.com/motion/) | **Living Canvas** animations (drag reorder, layout changes, SVGs). |
+
 | **Lucide React** | [lucide.dev](https://lucide.dev/icons/) | SVG Icon library. |
 
 ## 3. Backend & Data
 
 | Tool | Docs | Key Use Cases |
 |---|---|---|
-| **Supabase** | [supabase.com/docs](https://supabase.com/docs) | Database, Auth, Storage, Edge Functions. |
+| **Supabase** | [supabase.com/docs](https://supabase.com/docs) | Database, Auth, Storage, **28+ Edge Functions**. |
+
 | **PostgreSQL** | [postgresql.org/docs](https://www.postgresql.org/docs/) | Underlying DB. Use for complex SQL or indexing reference. |
 | **React Query** | [tanstack.com/query](https://tanstack.com/query/latest) | Server state management. Handles caching, polling, and synchronization. |
 
@@ -45,7 +50,9 @@
 | **Recharts** | [recharts.org](https://recharts.org/en-US) | Analytics charts (Line, Bar, Area). |
 | **i18next** | [react.i18next.com](https://react.i18next.com/) | Localization (16 languages: RU, EN, KK primary; DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR lazy). |
 | **Vaul** | [vaul.emilkowal.ski](https://vaul.emilkowal.ski/) | Mobile drawer/bottom sheet component. |
-| **Sonner** | [sonner.emilkowal.ski](https://sonner.emilkowal.ski/) | Toast notifications. |
+| **Sonner** | [sonner.emilkowal.ski](https://sonner.emilkowal.ski/) | Toast notifications (success/error/lead). |
+| **Lucide React** | [lucide.dev](https://lucide.dev/) | 100% Coverage for block-specific micro-animations. |
+
 
 ## 6. Testing & Quality
 

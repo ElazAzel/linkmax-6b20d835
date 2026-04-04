@@ -1,13 +1,13 @@
-# lnkmx — The Micro-Business OS
+# LinkMAX — The Micro-Business OS
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
-![Node](https://img.shields.io/badge/node-v18+-green.svg)
+![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)
+![Node](https://img.shields.io/badge/node-v20+-green.svg)
 ![License](https://img.shields.io/badge/license-Proprietary-orange.svg)
 ![Status](https://img.shields.io/badge/status-Active-success.svg)
 
 > **Create professional bio pages, manage leads, and track analytics — all in 2 minutes.**
 
-**lnkmx** is a comprehensive SaaS platform built for creators, freelancers, and small businesses in the CIS region. It combines a powerful page builder (28+ blocks), a **Business Zone** (mini-CRM, Kanban, Tasks, Contacts), and advanced analytics into one unified, mobile-first system.
+**LinkMAX** is a comprehensive SaaS platform built for creators, freelancers, and small businesses in the CIS region. It combines a powerful page builder (28+ blocks), a **Business Zone** (mini-CRM, Kanban, Tasks, Contacts), and advanced analytics into one unified, mobile-first system.
 
 **[Live Demo](https://lnkmx.my)**
 
@@ -15,17 +15,20 @@
 
 ## ✨ Features
 
+
 ### 🎨 **AI-Powered Page Builder**
 
 - **28+ Block Types**: Profile, links, products, forms, bookings, events, carousels, scratch cards, and more.
 - **Drag & Drop**: Intuitive mobile-first editor (dnd-kit).
 - **AI Generation**: Create entire pages or write copy with one click (Gemini).
-- **Customization**: Themes, fonts, and animations (Liquid Glass design system).
-- **Multi-Page**: Up to 6 pages per user (Pro); each with its own slug and SEO.
+- **Customization**: Themes, fonts, and animations (**Living Canvas** design system).
+- **A/B Testing**: Native multi-variant testing for individual blocks with traffic allocation.
+- **Multi-Page**: Up to 10 pages per user (Pro); each with its own slug and SEO.
 
 ### 📈 **Business Zone & Analytics**
 
 - **Mini-CRM**: Leads with status pipeline (New → Contacted → Won/Lost), notes, and history.
+
 - **Kanban**: Deals pipeline with drag-and-drop stages.
 - **Tasks**: Task board with priorities, assignees, due dates, linked contacts and deals.
 - **Contacts**: Unified contact list linked to leads and deals.

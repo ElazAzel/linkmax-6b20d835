@@ -1,12 +1,14 @@
 # Developer Quickstart
 
-> **Last Updated:** February 28, 2026
+> **Last Updated:** April 4, 2026 (Phase 40 Sync)
+
 
 ## Prerequisites
 
-- **Node.js**: v18 or higher (v20 recommended)
-- **npm**: v9 or higher
+- **Node.js**: v20 or higher (v22 recommended)
+- **npm**: v10 or higher
 - **Git**
+
 
 ## Setup
 
@@ -46,12 +48,14 @@
 
 ## Project Structure
 
-- `src/components/`: UI and business components (blocks, dashboard-v2, zones, ui)
+- `src/components/`: UI components (blocks, dashboard-v2, zones, shared)
 - `src/pages/`: Route-level components
-- `src/hooks/`: Custom React hooks (60+)
-- `src/services/`: API and business logic
-- `src/lib/`: Utilities, SEO, export (PDF/Excel)
+- `src/hooks/`: Custom React hooks (70+)
+- `src/services/`: Service-Pattern logic (apiKeys.ts, pages.ts, user.ts, etc.)
+- `src/lib/`: Utilities, SEO, exports
 - `src/i18n/locales/`: Translation files (16 languages)
+- `scripts/`: i18n management and build utilities
+
 
 ## Troubleshooting
 

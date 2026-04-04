@@ -1,16 +1,18 @@
 # 1. Product Vision & Strategy
 
-> **Status:** Active
-> **Last Updated:** March 5, 2026
-> **Owner:** Product Team
+> **Status:** Phase 40 (Zenith)
+> **Last Updated:** April 4, 2026
+> **Owner:** Principal Architect / Product Team
+
 
 ---
 
 ## 1. Executive Summary
 
-**lnkmx** is the **Micro-Business Operating System**. We are not just another link-in-bio tool; we are a verticalized platform that enables solopreneurs and micro-businesses to **Build** their presence, **Manage** their clients, and **Grow** their revenue—all from a single mobile-first dashboard.
+**LinkMAX** is the **Micro-Business Operating System**. We are not just another link-in-bio tool; we are a verticalized platform that enables solopreneurs and experts to **Build** their presence, **Manage** their clients, and **Grow** their revenue—all from a single, high-performance dashboard.
 
-Our core thesis: **The "Tool Tax" is killing micro-businesses.** They shouldn't need Wix for a site, Calendly for bookings, Mailchimp for leads, and Google Sheets for CRM. lnkmx consolidates this stack into one 15-minute setup.
+Our core thesis: **The "Tool Tax" is killing micro-businesses.** They shouldn't need Wix for a site, Calendly for bookings, Mailchimp for leads, and individual CRM subscriptions. LinkMAX consolidates this stack into one 2-minute setup.
+
 
 ---
 
@@ -22,13 +24,15 @@ To democratize professional business infrastructure for the next generation of s
 
 ### Vision
 
-To become the default "Identity + Business OS" for every service provider in Central Asia and emerging markets, where every "link in bio" is actually a fully functioning business backend.
+To become the default "Identity + Business OS" for every service provider and expert in Central Asia and emerging markets, where every "link in bio" is actually a fully functioning business backend with native API and webhooks.
+
 
 ### Core Values
 
-1. **Simplicity as a Religion**: If it takes more than 3 clicks, it's broken. We target users who are experts in *baking/teaching/selling*, not IT.
-2. **Premium by Default**: Our "Liquid Glass" design system ensures that even a free user looks expensive. Aesthetics is our viral loop.
-3. **Native Power**: We don't just "link out" to other tools; we *replace* them. Native forms, native bookings, native analytics.
+1. **Simplicity as a Religion**: If it takes more than 2 minutes to launch, it's broken. We target users who are experts in *niche services*, not IT.
+2. **Premium by Default**: Our **"Living Canvas"** design system ensures that even a free user looks expensive. Aesthetics is our viral loop.
+3. **Native Power**: We don't just "link out" to other tools; we *replace* them. Native forms, native bookings, native analytics, and now a **native Developer API**.
+
 
 ---
 
@@ -53,11 +57,12 @@ To become the default "Identity + Business OS" for every service provider in Cen
 
 ## 5. Strategic Pillars (Our Bets)
 
-### Bet 1: The "Liquid Glass" Aesthetic (Design as a Moat)
+### Bet 1: The "Living Canvas" Aesthetic (Design as a Moat)
 
-Most bio-link tools look cheap and flat. We invested heavily in a proprietary design system—**Liquid Glass**—featuring glassmorphism, rich motion, and depth.
+Most bio-link tools look cheap and flat. We invested heavily in a proprietary design system—**Living Canvas**—featuring WebGL-powered reactive backgrounds, high-index glassmorphism, and unique micro-animations for every interaction.
 
-* **Result**: Users switch to us purely for the "look", then stay for the features.
+* **Result**: Users switch to us purely for the "WOW factor", then stay for the deep business features.
+
 
 ### Bet 2: Vertical Integration (The "All-in-One" Wedge)
 

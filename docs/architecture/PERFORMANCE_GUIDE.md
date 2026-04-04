@@ -1,6 +1,8 @@
 # Performance Optimization Guide
 
-> **Objective:** Ensure lnkmx loads in <1.5s on mobile (3G) and achieves Core Web Vitals scores of 90+.
+> **Objective:** Ensure LinkMAX loads in <1.2s on mobile (3G) and achieves Core Web Vitals scores of 95+.
+> **Last Updated:** April 4, 2026 (Phase 40 Sync)
+
 
 ## 1. Frontend Optimization (Vite + React)
 
@@ -29,7 +31,8 @@ export function AnalyticsWidget() {
 ```
 
 ### 1.5 Vendor Bundle Splitting
-Since March 13, the platform uses a manual chunking strategy in `vite.config.ts` to separate infrequent dependencies from business logic.
+Since the **Zenith (Phase 40)** release, the platform uses a refined manual chunking strategy in `vite.config.ts` to separate infrequent dependencies from business logic.
+
 
 **Benefits:**
 - **Improved TBT (Total Blocking Time)**: Smaller individual scripts allow the browser main thread to breathe.
@@ -76,12 +79,13 @@ Prevent unnecessary re-renders in the drag-and-drop builder.
 const config = { color: 'red' }; 
 ```
 
-### 1.4 Font Optimization
 - Self-host fonts (already in `public/fonts`) or use Google Fonts with `display=swap`.
-- Preload critical fonts in `index.html`:
+- **Preload Critical Assets**: (Zenith Hardening) `index.html` must include preloads for primary branding fonts (Outfit/Inter) and the main application entry point to reduce LCP.
 ```html
-<link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Outfit-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Outfit-Regular.woff2" as="font" type="font/woff2" crossorigin>
 ```
+
 
 ---
 
@@ -164,6 +168,8 @@ if (!success) {
 - **Public Forms (Lead Gen):** 5 req/min per IP
 - **Auth/Login:** 10 req/min per IP
 - **AI Chatbot:** 3 req/min per User ID
+- **Developer API (`lk_live_`):** 60 req/min per key (Pro Tier)
+
 
 
 ## 4. Monitoring (Core Web Vitals)
@@ -181,3 +187,8 @@ onCLS(sendToAnalytics);
 onFID(sendToAnalytics);
 onLCP(sendToAnalytics);
 ```
+## 5. Developer Portal & API Performance
+
+- **Token Validation**: API keys are validated using a high-performance hash check in Edge Functions; metadata is cached in Redis for <50ms response times.
+- **Webhook Latency**: Webhook triggers are queued asynchronously via Supabase PG_NET to ensure the main user transaction (e.g., Lead creation) is not delayed. Target delivery is <500ms.
+- **Service-Pattern Efficiency**: Most business logic is moved from client-side hooks to the `services/` layer, reducing component complexity and improving TBT during high-interaction scenarios (e.g., Kanban drag-and-drop).

@@ -1,7 +1,8 @@
 # 6. Operational Handbook
 
-> **Status:** Active
-> **Last Updated:** February 28, 2026
+> **Status:** Active (Phase 40 Zenith)
+> **Last Updated:** April 4, 2026
+
 > **Scope:** Internal Procedures, Compliance, Support
 
 ---
@@ -10,8 +11,10 @@
 *(Lean Team Structure for Seed Stage)*
 
 *   **Product/Eng Lead**: Owns Roadmap, Architecture, Release Quality.
+*   **Always-on Specialist Agents**: (Principal, Frontend, Backend, Review) Automated agents for CI/CD and Code Quality.
 *   **Growth/Marketing**: Owns CAC, Content, Partnerships.
 *   **Operations/Support**: Owns Customer Success, Legal, Finance.
+
 
 ---
 
@@ -26,6 +29,8 @@
     2.  Log in GitHub Issues with `bug` label.
     3.  Notify user of "Received" -> "In Progress" -> "Fixed".
 *   **Feature Requests**: Log in "Product Ideas" notions DB. Do not promise timelines.
+*   **Developer API Support**: Special queue for `api-keys` and `webhooks` issues. Target resolution < 12h for Pro tier keys.
+
 
 ---
 
@@ -71,3 +76,17 @@
     *   *Action*: Fix in next sprint.
 
 **Status Page**: Hosted externally (e.g., Atlassian Statuspage).
+
+---
+
+## 6. Developer Platform Rules & Safety
+
+### API Security
+- **Tokens**: Only `lk_live_` prefixed keys are valid for production.
+- **Rotation**: Users should rotate keys every 90 days.
+- **Exposure**: Any system discovery of a leaked key in public repos (GitHub) results in immediate automated revocation.
+
+### Webhook Reliability
+- **Signature**: All outgoing webhooks include `X-LinkMAX-Signature` (HMAC-SHA256).
+- **Retries**: 5 attempts with exponential backoff (1m, 5m, 15m, 1h, 4h).
+

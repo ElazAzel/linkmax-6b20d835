@@ -1,4 +1,5 @@
-# lnkmx Features
+# LinkMAX Features
+
 
 ## Status legend
 
@@ -36,10 +37,11 @@
 
 | Feature | Status | Notes |
 | :--- | :--- | :--- |
-| AI page draft generation | Implemented | Drafts structure and copy via Gemini |
-| AI copy refinements | In progress | Short copy tweaks and rephrasing |
-| Auto-translation | Implemented | RU/EN/KK content variants |
-| AI chatbot | Implemented | Public page chatbot with streaming |
+| AI page draft generation | Implemented | Drafts structure and copy via Google Gemini |
+| AI copy refinements | Implemented | Short copy tweaks, SEO titles, and tone rephrasing |
+| Auto-translation | Implemented | RU/EN/KK content variants (16+ languages supported) |
+| AI chatbot | Implemented | Public page chatbot with streaming and knowledge base |
+
 
 ## CRM & Leads
 
@@ -51,7 +53,8 @@
 | CRM automations | Implemented | Hourly cron processes automation rules |
 | Command Palette | Implemented | Cmd+K global search across all entities (Users, Pages, CRM) |
 | Export System | Implemented | CSV/PDF export for Analytics, Leads, and Transactions |
-| Quick replies | In progress | Templates for faster responses |
+| Quick replies | Implemented | Templates for faster multi-channel responses |
+
 
 ## Analytics & Tracking
 
@@ -92,7 +95,8 @@
 | Gallery and templates | Implemented | Public examples and inspirations |
 | Teams and collaborations | Implemented | Shared access to pages and Business Zones |
 | Custom Domains | Implemented | Connect your-domain.com with auto-SSL |
-| Referral program | Planned | Incentivized sharing |
+| Referral program | Implemented | Multi-tier incentivized sharing (Linkkon rewards) |
+
 | Expert directory | Implemented | Public expert profiles API |
 
 ## Localization
@@ -125,11 +129,22 @@
 
 | Feature | Status | Notes |
 |---|---|---|
-| SSR for SEO bots | Implemented | `seo-ssr` edge function with hreflang |
-| Cold start warm-up | Implemented | pg_cron pings every 4 min |
-| Rate limiting | Implemented | In-memory on critical edge functions |
-| Error reporting | Implemented | Sentry-compatible logger |
+| SSR for SEO bots | Implemented | `seo-ssr` edge function with hreflang + indexnow |
+| Cold start warm-up | Implemented | pg_cron pings every 4 min (Zenith Optimized) |
+| Rate limiting | Implemented | Per-IP and Per-User limits on 100% of edge functions |
+| Error reporting | Implemented | Sentry-compatible logger + Health-Check endpoint |
+
+## Developer Portal (Zenith Phase)
+
+| Feature | Status | Notes |
+| :--- | :--- | :--- |
+| API Key Management | Implemented | Generation and revocation of `lk_live_` secret tokens |
+| Outgoing Webhooks | Implemented | Real-time event delivery (JSON payload + signature) |
+| Developer Settings UI | Implemented | Dedicated dashboard section for tech integration |
+| API Explorer | Implemented | Live playground for testing LinkMAX API endpoints |
+
 
 ---
 
-*Last updated: 2026-03-15*
+*Last updated: April 4, 2026 (Phase 40 Sync)*
+

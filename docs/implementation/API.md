@@ -1,8 +1,10 @@
 # API & Backend Documentation
 
-This document serves as a reference for the backend logic of the lnkmx platform, built on Supabase (PostgreSQL + Edge Functions).
+This document serves as a reference for the backend logic of the **LinkMAX** platform, built on Supabase (Postgres + Edge Functions).
 
-## 1. Edge Functions (28 total)
+
+## 1. Edge Functions (54 total)
+
 
 Stateless server-side functions running on **Deno runtime**. Located in `supabase/functions/`.
 
@@ -84,6 +86,18 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 | `verify-domain` | No JWT | Verifies CNAME/DNS for custom domains |
 | `seed-demo-accounts` | No JWT | Seeds demo accounts (admin-only check inside) |
 | `language-upload` | No JWT | Uploads language translation files |
+| `health-check` | No JWT | System health monitor for uptime tracking |
+
+### Developer Platform (Zenith Phase)
+
+| Function | Auth | Description |
+| :--- | :--- | :--- |
+| `api-keys` | JWT | CRUD for user API keys (`lk_live_`) |
+| `api-webhooks` | JWT | CRUD for user-defined outgoing webhooks |
+| `broadcast-update` | Internal | Mass-notify users/pages of system changes |
+| `run-zone-automations` | No JWT | Executes user-defined business zone rules |
+| `cleanup-orphaned-media`| Admin | Maintenance: Removes unused storage assets |
+
 
 > [!NOTE]
 > All functions use `verify_jwt = false` in `config.toml` but implement their own auth checks where needed (e.g., `seed-demo-accounts` verifies admin role).
@@ -98,6 +112,10 @@ PostgreSQL functions for atomic operations and secure logic.
 | :--- | :--- | :--- |
 | `check_page_limits` | `user_id` | Verifies if user can create more pages based on tier |
 | `save_page_blocks` | `page_id`, `blocks_json` | Atomically replaces blocks for a page with versioning |
+| `generate_user_api_key`| `key_name` | Securely generates and hashes a new `lk_live_` token |
+| `get_wallet_balance` | `wallet_id` | Returns current ledger-verified balance |
+| `track_ledger_entry` | `amount`, `type` | Atomic financial logging for Step-by-Growth fees |
+
 | `increment_view_count` | `page_id` | Efficiently increments page views +1 |
 | `claim_daily_token_reward` | `user_id` | Awards lnkmx tokens for daily login (**auth.uid() check**) |
 | `get_token_analytics` | — | Returns token economy stats (**admin-only**) |

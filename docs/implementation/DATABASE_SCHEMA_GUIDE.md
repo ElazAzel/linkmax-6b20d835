@@ -1,6 +1,7 @@
 # Database Schema Guide
 
-This document serves as a reference for the lnkmx platform's database structure, managed via Supabase (Postgres).
+This document serves as a reference for the **LinkMAX** platform's database structure, managed via Supabase (Postgres).
+
 
 ## Core Tables
 
@@ -11,7 +12,8 @@ This document serves as a reference for the lnkmx platform's database structure,
 - `slug` (text, unique) - The public URL identifier (`lnkmx.my/slug`)
 - `title` (text)
 - `description` (text)
-- `theme` (jsonb) - Aesthetic settings (Liquid Glass tokens)
+- `theme` (jsonb) - Aesthetic settings (**Living Canvas** tokens)
+
 - `is_published` (boolean)
 - `is_premium` (boolean)
 - `metadata` (jsonb) - SEO tags, Pixel IDs: `fb_pixel_id`, `tt_pixel_id`, `ga_id`, `yandex_id`
@@ -24,6 +26,8 @@ This document serves as a reference for the lnkmx platform's database structure,
 - `content` (jsonb) - Block-specific data (links, images, text)
 - `position` (integer) - Order on the page
 - `is_visible` (boolean)
+- `deleted_at` (timestamp) - Soft-delete support
+
 
 ## CRM & Interactions
 
@@ -46,23 +50,26 @@ This document serves as a reference for the lnkmx platform's database structure,
 - `end_time` (timestamp)
 - `status` (text)
 - `customer_info` (jsonb)
+- `deleted_at` (timestamp, optional)
 
-## Fintech (Draft implementation)
 
-### `user_wallets`
+### `user_wallets` (Fintech Core)
 
 - `id` (uuid, PK)
 - `user_id` (uuid, FK to user_profiles)
-- `balance` (numeric)
+- `balance` (numeric) - Ledger-verified balance
 - `currency` (text)
+- `status` (text) - `active`, `frozen`
 
-### `wallet_transactions`
+### `wallet_transactions` (Ledger)
 
 - `id` (uuid, PK)
 - `wallet_id` (uuid, FK)
 - `amount` (numeric)
 - `type` (text) - `credit`, `debit`
-- `metadata` (jsonb) - GMV, Fees
+- `metadata` (jsonb) - GMV, Fees (`platform_fee`, `partner_fee`), transaction IDs
+- `created_at` (timestamp)
+
 
 ## Analytics
 
@@ -97,6 +104,8 @@ This document serves as a reference for the lnkmx platform's database structure,
 - `amount` (numeric)
 - `status` (text)
 - `contact_id` (uuid, FK)
+- `deleted_at` (timestamp)
+
 
 ### `zone_tasks`
 
@@ -143,3 +152,22 @@ This document serves as a reference for the lnkmx platform's database structure,
 
 ---
 *Generated based on migrations up to March 2026 (Business OS Update).*
+## Developer Platform (Zenith Phase)
+
+### `api_keys`
+
+- `id` (uuid, PK)
+- `user_id` (uuid, FK)
+- `name` (text)
+- `key_prefix` (text) - Stores `lk_live_` first 7 chars
+- `key_hash` (text) - SHA-256 hash of the secret
+- `last_used_at` (timestamp)
+
+### `webhooks`
+
+- `id` (uuid, PK)
+- `user_id` (uuid, FK)
+- `target_url` (text)
+- `event_types` (text[]) - `lead.created`, `booking.new`, `transaction.success`
+- `secret` (text) - For signature verification
+- `is_active` (boolean)

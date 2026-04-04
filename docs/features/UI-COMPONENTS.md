@@ -1,8 +1,10 @@
-# UI Component Documentation - lnkmx
+# UI Component Documentation - LinkMAX
 
-## Overview
 
-lnkmx uses a component-based architecture built on:
+## Design System (Living Canvas)
+
+LinkMAX uses the **Living Canvas** design system, an evolution of Liquid Glass that focuses on fluidity, prismatic glass effects, and 100% micro-animation coverage.
+
 - **React 18** with TypeScript
 - **Tailwind CSS** with semantic design tokens
 - **shadcn/ui** for base components
@@ -188,6 +190,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 | Countdown | `CountdownBlock` | Timer |
 | Map | `MapBlock` | Google Maps embed |
 | Carousel | `CarouselBlock` | Image slider |
+| Compare | `CompareBlock` | **Zenith Phase**: Before/After sliding comparison |
+| Gallery | `GalleryBlock` | Advanced image grid with lightboxes |
+
 
 ### Block Structure
 
@@ -274,11 +279,13 @@ const tabs = [
 | Tab | Component | Description |
 |-----|-----------|-------------|
 | Projects | `ProjectsTab` | Page overview, stats |
-| Editor | `EditorTab` | Block editor canvas |
-| CRM | `CRMTab` | Lead management |
-| Analytics | `AnalyticsTab` | View/click stats |
-| Gallery | `GalleryToggle` | Community pages |
-| Settings | `SettingsTab` | Profile, theme |
+| Editor | `EditorTab` | Block editor canvas (Living Canvas engine) |
+| CRM | `CRMTab` | Business Zone (Deals, Tasks, Contacts) |
+| Analytics | `AnalyticsTab` | View/click/conversion stats |
+| Gallery | `GalleryToggle` | Community inspirations |
+| Developer | `DeveloperTab` | **Zenith Phase**: API & Webhook management |
+| Settings | `SettingsTab` | Profile, billing, theme |
+
 
 ---
 
@@ -320,17 +327,12 @@ import { Settings, Plus, Trash2, Edit } from 'lucide-react';
 
 ---
 
-## Animations
+## Animations (Living Canvas Core)
 
-### CSS Transitions
+### Framer Motion
 
-```tsx
-<div className="transition-all duration-200 hover:scale-105">
-  {/* Animated content */}
-</div>
-```
+Framer Motion is the primary engine for LinkMAX micro-interactions. Every block icon and state change must use smooth, spring-based transitions.
 
-### Framer Motion (optional)
 
 ```tsx
 import { motion } from 'framer-motion';
@@ -404,4 +406,4 @@ test('button renders with text', () => {
 
 ---
 
-*Last updated: 2026-01-15*
+*Last updated: April 4, 2026 (Phase 40 Sync)*

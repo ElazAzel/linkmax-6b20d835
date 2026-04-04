@@ -1,6 +1,5 @@
-# SEO SSR & Bot Rendering
+LinkMAX uses a **bot-oriented SSR layer** (Zenith Phase) for indexing without changing the main React/Vite SPA behavior.
 
-This project uses a **bot-oriented SSR layer** for indexing without changing the main React/Vite SPA behavior.
 
 ## How it works
 
@@ -16,7 +15,9 @@ This project uses a **bot-oriented SSR layer** for indexing without changing the
    - Generates `sitemap.xml`.
    - Renders SSR HTML for landing, gallery, and profile pages.
    - Adds meta tags, canonical, hreflang, OG/Twitter, and JSON-LD.
+   - **IndexNow Integration**: Automatically pings Yandex/Bing on page publishing.
    - Returns correct HTTP status (200/404).
+
    - Caches SSR output with `Cache-Control` headers.
 
 ## SSR endpoints
@@ -40,10 +41,11 @@ Add `?lang=ru|en|kk` to select language. If omitted, the SSR layer uses the
 ## Testing (manual)
 
 ```
-curl -A "Googlebot" https://lnkmx.my/
-curl -A "Googlebot" https://lnkmx.my/gallery
-curl -A "Googlebot" https://lnkmx.my/{slug}
-curl https://lnkmx.my/sitemap.xml
+curl -A "Googlebot" https://linkmax.my/
+curl -A "Googlebot" https://linkmax.my/gallery
+curl -A "Googlebot" https://linkmax.my/{slug}
+curl https://linkmax.my/sitemap.xml
+
 ```
 
 ## Testing (unit)
