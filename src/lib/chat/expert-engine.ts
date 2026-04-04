@@ -212,3 +212,35 @@ export class ExpertEngine {
     return suggested.length > 0 ? suggested : defaultSuggestions;
   }
 }
+
+/**
+ * Детерминированный алгоритм для генерации смарт-ответов эксперта.
+ * Использует интент, ключевые слова из истории и данные лида.
+ */
+export function generateSmartDraft(leadName: string, intent: string, lastQuery: string, conversation: ExpertEngineMessage[] = []): string {
+  const greeting = leadName ? `Здравствуйте, ${leadName}! ` : 'Здравствуйте! ';
+  let body = '';
+
+  if (intent === 'commercial') {
+    body = `Спасибо за вашу заявку. Я изучил ваш вопрос${lastQuery ? ` по поводу «${lastQuery}»` : ''} и готов обсудить детали. Подскажите, когда вам будет удобно созвониться или списаться для консультации?`;
+  } else {
+    body = `Спасибо за интерес! Вы общались с моим цифровым ассистентом${lastQuery ? ` и спрашивали про «${lastQuery}»` : ''}. Буду рад рассказать подробнее и ответить на любые оставшиеся вопросы лично.`;
+  }
+
+  // Расширенный анализ контекста на основе ключевых слов в истории
+  const allText = conversation.map(m => m.content.toLowerCase()).join(' ');
+  
+  const hasPricing = ['цен', 'скидк', 'стоимост', 'прайс', 'тариф', 'плат'].some(k => allText.includes(k));
+  const hasBooking = ['запис', 'встреч', 'консультаци', 'время', 'когда', 'свобод'].some(k => allText.includes(k));
+  const hasProduct = ['купить', 'товар', 'заказ', 'доставк'].some(k => allText.includes(k));
+
+  if (hasPricing) {
+    body += '\n\nЧто касается стоимости: мы можем подобрать оптимальный вариант и тариф специально под ваши задачи.';
+  } else if (hasBooking) {
+    body += '\n\nДавайте подберем удобное для вас время. У меня есть пара свободных слотов на ближайшие дни.';
+  } else if (hasProduct) {
+    body += '\n\nЯ могу проконсультировать вас по наличию и деталям заказа.';
+  }
+
+  return greeting + body; // Without "С уважением" as it will be used in chats like Telegram where it's less formal.
+}

@@ -4870,7 +4870,14 @@
       },
       "chatbot": {
         "commercialDesc": "Пользователь проявил коммерческий интерес перед отправкой формы.",
-        "infoDesc": "Пользователь задавал уточняющие вопросы ассистенту."
+        "infoDesc": "Пользователь задавал уточняющие вопросы ассистенту.",
+        "history": "История диалога",
+        "hot": "Горячий",
+        "smartDraft": "Smart-драфт",
+        "generateDraft": "Сгенерировать Smart-драфт",
+        "copyDraftSuccess": "Скопировано",
+        "sendTelegram": "Отправить в Telegram",
+        "sendWhatsApp": "Отправить в WhatsApp"
       },
       "status": {
         "label": "Статус",

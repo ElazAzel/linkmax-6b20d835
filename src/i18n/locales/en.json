@@ -6909,7 +6909,12 @@
         "commercialDesc": "The user showed commercial interest before submitting the form.",
         "infoDesc": "The user was asking clarifying questions to the assistant.",
         "history": "Conversation History",
-        "hot": "Hot"
+        "hot": "Hot",
+        "smartDraft": "Smart Draft",
+        "generateDraft": "Generate Smart Draft",
+        "copyDraftSuccess": "Copied",
+        "sendTelegram": "Send via Telegram",
+        "sendWhatsApp": "Send via WhatsApp"
       },
       "status": {
         "label": "Status",

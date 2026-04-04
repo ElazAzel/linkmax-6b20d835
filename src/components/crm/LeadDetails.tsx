@@ -52,8 +52,13 @@ import Send from 'lucide-react/dist/esm/icons/send';
 import Tag from 'lucide-react/dist/esm/icons/tag';
 import Globe from 'lucide-react/dist/esm/icons/globe';
 import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import Check from 'lucide-react/dist/esm/icons/check';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import type { Lead } from '@/hooks/crm/useLeads';
+import { generateSmartDraft } from '@/lib/chat/expert-engine';
+import { cn } from '@/lib/utils/utils';
 
 interface LeadDetailsProps {
   lead: Lead;
@@ -106,6 +111,8 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
   const [newInteractionType, setNewInteractionType] = useState<InteractionType>('note');
   const [newInteractionContent, setNewInteractionContent] = useState('');
   const [hasChanges, setHasChanges] = useState(false);
+  const [draft, setDraft] = useState<string | null>(null);
+  const [draftCopied, setDraftCopied] = useState(false);
 
   const handleStatusChange = async (newStatus: LeadStatus) => {
     setStatus(newStatus);
@@ -122,6 +129,35 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
 
     await addInteraction(newInteractionType, newInteractionContent);
     setNewInteractionContent('');
+  };
+
+  const handleGenerateDraft = () => {
+    const text = generateSmartDraft(
+      lead.name, 
+      lead.metadata?.intent || 'informational', 
+      lead.metadata?.last_query || '', 
+      lead.metadata?.conversation || []
+    );
+    setDraft(text);
+  };
+
+  const handleCopyDraft = () => {
+    if (!draft) return;
+    navigator.clipboard.writeText(draft);
+    setDraftCopied(true);
+    setTimeout(() => setDraftCopied(false), 2000);
+  };
+
+  const handleSendTelegram = () => {
+    if (!lead.phone) return;
+    const url = `https://t.me/${lead.phone.replace(/\D/g, '')}?text=${encodeURIComponent(draft || '')}`;
+    window.open(url, '_blank');
+  };
+
+  const handleSendWhatsApp = () => {
+    if (!lead.phone) return;
+    const url = `https://wa.me/${lead.phone.replace(/\D/g, '')}?text=${encodeURIComponent(draft || '')}`;
+    window.open(url, '_blank');
   };
 
   const handleDelete = async () => {
@@ -225,6 +261,56 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
                   </div>
                 </div>
               )}
+
+              {/* Smart Draft Feature */}
+              <div className="mt-3 pt-3 border-t border-primary/10">
+                {!draft ? (
+                  <Button 
+                    onClick={handleGenerateDraft}
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full h-9 bg-primary/5 hover:bg-primary/10 border-primary/20 text-primary group"
+                  >
+                    <Sparkles className="h-3.5 w-3.5 mr-2 group-hover:animate-pulse" />
+                    {t('crm.chatbot.generateDraft', 'Сгенерировать Smart-драфт')}
+                  </Button>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">Smart Draft</span>
+                      <Button variant="ghost" size="sm" onClick={handleCopyDraft} className="h-6 px-2 text-[10px] hover:bg-primary/10">
+                        {draftCopied ? <Check className="h-3 w-3 mr-1 text-emerald-500" /> : <Copy className="h-3 w-3 mr-1" />}
+                        {draftCopied ? t('crm.chatbot.copyDraftSuccess', 'Скопировано') : t('editor.copy_link', 'Copy')}
+                      </Button>
+                    </div>
+                    <Textarea 
+                      value={draft}
+                      onChange={(e) => setDraft(e.target.value)}
+                      className="text-xs resize-none bg-background/50 border-primary/20 focus-visible:ring-primary/30 h-24"
+                    />
+                    {lead.phone && (
+                      <div className="flex gap-2 mt-2">
+                        <Button 
+                          onClick={handleSendTelegram}
+                          size="sm" 
+                          className="flex-1 h-8 bg-[#2AABEE] hover:bg-[#229ED9] text-white text-[10px] uppercase font-bold tracking-wider"
+                        >
+                          <Send className="h-3 w-3 mr-1.5" />
+                          {t('crm.chatbot.sendTelegram', 'Telegram')}
+                        </Button>
+                        <Button 
+                          onClick={handleSendWhatsApp}
+                          size="sm" 
+                          className="flex-1 h-8 bg-[#25D366] hover:bg-[#128C7E] text-white text-[10px] uppercase font-bold tracking-wider"
+                        >
+                          <MessageSquare className="h-3 w-3 mr-1.5" />
+                          {t('crm.chatbot.sendWhatsApp', 'WhatsApp')}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
