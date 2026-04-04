@@ -284,7 +284,10 @@ export function usePageAnalytics(externalPageId?: string) {
         if (isNaN(stats.ctr)) stats.ctr = 0;
       });
 
+      // Deduplicate — aliases share the same stats object reference
+      const seen = new Set<BlockStats>();
       const topBlocks = Array.from(blockStatsMap.values())
+        .filter(s => { if (seen.has(s)) return false; seen.add(s); return true; })
         .sort((a, b) => b.clicks - a.clicks)
         .slice(0, 10);
 
