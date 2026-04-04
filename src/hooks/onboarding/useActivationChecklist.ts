@@ -94,7 +94,7 @@ export function useActivationChecklist({
       id: 'first-lead',
       labelKey: 'activation.steps.firstLead',
       completed: hasFirstLead,
-      action: onOpenEditor,
+      action: onShare,
       ctaKey: 'activation.cta.promotePage',
       href: '/dashboard/activity?action=first-lead',
     });

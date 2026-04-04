@@ -64,40 +64,40 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
   if (_geoFetchPromise) return _geoFetchPromise;
 
   _geoFetchPromise = (async () => {
-    try {
-      // Use multiple fallback APIs for reliability
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 3000);
-
-      const response = await fetch('https://ipapi.co/json/', {
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
-
-      if (!response.ok) return null;
-
-      const data = await response.json();
-      _geoCache = {
-        country: data.country_name || 'Unknown',
-        countryCode: data.country_code || 'XX',
-        city: data.city || undefined,
-        region: data.region || undefined,
-      };
-      return _geoCache;
-    } catch {
-      // Try fallback
-      try {
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 3000);
-        const resp2 = await fetch('https://ip.guide/', {
-          headers: { Accept: 'application/json' },
-          signal: controller2.signal,
-        });
-        clearTimeout(timeout2);
-        if (!resp2.ok) return null;
-        const d2 = await resp2.json();
-        _geoCache = {
-          country: d2.location?.country || 'Unknown',
+    // Try multiple free geo APIs with short timeouts
+    const apis = [
+      {
+        url: 'https://ipwho.is/',
+        parse: (d: any) => ({
+          country: d.country || 'Unknown',
+          countryCode: d.country_code || 'XX',
+          city: d.city || undefined,
+          region: d.region || undefined,
+        }),
+      },
+      {
+        url: 'https://freeipapi.com/api/json',
+        parse: (d: any) => ({
+          country: d.countryName || 'Unknown',
+          countryCode: d.countryCode || 'XX',
+          city: d.cityName || undefined,
+          region: d.regionName || undefined,
+        }),
+      },
+      {
+        url: 'https://ipapi.co/json/',
+        parse: (d: any) => ({
+          country: d.country_name || 'Unknown',
+          countryCode: d.country_code || 'XX',
+          city: d.city || undefined,
+          region: d.region || undefined,
+        }),
+      },
+      {
+        url: 'https://ip.guide/',
+        headers: { Accept: 'application/json' },
+        parse: (d: any) => ({
+          country: d.location?.country || 'Unknown',
           countryCode: d2.location?.country_code || 'XX',
           city: d2.location?.city || undefined,
         };
