@@ -504,6 +504,7 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 | Analytics | `screens/InsightsScreen.tsx` | Views, clicks, conversion metrics |
 | CRM | `screens/ActivityScreen.tsx` | Leads, bookings, event registrations |
 | Page Settings | `screens/PageSettingsScreen.tsx` | Slug, SEO, branding, **pixel analytics** |
+| Developer Settings | `screens/DeveloperSettings.tsx` | API key management (`lk_live_`) and webhooks |
 | Account Settings | `screens/AccountSettingsScreen.tsx` | Profile, billing, notifications |
 
 **Auto-save mechanism:**

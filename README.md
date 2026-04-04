@@ -32,6 +32,7 @@
 - **Deep Analytics**: Views, clicks, CTR, traffic sources, block performance, geography; **Pixel Proxy** for server-side tracking (Facebook CAPI, TikTok Events).
 - **A/B Experiments**: Test block variants for conversion optimization.
 - **Notifications**: Instant alerts via Telegram for new leads and bookings.
+- **Developer Portal**: API keys (`lk_live_`) and webhook endpoints for expert business automation.
 
 ### 🌐 **Localization & SEO**
 
@@ -135,7 +136,7 @@
 
 ## 📂 Project Structure
 
-```
+```text
 lnkmx/
 ├── src/
 │   ├── components/       # Reusable UI & Business Components
