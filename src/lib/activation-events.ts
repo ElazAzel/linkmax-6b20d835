@@ -88,6 +88,7 @@ export async function trackActivationEvent(
       .from('analytics')
       .insert([{ 
         page_id: pageId,
+        block_id: null,
         event_type: `activation:${eventType}`,
         metadata: (metadata ?? {}) as Json,
       }]);

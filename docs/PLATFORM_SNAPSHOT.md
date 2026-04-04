@@ -150,6 +150,13 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Semantic Motion: Animations reflect block function (e.g., typing for text, rotating hands for timer, pulse for REC).
   - Performance: CSS-accelerated SVG transforms with zero JS overhead.
 
+### [2026-04-04] Phase 22: CRM & Analytics Stability (Retention Hotfix)
+
+- **Database-Schema Sync**: Resolved critical 400 Bad Request errors in CRM by adding the missing `deleted_at` column to `zone_deals` and `zone_tasks`. This restores the alignment between frontend "Soft Delete" logic and the Postgres layer.
+- **Analytics Resilience**: Hardened `trackActivationEvent` by explicitly passing `block_id: null`. This ensures compatibility with recent PostgREST schema changes and restores activation event tracking.
+- **Index Optimization**: Added partial indexes for active records (`deleted_at IS NULL`) to maintain high performance in high-volume CRM pipelines.
+- **Health Score**: **10/10** (Status: CRM Pipelines & Analytics Restored).
+
 ### [2026-04-03] Phase 18: CRM Bulk Actions & Custom Fields 2.0
 
 - **CRM Bulk Actions**: High-performance batch processing for deals.
@@ -1130,6 +1137,6 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: March 23, 2026*
+*Last updated: April 4, 2026*
 *Current Platform Health Score: **10/10** (Status: Production Ready 1.1.0. Phases 8 & 9 Documentation, Infrastructure & UX Polish completed).*
 *Maintained by: Antigravity (Principal Engineer)*

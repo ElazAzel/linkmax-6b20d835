@@ -1,5 +1,15 @@
 # Changelog
 
+## [Phase 23] - 2026-04-04
+
+### Fixed (Phase 23)
+
+- **CRM 400 Bad Request**: Resolved a critical database schema mismatch where the `zone_deals` and `zone_tasks` tables were missing the `deleted_at` column required by the frontend "Soft Delete" logic.
+- **Analytics Insertion**: Fixed 400 errors in `trackActivationEvent` by explicitly providing `block_id: null` in the payload, ensuring compliance with strict PostgREST schema validation.
+- **Database Maintenance**:
+  - Implemented migration `20260404100000_crm_soft_delete_maintenance.sql`.
+  - Added partial indexes for `deleted_at IS NULL` to optimize CRM pipeline queries.
+
 ## [Phase 18] - 2026-04-03
 
 ### Added (Phase 18)
