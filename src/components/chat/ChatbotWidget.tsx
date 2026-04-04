@@ -11,21 +11,33 @@ import { cn } from '@/lib/utils/utils';
 import { trackEvent, logChatQuery } from '@/services/analytics';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExpertEngine, ExpertEngineMessage } from '@/lib/chat/expert-engine';
+import { ExpertEngine } from '@/lib/chat/expert-engine';
 import { Block } from '@/types/blocks';
+import { ChatLeadForm } from './ChatLeadForm';
+
+export interface ExpertEngineMessage { 
+  id?: string;
+  role: 'user' | 'assistant'; 
+  content: string; 
+  source?: string;
+  type?: 'text' | 'form';
+}
 
 interface ChatbotWidgetProps {
+  pageId: string;
+  userId: string;
   pageSlug: string;
   blocks: Block[];
   seo: { title: string; description: string };
 }
 
-export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
+export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: ChatbotWidgetProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ExpertEngineMessage[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [leadSent, setLeadSent] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initialize the deterministic engine
@@ -55,7 +67,7 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
 
     try {
       // Local DKE processing
-      const { message: responseMessage, hasMatch, score } = engine.getResponse(cleanText);
+      const { message: responseMessage, hasMatch, score, intent } = engine.getResponse(cleanText);
       
       // Artificial delay for "Natural" feeling
       await new Promise((resolve) => setTimeout(resolve, 800 + Math.random() * 1000));
@@ -64,10 +76,24 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: responseMessage.content,
-        source: responseMessage.source
+        source: responseMessage.source,
+        type: 'text'
       };
 
-      setMessages((prev) => [...prev, botMessage]);
+      const newMessages = [...messages, userMsg, botMessage];
+      
+      // Intent handling: Offer Lead Form if commercial intent detected and form not sent yet
+      if (intent === 'commercial' && !leadSent) {
+        const leadOffer: ExpertEngineMessage = {
+          id: (Date.now() + 2).toString(),
+          role: 'assistant',
+          content: t('chat.lead.offer', 'Я могу передать вашу заявку напрямую эксперту. Хотите оставить контакты?'),
+          type: 'form'
+        };
+        setMessages([...newMessages, leadOffer]);
+      } else {
+        setMessages(newMessages);
+      }
       
       // Log for Expert Insights (Phase 26)
       logChatQuery(pageSlug, cleanText, hasMatch, { score, source: responseMessage.source });
@@ -77,6 +103,20 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
     } finally {
       setIsTyping(false);
     }
+  };
+
+  const handleLeadSuccess = (name: string) => {
+    setLeadSent(true);
+    // Remove the form message and add a success text message
+    setMessages(prev => {
+      const filtered = prev.filter(m => m.type !== 'form');
+      return [...filtered, {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: `${name}, ${t('chat.lead.successMsg', 'спасибо! Ваша заявка принята. Эксперт свяжется с вами в ближайшее время.')}`,
+        type: 'text'
+      }];
+    });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -157,12 +197,12 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
 
               {messages.map((message, index) => (
                 <motion.div
-                  key={index}
+                  key={message.id || index}
                   initial={{ opacity: 0, x: message.role === 'user' ? 20 : -20, y: 10 }}
                   animate={{ opacity: 1, x: 0, y: 0 }}
                   className={cn(
-                    'flex w-full',
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                    'flex w-full flex-col',
+                    message.role === 'user' ? 'items-end' : 'items-start'
                   )}
                 >
                   <div
@@ -175,6 +215,17 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
                   >
                     <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
                   </div>
+                  
+                  {/* Lead Form Integration - Phase 27 */}
+                  {message.type === 'form' && (
+                    <div className="w-full sm:w-[90%]">
+                      <ChatLeadForm 
+                        pageId={pageId}
+                        userId={userId}
+                        onSuccess={handleLeadSuccess}
+                      />
+                    </div>
+                  )}
                 </motion.div>
               ))}
 
@@ -196,17 +247,17 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 border-t border-white/5 bg-black/10 backdrop-blur-lg">
+            <div className="p-4 pb-safe border-t border-white/5 bg-black/10 backdrop-blur-lg">
               {/* Suggestions */}
               {messages.length === 0 && suggestions.length > 0 && !isTyping && (
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-4 max-h-32 overflow-y-auto scrollbar-hide py-1">
                   {suggestions.map((suggestion, idx) => (
                     <Button
                       key={idx}
                       variant="outline"
                       size="sm"
                       onClick={() => handleSend(suggestion)}
-                      className="text-[11px] h-8 rounded-full bg-white/5 hover:bg-primary/20 hover:text-foreground border-white/10 transition-all font-medium py-0"
+                      className="text-[11px] h-8 rounded-full bg-white/5 hover:bg-primary/20 hover:text-foreground border-white/10 transition-all font-medium py-0 whitespace-nowrap"
                     >
                       {suggestion}
                     </Button>
@@ -221,7 +272,7 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
                   onKeyDown={handleKeyPress}
                   placeholder={t('chat.placeholder', 'Задайте вопрос...')}
                   disabled={isTyping}
-                  className="bg-white/5 border-white/10 focus-visible:ring-primary/50 rounded-2xl h-11 pr-12 text-sm transition-all"
+                  className="bg-white/5 border-white/10 focus-visible:ring-primary/50 glass-input rounded-2xl h-11 pr-12 text-sm transition-all outline-none"
                 />
                 <Button
                   onClick={() => handleSend()}

@@ -345,6 +345,8 @@ export default function PublicPage() {
               {enhancementsReady && slug && pageData && (
                 <Suspense fallback={null}>
                   <ChatbotWidget 
+                    pageId={pageData.id!}
+                    userId={pageData.userId!}
                     pageSlug={slug} 
                     blocks={displayBlocks as Block[]} 
                     seo={pageData.seo} 

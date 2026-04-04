@@ -117,7 +117,18 @@
 
 ## [1.15.0] - 2026-04-02
 
-### Phase 14: Interactive Micro-Animations (WOW Factor)
+### Phase 27: Smart Lead Capture (Conversational Sales)
+
+- **Intent-Based Conversion**: Updated Expert Engine to detect commercial intent (pricing, booking, etc.).
+- **Interactive Forms**: Created `ChatLeadForm` using Liquid Glass design for zero-friction lead capture.
+- **Unified CRM**: Leads from chat are automatically synced with the CRM block, tagged with `chatbot` source.
+- **Advanced Responsiveness**: The chat widget now supports full-screen mobile mode and floating desktop mode with safe area support.
+
+### Phase 26: Expert Engine (DKE)
+
+- **Knowledge Retrieval**: Implemented deterministic pattern matching for zero-latency responses based on page content.
+- **Visual Analytics**: Added `ChatbotInsights.tsx` to visualize top user queries and engine performance.
+Micro-Animations (WOW Factor)
 
 - **100% Icon Coverage**: Expanded `AnimatedBlockIcon` to include unique, meaning-based micro-animations for all 28+ block types, eliminating all static fallbacks.
 - **Advanced Micro-Animations**: Added 10+ new specialized paths:
@@ -693,7 +704,7 @@
 #### Invoice Numbering
 
 - Автоматическая генерация порядковых номеров (`#INV-001`, `#INV-002`, ...) через DB-триггер `trg_zone_invoice_number`.
-- Обновлён UI инвойсов: `ZoneInvoicesScreen` и `InvoiceDetailSheet` используют формат `INV-XXX`.
+- Обновлён UI инвойсов: `ZoneInvoicesScreen` and `InvoiceDetailSheet` используют формат `INV-XXX`.
 
 #### Business Dashboard (v3)
 
@@ -789,7 +800,7 @@
 - **SEOHead.tsx & PublicPage.tsx**: Добавлен безопасный доступ (`?.`) к объекту `seo` в `pageData`. Ранее прямое обращение к `pageData.seo.title` вызывало `TypeError`, если данные SEO не были загружены или отсутствовали.
 - **DashboardV2.tsx**: Исправлен `lazy import` для `TeamManagementScreen`. Ранее возникло несоответствие (default export vs named import), что блокировало загрузку дашборда.
 - **src/services/pages.ts**:
-  - Исправлена логика маппинга в функциях `loadPageBySlug` и `loadPageByCustomDomain`.
+  - Исправлена логика маппинга в функциях `loadPageBySlug` and `loadPageByCustomDomain`.
   - Добавлена недостающая вспомогательная функция `mapExperimentData`.
   - Добавлен маппинг `organization_id`, необходимый для работы командных функций.
 - **TeamManagementScreen**: Компонент переведен на использование `named export` для соответствия паттерну остальных экранов дашборда.
@@ -974,6 +985,8 @@
 
 - **Mobile Editor UX**:
   - Implemented dedicated drag handles (`::` icon) for block reordering on mobile to prevent conflict with "Tap to Edit".
+  - [Phase 27] Conversational Lead Capture: Intent detection + Inline forms.
+  - [Phase 26] Expert Engine DKE: Deterministic knowledge extraction for instant chatbot responses.
   - Removed artificial delays on mobile interactions for instant responsiveness.
   - Added `framer-motion` animations for smoother UI transitions in the editor.
 

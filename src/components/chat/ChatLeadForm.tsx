@@ -76,7 +76,7 @@ export const ChatLeadForm = ({ pageId, userId, onSuccess }: ChatLeadFormProps) =
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 required
-                className="h-10 rounded-xl bg-white/5 border-white/10 text-sm focus:ring-primary focus:border-primary transition-all"
+                className="h-10 rounded-xl glass-input text-sm transition-all"
               />
               <Input
                 placeholder={t('chat.lead.phone', 'Телефон')}
@@ -84,7 +84,7 @@ export const ChatLeadForm = ({ pageId, userId, onSuccess }: ChatLeadFormProps) =
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 required
-                className="h-10 rounded-xl bg-white/5 border-white/10 text-sm focus:ring-primary focus:border-primary transition-all"
+                className="h-10 rounded-xl glass-input text-sm transition-all"
               />
             </div>
 
