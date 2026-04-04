@@ -774,166 +774,6 @@
       "item4": "Would you like to see analytics on blocks and traffic sources?",
       "item5": "You work in RU and KK, you need localization and KZT prices.",
       "title": "When to choose LinkMAX"
-    }
-  },
-  "analytics": {
-    "activityChart": "Activity",
-    "aiInsights": "AI Recommendations",
-    "all": "Entire period",
-    "apply": "Apply",
-    "avgPerDay": "Average per day",
-    "staff": {
-      "bookings": "Bookings",
-      "keepItUp": "keep it up!",
-      "revenue": "Revenue",
-      "teamBreakdown": "Team Breakdown",
-      "units": "bookings",
-      "yourStats": "Your Result"
-    },
-    "blockTypes": {
-      "booking": "Booking",
-      "button": "Button",
-      "contactForm": "Form",
-      "event": "Event",
-      "gallery": "Gallery",
-      "link": "Link",
-      "messenger": "Messenger",
-      "pricing": "Pricing",
-      "product": "Product",
-      "social": "Social",
-      "video": "Video"
-    },
-    "blocks": {
-      "andMore": "and another {{count}} blocks",
-      "avgCtr": "Wed. CTR",
-      "clicks": "clicks",
-      "noData": "No click data",
-      "title": "Block efficiency"
-    },
-    "chart": {
-      "title": "Dynamics for the period"
-    },
-    "chat": {
-      "error": "An error occurred. Please try again.",
-      "noResponse": "Sorry, I couldn't find an answer. Try a different question.",
-      "placeholder": "Ask a question...",
-      "suggest": "Try asking:",
-      "title": "Expert Assistant",
-      "typing": "Typing...",
-      "lead": {
-        "title": "Submit Request",
-        "name": "Your name",
-        "phone": "Phone",
-        "submit": "Submit",
-        "success": "Request sent!",
-        "successMsg": "We will contact you soon",
-        "disclaimer": "By clicking, you agree to data processing",
-        "offer": "I can pass your request directly to the expert. Would you like to leave your contacts?"
-      }
-    },
-    "clicks": "Clicks",
-    "clicksByBlock": "Clicks on blocks",
-    "description": "Track page performance",
-    "desktop": "Computers",
-    "devices": "Devices",
-    "engagement": {
-      "avgSession": "Average time",
-      "bounceDesc": "No interaction",
-      "bounceRate": "Failures",
-      "ctr": "CTR",
-      "ctrDesc": "Clicks per view",
-      "returning": "Returns",
-      "returningDesc": "Repeat visits",
-      "sessionDesc": "On the page",
-      "title": "Engagement",
-      "viewsPerVisitor": "Views per visitor"
-    },
-    "export": {
-      "button": "Export",
-      "daily": "By day (CSV)",
-      "error": "Data export error",
-      "excel": "Export Excel",
-      "success": "Data exported successfully",
-      "summary": "Summary (CSV)"
-    },
-    "funnel": {
-      "avgPerDay": "Average per day",
-      "clickRate": "Clicks/Views",
-      "clicks": "Clicks",
-      "conversionRate": "Conversions/Views",
-      "conversions": "Conversions",
-      "dropOff": "drop-off",
-      "engagement": "Involvement",
-      "insights": "Conversion Analysis",
-      "overallConversion": "Total Conversion",
-      "overallLabel": "Overall conversion",
-      "retention": "retained",
-      "subtitle": "Visitor journey to purchase",
-      "title": "Conversion funnel",
-      "views": "Views"
-    },
-    "geography": {
-      "andMore": "and more {{count}} countries",
-      "noData": "No geographical data",
-      "title": "Geography"
-    },
-    "insights": {
-      "addPricing": "Add a block with prices",
-      "addPricingDesc": "Price list pages receive 40% more requests",
-      "addTestimonials": "Add reviews",
-      "addTestimonialsDesc": "Reviews increase trust and conversion by 25%",
-      "duplicateTop": "Duplicate a popular link",
-      "duplicateTopDesc": "gets clicks"
-    },
-    "mobile": "Mobile",
-    "month": "Month",
-    "noData": "There is no data for the selected period",
-    "premium": {
-      "desc": "A/B tests, heatmaps and detailed analytics in Pro",
-      "title": "Expanded Funnel"
-    },
-    "refresh": "Update",
-    "shares": "Reposts",
-    "sources": {
-      "noData": "No information about sources",
-      "title": "Traffic sources"
-    },
-    "subtitle": "Page statistics",
-    "tablet": "Tablets",
-    "tabs": {
-      "blocks": "Blocks",
-      "experiments": "Tests",
-      "funnel": "Funnel",
-      "overview": "Review",
-      "traffic": "Traffic"
-    },
-    "title": "Analytics",
-    "today": "Today",
-    "tooltipClicks": "Clicks",
-    "topBlocks": "Popular blocks",
-    "traffic": {
-      "bing": "Bing",
-      "direct": "Direct",
-      "facebook": "Facebook",
-      "google": "Google",
-      "instagram": "Instagram",
-      "linkedin": "LinkedIn",
-      "referral": "Referral",
-      "telegram": "Telegram",
-      "tiktok": "TikTok",
-      "twitter": "Twitter/X",
-      "unknown": "Other",
-      "vkontakte": "VKontakte",
-      "whatsapp": "WhatsApp",
-      "yandex": "Yandex",
-      "youtube": "YouTube"
-    },
-    "trafficSources": "Traffic sources",
-    "uniqueVisitors": "Unique visitors",
-    "views": "Views",
-    "viewsPerDay": "views / day",
-    "visitors": "Visitors",
-    "week": "Week"
   },
   "animationSettings": {
     "bounce": "Bounce",
@@ -6402,7 +6242,168 @@
       "title": "Final touches"
     }
   },
-  "zone": {
+  "zones": {
+    "analytics": {
+      "activityChart": "Activity",
+      "aiInsights": "AI Recommendations",
+      "all": "Entire period",
+      "apply": "Apply",
+      "avgPerDay": "Average per day",
+      "staff": {
+        "bookings": "Bookings",
+        "keepItUp": "keep it up!",
+        "revenue": "Revenue",
+        "teamBreakdown": "Team Breakdown",
+        "units": "bookings",
+        "yourStats": "Your Result"
+      },
+      "blockTypes": {
+        "booking": "Booking",
+        "button": "Button",
+        "contactForm": "Form",
+        "event": "Event",
+        "gallery": "Gallery",
+        "link": "Link",
+        "messenger": "Messenger",
+        "pricing": "Pricing",
+        "product": "Product",
+        "social": "Social",
+        "video": "Video"
+      },
+      "blocks": {
+        "andMore": "and another {{count}} blocks",
+        "avgCtr": "Wed. CTR",
+        "clicks": "clicks",
+        "noData": "No click data",
+        "title": "Block efficiency"
+      },
+      "chart": {
+        "title": "Dynamics for the period"
+      },
+      "chat": {
+        "error": "An error occurred. Please try again.",
+        "noResponse": "Sorry, I couldn't find an answer. Try a different question.",
+        "placeholder": "Ask a question...",
+        "suggest": "Try asking:",
+        "title": "Expert Assistant",
+        "typing": "Typing...",
+        "lead": {
+          "title": "Submit Request",
+          "name": "Your name",
+          "phone": "Phone",
+          "submit": "Submit",
+          "success": "Request sent!",
+          "successMsg": "We will contact you soon",
+          "disclaimer": "By clicking, you agree to data processing",
+          "offer": "I can pass your request directly to the expert. Would you like to leave your contacts?"
+        }
+      },
+      "clicks": "Clicks",
+      "clicksByBlock": "Clicks on blocks",
+      "description": "Track page performance",
+      "desktop": "Computers",
+      "devices": "Devices",
+      "engagement": {
+        "avgSession": "Average time",
+        "bounceDesc": "No interaction",
+        "bounceRate": "Failures",
+        "ctr": "CTR",
+        "ctrDesc": "Clicks per view",
+        "returning": "Returns",
+        "returningDesc": "Repeat visits",
+        "sessionDesc": "On the page",
+        "title": "Engagement",
+        "viewsPerVisitor": "Views per visitor"
+      },
+      "export": {
+        "button": "Export",
+        "daily": "By day (CSV)",
+        "error": "Data export error",
+        "excel": "Export Excel",
+        "success": "Data exported successfully",
+        "summary": "Summary (CSV)"
+      },
+      "funnel": {
+        "avgPerDay": "Average per day",
+        "clickRate": "Clicks/Views",
+        "clicks": "Clicks",
+        "conversionRate": "Conversions/Views",
+        "conversions": "Conversions",
+        "dropOff": "drop-off",
+        "engagement": "Involvement",
+        "insights": "Conversion Analysis",
+        "overallConversion": "Total Conversion",
+        "overallLabel": "Overall conversion",
+        "retention": "retained",
+        "subtitle": "Visitor journey to purchase",
+        "title": "Conversion funnel",
+        "views": "Views"
+      },
+      "geography": {
+        "andMore": "and more {{count}} countries",
+        "noData": "No geographical data",
+        "title": "Geography"
+      },
+      "insights": {
+        "addPricing": "Add a block with prices",
+        "addPricingDesc": "Price list pages receive 40% more requests",
+        "addTestimonials": "Add reviews",
+        "addTestimonialsDesc": "Reviews increase trust and conversion by 25%",
+        "duplicateTop": "Duplicate a popular link",
+        "duplicateTopDesc": "gets clicks"
+      },
+      "mobile": "Mobile",
+      "month": "Month",
+      "noData": "There is no data for the selected period",
+      "premium": {
+        "desc": "A/B tests, heatmaps and detailed analytics in Pro",
+        "title": "Expanded Funnel"
+      },
+      "refresh": "Update",
+      "shares": "Reposts",
+      "sources": {
+        "noData": "No information about sources",
+        "title": "Traffic sources"
+      },
+      "subtitle": "Page statistics",
+      "tablet": "Tablets",
+      "tabs": {
+        "blocks": "Blocks",
+        "experiments": "Tests",
+        "funnel": "Funnel",
+        "overview": "Review",
+        "traffic": "Traffic"
+      },
+      "title": "Analytics",
+      "today": "Today",
+      "tooltipClicks": "Clicks",
+      "topBlocks": "Popular blocks",
+      "traffic": {
+        "bing": "Bing",
+        "direct": "Direct",
+        "facebook": "Facebook",
+        "google": "Google",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "referral": "Referral",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "twitter": "Twitter/X",
+        "unknown": "Other",
+        "vkontakte": "VKontakte",
+        "whatsapp": "WhatsApp",
+        "yandex": "Yandex",
+        "youtube": "YouTube"
+      },
+      "trafficSources": "Traffic sources",
+      "uniqueVisitors": "Unique visitors",
+      "views": "Views",
+      "viewsPerDay": "views / day",
+      "visitors": "Visitors",
+      "week": "Week"
+    },
+  },
+  "zones": {
     "notifications": {
       "empty": "No notifications",
       "markAllRead": "Mark all as read",
@@ -6429,9 +6430,7 @@
       "title": "Product Catalog",
       "unit": "Unit",
       "updated": "Product updated"
-    }
-  },
-  "zones": {
+    },
     "analytics": {
       "activeValue": "Open deals value",
       "avgClose": "Avg. Close",
@@ -7028,8 +7027,8 @@
       }
     }
   }
-},
-"landingV2": {
+  },
+  "landingV2": {
     "expert": {
       "badge": "Official Business Platform (Solo OS)",
       "title1": "Stop gluing",
