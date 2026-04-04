@@ -34,6 +34,7 @@ import {
   BlockPerformance,
   AnalyticsExport,
   ExperimentsList,
+  ChatbotInsights,
 } from '../analytics';
 import { cn } from '@/lib/utils/utils';
 import type { Block } from '@/types/page';
@@ -410,6 +411,11 @@ export const InsightsScreen = memo(function InsightsScreen({
                       />
                     </motion.div>
                   )}
+
+                  {/* Chatbot Insights (Phase 26) */}
+                  <motion.div variants={itemVariants}>
+                    <ChatbotInsights pageId={pageId} />
+                  </motion.div>
 
                   {/* AI Insights */}
                   {insights.length > 0 && (

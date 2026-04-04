@@ -385,6 +385,42 @@ export async function trackEvent({
 }
 
 /**
+ * Log a chat query for Expert Insights
+ * Stores the question, whether it was answered, and relevant metadata.
+ */
+export async function logChatQuery(
+  pageId: string,
+  queryText: string,
+  hasResponse: boolean,
+  metadata: Record<string, unknown> = {}
+): Promise<void> {
+  if (!ANALYTICS_ENABLED) return;
+
+  try {
+    const session_data = getOrCreateSession();
+    const geo = await getGeoInfo().catch(() => null);
+
+    await (supabase.from('expert_queries' as any) as any).insert({
+      page_id: pageId,
+      query_text: queryText.substring(0, 500), // Cap length
+      has_response: hasResponse,
+      metadata: {
+        ...metadata,
+        visitorId: session_data.visitorId,
+        sessionId: session_data.id,
+        device: getDeviceType(),
+        country: geo?.countryCode || undefined,
+        city: geo?.city || undefined,
+        timestamp: new Date().toISOString(),
+      } as Json,
+    });
+  } catch (err) {
+    // Silent fail for analytics
+    logger.debug('Expert Insights logging failed', { data: err });
+  }
+}
+
+/**
  * Track page view event
  */
 export async function trackPageView(pageId: string): Promise<void> {

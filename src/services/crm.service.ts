@@ -81,6 +81,36 @@ export class CrmService {
     }
   }
 
+  /**
+   * Create a lead from a public source (like chatbot)
+   */
+  static async createPublicLead(data: {
+    userId: string;
+    name: string;
+    email?: string;
+    phone?: string;
+    notes?: string;
+    source?: string;
+    metadata?: any;
+  }): Promise<{ data: any; error: any }> {
+    const { data: lead, error } = await supabase
+      .from('leads')
+      .insert({
+        user_id: data.userId,
+        name: data.name,
+        email: data.email || null,
+        phone: data.phone || null,
+        notes: data.notes || null,
+        source: (data.source as any) || 'form',
+        status: 'new',
+        metadata: data.metadata || {},
+      })
+      .select()
+      .single();
+
+    return { data: lead, error };
+  }
+
   private static async getPrimaryZoneId(userId: string): Promise<string | null> {
     const { data } = await supabase
       .from('zones')

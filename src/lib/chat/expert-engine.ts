@@ -1,6 +1,7 @@
 import { Block } from '@/types/blocks';
 
 export interface ExpertEngineMessage {
+  id?: string;
   role: 'user' | 'assistant';
   content: string;
   source?: 'faq' | 'pricing' | 'about' | 'contact' | 'booking' | 'system';
@@ -133,8 +134,24 @@ export class ExpertEngine {
     });
   }
 
-  public getResponse(userInput: string): ExpertEngineMessage {
-    if (!userInput.trim()) return { role: 'assistant', content: 'Пожалуйста, введите ваш вопрос.', source: 'system' };
+  public getResponse(userInput: string): { 
+    message: ExpertEngineMessage; 
+    hasMatch: boolean; 
+    score: number;
+    intent: 'commercial' | 'informational';
+  } {
+    if (!userInput.trim()) {
+      return { 
+        message: { role: 'assistant', content: 'Пожалуйста, введите ваш вопрос.', source: 'system' },
+        hasMatch: false,
+        score: 0,
+        intent: 'informational'
+      };
+    }
+
+    const cleanInput = userInput.toLowerCase().trim();
+    const commercialKeywords = ['цена', 'сколько', 'купить', 'заказать', 'записаться', 'встреча', 'консультация', 'прайс', 'тариф', 'связаться', 'номер', 'телефон', 'whatsapp', 'телеграм'];
+    const hasCommercialKeywords = commercialKeywords.some(kw => cleanInput.includes(kw));
 
     const scored = this.knowledge.map(item => ({
       ...item,
@@ -145,20 +162,40 @@ export class ExpertEngine {
     scored.sort((a, b) => (b.score || 0) - (a.score || 0));
 
     const bestMatch = scored[0];
+    const threshold = 0.25;
+    const hasMatch = !!(bestMatch && bestMatch.score && bestMatch.score > threshold);
     
-    if (bestMatch && bestMatch.score && bestMatch.score > 0.25) {
+    // Determine Intent
+    let intent: 'commercial' | 'informational' = 'informational';
+    if (hasMatch && ['pricing', 'booking', 'contact'].includes(bestMatch.category || '')) {
+      intent = 'commercial';
+    } else if (hasCommercialKeywords) {
+      intent = 'commercial';
+    }
+
+    if (hasMatch) {
       return {
-        role: 'assistant',
-        content: bestMatch.answer,
-        source: bestMatch.category
+        message: {
+          role: 'assistant',
+          content: bestMatch.answer,
+          source: bestMatch.category
+        },
+        hasMatch: true,
+        score: bestMatch.score || 0,
+        intent
       };
     }
 
     // Fallback
     return {
-      role: 'assistant',
-      content: `К сожалению, я не совсем понял ваш вопрос. Но я могу рассказать о себе, моих услугах или о том, как со мной связаться. Попробуйте спросить "Кто ты?" или "Какие есть тарифы?".`,
-      source: 'system'
+      message: {
+        role: 'assistant',
+        content: `К сожалению, я не совсем понял ваш вопрос. Но я могу рассказать о себе, моих услугах или о том, как со мной связаться. Попробуйте спросить "Кто ты?" или "Какие есть тарифы?".`,
+        source: 'system'
+      },
+      hasMatch: false,
+      score: bestMatch?.score || 0,
+      intent
     };
   }
 

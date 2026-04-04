@@ -160,6 +160,12 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **GEO Dynamics**: Automated title generation with city/region context for local SEO.
 - **AI-Bot Discovery**: Full update of `llms.txt` with Entity-First Indexing policy.
 
+### [2026-04-04] Phase 26: Expert Insights & Conversion Analytics
+- **Query Tracking**: Реализована система логирования запросов к чат-боту (`expert_queries`). 
+- **Content Gap Analysis**: Внедрен механизм отслеживания "неотвеченных" вопросов, помогающий экспертам выявлять пробелы в контенте.
+- **Analytics Dashboard**: Новый виджет `ChatbotInsights` интегрирован в экран аналитики, отображающий топ популярных вопросов и статистику успешных ответов.
+- **Enhanced DKE**: Движок знаний теперь возвращает метаданные (score, match status) для детальной аналитики.
+
 ### [2026-04-04] Phase 25: Deterministic Expert Engine (DKE) & Liquid Glass UI
 - **Architecture Shift**: Полностью удалена зависимость от внешних AI API (`chatbot-stream`) для ответов на публичных страницах.
 - **ExpertEngine (DKE)**: Внедрен детерминированный движок знаний (`src/lib/chat/expert-engine.ts`), работающий на 100% на стороне клиента.

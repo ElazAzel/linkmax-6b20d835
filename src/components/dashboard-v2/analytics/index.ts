@@ -9,3 +9,4 @@ export { TrafficSourcesChart } from './TrafficSourcesChart';
 export { BlockPerformance } from './BlockPerformance';
 export { AnalyticsExport } from './AnalyticsExport';
 export { ExperimentsList } from './ExperimentsList';
+export { ChatbotInsights } from './ChatbotInsights';

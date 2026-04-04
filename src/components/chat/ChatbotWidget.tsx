@@ -8,6 +8,7 @@ import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import X from 'lucide-react/dist/esm/icons/x';
 import Send from 'lucide-react/dist/esm/icons/send';
 import { cn } from '@/lib/utils/utils';
+import { trackEvent, logChatQuery } from '@/services/analytics';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExpertEngine, ExpertEngineMessage } from '@/lib/chat/expert-engine';
@@ -52,14 +53,30 @@ export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
     setInput('');
     setIsTyping(true);
 
-    // Simulate "thinking" for natural feel (but it's actually instant)
-    await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 800));
+    try {
+      // Local DKE processing
+      const { message: responseMessage, hasMatch, score } = engine.getResponse(cleanText);
+      
+      // Artificial delay for "Natural" feeling
+      await new Promise((resolve) => setTimeout(resolve, 800 + Math.random() * 1000));
 
-    // Get response from DKE
-    const response = engine.getResponse(cleanText);
-    
-    setMessages(prev => [...prev, response]);
-    setIsTyping(false);
+      const botMessage: ExpertEngineMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: responseMessage.content,
+        source: responseMessage.source
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
+      
+      // Log for Expert Insights (Phase 26)
+      logChatQuery(pageSlug, cleanText, hasMatch, { score, source: responseMessage.source });
+      
+    } catch (error) {
+      console.error("Chat error:", error);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

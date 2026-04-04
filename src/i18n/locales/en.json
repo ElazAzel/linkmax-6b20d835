@@ -819,7 +819,17 @@
       "placeholder": "Ask a question...",
       "suggest": "Try asking:",
       "title": "Expert Assistant",
-      "typing": "Typing..."
+      "typing": "Typing...",
+      "lead": {
+        "title": "Submit Request",
+        "name": "Your name",
+        "phone": "Phone",
+        "submit": "Submit",
+        "success": "Request sent!",
+        "successMsg": "We will contact you soon",
+        "disclaimer": "By clicking, you agree to data processing",
+        "offer": "I can pass your request directly to the expert. Would you like to leave your contacts?"
+      }
     },
     "clicks": "Clicks",
     "clicksByBlock": "Clicks on blocks",
