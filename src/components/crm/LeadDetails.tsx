@@ -82,6 +82,7 @@ const sourceColors: Record<string, string> = {
   messenger: 'bg-indigo-500/20 text-indigo-500 border-indigo-500/30',
   manual: 'bg-slate-500/20 text-slate-500 border-slate-500/30',
   page_view: 'bg-cyan-500/20 text-cyan-500 border-cyan-500/30',
+  chatbot: 'bg-blue-500/20 text-blue-500 border-blue-500/30',
   other: 'bg-gray-500/20 text-gray-500 border-gray-500/30',
 };
 
@@ -90,6 +91,7 @@ const sourceIcons: Record<string, string> = {
   messenger: '💬',
   manual: '✏️',
   page_view: '👁️',
+  chatbot: '🤖',
   other: '📌',
 };
 
@@ -177,6 +179,31 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
             <Tag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             {t('crm.formData', 'Данные формы')}
           </h4>
+
+          {/* Expert Engine Insight - Phase 28 */}
+          {lead.metadata.chat_lead && (
+            <div className="mb-4 p-3 bg-primary/5 border border-primary/20 rounded-2xl space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-widest text-primary">Assistant Insight</span>
+                <Badge variant="outline" className="text-[9px] bg-primary/10 border-primary/20">
+                  {lead.metadata.intent === 'commercial' ? '🔥 High Intent' : 'ℹ️ Info Seeking'}
+                </Badge>
+              </div>
+              
+              {lead.metadata.last_query && (
+                <div className="p-2.5 bg-background/50 rounded-xl border border-white/5 italic text-xs leading-relaxed">
+                  "{lead.metadata.last_query}"
+                </div>
+              )}
+              
+              <p className="text-[10px] text-muted-foreground leading-tight">
+                {lead.metadata.intent === 'commercial' 
+                  ? t('crm.chatbot.commercialDesc', 'Пользователь проявил коммерческий интерес перед отправкой формы.')
+                  : t('crm.chatbot.infoDesc', 'Пользователь задавал уточняющие вопросы ассистенту.')}
+              </p>
+            </div>
+          )}
+
           <div className="space-y-1.5 sm:space-y-2">
             {Object.entries(lead.metadata)
               .filter(([key]) => !key.startsWith('utm_') && key !== 'referrer')

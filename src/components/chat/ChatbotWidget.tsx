@@ -38,6 +38,8 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [leadSent, setLeadSent] = useState(false);
+  const [activeIntent, setActiveIntent] = useState<string>('informational');
+  const [activeQuery, setActiveQuery] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initialize the deterministic engine
@@ -68,6 +70,9 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
     try {
       // Local DKE processing
       const { message: responseMessage, hasMatch, score, intent } = engine.getResponse(cleanText);
+      
+      setActiveIntent(intent);
+      setActiveQuery(cleanText);
       
       // Artificial delay for "Natural" feeling
       await new Promise((resolve) => setTimeout(resolve, 800 + Math.random() * 1000));
@@ -152,16 +157,19 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 100, scale: 0.95 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 100, scale: 0.95 }}
-            className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[400px] sm:h-[600px] z-50 flex flex-col sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 bg-background/60 backdrop-blur-3xl"
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className={cn(
+              "fixed z-50 flex flex-col overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 bg-background/60 backdrop-blur-3xl transition-all duration-300",
+              "inset-0 h-[100dvh] w-full rounded-none sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[400px] sm:h-[600px] sm:rounded-3xl"
+            )}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-white/5 bg-white/5">
+            <div className="flex items-center justify-between p-4 border-b border-white/5 bg-white/5 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/20">
-                  <MessageCircle className="h-4 w-4 text-primary" />
+                <div className="h-9 w-9 rounded-2xl bg-primary/20 flex items-center justify-center border border-primary/20">
+                  <MessageCircle className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <h3 className="font-bold text-sm tracking-tight">{t('chat.title', 'Ассистент эксперта')}</h3>
@@ -171,14 +179,16 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
                   </div>
                 </div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsOpen(false)}
-                className="h-9 w-9 rounded-full hover:bg-white/10 transition-colors"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsOpen(false)}
+                  className="h-9 w-9 rounded-full hover:bg-white/10 transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Messages Area */}
@@ -222,6 +232,8 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
                       <ChatLeadForm 
                         pageId={pageId}
                         userId={userId}
+                        intent={activeIntent}
+                        lastQuery={activeQuery}
                         onSuccess={handleLeadSuccess}
                       />
                     </div>

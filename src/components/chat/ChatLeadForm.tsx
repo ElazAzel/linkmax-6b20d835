@@ -13,10 +13,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface ChatLeadFormProps {
   pageId: string;
   userId: string;
+  intent?: string;
+  lastQuery?: string;
   onSuccess: (name: string) => void;
 }
 
-export const ChatLeadForm = ({ pageId, userId, onSuccess }: ChatLeadFormProps) => {
+export const ChatLeadForm = ({ pageId, userId, intent, lastQuery, onSuccess }: ChatLeadFormProps) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -35,9 +37,14 @@ export const ChatLeadForm = ({ pageId, userId, onSuccess }: ChatLeadFormProps) =
         userId,
         name: formData.name,
         phone: formData.phone,
-        source: 'form', // Map to form until 'chatbot' added to enum
+        source: 'chatbot',
         notes: `Lead from Expert Engine chat (Page ID: ${pageId})`,
-        metadata: { page_id: pageId, chat_lead: true }
+        metadata: { 
+          page_id: pageId, 
+          chat_lead: true,
+          intent,
+          last_query: lastQuery
+        }
       });
 
       if (error) throw error;

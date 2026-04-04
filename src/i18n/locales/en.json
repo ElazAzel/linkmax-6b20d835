@@ -1628,6 +1628,19 @@
     "yes": "Yes",
     "deleteConfirmTitle": "Delete block?"
   },
+  "chat": {
+    "lead": {
+      "title": "Leave a request",
+      "name": "Your name",
+      "phone": "Phone number",
+      "submit": "Submit",
+      "disclaimer": "By clicking the button, you agree to the processing of personal data",
+      "success": "Request sent!",
+      "successMsg": "We will contact you soon",
+      "error": "Submission error",
+      "intentHeader": "Looks like you're interested in: {{intent}}"
+    }
+  },
   "cookies": {
     "accept": "Accept",
     "message": "We use analytics to improve the platform. Click \"Accept\" to allow anonymous visit data collection.",
@@ -1641,12 +1654,41 @@
     "createInvoice": "Create Invoice",
     "createLead": "Create Lead",
     "formData": "Form Data",
+    "metrics": {
+      "conversion": "Conversion",
+      "avgCheck": "Avg. check",
+      "pipeline": "Forecast",
+      "active": "Active"
+    },
+    "status": {
+      "new": "New",
+      "contacted": "Contacted",
+      "qualified": "Qualified",
+      "converted": "Converted",
+      "lost": "Lost"
+    },
     "sources": {
       "ads": "Ads",
       "direct": "Direct",
       "referral": "Referrals",
       "social": "Social",
+      "chatbot": "Chat Assistant",
+      "form": "Web Form",
+      "manual": "Manual",
+      "messenger": "Messenger",
+      "pageView": "Page View",
+      "other": "Other",
       "title": "Lead Sources"
+    },
+    "intent": {
+      "commercial": "Commercial Interest",
+      "informational": "Informational Query",
+      "educational": "Educational Question"
+    },
+    "chatbot": {
+      "insight": "Assistant Insight",
+      "lastQuery": "Last Query",
+      "history": "Chat History"
     }
   },
   "currency": {
@@ -6791,20 +6833,20 @@
       "ownerCannotLeave": "As the owner, you cannot leave the zone. Transfer ownership first or contact support.",
       "pendingInvites": "Pending invites",
       "pipelines": {
-        "add": "Добавить воронку",
+        "add": "Add Pipeline",
         "cannotDeleteDefault": "Cannot delete default pipeline. Set another as default first.",
-        "cannotDeleteLast": "Нельзя удалить последнюю воронку",
+        "cannotDeleteLast": "Cannot delete the last pipeline",
         "confirmDelete": "Are you sure? Deals in this pipeline will be hidden until reassigned.",
-        "create": "Новая воронка",
+        "create": "New Pipeline",
         "created": "Pipeline created",
-        "default": "По умолчанию",
+        "default": "Default",
         "deleted": "Pipeline deleted",
         "desc": "Create and configure pipelines for different processes.",
-        "description": "Управляйте пайплайнами для организации процессов продаж и обслуживания.",
-        "edit": "Редактировать воронку",
+        "description": "Manage pipelines to organize sales and service processes.",
+        "edit": "Edit pipeline",
         "empty": "You have no pipelines yet. Create your first sales funnel.",
         "lastOne": "Cannot delete the last pipeline",
-        "nameLabel": "Название воронки",
+        "nameLabel": "Pipeline name",
         "newPlaceholder": "New pipeline...",
         "title": "Sales Funnel Management",
         "updated": "Pipeline updated"
@@ -6824,34 +6866,57 @@
         "member": "Member",
         "owner": "Owner",
         "viewer": "Viewer"
-      },
-      "saved": "Settings saved",
-      "sendInvite": "Send Invite",
-      "title": "Settings",
-      "zoneName": "Zone name"
+      }
     },
     "slug": "Slug",
-    "tasks": {
-      "all": "All",
-      "assignee": "Assignee",
-      "contact": "Contact",
-      "deal": "Deal",
-      "description": "Description",
-      "descriptionPlaceholder": "Description (optional)",
-      "due": "Due:",
-      "dueDate": "Due date",
-      "mine": "Mine",
-      "my": "My",
-      "new": "New task",
-      "newTask": "New Task",
-      "overdue": "overdue",
-      "priority": "Priority",
-      "taskDesc": "Description (optional)",
-      "taskName": "Task Name",
-      "taskTitle": "Title",
-      "taskTitlePlaceholder": "Task title",
-      "title": "Tasks",
-      "unassigned": "Unassigned"
+    "chat": {
+      "title": "Expert Assistant",
+      "placeholder": "Ask your question...",
+      "suggestions": "Try asking:",
+      "lead": {
+        "title": "Leave a request",
+        "name": "Your name",
+        "phone": "Phone",
+        "submit": "Submit",
+        "success": "Request sent!",
+        "successMsg": "We will contact you soon",
+        "disclaimer": "By clicking the button, you agree to the processing of data"
+      }
+    },
+    "crm": {
+      "title": "CRM",
+      "contactInfo": "Contact Information",
+      "formData": "Form Data",
+      "attribution": "Attribution",
+      "notes": "Notes",
+      "notesPlaceholder": "Add notes...",
+      "addInteraction": "Add Interaction",
+      "interactionPlaceholder": "What happened?",
+      "history": "History",
+      "noInteractions": "No interactions yet",
+      "deleteLead": "Delete Lead",
+      "confirmDelete": "Delete this lead?",
+      "deleteWarning": "This action cannot be undone.",
+      "source": {
+        "form": "Form",
+        "messenger": "Messenger",
+        "manual": "Manual",
+        "page_view": "Page View",
+        "chatbot": "Chatbot",
+        "other": "Other"
+      },
+      "chatbot": {
+        "commercialDesc": "The user showed commercial interest before submitting the form.",
+        "infoDesc": "The user was asking clarifying questions to the assistant."
+      },
+      "status": {
+        "label": "Status",
+        "new": "New",
+        "contacted": "Contacted",
+        "qualified": "Qualified",
+        "converted": "Converted",
+        "lost": "Lost"
+      }
     }
   }
 }
