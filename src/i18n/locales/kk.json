@@ -1202,7 +1202,9 @@
       "noName": "Атаусыз",
       "position": "Позиция",
       "selectCategory": "Санатты таңдаңыз",
-      "showPrices": "Бағала�  "dashboard": {
+      "showPrices": "Бағаларды көрсету"
+    }
+    },
     "accountSettings": {
       "account": "Аккаунт",
       "achievements": "Жетістіктер",
