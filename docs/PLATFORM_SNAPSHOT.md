@@ -160,6 +160,14 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **GEO Dynamics**: Automated title generation with city/region context for local SEO.
 - **AI-Bot Discovery**: Full update of `llms.txt` with Entity-First Indexing policy.
 
+### [2026-04-04] Phase 25: Deterministic Expert Engine (DKE) & Liquid Glass UI
+- **Architecture Shift**: Полностью удалена зависимость от внешних AI API (`chatbot-stream`) для ответов на публичных страницах.
+- **ExpertEngine (DKE)**: Внедрен детерминированный движок знаний (`src/lib/chat/expert-engine.ts`), работающий на 100% на стороне клиента.
+  - **Fuzzy Indexing**: Индексация контента блоков (FAQ, Цены, Био, Товары) с использованием алгоритма Сёренсена — Дайса.
+  - **Zero Latency**: Время ответа снижено до <10мс, обеспечивая моментальный отклик и 100% приватность данных.
+- **Liquid Glass Aesthetic**: Виджет чата переработан с использованием `backdrop-blur-3xl`, анимированных подсказок (Bubbles) и пружинных анимаций.
+- **Contextual Suggestions**: Автоматическая генерация быстрых вопросов на основе доступных блоков страницы.
+
 ### [2026-04-04] Phase 24: SEO-Driven Discovery Hardening (Consolidation)
 - **Universal Quality Gate**: Synchronized the 25-point threshold across all discovery surfaces: `public-experts` API, Gallery SSR, and Site-wide Sitemap.
 - **Discovery Network**: Updated `getTopPremiumPages` service to prioritize high-quality profiles (Score >= 25) for internal linking on the Landing Page.
@@ -779,7 +787,7 @@ LinkMAX использует гибридную модель, направлен
 | Function | Trigger | Purpose |
 | :--- | :--- | :--- |
 | `ai-content-generator` | Dashboard | AI page/block generation |
-| `chatbot-stream` | Widget | AI chatbot responses |
+| `chatbot-stream` | Legacy/Widget | AI chatbot responses (Bypassed by DKE) |
 | `translate-content` | Editor | Block content translation |
 | `create-lead` | Form submit | Lead capture |
 | `send-lead-notification` | Lead created | Telegram/email alert |

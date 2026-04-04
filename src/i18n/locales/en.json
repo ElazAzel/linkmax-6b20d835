@@ -813,6 +813,14 @@
     "chart": {
       "title": "Dynamics for the period"
     },
+    "chat": {
+      "error": "An error occurred. Please try again.",
+      "noResponse": "Sorry, I couldn't find an answer. Try a different question.",
+      "placeholder": "Ask a question...",
+      "suggest": "Try asking:",
+      "title": "Expert Assistant",
+      "typing": "Typing..."
+    },
     "clicks": "Clicks",
     "clicksByBlock": "Clicks on blocks",
     "description": "Track page performance",

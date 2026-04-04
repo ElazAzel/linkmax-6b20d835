@@ -1,228 +1,227 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import X from 'lucide-react/dist/esm/icons/x';
 import Send from 'lucide-react/dist/esm/icons/send';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { cn } from '@/lib/utils/utils';
-
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
+import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExpertEngine, ExpertEngineMessage } from '@/lib/chat/expert-engine';
+import { Block } from '@/types/blocks';
 
 interface ChatbotWidgetProps {
   pageSlug: string;
+  blocks: Block[];
+  seo: { title: string; description: string };
 }
 
-export function ChatbotWidget({ pageSlug }: ChatbotWidgetProps) {
+export function ChatbotWidget({ pageSlug, blocks, seo }: ChatbotWidgetProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ExpertEngineMessage[]>([]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize the deterministic engine
+  const engine = useMemo(() => new ExpertEngine(blocks || [], seo), [blocks, seo]);
+  
+  const suggestions = useMemo(() => engine.getSuggestions(), [engine]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
-
-    const userMessage: Message = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chatbot-stream`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            pageSlug,
-            messages: [...messages, userMessage],
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let assistantMessage = '';
-
-      if (reader) {
-        // Add empty assistant message
-        setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
-
-        let done = false;
-        while (!done) {
-          const result = await reader.read();
-          done = result.done;
-          if (done) break;
-          const value = result.value;
-
-          const chunk = decoder.decode(value);
-          const lines = chunk.split('\n');
-
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6);
-              if (data === '[DONE]') continue;
-
-              try {
-                const parsed = JSON.parse(data);
-                const content = parsed.choices?.[0]?.delta?.content;
-
-                if (content) {
-                  assistantMessage += content;
-                  setMessages(prev => {
-                    const newMessages = [...prev];
-                    newMessages[newMessages.length - 1] = {
-                      role: 'assistant',
-                      content: assistantMessage,
-                    };
-                    return newMessages;
-                  });
-                }
-              } catch (e) {
-                // Skip malformed JSON
-              }
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Chat error:', error);
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: 'Sorry, I encountered an error. Please try again.',
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
+    if (isOpen) {
+      scrollToBottom();
     }
+  }, [messages, isOpen, isTyping]);
+
+  const handleSend = async (text: string = input) => {
+    const cleanText = text.trim();
+    if (!cleanText || isTyping) return;
+
+    // Add user message
+    const userMsg: ExpertEngineMessage = { role: 'user', content: cleanText };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setIsTyping(true);
+
+    // Simulate "thinking" for natural feel (but it's actually instant)
+    await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 800));
+
+    // Get response from DKE
+    const response = engine.getResponse(cleanText);
+    
+    setMessages(prev => [...prev, response]);
+    setIsTyping(false);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      handleSend();
     }
   };
 
   return (
     <>
-      {/* Chat Button - Mobile Optimized */}
-      {!isOpen && (
-        <Button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-lg z-50"
-          size="icon"
-        >
-          <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-        </Button>
-      )}
-
-      {/* Chat Window - Fullscreen on Mobile */}
-      {isOpen && (
-        <Card className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:h-[600px] shadow-2xl z-50 flex flex-col sm:rounded-lg">
-          {/* Header */}
-          <div className="flex items-center justify-between p-3 sm:p-4 border-b bg-background">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-              <h3 className="font-semibold text-sm sm:text-base">Ask me anything</h3>
-            </div>
+      {/* Floating Action Button - Liquid Glass */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className="fixed bottom-6 right-6 z-50"
+          >
             <Button
-              variant="ghost"
+              onClick={() => setIsOpen(true)}
+              className="h-14 w-14 rounded-full shadow-2xl bg-primary/90 hover:bg-primary backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95"
               size="icon"
-              onClick={() => setIsOpen(false)}
-              className="h-8 w-8 sm:h-10 sm:w-10"
             >
-              <X className="h-4 w-4" />
+              <MessageCircle className="h-6 w-6 text-primary-foreground" />
             </Button>
-          </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Messages - Optimized Scroll */}
-          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
-            {messages.length === 0 && (
-              <div className="text-center text-muted-foreground text-xs sm:text-sm py-8">
-                <p>Hi! I'm here to help answer questions about this page.</p>
-                <p className="mt-2">Ask me anything!</p>
-              </div>
-            )}
-
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={cn(
-                  'flex',
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                )}
-              >
-                <div
-                  className={cn(
-                    'rounded-lg px-3 py-2 sm:px-4 max-w-[85%] sm:max-w-[80%]',
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
-                  )}
-                >
-                  <p className="text-xs sm:text-sm whitespace-pre-wrap break-words">{message.content}</p>
+      {/* Chat Window - Liquid Glass Aesthetic */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 100, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 100, scale: 0.95 }}
+            className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[400px] sm:h-[600px] z-50 flex flex-col sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 bg-background/60 backdrop-blur-3xl"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-white/5 bg-white/5">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/20">
+                  <MessageCircle className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm tracking-tight">{t('chat.title', 'Ассистент эксперта')}</h3>
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">Online</span>
+                  </div>
                 </div>
               </div>
-            ))}
-
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-muted rounded-lg px-3 py-2 sm:px-4">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input - Touch Optimized */}
-          <div className="p-3 sm:p-4 border-t bg-background">
-            <div className="flex gap-2">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                disabled={isLoading}
-                className="text-sm sm:text-base h-10 sm:h-10"
-              />
               <Button
-                onClick={sendMessage}
-                disabled={!input.trim() || isLoading}
+                variant="ghost"
                 size="icon"
-                className="h-10 w-10 sm:h-10 sm:w-10 flex-shrink-0"
+                onClick={() => setIsOpen(false)}
+                className="h-9 w-9 rounded-full hover:bg-white/10 transition-colors"
               >
-                <Send className="h-4 w-4" />
+                <X className="h-4 w-4" />
               </Button>
             </div>
-          </div>
-        </Card>
-      )}
+
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
+              {messages.length === 0 && (
+                <div className="flex flex-col items-center justify-center h-full text-center space-y-4 px-6">
+                  <div className="h-16 w-16 rounded-3xl bg-primary/10 flex items-center justify-center animate-bounce">
+                    <MessageCircle className="h-8 w-8 text-primary/40" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground/80">Привет!</p>
+                    <p className="text-xs text-muted-foreground mt-1">Я ваш персональный ассистент на этой странице. Задайте любой вопрос об услугах или эксперте!</p>
+                  </div>
+                </div>
+              )}
+
+              {messages.map((message, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: message.role === 'user' ? 20 : -20, y: 10 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  className={cn(
+                    'flex w-full',
+                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'rounded-2xl px-4 py-2.5 max-w-[85%] text-sm shadow-sm transition-all',
+                      message.role === 'user'
+                        ? 'bg-primary text-primary-foreground rounded-tr-none'
+                        : 'bg-white/10 text-foreground border border-white/10 rounded-tl-none backdrop-blur-md'
+                    )}
+                  >
+                    <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                  </div>
+                </motion.div>
+              ))}
+
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="bg-white/5 border border-white/5 rounded-2xl rounded-tl-none px-4 py-3 flex gap-1 items-center">
+                    <span className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-1 h-1 bg-primary rounded-full animate-bounce" />
+                  </div>
+                </motion.div>
+              )}
+
+              <div ref={messagesEndRef} className="h-4" />
+            </div>
+
+            {/* Input Area */}
+            <div className="p-4 border-t border-white/5 bg-black/10 backdrop-blur-lg">
+              {/* Suggestions */}
+              {messages.length === 0 && suggestions.length > 0 && !isTyping && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {suggestions.map((suggestion, idx) => (
+                    <Button
+                      key={idx}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleSend(suggestion)}
+                      className="text-[11px] h-8 rounded-full bg-white/5 hover:bg-primary/20 hover:text-foreground border-white/10 transition-all font-medium py-0"
+                    >
+                      {suggestion}
+                    </Button>
+                  ))}
+                </div>
+              )}
+
+              <div className="relative group">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  placeholder={t('chat.placeholder', 'Задайте вопрос...')}
+                  disabled={isTyping}
+                  className="bg-white/5 border-white/10 focus-visible:ring-primary/50 rounded-2xl h-11 pr-12 text-sm transition-all"
+                />
+                <Button
+                  onClick={() => handleSend()}
+                  disabled={!input.trim() || isTyping}
+                  size="icon"
+                  className="absolute right-1.5 top-1.5 h-8 w-8 rounded-xl bg-primary shadow-lg hover:scale-105 active:scale-95 transition-transform"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-[9px] text-center mt-3 text-muted-foreground/50 uppercase tracking-[0.2em] font-bold">
+                Powered by InkMAX DKE
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

@@ -341,10 +341,14 @@ export default function PublicPage() {
                 </DialogContent>
               </Dialog>
 
-              {/* AI Chatbot Widget */}
-              {enhancementsReady && slug && (
+              {/* AI Chatbot Widget - Deterministic Expert Engine */}
+              {enhancementsReady && slug && pageData && (
                 <Suspense fallback={null}>
-                  <ChatbotWidget pageSlug={slug} />
+                  <ChatbotWidget 
+                    pageSlug={slug} 
+                    blocks={displayBlocks as Block[]} 
+                    seo={pageData.seo} 
+                  />
                 </Suspense>
               )}
 
