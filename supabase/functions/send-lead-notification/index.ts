@@ -21,6 +21,14 @@ interface NotificationSettings {
   telegram_chat_id: string | null;
 }
 
+interface TelegramInlineButton {
+  text: string;
+  callback_data?: string;
+  url?: string;
+}
+
+type TelegramInlineKeyboard = TelegramInlineButton[][];
+
 // HTML encode user input to prevent XSS in emails
 function escapeHtml(text: string | null | undefined): string {
   if (!text) return '';
@@ -88,7 +96,7 @@ serve(async (req) => {
       if (leadPhone) message += `📱 *Телефон:* ${leadPhone}\n`;
       message += `📍 *Источник:* ${sourceLabels[source] || source}`;
 
-      const inline_keyboard = [
+      const inline_keyboard: TelegramInlineKeyboard = [
         [
           { text: "✅ В работу", callback_data: `lead_status:contacted:${leadId}` },
           { text: "💰 Продано", callback_data: `lead_status:won:${leadId}` }
