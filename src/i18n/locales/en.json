@@ -3273,7 +3273,7 @@
     "simulateMock": "Simulate Payment (Sandbox)",
     "title": "Kaspi QR Payment"
   },
-  "landing": {
+  "landingV1": {
     "aiBuilderDesc": "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
     "aiBuilderTitle": "AI Page Builder",
     "aiBuilds": "AI builds everything",
@@ -5097,7 +5097,7 @@
     "yourBio": "About me",
     "yourName": "your name"
   },
-  "publicPage": {
+  "publicPageV1": {
     "defaultDescription": "View my profile",
     "invalidLink": "Invalid or damaged link",
     "loading": "Loading page...",
@@ -7027,8 +7027,9 @@
         "lost": "Lost"
       }
     }
-  },
-  "landing": {
+  }
+},
+"landingV2": {
     "expert": {
       "badge": "Official Business Platform (Solo OS)",
       "title1": "Stop gluing",
@@ -7131,7 +7132,7 @@
       "b6": "Up to 5 team members"
     }
   },
-  "publicPage": {
+  "publicPageV2": {
     "poweredBy": "Powered by"
   }
 }
