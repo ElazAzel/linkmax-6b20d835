@@ -49,15 +49,14 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
   const userIds = Array.from(new Set((data || []).map(p => p.user_id)));
   if (userIds.length === 0) return [];
 
-  const { data: profiles } = await supabase
-    .from('user_profiles')
-    .select('id, is_premium, trial_ends_at')
-    .in('id', userIds);
+  const { data: profiles } = await (supabase
+    .from('public_user_profiles' as any)
+    .select('id, is_premium')
+    .in('id', userIds) as any);
 
   const premiumMap = new Map<string, boolean>();
   profiles?.forEach((p: any) => {
-    const isPremium = !!p.is_premium || (!!p.trial_ends_at && new Date(p.trial_ends_at) > new Date());
-    premiumMap.set(p.id, isPremium);
+    premiumMap.set(p.id, !!p.is_premium);
   });
 
   // Add premium flag and sort: premium first, then by views
@@ -95,16 +94,16 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
 // Fetch top premium pages with most views for landing page
 export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage[]> {
   // First get premium users
-  const { data: premiumProfiles } = await supabase
-    .from('user_profiles')
+  const { data: premiumProfiles } = await (supabase
+    .from('public_user_profiles' as any)
     .select('id')
-    .or('is_premium.eq.true,trial_ends_at.gt.now()');
+    .eq('is_premium', true) as any);
 
   if (!premiumProfiles || premiumProfiles.length === 0) {
     return [];
   }
 
-  const premiumUserIds = premiumProfiles.map(p => p.id);
+  const premiumUserIds = (premiumProfiles as any[]).map((p: any) => p.id);
 
   const { data, error } = await supabase
     .from('pages')

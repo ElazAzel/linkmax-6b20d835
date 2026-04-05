@@ -63,12 +63,12 @@ async function fetchCollabPage(collabSlug: string): Promise<CollabPageData | nul
 
   // Fetch user profiles
   const userIds = [collab.requester_id, collab.target_id];
-  const { data: profiles } = await supabase
-    .from('user_profiles')
+  const { data: profiles } = await (supabase
+    .from('public_user_profiles' as any)
     .select('id, username, display_name, avatar_url')
-    .in('id', userIds);
+    .in('id', userIds) as any);
 
-  const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+  const profileMap = new Map((profiles as any[])?.map((p: any) => [p.id, p]) || []);
 
   // Fetch blocks from both pages
   const pageIds = [collab.requester_page_id, collab.target_page_id].filter(Boolean) as string[];
@@ -137,8 +137,8 @@ async function fetchCollabPage(collabSlug: string): Promise<CollabPageData | nul
     target_id: collab.target_id,
     requester_page_id: collab.requester_page_id,
     target_page_id: collab.target_page_id,
-    requester: profileMap.get(collab.requester_id) || null,
-    target: profileMap.get(collab.target_id) || null,
+    requester: (profileMap.get(collab.requester_id) as any) || null,
+    target: (profileMap.get(collab.target_id) as any) || null,
     blocks: allBlocks,
     theme,
     block_settings: blockSettings,
