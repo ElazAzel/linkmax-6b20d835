@@ -443,7 +443,6 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       organization_id: pg.organization_id || undefined,
-      organization_id: pg.organization_id || undefined,
       experiments
     };
 
