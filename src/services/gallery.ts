@@ -49,10 +49,10 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
   const userIds = Array.from(new Set((data || []).map(p => p.user_id)));
   if (userIds.length === 0) return [];
 
-  const { data: profiles } = await supabase
+  const { data: profiles } = await (supabase
     .from('public_user_profiles' as any)
     .select('id, is_premium')
-    .in('id', userIds);
+    .in('id', userIds) as any);
 
   const premiumMap = new Map<string, boolean>();
   profiles?.forEach((p: any) => {
