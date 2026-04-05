@@ -103,7 +103,7 @@ export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage
     return [];
   }
 
-  const premiumUserIds = premiumProfiles.map(p => p.id);
+  const premiumUserIds = (premiumProfiles as any[]).map((p: any) => p.id);
 
   const { data, error } = await supabase
     .from('pages')
