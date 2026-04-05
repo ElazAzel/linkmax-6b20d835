@@ -71,7 +71,7 @@ export function AdminBroadcastTab() {
     setResult(null);
 
     try {
-      const { data, error } = await supabase.rpc('send_telegram_broadcast', {
+      const { data, error } = await (supabase.rpc as any)('send_telegram_broadcast', {
         p_custom_text: message.trim() || null
       });
 
