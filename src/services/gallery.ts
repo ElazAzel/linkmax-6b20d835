@@ -56,8 +56,7 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
 
   const premiumMap = new Map<string, boolean>();
   profiles?.forEach((p: any) => {
-    const isPremium = !!p.is_premium || (!!p.trial_ends_at && new Date(p.trial_ends_at) > new Date());
-    premiumMap.set(p.id, isPremium);
+    premiumMap.set(p.id, !!p.is_premium);
   });
 
   // Add premium flag and sort: premium first, then by views
