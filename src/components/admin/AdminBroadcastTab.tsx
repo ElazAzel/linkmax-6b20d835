@@ -34,11 +34,11 @@ export function AdminBroadcastTab() {
     const loadConfig = async () => {
       try {
         const { data } = await supabase
-          .from('bot_config' as any)
+          .from('app_settings')
           .select('value')
           .eq('key', 'TELEGRAM_BOT_TOKEN')
           .single();
-        if (data) setBotToken(data.value);
+        if (data) setBotToken((data as any).value);
       } catch (err) {
         // config might not exist yet
       }
