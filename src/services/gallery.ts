@@ -50,8 +50,8 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
   if (userIds.length === 0) return [];
 
   const { data: profiles } = await supabase
-    .from('user_profiles')
-    .select('id, is_premium, trial_ends_at')
+    .from('public_user_profiles' as any)
+    .select('id, is_premium')
     .in('id', userIds);
 
   const premiumMap = new Map<string, boolean>();
