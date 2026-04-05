@@ -53,7 +53,7 @@ export function AdminBroadcastTab() {
     }
     setSavingToken(true);
     try {
-      const { error } = await (supabase.from('bot_config' as any) as any).upsert({
+      const { error } = await (supabase.from('app_settings') as any).upsert({
         key: 'TELEGRAM_BOT_TOKEN',
         value: botToken.trim()
       });
