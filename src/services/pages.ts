@@ -503,8 +503,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       integrations: (pg.integrations as unknown as PageData['integrations']) || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
-      webhook_url: pg.webhook_url || undefined,
-      webhook_secret: pg.webhook_secret || undefined,
+      organization_id: pg.organization_id || undefined,
       organization_id: pg.organization_id || undefined,
       experiments
     };
