@@ -95,9 +95,9 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
 export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage[]> {
   // First get premium users
   const { data: premiumProfiles } = await supabase
-    .from('user_profiles')
+    .from('public_user_profiles' as any)
     .select('id')
-    .or('is_premium.eq.true,trial_ends_at.gt.now()');
+    .eq('is_premium', true);
 
   if (!premiumProfiles || premiumProfiles.length === 0) {
     return [];
