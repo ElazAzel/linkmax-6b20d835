@@ -503,7 +503,6 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       organization_id: pg.organization_id || undefined,
-      organization_id: pg.organization_id || undefined,
       experiments
     };
 
