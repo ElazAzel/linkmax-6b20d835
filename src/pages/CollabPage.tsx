@@ -68,7 +68,7 @@ async function fetchCollabPage(collabSlug: string): Promise<CollabPageData | nul
     .select('id, username, display_name, avatar_url')
     .in('id', userIds) as any);
 
-  const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+  const profileMap = new Map((profiles as any[])?.map((p: any) => [p.id, p]) || []);
 
   // Fetch blocks from both pages
   const pageIds = [collab.requester_page_id, collab.target_page_id].filter(Boolean) as string[];
