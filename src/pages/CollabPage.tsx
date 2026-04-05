@@ -63,10 +63,10 @@ async function fetchCollabPage(collabSlug: string): Promise<CollabPageData | nul
 
   // Fetch user profiles
   const userIds = [collab.requester_id, collab.target_id];
-  const { data: profiles } = await supabase
+  const { data: profiles } = await (supabase
     .from('public_user_profiles' as any)
     .select('id, username, display_name, avatar_url')
-    .in('id', userIds);
+    .in('id', userIds) as any);
 
   const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 

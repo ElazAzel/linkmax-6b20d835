@@ -94,10 +94,10 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
 // Fetch top premium pages with most views for landing page
 export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage[]> {
   // First get premium users
-  const { data: premiumProfiles } = await supabase
+  const { data: premiumProfiles } = await (supabase
     .from('public_user_profiles' as any)
     .select('id')
-    .eq('is_premium', true);
+    .eq('is_premium', true) as any);
 
   if (!premiumProfiles || premiumProfiles.length === 0) {
     return [];
