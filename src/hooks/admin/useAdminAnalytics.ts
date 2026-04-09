@@ -281,12 +281,14 @@ export function useAdminAnalytics() {
             // Top blocks
             const blockClickCounts: Record<string, { type: string; clicks: number }> = {};
             events.forEach(e => {
-                if (!e.block_id || e.event_type !== 'click') return;
+                if (e.event_type !== 'click') return;
                 const meta = e.metadata as Record<string, unknown> | null;
-                if (!blockClickCounts[e.block_id]) {
-                    blockClickCounts[e.block_id] = { type: getString(meta, 'block_type') || 'Unknown', clicks: 0 };
+                const blockRef = e.block_id || getString(meta, 'blockId') || getString(meta, 'blockType');
+                if (!blockRef) return;
+                if (!blockClickCounts[blockRef]) {
+                    blockClickCounts[blockRef] = { type: getString(meta, 'blockType') || getString(meta, 'block_type') || 'Unknown', clicks: 0 };
                 }
-                blockClickCounts[e.block_id].clicks++;
+                blockClickCounts[blockRef].clicks++;
             });
 
             const topBlocks = Object.entries(blockClickCounts)
