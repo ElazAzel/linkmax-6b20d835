@@ -472,9 +472,22 @@ export async function trackBlockClick(
   variantLabel?: string
 ): Promise<void> {
   // Increment click count in blocks table
-  if (blockId) {
+  // blockId is a content-level ID (e.g. "profile-1"), not a DB UUID.
+  // We need to look up the real DB UUID to increment clicks.
+  if (blockId && pageId) {
     try {
-      await supabase.rpc('increment_block_clicks', { block_uuid: blockId });
+      // Find the actual DB block by matching content->>'id' or content->>'type'
+      const { data: blockRow } = await supabase
+        .from('blocks')
+        .select('id')
+        .eq('page_id', pageId)
+        .or(`content->>id.eq.${blockId},content->>type.eq.${blockType}`)
+        .limit(1)
+        .maybeSingle();
+
+      if (blockRow?.id) {
+        await supabase.rpc('increment_block_clicks', { block_uuid: blockRow.id });
+      }
     } catch {
       // Silent fail
     }
@@ -483,10 +496,12 @@ export async function trackBlockClick(
   return trackEvent({
     pageId,
     eventType: 'click',
-    blockId,
+    // Don't pass blockId to block_id column — it's a content ID, not a DB UUID
+    // Store it in metadata instead
     experimentId,
     variantLabel,
     metadata: {
+      blockId,
       blockType,
       blockTitle,
     },
