@@ -36,9 +36,9 @@ export const PremiumFooter = () => {
                     <div className="hidden md:flex flex-col gap-6">
                         <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">{t('footer.brand', 'Platform')}</h4>
                         <div className="flex flex-col gap-4">
-                            <button onClick={() => navigate('/')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">Home</button>
-                            <button onClick={() => navigate('/auth')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">Dashboard</button>
-                            <button onClick={() => navigate('/docs')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">Docs</button>
+                            <button onClick={() => navigate('/')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.home', 'Home')}</button>
+                            <button onClick={() => navigate('/auth')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.dashboard', 'Dashboard')}</button>
+                            <button onClick={() => navigate('/for-masters')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.forMasters', 'For Masters')}</button>
                         </div>
                     </div>
 
