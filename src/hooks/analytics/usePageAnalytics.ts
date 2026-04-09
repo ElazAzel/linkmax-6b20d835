@@ -269,9 +269,14 @@ export function usePageAnalytics(externalPageId?: string) {
       }
 
       // Count clicks per block from events
-      events.filter(e => e.event_type === 'click' && e.block_id).forEach(e => {
-        // e.block_id in the analytics table now stores the stable ID
-        const stats = blockStatsMap.get(e.block_id!);
+      // block_id column may be null (FK constraint rejects non-UUID content IDs)
+      // so also check metadata.blockId for the content-level ID
+      events.filter(e => e.event_type === 'click').forEach(e => {
+        const blockRef = e.block_id
+          || (e.metadata as any)?.blockId
+          || (e.metadata as any)?.blockType; // fallback to type matching
+        if (!blockRef) return;
+        const stats = blockStatsMap.get(blockRef);
         if (stats) {
           stats.clicks++;
         }

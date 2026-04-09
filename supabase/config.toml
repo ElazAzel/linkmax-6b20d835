@@ -13,26 +13,54 @@ enable_manual_linking = true
 # implement their own auth (API key, signature verification, etc.)
 # ──────────────────────────────────────────────────────────────
 
-# --- AI / Content generation (called from authenticated frontend, but uses service_role internally) ---
+# --- AI & Core Services (Internal/Auth) ---
 [functions.ai-content-generator]
-verify_jwt = true # FIXED 2026-03-31: requires authenticated user
+verify_jwt = true # FIXED: requires authenticated user
 
 [functions.chatbot-stream]
-verify_jwt = true # FIXED 2026-03-31: requires authenticated user
+verify_jwt = true # FIXED: requires authenticated user
 
 [functions.translate-content]
-verify_jwt = true # FIXED 2026-03-31: requires authenticated user
+verify_jwt = true # FIXED: requires authenticated user
 
-# --- Lead capture (public forms, no auth required) ---
+[functions.image-proxy]
+verify_jwt = true
+
+# --- Lead & Booking (Public Inbound) ---
 [functions.create-lead]
-verify_jwt = false # Public: accepts leads from public pages without auth
+verify_jwt = false # Public: accepts leads from public pages
 
+[functions.submit-booking]
+verify_jwt = false # Public: accepts bookings from public pages
+
+[functions.submit-lead]
+verify_jwt = false # Public: accepts leads from public pages
+
+# --- Notifications & background (Internal/Service Role) ---
 [functions.send-lead-notification]
-verify_jwt = false # Internal: triggered by DB webhook/cron
+verify_jwt = true # Now protected: called via service_role or authenticated trigger
 
-# --- Scheduled/cron functions (invoked by Supabase scheduler) ---
+[functions.send-collab-notification]
+verify_jwt = true
+
+[functions.send-team-notification]
+verify_jwt = true
+
+[functions.send-friend-notification]
+verify_jwt = true
+
+[functions.send-social-notification]
+verify_jwt = true
+
+[functions.send-booking-notification]
+verify_jwt = true
+
+[functions.send-event-confirmation]
+verify_jwt = true
+
+# --- Cron / Scheduled (System) ---
 [functions.send-weekly-digest]
-verify_jwt = false # Cron: invoked by pg_cron, no user context
+verify_jwt = false # Cron: invoked by pg_cron (uses service_role internally)
 
 [functions.send-trial-ending-notification]
 verify_jwt = false # Cron: invoked by pg_cron
@@ -43,74 +71,38 @@ verify_jwt = false # Cron: invoked by pg_cron
 [functions.process-crm-automations]
 verify_jwt = false # Cron: invoked by pg_cron
 
-# --- Telegram integration (external webhook) ---
-[functions.validate-telegram]
-verify_jwt = false # Webhook: called by Telegram API
+[functions.send-booking-reminder]
+verify_jwt = false # Cron: invoked by pg_cron
 
-[functions.telegram-password-reset]
+# --- Webhooks (External) ---
+[functions.validate-telegram]
 verify_jwt = false # Webhook: called by Telegram API
 
 [functions.telegram-bot-webhook]
 verify_jwt = false # Webhook: called by Telegram API
 
-# --- Notification functions (triggered by DB triggers/webhooks) ---
-[functions.send-collab-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-team-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-friend-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-social-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-booking-notification]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-booking-reminder]
-verify_jwt = false # Cron: invoked by pg_cron
-
-[functions.send-event-confirmation]
-verify_jwt = false # Internal: triggered by DB webhook
-
-[functions.send-attendee-email]
-verify_jwt = false # Internal: triggered by DB webhook
-
-# --- Seed/admin (development only) ---
-[functions.seed-demo-accounts]
-verify_jwt = true # FIXED 2026-03-31: protected, requires admin JWT
-
-# --- SEO / public endpoints ---
-[functions.generate-sitemap]
-verify_jwt = false # Public: sitemap must be accessible without auth
-
-[functions.seo-ssr]
-verify_jwt = false # Public: SSR pages must be accessible without auth
-
-[functions.gcal-callback]
-verify_jwt = false  # OAuth callback from Google, no JWT
-
-[functions.google-calendar-sync]
-verify_jwt = false  # Handles auth internally via supabaseClient.auth.getUser()
-
 [functions.google-forms-parser]
 verify_jwt = false # Webhook: called by Google Forms
 
-[functions.public-experts]
-verify_jwt = false # Public: experts listing accessible without auth
+[functions.gcal-callback]
+verify_jwt = false # Webhook: Google OAuth callback
+
+# --- Public Endpoints (SEO/Tracking) ---
+[functions.generate-sitemap]
+verify_jwt = false
+
+[functions.seo-ssr]
+verify_jwt = false
 
 [functions.pixel-proxy]
-verify_jwt = false # Public: tracking pixel, no auth required
+verify_jwt = false # Public: tracking pixel
 
-# --- CRM inbound (public, no auth — end-customers submit bookings) ---
-[functions.submit-booking]
-verify_jwt = false # Public: accepts bookings from public pages without auth
+[functions.public-experts]
+verify_jwt = false # Public: эксперты
 
-[functions.submit-lead]
-verify_jwt = false # Public: accepts leads from public pages without auth
+# --- Admin & Internal ---
+[functions.seed-demo-accounts]
+verify_jwt = true # Admin only
 
-# --- Admin / Internal (Manual Trigger) ---
 [functions.process-transaction-fee]
-verify_jwt = true
+verify_jwt = true # Admin only

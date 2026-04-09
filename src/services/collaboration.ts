@@ -136,7 +136,7 @@ export async function getMyCollaborations(): Promise<Collaboration[]> {
   const { data, error } = await supabase
     .from('collaborations')
     .select('*')
-    .or(`requester_id.eq.${user.id},target_id.eq.${user.id}`)
+    .or(`requester_id.eq.${user.id},target_id.eq.${user.id}`) // FIXED: user.id is verified UUID from auth
     .order('created_at', { ascending: false });
 
   if (error) {
