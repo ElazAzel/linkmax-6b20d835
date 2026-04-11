@@ -1,147 +1,147 @@
 {
   "achievements": {
     "categories": {
-      "all": "All",
-      "blocks": "Blocks",
-      "features": "Functions",
-      "milestones": "Milestones",
-      "social": "Social"
+      "all": "Барлығы",
+      "blocks": "Блоктар",
+      "features": "Функциялар",
+      "milestones": "Белгілер",
+      "social": "Әлеуметтік"
     },
-    "emptyDescription": "There are no achievements in this category yet",
-    "emptyTitle": "No achievements",
+    "emptyDescription": "Бұл санатта әлі жетістіктер жоқ",
+    "emptyTitle": "Жетістіктер жоқ",
     "items": {
       "aiPowered": {
-        "description": "Use AI to generate content",
-        "title": "AI assistant"
+        "description": "Мазмұнды жасау үшін AI пайдаланыңыз",
+        "title": "AI көмекшісі"
       },
       "chatbotExpert": {
-        "description": "Set up an AI chatbot",
-        "title": "Chatbot Expert"
+        "description": "AI чат-ботын орнатыңыз",
+        "title": "Чатбот сарапшысы"
       },
       "collector": {
-        "description": "Add 5 different block types",
-        "title": "Collector"
+        "description": "5 түрлі блок түрлерін қосыңыз",
+        "title": "Коллекционер"
       },
       "communicator": {
-        "description": "Add a feedback form",
-        "title": "Communicator"
+        "description": "Кері байланыс пішінін қосыңыз",
+        "title": "Коммуникатор"
       },
       "communityLeader": {
-        "description": "Add 25 friends",
-        "title": "Community Leader"
+        "description": "25 дос қосыңыз",
+        "title": "Қоғамдастық көшбасшысы"
       },
       "completionist": {
-        "description": "Use all block types",
-        "title": "Perfectionist"
+        "description": "Барлық блок түрлерін пайдаланыңыз",
+        "title": "Перфекционист"
       },
       "contentCreator": {
-        "description": "Add a video block",
-        "title": "Content Creator"
+        "description": "Бейне блогын қосыңыз",
+        "title": "Мазмұн жасаушы"
       },
       "developer": {
-        "description": "Use a block with custom code",
-        "title": "Developer"
+        "description": "Пайдаланушы коды бар блокты пайдаланыңыз",
+        "title": "Әзірлеуші"
       },
       "firstFriend": {
-        "description": "Add your first friend",
-        "title": "First friend"
+        "description": "Бірінші досыңызды қосыңыз",
+        "title": "Алғашқы дос"
       },
       "firstLink": {
-        "description": "Add your first link",
-        "title": "First link"
+        "description": "Бірінші сілтемені қосыңыз",
+        "title": "Бірінші сілтеме"
       },
       "galleryMaster": {
-        "description": "Create an Image Carousel",
-        "title": "Gallery Master"
+        "description": "Кескін карусельін жасаңыз",
+        "title": "Галерея шебері"
       },
       "influencer": {
-        "description": "Get 1000 views",
-        "title": "Influencer"
+        "description": "1000 қаралым алыңыз",
+        "title": "Әсер етуші"
       },
       "masterBuilder": {
-        "description": "Add 10 blocks per page",
-        "title": "Master Builder"
+        "description": "Әр бетке 10 блок қосыңыз",
+        "title": "Шебер құрылысшы"
       },
       "merchant": {
-        "description": "Add your first product to your store",
-        "title": "Dealer"
+        "description": "Дүкеніңізге бірінші өніміңізді қосыңыз",
+        "title": "Дилер"
       },
       "networkingPro": {
-        "description": "Add 10 friends",
-        "title": "Master of Networking"
+        "description": "10 дос қосыңыз",
+        "title": "Networking магистрі"
       },
       "popular": {
-        "description": "Get 100 views",
-        "title": "Popular"
+        "description": "100 көрініс алыңыз",
+        "title": "Танымал"
       },
       "publisher": {
-        "description": "Publish your first page",
-        "title": "Publisher"
+        "description": "Бірінші бетті жариялаңыз",
+        "title": "Баспагер"
       },
       "searchGuru": {
-        "description": "Add AI Search block",
-        "title": "Search Guru"
+        "description": "AI іздеу блогын қосыңыз",
+        "title": "Гуру іздеу"
       },
       "socialButterfly": {
-        "description": "Add a social network block",
-        "title": "Social butterfly"
+        "description": "Әлеуметтік желі блогын қосыңыз",
+        "title": "Әлеуметтік көбелек"
       },
       "socialCircle": {
-        "description": "Add 5 friends",
-        "title": "Social circle"
+        "description": "5 дос қосыңыз",
+        "title": "Әлеуметтік шеңбер"
       },
       "templateUser": {
-        "description": "Use a ready-made template",
-        "title": "Quick start"
+        "description": "Дайын үлгіні пайдаланыңыз",
+        "title": "Жылдам бастау"
       }
     },
-    "newAchievement": "New achievement!",
+    "newAchievement": "Жаңа жетістік!",
     "progress": "{{unlocked}} из {{total}} открыто",
     "rarity": {
-      "common": "Normal",
-      "epic": "Epic",
-      "legendary": "Legendary",
-      "rare": "Rare"
+      "common": "Қалыпты",
+      "epic": "Эпикалық",
+      "legendary": "Аңызға айналған",
+      "rare": "Сирек"
     },
     "rewardDescription": "Награда за достижение: {{title}}",
     "sections": {
       "locked": "Заблокированные ({{count}})",
       "unlocked": "Открытые ({{count}})"
     },
-    "title": "Achievements"
+    "title": "Жетістіктер"
   },
   "actions": {
-    "addImage": "Add Image",
-    "addPlatform": "Add Platform",
-    "buy": "Buy",
-    "buyForTokens": "Buy for",
-    "buyTokens": "Buy tokens",
-    "cancel": "Cancel",
-    "download": "Download",
-    "removeCustomIcon": "Remove custom icon",
-    "save": "Save",
-    "send": "Send",
-    "sending": "Sending...",
-    "subscribe": "Subscribe",
-    "tapToView": "Read more →",
-    "upgrade": "Upgrade"
+    "addImage": "Кескінді қосу",
+    "addPlatform": "Платформа қосу",
+    "buy": "Сатып алу",
+    "buyForTokens": "үшін сатып алыңыз",
+    "buyTokens": "Токендерді сатып алыңыз",
+    "cancel": "Болдырмау",
+    "download": "Жүктеп алу",
+    "removeCustomIcon": "Арнаулы белгішені алып тастаңыз",
+    "save": "Сақтау",
+    "send": "Жіберу",
+    "sending": "Жіберілуде...",
+    "subscribe": "Жазылу",
+    "tapToView": "Толығырақ →",
+    "upgrade": "Жаңарту"
   },
   "activation": {
-    "celebrationDesc": "Your page is live and delivering results",
-    "celebrationTitle": "🎉 Congratulations!",
+    "celebrationDesc": "Сіздің парақшаңыз белсенді және нәтижелер береді",
+    "celebrationTitle": "🎉 Құттықтаймыз!",
     "progress": "{{done}} из {{total}}",
     "steps": {
-      "createPage": "Create your page",
-      "addBlock": "Add your first block",
-      "publish": "Publish your page",
-      "connectTelegram": "Connect Telegram",
-      "firstLead": "Get your first lead",
-      "firstBooking": "Get your first booking",
-      "firstConversion": "Get your first response",
-      "firstVisitor": "Get your first visitor"
+      "createPage": "Өз парақшаңызды жасаңыз",
+      "addBlock": "Бірінші блокты қосыңыз",
+      "publish": "Парақшаңызды жариялаңыз",
+      "connectTelegram": "Telegram-ды қосыңыз",
+      "firstLead": "Алғашқы жетекшіңізді алыңыз",
+      "firstBooking": "Алғашқы брондауыңызды алыңыз",
+      "firstConversion": "Алғашқы жауабыңызды алыңыз",
+      "firstVisitor": "Алғашқы келушіңізді алыңыз"
     },
     "cta": {
-      "openEditor": "Open",
+      "openEditor": "Ашық",
       "addBlock": "Add",
       "publish": "Publish",
       "connectTelegram": "Connect",
