@@ -110,6 +110,13 @@ const customLanguageDetector = {
       return stored as LocaleCode;
     }
 
+    // Check Telegram WebApp context
+    const tg = (window as any).Telegram?.WebApp;
+    const tgLang = tg?.initDataUnsafe?.user?.language_code;
+    if (tgLang) {
+      return normalizeLanguage(tgLang);
+    }
+
     const browserLang = navigator.language || (navigator as any).languages?.[0] || '';
     return normalizeLanguage(browserLang);
   },
