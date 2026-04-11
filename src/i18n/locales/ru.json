@@ -3017,537 +3017,537 @@
       "copyLink": "Скопировать ссылку",
       "description": "Установите приложение LinkMAX.my на свое устройство для быстрого доступа",
       "desktop": {
-        "installNow": "Install now",
-        "ready": "LinkMAX.my is ready to install!",
-        "step1": "Find the installation icon",
-        "step1desc": "It is usually located in the address bar (Chrome, Edge)",
-        "step2": "Click \"Install\"",
-        "step2desc": "Add LinkMAX.my to your desktop",
-        "title": "Instructions for Desktop",
-        "desc": "Look for the install icon in the browser address bar or select \"Install LinkMAX.my\" from the browser menu"
+        "installNow": "Установить сейчас",
+        "ready": "LinkMAX.my готов к установке!",
+        "step1": "Найдите значок установки",
+        "step1desc": "Обычно он находится в адресной строке (Chrome, Edge).",
+        "step2": "Нажмите «Установить»",
+        "step2desc": "Добавьте LinkMAX.my на свой рабочий стол",
+        "title": "Инструкции для рабочего стола",
+        "desc": "Найдите значок установки в адресной строке браузера или выберите «Установить LinkMAX.my» в меню браузера."
       },
       "ios": {
-        "step1": "Tap the \"Share\" button ⬆️ at the bottom of Safari",
-        "step1desc": "Make sure you open the site in Safari",
-        "step2": "Scroll down and select \"Add to Home Screen\"",
-        "step2desc": "Safari bottom arrow button",
-        "step3": "Tap \"Add\" in the top right corner",
-        "step3desc": "Scroll down and select \"Add to Home Screen\"",
-        "title": "Instructions for iOS"
+        "step1": "Нажмите кнопку «Поделиться» ⬆️ в нижней части Safari.",
+        "step1desc": "Убедитесь, что вы открываете сайт в Safari.",
+        "step2": "Прокрутите вниз и выберите «Добавить на главный экран».",
+        "step2desc": "Кнопка со стрелкой вниз Safari",
+        "step3": "Нажмите «Добавить» в правом верхнем углу.",
+        "step3desc": "Прокрутите вниз и выберите «Добавить на главный экран».",
+        "title": "Инструкции для iOS"
       },
-      "later": "Later",
+      "later": "Позже",
       "seo": {
-        "description": "Install LinkMAX as a PWA for quick access.",
-        "title": "Installing LinkMAX"
+        "description": "Установите LinkMAX как PWA для быстрого доступа.",
+        "title": "Установка LinkMAX"
       },
-      "subtitle": "Add the app to your home screen for a better experience",
-      "title": "Install LinkMAX.my",
-      "yourLink": "Your link:",
-      "backHome": "Back to home",
+      "subtitle": "Добавьте приложение на главный экран для более удобного использования.",
+      "title": "Установите LinkMAX.my",
+      "yourLink": "Ваша ссылка:",
+      "backHome": "Вернуться домой",
       "features": {
-        "quickAccess": "Quick access",
-        "quickAccessDesc": "One-click launch from home screen",
-        "offline": "Offline mode",
-        "offlineDesc": "Access content without internet",
-        "native": "Native interface",
-        "nativeDesc": "Full-screen mode without browser"
+        "quickAccess": "Быстрый доступ",
+        "quickAccessDesc": "Запуск в один клик с главного экрана",
+        "offline": "Офлайн-режим",
+        "offlineDesc": "Доступ к контенту без Интернета",
+        "native": "Родной интерфейс",
+        "nativeDesc": "Полноэкранный режим без браузера"
       },
       "installed": {
-        "title": "App installed!",
-        "desc": "LinkMAX.my is ready. Find the icon on your home screen.",
-        "open": "Open app"
+        "title": "Приложение установлено!",
+        "desc": "LinkMAX.my готов. Найдите значок на главном экране.",
+        "open": "Открыть приложение"
       },
       "ready": {
-        "title": "Ready to install",
-        "desc": "Click the button below to install LinkMAX.my on your device",
-        "button": "Install now"
+        "title": "Готов к установке",
+        "desc": "Нажмите кнопку ниже, чтобы установить LinkMAX.my на ваше устройство.",
+        "button": "Установить сейчас"
       }
     },
     "kaspi": {
-      "amount": "Amount",
-      "comment": "Comment",
-      "commentPlaceholder": "Payment description",
-      "copyLink": "Copy Link",
-      "description": "Generate QR code for quick Kaspi payment",
-      "disclaimer": "Powered by Kaspi.kz payment system",
-      "downloadQR": "Download QR",
-      "enter_amount": "Enter amount to generate QR",
-      "generateQR": "Kaspi QR Payment",
-      "invalidAmount": "Invalid amount or missing owner ID",
-      "linkCopied": "Link copied to clipboard",
-      "pay": "Pay",
-      "paymentSimulated": "Payment successfully simulated and fee processed!",
-      "scanHint": "Scan with Kaspi app to pay",
-      "simulateMock": "Simulate Payment (Sandbox)",
-      "title": "Kaspi QR Payment"
+      "amount": "Количество",
+      "comment": "Комментарий",
+      "commentPlaceholder": "Описание платежа",
+      "copyLink": "Копировать ссылку",
+      "description": "Сгенерируйте QR-код для быстрой оплаты Kaspi",
+      "disclaimer": "При поддержке платежной системы Kaspi.kz.",
+      "downloadQR": "Скачать QR-код",
+      "enter_amount": "Введите сумму для создания QR",
+      "generateQR": "Каспи QR-платеж",
+      "invalidAmount": "Неверная сумма или отсутствует идентификатор владельца.",
+      "linkCopied": "Ссылка скопирована в буфер обмена",
+      "pay": "Платить",
+      "paymentSimulated": "Платеж успешно смоделирован и комиссия обработана!",
+      "scanHint": "Чтобы оплатить, отсканируйте в приложении Kaspi.",
+      "simulateMock": "Имитация платежа (песочница)",
+      "title": "Каспи QR-платеж"
     },
     "landingV1": {
-      "aiBuilderDesc": "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
-      "aiBuilderTitle": "AI Page Builder",
-      "aiBuilds": "AI builds everything",
-      "aiBuildsDesc": "Structure, copy, and design generated in seconds. No drag-and-drop hell.",
-      "aiGenerating": "AI Generating...",
-      "aiPowered": "AI Powered",
+      "aiBuilderDesc": "Опишите свой бизнес, и наш ИИ создаст идеальную структуру, текст и макет за считанные секунды.",
+      "aiBuilderTitle": "Конструктор страниц с искусственным интеллектом",
+      "aiBuilds": "ИИ строит всё",
+      "aiBuildsDesc": "Структура, текст и дизайн создаются за секунды. Никакого ада перетаскивания.",
+      "aiGenerating": "Генерация ИИ...",
+      "aiPowered": "Работает на искусственном интеллекте",
       "bento": {
-        "aiDesc": "Skip months of development. Describe your offer, and AI builds structure, copy, and design instantly.",
-        "aiPowered": "AI-Powered",
-        "aiSub": "Structure • Copy • Design",
-        "aiTitle": "Launch in 2 Minutes",
-        "analyticsDesc": "Track every click and purchase without complex Google Analytics setups.",
-        "analyticsTitle": "Instant Analytics",
-        "bookingDesc": "Let clients book slots directly. Automated calendar, zero phone calls.",
-        "bookingSlot": "Available",
-        "bookingTitle": "Online Booking",
-        "crmDesc": "A simple Kanban board. No monstrous interfaces that take weeks to learn.",
-        "crmDone": "Done",
-        "crmInProgress": "In Progress",
-        "crmNew": "New",
-        "crmTitle": "Pain-Free CRM",
-        "lead1": "New lead: Sarah K.",
-        "lead2": "New lead: Alex M.",
-        "leadCount": "+12 today",
-        "leadsDesc": "Get leads delivered straight to Telegram. Never miss a customer.",
-        "leadsTitle": "Instant Leads to Telegram",
-        "mobileDesc": "Manage your content and launch new products directly from your phone.",
-        "mobileTitle": "Total Freedom",
-        "sectionDesc": "Mini-landing + CRM + analytics. Works out of the box, no integrators needed.",
-        "sectionTitle": "Everything you need to launch"
+        "aiDesc": "Пропустите месяцы разработки. Опишите свое предложение, и ИИ мгновенно создаст структуру, текст и дизайн.",
+        "aiPowered": "на базе искусственного интеллекта",
+        "aiSub": "Структура • Копия • Дизайн",
+        "aiTitle": "Запуск через 2 минуты",
+        "analyticsDesc": "Отслеживайте каждый клик и покупку без сложных настроек Google Analytics.",
+        "analyticsTitle": "Мгновенная аналитика",
+        "bookingDesc": "Позвольте клиентам бронировать слоты напрямую. Автоматизированный календарь, отсутствие телефонных звонков.",
+        "bookingSlot": "Доступный",
+        "bookingTitle": "Онлайн бронирование",
+        "crmDesc": "Простая канбан-доска. Никаких чудовищных интерфейсов, на изучение которых уходят недели.",
+        "crmDone": "Сделанный",
+        "crmInProgress": "В ходе выполнения",
+        "crmNew": "Новый",
+        "crmTitle": "Безболезненная CRM",
+        "lead1": "Новый ведущий: Сара К.",
+        "lead2": "Новый ведущий: Алекс М.",
+        "leadCount": "+12 сегодня",
+        "leadsDesc": "Получайте потенциальных клиентов прямо в Telegram. Никогда не пропустите клиента.",
+        "leadsTitle": "Мгновенные лиды в Telegram",
+        "mobileDesc": "Управляйте своим контентом и запускайте новые продукты прямо со своего телефона.",
+        "mobileTitle": "Полная свобода",
+        "sectionDesc": "Мини-лендинг + CRM + аналитика. Работает «из коробки», интеграторы не нужны.",
+        "sectionTitle": "Все, что вам нужно для запуска"
       },
-      "chooseNiche": "Choose your niche",
-      "chooseNicheDesc": "Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.",
+      "chooseNiche": "Выберите свою нишу",
+      "chooseNicheDesc": "Расскажите ИИ, что вы делаете. Красота, криптография, коучинг — мы говорим на вашем языке.",
       "comparison": {
-        "ai": "AI page assembly",
-        "blockAnalytics": "Analytics by block",
-        "crm": "Mini-CRM for applications",
-        "feature": "Function",
-        "mobile": "Mobile editor",
-        "others": "Other",
-        "telegram": "Telegram notifications",
-        "title": "Why is a mini-site better than a link menu?"
+        "ai": "Сборка AI-страницы",
+        "blockAnalytics": "Аналитика по блокам",
+        "crm": "Мини-CRM для приложений",
+        "feature": "Функция",
+        "mobile": "Мобильный редактор",
+        "others": "Другой",
+        "telegram": "Уведомления в телеграмме",
+        "title": "Почему мини-сайт лучше меню ссылок?"
       },
-      "deepAnalyticsDesc": "Track every click, view, and conversion with privacy-focused, real-time analytics.",
-      "deepAnalyticsTitle": "Deep Analytics",
+      "deepAnalyticsDesc": "Отслеживайте каждый клик, просмотр и конверсию с помощью аналитики в реальном времени, ориентированной на конфиденциальность.",
+      "deepAnalyticsTitle": "Глубокая аналитика",
       "demo": {
-        "addBlocks": "Add blocks",
-        "addBlocksHint": "Add blocks to see them here",
-        "aiGenerating": "AI is generating...",
-        "badge": "Try it now",
-        "chatMsg1": "Hi, I want to book a consultation!",
-        "chatMsg2": "Great! Let's schedule it.",
-        "dragToReorder": "drag to sort",
-        "iAmA": "I am a...",
-        "image": "Image",
-        "leadCaptured": "New lead captured",
-        "link": "Link",
-        "livePreview": "Preview",
-        "nicheBeauty": "Beauty Blogger",
-        "nicheCreator": "Digital Creator",
-        "nicheCrypto": "Crypto Expert",
-        "nicheFitness": "Fitness Trainer",
-        "nicheMusic": "Music Producer",
-        "nicheTutor": "Online Tutor",
-        "noBlocks": "No blocks yet. Add higher!",
-        "profile": "Profile",
-        "socials": "Social networks",
-        "step1Desc": "Tell AI what you do. Beauty, crypto, coaching — we speak your language.",
-        "step1Title": "Choose your niche",
-        "step2Desc": "Structure, text, and design in seconds. No drag-and-drop.",
-        "step2Title": "AI builds everything",
-        "step3Desc": "Your page is live. Leads go straight to your DM. Close deals instantly.",
-        "step3Title": "Get leads in Telegram",
-        "subtitle": "Play with the editor right here. Add blocks, change content and see the changes in real time.",
-        "text": "Text",
-        "title": "Feel the magic.",
-        "yourBlocks": "Your blocks"
+        "addBlocks": "Добавить блоки",
+        "addBlocksHint": "Добавьте блоки, чтобы увидеть их здесь",
+        "aiGenerating": "ИИ генерирует...",
+        "badge": "Попробуйте сейчас",
+        "chatMsg1": "Здравствуйте, хочу записаться на консультацию!",
+        "chatMsg2": "Большой! Давайте запланируем это.",
+        "dragToReorder": "перетащите для сортировки",
+        "iAmA": "Я...",
+        "image": "Изображение",
+        "leadCaptured": "Новый зацеп захвачен",
+        "link": "Связь",
+        "livePreview": "Предварительный просмотр",
+        "nicheBeauty": "Бьюти-блогер",
+        "nicheCreator": "Цифровой создатель",
+        "nicheCrypto": "Криптоэксперт",
+        "nicheFitness": "Фитнес-тренер",
+        "nicheMusic": "Музыкальный продюсер",
+        "nicheTutor": "Онлайн репетитор",
+        "noBlocks": "Блоков пока нет. Добавляйте выше!",
+        "profile": "Профиль",
+        "socials": "Социальные сети",
+        "step1Desc": "Расскажите ИИ, что вы делаете. Красота, криптография, коучинг — мы говорим на вашем языке.",
+        "step1Title": "Выберите свою нишу",
+        "step2Desc": "Структура, текст и дизайн за считанные секунды. Никакого перетаскивания.",
+        "step2Title": "ИИ строит всё",
+        "step3Desc": "Ваша страница активна. Лиды идут прямо к вашему DM. Заключайте сделки мгновенно.",
+        "step3Title": "Получайте лиды в Telegram",
+        "subtitle": "Поиграйте с редактором прямо здесь. Добавляйте блоки, меняйте контент и наблюдайте за изменениями в режиме реального времени.",
+        "text": "Текст",
+        "title": "Почувствуйте волшебство.",
+        "yourBlocks": "Ваши блоки"
       },
       "faq": {
-        "badge": "Questions and answers",
+        "badge": "Вопросы и ответы",
         "q1": {
-          "answer": "LinkMAX is an AI link in bio and mini-site builder that helps you put together one clear page for links, services, entries and applications.",
-          "question": "What is LinkMAX and what is it for?"
+          "answer": "LinkMAX — это AI-ссылка в биографии и конструкторе мини-сайтов, который помогает вам собрать одну четкую страницу для ссылок, услуг, записей и приложений.",
+          "question": "Что такое LinkMAX и для чего он нужен?"
         },
         "q10": {
-          "answer": "Returns are possible within 14 days from the date of payment in accordance with the legislation of the Republic of Kazakhstan. More details in the user agreement.",
-          "question": "What are the refund conditions?"
+          "answer": "Возврат возможен в течение 14 дней с момента оплаты в соответствии с законодательством Республики Казахстан. Подробности в пользовательском соглашении.",
+          "question": "Каковы условия возврата?"
         },
         "q11": {
-          "answer": "Yes. The gallery contains real pages from different niches: specialists, stores, services and creators.",
-          "question": "Can I see sample pages?"
+          "answer": "Да. В галерее собраны реальные страницы из разных ниш: специалистов, магазинов, сервисов и авторов.",
+          "question": "Могу ли я увидеть образцы страниц?"
         },
         "q12": {
-          "answer": "LinkMAX has AI page builder, CRM and notifications. Plus flexible blocks, clear tariffs and local languages.",
-          "question": "How is LinkMAX different from Linktree and Taplink?"
+          "answer": "LinkMAX имеет конструктор страниц AI, CRM и уведомления. Плюс гибкие блоки, понятные тарифы и местные языки.",
+          "question": "Чем LinkMAX отличается от Linktree и Taplink?"
         },
         "q13": {
-          "answer": "Yes. You can add a catalog, price list, application forms and contact buttons so that the client can quickly place an order or record.",
-          "question": "Is LinkMAX suitable for a store or service?"
+          "answer": "Да. Вы можете добавить каталог, прайс-лист, формы заявок и кнопки контактов, чтобы клиент мог быстро оформить заказ или записаться.",
+          "question": "Подходит ли LinkMAX для магазина или сервиса?"
         },
         "q14": {
-          "answer": "Yes, custom domains and page branding are available in Pro.",
-          "question": "Can I connect my domain?"
+          "answer": "Да, в версии Pro доступны собственные домены и брендинг страниц.",
+          "question": "Могу ли я подключить свой домен?"
         },
         "q2": {
-          "answer": "The basic plan is free forever. Pro: 3 months - 4,350в‚ё/month, 6 months - 3,698в‚ё/month (-15%), 12 months - 3,045в‚ё/month (-30%). Payment online, refund within 14 days.",
-          "question": "How much does it cost to use LinkMAX?"
+          "answer": "Базовый план бесплатен навсегда. Плюсы: 3 месяца - 4350 евро/мес, 6 месяцев - 3698 евро/мес (-15%), 12 месяцев - 3045 евро/мес (-30%). Оплата онлайн, возврат в течение 14 дней.",
+          "question": "Сколько стоит использование LinkMAX?"
         },
         "q3": {
-          "answer": "Choose a niche and write a few facts about yourself - AI will collect the structure, texts and CTA in a couple of minutes. The free plan has 1 generation/month, the Pro plan has 5 generations/month.",
-          "question": "How does AI page generation work?"
+          "answer": "Выберите нишу и напишите несколько фактов о себе — ИИ соберет структуру, тексты и CTA за пару минут. В бесплатном плане — 1 поколение в месяц, в плане Pro — 5 поколений в месяц.",
+          "question": "Как работает генерация страниц AI?"
         },
         "q4": {
-          "answer": "20+ types of blocks: profile, links, buttons, images, videos, carousels, products, price lists, forms, maps, messengers, reviews, FAQ, timers and more.",
-          "question": "What blocks are available for the page?"
+          "answer": "20+ типов блоков: профиль, ссылки, кнопки, изображения, видео, карусели, товары, прайс-листы, формы, карты, мессенджеры, отзывы, FAQ, таймеры и многое другое.",
+          "question": "Какие блоки доступны для страницы?"
         },
         "q5": {
-          "answer": "Yes. Pro has lead CRM and Telegram notifications. Analytics shows clicks, traffic sources and visitor behavior.",
-          "question": "Do you have CRM and analytics?"
+          "answer": "Да. Pro имеет лид-уведомления CRM и Telegram. Аналитика показывает клики, источники трафика и поведение посетителей.",
+          "question": "У вас есть CRM и аналитика?"
         },
         "q6": {
-          "answer": "Yes. You can edit the page directly from your smartphone.",
-          "question": "Is the mobile editor supported?"
+          "answer": "Да. Вы можете редактировать страницу прямо со своего смартфона.",
+          "question": "Поддерживается ли мобильный редактор?"
         },
         "q7": {
-          "answer": "Telegram for lead notifications and Google Calendar for scheduling. Social networks and instant messengers are available as blocks.",
-          "question": "What integrations does LinkMAX support?"
+          "answer": "Telegram для уведомлений о потенциальных клиентах и ​​Календарь Google для планирования. Социальные сети и мессенджеры доступны в виде блоков.",
+          "question": "Какие интеграции поддерживает LinkMAX?"
         },
         "q8": {
-          "answer": "No. 0% commission on your sales - you only pay for the subscription.",
-          "question": "Does LinkMAX take a commission on sales?"
+          "answer": "Нет. Комиссия 0% от ваших продаж — вы платите только за подписку.",
+          "question": "Взимает ли LinkMAX комиссию с продаж?"
         },
         "q9": {
-          "answer": "Payment by card and through available payment methods. You can also use tokens (100 tokens = 1 day Pro).",
-          "question": "How to pay for Pro subscription?"
+          "answer": "Оплата картой и доступными способами оплаты. Вы также можете использовать токены (100 жетонов = 1 день Pro).",
+          "question": "Как оплатить подписку Pro?"
         },
-        "subtitle": "Answers to popular questions about LinkMAX",
-        "title": "Frequently Asked Questions"
+        "subtitle": "Ответы на популярные вопросы о LinkMAX",
+        "title": "Часто задаваемые вопросы"
       },
       "featured": {
-        "badge": "Top creators",
-        "subtitle": "Discover the most popular pages created with LinkMAX.my",
-        "title": "Recommended Pages",
-        "viewAll": "View all pages"
+        "badge": "Лучшие создатели",
+        "subtitle": "Откройте для себя самые популярные страницы, созданные с помощью LinkMAX.my",
+        "title": "Рекомендуемые страницы",
+        "viewAll": "Посмотреть все страницы"
       },
       "features": {
         "ai": {
-          "item1": "First screen with promise of result and CTA",
-          "item2": "Price list or service packages without manual layout",
-          "item3": "Application form and contacts on one page",
-          "title": "A page with a clear offer"
+          "item1": "Первый экран с обещанием результата и призывом к действию",
+          "item2": "Прайс-лист или пакеты услуг без ручного оформления",
+          "item3": "Форма заявки и контакты на одной странице",
+          "title": "Страница с четким предложением"
         },
         "analytics": {
-          "item1": "Views and clicks on blocks",
-          "item2": "Traffic sources, devices",
-          "item3": "Tips on what to improve next",
-          "title": "Understanding what works"
+          "item1": "Просмотры и клики по блокам",
+          "item2": "Источники трафика, устройства",
+          "item3": "Советы о том, что улучшить дальше",
+          "title": "Понимание того, что работает"
         },
         "crm": {
-          "item1": "Mini-CRM: leads, statuses, notes",
-          "item2": "Notifications about applications in Telegram",
-          "item3": "Quick replies and communication history",
-          "title": "Leads and order"
+          "item1": "Мини-CRM: лиды, статусы, заметки",
+          "item2": "Уведомления о заявках в Telegram",
+          "item3": "Быстрые ответы и история общения",
+          "title": "Лиды и заказ"
         },
-        "title": "What will you get in the first version"
+        "title": "Что вы получите в первой версии"
       },
       "finalCta": {
-        "description": "Don't lose clients in correspondence. Give them a clear path: who you are - how you help - how much it costs - sign up.",
-        "primaryCta": "Create a page for free",
-        "secondaryCta": "View examples",
-        "title": "Build a page that leads to an application in 2 minutes"
+        "description": "Не теряйте клиентов в переписке. Дайте им четкий путь: кто вы — как помогаете — сколько это стоит — зарегистрируйтесь.",
+        "primaryCta": "Создать страницу бесплатно",
+        "secondaryCta": "Посмотреть примеры",
+        "title": "Создайте страницу, ведущую к приложению, за 2 минуты."
       },
       "floatingCta": {
-        "create": "Create"
+        "create": "Создавать"
       },
       "footer": {
-        "alternatives": "Comparison",
-        "copyright": "В© 2025 LinkMAX"
+        "alternatives": "Сравнение",
+        "copyright": "© 2025 ЛинМАКС"
       },
       "forWhom": {
         "beauty": {
-          "desc": "Recording, reviews, map",
-          "title": "Beauty and services"
+          "desc": "Запись, отзывы, карта",
+          "title": "Красота и услуги"
         },
         "business": {
-          "desc": "Catalog, leads, analytics",
-          "title": "Small business"
+          "desc": "Каталог, лиды, аналитика",
+          "title": "Малый бизнес"
         },
         "expert": {
-          "desc": "Services, cases, clear offer",
-          "title": "Experts and mentors"
+          "desc": "Услуги, кейсы, четкое предложение",
+          "title": "Эксперты и наставники"
         },
         "freelancer": {
-          "desc": "Portfolio, brief, applications",
-          "title": "Freelancers"
+          "desc": "Портфолио, бриф, заявки",
+          "title": "Фрилансеры"
         },
-        "title": "Who is LinkMAX suitable for?"
+        "title": "Кому подходит LinkMAX?"
       },
       "gallery": {
-        "badge": "Examples",
-        "subtitle": "See how other experts and brands use LinkMAX.my",
-        "title": "Gallery of the best pages",
-        "viewAll": "Open gallery"
+        "badge": "Примеры",
+        "subtitle": "Посмотрите, как другие эксперты и бренды используют LinkMAX.my",
+        "title": "Галерея лучших страниц",
+        "viewAll": "Открыть галерею"
       },
-      "getLeads": "Get leads in Telegram",
-      "getLeadsDesc": "Your page is live. Leads come straight to your DM. Close them instantly.",
-      "growDesc": "Powerful features wrapped in a beautiful, easy-to-use interface.",
-      "growTitle": "Everything you need to grow",
+      "getLeads": "Получайте лиды в Telegram",
+      "getLeadsDesc": "Ваша страница активна. Лиды приходят прямо в вашу личку. Закройте их немедленно.",
+      "growDesc": "Мощные функции, заключенные в красивый и простой в использовании интерфейс.",
+      "growTitle": "Все, что вам нужно для роста",
       "hero": {
-        "aiHelps": "AI helps",
-        "badge": "AI mini-site builder",
-        "benefit1": "AI collects the structure and texts of the first screen",
-        "benefit2": "Applications arrive in mini-CRM and Telegram",
-        "benefit3": "Analytics shows which blocks provide leads",
-        "createPage": "Create a page",
-        "description": "For beauty professionals, experts and small businesses. AI designer + AI copywriter + Mini-CRM + Telegram notifications about new clients.",
-        "free": "For free",
-        "mainHighlight": "One link - a clear path to the recording",
-        "mainTitle": "Mini-site that generates applications in 2 minutes",
-        "microNote": "Free start. Editor on the phone. Publishing in one click.",
-        "noCode": "No code",
-        "pricingCta": "Compare rates",
-        "primaryCta": "Create a page for free",
-        "secondaryCta": "View examples",
-        "title": "AI page in a minute,",
-        "titleHighlight": "which collects applications",
-        "usernamePlaceholder": "yourname",
-        "valueProposition": "AI constructor for experts, freelancers and small businesses. Create a page, price list, forms and contacts without a designer or code.",
-        "viewExamples": "View examples"
+        "aiHelps": "ИИ помогает",
+        "badge": "Конструктор мини-сайтов с искусственным интеллектом",
+        "benefit1": "ИИ собирает структуру и тексты первого экрана",
+        "benefit2": "Заявки приходят в мини-CRM и Telegram",
+        "benefit3": "Аналитика показывает, какие блоки приносят лиды",
+        "createPage": "Создать страницу",
+        "description": "Для профессионалов красоты, экспертов и малого бизнеса. AI-дизайнер + AI-копирайтер + Мини-CRM + уведомления в Telegram о новых клиентах.",
+        "free": "Бесплатно",
+        "mainHighlight": "Одна ссылка - понятный путь к записи",
+        "mainTitle": "Мини-сайт, генерирующий заявки за 2 минуты",
+        "microNote": "Бесплатный старт. Редактор по телефону. Публикация в один клик.",
+        "noCode": "Нет кода",
+        "pricingCta": "Сравнить цены",
+        "primaryCta": "Создать страницу бесплатно",
+        "secondaryCta": "Посмотреть примеры",
+        "title": "Страница AI за минуту,",
+        "titleHighlight": "который собирает заявки",
+        "usernamePlaceholder": "Ваше имя",
+        "valueProposition": "AI-конструктор для экспертов, фрилансеров и малого бизнеса. Создайте страницу, прайс-лист, формы и контакты без дизайнера и кода.",
+        "viewExamples": "Посмотреть примеры"
       },
       "howItWorks": {
-        "badge": "1 minute to result",
-        "cta": "Try for free",
-        "title": "How it works"
+        "badge": "1 минута до результата",
+        "cta": "Попробуйте бесплатно",
+        "title": "Как это работает"
       },
-      "iAmA": "I am a...",
-      "instantLeadsDesc": "Get leads delivered straight to Telegram. No more missing customers.",
-      "instantLeadsTitle": "Instant Leads",
-      "leadMsg1": "Hey, I want to book a consultation!",
-      "leadMsg2": "Awesome! Let's",
+      "iAmA": "Я...",
+      "instantLeadsDesc": "Получайте потенциальных клиентов прямо в Telegram. Больше никаких пропавших клиентов.",
+      "instantLeadsTitle": "Мгновенные лиды",
+      "leadMsg1": "Привет, хочу записаться на консультацию!",
+      "leadMsg2": "Потрясающий! Давайте",
       "linkInBio": {
-        "benefit1": "All links in one place",
-        "benefit2": "AI creates content",
-        "benefit3": "Click analytics",
-        "benefit4": "No commissions",
-        "benefit5": "Your own domain",
-        "benefit6": "Mobile editor",
-        "keywords": "Keywords: links page, link in bio, link in bio, multilink, linktree alternative, taplink analogue, mini-landing",
-        "p1": "Link-in-Bio (link in bio, multi-link) is a page that you place in the profile description of Instagram, TikTok, YouTube or Telegram. Instead of one link, you get a full-fledged mini-landing page with buttons, contacts and even a product catalog.",
-        "p2": "LinkMAX.my is a modern alternative to Linktree and Taplink with AI content generation. You choose a niche (barber, photographer, trainer, psychologist), and artificial intelligence creates a ready-made page in 2 minutes: with a profile, the necessary blocks and texts.",
-        "p3": "Unlike our competitors, we do not take a commission on your sales. All money from goods and services is yours. And built-in analytics and CRM help you understand which links work best.",
-        "subtitle": "A links page is a mini-site that brings together all your resources: social networks, instant messengers, portfolio, products and services",
-        "title": "What is Link-in-Bio and why is it needed?"
+        "benefit1": "Все ссылки в одном месте",
+        "benefit2": "ИИ создает контент",
+        "benefit3": "Нажмите аналитику",
+        "benefit4": "Без комиссий",
+        "benefit5": "Ваш собственный домен",
+        "benefit6": "Мобильный редактор",
+        "keywords": "Ключевые слова: страница ссылок, ссылка в шапке профиля, ссылка в шапке профиля, мультиссылка, альтернатива дереву ссылок, аналог Taplink, мини-лендинг.",
+        "p1": "Link-in-Bio (ссылка в био, мультиссылка) — это страница, которую вы размещаете в описании профиля в Instagram, TikTok, YouTube или Telegram. Вместо одной ссылки вы получаете полноценный мини-лендинг с кнопками, контактами и даже каталогом товаров.",
+        "p2": "LinkMAX.my — это современная альтернатива Linktree и Taplink с генерацией контента с помощью искусственного интеллекта. Вы выбираете нишу (парикмахер, фотограф, тренер, психолог), а искусственный интеллект за 2 минуты создает готовую страницу: с профилем, необходимыми блоками и текстами.",
+        "p3": "В отличие от наших конкурентов, мы не берем комиссию с ваших продаж. Все деньги от товаров и услуг ваши. А встроенная аналитика и CRM помогут понять, какие ссылки работают лучше всего.",
+        "subtitle": "Страница ссылок — это мини-сайт, объединяющий все ваши ресурсы: социальные сети, мессенджеры, портфолио, товары и услуги.",
+        "title": "Что такое Link-in-Bio и зачем он нужен?"
       },
-      "mobileEditorDesc": "Edit your page from your phone. Full power in your pocket.",
-      "mobileEditorTitle": "Mobile First Editor",
+      "mobileEditorDesc": "Редактируйте свою страницу с телефона. Полная мощность в вашем кармане.",
+      "mobileEditorTitle": "Первый мобильный редактор",
       "nav": {
-        "examples": "Examples",
-        "gallery": "Gallery",
-        "getStarted": "Create",
-        "signIn": "Login"
+        "examples": "Примеры",
+        "gallery": "Галерея",
+        "getStarted": "Создавать",
+        "signIn": "Авторизоваться"
       },
-      "newLead1": "New lead: Sarah K.",
-      "newLead2": "New lead: Alex M.",
-      "newLeadCaptured": "New Lead Captured",
-      "newLeadsToday": "+12 today",
-      "nicheBeauty": "Beauty Blogger",
-      "nicheCreator": "Digital Creator",
-      "nicheCrypto": "Crypto Expert",
-      "nicheFitness": "Fitness Coach",
-      "nicheMusic": "Music Producer",
-      "nicheTutor": "Online Tutor",
+      "newLead1": "Новый ведущий: Сара К.",
+      "newLead2": "Новый ведущий: Алекс М.",
+      "newLeadCaptured": "Новый лидер захвачен",
+      "newLeadsToday": "+12 сегодня",
+      "nicheBeauty": "Бьюти-блогер",
+      "nicheCreator": "Цифровой создатель",
+      "nicheCrypto": "Криптоэксперт",
+      "nicheFitness": "Фитнес-тренер",
+      "nicheMusic": "Музыкальный продюсер",
+      "nicheTutor": "Онлайн репетитор",
       "niches": {
         "agency": {
-          "benefit": "Page in 1 day",
-          "pain": "Website - expensive and time-consuming",
-          "title": "Agency"
+          "benefit": "Страница через 1 день",
+          "pain": "Сайт – дорого и долго",
+          "title": "Агентство"
         },
         "barber": {
-          "benefit": "Online registration",
-          "pain": "Clients write to make an appointment",
-          "title": "Barber"
+          "benefit": "Онлайн регистрация",
+          "pain": "Клиенты пишут, чтобы записаться на прием",
+          "title": "Парикмахерская"
         },
         "beauty": {
-          "benefit": "Price + entry",
-          "pain": "Sends prices in DM",
-          "title": "Beauty Master"
+          "benefit": "Цена + вход",
+          "pain": "Цены отправляю в Директ.",
+          "title": "Мастер красоты"
         },
         "cafe": {
-          "benefit": "Online menu",
-          "pain": "Menu in PDF",
-          "title": "Cafe"
+          "benefit": "Онлайн меню",
+          "pain": "Меню в PDF",
+          "title": "Кафе"
         },
         "clinic": {
-          "benefit": "Catalog + map",
-          "pain": "Patients do not find services",
-          "title": "Clinic"
+          "benefit": "Каталог + карта",
+          "pain": "Пациенты не находят услуг",
+          "title": "Клиника"
         },
-        "cta": "Create a page for my niche",
+        "cta": "Создать страницу для моей ниши",
         "designer": {
-          "benefit": "Free showcase",
-          "pain": "Portfolio website is expensive",
-          "title": "Designer"
+          "benefit": "Бесплатная витрина",
+          "pain": "Сайт-портфолио стоит дорого",
+          "title": "Дизайнер"
         },
         "fitness": {
-          "benefit": "Schedule + form",
-          "pain": "Collects records manually",
-          "title": "Fitness trainer"
+          "benefit": "Расписание + форма",
+          "pain": "Собирает записи вручную",
+          "title": "Фитнес-тренер"
         },
         "musician": {
-          "benefit": "Everything in one link",
-          "pain": "Music is scattered across platforms",
-          "title": "Musician"
+          "benefit": "Все в одной ссылке",
+          "pain": "Музыка разбросана по платформам",
+          "title": "Музыкант"
         },
         "photographer": {
-          "benefit": "One page gallery",
-          "pain": "Portfolio scattered",
-          "title": "Photographer"
+          "benefit": "Галерея на одной странице",
+          "pain": "Портфолио разбросано",
+          "title": "Фотограф"
         },
         "psychologist": {
-          "benefit": "Offer + experience",
-          "pain": "Wants to sell consultations",
-          "title": "Psychologist"
+          "benefit": "Предложение + опыт",
+          "pain": "Хочет продавать консультации",
+          "title": "Психолог"
         },
         "shop": {
-          "benefit": "Mini store",
-          "pain": "Instagram as a catalog",
-          "title": "Shop"
+          "benefit": "Мини-магазин",
+          "pain": "Инстаграм как каталог",
+          "title": "Магазин"
         },
-        "subtitle": "We have created special templates for each niche. AI knows the pain points of your audience and creates a page tailored to your needs",
-        "title": "Who is LinkMAX.my suitable for?",
+        "subtitle": "Для каждой ниши мы создали специальные шаблоны. ИИ знает болевые точки вашей аудитории и создает страницу с учетом ваших потребностей.",
+        "title": "Кому подходит LinkMAX.my?",
         "tutor": {
-          "benefit": "Formats + application",
-          "pain": "Looking for students on social networks",
-          "title": "Tutor"
+          "benefit": "Форматы + приложение",
+          "pain": "Ищем студентов в социальных сетях.",
+          "title": "Репетитор"
         }
       },
       "partners": {
-        "title": "They trust us"
+        "title": "Они доверяют нам"
       },
       "premiumValue": {
         "ai": {
-          "description": "Generation of texts, headlines, product descriptions - without restrictions. AI copywriter works for you.",
-          "title": "Unlimited AI"
+          "description": "Генерация текстов, заголовков, описаний товаров – без ограничений. Копирайтер с искусственным интеллектом работает на вас.",
+          "title": "Неограниченный ИИ"
         },
         "analytics": {
-          "description": "Which links are clicked more often, where clients come from, at what time the activity is highest.",
-          "title": "Advanced Analytics"
+          "description": "По каким ссылкам чаще кликают, откуда приходят клиенты, в какое время активность наибольшая.",
+          "title": "Расширенная аналитика"
         },
-        "badge": "Premium - more money",
+        "badge": "Премиум – больше денег",
         "bonus": {
-          "scheduler": "Block Scheduler",
-          "themes": "Premium Themes and Animations",
-          "video": "Video and media blocks"
+          "scheduler": "Планировщик блоков",
+          "themes": "Премиум-темы и анимации",
+          "video": "Видео и медиаблоки"
         },
-        "bonusTitle": "And also nice bonuses:",
+        "bonusTitle": "А также приятные бонусы:",
         "crm": {
-          "description": "All requests from the form automatically go into the CRM. Statuses: new → in progress → completed. No more Excel.",
-          "title": "Mini-CRM"
+          "description": "Все запросы из формы автоматически попадают в CRM. Статусы: новое → в работе → завершено. Больше никакого Экселя.",
+          "title": "Мини-CRM"
         },
-        "cta": "Try Premium",
-        "price": "From 3,045 в‚ё/month when paid annually (~$6)",
-        "subtitle": "Not visual decorations, but tools for making money",
+        "cta": "Попробуйте Премиум",
+        "price": "От 3045 евро в месяц при ежегодной оплате (~6 долларов США)",
+        "subtitle": "Не визуальные украшения, а инструменты для зарабатывания денег",
         "telegram": {
-          "description": "Instant message in Telegram when a client leaves a request. Don't miss a single lead.",
-          "title": "Telegram notifications"
+          "description": "Мгновенное сообщение в Telegram, когда клиент оставляет заявку. Не пропустите ни одной зацепки.",
+          "title": "Уведомления в телеграмме"
         },
-        "title": "Why pay for Premium"
+        "title": "Зачем платить за Премиум"
       },
       "pricing": {
-        "aiPowered": "AI Powered",
-        "b1": "Everything in Pro, plus:",
-        "b2": "Business Zones (workspaces)",
-        "b3": "Team CRM & Kanban",
-        "b4": "Team chat & tasks",
-        "b5": "Roles & access control",
-        "b6": "Up to 5 team members",
-        "billedOnce": "once",
-        "billedYearly": "Billed {{price}} yearly",
-        "businessCta": "Start Business",
-        "businessName": "Business",
+        "aiPowered": "Работает на искусственном интеллекте",
+        "b1": "Все в версии Pro, плюс:",
+        "b2": "Бизнес-зоны (рабочие места)",
+        "b3": "Команда CRM и Канбан",
+        "b4": "Командный чат и задачи",
+        "b5": "Роли и контроль доступа",
+        "b6": "До 5 членов команды",
+        "billedOnce": "один раз",
+        "billedYearly": "Оплата {{price}} ежегодно",
+        "businessCta": "Начать бизнес",
+        "businessName": "Бизнес",
         "calculator": {
-          "avgCheck": "Average Check ($)",
-          "competitorCost": "Competitor Cost (7% - 10%):",
-          "conversion": "Conversion Rate (%)",
-          "leads": "Monthly Leads",
-          "linkmaxCost": "LinkMAX Cost:",
-          "revenue": "Your Revenue:",
-          "savings": "Your Savings:",
-          "title": "Profitability Calculator"
+          "avgCheck": "Средний чек ($)",
+          "competitorCost": "Стоимость конкурентов (7% - 10%):",
+          "conversion": "Коэффициент конверсии (%)",
+          "leads": "Ежемесячные лиды",
+          "linkmaxCost": "Стоимость LinkMAX:",
+          "revenue": "Ваш доход:",
+          "savings": "Ваша экономия:",
+          "title": "Калькулятор рентабельности"
         },
-        "f1": "All blocks without limits",
-        "f2": "Online booking & mini-CRM",
-        "f3": "Instant leads to Telegram",
-        "f4": "Sell products & event tickets",
-        "f5": "Built-in QR scanner",
-        "f6": "Advanced analytics & reports",
-        "freeCta": "Start for free",
-        "month": "mo",
-        "monthly": "Monthly",
-        "newBadge": "NEW",
-        "perMonth": "month",
-        "popular": "POPULAR",
-        "proCta": "Start Pro Trial",
-        "proName": "Pro",
+        "f1": "Все блоки без ограничений",
+        "f2": "Онлайн бронирование и мини-CRM",
+        "f3": "Мгновенные лиды в Telegram",
+        "f4": "Продавайте товары и билеты на мероприятия",
+        "f5": "Встроенный QR-сканер.",
+        "f6": "Расширенная аналитика и отчеты",
+        "freeCta": "Начни бесплатно",
+        "month": "мес.",
+        "monthly": "Ежемесячно",
+        "newBadge": "НОВЫЙ",
+        "perMonth": "месяц",
+        "popular": "ПОПУЛЯРНЫЕ",
+        "proCta": "Начать пробную версию Pro",
+        "proName": "Про",
         "save": "-30%",
-        "subtitle": "Start for free. Upgrade when you're ready to scale.",
-        "teamLabel": "Team",
-        "title": "Simple Pricing,",
-        "titleHighlight": "Exponential Growth",
-        "total": "Total",
-        "yearly": "Yearly"
+        "subtitle": "Начните бесплатно. Обновите, когда будете готовы к масштабированию.",
+        "teamLabel": "Команда",
+        "title": "Простое ценообразование,",
+        "titleHighlight": "Экспоненциальный рост",
+        "total": "Общий",
+        "yearly": "Ежегодно"
       },
       "pricingLegacy": {
-        "annualPriceKzt": "36,540 в‚ё for 12 months",
-        "annualPriceUsd": "$71/year",
-        "bestValue": "Best price",
-        "billedOnce": "one-time",
-        "forever": "Forever",
+        "annualPriceKzt": "36 540 ₽ на 12 месяцев",
+        "annualPriceUsd": "71 доллар США в год",
+        "bestValue": "Лучшая цена",
+        "billedOnce": "один раз",
+        "forever": "Навсегда",
         "free": {
-          "item1": "6 base blocks",
-          "item2": "1 AI generation/month",
-          "item3": "Basic analytics"
+          "item1": "6 базовых блоков",
+          "item2": "1 поколение ИИ/месяц",
+          "item3": "Базовая аналитика"
         },
-        "freeAction": "Start for free",
-        "month": "months",
-        "otherPlans": "Other options:",
-        "otherPlansSix": "6 months: 3,698 в‚ё/month (-15%)",
-        "otherPlansThree": "3 months: 4,350 в‚ё/month",
+        "freeAction": "Начни бесплатно",
+        "month": "месяцы",
+        "otherPlans": "Другие варианты:",
+        "otherPlansSix": "6 месяцев: 3698 ₽/месяц (-15%)",
+        "otherPlansThree": "3 месяца: 4,350 ‚ё/мес.",
         "pro": {
-          "item1": "Unlimited blocks and templates",
-          "item2": "5 AI generations/month",
-          "item3": "CRM + Telegram notifications",
-          "item4": "Advanced Analytics",
-          "item5": "Without watermark"
+          "item1": "Неограниченное количество блоков и шаблонов",
+          "item2": "5 поколений ИИ/месяц",
+          "item3": "CRM + уведомления в Telegram",
+          "item4": "Расширенная аналитика",
+          "item5": "Без водяного знака"
         },
-        "subtitle": "Start for free and upgrade when you need more",
-        "title": "Tariffs",
-        "total": "Total",
-        "viewPlans": "Select Pro"
+        "subtitle": "Начните бесплатно и обновляйте, когда вам нужно больше",
+        "title": "Тарифы",
+        "total": "Общий",
+        "viewPlans": "Выберите Про"
       },
       "problem": {
-        "item1": "There is chaos in bio: price list, recording and cases are scattered across posts and links",
-        "item2": "People ask the same questions, and you answer manually and waste time",
-        "item3": "The page turns into a menu of links rather than a path to the post",
-        "item4": "There is no understanding: what people actually click on and where attention is lost",
-        "solution": "LinkMAX makes one clear page where the visitor quickly understands who you are, how you are useful, how much it costs, and where to click to apply. And you see leads and analytics in one place.",
-        "title": "Why are applications getting lost today?"
+        "item1": "В био хаос: прайс-лист, записи и кейсы разбросаны по постам и ссылкам.",
+        "item2": "Люди задают одни и те же вопросы, а вы отвечаете вручную и теряете время.",
+        "item3": "Страница превращается в меню ссылок, а не в путь к публикации.",
+        "item4": "Нет понимания: на что на самом деле кликают люди и где теряется внимание",
+        "solution": "LinkMAX делает одну понятную страницу, на которой посетитель быстро понимает, кто вы, чем вы полезны, сколько это стоит и куда нажать, чтобы подать заявку. И вы видите лиды и аналитику в одном месте.",
+        "title": "Почему сегодня теряются приложения?"
       },
       "simplePricing": {
-        "badge": "Simple tariffs",
+        "badge": "Простые тарифы",
         "free": {
-          "cta": "Start for free",
-          "f1_v2": "Basic blocks (links, text, photos)",
-          "f2_v2": "AI generation (1 time/month)",
-          "f3_v2": "Basic view statistics",
-          "f4_v2": "Page QR code",
-          "f5_booking": "Booking + Form + CRM (50/mo)",
-          "f5_v2": "Mini-CRM and Telegram notifications",
-          "f6_v2": "Advanced Analytics",
-          "f7_v2": "AI generation (5 times/month)",
-          "subtitle": "Forever, no hidden fees",
-          "title": "For free"
+          "cta": "Начни бесплатно",
+          "f1_v2": "Базовые блоки (ссылки, текст, фотографии)",
+          "f2_v2": "Генерация ИИ (1 раз/месяц)",
+          "f3_v2": "Базовая статистика просмотров",
+          "f4_v2": "QR-код страницы",
+          "f5_booking": "Бронирование + Форма + CRM (50/мес)",
+          "f5_v2": "Мини-CRM и уведомления в Telegram",
+          "f6_v2": "Расширенная аналитика",
+          "f7_v2": "Генерация ИИ (5 раз в месяц)",
+          "subtitle": "Навсегда, без скрытых комиссий",
+          "title": "Бесплатно"
         },
         "premium": {
-          "badge": "We recommend",
+          "badge": "Мы рекомендуем",
           "cta": "Get Premium",
           "f1_v2": "All 25+ block types",
           "f1_v3": "Unlimited inbound requests",
