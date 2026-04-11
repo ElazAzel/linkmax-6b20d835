@@ -12,12 +12,14 @@ import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { RoutePrefetchManager } from "@/components/performance/RoutePrefetchManager";
 import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
-
+import { TMAProvider } from "@/platform/tma/TMAProvider";
+import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
 
 // Lazy load non-critical shell components to reduce main bundle
 const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
 const PWAUpdatePrompt = lazy(() => import("@/components/pwa/PWAUpdatePrompt").then(m => ({ default: m.PWAUpdatePrompt })));
 const CookieConsent = lazy(() => import("@/components/legal/CookieConsent").then(m => ({ default: m.CookieConsent })));
+const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalette").then(m => ({ default: m.CommandPalette })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +32,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading fallback for pages — visible in both light and dark mode
+// Loading fallback for pages
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="flex flex-col items-center gap-4">
@@ -75,13 +77,8 @@ class RouteErrorBoundary extends React.Component<
   }
 }
 
-
-const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalette").then(m => ({ default: m.CommandPalette })));
-import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
-
 const App = () => {
   // Defer non-critical init until user interacts or after 8s
-  // This prevents web-vitals, storage, and i18n-db-backend chunks from loading on initial paint
   useEffect(() => {
     let fired = false;
     const run = () => {
@@ -117,9 +114,7 @@ const App = () => {
     const errorDescription = hashParams.get('error_description');
 
     if (error) {
-      // Clear hash to prevent repeated errors
       window.history.replaceState(null, '', window.location.pathname);
-      // Wait for toast to be ready
       setTimeout(() => {
         toast.error(`Authentication Error: ${errorDescription || error}`);
       }, 500);
@@ -129,32 +124,34 @@ const App = () => {
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <LanguageProvider>
-            <TooltipProvider>
-              <SkipToMainContent />
-<Suspense fallback={null}>
-                <Toaster />
-                <Sonner />
-                <CommandPalette />
-              </Suspense>
-              <RoutePrefetchManager />
-              <RouteWebVitalsMonitor />
-              <RouteErrorBoundary>
-                <div id="main-content" className="outline-none" tabIndex={-1}>
-                  <Suspense fallback={<PageLoader />}>
-                    <Outlet />
-                  </Suspense>
-                </div>
-              </RouteErrorBoundary>
-              <Suspense fallback={null}>
-                <PWAInstallPrompt />
-                <PWAUpdatePrompt />
-                <CookieConsent />
-              </Suspense>
-            </TooltipProvider>
-          </LanguageProvider>
-        </AuthProvider>
+        <TMAProvider>
+          <AuthProvider>
+            <LanguageProvider>
+              <TooltipProvider>
+                <SkipToMainContent />
+                <Suspense fallback={null}>
+                  <Toaster />
+                  <Sonner />
+                  <CommandPalette />
+                </Suspense>
+                <RoutePrefetchManager />
+                <RouteWebVitalsMonitor />
+                <RouteErrorBoundary>
+                  <div id="main-content" className="outline-none" tabIndex={-1}>
+                    <Suspense fallback={<PageLoader />}>
+                      <Outlet />
+                    </Suspense>
+                  </div>
+                </RouteErrorBoundary>
+                <Suspense fallback={null}>
+                  <PWAInstallPrompt />
+                  <PWAUpdatePrompt />
+                  <CookieConsent />
+                </Suspense>
+              </TooltipProvider>
+            </LanguageProvider>
+          </AuthProvider>
+        </TMAProvider>
       </QueryClientProvider>
     </HelmetProvider>
   );

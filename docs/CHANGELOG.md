@@ -1070,6 +1070,17 @@ Micro-Animations (WOW Factor)
     - Fixed Git push timeout and large file errors (`.next` directory removal).
     - Configured `next.config.mjs` for seamless environment variable migration.
 
+## [3.1.0] - 2026-04-11
+### Phase 43: Token Economy & TMA Integration
+- **Token Economy**: Finalized transition to tokens. Updated `complete_daily_quest` RPC and `quests` service to use tokens directly.
+- **TMA Integration**: Implemented native `TMAProvider` and `useTMA` hook for Telegram Mini App environment.
+- **Theme Sync**: Added automatic synchronization of Telegram theme colors with CSS variables.
+- **Payments UI**: Activated `TMAPaymentsScreen` with real-time wallet data and withdrawal flow.
+- **Settings UI**: Activated `TMASettingsScreen` with Telegram user profile and UI controls.
+- **Backend**: Expanded `fintechService` to support 'stars' and 'token_purchase' transaction types.
+
+## [3.0.0] - 2026-04-11
+
 ## [0.0.0] - 2026-02-13
 
 ### Added (Initial Release — 2026-02-13)

@@ -31,13 +31,11 @@ LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)*
 ### Repository Security & Privacy
 
 The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. 
-In **Phase 42 (April 2026)**, the platform underwent a major security hardening initiative:
-- **JWT Enforcement**: 100% coverage for AI, Admin, and Translator Edge Functions.
-- **RLS 2.0**: Hardened Row Level Security on `bookings` and identity-sensitive tables.
-- **SQL Injection Guard**: Mandatory parameter validation for all database filters.
-- **GDPR Compliance**: Full implementation of Right to Erasure (deletion) and Data Portability (JSON export).
-
-The database layer is further hardened with **Trigger Guards** (ADR 0027) preventing unauthorized mutation of system-critical columns in `user_profiles` and `challenge_progress`.
+In **Phase 42 (April 2026)**, the platform underwent a major security hardening initiative (JWT enforcement, RLS 2.0, GDPR).
+In **Phase 43 (April 2026)**, the platform finalized its pivot to the **Token Economy** and achieved deep **Telegram Mini App (TMA)** integration:
+- **TMA Core**: Native theme synchronization, MainButton/BackButton logic, and HapticFeedback.
+- **Token Ledger**: 100% migration from "bonus hours" to unified tokens.
+- **Fintech Activation**: Support for Stars and real-time withdrawal workflows.
 
 **Target audiences:**
 
@@ -215,11 +213,11 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **Liquid Glass Aesthetic**: Виджет чата переработан с использованием `backdrop-blur-3xl`, анимированных подсказок (Bubbles) и пружинных анимаций.
 - **Contextual Suggestions**: Автоматическая генерация быстрых вопросов на основе доступных блоков страницы.
 
-### [2026-04-04] Phase 24: SEO-Driven Discovery Hardening (Consolidation)
-- **Universal Quality Gate**: Synchronized the 25-point threshold across all discovery surfaces: `public-experts` API, Gallery SSR, and Site-wide Sitemap.
-- **Discovery Network**: Updated `getTopPremiumPages` service to prioritize high-quality profiles (Score >= 25) for internal linking on the Landing Page.
-- **Robots.txt Optimization**: Explicitly allowed AI-crawlers to explore `/experts` and `/gallery`, creating a direct crawl-path from the root to user entities.
-- **Health Score**: **10/10** (Status: SEO Discovery Network Consolidated).
+### [2026-04-11] Phase 43: Token Economy & TMA Integration
+- **TMA Ecosystem**: Implemented `TMAProvider` for native environment support (Theme Sync, UI Controls).
+- **Token Finalization**: Updated quest rewards to use tokens directly. Deprecated legacy `bonus_hours` multiplier logic.
+- **Wallet Activation**: Connected `TMAPaymentsScreen` and `TMASettingsScreen` to real-time state.
+- **Health Score**: **10/10** (Status: Eco-system Integrated & Tokens Finalized).
 
 ### [2026-04-03] Phase 18: CRM Bulk Actions & Custom Fields 2.0
 

@@ -3,7 +3,7 @@ import { logger } from '@/lib/utils/logger';
 import { Json } from '@/platform/supabase/types';
 import { getTierCommissionRate, type PremiumTier } from '@/services/user';
 
-export type TransactionType = 'income' | 'withdrawal' | 'fee' | 'refund';
+export type TransactionType = 'income' | 'withdrawal' | 'fee' | 'refund' | 'stars';
 export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'cancelled';
 
 export interface WalletTransaction {
@@ -83,7 +83,7 @@ export const fintechService = {
         amount: number;
         description: string;
         relatedEntityId?: string;
-        relatedEntityType?: 'lead' | 'booking' | 'event' | 'wallet_transaction';
+        relatedEntityType?: 'lead' | 'booking' | 'event' | 'wallet_transaction' | 'token_purchase';
         metadata?: Record<string, unknown>;
     }) {
         try {
