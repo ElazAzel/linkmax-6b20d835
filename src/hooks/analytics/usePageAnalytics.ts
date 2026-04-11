@@ -83,21 +83,25 @@ export interface DeviceBreakdown {
 
 export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
 
-export function usePageAnalytics(externalPageId?: string) {
+/** Pass `null` when the dashboard page is not ready yet — avoids resolving the wrong page via `limit(1)`. Omit the argument for legacy “first page of user” behaviour. */
+export function usePageAnalytics(externalPageId?: string | null) {
   const { user } = useAuth();
   const { i18n } = useTranslation();
-  const [pageId, setPageId] = useState<string | null>(externalPageId || null);
-  const [loading, setLoading] = useState(true);
+  const [pageId, setPageId] = useState<string | null>(
+    externalPageId !== undefined ? (externalPageId && externalPageId.length > 0 ? externalPageId : null) : null
+  );
+  const [loading, setLoading] = useState(() => (externalPageId !== undefined ? !!externalPageId : true));
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [period, setPeriod] = useState<TimePeriod>('week');
   const [isStaffMember, setIsStaffMember] = useState(false);
   const [currentStaffId, setCurrentStaffId] = useState<string | null>(null);
   const [staffMemberName, setStaffMemberName] = useState<string | null>(null);
 
-  // Fetch user's page ID only if not provided externally
+  // Resolve page: explicit id from caller, or first page of user (legacy)
   useEffect(() => {
-    if (externalPageId) {
-      setPageId(externalPageId);
+    if (externalPageId !== undefined) {
+      setPageId(externalPageId && externalPageId.length > 0 ? externalPageId : null);
       return;
     }
 
@@ -149,6 +153,7 @@ export function usePageAnalytics(externalPageId?: string) {
 
     try {
       setLoading(true);
+      setError(null);
 
       const now = new Date();
       let startDate: Date;
@@ -282,10 +287,22 @@ export function usePageAnalytics(externalPageId?: string) {
         }
       });
 
-      // Calculate CTR (clicks / total page views)
+      // Count views per block (page-level views often have null block_id — those are not attributed)
+      events.filter(e => e.event_type === 'view').forEach(e => {
+        const blockRef =
+          e.block_id
+          || (e.metadata as any)?.blockId
+          || (e.metadata as any)?.block_id;
+        if (!blockRef) return;
+        const stats = blockStatsMap.get(blockRef);
+        if (stats) {
+          stats.views = (stats.views ?? 0) + 1;
+        }
+      });
+
+      // CTR per block: clicks / views for that block (not whole page views)
       blockStatsMap.forEach(stats => {
-        stats.views = totalViews || 0;
-        stats.ctr = totalViews > 0 ? (stats.clicks / totalViews) * 100 : 0;
+        stats.ctr = stats.views > 0 ? (stats.clicks / stats.views) * 100 : 0;
         if (isNaN(stats.ctr)) stats.ctr = 0;
       });
 
@@ -406,6 +423,7 @@ export function usePageAnalytics(externalPageId?: string) {
         .from('leads')
         .select('id')
         .eq('user_id', user.id)
+        .eq('page_id', pageId)
         .gte('created_at', startDate.toISOString());
 
       const { data: bookings } = await supabase
@@ -498,21 +516,28 @@ export function usePageAnalytics(externalPageId?: string) {
         personalStaffStats
       });
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      setError(message);
       logger.error('Error fetching analytics:', error, { context: 'usePageAnalytics' });
     } finally {
       setLoading(false);
     }
-  }, [user, pageId, period, i18n.language]);
+  }, [user, pageId, period, i18n.language, isStaffMember, currentStaffId]);
 
   useEffect(() => {
     if (pageId) {
       fetchAnalytics();
+    } else {
+      setLoading(false);
+      setAnalytics(null);
+      setError(null);
     }
   }, [fetchAnalytics, pageId]);
 
   return {
     analytics,
     loading,
+    error,
     period,
     setPeriod,
     isStaffMember,

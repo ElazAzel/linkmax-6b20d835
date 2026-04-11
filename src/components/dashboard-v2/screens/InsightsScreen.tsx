@@ -25,6 +25,7 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatCard } from '../common/StatCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { EmptyState } from '../common/EmptyState';
+import { ErrorState } from '../common/ErrorState';
 import {
   AnalyticsChart,
   ConversionFunnel,
@@ -77,7 +78,9 @@ export const InsightsScreen = memo(function InsightsScreen({
   const { t } = useTranslation();
   const [period, setPeriod] = useState<Period>('7d');
   const [activeTab, setActiveTab] = useState<Tab>('overview');
-  const { analytics, loading, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics();
+  const { analytics, loading, error, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics(
+    pageId || null
+  );
 
   const handlePeriodChange = (p: Period) => {
     setPeriod(p);
@@ -221,7 +224,7 @@ export const InsightsScreen = memo(function InsightsScreen({
     return suggestions.slice(0, 4);
   }, [blocks, onApplyInsight, stats, devicePercentages, t]);
 
-  if (loading) {
+  if (loading || !pageId) {
     return (
       <div className="min-h-screen safe-area-top">
         <DashboardHeader 
@@ -230,6 +233,23 @@ export const InsightsScreen = memo(function InsightsScreen({
         />
         <div className="px-5 py-6">
           <LoadingSkeleton variant="stats" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen safe-area-top">
+        <DashboardHeader
+          title={t('dashboard.insights.title', 'Аналитика')}
+          onMenuClick={() => {}}
+        />
+        <div className="px-[var(--space-page-px)] py-8">
+          <ErrorState
+            description={error}
+            onRetry={() => void refresh()}
+          />
         </div>
       </div>
     );
