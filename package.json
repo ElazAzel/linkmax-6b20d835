@@ -36,7 +36,10 @@
     "typecheck:strict": "tsc -p tsconfig.strict.json --noEmit",
     "mobile:sync": "npm run build && npx cap sync",
     "mobile:open:android": "npx cap open android",
-    "mobile:open:ios": "npx cap open ios"
+    "mobile:open:ios": "npx cap open ios",
+    "skills:browse": "ai-agent-skills",
+    "skills:list": "ai-agent-skills list",
+    "skills:doctor": "ai-agent-skills doctor"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
@@ -134,6 +137,7 @@
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
     "@vitest/coverage-v8": "^3.2.4",
+    "ai-agent-skills": "4.2.0",
     "autoprefixer": "^10.4.21",
     "dependency-cruiser": "^16.3.2",
     "eslint": "^8.57.0",

@@ -32,6 +32,7 @@
 3. **[UI_MODAL_CONTRACT.md](architecture/UI_MODAL_CONTRACT.md)** — Единый контракт для `Dialog/Sheet` (крестик, `onOpenChange`, закрытие по overlay/ESC/button).
 4. **[API.md](implementation/API.md)** — Edge Functions, RPCs, интеграции.
 5. **[DATABASE_SCHEMA_GUIDE.md](implementation/DATABASE_SCHEMA_GUIDE.md)** — Схема БД, таблицы, RLS.
+6. **[`.agent/README.md`](../.agent/README.md)** — правила агентов и подключение внешней библиотеки [Ai-Agent-Skills](https://github.com/MoizIbnYousaf/Ai-Agent-Skills) для Cursor (`--agent cursor` → `.cursor/skills/`, без `-p`).
 
 ### Для тестировщиков и DevOps
 
