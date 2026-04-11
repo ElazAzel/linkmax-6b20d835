@@ -9,6 +9,7 @@ import { session } from '@/lib/storage';
 import {
   trackPageView,
   trackBlockClick,
+  trackBlockView,
   trackShare,
   initSessionDurationTracking,
 } from '@/services/analytics';
@@ -44,13 +45,15 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   }, [pageId, trackingEnabled]);
 
   // Track block click — sends to internal DB + marketing pixels
-  const onBlockClick = useCallback(
+    },
+    [pageId, trackingEnabled]
+  );
+
+  // Track block view (impression)
+  const onBlockView = useCallback(
     (blockId: string, blockType?: string, blockTitle?: string, experimentId?: string, variantLabel?: string) => {
       if (!pageId || !trackingEnabled) return;
-      // Internal analytics (DB)
-      trackBlockClick(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
-      // Marketing pixels (FB, TikTok, GA4)
-      trackClickLink(blockTitle, undefined);
+      trackBlockView(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
     },
     [pageId, trackingEnabled]
   );
@@ -66,6 +69,7 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
 
   return {
     onBlockClick,
+    onBlockView,
     onShare,
   };
 }
@@ -84,6 +88,13 @@ interface AnalyticsContextValue {
     experimentId?: string,
     variantLabel?: string
   ) => void;
+  onBlockView: (
+    blockId: string,
+    blockType?: string,
+    blockTitle?: string,
+    experimentId?: string,
+    variantLabel?: string
+  ) => void;
   onShare: (method?: string) => void;
 }
 
@@ -96,10 +107,10 @@ interface AnalyticsProviderProps {
 }
 
 export function AnalyticsProvider({ pageId, enabled = true, children }: AnalyticsProviderProps) {
-  const { onBlockClick, onShare } = useAnalyticsTracking({ pageId, enabled });
+  const { onBlockClick, onBlockView, onShare } = useAnalyticsTracking({ pageId, enabled });
 
   return (
-    <AnalyticsContext.Provider value={{ pageId, onBlockClick, onShare }}>
+    <AnalyticsContext.Provider value={{ pageId, onBlockClick, onBlockView, onShare }}>
       {children}
     </AnalyticsContext.Provider>
   );

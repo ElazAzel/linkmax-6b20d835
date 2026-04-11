@@ -42,6 +42,7 @@ import { ChangePasswordDialog } from '@/components/settings/ChangePasswordDialog
 import { BillingHistorySheet } from '@/components/settings/BillingHistorySheet';
 import { ApiKeysManagement } from '@/components/settings/ApiKeysManagement';
 import { cn } from '@/lib/utils/utils';
+import { PrivacySettings } from '@/components/settings/PrivacySettings';
 import type { ProfileBlock } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion } from 'framer-motion';
@@ -372,6 +373,11 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               onClick={() => setShowPasswordDialog(true)}
             />
           </Card>
+        </motion.div>
+
+        {/* Privacy & Data Management (GDPR) */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <PrivacySettings />
         </motion.div>
 
         {/* API Access (Roadmap Item 12) */}

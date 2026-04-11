@@ -8,6 +8,7 @@ import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
 import { session } from '@/lib/storage';
+import { trackViewContent, trackClickLink } from '@/lib/marketing-pixels';
 
 // ============================================
 // Types
@@ -391,6 +392,21 @@ export async function trackEvent({
       event_type: eventType,
       metadata: enrichedMetadata as Json,
     });
+
+    // Send to Pixel Proxy if enabled
+    if (eventType === 'view' || eventType === 'click') {
+      try {
+        await supabase.functions.invoke('pixel-proxy', {
+          body: {
+            pageId,
+            eventType,
+            metadata: enrichedMetadata
+          }
+        });
+      } catch (e) {
+        // Silent fail for proxy
+      }
+    }
   } catch (error) {
     // Silent fail for analytics - don't break user experience
     logger.debug('Analytics tracking failed', { data: error });
@@ -504,6 +520,34 @@ export async function trackBlockClick(
       blockId,
       blockType,
       blockTitle,
+    },
+  });
+}
+
+/**
+ * Track block view event (Impression)
+ * Crucial for A/B testing conversion rate calculation
+ */
+export async function trackBlockView(
+  pageId: string,
+  blockId: string,
+  blockType?: string,
+  blockTitle?: string,
+  experimentId?: string,
+  variantLabel?: string
+): Promise<void> {
+  if (!pageId || !blockId) return;
+
+  return trackEvent({
+    pageId,
+    eventType: 'view',
+    experimentId,
+    variantLabel,
+    metadata: {
+      blockId,
+      blockType,
+      blockTitle,
+      isBlockImpression: true,
     },
   });
 }

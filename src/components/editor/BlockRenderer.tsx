@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useMemo } from 'react';
+import { Suspense, useCallback, useMemo, useEffect } from 'react';
 import type { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -76,10 +76,18 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
 }
 
 export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
-  const { onBlockClick } = useAnalytics();
-  const { i18n } = useTranslation();
   const renderContext = useRenderContext();
   const isEditorMode = renderContext === 'editor';
+  const { onBlockClick, onBlockView } = useAnalytics();
+  const { i18n } = useTranslation();
+
+  // Track impression on mount (only for public pages)
+  useEffect(() => {
+    if (!isPreview && !isEditorMode && block.experimentId) {
+      const title = getBlockTitle(block, i18n.language as SupportedLanguage);
+      onBlockView(block.id, block.type, title, block.experimentId, block.variantLabel);
+    }
+  }, [block.id, block.experimentId, block.variantLabel, isPreview, isEditorMode, onBlockView, i18n.language]);
 
   const handleClick = useCallback(() => {
     if (!isPreview) {
