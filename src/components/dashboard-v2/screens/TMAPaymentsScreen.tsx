@@ -201,6 +201,3 @@ export const TMAPaymentsScreen: React.FC = () => {
     </motion.div>
   );
 };
-    </motion.div>
-  );
-};
