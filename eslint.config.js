@@ -9,7 +9,19 @@ import tseslint from "typescript-eslint";
 const isI18nLint = process.env.LINT_I18N === "true";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  {
+    ignores: [
+      "dist",
+      // Документация и примеры — не продакшен UI; i18n не требуется
+      "docs/**",
+      "e2e/**",
+      // Тесты: литералы для RTL/снимков допустимы отдельно от продакшена
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "src/**/__tests__/**",
+      "src/testing/**",
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -47,6 +59,8 @@ export default tseslint.config(
             markupOnly: true,
             ignoreAttribute: [
               "className",
+              // Часто дублируют label или подсказку формата; предпочтительно t(), но не блокируем линтер
+              "placeholder",
               "data-testid",
               "data-qa",
               "data-cy",

@@ -32,7 +32,7 @@ function FAQBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
     if (item) {
       const currentQ = typeof item.question === 'string' ? createMultilingualString(item.question) : item.question;
       updateItem(itemId, { question: { ...currentQ, [currentLang]: suggestion } });
-      toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+      toast.success(t('ai.suggestionApplied', 'Предложение применено'));
     }
   };
 
@@ -42,7 +42,7 @@ function FAQBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
     if (item) {
       const currentA = typeof item.answer === 'string' ? createMultilingualString(item.answer) : item.answer;
       updateItem(itemId, { answer: { ...currentA, [currentLang]: suggestion } });
-      toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+      toast.success(t('ai.suggestionApplied', 'Предложение применено'));
     }
   };
 

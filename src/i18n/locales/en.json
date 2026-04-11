@@ -7168,7 +7168,7 @@
       "yearly": "Yearly",
       "save": "Save",
       "perMonth": "/month",
-      "billedYearly": "Billed yearly",
+      "billedYearly": "Billed yearly {{price}}",
       "popular": "Popular",
       "newBadge": "New",
       "starterCta": "Start for free",
@@ -7218,6 +7218,9 @@
         "start": "Start",
         "startFree": "Start for free",
         "getStarted": "Get Started"
+      },
+      "pricing": {
+        "billedYearly": "Оплата {{price}} в год"
       }
     },
     "v4": {
@@ -7233,6 +7236,234 @@
         "trust2": "Free plan available",
         "trust3": "Setup in 60 seconds"
       }
+    }
+  },
+  "analytics": {
+    "blocks": {
+      "andMore": "и ещё {{count}} блоков"
+    },
+    "geography": {
+      "andMore": "и ещё {{count}} стран"
+    }
+  },
+  "animationSettings": {
+    "delay": "Задержка: {{value}}мс"
+  },
+  "auth": {
+    "oauthError": "Ошибка авторизации: {{error}}",
+    "referral": {
+      "success": "🎉 +{{days}} дней Premium по реферальному коду!"
+    }
+  },
+  "blockManager": {
+    "description": "{{count}} блоков · Перетащите для сортировки"
+  },
+  "booking": {
+    "formPrepaymentNote": "Предоплата {{amount}} {{currency}} после записи",
+    "prepaymentBadge": "Предоплата {{amount}} {{currency}}",
+    "slotPrepaymentHint": "Предоплата {{amount}} {{currency}} · гарантирует бронь",
+    "whatsapp": {
+      "greeting": "Здравствуйте! Я записался(ась) на {{date}} в {{time}}.",
+      "name": "Имя: {{name}}",
+      "prepayment": "Сумма предоплаты: {{amount}} {{currency}}"
+    }
+  },
+  "collab": {
+    "shoutoutRecommendTitle": "Рекомендовать {{name}}"
+  },
+  "collaboration": {
+    "nicheUsers": "Пользователи в нише \"{{niche}}\""
+  },
+  "common": {
+    "cta": {
+      "upgradeToTier": "Улучшить до {{tier}}"
+    }
+  },
+  "dashboard": {
+    "dealsCount": "{{count}} сделок",
+    "openDealsCount": "{{count}} открытых сделок"
+  },
+  "editor": {
+    "history": {
+      "blockAdded": "Блок добавлен: {{type}}",
+      "blockDeleted": "Блок удалён: {{type}}",
+      "blockUpdated": "Блок изменён: {{type}}"
+    }
+  },
+  "experiments": {
+    "insight": {
+      "desc": "Данных пока недостаточно для 95% уверенности, но Вариант {{variant}} показывает лучший результат по CTR."
+    }
+  },
+  "experts": {
+    "tagDescription": "Профили {{tag}} специалистов на LinkMAX"
+  },
+  "freemium": {
+    "blocksRemaining": "Осталось блоков: {{count}} из {{max}}",
+    "aiGenerationsRemaining": "Осталось AI генераций: {{count}}",
+    "upgradeToEdit": "Обновите до {{tier}} для редактирования",
+    "viewOnlyHint": "Требуется {{tier}} для редактирования"
+  },
+  "funnel": {
+    "insightGoodConversion": "Хорошая конверсия {{rate}}%!",
+    "insightHighCtr": "Отличный CTR ({{rate}}%)! Контент вовлекает пользователей.",
+    "insightLowConversion": "Конверсия {{rate}}%. Оптимизируйте CTA и формы.",
+    "insightLowCtr": "Низкий CTR ({{rate}}%). Попробуйте добавить более заметные кнопки."
+  },
+  "gallery": {
+    "seo": {
+      "nicheDescription": "Примеры страниц LinkMAX в нише {{niche}}: шаблоны, идеи и структура.",
+      "nicheTitle": "Галерея LinkMAX — {{niche}}"
+    },
+    "totalPages": "Страницы: {{count}} в галерее"
+  },
+  "googleForms": {
+    "importSuccess": "Импортировано полей: {{count}}"
+  },
+  "landingV1": {
+    "pricing": {
+      "billedYearly": "Оплата {{price}} в год"
+    },
+    "v2": {
+      "pricing": {
+        "billedYearly": "Оплата {{price}} в год"
+      }
+    }
+  },
+  "landingV5": {
+    "footer": {
+      "copyright": "© {{year}} LinkMAX. Сделано в Казахстане."
+    }
+  },
+  "language": {
+    "autoTranslatedTo": "Переведено на: {{languages}}",
+    "showMoreLanguages": "Ещё {{count}} языков"
+  },
+  "lifecycle": {
+    "repeatCustomers": {
+      "hint": "У вас {{count}} постоянных клиентов — отличная работа! 🎉"
+    }
+  },
+  "operator": {
+    "followUp": {
+      "completedOn": "Визит {{date}}",
+      "template": "Здравствуйте, {{name}}! Спасибо за визит! Как вам? Будем рады видеть вас снова 😊",
+      "visitedYesterday": "Визит вчера в {{time}}"
+    },
+    "rebook": {
+      "daysSince": "{{days}} дн. назад"
+    },
+    "today": {
+      "next": "Ближайшая: {{name}} в {{time}}",
+      "title": "Сегодня записей: {{count}}"
+    },
+    "unanswered": {
+      "missed": "{{count}} пропущено (>24ч)",
+      "title": "Необработано: {{count}}"
+    }
+  },
+  "premium": {
+    "featureRequires": "{{feature}} доступно в {{tier}}",
+    "requiresTier": "Требуется {{tier}}"
+  },
+  "pricing": {
+    "tokens": {
+      "balanceDescription": "100 Linkkon = 1 день Premium. Ваш баланс: {{balance}} токенов",
+      "buyDay": "Купить 1 день за {{cost}} Linkkon"
+    }
+  },
+  "product": {
+    "purchaseDescription": "Покупка товара: {{name}}"
+  },
+  "quests": {
+    "toastCompleted": "{{icon}} +{{count}} Linkkon за \"{{title}}\"!",
+    "toastDailyVisit": "👋 +{{count}} Linkkon за ежедневный визит!",
+    "tokensEarned": "+{{count}} Linkkon заработано"
+  },
+  "referral": {
+    "toastSuccess": "🎉 +{{count}} дней Premium для вас и друга!"
+  },
+  "ritual": {
+    "niches": {
+      "beauty": "Записаться ко мне онлайн: {{url}}",
+      "default": "Мои услуги и запись: {{url}}",
+      "education": "Записаться на занятие: {{url}}",
+      "fitness": "Запишись на тренировку: {{url}}",
+      "food": "Забронировать столик / заказать: {{url}}",
+      "health": "Записаться на приём: {{url}}"
+    }
+  },
+  "social": {
+    "feed": {
+      "events": "{{count}} событий",
+      "events_few": "{{count}} события",
+      "events_many": "{{count}} событий",
+      "events_one": "{{count}} событие",
+      "events_other": "{{count}} событий"
+    },
+    "metadata": {
+      "achievement": "🏆 {{title}}",
+      "boost": "🚀 {{type}} буст",
+      "challenge": "✅ {{title}}",
+      "gift": "💝 +{{count}} дней Premium",
+      "streak": "🔥 {{count}} дней подряд"
+    },
+    "pendingGifts": {
+      "count_few": "{{count}} подарка",
+      "count_many": "{{count}} подарков",
+      "count_one": "{{count}} подарок",
+      "count_other": "{{count}} подарков",
+      "days_few": "+{{count}} дня",
+      "days_many": "+{{count}} дней",
+      "days_one": "+{{count}} день",
+      "days_other": "+{{count}} дней"
+    },
+    "weeklyChallenges": {
+      "completed": "{{completed}}/{{total}} выполнено",
+      "daysLeftShort": "{{count}} дн.",
+      "rewardHoursShort": "+{{count}}ч"
+    }
+  },
+  "structure": {
+    "description": "{{count}} блоков"
+  },
+  "templates": {
+    "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
+    "purchaseTemplate": "Покупка шаблона: {{name}}"
+  },
+  "tma": {
+    "home_greeting": "Привет, {{name}} 👋"
+  },
+  "tokens": {
+    "insufficientForPremium": "Недостаточно Linkkon. Нужно {{count}} токенов.",
+    "insufficientForPurchase": "Недостаточно Linkkon. Нужно {{count}} токенов.",
+    "toastEarned": "+{{count}} Linkkon за {{action}}!"
+  },
+  "translation": {
+    "browserLanguageDetected": "Определён язык браузера: {{language}}"
+  },
+  "zones": {
+    "analytics": {
+      "pendingAmount": "Ожидается: {{amount}} ({{count}})",
+      "totalContacts": "Всего: {{count}}"
+    },
+    "config": {
+      "variables": "Используйте {{contact_name}}, {{deal_title}}, {{zone_name}} для подстановки данных."
+    }
+  },
+  "contacts": {
+    "andMore": "и ещё {{count}}",
+    "deleteWarning": "Это навсегда удалит контакт {{name}}. Связанные сделки и задачи останутся.",
+    "importButton": "Импортировать {{count}}",
+    "imported": "{{count}} контактов импортировано"
+  },
+  "documents": {
+    "filteredCount": "Показано {{shown}} из {{total}}",
+    "totalCount": "Всего: {{count}}"
+  },
+  "landingV2": {
+    "pricing": {
+      "billedYearly": "Оплата {{price}} в год"
     }
   }
 }
