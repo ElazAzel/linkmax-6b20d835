@@ -141,12 +141,3 @@ export const TMASettingsScreen: React.FC = () => {
     </motion.div>
   );
 };
-
-      <div className="flex justify-center gap-8 text-sm text-muted-foreground pb-8">
-        <a href="https://core.telegram.org/bots/webapps" target="_blank" rel="noreferrer" className="hover:text-primary flex items-center gap-1">
-          Telegram Documentation <ExternalLink className="h-3 w-3" />
-        </a>
-      </div>
-    </motion.div>
-  );
-};

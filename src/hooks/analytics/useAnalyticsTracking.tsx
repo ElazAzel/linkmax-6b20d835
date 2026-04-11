@@ -45,6 +45,11 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   }, [pageId, trackingEnabled]);
 
   // Track block click — sends to internal DB + marketing pixels
+  const onBlockClick = useCallback(
+    (blockId: string, blockType?: string, blockTitle?: string, experimentId?: string, variantLabel?: string) => {
+      if (!pageId || !trackingEnabled) return;
+      trackBlockClick(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
+      trackClickLink(blockTitle, blockType);
     },
     [pageId, trackingEnabled]
   );
@@ -123,6 +128,7 @@ export function useAnalytics() {
     return {
       pageId: undefined,
       onBlockClick: () => { },
+      onBlockView: () => { },
       onShare: () => { },
     };
   }
