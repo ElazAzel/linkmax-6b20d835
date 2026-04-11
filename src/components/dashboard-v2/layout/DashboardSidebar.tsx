@@ -90,21 +90,12 @@ const SECTIONS: SidebarSection[] = [
     ],
   },
   {
-    id: 'business-zone',
+    id: 'business-tools',
     titleKey: 'dashboard.sidebar.zone',
     defaultTitle: 'Бизнес-инструменты',
     items: [
       { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды' },
-      { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
-      { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
-      { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи' },
       { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События' },
-      { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь' },
-      { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации' },
-      { id: 'zone-invoices', icon: Receipt, labelKey: 'dashboard.sidebar.zoneInvoices', defaultLabel: 'Инвойсы' },
-      { id: 'zone-products', icon: Package, labelKey: 'dashboard.sidebar.zoneProducts', defaultLabel: 'Продукты' },
-      { id: 'zone-resources', icon: Package, labelKey: 'dashboard.sidebar.zoneResources', defaultLabel: 'Ресурсы' },
-      { id: 'marketplace', icon: Store, labelKey: 'dashboard.sidebar.marketplace', defaultLabel: 'Маркетплейс' },
     ],
   },
   {
@@ -112,9 +103,6 @@ const SECTIONS: SidebarSection[] = [
     titleKey: 'dashboard.sidebar.account',
     defaultTitle: 'Аккаунт',
     items: [
-      { id: 'finance', icon: Coins, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы' },
-      { id: 'developers', icon: Code2, labelKey: 'dashboard.sidebar.developers', defaultLabel: 'Разработчикам' },
-      { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда' },
       { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор' },
       { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
     ],

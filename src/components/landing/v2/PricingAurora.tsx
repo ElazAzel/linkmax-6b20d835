@@ -125,11 +125,11 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
 
     const businessFeatures = [
         t('landing.pricing.b1', 'Everything in Pro, plus:'),
-        t('landing.pricing.b2', 'Business Zones (workspaces)'),
-        t('landing.pricing.b3', 'Team CRM & Kanban'),
-        t('landing.pricing.b4', 'Team chat & tasks'),
+        t('landing.pricing.b2_v2', 'Custom domain & branding'),
+        t('landing.pricing.b3_v2', 'Up to 6 pages per account'),
+        t('landing.pricing.b4_v2', 'Priority support'),
         t('landing.pricing.b5', 'Roles & access control'),
-        t('landing.pricing.b6', 'Up to 5 team members'),
+        t('landing.pricing.b6_v2', 'Advanced export & integrations'),
     ];
 
     return (
