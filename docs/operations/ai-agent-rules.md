@@ -1,6 +1,6 @@
 # AI Agent Rules & Skills
 
-Набор правил и навыков для AI-агентов, работающих с проектом lnkmx. Каждый навык определяет зону ответственности и стандарты качества.
+Набор правил и навыков для AI-агентов, работающих с проектом **LinkMAX** (репозиторий `inkmax`). Каждый навык определяет зону ответственности и стандарты качества. Детальные правила для Antigravity: [`.agent/rules/`](../../.agent/rules/).
 
 ---
 
@@ -29,10 +29,10 @@
 - Domain Layer (`src/domain/`, `src/types/`) — **никаких** импортов из UI/Data слоёв
 - Data Layer (`src/repositories/`, `src/services/`) — **никаких** импортов из UI слоя
 - UI Layer (`src/components/`, `src/pages/`, `src/hooks/`) — может импортировать Data и Domain
-- Все зависимости проверяются через `.dependency-cruiser.cjs`
+- Все зависимости проверяются через [`config/dependency-cruiser.cjs`](../../config/dependency-cruiser.cjs) (`npm run analyze:deps`, `analyze:cycles`, `analyze:layers`)
 - Новые файлы размещаются строго по слоям
 
-**Ссылка:** `docs/graphs/dependency-graph.mmd`
+**Проверка:** текстовый отчёт зависимостей — `npm run analyze:deps` (при необходимости сохранить вывод в `docs/` отдельным артефактом).
 
 ---
 
@@ -136,7 +136,7 @@
 **Правила:**
 
 - Все PR проходят CI перед мержем
-- Миграции БД — только через `supabase--migration` tool
+- Миграции БД — только через Supabase CLI и файлы в `supabase/migrations/`
 - Edge Functions деплоятся автоматически
 
 ---
@@ -154,9 +154,9 @@
 
 **Где хранится:**
 
-- `docs/platform.md` — основной источник истины
-- `docs/ai-agent-rules.md` — правила для AI-агентов (этот файл)
-- `.agent/rules/` — конфигурация Antigravity
+- [`docs/PLATFORM_SNAPSHOT.md`](../PLATFORM_SNAPSHOT.md) — основной источник истины по платформе
+- [`docs/operations/ai-agent-rules.md`](ai-agent-rules.md) — правила для AI-агентов (этот файл)
+- [`.agent/rules/`](../../.agent/rules/) — конфигурация Antigravity и команды
 - Memory-блоки в контексте сессии
 
 ---
@@ -168,7 +168,7 @@
 | Навык (Skill) | Агент (Role) | Ответственность |
 |---------------|--------------|-----------------|
 | **Rapid Spec Builder** | `planner.md` | ТЗ, API-контракты, декомпозиция |
-| **Clean Architecture** | `arch-reviev.md`| Контроль слоев, зависимости |
+| **Clean Architecture** | `arch-review.md` | Контроль слоев, зависимости |
 | **Auto Refactor Pro** | `refactor.md` | Очистка кода, DRY |
 | **Smart Test Generator**| `qa_specialist.md` / `test_runner.md` | Unit/E2E сценарии и выполнение |
 | **Performance Scanner** | `frontend_specialist` / `backend_specialist` | Оптимизация слоев |

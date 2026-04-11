@@ -87,6 +87,6 @@
 ## Next steps
 
 - **[Comprehensive Platform Guide](../architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — полное описание платформы, модулей и блоков.
-- **[Documentation index](../INDEX.md)** — навигация по разделам документации.
-- **[Full doc catalog](../DOCUMENTATION-INDEX-FULL.md)** — каталог всех документов по папкам и ролям.
+- **[Documentation index](../README.md)** — единая навигация по разделам `docs/` (индекс и роли).
+- **[Platform snapshot](../PLATFORM_SNAPSHOT.md)** — актуальный снимок платформы (SSOT).
 - **[Contributing](../../CONTRIBUTING.md)** — как участвовать в разработке (ветки, коммиты, PR).

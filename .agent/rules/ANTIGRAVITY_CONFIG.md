@@ -1,5 +1,5 @@
 <project_context>
-# Antigravity Configuration for lnkmx.my
+# Antigravity Configuration for LinkMAX (lnkmx.my)
 
 This project uses Antigravity to automate development workflows and ensure code quality.
 
@@ -7,7 +7,7 @@ This project uses Antigravity to automate development workflows and ensure code 
 
 - **Frontend**: React (Vite), TypeScript, Tailwind, Shadcn UI (`src/`)
 - **Backend**: Supabase (Postgres, Edge Functions, Auth, Storage) (`supabase/`)
-- **Testing**: Vitest (Unit), Playwright (E22)
+- **Testing**: Vitest (unit), Playwright (E2E)
 - **Linting**: ESLint
 </project_context>
 
@@ -28,11 +28,11 @@ This project uses Antigravity to automate development workflows and ensure code 
 <commands>
 ## Commands
 
-- `dev`: Start local development environment.
-- `lint`: Check code style and quality.
-- `build`: Build for production.
-- `test`: Run all proper tests.
-- `db:migrate`: Manage database schema changes.
+- `dev` / `npm run dev`: Start local development environment (Vite, see `vite.config.ts` port).
+- `lint` / `npm run lint`: Check code style and quality.
+- `build` / `npm run build`: Build for production.
+- `test` / `npm run test`: Unit tests (Vitest); E2E: `npm run e2e` (Playwright).
+- **Database (Supabase CLI, not an npm script):** see `.agent/rules/commands/database.md` — e.g. `npx supabase db diff`, `db reset`, `db push`.
 </commands>
 
 <rules>
