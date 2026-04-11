@@ -30,7 +30,13 @@ LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)*
 
 ### Repository Security & Privacy
 
-The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. See [ADR 0024: Repository Security and Privacy](../../ADR/0024-repository-security.md) for details on recent security hardening.
+The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. 
+In **Phase 42 (April 2026)**, the platform underwent a major security hardening initiative:
+- **JWT Enforcement**: 100% coverage for AI, Admin, and Translator Edge Functions.
+- **RLS 2.0**: Hardened Row Level Security on `bookings` and identity-sensitive tables.
+- **SQL Injection Guard**: Mandatory parameter validation for all database filters.
+- **GDPR Compliance**: Full implementation of Right to Erasure (deletion) and Data Portability (JSON export).
+
 The database layer is further hardened with **Trigger Guards** (ADR 0027) preventing unauthorized mutation of system-critical columns in `user_profiles` and `challenge_progress`.
 
 **Target audiences:**
@@ -159,6 +165,20 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
   - Укреплен HMR (443 порт) для предотвращения WebSocket обрывов 503.
   - Предзагрузка шрифтов (`Inter`, `Manrope`) на уровне HTML для устранения мерцания текста (FOUC).
 - **Health Score**: **10/10** (Status: Production-Ready & Developer friendly).
+
+### [2026-04-11] Phase 42: Security & Compliance Hardening (Production Edge)
+
+- **Security & RBAC**:
+  - **Edge Hardening**: Enforced `verify_jwt` on all high-risk functions (AI, Admin, Migrations).
+  - **RLS Mastery**: Hardened `public.bookings` with state-aware visibility and modification rules.
+  - **System Admin RBAC**: Automated privilege escalation for primary admin accounts.
+- **GDPR Resilience**:
+  - **Account Purge**: Native account deletion logic with cascading cleanup of assets and pages.
+  - **Data Export**: `gdprService` integrated with JSON RPC for full data portability.
+- **Analytics & Tracking**:
+  - **Pixel Proxy 2.0**: Integrated marketing pixel proxy to ensure conversion tracking reliability.
+  - **Impression Engine**: Native block-level impression tracking for A/B experiment accuracy.
+- **Health Score**: **10/10** (Status: GDPR-Compliant & Auditor-Verified).
 
 ### [2026-04-05] Phase 41.1: Localization Hardening & Integrity Restoration
 

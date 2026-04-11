@@ -1,5 +1,33 @@
 # Changelog
 
+## [Phase 42] - 2026-04-11
+
+### Security (Hardening & RLS)
+
+- **Edge Functions Security**: Hardened `supabase/config.toml` by enforcing `verify_jwt = true` for AI generation, admin seed tools, and translation endpoints. 
+- **Row Level Security (RLS)**: Implemented comprehensive data protection in `public.bookings`:
+  - Restricted slot visibility to owners and associated customers only.
+  - Hardened deletion/update policies to prevent unauthorized modification.
+- **Role-Based Access Control (RBAC)**: Added `has_role` and `is_admin` helper functions. Automated admin role assignment for primary system administrators.
+- **SQL Injection Prevention**: Sanitized collaboration service queries by enforcing UUID validation for `.or()` filters.
+- **Double-Booking Protection**: Added unique constraint `idx_bookings_uniqueness_guard` on `(block_id, start_time, status)` where status is active.
+
+### Compliance (GDPR)
+
+- **Data Portability**: Implemented `gdprService` with RPC wrappers for full user data export in JSON format.
+- **Right to Erasure**: Added automated account deletion logic, ensuring all associated resources (pages, blocks, media) are purged upon request.
+- **Privacy UI**: Integrated "Privacy & Data Management" section in Account Settings, providing self-service tools for GDPR compliance.
+
+### Analytics & Experiments
+
+- **Impression Tracking**: Connected block-level impression tracking in `BlockRenderer.tsx` for A/B testing conversion accuracy.
+- **Pixel Proxy Integration**: Integrated server-side marketing pixel proxy in the analytics service to bypass ad-blockers and improve attribution tracking.
+
+### Infrastructure & Monitoring
+
+- **Unified Monitoring**: Created `src/lib/monitoring.ts` as a unified wrapper for Sentry and LogRocket with safe initialization stubs.
+- **TMA Stubs**: Implemented dedicated screens for Telegram Mini App (TMA) Settings and Payments with modern dashboard UI.
+
 ## [Phase 41.1] - 2026-04-05
 
 ### Fixed (Localization Hardening & Integrity)

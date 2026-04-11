@@ -12,3 +12,5 @@ export { EventDetailScreen } from './EventDetailScreen';
 export { FinanceScreen } from './FinanceScreen';
 export { ResourcesScreen } from './ResourcesScreen';
 export { TeamManagementScreen } from './TeamManagementScreen';
+export { TMASettingsScreen } from './TMASettingsScreen';
+export { TMAPaymentsScreen } from './TMAPaymentsScreen';
