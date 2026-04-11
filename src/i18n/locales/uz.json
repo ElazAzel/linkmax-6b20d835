@@ -2922,175 +2922,175 @@
       "noDataDesc": "Ma'lumotlar tashriflardan keyin paydo bo'ladi",
       "position": "Lavozim",
       "reached": "yetib keldi",
-      "scrollDepth": "Scroll depth",
-      "sessions": "sessions",
-      "short": "Map",
-      "title": "Heat map",
-      "topClickAreas": "Top click zones:"
+      "scrollDepth": "O'tkazish chuqurligi",
+      "sessions": "sessiyalar",
+      "short": "Xarita",
+      "title": "Issiqlik xaritasi",
+      "topClickAreas": "Yuqori bosish zonalari:"
     },
     "heights": {
-      "large": "Large - 320px",
-      "medium": "Medium - 200px",
-      "small": "Small - 120px"
+      "large": "Katta - 320px",
+      "medium": "O'rtacha - 200px",
+      "small": "Kichik - 120px"
     },
     "hints": {
-      "bioLinks": "Tip: add links in [text](url) format",
-      "richTextVisual": "Use the рџ”— button to add links. Line breaks are preserved."
+      "bioLinks": "Maslahat: havolalarni [text](url) formatida qo'shing",
+      "richTextVisual": "Havolalar qo'shish uchun rџ”— tugmasidan foydalaning. Satrlar uzilishlari saqlanadi."
     },
     "home": {
       "incoming": {
-        "booking": "Booking",
-        "empty": "No incoming yet",
-        "emptyHint": "Share your page to get the first leads",
-        "lead": "Lead",
-        "share": "Share",
-        "title": "Incoming",
-        "viewAll": "All"
+        "booking": "Band qilish",
+        "empty": "Hali kirmadi",
+        "emptyHint": "Birinchi takliflarni olish uchun sahifangizni baham ko'ring",
+        "lead": "Qo'rg'oshin",
+        "share": "Ulashish",
+        "title": "Kiruvchi",
+        "viewAll": "Hammasi"
       }
     },
     "imageCropper": {
-      "description": "Drag and scale the image",
-      "hint": "Drag image to position",
-      "reset": "Reset",
-      "title": "Image Settings",
-      "zoom": "Scale"
+      "description": "Tasvirni sudrab olib boring va o'lchamini oshiring",
+      "hint": "Rasmni joylashuviga torting",
+      "reset": "Qayta tiklash",
+      "title": "Rasm sozlamalari",
+      "zoom": "Masshtab"
     },
     "imageScales": {
-      "contain": "Fit (Contain)",
-      "cover": "Fill (Cover)",
+      "contain": "Fit (tarkibida)",
+      "cover": "To'ldirish (qopqoq)",
       "fill": "Stretch",
-      "tile": "Tile"
+      "tile": "Plitka"
     },
     "imageStyles": {
-      "banner": "Banner - Full Width",
-      "circle": "Circle - Round Crop",
-      "default": "Default - Rounded Corners",
-      "polaroid": "Polaroid - Vintage Frame",
-      "vignette": "Vignette - Soft Edges"
+      "banner": "Banner - to'liq kenglik",
+      "circle": "Doira - dumaloq kesish",
+      "default": "Birlamchi - yumaloq burchaklar",
+      "polaroid": "Polaroid - Vintage ramka",
+      "vignette": "Vinyetka - Yumshoq qirralar"
     },
     "insights": {
-      "analyze": "Analysis",
-      "applied": "Insight applied",
-      "apply": "Apply",
-      "description": "Recommendations for improvement",
-      "empty": "Click",
-      "error": "Analysis error",
+      "analyze": "Tahlil",
+      "applied": "Insight qo'llanildi",
+      "apply": "Murojaat qiling",
+      "description": "Yaxshilash bo'yicha tavsiyalar",
+      "empty": "bosing",
+      "error": "Tahlil xatosi",
       "lowCTR": {
-        "description": "A bright button with a call to action will increase conversions",
-        "title": "Add a CTA button"
+        "description": "Harakatga chaqiruvga ega yorqin tugma konversiyalarni oshiradi",
+        "title": "CTA tugmachasini qo'shing"
       },
       "lowPerforming": {
-        "description": "Description",
-        "title": "Ineffective block"
+        "description": "Tavsif",
+        "title": "Samarasiz blok"
       },
       "lowViews": {
-        "description": "Pages with social networks receive 40% more clicks",
-        "title": "Add social networks"
+        "description": "Ijtimoiy tarmoqlarga ega sahifalar 40% ko'proq klik oladi",
+        "title": "Ijtimoiy tarmoqlarni qo'shing"
       },
       "mobileOpt": {
-        "description": "80%+ of your audience uses phones",
-        "title": "Optimize for mobile"
+        "description": "Auditoriyangizning 80%+ telefonlardan foydalanadi",
+        "title": "Mobil uchun optimallashtirish"
       },
-      "noInsights": "Your page is perfectly optimized!",
+      "noInsights": "Sizning sahifangiz mukammal optimallashtirilgan!",
       "noProducts": {
-        "description": "Product pages monetize better",
-        "title": "Add a product or service"
+        "description": "Mahsulot sahifalari yaxshiroq monetizatsiya qiladi",
+        "title": "Mahsulot yoki xizmat qo'shing"
       },
       "priority": {
-        "high": "Important",
-        "low": "Low",
-        "medium": "Average"
+        "high": "Muhim",
+        "low": "Past",
+        "medium": "O'rtacha"
       },
-      "title": "AI Insights",
-      "undone": "Action canceled"
+      "title": "AI insights",
+      "undone": "Amal bekor qilindi"
     },
     "install": {
       "android": {
-        "step1": "Tap the browser menu (⋮) in the top right corner",
-        "step1desc": "Click on the three dots in the corner",
-        "step2": "Select \"Install app\" or \"Add to Home Screen\"",
-        "step2desc": "Select \"Install\" or \"To Home Screen\"",
-        "step3": "Confirm installation",
-        "step3desc": "Click \"Install\" in the pop-up window",
-        "title": "Instructions for Android"
+        "step1": "Yuqori o'ng burchakdagi brauzer menyusiga (⋮) teging",
+        "step1desc": "Burchakdagi uchta nuqta ustiga bosing",
+        "step2": "\"Ilovani o'rnatish\" yoki \"Bosh ekranga qo'shish\" ni tanlang.",
+        "step2desc": "\"O'rnatish\" yoki \"Bosh ekranga\" ni tanlang.",
+        "step3": "O'rnatishni tasdiqlang",
+        "step3desc": "Qalqib chiquvchi oynada \"O'rnatish\" tugmasini bosing",
+        "title": "Android uchun ko'rsatmalar"
       },
-      "copyLink": "Copy link",
-      "description": "Install the LinkMAX.my application on your device for quick access",
+      "copyLink": "Havolani nusxalash",
+      "description": "Tez kirish uchun LinkMAX.my ilovasini qurilmangizga oʻrnating",
       "desktop": {
-        "installNow": "Install now",
-        "ready": "LinkMAX.my is ready to install!",
-        "step1": "Find the installation icon",
-        "step1desc": "It is usually located in the address bar (Chrome, Edge)",
-        "step2": "Click \"Install\"",
-        "step2desc": "Add LinkMAX.my to your desktop",
-        "title": "Instructions for Desktop",
-        "desc": "Look for the install icon in the browser address bar or select \"Install LinkMAX.my\" from the browser menu"
+        "installNow": "Hozir oʻrnating",
+        "ready": "LinkMAX.my o'rnatishga tayyor!",
+        "step1": "O'rnatish belgisini toping",
+        "step1desc": "Odatda u manzil satrida joylashgan (Chrome, Edge)",
+        "step2": "\"O'rnatish\" tugmasini bosing",
+        "step2desc": "Ish stolingizga LinkMAX.my-ni qo'shing",
+        "title": "Ish stoli uchun ko'rsatmalar",
+        "desc": "Brauzerning manzil satrida o'rnatish belgisini toping yoki brauzer menyusidan \"Install LinkMAX.my\" ni tanlang"
       },
       "ios": {
-        "step1": "Tap the \"Share\" button ⬆️ at the bottom of Safari",
-        "step1desc": "Make sure you open the site in Safari",
-        "step2": "Scroll down and select \"Add to Home Screen\"",
-        "step2desc": "Safari bottom arrow button",
-        "step3": "Tap \"Add\" in the top right corner",
-        "step3desc": "Scroll down and select \"Add to Home Screen\"",
-        "title": "Instructions for iOS"
+        "step1": "Safari pastki qismidagi “Ulashish” tugmasini ⬆️ bosing",
+        "step1desc": "Saytni Safari-da ochganingizga ishonch hosil qiling",
+        "step2": "Pastga aylantiring va \"Bosh ekranga qo'shish\" ni tanlang.",
+        "step2desc": "Safari pastki o'q tugmasi",
+        "step3": "Yuqori o'ng burchakdagi \"Qo'shish\" tugmasini bosing",
+        "step3desc": "Pastga aylantiring va \"Bosh ekranga qo'shish\" ni tanlang.",
+        "title": "IOS uchun ko'rsatmalar"
       },
-      "later": "Later",
+      "later": "Keyinchalik",
       "seo": {
-        "description": "Install LinkMAX as a PWA for quick access.",
-        "title": "Installing LinkMAX"
+        "description": "Tez kirish uchun LinkMAX-ni PWA sifatida o'rnating.",
+        "title": "LinkMAX o'rnatilmoqda"
       },
-      "subtitle": "Add the app to your home screen for a better experience",
-      "title": "Install LinkMAX.my",
-      "yourLink": "Your link:",
-      "backHome": "Back to home",
+      "subtitle": "Yaxshiroq tajriba uchun ilovani bosh ekraningizga qo‘shing",
+      "title": "LinkMAX.my ni o'rnating",
+      "yourLink": "Sizning havolangiz:",
+      "backHome": "Uyga qaytish",
       "features": {
-        "quickAccess": "Quick access",
-        "quickAccessDesc": "One-click launch from home screen",
-        "offline": "Offline mode",
-        "offlineDesc": "Access content without internet",
-        "native": "Native interface",
-        "nativeDesc": "Full-screen mode without browser"
+        "quickAccess": "Tez kirish",
+        "quickAccessDesc": "Bosh ekrandan bir marta bosish bilan ishga tushirish",
+        "offline": "Oflayn rejim",
+        "offlineDesc": "Tarkibga internetsiz kirish",
+        "native": "Mahalliy interfeys",
+        "nativeDesc": "Brauzersiz to'liq ekran rejimi"
       },
       "installed": {
-        "title": "App installed!",
-        "desc": "LinkMAX.my is ready. Find the icon on your home screen.",
-        "open": "Open app"
+        "title": "Ilova o'rnatildi!",
+        "desc": "LinkMAX.my tayyor. Bosh ekraningizdagi belgini toping.",
+        "open": "Ilovani oching"
       },
       "ready": {
-        "title": "Ready to install",
-        "desc": "Click the button below to install LinkMAX.my on your device",
-        "button": "Install now"
+        "title": "Oʻrnatishga tayyor",
+        "desc": "LinkMAX.my-ni qurilmangizga o'rnatish uchun quyidagi tugmani bosing",
+        "button": "Hozir oʻrnating"
       }
     },
     "kaspi": {
-      "amount": "Amount",
-      "comment": "Comment",
-      "commentPlaceholder": "Payment description",
-      "copyLink": "Copy Link",
-      "description": "Generate QR code for quick Kaspi payment",
-      "disclaimer": "Powered by Kaspi.kz payment system",
-      "downloadQR": "Download QR",
-      "enter_amount": "Enter amount to generate QR",
-      "generateQR": "Kaspi QR Payment",
-      "invalidAmount": "Invalid amount or missing owner ID",
-      "linkCopied": "Link copied to clipboard",
-      "pay": "Pay",
-      "paymentSimulated": "Payment successfully simulated and fee processed!",
-      "scanHint": "Scan with Kaspi app to pay",
-      "simulateMock": "Simulate Payment (Sandbox)",
-      "title": "Kaspi QR Payment"
+      "amount": "Miqdori",
+      "comment": "Izoh",
+      "commentPlaceholder": "To'lov tavsifi",
+      "copyLink": "Havolani nusxalash",
+      "description": "Tez Kaspi to'lovi uchun QR kodini yarating",
+      "disclaimer": "Kaspi.kz to'lov tizimi tomonidan ishlab chiqilgan",
+      "downloadQR": "QR-ni yuklab oling",
+      "enter_amount": "QR yaratish uchun miqdorni kiriting",
+      "generateQR": "Kaspi QR to'lovi",
+      "invalidAmount": "Yaroqsiz summa yoki egasining identifikatori yetishmayapti",
+      "linkCopied": "Havola vaqtinchalik xotiraga nusxalandi",
+      "pay": "To'lash",
+      "paymentSimulated": "Toʻlov muvaffaqiyatli simulyatsiya qilindi va toʻlov amalga oshirildi!",
+      "scanHint": "Toʻlash uchun Kaspi ilovasi bilan skanerlang",
+      "simulateMock": "Toʻlovni simulyatsiya qilish (Sandbox)",
+      "title": "Kaspi QR to'lovi"
     },
     "landingV1": {
-      "aiBuilderDesc": "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
-      "aiBuilderTitle": "AI Page Builder",
-      "aiBuilds": "AI builds everything",
-      "aiBuildsDesc": "Structure, copy, and design generated in seconds. No drag-and-drop hell.",
-      "aiGenerating": "AI Generating...",
-      "aiPowered": "AI Powered",
+      "aiBuilderDesc": "Biznesingizni tavsiflang va bizning AI bir necha soniya ichida mukammal tuzilma, nusxa ko'chirish va tartibni yaratadi.",
+      "aiBuilderTitle": "AI sahifa yaratuvchisi",
+      "aiBuilds": "AI hamma narsani quradi",
+      "aiBuildsDesc": "Tuzilishi, nusxasi va dizayni soniyalarda yaratilgan. Drag-and-drop do'zax yo'q.",
+      "aiGenerating": "AI yaratilmoqda...",
+      "aiPowered": "AI quvvatlanadi",
       "bento": {
-        "aiDesc": "Skip months of development. Describe your offer, and AI builds structure, copy, and design instantly.",
-        "aiPowered": "AI-Powered",
+        "aiDesc": "Rivojlanish oylarini o'tkazib yuboring. Taklifingizni tavsiflang va AI bir zumda tuzilma, nusxa ko'chirish va dizaynni yaratadi.",
+        "aiPowered": "AI quvvatiga ega",
         "aiSub": "Structure • Copy • Design",
         "aiTitle": "Launch in 2 Minutes",
         "analyticsDesc": "Track every click and purchase without complex Google Analytics setups.",
