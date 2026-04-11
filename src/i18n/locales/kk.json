@@ -2731,88 +2731,88 @@
     "from": {
       "cta": "Өз парақшаңызды жасаңыз",
       "free": "Тегін. Карта жоқ. Жасырын төлемдер жоқ.",
-      "headline": "Create yours — free",
-      "madeWith": "This page was created on lnkmx",
-      "seoDesc": "Create a page for customer booking in 5 minutes. Free.",
-      "seoTitle": "Create your page — free | lnkmx",
-      "subheadline": "Link for customer booking. Ready in 5 minutes.",
-      "val1": "Beautiful link for Instagram bio",
-      "val2": "Clients see prices and book themselves",
-      "val3": "No calls or DMs"
+      "headline": "Өзіңіздікі тегін жасаңыз",
+      "madeWith": "Бұл бет lnkmx сайтында жасалған",
+      "seoDesc": "5 минут ішінде тұтынушыларды брондау үшін бет жасаңыз. Тегін.",
+      "seoTitle": "Өз парақшаңызды жасаңыз — тегін | lnkmx",
+      "subheadline": "Тұтынушыға тапсырыс беру сілтемесі. 5 минутта дайын.",
+      "val1": "Instagram био үшін әдемі сілтеме",
+      "val2": "Клиенттер бағаны көреді және өздері тапсырыс береді",
+      "val3": "Қоңыраулар немесе хабарламалар жоқ"
     },
     "funnel": {
-      "clickDesc": "Clicked on blocks or links",
-      "convertDesc": "Submitted a request or made a reservation",
-      "description": "Shows the path of users from page viewing to target action",
-      "dropOff": "outflow",
-      "engageDesc": "Completed actions (clicks, shares)",
-      "insightGoodConversion": "Good conversion {{rate}}%!",
-      "insightHighCtr": "Excellent CTR ({{rate}}%)! Content engages users.",
-      "insightLowConversion": "Conversion {{rate}}%. Optimize CTAs and forms.",
-      "insightLowCtr": "Low CTR ({{rate}}%). Try adding more visible buttons.",
-      "insightLowTraffic": "Not enough data to analyze. Share the link to the page.",
-      "insightNoConversions": "There is engagement, but no conversions. Add a form or reservation.",
-      "insights": "Recommendations",
-      "noData": "Insufficient data",
-      "noDataDesc": "Data will appear after visits to your page",
-      "overallConversion": "Total Conversion",
-      "short": "Funnel",
-      "stepClick": "Clicks",
-      "stepConvert": "Conversions",
-      "stepEngage": "Involvement",
-      "stepView": "Views",
-      "title": "Conversion funnel",
-      "totalVisitors": "Total visitors",
-      "viewDesc": "Users visited your page"
+      "clickDesc": "Блоктарға немесе сілтемелерге басылды",
+      "convertDesc": "Сұраныс жіберді немесе тапсырыс берді",
+      "description": "Пайдаланушылардың бетті қараудан мақсатты әрекетке дейінгі жолын көрсетеді",
+      "dropOff": "шығу",
+      "engageDesc": "Аяқталған әрекеттер (басулар, бөлісулер)",
+      "insightGoodConversion": "Жақсы конверсия {{rate}}%!",
+      "insightHighCtr": "Керемет CTR ({{rate}}%)! Мазмұн пайдаланушыларды тартады.",
+      "insightLowConversion": "Түрлендіру {{rate}}%. CTA және пішіндерді оңтайландыру.",
+      "insightLowCtr": "Төмен CTR ({{rate}}%). Көбірек көрінетін түймелерді қосып көріңіз.",
+      "insightLowTraffic": "Талдау үшін деректер жеткіліксіз. Бетке сілтемені бөлісіңіз.",
+      "insightNoConversions": "Қатысу бар, бірақ конверсия жоқ. Пішін немесе резерв қосыңыз.",
+      "insights": "Ұсыныстар",
+      "noData": "Деректер жеткіліксіз",
+      "noDataDesc": "Деректер сіздің парағыңызға кіргеннен кейін пайда болады",
+      "overallConversion": "Жалпы конверсия",
+      "short": "Шұңқыр",
+      "stepClick": "Басулар",
+      "stepConvert": "Түрлендірулер",
+      "stepEngage": "Қатысу",
+      "stepView": "Көрулер",
+      "title": "Түрлендіру шұңқыры",
+      "totalVisitors": "Жалпы келушілер",
+      "viewDesc": "Пайдаланушылар сіздің парағыңызға кірді"
     },
     "gallery": {
-      "all": "All",
-      "allNiches": "All",
-      "allPages": "All pages",
-      "alreadyLiked": "You have already bookmarked this page",
-      "create": "Create",
-      "createPage": "Create a page",
-      "empty": "Be the first here!",
-      "emptyDescription": "This category is waiting for its star. Create a page and get to the top.",
-      "featured": "Featured",
-      "featuredPages": "Featured Pages",
-      "filter": "Filter",
-      "goToEditor": "Open the editor for customization",
-      "latest": "New",
-      "like": "Like",
-      "liked": "I liked the page!",
-      "noPages": "No pages found",
-      "noResults": "Nothing found",
-      "openEditor": "Open",
-      "pages": "pages",
-      "popular": "Popular",
-      "searchPlaceholder": "Search pages...",
-      "searchResults": "Filtering by ",
+      "all": "Барлығы",
+      "allNiches": "Барлығы",
+      "allPages": "Барлық беттер",
+      "alreadyLiked": "Сіз бұл бетті әлдеқашан белгілеп қойдыңыз",
+      "create": "Жасау",
+      "createPage": "Бет жасау",
+      "empty": "Мұнда бірінші болыңыз!",
+      "emptyDescription": "Бұл категория өз жұлдызын күтуде. Бетті жасаңыз және жоғарғы жағына өтіңіз.",
+      "featured": "Таңдаулы",
+      "featuredPages": "Таңдаулы беттер",
+      "filter": "Сүзгі",
+      "goToEditor": "Баптау үшін редакторды ашыңыз",
+      "latest": "Жаңа",
+      "like": "Ұнайды",
+      "liked": "Маған парақша ұнады!",
+      "noPages": "Ешбір бет табылмады",
+      "noResults": "Ештеңе табылмады",
+      "openEditor": "Ашық",
+      "pages": "беттер",
+      "popular": "Танымал",
+      "searchPlaceholder": "Беттерді іздеу...",
+      "searchResults": "бойынша сүзу",
       "seo": {
-        "description": "Real user pages: templates, niches, ideas for your link in bio.",
-        "imageAlt": "LinkMAX Gallery - Link in Bio Examples",
-        "nicheDescription": "Examples of LinkMAX pages in the {{niche}} niche: templates, ideas and structure.",
-        "nicheTitle": "Gallery LinkMAX — {{niche}}",
+        "description": "Нақты пайдаланушы беттері: шаблондар, тауашалар, биодағы сілтемеңізге арналған идеялар.",
+        "imageAlt": "LinkMAX галереясы - Био мысалдарындағы сілтеме",
+        "nicheDescription": "{{niche}} тауашасындағы LinkMAX беттерінің мысалдары: үлгілер, идеялар және құрылым.",
+        "nicheTitle": "Галерея LinkMAX — {{niche}}",
         "opt": {
-          "answer": "The LinkMAX Gallery showcases real examples of pages created by users across different industries including freelancers, businesses, beauty professionals, fitness coaches, and content creators.",
+          "answer": "LinkMAX галереясы фрилансерлерді, бизнесті, сұлулық мамандарын, фитнес жаттықтырушыларды және мазмұнды жасаушыларды қоса алғанда, әртүрлі салалардағы пайдаланушылар жасаған беттердің нақты мысалдарын көрсетеді.",
           "audience": {
-            "1": "New users seeking inspiration",
-            "2": "Businesses looking for examples",
-            "3": "Designers researching layouts",
-            "4": "Marketers studying conversions"
+            "1": "Шабыт іздейтін жаңа пайдаланушылар",
+            "2": "Мысалдар іздейтін кәсіпорындар",
+            "3": "Дизайнерлер макеттерді зерттейді",
+            "4": "Конверсияны зерттейтін маркетологтар"
           },
-          "problem": "Users need inspiration and examples to understand how to build effective pages",
-          "question": "Where can I see examples of LinkMAX pages?",
-          "solution": "The Gallery provides real-world examples across multiple industries showing successful page implementations",
+          "problem": "Тиімді беттерді қалай құру керектігін түсіну үшін пайдаланушыларға шабыт пен мысалдар қажет",
+          "question": "LinkMAX беттерінің мысалдарын қайдан көруге болады?",
+          "solution": "Галерея беттерді сәтті іске асыруды көрсететін көптеген салаларда нақты мысалдарды ұсынады",
           "uses": {
-            "1": "Browse professional page examples",
-            "2": "Find inspiration for your industry",
-            "3": "See real user implementations",
-            "4": "Discover design ideas",
-            "5": "Learn from successful pages"
+            "1": "Кәсіби бет мысалдарын шолыңыз",
+            "2": "Сіздің салаңыз үшін шабыт табыңыз",
+            "3": "Нақты пайдаланушы енгізулерін қараңыз",
+            "4": "Дизайн идеяларын ашыңыз",
+            "5": "Сәтті беттерден үйреніңіз"
           }
         },
-        "title": "Gallery LinkMAX - examples of link in bio and mini-sites"
+        "title": "LinkMAX галереясы - био және шағын сайттардағы сілтеме мысалдары"
       },
       "seoIntro": {
         "highlights": [
@@ -2820,1113 +2820,1113 @@
           "Niches: beauty, education, consulting, and more",
           "Ready-made blocks and CTAs"
         ],
-        "locationBody": "Look for examples in your city or country and adapt them to your business.",
-        "locationTitle": "Local relevance",
-        "subtitle": "We have collected the best pages and templates so that you can quickly choose a structure for your niche.",
-        "title": "How to use the gallery"
+        "locationBody": "Қалаңыздағы немесе еліңіздегі мысалдарды іздеңіз және оларды бизнесіңізге бейімдеңіз.",
+        "locationTitle": "Жергілікті өзектілігі",
+        "subtitle": "Біз ең жақсы беттер мен үлгілерді жинадық, осылайша сіз өзіңіздің тауашаларыңыз үшін құрылымды жылдам таңдай аласыз.",
+        "title": "Галереяны қалай пайдалануға болады"
       },
-      "shareDescription": "Show your page in the community gallery",
-      "shareToGallery": "Share to Gallery",
-      "sortBy": "Sort by",
-      "sortPopular": "Popular",
-      "sortRecent": "New",
-      "sortViews": "Views",
-      "statsLikes": "Likes",
-      "statsPages": "Pages",
-      "statsViews": "Views",
-      "subtitle": "Get inspired by our users' pages",
-      "tabGallery": "Gallery",
-      "tabLeaderboard": "Rating",
-      "templateCopied": "Template copied!",
-      "title": "Gallery of pages",
-      "totalPages": "{{count}} pages in gallery",
-      "tryAnotherFilter": "Try a different filter",
-      "unlike": "Don't like it",
-      "untitled": "Untitled",
-      "useTemplate": "Create",
-      "viewPage": "Open",
-      "views": "views"
+      "shareDescription": "Өз бетіңізді қауымдастық галереясында көрсетіңіз",
+      "shareToGallery": "Галереяға бөлісіңіз",
+      "sortBy": "Бойынша сұрыптау",
+      "sortPopular": "Танымал",
+      "sortRecent": "Жаңа",
+      "sortViews": "Көрулер",
+      "statsLikes": "Ұнатады",
+      "statsPages": "Беттер",
+      "statsViews": "Көрулер",
+      "subtitle": "Біздің пайдаланушылардың беттерінен шабыт алыңыз",
+      "tabGallery": "Галерея",
+      "tabLeaderboard": "Рейтинг",
+      "templateCopied": "Үлгі көшірілді!",
+      "title": "Беттердің галереясы",
+      "totalPages": "Галереядағы {{count}} беттер",
+      "tryAnotherFilter": "Басқа сүзгіні қолданып көріңіз",
+      "unlike": "Ұнамайды",
+      "untitled": "Атаусыз",
+      "useTemplate": "Жасау",
+      "viewPage": "Ашық",
+      "views": "көріністер"
     },
     "gift": {
-      "days3": "3 days",
-      "description": "Treat your friend with the gift of a Premium subscription",
-      "duration": "Subscription duration",
-      "message": "Message (optional)",
-      "messagePlaceholder": "Write kind words...",
-      "month1": "1 month",
-      "popular": "Popular",
-      "send": "Send a gift",
-      "sendError": "Failed to send gift",
-      "sent": "The gift has been sent!",
-      "sentDesc": "will receive Premium days",
-      "title": "Give Premium",
-      "week1": "1 week",
-      "weeks2": "2 weeks"
+      "days3": "3 күн",
+      "description": "Досыңызды Premium жазылымымен сыйлаңыз",
+      "duration": "Жазылым ұзақтығы",
+      "message": "Хабарлама (міндетті емес)",
+      "messagePlaceholder": "Жақсы сөздер жазыңыз...",
+      "month1": "1 ай",
+      "popular": "Танымал",
+      "send": "Сыйлық жіберіңіз",
+      "sendError": "Сыйлықты жіберу мүмкін болмады",
+      "sent": "Сыйлық жіберілді!",
+      "sentDesc": "премиум күндерін алады",
+      "title": "Премиум беріңіз",
+      "week1": "1 апта",
+      "weeks2": "2 апта"
     },
     "googleForms": {
-      "byUrl": "Follow the link",
-      "fetchFailed": "Failed to load form. Check the link.",
-      "formClosed": "The form is closed for replies",
-      "formDataNotFound": "Could not find form data",
-      "formNotPublic": "The form is not public. Open access in Google Forms settings.",
-      "formTitle": "Form name",
-      "formUrl": "Google Form Link",
-      "foundFields": "Fields found",
-      "import": "Import",
-      "importDescription": "Import field structure from public Google Forms",
-      "importFromUrl": "Import",
-      "importSuccess": "Imported fields: {{count}}",
-      "importTitle": "Import from Google Forms",
-      "invalidUrl": "Invalid link. Use a link like docs.google.com/forms/...",
-      "jsonHint": "Types: short_text, long_text, single_choice, multiple_choice, dropdown, date",
-      "jsonStructure": "Form structure (JSON)",
-      "loadTemplate": "Download template",
-      "loading": "Loading...",
-      "manualJson": "Manual (JSON)",
-      "noFields": "No fields found to import",
-      "parseError": "Parsing error. Check the format.",
-      "parseJson": "Parse",
-      "parseSuccess": "The form has been successfully recognized!",
-      "serverError": "Server error. Please try again later.",
-      "templateLoaded": "Template loaded",
-      "unknownError": "Unknown error",
-      "urlHint": "The form must be public (available to everyone via a link)",
-      "urlRequired": "Enter your Google Form link"
+      "byUrl": "Сілтемені орындаңыз",
+      "fetchFailed": "Пішін жүктелмеді. Сілтемені тексеріңіз.",
+      "formClosed": "Пішін жауаптар үшін жабық",
+      "formDataNotFound": "Пішін деректері табылмады",
+      "formNotPublic": "Пішін жалпыға ортақ емес. Google Forms параметрлерінде рұқсатты ашыңыз.",
+      "formTitle": "Пішін атауы",
+      "formUrl": "Google пішін сілтемесі",
+      "foundFields": "Өрістер табылды",
+      "import": "Импорттау",
+      "importDescription": "Жалпыға қолжетімді Google пішіндерінен өріс құрылымын импорттаңыз",
+      "importFromUrl": "Импорттау",
+      "importSuccess": "Импортталған өрістер: {{count}}",
+      "importTitle": "Google пішіндерінен импорттау",
+      "invalidUrl": "Жарамсыз сілтеме. docs.google.com/forms/... сияқты сілтемені пайдаланыңыз.",
+      "jsonHint": "Түрлері: қысқа_мәтін, ұзын_мәтін, бір_таңдау, бірнеше_таңдау, ашылмалы тізім, күн",
+      "jsonStructure": "Пішін құрылымы (JSON)",
+      "loadTemplate": "Үлгіні жүктеп алу",
+      "loading": "Жүктелуде...",
+      "manualJson": "Қолмен (JSON)",
+      "noFields": "Импортталатын өрістер табылмады",
+      "parseError": "Талдау қатесі. Пішімді тексеріңіз.",
+      "parseJson": "Талдау",
+      "parseSuccess": "Пішін сәтті танылды!",
+      "serverError": "Сервер қатесі. Тағы жасауды сәл кейінірек көріңізді өтінеміз.",
+      "templateLoaded": "Үлгі жүктелді",
+      "unknownError": "Белгісіз қате",
+      "urlHint": "Пішін жалпыға ортақ болуы керек (сілтеме арқылы барлығына қолжетімді)",
+      "urlRequired": "Google пішін сілтемесін енгізіңіз"
     },
     "gradients": {
-      "dark": "Dark Overlay",
-      "light": "Light Overlay",
-      "none": "No Gradient",
-      "ocean": "Ocean Gradient",
-      "primary": "Primary Color",
-      "purple": "Purple Dream",
-      "sunset": "Sunset Gradient"
+      "dark": "Қараңғы қабат",
+      "light": "Жарық қабаттасуы",
+      "none": "Градиент жоқ",
+      "ocean": "Мұхит градиенті",
+      "primary": "Негізгі түс",
+      "purple": "Күлгін арман",
+      "sunset": "Күннің батуы градиенті"
     },
     "guide": {
       "pdf": "Pdf"
     },
     "heatmap": {
-      "avgScroll": "Wed. scroll",
-      "clickMap": "Hit map",
-      "clickZones": "Click zone",
-      "clicks": "cry",
-      "cold": "Cold",
-      "description": "Visualization of clicks and scroll depth",
-      "fromTop": "above",
-      "hot": "Hot",
-      "insightGoodScroll": "Great engagement! Users view most of the content.",
-      "insightLowScroll": "Users don't reach the middle of the page. Move important content higher.",
-      "insightMedScroll": "Average scroll depth. Consider adding anchors or CTAs.",
-      "maxScroll": "Max. scroll",
-      "noData": "Insufficient data",
-      "noDataDesc": "Data will appear after visits",
-      "position": "Position",
-      "reached": "got there",
-      "scrollDepth": "Scroll depth",
-      "sessions": "sessions",
-      "short": "Map",
-      "title": "Heat map",
-      "topClickAreas": "Top click zones:"
+      "avgScroll": "Сәр. айналдыру",
+      "clickMap": "Картаны басыңыз",
+      "clickZones": "Аймақты басыңыз",
+      "clicks": "жылау",
+      "cold": "Суық",
+      "description": "Кликтердің визуализациясы және айналдыру тереңдігі",
+      "fromTop": "жоғарыда",
+      "hot": "Ыстық",
+      "insightGoodScroll": "Керемет келісім! Пайдаланушылар мазмұнның көп бөлігін қарайды.",
+      "insightLowScroll": "Пайдаланушылар беттің ортасына жетпейді. Маңызды мазмұнды жоғары жылжытыңыз.",
+      "insightMedScroll": "Орташа айналдыру тереңдігі. Анкерлерді немесе CTA қосуды қарастырыңыз.",
+      "maxScroll": "Макс. айналдыру",
+      "noData": "Деректер жеткіліксіз",
+      "noDataDesc": "Деректер кіргеннен кейін пайда болады",
+      "position": "Позиция",
+      "reached": "сонда жетті",
+      "scrollDepth": "Айналдыру тереңдігі",
+      "sessions": "сеанстар",
+      "short": "Карта",
+      "title": "Жылу картасы",
+      "topClickAreas": "Жоғарғы басу аймақтары:"
     },
     "heights": {
-      "large": "Large - 320px",
-      "medium": "Medium - 200px",
-      "small": "Small - 120px"
+      "large": "Үлкен - 320px",
+      "medium": "Орташа - 200px",
+      "small": "Шағын - 120px"
     },
     "hints": {
-      "bioLinks": "Tip: add links in [text](url) format",
-      "richTextVisual": "Use the рџ”— button to add links. Line breaks are preserved."
+      "bioLinks": "Кеңес: сілтемелерді [text](url) пішімінде қосыңыз",
+      "richTextVisual": "Сілтемелерді қосу үшін рџ”— түймешігін пайдаланыңыз. Жол үзілімдері сақталады."
     },
     "home": {
       "incoming": {
-        "booking": "Booking",
-        "empty": "No incoming yet",
-        "emptyHint": "Share your page to get the first leads",
-        "lead": "Lead",
-        "share": "Share",
-        "title": "Incoming",
-        "viewAll": "All"
+        "booking": "Брондау",
+        "empty": "Әзірге кіріс жоқ",
+        "emptyHint": "Алғашқы тұтынушыларды алу үшін парақшаңызды бөлісіңіз",
+        "lead": "Қорғасын",
+        "share": "Бөлісу",
+        "title": "Кіріс",
+        "viewAll": "Барлығы"
       }
     },
     "imageCropper": {
-      "description": "Drag and scale the image",
-      "hint": "Drag image to position",
-      "reset": "Reset",
-      "title": "Image Settings",
-      "zoom": "Scale"
+      "description": "Кескінді сүйреп, масштабтаңыз",
+      "hint": "Кескінді орнына сүйреңіз",
+      "reset": "Қалпына келтіру",
+      "title": "Кескін параметрлері",
+      "zoom": "Масштаб"
     },
     "imageScales": {
-      "contain": "Fit (Contain)",
-      "cover": "Fill (Cover)",
-      "fill": "Stretch",
-      "tile": "Tile"
+      "contain": "Fit (құрамында)",
+      "cover": "Толтыру (мұқаба)",
+      "fill": "Созылу",
+      "tile": "Плитка"
     },
     "imageStyles": {
-      "banner": "Banner - Full Width",
-      "circle": "Circle - Round Crop",
-      "default": "Default - Rounded Corners",
-      "polaroid": "Polaroid - Vintage Frame",
-      "vignette": "Vignette - Soft Edges"
+      "banner": "Баннер - толық ені",
+      "circle": "Шеңбер - дөңгелек кесу",
+      "default": "Әдепкі - дөңгелектелген бұрыштар",
+      "polaroid": "Полароид - винтаждық жақтау",
+      "vignette": "Виньетка - жұмсақ жиектер"
     },
     "insights": {
-      "analyze": "Analysis",
-      "applied": "Insight applied",
-      "apply": "Apply",
-      "description": "Recommendations for improvement",
-      "empty": "Click",
-      "error": "Analysis error",
+      "analyze": "Талдау",
+      "applied": "Insight қолданылды",
+      "apply": "Қолдану",
+      "description": "Жақсарту бойынша ұсыныстар",
+      "empty": "басыңыз",
+      "error": "Талдау қатесі",
       "lowCTR": {
-        "description": "A bright button with a call to action will increase conversions",
-        "title": "Add a CTA button"
+        "description": "Әрекетке шақыру бар жарқын түйме конверсияны арттырады",
+        "title": "CTA түймесін қосыңыз"
       },
       "lowPerforming": {
-        "description": "Description",
-        "title": "Ineffective block"
+        "description": "Сипаттама",
+        "title": "Тиімсіз блок"
       },
       "lowViews": {
-        "description": "Pages with social networks receive 40% more clicks",
-        "title": "Add social networks"
+        "description": "Әлеуметтік желілері бар беттер 40%-ға көбірек клик алады",
+        "title": "Әлеуметтік желілерді қосыңыз"
       },
       "mobileOpt": {
-        "description": "80%+ of your audience uses phones",
-        "title": "Optimize for mobile"
+        "description": "Аудиторияңыздың 80%-дан астамы телефонды пайдаланады",
+        "title": "Ұялы телефон үшін оңтайландыру"
       },
-      "noInsights": "Your page is perfectly optimized!",
+      "noInsights": "Сіздің парақшаңыз тамаша оңтайландырылған!",
       "noProducts": {
-        "description": "Product pages monetize better",
-        "title": "Add a product or service"
+        "description": "Өнім беттері жақсырақ монетизацияланады",
+        "title": "Өнімді немесе қызметті қосыңыз"
       },
       "priority": {
-        "high": "Important",
-        "low": "Low",
-        "medium": "Average"
+        "high": "Маңызды",
+        "low": "Төмен",
+        "medium": "Орташа"
       },
-      "title": "AI Insights",
-      "undone": "Action canceled"
+      "title": "AI инсайттары",
+      "undone": "Әрекеттен бас тартылды"
     },
     "install": {
       "android": {
-        "step1": "Tap the browser menu (⋮) in the top right corner",
-        "step1desc": "Click on the three dots in the corner",
-        "step2": "Select \"Install app\" or \"Add to Home Screen\"",
-        "step2desc": "Select \"Install\" or \"To Home Screen\"",
-        "step3": "Confirm installation",
-        "step3desc": "Click \"Install\" in the pop-up window",
-        "title": "Instructions for Android"
+        "step1": "Жоғарғы оң жақ бұрыштағы шолғыш мәзірін (⋮) түртіңіз",
+        "step1desc": "Бұрыштағы үш нүктені басыңыз",
+        "step2": "«Қолданбаны орнату» немесе «Негізгі экранға қосу» таңдаңыз.",
+        "step2desc": "«Орнату» немесе «Негізгі экранға» таңдаңыз.",
+        "step3": "Орнатуды растаңыз",
+        "step3desc": "Қалқымалы терезеде «Орнату» түймесін басыңыз",
+        "title": "Android үшін нұсқаулар"
       },
-      "copyLink": "Copy link",
-      "description": "Install the LinkMAX.my application on your device for quick access",
+      "copyLink": "Сілтемені көшіру",
+      "description": "Жылдам қол жеткізу үшін құрылғыңызға LinkMAX.my қолданбасын орнатыңыз",
       "desktop": {
-        "installNow": "Install now",
-        "ready": "LinkMAX.my is ready to install!",
-        "step1": "Find the installation icon",
-        "step1desc": "It is usually located in the address bar (Chrome, Edge)",
-        "step2": "Click \"Install\"",
-        "step2desc": "Add LinkMAX.my to your desktop",
-        "title": "Instructions for Desktop",
-        "desc": "Look for the install icon in the browser address bar or select \"Install LinkMAX.my\" from the browser menu"
+        "installNow": "Қазір орнатыңыз",
+        "ready": "LinkMAX.my орнатуға дайын!",
+        "step1": "Орнату белгішесін табыңыз",
+        "step1desc": "Ол әдетте мекенжай жолағында (Chrome, Edge) орналасады.",
+        "step2": "«Орнату» түймесін басыңыз",
+        "step2desc": "Жұмыс үстеліңізге LinkMAX.my қосыңыз",
+        "title": "Жұмыс үстеліне арналған нұсқаулар",
+        "desc": "Браузердің мекенжай жолағында орнату белгішесін іздеңіз немесе шолғыш мәзірінен «Install LinkMAX.my» тармағын таңдаңыз"
       },
       "ios": {
-        "step1": "Tap the \"Share\" button ⬆️ at the bottom of Safari",
-        "step1desc": "Make sure you open the site in Safari",
-        "step2": "Scroll down and select \"Add to Home Screen\"",
-        "step2desc": "Safari bottom arrow button",
-        "step3": "Tap \"Add\" in the top right corner",
-        "step3desc": "Scroll down and select \"Add to Home Screen\"",
-        "title": "Instructions for iOS"
+        "step1": "Safari төменгі жағындағы \"Бөлісу\" түймесін ⬆️ түртіңіз",
+        "step1desc": "Сайтты Safari-де ашқаныңызға көз жеткізіңіз",
+        "step2": "Төмен жылжып, «Негізгі экранға қосу» опциясын таңдаңыз.",
+        "step2desc": "Safari төменгі көрсеткі түймесі",
+        "step3": "Жоғарғы оң жақ бұрыштағы «Қосу» түймесін түртіңіз",
+        "step3desc": "Төмен жылжып, «Негізгі экранға қосу» опциясын таңдаңыз.",
+        "title": "iOS үшін нұсқаулар"
       },
-      "later": "Later",
+      "later": "Кейінірек",
       "seo": {
-        "description": "Install LinkMAX as a PWA for quick access.",
-        "title": "Installing LinkMAX"
+        "description": "Жылдам қол жеткізу үшін LinkMAX бағдарламасын PWA ретінде орнатыңыз.",
+        "title": "LinkMAX орнатылуда"
       },
-      "subtitle": "Add the app to your home screen for a better experience",
-      "title": "Install LinkMAX.my",
-      "yourLink": "Your link:",
-      "backHome": "Back to home",
+      "subtitle": "Жақсырақ тәжірибе алу үшін қолданбаны негізгі экранға қосыңыз",
+      "title": "LinkMAX.my орнатыңыз",
+      "yourLink": "Сіздің сілтемеңіз:",
+      "backHome": "Үйге оралу",
       "features": {
-        "quickAccess": "Quick access",
-        "quickAccessDesc": "One-click launch from home screen",
-        "offline": "Offline mode",
-        "offlineDesc": "Access content without internet",
-        "native": "Native interface",
-        "nativeDesc": "Full-screen mode without browser"
+        "quickAccess": "Жылдам қол жеткізу",
+        "quickAccessDesc": "Негізгі экраннан бір рет басу арқылы іске қосу",
+        "offline": "Офлайн режимі",
+        "offlineDesc": "Интернетсіз мазмұнға қол жеткізіңіз",
+        "native": "Жергілікті интерфейс",
+        "nativeDesc": "Браузерсіз толық экран режимі"
       },
       "installed": {
-        "title": "App installed!",
-        "desc": "LinkMAX.my is ready. Find the icon on your home screen.",
-        "open": "Open app"
+        "title": "Қолданба орнатылды!",
+        "desc": "LinkMAX.my дайын. Негізгі экрандағы белгішені табыңыз.",
+        "open": "Қолданбаны ашыңыз"
       },
       "ready": {
-        "title": "Ready to install",
-        "desc": "Click the button below to install LinkMAX.my on your device",
-        "button": "Install now"
+        "title": "Орнатуға дайын",
+        "desc": "Құрылғыңызға LinkMAX.my орнату үшін төмендегі түймені басыңыз",
+        "button": "Қазір орнатыңыз"
       }
     },
     "kaspi": {
-      "amount": "Amount",
-      "comment": "Comment",
-      "commentPlaceholder": "Payment description",
-      "copyLink": "Copy Link",
-      "description": "Generate QR code for quick Kaspi payment",
-      "disclaimer": "Powered by Kaspi.kz payment system",
-      "downloadQR": "Download QR",
-      "enter_amount": "Enter amount to generate QR",
-      "generateQR": "Kaspi QR Payment",
-      "invalidAmount": "Invalid amount or missing owner ID",
-      "linkCopied": "Link copied to clipboard",
-      "pay": "Pay",
-      "paymentSimulated": "Payment successfully simulated and fee processed!",
-      "scanHint": "Scan with Kaspi app to pay",
-      "simulateMock": "Simulate Payment (Sandbox)",
-      "title": "Kaspi QR Payment"
+      "amount": "Сома",
+      "comment": "Түсініктеме",
+      "commentPlaceholder": "Төлем сипаттамасы",
+      "copyLink": "Сілтемені көшіру",
+      "description": "Kaspi жылдам төлемі үшін QR кодын жасаңыз",
+      "disclaimer": "Kaspi.kz төлем жүйесімен жұмыс істейді",
+      "downloadQR": "QR жүктеп алыңыз",
+      "enter_amount": "QR жасау үшін соманы енгізіңіз",
+      "generateQR": "Kaspi QR төлемі",
+      "invalidAmount": "Жарамсыз сома немесе иесінің идентификаторы жоқ",
+      "linkCopied": "Сілтеме алмасу буферіне көшірілді",
+      "pay": "Төлеу",
+      "paymentSimulated": "Төлем сәтті үлгіленді және комиссия өңделді!",
+      "scanHint": "Төлеу үшін Kaspi қолданбасымен сканерлеңіз",
+      "simulateMock": "Төлемді имитациялау (құмсалғыш)",
+      "title": "Kaspi QR төлемі"
     },
     "landingV1": {
-      "aiBuilderDesc": "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
-      "aiBuilderTitle": "AI Page Builder",
-      "aiBuilds": "AI builds everything",
-      "aiBuildsDesc": "Structure, copy, and design generated in seconds. No drag-and-drop hell.",
-      "aiGenerating": "AI Generating...",
+      "aiBuilderDesc": "Бизнесіңізді сипаттаңыз және біздің AI секундтар ішінде тамаша құрылымды, көшіруді және орналасуды жасайды.",
+      "aiBuilderTitle": "AI бет құрастырушы",
+      "aiBuilds": "AI бәрін жасайды",
+      "aiBuildsDesc": "Құрылым, көшірме және дизайн секундтарда жасалады. Сүйреп апаратын тозақ жоқ.",
+      "aiGenerating": "Жасалуда AI...",
       "aiPowered": "AI Powered",
       "bento": {
-        "aiDesc": "Skip months of development. Describe your offer, and AI builds structure, copy, and design instantly.",
-        "aiPowered": "AI-Powered",
-        "aiSub": "Structure • Copy • Design",
-        "aiTitle": "Launch in 2 Minutes",
-        "analyticsDesc": "Track every click and purchase without complex Google Analytics setups.",
+        "aiDesc": "Даму айларын өткізіп жіберіңіз. Ұсынысты сипаттаңыз және AI бірден құрылымды, көшіруді және дизайнды жасайды.",
+        "aiPowered": "AI-қуат",
+        "aiSub": "Құрылым • Көшіру • Дизайн",
+        "aiTitle": "2 минуттан кейін іске қосыңыз",
+        "analyticsDesc": "Күрделі Google Analytics орнатусыз әрбір шерту мен сатып алуды қадағалаңыз.",
         "analyticsTitle": "Instant Analytics",
-        "bookingDesc": "Let clients book slots directly. Automated calendar, zero phone calls.",
-        "bookingSlot": "Available",
-        "bookingTitle": "Online Booking",
-        "crmDesc": "A simple Kanban board. No monstrous interfaces that take weeks to learn.",
-        "crmDone": "Done",
-        "crmInProgress": "In Progress",
-        "crmNew": "New",
-        "crmTitle": "Pain-Free CRM",
-        "lead1": "New lead: Sarah K.",
-        "lead2": "New lead: Alex M.",
-        "leadCount": "+12 today",
-        "leadsDesc": "Get leads delivered straight to Telegram. Never miss a customer.",
-        "leadsTitle": "Instant Leads to Telegram",
-        "mobileDesc": "Manage your content and launch new products directly from your phone.",
-        "mobileTitle": "Total Freedom",
-        "sectionDesc": "Mini-landing + CRM + analytics. Works out of the box, no integrators needed.",
-        "sectionTitle": "Everything you need to launch"
+        "bookingDesc": "Клиенттерге слоттарға тікелей тапсырыс беріңіз. Автоматтандырылған күнтізбе, нөлдік телефон қоңыраулары.",
+        "bookingSlot": "Қол жетімді",
+        "bookingTitle": "Онлайн брондау",
+        "crmDesc": "Қарапайым Kanban тақтасы. Үйренуге апталар қажет болатын қорқынышты интерфейстер жоқ.",
+        "crmDone": "Дайын",
+        "crmInProgress": "Орындалуда",
+        "crmNew": "Жаңа",
+        "crmTitle": "Ауыртпайтын CRM",
+        "lead1": "Жаңа жетекші: Сара К.",
+        "lead2": "Жаңа жетекші: Алекс М.",
+        "leadCount": "+12 бүгін",
+        "leadsDesc": "Тікелей Telegram-ға жеткізілетін тұтынушыларды алыңыз. Ешқашан тұтынушыны жіберіп алмаңыз.",
+        "leadsTitle": "Telegram-ға лезде әкеледі",
+        "mobileDesc": "Мазмұныңызды басқарыңыз және жаңа өнімдерді тікелей телефоннан іске қосыңыз.",
+        "mobileTitle": "Толық еркіндік",
+        "sectionDesc": "Шағын десант + CRM + аналитика. Қораптан тыс жұмыс істейді, интеграторлар қажет емес.",
+        "sectionTitle": "Іске қосу үшін қажет нәрсенің бәрі"
       },
-      "chooseNiche": "Choose your niche",
-      "chooseNicheDesc": "Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.",
+      "chooseNiche": "Өз тауашаңызды таңдаңыз",
+      "chooseNicheDesc": "AI-ға не істейтініңізді айтыңыз. Сұлулық, крипто, коучинг - біз сіздің тіліңізде сөйлейміз.",
       "comparison": {
-        "ai": "AI page assembly",
-        "blockAnalytics": "Analytics by block",
-        "crm": "Mini-CRM for applications",
-        "feature": "Function",
-        "mobile": "Mobile editor",
-        "others": "Other",
-        "telegram": "Telegram notifications",
-        "title": "Why is a mini-site better than a link menu?"
+        "ai": "AI бет жинағы",
+        "blockAnalytics": "Блок бойынша талдау",
+        "crm": "Қолданбаларға арналған мини-CRM",
+        "feature": "Функция",
+        "mobile": "Мобильді редактор",
+        "others": "Басқа",
+        "telegram": "Telegram хабарламалары",
+        "title": "Неліктен шағын сайт сілтеме мәзірінен жақсы?"
       },
-      "deepAnalyticsDesc": "Track every click, view, and conversion with privacy-focused, real-time analytics.",
-      "deepAnalyticsTitle": "Deep Analytics",
+      "deepAnalyticsDesc": "Құпиялылыққа бағытталған, нақты уақыттағы аналитика арқылы әрбір басуды, көруді және түрлендіруді қадағалаңыз.",
+      "deepAnalyticsTitle": "Терең талдау",
       "demo": {
-        "addBlocks": "Add blocks",
-        "addBlocksHint": "Add blocks to see them here",
-        "aiGenerating": "AI is generating...",
-        "badge": "Try it now",
-        "chatMsg1": "Hi, I want to book a consultation!",
-        "chatMsg2": "Great! Let's schedule it.",
-        "dragToReorder": "drag to sort",
-        "iAmA": "I am a...",
-        "image": "Image",
-        "leadCaptured": "New lead captured",
-        "link": "Link",
-        "livePreview": "Preview",
+        "addBlocks": "Блоктарды қосыңыз",
+        "addBlocksHint": "Оларды осы жерден көру үшін блоктарды қосыңыз",
+        "aiGenerating": "AI жасайды ...",
+        "badge": "Қазір көріңіз",
+        "chatMsg1": "Сәлем, мен консультацияға тапсырыс бергім келеді!",
+        "chatMsg2": "Тамаша! Оны жоспарлап көрейік.",
+        "dragToReorder": "сұрыптау үшін сүйреңіз",
+        "iAmA": "Мен...",
+        "image": "Сурет",
+        "leadCaptured": "Жаңа ықтимал тұтынушы түсірілді",
+        "link": "Сілтеме",
+        "livePreview": "Алдын ала қарау",
         "nicheBeauty": "Beauty Blogger",
-        "nicheCreator": "Digital Creator",
-        "nicheCrypto": "Crypto Expert",
-        "nicheFitness": "Fitness Trainer",
-        "nicheMusic": "Music Producer",
-        "nicheTutor": "Online Tutor",
-        "noBlocks": "No blocks yet. Add higher!",
-        "profile": "Profile",
-        "socials": "Social networks",
-        "step1Desc": "Tell AI what you do. Beauty, crypto, coaching — we speak your language.",
-        "step1Title": "Choose your niche",
-        "step2Desc": "Structure, text, and design in seconds. No drag-and-drop.",
-        "step2Title": "AI builds everything",
-        "step3Desc": "Your page is live. Leads go straight to your DM. Close deals instantly.",
-        "step3Title": "Get leads in Telegram",
-        "subtitle": "Play with the editor right here. Add blocks, change content and see the changes in real time.",
-        "text": "Text",
-        "title": "Feel the magic.",
-        "yourBlocks": "Your blocks"
+        "nicheCreator": "Сандық жасаушы",
+        "nicheCrypto": "Крипто сарапшысы",
+        "nicheFitness": "Фитнес жаттықтырушысы",
+        "nicheMusic": "Музыкалық продюсер",
+        "nicheTutor": "Онлайн репетитор",
+        "noBlocks": "Әлі блоктар жоқ. Жоғарырақ қосыңыз!",
+        "profile": "Профиль",
+        "socials": "Әлеуметтік желілер",
+        "step1Desc": "AI-ға не істейтініңізді айтыңыз. Сұлулық, крипто, коучинг — біз сіздің тіліңізде сөйлейміз.",
+        "step1Title": "Өз тауашаңызды таңдаңыз",
+        "step2Desc": "Құрылым, мәтін және дизайн секундтарда. Сүйреп апару мүмкіндігі жоқ.",
+        "step2Title": "AI бәрін жасайды",
+        "step3Desc": "Сіздің парақшаңыз белсенді. Жетекшілер тікелей сіздің DM-ге түседі. Мәмілелерді дереу жабыңыз.",
+        "step3Title": "Telegram-да көшбасшыларды алыңыз",
+        "subtitle": "Редактормен дәл осы жерде ойнаңыз. Блоктарды қосыңыз, мазмұнды өзгертіңіз және нақты уақытта өзгерістерді көріңіз.",
+        "text": "Мәтін",
+        "title": "Сиқырды сезін.",
+        "yourBlocks": "Сіздің блоктарыңыз"
       },
       "faq": {
-        "badge": "Questions and answers",
+        "badge": "Сұрақтар мен жауаптар",
         "q1": {
-          "answer": "LinkMAX is an AI link in bio and mini-site builder that helps you put together one clear page for links, services, entries and applications.",
-          "question": "What is LinkMAX and what is it for?"
+          "answer": "LinkMAX – сілтемелер, қызметтер, жазбалар және қолданбалар үшін бір нақты бетті біріктіруге көмектесетін био және шағын сайт құрастырушыдағы AI сілтемесі.",
+          "question": "LinkMAX дегеніміз не және ол не үшін қажет?"
         },
         "q10": {
-          "answer": "Returns are possible within 14 days from the date of payment in accordance with the legislation of the Republic of Kazakhstan. More details in the user agreement.",
-          "question": "What are the refund conditions?"
+          "answer": "Қайтару Қазақстан Республикасының заңнамасына сәйкес төлем жасалған күннен бастап 14 күн ішінде мүмкін. Қосымша мәліметтер пайдаланушы келісімінде.",
+          "question": "Қайтару шарттары қандай?"
         },
         "q11": {
-          "answer": "Yes. The gallery contains real pages from different niches: specialists, stores, services and creators.",
-          "question": "Can I see sample pages?"
+          "answer": "Иә. Галереяда әртүрлі тауашалардағы нақты беттер бар: мамандар, дүкендер, қызметтер және жасаушылар.",
+          "question": "Үлгі беттерді көре аламын ба?"
         },
         "q12": {
-          "answer": "LinkMAX has AI page builder, CRM and notifications. Plus flexible blocks, clear tariffs and local languages.",
-          "question": "How is LinkMAX different from Linktree and Taplink?"
+          "answer": "LinkMAX-те AI бет құрастырушы, CRM және хабарландырулар бар. Плюс икемді блоктар, түсінікті тарифтер және жергілікті тілдер.",
+          "question": "LinkMAX-тың Linktree және Taplink-тен айырмашылығы неде?"
         },
         "q13": {
-          "answer": "Yes. You can add a catalog, price list, application forms and contact buttons so that the client can quickly place an order or record.",
-          "question": "Is LinkMAX suitable for a store or service?"
+          "answer": "Иә. Клиент тапсырысты немесе жазбаны жылдам орналастыра алатындай етіп каталогты, прайс-парақшаны, өтінім пішіндерін және байланыс түймелерін қосуға болады.",
+          "question": "LinkMAX дүкен немесе қызмет үшін жарамды ма?"
         },
         "q14": {
-          "answer": "Yes, custom domains and page branding are available in Pro.",
-          "question": "Can I connect my domain?"
+          "answer": "Иә, пайдаланушы домендері мен бет бренді Pro бағдарламасында қол жетімді.",
+          "question": "Мен өз доменімді қоса аламын ба?"
         },
         "q2": {
-          "answer": "The basic plan is free forever. Pro: 3 months - 4,350в‚ё/month, 6 months - 3,698в‚ё/month (-15%), 12 months - 3,045в‚ё/month (-30%). Payment online, refund within 14 days.",
-          "question": "How much does it cost to use LinkMAX?"
+          "answer": "Негізгі жоспар мәңгілікке тегін. Pro: 3 ай - 4,350в‚ё/ай, 6 ай - 3,698в‚ё/ай (-15%), 12 ай - 3,045в‚ё/ай (-30%). Онлайн төлем, 14 күн ішінде қайтару.",
+          "question": "LinkMAX пайдалану қанша тұрады?"
         },
         "q3": {
-          "answer": "Choose a niche and write a few facts about yourself - AI will collect the structure, texts and CTA in a couple of minutes. The free plan has 1 generation/month, the Pro plan has 5 generations/month.",
-          "question": "How does AI page generation work?"
+          "answer": "Тауашаны таңдаңыз және өзіңіз туралы бірнеше фактілер жазыңыз - AI бірнеше минут ішінде құрылымды, мәтіндерді және CTA жинайды. Тегін жоспарда 1 буын/ай, Pro жоспарында 5 ұрпақ/ай бар.",
+          "question": "AI беттерін құру қалай жұмыс істейді?"
         },
         "q4": {
-          "answer": "20+ types of blocks: profile, links, buttons, images, videos, carousels, products, price lists, forms, maps, messengers, reviews, FAQ, timers and more.",
-          "question": "What blocks are available for the page?"
+          "answer": "20+ блок түрлері: профиль, сілтемелер, түймелер, суреттер, бейнелер, карусельдер, өнімдер, прайс-парақшалар, пішіндер, карталар, хабаршылар, шолулар, жиі қойылатын сұрақтар, таймерлер және т.б.",
+          "question": "Бет үшін қандай блоктар бар?"
         },
         "q5": {
-          "answer": "Yes. Pro has lead CRM and Telegram notifications. Analytics shows clicks, traffic sources and visitor behavior.",
-          "question": "Do you have CRM and analytics?"
+          "answer": "Иә. Pro-да жетекші CRM және Telegram хабарландырулары бар. Analytics кликтерді, трафик көздерін және келушілердің әрекетін көрсетеді.",
+          "question": "Сізде CRM және аналитика бар ма?"
         },
         "q6": {
-          "answer": "Yes. You can edit the page directly from your smartphone.",
-          "question": "Is the mobile editor supported?"
+          "answer": "Иә. Бетті тікелей смартфоннан өңдеуге болады.",
+          "question": "Мобильді редакторға қолдау көрсетіледі ме?"
         },
         "q7": {
-          "answer": "Telegram for lead notifications and Google Calendar for scheduling. Social networks and instant messengers are available as blocks.",
-          "question": "What integrations does LinkMAX support?"
+          "answer": "Жетекші хабарландырулар үшін Telegram және жоспарлау үшін Google Calendar. Әлеуметтік желілер мен мессенджерлер блоктар ретінде қол жетімді.",
+          "question": "LinkMAX қандай интеграцияларды қолдайды?"
         },
         "q8": {
-          "answer": "No. 0% commission on your sales - you only pay for the subscription.",
-          "question": "Does LinkMAX take a commission on sales?"
+          "answer": "Сатылымыңыздан 0% комиссия жоқ - сіз тек жазылым үшін төлейсіз.",
+          "question": "LinkMAX сатудан комиссия алады ма?"
         },
         "q9": {
-          "answer": "Payment by card and through available payment methods. You can also use tokens (100 tokens = 1 day Pro).",
-          "question": "How to pay for Pro subscription?"
+          "answer": "Карточкамен және қолжетімді төлем әдістерімен төлеу. Токендерді де пайдалануға болады (100 токен = 1 күндік Pro).",
+          "question": "Pro жазылымын қалай төлеуге болады?"
         },
-        "subtitle": "Answers to popular questions about LinkMAX",
-        "title": "Frequently Asked Questions"
+        "subtitle": "LinkMAX туралы танымал сұрақтарға жауаптар",
+        "title": "Жиі қойылатын сұрақтар"
       },
       "featured": {
-        "badge": "Top creators",
-        "subtitle": "Discover the most popular pages created with LinkMAX.my",
-        "title": "Recommended Pages",
-        "viewAll": "View all pages"
+        "badge": "Үздік авторлар",
+        "subtitle": "LinkMAX.my арқылы жасалған ең танымал беттерді табыңыз",
+        "title": "Ұсынылатын беттер",
+        "viewAll": "Барлық беттерді көру"
       },
       "features": {
         "ai": {
-          "item1": "First screen with promise of result and CTA",
-          "item2": "Price list or service packages without manual layout",
-          "item3": "Application form and contacts on one page",
-          "title": "A page with a clear offer"
+          "item1": "Нәтиже және CTA уәдесі бар бірінші экран",
+          "item2": "Қолмен орналасусыз бағалар тізімі немесе қызмет пакеттері",
+          "item3": "Өтініш формасы мен контактілер бір бетте",
+          "title": "Нақты ұсынысы бар бет"
         },
         "analytics": {
-          "item1": "Views and clicks on blocks",
-          "item2": "Traffic sources, devices",
-          "item3": "Tips on what to improve next",
-          "title": "Understanding what works"
+          "item1": "Блоктарды көру және басу",
+          "item2": "Трафик көздері, құрылғылар",
+          "item3": "Келесіде нені жақсарту керектігі туралы кеңестер",
+          "title": "Не істейтінін түсіну"
         },
         "crm": {
-          "item1": "Mini-CRM: leads, statuses, notes",
-          "item2": "Notifications about applications in Telegram",
-          "item3": "Quick replies and communication history",
-          "title": "Leads and order"
+          "item1": "Мини-CRM: жетекшілер, күйлер, ескертпелер",
+          "item2": "Telegram қолданбалары туралы хабарландырулар",
+          "item3": "Жылдам жауаптар және байланыс тарихы",
+          "title": "Жетекші және тапсырыс"
         },
-        "title": "What will you get in the first version"
+        "title": "Бірінші нұсқада не аласыз"
       },
       "finalCta": {
-        "description": "Don't lose clients in correspondence. Give them a clear path: who you are - how you help - how much it costs - sign up.",
-        "primaryCta": "Create a page for free",
-        "secondaryCta": "View examples",
-        "title": "Build a page that leads to an application in 2 minutes"
+        "description": "Клиенттерді хат алмасуда жоғалтпаңыз. Оларға нақты жол көрсетіңіз: сіз кімсіз - қалай көмектесесіз - бұл қанша тұрады - тіркеліңіз.",
+        "primaryCta": "Тегін бет жасаңыз",
+        "secondaryCta": "Мысалдар көру",
+        "title": "2 минут ішінде қолданбаға апаратын бетті жасаңыз"
       },
       "floatingCta": {
-        "create": "Create"
+        "create": "Жасау"
       },
       "footer": {
-        "alternatives": "Comparison",
+        "alternatives": "Салыстыру",
         "copyright": "В© 2025 LinkMAX"
       },
       "forWhom": {
         "beauty": {
-          "desc": "Recording, reviews, map",
-          "title": "Beauty and services"
+          "desc": "Жазу, шолу, карта",
+          "title": "Сұлулық және қызметтер"
         },
         "business": {
-          "desc": "Catalog, leads, analytics",
-          "title": "Small business"
+          "desc": "Каталог, жетекшілер, аналитика",
+          "title": "Шағын бизнес"
         },
         "expert": {
-          "desc": "Services, cases, clear offer",
-          "title": "Experts and mentors"
+          "desc": "Қызметтер, істер, нақты ұсыныс",
+          "title": "Сарапшылар мен тәлімгерлер"
         },
         "freelancer": {
-          "desc": "Portfolio, brief, applications",
-          "title": "Freelancers"
+          "desc": "Портфолио, қысқаша, қосымшалар",
+          "title": "Фрилансерлер"
         },
-        "title": "Who is LinkMAX suitable for?"
+        "title": "LinkMAX кімге жарамды?"
       },
       "gallery": {
-        "badge": "Examples",
-        "subtitle": "See how other experts and brands use LinkMAX.my",
-        "title": "Gallery of the best pages",
-        "viewAll": "Open gallery"
+        "badge": "Мысалдар",
+        "subtitle": "Басқа сарапшылар мен брендтердің LinkMAX.my қалай пайдаланатынын қараңыз",
+        "title": "Ең жақсы беттер галереясы",
+        "viewAll": "Галереяны ашу"
       },
-      "getLeads": "Get leads in Telegram",
-      "getLeadsDesc": "Your page is live. Leads come straight to your DM. Close them instantly.",
-      "growDesc": "Powerful features wrapped in a beautiful, easy-to-use interface.",
-      "growTitle": "Everything you need to grow",
+      "getLeads": "Telegram-да көшбасшыларды алыңыз",
+      "getLeadsDesc": "Сіздің парақшаңыз белсенді. Жетекшілер сіздің DM-ге тікелей келеді. Оларды дереу жабыңыз.",
+      "growDesc": "Әдемі, қолдануға оңай интерфейске оралған қуатты мүмкіндіктер.",
+      "growTitle": "Өсу үшін қажет нәрсенің бәрі",
       "hero": {
-        "aiHelps": "AI helps",
-        "badge": "AI mini-site builder",
-        "benefit1": "AI collects the structure and texts of the first screen",
-        "benefit2": "Applications arrive in mini-CRM and Telegram",
-        "benefit3": "Analytics shows which blocks provide leads",
-        "createPage": "Create a page",
-        "description": "For beauty professionals, experts and small businesses. AI designer + AI copywriter + Mini-CRM + Telegram notifications about new clients.",
-        "free": "For free",
-        "mainHighlight": "One link - a clear path to the recording",
-        "mainTitle": "Mini-site that generates applications in 2 minutes",
-        "microNote": "Free start. Editor on the phone. Publishing in one click.",
-        "noCode": "No code",
-        "pricingCta": "Compare rates",
-        "primaryCta": "Create a page for free",
-        "secondaryCta": "View examples",
-        "title": "AI page in a minute,",
-        "titleHighlight": "which collects applications",
-        "usernamePlaceholder": "yourname",
-        "valueProposition": "AI constructor for experts, freelancers and small businesses. Create a page, price list, forms and contacts without a designer or code.",
-        "viewExamples": "View examples"
+        "aiHelps": "AI көмектеседі",
+        "badge": "AI шағын сайт құрастырушысы",
+        "benefit1": "AI бірінші экранның құрылымы мен мәтіндерін жинайды",
+        "benefit2": "Өтініштер mini-CRM және Telegram арқылы келеді",
+        "benefit3": "Аналитика қандай блоктар ықтималдылықты қамтамасыз ететінін көрсетеді",
+        "createPage": "Бет жасау",
+        "description": "Сұлулық мамандары, сарапшылар және шағын бизнес үшін. AI дизайнері + AI копирайтер + Mini-CRM + жаңа клиенттер туралы Telegram хабарландырулары.",
+        "free": "Тегін",
+        "mainHighlight": "Бір сілтеме - жазбаға анық жол",
+        "mainTitle": "2 минут ішінде қолданбаларды жасайтын шағын сайт",
+        "microNote": "Еркін бастау. Телефондағы редактор. Бір рет басу арқылы жариялау.",
+        "noCode": "Код жоқ",
+        "pricingCta": "Тарифтерді салыстыру",
+        "primaryCta": "Тегін бет жасаңыз",
+        "secondaryCta": "Мысалдар көру",
+        "title": "Бір минутта AI беті,",
+        "titleHighlight": "ол қолданбаларды жинайды",
+        "usernamePlaceholder": "сіздің атыңыз",
+        "valueProposition": "Сарапшыларға, фрилансерлерге және шағын бизнеске арналған AI конструкторы. Дизайнер немесе кодсыз бетті, бағалар тізімін, пішіндерді және контактілерді жасаңыз.",
+        "viewExamples": "Мысалдар көру"
       },
       "howItWorks": {
-        "badge": "1 minute to result",
-        "cta": "Try for free",
-        "title": "How it works"
+        "badge": "Нәтижеге 1 минут қалды",
+        "cta": "Тегін көріңіз",
+        "title": "Ол қалай жұмыс істейді"
       },
-      "iAmA": "I am a...",
-      "instantLeadsDesc": "Get leads delivered straight to Telegram. No more missing customers.",
-      "instantLeadsTitle": "Instant Leads",
-      "leadMsg1": "Hey, I want to book a consultation!",
-      "leadMsg2": "Awesome! Let's",
+      "iAmA": "Мен...",
+      "instantLeadsDesc": "Тікелей Telegram-ға жеткізілетін тұтынушыларды алыңыз. Жоғалған тұтынушылар жоқ.",
+      "instantLeadsTitle": "Лездік тұтынушылар",
+      "leadMsg1": "Эй, мен консультацияға тапсырыс бергім келеді!",
+      "leadMsg2": "Керемет! Алайық",
       "linkInBio": {
-        "benefit1": "All links in one place",
-        "benefit2": "AI creates content",
-        "benefit3": "Click analytics",
-        "benefit4": "No commissions",
-        "benefit5": "Your own domain",
-        "benefit6": "Mobile editor",
-        "keywords": "Keywords: links page, link in bio, link in bio, multilink, linktree alternative, taplink analogue, mini-landing",
-        "p1": "Link-in-Bio (link in bio, multi-link) is a page that you place in the profile description of Instagram, TikTok, YouTube or Telegram. Instead of one link, you get a full-fledged mini-landing page with buttons, contacts and even a product catalog.",
-        "p2": "LinkMAX.my is a modern alternative to Linktree and Taplink with AI content generation. You choose a niche (barber, photographer, trainer, psychologist), and artificial intelligence creates a ready-made page in 2 minutes: with a profile, the necessary blocks and texts.",
-        "p3": "Unlike our competitors, we do not take a commission on your sales. All money from goods and services is yours. And built-in analytics and CRM help you understand which links work best.",
-        "subtitle": "A links page is a mini-site that brings together all your resources: social networks, instant messengers, portfolio, products and services",
-        "title": "What is Link-in-Bio and why is it needed?"
+        "benefit1": "Барлық сілтемелер бір жерде",
+        "benefit2": "AI мазмұнды жасайды",
+        "benefit3": "Аналитика түймесін басыңыз",
+        "benefit4": "Комиссиялар жоқ",
+        "benefit5": "Сіздің жеке доменіңіз",
+        "benefit6": "Мобильді редактор",
+        "keywords": "Түйін сөздер: сілтемелер беті, биодағы сілтеме, биодағы сілтеме, мультисілтеме, сілтеме ағашының баламасы, түртпе сілтеменің аналогы, шағын қону",
+        "p1": "Link-in-Bio (биодағы сілтеме, мульти-сілтеме) - Instagram, TikTok, YouTube немесе Telegram профиль сипаттамасында орналастыратын бет. Бір сілтеменің орнына сіз түймелері, контактілері және тіпті өнім каталогы бар толыққанды мини-қону бетін аласыз.",
+        "p2": "LinkMAX.my – AI мазмұнын жасау арқылы Linktree және Taplink-ке заманауи балама. Сіз тауашаны таңдайсыз (шаштараз, фотограф, жаттықтырушы, психолог), жасанды интеллект 2 минут ішінде дайын бетті жасайды: профиль, қажетті блоктар мен мәтіндер.",
+        "p3": "Бәсекелестерден айырмашылығы, біз сіздің сатылымдарыңыздан комиссия алмаймыз. Тауарлар мен қызметтерден түсетін барлық ақша сіздікі. Ал кірістірілген аналитика және CRM қай сілтемелердің жақсы жұмыс істейтінін түсінуге көмектеседі.",
+        "subtitle": "Сілтемелер беті - бұл сіздің барлық ресурстарыңызды біріктіретін шағын сайт: әлеуметтік желілер, жедел хабаршылар, портфолио, өнімдер мен қызметтер",
+        "title": "Link-in-Bio дегеніміз не және ол не үшін қажет?"
       },
-      "mobileEditorDesc": "Edit your page from your phone. Full power in your pocket.",
-      "mobileEditorTitle": "Mobile First Editor",
+      "mobileEditorDesc": "Бетіңізді телефоннан өңдеңіз. Толық қуат қалтаңызда.",
+      "mobileEditorTitle": "Мобильді бірінші редактор",
       "nav": {
-        "examples": "Examples",
-        "gallery": "Gallery",
-        "getStarted": "Create",
-        "signIn": "Login"
+        "examples": "Мысалдар",
+        "gallery": "Галерея",
+        "getStarted": "Жасау",
+        "signIn": "Жүйеге кіру"
       },
-      "newLead1": "New lead: Sarah K.",
-      "newLead2": "New lead: Alex M.",
-      "newLeadCaptured": "New Lead Captured",
-      "newLeadsToday": "+12 today",
+      "newLead1": "Жаңа жетекші: Сара К.",
+      "newLead2": "Жаңа жетекші: Алекс М.",
+      "newLeadCaptured": "Жаңа жетекші түсірілді",
+      "newLeadsToday": "+12 бүгін",
       "nicheBeauty": "Beauty Blogger",
-      "nicheCreator": "Digital Creator",
-      "nicheCrypto": "Crypto Expert",
-      "nicheFitness": "Fitness Coach",
-      "nicheMusic": "Music Producer",
-      "nicheTutor": "Online Tutor",
+      "nicheCreator": "Сандық жасаушы",
+      "nicheCrypto": "Крипто сарапшысы",
+      "nicheFitness": "Фитнес жаттықтырушы",
+      "nicheMusic": "Музыкалық продюсер",
+      "nicheTutor": "Онлайн репетитор",
       "niches": {
         "agency": {
-          "benefit": "Page in 1 day",
-          "pain": "Website - expensive and time-consuming",
-          "title": "Agency"
+          "benefit": "Бет 1 күнде",
+          "pain": "Веб-сайт - қымбат және көп уақытты қажет етеді",
+          "title": "Агенттік"
         },
         "barber": {
-          "benefit": "Online registration",
-          "pain": "Clients write to make an appointment",
-          "title": "Barber"
+          "benefit": "Онлайн тіркеу",
+          "pain": "Клиенттер кездесуге жазылу үшін жазады",
+          "title": "Шаштараз"
         },
         "beauty": {
-          "benefit": "Price + entry",
-          "pain": "Sends prices in DM",
-          "title": "Beauty Master"
+          "benefit": "Баға + кіру",
+          "pain": "Бағаларды DM арқылы жібереді",
+          "title": "Сұлулық шебері"
         },
         "cafe": {
-          "benefit": "Online menu",
-          "pain": "Menu in PDF",
-          "title": "Cafe"
+          "benefit": "Онлайн мәзір",
+          "pain": "PDF форматындағы мәзір",
+          "title": "Кафе"
         },
         "clinic": {
-          "benefit": "Catalog + map",
-          "pain": "Patients do not find services",
-          "title": "Clinic"
+          "benefit": "Каталог + карта",
+          "pain": "Науқастар қызметтерді таба алмайды",
+          "title": "Клиника"
         },
-        "cta": "Create a page for my niche",
+        "cta": "Менің тауашасыма бет жасаңыз",
         "designer": {
-          "benefit": "Free showcase",
-          "pain": "Portfolio website is expensive",
-          "title": "Designer"
+          "benefit": "Тегін көрме",
+          "pain": "Портфолио веб-сайты қымбат",
+          "title": "Дизайнер"
         },
         "fitness": {
-          "benefit": "Schedule + form",
-          "pain": "Collects records manually",
-          "title": "Fitness trainer"
+          "benefit": "Кесте + пішін",
+          "pain": "Жазбаларды қолмен жинайды",
+          "title": "Фитнес жаттықтырушысы"
         },
         "musician": {
-          "benefit": "Everything in one link",
-          "pain": "Music is scattered across platforms",
-          "title": "Musician"
+          "benefit": "Барлығы бір сілтемеде",
+          "pain": "Музыка платформалар бойынша шашыраңқы",
+          "title": "Музыкант"
         },
         "photographer": {
-          "benefit": "One page gallery",
-          "pain": "Portfolio scattered",
-          "title": "Photographer"
+          "benefit": "Бір беттік галерея",
+          "pain": "Портфолио шашыраңқы",
+          "title": "Фотограф"
         },
         "psychologist": {
-          "benefit": "Offer + experience",
-          "pain": "Wants to sell consultations",
-          "title": "Psychologist"
+          "benefit": "Ұсыныс + тәжірибе",
+          "pain": "Консультацияларды сатқысы келеді",
+          "title": "Психолог"
         },
         "shop": {
-          "benefit": "Mini store",
-          "pain": "Instagram as a catalog",
-          "title": "Shop"
+          "benefit": "Шағын дүкен",
+          "pain": "Instagram каталог ретінде",
+          "title": "Дүкен"
         },
-        "subtitle": "We have created special templates for each niche. AI knows the pain points of your audience and creates a page tailored to your needs",
-        "title": "Who is LinkMAX.my suitable for?",
+        "subtitle": "Біз әр тауаша үшін арнайы шаблондар жасадық. Жасанды интеллект сіздің аудиторияңыздың ауырсынуын біледі және сіздің қажеттіліктеріңізге бейімделген бет жасайды",
+        "title": "LinkMAX.my кімге жарамды?",
         "tutor": {
-          "benefit": "Formats + application",
-          "pain": "Looking for students on social networks",
-          "title": "Tutor"
+          "benefit": "Форматтар + қолданба",
+          "pain": "Әлеуметтік желіде студенттерді іздеу",
+          "title": "Тәрбиеші"
         }
       },
       "partners": {
-        "title": "They trust us"
+        "title": "Олар бізге сенеді"
       },
       "premiumValue": {
         "ai": {
-          "description": "Generation of texts, headlines, product descriptions - without restrictions. AI copywriter works for you.",
-          "title": "Unlimited AI"
+          "description": "Мәтіндерді, тақырыптарды, өнім сипаттамаларын құру - шектеусіз. AI копирайтер сіз үшін жұмыс істейді.",
+          "title": "Шексіз AI"
         },
         "analytics": {
-          "description": "Which links are clicked more often, where clients come from, at what time the activity is highest.",
-          "title": "Advanced Analytics"
+          "description": "Қай сілтемелер жиі басылады, клиенттер қайдан келеді, қай уақытта белсенділік жоғары.",
+          "title": "Жетілдірілген аналитика"
         },
-        "badge": "Premium - more money",
+        "badge": "Премиум - көп ақша",
         "bonus": {
-          "scheduler": "Block Scheduler",
-          "themes": "Premium Themes and Animations",
-          "video": "Video and media blocks"
+          "scheduler": "Блокты жоспарлаушы",
+          "themes": "Премиум тақырыптар мен анимациялар",
+          "video": "Бейне және медиа блоктары"
         },
-        "bonusTitle": "And also nice bonuses:",
+        "bonusTitle": "Сондай-ақ жақсы бонустар:",
         "crm": {
-          "description": "All requests from the form automatically go into the CRM. Statuses: new → in progress → completed. No more Excel.",
-          "title": "Mini-CRM"
+          "description": "Пішіндегі барлық сұраулар автоматты түрде CRM жүйесіне түседі. Күйлер: жаңа → орындалуда → аяқталды. Енді Excel жоқ.",
+          "title": "Мини-CRM"
         },
-        "cta": "Try Premium",
-        "price": "From 3,045 в‚ё/month when paid annually (~$6)",
-        "subtitle": "Not visual decorations, but tools for making money",
+        "cta": "Premium қолданбасын қолданып көріңіз",
+        "price": "Жыл сайын төленген кезде айына 3,045 в‚ё бастап (~$6)",
+        "subtitle": "Көрнекі әшекейлер емес, ақша табу құралдары",
         "telegram": {
-          "description": "Instant message in Telegram when a client leaves a request. Don't miss a single lead.",
-          "title": "Telegram notifications"
+          "description": "Клиент сұрауды қалдырған кезде Telegram-дағы жедел хабар. Бір жетекшіні жіберіп алмаңыз.",
+          "title": "Telegram хабарламалары"
         },
-        "title": "Why pay for Premium"
+        "title": "Неліктен Premium үшін төлеу керек"
       },
       "pricing": {
         "aiPowered": "AI Powered",
-        "b1": "Everything in Pro, plus:",
-        "b2": "Business Zones (workspaces)",
-        "b3": "Team CRM & Kanban",
-        "b4": "Team chat & tasks",
-        "b5": "Roles & access control",
-        "b6": "Up to 5 team members",
-        "billedOnce": "once",
-        "billedYearly": "Billed {{price}} yearly",
-        "businessCta": "Start Business",
-        "businessName": "Business",
+        "b1": "Барлығы Pro-да, сонымен қатар:",
+        "b2": "Бизнес аймақтары (жұмыс кеңістіктері)",
+        "b3": "CRM және Kanban командасы",
+        "b4": "Топтық чат және тапсырмалар",
+        "b5": "Рөлдер және қатынасты басқару",
+        "b6": "Команданың 5 мүшесіне дейін",
+        "billedOnce": "бір рет",
+        "billedYearly": "Жыл сайын {{price}} төленеді",
+        "businessCta": "Бизнес бастау",
+        "businessName": "Бизнес",
         "calculator": {
-          "avgCheck": "Average Check ($)",
-          "competitorCost": "Competitor Cost (7% - 10%):",
-          "conversion": "Conversion Rate (%)",
-          "leads": "Monthly Leads",
-          "linkmaxCost": "LinkMAX Cost:",
-          "revenue": "Your Revenue:",
-          "savings": "Your Savings:",
-          "title": "Profitability Calculator"
+          "avgCheck": "Орташа чек ($)",
+          "competitorCost": "Бәсеке құны (7% - 10%):",
+          "conversion": "Конверсия жылдамдығы (%)",
+          "leads": "Ай сайынғы мүмкіндіктер",
+          "linkmaxCost": "LinkMAX құны:",
+          "revenue": "Сіздің табысыңыз:",
+          "savings": "Сіздің жинақтарыңыз:",
+          "title": "Табыстылық калькуляторы"
         },
-        "f1": "All blocks without limits",
-        "f2": "Online booking & mini-CRM",
-        "f3": "Instant leads to Telegram",
-        "f4": "Sell products & event tickets",
-        "f5": "Built-in QR scanner",
-        "f6": "Advanced analytics & reports",
-        "freeCta": "Start for free",
-        "month": "mo",
-        "monthly": "Monthly",
-        "newBadge": "NEW",
-        "perMonth": "month",
-        "popular": "POPULAR",
-        "proCta": "Start Pro Trial",
+        "f1": "Барлық блоктар шектеусіз",
+        "f2": "Онлайн брондау және мини-CRM",
+        "f3": "Instant Telegram-ға апарады",
+        "f4": "Өнімдер мен оқиға билеттерін сатыңыз",
+        "f5": "Кірістірілген QR сканері",
+        "f6": "Жетілдірілген аналитика және есептер",
+        "freeCta": "Тегін бастаңыз",
+        "month": "ай",
+        "monthly": "Ай сайын",
+        "newBadge": "ЖАҢА",
+        "perMonth": "ай",
+        "popular": "ТАНЫМАЛ",
+        "proCta": "Pro сынақ нұсқасын іске қосыңыз",
         "proName": "Pro",
         "save": "-30%",
-        "subtitle": "Start for free. Upgrade when you're ready to scale.",
-        "teamLabel": "Team",
-        "title": "Simple Pricing,",
-        "titleHighlight": "Exponential Growth",
-        "total": "Total",
-        "yearly": "Yearly"
+        "subtitle": "Тегін бастаңыз. Масштабтауға дайын болғанда жаңартыңыз.",
+        "teamLabel": "Команда",
+        "title": "Қарапайым баға белгілеу,",
+        "titleHighlight": "Экспоненциалды өсу",
+        "total": "Барлығы",
+        "yearly": "Жыл сайын"
       },
       "pricingLegacy": {
-        "annualPriceKzt": "36,540 в‚ё for 12 months",
-        "annualPriceUsd": "$71/year",
-        "bestValue": "Best price",
-        "billedOnce": "one-time",
-        "forever": "Forever",
+        "annualPriceKzt": "12 айға 36 540 в‚ё",
+        "annualPriceUsd": "$71/жыл",
+        "bestValue": "Ең жақсы баға",
+        "billedOnce": "бір реттік",
+        "forever": "Мәңгі",
         "free": {
-          "item1": "6 base blocks",
-          "item2": "1 AI generation/month",
-          "item3": "Basic analytics"
+          "item1": "6 негізгі блок",
+          "item2": "1 AI ұрпағы/ай",
+          "item3": "Негізгі аналитика"
         },
-        "freeAction": "Start for free",
-        "month": "months",
-        "otherPlans": "Other options:",
-        "otherPlansSix": "6 months: 3,698 в‚ё/month (-15%)",
-        "otherPlansThree": "3 months: 4,350 в‚ё/month",
+        "freeAction": "Тегін бастаңыз",
+        "month": "айлар",
+        "otherPlans": "Басқа опциялар:",
+        "otherPlansSix": "6 ай: 3,698 в‚ё/ай (-15%)",
+        "otherPlansThree": "3 ай: 4 350 в‚ё/ай",
         "pro": {
-          "item1": "Unlimited blocks and templates",
-          "item2": "5 AI generations/month",
-          "item3": "CRM + Telegram notifications",
-          "item4": "Advanced Analytics",
-          "item5": "Without watermark"
+          "item1": "Шексіз блоктар мен шаблондар",
+          "item2": "AI 5 ұрпағы/ай",
+          "item3": "CRM + Telegram хабарландырулары",
+          "item4": "Жетілдірілген аналитика",
+          "item5": "Су таңбасы жоқ"
         },
-        "subtitle": "Start for free and upgrade when you need more",
-        "title": "Tariffs",
-        "total": "Total",
-        "viewPlans": "Select Pro"
+        "subtitle": "Тегін бастаңыз және қажет болғанда жаңартыңыз",
+        "title": "Тарифтер",
+        "total": "Барлығы",
+        "viewPlans": "Pro таңдаңыз"
       },
       "problem": {
-        "item1": "There is chaos in bio: price list, recording and cases are scattered across posts and links",
-        "item2": "People ask the same questions, and you answer manually and waste time",
-        "item3": "The page turns into a menu of links rather than a path to the post",
-        "item4": "There is no understanding: what people actually click on and where attention is lost",
-        "solution": "LinkMAX makes one clear page where the visitor quickly understands who you are, how you are useful, how much it costs, and where to click to apply. And you see leads and analytics in one place.",
-        "title": "Why are applications getting lost today?"
+        "item1": "Биода хаос бар: прайс-парақ, жазба және істер хабарламалар мен сілтемелер бойынша шашыраңқы",
+        "item2": "Адамдар бірдей сұрақтар қояды, ал сіз қолмен жауап бересіз және уақытты босқа өткізесіз",
+        "item3": "Бет жазбаға жол емес, сілтемелер мәзіріне айналады",
+        "item4": "Түсіну жоқ: адамдар нені басады және назар қайда жоғалады",
+        "solution": "LinkMAX келуші сіздің кім екеніңізді, қаншалықты пайдалы екеніңізді, қанша тұратынын және өтініш беру үшін қайда басу керектігін тез түсінетін бір нақты бет жасайды. Сіз көшбасшылар мен аналитиканы бір жерден көресіз.",
+        "title": "Неліктен бүгін қолданбалар жоғалып жатыр?"
       },
       "simplePricing": {
-        "badge": "Simple tariffs",
+        "badge": "Қарапайым тарифтер",
         "free": {
-          "cta": "Start for free",
-          "f1_v2": "Basic blocks (links, text, photos)",
-          "f2_v2": "AI generation (1 time/month)",
-          "f3_v2": "Basic view statistics",
-          "f4_v2": "Page QR code",
-          "f5_booking": "Booking + Form + CRM (50/mo)",
-          "f5_v2": "Mini-CRM and Telegram notifications",
-          "f6_v2": "Advanced Analytics",
-          "f7_v2": "AI generation (5 times/month)",
-          "subtitle": "Forever, no hidden fees",
-          "title": "For free"
+          "cta": "Тегін бастаңыз",
+          "f1_v2": "Негізгі блоктар (сілтемелер, мәтін, фотосуреттер)",
+          "f2_v2": "AI генерациясы (айына 1 рет)",
+          "f3_v2": "Негізгі көрініс статистикасы",
+          "f4_v2": "Бет QR коды",
+          "f5_booking": "Брондау + пішін + CRM (айына 50)",
+          "f5_v2": "Mini-CRM және Telegram хабарландырулары",
+          "f6_v2": "Жетілдірілген аналитика",
+          "f7_v2": "AI генерациясы (айына 5 рет)",
+          "subtitle": "Мәңгілік, жасырын төлемдер жоқ",
+          "title": "Тегін"
         },
         "premium": {
-          "badge": "We recommend",
-          "cta": "Get Premium",
-          "f1_v2": "All 25+ block types",
-          "f1_v3": "Unlimited inbound requests",
-          "f2_v2": "Mini-CRM - all applications in one place",
-          "f2_v3": "No watermark — your brand",
-          "f3_v2": "Telegram notifications about leads",
-          "f3_v3": "Advanced click analytics",
-          "f4_v2": "AI generation (5 times/month)",
-          "f4_v3": "Export + Telegram notifications",
-          "f5_v2": "Advanced click analytics",
-          "f5_v3": "All 25+ block types",
-          "f6_v2": "Premium Themes and Animations",
-          "f6_v3": "Up to 6 pages + custom domain",
-          "f7_v2": "Block Scheduler",
-          "f7_v3": "10 AI generations per month",
-          "subtitle": "Everything for business growth",
-          "title": "Premium"
+          "badge": "Біз ұсынамыз",
+          "cta": "Premium алыңыз",
+          "f1_v2": "Барлық 25+ блок түрлері",
+          "f1_v3": "Шектеусіз кіріс сұраулар",
+          "f2_v2": "Mini-CRM - барлық қолданбалар бір жерде",
+          "f2_v3": "Су таңбасы жоқ — сіздің брендіңіз",
+          "f3_v2": "Жетекшілер туралы Telegram хабарламалары",
+          "f3_v3": "Кеңейтілген басуды талдау",
+          "f4_v2": "AI генерациясы (айына 5 рет)",
+          "f4_v3": "Экспорт + Telegram хабарландырулары",
+          "f5_v2": "Кеңейтілген басуды талдау",
+          "f5_v3": "Барлық 25+ блок түрлері",
+          "f6_v2": "Премиум тақырыптар мен анимациялар",
+          "f6_v3": "6 бетке дейін + теңшелетін домен",
+          "f7_v2": "Блокты жоспарлаушы",
+          "f7_v3": "Айына 10 AI ұрпағы",
+          "subtitle": "Барлығы бизнестің өсуі үшін",
+          "title": "Премиум"
         },
-        "title": "Free or Premium"
+        "title": "Тегін немесе премиум"
       },
       "socialProof": {
-        "title": "Sample pages"
+        "title": "Үлгі беттер"
       },
       "targetAudience": {
         "beauty": {
-          "result1": "All services and prices are in one link",
-          "result2": "Clients sign up via form",
-          "result3": "Notification in Telegram about recording",
-          "subtitle": "Manicure, eyebrows, eyelashes, hair",
-          "title": "Beauty masters"
+          "result1": "Барлық қызметтер мен бағалар бір сілтемеде",
+          "result2": "Клиенттер форма арқылы тіркеледі",
+          "result3": "Жазу туралы Telegram хабарламасы",
+          "subtitle": "Маникюр, қас, кірпік, шаш",
+          "title": "Сұлулық шеберлері"
         },
         "business": {
-          "result1": "Catalog of goods and services",
-          "result2": "Analytics: where did the clients come from?",
-          "result3": "Order control without Excel",
-          "subtitle": "Barbers, photographers, coffee shops",
-          "title": "Small business"
+          "result1": "Тауарлар мен қызметтердің каталогы",
+          "result2": "Аналитика: клиенттер қайдан келді?",
+          "result3": "Excel бағдарламасынсыз тапсырысты басқару",
+          "subtitle": "Шаштараздар, фотографтар, кофеханалар",
+          "title": "Шағын бизнес"
         },
-        "cta": "Create a page",
+        "cta": "Бет жасау",
         "expert": {
-          "result1": "Portfolio and reviews in a beautiful way",
-          "result2": "Leads automatically in Mini-CRM",
-          "result3": "Client statuses: new → in progress → ready",
-          "subtitle": "Psychologists, tutors, consultants",
-          "title": "Experts and coaches"
+          "result1": "Портфолио және шолулар әдемі түрде",
+          "result2": "Mini-CRM жүйесінде автоматты түрде жетекші болады",
+          "result3": "Клиент күйлері: жаңа → орындалуда → дайын",
+          "subtitle": "Психологтар, репетиторлар, кеңесшілер",
+          "title": "Сарапшылар мен жаттықтырушылар"
         },
-        "subtitle": "Specific results for your niche",
-        "title": "Who is LinkMAX.my created for?"
+        "subtitle": "Сіздің тауашаңызға арналған нақты нәтижелер",
+        "title": "LinkMAX.my кім үшін жасалған?"
       },
       "testimonials": {
         "count": "2,000+",
-        "review1": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it.",
-        "review2": "The aesthetics are on another level. It doesn't look like a generic link-in-bio. It looks like a custom website.",
-        "review3": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
-        "review4": "My clients love how easy it is to book. And I love the CRM. I finally know where my traffic comes from.",
-        "role1": "Fitness Coach",
-        "role2": "Digital Artist",
-        "role3": "Business Owner",
-        "role4": "Beauty Salon Owner",
-        "subtitle": "Experts, coaches, and small businesses trust LinkMAX to grow.",
-        "suffix": "Creators",
-        "title": "Loved by"
+        "review1": "Спортзалда жүргенде 3 минутта парақшамды орнаттым. Бір сағаттан кейін бірінші клиентімді алдым. AI оны жай ғана түсінеді.",
+        "review2": "Эстетика басқа деңгейде. Бұл биодағы жалпы сілтемеге ұқсамайды. Бұл арнайы веб-сайтқа ұқсайды.",
+        "review3": "Direct Telegram жетекшілері менің жұмыс үрдісімді өзгертті. Электрондық хаттарды тексеру енді жоқ. Мен чатта мәмілелерді жабамын.",
+        "review4": "Менің клиенттерім брондаудың қаншалықты оңай екенін жақсы көреді. Ал маған CRM ұнайды. Ақырында мен трафиктің қайдан келетінін білемін.",
+        "role1": "Фитнес жаттықтырушы",
+        "role2": "Сандық суретші",
+        "role3": "Бизнес иесі",
+        "role4": "Сұлулық салонының иесі",
+        "subtitle": "Сарапшылар, жаттықтырушылар және шағын бизнес LinkMAX-тің өсуіне сенеді.",
+        "suffix": "Жасаушылар",
+        "title": "Сүйікті"
       },
       "ticker": {
-        "agencies": "Agencies",
-        "clinics": "Clinics",
-        "coaches": "Coaches",
-        "creators": "Creators",
-        "designers": "Designers",
-        "experts": "Experts",
-        "startups": "Startups",
-        "studios": "Studios",
-        "title": "Trusted by creators worldwide"
+        "agencies": "Агенттіктер",
+        "clinics": "Клиникалар",
+        "coaches": "Жаттықтырушылар",
+        "creators": "Жасаушылар",
+        "designers": "Дизайнерлер",
+        "experts": "Сарапшылар",
+        "startups": "Стартаптар",
+        "studios": "Студиялар",
+        "title": "Дүние жүзіндегі авторлар сенім артқан"
       },
       "toc": {
-        "ariaLabel": "Page content",
-        "faq": "FAQ",
-        "features": "Possibilities",
-        "forWhom": "For whom",
-        "linkInBio": "What is Link-in-Bio",
-        "pricing": "Tariffs",
-        "title": "Content",
-        "useCases": "Examples"
+        "ariaLabel": "Бет мазмұны",
+        "faq": "Жиі қойылатын сұрақтар",
+        "features": "Мүмкіндіктер",
+        "forWhom": "Кім үшін",
+        "linkInBio": "Link-in-Bio дегеніміз не",
+        "pricing": "Тарифтер",
+        "title": "Мазмұны",
+        "useCases": "Мысалдар"
       },
       "useCases": {
-        "badge": "Examples of use",
+        "badge": "Қолдану мысалдары",
         "barber": {
-          "desc": "Services, prices, online registration",
-          "link1": "вњ‚пёЏ Services",
-          "link2": "рџ“ЌAddress",
+          "desc": "Қызметтер, бағалар, онлайн тіркеу",
+          "link1": "вњ‚пёЏ Қызметтер",
+          "link2": "рџ“ҚМекенжай",
           "link3": "рџ“± WhatsApp",
-          "name": "BarberShop MAX",
-          "role": "Barbershop"
+          "name": "Шаштараз дүкені MAX",
+          "role": "Шаштараз"
         },
         "creator": {
-          "bullet1": "Best projects and cases",
-          "bullet2": "Social networks and subscriptions",
-          "bullet3": "Acceptance of applications and brief",
-          "title": "Creator and portfolio"
+          "bullet1": "Үздік жобалар мен кейстер",
+          "bullet2": "Әлеуметтік желілер және жазылымдар",
+          "bullet3": "Өтінімдерді қабылдау және қысқаша",
+          "title": "Жасаушы және портфолио"
         },
-        "cta": "View all pages in gallery",
+        "cta": "Галереядағы барлық беттерді көру",
         "expert": {
-          "bullet1": "Offer and result on the first screen",
-          "bullet2": "Price and service packages",
-          "bullet3": "Application form and messengers",
-          "title": "Expert or consultation"
+          "bullet1": "Бірінші экранда ұсыныс және нәтиже",
+          "bullet2": "Баға және қызмет пакеттері",
+          "bullet3": "Өтініш формасы және мессенджерлер",
+          "title": "Сарапшы немесе кеңес беру"
         },
         "fitness": {
-          "desc": "Training programs, online courses",
-          "link1": "рџЏ‹пёЏ Programs",
-          "link2": "рџ“№ Online course",
+          "desc": "Оқыту бағдарламалары, онлайн курстар",
+          "link1": "рџЏ‹пёЏ Бағдарламалар",
+          "link2": "рџ“№ Онлайн курс",
           "link3": "вњ‰пёЏ Telegram",
-          "name": "Maria Fitness",
-          "role": "Fitness trainer"
+          "name": "Мария фитнес",
+          "role": "Фитнес жаттықтырушысы"
         },
         "musician": {
-          "desc": "Music, events, booking",
+          "desc": "Музыка, оқиғалар, брондау",
           "link1": "рџЋ§ Spotify",
-          "link2": "рџЋџпёЏ Events",
-          "link3": "рџ“ћ Booking",
-          "name": "DJ Max",
-          "role": "Musician"
+          "link2": "рџЋџпёЏ Оқиғалар",
+          "link3": "рџ“ћ Брондау",
+          "name": "DJ Макс",
+          "role": "Музыкант"
         },
         "photographer": {
-          "desc": "Portfolio, shooting prices, booking",
-          "link1": "рџЋЁ Portfolio",
-          "link2": "рџ’° Price list",
-          "link3": "рџ“… Sign up",
-          "name": "Alexey Photo",
-          "role": "Photographer"
+          "desc": "Портфолио, түсіру бағасы, брондау",
+          "link1": "рџЋЁ Портфолио",
+          "link2": "рџ’° Бағалар тізімі",
+          "link3": "рџ“… Тіркеліңіз",
+          "name": "Алексей фотосы",
+          "role": "Фотограф"
         },
-        "primaryCta": "Create a page",
+        "primaryCta": "Бет жасау",
         "psychologist": {
-          "desc": "Consultations, areas of work",
-          "link1": "рџ’¬ About therapy",
-          "link2": "рџ“‹ Sign up",
-          "link3": "рџ“љ Blog",
-          "name": "Anna Psychologist",
-          "role": "Psychologist"
+          "desc": "Консультациялар, жұмыс бағыттары",
+          "link1": "рџ’¬ Терапия туралы",
+          "link2": "рџ“‹ Тіркеліңіз",
+          "link3": "рџ“љ Блог",
+          "name": "Анна Психолог",
+          "role": "Психолог"
         },
-        "secondaryCta": "View examples",
+        "secondaryCta": "Мысалдар көру",
         "service": {
-          "bullet1": "Registration and scheduling",
-          "bullet2": "Address, map and reviews",
-          "bullet3": "Contacts and quick answers",
-          "title": "Facilities and service"
+          "bullet1": "Тіркеу және жоспарлау",
+          "bullet2": "Мекенжай, карта және шолулар",
+          "bullet3": "Байланыстар және жылдам жауаптар",
+          "title": "Құралдар мен қызмет көрсету"
         },
         "shop": {
-          "bullet1": "Products and prices",
-          "bullet2": "FAQ and delivery terms",
-          "bullet3": "Quick contact for order",
-          "desc": "Catalog, delivery, promotions",
-          "link1": "рџ‘— Catalog",
-          "link2": "рџЏ·пёЏ Promotions",
-          "link3": "рџљљ Delivery",
-          "name": "Boutique Fashion",
-          "role": "Clothing store",
-          "title": "Store or catalog"
+          "bullet1": "Өнімдер мен бағалар",
+          "bullet2": "Жиі қойылатын сұрақтар және жеткізу шарттары",
+          "bullet3": "Тапсырыс беру үшін жылдам хабарласыңыз",
+          "desc": "Каталог, жеткізу, акциялар",
+          "link1": "рџ‘— Каталог",
+          "link2": "рџЏ·пёЏ Акциялар",
+          "link3": "рџљљ Жеткізу",
+          "name": "Бутик сәні",
+          "role": "Киім дүкені",
+          "title": "Дүкен немесе каталог"
         },
-        "subtitle": "Choose a script, fix a couple of blocks and publish.",
-        "title": "Ready-made scripts for your tasks"
+        "subtitle": "Сценарийді таңдап, бірнеше блокты түзетіп, жариялаңыз.",
+        "title": "Тапсырмаларыңыз үшін дайын сценарийлер"
       },
       "v2": {
         "logoTicker": {
-          "title": "Trusted by creators worldwide"
+          "title": "Дүние жүзіндегі авторлар сенім артқан"
         },
         "nav": {
-          "features": "Features",
-          "getStarted": "Get Started",
-          "howItWorks": "How it works",
-          "login": "Log in",
-          "pricing": "Pricing",
-          "start": "Start",
-          "startFree": "Start for Free"
+          "features": "Ерекше өзгешеліктері",
+          "getStarted": "Жұмысты бастау",
+          "howItWorks": "Ол қалай жұмыс істейді",
+          "login": "Жүйеге кіріңіз",
+          "pricing": "Баға белгілеу",
+          "start": "Бастау",
+          "startFree": "Тегін бастаңыз"
         },
         "pricing": {
           "aiPowered": "AI Powered",
-          "billedYearly": "Payment {{price}} per year",
-          "forever": "forever",
+          "billedYearly": "Төлем жылына {{price}}",
+          "forever": "мәңгі",
           "free": {
-            "cta": "Start for free",
-            "desc": "Ideal for platform testing.",
-            "f1": "Basic blocks",
-            "f2": "1 AI generation/month",
-            "f3": "Basic analytics",
-            "f4": "Without your own domain",
-            "name": "Starter"
+            "cta": "Тегін бастаңыз",
+            "desc": "Платформаны сынауға өте ыңғайлы.",
+            "f1": "Негізгі блоктар",
+            "f2": "1 AI ұрпағы/ай",
+            "f3": "Негізгі аналитика",
+            "f4": "Жеке доменсіз",
+            "name": "Стартер"
           },
-          "monthly": "Month",
-          "perMonth": "months",
-          "popular": "POPULAR",
+          "monthly": "Ай",
+          "perMonth": "айлар",
+          "popular": "ТАНЫМАЛ",
           "pro": {
-            "cta": "Start Pro trial",
-            "f1": "Everything from the Free tariff",
-            "f1_new": "All blocks without restrictions",
-            "f2": "5 AI generations/month",
-            "f2_new": "Online registration and your own mini-CRM",
-            "f3": "Leads in Telegram",
-            "f3_new": "Instant applications in Telegram",
-            "f4": "Advanced Analytics",
-            "f4_new": "Sale of goods and tickets",
-            "f5": "Removing branding",
-            "f5_new": "Built-in QR scanner",
-            "f6_new": "Advanced Statistics",
+            "cta": "Pro сынақ нұсқасын бастаңыз",
+            "f1": "Барлығы тегін тарифтен",
+            "f1_new": "Барлық блоктар шектеусіз",
+            "f2": "AI 5 ұрпағы/ай",
+            "f2_new": "Онлайн тіркелу және жеке шағын CRM",
+            "f3": "Telegram-да көшбасшы",
+            "f3_new": "Telegram-дағы жедел қолданбалар",
+            "f4": "Жетілдірілген аналитика",
+            "f4_new": "Тауарлар мен билеттерді сату",
+            "f5": "Брендті жою",
+            "f5_new": "Кірістірілген QR сканері",
+            "f6_new": "Жетілдірілген статистика",
             "name": "Pro"
           },
           "save": "-30%",
-          "subtitle": "Get started for free. Take it to the next level when you're ready.",
-          "title": "Simple tariffs,",
-          "titleHighlight": "Exponential growth",
-          "yearly": "Year"
+          "subtitle": "Тегін бастаңыз. Дайын болғанда келесі деңгейге өтіңіз.",
+          "title": "Қарапайым тарифтер,",
+          "titleHighlight": "Экспоненциалды өсу",
+          "yearly": "Жыл"
         },
         "testimonials": {
           "count": "2,000+",
           "reviews": {
-            "artist": "The aesthetics are on another level. It doesn't",
-            "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI вЂ‹вЂ‹just gets it.",
-            "crypto": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
-            "salon": "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from."
+            "artist": "Эстетика басқа деңгейде. Болмайды",
+            "coach": "Спортзалда жүргенде 3 минутта парақшамды орнаттым. Бір сағаттан кейін бірінші клиентімді алдым. AI оны жай ғана түсінеді.",
+            "crypto": "Direct Telegram жетекшілері менің жұмыс үрдісімді өзгертті. Электрондық хаттарды тексеру енді жоқ. Мен чатта мәмілелерді жабамын.",
+            "salon": "Менің клиенттерім брондаудың қаншалықты оңай екенін жақсы көреді. Ал мен аналитиканы жақсы көремін. Ақырында мен трафиктің қайдан келетінін білемін."
           },
           "roles": {
-            "artist": "Digital Artist",
-            "coach": "Fitness Coach",
-            "crypto": "Crypto Analyst",
-            "salon": "Beauty Salon Owner"
+            "artist": "Сандық суретші",
+            "coach": "Фитнес жаттықтырушы",
+            "crypto": "Крипто талдаушысы",
+            "salon": "Сұлулық салонының иесі"
           },
-          "suffix": "creators",
-          "title": "Loved"
+          "suffix": "жасаушылар",
+          "title": "Сүйікті"
         }
       },
       "v4": {
         "benefits": {
           "ai": {
-            "desc": "AI creates structure, texts and recommendations. Saves hours of work.",
-            "title": "AI generation"
+            "desc": "AI құрылымды, мәтіндерді және ұсыныстарды жасайды. Жұмыс уақытын үнемдейді.",
+            "title": "AI ұрпағы"
           },
           "analytics": {
-            "desc": "Clicks, conversions, traffic sources, geography of visitors.",
-            "title": "Analytics"
+            "desc": "Кликтер, түрлендірулер, трафик көздері, келушілер географиясы.",
+            "title": "Аналитика"
           },
           "crm": {
-            "desc": "All applications in one place. Statuses, history, Telegram notifications.",
-            "title": "Mini CRM"
+            "desc": "Барлық қолданбалар бір жерде. Күйлер, тарих, Telegram хабарландырулары.",
+            "title": "Шағын CRM"
           },
           "mobile": {
-            "desc": "25+ blocks, drag & drop. Edit from your phone or computer.",
-            "title": "Page builder"
+            "desc": "25+ блок, сүйреп апарыңыз. Телефоннан немесе компьютерден өңдеңіз.",
+            "title": "Бет құрастырушы"
           },
-          "title": "Complete business system"
+          "title": "Толық бизнес жүйесі"
         },
         "blocks": {
-          "subtitle": "Drag & drop. Works on any device.",
-          "title": "25+ ready-made blocks"
+          "subtitle": "Сүйреп апарыңыз. Кез келген құрылғыда жұмыс істейді.",
+          "title": "25+ дайын блоктар"
         },
         "finalCta": {
-          "cta": "Create for free",
-          "secondary": "Or look at examples",
-          "subtitle": "Website + CRM + analytics. For free. No code.",
-          "title": "Ready to launch your business center?"
+          "cta": "Тегін жасаңыз",
+          "secondary": "Немесе мысалдарды қараңыз",
+          "subtitle": "Веб-сайт + CRM + аналитика. Тегін. Код жоқ.",
+          "title": "Бизнес орталығыңызды іске қосуға дайынсыз ба?"
         },
         "forWhom": {
-          "beauty": "Services",
-          "business": "Stores",
-          "creator": "Creators",
-          "expert": "Experts",
-          "label": "For those who need a simple business system:"
+          "beauty": "Қызметтер",
+          "business": "Дүкендер",
+          "creator": "Жасаушылар",
+          "expert": "Сарапшылар",
+          "label": "Қарапайым бизнес жүйесін қажет ететіндер үшін:"
         },
         "hero": {
-          "analytics": "Analytics",
-          "badge": "Expert-First Platform",
-          "cta": "Start for Free",
-          "mobileFirst": "Mobile First",
-          "scroll": "Scroll",
-          "secondary": "See Examples",
-          "seoReady": "SEO Ready",
-          "subtitle": "Instant mini-landings, online courses, and Telegram leads. Stop fighting complex CRMs — launch in 2 minutes.",
-          "title": "Website, CRM & Leads — in one place",
-          "titleEnd": "in one place",
-          "titleStart": "Website, CRM & Leads",
-          "trust1": "Blocks",
-          "trust2": "Creators",
-          "trust3": "Langs"
+          "analytics": "Аналитика",
+          "badge": "Бірінші сарапшы платформасы",
+          "cta": "Тегін бастаңыз",
+          "mobileFirst": "Ұялы бірінші",
+          "scroll": "Айналдыру",
+          "secondary": "Мысалдар қараңыз",
+          "seoReady": "SEO дайын",
+          "subtitle": "Жылдам мини-десанстар, онлайн курстар және Telegram жетекшілері. Күрделі CRM-мен күресуді тоқтатыңыз — 2 минут ішінде іске қосыңыз.",
+          "title": "Веб-сайт, CRM және жетекшілер — бір жерде",
+          "titleEnd": "бір жерде",
+          "titleStart": "Веб-сайт, CRM және жетекшілер",
+          "trust1": "Блоктар",
+          "trust2": "Жасаушылар",
+          "trust3": "Лангс"
         },
         "howItWorks": {
-          "badge": "2 minutes until result",
-          "cta": "Try it",
+          "badge": "Нәтижеге дейін 2 минут қалды",
+          "cta": "Байқап көріңіз",
           "step1": {
-            "desc": "Choose a niche and add a few facts about yourself",
-            "title": "Tell me what you do"
+            "desc": "Тауашаны таңдап, өзіңіз туралы бірнеше фактілерді қосыңыз",
+            "title": "Маған не істеп жатқаныңызды айтыңыз"
           },
           "step2": {
-            "desc": "Structure, texts, buttons - edit as you want",
-            "title": "AI will assemble the page"
+            "desc": "Құрылым, мәтіндер, түймелер - қалауыңызша өңдеңіз",
+            "title": "AI бетті жинайды"
           },
           "step3": {
-            "desc": "The link for social networks is ready, leads go to Telegram",
-            "title": "Receive applications"
+            "desc": "Әлеуметтік желілерге арналған сілтеме дайын, Telegram-ға өтіңіз",
+            "title": "Өтініштерді қабылдау"
           },
-          "title": "How does this work"
+          "title": "Бұл қалай жұмыс істейді"
         },
         "pricing": {
-          "forever": "Forever",
+          "forever": "Мәңгі",
           "free": {
-            "f1": "Basic blocks",
-            "f2": "1 AI generation/month",
-            "f3": "Basic Statistics"
+            "f1": "Негізгі блоктар",
+            "f2": "1 AI ұрпағы/ай",
+            "f3": "Негізгі статистика"
           },
-          "freeCta": "Start for free",
-          "guarantee": "0% commission on sales. Return 14 days.",
-          "month": "months",
+          "freeCta": "Тегін бастаңыз",
+          "guarantee": "Сату бойынша 0% комиссия. 14 күн қайтару.",
+          "month": "айлар",
           "pro": {
-            "f1": "All 25+ blocks",
-            "f2": "Mini-CRM + Telegram notifications",
-            "f3": "5 AI generations/month",
-            "f4": "Advanced Analytics",
-            "f5": "Without watermark"
+            "f1": "Барлық 25+ блок",
+            "f2": "Mini-CRM + Telegram хабарландырулары",
+            "f3": "AI 5 ұрпағы/ай",
+            "f4": "Жетілдірілген аналитика",
+            "f5": "Су таңбасы жоқ"
           },
-          "proCta": "Select Pro",
-          "recommended": "We recommend",
-          "save": "saving 30%",
-          "subtitle": "Get started for free. Connect Pro when you need more.",
-          "title": "Simple tariffs"
+          "proCta": "Pro таңдаңыз",
+          "recommended": "Біз ұсынамыз",
+          "save": "30% үнемдеу",
+          "subtitle": "Тегін бастаңыз. Қосымша қажет болғанда Pro қосылыңыз.",
+          "title": "Қарапайым тарифтер"
         },
         "problem": {
-          "item1": "There is a link to WhatsApp in the bio, and clients ask the same thing",
-          "item2": "There is no clear price list - you lose those who don't want to write",
-          "item3": "It's unclear which posts and stories actually generate applications",
-          "solution": "- one page where everything is clear: who you are, how you help, how much it costs and where to click.",
-          "title": "Sound familiar?"
+          "item1": "Биода WhatsApp-қа сілтеме бар, клиенттер де сол нәрсені сұрайды",
+          "item2": "Нақты прейскурант жоқ - жазуды қаламайтындарды жоғалтасыз",
+          "item3": "Қандай посттар мен әңгімелер қолданбаларды жасайтыны белгісіз",
+          "solution": "- бәрі түсінікті бір бет: сіз кімсіз, қалай көмектесесіз, қанша тұрады және қайда басу керек.",
+          "title": "Таныс естіледі ме?"
         },
         "proof": {
-          "subtitle": "See how others use LinkMAX",
-          "title": "Sample pages"
+          "subtitle": "Басқалардың LinkMAX қалай пайдаланатынын қараңыз",
+          "title": "Үлгі беттер"
         },
         "seo": {
-          "answer": "LinkMAX is an AI-powered page builder for creators.",
-          "howToDesc": "Create a professional page in 2 minutes",
-          "howToName": "How to build a landing page with AI",
-          "question": "What is LinkMAX?"
+          "answer": "LinkMAX – жасаушыларға арналған AI-мен жұмыс істейтін бет құрастырушы.",
+          "howToDesc": "2 минут ішінде кәсіби бет жасаңыз",
+          "howToName": "AI көмегімен қону бетін қалай құруға болады",
+          "question": "LinkMAX дегеніміз не?"
         },
         "useCases": {
           "beauty": {
-            "item1": "Online registration",
-            "item2": "Reviews and before/after",
-            "item3": "Map and contacts",
-            "title": "Beauty / Services"
+            "item1": "Онлайн тіркеу",
+            "item2": "Пікірлер және бұрын/кейін",
+            "item3": "Карта және контактілер",
+            "title": "Сұлулық / Қызметтер"
           },
           "creator": {
-            "item1": "Best works",
-            "item2": "Social networks and subscriptions",
-            "item3": "Brief for order",
-            "title": "Creator / Portfolio"
+            "item1": "Үздік жұмыстар",
+            "item2": "Әлеуметтік желілер және жазылымдар",
+            "item3": "Тапсырыс үшін қысқаша",
+            "title": "Жасаушы / Портфолио"
           },
-          "cta": "Select scenario",
+          "cta": "Сценарийді таңдаңыз",
           "expert": {
-            "item1": "Offer on the first screen",
-            "item2": "Service packages and prices",
-            "item3": "Application form",
-            "title": "Expert / Consultant"
+            "item1": "Бірінші экранда ұсыныс",
+            "item2": "Қызметтер пакеттері мен бағалары",
+            "item3": "Өтініш формасы",
+            "title": "Сарапшы/кеңесші"
           },
           "shop": {
-            "item1": "Products with prices",
-            "item2": "FAQ and delivery",
-            "item3": "Quick order",
-            "title": "Store / Catalog"
+            "item1": "Бағалары бар өнімдер",
+            "item2": "Жиі қойылатын сұрақтар және жеткізу",
+            "item3": "Жылдам тапсырыс",
+            "title": "Дүкен / Каталог"
           },
-          "subtitle": "Choose a template - AI will adapt it to you",
-          "title": "Ready-made scripts"
+          "subtitle": "Үлгіні таңдаңыз - AI оны сізге бейімдейді",
+          "title": "Дайын сценарийлер"
         }
       },
       "v6": {
         "cta": {
-          "badge": "Ready to launch?",
-          "description": "Join thousands of creators, experts and small businesses growing with LinkMAX. No credit card.",
-          "note": "Forever Free Plan вЂў Cancel anytime вЂў 24/7 Support",
-          "primary": "Start for free",
-          "secondary": "View examples",
-          "titlePrefix": "Create your micro-site",
-          "titleSuffix": "free today."
+          "badge": "Іске қосуға дайынсыз ба?",
+          "description": "LinkMAX-пен дамып келе жатқан мыңдаған жасаушыларға, сарапшыларға және шағын бизнеске қосылыңыз. Несие картасы жоқ.",
+          "note": "Forever Free Plan • Кез келген уақытта бас тарту • 24/7 қолдау көрсету",
+          "primary": "Тегін бастаңыз",
+          "secondary": "Мысалдар көру",
+          "titlePrefix": "Микро-сайтыңызды жасаңыз",
+          "titleSuffix": "бүгін тегін."
         },
         "faq": {
           "items": [
@@ -3951,62 +3951,62 @@
               "answer": "Yes, we have a forever free plan with basic features. You can create a page and start accepting requests without investment."
             }
           ],
-          "subtitle": "Everything you need to know about the platform",
-          "title": "Frequently asked questions"
+          "subtitle": "Платформа туралы білуіңіз керек барлық нәрсе",
+          "title": "Жиі қойылатын сұрақтар"
         },
         "features": {
           "analytics": {
-            "desc": "Track clicks, views, and conversions with built-in, privacy-respecting analytics.",
-            "title": "Live analytics"
+            "desc": "Кірістірілген, құпиялылықты құрметтейтін аналитика арқылы шертулерді, көріністерді және түрлендірулерді қадағалаңыз.",
+            "title": "Тікелей талдау"
           },
           "blocks": {
-            "desc": "From simple links to complex forms and booking systems.",
-            "title": "28+ Smart blocks"
+            "desc": "Қарапайым сілтемелерден күрделі пішіндер мен брондау жүйелеріне дейін.",
+            "title": "28+ смарт блоктар"
           },
-          "description": "Everything you need for sales and communication with clients in one place.",
+          "description": "Сату және клиенттермен байланысу үшін қажет нәрсенің бәрі бір жерде.",
           "domain": {
-            "desc": "Connect your .com or .kz domain for professional branding.",
-            "title": "Your own domain"
+            "desc": "Кәсіби брендинг үшін .com немесе .kz доменін қосыңыз.",
+            "title": "Сіздің жеке доменіңіз"
           },
           "mobileBuilder": {
-            "desc": "Designed for the smartphone generation. Edit, review and publish directly from your phone.",
-            "title": "Mobile designer"
+            "desc": "Смартфон буынына арналған. Телефоннан тікелей өңдеңіз, қарап шығыңыз және жариялаңыз.",
+            "title": "Мобильді дизайнер"
           },
           "payments": {
-            "desc": "Accept payment from anywhere via Stripe, Kaspi or Crypto.",
-            "title": "Accepting payments"
+            "desc": "Stripe, Kaspi немесе Crypto арқылы кез келген жерден төлемді қабылдаңыз.",
+            "title": "Төлемдерді қабылдау"
           },
           "seo": {
-            "desc": "AI-generated meta tags and schema markup for perfect search indexing.",
-            "title": "Instant SEO"
+            "desc": "AI жасаған мета тегтер және тамаша іздеу индекстеу үшін схема белгілеу.",
+            "title": "Жылдам SEO"
           },
-          "subtitle": "A complete business tool.",
-          "title": "More than just a link."
+          "subtitle": "Толық бизнес құралы.",
+          "title": "Жай сілтеме емес."
         },
         "hero": {
-          "badge": "V6.0 Live",
-          "cancelAnytime": "Cancel anytime",
+          "badge": "V6.0 Тікелей",
+          "cancelAnytime": "Кез келген уақытта бас тарту",
           "cardLead": {
-            "subtitle": "Just in via LinkMAX.my",
-            "title": "New client!"
+            "subtitle": "Тек LinkMAX.my арқылы кіріңіз",
+            "title": "Жаңа клиент!"
           },
           "cardRevenue": {
-            "label": "Revenue",
+            "label": "Кіріс",
             "value": "$12,450"
           },
-          "ctaPrimary": "Create a page for free",
-          "ctaSecondary": "View examples",
-          "description": "Combine content, products and services into a beautiful page. Without designers and programmers. Take orders and grow.",
-          "noCard": "No credit card",
+          "ctaPrimary": "Тегін бет жасаңыз",
+          "ctaSecondary": "Мысалдар көру",
+          "description": "Мазмұнды, өнімдерді және қызметтерді әдемі бетке біріктіріңіз. Дизайнерлер мен бағдарламашыларсыз. Тапсырыс алып, өсіңіз.",
+          "noCard": "Несие картасы жоқ",
           "titleBrand": "LinkMAX.my",
-          "titleHighlight": "one link.",
-          "titlePrefix": "Everything you do",
-          "titleSuffix": "for business"
+          "titleHighlight": "бір сілтеме.",
+          "titlePrefix": "Сіз жасайтын барлық нәрсе",
+          "titleSuffix": "бизнес үшін"
         },
         "pricing": {
           "free": {
-            "cta": "Begin",
-            "desc": "Ideal for starting",
+            "cta": "БАСТА",
+            "desc": "Бастау үшін өте қолайлы",
             "features": [
               "Unlimited links",
               "Basic analytics",
@@ -4014,13 +4014,13 @@
               "QR code generator",
               "Social icons"
             ],
-            "title": "Free"
+            "title": "Тегін"
           },
-          "perMonth": "/month",
+          "perMonth": "/ай",
           "pro": {
-            "badge": "POPULAR",
-            "cta": "Upgrade to Pro",
-            "desc": "For serious authors",
+            "badge": "ТАНЫМАЛ",
+            "cta": "Pro нұсқасына жаңартыңыз",
+            "desc": "Ауыр авторлар үшін",
             "features": [
               "Everything in Free",
               "Advanced analytics",
@@ -4031,24 +4031,24 @@
             ],
             "title": "Pro"
           },
-          "subtitle": "Start for free, grow with Pro. No hidden fees.",
-          "title": "Simple, transparent prices."
+          "subtitle": "Тегін бастаңыз, Pro көмегімен өсіңіз. Жасырын төлемдер жоқ.",
+          "title": "Қарапайым, ашық бағалар."
         },
         "steps": {
           "step1": {
-            "desc": "Registration in seconds via email or Google.",
-            "title": "1. Create an account"
+            "desc": "Электрондық пошта немесе Google арқылы бірнеше секунд ішінде тіркелу.",
+            "title": "1. Тіркелгіні жасаңыз"
           },
           "step2": {
-            "desc": "Ready-made templates for any niche. Just add your links.",
-            "title": "2. Choose a style"
+            "desc": "Кез келген тауашалар үшін дайын шаблондар. Тек сілтемелеріңізді қосыңыз.",
+            "title": "2. Стиль таңдаңыз"
           },
           "step3": {
-            "desc": "Publish the page and share the link in bio. Start tracking visits instantly.",
-            "title": "3. Launch"
+            "desc": "Парақты жариялаңыз және биодағы сілтемені бөлісіңіз. Келулерді лезде бақылауды бастаңыз.",
+            "title": "3. Іске қосу"
           },
-          "subtitle": "We've removed all the complexity. You focus on the content, we take care of the rest.",
-          "title": "From idea to launch in 2 minutes"
+          "subtitle": "Біз барлық күрделілікті жойдық. Сіз мазмұнға назар аударыңыз, қалғанын біз шешеміз.",
+          "title": "Идеядан іске қосуға дейін 2 минутта"
         }
       }
     },
@@ -4069,7 +4069,7 @@
               "a": "Yes, add city, map, and booking to capture local demand."
             }
           ],
-          "title": "Short answers"
+          "title": "Қысқа жауаптар"
         },
         "badge": "AEO + GEO",
         "for": {
@@ -4079,13 +4079,13 @@
             "Creators and course makers",
             "Event organizers"
           ],
-          "title": "For whom"
+          "title": "Кім үшін"
         },
-        "subtitle": "Semantic content helps you quickly understand what you offer and where you operate.",
-        "title": "Short answers that people and bots can understand",
+        "subtitle": "Семантикалық мазмұн не ұсынатыныңызды және қайда жұмыс істейтініңізді жылдам түсінуге көмектеседі.",
+        "title": "Адамдар мен боттар түсінетін қысқа жауаптар",
         "what": {
-          "body": "LinkMAX is a page builder + CRM for micro-businesses. Create a mini-site, accept applications and manage clients in one place.",
-          "title": "What is LinkMAX"
+          "body": "LinkMAX - микро-бизнестерге арналған бет құрастырушы + CRM. Бір жерде шағын сайт жасаңыз, қолданбаларды қабылдаңыз және клиенттерді басқарыңыз.",
+          "title": "LinkMAX дегеніміз не"
         },
         "where": {
           "list": [
@@ -4093,944 +4093,944 @@
             "Almaty, Astana, Shymkent",
             "Online and offline services"
           ],
-          "title": "Where does he work?"
+          "title": "Ол қайда жұмыс істейді?"
         }
       },
       "blocks": {
-        "badge": "25+ blocks",
-        "booking": "Record",
-        "countdown": "Timer",
-        "event": "Event",
-        "faq": "FAQ",
-        "form": "Form",
-        "gallery": "Gallery",
-        "links": "Links",
-        "map": "Map",
-        "messenger": "Chats",
-        "pricing": "Price",
+        "badge": "25+ блок",
+        "booking": "Жазба",
+        "countdown": "Таймер",
+        "event": "Оқиға",
+        "faq": "Жиі қойылатын сұрақтар",
+        "form": "Пішін",
+        "gallery": "Галерея",
+        "links": "Сілтемелер",
+        "map": "Карта",
+        "messenger": "Чаттар",
+        "pricing": "Бағасы",
         "proLabel": "Pro",
-        "products": "Goods",
-        "profile": "Profile",
-        "subtitle": "Drag and change the order. No code needed.",
-        "testimonials": "Reviews",
-        "title": "Build as constructor",
-        "video": "Video"
+        "products": "Тауарлар",
+        "profile": "Профиль",
+        "subtitle": "Тәртіпті сүйреп, өзгертіңіз. Код қажет емес.",
+        "testimonials": "Пікірлер",
+        "title": "Конструктор ретінде құрастырыңыз",
+        "video": "Бейне"
       },
       "examples": {
-        "badge": "Examples",
-        "business": "Business",
-        "creator": "Creator",
-        "expert": "Expert",
-        "subtitle": "Real examples from users",
-        "title": "Pages that work",
-        "useTemplate": "Use",
-        "viewAll": "All examples"
+        "badge": "Мысалдар",
+        "business": "Бизнес",
+        "creator": "Жаратушы",
+        "expert": "Сарапшы",
+        "subtitle": "Пайдаланушылардан нақты мысалдар",
+        "title": "Жұмыс істейтін беттер",
+        "useTemplate": "Қолдану",
+        "viewAll": "Барлық мысалдар"
       },
       "faq": {
-        "badge": "Questions",
+        "badge": "Сұрақтар",
         "q1": {
-          "answer": "LinkMAX is a Micro-Business OS: an operating system for small businesses. Includes an AI page builder, built-in CRM for requests, Telegram notifications and analytics. Everything you need to start a business in one place.",
-          "question": "What is LinkMAX?"
+          "answer": "LinkMAX - бұл Micro-Business ОЖ: шағын бизнеске арналған операциялық жүйе. AI бет құрастырушысын, сұрауларға арналған кірістірілген CRM, Telegram хабарландырулары мен аналитикасын қамтиды. Бір жерде бизнес бастау үшін қажет нәрсенің бәрі.",
+          "question": "LinkMAX дегеніміз не?"
         },
         "q10": {
-          "answer": "Yes, in Pro. Instead of LinkMAX.my/name it will be yoursite.com.",
-          "question": "Can I have my domain?"
+          "answer": "Иә, Pro. LinkMAX.my/name орнына ол yoursite.com болады.",
+          "question": "Мен өз доменімді ала аламын ба?"
         },
         "q11": {
-          "answer": "Visa, Mastercard or Kaspi card. Payment in tenge.",
-          "question": "How to pay for Pro?"
+          "answer": "Visa, Mastercard немесе Kaspi картасы. Төлем теңгемен.",
+          "question": "Pro үшін қалай төлеуге болады?"
         },
         "q12": {
-          "answer": "14 days from payment. If it doesn't suit you, we'll return it without questions.",
-          "question": "Return conditions?"
+          "answer": "Төлегеннен кейін 14 күн. Егер ол сізге сәйкес келмесе, біз оны сұрақсыз қайтарамыз.",
+          "question": "Қайтару шарттары?"
         },
         "q2": {
-          "answer": "The basic plan is free forever. Pro - from 3,045 в‚ё/month when paid annually. 14 days for return.",
-          "question": "What is the price?"
+          "answer": "Негізгі жоспар мәңгілікке тегін. Pro - жыл сайын төленген кезде айына 3 045 в‚ё бастап. Қайтару үшін 14 күн.",
+          "question": "Бағасы қанша?"
         },
         "q3": {
-          "answer": "Choose a niche, write 2-3 sentences about yourself. AI selects the structure, writes texts, and arranges blocks. Then you edit.",
-          "question": "How does AI work?"
+          "answer": "Тауашаны таңдаңыз, өзіңіз туралы 2-3 сөйлем жазыңыз. AI құрылымды таңдайды, мәтіндер жазады және блоктарды реттейді. Содан кейін өңдейсіз.",
+          "question": "AI қалай жұмыс істейді?"
         },
         "q4": {
-          "answer": "25+: profile, links, products, price, form, entry, reviews, FAQ, map, messengers, video, gallery and others.",
-          "question": "What are the blocks?"
+          "answer": "25+: профиль, сілтемелер, өнімдер, баға, пішін, жазба, шолулар, жиі қойылатын сұрақтар, карта, хабаршылар, бейне, галерея және т.б.",
+          "question": "Блоктар қандай?"
         },
         "q5": {
-          "answer": "Yes, in Pro. All applications in one place, statuses, notes. Plus notifications in Telegram.",
-          "question": "Do you have a CRM for applications?"
+          "answer": "Иә, Pro. Барлық қолданбалар бір жерде, күйлер, жазбалар. Telegram-да қосымша хабарландырулар.",
+          "question": "Сізде қолданбаларға арналған CRM бар ма?"
         },
         "q6": {
-          "answer": "Yes. The editor works on the phone the same way as on the computer.",
-          "question": "Can I edit from my phone?"
+          "answer": "Иә. Редактор телефонда компьютердегідей жұмыс істейді.",
+          "question": "Телефонымнан өңдей аламын ба?"
         },
         "q7": {
-          "answer": "No. 0%. If you sell through the page, it's all yours.",
-          "question": "Do you take a commission on sales?"
+          "answer": "№ 0%. Егер сіз парақ арқылы сатсаңыз, бәрі сіздікі.",
+          "question": "Сіз сатудан комиссия аласыз ба?"
         },
         "q8": {
-          "answer": "AI assembles the page. Built-in CRM. Notifications in Telegram. Prices in tenge. Interface in Russian.",
-          "question": "Why is Linktree better?"
+          "answer": "AI бетті жинайды. Кірістірілген CRM. Telegram-дағы хабарландырулар. Бағалар теңгемен. Орыс тіліндегі интерфейс.",
+          "question": "Неліктен Linktree жақсырақ?"
         },
         "q9": {
-          "answer": "Yes. Catalog, price, online registration. The client sees the products and prices and leaves a request.",
-          "question": "Suitable for a store?"
+          "answer": "Иә. Каталог, бағасы, онлайн тіркеу. Клиент тауарлар мен бағаларды көріп, сұраныс қалдырады.",
+          "question": "Дүкенге жарамды ма?"
         },
-        "subtitle": "Didn't find the answer? Write to support",
-        "title": "Frequently asked questions"
+        "subtitle": "Жауабын таппадың ба? Қолдау көрсетуге жазыңыз",
+        "title": "Жиі қойылатын сұрақтар"
       },
       "finalCta": {
-        "badge": "Are you ready?",
-        "cta": "Create a page",
-        "secondary": "View examples",
-        "subtitle": "For free. Without a map. No code.",
-        "title": "Create a page in 2 minutes"
+        "badge": "Дайынсыз ба?",
+        "cta": "Бет жасау",
+        "secondary": "Мысалдар көру",
+        "subtitle": "Тегін. Картасыз. Код жоқ.",
+        "title": "2 минут ішінде бет жасаңыз"
       },
-      "floatingCta": "Create",
+      "floatingCta": "Жасау",
       "footer": {
-        "about": "About Us",
-        "blog": "Blog",
-        "company": "Company",
-        "contacts": "Contacts",
-        "copyright": "В© {{year}} LinkMAX. Made in Kazakhstan.",
-        "description": "The all-in-one platform for creators and micro-businesses.",
-        "examples": "Examples",
-        "language": "Language",
-        "legal": "Legal",
-        "pricing": "Pricing",
-        "privacy": "Privacy Policy",
-        "product": "Product",
-        "templates": "Templates",
-        "terms": "Terms of Service"
+        "about": "Біз туралы",
+        "blog": "Блог",
+        "company": "Компания",
+        "contacts": "Контактілер",
+        "copyright": "В© {{year}} LinkMAX. Қазақстанда жасалған.",
+        "description": "Жасаушылар мен микро-бизнестерге арналған барлығы бір платформа.",
+        "examples": "Мысалдар",
+        "language": "Тіл",
+        "legal": "Заңды",
+        "pricing": "Баға белгілеу",
+        "privacy": "Құпиялылық саясаты",
+        "product": "Өнім",
+        "templates": "Үлгілер",
+        "terms": "Қызмет көрсету шарттары"
       },
       "hero": {
-        "badge": "Micro-Business OS",
-        "cta": "Create for free",
-        "previewCta": "Sign up",
-        "secondary": "View examples",
-        "subtitle": "Mini-site + CRM + applications + analytics in one place. AI Page Builder - Launch a Business in 2 Minutes Without Code.",
-        "title1": "operating system",
-        "title2": "for your business",
-        "trust1": "No card needed",
-        "trust2": "Page builder",
-        "trust3": "Built-in CRM"
+        "badge": "Микробизнес ОЖ",
+        "cta": "Тегін жасаңыз",
+        "previewCta": "Тіркелу",
+        "secondary": "Мысалдар көру",
+        "subtitle": "Мини-сайт + CRM + қолданбалар + аналитика бір жерде. AI Page Builder - 2 минут ішінде кодсыз бизнесті іске қосыңыз.",
+        "title1": "операциялық жүйе",
+        "title2": "сіздің бизнесіңіз үшін",
+        "trust1": "Карта қажет емес",
+        "trust2": "Бет құрастырушы",
+        "trust3": "Кірістірілген CRM"
       },
       "howItWorks": {
-        "badge": "3 steps",
-        "cta": "Try it",
-        "note": "2 minutes to create",
+        "badge": "3 қадам",
+        "cta": "Байқап көріңіз",
+        "note": "Жасалуға 2 минут",
         "step1": {
-          "description": "Expert, freelancer, salon - AI will select the necessary blocks",
-          "title": "Choose a niche"
+          "description": "Сарапшы, фрилансер, салон - AI қажетті блоктарды таңдайды",
+          "title": "Тауашаны таңдаңыз"
         },
         "step2": {
-          "description": "A couple of sentences - and AI will write texts for the page",
-          "title": "Describe yourself"
+          "description": "Бірнеше сөйлем - және AI бетке мәтіндер жазады",
+          "title": "Өзіңізді сипаттаңыз"
         },
         "step3": {
-          "description": "Get the link LinkMAX.my/name and paste it into bio",
-          "title": "Publish"
+          "description": "LinkMAX.my/name сілтемесін алып, биоға қойыңыз",
+          "title": "Жариялау"
         },
-        "subtitle": "Answer questions - AI assembles the page. No code or designer required.",
-        "title": "How does this work"
+        "subtitle": "Сұрақтарға жауап беріңіз - AI бетті жинайды. Код немесе дизайнер қажет емес.",
+        "title": "Бұл қалай жұмыс істейді"
       },
       "nav": {
-        "create": "Create",
-        "examples": "Examples",
-        "login": "Login",
-        "pricing": "Tariffs"
+        "create": "Жасау",
+        "examples": "Мысалдар",
+        "login": "Жүйеге кіру",
+        "pricing": "Тарифтер"
       },
       "pricing": {
-        "badge": "Tariffs",
-        "bestValue": "Profitable",
+        "badge": "Тарифтер",
+        "bestValue": "Пайдалы",
         "free": {
-          "cta": "Start for free",
-          "description": "To try",
+          "cta": "Тегін бастаңыз",
+          "description": "Байқау үшін",
           "features": {
-            "1": "1 page",
-            "2": "Basic blocks",
-            "3": "3 AI generations",
-            "4": "LinkMAX watermark"
+            "1": "1 бет",
+            "2": "Негізгі блоктар",
+            "3": "AI 3 буыны",
+            "4": "LinkMAX су белгісі"
           },
-          "period": "forever",
+          "period": "мәңгі",
           "price": "$0",
-          "title": "For free"
+          "title": "Тегін"
         },
-        "guarantee": "14 days for return",
-        "halfYear": "six months",
-        "perMonth": "/month",
+        "guarantee": "Қайтару үшін 14 күн",
+        "halfYear": "алты ай",
+        "perMonth": "/ай",
         "pro": {
-          "cta": "Select Pro",
-          "description": "For serious work",
+          "cta": "Pro таңдаңыз",
+          "description": "Ауыр жұмыс үшін",
           "features": {
-            "1": "6 pages",
-            "2": "All 25+ blocks",
-            "3": "CRM + Telegram notifications",
-            "4": "No watermark",
-            "5": "Your own domain",
-            "6": "Advanced Analytics"
+            "1": "6 бет",
+            "2": "Барлық 25+ блок",
+            "3": "CRM + Telegram хабарландырулары",
+            "4": "Су белгісі жоқ",
+            "5": "Сіздің жеке доменіңіз",
+            "6": "Жетілдірілген аналитика"
           },
-          "period": "/month",
-          "popular": "Popular",
+          "period": "/ай",
+          "popular": "Танымал",
           "title": "Pro"
         },
-        "quarter": "quarter",
-        "subtitle": "Basic features are free forever",
-        "title": "Free at start, Pro when you need more",
-        "year": "year"
+        "quarter": "тоқсан",
+        "subtitle": "Негізгі мүмкіндіктер мәңгілікке тегін",
+        "title": "Бастапқыда тегін, қосымша қажет кезде Pro",
+        "year": "жыл"
       },
       "problem": {
-        "badge": "Sound familiar?",
-        "description": "Applications in DM, prices in stories, clients in notepad. Chaos instead of system. You waste time - clients leave.",
-        "item1": "Applications are lost",
-        "item1desc": "The client wrote - you forgot",
-        "item2": "There is no single system",
-        "item2desc": "Everything is scattered across messengers",
-        "item3": "No analytics",
-        "item3desc": "Don't know what works",
-        "title": "Social networks will not replace business tools"
+        "badge": "Таныс естіледі ме?",
+        "description": "DM-дегі қосымшалар, әңгімелердегі бағалар, блокноттағы клиенттер. Жүйенің орнына хаос. Сіз уақытты босқа өткізесіз - клиенттер кетеді.",
+        "item1": "Қолданбалар жоғалды",
+        "item1desc": "Клиент жазды - сіз ұмытып қалдыңыз",
+        "item2": "Бірыңғай жүйе жоқ",
+        "item2desc": "Барлығы мессенджерлерде шашыраңқы",
+        "item3": "Аналитика жоқ",
+        "item3desc": "Не жұмыс істейтінін білмеймін",
+        "title": "Әлеуметтік желілер бизнес құралдарын алмастырмайды"
       },
       "results": {
-        "badge": "For whom",
+        "badge": "Кім үшін",
         "business": {
-          "cta": "Create",
-          "problem": "The website is expensive, social networks do not give the full picture",
-          "solution": "Catalog, map and entry on one page",
-          "title": "Small business"
+          "cta": "Жасау",
+          "problem": "Веб-сайт қымбат, әлеуметтік желілер толық суретті бермейді",
+          "solution": "Каталог, карта және жазба бір бетте",
+          "title": "Шағын бизнес"
         },
         "creators": {
-          "cta": "Create",
-          "problem": "Subscribers don't know where to buy your product",
-          "solution": "Courses, merch and links on one page",
-          "title": "Bloggers and creators"
+          "cta": "Жасау",
+          "problem": "Жазылушылар өніміңізді қайдан сатып алатынын білмейді",
+          "solution": "Бір бетте курстар, тауар және сілтемелер",
+          "title": "Блогерлер мен авторлар"
         },
         "education": {
-          "cta": "Create",
-          "problem": "Parents want to see the program before registering",
-          "solution": "Schedule, prices and reviews in one place",
-          "title": "Tutors and trainers"
+          "cta": "Жасау",
+          "problem": "Ата-аналар тіркеуден бұрын бағдарламаны көргісі келеді",
+          "solution": "Кесте, бағалар және шолулар бір жерде",
+          "title": "Тьюторлар мен жаттықтырушылар"
         },
         "events": {
-          "cta": "Create",
-          "problem": "Information is scattered, people don't get to register",
-          "solution": "Date, place, program and form in one place",
-          "title": "Organizers"
+          "cta": "Жасау",
+          "problem": "Ақпарат шашыраңқы, адамдар тіркеле алмайды",
+          "solution": "Күні, орны, бағдарламасы және формасы бір жерде",
+          "title": "Ұйымдастырушылар"
         },
         "freelancers": {
-          "cta": "Create",
-          "problem": "\"What is the price?\" - in every message",
-          "solution": "Price and application form - the client sees prices immediately",
-          "title": "Freelancers"
+          "cta": "Жасау",
+          "problem": "\"Бағасы қанша?\" - әрбір хабарламада",
+          "solution": "Баға және өтініш формасы – клиент бағаларды бірден көреді",
+          "title": "Фрилансерлер"
         },
         "health": {
-          "cta": "Create",
-          "problem": "Clients call to check prices",
-          "solution": "Price and online booking - fewer calls",
-          "title": "Salons and masters"
+          "cta": "Жасау",
+          "problem": "Клиенттер бағаны тексеру үшін телефон соғады",
+          "solution": "Баға және онлайн брондау - аз қоңыраулар",
+          "title": "Салондар мен шеберлер"
         },
-        "subtitle": "No matter the niche, LinkMAX helps you get applications",
-        "title": "One page - different tasks"
+        "subtitle": "Қандай тауашалар болса да, LinkMAX қолданбаларды алуға көмектеседі",
+        "title": "Бір бет – әртүрлі тапсырмалар"
       },
       "seo": {
-        "badge": "What is LinkMAX",
+        "badge": "LinkMAX дегеніміз не",
         "items": {
-          "1": "Micro-Business OS - everything for business in one place",
-          "2": "AI Page Builder: Create a Website in 2 Minutes",
-          "3": "Built-in CRM: manage requests and clients",
-          "4": "Mini-site + application form + Telegram notifications",
-          "5": "Alternative to Taplink, Linktree with CRM features"
+          "1": "Micro-Business ОЖ – бизнес үшін барлығы бір жерде",
+          "2": "AI Page Builder: 2 минут ішінде веб-сайт жасаңыз",
+          "3": "Кірістірілген CRM: сұраулар мен клиенттерді басқару",
+          "4": "Мини-сайт + өтініш формасы + Telegram хабарламалары",
+          "5": "Taplink-ке балама, CRM мүмкіндіктері бар Linktree"
         },
-        "title": "Operating system for micro-business"
+        "title": "Микробизнеске арналған операциялық жүйе"
       },
       "solution": {
-        "badge": "Solution",
-        "description": "Business card website, CRM for applications, Telegram notifications, analytics - all in one place. Your operating system for micro-businesses.",
-        "item1": "Page builder",
-        "item1desc": "Build a website from 25+ ready-made blocks",
-        "item2": "Built-in CRM",
-        "item2desc": "All applications in one place",
-        "item3": "Instant Notifications",
-        "item3desc": "Telegram bot will notify you about new clients",
-        "title": "One platform for your entire business"
+        "badge": "Шешім",
+        "description": "Визиттік веб-сайт, қолданбаларға арналған CRM, Telegram хабарландырулары, аналитика – барлығы бір жерде. Микробизнеске арналған операциялық жүйеңіз.",
+        "item1": "Бет құрастырушы",
+        "item1desc": "25+ дайын блоктардан веб-сайт жасаңыз",
+        "item2": "Кірістірілген CRM",
+        "item2desc": "Барлық қолданбалар бір жерде",
+        "item3": "Жылдам хабарландырулар",
+        "item3desc": "Telegram боты сізге жаңа клиенттер туралы хабарлайды",
+        "title": "Бүкіл бизнесіңізге арналған бір платформа"
       },
       "trust": {
-        "badge": "Why LinkMAX",
+        "badge": "Неліктен LinkMAX",
         "mobile": {
-          "description": "Change texts and prices from your phone",
-          "title": "Editor in your pocket"
+          "description": "Телефоннан мәтіндер мен бағаларды өзгертіңіз",
+          "title": "Қалтаңыздағы редактор"
         },
         "noCommission": {
-          "description": "Sell вЂ‹вЂ‹- it's all yours",
-          "title": "0% commission"
+          "description": "Сату - бәрі сенікі",
+          "title": "0% комиссия"
         },
         "speed": {
-          "description": "Pages load instantly. The client will not leave",
-          "title": "Fast on the phone"
+          "description": "Беттер бірден жүктеледі. Клиент кетпейді",
+          "title": "Телефонда жылдам"
         },
-        "subtitle": "Nothing extra. Only what brings in applications.",
+        "subtitle": "Қосымша ештеңе жоқ. Тек қолданбаларды әкелетін нәрсе.",
         "telegram": {
-          "description": "New lead - notification immediately",
-          "title": "Applications in Telegram"
+          "description": "Жаңа жетекші - дереу хабарландыру",
+          "title": "Telegram-дағы қосымшалар"
         },
-        "title": "For those who value time"
+        "title": "Уақытты бағалайтындар үшін"
       }
     },
     "language": {
-      "addLanguage": "Add language",
-      "additionalLanguages": "Additional languages:",
-      "anyLanguageSupported": "Any language supported",
-      "autoTranslate": "Autotranslation",
-      "autoTranslated": "Content has been automatically translated",
-      "autoTranslatedTo": "Translated to: {{languages}}",
-      "contentLanguage": "Content language",
-      "flexibleMultilingual": "Flexible multilingual",
-      "moreLanguages": "Other languages",
-      "noLanguageFound": "Language not found",
-      "searchLanguage": "Search for language...",
-      "selectLanguage": "Select language",
-      "showMoreLanguages": "{{count}} more languages",
-      "translating": "Translation...",
-      "translationError": "Auto translation error",
-      "uiLanguage": "Interface language"
+      "addLanguage": "Тіл қосыңыз",
+      "additionalLanguages": "Қосымша тілдер:",
+      "anyLanguageSupported": "Кез келген тілге қолдау көрсетіледі",
+      "autoTranslate": "Автотрансляция",
+      "autoTranslated": "Мазмұн автоматты түрде аударылды",
+      "autoTranslatedTo": "Аударылған: {{languages}}",
+      "contentLanguage": "Мазмұн тілі",
+      "flexibleMultilingual": "Икемді көптілді",
+      "moreLanguages": "Басқа тілдер",
+      "noLanguageFound": "Тіл табылмады",
+      "searchLanguage": "Тіл іздеу...",
+      "selectLanguage": "Тілді таңдаңыз",
+      "showMoreLanguages": "{{count}} қосымша тіл",
+      "translating": "Аударма...",
+      "translationError": "Автоматты аударма қатесі",
+      "uiLanguage": "Интерфейс тілі"
     },
     "layouts": {
-      "grid": "Grid",
-      "list": "List"
+      "grid": "Тор",
+      "list": "Тізім"
     },
     "leaderboard": {
-      "all": "All",
-      "allTime": "All Time",
-      "empty": "No pages yet for this period",
-      "month": "This Month",
-      "title": "Top Pages",
-      "week": "This Week"
+      "all": "Барлығы",
+      "allTime": "Барлық уақытта",
+      "empty": "Бұл кезең үшін әлі беттер жоқ",
+      "month": "Осы айда",
+      "title": "Жоғарғы беттер",
+      "week": "Осы аптада"
     },
     "legal": {
-      "agreeToTerms": "I accept the terms",
-      "andThe": "And",
-      "paymentTerms": "Payment terms",
-      "paymentTermsDescription": "Payment and refund policy for the platform",
-      "privacyDescription": "Read the personal data processing policy",
-      "privacyLink": "Privacy Policy",
-      "privacyPolicy": "Privacy Policy",
-      "termsDescription": "Read the terms of use of the LinkMAX platform",
-      "termsLink": "User Agreement",
-      "termsOfService": "User Agreement"
+      "agreeToTerms": "Мен шарттарды қабылдаймын",
+      "andThe": "Және",
+      "paymentTerms": "Төлем шарттары",
+      "paymentTermsDescription": "Платформа үшін төлем және қайтару саясаты",
+      "privacyDescription": "Жеке деректерді өңдеу саясатын оқыңыз",
+      "privacyLink": "Құпиялылық саясаты",
+      "privacyPolicy": "Құпиялылық саясаты",
+      "termsDescription": "LinkMAX платформасын пайдалану шарттарын оқыңыз",
+      "termsLink": "Пайдаланушы келісімі",
+      "termsOfService": "Пайдаланушы келісімі"
     },
     "lifecycle": {
       "hasLeads": {
-        "hint": "Follow up with clients after their visit — it improves return rate by 30%",
-        "title": "Leads are coming in"
+        "hint": "Клиенттерге келгеннен кейін оларды бақылаңыз - бұл қайтару деңгейін 30% арттырады",
+        "title": "Жетекшілер кіріп жатыр"
       },
       "repeatCustomers": {
-        "hint": "You have {{count}} repeat customers — great job! 🎉",
-        "title": "Repeat customers"
+        "hint": "Сізде {{count}} қайталанатын тұтынушыларыңыз бар — тамаша жұмыс! 🎉",
+        "title": "Қайталанатын тұтынушылар"
       },
       "trafficNoLeads": {
-        "hint": "Add a contact form or booking block — every 5th page with a form gets leads",
-        "title": "Traffic but no leads"
+        "hint": "Байланыс пішінін немесе брондау блогын қосыңыз — пішіні бар әрбір 5-ші бет ықтимал тұтынушыларды алады",
+        "title": "Трафик, бірақ жетекшілер жоқ"
       }
     },
     "mapBlock": {
-      "address": "Address",
-      "addressPlaceholder": "Almaty, st. Abaya 150",
-      "enterAddress": "Enter address",
-      "hint": "Enter the address - the map will find the place automatically"
+      "address": "Мекенжай",
+      "addressPlaceholder": "Алматы, көш. Абай 150",
+      "enterAddress": "Мекенжайды енгізіңіз",
+      "hint": "Мекенжайды енгізіңіз - карта орынды автоматты түрде табады"
     },
     "messages": {
-      "accountCreated": "AccountCreated",
-      "failedToSignIn": "FailedToSignIn",
-      "failedToSignUp": "FailedToSignUp",
-      "loading": "Loading..."
+      "accountCreated": "Есептік жазба жасалды",
+      "failedToSignIn": "Кіру сәтсіз аяқталды",
+      "failedToSignUp": "Тіркелу сәтсіз аяқталды",
+      "loading": "Жүктелуде..."
     },
     "metrics": {
-      "clicks": "Clicks",
-      "conversion": "Conversion",
-      "ctr": "Activity",
+      "clicks": "Басулар",
+      "conversion": "Түрлендіру",
+      "ctr": "Белсенділік",
       "funnel": {
-        "clicks": "Interest (clicks)",
-        "insightGoodJob": "Your funnel is working steadily. Keep driving traffic through social media!",
-        "insightLowConversion": "Many clicks but few leads. Make sure your offer is clear to the client.",
-        "insightNoLeads": "You have views but no leads. Try adding a contact form to the first screen.",
-        "insightTitle": "LinkMAX AI Tip",
-        "last30Days": "Last 30 days",
-        "leads": "Leads",
-        "title": "Conversion Funnel",
-        "views": "Views"
+        "clicks": "Қызығушылық (басулар)",
+        "insightGoodJob": "Шұңқырыңыз тұрақты жұмыс істейді. Әлеуметтік желілер арқылы трафикті арттырыңыз!",
+        "insightLowConversion": "Көптеген шертулер, бірақ аз мүмкіндіктер. Сіздің ұсынысыңыз клиентке түсінікті екеніне көз жеткізіңіз.",
+        "insightNoLeads": "Көрулеріңіз бар, бірақ жетекшілер жоқ. Бірінші экранға контакт пішінін қосып көріңіз.",
+        "insightTitle": "LinkMAX AI кеңесі",
+        "last30Days": "Соңғы 30 күн",
+        "leads": "Жетекші",
+        "title": "Түрлендіру шұңқыры",
+        "views": "Көрулер"
       },
-      "views": "Views"
+      "views": "Көрулер"
     },
     "mobileToolbar": {
-      "achievements": "Achievements",
-      "achievementsDesc": "Your progress",
-      "aiBuilder": "AI Constructor",
-      "aiBuilderDesc": "Create a page with AI",
+      "achievements": "Жетістіктер",
+      "achievementsDesc": "Сіздің үлгеріміңіз",
+      "aiBuilder": "AI конструкторы",
+      "aiBuilderDesc": "AI көмегімен бет жасаңыз",
       "crm": "CRM",
-      "crmDesc": "Lead management",
-      "galleryDesc": "Community works",
-      "marketplace": "Marketplace",
-      "marketplaceDesc": "Community templates",
-      "more": "Menu",
-      "moreOptions": "Menu",
-      "preview": "Look",
-      "pricingDesc": "Premium features",
-      "settings": "Settings",
-      "share": "Publish",
-      "status": "Status",
-      "templates": "Templates",
-      "templatesDesc": "Ready-made templates",
-      "tokensDesc": "Your balance and transactions"
+      "crmDesc": "Жетекші басқару",
+      "galleryDesc": "Қоғамдық жұмыстар",
+      "marketplace": "Базар",
+      "marketplaceDesc": "Қауымдастық үлгілері",
+      "more": "Мәзір",
+      "moreOptions": "Мәзір",
+      "preview": "Қараңыз",
+      "pricingDesc": "Премиум мүмкіндіктер",
+      "settings": "Параметрлер",
+      "share": "Жариялау",
+      "status": "Күй",
+      "templates": "Үлгілер",
+      "templatesDesc": "Дайын шаблондар",
+      "tokensDesc": "Сіздің балансыңыз және транзакцияларыңыз"
     },
     "nameAnimation": {
-      "bounce": "Jumping",
-      "glow": "Glow",
-      "gradient": "Gradient",
-      "neon": "Neon",
-      "none": "No animation",
+      "bounce": "Секіру",
+      "glow": "Жарқырау",
+      "gradient": "Градиент",
+      "neon": "Неон",
+      "none": "Анимация жоқ",
       "pulse": "Ripple",
-      "rainbow": "Rainbow",
-      "shake": "Shaking",
-      "title": "Name animation",
-      "typing": "Typewriter",
-      "unlockAll": "Unlock all animations",
-      "wave": "Wave"
+      "rainbow": "Кемпірқосақ",
+      "shake": "Шайқау",
+      "title": "Атау анимациясы",
+      "typing": "Жазу машинкасы",
+      "unlockAll": "Барлық анимациялардың құлпын ашыңыз",
+      "wave": "Толқын"
     },
     "nav": {
-      "dashboard": "Dashboard",
-      "insights": "Insights",
-      "settings": "Settings"
+      "dashboard": "Бақылау тақтасы",
+      "insights": "Түсініктер",
+      "settings": "Параметрлер"
     },
     "newsletter": {
-      "alreadySubscribed": "You are already subscribed!",
-      "emailPlaceholder": "Your email",
-      "error": "Error. Try again.",
-      "subscribe": "Subscribe",
-      "subscriptionConfirmed": "Your subscription has been confirmed.",
-      "success": "Thanks for subscribing!",
-      "thankYou": "Thank you!",
-      "title": "Subscribe"
+      "alreadySubscribed": "Сіз әлдеқашан жазылғансыз!",
+      "emailPlaceholder": "Сіздің электрондық поштаңыз",
+      "error": "Қате. Қайтадан байқап көріңіз.",
+      "subscribe": "Жазылу",
+      "subscriptionConfirmed": "Жазылымыңыз расталды.",
+      "success": "Жазылғаныңыз үшін рахмет!",
+      "thankYou": "Рақмет сізге!",
+      "title": "Жазылу"
     },
     "niche": {
-      "barber": "Barber",
-      "beauty": "Beauty Master",
-      "chef": "Cook/Pastry Chef",
-      "designer": "Designer",
-      "expert": "Expert",
-      "fitness": "Fitness trainer",
-      "marketer": "Marketer",
-      "musician": "Musician",
-      "photographer": "Photographer",
-      "psychologist": "Psychologist",
-      "shop": "Shop",
-      "teacher": "Tutor"
+      "barber": "Шаштараз",
+      "beauty": "Сұлулық шебері",
+      "chef": "Аспаз/кондитер аспазшысы",
+      "designer": "Дизайнер",
+      "expert": "Сарапшы",
+      "fitness": "Фитнес жаттықтырушысы",
+      "marketer": "Маркетолог",
+      "musician": "Музыкант",
+      "photographer": "Фотограф",
+      "psychologist": "Психолог",
+      "shop": "Дүкен",
+      "teacher": "Тәрбиеші"
     },
     "niches": {
-      "art": "Creation",
-      "beauty": "Beauty",
-      "business": "Business",
-      "education": "Education",
-      "events": "Events",
-      "expert": "Expert",
-      "fashion": "Fashion",
-      "fitness": "Fitness",
-      "food": "Food",
-      "health": "Health",
-      "music": "Music",
-      "other": "Other",
-      "realestate": "Real estate",
-      "services": "Services",
-      "tech": "IT and technology",
-      "travel": "Trips"
+      "art": "Жасау",
+      "beauty": "Сұлулық",
+      "business": "Бизнес",
+      "education": "Білім",
+      "events": "Оқиғалар",
+      "expert": "Сарапшы",
+      "fashion": "Сән",
+      "fitness": "Фитнес",
+      "food": "Тамақ",
+      "health": "Денсаулық",
+      "music": "Музыка",
+      "other": "Басқа",
+      "realestate": "Жылжымайтын мүлік",
+      "services": "Қызметтер",
+      "tech": "IT және технология",
+      "travel": "Сапарлар"
     },
     "notFound": {
-      "message": "Oops! Page not found",
-      "returnHome": "Return to Home"
+      "message": "Ой! Бет табылмады",
+      "returnHome": "Үйге оралу"
     },
     "onboarding": {
-      "additionalDetails": "Additional information",
-      "completeDescription": "Your page is created and ready to edit",
-      "completeTitle": "Ready!",
-      "detailsDescription": "This information will help AI create the perfect page",
-      "detailsHint": "Not necessary, but will help make the page more accurate",
-      "detailsPlaceholder": "City, specialization, experience...",
-      "detailsTitle": "Tell us about yourself",
-      "enterName": "Enter your name",
-      "generatePage": "Create a page",
-      "generatingDescription": "We generate structure, texts and design...",
-      "generatingTitle": "AI creates your page",
-      "generationFailed": "Failed to create page",
-      "goalBookings": "Record",
-      "goalClicks": "Clicks",
-      "goalDescription": "Let's choose blocks so that this happens faster.",
-      "goalLeads": "Applications",
-      "goalTitle": "What do you want to get from this page?",
-      "namePlaceholder": "For example: Alexey or Beauty Studio",
-      "nicheDescription": "AI will create a personal page for you in a minute",
-      "nicheTitle": "Choose your niche",
-      "pageGenerated": "The page has been successfully created!",
-      "pleaseWait": "This will take about 30 seconds",
-      "skip": "Skip",
-      "wizardDescription": "Step-by-step setup of your profile and page.",
-      "wizardTitle": "Setup Wizard",
-      "yourName": "Your name or title"
+      "additionalDetails": "Қосымша ақпарат",
+      "completeDescription": "Сіздің бетіңіз жасалды және өңдеуге дайын",
+      "completeTitle": "Дайын!",
+      "detailsDescription": "Бұл ақпарат AI-ға тамаша бетті жасауға көмектеседі",
+      "detailsHint": "Қажет емес, бірақ бетті дәлірек етуге көмектеседі",
+      "detailsPlaceholder": "Қала, мамандық, тәжірибе...",
+      "detailsTitle": "Өзіңіз туралы айтып беріңізші",
+      "enterName": "Атыңызды енгізіңіз",
+      "generatePage": "Бет жасау",
+      "generatingDescription": "Біз құрылымды, мәтіндерді және дизайнды жасаймыз...",
+      "generatingTitle": "AI сіздің бетіңізді жасайды",
+      "generationFailed": "Бетті жасау сәтсіз аяқталды",
+      "goalBookings": "Жазба",
+      "goalClicks": "Басулар",
+      "goalDescription": "Бұл тезірек болатындай блоктарды таңдайық.",
+      "goalLeads": "Қолданбалар",
+      "goalTitle": "Бұл беттен не алғыңыз келеді?",
+      "namePlaceholder": "Мысалы: Алексей немесе сұлулық студиясы",
+      "nicheDescription": "AI бір минут ішінде сіз үшін жеке бет жасайды",
+      "nicheTitle": "Өз тауашаңызды таңдаңыз",
+      "pageGenerated": "Бет сәтті жасалды!",
+      "pleaseWait": "Бұл шамамен 30 секундты алады",
+      "skip": "Өткізіп жіберу",
+      "wizardDescription": "Профильді және бетті кезең-кезеңмен орнату.",
+      "wizardTitle": "Орнату шебері",
+      "yourName": "Сіздің атыңыз немесе лауазымыңыз"
     },
     "onboardingTour": {
       "addBlock": {
-        "desc": "Press the + button to add a new block. Links, products, videos, and more are available.",
-        "title": "Adding Blocks"
+        "desc": "Жаңа блок қосу үшін + түймесін басыңыз. Сілтемелер, өнімдер, бейнелер және т.б. қолжетімді.",
+        "title": "Блоктарды қосу"
       },
-      "back": "Back",
+      "back": "Артқа",
       "complete": {
-        "desc": "Now you know the basics. Start building your page!",
-        "title": "All done! 🎉"
+        "desc": "Енді сіз негіздерді білесіз. Парақшаңызды құруды бастаңыз!",
+        "title": "Барлығы орындалды! 🎉"
       },
       "editBlock": {
-        "desc": "Hover over any block to see edit, delete, and drag buttons.",
-        "title": "Editing Blocks"
+        "desc": "Өңдеу, жою және сүйреу түймелерін көру үшін меңзерді кез келген блоктың үстіне апарыңыз.",
+        "title": "Өңдеу блоктары"
       },
-      "next": "Next",
+      "next": "Келесі",
       "profile": {
-        "desc": "Click on the profile block to change your name, bio, and avatar.",
-        "title": "Your Profile"
+        "desc": "Аты-жөніңізді, өмірбаяныңызды және аватарыңызды өзгерту үшін профиль блогын басыңыз.",
+        "title": "Сіздің профиліңіз"
       },
       "share": {
-        "desc": "When done, click \"Share\" to get a public link for social media.",
-        "title": "Publishing Your Page"
+        "desc": "Аяқтағаннан кейін, әлеуметтік медиаға ортақ сілтемені алу үшін «Бөлісу» түймесін басыңыз.",
+        "title": "Сіздің парақшаңызды жариялау"
       },
-      "skip": "Skip",
-      "start": "Start",
+      "skip": "Өткізіп жіберу",
+      "start": "Бастау",
       "welcome": {
-        "desc": "Let us show you the basics. It will only take a minute.",
-        "title": "Welcome to LinkMAX! рџ‘‹"
+        "desc": "Сізге негіздерді көрсетейік. Бұл бар болғаны бір минутты алады.",
+        "title": "LinkMAX-қа қош келдіңіз! рџ‘‹"
       }
     },
     "operator": {
       "followUp": {
-        "completedOn": "Visit {{date}}",
-        "send": "Message",
-        "sent": "Sent",
-        "template": "Hello {{name}}! Thanks for visiting! How was it? We'd love to see you again рџЉ",
-        "title": "Follow-up needed",
-        "visitedYesterday": "Visited yesterday at {{time}}"
+        "completedOn": "{{date}} сайтына кіру",
+        "send": "Хабарлама",
+        "sent": "Жіберілді",
+        "template": "Сәлем {{name}}! Келгеніңізге рахмет! Қалай болды? Біз сізді қайтадан көргіміз келеді рџЉ",
+        "title": "Бақылау қажет",
+        "visitedYesterday": "Кеше барған: {{time}}"
       },
       "rebook": {
-        "daysSince": "{{days}} days ago",
-        "nudge": "Nudge",
-        "title": "Time to bring back client"
+        "daysSince": "{{days}} күн бұрын",
+        "nudge": "Түрту",
+        "title": "Клиентті қайтару уақыты келді"
       },
       "repeat": {
-        "badge": "Returning",
-        "label": "Returning:"
+        "badge": "Қайтару",
+        "label": "Қайтару:"
       },
       "stale": {
-        "page": "Page hasn't been updated in over 2 weeks — refresh your content"
+        "page": "Бет 2 аптадан астам уақыт бойы жаңартылмады — мазмұнды жаңартыңыз"
       },
       "today": {
-        "next": "Next: {{name}} at {{time}}",
-        "title": "Bookings today: {{count}}"
+        "next": "Келесі: {{name}}, {{time}}",
+        "title": "Бүгінгі тапсырыстар: {{count}}"
       },
       "unanswered": {
-        "missed": "{{count}} missed (>24h)",
-        "title": "Unprocessed: {{count}}"
+        "missed": "{{count}} өткізіп алған (>24 сағ)",
+        "title": "Өңделмеген: {{count}}"
       },
       "week": {
-        "leads": "This week:"
+        "leads": "Осы аптада:"
       }
     },
     "pagination": {
-      "morePages": "More pages",
-      "next": "Forward",
-      "previous": "Back"
+      "morePages": "Қосымша беттер",
+      "next": "Алға",
+      "previous": "Артқа"
     },
     "paidContent": {
-      "content": "content",
-      "description": "Unlock this content with Linkkon tokens",
-      "loginRequired": "Login to purchase",
+      "content": "мазмұны",
+      "description": "Бұл мазмұнды Linkkon белгілерімен ашыңыз",
+      "loginRequired": "Сатып алу үшін жүйеге кіріңіз",
       "notEnoughTokens": "NotEnoughTokens",
-      "priceHint": "Minimum: 1 token. Recommended: 50-500 tokens.",
-      "priceLabel": "Price (in Linkkon tokens)",
+      "priceHint": "Ең аз: 1 токен. Ұсынылған: 50-500 токен.",
+      "priceLabel": "Бағасы (Linkon токендерінде)",
       "pricePlaceholder": "100",
-      "settingsDescription": "Restrict access to block content. Visitors will be able to unlock it for Linkkon tokens (1 token = 1 в‚ё).",
-      "title": "Paid content",
-      "unlock": "Unblock",
-      "unlockContent": "Unblocking paid content",
-      "unlockDescription": "Unblocking paid content",
-      "unlockWithTokens": "Unlock this content with Linkkon tokens",
-      "unlocking": "Unlock...",
-      "yourBalance": "Your balance"
+      "settingsDescription": "Мазмұнға кіруді шектеңіз. Келушілер оны Linkkon токендері (1 токен = 1 в‚ё) үшін аша алады.",
+      "title": "Ақылы мазмұн",
+      "unlock": "Блоктан шығару",
+      "unlockContent": "Ақылы мазмұнды блоктан шығару",
+      "unlockDescription": "Ақылы мазмұнды блоктан шығару",
+      "unlockWithTokens": "Бұл мазмұнды Linkkon белгілерімен ашыңыз",
+      "unlocking": "Құлыпты ашу...",
+      "yourBalance": "Сіздің балансыңыз"
     },
     "phaseB": {
       "whyLnkmx": {
-        "emptyContacts": "All work from smartphone. Import contacts or add manually.",
-        "emptyDeals": "CRM in 15 minutes — no implementation. Add your first deal.",
-        "mobile": "All work from your smartphone",
-        "noSetup": "CRM in 15 minutes — no implementation needed",
-        "premium": "Premium design out of the box",
-        "title": "Why LinkMAX"
+        "emptyContacts": "Барлығы смартфоннан жұмыс істейді. Контактілерді импорттаңыз немесе қолмен қосыңыз.",
+        "emptyDeals": "15 минут ішінде CRM — іске асыру жоқ. Алғашқы мәмілеңізді қосыңыз.",
+        "mobile": "Барлығы смартфоннан жұмыс істейді",
+        "noSetup": "15 минут ішінде CRM — енгізу қажет емес",
+        "premium": "Қораптан шыққан премиум дизайн",
+        "title": "Неліктен LinkMAX"
       }
     },
     "placeholders": {
-      "buttonText": "Button text",
-      "enterText": "Enter your text...",
-      "tellAboutYourself": "Tell us about yourself...",
-      "yourName": "your name"
+      "buttonText": "Түйме мәтіні",
+      "enterText": "Мәтінді енгізіңіз...",
+      "tellAboutYourself": "Өзіңіз туралы айтып беріңізші...",
+      "yourName": "сіздің атыңыз"
     },
     "premium": {
-      "active": "Pro active",
-      "blockLocked": "Premium block",
-      "featureRequires": "{{feature}} available in {{tier}}",
-      "features": "Pro Features",
-      "premiumFramesLocked": "Premium frames require PRO subscription",
-      "requiresTier": "{{tier}} required",
-      "trial": "Trial period",
-      "unlockWith": "Unlock this block with a Pro subscription",
-      "upgrade": "Upgrade to Pro",
-      "upgradeToBusiness": "Go to Business",
-      "upgradeToPro": "Upgrade to PRO →",
-      "verificationRequiresPro": "Verification badge is available for PRO users"
+      "active": "Pro белсенді",
+      "blockLocked": "Премиум блок",
+      "featureRequires": "{{feature}} {{tier}} ішінде қолжетімді",
+      "features": "Pro мүмкіндіктері",
+      "premiumFramesLocked": "Премиум кадрлар PRO жазылуын қажет етеді",
+      "requiresTier": "{{tier}} қажет",
+      "trial": "Сынақ мерзімі",
+      "unlockWith": "Бұл блокты Pro жазылымымен ашыңыз",
+      "upgrade": "Pro нұсқасына жаңартыңыз",
+      "upgradeToBusiness": "Бизнеске өтіңіз",
+      "upgradeToPro": "PRO нұсқасына жаңартыңыз →",
+      "verificationRequiresPro": "Растау белгісі PRO пайдаланушылары үшін қолжетімді"
     },
     "pricing": {
-      "alreadyFree": "Free plan is already active",
-      "basicDesc": "Page + bookings + CRM for free",
-      "businessDesc": "CRM, team & zones for business",
-      "businessLink": "Learn about the BUSINESS plan →",
-      "businessNote": "Need team CRM, zones, and roles?",
-      "cancelAnytime": "Cancel anytime",
-      "choosePlan": "Choose the right tariff",
-      "comingSoon": "Payment will be available soon! Stay tuned.",
+      "alreadyFree": "Тегін жоспар қазірдің өзінде белсенді",
+      "basicDesc": "Бет + брондау + CRM тегін",
+      "businessDesc": "CRM, команда және бизнеске арналған аймақтар",
+      "businessLink": "БИЗНЕС-жоспар туралы біліңіз →",
+      "businessNote": "Командаға CRM, аймақтар және рөлдер керек пе?",
+      "cancelAnytime": "Кез келген уақытта бас тарту",
+      "choosePlan": "Дұрыс тарифті таңдаңыз",
+      "comingSoon": "Төлем жақын арада қолжетімді болады! Бізбен бірге қалыңыз.",
       "companyDetails": {
-        "addressLine": "Almaty, st. Sholokhova, 20",
-        "nameLine": "ARchitecKZ вЂў BIN: 190540008684"
+        "addressLine": "Алматы, көш. Шолохова, 20 жаста",
+        "nameLine": "ARchitecKZ • БИН: 190540008684"
       },
-      "currentPlan": "Current",
-      "description": "Unlock all the features of LinkMAX.my for your business",
+      "currentPlan": "Ағымдағы",
+      "description": "Бизнесіңіз үшін LinkMAX.my барлық мүмкіндіктерін ашыңыз",
       "features": {
-        "advancedAnalytics": "Advanced click analytics",
-        "aiMonthly": "1 AI generation per month",
-        "aiMonthlyPro": "5 AI generations per month",
-        "allBasic": "Everything from BASIC, plus:",
-        "allBlocks": "All 25+ block types without restrictions",
-        "allPro": "Everything from PRO, plus:",
-        "basicBlocks": "Basic blocks (Profile, Link, Text, Photo, Button, Social networks)",
-        "basicCustomization": "Basic setup (colors, fonts)",
-        "basicStats": "Basic view statistics",
-        "basicThemes": "Basic themes",
-        "basicViewStats": "Basic view statistics",
-        "businessZones": "Business Zones (workspaces)",
-        "customDomain": "Custom domain",
-        "exportAndAutomation": "Export + Telegram notifications",
-        "faq": "FAQ and feedback blocks",
-        "forms": "Application collection forms",
-        "freeBooking": "Customer booking + prepayment",
-        "freeCRM": "CRM up to 50 leads/mo",
-        "fullCRM": "Full-fledged CRM for leads",
-        "maps": "Maps (address + map)",
-        "media": "Media: images, videos, carousels",
-        "messengers": "Messengers and social networks",
-        "multiPage": "Up to 6 pages",
-        "noWatermark": "No watermark — your brand",
-        "priceLists": "Price lists and product catalogs",
-        "prioritySupport": "Priority support",
-        "proThemes": "Professional themes and animations",
-        "qrCode": "Page QR code",
-        "scheduler": "Block Scheduler",
-        "teamCRM": "Team CRM & Kanban",
-        "teamInbox": "Team chat & tasks",
-        "teamMembers": "Up to 5 team members",
-        "teamRoles": "Roles & access control",
-        "telegramNotifications": "Telegram notifications about applications",
-        "timers": "Countdown timers",
-        "unlimitedInbound": "Unlimited inbound requests",
-        "unlimitedLinks": "Unlimited links"
+        "advancedAnalytics": "Кеңейтілген басуды талдау",
+        "aiMonthly": "Айына 1 AI буыны",
+        "aiMonthlyPro": "Айына 5 AI ұрпағы",
+        "allBasic": "BASIC-тен барлығы, сонымен қатар:",
+        "allBlocks": "Барлық 25+ блок түрлері шектеусіз",
+        "allPro": "Барлығы PRO-ден, сонымен қатар:",
+        "basicBlocks": "Негізгі блоктар (Профиль, Сілтеме, Мәтін, Фото, Түйме, Әлеуметтік желілер)",
+        "basicCustomization": "Негізгі орнату (түстер, қаріптер)",
+        "basicStats": "Негізгі көрініс статистикасы",
+        "basicThemes": "Негізгі тақырыптар",
+        "basicViewStats": "Негізгі көрініс статистикасы",
+        "businessZones": "Бизнес аймақтары (жұмыс кеңістіктері)",
+        "customDomain": "Арнаулы домен",
+        "exportAndAutomation": "Экспорт + Telegram хабарландырулары",
+        "faq": "Жиі қойылатын сұрақтар және кері байланыс блоктары",
+        "forms": "Өтінімдерді жинау формалары",
+        "freeBooking": "Тұтынушыға тапсырыс беру + алдын ала төлем",
+        "freeCRM": "CRM айына 50 тұтынушыға дейін",
+        "fullCRM": "Жетекшілерге арналған толыққанды CRM",
+        "maps": "Карталар (мекенжай + карта)",
+        "media": "Ақпарат құралдары: суреттер, бейнелер, карусельдер",
+        "messengers": "Мессенджерлер мен әлеуметтік желілер",
+        "multiPage": "6 бетке дейін",
+        "noWatermark": "Су таңбасы жоқ — сіздің брендіңіз",
+        "priceLists": "Бағалар тізімі және өнім каталогтары",
+        "prioritySupport": "Басымдық қолдау",
+        "proThemes": "Кәсіби тақырыптар мен анимациялар",
+        "qrCode": "Бет QR коды",
+        "scheduler": "Блокты жоспарлаушы",
+        "teamCRM": "CRM және Kanban командасы",
+        "teamInbox": "Топтық чат және тапсырмалар",
+        "teamMembers": "Команданың 5 мүшесіне дейін",
+        "teamRoles": "Рөлдер және қатынасты басқару",
+        "telegramNotifications": "Қолданбалар туралы Telegram хабарламалары",
+        "timers": "Кері санақ таймерлері",
+        "unlimitedInbound": "Шектеусіз кіріс сұраулар",
+        "unlimitedLinks": "Шексіз сілтемелер"
       },
       "free": {
-        "title": "For free"
+        "title": "Тегін"
       },
-      "freeForever": "Free forever",
+      "freeForever": "Мәңгілік тегін",
       "limitations": {
-        "limitedBlocks": "10 blocks maximum",
-        "watermark": "Watermark LinkMAX.my"
+        "limitedBlocks": "Ең көбі 10 блок",
+        "watermark": "Су белгісі LinkMAX.my"
       },
-      "moneyBack": "14 day return guarantee",
-      "month": "months",
-      "months": "months",
-      "new": "New",
-      "paymentNote": "Payment via RoboKassa",
-      "popular": "Popular",
-      "proDesc": "Everything for professionals and business",
-      "savingsText": "Saving",
-      "securePayments": "Secure payments",
+      "moneyBack": "14 күндік қайтару кепілдігі",
+      "month": "айлар",
+      "months": "айлар",
+      "new": "Жаңа",
+      "paymentNote": "RoboKassa арқылы төлеу",
+      "popular": "Танымал",
+      "proDesc": "Барлығы кәсіпқойлар мен бизнес үшін",
+      "savingsText": "Сақтау",
+      "securePayments": "Қауіпсіз төлемдер",
       "seo": {
-        "description": "Compare LinkMAX plans: free builder, Pro with AI, CRM, analytics and your own domain. Transparent prices.",
-        "imageAlt": "Tariff plans LinkMAX",
+        "description": "LinkMAX жоспарларын салыстырыңыз: тегін құрастырушы, AI бар Pro, CRM, аналитика және жеке домен. Мөлдір бағалар.",
+        "imageAlt": "LinkMAX тарифтік жоспарлары",
         "opt": {
-          "answer": "LinkMAX offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support.",
+          "answer": "LinkMAX 12 айға 3045 теңгеден (шамамен $6 АҚШ доллары) басталатын тегін Basic жоспары мен Pro жоспарын ұсынады. Pro мүмкіндіктеріне шексіз беттер, пайдаланушы домендері, аналитика және басымдықты қолдау кіреді.",
           "audience": {
-            "1": "Budget-conscious small businesses",
-            "2": "Freelancers looking for affordable tools",
-            "3": "Growing businesses needing more features"
+            "1": "Бюджетті қажет ететін шағын кәсіпорындар",
+            "2": "Фрилансерлер қол жетімді құралдарды іздейді",
+            "3": "Өсіп келе жатқан кәсіпорындар қосымша мүмкіндіктерді қажет етеді"
           },
           "features": {
-            "1": "Free Basic plan available",
-            "2": "Pro plan: 3,045 KZT/mo (Annual)",
-            "3": "Volume discounts: up to 30% off for 12 months",
-            "4": "Multi-currency support (KZT, USD)",
-            "5": "Flexible token system",
-            "6": "No credit card required for free plan"
+            "1": "Тегін негізгі жоспар қол жетімді",
+            "2": "Pro жоспары: 3 045 теңге/ай (жылдық)",
+            "3": "Көлемді жеңілдіктер: 12 айға 30% дейін жеңілдік",
+            "4": "Көп валюталық қолдау (KZT, USD)",
+            "5": "Икемді токен жүйесі",
+            "6": "Тегін жоспар үшін несие картасы қажет емес"
           },
-          "problem": "Most link-in-bio and page builder tools are too expensive for micro-businesses and freelancers",
-          "question": "How much does LinkMAX cost?",
-          "solution": "LinkMAX offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months",
+          "problem": "Биодағы сілтеме және бет құрастырушы құралдарының көпшілігі микробизнес пен фрилансерлер үшін тым қымбат",
+          "question": "LinkMAX қанша тұрады?",
+          "solution": "LinkMAX негізгі қажеттіліктерге арналған тегін жоспарды және 12 айға небәрі 6 доллардан басталатын қолжетімді Pro бағасын ұсынады.",
           "uses": {
-            "1": "Start free with Basic plan",
-            "2": "Upgrade to Pro for advanced features",
-            "3": "Pay for 3, 6, or 12 months",
-            "4": "Use tokens for flexible premium access"
+            "1": "Негізгі жоспармен тегін бастаңыз",
+            "2": "Жетілдірілген мүмкіндіктер үшін Pro нұсқасына жаңартыңыз",
+            "3": "3, 6 немесе 12 айға төлеңіз",
+            "4": "Икемді премиум қатынасы үшін таңбалауыштарды пайдаланыңыз"
           }
         },
-        "title": "LinkMAX Tariffs - Plans for Link in Bio and Mini Sites"
+        "title": "LinkMAX тарифтері - Биодағы және шағын сайттардағы сілтемеге арналған жоспарлар"
       },
-      "startFree": "Start for free",
-      "subscribe": "Subscribe",
-      "title": "Tariffs",
+      "startFree": "Тегін бастаңыз",
+      "subscribe": "Жазылу",
+      "title": "Тарифтер",
       "tokens": {
-        "balanceDescription": "100 Linkkon = 1 day Premium. Your balance: {{balance}} tokens",
-        "buyDay": "Buy 1 day for {{cost}} Linkkon",
-        "buyTokens": "Buy tokens",
-        "converting": "Conversion...",
-        "title": "Or pay with Linkkon tokens"
+        "balanceDescription": "100 Linkkon = 1 күндік премиум. Сіздің балансыңыз: {{balance}} токендері",
+        "buyDay": "{{cost}} Linkkon үшін 1 күн сатып алыңыз",
+        "buyTokens": "Токендерді сатып алыңыз",
+        "converting": "Түрлендіру...",
+        "title": "Немесе Linkkon токендерімен төлеңіз"
       },
-      "totalFor": "for",
+      "totalFor": "үшін",
       "whyLnkmx": {
-        "mobile": "All work from your smartphone",
-        "noSetup": "CRM in 15 minutes — no implementation needed",
-        "premium": "Premium design out of the box",
-        "title": "Why LinkMAX"
+        "mobile": "Барлығы смартфоннан жұмыс істейді",
+        "noSetup": "15 минут ішінде CRM — енгізу қажет емес",
+        "premium": "Қораптан шыққан премиум дизайн",
+        "title": "Неліктен LinkMAX"
       }
     },
     "pricingBlock": {
-      "consultation": "Consultation",
-      "defaultCurrency": "Default currency",
-      "description": "Description",
-      "duration": "Duration",
-      "emptyHint": "Tell us what services you provide",
-      "featured": "Popular",
-      "haircut": "Haircut",
-      "hour1": "1 hour",
-      "hours1_5": "1.5 hours",
-      "hours2": "2 hours",
-      "lesson": "Lesson",
-      "manicure": "Manicure",
-      "massage": "Massage",
-      "min": "min",
-      "min30": "30 min",
-      "name": "Name",
-      "namePlaceholder": "Men's haircut",
-      "other": "Other",
-      "photo": "Photoshoot",
-      "price": "Price",
-      "serviceType": "Service type",
-      "services": "Services",
-      "servicesHint": "The more detailed the services are described, the more accurately the AI вЂ‹вЂ‹assistant understands your business.",
-      "training": "Training"
+      "consultation": "Консультация",
+      "defaultCurrency": "Әдепкі валюта",
+      "description": "Сипаттама",
+      "duration": "Ұзақтығы",
+      "emptyHint": "Қандай қызметтер көрсететініңізді айтыңыз",
+      "featured": "Танымал",
+      "haircut": "Шаш қию",
+      "hour1": "1 сағат",
+      "hours1_5": "1,5 сағат",
+      "hours2": "2 сағат",
+      "lesson": "Сабақ",
+      "manicure": "Маникюр",
+      "massage": "Массаж",
+      "min": "мин",
+      "min30": "30 мин",
+      "name": "Аты",
+      "namePlaceholder": "Ерлердің шаш қиюы",
+      "other": "Басқа",
+      "photo": "Фототүсіру",
+      "price": "Бағасы",
+      "serviceType": "Қызмет түрі",
+      "services": "Қызметтер",
+      "servicesHint": "Қызметтер неғұрлым егжей-тегжейлі сипатталған болса, AI көмекшісі сіздің бизнесіңізді соғұрлым дәлірек түсінеді.",
+      "training": "Тренинг"
     },
     "product": {
-      "authRequired": "Authorization required to purchase",
-      "buy": "Buy",
-      "buyFor": "Buy for",
-      "buyTokens": "Buy tokens",
-      "buying": "Purchase...",
-      "needMore": "Need more",
-      "notEnoughTokens": "Not enough tokens",
-      "purchaseDescription": "Purchase of goods: {{name}}",
-      "purchaseSuccess": "You have successfully purchased",
-      "purchasing": "Purchase...",
-      "tapToView": "Read more →"
+      "authRequired": "Сатып алу үшін рұқсат қажет",
+      "buy": "Сатып алу",
+      "buyFor": "үшін сатып алыңыз",
+      "buyTokens": "Токендерді сатып алыңыз",
+      "buying": "Сатып алу...",
+      "needMore": "Көбірек керек",
+      "notEnoughTokens": "Токендер жеткіліксіз",
+      "purchaseDescription": "Тауарларды сатып алу: {{name}}",
+      "purchaseSuccess": "Сіз сәтті сатып алдыңыз",
+      "purchasing": "Сатып алу...",
+      "tapToView": "Толығырақ →"
     },
     "profile": {
-      "addBio": "Add a description",
-      "addCover": "Add cover",
-      "addName": "Add name",
-      "avatarFrame": "Frame",
-      "avatarSettings": "Avatar settings",
-      "avatarSize": "Avatar size",
-      "bioPlaceholder": "Tell us about yourself...",
-      "bioSaved": "Description saved",
-      "changeCover": "Change cover",
-      "clickToChangeAvatar": "Click to change avatar",
-      "clickToChangeCover": "Click to add cover",
-      "clickToEdit": "Click to edit",
-      "coverGradient": "Gradient",
-      "coverHeight": "Height",
-      "coverRemoved": "Cover removed",
-      "coverSettings": "Cover Settings",
-      "dark": "Dark",
-      "frame": "Frame",
-      "glow": "Glow",
-      "large": "Big",
-      "light": "Light",
-      "medium": "Average",
-      "nameAnim": "Name",
-      "namePlaceholder": "your name",
-      "nameSaved": "Name saved",
-      "none": "No",
-      "ocean": "Ocean",
-      "primary": "Basic",
-      "purple": "Violet",
-      "removeCover": "Remove cover",
-      "shadowStyle": "Shadow style",
-      "size": "Size",
-      "small": "Small",
-      "soft": "Soft",
-      "strong": "Strong",
-      "sunset": "Sunset",
-      "verified": "Verified",
-      "xlarge": "Very big"
+      "addBio": "Сипаттама қосыңыз",
+      "addCover": "Қақпақты қосыңыз",
+      "addName": "Атын қосыңыз",
+      "avatarFrame": "Жақтау",
+      "avatarSettings": "Аватар параметрлері",
+      "avatarSize": "Аватар өлшемі",
+      "bioPlaceholder": "Өзіңіз туралы айтып беріңізші...",
+      "bioSaved": "Сипаттама сақталды",
+      "changeCover": "Қақпақты өзгерту",
+      "clickToChangeAvatar": "Аватарды өзгерту үшін басыңыз",
+      "clickToChangeCover": "Мұқаба қосу үшін басыңыз",
+      "clickToEdit": "Өңдеу үшін басыңыз",
+      "coverGradient": "Градиент",
+      "coverHeight": "Биіктігі",
+      "coverRemoved": "Қақпақ алынып тасталды",
+      "coverSettings": "Мұқаба параметрлері",
+      "dark": "Қараңғы",
+      "frame": "Жақтау",
+      "glow": "Жарқырау",
+      "large": "Үлкен",
+      "light": "Жарық",
+      "medium": "Орташа",
+      "nameAnim": "Аты",
+      "namePlaceholder": "сіздің атыңыз",
+      "nameSaved": "Аты сақталды",
+      "none": "Жоқ",
+      "ocean": "Мұхит",
+      "primary": "Негізгі",
+      "purple": "Күлгін",
+      "removeCover": "Қақпақты алыңыз",
+      "shadowStyle": "Көлеңке стилі",
+      "size": "Өлшем",
+      "small": "Кішкентай",
+      "soft": "Жұмсақ",
+      "strong": "Күшті",
+      "sunset": "Күннің батуы",
+      "verified": "Тексерілді",
+      "xlarge": "Өте үлкен"
     },
     "profileEditor": {
-      "avatar": "Avatar",
-      "avatarDesc": "Your profile photo",
-      "cover": "Cover",
-      "coverDesc": "Add a beautiful cover",
-      "info": "About you",
-      "infoDesc": "Name and description in 3 languages",
-      "openEditor": "Open editor",
-      "position": "Position",
-      "removeCover": "Remove cover",
-      "style": "Location",
-      "styleDesc": "Customize your appearance",
-      "subtitle": "Set up your profile",
-      "title": "Profile editor",
-      "uploadCover": "Download cover",
-      "yourBio": "About me",
-      "yourName": "your name"
+      "avatar": "Аватар",
+      "avatarDesc": "Профиль фотосуретіңіз",
+      "cover": "Қақпақ",
+      "coverDesc": "Әдемі мұқабаны қосыңыз",
+      "info": "Сен туралы",
+      "infoDesc": "3 тілде аты мен сипаттамасы",
+      "openEditor": "Редакторды ашыңыз",
+      "position": "Позиция",
+      "removeCover": "Қақпақты алыңыз",
+      "style": "Орналасқан жері",
+      "styleDesc": "Сыртқы көріністі реттеңіз",
+      "subtitle": "Профильіңізді орнатыңыз",
+      "title": "Профиль редакторы",
+      "uploadCover": "Мұқабаны жүктеп алыңыз",
+      "yourBio": "Мен туралы",
+      "yourName": "сіздің атыңыз"
     },
     "publicPageV1": {
-      "defaultDescription": "View my profile",
-      "invalidLink": "Invalid or damaged link",
-      "loading": "Loading page...",
-      "notFound": "Page not found",
-      "qrCode": "QR code",
-      "scanToShare": "Scan the code to view the page",
-      "shareLink": "Share"
+      "defaultDescription": "Менің профилімді қараңыз",
+      "invalidLink": "Жарамсыз немесе зақымдалған сілтеме",
+      "loading": "Бет жүктелуде...",
+      "notFound": "Бет табылмады",
+      "qrCode": "QR коды",
+      "scanToShare": "Бетті көру үшін кодты сканерлеңіз",
+      "shareLink": "Бөлісу"
     },
     "pwa": {
-      "install": "Install the application",
-      "updateAvailable": "Update available"
+      "install": "Қолданбаны орнатыңыз",
+      "updateAvailable": "Жаңарту қолжетімді"
     },
     "quests": {
       "addBlock": {
-        "description": "Add a new block to the page",
-        "title": "Add a block"
+        "description": "Бетке жаңа блок қосыңыз",
+        "title": "Блок қосыңыз"
       },
-      "allCompleted": "🎉 All tasks completed!",
+      "allCompleted": "🎉 Барлық тапсырмалар орындалды!",
       "dailyVisit": {
-        "description": "Go to the application",
-        "title": "Daily visit"
+        "description": "Қолданбаға өтіңіз",
+        "title": "Күнделікті сапар"
       },
       "editProfile": {
-        "description": "Change your profile name or bio",
-        "title": "Update your profile"
+        "description": "Профиль атын немесе бионы өзгертіңіз",
+        "title": "Профильді жаңартыңыз"
       },
-      "panelTitle": "Daily quests",
+      "panelTitle": "Күнделікті квесттер",
       "sharePage": {
-        "description": "Copy the link to your page",
-        "title": "Share this page"
+        "description": "Сілтемені өз бетіңізге көшіріңіз",
+        "title": "Осы бетті бөлісіңіз"
       },
-      "toastCompleted": "{{icon}} +{{count}} Linkkon for \"{{title}}\"!",
-      "toastDailyVisit": "рџ‘‹ +{{count}} Linkkon for visiting daily!",
-      "tokensEarned": "+{{count}} Linkkon earned",
+      "toastCompleted": "\"{{title}}\" үшін {{icon}} +{{count}} Linkkon!",
+      "toastDailyVisit": "рџ‘‹ +{{count}} Linkkon күнделікті бару үшін!",
+      "tokensEarned": "+{{count}} Linkkon жинады",
       "useAi": {
-        "description": "Generate content using AI",
-        "title": "Use AI"
+        "description": "AI көмегімен мазмұнды жасаңыз",
+        "title": "AI пайдаланыңыз"
       }
     },
     "quickStart": {
-      "additionalDetails": "Description (optional)",
-      "completeDescription": "The page has been created and is ready to edit",
-      "completeTitle": "Ready! 🎉",
-      "description": "Create a page quickly with the AI вЂ‹вЂ‹assistant",
-      "detailsDescription": "AI personalizes the page",
-      "detailsHint": "The more details, the better the result.",
-      "detailsPlaceholder": "What are you doing? What services do you provide?",
-      "detailsTitle": "Tell us about yourself",
-      "generate": "Create",
-      "generatingDescription": "We select blocks and content specifically for you",
-      "generatingTitle": "AI creates the page",
-      "namePlaceholder": "What's your name?",
-      "nicheDescription": "AI will select the design and blocks",
+      "additionalDetails": "Сипаттама (міндетті емес)",
+      "completeDescription": "Бет жасалды және өңдеуге дайын",
+      "completeTitle": "Дайын! 🎉",
+      "description": "AI көмекшісімен бетті жылдам жасаңыз",
+      "detailsDescription": "AI бетті жекелендіреді",
+      "detailsHint": "Неғұрлым егжей-тегжейлі болса, нәтиже соғұрлым жақсы болады.",
+      "detailsPlaceholder": "Сен не істеп жатырсың? Сіз қандай қызметтер көрсетесіз?",
+      "detailsTitle": "Өзіңіз туралы айтып беріңізші",
+      "generate": "Жасау",
+      "generatingDescription": "Біз блоктар мен мазмұнды сіз үшін арнайы таңдаймыз",
+      "generatingTitle": "AI бетті жасайды",
+      "namePlaceholder": "Сенің атың кім?",
+      "nicheDescription": "AI дизайн мен блоктарды таңдайды",
       "nicheQuestions": {
-        "bioBeauty": "About your experience (Beauty)",
-        "bioBusiness": "Describe your business in a few words",
-        "bioExpert": "Your specialization and niche",
-        "bioFreelance": "What is your superpower? (Freelance)",
-        "bioGeneric": "About me / Description",
-        "bioPlaceholder": "Write a couple of sentences... You can add a link, the algorithm will turn it into a nice button.",
-        "contactsHint": "Enter phone, email or address",
-        "contactsLabel": "Where to find you? (Contacts & Address)",
-        "contactsPlaceholder": "+1 555 123 4567\n123 Main Street",
-        "desc": "This info helps us fill in blocks. You can skip any step.",
-        "expertChannelEmail": "Email",
-        "expertChannelLabel": "Where to send new client notifications?",
-        "expertChannelTelegram": "Telegram (recommended — instant)",
-        "expertGoalLabel": "Who do you help?",
-        "expertGoalPlaceholder": "e.g. entrepreneurs, young mothers...",
-        "expertOfferLabel": "What results do you deliver?",
-        "expertOfferPlaceholder": "e.g. I help launch a business from scratch...",
-        "generateBtn": "Generate magic ✨",
-        "mediaHint": "Links to YouTube, portfolio or images (comma-separated)",
-        "mediaLabel": "Links to useful materials (Media)",
+        "bioBeauty": "Өз тәжірибеңіз туралы (Сұлулық)",
+        "bioBusiness": "Бизнесіңізді бірнеше сөзбен сипаттаңыз",
+        "bioExpert": "Сіздің мамандығыңыз бен тауашаңыз",
+        "bioFreelance": "Сіздің керемет күшіңіз қандай? (Аудансыз)",
+        "bioGeneric": "Мен туралы / Сипаттама",
+        "bioPlaceholder": "Бір-екі сөйлем жазыңыз... Сілтеме қосуға болады, алгоритм оны әдемі түймеге айналдырады.",
+        "contactsHint": "Телефонды, электрондық поштаны немесе мекенжайды енгізіңіз",
+        "contactsLabel": "Сізді қайдан табуға болады? (Байланыстар мен мекенжай)",
+        "contactsPlaceholder": "+1 555 123 4567\nБас көше, 123",
+        "desc": "Бұл ақпарат блоктарды толтыруға көмектеседі. Кез келген қадамды өткізіп жіберуге болады.",
+        "expertChannelEmail": "Электрондық пошта",
+        "expertChannelLabel": "Жаңа клиент хабарландыруларын қайда жіберу керек?",
+        "expertChannelTelegram": "Telegram (ұсынылады — лезде)",
+        "expertGoalLabel": "Сіз кімге көмектесесіз?",
+        "expertGoalPlaceholder": "мысалы кәсіпкерлер, жас аналар...",
+        "expertOfferLabel": "Сіз қандай нәтиже бересіз?",
+        "expertOfferPlaceholder": "мысалы Мен бизнесті нөлден бастауға көмектесемін...",
+        "generateBtn": "Сиқыр тудырыңыз ✨",
+        "mediaHint": "YouTube сілтемелері, портфолио немесе кескіндер (үтірмен бөлінген)",
+        "mediaLabel": "Пайдалы материалдарға сілтемелер (медиа)",
         "mediaPlaceholder": "https://youtube.com/watch?v=..., https://my-portfolio.com",
-        "nameHint": "This will be your profile headline",
-        "nameLabel": "What is your name or project name?",
-        "namePlaceholder": "e.g. John Smith or Studio \"Beauty\"",
-        "socialsLabel": "Your social media",
+        "nameHint": "Бұл сіздің профиліңіздің тақырыбы болады",
+        "nameLabel": "Сіздің атыңыз немесе жобаңыз қандай?",
+        "namePlaceholder": "мысалы Джон Смит немесе «Сұлулық» студиясы",
+        "socialsLabel": "Сіздің әлеуметтік желі",
         "socialsPlaceholder": "inst: @nickname, t.me/username, youtube.com/...",
-        "srvBeauty": "What services do you offer? (With prices)",
-        "srvFreelance": "Skills or Pricing Plans",
-        "srvGeneric": "Services or Skills",
-        "srvHint": "The algorithm will arrange them into cards. If you mention \"discount\" or \"gift\" — a bonus block will be created!",
-        "srvPlaceholder": "Manicure - $50\nPedicure - $70\n10% off first visit",
-        "title": "Tell us about yourself ✨"
+        "srvBeauty": "Сіз қандай қызметтерді ұсынасыз? (бағаларымен)",
+        "srvFreelance": "Дағдылар немесе баға жоспарлары",
+        "srvGeneric": "Қызметтер немесе дағдылар",
+        "srvHint": "Алгоритм оларды карталарға орналастырады. Егер сіз «жеңілдік» немесе «сыйлық» деп атасаңыз — бонустық блок жасалады!",
+        "srvPlaceholder": "Маникюр - 50 доллар\nПедикюр - 70 доллар\nАлғашқы келуге 10% жеңілдік",
+        "title": "Өзіңіз туралы айтып беріңізші✨"
       },
-      "nicheTitle": "Choose a niche",
-      "skipToEditor": "Skip and create manually",
-      "startWithAI": "Create with AI",
-      "title": "Quick start",
-      "welcomeDescription": "AI will generate a personalized page based on your niche and description",
-      "welcomeTitle": "Create a page in 60 seconds",
-      "yourName": "your name"
+      "nicheTitle": "Тауашаны таңдаңыз",
+      "skipToEditor": "Өткізу және қолмен жасау",
+      "startWithAI": "AI көмегімен жасаңыз",
+      "title": "Жылдам бастау",
+      "welcomeDescription": "Жасанды интеллект сіздің тауашаларыңыз бен сипаттамаларыңызға негізделген жеке бетті жасайды",
+      "welcomeTitle": "60 секундта бет жасаңыз",
+      "yourName": "сіздің атыңыз"
     },
     "recommendations": {
-      "allBlocks": "All blocks",
+      "allBlocks": "Барлық блоктар",
       "reason": {
-        "before_after": "Show the results of your work",
-        "before_after_health": "Before/after results",
-        "before_after_portfolio": "Before/After projects",
-        "booking_business": "Online registration",
-        "booking_education": "Registration for classes",
-        "booking_freelancer": "Clients will sign up online",
-        "booking_health": "Make an appointment with a specialist",
-        "button_general": "Action button",
-        "carousel_creator": "Portfolio gallery",
-        "carousel_ecommerce": "Product gallery",
-        "carousel_events": "Photos from events",
-        "carousel_portfolio": "Show your work",
-        "catalog": "Product catalog",
-        "catalog_business": "Catalog of services/products",
-        "community": "Create a community",
-        "community_creator": "Connect your audience",
-        "countdown_events": "Countdown",
-        "countdown_sale": "Promotion timer",
-        "download_education": "Educational materials",
-        "download_portfolio": "Download portfolio",
-        "event": "Event announcement",
-        "event_community": "Community Events",
-        "faq": "Answers to frequently asked questions",
-        "faq_business": "Remove objections",
-        "faq_ecommerce": "Questions about products",
-        "faq_education": "Frequently asked questions",
-        "form": "Feedback form",
+        "before_after": "Жұмысыңыздың нәтижесін көрсетіңіз",
+        "before_after_health": "Нәтижелерге дейін/кейін",
+        "before_after_portfolio": "Жобаларға дейін/кейін",
+        "booking_business": "Онлайн тіркеу",
+        "booking_education": "Сабақтарға жазылу",
+        "booking_freelancer": "Клиенттер онлайн тіркеледі",
+        "booking_health": "Маманмен кездесуге жазылыңыз",
+        "button_general": "Әрекет түймесі",
+        "carousel_creator": "Портфолио галереясы",
+        "carousel_ecommerce": "Өнім галереясы",
+        "carousel_events": "Оқиғалардан фотолар",
+        "carousel_portfolio": "Жұмысыңызды көрсетіңіз",
+        "catalog": "Өнім каталогы",
+        "catalog_business": "Қызметтер/өнімдер каталогы",
+        "community": "Қауымдастық құру",
+        "community_creator": "Аудиторияңызды қосыңыз",
+        "countdown_events": "Кері санақ",
+        "countdown_sale": "Жарнама таймері",
+        "download_education": "Оқу материалдары",
+        "download_portfolio": "Портфолионы жүктеп алу",
+        "event": "Оқиға туралы хабарландыру",
+        "event_community": "Қауымдастық оқиғалары",
+        "faq": "Жиі қойылатын сұрақтарға жауаптар",
+        "faq_business": "Қарсылықтарды жою",
+        "faq_ecommerce": "Өнімдер туралы сұрақтар",
+        "faq_education": "Жиі қойылатын сұрақтар",
+        "form": "Кері байланыс формасы",
         "form_business": "Collect applications",
         "form_education": "Registration for the course",
         "form_events": "Registration for the event",

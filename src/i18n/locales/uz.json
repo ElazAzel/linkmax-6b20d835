@@ -3135,798 +3135,798 @@
         "chatMsg1": "Salom, men konsultatsiyani bron qilmoqchiman!",
         "chatMsg2": "Ajoyib! Keling, uni rejalashtiramiz.",
         "dragToReorder": "saralash uchun torting",
-        "iAmA": "I am a...",
-        "image": "Image",
-        "leadCaptured": "New lead captured",
-        "link": "Link",
-        "livePreview": "Preview",
-        "nicheBeauty": "Beauty Blogger",
-        "nicheCreator": "Digital Creator",
-        "nicheCrypto": "Crypto Expert",
-        "nicheFitness": "Fitness Trainer",
-        "nicheMusic": "Music Producer",
-        "nicheTutor": "Online Tutor",
-        "noBlocks": "No blocks yet. Add higher!",
-        "profile": "Profile",
-        "socials": "Social networks",
-        "step1Desc": "Tell AI what you do. Beauty, crypto, coaching — we speak your language.",
-        "step1Title": "Choose your niche",
-        "step2Desc": "Structure, text, and design in seconds. No drag-and-drop.",
-        "step2Title": "AI builds everything",
-        "step3Desc": "Your page is live. Leads go straight to your DM. Close deals instantly.",
-        "step3Title": "Get leads in Telegram",
-        "subtitle": "Play with the editor right here. Add blocks, change content and see the changes in real time.",
-        "text": "Text",
-        "title": "Feel the magic.",
-        "yourBlocks": "Your blocks"
+        "iAmA": "men...",
+        "image": "Rasm",
+        "leadCaptured": "Yangi yetakchi olindi",
+        "link": "Havola",
+        "livePreview": "Ko‘rib chiqish",
+        "nicheBeauty": "Go'zallik bloggeri",
+        "nicheCreator": "Raqamli yaratuvchi",
+        "nicheCrypto": "Kriptomatik mutaxassis",
+        "nicheFitness": "Fitness trener",
+        "nicheMusic": "Musiqa prodyuseri",
+        "nicheTutor": "Onlayn o'qituvchi",
+        "noBlocks": "Hali bloklar yo'q. Yuqori qo'shing!",
+        "profile": "Profil",
+        "socials": "Ijtimoiy tarmoqlar",
+        "step1Desc": "AIga nima qilayotganingizni ayting. Go'zallik, kripto, murabbiylik — biz sizning tilingizda gaplashamiz.",
+        "step1Title": "Joyingizni tanlang",
+        "step2Desc": "Bir necha soniya ichida tuzilma, matn va dizayn. Surang va tashlab bo'lmaydi.",
+        "step2Title": "AI hamma narsani quradi",
+        "step3Desc": "Sizning sahifangiz jonli. Etakchilar to'g'ridan-to'g'ri DM ga boradi. Bitimlarni darhol yoping.",
+        "step3Title": "Telegramda yetakchilarni oling",
+        "subtitle": "Bu yerda muharrir bilan o'ynang. Bloklarni qo'shing, tarkibni o'zgartiring va real vaqtda o'zgarishlarni ko'ring.",
+        "text": "Matn",
+        "title": "Sehrni his eting.",
+        "yourBlocks": "Sizning bloklaringiz"
       },
       "faq": {
-        "badge": "Questions and answers",
+        "badge": "Savollar va javoblar",
         "q1": {
-          "answer": "LinkMAX is an AI link in bio and mini-site builder that helps you put together one clear page for links, services, entries and applications.",
-          "question": "What is LinkMAX and what is it for?"
+          "answer": "LinkMAX - bu havolalar, xizmatlar, yozuvlar va ilovalar uchun bitta aniq sahifani birlashtirishga yordam beradigan bio va mini-sayt yaratuvchisidagi AI havolasi.",
+          "question": "LinkMAX nima va u nima uchun?"
         },
         "q10": {
-          "answer": "Returns are possible within 14 days from the date of payment in accordance with the legislation of the Republic of Kazakhstan. More details in the user agreement.",
-          "question": "What are the refund conditions?"
+          "answer": "Qaytish Qozog'iston Respublikasi qonunchiligiga muvofiq to'lov amalga oshirilgan kundan boshlab 14 kun ichida mumkin. Foydalanuvchi shartnomasida batafsil ma'lumot.",
+          "question": "To'lovni qaytarish shartlari qanday?"
         },
         "q11": {
-          "answer": "Yes. The gallery contains real pages from different niches: specialists, stores, services and creators.",
-          "question": "Can I see sample pages?"
+          "answer": "Ha. Galereyada turli xil bo'shliqlarning haqiqiy sahifalari mavjud: mutaxassislar, do'konlar, xizmatlar va ijodkorlar.",
+          "question": "Namuna sahifalarini ko'rishim mumkinmi?"
         },
         "q12": {
-          "answer": "LinkMAX has AI page builder, CRM and notifications. Plus flexible blocks, clear tariffs and local languages.",
-          "question": "How is LinkMAX different from Linktree and Taplink?"
+          "answer": "LinkMAX-da AI sahifa yaratuvchisi, CRM va bildirishnomalar mavjud. Bundan tashqari, moslashuvchan bloklar, aniq tariflar va mahalliy tillar.",
+          "question": "LinkMAX Linktree va Taplinkdan qanday farq qiladi?"
         },
         "q13": {
-          "answer": "Yes. You can add a catalog, price list, application forms and contact buttons so that the client can quickly place an order or record.",
-          "question": "Is LinkMAX suitable for a store or service?"
+          "answer": "Ha. Mijoz tezda buyurtma berish yoki yozib olish uchun katalog, narxlar ro'yxati, ariza shakllari va aloqa tugmachalarini qo'shishingiz mumkin.",
+          "question": "LinkMAX do'kon yoki xizmat uchun mosmi?"
         },
         "q14": {
-          "answer": "Yes, custom domains and page branding are available in Pro.",
-          "question": "Can I connect my domain?"
+          "answer": "Ha, maxsus domenlar va sahifa brendingi Pro-da mavjud.",
+          "question": "Domenimni ulay olamanmi?"
         },
         "q2": {
-          "answer": "The basic plan is free forever. Pro: 3 months - 4,350в‚ё/month, 6 months - 3,698в‚ё/month (-15%), 12 months - 3,045в‚ё/month (-30%). Payment online, refund within 14 days.",
-          "question": "How much does it cost to use LinkMAX?"
+          "answer": "Asosiy reja abadiy bepul. Pro: 3 oy - 4,350v‚yo/oy, 6 oy - 3,698v‚yo/oy (-15%), 12 oy - 3,045v‚yo/oy (-30%). Onlayn to'lov, 14 kun ichida qaytarib berish.",
+          "question": "LinkMAX-dan foydalanish qancha turadi?"
         },
         "q3": {
-          "answer": "Choose a niche and write a few facts about yourself - AI will collect the structure, texts and CTA in a couple of minutes. The free plan has 1 generation/month, the Pro plan has 5 generations/month.",
-          "question": "How does AI page generation work?"
+          "answer": "Joyni tanlang va o'zingiz haqingizda bir nechta faktlarni yozing - AI bir necha daqiqada tuzilmani, matnlarni va CTAni to'playdi. Bepul rejada 1 avlod/oy, Pro rejasida 5 avlod/oy mavjud.",
+          "question": "AI sahifa yaratish qanday ishlaydi?"
         },
         "q4": {
-          "answer": "20+ types of blocks: profile, links, buttons, images, videos, carousels, products, price lists, forms, maps, messengers, reviews, FAQ, timers and more.",
-          "question": "What blocks are available for the page?"
+          "answer": "20+ turdagi bloklar: profil, havolalar, tugmalar, rasmlar, videolar, karusellar, mahsulotlar, narxlar ro'yxati, shakllar, xaritalar, messenjerlar, sharhlar, tez-tez so'raladigan savollar, taymerlar va boshqalar.",
+          "question": "Sahifa uchun qanday bloklar mavjud?"
         },
         "q5": {
-          "answer": "Yes. Pro has lead CRM and Telegram notifications. Analytics shows clicks, traffic sources and visitor behavior.",
-          "question": "Do you have CRM and analytics?"
+          "answer": "Ha. Pro-da yetakchi CRM va Telegram bildirishnomalari mavjud. Analytics bosishlar, trafik manbalari va tashrif buyuruvchilarning xatti-harakatlarini ko'rsatadi.",
+          "question": "Sizda CRM va tahlil bormi?"
         },
         "q6": {
-          "answer": "Yes. You can edit the page directly from your smartphone.",
-          "question": "Is the mobile editor supported?"
+          "answer": "Ha. Siz sahifani bevosita smartfoningizdan tahrirlashingiz mumkin.",
+          "question": "Mobil muharrir qo'llab-quvvatlanadimi?"
         },
         "q7": {
-          "answer": "Telegram for lead notifications and Google Calendar for scheduling. Social networks and instant messengers are available as blocks.",
-          "question": "What integrations does LinkMAX support?"
+          "answer": "Etakchi bildirishnomalar uchun Telegram va rejalashtirish uchun Google Calendar. Ijtimoiy tarmoqlar va messenjerlar blok sifatida mavjud.",
+          "question": "LinkMAX qanday integratsiyalarni qo'llab-quvvatlaydi?"
         },
         "q8": {
-          "answer": "No. 0% commission on your sales - you only pay for the subscription.",
-          "question": "Does LinkMAX take a commission on sales?"
+          "answer": "Savdolaringiz uchun 0% komissiya yo'q - siz faqat obuna uchun to'laysiz.",
+          "question": "LinkMAX savdodan komissiya oladimi?"
         },
         "q9": {
-          "answer": "Payment by card and through available payment methods. You can also use tokens (100 tokens = 1 day Pro).",
-          "question": "How to pay for Pro subscription?"
+          "answer": "Karta orqali va mavjud to'lov usullari orqali to'lash. Tokenlardan ham foydalanishingiz mumkin (100 ta token = 1 kunlik Pro).",
+          "question": "Pro obunasini qanday to'lash kerak?"
         },
-        "subtitle": "Answers to popular questions about LinkMAX",
-        "title": "Frequently Asked Questions"
+        "subtitle": "LinkMAX haqidagi mashhur savollarga javoblar",
+        "title": "Tez-tez so'raladigan savollar"
       },
       "featured": {
-        "badge": "Top creators",
-        "subtitle": "Discover the most popular pages created with LinkMAX.my",
-        "title": "Recommended Pages",
-        "viewAll": "View all pages"
+        "badge": "Eng yaxshi ijodkorlar",
+        "subtitle": "LinkMAX.my bilan yaratilgan eng mashhur sahifalarni kashf eting",
+        "title": "Tavsiya etilgan sahifalar",
+        "viewAll": "Barcha sahifalarni ko'rish"
       },
       "features": {
         "ai": {
-          "item1": "First screen with promise of result and CTA",
-          "item2": "Price list or service packages without manual layout",
-          "item3": "Application form and contacts on one page",
-          "title": "A page with a clear offer"
+          "item1": "Natija va CTA va'dasi bilan birinchi ekran",
+          "item2": "Qo'lda tartibsiz narxlar ro'yxati yoki xizmat paketlari",
+          "item3": "Ariza shakli va kontaktlar bir sahifada",
+          "title": "Aniq taklifga ega sahifa"
         },
         "analytics": {
-          "item1": "Views and clicks on blocks",
-          "item2": "Traffic sources, devices",
-          "item3": "Tips on what to improve next",
-          "title": "Understanding what works"
+          "item1": "Bloklarni ko'rish va bosish",
+          "item2": "Trafik manbalari, qurilmalar",
+          "item3": "Keyinchalik nimani yaxshilash bo'yicha maslahatlar",
+          "title": "Nima ishlayotganini tushunish"
         },
         "crm": {
-          "item1": "Mini-CRM: leads, statuses, notes",
-          "item2": "Notifications about applications in Telegram",
-          "item3": "Quick replies and communication history",
-          "title": "Leads and order"
+          "item1": "Mini-CRM: yetakchilar, statuslar, eslatmalar",
+          "item2": "Telegramdagi ilovalar haqida bildirishnomalar",
+          "item3": "Tez javoblar va aloqa tarixi",
+          "title": "Etakchi va buyurtma"
         },
-        "title": "What will you get in the first version"
+        "title": "Birinchi versiyada nima olasiz"
       },
       "finalCta": {
-        "description": "Don't lose clients in correspondence. Give them a clear path: who you are - how you help - how much it costs - sign up.",
-        "primaryCta": "Create a page for free",
-        "secondaryCta": "View examples",
-        "title": "Build a page that leads to an application in 2 minutes"
+        "description": "Xat yozishda mijozlarni yo'qotmang. Ularga aniq yo'lni bering: siz kimsiz - qanday yordam berasiz - bu qancha turadi - ro'yxatdan o'ting.",
+        "primaryCta": "Bepul sahifa yarating",
+        "secondaryCta": "Misollarni ko'rish",
+        "title": "2 daqiqada ilovaga olib boradigan sahifani yarating"
       },
       "floatingCta": {
-        "create": "Create"
+        "create": "Yaratish"
       },
       "footer": {
-        "alternatives": "Comparison",
-        "copyright": "В© 2025 LinkMAX"
+        "alternatives": "Taqqoslash",
+        "copyright": "V© 2025 LinkMAX"
       },
       "forWhom": {
         "beauty": {
-          "desc": "Recording, reviews, map",
-          "title": "Beauty and services"
+          "desc": "Yozib olish, sharhlar, xarita",
+          "title": "Go'zallik va xizmatlar"
         },
         "business": {
-          "desc": "Catalog, leads, analytics",
-          "title": "Small business"
+          "desc": "Katalog, yetakchilar, tahlillar",
+          "title": "Kichik biznes"
         },
         "expert": {
-          "desc": "Services, cases, clear offer",
-          "title": "Experts and mentors"
+          "desc": "Xizmatlar, holatlar, aniq taklif",
+          "title": "Mutaxassislar va murabbiylar"
         },
         "freelancer": {
-          "desc": "Portfolio, brief, applications",
-          "title": "Freelancers"
+          "desc": "Portfolio, qisqacha mazmun, ilovalar",
+          "title": "Freelancerlar"
         },
-        "title": "Who is LinkMAX suitable for?"
+        "title": "LinkMAX kimga mos keladi?"
       },
       "gallery": {
-        "badge": "Examples",
-        "subtitle": "See how other experts and brands use LinkMAX.my",
-        "title": "Gallery of the best pages",
-        "viewAll": "Open gallery"
+        "badge": "Misollar",
+        "subtitle": "Boshqa mutaxassislar va brendlar LinkMAX.my-dan qanday foydalanishini ko'ring",
+        "title": "Eng yaxshi sahifalar galereyasi",
+        "viewAll": "Galereyani ochish"
       },
-      "getLeads": "Get leads in Telegram",
-      "getLeadsDesc": "Your page is live. Leads come straight to your DM. Close them instantly.",
-      "growDesc": "Powerful features wrapped in a beautiful, easy-to-use interface.",
-      "growTitle": "Everything you need to grow",
+      "getLeads": "Telegramda yetakchilarni oling",
+      "getLeadsDesc": "Sizning sahifangiz jonli. Etakchilar to'g'ridan-to'g'ri DM ga keladi. Ularni darhol yoping.",
+      "growDesc": "Chiroyli, ishlatish uchun qulay interfeys bilan o'ralgan kuchli xususiyatlar.",
+      "growTitle": "O'sish uchun kerak bo'lgan hamma narsa",
       "hero": {
-        "aiHelps": "AI helps",
-        "badge": "AI mini-site builder",
-        "benefit1": "AI collects the structure and texts of the first screen",
-        "benefit2": "Applications arrive in mini-CRM and Telegram",
-        "benefit3": "Analytics shows which blocks provide leads",
-        "createPage": "Create a page",
-        "description": "For beauty professionals, experts and small businesses. AI designer + AI copywriter + Mini-CRM + Telegram notifications about new clients.",
-        "free": "For free",
-        "mainHighlight": "One link - a clear path to the recording",
-        "mainTitle": "Mini-site that generates applications in 2 minutes",
-        "microNote": "Free start. Editor on the phone. Publishing in one click.",
-        "noCode": "No code",
-        "pricingCta": "Compare rates",
-        "primaryCta": "Create a page for free",
-        "secondaryCta": "View examples",
-        "title": "AI page in a minute,",
-        "titleHighlight": "which collects applications",
-        "usernamePlaceholder": "yourname",
-        "valueProposition": "AI constructor for experts, freelancers and small businesses. Create a page, price list, forms and contacts without a designer or code.",
-        "viewExamples": "View examples"
+        "aiHelps": "AI yordam beradi",
+        "badge": "AI mini-sayt quruvchisi",
+        "benefit1": "AI birinchi ekranning tuzilishi va matnlarini to'playdi",
+        "benefit2": "Ilovalar mini-CRM va Telegram’da keladi",
+        "benefit3": "Analytics qaysi bloklar etakchilik qilishini ko'rsatadi",
+        "createPage": "Sahifa yarating",
+        "description": "Go'zallik mutaxassislari, mutaxassislar va kichik biznes uchun. AI dizayneri + AI kopirayteri + Mini-CRM + yangi mijozlar haqida Telegram xabarnomalari.",
+        "free": "Bepul",
+        "mainHighlight": "Bitta havola - yozib olish uchun aniq yo'l",
+        "mainTitle": "2 daqiqada ilovalar yaratadigan mini-sayt",
+        "microNote": "Bepul boshlash. Telefonda muharrir. Bir marta bosish bilan nashr qilish.",
+        "noCode": "Kod yo'q",
+        "pricingCta": "Tariflarni solishtiring",
+        "primaryCta": "Bepul sahifa yarating",
+        "secondaryCta": "Misollarni ko'rish",
+        "title": "Bir daqiqada AI sahifasi,",
+        "titleHighlight": "ilovalarni to'playdigan",
+        "usernamePlaceholder": "ismingiz",
+        "valueProposition": "Ekspertlar, frilanserlar va kichik biznes uchun AI konstruktori. Dizayner yoki kodsiz sahifa, narxlar ro'yxati, shakllar va kontaktlarni yarating.",
+        "viewExamples": "Misollarni ko'rish"
       },
       "howItWorks": {
-        "badge": "1 minute to result",
-        "cta": "Try for free",
-        "title": "How it works"
+        "badge": "Natijaga 1 daqiqa",
+        "cta": "Bepul sinab ko'ring",
+        "title": "Bu qanday ishlaydi"
       },
-      "iAmA": "I am a...",
-      "instantLeadsDesc": "Get leads delivered straight to Telegram. No more missing customers.",
-      "instantLeadsTitle": "Instant Leads",
-      "leadMsg1": "Hey, I want to book a consultation!",
-      "leadMsg2": "Awesome! Let's",
+      "iAmA": "men...",
+      "instantLeadsDesc": "Etakchi takliflarni to'g'ridan-to'g'ri Telegramga yetkazing. Yo'qolgan mijozlar yo'q.",
+      "instantLeadsTitle": "Instant Lids",
+      "leadMsg1": "Hey, men konsultatsiyani bron qilmoqchiman!",
+      "leadMsg2": "Ajoyib! Keling",
       "linkInBio": {
-        "benefit1": "All links in one place",
-        "benefit2": "AI creates content",
-        "benefit3": "Click analytics",
-        "benefit4": "No commissions",
-        "benefit5": "Your own domain",
-        "benefit6": "Mobile editor",
-        "keywords": "Keywords: links page, link in bio, link in bio, multilink, linktree alternative, taplink analogue, mini-landing",
-        "p1": "Link-in-Bio (link in bio, multi-link) is a page that you place in the profile description of Instagram, TikTok, YouTube or Telegram. Instead of one link, you get a full-fledged mini-landing page with buttons, contacts and even a product catalog.",
-        "p2": "LinkMAX.my is a modern alternative to Linktree and Taplink with AI content generation. You choose a niche (barber, photographer, trainer, psychologist), and artificial intelligence creates a ready-made page in 2 minutes: with a profile, the necessary blocks and texts.",
-        "p3": "Unlike our competitors, we do not take a commission on your sales. All money from goods and services is yours. And built-in analytics and CRM help you understand which links work best.",
-        "subtitle": "A links page is a mini-site that brings together all your resources: social networks, instant messengers, portfolio, products and services",
-        "title": "What is Link-in-Bio and why is it needed?"
+        "benefit1": "Barcha havolalar bir joyda",
+        "benefit2": "AI kontent yaratadi",
+        "benefit3": "Analitikani bosing",
+        "benefit4": "Komissiyalar yo'q",
+        "benefit5": "O'z domeningiz",
+        "benefit6": "Mobil muharriri",
+        "keywords": "Kalit so'zlar: havolalar sahifasi, biodagi havola, biodagi havola, multilink, linktree alternativi, taplink analogi, mini-landing",
+        "p1": "Link-in-Bio (biodagi havola, ko'p havola) - Instagram, TikTok, YouTube yoki Telegram profil tavsifida joylashtirgan sahifa. Bitta havola o'rniga siz tugmalar, kontaktlar va hatto mahsulot katalogiga ega to'liq huquqli mini-uchun sahifaga ega bo'lasiz.",
+        "p2": "LinkMAX.my - AI tarkibini yaratishga ega Linktree va Taplink-ga zamonaviy alternativ. Siz joyni tanlaysiz (sartarosh, fotograf, murabbiy, psixolog) va sun'iy intellekt 2 daqiqada tayyor sahifani yaratadi: profil, kerakli bloklar va matnlar.",
+        "p3": "Raqobatchilarimizdan farqli o'laroq, biz sizning savdolaringizdan komissiya olmaymiz. Tovar va xizmatlardan tushgan barcha pul sizniki. O'rnatilgan tahlil va CRM sizga qaysi havolalar yaxshiroq ishlashini tushunishga yordam beradi.",
+        "subtitle": "Havolalar sahifasi - bu sizning barcha resurslaringizni birlashtirgan mini-sayt: ijtimoiy tarmoqlar, messenjerlar, portfel, mahsulot va xizmatlar.",
+        "title": "Link-in-Bio nima va u nima uchun kerak?"
       },
-      "mobileEditorDesc": "Edit your page from your phone. Full power in your pocket.",
-      "mobileEditorTitle": "Mobile First Editor",
+      "mobileEditorDesc": "Telefoningizdan sahifangizni tahrirlang. To'liq quvvat cho'ntagingizda.",
+      "mobileEditorTitle": "Mobil birinchi muharriri",
       "nav": {
-        "examples": "Examples",
-        "gallery": "Gallery",
-        "getStarted": "Create",
-        "signIn": "Login"
+        "examples": "Misollar",
+        "gallery": "Galereya",
+        "getStarted": "Yaratish",
+        "signIn": "Tizimga kirish"
       },
-      "newLead1": "New lead: Sarah K.",
-      "newLead2": "New lead: Alex M.",
-      "newLeadCaptured": "New Lead Captured",
-      "newLeadsToday": "+12 today",
-      "nicheBeauty": "Beauty Blogger",
-      "nicheCreator": "Digital Creator",
-      "nicheCrypto": "Crypto Expert",
-      "nicheFitness": "Fitness Coach",
-      "nicheMusic": "Music Producer",
-      "nicheTutor": "Online Tutor",
+      "newLead1": "Yangi rahbar: Sara K.",
+      "newLead2": "Yangi rahbar: Aleks M.",
+      "newLeadCaptured": "Yangi rahbar qo'lga olindi",
+      "newLeadsToday": "Bugun +12",
+      "nicheBeauty": "Go'zallik bloggeri",
+      "nicheCreator": "Raqamli yaratuvchi",
+      "nicheCrypto": "Kriptomatik mutaxassis",
+      "nicheFitness": "Fitnes murabbiyi",
+      "nicheMusic": "Musiqa prodyuseri",
+      "nicheTutor": "Onlayn o'qituvchi",
       "niches": {
         "agency": {
-          "benefit": "Page in 1 day",
-          "pain": "Website - expensive and time-consuming",
-          "title": "Agency"
+          "benefit": "1 kunda sahifa",
+          "pain": "Veb-sayt - qimmat va vaqt talab qiluvchi",
+          "title": "Agentlik"
         },
         "barber": {
-          "benefit": "Online registration",
-          "pain": "Clients write to make an appointment",
-          "title": "Barber"
+          "benefit": "Onlayn ro'yxatdan o'tish",
+          "pain": "Mijozlar uchrashuv tayinlash uchun yozadilar",
+          "title": "Sartarosh"
         },
         "beauty": {
-          "benefit": "Price + entry",
-          "pain": "Sends prices in DM",
-          "title": "Beauty Master"
+          "benefit": "Narx + kirish",
+          "pain": "Narxlarni DM ga yuboring",
+          "title": "Go'zallik ustasi"
         },
         "cafe": {
-          "benefit": "Online menu",
-          "pain": "Menu in PDF",
-          "title": "Cafe"
+          "benefit": "Onlayn menyu",
+          "pain": "Menyu pdf formatida",
+          "title": "Kafe"
         },
         "clinic": {
-          "benefit": "Catalog + map",
-          "pain": "Patients do not find services",
-          "title": "Clinic"
+          "benefit": "Katalog + xarita",
+          "pain": "Bemorlar xizmatlarni topa olmaydilar",
+          "title": "Klinika"
         },
-        "cta": "Create a page for my niche",
+        "cta": "Mening uyim uchun sahifa yarating",
         "designer": {
-          "benefit": "Free showcase",
-          "pain": "Portfolio website is expensive",
-          "title": "Designer"
+          "benefit": "Bepul ko'rgazma",
+          "pain": "Portfolio veb-sayti qimmat",
+          "title": "Dizayner"
         },
         "fitness": {
-          "benefit": "Schedule + form",
-          "pain": "Collects records manually",
-          "title": "Fitness trainer"
+          "benefit": "Jadval + shakl",
+          "pain": "Yozuvlarni qo'lda to'playdi",
+          "title": "Fitness murabbiyi"
         },
         "musician": {
-          "benefit": "Everything in one link",
-          "pain": "Music is scattered across platforms",
-          "title": "Musician"
+          "benefit": "Hammasi bitta havolada",
+          "pain": "Musiqa platformalar bo'ylab tarqalgan",
+          "title": "Musiqachi"
         },
         "photographer": {
-          "benefit": "One page gallery",
-          "pain": "Portfolio scattered",
-          "title": "Photographer"
+          "benefit": "Bir sahifali galereya",
+          "pain": "Portfolio tarqalgan",
+          "title": "Fotosuratchi"
         },
         "psychologist": {
-          "benefit": "Offer + experience",
-          "pain": "Wants to sell consultations",
-          "title": "Psychologist"
+          "benefit": "Taklif + tajriba",
+          "pain": "Maslahatlarni sotmoqchi",
+          "title": "Psixolog"
         },
         "shop": {
-          "benefit": "Mini store",
-          "pain": "Instagram as a catalog",
-          "title": "Shop"
+          "benefit": "Mini do'kon",
+          "pain": "Instagram katalog sifatida",
+          "title": "Do'kon"
         },
-        "subtitle": "We have created special templates for each niche. AI knows the pain points of your audience and creates a page tailored to your needs",
-        "title": "Who is LinkMAX.my suitable for?",
+        "subtitle": "Biz har bir joy uchun maxsus shablonlarni yaratdik. AI auditoriyangizning og'riqli nuqtalarini biladi va sizning ehtiyojlaringizga moslashtirilgan sahifa yaratadi",
+        "title": "LinkMAX.my kimga mos keladi?",
         "tutor": {
-          "benefit": "Formats + application",
-          "pain": "Looking for students on social networks",
-          "title": "Tutor"
+          "benefit": "Formatlar + ilova",
+          "pain": "Ijtimoiy tarmoqlarda talabalar qidirilmoqda",
+          "title": "Repetitor"
         }
       },
       "partners": {
-        "title": "They trust us"
+        "title": "Ular bizga ishonishadi"
       },
       "premiumValue": {
         "ai": {
-          "description": "Generation of texts, headlines, product descriptions - without restrictions. AI copywriter works for you.",
-          "title": "Unlimited AI"
+          "description": "Matnlar, sarlavhalar, mahsulot tavsiflarini yaratish - cheklovlarsiz. AI kopirayter siz uchun ishlaydi.",
+          "title": "Cheksiz AI"
         },
         "analytics": {
-          "description": "Which links are clicked more often, where clients come from, at what time the activity is highest.",
-          "title": "Advanced Analytics"
+          "description": "Qaysi havolalar tez-tez bosiladi, mijozlar qayerdan keladi, qaysi vaqtda faollik eng yuqori.",
+          "title": "Kengaytirilgan tahlil"
         },
-        "badge": "Premium - more money",
+        "badge": "Premium - ko'proq pul",
         "bonus": {
-          "scheduler": "Block Scheduler",
-          "themes": "Premium Themes and Animations",
-          "video": "Video and media blocks"
+          "scheduler": "Bloklarni rejalashtiruvchi",
+          "themes": "Premium mavzular va animatsiyalar",
+          "video": "Video va media bloklari"
         },
-        "bonusTitle": "And also nice bonuses:",
+        "bonusTitle": "Va shuningdek, yoqimli bonuslar:",
         "crm": {
-          "description": "All requests from the form automatically go into the CRM. Statuses: new → in progress → completed. No more Excel.",
+          "description": "Shakldagi barcha so'rovlar avtomatik ravishda CRM-ga tushadi. Holatlar: yangi → davom etmoqda → tugallangan. Endi Excel yo'q.",
           "title": "Mini-CRM"
         },
-        "cta": "Try Premium",
-        "price": "From 3,045 в‚ё/month when paid annually (~$6)",
-        "subtitle": "Not visual decorations, but tools for making money",
+        "cta": "Premiumni sinab ko'ring",
+        "price": "Yillik to'langanda oyiga 3045 v‚yo dan (~$6)",
+        "subtitle": "Vizual bezaklar emas, balki pul ishlash uchun vositalar",
         "telegram": {
-          "description": "Instant message in Telegram when a client leaves a request. Don't miss a single lead.",
-          "title": "Telegram notifications"
+          "description": "Mijoz so'rovni qoldirganda Telegramda tezkor xabar. Bitta etakchini o'tkazib yubormang.",
+          "title": "Telegram xabarnomalari"
         },
-        "title": "Why pay for Premium"
+        "title": "Nima uchun Premium uchun to'lash kerak"
       },
       "pricing": {
-        "aiPowered": "AI Powered",
-        "b1": "Everything in Pro, plus:",
-        "b2": "Business Zones (workspaces)",
-        "b3": "Team CRM & Kanban",
-        "b4": "Team chat & tasks",
-        "b5": "Roles & access control",
-        "b6": "Up to 5 team members",
-        "billedOnce": "once",
-        "billedYearly": "Billed {{price}} yearly",
-        "businessCta": "Start Business",
-        "businessName": "Business",
+        "aiPowered": "AI quvvatlanadi",
+        "b1": "Pro-da hamma narsa, shuningdek:",
+        "b2": "Biznes zonalari (ish joylari)",
+        "b3": "CRM va Kanban jamoasi",
+        "b4": "Jamoa suhbati va vazifalar",
+        "b5": "Rollar va kirishni boshqarish",
+        "b6": "5 tagacha jamoa a'zolari",
+        "billedOnce": "bir marta",
+        "billedYearly": "Yillik {{price}} toʻlanadi",
+        "businessCta": "Biznes boshlash",
+        "businessName": "Biznes",
         "calculator": {
-          "avgCheck": "Average Check ($)",
-          "competitorCost": "Competitor Cost (7% - 10%):",
-          "conversion": "Conversion Rate (%)",
-          "leads": "Monthly Leads",
-          "linkmaxCost": "LinkMAX Cost:",
-          "revenue": "Your Revenue:",
-          "savings": "Your Savings:",
-          "title": "Profitability Calculator"
+          "avgCheck": "O'rtacha chek ($)",
+          "competitorCost": "Raqobatchi narxi (7% - 10%):",
+          "conversion": "Konvertatsiya darajasi (%)",
+          "leads": "Oylik takliflar",
+          "linkmaxCost": "LinkMAX narxi:",
+          "revenue": "Sizning daromadingiz:",
+          "savings": "Sizning tejashingiz:",
+          "title": "Daromad kalkulyatori"
         },
-        "f1": "All blocks without limits",
-        "f2": "Online booking & mini-CRM",
-        "f3": "Instant leads to Telegram",
-        "f4": "Sell products & event tickets",
-        "f5": "Built-in QR scanner",
-        "f6": "Advanced analytics & reports",
-        "freeCta": "Start for free",
-        "month": "mo",
-        "monthly": "Monthly",
-        "newBadge": "NEW",
-        "perMonth": "month",
-        "popular": "POPULAR",
-        "proCta": "Start Pro Trial",
+        "f1": "Cheklovsiz barcha bloklar",
+        "f2": "Onlayn bron qilish va mini-CRM",
+        "f3": "Instant Telegramga olib boradi",
+        "f4": "Mahsulotlar va tadbir chiptalarini soting",
+        "f5": "O'rnatilgan QR skaneri",
+        "f6": "Kengaytirilgan tahlil va hisobotlar",
+        "freeCta": "Bepul boshlang",
+        "month": "oy",
+        "monthly": "Oylik",
+        "newBadge": "YANGI",
+        "perMonth": "oy",
+        "popular": "MASHXUR",
+        "proCta": "Pro sinov versiyasini boshlang",
         "proName": "Pro",
         "save": "-30%",
-        "subtitle": "Start for free. Upgrade when you're ready to scale.",
-        "teamLabel": "Team",
-        "title": "Simple Pricing,",
-        "titleHighlight": "Exponential Growth",
-        "total": "Total",
-        "yearly": "Yearly"
+        "subtitle": "Bepul boshlang. Miqyosga tayyor bo'lgach, yangilang.",
+        "teamLabel": "Jamoa",
+        "title": "Oddiy narxlash,",
+        "titleHighlight": "Eksponensial o'sish",
+        "total": "Jami",
+        "yearly": "Yillik"
       },
       "pricingLegacy": {
-        "annualPriceKzt": "36,540 в‚ё for 12 months",
-        "annualPriceUsd": "$71/year",
-        "bestValue": "Best price",
-        "billedOnce": "one-time",
-        "forever": "Forever",
+        "annualPriceKzt": "12 oyga 36 540 v‚yo",
+        "annualPriceUsd": "Yiliga $71",
+        "bestValue": "Eng yaxshi narx",
+        "billedOnce": "bir marta",
+        "forever": "Abadiy",
         "free": {
-          "item1": "6 base blocks",
-          "item2": "1 AI generation/month",
-          "item3": "Basic analytics"
+          "item1": "6 ta asosiy blok",
+          "item2": "Oyiga 1 ta AI avlodi",
+          "item3": "Asosiy tahlil"
         },
-        "freeAction": "Start for free",
-        "month": "months",
-        "otherPlans": "Other options:",
-        "otherPlansSix": "6 months: 3,698 в‚ё/month (-15%)",
-        "otherPlansThree": "3 months: 4,350 в‚ё/month",
+        "freeAction": "Bepul boshlang",
+        "month": "oylar",
+        "otherPlans": "Boshqa variantlar:",
+        "otherPlansSix": "6 oy: oyiga 3698 v‚yo (-15%)",
+        "otherPlansThree": "3 oy: oyiga 4350 v‚yo",
         "pro": {
-          "item1": "Unlimited blocks and templates",
-          "item2": "5 AI generations/month",
-          "item3": "CRM + Telegram notifications",
-          "item4": "Advanced Analytics",
-          "item5": "Without watermark"
+          "item1": "Cheksiz bloklar va shablonlar",
+          "item2": "Oyiga 5 AI avlodi",
+          "item3": "CRM + Telegram xabarnomalari",
+          "item4": "Kengaytirilgan tahlil",
+          "item5": "Suv belgisisiz"
         },
-        "subtitle": "Start for free and upgrade when you need more",
-        "title": "Tariffs",
-        "total": "Total",
-        "viewPlans": "Select Pro"
+        "subtitle": "Bepul boshlang va ko'proq kerak bo'lganda yangilang",
+        "title": "Tariflar",
+        "total": "Jami",
+        "viewPlans": "Pro-ni tanlang"
       },
       "problem": {
-        "item1": "There is chaos in bio: price list, recording and cases are scattered across posts and links",
-        "item2": "People ask the same questions, and you answer manually and waste time",
-        "item3": "The page turns into a menu of links rather than a path to the post",
-        "item4": "There is no understanding: what people actually click on and where attention is lost",
-        "solution": "LinkMAX makes one clear page where the visitor quickly understands who you are, how you are useful, how much it costs, and where to click to apply. And you see leads and analytics in one place.",
-        "title": "Why are applications getting lost today?"
+        "item1": "Bio-da tartibsizlik mavjud: narxlar ro'yxati, yozuvlar va holatlar postlar va havolalar bo'ylab tarqalib ketgan",
+        "item2": "Odamlar bir xil savollarni berishadi va siz qo'lda javob berasiz va vaqtni behuda sarflaysiz",
+        "item3": "Sahifa postga yo'l emas, balki havolalar menyusiga aylanadi",
+        "item4": "Hech qanday tushuncha yo'q: odamlar aslida nimani bosadi va e'tibor qaerga yo'qoladi",
+        "solution": "LinkMAX bitta aniq sahifa yaratadi, u yerda tashrif buyuruvchi sizni kimligingizni, qanchalik foydali ekanligingizni, qancha turadi va qayerga murojaat qilish kerakligini tezda tushunadi. Siz yetakchilar va tahlillarni bir joyda ko‘rasiz.",
+        "title": "Nima uchun bugungi kunda ilovalar yo'qoladi?"
       },
       "simplePricing": {
-        "badge": "Simple tariffs",
+        "badge": "Oddiy tariflar",
         "free": {
-          "cta": "Start for free",
-          "f1_v2": "Basic blocks (links, text, photos)",
-          "f2_v2": "AI generation (1 time/month)",
-          "f3_v2": "Basic view statistics",
-          "f4_v2": "Page QR code",
-          "f5_booking": "Booking + Form + CRM (50/mo)",
-          "f5_v2": "Mini-CRM and Telegram notifications",
-          "f6_v2": "Advanced Analytics",
-          "f7_v2": "AI generation (5 times/month)",
-          "subtitle": "Forever, no hidden fees",
-          "title": "For free"
+          "cta": "Bepul boshlang",
+          "f1_v2": "Asosiy bloklar (havolalar, matn, rasmlar)",
+          "f2_v2": "AI avlodi (oyiga 1 marta)",
+          "f3_v2": "Ko'rishning asosiy statistikasi",
+          "f4_v2": "Sahifa QR kodi",
+          "f5_booking": "Bandlov + Shakl + CRM (oyiga 50)",
+          "f5_v2": "Mini-CRM va Telegram xabarnomalari",
+          "f6_v2": "Kengaytirilgan tahlil",
+          "f7_v2": "AI avlodi (oyiga 5 marta)",
+          "subtitle": "Abadiy, yashirin to'lovlar yo'q",
+          "title": "Bepul"
         },
         "premium": {
-          "badge": "We recommend",
-          "cta": "Get Premium",
-          "f1_v2": "All 25+ block types",
-          "f1_v3": "Unlimited inbound requests",
-          "f2_v2": "Mini-CRM - all applications in one place",
-          "f2_v3": "No watermark — your brand",
-          "f3_v2": "Telegram notifications about leads",
-          "f3_v3": "Advanced click analytics",
-          "f4_v2": "AI generation (5 times/month)",
-          "f4_v3": "Export + Telegram notifications",
-          "f5_v2": "Advanced click analytics",
-          "f5_v3": "All 25+ block types",
-          "f6_v2": "Premium Themes and Animations",
-          "f6_v3": "Up to 6 pages + custom domain",
-          "f7_v2": "Block Scheduler",
-          "f7_v3": "10 AI generations per month",
-          "subtitle": "Everything for business growth",
+          "badge": "Biz tavsiya qilamiz",
+          "cta": "Premium oling",
+          "f1_v2": "Barcha 25+ blok turlari",
+          "f1_v3": "Cheksiz kiruvchi so'rovlar",
+          "f2_v2": "Mini-CRM - barcha ilovalar bir joyda",
+          "f2_v3": "Suv belgisi yo'q - sizning brendingiz",
+          "f3_v2": "Etakchilar haqida Telegram xabarnomalari",
+          "f3_v3": "Kengaytirilgan bosish tahlili",
+          "f4_v2": "AI avlodi (oyiga 5 marta)",
+          "f4_v3": "Eksport + Telegram bildirishnomalari",
+          "f5_v2": "Kengaytirilgan bosish tahlili",
+          "f5_v3": "Barcha 25+ blok turlari",
+          "f6_v2": "Premium mavzular va animatsiyalar",
+          "f6_v3": "6 sahifagacha + shaxsiy domen",
+          "f7_v2": "Bloklarni rejalashtiruvchi",
+          "f7_v3": "Oyiga 10 ta AI avlodi",
+          "subtitle": "Biznes rivojlanishi uchun hamma narsa",
           "title": "Premium"
         },
-        "title": "Free or Premium"
+        "title": "Bepul yoki Premium"
       },
       "socialProof": {
-        "title": "Sample pages"
+        "title": "Namuna sahifalar"
       },
       "targetAudience": {
         "beauty": {
-          "result1": "All services and prices are in one link",
-          "result2": "Clients sign up via form",
-          "result3": "Notification in Telegram about recording",
-          "subtitle": "Manicure, eyebrows, eyelashes, hair",
-          "title": "Beauty masters"
+          "result1": "Barcha xizmatlar va narxlar bitta havolada",
+          "result2": "Mijozlar forma orqali ro'yxatdan o'tishadi",
+          "result3": "Yozib olish haqida Telegramda bildirishnoma",
+          "subtitle": "Manikyur, qoshlar, kirpiklar, sochlar",
+          "title": "Go'zallik ustalari"
         },
         "business": {
-          "result1": "Catalog of goods and services",
-          "result2": "Analytics: where did the clients come from?",
-          "result3": "Order control without Excel",
-          "subtitle": "Barbers, photographers, coffee shops",
-          "title": "Small business"
+          "result1": "Tovarlar va xizmatlar katalogi",
+          "result2": "Tahlil: mijozlar qaerdan kelgan?",
+          "result3": "Excelsiz buyurtma boshqaruvi",
+          "subtitle": "Sartaroshlar, fotosuratchilar, qahvaxonalar",
+          "title": "Kichik biznes"
         },
-        "cta": "Create a page",
+        "cta": "Sahifa yarating",
         "expert": {
-          "result1": "Portfolio and reviews in a beautiful way",
-          "result2": "Leads automatically in Mini-CRM",
-          "result3": "Client statuses: new → in progress → ready",
-          "subtitle": "Psychologists, tutors, consultants",
-          "title": "Experts and coaches"
+          "result1": "Portfolio va sharhlar chiroyli tarzda",
+          "result2": "Mini-CRM-da avtomatik ravishda yetakchilik qiladi",
+          "result3": "Mijoz holatlari: yangi → davom etmoqda → tayyor",
+          "subtitle": "Psixologlar, repetitorlar, maslahatchilar",
+          "title": "Mutaxassislar va murabbiylar"
         },
-        "subtitle": "Specific results for your niche",
-        "title": "Who is LinkMAX.my created for?"
+        "subtitle": "Sizning joyingiz uchun maxsus natijalar",
+        "title": "LinkMAX.my kim uchun yaratilgan?"
       },
       "testimonials": {
         "count": "2,000+",
-        "review1": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it.",
-        "review2": "The aesthetics are on another level. It doesn't look like a generic link-in-bio. It looks like a custom website.",
-        "review3": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
-        "review4": "My clients love how easy it is to book. And I love the CRM. I finally know where my traffic comes from.",
-        "role1": "Fitness Coach",
-        "role2": "Digital Artist",
-        "role3": "Business Owner",
-        "role4": "Beauty Salon Owner",
-        "subtitle": "Experts, coaches, and small businesses trust LinkMAX to grow.",
-        "suffix": "Creators",
-        "title": "Loved by"
+        "review1": "Sport zalida 3 daqiqada sahifamni o'rnatdim. Bir soatdan keyin birinchi mijozimni oldim. AI buni shunchaki tushunadi.",
+        "review2": "Estetika boshqa darajada. Bu umumiy bio-in-linkga o'xshamaydi. Bu maxsus veb-saytga o'xshaydi.",
+        "review3": "To'g'ridan-to'g'ri Telegram mijozlari mening ish jarayonimni o'zgartirdi. Endi elektron pochta xabarlarini tekshirib bo'lmaydi. Men chatda bitimlarni yopaman.",
+        "review4": "Mening mijozlarim bron qilish qanchalik osonligini yaxshi ko'radilar. Va men CRMni yaxshi ko'raman. Nihoyat, mening trafikim qayerdan kelganini bilaman.",
+        "role1": "Fitnes murabbiyi",
+        "role2": "Raqamli rassom",
+        "role3": "Biznes egasi",
+        "role4": "Go'zallik saloni egasi",
+        "subtitle": "Mutaxassislar, murabbiylar va kichik biznes o'sishi uchun LinkMAXga ishonishadi.",
+        "suffix": "Ijodkorlar",
+        "title": "tomonidan sevilgan"
       },
       "ticker": {
-        "agencies": "Agencies",
-        "clinics": "Clinics",
-        "coaches": "Coaches",
-        "creators": "Creators",
-        "designers": "Designers",
-        "experts": "Experts",
-        "startups": "Startups",
-        "studios": "Studios",
-        "title": "Trusted by creators worldwide"
+        "agencies": "Agentliklar",
+        "clinics": "Klinikalar",
+        "coaches": "Murabbiylar",
+        "creators": "Ijodkorlar",
+        "designers": "Dizaynerlar",
+        "experts": "Mutaxassislar",
+        "startups": "Startaplar",
+        "studios": "Studiyalar",
+        "title": "Butun dunyodagi ijodkorlar tomonidan ishonchli"
       },
       "toc": {
-        "ariaLabel": "Page content",
-        "faq": "FAQ",
-        "features": "Possibilities",
-        "forWhom": "For whom",
-        "linkInBio": "What is Link-in-Bio",
-        "pricing": "Tariffs",
-        "title": "Content",
-        "useCases": "Examples"
+        "ariaLabel": "Sahifa tarkibi",
+        "faq": "TSS",
+        "features": "Imkoniyatlar",
+        "forWhom": "Kim uchun",
+        "linkInBio": "Link-in-Bio nima",
+        "pricing": "Tariflar",
+        "title": "Tarkib",
+        "useCases": "Misollar"
       },
       "useCases": {
-        "badge": "Examples of use",
+        "badge": "Foydalanish misollari",
         "barber": {
-          "desc": "Services, prices, online registration",
-          "link1": "вњ‚пёЏ Services",
-          "link2": "рџ“ЌAddress",
-          "link3": "рџ“± WhatsApp",
-          "name": "BarberShop MAX",
-          "role": "Barbershop"
+          "desc": "Xizmatlar, narxlar, onlayn ro'yxatdan o'tish",
+          "link1": "vH‚pyoď Xizmatlar",
+          "link2": "rj“QManzil",
+          "link3": "rџ“± WhatsApp",
+          "name": "Sartaroshxona MAX",
+          "role": "Sartaroshxona"
         },
         "creator": {
-          "bullet1": "Best projects and cases",
-          "bullet2": "Social networks and subscriptions",
-          "bullet3": "Acceptance of applications and brief",
-          "title": "Creator and portfolio"
+          "bullet1": "Eng yaxshi loyihalar va holatlar",
+          "bullet2": "Ijtimoiy tarmoqlar va obunalar",
+          "bullet3": "Murojaatlarni qabul qilish va qisqacha",
+          "title": "Yaratuvchi va portfel"
         },
-        "cta": "View all pages in gallery",
+        "cta": "Galereyadagi barcha sahifalarni ko'ring",
         "expert": {
-          "bullet1": "Offer and result on the first screen",
-          "bullet2": "Price and service packages",
-          "bullet3": "Application form and messengers",
-          "title": "Expert or consultation"
+          "bullet1": "Birinchi ekranda taklif va natija",
+          "bullet2": "Narxlar va xizmatlar paketlari",
+          "bullet3": "Ariza shakli va messenjerlar",
+          "title": "Ekspert yoki maslahat"
         },
         "fitness": {
-          "desc": "Training programs, online courses",
-          "link1": "рџЏ‹пёЏ Programs",
-          "link2": "рџ“№ Online course",
-          "link3": "вњ‰пёЏ Telegram",
-          "name": "Maria Fitness",
-          "role": "Fitness trainer"
+          "desc": "O'quv dasturlari, onlayn kurslar",
+          "link1": "rџď‹pyoď Dasturlar",
+          "link2": "rџ“№ Onlayn kurs",
+          "link3": "vh‰pyoď Telegram",
+          "name": "Mariya Fitness",
+          "role": "Fitness murabbiyi"
         },
         "musician": {
-          "desc": "Music, events, booking",
-          "link1": "рџЋ§ Spotify",
-          "link2": "рџЋџпёЏ Events",
-          "link3": "рџ“ћ Booking",
-          "name": "DJ Max",
-          "role": "Musician"
+          "desc": "Musiqa, tadbirlar, bron qilish",
+          "link1": "rџċ§ Spotify",
+          "link2": "rџċџpyoď Voqealar",
+          "link3": "rџ“ћ Bronlash",
+          "name": "DJ Maks",
+          "role": "Musiqachi"
         },
         "photographer": {
-          "desc": "Portfolio, shooting prices, booking",
-          "link1": "рџЋЁ Portfolio",
-          "link2": "рџ’° Price list",
-          "link3": "рџ“… Sign up",
-          "name": "Alexey Photo",
-          "role": "Photographer"
+          "desc": "Portfolio, suratga olish narxlari, bron qilish",
+          "link1": "rџċYo Portfolio",
+          "link2": "rџ’° Narxlar ro‘yxati",
+          "link3": "rџ“… Ro‘yxatdan o‘ting",
+          "name": "Aleksey fotosurati",
+          "role": "Fotosuratchi"
         },
-        "primaryCta": "Create a page",
+        "primaryCta": "Sahifa yarating",
         "psychologist": {
-          "desc": "Consultations, areas of work",
-          "link1": "рџ’¬ About therapy",
-          "link2": "рџ“‹ Sign up",
-          "link3": "рџ“љ Blog",
-          "name": "Anna Psychologist",
-          "role": "Psychologist"
+          "desc": "Maslahatlashuvlar, ish sohalari",
+          "link1": "rџ'¬ Terapiya haqida",
+          "link2": "rџ“‹ Ro‘yxatdan o‘ting",
+          "link3": "rџ“̂ Blog",
+          "name": "Anna Psixolog",
+          "role": "Psixolog"
         },
-        "secondaryCta": "View examples",
+        "secondaryCta": "Misollarni ko'rish",
         "service": {
-          "bullet1": "Registration and scheduling",
-          "bullet2": "Address, map and reviews",
-          "bullet3": "Contacts and quick answers",
-          "title": "Facilities and service"
+          "bullet1": "Ro'yxatdan o'tish va rejalashtirish",
+          "bullet2": "Manzil, xarita va sharhlar",
+          "bullet3": "Kontaktlar va tezkor javoblar",
+          "title": "Ob'ektlar va xizmat ko'rsatish"
         },
         "shop": {
-          "bullet1": "Products and prices",
-          "bullet2": "FAQ and delivery terms",
-          "bullet3": "Quick contact for order",
-          "desc": "Catalog, delivery, promotions",
-          "link1": "рџ‘— Catalog",
-          "link2": "рџЏ·пёЏ Promotions",
-          "link3": "рџљљ Delivery",
-          "name": "Boutique Fashion",
-          "role": "Clothing store",
-          "title": "Store or catalog"
+          "bullet1": "Mahsulotlar va narxlar",
+          "bullet2": "Tez-tez so'raladigan savollar va yetkazib berish shartlari",
+          "bullet3": "Buyurtma uchun tezkor aloqa",
+          "desc": "Katalog, yetkazib berish, aksiyalar",
+          "link1": "rџ‘— Katalog",
+          "link2": "rџď·pyoď Aktsiyalar",
+          "link3": "rĵ̂ Yetkazib berish",
+          "name": "Butik modasi",
+          "role": "Kiyim do'koni",
+          "title": "Do'kon yoki katalog"
         },
-        "subtitle": "Choose a script, fix a couple of blocks and publish.",
-        "title": "Ready-made scripts for your tasks"
+        "subtitle": "Skriptni tanlang, bir nechta bloklarni tuzating va nashr qiling.",
+        "title": "Vazifalaringiz uchun tayyor skriptlar"
       },
       "v2": {
         "logoTicker": {
-          "title": "Trusted by creators worldwide"
+          "title": "Butun dunyodagi ijodkorlar tomonidan ishonchli"
         },
         "nav": {
-          "features": "Features",
-          "getStarted": "Get Started",
-          "howItWorks": "How it works",
-          "login": "Log in",
-          "pricing": "Pricing",
-          "start": "Start",
-          "startFree": "Start for Free"
+          "features": "Xususiyatlari",
+          "getStarted": "Boshlash",
+          "howItWorks": "Bu qanday ishlaydi",
+          "login": "Tizimga kirish",
+          "pricing": "Narxlash",
+          "start": "Boshlash",
+          "startFree": "Bepul boshlang"
         },
         "pricing": {
-          "aiPowered": "AI Powered",
-          "billedYearly": "Payment {{price}} per year",
-          "forever": "forever",
+          "aiPowered": "AI quvvatlanadi",
+          "billedYearly": "Toʻlov yiliga {{price}}",
+          "forever": "abadiy",
           "free": {
-            "cta": "Start for free",
-            "desc": "Ideal for platform testing.",
-            "f1": "Basic blocks",
-            "f2": "1 AI generation/month",
-            "f3": "Basic analytics",
-            "f4": "Without your own domain",
-            "name": "Starter"
+            "cta": "Bepul boshlang",
+            "desc": "Platformani sinovdan o'tkazish uchun ideal.",
+            "f1": "Asosiy bloklar",
+            "f2": "Oyiga 1 ta AI avlodi",
+            "f3": "Asosiy tahlil",
+            "f4": "O'z domeningizsiz",
+            "name": "Boshlovchi"
           },
-          "monthly": "Month",
-          "perMonth": "months",
-          "popular": "POPULAR",
+          "monthly": "Oy",
+          "perMonth": "oylar",
+          "popular": "MASHXUR",
           "pro": {
-            "cta": "Start Pro trial",
-            "f1": "Everything from the Free tariff",
-            "f1_new": "All blocks without restrictions",
-            "f2": "5 AI generations/month",
-            "f2_new": "Online registration and your own mini-CRM",
-            "f3": "Leads in Telegram",
-            "f3_new": "Instant applications in Telegram",
-            "f4": "Advanced Analytics",
-            "f4_new": "Sale of goods and tickets",
-            "f5": "Removing branding",
-            "f5_new": "Built-in QR scanner",
-            "f6_new": "Advanced Statistics",
+            "cta": "Pro sinov versiyasini boshlang",
+            "f1": "Bepul tarifdan hamma narsa",
+            "f1_new": "Barcha bloklar cheklovlarsiz",
+            "f2": "Oyiga 5 AI avlodi",
+            "f2_new": "Onlayn ro'yxatdan o'tish va shaxsiy mini-CRM",
+            "f3": "Telegramda yetakchi",
+            "f3_new": "Telegramda tezkor ilovalar",
+            "f4": "Kengaytirilgan tahlil",
+            "f4_new": "Tovarlar va chiptalarni sotish",
+            "f5": "Brendni olib tashlash",
+            "f5_new": "O'rnatilgan QR skaneri",
+            "f6_new": "Kengaytirilgan statistika",
             "name": "Pro"
           },
           "save": "-30%",
-          "subtitle": "Get started for free. Take it to the next level when you're ready.",
-          "title": "Simple tariffs,",
-          "titleHighlight": "Exponential growth",
-          "yearly": "Year"
+          "subtitle": "Bepul boshlang. Tayyor bo'lgach, keyingi bosqichga o'ting.",
+          "title": "Oddiy tariflar,",
+          "titleHighlight": "Eksponensial o'sish",
+          "yearly": "Yil"
         },
         "testimonials": {
           "count": "2,000+",
           "reviews": {
-            "artist": "The aesthetics are on another level. It doesn't",
-            "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI вЂ‹вЂ‹just gets it.",
-            "crypto": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
-            "salon": "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from."
+            "artist": "Estetika boshqa darajada. Unday emas",
+            "coach": "Sport zalida 3 daqiqada sahifamni o'rnatdim. Bir soatdan keyin birinchi mijozimni oldim. AI buni shunchaki tushunadi.",
+            "crypto": "To'g'ridan-to'g'ri Telegram mijozlari mening ish jarayonimni o'zgartirdi. Endi elektron pochta xabarlarini tekshirib bo'lmaydi. Men chatda bitimlarni yopaman.",
+            "salon": "Mening mijozlarim bron qilish qanchalik osonligini yaxshi ko'radilar. Va men tahlilni yaxshi ko'raman. Nihoyat, mening trafikim qayerdan kelganini bilaman."
           },
           "roles": {
-            "artist": "Digital Artist",
-            "coach": "Fitness Coach",
-            "crypto": "Crypto Analyst",
-            "salon": "Beauty Salon Owner"
+            "artist": "Raqamli rassom",
+            "coach": "Fitnes murabbiyi",
+            "crypto": "Kripto tahlilchisi",
+            "salon": "Go'zallik saloni egasi"
           },
-          "suffix": "creators",
-          "title": "Loved"
+          "suffix": "ijodkorlar",
+          "title": "Sevimli"
         }
       },
       "v4": {
         "benefits": {
           "ai": {
-            "desc": "AI creates structure, texts and recommendations. Saves hours of work.",
-            "title": "AI generation"
+            "desc": "AI tuzilma, matn va tavsiyalarni yaratadi. Ish soatlarini tejaydi.",
+            "title": "AI avlodi"
           },
           "analytics": {
-            "desc": "Clicks, conversions, traffic sources, geography of visitors.",
-            "title": "Analytics"
+            "desc": "Kliklar, konversiyalar, trafik manbalari, tashrif buyuruvchilar geografiyasi.",
+            "title": "Analitika"
           },
           "crm": {
-            "desc": "All applications in one place. Statuses, history, Telegram notifications.",
+            "desc": "Barcha ilovalar bir joyda. Statuslar, tarix, Telegram xabarnomalari.",
             "title": "Mini CRM"
           },
           "mobile": {
-            "desc": "25+ blocks, drag & drop. Edit from your phone or computer.",
-            "title": "Page builder"
+            "desc": "25+ blok, sudrab olib tashlang. Telefoningiz yoki kompyuteringizdan tahrirlang.",
+            "title": "Sahifa yaratuvchisi"
           },
-          "title": "Complete business system"
+          "title": "To'liq biznes tizimi"
         },
         "blocks": {
-          "subtitle": "Drag & drop. Works on any device.",
-          "title": "25+ ready-made blocks"
+          "subtitle": "Surang va tashlab. Har qanday qurilmada ishlaydi.",
+          "title": "25+ tayyor bloklar"
         },
         "finalCta": {
-          "cta": "Create for free",
-          "secondary": "Or look at examples",
-          "subtitle": "Website + CRM + analytics. For free. No code.",
-          "title": "Ready to launch your business center?"
+          "cta": "Bepul yaratish",
+          "secondary": "Yoki misollarga qarang",
+          "subtitle": "Veb-sayt + CRM + tahlil. Bepul. Kod yo'q.",
+          "title": "Biznes markazingizni ishga tushirishga tayyormisiz?"
         },
         "forWhom": {
-          "beauty": "Services",
-          "business": "Stores",
-          "creator": "Creators",
-          "expert": "Experts",
-          "label": "For those who need a simple business system:"
+          "beauty": "Xizmatlar",
+          "business": "Do'konlar",
+          "creator": "Ijodkorlar",
+          "expert": "Mutaxassislar",
+          "label": "Oddiy biznes tizimiga muhtoj bo'lganlar uchun:"
         },
         "hero": {
-          "analytics": "Analytics",
-          "badge": "Expert-First Platform",
-          "cta": "Start for Free",
-          "mobileFirst": "Mobile First",
-          "scroll": "Scroll",
-          "secondary": "See Examples",
-          "seoReady": "SEO Ready",
-          "subtitle": "Instant mini-landings, online courses, and Telegram leads. Stop fighting complex CRMs — launch in 2 minutes.",
-          "title": "Website, CRM & Leads — in one place",
-          "titleEnd": "in one place",
-          "titleStart": "Website, CRM & Leads",
-          "trust1": "Blocks",
-          "trust2": "Creators",
+          "analytics": "Analitika",
+          "badge": "Ekspert-Birinchi platforma",
+          "cta": "Bepul boshlang",
+          "mobileFirst": "Mobil birinchi",
+          "scroll": "aylantiring",
+          "secondary": "Misollarga qarang",
+          "seoReady": "SEO tayyor",
+          "subtitle": "Bir zumda mini-landinglar, onlayn kurslar va Telegram yetakchilari. Murakkab CRM bilan kurashishni to'xtating - 2 daqiqada ishga tushiring.",
+          "title": "Veb-sayt, CRM va yetakchilar — bir joyda",
+          "titleEnd": "bir joyda",
+          "titleStart": "Veb-sayt, CRM va yetakchilar",
+          "trust1": "Bloklar",
+          "trust2": "Ijodkorlar",
           "trust3": "Langs"
         },
         "howItWorks": {
-          "badge": "2 minutes until result",
-          "cta": "Try it",
+          "badge": "Natijaga 2 daqiqa qoldi",
+          "cta": "Sinab ko'ring",
           "step1": {
-            "desc": "Choose a niche and add a few facts about yourself",
-            "title": "Tell me what you do"
+            "desc": "Joyni tanlang va o'zingiz haqingizda bir nechta faktlarni qo'shing",
+            "title": "Menga nima qilayotganingizni ayting"
           },
           "step2": {
-            "desc": "Structure, texts, buttons - edit as you want",
-            "title": "AI will assemble the page"
+            "desc": "Struktura, matnlar, tugmalar - xohlaganingizcha tahrirlang",
+            "title": "AI sahifani yig'adi"
           },
           "step3": {
-            "desc": "The link for social networks is ready, leads go to Telegram",
-            "title": "Receive applications"
+            "desc": "Ijtimoiy tarmoqlar uchun havola tayyor, telegrammaga o'ting",
+            "title": "Ilovalarni qabul qilish"
           },
-          "title": "How does this work"
+          "title": "U qanday ishlaydi"
         },
         "pricing": {
-          "forever": "Forever",
+          "forever": "Abadiy",
           "free": {
-            "f1": "Basic blocks",
-            "f2": "1 AI generation/month",
-            "f3": "Basic Statistics"
+            "f1": "Asosiy bloklar",
+            "f2": "Oyiga 1 ta AI avlodi",
+            "f3": "Asosiy statistika"
           },
-          "freeCta": "Start for free",
-          "guarantee": "0% commission on sales. Return 14 days.",
-          "month": "months",
+          "freeCta": "Bepul boshlang",
+          "guarantee": "Sotish uchun 0% komissiya. Qaytish 14 kun.",
+          "month": "oylar",
           "pro": {
-            "f1": "All 25+ blocks",
-            "f2": "Mini-CRM + Telegram notifications",
-            "f3": "5 AI generations/month",
-            "f4": "Advanced Analytics",
-            "f5": "Without watermark"
+            "f1": "Barcha 25+ bloklar",
+            "f2": "Mini-CRM + Telegram xabarnomalari",
+            "f3": "Oyiga 5 AI avlodi",
+            "f4": "Kengaytirilgan tahlil",
+            "f5": "Suv belgisisiz"
           },
-          "proCta": "Select Pro",
-          "recommended": "We recommend",
-          "save": "saving 30%",
-          "subtitle": "Get started for free. Connect Pro when you need more.",
-          "title": "Simple tariffs"
+          "proCta": "Pro-ni tanlang",
+          "recommended": "Biz tavsiya qilamiz",
+          "save": "30% tejash",
+          "subtitle": "Bepul boshlang. Sizga ko'proq kerak bo'lganda Pro-ni ulang.",
+          "title": "Oddiy tariflar"
         },
         "problem": {
-          "item1": "There is a link to WhatsApp in the bio, and clients ask the same thing",
-          "item2": "There is no clear price list - you lose those who don't want to write",
-          "item3": "It's unclear which posts and stories actually generate applications",
-          "solution": "- one page where everything is clear: who you are, how you help, how much it costs and where to click.",
-          "title": "Sound familiar?"
+          "item1": "Bio-da WhatsApp-ga havola mavjud va mijozlar ham xuddi shunday so'rashadi",
+          "item2": "Aniq narxlar ro'yxati yo'q - yozishni istamaganlarni yo'qotasiz",
+          "item3": "Qaysi xabarlar va hikoyalar ilovalarni yaratishi aniq emas",
+          "solution": "- hamma narsa aniq bo'lgan bitta sahifa: siz kimsiz, qanday yordam berasiz, qancha turadi va qaerga bosing.",
+          "title": "Tanish eshitildimi?"
         },
         "proof": {
-          "subtitle": "See how others use LinkMAX",
-          "title": "Sample pages"
+          "subtitle": "Boshqalar LinkMAXdan qanday foydalanishini koʻring",
+          "title": "Namuna sahifalar"
         },
         "seo": {
-          "answer": "LinkMAX is an AI-powered page builder for creators.",
-          "howToDesc": "Create a professional page in 2 minutes",
-          "howToName": "How to build a landing page with AI",
-          "question": "What is LinkMAX?"
+          "answer": "LinkMAX - bu yaratuvchilar uchun sun'iy intellekt asosidagi sahifa yaratuvchisi.",
+          "howToDesc": "2 daqiqada professional sahifa yarating",
+          "howToName": "AI yordamida ochilish sahifasini qanday qurish mumkin",
+          "question": "LinkMAX nima?"
         },
         "useCases": {
           "beauty": {
-            "item1": "Online registration",
-            "item2": "Reviews and before/after",
-            "item3": "Map and contacts",
-            "title": "Beauty / Services"
+            "item1": "Onlayn ro'yxatdan o'tish",
+            "item2": "Sharhlar va oldin/keyin",
+            "item3": "Xarita va kontaktlar",
+            "title": "Go'zallik / Xizmatlar"
           },
           "creator": {
-            "item1": "Best works",
-            "item2": "Social networks and subscriptions",
-            "item3": "Brief for order",
-            "title": "Creator / Portfolio"
+            "item1": "Eng yaxshi asarlar",
+            "item2": "Ijtimoiy tarmoqlar va obunalar",
+            "item3": "Buyurtma uchun qisqacha",
+            "title": "Yaratuvchi / Portfolio"
           },
-          "cta": "Select scenario",
+          "cta": "Ssenariyni tanlang",
           "expert": {
-            "item1": "Offer on the first screen",
-            "item2": "Service packages and prices",
-            "item3": "Application form",
-            "title": "Expert / Consultant"
+            "item1": "Birinchi ekranda taklif",
+            "item2": "Xizmat paketlari va narxlar",
+            "item3": "Ariza shakli",
+            "title": "Ekspert / maslahatchi"
           },
           "shop": {
-            "item1": "Products with prices",
-            "item2": "FAQ and delivery",
-            "item3": "Quick order",
-            "title": "Store / Catalog"
+            "item1": "Narxlari bilan mahsulotlar",
+            "item2": "Tez-tez so'raladigan savollar va yetkazib berish",
+            "item3": "Tez buyurtma",
+            "title": "Do'kon / Katalog"
           },
-          "subtitle": "Choose a template - AI will adapt it to you",
-          "title": "Ready-made scripts"
+          "subtitle": "Shablonni tanlang - AI uni sizga moslashtiradi",
+          "title": "Tayyor skriptlar"
         }
       },
       "v6": {
         "cta": {
-          "badge": "Ready to launch?",
-          "description": "Join thousands of creators, experts and small businesses growing with LinkMAX. No credit card.",
-          "note": "Forever Free Plan вЂў Cancel anytime вЂў 24/7 Support",
-          "primary": "Start for free",
-          "secondary": "View examples",
-          "titlePrefix": "Create your micro-site",
-          "titleSuffix": "free today."
+          "badge": "Ishga tushirishga tayyormisiz?",
+          "description": "LinkMAX bilan rivojlanayotgan minglab ijodkorlar, ekspertlar va kichik bizneslarga qoʻshiling. Kredit karta yo'q.",
+          "note": "Forever Free Plani • Istalgan vaqtda bekor qiling • 24/7 Yordam",
+          "primary": "Bepul boshlang",
+          "secondary": "Misollarni ko'rish",
+          "titlePrefix": "Mikro-saytingizni yarating",
+          "titleSuffix": "bugun bepul."
         },
         "faq": {
           "items": [
@@ -3951,62 +3951,62 @@
               "answer": "Yes, we have a forever free plan with basic features. You can create a page and start accepting requests without investment."
             }
           ],
-          "subtitle": "Everything you need to know about the platform",
-          "title": "Frequently asked questions"
+          "subtitle": "Platforma haqida bilishingiz kerak bo'lgan hamma narsa",
+          "title": "Tez-tez beriladigan savollar"
         },
         "features": {
           "analytics": {
-            "desc": "Track clicks, views, and conversions with built-in, privacy-respecting analytics.",
-            "title": "Live analytics"
+            "desc": "Oʻrnatilgan, maxfiylikka rioya qiluvchi tahlillar yordamida bosishlar, koʻrishlar va konversiyalarni kuzating.",
+            "title": "Jonli tahlil"
           },
           "blocks": {
-            "desc": "From simple links to complex forms and booking systems.",
-            "title": "28+ Smart blocks"
+            "desc": "Oddiy havolalardan murakkab shakllar va bronlash tizimlariga.",
+            "title": "28+ aqlli bloklar"
           },
-          "description": "Everything you need for sales and communication with clients in one place.",
+          "description": "Savdo va mijozlar bilan muloqot qilish uchun kerak bo'lgan hamma narsa bir joyda.",
           "domain": {
-            "desc": "Connect your .com or .kz domain for professional branding.",
-            "title": "Your own domain"
+            "desc": "Professional brending uchun .com yoki .kz domeningizni ulang.",
+            "title": "O'z domeningiz"
           },
           "mobileBuilder": {
-            "desc": "Designed for the smartphone generation. Edit, review and publish directly from your phone.",
-            "title": "Mobile designer"
+            "desc": "Smartfon avlodi uchun mo'ljallangan. To'g'ridan-to'g'ri telefoningizdan tahrirlang, ko'rib chiqing va nashr qiling.",
+            "title": "Mobil dizayner"
           },
           "payments": {
-            "desc": "Accept payment from anywhere via Stripe, Kaspi or Crypto.",
-            "title": "Accepting payments"
+            "desc": "Stripe, Kaspi yoki Crypto orqali istalgan joydan toʻlovni qabul qiling.",
+            "title": "To'lovlarni qabul qilish"
           },
           "seo": {
-            "desc": "AI-generated meta tags and schema markup for perfect search indexing.",
-            "title": "Instant SEO"
+            "desc": "AI tomonidan yaratilgan meta teglar va mukammal qidiruv indeksatsiyasi uchun sxema belgilari.",
+            "title": "Tezkor SEO"
           },
-          "subtitle": "A complete business tool.",
-          "title": "More than just a link."
+          "subtitle": "To'liq biznes vositasi.",
+          "title": "Bu shunchaki havola emas."
         },
         "hero": {
-          "badge": "V6.0 Live",
-          "cancelAnytime": "Cancel anytime",
+          "badge": "V6.0 Jonli",
+          "cancelAnytime": "Istalgan vaqtda bekor qiling",
           "cardLead": {
-            "subtitle": "Just in via LinkMAX.my",
-            "title": "New client!"
+            "subtitle": "Faqat LinkMAX.my orqali kiring",
+            "title": "Yangi mijoz!"
           },
           "cardRevenue": {
-            "label": "Revenue",
+            "label": "Daromad",
             "value": "$12,450"
           },
-          "ctaPrimary": "Create a page for free",
-          "ctaSecondary": "View examples",
-          "description": "Combine content, products and services into a beautiful page. Without designers and programmers. Take orders and grow.",
-          "noCard": "No credit card",
+          "ctaPrimary": "Bepul sahifa yarating",
+          "ctaSecondary": "Misollarni ko'rish",
+          "description": "Kontent, mahsulotlar va xizmatlarni chiroyli sahifaga birlashtiring. Dizaynerlar va dasturchilarsiz. Buyurtmalarni oling va o'stiring.",
+          "noCard": "Kredit karta yo'q",
           "titleBrand": "LinkMAX.my",
-          "titleHighlight": "one link.",
-          "titlePrefix": "Everything you do",
-          "titleSuffix": "for business"
+          "titleHighlight": "bitta havola.",
+          "titlePrefix": "Siz qilayotgan hamma narsa",
+          "titleSuffix": "biznes uchun"
         },
         "pricing": {
           "free": {
-            "cta": "Begin",
-            "desc": "Ideal for starting",
+            "cta": "Boshlanishi",
+            "desc": "Boshlash uchun ideal",
             "features": [
               "Unlimited links",
               "Basic analytics",
@@ -4014,13 +4014,13 @@
               "QR code generator",
               "Social icons"
             ],
-            "title": "Free"
+            "title": "Bepul"
           },
-          "perMonth": "/month",
+          "perMonth": "/oy",
           "pro": {
-            "badge": "POPULAR",
-            "cta": "Upgrade to Pro",
-            "desc": "For serious authors",
+            "badge": "MASHXUR",
+            "cta": "Pro versiyasiga yangilang",
+            "desc": "Jiddiy mualliflar uchun",
             "features": [
               "Everything in Free",
               "Advanced analytics",
@@ -4031,24 +4031,24 @@
             ],
             "title": "Pro"
           },
-          "subtitle": "Start for free, grow with Pro. No hidden fees.",
-          "title": "Simple, transparent prices."
+          "subtitle": "Bepul boshlang, Pro bilan rivojlaning. Yashirin to'lovlar yo'q.",
+          "title": "Oddiy, shaffof narxlar."
         },
         "steps": {
           "step1": {
-            "desc": "Registration in seconds via email or Google.",
-            "title": "1. Create an account"
+            "desc": "Elektron pochta yoki Google orqali bir necha soniya ichida ro'yxatdan o'tish.",
+            "title": "1. Hisob qaydnomasini yarating"
           },
           "step2": {
-            "desc": "Ready-made templates for any niche. Just add your links.",
-            "title": "2. Choose a style"
+            "desc": "Har qanday joy uchun tayyor shablonlar. Faqat havolalaringizni qo'shing.",
+            "title": "2. Uslubni tanlang"
           },
           "step3": {
-            "desc": "Publish the page and share the link in bio. Start tracking visits instantly.",
-            "title": "3. Launch"
+            "desc": "Sahifani nashr qiling va havolani bio-da ulashing. Bir zumda tashriflarni kuzatishni boshlang.",
+            "title": "3. Ishga tushirish"
           },
-          "subtitle": "We've removed all the complexity. You focus on the content, we take care of the rest.",
-          "title": "From idea to launch in 2 minutes"
+          "subtitle": "Biz barcha murakkablikni olib tashladik. Siz tarkibga e'tibor qaratasiz, qolganini biz hal qilamiz.",
+          "title": "G'oyadan ishga tushirishgacha 2 daqiqada"
         }
       }
     },
@@ -4069,7 +4069,7 @@
               "a": "Yes, add city, map, and booking to capture local demand."
             }
           ],
-          "title": "Short answers"
+          "title": "Qisqa javoblar"
         },
         "badge": "AEO + GEO",
         "for": {
@@ -4079,13 +4079,13 @@
             "Creators and course makers",
             "Event organizers"
           ],
-          "title": "For whom"
+          "title": "Kim uchun"
         },
-        "subtitle": "Semantic content helps you quickly understand what you offer and where you operate.",
-        "title": "Short answers that people and bots can understand",
+        "subtitle": "Semantik kontent sizga nima taklif qilayotganingizni va qaerda ishlayotganingizni tezda tushunishga yordam beradi.",
+        "title": "Odamlar va botlar tushunishi mumkin bo'lgan qisqa javoblar",
         "what": {
-          "body": "LinkMAX is a page builder + CRM for micro-businesses. Create a mini-site, accept applications and manage clients in one place.",
-          "title": "What is LinkMAX"
+          "body": "LinkMAX - bu mikrobiznes uchun sahifa yaratuvchisi + CRM. Bir joyda mini-sayt yarating, ilovalarni qabul qiling va mijozlarni boshqaring.",
+          "title": "LinkMAX nima"
         },
         "where": {
           "list": [
@@ -4093,1013 +4093,1013 @@
             "Almaty, Astana, Shymkent",
             "Online and offline services"
           ],
-          "title": "Where does he work?"
+          "title": "U qayerda ishlaydi?"
         }
       },
       "blocks": {
-        "badge": "25+ blocks",
-        "booking": "Record",
-        "countdown": "Timer",
-        "event": "Event",
-        "faq": "FAQ",
-        "form": "Form",
-        "gallery": "Gallery",
-        "links": "Links",
-        "map": "Map",
-        "messenger": "Chats",
-        "pricing": "Price",
+        "badge": "25+ blok",
+        "booking": "Yozib olish",
+        "countdown": "Taymer",
+        "event": "Tadbir",
+        "faq": "TSS",
+        "form": "Shakl",
+        "gallery": "Galereya",
+        "links": "Havolalar",
+        "map": "Xarita",
+        "messenger": "Suhbatlar",
+        "pricing": "Narxi",
         "proLabel": "Pro",
-        "products": "Goods",
-        "profile": "Profile",
-        "subtitle": "Drag and change the order. No code needed.",
-        "testimonials": "Reviews",
-        "title": "Build as constructor",
+        "products": "Tovarlar",
+        "profile": "Profil",
+        "subtitle": "Tartibni torting va o'zgartiring. Kod kerak emas.",
+        "testimonials": "Sharhlar",
+        "title": "Konstruktor sifatida qurish",
         "video": "Video"
       },
       "examples": {
-        "badge": "Examples",
-        "business": "Business",
-        "creator": "Creator",
-        "expert": "Expert",
-        "subtitle": "Real examples from users",
-        "title": "Pages that work",
-        "useTemplate": "Use",
-        "viewAll": "All examples"
+        "badge": "Misollar",
+        "business": "Biznes",
+        "creator": "Yaratuvchi",
+        "expert": "Mutaxassis",
+        "subtitle": "Foydalanuvchilardan haqiqiy misollar",
+        "title": "Ishlaydigan sahifalar",
+        "useTemplate": "Foydalanish",
+        "viewAll": "Barcha misollar"
       },
       "faq": {
-        "badge": "Questions",
+        "badge": "Savollar",
         "q1": {
-          "answer": "LinkMAX is a Micro-Business OS: an operating system for small businesses. Includes an AI page builder, built-in CRM for requests, Telegram notifications and analytics. Everything you need to start a business in one place.",
-          "question": "What is LinkMAX?"
+          "answer": "LinkMAX - bu Micro-Business OS: kichik biznes uchun operatsion tizim. AI sahifa yaratuvchisi, soʻrovlar uchun oʻrnatilgan CRM, Telegram bildirishnomalari va tahlillarni oʻz ichiga oladi. Bir joyda biznes boshlash uchun kerak bo'lgan hamma narsa.",
+          "question": "LinkMAX nima?"
         },
         "q10": {
-          "answer": "Yes, in Pro. Instead of LinkMAX.my/name it will be yoursite.com.",
-          "question": "Can I have my domain?"
+          "answer": "Ha, Pro-da. LinkMAX.my/name o'rniga u yoursite.com bo'ladi.",
+          "question": "Domenimni olsam bo'ladimi?"
         },
         "q11": {
-          "answer": "Visa, Mastercard or Kaspi card. Payment in tenge.",
-          "question": "How to pay for Pro?"
+          "answer": "Visa, Mastercard yoki Kaspi kartalari. To'lov tengeda.",
+          "question": "Pro uchun qanday to'lash kerak?"
         },
         "q12": {
-          "answer": "14 days from payment. If it doesn't suit you, we'll return it without questions.",
-          "question": "Return conditions?"
+          "answer": "To'lovdan boshlab 14 kun. Agar sizga mos kelmasa, savolsiz qaytarib beramiz.",
+          "question": "Qaytish shartlari?"
         },
         "q2": {
-          "answer": "The basic plan is free forever. Pro - from 3,045 в‚ё/month when paid annually. 14 days for return.",
-          "question": "What is the price?"
+          "answer": "Asosiy reja abadiy bepul. Pro - har yili to'langanda oyiga 3045 v‚yo dan. Qaytish uchun 14 kun.",
+          "question": "Narxi qancha?"
         },
         "q3": {
-          "answer": "Choose a niche, write 2-3 sentences about yourself. AI selects the structure, writes texts, and arranges blocks. Then you edit.",
-          "question": "How does AI work?"
+          "answer": "Joyni tanlang, o'zingiz haqingizda 2-3 ta jumla yozing. AI strukturani tanlaydi, matnlarni yozadi va bloklarni tartibga soladi. Keyin tahrir qilasiz.",
+          "question": "AI qanday ishlaydi?"
         },
         "q4": {
-          "answer": "25+: profile, links, products, price, form, entry, reviews, FAQ, map, messengers, video, gallery and others.",
-          "question": "What are the blocks?"
+          "answer": "25+: profil, havolalar, mahsulotlar, narx, shakl, kirish, sharhlar, tez-tez so'raladigan savollar, xarita, messenjerlar, video, galereya va boshqalar.",
+          "question": "Bloklar nima?"
         },
         "q5": {
-          "answer": "Yes, in Pro. All applications in one place, statuses, notes. Plus notifications in Telegram.",
-          "question": "Do you have a CRM for applications?"
+          "answer": "Ha, Pro-da. Barcha ilovalar bir joyda, statuslar, eslatmalar. Telegramdagi bildirishnomalar.",
+          "question": "Sizda ilovalar uchun CRM bormi?"
         },
         "q6": {
-          "answer": "Yes. The editor works on the phone the same way as on the computer.",
-          "question": "Can I edit from my phone?"
+          "answer": "Ha. Tahrirlovchi telefonda xuddi kompyuterda bo'lgani kabi ishlaydi.",
+          "question": "Telefonimdan tahrir qila olamanmi?"
         },
         "q7": {
-          "answer": "No. 0%. If you sell through the page, it's all yours.",
-          "question": "Do you take a commission on sales?"
+          "answer": "No 0%. Agar siz sahifa orqali sotsangiz, hammasi sizniki.",
+          "question": "Sotish uchun komissiya olasizmi?"
         },
         "q8": {
-          "answer": "AI assembles the page. Built-in CRM. Notifications in Telegram. Prices in tenge. Interface in Russian.",
-          "question": "Why is Linktree better?"
+          "answer": "AI sahifani yig'adi. O'rnatilgan CRM. Telegramdagi bildirishnomalar. Narxlar tengeda. Rus tilida interfeys.",
+          "question": "Nima uchun Linktree yaxshiroq?"
         },
         "q9": {
-          "answer": "Yes. Catalog, price, online registration. The client sees the products and prices and leaves a request.",
-          "question": "Suitable for a store?"
+          "answer": "Ha. Katalog, narx, onlayn ro'yxatdan o'tish. Mijoz mahsulotlar va narxlarni ko'radi va so'rov qoldiradi.",
+          "question": "Do'konga mos keladimi?"
         },
-        "subtitle": "Didn't find the answer? Write to support",
-        "title": "Frequently asked questions"
+        "subtitle": "Javobni topa olmadingizmi? Qo'llab-quvvatlashga yozing",
+        "title": "Tez-tez beriladigan savollar"
       },
       "finalCta": {
-        "badge": "Are you ready?",
-        "cta": "Create a page",
-        "secondary": "View examples",
-        "subtitle": "For free. Without a map. No code.",
-        "title": "Create a page in 2 minutes"
+        "badge": "Tayyormisiz?",
+        "cta": "Sahifa yarating",
+        "secondary": "Misollarni ko'rish",
+        "subtitle": "Bepul. Xaritasiz. Kod yo'q.",
+        "title": "2 daqiqada sahifa yarating"
       },
-      "floatingCta": "Create",
+      "floatingCta": "Yaratish",
       "footer": {
-        "about": "About Us",
+        "about": "Biz haqimizda",
         "blog": "Blog",
-        "company": "Company",
-        "contacts": "Contacts",
-        "copyright": "В© {{year}} LinkMAX. Made in Kazakhstan.",
-        "description": "The all-in-one platform for creators and micro-businesses.",
-        "examples": "Examples",
-        "language": "Language",
-        "legal": "Legal",
-        "pricing": "Pricing",
-        "privacy": "Privacy Policy",
-        "product": "Product",
-        "templates": "Templates",
-        "terms": "Terms of Service"
+        "company": "Kompaniya",
+        "contacts": "Kontaktlar",
+        "copyright": "V© {{year}} LinkMAX. Qozog'istonda ishlab chiqarilgan.",
+        "description": "Ijodkorlar va mikrobiznes uchun yaxlit platforma.",
+        "examples": "Misollar",
+        "language": "Til",
+        "legal": "Huquqiy",
+        "pricing": "Narxlash",
+        "privacy": "Maxfiylik siyosati",
+        "product": "Mahsulot",
+        "templates": "Shablonlar",
+        "terms": "Xizmat shartlari"
       },
       "hero": {
-        "badge": "Micro-Business OS",
-        "cta": "Create for free",
-        "previewCta": "Sign up",
-        "secondary": "View examples",
-        "subtitle": "Mini-site + CRM + applications + analytics in one place. AI Page Builder - Launch a Business in 2 Minutes Without Code.",
-        "title1": "operating system",
-        "title2": "for your business",
-        "trust1": "No card needed",
-        "trust2": "Page builder",
-        "trust3": "Built-in CRM"
+        "badge": "Mikrobiznes operatsion tizimi",
+        "cta": "Bepul yaratish",
+        "previewCta": "Ro'yxatdan o'tish",
+        "secondary": "Misollarni ko'rish",
+        "subtitle": "Mini-sayt + CRM + ilovalar + tahlillar bir joyda. AI Page Builder - 2 daqiqada kodsiz biznesni ishga tushiring.",
+        "title1": "operatsion tizim",
+        "title2": "biznesingiz uchun",
+        "trust1": "Karta kerak emas",
+        "trust2": "Sahifa yaratuvchisi",
+        "trust3": "O'rnatilgan CRM"
       },
       "howItWorks": {
-        "badge": "3 steps",
-        "cta": "Try it",
-        "note": "2 minutes to create",
+        "badge": "3 qadam",
+        "cta": "Sinab ko'ring",
+        "note": "Yaratish uchun 2 daqiqa",
         "step1": {
-          "description": "Expert, freelancer, salon - AI will select the necessary blocks",
-          "title": "Choose a niche"
+          "description": "Mutaxassis, frilanser, salon - AI kerakli bloklarni tanlaydi",
+          "title": "Joyni tanlang"
         },
         "step2": {
-          "description": "A couple of sentences - and AI will write texts for the page",
-          "title": "Describe yourself"
+          "description": "Bir nechta jumlalar - va AI sahifa uchun matnlar yozadi",
+          "title": "O'zingizni tasvirlab bering"
         },
         "step3": {
-          "description": "Get the link LinkMAX.my/name and paste it into bio",
-          "title": "Publish"
+          "description": "LinkMAX.my/name havolasini oling va uni bioga joylashtiring",
+          "title": "Nashr qilish"
         },
-        "subtitle": "Answer questions - AI assembles the page. No code or designer required.",
-        "title": "How does this work"
+        "subtitle": "Savollarga javob bering - AI sahifani yig'adi. Hech qanday kod yoki dizayner kerak emas.",
+        "title": "U qanday ishlaydi"
       },
       "nav": {
-        "create": "Create",
-        "examples": "Examples",
-        "login": "Login",
-        "pricing": "Tariffs"
+        "create": "Yaratish",
+        "examples": "Misollar",
+        "login": "Tizimga kirish",
+        "pricing": "Tariflar"
       },
       "pricing": {
-        "badge": "Tariffs",
-        "bestValue": "Profitable",
+        "badge": "Tariflar",
+        "bestValue": "Foydali",
         "free": {
-          "cta": "Start for free",
-          "description": "To try",
+          "cta": "Bepul boshlang",
+          "description": "Sinash uchun",
           "features": {
-            "1": "1 page",
-            "2": "Basic blocks",
-            "3": "3 AI generations",
-            "4": "LinkMAX watermark"
+            "1": "1 sahifa",
+            "2": "Asosiy bloklar",
+            "3": "AIning 3 avlodi",
+            "4": "LinkMAX suv belgisi"
           },
-          "period": "forever",
+          "period": "abadiy",
           "price": "$0",
-          "title": "For free"
+          "title": "Bepul"
         },
-        "guarantee": "14 days for return",
-        "halfYear": "six months",
-        "perMonth": "/month",
+        "guarantee": "Qaytish uchun 14 kun",
+        "halfYear": "olti oy",
+        "perMonth": "/oy",
         "pro": {
-          "cta": "Select Pro",
-          "description": "For serious work",
+          "cta": "Pro-ni tanlang",
+          "description": "Jiddiy ish uchun",
           "features": {
-            "1": "6 pages",
-            "2": "All 25+ blocks",
-            "3": "CRM + Telegram notifications",
-            "4": "No watermark",
-            "5": "Your own domain",
-            "6": "Advanced Analytics"
+            "1": "6 sahifa",
+            "2": "Barcha 25+ bloklar",
+            "3": "CRM + Telegram xabarnomalari",
+            "4": "Suv belgisi yo'q",
+            "5": "O'z domeningiz",
+            "6": "Kengaytirilgan tahlil"
           },
-          "period": "/month",
-          "popular": "Popular",
+          "period": "/oy",
+          "popular": "Ommabop",
           "title": "Pro"
         },
-        "quarter": "quarter",
-        "subtitle": "Basic features are free forever",
-        "title": "Free at start, Pro when you need more",
-        "year": "year"
+        "quarter": "chorak",
+        "subtitle": "Asosiy xususiyatlar abadiy bepul",
+        "title": "Boshida bepul, ko'proq kerak bo'lganda Pro",
+        "year": "yil"
       },
       "problem": {
-        "badge": "Sound familiar?",
-        "description": "Applications in DM, prices in stories, clients in notepad. Chaos instead of system. You waste time - clients leave.",
-        "item1": "Applications are lost",
-        "item1desc": "The client wrote - you forgot",
-        "item2": "There is no single system",
-        "item2desc": "Everything is scattered across messengers",
-        "item3": "No analytics",
-        "item3desc": "Don't know what works",
-        "title": "Social networks will not replace business tools"
+        "badge": "Tanish eshitildimi?",
+        "description": "DMdagi ilovalar, hikoyalardagi narxlar, bloknotdagi mijozlar. Tizim o'rniga xaos. Siz vaqtni behuda sarflaysiz - mijozlar ketishadi.",
+        "item1": "Ilovalar yo'qoladi",
+        "item1desc": "Mijoz yozgan - siz unutdingiz",
+        "item2": "Yagona tizim mavjud emas",
+        "item2desc": "Hamma narsa messenjerlar bo'ylab tarqalib ketgan",
+        "item3": "Analitika yo'q",
+        "item3desc": "Nima ishlayotganini bilmayman",
+        "title": "Ijtimoiy tarmoqlar biznes vositalarini almashtirmaydi"
       },
       "results": {
-        "badge": "For whom",
+        "badge": "Kim uchun",
         "business": {
-          "cta": "Create",
-          "problem": "The website is expensive, social networks do not give the full picture",
-          "solution": "Catalog, map and entry on one page",
-          "title": "Small business"
+          "cta": "Yaratish",
+          "problem": "Veb-sayt qimmat, ijtimoiy tarmoqlar to'liq tasvirni bermaydi",
+          "solution": "Bir sahifada katalog, xarita va kirish",
+          "title": "Kichik biznes"
         },
         "creators": {
-          "cta": "Create",
-          "problem": "Subscribers don't know where to buy your product",
-          "solution": "Courses, merch and links on one page",
-          "title": "Bloggers and creators"
+          "cta": "Yaratish",
+          "problem": "Obunachilar mahsulotingizni qayerdan sotib olishni bilishmaydi",
+          "solution": "Kurslar, tovar va havolalar bir sahifada",
+          "title": "Bloggerlar va ijodkorlar"
         },
         "education": {
-          "cta": "Create",
-          "problem": "Parents want to see the program before registering",
-          "solution": "Schedule, prices and reviews in one place",
-          "title": "Tutors and trainers"
+          "cta": "Yaratish",
+          "problem": "Ota-onalar ro'yxatdan o'tishdan oldin dasturni ko'rishni xohlashadi",
+          "solution": "Jadval, narxlar va sharhlar bir joyda",
+          "title": "Repetitorlar va murabbiylar"
         },
         "events": {
-          "cta": "Create",
-          "problem": "Information is scattered, people don't get to register",
-          "solution": "Date, place, program and form in one place",
-          "title": "Organizers"
+          "cta": "Yaratish",
+          "problem": "Ma'lumotlar tarqoq, odamlar ro'yxatdan o'tishmaydi",
+          "solution": "Sana, joy, dastur va shakl bir joyda",
+          "title": "Tashkilotchilar"
         },
         "freelancers": {
-          "cta": "Create",
-          "problem": "\"What is the price?\" - in every message",
-          "solution": "Price and application form - the client sees prices immediately",
-          "title": "Freelancers"
+          "cta": "Yaratish",
+          "problem": "\"Narxi qancha?\" - har bir xabarda",
+          "solution": "Narx va ariza shakli - mijoz darhol narxlarni ko'radi",
+          "title": "Freelancerlar"
         },
         "health": {
-          "cta": "Create",
-          "problem": "Clients call to check prices",
-          "solution": "Price and online booking - fewer calls",
-          "title": "Salons and masters"
+          "cta": "Yaratish",
+          "problem": "Mijozlar narxlarni tekshirish uchun qo'ng'iroq qilishadi",
+          "solution": "Narx va onlayn bron qilish - kamroq qo'ng'iroqlar",
+          "title": "Salonlar va ustalar"
         },
-        "subtitle": "No matter the niche, LinkMAX helps you get applications",
-        "title": "One page - different tasks"
+        "subtitle": "Qanday bo'lmasin, LinkMAX sizga ilovalarni olishga yordam beradi",
+        "title": "Bir sahifa - turli vazifalar"
       },
       "seo": {
-        "badge": "What is LinkMAX",
+        "badge": "LinkMAX nima",
         "items": {
-          "1": "Micro-Business OS - everything for business in one place",
-          "2": "AI Page Builder: Create a Website in 2 Minutes",
-          "3": "Built-in CRM: manage requests and clients",
-          "4": "Mini-site + application form + Telegram notifications",
-          "5": "Alternative to Taplink, Linktree with CRM features"
+          "1": "Micro-Business OS - biznes uchun hamma narsa bir joyda",
+          "2": "AI Page Builder: 2 daqiqada veb-sayt yarating",
+          "3": "O'rnatilgan CRM: so'rovlar va mijozlarni boshqarish",
+          "4": "Mini-sayt + ariza shakli + Telegram xabarnomalari",
+          "5": "Taplink-ga muqobil, CRM xususiyatlariga ega Linktree"
         },
-        "title": "Operating system for micro-business"
+        "title": "Mikrobiznes uchun operatsion tizim"
       },
       "solution": {
-        "badge": "Solution",
-        "description": "Business card website, CRM for applications, Telegram notifications, analytics - all in one place. Your operating system for micro-businesses.",
-        "item1": "Page builder",
-        "item1desc": "Build a website from 25+ ready-made blocks",
-        "item2": "Built-in CRM",
-        "item2desc": "All applications in one place",
-        "item3": "Instant Notifications",
-        "item3desc": "Telegram bot will notify you about new clients",
-        "title": "One platform for your entire business"
+        "badge": "Yechim",
+        "description": "Vizitka veb-sayti, ilovalar uchun CRM, Telegram xabarnomalari, tahlillar - barchasi bir joyda. Mikrobiznes uchun operatsion tizimingiz.",
+        "item1": "Sahifa yaratuvchisi",
+        "item1desc": "25+ tayyor bloklardan veb-sayt yarating",
+        "item2": "O'rnatilgan CRM",
+        "item2desc": "Barcha ilovalar bir joyda",
+        "item3": "Tezkor bildirishnomalar",
+        "item3desc": "Telegram boti sizni yangi mijozlar haqida xabardor qiladi",
+        "title": "Butun biznesingiz uchun bitta platforma"
       },
       "trust": {
-        "badge": "Why LinkMAX",
+        "badge": "Nima uchun LinkMAX",
         "mobile": {
-          "description": "Change texts and prices from your phone",
-          "title": "Editor in your pocket"
+          "description": "Telefoningizdan matnlar va narxlarni o'zgartiring",
+          "title": "Cho'ntagingizda muharrir"
         },
         "noCommission": {
-          "description": "Sell вЂ‹вЂ‹- it's all yours",
-          "title": "0% commission"
+          "description": "Soting - hammasi sizniki",
+          "title": "0% komissiya"
         },
         "speed": {
-          "description": "Pages load instantly. The client will not leave",
-          "title": "Fast on the phone"
+          "description": "Sahifalar bir zumda yuklanadi. Mijoz ketmaydi",
+          "title": "Telefonda tez"
         },
-        "subtitle": "Nothing extra. Only what brings in applications.",
+        "subtitle": "Qo'shimcha hech narsa. Faqat ilovalarni olib keladigan narsa.",
         "telegram": {
-          "description": "New lead - notification immediately",
-          "title": "Applications in Telegram"
+          "description": "Yangi yetakchi - darhol bildirishnoma",
+          "title": "Telegramdagi ilovalar"
         },
-        "title": "For those who value time"
+        "title": "Vaqtni qadrlaydiganlar uchun"
       }
     },
     "language": {
-      "addLanguage": "Add language",
-      "additionalLanguages": "Additional languages:",
-      "anyLanguageSupported": "Any language supported",
-      "autoTranslate": "Autotranslation",
-      "autoTranslated": "Content has been automatically translated",
-      "autoTranslatedTo": "Translated to: {{languages}}",
-      "contentLanguage": "Content language",
-      "flexibleMultilingual": "Flexible multilingual",
-      "moreLanguages": "Other languages",
-      "noLanguageFound": "Language not found",
-      "searchLanguage": "Search for language...",
-      "selectLanguage": "Select language",
-      "showMoreLanguages": "{{count}} more languages",
-      "translating": "Translation...",
-      "translationError": "Auto translation error",
-      "uiLanguage": "Interface language"
+      "addLanguage": "Til qo'shing",
+      "additionalLanguages": "Qo'shimcha tillar:",
+      "anyLanguageSupported": "Har qanday til qo'llab-quvvatlanadi",
+      "autoTranslate": "Avtomatik tarjima",
+      "autoTranslated": "Kontent avtomatik ravishda tarjima qilindi",
+      "autoTranslatedTo": "Tarjima qilingan: {{languages}}",
+      "contentLanguage": "Kontent tili",
+      "flexibleMultilingual": "Moslashuvchan ko'p tilli",
+      "moreLanguages": "Boshqa tillar",
+      "noLanguageFound": "Til topilmadi",
+      "searchLanguage": "Til qidirish...",
+      "selectLanguage": "Tilni tanlang",
+      "showMoreLanguages": "{{count}} koʻproq tillar",
+      "translating": "Tarjima...",
+      "translationError": "Avtomatik tarjima xatosi",
+      "uiLanguage": "Interfeys tili"
     },
     "layouts": {
-      "grid": "Grid",
-      "list": "List"
+      "grid": "To‘r",
+      "list": "Roʻyxat"
     },
     "leaderboard": {
-      "all": "All",
-      "allTime": "All Time",
-      "empty": "No pages yet for this period",
-      "month": "This Month",
-      "title": "Top Pages",
-      "week": "This Week"
+      "all": "Hammasi",
+      "allTime": "Hamma vaqt",
+      "empty": "Bu davr uchun hali sahifalar yoʻq",
+      "month": "Shu oy",
+      "title": "Yuqori sahifalar",
+      "week": "Ushbu hafta"
     },
     "legal": {
-      "agreeToTerms": "I accept the terms",
-      "andThe": "And",
-      "paymentTerms": "Payment terms",
-      "paymentTermsDescription": "Payment and refund policy for the platform",
-      "privacyDescription": "Read the personal data processing policy",
-      "privacyLink": "Privacy Policy",
-      "privacyPolicy": "Privacy Policy",
-      "termsDescription": "Read the terms of use of the LinkMAX platform",
-      "termsLink": "User Agreement",
-      "termsOfService": "User Agreement"
+      "agreeToTerms": "Men shartlarni qabul qilaman",
+      "andThe": "Va",
+      "paymentTerms": "To'lov shartlari",
+      "paymentTermsDescription": "Platforma uchun to'lov va pulni qaytarish siyosati",
+      "privacyDescription": "Shaxsiy ma'lumotlarni qayta ishlash siyosatini o'qing",
+      "privacyLink": "Maxfiylik siyosati",
+      "privacyPolicy": "Maxfiylik siyosati",
+      "termsDescription": "LinkMAX platformasidan foydalanish shartlarini o'qing",
+      "termsLink": "Foydalanuvchi shartnomasi",
+      "termsOfService": "Foydalanuvchi shartnomasi"
     },
     "lifecycle": {
       "hasLeads": {
-        "hint": "Follow up with clients after their visit — it improves return rate by 30%",
-        "title": "Leads are coming in"
+        "hint": "Tashrifdan keyin mijozlarni kuzatib boring - bu qaytish tezligini 30% ga yaxshilaydi",
+        "title": "Etakchilar kirib kelmoqda"
       },
       "repeatCustomers": {
-        "hint": "You have {{count}} repeat customers — great job! 🎉",
-        "title": "Repeat customers"
+        "hint": "Sizda {{count}} takroriy mijozlar bor — ajoyib ish! 🎉",
+        "title": "Takroriy mijozlar"
       },
       "trafficNoLeads": {
-        "hint": "Add a contact form or booking block — every 5th page with a form gets leads",
-        "title": "Traffic but no leads"
+        "hint": "Kontakt shakli yoki bandlov blokini qo'shing - formali har 5-sahifada takliflar keladi",
+        "title": "Trafik, lekin hech qanday sabab yo'q"
       }
     },
     "mapBlock": {
-      "address": "Address",
-      "addressPlaceholder": "Almaty, st. Abaya 150",
-      "enterAddress": "Enter address",
-      "hint": "Enter the address - the map will find the place automatically"
+      "address": "Manzil",
+      "addressPlaceholder": "Olmaota, st. Abaya 150",
+      "enterAddress": "Manzilni kiriting",
+      "hint": "Manzilni kiriting - xarita joyni avtomatik ravishda topadi"
     },
     "messages": {
-      "accountCreated": "AccountCreated",
-      "failedToSignIn": "FailedToSignIn",
-      "failedToSignUp": "FailedToSignUp",
-      "loading": "Loading..."
+      "accountCreated": "Hisob yaratilgan",
+      "failedToSignIn": "FailedTo SignIn",
+      "failedToSignUp": "FailedTo SignUp",
+      "loading": "Yuklanmoqda..."
     },
     "metrics": {
-      "clicks": "Clicks",
-      "conversion": "Conversion",
-      "ctr": "Activity",
+      "clicks": "Bosishlar",
+      "conversion": "Konvertatsiya",
+      "ctr": "Faoliyat",
       "funnel": {
-        "clicks": "Interest (clicks)",
-        "insightGoodJob": "Your funnel is working steadily. Keep driving traffic through social media!",
-        "insightLowConversion": "Many clicks but few leads. Make sure your offer is clear to the client.",
-        "insightNoLeads": "You have views but no leads. Try adding a contact form to the first screen.",
-        "insightTitle": "LinkMAX AI Tip",
-        "last30Days": "Last 30 days",
-        "leads": "Leads",
-        "title": "Conversion Funnel",
-        "views": "Views"
+        "clicks": "Qiziqish (klik)",
+        "insightGoodJob": "Huningiz barqaror ishlamoqda. Ijtimoiy tarmoqlar orqali trafikni boshqarishda davom eting!",
+        "insightLowConversion": "Ko'p bosish, lekin bir nechta etakchi. Sizning taklifingiz mijozga tushunarli ekanligiga ishonch hosil qiling.",
+        "insightNoLeads": "Sizda koʻrishlar bor, lekin yetakchilar yoʻq. Birinchi ekranga kontakt formasini qo'shib ko'ring.",
+        "insightTitle": "LinkMAX AI maslahati",
+        "last30Days": "Oxirgi 30 kun",
+        "leads": "Etakchi",
+        "title": "Konvertatsiya hunisi",
+        "views": "Koʻrishlar"
       },
-      "views": "Views"
+      "views": "Koʻrishlar"
     },
     "mobileToolbar": {
-      "achievements": "Achievements",
-      "achievementsDesc": "Your progress",
-      "aiBuilder": "AI Constructor",
-      "aiBuilderDesc": "Create a page with AI",
+      "achievements": "Yutuqlar",
+      "achievementsDesc": "Sizning taraqqiyotingiz",
+      "aiBuilder": "AI konstruktori",
+      "aiBuilderDesc": "AI bilan sahifa yarating",
       "crm": "CRM",
-      "crmDesc": "Lead management",
-      "galleryDesc": "Community works",
-      "marketplace": "Marketplace",
-      "marketplaceDesc": "Community templates",
-      "more": "Menu",
-      "moreOptions": "Menu",
-      "preview": "Look",
-      "pricingDesc": "Premium features",
-      "settings": "Settings",
-      "share": "Publish",
+      "crmDesc": "Etakchi boshqaruv",
+      "galleryDesc": "Jamoa ishlari",
+      "marketplace": "Bozor",
+      "marketplaceDesc": "Hamjamiyat shablonlar",
+      "more": "Menyu",
+      "moreOptions": "Menyu",
+      "preview": "Qarang",
+      "pricingDesc": "Premium xususiyatlar",
+      "settings": "Sozlamalar",
+      "share": "Nashr qilish",
       "status": "Status",
-      "templates": "Templates",
-      "templatesDesc": "Ready-made templates",
-      "tokensDesc": "Your balance and transactions"
+      "templates": "Shablonlar",
+      "templatesDesc": "Tayyor shablonlar",
+      "tokensDesc": "Sizning balansingiz va operatsiyalaringiz"
     },
     "nameAnimation": {
-      "bounce": "Jumping",
-      "glow": "Glow",
+      "bounce": "Sakrash",
+      "glow": "Yorqin",
       "gradient": "Gradient",
       "neon": "Neon",
-      "none": "No animation",
-      "pulse": "Ripple",
-      "rainbow": "Rainbow",
-      "shake": "Shaking",
-      "title": "Name animation",
-      "typing": "Typewriter",
-      "unlockAll": "Unlock all animations",
-      "wave": "Wave"
+      "none": "Animatsiya yo'q",
+      "pulse": "Dalgalanish",
+      "rainbow": "Kamalak",
+      "shake": "Tebranish",
+      "title": "Nom animatsiyasi",
+      "typing": "Yozuv mashinkasi",
+      "unlockAll": "Barcha animatsiyalarni qulfdan chiqaring",
+      "wave": "To'lqin"
     },
     "nav": {
-      "dashboard": "Dashboard",
+      "dashboard": "Boshqaruv paneli",
       "insights": "Insights",
-      "settings": "Settings"
+      "settings": "Sozlamalar"
     },
     "newsletter": {
-      "alreadySubscribed": "You are already subscribed!",
-      "emailPlaceholder": "Your email",
-      "error": "Error. Try again.",
-      "subscribe": "Subscribe",
-      "subscriptionConfirmed": "Your subscription has been confirmed.",
-      "success": "Thanks for subscribing!",
-      "thankYou": "Thank you!",
-      "title": "Subscribe"
+      "alreadySubscribed": "Siz allaqachon obuna bo'lgansiz!",
+      "emailPlaceholder": "Sizning elektron pochtangiz",
+      "error": "Xato. Qayta urinib ko'ring.",
+      "subscribe": "Obuna boʻling",
+      "subscriptionConfirmed": "Obunangiz tasdiqlandi.",
+      "success": "Obuna bo'lganingiz uchun tashakkur!",
+      "thankYou": "Rahmat!",
+      "title": "Obuna boʻling"
     },
     "niche": {
-      "barber": "Barber",
-      "beauty": "Beauty Master",
-      "chef": "Cook/Pastry Chef",
-      "designer": "Designer",
-      "expert": "Expert",
-      "fitness": "Fitness trainer",
-      "marketer": "Marketer",
-      "musician": "Musician",
-      "photographer": "Photographer",
-      "psychologist": "Psychologist",
-      "shop": "Shop",
-      "teacher": "Tutor"
+      "barber": "Sartarosh",
+      "beauty": "Go'zallik ustasi",
+      "chef": "Oshpaz / qandolatchi",
+      "designer": "Dizayner",
+      "expert": "Mutaxassis",
+      "fitness": "Fitness murabbiyi",
+      "marketer": "Marketolog",
+      "musician": "Musiqachi",
+      "photographer": "Fotosuratchi",
+      "psychologist": "Psixolog",
+      "shop": "Do'kon",
+      "teacher": "Repetitor"
     },
     "niches": {
-      "art": "Creation",
-      "beauty": "Beauty",
-      "business": "Business",
-      "education": "Education",
-      "events": "Events",
-      "expert": "Expert",
-      "fashion": "Fashion",
-      "fitness": "Fitness",
-      "food": "Food",
-      "health": "Health",
-      "music": "Music",
-      "other": "Other",
-      "realestate": "Real estate",
-      "services": "Services",
-      "tech": "IT and technology",
-      "travel": "Trips"
+      "art": "Yaratilish",
+      "beauty": "Go'zallik",
+      "business": "Biznes",
+      "education": "Ta'lim",
+      "events": "Voqealar",
+      "expert": "Mutaxassis",
+      "fashion": "Moda",
+      "fitness": "Fitnes",
+      "food": "Oziq-ovqat",
+      "health": "Salomatlik",
+      "music": "Musiqa",
+      "other": "Boshqa",
+      "realestate": "Ko'chmas mulk",
+      "services": "Xizmatlar",
+      "tech": "IT va texnologiya",
+      "travel": "Sayohatlar"
     },
     "notFound": {
-      "message": "Oops! Page not found",
-      "returnHome": "Return to Home"
+      "message": "Voy! Sahifa topilmadi",
+      "returnHome": "Uyga qaytish"
     },
     "onboarding": {
-      "additionalDetails": "Additional information",
-      "completeDescription": "Your page is created and ready to edit",
-      "completeTitle": "Ready!",
-      "detailsDescription": "This information will help AI create the perfect page",
-      "detailsHint": "Not necessary, but will help make the page more accurate",
-      "detailsPlaceholder": "City, specialization, experience...",
-      "detailsTitle": "Tell us about yourself",
-      "enterName": "Enter your name",
-      "generatePage": "Create a page",
-      "generatingDescription": "We generate structure, texts and design...",
-      "generatingTitle": "AI creates your page",
-      "generationFailed": "Failed to create page",
-      "goalBookings": "Record",
-      "goalClicks": "Clicks",
-      "goalDescription": "Let's choose blocks so that this happens faster.",
-      "goalLeads": "Applications",
-      "goalTitle": "What do you want to get from this page?",
-      "namePlaceholder": "For example: Alexey or Beauty Studio",
-      "nicheDescription": "AI will create a personal page for you in a minute",
-      "nicheTitle": "Choose your niche",
-      "pageGenerated": "The page has been successfully created!",
-      "pleaseWait": "This will take about 30 seconds",
-      "skip": "Skip",
-      "wizardDescription": "Step-by-step setup of your profile and page.",
-      "wizardTitle": "Setup Wizard",
-      "yourName": "Your name or title"
+      "additionalDetails": "Qo'shimcha ma'lumot",
+      "completeDescription": "Sizning sahifangiz yaratilgan va tahrirlashga tayyor",
+      "completeTitle": "Tayyor!",
+      "detailsDescription": "Ushbu ma'lumot AIga mukammal sahifani yaratishga yordam beradi",
+      "detailsHint": "Kerak emas, lekin sahifani yanada aniqroq qilishga yordam beradi",
+      "detailsPlaceholder": "Shahar, mutaxassislik, tajriba...",
+      "detailsTitle": "O'zingiz haqingizda gapirib bering",
+      "enterName": "Ismingizni kiriting",
+      "generatePage": "Sahifa yarating",
+      "generatingDescription": "Biz tuzilma, matn va dizaynni yaratamiz...",
+      "generatingTitle": "AI sizning sahifangizni yaratadi",
+      "generationFailed": "Sahifani yaratib bo‘lmadi",
+      "goalBookings": "Yozib olish",
+      "goalClicks": "Bosishlar",
+      "goalDescription": "Bu tezroq sodir bo'lishi uchun bloklarni tanlaylik.",
+      "goalLeads": "Ilovalar",
+      "goalTitle": "Ushbu sahifadan nimani olishni xohlaysiz?",
+      "namePlaceholder": "Masalan: Aleksey yoki Go'zallik studiyasi",
+      "nicheDescription": "AI bir daqiqada siz uchun shaxsiy sahifa yaratadi",
+      "nicheTitle": "Joyingizni tanlang",
+      "pageGenerated": "Sahifa muvaffaqiyatli yaratildi!",
+      "pleaseWait": "Bu taxminan 30 soniya davom etadi",
+      "skip": "Oʻtkazib yuborish",
+      "wizardDescription": "Profilingiz va sahifangizni bosqichma-bosqich sozlash.",
+      "wizardTitle": "O'rnatish ustasi",
+      "yourName": "Ismingiz yoki unvoningiz"
     },
     "onboardingTour": {
       "addBlock": {
-        "desc": "Press the + button to add a new block. Links, products, videos, and more are available.",
-        "title": "Adding Blocks"
+        "desc": "Yangi blok qo'shish uchun + tugmasini bosing. Havolalar, mahsulotlar, videolar va boshqalar mavjud.",
+        "title": "Bloklarni qo'shish"
       },
-      "back": "Back",
+      "back": "Orqaga",
       "complete": {
-        "desc": "Now you know the basics. Start building your page!",
-        "title": "All done! 🎉"
+        "desc": "Endi siz asoslarni bilasiz. O'z sahifangizni yaratishni boshlang!",
+        "title": "Hammasi tayyor! 🎉"
       },
       "editBlock": {
-        "desc": "Hover over any block to see edit, delete, and drag buttons.",
-        "title": "Editing Blocks"
+        "desc": "Tahrirlash, oʻchirish va sudrab tortish tugmalarini koʻrish uchun kursorni istalgan blok ustiga olib boring.",
+        "title": "Bloklarni tahrirlash"
       },
-      "next": "Next",
+      "next": "Keyingisi",
       "profile": {
-        "desc": "Click on the profile block to change your name, bio, and avatar.",
-        "title": "Your Profile"
+        "desc": "Ismingiz, tarjimai holingiz va avataringizni o'zgartirish uchun profil blokiga bosing.",
+        "title": "Profilingiz"
       },
       "share": {
-        "desc": "When done, click \"Share\" to get a public link for social media.",
-        "title": "Publishing Your Page"
+        "desc": "Tugallangach, ijtimoiy tarmoqlar uchun umumiy havolani olish uchun “Ulashish” tugmasini bosing.",
+        "title": "Sizning sahifangizni nashr qilish"
       },
-      "skip": "Skip",
-      "start": "Start",
+      "skip": "Oʻtkazib yuborish",
+      "start": "Boshlash",
       "welcome": {
-        "desc": "Let us show you the basics. It will only take a minute.",
-        "title": "Welcome to LinkMAX! рџ‘‹"
+        "desc": "Keling, sizga asoslarni ko'rsatamiz. Bu faqat bir daqiqa vaqt oladi.",
+        "title": "LinkMAX ga xush kelibsiz! rџ'‹"
       }
     },
     "operator": {
       "followUp": {
-        "completedOn": "Visit {{date}}",
-        "send": "Message",
-        "sent": "Sent",
-        "template": "Hello {{name}}! Thanks for visiting! How was it? We'd love to see you again рџЉ",
-        "title": "Follow-up needed",
-        "visitedYesterday": "Visited yesterday at {{time}}"
+        "completedOn": "{{date}} ga tashrif buyuring",
+        "send": "Xabar",
+        "sent": "Yuborildi",
+        "template": "Salom {{name}}! Tashrifingiz uchun tashakkur! Qanday o'tdi; qanday bo'ldi? Sizni yana ko'rishni istaymiz",
+        "title": "Kuzatuv zarur",
+        "visitedYesterday": "Kecha tashrif buyurgan: {{time}}"
       },
       "rebook": {
-        "daysSince": "{{days}} days ago",
-        "nudge": "Nudge",
-        "title": "Time to bring back client"
+        "daysSince": "{{days}} kun oldin",
+        "nudge": "Tenglash",
+        "title": "Mijozni qaytarish vaqti keldi"
       },
       "repeat": {
-        "badge": "Returning",
-        "label": "Returning:"
+        "badge": "Qaytish",
+        "label": "Qaytish:"
       },
       "stale": {
-        "page": "Page hasn't been updated in over 2 weeks — refresh your content"
+        "page": "Sahifa 2 haftadan beri yangilanmadi — kontentingizni yangilang"
       },
       "today": {
-        "next": "Next: {{name}} at {{time}}",
-        "title": "Bookings today: {{count}}"
+        "next": "Keyingi: {{name}} da {{time}}",
+        "title": "Bugungi bandlovlar: {{count}}"
       },
       "unanswered": {
-        "missed": "{{count}} missed (>24h)",
-        "title": "Unprocessed: {{count}}"
+        "missed": "{{count}} o'tkazib yuborilgan (>24 soat)",
+        "title": "Ishlov berilmagan: {{count}}"
       },
       "week": {
-        "leads": "This week:"
+        "leads": "Ushbu hafta:"
       }
     },
     "pagination": {
-      "morePages": "More pages",
-      "next": "Forward",
-      "previous": "Back"
+      "morePages": "Ko'proq sahifalar",
+      "next": "Oldinga",
+      "previous": "Orqaga"
     },
     "paidContent": {
-      "content": "content",
-      "description": "Unlock this content with Linkkon tokens",
-      "loginRequired": "Login to purchase",
+      "content": "mazmuni",
+      "description": "Ushbu kontentni Linkkon tokenlari bilan oching",
+      "loginRequired": "Sotib olish uchun tizimga kiring",
       "notEnoughTokens": "NotEnoughTokens",
-      "priceHint": "Minimum: 1 token. Recommended: 50-500 tokens.",
-      "priceLabel": "Price (in Linkkon tokens)",
+      "priceHint": "Minimal: 1 ta token. Tavsiya etiladi: 50-500 token.",
+      "priceLabel": "Narxi (Linkon tokenlarida)",
       "pricePlaceholder": "100",
-      "settingsDescription": "Restrict access to block content. Visitors will be able to unlock it for Linkkon tokens (1 token = 1 в‚ё).",
-      "title": "Paid content",
-      "unlock": "Unblock",
-      "unlockContent": "Unblocking paid content",
-      "unlockDescription": "Unblocking paid content",
-      "unlockWithTokens": "Unlock this content with Linkkon tokens",
-      "unlocking": "Unlock...",
-      "yourBalance": "Your balance"
+      "settingsDescription": "Kontentga kirishni cheklash. Mehmonlar uni Linkkon tokenlari uchun ochishlari mumkin (1 token = 1 v‚yo).",
+      "title": "Pulli kontent",
+      "unlock": "Blokdan chiqarish",
+      "unlockContent": "Pulli kontentni blokdan chiqarish",
+      "unlockDescription": "Pulli kontentni blokdan chiqarish",
+      "unlockWithTokens": "Ushbu kontentni Linkkon tokenlari bilan oching",
+      "unlocking": "Qulfni ochish...",
+      "yourBalance": "Sizning balansingiz"
     },
     "phaseB": {
       "whyLnkmx": {
-        "emptyContacts": "All work from smartphone. Import contacts or add manually.",
-        "emptyDeals": "CRM in 15 minutes — no implementation. Add your first deal.",
-        "mobile": "All work from your smartphone",
-        "noSetup": "CRM in 15 minutes — no implementation needed",
-        "premium": "Premium design out of the box",
-        "title": "Why LinkMAX"
+        "emptyContacts": "Hammasi smartfondan ishlaydi. Kontaktlarni import qiling yoki qo'lda qo'shing.",
+        "emptyDeals": "15 daqiqada CRM - amalga oshirilmaydi. Birinchi kelishuvingizni qo'shing.",
+        "mobile": "Hammasi smartfondan ishlaydi",
+        "noSetup": "15 daqiqada CRM - amalga oshirish kerak emas",
+        "premium": "Qutidagi premium dizayn",
+        "title": "Nima uchun LinkMAX"
       }
     },
     "placeholders": {
-      "buttonText": "Button text",
-      "enterText": "Enter your text...",
-      "tellAboutYourself": "Tell us about yourself...",
-      "yourName": "your name"
+      "buttonText": "Tugma matni",
+      "enterText": "Matningizni kiriting...",
+      "tellAboutYourself": "O'zingiz haqingizda gapirib bering...",
+      "yourName": "ismingiz"
     },
     "premium": {
-      "active": "Pro active",
-      "blockLocked": "Premium block",
-      "featureRequires": "{{feature}} available in {{tier}}",
-      "features": "Pro Features",
-      "premiumFramesLocked": "Premium frames require PRO subscription",
-      "requiresTier": "{{tier}} required",
-      "trial": "Trial period",
-      "unlockWith": "Unlock this block with a Pro subscription",
-      "upgrade": "Upgrade to Pro",
-      "upgradeToBusiness": "Go to Business",
-      "upgradeToPro": "Upgrade to PRO →",
-      "verificationRequiresPro": "Verification badge is available for PRO users"
+      "active": "Pro faol",
+      "blockLocked": "Premium blok",
+      "featureRequires": "{{feature}} {{tier}} da mavjud",
+      "features": "Pro xususiyatlari",
+      "premiumFramesLocked": "Premium kadrlar PRO obunasini talab qiladi",
+      "requiresTier": "{{tier}} shart",
+      "trial": "Sinov muddati",
+      "unlockWith": "Pro obunasi bilan ushbu blokni qulfdan chiqaring",
+      "upgrade": "Pro versiyasiga yangilang",
+      "upgradeToBusiness": "Biznesga o'ting",
+      "upgradeToPro": "PRO ga yangilang →",
+      "verificationRequiresPro": "Tasdiqlash nishoni PRO foydalanuvchilari uchun mavjud"
     },
     "pricing": {
-      "alreadyFree": "Free plan is already active",
-      "basicDesc": "Page + bookings + CRM for free",
-      "businessDesc": "CRM, team & zones for business",
-      "businessLink": "Learn about the BUSINESS plan →",
-      "businessNote": "Need team CRM, zones, and roles?",
-      "cancelAnytime": "Cancel anytime",
-      "choosePlan": "Choose the right tariff",
-      "comingSoon": "Payment will be available soon! Stay tuned.",
+      "alreadyFree": "Bepul tarif allaqachon faol",
+      "basicDesc": "Sahifa + bandlovlar + CRM bepul",
+      "businessDesc": "Biznes uchun CRM, jamoa va zonalar",
+      "businessLink": "BIZNES-reja haqida bilib oling →",
+      "businessNote": "Jamoaga CRM, zonalar va rollar kerakmi?",
+      "cancelAnytime": "Istalgan vaqtda bekor qiling",
+      "choosePlan": "To'g'ri tarifni tanlang",
+      "comingSoon": "To'lov tez orada amalga oshiriladi! Yangiliklarni kuzatib boring, xabardor bo'lib boring; Biz bilan qoling.",
       "companyDetails": {
-        "addressLine": "Almaty, st. Sholokhova, 20",
-        "nameLine": "ARchitecKZ вЂў BIN: 190540008684"
+        "addressLine": "Olmaota, st. Sholoxova, 20 yosh",
+        "nameLine": "ARchitecKZ va BIN: 190540008684"
       },
-      "currentPlan": "Current",
-      "description": "Unlock all the features of LinkMAX.my for your business",
+      "currentPlan": "Hozirgi",
+      "description": "Biznesingiz uchun LinkMAX.my ning barcha xususiyatlarini oching",
       "features": {
-        "advancedAnalytics": "Advanced click analytics",
-        "aiMonthly": "1 AI generation per month",
-        "aiMonthlyPro": "5 AI generations per month",
-        "allBasic": "Everything from BASIC, plus:",
-        "allBlocks": "All 25+ block types without restrictions",
-        "allPro": "Everything from PRO, plus:",
-        "basicBlocks": "Basic blocks (Profile, Link, Text, Photo, Button, Social networks)",
-        "basicCustomization": "Basic setup (colors, fonts)",
-        "basicStats": "Basic view statistics",
-        "basicThemes": "Basic themes",
-        "basicViewStats": "Basic view statistics",
-        "businessZones": "Business Zones (workspaces)",
-        "customDomain": "Custom domain",
-        "exportAndAutomation": "Export + Telegram notifications",
-        "faq": "FAQ and feedback blocks",
-        "forms": "Application collection forms",
-        "freeBooking": "Customer booking + prepayment",
-        "freeCRM": "CRM up to 50 leads/mo",
-        "fullCRM": "Full-fledged CRM for leads",
-        "maps": "Maps (address + map)",
-        "media": "Media: images, videos, carousels",
-        "messengers": "Messengers and social networks",
-        "multiPage": "Up to 6 pages",
-        "noWatermark": "No watermark — your brand",
-        "priceLists": "Price lists and product catalogs",
-        "prioritySupport": "Priority support",
-        "proThemes": "Professional themes and animations",
-        "qrCode": "Page QR code",
-        "scheduler": "Block Scheduler",
-        "teamCRM": "Team CRM & Kanban",
-        "teamInbox": "Team chat & tasks",
-        "teamMembers": "Up to 5 team members",
-        "teamRoles": "Roles & access control",
-        "telegramNotifications": "Telegram notifications about applications",
-        "timers": "Countdown timers",
-        "unlimitedInbound": "Unlimited inbound requests",
-        "unlimitedLinks": "Unlimited links"
+        "advancedAnalytics": "Kengaytirilgan bosish tahlili",
+        "aiMonthly": "Oyiga 1 ta AI avlodi",
+        "aiMonthlyPro": "Oyiga 5 ta AI avlodi",
+        "allBasic": "BASIC dan hamma narsa, shuningdek:",
+        "allBlocks": "Barcha 25+ blok turlari cheklovlarsiz",
+        "allPro": "PRO-dan hamma narsa, shuningdek:",
+        "basicBlocks": "Asosiy bloklar (Profil, havola, matn, fotosurat, tugma, ijtimoiy tarmoqlar)",
+        "basicCustomization": "Asosiy sozlash (ranglar, shriftlar)",
+        "basicStats": "Ko'rishning asosiy statistikasi",
+        "basicThemes": "Asosiy mavzular",
+        "basicViewStats": "Ko'rishning asosiy statistikasi",
+        "businessZones": "Biznes zonalari (ish joylari)",
+        "customDomain": "Maxsus domen",
+        "exportAndAutomation": "Eksport + Telegram bildirishnomalari",
+        "faq": "Tez-tez so'raladigan savollar va fikr-mulohaza bloklari",
+        "forms": "Ariza yig'ish shakllari",
+        "freeBooking": "Mijozni bron qilish + oldindan to'lov",
+        "freeCRM": "Oyiga 50 tagacha CRM",
+        "fullCRM": "Etakchilar uchun to'liq CRM",
+        "maps": "Xaritalar (manzil + xarita)",
+        "media": "Media: tasvirlar, videolar, karusellar",
+        "messengers": "Messenjerlar va ijtimoiy tarmoqlar",
+        "multiPage": "6 sahifagacha",
+        "noWatermark": "Suv belgisi yo'q - sizning brendingiz",
+        "priceLists": "Narxlar ro'yxati va mahsulot kataloglari",
+        "prioritySupport": "Ustuvor qo'llab-quvvatlash",
+        "proThemes": "Professional mavzular va animatsiyalar",
+        "qrCode": "Sahifa QR kodi",
+        "scheduler": "Bloklarni rejalashtiruvchi",
+        "teamCRM": "CRM va Kanban jamoasi",
+        "teamInbox": "Jamoa suhbati va vazifalar",
+        "teamMembers": "5 tagacha jamoa a'zolari",
+        "teamRoles": "Rollar va kirishni boshqarish",
+        "telegramNotifications": "Ilovalar haqida Telegram xabarnomalari",
+        "timers": "Ortga hisoblash taymerlari",
+        "unlimitedInbound": "Cheksiz kiruvchi so'rovlar",
+        "unlimitedLinks": "Cheksiz havolalar"
       },
       "free": {
-        "title": "For free"
+        "title": "Bepul"
       },
-      "freeForever": "Free forever",
+      "freeForever": "Abadiy bepul",
       "limitations": {
-        "limitedBlocks": "10 blocks maximum",
-        "watermark": "Watermark LinkMAX.my"
+        "limitedBlocks": "Maksimal 10 blok",
+        "watermark": "LinkMAX.my suv belgisi"
       },
-      "moneyBack": "14 day return guarantee",
-      "month": "months",
-      "months": "months",
-      "new": "New",
-      "paymentNote": "Payment via RoboKassa",
-      "popular": "Popular",
-      "proDesc": "Everything for professionals and business",
-      "savingsText": "Saving",
-      "securePayments": "Secure payments",
+      "moneyBack": "14 kunlik qaytarish kafolati",
+      "month": "oylar",
+      "months": "oylar",
+      "new": "Yangi",
+      "paymentNote": "RoboKassa orqali to'lov",
+      "popular": "Ommabop",
+      "proDesc": "Professionallar va biznes uchun hamma narsa",
+      "savingsText": "Saqlash",
+      "securePayments": "Xavfsiz to'lovlar",
       "seo": {
-        "description": "Compare LinkMAX plans: free builder, Pro with AI, CRM, analytics and your own domain. Transparent prices.",
-        "imageAlt": "Tariff plans LinkMAX",
+        "description": "LinkMAX rejalarini solishtiring: bepul quruvchi, AIga ega Pro, CRM, analitik va shaxsiy domeningiz. Shaffof narxlar.",
+        "imageAlt": "LinkMAX tarif rejalari",
         "opt": {
-          "answer": "LinkMAX offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support.",
+          "answer": "LinkMAX 12 oyga 3045 KZT (taxminan $6 USD) dan boshlanadigan bepul Asosiy reja va Pro rejasini taklif etadi. Pro xususiyatlariga cheksiz sahifalar, maxsus domenlar, tahlillar va ustuvor yordam kiradi.",
           "audience": {
-            "1": "Budget-conscious small businesses",
-            "2": "Freelancers looking for affordable tools",
-            "3": "Growing businesses needing more features"
+            "1": "Byudjetga asoslangan kichik korxonalar",
+            "2": "Frilanserlar arzon vositalarni qidirmoqdalar",
+            "3": "Rivojlanayotgan korxonalar ko'proq xususiyatlarga muhtoj"
           },
           "features": {
-            "1": "Free Basic plan available",
-            "2": "Pro plan: 3,045 KZT/mo (Annual)",
-            "3": "Volume discounts: up to 30% off for 12 months",
-            "4": "Multi-currency support (KZT, USD)",
-            "5": "Flexible token system",
-            "6": "No credit card required for free plan"
+            "1": "Bepul asosiy reja mavjud",
+            "2": "Pro rejasi: oyiga 3,045 KZT (yillik)",
+            "3": "Hajmi bo'yicha chegirmalar: 12 oy davomida 30% gacha chegirma",
+            "4": "Ko'p valyutali yordam (KZT, USD)",
+            "5": "Moslashuvchan token tizimi",
+            "6": "Bepul reja uchun kredit karta talab qilinmaydi"
           },
-          "problem": "Most link-in-bio and page builder tools are too expensive for micro-businesses and freelancers",
-          "question": "How much does LinkMAX cost?",
-          "solution": "LinkMAX offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months",
+          "problem": "Bio-in-bio va sahifa yaratish vositalarining aksariyati mikro-biznes va frilanserlar uchun juda qimmat",
+          "question": "LinkMAX qancha turadi?",
+          "solution": "LinkMAX 12 oyga atigi 6 dollardan boshlanadigan asosiy ehtiyojlar uchun bepul reja va arzon Pro narxlarini taklif etadi.",
           "uses": {
-            "1": "Start free with Basic plan",
-            "2": "Upgrade to Pro for advanced features",
-            "3": "Pay for 3, 6, or 12 months",
-            "4": "Use tokens for flexible premium access"
+            "1": "Asosiy tarif rejasi bilan bepul boshlang",
+            "2": "Kengaytirilgan funksiyalar uchun Pro-ga yangilang",
+            "3": "3, 6 yoki 12 oyga to'lang",
+            "4": "Moslashuvchan premium kirish uchun tokenlardan foydalaning"
           }
         },
-        "title": "LinkMAX Tariffs - Plans for Link in Bio and Mini Sites"
+        "title": "LinkMAX tariflari - Bio va mini-saytlardagi havola uchun rejalar"
       },
-      "startFree": "Start for free",
-      "subscribe": "Subscribe",
-      "title": "Tariffs",
+      "startFree": "Bepul boshlang",
+      "subscribe": "Obuna boʻling",
+      "title": "Tariflar",
       "tokens": {
-        "balanceDescription": "100 Linkkon = 1 day Premium. Your balance: {{balance}} tokens",
-        "buyDay": "Buy 1 day for {{cost}} Linkkon",
-        "buyTokens": "Buy tokens",
-        "converting": "Conversion...",
-        "title": "Or pay with Linkkon tokens"
+        "balanceDescription": "100 Linkkon = 1 kunlik Premium. Balansingiz: {{balance}} token",
+        "buyDay": "{{cost}} Linkkon uchun 1 kun xarid qiling",
+        "buyTokens": "Tokenlarni sotib oling",
+        "converting": "Konvertatsiya...",
+        "title": "Yoki Linkkon tokenlari bilan toʻlang"
       },
-      "totalFor": "for",
+      "totalFor": "uchun",
       "whyLnkmx": {
-        "mobile": "All work from your smartphone",
-        "noSetup": "CRM in 15 minutes — no implementation needed",
-        "premium": "Premium design out of the box",
-        "title": "Why LinkMAX"
+        "mobile": "Hammasi smartfondan ishlaydi",
+        "noSetup": "15 daqiqada CRM - amalga oshirish kerak emas",
+        "premium": "Qutidagi premium dizayn",
+        "title": "Nima uchun LinkMAX"
       }
     },
     "pricingBlock": {
-      "consultation": "Consultation",
-      "defaultCurrency": "Default currency",
-      "description": "Description",
-      "duration": "Duration",
-      "emptyHint": "Tell us what services you provide",
-      "featured": "Popular",
-      "haircut": "Haircut",
-      "hour1": "1 hour",
-      "hours1_5": "1.5 hours",
-      "hours2": "2 hours",
-      "lesson": "Lesson",
-      "manicure": "Manicure",
-      "massage": "Massage",
+      "consultation": "Konsultatsiya",
+      "defaultCurrency": "Standart valyuta",
+      "description": "Tavsif",
+      "duration": "Davomiyligi",
+      "emptyHint": "Bizga qanday xizmatlar ko'rsatayotganingizni ayting",
+      "featured": "Ommabop",
+      "haircut": "Soch kesish",
+      "hour1": "1 soat",
+      "hours1_5": "1,5 soat",
+      "hours2": "2 soat",
+      "lesson": "Dars",
+      "manicure": "Manikyur",
+      "massage": "Massaj",
       "min": "min",
       "min30": "30 min",
-      "name": "Name",
-      "namePlaceholder": "Men's haircut",
-      "other": "Other",
-      "photo": "Photoshoot",
-      "price": "Price",
-      "serviceType": "Service type",
-      "services": "Services",
-      "servicesHint": "The more detailed the services are described, the more accurately the AI вЂ‹вЂ‹assistant understands your business.",
-      "training": "Training"
+      "name": "Ism",
+      "namePlaceholder": "Erkaklar soch turmagi",
+      "other": "Boshqa",
+      "photo": "Fotosessiya",
+      "price": "Narxi",
+      "serviceType": "Xizmat turi",
+      "services": "Xizmatlar",
+      "servicesHint": "Xizmatlar qanchalik batafsil tavsiflangan bo'lsa, AI yordamchisi biznesingizni shunchalik aniqroq tushunadi.",
+      "training": "Trening"
     },
     "product": {
-      "authRequired": "Authorization required to purchase",
-      "buy": "Buy",
-      "buyFor": "Buy for",
-      "buyTokens": "Buy tokens",
-      "buying": "Purchase...",
-      "needMore": "Need more",
-      "notEnoughTokens": "Not enough tokens",
-      "purchaseDescription": "Purchase of goods: {{name}}",
-      "purchaseSuccess": "You have successfully purchased",
-      "purchasing": "Purchase...",
-      "tapToView": "Read more →"
+      "authRequired": "Sotib olish uchun ruxsat talab qilinadi",
+      "buy": "Sotib olish",
+      "buyFor": "uchun sotib oling",
+      "buyTokens": "Tokenlarni sotib oling",
+      "buying": "Sotib olish...",
+      "needMore": "Ko'proq kerak",
+      "notEnoughTokens": "Tokenlar yetarli emas",
+      "purchaseDescription": "Tovarlarni sotib olish: {{name}}",
+      "purchaseSuccess": "Siz muvaffaqiyatli xarid qildingiz",
+      "purchasing": "Sotib olish...",
+      "tapToView": "Batafsil →"
     },
     "profile": {
-      "addBio": "Add a description",
-      "addCover": "Add cover",
-      "addName": "Add name",
-      "avatarFrame": "Frame",
-      "avatarSettings": "Avatar settings",
-      "avatarSize": "Avatar size",
-      "bioPlaceholder": "Tell us about yourself...",
-      "bioSaved": "Description saved",
-      "changeCover": "Change cover",
-      "clickToChangeAvatar": "Click to change avatar",
-      "clickToChangeCover": "Click to add cover",
-      "clickToEdit": "Click to edit",
+      "addBio": "Tavsif qo'shing",
+      "addCover": "Qopqoq qo'shing",
+      "addName": "Ism qo'shing",
+      "avatarFrame": "Ramka",
+      "avatarSettings": "Avatar sozlamalari",
+      "avatarSize": "Avatar hajmi",
+      "bioPlaceholder": "O'zingiz haqingizda gapirib bering...",
+      "bioSaved": "Tavsif saqlandi",
+      "changeCover": "Qopqoqni o'zgartiring",
+      "clickToChangeAvatar": "Avatarni o'zgartirish uchun bosing",
+      "clickToChangeCover": "Muqova qo'shish uchun bosing",
+      "clickToEdit": "Tahrirlash uchun bosing",
       "coverGradient": "Gradient",
-      "coverHeight": "Height",
-      "coverRemoved": "Cover removed",
-      "coverSettings": "Cover Settings",
-      "dark": "Dark",
-      "frame": "Frame",
-      "glow": "Glow",
-      "large": "Big",
-      "light": "Light",
-      "medium": "Average",
-      "nameAnim": "Name",
-      "namePlaceholder": "your name",
-      "nameSaved": "Name saved",
-      "none": "No",
-      "ocean": "Ocean",
-      "primary": "Basic",
-      "purple": "Violet",
-      "removeCover": "Remove cover",
-      "shadowStyle": "Shadow style",
-      "size": "Size",
-      "small": "Small",
-      "soft": "Soft",
-      "strong": "Strong",
-      "sunset": "Sunset",
-      "verified": "Verified",
-      "xlarge": "Very big"
+      "coverHeight": "Balandligi",
+      "coverRemoved": "Qopqoq olib tashlandi",
+      "coverSettings": "Qopqoq sozlamalari",
+      "dark": "Qorong'i",
+      "frame": "Ramka",
+      "glow": "Yorqin",
+      "large": "Katta",
+      "light": "Nur",
+      "medium": "O'rtacha",
+      "nameAnim": "Ism",
+      "namePlaceholder": "ismingiz",
+      "nameSaved": "Ism saqlandi",
+      "none": "Yo'q",
+      "ocean": "Okean",
+      "primary": "Asosiy",
+      "purple": "Binafsha",
+      "removeCover": "Qopqoqni olib tashlang",
+      "shadowStyle": "Soya uslubi",
+      "size": "Hajmi",
+      "small": "Kichik",
+      "soft": "Yumshoq",
+      "strong": "Kuchli",
+      "sunset": "Quyosh botishi",
+      "verified": "Tasdiqlangan",
+      "xlarge": "Juda katta"
     },
     "profileEditor": {
       "avatar": "Avatar",
-      "avatarDesc": "Your profile photo",
-      "cover": "Cover",
-      "coverDesc": "Add a beautiful cover",
-      "info": "About you",
-      "infoDesc": "Name and description in 3 languages",
-      "openEditor": "Open editor",
-      "position": "Position",
-      "removeCover": "Remove cover",
-      "style": "Location",
-      "styleDesc": "Customize your appearance",
-      "subtitle": "Set up your profile",
-      "title": "Profile editor",
-      "uploadCover": "Download cover",
-      "yourBio": "About me",
-      "yourName": "your name"
+      "avatarDesc": "Profil rasmingiz",
+      "cover": "Qopqoq",
+      "coverDesc": "Chiroyli qoplama qo'shing",
+      "info": "Siz haqingizda",
+      "infoDesc": "3 tilda nomi va tavsifi",
+      "openEditor": "Muharrirni oching",
+      "position": "Lavozim",
+      "removeCover": "Qopqoqni olib tashlang",
+      "style": "Joylashuv",
+      "styleDesc": "Tashqi ko'rinishingizni moslashtiring",
+      "subtitle": "Profilingizni sozlang",
+      "title": "Profil muharriri",
+      "uploadCover": "Muqova yuklab olish",
+      "yourBio": "Men haqimda",
+      "yourName": "ismingiz"
     },
     "publicPageV1": {
-      "defaultDescription": "View my profile",
-      "invalidLink": "Invalid or damaged link",
-      "loading": "Loading page...",
-      "notFound": "Page not found",
-      "qrCode": "QR code",
-      "scanToShare": "Scan the code to view the page",
-      "shareLink": "Share"
+      "defaultDescription": "Mening profilimni ko'ring",
+      "invalidLink": "Yaroqsiz yoki shikastlangan havola",
+      "loading": "Sahifa yuklanmoqda...",
+      "notFound": "Sahifa topilmadi",
+      "qrCode": "QR kodi",
+      "scanToShare": "Sahifani ko'rish uchun kodni skanerlang",
+      "shareLink": "Ulashish"
     },
     "pwa": {
-      "install": "Install the application",
-      "updateAvailable": "Update available"
+      "install": "Ilovani o'rnating",
+      "updateAvailable": "Yangilanish mavjud"
     },
     "quests": {
       "addBlock": {
-        "description": "Add a new block to the page",
-        "title": "Add a block"
+        "description": "Sahifaga yangi blok qo'shing",
+        "title": "Blok qo'shing"
       },
-      "allCompleted": "🎉 All tasks completed!",
+      "allCompleted": "🎉 Barcha vazifalar bajarildi!",
       "dailyVisit": {
-        "description": "Go to the application",
-        "title": "Daily visit"
+        "description": "Ilovaga o'ting",
+        "title": "Kundalik tashrif"
       },
       "editProfile": {
-        "description": "Change your profile name or bio",
-        "title": "Update your profile"
+        "description": "Profilingiz nomini yoki biologiyangizni o'zgartiring",
+        "title": "Profilingizni yangilang"
       },
-      "panelTitle": "Daily quests",
+      "panelTitle": "Kundalik kvestlar",
       "sharePage": {
-        "description": "Copy the link to your page",
-        "title": "Share this page"
+        "description": "Havolani sahifangizga nusxalang",
+        "title": "Ushbu sahifani baham ko'ring"
       },
-      "toastCompleted": "{{icon}} +{{count}} Linkkon for \"{{title}}\"!",
-      "toastDailyVisit": "рџ‘‹ +{{count}} Linkkon for visiting daily!",
-      "tokensEarned": "+{{count}} Linkkon earned",
+      "toastCompleted": "\"{{title}}\" uchun {{icon}} +{{count}} Linkkon!",
+      "toastDailyVisit": "rџ‘‹ +{{count}} Linkkon har kuni tashrif buyurganingiz uchun!",
+      "tokensEarned": "+{{count}} Linkkon ishlab topdi",
       "useAi": {
-        "description": "Generate content using AI",
-        "title": "Use AI"
+        "description": "AI yordamida kontent yarating",
+        "title": "AIdan foydalaning"
       }
     },
     "quickStart": {
-      "additionalDetails": "Description (optional)",
-      "completeDescription": "The page has been created and is ready to edit",
-      "completeTitle": "Ready! 🎉",
-      "description": "Create a page quickly with the AI вЂ‹вЂ‹assistant",
-      "detailsDescription": "AI personalizes the page",
-      "detailsHint": "The more details, the better the result.",
-      "detailsPlaceholder": "What are you doing? What services do you provide?",
-      "detailsTitle": "Tell us about yourself",
-      "generate": "Create",
-      "generatingDescription": "We select blocks and content specifically for you",
-      "generatingTitle": "AI creates the page",
-      "namePlaceholder": "What's your name?",
-      "nicheDescription": "AI will select the design and blocks",
+      "additionalDetails": "Tavsif (ixtiyoriy)",
+      "completeDescription": "Sahifa yaratildi va tahrirlashga tayyor",
+      "completeTitle": "Tayyor! 🎉",
+      "description": "AI yordamchisi yordamida sahifani tezda yarating",
+      "detailsDescription": "AI sahifani shaxsiylashtiradi",
+      "detailsHint": "Tafsilotlar qanchalik ko'p bo'lsa, natija shunchalik yaxshi bo'ladi.",
+      "detailsPlaceholder": "Nima qilyapsiz? Siz qanday xizmatlarni taqdim qilasiz?",
+      "detailsTitle": "O'zingiz haqingizda gapirib bering",
+      "generate": "Yaratish",
+      "generatingDescription": "Biz siz uchun maxsus bloklar va tarkibni tanlaymiz",
+      "generatingTitle": "AI sahifani yaratadi",
+      "namePlaceholder": "Ismingiz nima?",
+      "nicheDescription": "AI dizayn va bloklarni tanlaydi",
       "nicheQuestions": {
-        "bioBeauty": "About your experience (Beauty)",
-        "bioBusiness": "Describe your business in a few words",
-        "bioExpert": "Your specialization and niche",
-        "bioFreelance": "What is your superpower? (Freelance)",
-        "bioGeneric": "About me / Description",
-        "bioPlaceholder": "Write a couple of sentences... You can add a link, the algorithm will turn it into a nice button.",
-        "contactsHint": "Enter phone, email or address",
-        "contactsLabel": "Where to find you? (Contacts & Address)",
-        "contactsPlaceholder": "+1 555 123 4567\n123 Main Street",
-        "desc": "This info helps us fill in blocks. You can skip any step.",
-        "expertChannelEmail": "Email",
-        "expertChannelLabel": "Where to send new client notifications?",
-        "expertChannelTelegram": "Telegram (recommended — instant)",
-        "expertGoalLabel": "Who do you help?",
-        "expertGoalPlaceholder": "e.g. entrepreneurs, young mothers...",
-        "expertOfferLabel": "What results do you deliver?",
-        "expertOfferPlaceholder": "e.g. I help launch a business from scratch...",
-        "generateBtn": "Generate magic ✨",
-        "mediaHint": "Links to YouTube, portfolio or images (comma-separated)",
-        "mediaLabel": "Links to useful materials (Media)",
+        "bioBeauty": "Tajribangiz haqida (Go'zallik)",
+        "bioBusiness": "Biznesingizni bir necha so'z bilan tavsiflang",
+        "bioExpert": "Sizning mutaxassisligingiz va joyingiz",
+        "bioFreelance": "Sizning super kuchingiz nima? (Freelans)",
+        "bioGeneric": "Men haqimda / Tavsif",
+        "bioPlaceholder": "Bir-ikki jumla yozing ... Siz havola qo'shishingiz mumkin, algoritm uni chiroyli tugmachaga aylantiradi.",
+        "contactsHint": "Telefon, elektron pochta yoki manzilni kiriting",
+        "contactsLabel": "Sizni qayerdan topish mumkin? (Kontaktlar va manzillar)",
+        "contactsPlaceholder": "+1 555 123 4567\nAsosiy ko'cha, 123",
+        "desc": "Ushbu ma'lumot bloklarni to'ldirishga yordam beradi. Har qanday qadamni o'tkazib yuborishingiz mumkin.",
+        "expertChannelEmail": "Elektron pochta",
+        "expertChannelLabel": "Yangi mijoz bildirishnomalarini qayerga yuborish kerak?",
+        "expertChannelTelegram": "Telegram (tavsiya etiladi - darhol)",
+        "expertGoalLabel": "Kimga yordam berasiz?",
+        "expertGoalPlaceholder": "masalan tadbirkorlar, yosh onalar...",
+        "expertOfferLabel": "Qanday natijalarga erishasiz?",
+        "expertOfferPlaceholder": "masalan Men biznesni noldan boshlashga yordam beraman...",
+        "generateBtn": "Sehr yarating ✨",
+        "mediaHint": "YouTube, portfel yoki rasmlarga havolalar (vergul bilan ajratilgan)",
+        "mediaLabel": "Foydali materiallarga havolalar (Media)",
         "mediaPlaceholder": "https://youtube.com/watch?v=..., https://my-portfolio.com",
-        "nameHint": "This will be your profile headline",
-        "nameLabel": "What is your name or project name?",
-        "namePlaceholder": "e.g. John Smith or Studio \"Beauty\"",
-        "socialsLabel": "Your social media",
+        "nameHint": "Bu sizning profilingiz sarlavhasi bo'ladi",
+        "nameLabel": "Sizning ismingiz yoki loyihangiz nima?",
+        "namePlaceholder": "masalan Jon Smit yoki \"Go'zallik\" studiyasi",
+        "socialsLabel": "Sizning ijtimoiy tarmoqlaringiz",
         "socialsPlaceholder": "inst: @nickname, t.me/username, youtube.com/...",
-        "srvBeauty": "What services do you offer? (With prices)",
-        "srvFreelance": "Skills or Pricing Plans",
-        "srvGeneric": "Services or Skills",
-        "srvHint": "The algorithm will arrange them into cards. If you mention \"discount\" or \"gift\" — a bonus block will be created!",
-        "srvPlaceholder": "Manicure - $50\nPedicure - $70\n10% off first visit",
-        "title": "Tell us about yourself ✨"
+        "srvBeauty": "Siz qanday xizmatlarni taklif qilasiz? (narxlari bilan)",
+        "srvFreelance": "Ko'nikmalar yoki narxlash rejalari",
+        "srvGeneric": "Xizmatlar yoki ko'nikmalar",
+        "srvHint": "Algoritm ularni kartalarga joylashtiradi. Agar siz \"chegirma\" yoki \"sovg'a\" ni eslatib o'tsangiz - bonus bloki yaratiladi!",
+        "srvPlaceholder": "Manikyur - 50 dollar\nPedikyur - 70 dollar\nBirinchi tashrif 10% chegirma",
+        "title": "O'zingiz haqingizda gapirib bering✨"
       },
-      "nicheTitle": "Choose a niche",
-      "skipToEditor": "Skip and create manually",
-      "startWithAI": "Create with AI",
-      "title": "Quick start",
-      "welcomeDescription": "AI will generate a personalized page based on your niche and description",
-      "welcomeTitle": "Create a page in 60 seconds",
-      "yourName": "your name"
+      "nicheTitle": "Joyni tanlang",
+      "skipToEditor": "O'tkazib yuboring va qo'lda yarating",
+      "startWithAI": "AI bilan yarating",
+      "title": "Tez boshlash",
+      "welcomeDescription": "AI sizning joyingiz va tavsifingiz asosida shaxsiylashtirilgan sahifani yaratadi",
+      "welcomeTitle": "60 soniyada sahifa yarating",
+      "yourName": "ismingiz"
     },
     "recommendations": {
-      "allBlocks": "All blocks",
+      "allBlocks": "Barcha bloklar",
       "reason": {
-        "before_after": "Show the results of your work",
-        "before_after_health": "Before/after results",
-        "before_after_portfolio": "Before/After projects",
-        "booking_business": "Online registration",
-        "booking_education": "Registration for classes",
-        "booking_freelancer": "Clients will sign up online",
-        "booking_health": "Make an appointment with a specialist",
-        "button_general": "Action button",
-        "carousel_creator": "Portfolio gallery",
-        "carousel_ecommerce": "Product gallery",
-        "carousel_events": "Photos from events",
-        "carousel_portfolio": "Show your work",
-        "catalog": "Product catalog",
-        "catalog_business": "Catalog of services/products",
-        "community": "Create a community",
-        "community_creator": "Connect your audience",
-        "countdown_events": "Countdown",
-        "countdown_sale": "Promotion timer",
-        "download_education": "Educational materials",
-        "download_portfolio": "Download portfolio",
-        "event": "Event announcement",
-        "event_community": "Community Events",
-        "faq": "Answers to frequently asked questions",
-        "faq_business": "Remove objections",
-        "faq_ecommerce": "Questions about products",
-        "faq_education": "Frequently asked questions",
-        "form": "Feedback form",
-        "form_business": "Collect applications",
-        "form_education": "Registration for the course",
-        "form_events": "Registration for the event",
-        "form_freelancer": "Collect applications",
-        "image_general": "Photo or banner",
-        "link_creator": "Links to your content",
-        "link_general": "Add a link",
-        "map_business": "Show location",
-        "map_events": "Venue",
-        "messenger": "Quick contact with you",
-        "messenger_business": "Quick contact with business",
-        "messenger_community": "Contact with participants",
-        "messenger_ecommerce": "Chat consultation",
-        "newsletter": "Collect subscribers",
-        "newsletter_community": "Newsletter for participants",
-        "pricing": "Prices for services",
-        "pricing_business": "Transparent prices",
-        "pricing_education": "Schedule and prices",
-        "pricing_freelancer": "Show your services and prices",
-        "pricing_health": "Cost of services",
-        "product": "Sell вЂ‹вЂ‹products",
-        "socials": "Show social networks",
-        "socials_community": "Community social networks",
-        "socials_creator": "Social media is important for creators",
-        "testimonial": "Social proof",
-        "testimonial_creator": "Reviews increase trust",
-        "testimonial_ecommerce": "Customer Reviews",
-        "testimonial_education": "Student reviews",
-        "testimonial_freelancer": "Reviews for trust",
-        "testimonial_health": "Patient reviews",
-        "testimonial_portfolio": "Customer Reviews",
-        "text_general": "Text block",
-        "video": "Video content",
-        "video_creator": "Video increases engagement",
-        "video_education": "Educational content",
-        "video_health": "Video about procedures",
-        "video_portfolio": "Video presentation"
+        "before_after": "Ishingiz natijalarini ko'rsating",
+        "before_after_health": "Natijalardan oldin/keyin",
+        "before_after_portfolio": "Loyihalardan oldin/keyin",
+        "booking_business": "Onlayn ro'yxatdan o'tish",
+        "booking_education": "Darslarga ro'yxatdan o'tish",
+        "booking_freelancer": "Mijozlar onlayn ro'yxatdan o'tadilar",
+        "booking_health": "Mutaxassis bilan uchrashuv tayinlang",
+        "button_general": "Harakat tugmasi",
+        "carousel_creator": "Portfolio galereyasi",
+        "carousel_ecommerce": "Mahsulotlar galereyasi",
+        "carousel_events": "Tadbirlardan fotosuratlar",
+        "carousel_portfolio": "Ishingizni ko'rsating",
+        "catalog": "Mahsulotlar katalogi",
+        "catalog_business": "Xizmatlar/mahsulotlar katalogi",
+        "community": "Jamiyat yarating",
+        "community_creator": "Tomoshabinlaringizni ulang",
+        "countdown_events": "Ortga hisoblash",
+        "countdown_sale": "Reklama taymer",
+        "download_education": "O'quv materiallari",
+        "download_portfolio": "Portfolio yuklab olish",
+        "event": "Tadbir haqida e'lon",
+        "event_community": "Jamiyat tadbirlari",
+        "faq": "Tez-tez beriladigan savollarga javoblar",
+        "faq_business": "E'tirozlarni olib tashlang",
+        "faq_ecommerce": "Mahsulotlar haqida savollar",
+        "faq_education": "Tez-tez beriladigan savollar",
+        "form": "Fikr-mulohaza shakli",
+        "form_business": "Ilovalarni yig'ish",
+        "form_education": "Kursga ro'yxatdan o'tish",
+        "form_events": "Tadbir uchun ro'yxatdan o'tish",
+        "form_freelancer": "Ilovalarni yig'ish",
+        "image_general": "Surat yoki banner",
+        "link_creator": "Kontentingizga havolalar",
+        "link_general": "Havolani qo'shing",
+        "map_business": "Joylashuvni ko'rsatish",
+        "map_events": "Joy",
+        "messenger": "Siz bilan tezkor aloqa",
+        "messenger_business": "Biznes bilan tezkor aloqa",
+        "messenger_community": "Ishtirokchilar bilan aloqa",
+        "messenger_ecommerce": "Chat maslahati",
+        "newsletter": "Obunachilarni yig'ing",
+        "newsletter_community": "Ishtirokchilar uchun axborot byulleteni",
+        "pricing": "Xizmatlar uchun narxlar",
+        "pricing_business": "Shaffof narxlar",
+        "pricing_education": "Jadval va narxlar",
+        "pricing_freelancer": "Xizmatlaringizni va narxlaringizni ko'rsating",
+        "pricing_health": "Xizmatlar narxi",
+        "product": "Mahsulotlarni sotish",
+        "socials": "Ijtimoiy tarmoqlarni ko'rsatish",
+        "socials_community": "Jamoa ijtimoiy tarmoqlari",
+        "socials_creator": "Ijtimoiy tarmoqlar ijodkorlar uchun muhim",
+        "testimonial": "Ijtimoiy dalil",
+        "testimonial_creator": "Sharhlar ishonchni oshiradi",
+        "testimonial_ecommerce": "Mijozlarning sharhlari",
+        "testimonial_education": "Talabalar sharhlari",
+        "testimonial_freelancer": "Ishonch uchun sharhlar",
+        "testimonial_health": "Bemorlarning sharhlari",
+        "testimonial_portfolio": "Mijozlarning sharhlari",
+        "text_general": "Matn bloki",
+        "video": "Video kontent",
+        "video_creator": "Video faollikni oshiradi",
+        "video_education": "Ta'lim mazmuni",
+        "video_health": "Jarayonlar haqida video",
+        "video_portfolio": "Video taqdimot"
       },
-      "relevant": "Current",
-      "title": "Recommended for you"
+      "relevant": "Hozirgi",
+      "title": "Siz uchun tavsiya etilgan"
     },
     "referral": {
-      "bonusEarned": "Bonus days earned",
-      "bothGetBonus": "You both get +3 days Premium!",
-      "codeCopied": "Code copied!",
-      "earned": "Earned",
+      "bonusEarned": "Topilgan bonusli kunlar",
+      "bothGetBonus": "Ikkalangiz ham +3 kunlik Premiumga ega bo'lasiz!",
+      "codeCopied": "Kod nusxalandi!",
+      "earned": "Ishlagan",
       "errors": {
-        "alreadyReferred": "You have already used the referral code",
-        "applyFailed": "Error when applying code",
-        "invalidCode": "Invalid invitation code",
-        "selfReferral": "You can't use your own code"
+        "alreadyReferred": "Siz allaqachon yo'naltiruvchi koddan foydalangansiz",
+        "applyFailed": "Kodni qo'llashda xato",
+        "invalidCode": "Taklif kodi yaroqsiz",
+        "selfReferral": "Siz o'zingizning kodingizdan foydalana olmaysiz"
       },
-      "friendsInvited": "Friends invited",
-      "inviteFriend": "Invite a friend",
-      "invited": "Invited",
-      "linkCopied": "Link copied!",
-      "shareReferralLink": "Share Referral Link",
-      "title": "Referral program",
-      "toastSuccess": "🎉 +{{count}} Premium days for you and a friend!",
-      "topReferrers": "Top Referrers",
-      "yourCode": "Your code"
+      "friendsInvited": "Do'stlar taklif qilindi",
+      "inviteFriend": "Do'stingizni taklif qiling",
+      "invited": "Taklif qilingan",
+      "linkCopied": "Havola nusxalandi!",
+      "shareReferralLink": "Yo'naltiruvchi havolani baham ko'ring",
+      "title": "Yo'naltiruvchi dastur",
+      "toastSuccess": "🎉 +{{count}} Siz va do'stingiz uchun premium kunlar!",
+      "topReferrers": "Eng yaxshi yo'naltiruvchilar",
+      "yourCode": "Sizning kodingiz"
     },
     "richText": {
-      "insert": "Insert",
-      "insertLink": "Insert link",
-      "linkText": "Link text",
-      "linkTextPlaceholder": "For example: click here",
+      "insert": "Kiritish",
+      "insertLink": "Havolani kiriting",
+      "linkText": "Bog'lanish matni",
+      "linkTextPlaceholder": "Masalan: bu yerga bosing",
       "linkUrl": "URL",
-      "removeLinks": "Remove all links"
+      "removeLinks": "Barcha havolalarni olib tashlang"
     },
     "scratch": {
       "hint": "Scratch the layer to reveal a surprise",
