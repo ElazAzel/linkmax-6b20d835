@@ -8,7 +8,7 @@ import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
 import { session } from '@/lib/storage';
-import { trackViewContent, trackClickLink } from '@/lib/marketing-pixels';
+import { trackViewContent, trackClickLink } from '@/lib/analytics';
 
 // ============================================
 // Types

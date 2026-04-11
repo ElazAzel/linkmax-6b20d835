@@ -9,47 +9,51 @@ export interface ExportDataResult {
 
 /**
  * GDPR Service - handles user data export and account deletion
- * Wraps RPC calls implemented in the 20260218200001_gdpr_compliance.sql migration
  */
 export const gdprService = {
-  /**
-   * Request all personal data stored in LinkMAX
-   * Triggers a secure export via the database RPC
-   */
   async exportUserData(): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
       logger.info('GDPR: Requesting user data export');
       
-      const { data, error } = await supabase.rpc('export_user_data');
-      
-      if (error) {
-        logger.error('GDPR: Export failed', error);
-        return { success: false, error: error.message };
-      }
-      
-      return { success: true, data };
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return { success: false, error: 'Not authenticated' };
+
+      // Gather user data from accessible tables
+      const [profiles, pages, leads] = await Promise.all([
+        supabase.from('user_profiles').select('*').eq('id', user.id).single(),
+        supabase.from('pages').select('*').eq('user_id', user.id),
+        supabase.from('leads').select('*').eq('user_id', user.id),
+      ]);
+
+      return {
+        success: true,
+        data: {
+          profile: profiles.data,
+          pages: pages.data,
+          leads: leads.data,
+          email: user.email,
+          created_at: user.created_at,
+        },
+      };
     } catch (error) {
       logger.error('GDPR: Unexpected error during export', error);
       return { success: false, error: 'An unexpected error occurred' };
     }
   },
 
-  /**
-   * Permanently delete user account and all associated data
-   * This is IRREVERSIBLE.
-   */
   async deleteAccount(): Promise<{ success: boolean; error?: string }> {
     try {
       logger.warn('GDPR: Requesting account deletion');
       
-      const { data, error } = await supabase.rpc('delete_user_account');
-      
-      if (error) {
-        logger.error('GDPR: Deletion failed', error);
-        return { success: false, error: error.message };
-      }
-      
-      // If successful, sign out the user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return { success: false, error: 'Not authenticated' };
+
+      // Delete user-owned data (cascades handle related records)
+      await supabase.from('pages').delete().eq('user_id', user.id);
+      await supabase.from('leads').delete().eq('user_id', user.id);
+      await supabase.from('user_profiles').delete().eq('id', user.id);
+
+      // Sign out
       await supabase.auth.signOut();
       
       return { success: true };
