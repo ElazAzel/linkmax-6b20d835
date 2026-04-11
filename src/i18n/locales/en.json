@@ -5738,6 +5738,28 @@
       "free": "Free"
     },
     "tma": {
+      "settingsTitle": "TMA Settings",
+      "settingsSubtitle": "Configure your app presence within the Telegram ecosystem.",
+      "botConnection": "Bot Connection",
+      "botDesc": "Connect your own Telegram Bot for a white-label experience.",
+      "setupBot": "Configure Bot Token",
+      "uiControl": "UI Control",
+      "language": "Language",
+      "languageDesc": "Choose your preferred interface language.",
+      "syncTheme": "Sync Theme Colors",
+      "hapticFeedback": "Haptic Feedback",
+      "expandedMode": "Full Height Mode",
+      "advancedSettings": "Advanced Bot Features",
+      "pushNotifications": "Push Notifications",
+      "pushDesc": "Send service updates directly via the bot.",
+      "customDomain": "Bot Domain Mapping",
+      "domainDesc": "Map your bot to a custom subdomain.",
+      "paymentsTitle": "TMA Payments",
+      "paymentsSubtitle": "Manage native Telegram payments and checkout.",
+      "availableBalance": "Available Balance",
+      "withdraw": "Withdraw",
+      "withdrawStarted": "Withdrawal Request",
+      "withdrawDesc": "Please select a payout method in your global settings to continue.",
       "action_bookings_desc": "Schedule and entries",
       "action_bookings_title": "Bookings",
       "action_crm_desc": "Incoming requests",
@@ -5753,11 +5775,11 @@
       "btn_add_link": "+ Add Link",
       "btn_back": "Back",
       "btn_continue": "Continue",
-      "btn_copy_link": "btn_copy_link",
+      "btn_copy_link": "Copy Link",
       "btn_launch": "Launch Business",
       "btn_open_in_tg": "Open in Telegram",
       "btn_publish": "Publish Page",
-      "btn_publish_full": "btn_publish_full",
+      "btn_publish_full": "Publish Changes",
       "btn_publishing": "Saving...",
       "btn_submitting": "Creating...",
       "cat_beauty": "Beauty & Care",
@@ -5777,7 +5799,7 @@
       "home_greeting": "Hi, {{name}} 👋",
       "home_greeting_fallback": "friend",
       "home_subtitle": "Your business center in Telegram",
-      "label_avatar": "Ссылка на фото (Avatar URL)",
+      "label_avatar": "Photo link (Avatar URL)",
       "label_avatar_url": "Avatar URL",
       "label_bio": "Bio",
       "label_name_title": "Name / Title",
@@ -5796,7 +5818,7 @@
         }
       },
       "link_new_title": "New Link",
-      "link_title_placeholder": "link_title_placeholder",
+      "link_title_placeholder": "Link Title",
       "loading": "Loading LinkMAX...",
       "nav_bookings": "Bookings",
       "nav_crm": "Leads",
@@ -7376,94 +7398,90 @@
     "purchaseDescription": "Покупка товара: {{name}}"
   },
   "quests": {
-    "toastCompleted": "{{icon}} +{{count}} Linkkon за \"{{title}}\"!",
-    "toastDailyVisit": "👋 +{{count}} Linkkon за ежедневный визит!",
-    "tokensEarned": "+{{count}} Linkkon заработано"
+    "toastCompleted": "{{icon}} +{{count}} Linkkon for \"{{title}}\"!",
+    "toastDailyVisit": "👋 +{{count}} Linkkon for daily visit!",
+    "tokensEarned": "+{{count}} Linkkon earned"
   },
   "referral": {
-    "toastSuccess": "🎉 +{{count}} дней Premium для вас и друга!"
+    "toastSuccess": "🎉 +{{count}} days Premium for you and a friend!"
   },
   "ritual": {
     "niches": {
-      "beauty": "Записаться ко мне онлайн: {{url}}",
-      "default": "Мои услуги и запись: {{url}}",
-      "education": "Записаться на занятие: {{url}}",
-      "fitness": "Запишись на тренировку: {{url}}",
-      "food": "Забронировать столик / заказать: {{url}}",
-      "health": "Записаться на приём: {{url}}"
+      "beauty": "Book me online: {{url}}",
+      "default": "My services and booking: {{url}}",
+      "education": "Book a lesson: {{url}}",
+      "fitness": "Sign up for a workout: {{url}}",
+      "food": "Book a table / order: {{url}}",
+      "health": "Make an appointment: {{url}}"
     }
   },
   "social": {
     "feed": {
-      "events": "{{count}} событий",
-      "events_few": "{{count}} события",
-      "events_many": "{{count}} событий",
-      "events_one": "{{count}} событие",
-      "events_other": "{{count}} событий"
+      "events": "{{count}} events",
+      "events_few": "{{count}} events",
+      "events_many": "{{count}} events",
+      "events_one": "{{count}} event",
+      "events_other": "{{count}} events"
     },
     "metadata": {
       "achievement": "🏆 {{title}}",
-      "boost": "🚀 {{type}} буст",
+      "boost": "🚀 {{type}} boost",
       "challenge": "✅ {{title}}",
-      "gift": "💝 +{{count}} дней Premium",
-      "streak": "🔥 {{count}} дней подряд"
+      "gift": "💝 +{{count}} days Premium",
+      "streak": "🔥 {{count}} day streak"
     },
     "pendingGifts": {
-      "count_few": "{{count}} подарка",
-      "count_many": "{{count}} подарков",
-      "count_one": "{{count}} подарок",
-      "count_other": "{{count}} подарков",
-      "days_few": "+{{count}} дня",
-      "days_many": "+{{count}} дней",
-      "days_one": "+{{count}} день",
-      "days_other": "+{{count}} дней"
+      "count_few": "{{count}} gifts",
+      "count_many": "{{count}} gifts",
+      "count_one": "{{count}} gift",
+      "count_other": "{{count}} gifts",
+      "days_few": "+{{count}} days",
+      "days_many": "+{{count}} days",
+      "days_one": "+{{count}} day",
+      "days_other": "+{{count}} days"
     },
     "weeklyChallenges": {
-      "completed": "{{completed}}/{{total}} выполнено",
-      "daysLeftShort": "{{count}} дн.",
-      "rewardHoursShort": "+{{count}}ч"
+      "completed": "{{completed}}/{{total}} completed",
+      "daysLeftShort": "{{count}}d",
+      "rewardHoursShort": "+{{count}}h"
     }
   },
   "structure": {
-    "description": "{{count}} блоков"
+    "description": "{{count}} blocks"
   },
   "templates": {
-    "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
-    "purchaseTemplate": "Покупка шаблона: {{name}}"
-  },
-  "tma": {
-    "home_greeting": "Привет, {{name}} 👋"
+    "notEnoughTokens": "Not enough tokens. Need {{amount}} more."
   },
   "tokens": {
-    "insufficientForPremium": "Недостаточно Linkkon. Нужно {{count}} токенов.",
-    "insufficientForPurchase": "Недостаточно Linkkon. Нужно {{count}} токенов.",
-    "toastEarned": "+{{count}} Linkkon за {{action}}!"
+    "insufficientForPremium": "Insufficient Linkkon. Need {{count}} tokens.",
+    "insufficientForPurchase": "Insufficient Linkkon. Need {{count}} tokens.",
+    "toastEarned": "+{{count}} Linkkon for {{action}}!"
   },
   "translation": {
-    "browserLanguageDetected": "Определён язык браузера: {{language}}"
+    "browserLanguageDetected": "Browser language detected: {{language}}"
   },
   "zones": {
     "analytics": {
-      "pendingAmount": "Ожидается: {{amount}} ({{count}})",
-      "totalContacts": "Всего: {{count}}"
+      "pendingAmount": "Pending: {{amount}} ({{count}})",
+      "totalContacts": "Total: {{count}}"
     },
     "config": {
-      "variables": "Используйте {{contact_name}}, {{deal_title}}, {{zone_name}} для подстановки данных."
+      "variables": "Use {{contact_name}}, {{deal_title}}, {{zone_name}} for data substitution."
     }
   },
   "contacts": {
-    "andMore": "и ещё {{count}}",
-    "deleteWarning": "Это навсегда удалит контакт {{name}}. Связанные сделки и задачи останутся.",
-    "importButton": "Импортировать {{count}}",
-    "imported": "{{count}} контактов импортировано"
+    "andMore": "and {{count}} more",
+    "deleteWarning": "This will permanently delete contact {{name}}. Linked deals and tasks will be resolved.",
+    "importButton": "Import {{count}}",
+    "imported": "{{count}} contacts imported"
   },
   "documents": {
-    "filteredCount": "Показано {{shown}} из {{total}}",
-    "totalCount": "Всего: {{count}}"
+    "filteredCount": "Showing {{shown}} of {{total}}",
+    "totalCount": "Total: {{count}}"
   },
   "landingV2": {
     "pricing": {
-      "billedYearly": "Оплата {{price}} в год"
+      "billedYearly": "Billed yearly at {{price}}"
     }
   }
 }

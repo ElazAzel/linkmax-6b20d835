@@ -12,8 +12,10 @@ import {
   BellRing,
   ExternalLink,
   User,
-  Layout
+  Layout,
+  Languages
 } from 'lucide-react';
+import { LanguageSelector } from '@/components/ui/language-selector';
 import { motion } from 'framer-motion';
 import { useTMA } from '@/platform/tma/TMAProvider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -100,6 +102,21 @@ export const TMASettingsScreen: React.FC = () => {
                 <span className="text-sm">{t('tma.expandedMode', 'Full Height Mode')}</span>
                 <Badge variant="outline" className="text-[10px] text-blue-600 bg-blue-50 border-blue-200">AUTO</Badge>
               </div>
+            </div>
+          </div>
+        </Card>
+        {/* Language Selection */}
+        <Card className="p-6 h-full flex flex-col border-primary/10">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Languages className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-bold">{t('tma.language', 'Language')}</h3>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t('tma.languageDesc', 'Choose your preferred interface language.')}
+            </p>
+            <div className="flex items-center gap-3 pt-2">
+              <LanguageSelector showLabel showFlag variant="outline" size="lg" className="w-full justify-between" />
             </div>
           </div>
         </Card>

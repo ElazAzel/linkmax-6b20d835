@@ -5738,6 +5738,28 @@
       "free": "Тегін"
     },
     "tma": {
+      "settingsTitle": "TMA баптаулары",
+      "settingsSubtitle": "Telegram экожүйесіндегі қолданбаңыздың жұмысын теңшеңіз.",
+      "botConnection": "Ботты қосу",
+      "botDesc": "Клиенттермен брендтік өзара әрекеттесу үшін жеке Telegram ботын қосыңыз.",
+      "setupBot": "Бот токенін баптау",
+      "uiControl": "Интерфейс",
+      "language": "Тіл",
+      "languageDesc": "Қолданба интерфейсінің қалаған тілін таңдаңыз.",
+      "syncTheme": "Тақырыпты синхрондау",
+      "hapticFeedback": "Діріл жауап",
+      "expandedMode": "Толық экран режимі",
+      "advancedSettings": "Боттың кеңейтілген функциялары",
+      "pushNotifications": "Push-хабарландырулар",
+      "pushDesc": "Қызмет жаңартуларын тікелей бот арқылы жіберіңіз.",
+      "customDomain": "Бот доменін байлау",
+      "domainDesc": "Ботты жеке қосалқы доменіңізге байланыстырыңыз.",
+      "paymentsTitle": "TMA төлемдері",
+      "paymentsSubtitle": "Telegram-дағы нативті төлемдерді басқарыңыз.",
+      "availableBalance": "Қолжетімді баланс",
+      "withdraw": "Қаражатты шығару",
+      "withdrawStarted": "Шығаруға сұраныс",
+      "withdrawDesc": "Жалпы профиль баптауларында төлем әдісін таңдаңыз.",
       "action_bookings_desc": "Кесте және жазбалар",
       "action_bookings_title": "Брондау",
       "action_crm_desc": "Кіріс сұраулары",
@@ -5753,11 +5775,11 @@
       "btn_add_link": "+ Сілтеме қосу",
       "btn_back": "Артқа",
       "btn_continue": "Жалғастыру",
-      "btn_copy_link": "btn_copy_link",
+      "btn_copy_link": "Сілтемені көшіру",
       "btn_launch": "Бизнесті іске қосу",
       "btn_open_in_tg": "Telegram-да ашыңыз",
       "btn_publish": "Жариялау беті",
-      "btn_publish_full": "btn_publish_full",
+      "btn_publish_full": "Өзгерістерді жариялау",
       "btn_publishing": "Сақталуда...",
       "btn_submitting": "Жасалуда...",
       "cat_beauty": "Сұлулық және күтім",
@@ -5772,16 +5794,16 @@
       "editor_title": "Редактор",
       "error_loading": "Жүктеу қатесі",
       "error_open_in_tg": "Telegram-да ашыңыз",
-      "error_tg_only": "This app only works inside Telegram. Open @linkmaxmy_bot and press \"Launch App\".",
+      "error_tg_only": "Бұл қолданба тек Telegram ішінде жұмыс істейді. @linkmaxmy_bot ашып, \"Іске қосу\" түймесін басыңыз.",
       "error_unknown": "Бірдеңе дұрыс болмады. Қолданбаны қайта іске қосыңыз.",
       "home_greeting": "Сәлем, {{name}} 👋",
       "home_greeting_fallback": "дос",
       "home_subtitle": "Telegram-дағы бизнес орталығыңыз",
-      "label_avatar": "Ссылка на фото (Аватар URL)",
-      "label_avatar_url": "Аватар URL мекенжайы",
+      "label_avatar": "Фото сілтемесі (Avatar URL)",
+      "label_avatar_url": "Аватар URL",
       "label_bio": "Био",
-      "label_name_title": "Аты / Атауы",
-      "label_page_url": "Сіздің парақшаңыздың мекенжайы:",
+      "label_name_title": "Аты / Лауазымы",
+      "label_page_url": "Парақшаңыздың мекенжайы:",
       "landing": {
         "v4": {
           "hero": {
@@ -5796,7 +5818,7 @@
         }
       },
       "link_new_title": "Жаңа сілтеме",
-      "link_title_placeholder": "сілтеме_тақырып_толтырғышы",
+      "link_title_placeholder": "Сілтеме тақырыбы",
       "loading": "LinkMAX жүктелуде...",
       "nav_bookings": "Брондау",
       "nav_crm": "Жетекші",
@@ -7428,42 +7450,39 @@
     "description": "{{count}} блоков"
   },
   "templates": {
-    "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
-    "purchaseTemplate": "Покупка шаблона: {{name}}"
-  },
-  "tma": {
-    "home_greeting": "Привет, {{name}} 👋"
+    "notEnoughTokens": "Токендер жеткіліксіз. Тағы {{amount}} Linkkon қажет.",
+    "purchaseTemplate": "Үлгіні сатып алу: {{name}}"
   },
   "tokens": {
-    "insufficientForPremium": "Недостаточно Linkkon. Нужно {{count}} токенов.",
-    "insufficientForPurchase": "Недостаточно Linkkon. Нужно {{count}} токенов.",
-    "toastEarned": "+{{count}} Linkkon за {{action}}!"
+    "insufficientForPremium": "Linkkon жеткіліксіз. {{count}} токен қажет.",
+    "insufficientForPurchase": "Linkkon жеткіліксіз. {{count}} токен қажет.",
+    "toastEarned": "+{{count}} Linkkon {{action}} үшін алынды!"
   },
   "translation": {
     "browserLanguageDetected": "Браузер тілі анықталған: {{language}}"
   },
   "zones": {
     "analytics": {
-      "pendingAmount": "Ожидается: {{amount}} ({{count}})",
+      "pendingAmount": "Күтілуде: {{amount}} ({{count}})",
       "totalContacts": "Барлығы: {{count}}"
     },
     "config": {
-      "variables": "Используйте {{contact_name}}, {{deal_title}}, {{zone_name}} для подстановки данных."
+      "variables": "Деректерді ауыстыру үшін {{contact_name}}, {{deal_title}}, {{zone_name}} пайдаланыңыз."
     }
   },
   "contacts": {
-    "andMore": "и ещё {{count}}",
-    "deleteWarning": "Бұл навсегда удалит контакт {{name}}. Связанные сделки и задачи останутся.",
+    "andMore": "және тағы {{count}}",
+    "deleteWarning": "Бұл {{name}} контактісін біржола жояды. Байланысты мәмілелер мен тапсырмалар шешіледі.",
     "importButton": "Импорттау {{count}}",
-    "imported": "{{count}} контактов импортировано"
+    "imported": "{{count}} контакт импортталды"
   },
   "documents": {
-    "filteredCount": "Показано {{shown}} из {{total}}",
+    "filteredCount": "{{shown}}/{{total}} көрсетілуде",
     "totalCount": "Барлығы: {{count}}"
   },
   "landingV2": {
     "pricing": {
-      "billedYearly": "Оплата {{price}} в год"
+      "billedYearly": "Жылына {{price}} төленеді"
     }
   }
 }

@@ -5738,6 +5738,28 @@
       "free": "Bepul"
     },
     "tma": {
+      "settingsTitle": "TMA sozlamalari",
+      "settingsSubtitle": "Telegram ekotizimida ilovangiz faoliyatini sozlang.",
+      "botConnection": "Botni ulash",
+      "botDesc": "Mijozlar bilan brendingiz nomidan muloqot qilish uchun shaxsiy Telegram botingizni ulang.",
+      "setupBot": "Bot tokenni sozlash",
+      "uiControl": "Interfeys",
+      "language": "Til",
+      "languageDesc": "Ilova interfeysi uchun qulay tilni tanlang.",
+      "syncTheme": "Mavzuni sinxronlash",
+      "hapticFeedback": "Vibratsiya javobi",
+      "expandedMode": "To'liq ekran rejimi",
+      "advancedSettings": "Botning qo'shimcha funksiyalari",
+      "pushNotifications": "Push-bildirishnomalar",
+      "pushDesc": "Xizmat yangilanishlarini to'g'ridan-to'g'ri bot orqali yuboring.",
+      "customDomain": "Bot domenini bog'lash",
+      "domainDesc": "Botni o'zingizning shaxsiy quyi domeningizga bog'lang.",
+      "paymentsTitle": "TMA to'lovlari",
+      "paymentsSubtitle": "Telegramdagi nativ to'lovlarni boshqaring.",
+      "availableBalance": "Mavjud balans",
+      "withdraw": "Mablag'ni yechib olish",
+      "withdrawStarted": "Yechib olish so'rovi",
+      "withdrawDesc": "Davom etish uchun umumiy profil sozlamalarida to'lov usulini tanlang.",
       "action_bookings_desc": "Jadval va yozuvlar",
       "action_bookings_title": "Bandlovlar",
       "action_crm_desc": "Kiruvchi so'rovlar",
@@ -5753,11 +5775,11 @@
       "btn_add_link": "+ Havola qo'shish",
       "btn_back": "Orqaga",
       "btn_continue": "Davom eting",
-      "btn_copy_link": "btn_copy_link",
+      "btn_copy_link": "Havolani nusxalash",
       "btn_launch": "Biznesni ishga tushirish",
       "btn_open_in_tg": "Telegramda oching",
       "btn_publish": "Sahifani nashr qilish",
-      "btn_publish_full": "btn_publish_full",
+      "btn_publish_full": "O'zgarishlarni nashr qilish",
       "btn_publishing": "Saqlanmoqda...",
       "btn_submitting": "Yaratilmoqda...",
       "cat_beauty": "Go'zallik va parvarish",
@@ -5769,16 +5791,16 @@
       "conv_no_name": "Ism yo'q",
       "crm_empty": "Hali faol suhbatlar yo'q",
       "crm_title": "Etakchilar va CRM",
-      "editor_title": "muharrir",
+      "editor_title": "Muharrir",
       "error_loading": "Yuklashda xato",
       "error_open_in_tg": "Telegramda oching",
-      "error_tg_only": "This app only works inside Telegram. Open @linkmaxmy_bot and press \"Launch App\".",
+      "error_tg_only": "Ushbu ilova faqat Telegram ichida ishlaydi. @linkmaxmy_bot botini oching va \"Launch App\" tugmasini bosing.",
       "error_unknown": "Nimadir xato ketdi. Iltimos, ilovani qayta ishga tushiring.",
       "home_greeting": "Salom, {{name}} 👋",
       "home_greeting_fallback": "do'st",
       "home_subtitle": "Telegramdagi biznes markazingiz",
-      "label_avatar": "Ssylka na foto (Avatar URL)",
-      "label_avatar_url": "Avatar URL",
+      "label_avatar": "Rasm havolasi (Avatar URL)",
+      "label_avatar_url": "Avatar URL manzili",
       "label_bio": "Bio",
       "label_name_title": "Ism / Sarlavha",
       "label_page_url": "Sizning sahifangiz manzili:",
@@ -5787,7 +5809,7 @@
           "hero": {
             "badge": "Micro-biznes operatsion tizimi",
             "cta": "Bepul boshlang",
-            "scroll": "aylantiring",
+            "scroll": "Aylantiring",
             "secondary": "Misollarga qarang",
             "subtitle": "Sahifa yaratuvchisi, yetakchi boshqaruvi, bosish tahlili. Kichik biznesingizga kerak bo'lgan hamma narsa - kod talab qilinmaydi.",
             "titleEnd": "bir joyda",
@@ -5796,7 +5818,7 @@
         }
       },
       "link_new_title": "Yangi havola",
-      "link_title_placeholder": "havola_sarlavha_joyi",
+      "link_title_placeholder": "Havola sarlavhasi",
       "loading": "LinkMAX yuklanmoqda...",
       "nav_bookings": "Bandlovlar",
       "nav_crm": "Etakchi",
@@ -7431,9 +7453,6 @@
     "notEnoughTokens": "Tokenlar yetarli emas. Yana {{amount}} Linkkon kerak.",
     "purchaseTemplate": "Shablonni xarid qilish: {{name}}"
   },
-  "tma": {
-    "home_greeting": "Salom, {{name}} 👋"
-  },
   "tokens": {
     "insufficientForPremium": "Linkkon yetarli emas. {{count}} ta token kerak.",
     "insufficientForPurchase": "Linkkon yetarli emas. {{count}} ta token kerak.",
@@ -7448,22 +7467,22 @@
       "totalContacts": "Jami: {{count}}"
     },
     "config": {
-      "variables": "Ispolzuyte {{contact_name}}, {{deal_title}}, {{zone_name}} uchun podstanovki dannyx."
+      "variables": "Ma'lumotlarni almashtirish uchun {{contact_name}}, {{deal_title}}, {{zone_name}} dan foydalaning."
     }
   },
   "contacts": {
-    "andMore": "i eshche {{count}}",
-    "deleteWarning": "Eto navsegda udalit kontakt {{name}}. Svyazannye sdelki va zadachi ostanatsiya.",
+    "andMore": "va yana {{count}} ta",
+    "deleteWarning": "{{name}} kontakti butunlay o'chiriladi. Bog'liq bitimlar va vazifalar hal qilinadi.",
     "importButton": "Import qilish {{count}}",
-    "imported": "{{count}} kontaktov importovano"
+    "imported": "{{count}} ta kontakt import qilindi"
   },
   "documents": {
-    "filteredCount": "Pokazano {{shown}} iz {{total}}",
+    "filteredCount": "{{total}} tadan {{shown}} tasi ko'rsatilmoqda",
     "totalCount": "Hammasi: {{count}}"
   },
   "landingV2": {
     "pricing": {
-      "billedYearly": "Oplata {{price}} v god"
+      "billedYearly": "Yiliga {{price}} to'lanadi"
     }
   }
 }
