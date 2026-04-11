@@ -27,6 +27,8 @@
     "i18n:fill": "node scripts/sync-locales-fill-missing.mjs",
     "i18n:check-coverage": "node scripts/check-locale-coverage.mjs",
     "i18n:audit": "node scripts/audit-locales.mjs",
+    "i18n:translate-stubs": "node scripts/translate-stubs-from-en.mjs",
+    "i18n:translate-stubs:batch": "node scripts/translate-stubs-from-en.mjs --rounds=18 --max=400 --delay=42",
     "i18n:export": "node scripts/i18n-export.mjs",
     "i18n:import": "node scripts/i18n-import.mjs",
     "test": "vitest",
