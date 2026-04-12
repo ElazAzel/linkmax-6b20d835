@@ -1,6 +1,8 @@
 /// <reference lib="deno.ns" />
+/// <reference lib="deno.ns" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -181,26 +183,59 @@ serve(async (req: Request) => {
 
     console.log(`Lead created for user ${pageOwnerId}: ${lead.id} (IP: ${ipAddress})`);
 
-    // Send email notification asynchronously (don't wait for it)
+    // Send inline Telegram notification (bypasses broken notification_queue)
     try {
-      const notificationUrl = `${supabaseUrl}/functions/v1/send-lead-notification`;
-      fetch(notificationUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseKey}`,
-        },
-        body: JSON.stringify({
-          leadId: lead.id,
-          pageOwnerId,
-          leadName: name.trim(),
-          leadEmail: email?.trim() || null,
-          leadPhone: phone?.trim() || null,
-          source: source || 'form',
-        }),
-      }).catch(err => console.error('Failed to send notification:', err));
+      if (isConfigured()) {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('telegram_chat_id, telegram_notifications_enabled, telegram_language')
+          .eq('id', pageOwnerId)
+          .single();
+
+        if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
+          const lang = profile.telegram_language || 'ru';
+          const safeName = (name || '').trim().replace(/[<>&]/g, '');
+          const safeEmail = (email || '').trim().replace(/[<>&]/g, '');
+          const safePhone = (phone || '').trim().replace(/[<>&]/g, '');
+
+          let text = '';
+          if (lang === 'ru') {
+            text = `🔔 <b>Новая заявка!</b>\n\n👤 ${safeName}`;
+            if (safeEmail) text += `\n📧 ${safeEmail}`;
+            if (safePhone) text += `\n📱 ${safePhone}`;
+            text += `\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть в CRM</a>`;
+          } else {
+            text = `🔔 <b>New Lead!</b>\n\n👤 ${safeName}`;
+            if (safeEmail) text += `\n📧 ${safeEmail}`;
+            if (safePhone) text += `\n📱 ${safePhone}`;
+            text += `\n\n👉 <a href="https://lnkmx.my/dashboard">View in CRM</a>`;
+          }
+
+          // Build inline keyboard with quick actions
+          const reply_markup: any = { inline_keyboard: [
+            [
+              { text: "✅ В работу", callback_data: `lead_status:contacted:${lead.id}` },
+              { text: "💰 Продано", callback_data: `lead_status:won:${lead.id}` }
+            ]
+          ]};
+
+          if (safePhone) {
+            const cleanPhone = safePhone.replace(/\D/g, '');
+            reply_markup.inline_keyboard.push([
+              { text: "💬 WhatsApp", url: `https://wa.me/${cleanPhone}` },
+              { text: "📱 Telegram", url: `https://t.me/+${cleanPhone}` }
+            ]);
+          }
+
+          await sendMessage(profile.telegram_chat_id, text, {
+            parse_mode: 'HTML',
+            reply_markup,
+          });
+          console.log(`Telegram notification sent for lead ${lead.id}`);
+        }
+      }
     } catch (notifyError) {
-      console.error('Error triggering notification:', notifyError);
+      console.error('Error sending Telegram notification:', notifyError);
       // Don't fail the lead creation if notification fails
     }
 
