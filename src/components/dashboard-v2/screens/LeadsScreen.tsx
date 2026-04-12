@@ -83,6 +83,26 @@ export const LeadsScreen = memo(function LeadsScreen() {
         }
     };
 
+    const bulkMarkContacted = async () => {
+        const newLeads = leads.filter(l => l.status === 'new');
+        if (newLeads.length === 0) return;
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+            const { error } = await supabase
+                .from('leads')
+                .update({ status: 'contacted', updated_at: new Date().toISOString() })
+                .eq('user_id', user.id)
+                .eq('status', 'new');
+            if (error) throw error;
+            setLeads(prev => prev.map(l => l.status === 'new' ? { ...l, status: 'contacted' } : l));
+            toast.success(`${newLeads.length} лидов → В работу`);
+        } catch (e) {
+            console.error('Bulk update error', e);
+            toast.error('Ошибка обновления');
+        }
+    };
+
     const filteredLeads = leads.filter(lead => {
         const matchesStatus = statusFilter === 'all' || lead.status === statusFilter;
         const matchesSearch = !searchQuery ||
@@ -149,16 +169,30 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 onMenuClick={() => {}}
                 title={t('dashboard.leads.title', 'Лиды (CRM)')}
                 actions={
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 rounded-xl"
-                        onClick={handleExport}
-                        disabled={leads.length === 0}
-                    >
-                        <Download className="h-4 w-4 mr-2" />
-                        <span className="hidden sm:inline">{t('dashboard.leads.export', 'Экспорт')}</span>
-                    </Button>
+                    <div className="flex gap-2">
+                        {stats.new > 0 && (
+                            <Button
+                                variant="default"
+                                size="sm"
+                                className="h-10 rounded-xl"
+                                onClick={bulkMarkContacted}
+                            >
+                                <CheckCheck className="h-4 w-4 mr-2" />
+                                <span className="hidden sm:inline">{t('dashboard.leads.markAll', 'Все в работу')}</span>
+                                <span className="sm:hidden">✓ {stats.new}</span>
+                            </Button>
+                        )}
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-10 rounded-xl"
+                            onClick={handleExport}
+                            disabled={leads.length === 0}
+                        >
+                            <Download className="h-4 w-4 mr-2" />
+                            <span className="hidden sm:inline">{t('dashboard.leads.export', 'Экспорт')}</span>
+                        </Button>
+                    </div>
                 }
             />
 
