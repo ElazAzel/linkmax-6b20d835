@@ -27,28 +27,28 @@ export const Testimonials = () => {
 
     const testimonials = [
         {
-            name: "Alex R.",
-            role: t('landing.testimonials.role1', 'Fitness Coach'),
-            content: t('landing.testimonials.review1', "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it."),
-            avatar: "AR"
+            name: t('landing.testimonials.name1', 'Реальный кейс'),
+            role: t('landing.testimonials.role1', 'Образовательный проект'),
+            content: t('landing.testimonials.review1', "360+ заявок через WhatsApp за месяц. Страница создана за 5 минут с AI, все лиды приходят в Telegram-бот."),
+            avatar: "📊"
         },
         {
-            name: "Sarah C.",
-            role: t('landing.testimonials.role2', 'Digital Artist'),
-            content: t('landing.testimonials.review2', "The aesthetics are on another level. It doesn't look like a generic link-in-bio. It looks like a custom website."),
-            avatar: "SC"
+            name: t('landing.testimonials.name2', 'Бьюти-мастер'),
+            role: t('landing.testimonials.role2', 'Алматы'),
+            content: t('landing.testimonials.review2', "Раньше клиенты писали в Директ и терялись. Теперь все заявки в одном месте, и я вижу кто новый, а кто вернулся."),
+            avatar: "💅"
         },
         {
-            name: "Marcus J.",
-            role: t('landing.testimonials.role3', 'Business Owner'),
-            content: t('landing.testimonials.review3', "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat."),
-            avatar: "MJ"
+            name: t('landing.testimonials.name3', 'Фитнес-тренер'),
+            role: t('landing.testimonials.role3', 'Онлайн'),
+            content: t('landing.testimonials.review3', "Собрал страницу с расписанием и прайсом за 3 минуты. Уведомления о записях прямо в Telegram — не пропускаю клиентов."),
+            avatar: "💪"
         },
         {
-            name: "Elena V.",
-            role: t('landing.testimonials.role4', 'Beauty Salon Owner'),
-            content: t('landing.testimonials.review4', "My clients love how easy it is to book. And I love the CRM. I finally know where my traffic comes from."),
-            avatar: "EV"
+            name: t('landing.testimonials.name4', 'Репетитор'),
+            role: t('landing.testimonials.role4', 'Астана'),
+            content: t('landing.testimonials.review4', "Ученики записываются через мою страницу, мне приходит уведомление. Никаких переписок в чатах."),
+            avatar: "📚"
         }
     ];
 
@@ -60,9 +60,8 @@ export const Testimonials = () => {
             <div className="container px-4 mx-auto relative">
                 <Reveal>
                     <h2 className="text-section-title text-center mb-4">
-                        {t('landing.testimonials.title', 'Loved by')}{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.count', '2,000+')}</span>{' '}
-                        {t('landing.testimonials.suffix', 'Creators')}
+                        {t('landing.testimonials.title', 'Реальные результаты')}{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight', 'наших пользователей')}</span>
                     </h2>
                 </Reveal>
                 <Reveal delay={100}>
@@ -88,9 +87,9 @@ export const Testimonials = () => {
                                 </p>
                                 
                                 <div className="flex items-center gap-4 mt-auto relative pt-4 border-t border-white/5">
-                                    <Avatar className="h-12 w-12 border-2 border-white/20 rounded-2xl shadow-glass">
-                                        <AvatarFallback className="bg-primary/20 text-primary text-xs font-black rounded-2xl uppercase">{testimonial.avatar}</AvatarFallback>
-                                    </Avatar>
+                                    <div className="h-12 w-12 border-2 border-white/20 rounded-2xl shadow-glass flex items-center justify-center bg-primary/10 text-xl">
+                                        {testimonial.avatar}
+                                    </div>
                                     <div>
                                         <div className="text-sm font-black tracking-tight text-foreground">{testimonial.name}</div>
                                         <div className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">{testimonial.role}</div>

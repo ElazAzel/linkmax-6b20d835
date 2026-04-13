@@ -105,7 +105,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                     </div>
                                 ))}
                             </div>
-                            <p>{t('landing.expert.usersCountLabel', 'Уже используют')} <strong className="text-foreground">2,500+</strong> {t('landing.expert.usersCountSuffix', 'специалистов')}</p>
+                            <p>{t('landing.expert.usersCountLabel', 'Уже используют')} <strong className="text-foreground">50+</strong> {t('landing.expert.usersCountSuffix', 'специалистов')}</p>
                         </div>
                     </div>
 
