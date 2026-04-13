@@ -60,9 +60,8 @@ export const Testimonials = () => {
             <div className="container px-4 mx-auto relative">
                 <Reveal>
                     <h2 className="text-section-title text-center mb-4">
-                        {t('landing.testimonials.title', 'Loved by')}{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.count', '360+')}</span>{' '}
-                        {t('landing.testimonials.suffix', 'заявок за месяц')}
+                        {t('landing.testimonials.title', 'Реальные результаты')}{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight', 'наших пользователей')}</span>
                     </h2>
                 </Reveal>
                 <Reveal delay={100}>
