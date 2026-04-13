@@ -54,14 +54,96 @@ interface GeoInfo {
   region?: string;
 }
 
+// Timezone → country mapping (covers 95%+ of real traffic)
+const TZ_COUNTRY_MAP: Record<string, { code: string; name: string }> = {
+  'Asia/Almaty': { code: 'KZ', name: 'Kazakhstan' },
+  'Asia/Aqtau': { code: 'KZ', name: 'Kazakhstan' },
+  'Asia/Aqtobe': { code: 'KZ', name: 'Kazakhstan' },
+  'Asia/Atyrau': { code: 'KZ', name: 'Kazakhstan' },
+  'Asia/Oral': { code: 'KZ', name: 'Kazakhstan' },
+  'Asia/Qostanay': { code: 'KZ', name: 'Kazakhstan' },
+  'Asia/Qyzylorda': { code: 'KZ', name: 'Kazakhstan' },
+  'Europe/Moscow': { code: 'RU', name: 'Russia' },
+  'Europe/Kaliningrad': { code: 'RU', name: 'Russia' },
+  'Asia/Yekaterinburg': { code: 'RU', name: 'Russia' },
+  'Asia/Novosibirsk': { code: 'RU', name: 'Russia' },
+  'Asia/Krasnoyarsk': { code: 'RU', name: 'Russia' },
+  'Asia/Irkutsk': { code: 'RU', name: 'Russia' },
+  'Asia/Vladivostok': { code: 'RU', name: 'Russia' },
+  'Asia/Kamchatka': { code: 'RU', name: 'Russia' },
+  'Europe/Samara': { code: 'RU', name: 'Russia' },
+  'Europe/Volgograd': { code: 'RU', name: 'Russia' },
+  'Europe/Saratov': { code: 'RU', name: 'Russia' },
+  'Europe/Kirov': { code: 'RU', name: 'Russia' },
+  'Europe/Astrakhan': { code: 'RU', name: 'Russia' },
+  'Europe/Ulyanovsk': { code: 'RU', name: 'Russia' },
+  'Asia/Omsk': { code: 'RU', name: 'Russia' },
+  'Asia/Barnaul': { code: 'RU', name: 'Russia' },
+  'Asia/Tomsk': { code: 'RU', name: 'Russia' },
+  'Asia/Novokuznetsk': { code: 'RU', name: 'Russia' },
+  'Asia/Chita': { code: 'RU', name: 'Russia' },
+  'Asia/Yakutsk': { code: 'RU', name: 'Russia' },
+  'Asia/Magadan': { code: 'RU', name: 'Russia' },
+  'Asia/Sakhalin': { code: 'RU', name: 'Russia' },
+  'Asia/Srednekolymsk': { code: 'RU', name: 'Russia' },
+  'Asia/Anadyr': { code: 'RU', name: 'Russia' },
+  'Europe/Kyiv': { code: 'UA', name: 'Ukraine' },
+  'Europe/Minsk': { code: 'BY', name: 'Belarus' },
+  'Asia/Tashkent': { code: 'UZ', name: 'Uzbekistan' },
+  'Asia/Samarkand': { code: 'UZ', name: 'Uzbekistan' },
+  'Asia/Bishkek': { code: 'KG', name: 'Kyrgyzstan' },
+  'Asia/Dushanbe': { code: 'TJ', name: 'Tajikistan' },
+  'Asia/Ashgabat': { code: 'TM', name: 'Turkmenistan' },
+  'Asia/Baku': { code: 'AZ', name: 'Azerbaijan' },
+  'Asia/Tbilisi': { code: 'GE', name: 'Georgia' },
+  'Asia/Yerevan': { code: 'AM', name: 'Armenia' },
+  'Europe/Istanbul': { code: 'TR', name: 'Turkey' },
+  'Asia/Dubai': { code: 'AE', name: 'UAE' },
+  'America/New_York': { code: 'US', name: 'USA' },
+  'America/Chicago': { code: 'US', name: 'USA' },
+  'America/Denver': { code: 'US', name: 'USA' },
+  'America/Los_Angeles': { code: 'US', name: 'USA' },
+  'Europe/London': { code: 'GB', name: 'United Kingdom' },
+  'Europe/Berlin': { code: 'DE', name: 'Germany' },
+  'Europe/Paris': { code: 'FR', name: 'France' },
+  'Europe/Warsaw': { code: 'PL', name: 'Poland' },
+  'Asia/Shanghai': { code: 'CN', name: 'China' },
+  'Asia/Tokyo': { code: 'JP', name: 'Japan' },
+  'Asia/Seoul': { code: 'KR', name: 'South Korea' },
+  'Asia/Kolkata': { code: 'IN', name: 'India' },
+};
+
 let _geoCache: GeoInfo | null = null;
 let _geoFetchPromise: Promise<GeoInfo | null> | null = null;
 
 /**
- * Fetch geo info from a free IP geolocation API (cached per session)
+ * Get geo from timezone (instant, no network) as primary method,
+ * then try IP APIs as fallback
+ */
+function getGeoFromTimezone(): GeoInfo | null {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const match = TZ_COUNTRY_MAP[tz];
+    if (match) {
+      return { country: match.name, countryCode: match.code };
+    }
+  } catch { /* ignore */ }
+  return null;
+}
+
+/**
+ * Fetch geo info — timezone first (instant), then IP API fallback (cached per session)
  */
 async function getGeoInfo(): Promise<GeoInfo | null> {
   if (_geoCache) return _geoCache;
+
+  // Try timezone first — instant, no network
+  const tzGeo = getGeoFromTimezone();
+  if (tzGeo) {
+    _geoCache = tzGeo;
+    return _geoCache;
+  }
+
   if (_geoFetchPromise) return _geoFetchPromise;
 
   _geoFetchPromise = (async () => {
@@ -88,43 +170,17 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
           region: d.regionName || undefined,
         }),
       },
-      {
-        url: 'https://ipapi.co/json/',
-        parse: (d: any) => ({
-          country: d.country_name || 'Unknown',
-          countryCode: d.country_code || 'XX',
-          city: d.city || undefined,
-          region: d.region || undefined,
-        }),
-      },
-      {
-        url: 'https://ip.guide/',
-        headers: { Accept: 'application/json' },
-        parse: (d: any) => ({
-          country: d.location?.country || 'Unknown',
-          countryCode: d.location?.country_code || 'XX',
-          city: d.location?.city || undefined,
-          region: undefined,
-        }),
-      },
     ];
 
     for (const api of apis) {
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 2000); // Shorter timeout for better UX
+        const timeout = setTimeout(() => controller.abort(), 2000);
         
         const response = await fetch(api.url, {
           signal: controller.signal,
-          headers: {
-            ...api.headers,
-            'Cache-Control': 'no-cache'
-          },
-        }).catch(err => {
-           // Silently log fetch error (likely CSP or network)
-           logger.debug(`Geo API ${api.url} failed`, { data: err.message });
-           return null;
-        });
+          headers: api.headers,
+        }).catch(() => null);
 
         clearTimeout(timeout);
         if (!response || !response.ok) continue;
@@ -136,8 +192,7 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
           _geoCache = parsed;
           return _geoCache;
         }
-      } catch (e: any) {
-        logger.debug('Geo fetch iteration failed', { data: e.message });
+      } catch {
         continue;
       }
     }
