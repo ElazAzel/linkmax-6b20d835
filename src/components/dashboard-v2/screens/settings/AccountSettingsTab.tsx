@@ -228,26 +228,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                 </div>
             </Card>
 
-            {/* Quick Actions */}
-            <div className="grid grid-cols-2 gap-3">
-                <button
-                    onClick={onOpenTokens}
-                    className="p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-violet-500/10 border border-primary/20 text-left transition-all active:scale-[0.98]"
-                >
-                    <Coins className="h-6 w-6 text-primary mb-2" />
-                    <div className="font-bold">{t('dashboard.accountSettings.tokens', 'Tokens')}</div>
-                    <div className="text-xs text-muted-foreground">{t('dashboard.accountSettings.tokensDesc', 'Balance & history')}</div>
-                </button>
-
-                <button
-                    onClick={onOpenAchievements}
-                    className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-left transition-all active:scale-[0.98]"
-                >
-                    <Trophy className="h-6 w-6 text-amber-500 mb-2" />
-                    <div className="font-bold">{t('dashboard.accountSettings.achievements', 'Achievements')}</div>
-                    <div className="text-xs text-muted-foreground">{t('dashboard.accountSettings.achievementsDesc', 'Your progress')}</div>
-                </button>
-            </div>
+            {/* Quick Actions - gamification hidden until user base scales */}
 
             {/* Account Section */}
             <div className="space-y-2">
