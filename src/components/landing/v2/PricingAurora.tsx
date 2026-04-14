@@ -230,7 +230,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                             </Button>
                         </div>
                         <p className="text-[10px] text-muted-foreground/40 font-bold uppercase tracking-[0.2em]">
-                            {t('landing.pricing.transactionFeeNote', '* Transaction fees apply to all tiers: Starter (7%), Pro (1%), Business (0.1%)')}
+                            {t('landing.pricing.transactionFeeNote_v2', '* Transaction fees: Starter (7%), Pro (1%)')}
                         </p>
                     </Reveal>
                 </div>
