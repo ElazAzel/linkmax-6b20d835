@@ -107,11 +107,6 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
             yearly: isKZ ? '3 045 ₸' : '$5.90',
             totalYearly: isKZ ? '36 540 ₸' : '$70.80'
         },
-        business: {
-            monthly: isKZ ? '9 900 ₸' : '$19.90',
-            yearly: isKZ ? '6 930 ₸' : '$13.90',
-            totalYearly: isKZ ? '83 160 ₸' : '$166.80'
-        }
     };
 
     const proFeatures = [
@@ -121,15 +116,8 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
         t('landing.pricing.f4', 'Sell products & event tickets'),
         t('landing.pricing.f5', 'Built-in QR scanner'),
         t('landing.pricing.f6', 'Advanced analytics & reports'),
-    ];
-
-    const businessFeatures = [
-        t('landing.pricing.b1', 'Everything in Pro, plus:'),
-        t('landing.pricing.b2_v2', 'Custom domain & branding'),
-        t('landing.pricing.b3_v2', 'Up to 6 pages per account'),
-        t('landing.pricing.b4_v2', 'Priority support'),
-        t('landing.pricing.b5', 'Roles & access control'),
-        t('landing.pricing.b6_v2', 'Advanced export & integrations'),
+        t('landing.pricing.f7_new', 'Custom domain & no branding'),
+        t('landing.pricing.f8_new', 'Up to 6 pages per account'),
     ];
 
     return (
