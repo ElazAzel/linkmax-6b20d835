@@ -160,7 +160,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                 </Reveal>
 
                 <Reveal delay={200}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 max-w-6xl mx-auto px-4">
+                    <div className="max-w-xl mx-auto px-4">
                         {/* PRO Card */}
                         <div className="glass border-primary/30 rounded-[2.5rem] sm:rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass-lg group">
                             <div className="bg-white/5 backdrop-blur-[40px] rounded-[2.5rem] sm:rounded-[3.3rem] p-6 sm:p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
@@ -205,52 +205,6 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
 
                                 <MagneticButton className="w-full h-14 sm:h-16 md:h-20 rounded-2xl text-sm sm:text-base md:text-lg font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] bg-primary text-white shadow-glass-lg hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all" onClick={() => onPlanSelect('pro')}>
                                     {t('landing.pricing.proCta', 'Start Pro Trial')}
-                                </MagneticButton>
-                            </div>
-                        </div>
-
-                        {/* BUSINESS Card */}
-                        <div className="glass border-white/10 rounded-[2.5rem] sm:rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass group">
-                            <div className="bg-white/5 backdrop-blur-[30px] rounded-[2.3rem] sm:rounded-[3.3rem] p-6 sm:p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
-                                <div className="absolute top-0 right-0 bg-white/10 backdrop-blur-md text-foreground/50 text-xs font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em]">
-                                    {t('landing.pricing.newBadge', 'NEW')}
-                                </div>
-
-                                <div className="mb-10">
-                                    <h3 className="text-3xl font-black mb-4 flex items-center gap-3 tracking-tighter">
-                                        {t('landing.pricing.businessName', 'Business')} 
-                                        <Badge variant="outline" className="text-foreground/40 border-white/10 font-black text-xs px-3 py-1 rounded-full uppercase tracking-widest">
-                                            {t('landing.pricing.teamLabel', 'Team')}
-                                        </Badge>
-                                    </h3>
-                                    <div className="flex items-baseline gap-3">
-                                        <span className="text-4xl sm:text-5xl md:text-6xl font-black tabular-nums tracking-tighter drop-shadow-sm">
-                                            {isYearly ? prices.business.yearly : prices.business.monthly}
-                                        </span>
-                                        <span className="text-muted-foreground/60 font-black uppercase tracking-widest text-xs">/ {t('landing.pricing.perMonth', 'mo')}</span>
-                                    </div>
-                                    {isYearly && (
-                                        <div className="mt-4 px-4 py-1.5 bg-white/5 rounded-full w-fit">
-                                            <p className="text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
-                                                {t('landing.pricing.billedYearly', 'Billed {{price}} yearly', { price: prices.business.totalYearly })}
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <ul className="space-y-6 mb-12 flex-1">
-                                    {businessFeatures.map((f, i) => (
-                                        <li key={i} className="flex items-center gap-4 text-sm font-bold text-foreground/70 group/feat">
-                                            <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10 group-hover/feat:scale-110 transition-transform">
-                                                <Check className="w-3.5 h-3.5 text-foreground/40" />
-                                            </div>
-                                            <span className="group-hover:text-foreground transition-colors">{f}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <MagneticButton variant="outline" className="w-full h-14 sm:h-16 md:h-20 rounded-2xl text-sm sm:text-base md:text-lg font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] glass hover:bg-white/10 border-white/10 hover:shadow-glass hover:scale-[1.02] active:scale-[0.98] transition-all" onClick={() => onPlanSelect('business')}>
-                                    {t('landing.pricing.businessCta', 'Start Business')}
                                 </MagneticButton>
                             </div>
                         </div>
