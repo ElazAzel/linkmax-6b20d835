@@ -126,6 +126,10 @@ export default function Index() {
               <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
             </Suspense>
           </div>
+
+          <Suspense fallback={<div className="h-40" />}>
+            <BottomCTA />
+          </Suspense>
         </main>
 
         <Suspense fallback={<div className="h-40" />}>
