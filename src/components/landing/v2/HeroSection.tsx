@@ -1,15 +1,16 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Zap from 'lucide-react/dist/esm/icons/zap';
-import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
-import Globe from 'lucide-react/dist/esm/icons/globe';
 import Play from 'lucide-react/dist/esm/icons/play';
 import Users from 'lucide-react/dist/esm/icons/users';
-import Layers from 'lucide-react/dist/esm/icons/layers';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
 import { MagneticButton } from './MagneticButton';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 
 interface HeroProp {
     onStart: () => void;
@@ -72,8 +73,19 @@ function AnimatedCount({ target, suffix = '' }: { target: number; suffix?: strin
 
 export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement>(null);
     const { style1, style2, style3, opacityStyle } = useScrollParallax();
+    const [username, setUsername] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
+
+    const handleCreatePage = useCallback(() => {
+        if (username.trim()) {
+            navigate(`/auth?username=${encodeURIComponent(username.trim())}`);
+        } else {
+            onStart();
+        }
+    }, [username, navigate, onStart]);
 
     return (
         <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden py-20 px-4">
@@ -106,64 +118,82 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </div>
 
                 {/* Headline - Editorial Boldness */}
-                <h1 className="max-w-6xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-10 tracking-[-0.04em] leading-[0.9] text-balance">
-                    <span className="block text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
+                <h1 className="max-w-5xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-10 tracking-[-0.04em] leading-[0.9] text-balance">
+                    <span className="block text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]">{t('landing.v4.hero.titleStart', 'AI-страница за минуту,')}</span>
                     <span className="block mt-3 sm:mt-6 pb-3 sm:pb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary animate-[gradient-shift_6s_ease_infinite] bg-[length:200%_auto] filter drop-shadow-[0_4px_12px_rgba(var(--primary-rgb),0.3)]">
-                        {t('landing.v4.hero.titleEnd', 'in one place')}
+                        {t('landing.v4.hero.titleEnd', 'клиенты — в Telegram')}
                     </span>
                 </h1>
 
                 {/* Subtitle - Refined Contrast */}
                 <p className="max-w-xl text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground/80 mb-8 sm:mb-12 leading-relaxed font-semibold tracking-tight px-4 md:px-0">
-                    {t('landing.v4.hero.subtitle', 'Page builder, lead management, click analytics. Everything your small business needs - no code required.')}
+                    {t('landing.v4.hero.subtitle', 'AI создаёт страницу с прайсом и контактами. Клиент нажимает «Написать» → вы получаете уведомление в Telegram.')}
                 </p>
 
-                {/* CTA Buttons - Physical & Magnetic */}
-                <div className="flex flex-col gap-5 sm:gap-8 w-full sm:w-auto items-center mt-4 sm:mt-6 relative px-4 sm:px-0">
+                {/* Username Input CTA */}
+                <div className="w-full max-w-md px-4 sm:px-0 relative">
                     <div className="absolute -inset-10 bg-primary/10 blur-[60px] rounded-full opacity-50 pointer-events-none" />
-                    
-                    <MagneticButton
-                        onClick={onStart}
-                        size="lg"
-                        className="h-14 sm:h-16 md:h-20 px-8 sm:px-12 md:px-16 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] text-base sm:text-lg md:text-xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none w-full sm:w-auto"
+                    <div
+                        className={`relative flex items-center gap-2 p-1.5 sm:p-2 rounded-2xl transition-all duration-400 glass backdrop-blur-2xl border shadow-glass-lg ${
+                            isFocused
+                                ? 'border-primary/50 shadow-glass-xl ring-4 ring-primary/10'
+                                : 'border-white/20 hover:border-white/30 hover:shadow-glass-xl'
+                        }`}
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-                        <span className="relative z-10 flex items-center justify-center gap-3 uppercase tracking-[0.1em] md:tracking-[0.15em]">
-                            {t('landing.v4.hero.cta', 'Start for Free')}
-                            <ArrowRight className="h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-500" />
-                        </span>
-                    </MagneticButton>
+                        <div className="flex-shrink-0 pl-3 sm:pl-4 text-muted-foreground font-bold text-sm sm:text-base select-none">
+                            lnkmx.my/
+                        </div>
+                        <Input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
+                            placeholder={t('landing.hero.usernamePlaceholder', 'yourname')}
+                            variant="minimal"
+                            className="flex-1 text-lg font-medium placeholder:text-muted-foreground/50 bg-transparent border-none"
+                            onKeyDown={(e) => e.key === 'Enter' && handleCreatePage()}
+                            onFocus={() => setIsFocused(true)}
+                            onBlur={() => setIsFocused(false)}
+                            aria-label="Username"
+                        />
+                        <MagneticButton
+                            onClick={handleCreatePage}
+                            size="lg"
+                            className="rounded-xl font-black px-5 sm:px-7 bg-primary text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border-none"
+                        >
+                            <span className="hidden sm:inline mr-2">{t('landing.hero.createPage', 'Создать')}</span>
+                            <ArrowRight className="h-5 w-5" />
+                        </MagneticButton>
+                    </div>
 
                     <button
                         onClick={onExamples}
-                        className="inline-flex items-center gap-3 text-xs sm:text-sm font-black text-muted-foreground/50 hover:text-primary transition-all group uppercase tracking-[0.2em] sm:tracking-[0.3em]"
+                        className="mt-5 inline-flex items-center gap-3 text-xs sm:text-sm font-black text-muted-foreground/50 hover:text-primary transition-all group uppercase tracking-[0.2em] sm:tracking-[0.3em] mx-auto w-full justify-center"
                     >
                         <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
                             <Play className="w-3 h-3 fill-current group-hover:scale-125 transition-transform duration-500" />
                         </div>
-                        {t('landing.v4.hero.secondary', 'See Examples')}
+                        {t('landing.v4.hero.secondary', 'Посмотреть примеры')}
                     </button>
                 </div>
 
-                {/* Animated Stats Strip */}
+                {/* Real Stats Strip */}
                 <div className="mt-12 md:mt-16 pt-8 border-t border-border/10 w-full max-w-sm md:max-w-2xl px-2">
                     <div className="flex justify-between items-center gap-2">
                         <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
-                            <Layers className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={28} suffix="+" /></span>
-                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust1', 'Blocks')}</span>
+                            <Eye className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
+                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={2400} suffix="+" /></span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust1', 'Просмотров')}</span>
                         </div>
                         <div className="w-px h-8 md:h-10 bg-border/20 shrink-0" />
                         <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
                             <Users className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={2000} suffix="+" /></span>
-                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust2', 'Creators')}</span>
+                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={50} suffix="+" /></span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust2', 'Страниц')}</span>
                         </div>
                         <div className="w-px h-8 md:h-10 bg-border/20 shrink-0" />
                         <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
-                            <Globe className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={40} suffix="+" /></span>
-                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust3', 'Langs')}</span>
+                            <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
+                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={360} suffix="+" /></span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust3', 'Заявок/мес')}</span>
                         </div>
                     </div>
                 </div>
