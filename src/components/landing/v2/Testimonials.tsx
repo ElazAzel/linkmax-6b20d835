@@ -27,28 +27,28 @@ export const Testimonials = () => {
 
     const testimonials = [
         {
-            name: t('landing.testimonials.name1', 'Реальный кейс'),
-            role: t('landing.testimonials.role1', 'Образовательный проект'),
-            content: t('landing.testimonials.review1', "360+ заявок через WhatsApp за месяц. Страница создана за 5 минут с AI, все лиды приходят в Telegram-бот."),
-            avatar: "📊"
+            name: 'Entrepreneurship Almau',
+            role: t('landing.testimonials.role1', '709 просмотров · Образование'),
+            content: t('landing.testimonials.review1', "Создали страницу за 5 минут с AI. 360+ заявок через WhatsApp за первый месяц — все уведомления приходят в Telegram."),
+            avatar: "🎓"
         },
         {
-            name: t('landing.testimonials.name2', 'Бьюти-мастер'),
-            role: t('landing.testimonials.role2', 'Алматы'),
-            content: t('landing.testimonials.review2', "Раньше клиенты писали в Директ и терялись. Теперь все заявки в одном месте, и я вижу кто новый, а кто вернулся."),
-            avatar: "💅"
+            name: 'Elazart Studio',
+            role: t('landing.testimonials.role2', '641 просмотр · Бизнес, Алматы'),
+            content: t('landing.testimonials.review2', "Перенесли портфолио из Instagram на свою страницу. Клиенты сразу видят прайс и пишут в WhatsApp — конверсия выросла."),
+            avatar: "🎨"
         },
         {
-            name: t('landing.testimonials.name3', 'Фитнес-тренер'),
-            role: t('landing.testimonials.role3', 'Онлайн'),
-            content: t('landing.testimonials.review3', "Собрал страницу с расписанием и прайсом за 3 минуты. Уведомления о записях прямо в Telegram — не пропускаю клиентов."),
+            name: t('landing.testimonials.name3', 'Home Cakes Asel'),
+            role: t('landing.testimonials.role3', '55 просмотров · Кулинария'),
+            content: t('landing.testimonials.review3', "Торты на заказ — нужен прайс и фото. Собрала страницу за 3 минуты, теперь клиенты не спрашивают цены в директе."),
+            avatar: "🧁"
+        },
+        {
+            name: t('landing.testimonials.name4', 'Coach Arman'),
+            role: t('landing.testimonials.role4', '49 просмотров · Фитнес'),
+            content: t('landing.testimonials.review4', "Расписание, прайс и кнопка записи — всё на одной странице. Уведомления о записях прямо в Telegram."),
             avatar: "💪"
-        },
-        {
-            name: t('landing.testimonials.name4', 'Репетитор'),
-            role: t('landing.testimonials.role4', 'Астана'),
-            content: t('landing.testimonials.review4', "Ученики записываются через мою страницу, мне приходит уведомление. Никаких переписок в чатах."),
-            avatar: "📚"
         }
     ];
 
