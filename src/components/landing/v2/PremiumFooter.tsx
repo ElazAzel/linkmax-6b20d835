@@ -26,7 +26,7 @@ export const PremiumFooter = () => {
                         lnk<span className="text-primary italic">mx.</span>
                     </span>
                     <p className="text-sm sm:text-lg text-muted-foreground/40 max-w-md mx-auto font-semibold leading-relaxed tracking-tight px-4">
-                        {t('landingV5.footer.description', 'The all-in-one platform for creators and micro-businesses. Built for the future.')}
+                        {t('landingV5.footer.description', 'Платформа для мастеров и малого бизнеса. Страница + CRM + уведомления.')}
                     </p>
                 </div>
 

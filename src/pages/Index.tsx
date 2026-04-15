@@ -23,6 +23,7 @@ const InteractiveDemo = lazy(() => import('@/components/landing/v2/InteractiveDe
 const Testimonials = lazy(() => import('@/components/landing/v2/Testimonials').then(m => ({ default: m.Testimonials })));
 const PricingAurora = lazy(() => import('@/components/landing/v2/PricingAurora').then(m => ({ default: m.PricingAurora })));
 const PremiumFooter = lazy(() => import('@/components/landing/v2/PremiumFooter').then(m => ({ default: m.PremiumFooter })));
+const BottomCTA = lazy(() => import('@/components/landing/v2/BottomCTA').then(m => ({ default: m.BottomCTA })));
 const GrainOverlay = lazy(() => import('@/components/landing/v2/GrainOverlay').then(m => ({ default: m.GrainOverlay })));
 const LiquidCursor = lazy(() => import('@/components/landing/v2/LiquidCursor').then(m => ({ default: m.LiquidCursor })));
 const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
