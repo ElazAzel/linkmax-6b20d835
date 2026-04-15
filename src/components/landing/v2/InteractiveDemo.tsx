@@ -13,30 +13,30 @@ export const InteractiveDemo = () => {
 
     const steps = [
         {
-            title: t('landing.demo.step1Title', 'Choose your niche'),
-            description: t('landing.demo.step1Desc', 'Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.'),
+            title: t('landing.demo.step1Title', 'Выберите нишу'),
+            description: t('landing.demo.step1Desc', 'Скажите AI, чем занимаетесь. Бьюти, фитнес, репетитор — AI понимает вашу специфику.'),
             icon: <User className="w-5 h-5" />,
             mockContent: (
                 <div className="flex flex-col gap-2 p-4 max-h-[260px] overflow-y-auto scrollbar-hide">
-                    <div className="text-sm font-bold opacity-50 mb-2">{t('landing.demo.iAmA', 'I am a...')}</div>
-                    <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium">{t('landing.demo.nicheCreator', 'Digital Creator')}</div>
-                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheFitness', 'Fitness Coach')}</div>
-                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheCrypto', 'Crypto Expert')}</div>
-                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheBeauty', 'Beauty Blogger')}</div>
-                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheMusic', 'Music Producer')}</div>
-                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheTutor', 'Online Tutor')}</div>
+                    <div className="text-sm font-bold opacity-50 mb-2">{t('landing.demo.iAmA', 'Я занимаюсь...')}</div>
+                    <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium">{t('landing.demo.nicheBeauty', 'Бьюти-мастер')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheFitness', 'Фитнес-тренер')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheTutor', 'Репетитор')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheFood', 'Кондитер')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nichePhoto', 'Фотограф')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.demo.nicheCoach', 'Коуч / Эксперт')}</div>
                 </div>
             )
         },
         {
-            title: t('landing.demo.step2Title', 'AI builds everything'),
-            description: t('landing.demo.step2Desc', 'Structure, copy, and design generated in seconds. No drag-and-drop hell.'),
+            title: t('landing.demo.step2Title', 'AI собирает страницу'),
+            description: t('landing.demo.step2Desc', 'Прайс, описание, контакты — всё генерируется за секунды. Без дизайнера и кода.'),
             icon: <Zap className="w-5 h-5" />,
             mockContent: (
                 <div className="flex flex-col gap-2 p-4">
                     <div className="flex gap-2 mb-2">
                         <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                        <div className="text-xs opacity-50">{t('landing.demo.aiGenerating', 'AI Generating...')}</div>
+                        <div className="text-xs opacity-50">{t('landing.demo.aiGenerating', 'AI генерирует...')}</div>
                     </div>
                     <div className="h-20 rounded-lg bg-muted animate-pulse" />
                     <div className="h-8 rounded-lg bg-muted animate-pulse w-2/3" />
@@ -45,22 +45,22 @@ export const InteractiveDemo = () => {
             )
         },
         {
-            title: t('landing.demo.step3Title', 'Get leads in Telegram'),
-            description: t('landing.demo.step3Desc', 'Your page is live. Leads come straight to your DM. Close them instantly.'),
+            title: t('landing.demo.step3Title', 'Клиенты пишут вам'),
+            description: t('landing.demo.step3Desc', 'Клиент нажимает кнопку на странице — вам приходит уведомление в Telegram. Закрываете сделку мгновенно.'),
             icon: <MessageSquare className="w-5 h-5" />,
             mockContent: (
                 <div className="flex flex-col gap-2 p-4">
                     <div className="p-3 rounded-xl bg-primary text-primary-foreground rounded-br-none self-end max-w-[80%] text-sm">
-                        {t('landing.demo.chatMsg1', 'Hey, I want to book a consultation!')}
+                        {t('landing.demo.chatMsg1', 'Здравствуйте! Хочу записаться на маникюр')}
                     </div>
                     <div className="p-3 rounded-xl bg-muted rounded-bl-none self-start max-w-[80%] text-sm">
-                        {t('landing.demo.chatMsg2', "Awesome! Let's schedule it.")}
+                        {t('landing.demo.chatMsg2', 'Отлично! Запишу вас на завтра 15:00 🙌')}
                     </div>
                     <div className="mt-4 flex items-center gap-2 p-2 bg-primary/10 border border-primary/20 rounded-lg">
                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                             <Check className="w-4 h-4 text-primary-foreground" />
                         </div>
-                        <div className="text-xs font-semibold text-primary">{t('landing.demo.leadCaptured', 'New Lead Captured')}</div>
+                        <div className="text-xs font-semibold text-primary">{t('landing.demo.leadCaptured', 'Новая заявка получена ✓')}</div>
                     </div>
                 </div>
             )
@@ -95,7 +95,7 @@ function MobileDemo({ steps }: { steps: any[] }) {
     return (
         <section className="py-16 bg-transparent border-none">
             <div className="container px-4">
-                <h2 className="text-2xl font-bold text-center mb-10">{t('landing.demo.title', 'How it works')}</h2>
+                <h2 className="text-2xl font-bold text-center mb-10">{t('landing.demo.title', 'Как это работает')}</h2>
                 <div className="space-y-8">
                     {steps.map((step: any, i: number) => (
                         <RevealOnScroll key={i} delay={i * 100}>
@@ -133,7 +133,7 @@ function DesktopDemo({ steps }: { steps: any[] }) {
     return (
         <section className="py-20 md:py-28 bg-transparent border-none">
             <div className="container max-w-5xl px-6">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-14">{t('landing.demo.title', 'How it works')}</h2>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-14">{t('landing.demo.title', 'Как это работает')}</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
                     {steps.map((step: any, i: number) => (
