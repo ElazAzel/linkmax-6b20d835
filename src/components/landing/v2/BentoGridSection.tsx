@@ -48,10 +48,10 @@ const AIBuilderVisual = () => {
       <div className="flex flex-col items-center gap-2 z-10">
         <Sparkles className="w-8 h-8 text-primary animate-pulse" />
         <div className={cn("text-xl font-bold text-primary transition-opacity duration-700", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiPowered', 'AI-Powered')}
+          {t('landing.bento.aiPowered', 'AI-Генерация')}
         </div>
         <div className={cn("text-xs text-muted-foreground transition-opacity duration-700 delay-300", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiSub', 'Structure • Copy • Design')}
+          {t('landing.bento.aiSub', 'Структура • Тексты • Дизайн')}
         </div>
       </div>
     </div>
@@ -94,9 +94,9 @@ const CRMVisual = () => {
     return () => obs.disconnect();
   }, []);
   const stages = [
-    { label: t('landing.bento.crmNew', 'New'), count: 5, color: 'bg-blue-500' },
-    { label: t('landing.bento.crmInProgress', 'In Progress'), count: 3, color: 'bg-yellow-500' },
-    { label: t('landing.bento.crmDone', 'Done'), count: 8, color: 'bg-green-500' },
+    { label: t('landing.bento.crmNew', 'Новые'), count: 5, color: 'bg-blue-500' },
+    { label: t('landing.bento.crmInProgress', 'В работе'), count: 3, color: 'bg-yellow-500' },
+    { label: t('landing.bento.crmDone', 'Готово'), count: 8, color: 'bg-green-500' },
   ];
   return (
     <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 items-center justify-center gap-3 p-4 group-hover/bento:scale-105 transition-transform duration-500">
@@ -138,9 +138,9 @@ const LeadsVisual = () => {
     return () => obs.disconnect();
   }, []);
   const items = [
-    { text: t('landing.bento.lead1', 'New lead: Sarah K.'), delay: '200ms' },
-    { text: t('landing.bento.lead2', 'New lead: Alex M.'), delay: '500ms' },
-    { text: t('landing.bento.leadCount', '+12 today'), delay: '800ms', highlight: true },
+    { text: t('landing.bento.lead1', 'Новая заявка: Айгерим К.'), delay: '200ms' },
+    { text: t('landing.bento.lead2', 'Новая заявка: Дмитрий М.'), delay: '500ms' },
+    { text: t('landing.bento.leadCount', '+12 сегодня'), delay: '800ms', highlight: true },
   ];
   return (
     <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-sky-500/15 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
@@ -177,7 +177,7 @@ const BookingVisual = () => {
         {['10:00', '11:30', '14:00'].map((time, i) => (
           <div key={i} className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors", i === 1 ? "bg-primary/15 text-primary border border-primary/20" : "bg-muted/50 text-muted-foreground")}>
             <Calendar className="w-3 h-3" />
-            {time} — {t('landing.bento.bookingSlot', 'Available')}
+            {time} — {t('landing.bento.bookingSlot', 'Свободно')}
           </div>
         ))}
       </div>
@@ -190,43 +190,43 @@ export function BentoGridSection() {
 
   const items = [
     {
-      title: t('landing.bento.aiTitle', 'AI Page Builder'),
-      description: t('landing.bento.aiDesc', 'Describe your business and AI creates the perfect structure, copy, and layout in seconds.'),
+      title: t('landing.bento.aiTitle', 'AI-конструктор страниц'),
+      description: t('landing.bento.aiDesc', 'Опишите бизнес — AI создаст структуру, тексты и дизайн за секунды.'),
       header: <AIBuilderVisual />,
       icon: <Sparkles className="h-5 w-5" />,
       className: "md:col-span-2 md:row-span-2"
     },
     {
-      title: t('landing.bento.analyticsTitle', 'Live Analytics'),
-      description: t('landing.bento.analyticsDesc', 'Track every click, view, and conversion with real-time, privacy-first analytics.'),
+      title: t('landing.bento.analyticsTitle', 'Аналитика в реальном времени'),
+      description: t('landing.bento.analyticsDesc', 'Отслеживайте клики, просмотры и конверсии. Без сторонних сервисов.'),
       header: <AnalyticsVisual />,
       icon: <BarChart3 className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.leadsTitle', 'Instant Leads'),
-      description: t('landing.bento.leadsDesc', 'Get leads delivered straight to Telegram. Never miss a customer.'),
+      title: t('landing.bento.leadsTitle', 'Заявки в Telegram'),
+      description: t('landing.bento.leadsDesc', 'Получайте лиды прямо в Telegram. Ни один клиент не потеряется.'),
       header: <LeadsVisual />,
       icon: <Send className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-2"
     },
     {
       title: t('landing.bento.mobileTitle', 'Mobile First'),
-      description: t('landing.bento.mobileDesc', 'Full editing power from your phone. Build and publish on the go.'),
+      description: t('landing.bento.mobileDesc', 'Полноценный редактор с телефона. Создавайте и публикуйте на ходу.'),
       header: <MobileVisual />,
       icon: <Smartphone className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.crmTitle', 'Built-in CRM'),
-      description: t('landing.bento.crmDesc', 'Manage leads, deals, and clients from a Kanban pipeline. No extra tools needed.'),
+      title: t('landing.bento.crmTitle', 'Встроенная CRM'),
+      description: t('landing.bento.crmDesc', 'Управляйте заявками и клиентами в Kanban-доске. Без сторонних сервисов.'),
       header: <CRMVisual />,
       icon: <Kanban className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.bookingTitle', 'Online Booking'),
-      description: t('landing.bento.bookingDesc', 'Let clients book slots directly. Automated calendar, zero phone calls.'),
+      title: t('landing.bento.bookingTitle', 'Онлайн-запись'),
+      description: t('landing.bento.bookingDesc', 'Клиенты записываются сами. Автокалендарь, без звонков.'),
       header: <BookingVisual />,
       icon: <Calendar className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
@@ -241,8 +241,8 @@ export function BentoGridSection() {
 
       <Reveal>
         <SectionHeading
-          title={t('landing.bento.sectionTitle', 'Everything you need to grow')}
-          subtitle={t('landing.bento.sectionDesc', 'Website builder + CRM + analytics. One platform instead of ten tools.')}
+          title={t('landing.bento.sectionTitle', 'Всё для роста в одном месте')}
+          subtitle={t('landing.bento.sectionDesc', 'Конструктор + CRM + аналитика. Одна платформа вместо десяти.')}
           className="mb-16"
         />
       </Reveal>
