@@ -45,28 +45,28 @@ function ProfitCalculator() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-50" />
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[60px] rounded-full pointer-events-none" />
             
-            <h3 className="text-xl sm:text-2xl font-black mb-8 text-center flex items-center justify-center gap-3">
-                {t('landing.pricing.calculator.title', 'Profitability Calculator')}
+                <h3 className="text-xl sm:text-2xl font-black mb-8 text-center flex items-center justify-center gap-3">
+                {t('landing.pricing.calculator.title', 'Калькулятор выгоды')}
                 <Badge className="bg-green-500/20 text-green-600 dark:text-green-400 border-none uppercase tracking-widest text-xs hover:bg-green-500/30">ROI</Badge>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8 relative z-10 w-full px-2">
                 <div className="space-y-4">
-                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.leads', 'Monthly Leads')}</Label>
+                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.leads', 'Заявки в месяц')}</Label>
                     <div className="flex items-center gap-4">
                         <Slider value={[leads]} max={5000} step={10} onValueChange={(v) => setLeads(v[0])} className="flex-1 cursor-grab active:cursor-grabbing" />
                         <span className="w-10 text-right font-black text-sm tabular-nums">{leads}</span>
                     </div>
                 </div>
                 <div className="space-y-4">
-                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.conversion', 'Conversion Rate (%)')}</Label>
+                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.conversion', 'Конверсия (%)')}</Label>
                     <div className="flex items-center gap-4">
                         <Slider value={[conversion]} max={100} step={1} onValueChange={(v) => setConversion(v[0])} className="flex-1 cursor-grab active:cursor-grabbing" />
                         <span className="w-10 text-right font-black text-sm tabular-nums">{conversion}%</span>
                     </div>
                 </div>
                 <div className="space-y-4">
-                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.avgCheck', 'Average Check ($)')}</Label>
+                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.avgCheck', 'Средний чек ($)')}</Label>
                     <div className="flex items-center gap-4">
                         <Slider value={[avgCheck]} max={500} step={5} onValueChange={(v) => setAvgCheck(v[0])} className="flex-1 cursor-grab active:cursor-grabbing" />
                         <span className="w-10 text-right font-black text-sm tabular-nums">${avgCheck}</span>
@@ -76,15 +76,15 @@ function ProfitCalculator() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 mt-4 border-t border-border/10 relative z-10">
                 <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-background/40">
-                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.revenue', 'Your Revenue:')}</span>
+                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.revenue', 'Ваш доход:')}</span>
                     <span className="text-2xl font-black tabular-nums tracking-tighter">${Math.round(revenue).toLocaleString()}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-background/40 opacity-70">
-                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.competitorCost', 'Competitors (8%):')}</span>
+                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.competitorCost', 'Конкуренты (8%):')}</span>
                     <span className="text-xl font-black tabular-nums tracking-tighter line-through decoration-red-500/50 decoration-2">${Math.round(competitorCost).toLocaleString()}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center bg-primary/10 rounded-2xl p-4 border border-primary/20 shadow-inner group-hover:bg-primary/15 transition-colors">
-                    <span className="text-xs text-primary font-black uppercase tracking-widest mb-1">{t('landing.pricing.calculator.savings', 'Your Savings:')}</span>
+                    <span className="text-xs text-primary font-black uppercase tracking-widest mb-1">{t('landing.pricing.calculator.savings', 'Ваша экономия:')}</span>
                     <span className="text-3xl font-black tabular-nums tracking-tighter text-primary drop-shadow-sm">
                         +${Math.max(0, Math.round(savings)).toLocaleString()}
                     </span>
@@ -110,14 +110,14 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
     };
 
     const proFeatures = [
-        t('landing.pricing.f1', 'All blocks without limits'),
-        t('landing.pricing.f2', 'Online booking & mini-CRM'),
-        t('landing.pricing.f3', 'Instant leads to Telegram'),
-        t('landing.pricing.f4', 'Sell products & event tickets'),
-        t('landing.pricing.f5', 'Built-in QR scanner'),
-        t('landing.pricing.f6', 'Advanced analytics & reports'),
-        t('landing.pricing.f7_new', 'Custom domain & no branding'),
-        t('landing.pricing.f8_new', 'Up to 6 pages per account'),
+        t('landing.pricing.f1', 'Все блоки без ограничений'),
+        t('landing.pricing.f2', 'Онлайн-запись и мини-CRM'),
+        t('landing.pricing.f3', 'Заявки сразу в Telegram'),
+        t('landing.pricing.f4', 'Продажа товаров и билетов'),
+        t('landing.pricing.f5', 'Встроенный QR-сканер'),
+        t('landing.pricing.f6', 'Расширенная аналитика'),
+        t('landing.pricing.f7_new', 'Свой домен и без брендинга'),
+        t('landing.pricing.f8_new', 'До 6 страниц на аккаунт'),
     ];
 
     return (
@@ -128,25 +128,25 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
             <div className="relative z-10">
                 <div className="text-center max-w-2xl mx-auto mb-16">
                     <Reveal>
-                        <h2 className="text-section-title mb-6">
-                            {t('landing.pricing.title', 'Simple Pricing,')}{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.pricing.titleHighlight', 'Exponential Growth')}</span>
+                         <h2 className="text-section-title mb-6">
+                            {t('landing.pricing.title', 'Простые цены,')}{' '}
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.pricing.titleHighlight', 'максимум возможностей')}</span>
                         </h2>
                     </Reveal>
                     <Reveal delay={100}>
                         <p className="text-muted-foreground text-lg mb-8">
-                            {t('landing.pricing.subtitle', 'Start for free. Upgrade when you\'re ready to scale.')}
+                            {t('landing.pricing.subtitle', 'Начните бесплатно. Перейдите на Pro, когда будете готовы масштабироваться.')}
                         </p>
                     </Reveal>
 
                     <Reveal delay={150}>
                         <div className="flex items-center justify-center gap-4">
                             <Label htmlFor="billing-mode" className={cn("text-sm font-medium cursor-pointer", !isYearly && "text-primary")}>
-                                {t('landing.pricing.monthly', 'Monthly')}
+                                {t('landing.pricing.monthly', 'Ежемесячно')}
                             </Label>
                             <Switch id="billing-mode" checked={isYearly} onCheckedChange={setIsYearly} />
                             <Label htmlFor="billing-mode" className={cn("text-sm font-medium cursor-pointer", isYearly && "text-primary")}>
-                                {t('landing.pricing.yearly', 'Yearly')}{' '}
+                                {t('landing.pricing.yearly', 'Годовой')}{' '}
                                 <Badge variant="secondary" className="ml-1 bg-primary/10 text-primary hover:bg-primary/20 text-xs uppercase">
                                     {t('landing.pricing.save', '-30%')}
                                 </Badge>
@@ -165,7 +165,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                         <div className="glass border-primary/30 rounded-[2.5rem] sm:rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass-lg group">
                             <div className="bg-white/5 backdrop-blur-[40px] rounded-[2.5rem] sm:rounded-[3.3rem] p-6 sm:p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
                                 <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-secondary text-white text-xs font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em] shadow-glass">
-                                    {t('landing.pricing.popular', 'POPULAR')}
+                                    {t('landing.pricing.popular', 'ХИТ')}
                                 </div>
                                 
                                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 blur-[80px] rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-1000" />
@@ -204,7 +204,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                 </ul>
 
                                 <MagneticButton className="w-full h-14 sm:h-16 md:h-20 rounded-2xl text-sm sm:text-base md:text-lg font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] bg-primary text-white shadow-glass-lg hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all" onClick={() => onPlanSelect('pro')}>
-                                    {t('landing.pricing.proCta', 'Start Pro Trial')}
+                                    {t('landing.pricing.proCta', 'Попробовать Pro бесплатно')}
                                 </MagneticButton>
                             </div>
                         </div>
@@ -216,21 +216,21 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                     <Reveal delay={300}>
                         <div className="glass border-primary/10 rounded-2xl p-6 mb-6">
                             <h4 className="text-lg font-black mb-2 flex items-center justify-center gap-2">
-                                <span className="text-primary">Starter</span> {t('landing.pricing.successFirst', 'Success-First Plan')}
+                                <span className="text-primary">Starter</span> {t('landing.pricing.successFirst', 'Плати только за результат')}
                             </h4>
                             <p className="text-xs text-muted-foreground mb-4">
-                                {t('landing.pricing.starterDesc', 'Start for $0/mo. We only take a small 7% commission when you actually make a sale. No hidden fees, no risks.')}
+                                {t('landing.pricing.starterDesc', 'Начните за 0₸/мес. Мы берём 7% комиссию только когда вы реально зарабатываете. Без скрытых платежей.')}
                             </p>
                             <Button
                                 variant="outline"
                                 className="rounded-xl border-primary/20 hover:bg-primary/5 text-primary text-xs font-black uppercase tracking-widest px-8"
                                 onClick={() => onPlanSelect('starter')}
                             >
-                                {t('landing.pricing.starterCta', 'Get Started for Free')}
+                                {t('landing.pricing.starterCta', 'Начать бесплатно')}
                             </Button>
                         </div>
                         <p className="text-[10px] text-muted-foreground/40 font-bold uppercase tracking-[0.2em]">
-                            {t('landing.pricing.transactionFeeNote_v2', '* Transaction fees: Starter (7%), Pro (1%)')}
+                            {t('landing.pricing.transactionFeeNote_v2', '* Комиссия за транзакции: Starter (7%), Pro (1%)')}
                         </p>
                     </Reveal>
                 </div>
