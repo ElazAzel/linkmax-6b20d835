@@ -60,18 +60,18 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                         
                         <Badge variant="outline" className="mb-6 h-9 px-4 text-xs font-semibold glass backdrop-blur-md border-primary/20 text-primary gap-2 shadow-sm rounded-full">
                             <ShieldCheck className="w-3.5 h-3.5" />
-                            {t('landing.expert.badge', 'Официальная Бизнес-Платформа (Solo OS)')}
+                            {t('landing.expert.badge', '🇰🇿 Сделано для экспертов Казахстана')}
                         </Badge>
                         
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">
-                            <span className="block text-foreground mb-2">{t('landing.expert.title1', 'Перестаньте склеивать')}</span>
+                            <span className="block text-foreground mb-2">{t('landing.expert.title1', 'Сайт + CRM + запись')}</span>
                             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-primary animate-[gradient-shift_8s_ease_infinite] bg-[length:200%_auto]">
-                                {t('landing.expert.title2', '10 разных сервисов.')}
+                                {t('landing.expert.title2', 'в одном приложении.')}
                             </span>
                         </h1>
 
                         <p className="text-lg sm:text-xl text-muted-foreground/90 mb-8 leading-relaxed max-w-xl">
-                            {t('landing.expert.subtitle', 'LinkMAX — это ваша персональная мобильная ОС. Мини-лендинги, умная CRM, онлайн-запись и аналитика в одном окне. Начните продавать свои услуги системно.')}
+                            {t('landing.expert.subtitle', 'AI создаст вашу страницу за 2 минуты. Клиенты записываются онлайн, заявки приходят в Telegram. Бесплатно навсегда.')}
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -80,7 +80,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                 size="lg"
                                 className="h-14 px-8 rounded-2xl text-base font-bold bg-primary text-primary-foreground shadow-lg hover:shadow-primary/25 hover:-translate-y-1 transition-all"
                             >
-                                {t('landing.expert.ctaPrimary', 'Создать платформу бесплатно')}
+                                {t('landing.expert.ctaPrimary', 'Создать страницу бесплатно')}
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </MagneticButton>
                             
@@ -89,7 +89,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                 className="h-14 px-8 rounded-2xl text-base font-semibold bg-secondary/50 hover:bg-secondary border border-border/50 transition-all flex items-center justify-center gap-2"
                             >
                                 <Users className="h-4 w-4" />
-                                {t('landing.expert.ctaSecondary', 'Опыт экспертов')}
+                                {t('landing.expert.ctaSecondary', 'Посмотреть примеры')}
                             </button>
                         </div>
                         

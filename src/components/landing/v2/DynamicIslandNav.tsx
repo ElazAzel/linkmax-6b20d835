@@ -73,9 +73,9 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
 
                     <nav className="flex items-center gap-1">
                         {[
-                            { href: '#features', label: t('landing.v2.nav.features', 'Features') },
-                            { href: '#demo', label: t('landing.v2.nav.howItWorks', 'How it Works') },
-                            { href: '#pricing', label: t('landing.v2.nav.pricing', 'Pricing') },
+                            { href: '#features', label: t('landing.v2.nav.features', 'Возможности') },
+                            { href: '#demo', label: t('landing.v2.nav.howItWorks', 'Как работает') },
+                            { href: '#pricing', label: t('landing.v2.nav.pricing', 'Тарифы') },
                         ].map(({ href, label }) => (
                             <button
                                 key={href}
@@ -99,14 +99,14 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                         className="h-8 text-white/70 hover:text-white hover:bg-white/10 rounded-full px-3 text-xs"
                         onClick={onLogin}
                     >
-                        {t('landing.v2.nav.login', 'Log in')}
+                        {t('landing.v2.nav.login', 'Войти')}
                     </Button>
                     <Button
                         size="sm"
                         className="h-8 bg-white text-black hover:bg-white/90 rounded-full px-4 text-xs font-semibold"
                         onClick={onSignup}
                     >
-                        {t('landing.v2.nav.getStarted', 'Get Started')}
+                        {t('landing.v2.nav.getStarted', 'Начать')}
                     </Button>
                 </div>
             </div>
@@ -141,14 +141,14 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                                 className="h-7 text-white/70 hover:text-white hover:bg-white/10 rounded-full px-2.5 text-xs"
                                 onClick={onLogin}
                             >
-                                {t('landing.v2.nav.login', 'Log in')}
+                                {t('landing.v2.nav.login', 'Войти')}
                             </Button>
                             <Button
                                 size="sm"
                                 className="h-7 bg-white text-black hover:bg-white/90 rounded-full px-3 text-xs font-semibold"
                                 onClick={onSignup}
                             >
-                                {t('landing.v2.nav.start', 'Start')}
+                                {t('landing.v2.nav.start', 'Начать')}
                             </Button>
                             <button
                                 onClick={() => setExpanded(true)}
@@ -178,9 +178,9 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                         <div className="px-5 pb-5 pt-1 flex flex-col gap-4">
                             <nav className="flex flex-col gap-1">
                                 {[
-                                    { href: '#features', label: t('landing.v2.nav.features', 'Features') },
-                                    { href: '#demo', label: t('landing.v2.nav.howItWorks', 'How it Works') },
-                                    { href: '#pricing', label: t('landing.v2.nav.pricing', 'Pricing') },
+                                    { href: '#features', label: t('landing.v2.nav.features', 'Возможности') },
+                                    { href: '#demo', label: t('landing.v2.nav.howItWorks', 'Как работает') },
+                                    { href: '#pricing', label: t('landing.v2.nav.pricing', 'Тарифы') },
                                 ].map(({ href, label }) => (
                                     <a
                                         key={href}
@@ -205,13 +205,13 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                                     variant="outline"
                                     onClick={() => { onLogin(); setExpanded(false); }}
                                 >
-                                    {t('landing.v2.nav.login', 'Log in')}
+                                    {t('landing.v2.nav.login', 'Войти')}
                                 </Button>
                                 <Button
                                     className="w-full justify-between h-11 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
                                     onClick={() => { onSignup(); setExpanded(false); }}
                                 >
-                                    {t('landing.v2.nav.startFree', 'Start for Free')}
+                                    {t('landing.v2.nav.startFree', 'Начать бесплатно')}
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>
                             </div>
