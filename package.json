@@ -108,6 +108,7 @@
     "lucide-react": "^0.462.0",
     "lz-string": "^1.5.0",
     "next-themes": "^0.3.0",
+    "posthog-js": "^1.160.0",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
@@ -125,7 +126,8 @@
     "vaul": "^0.9.9",
     "web-vitals": "^5.1.0",
     "zod": "^3.25.76",
-    "zustand": "^5.0.12"
+    "zustand": "^5.0.12",
+    "@capacitor/haptics": "^8.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
