@@ -210,6 +210,7 @@ export default function Auth() {
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    trackAuthEvent('auth_submit_attempt', { method: 'email_signin' });
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get('signin-email') as string;
@@ -223,6 +224,7 @@ export default function Auth() {
       toast.error(firstError.message);
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signin', stage: 'validation', error: firstError.message });
       return;
     }
 
@@ -233,11 +235,13 @@ export default function Auth() {
       handleError(error, t('messages.failedToSignIn'));
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signin', stage: 'submit', error: error.message });
       return;
     }
 
     playSuccess();
     toast.success(t('auth.welcomeBack', 'Welcome back!'));
+    trackAuthEvent('auth_success', { method: 'email_signin' });
     // Auth state change will trigger redirect
   };
 
