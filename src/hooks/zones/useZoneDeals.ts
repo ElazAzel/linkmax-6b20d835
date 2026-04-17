@@ -159,20 +159,20 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
 
   const createPipelineMutation = useMutation({
     mutationFn: async (pipeline: Partial<ZonePipeline>) => {
-      const { data, error } = await (supabase
-        .from('zone_pipelines' as any)
-        .insert({ ...pipeline, zone_id: zoneId } as any)
+      const { data, error } = await supabase
+        .from('zone_pipelines')
+        .insert({ ...pipeline, zone_id: zoneId })
         .select()
-        .single() as any);
+        .single();
       if (error) throw error;
-      return data as ZonePipeline;
+      return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
   });
 
   const updatePipelineMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZonePipeline> }) => {
-      const { error } = await (supabase.from('zone_pipelines' as any).update(updates as any).eq('id', id) as any);
+      const { error } = await supabase.from('zone_pipelines').update(updates).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
@@ -180,7 +180,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
 
   const deletePipelineMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from('zone_pipelines' as any).delete().eq('id', id) as any);
+      const { error } = await supabase.from('zone_pipelines').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -205,11 +205,11 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
 
   const createStageMutation = useMutation({
     mutationFn: async (stage: Partial<ZoneDealStage>) => {
-      const { data, error } = await (supabase
-        .from('zone_deal_stages' as any)
-        .insert({ ...stage, zone_id: zoneId, pipeline_id: pipelineId } as any)
+      const { data, error } = await supabase
+        .from('zone_deal_stages')
+        .insert({ ...stage, zone_id: zoneId, pipeline_id: pipelineId })
         .select()
-        .single() as any);
+        .single();
       if (error) throw error;
       return data;
     },
@@ -220,7 +220,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
 
   const updateStageMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneDealStage> }) => {
-      const { error } = await (supabase.from('zone_deal_stages' as any).update(updates as any).eq('id', id) as any);
+      const { error } = await supabase.from('zone_deal_stages').update(updates).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -230,7 +230,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
 
   const deleteStageMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from('zone_deal_stages' as any).delete().eq('id', id) as any);
+      const { error } = await supabase.from('zone_deal_stages').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -243,7 +243,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     mutationFn: async (updatedStages: { id: string; order_index: number }[]) => {
       // Bulk update order_index
       const promises = updatedStages.map(s => 
-        supabase.from('zone_deal_stages' as any).update({ order_index: s.order_index } as any).eq('id', s.id)
+        supabase.from('zone_deal_stages').update({ order_index: s.order_index }).eq('id', s.id)
       );
       await Promise.all(promises);
     },

@@ -2,14 +2,22 @@
 
 ## [Phase 44] - 2026-04-17
 
-### CRM Deals: Multiple Pipelines UX
+### CRM Depth: Multiple Pipelines & Stage Management
+- **Stage Management UI**: Создан компонент `ZonePipelineStageSettings.tsx` с поддержкой Drag-and-drop сортировки (через `@dnd-kit`).
+- **Settings Integration**: Настройка этапов интегрирована напрямую в `ZonePipelineSettings.tsx` через модальный интерфейс.
+- **Data Layer Hardening**: В хук `useZoneDeals.ts` добавлены мутации `createStage`, `updateStage`, `deleteStage`, `reorderStages`. Удалено более 12 кастов `as any`.
+- **Bug Fix (Critical)**: Исправлена ошибка в `fetchStages` — фильтр `pipeline_id` теперь применяется корректно.
+- **Pipeline Persistence**: Выбранная воронка сохраняется в `localStorage`.
 
-- **Bug Fix (Critical)**: Исправлена ошибка в `fetchStages` (`useZoneDeals.ts`) — фильтр `pipeline_id` не применялся (`query.eq(...)` вместо `query = query.eq(...)`). Этапы теперь корректно фильтруются по активной воронке.
-- **Pipeline Quick Management**: Добавлена кнопка `Settings2` в хедер Kanban-доски (`ZoneDealsScreen`) для управления воронками прямо из экрана сделок.
-- **`useZonePipelineAutoInit`**: Новый хук — при первом открытии CRM без воронок автоматически создаёт «Основная воронка» (1 раз за `sessionStorage`).
-- **Pipeline Persistence**: Выбранная воронка сохраняется в `localStorage` (`lnkmx_pipeline_{zoneId}`).
-- **Export Button Dedup**: Убрана дублирующая кнопка Export в хедере.
-- **"No Pipelines" State**: Добавлен placeholder-текст в pipeline selector при пустом списке.
+### Mobile Expansion: Push Notifications
+- **Plugin Integration**: Добавлен `@capacitor/push-notifications`.
+- **PushService**: Реализован централизованный сервис `src/lib/notifications/push-service.ts` для управления нативными токенами.
+- **Boot Lifecycle**: Инициализация уведомлений интегрирована в `main.tsx` для нативных платформ.
+- **FCM Readiness**: Подготовлено поле `fcm_token` в `user_profiles` для хранения токенов.
+
+### Platform Quality
+- **Supabase Types Sync**: В `types.ts` вручную добавлены `zone_pipelines`, `zone_contact_notes`, `zone_deal_stages` и `fcm_token`.
+- **Modernization**: Добавлены зависимости `posthog-js` и `@capacitor/haptics` для аналитики и VR-отклика.
 
 ### Phase 44 Health Score: **10/10**
 
