@@ -71,11 +71,19 @@ export default function Auth() {
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [signupEmailSent, setSignupEmailSent] = useState(false);
   const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signup');
 
   // Telegram password reset state
   const [telegramResetStep, setTelegramResetStep] = useState<TelegramResetStep>('request');
   const [telegramChatId, setTelegramChatId] = useState('');
   const [resetToken, setResetToken] = useState('');
+
+  // Track form view once on mount
+  useEffect(() => {
+    trackAuthEvent('auth_form_view', { mode: 'initial' });
+  }, []);
 
   // Get referral code, mode, and growth source from URL
   const refCode = searchParams.get('ref');
