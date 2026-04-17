@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
+import { ZonePipelineStageSettings } from './ZonePipelineStageSettings';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Pencil from 'lucide-react/dist/esm/icons/pencil';
@@ -20,6 +21,7 @@ export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId 
   const [isCreating, setIsCreating] = useState(false);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [activePipelineForStages, setActivePipelineForStages] = useState<ZonePipeline | null>(null);
 
   const handleCreate = async () => {
     if (!name.trim()) return;
@@ -65,6 +67,22 @@ export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId 
     }
   };
 
+  if (activePipelineForStages) {
+    return (
+      <div className="space-y-4">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => setActivePipelineForStages(null)} 
+          className="-ml-2 text-muted-foreground"
+        >
+          &larr; {t('common.back', 'Назад к воронкам')}
+        </Button>
+        <ZonePipelineStageSettings zoneId={zoneId} pipeline={activePipelineForStages} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -84,10 +102,13 @@ export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId 
                 {pipeline.is_default && <span className="text-xs uppercase text-muted-foreground tracking-wider font-bold">{t('zones.settings.pipelines.default', 'По умолчанию')}</span>}
               </div>
               <div className="flex gap-1">
-                <Button variant="ghost" size="icon" onClick={() => { setIsEditing(pipeline); setName(pipeline.name); }}>
+                <Button variant="ghost" size="sm" className="h-8 px-2 text-xs" onClick={() => setActivePipelineForStages(pipeline)}>
+                  {t('zones.settings.pipelines.manageStages', 'Этапы')}
+                </Button>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setIsEditing(pipeline); setName(pipeline.name); }}>
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon" className="text-destructive" disabled={pipelines.length <= 1} onClick={() => handleDelete(pipeline.id)}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" disabled={pipelines.length <= 1} onClick={() => handleDelete(pipeline.id)}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>

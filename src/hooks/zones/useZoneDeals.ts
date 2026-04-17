@@ -203,6 +203,55 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     },
   });
 
+  const createStageMutation = useMutation({
+    mutationFn: async (stage: Partial<ZoneDealStage>) => {
+      const { data, error } = await (supabase
+        .from('zone_deal_stages' as any)
+        .insert({ ...stage, zone_id: zoneId, pipeline_id: pipelineId } as any)
+        .select()
+        .single() as any);
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId, pipelineId) });
+    },
+  });
+
+  const updateStageMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneDealStage> }) => {
+      const { error } = await (supabase.from('zone_deal_stages' as any).update(updates as any).eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId, pipelineId) });
+    },
+  });
+
+  const deleteStageMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase.from('zone_deal_stages' as any).delete().eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId, pipelineId) });
+      invalidateDeals();
+    },
+  });
+
+  const reorderStagesMutation = useMutation({
+    mutationFn: async (updatedStages: { id: string; order_index: number }[]) => {
+      // Bulk update order_index
+      const promises = updatedStages.map(s => 
+        supabase.from('zone_deal_stages' as any).update({ order_index: s.order_index } as any).eq('id', s.id)
+      );
+      await Promise.all(promises);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId, pipelineId) });
+    },
+  });
+
   const moveDealToStageMutation = useMutation({
     mutationFn: async ({ dealId, stageId }: { dealId: string; stageId: string }) => {
       const { error } = await supabase
@@ -312,6 +361,12 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     createPipeline: (pipeline: Partial<ZonePipeline>) => createPipelineMutation.mutateAsync(pipeline),
     updatePipeline: (id: string, updates: Partial<ZonePipeline>) => updatePipelineMutation.mutateAsync({ id, updates }),
     deletePipeline: (id: string) => deletePipelineMutation.mutateAsync(id),
+
+    // Stage Mutations
+    createStage: (stage: Partial<ZoneDealStage>) => createStageMutation.mutateAsync(stage),
+    updateStage: (id: string, updates: Partial<ZoneDealStage>) => updateStageMutation.mutateAsync({ id, updates }),
+    deleteStage: (id: string) => deleteStageMutation.mutateAsync(id),
+    reorderStages: (stages: { id: string; order_index: number }[]) => reorderStagesMutation.mutateAsync(stages),
   };
 }
 
