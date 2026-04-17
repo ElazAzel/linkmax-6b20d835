@@ -111,8 +111,7 @@
   <!-- Preload noise pattern for background - critical for FCP/LCP aesthetic -->
   <link rel="preload" href="/noise.svg" as="image" />
 
-  <!-- Preload fonts to eliminate FOUC/CLS -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" as="style" crossorigin />
+  <!-- Load fonts (no preload — browser fetches only required unicode-range subsets) -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" crossorigin />
   
   <!-- Preload dynamic components will be injected by Vite -->

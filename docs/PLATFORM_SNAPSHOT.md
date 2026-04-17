@@ -30,9 +30,10 @@ LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)*
 
 ### Repository Security & Privacy
 
-The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. 
+The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials.
 In **Phase 42 (April 2026)**, the platform underwent a major security hardening initiative (JWT enforcement, RLS 2.0, GDPR).
 In **Phase 43 (April 2026)**, the platform finalized its pivot to the **Token Economy** and achieved deep **Telegram Mini App (TMA)** integration:
+
 - **TMA Core**: Native theme synchronization, MainButton/BackButton logic, and HapticFeedback.
 - **Token Ledger**: 100% migration from "bonus hours" to unified tokens.
 - **Fintech Activation**: Support for Stars and real-time withdrawal workflows.
@@ -156,9 +157,9 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 ### [2026-04-04] Phase 40: Zenith & Developer Portal (Stable Integration)
 
-- **API & Integrations**: Внедрена страница `DeveloperSettings` для централизованного управления ключами API (`lk_live_***`) и вебхуками. 
+- **API & Integrations**: Внедрена страница `DeveloperSettings` для централизованного управления ключами API (`lk_live_***`) и вебхуками.
 - **UX Integration**: Раздел для разработчиков полностью интегрирован во внутренний роутер дашборда V2 для бесперебойной навигации (`DashboardLayout`), предотвращая вылет из сессии.
-- **Инфраструктурная стабильность**: 
+- **Инфраструктурная стабильность**:
   - Разрешены CSP конфликты для Яндекс, TikTok и Google экосистем в `index.html`.
   - Укреплен HMR (443 порт) для предотвращения WebSocket обрывов 503.
   - Предзагрузка шрифтов (`Inter`, `Manrope`) на уровне HTML для устранения мерцания текста (FOUC).
@@ -183,29 +184,31 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **Structural Normalization**: Restored 100% structural parity between `en.json` and `ru.json`.
   - Decoupled `analytics` from the `zones` object, promoting it to a root-level key for improved i18next resolution and namespace clarity.
   - Eliminated structural corruption (merge conflicts) in `en.json` caused by concurrent branch merging.
-- **Key Synchronization**: 
+- **Key Synchronization**:
   - Aligned `landingV2` and `publicPageV2` blocks.
   - Resolved manual duplicate key warnings in the `footer` and `settings` namespaces.
 - **Health Score**: **10/10** (Status: Localization Integrity Restored & Conflict-Free).
 
-
 ### [2026-04-04] Phase 22: CRM & Analytics Stability (Retention Hotfix)
-...
+
 - **Health Score**: 10/10 (Status: CRM Pipelines & Analytics Restored).
 
 ### [2026-04-04] Phase 23: SEO, GEO & AEO Hardening (Visibility)
+
 - **Lowered Indexing Threshold**: Reduced `QUALITY_THRESHOLD` to **25** points to allow newer, minimal profiles to be discovered by search engines.
 - **Micro-markup V2 (AEO)**: Enhanced JSON-LD with semantic signals (`knowsAbout`, `areaServed`, `about`) to feed LLM Answer Engines and Perplexity.
 - **GEO Dynamics**: Automated title generation with city/region context for local SEO.
 - **AI-Bot Discovery**: Full update of `llms.txt` with Entity-First Indexing policy.
 
 ### [2026-04-04] Phase 26: Expert Insights & Conversion Analytics
-- **Query Tracking**: Реализована система логирования запросов к чат-боту (`expert_queries`). 
+
+- **Query Tracking**: Реализована система логирования запросов к чат-боту (`expert_queries`).
 - **Content Gap Analysis**: Внедрен механизм отслеживания "неотвеченных" вопросов, помогающий экспертам выявлять пробелы в контенте.
 - **Analytics Dashboard**: Новый виджет `ChatbotInsights` интегрирован в экран аналитики, отображающий топ популярных вопросов и статистику успешных ответов.
 - **Enhanced DKE**: Движок знаний теперь возвращает метаданные (score, match status) для детальной аналитики.
 
 ### [2026-04-04] Phase 25: Deterministic Expert Engine (DKE) & Liquid Glass UI
+
 - **Architecture Shift**: Полностью удалена зависимость от внешних AI API (`chatbot-stream`) для ответов на публичных страницах.
 - **ExpertEngine (DKE)**: Внедрен детерминированный движок знаний (`src/lib/chat/expert-engine.ts`), работающий на 100% на стороне клиента.
   - **Fuzzy Indexing**: Индексация контента блоков (FAQ, Цены, Био, Товары) с использованием алгоритма Сёренсена — Дайса.
@@ -214,6 +217,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **Contextual Suggestions**: Автоматическая генерация быстрых вопросов на основе доступных блоков страницы.
 
 ### [2026-04-11] Phase 43: Token Economy & TMA Integration
+
 - **TMA Ecosystem**: Implemented `TMAProvider` for native environment support (Theme Sync, UI Controls).
 - **Token Finalization**: Updated quest rewards to use tokens directly. Deprecated legacy `bonus_hours` multiplier logic.
 - **Wallet Activation**: Connected `TMAPaymentsScreen` and `TMASettingsScreen` to real-time state.
@@ -805,20 +809,20 @@ LinkMAX использует гибридную модель, направлен
 - `zone_document_templates`: customizable HTML templates for Acts/Invoices/Contracts generation.
 - `zone_documents`: actual generated documents attached to deals and contacts supporting status tracking.
 
-**Social features**
+### Social Features
 
 - `friendships`: user connections.
 - `shoutouts`: cross-promotion between users.
 - `collaborations`: joint page features.
 
-**Events and Bookings**
+### Events and Bookings
 
 - `events`: event management.
 - `event_registrations`: attendee tracking.
 - `bookings`: appointment scheduling.
 - `booking_slots`: availability management.
 
-**Gamification**
+### Gamification
 
 - `user_tokens`: Linkkon token balances.
 - `token_transactions`: token economy history.
@@ -1002,7 +1006,7 @@ LinkMAX/
 
 ### Component structure
 
-**Landing page v5 (current)**
+#### Landing page v5 (current)
 
 Located in `src/components/landing-v5/`:
 
@@ -1030,7 +1034,7 @@ A premium visual overhaul (Evolution of Liquid Glass) featuring:
 - **Premium Typography**: Consistent `text-gradient` for hero headers and refined headings.
 - **Organic Interactions**: Refined `framer-motion` variants with organic spring physics and staggered entry.
 
-**Dashboard v2 (current)**
+#### Dashboard v2 (current)
 
 Located in `src/components/dashboard-v2/`:
 

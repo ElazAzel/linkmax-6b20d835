@@ -81,8 +81,11 @@ export const ChatbotInsights = ({ pageId }: ChatbotInsightsProps) => {
           popular: sorted.slice(0, 5),
           missing: sorted.filter(s => !s.has_response).slice(0, 5),
         });
-      } catch (err) {
-        console.error('Failed to fetch chatbot insights:', err);
+      } catch (err: any) {
+        // Suppress expected 404 related errors for this beta feature which may not have the backend yet
+        if (err?.code !== 'PGRST205') {
+          console.error('Failed to fetch chatbot insights:', err);
+        }
       } finally {
         setLoading(false);
       }

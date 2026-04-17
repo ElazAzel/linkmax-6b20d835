@@ -128,17 +128,24 @@ export function usePageAnalytics(externalPageId?: string | null) {
     async function checkStaffStatus() {
       if (!user || !pageId) return;
 
-      const { data: staffData } = await supabase
-        .from('zone_staff')
-        .select('id, name')
-        .eq('user_id', user.id)
-        .maybeSingle();
+      try {
+        const { data: staffData } = await supabase
+          .from('zone_staff')
+          .select('id, name')
+          .eq('user_id', user.id)
+          .maybeSingle();
 
-      if (staffData) {
-        setIsStaffMember(true);
-        setCurrentStaffId(staffData.id);
-        setStaffMemberName(staffData.name);
-      } else {
+        if (staffData) {
+          setIsStaffMember(true);
+          setCurrentStaffId(staffData.id);
+          setStaffMemberName(staffData.name);
+        } else {
+          setIsStaffMember(false);
+          setCurrentStaffId(null);
+          setStaffMemberName(null);
+        }
+      } catch {
+        // zone_staff table may not exist — silent fallback
         setIsStaffMember(false);
         setCurrentStaffId(null);
         setStaffMemberName(null);
@@ -447,10 +454,16 @@ export function usePageAnalytics(externalPageId?: string | null) {
       let personalStaffStats: StaffStats | undefined;
 
       if (bookings) {
-        const { data: allStaff } = await supabase
-          .from('zone_staff')
-          .select('id, name')
-          .eq('owner_id', user.id); // Valid if current user is owner
+        let allStaff: any[] | null = null;
+        try {
+          const { data } = await supabase
+            .from('zone_staff')
+            .select('id, name')
+            .eq('owner_id', user.id);
+          allStaff = data;
+        } catch {
+          // zone_staff table may not exist — silent fallback
+        }
 
         const staffMap = new Map<string, StaffStats>();
         

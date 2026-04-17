@@ -185,7 +185,7 @@ export function PublicationRitual({
                     level="H"
                     includeMargin={false}
                     imageSettings={{
-                      src: "/logo-icon.png", // Assuming there is a logo icon
+                      src: "/favicon.png", // Fallback to favicon
                       x: undefined,
                       y: undefined,
                       height: 24,

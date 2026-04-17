@@ -24,16 +24,21 @@ export class CrmService {
     // 1. Fetch Leads
     const { data: leads } = await supabase
       .from('leads')
-      .select('status, value_amount')
+      .select('status')
       .eq('user_id', userId)
       .gte('created_at', monthStartISO);
 
-    // 2. Fetch Zone Deals
-    const { data: zoneDeals } = await supabase
-      .from('zone_deals')
-      .select('status, value_amount')
-      .eq('zone_id', (await this.getPrimaryZoneId(userId)) || '')
-      .is('deleted_at', null);
+    // 2. Fetch Zone Deals (only if user has a zone)
+    const primaryZoneId = await this.getPrimaryZoneId(userId);
+    let zoneDeals: any[] | null = null;
+    if (primaryZoneId) {
+      const { data } = await supabase
+        .from('zone_deals')
+        .select('status, value_amount')
+        .eq('zone_id', primaryZoneId)
+        .is('deleted_at', null);
+      zoneDeals = data;
+    }
 
     // 3. Fetch Bookings count
     const { count: activeBookings } = await supabase
@@ -47,8 +52,7 @@ export class CrmService {
     const totalLeads = allLeads.length;
     const convertedLeads = allLeads.filter((l: any) => l.status === 'converted' || l.status === 'qualified').length;
     
-    const pipelineValue = allLeads.reduce((sum: number, l: any) => sum + (Number(l.value_amount) || 0), 0) +
-                         (zoneDeals || []).reduce((sum, d) => sum + (Number(d.value_amount) || 0), 0);
+    const pipelineValue = (zoneDeals || []).reduce((sum: number, d: any) => sum + (Number(d.value_amount) || 0), 0);
 
     const conversionRate = totalLeads > 0 ? (convertedLeads / totalLeads) * 100 : 0;
     const averageCheck = convertedLeads > 0 ? pipelineValue / convertedLeads : 0;
@@ -175,9 +179,9 @@ export class CrmService {
     const { data } = await supabase
       .from('zones')
       .select('id')
-      .eq('owner_id', userId)
+      .eq('owner_user_id', userId)
       .limit(1)
-      .single();
+      .maybeSingle();
     return data?.id || null;
   }
 }
