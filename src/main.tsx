@@ -208,11 +208,16 @@ const router = createBrowserRouter([
   },
 });
 
+import { PushService } from "@/lib/notifications/push-service";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} future={{ v7_startTransition: true }} />
   </StrictMode>
 );
+
+// Initialize Push Notifications for native mobile
+PushService.init();
 
 // Re-enable Service Worker for PWA V2 offline support
 if ('serviceWorker' in navigator) {

@@ -2141,6 +2141,7 @@ export type Database = {
           verification_status: string | null
           verification_submitted_at: string | null
           verification_type: string | null
+          fcm_token: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -2452,6 +2453,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "zone_audit_log_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_pipelines: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          order_index: number
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          order_index?: number
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          order_index?: number
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_pipelines_zone_id_fkey"
             columns: ["zone_id"]
             isOneToOne: false
             referencedRelation: "zones"
