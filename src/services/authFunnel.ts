@@ -52,8 +52,7 @@ export async function trackAuthEvent(
     };
 
     // Fire-and-forget; don't block UI
-    void supabase
-      .from('analytics')
+    void (supabase.from('analytics') as any)
       .insert({
         page_id: null,
         block_id: null,
