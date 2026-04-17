@@ -386,9 +386,11 @@ export default function Auth() {
   };
 
   const handleGoogleSignIn = async () => {
+    trackAuthEvent('auth_oauth_click', { provider: 'google' });
     setIsOAuthLoading('google');
     const { error } = await signInWithGoogle(safeReturnTo);
     if (error) {
+      trackAuthEvent('auth_error', { method: 'google', error: error.message });
       handleError(error, t('messages.failedToSignIn'));
       playError();
     }
@@ -396,9 +398,11 @@ export default function Auth() {
   };
 
   const handleAppleSignIn = async () => {
+    trackAuthEvent('auth_oauth_click', { provider: 'apple' });
     setIsOAuthLoading('apple');
     const { error } = await signInWithApple(safeReturnTo);
     if (error) {
+      trackAuthEvent('auth_error', { method: 'apple', error: error.message });
       handleError(error, t('messages.failedToSignIn'));
       playError();
     }
@@ -406,6 +410,7 @@ export default function Auth() {
   };
 
   const handleTelegramAuth = async (telegramData: any) => {
+    trackAuthEvent('auth_oauth_click', { provider: 'telegram' });
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);
     if (error) {
