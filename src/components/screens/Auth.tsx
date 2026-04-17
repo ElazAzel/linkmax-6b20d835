@@ -472,10 +472,10 @@ export default function Auth() {
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
-              {t('auth.title')}
+              {t('auth.title', 'Добро пожаловать в LinkMAX')}
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
-              {t('auth.subtitle')}
+              {t('auth.subtitle', 'AI-страница для бизнеса за 2 минуты')}
             </p>
             <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <LanguageSwitcher />
@@ -586,7 +586,7 @@ export default function Auth() {
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                   )}
-                  {t('auth.continueWithGoogle')}
+                  {t('auth.continueWithGoogle', 'Продолжить с Google')}
                 </Button>
 
                 {/* SECONDARY: Email expand toggle */}
@@ -905,7 +905,7 @@ export default function Auth() {
           {/* Back to home */}
           <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <Button variant="ghost" onClick={() => navigate('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
-              {t('auth.backToHome')}
+              {t('auth.backToHome', 'На главную')}
             </Button>
           </div>
         </div>
