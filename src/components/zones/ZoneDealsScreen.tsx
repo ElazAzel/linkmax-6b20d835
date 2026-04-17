@@ -4,7 +4,7 @@
 import { memo, useState, useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DndContext, DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
-import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
+import { useZoneDeals, useZonePipelineAutoInit } from '@/hooks/zones/useZoneDeals';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
 import { useZoneContext } from '@/contexts/ZoneContext';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Download from 'lucide-react/dist/esm/icons/download';
 import Filter from 'lucide-react/dist/esm/icons/filter';
+import Settings2 from 'lucide-react/dist/esm/icons/settings-2';
 import { toast } from 'sonner';
 import { generateId } from '@/lib/utils/generateId';
 import type { ZoneDeal } from '@/types/zones';
@@ -26,6 +27,7 @@ import { useZoneDealFields } from '@/hooks/zones/useZoneDealFields';
 import { DealKanbanColumn } from './deals/DealKanbanColumn';
 import { DealCard } from './deals/DealCard';
 import { DealDetailSheet } from './deals/DealDetailSheet';
+import { ZonePipelineSettings } from './settings/ZonePipelineSettings';
 import { useAppError } from '@/hooks/useAppError';
 
 interface ZoneDealsScreenProps {
@@ -50,8 +52,11 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const { handleError } = useAppError();
   const { members } = useZoneContext();
   const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
+  const [pipelineMgmtOpen, setPipelineMgmtOpen] = useState(false);
   const { contacts } = useZoneContacts(zoneId);
   const { fields: dealFields } = useZoneDealFields(zoneId);
+  // Auto-create default pipeline when zone has none
+  useZonePipelineAutoInit(zoneId);
   const [selectedDealIds, setSelectedDealIds] = useState<Set<string>>(new Set());
 
   const toggleDealSelection = useCallback((id: string, selected: boolean) => {
@@ -65,12 +70,25 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
 
   const { deals, stages, pipelines, loading, createDeal, updateDeal, moveDealToStage, addActivity, createPipeline, updatePipeline, deletePipeline, bulkDeleteDeals, bulkMoveDealsToStage } = useZoneDeals(zoneId, selectedPipelineId);
 
+  // Restore selected pipeline from localStorage
   useEffect(() => {
     if (!selectedPipelineId && pipelines.length > 0) {
-      const def = pipelines.find(p => p.is_default) || pipelines[0];
+      const stored = typeof window !== 'undefined'
+        ? window.localStorage.getItem(`lnkmx_pipeline_${zoneId}`)
+        : null;
+      const def = (stored && pipelines.find(p => p.id === stored))
+        || pipelines.find(p => p.is_default)
+        || pipelines[0];
       if (def) setSelectedPipelineId(def.id);
     }
-  }, [pipelines, selectedPipelineId]);
+  }, [pipelines, selectedPipelineId, zoneId]);
+
+  // Persist selected pipeline to localStorage
+  useEffect(() => {
+    if (selectedPipelineId && typeof window !== 'undefined') {
+      window.localStorage.setItem(`lnkmx_pipeline_${zoneId}`, selectedPipelineId);
+    }
+  }, [selectedPipelineId, zoneId]);
 
   const currentStages = useMemo(() => {
     if (!selectedPipelineId) return stages;
@@ -343,12 +361,12 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       <div className="p-4 md:p-6 space-y-4 flex-1 overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl font-bold" data-testid="zone-deals-title">{t('zones.deals.title', 'Deals Pipeline')}</h1>
-            {pipelines.length > 0 && (
+            {pipelines.length > 0 ? (
               <Select value={selectedPipelineId} onValueChange={setSelectedPipelineId}>
-                <SelectTrigger className="w-[200px] h-9">
-                  <SelectValue placeholder="Выберите воронку" />
+                <SelectTrigger className="w-[180px] h-9">
+                  <SelectValue placeholder={t('zones.deals.selectPipeline', 'Выберите воронку')} />
                 </SelectTrigger>
                 <SelectContent>
                   {pipelines.map(p => (
@@ -356,7 +374,18 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                   ))}
                 </SelectContent>
               </Select>
+            ) : (
+              <span className="text-sm text-muted-foreground">{t('zones.deals.noPipelines', 'Нет воронок')}</span>
             )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 rounded-lg"
+              onClick={() => setPipelineMgmtOpen(true)}
+              title={t('zones.deals.managePipelines', 'Управление воронками')}
+            >
+              <Settings2 className="h-4 w-4" />
+            </Button>
           </div>
           <div className="flex gap-2 flex-wrap items-center">
             <Button variant="outline" size="sm" onClick={async () => {
@@ -512,18 +541,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                 </SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm" onClick={async () => {
-              try {
-                const { exportDealsToExcel } = await import('@/lib/export/excel-export-zone');
-                await exportDealsToExcel({ deals });
-                toast.success(t('zones.deals.exportSuccess', 'Deals exported'));
-              } catch (err: any) {
-                handleError(err, 'Export failed');
-              }
-            }}>
-              <Download className="h-4 w-4 mr-1" />
-              {t('zones.deals.export', 'Export')}
-            </Button>
+
             <Button onClick={() => setCreateOpen(true)} size="sm">
               <Plus className="h-4 w-4 mr-1" />
               {t('zones.deals.newDeal', 'New Deal')}
@@ -705,6 +723,24 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             </Button>
             <Button onClick={handleCreate} disabled={!newDeal.title.trim()}>
               {t('common.create', 'Create')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Pipeline Management Dialog */}
+      <Dialog open={pipelineMgmtOpen} onOpenChange={setPipelineMgmtOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('zones.settings.pipelines.title', 'Управление воронками')}</DialogTitle>
+            <DialogDescription>
+              {t('zones.settings.pipelines.description', 'Создавайте и настраивайте воронки продаж для разных направлений бизнеса.')}
+            </DialogDescription>
+          </DialogHeader>
+          <ZonePipelineSettings zoneId={zoneId} />
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setPipelineMgmtOpen(false)}>
+              {t('common.close', 'Закрыть')}
             </Button>
           </DialogFooter>
         </DialogContent>

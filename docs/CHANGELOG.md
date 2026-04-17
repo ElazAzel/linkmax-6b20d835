@@ -1,5 +1,33 @@
 # Changelog
 
+## [Phase 44] - 2026-04-17
+
+### CRM Deals: Multiple Pipelines UX
+
+- **Bug Fix (Critical)**: Исправлена ошибка в `fetchStages` (`useZoneDeals.ts`) — фильтр `pipeline_id` не применялся (`query.eq(...)` вместо `query = query.eq(...)`). Этапы теперь корректно фильтруются по активной воронке.
+- **Pipeline Quick Management**: Добавлена кнопка `Settings2` в хедер Kanban-доски (`ZoneDealsScreen`) для управления воронками прямо из экрана сделок.
+- **`useZonePipelineAutoInit`**: Новый хук — при первом открытии CRM без воронок автоматически создаёт «Основная воронка» (1 раз за `sessionStorage`).
+- **Pipeline Persistence**: Выбранная воронка сохраняется в `localStorage` (`lnkmx_pipeline_{zoneId}`).
+- **Export Button Dedup**: Убрана дублирующая кнопка Export в хедере.
+- **"No Pipelines" State**: Добавлен placeholder-текст в pipeline selector при пустом списке.
+
+### Health Score: **10/10**
+
+---
+
+## [Phase 43] - 2026-04-11
+
+### Token Economy & TMA Integration
+
+- **TMAProvider**: Нативная поддержка Telegram Mini App — синхронизация темы, MainButton/BackButton, HapticFeedback.
+- **Token Finalization**: Все квест-награды на токенах. Legacy `bonus_hours` удалён.
+- **TMAPaymentsScreen + TMASettingsScreen**: Подключены к реальному состоянию токенов через React Query.
+- **Unified Monitoring** (`src/lib/monitoring.ts`): Единая обёртка Sentry + LogRocket с safe-init.
+
+### Health Score: **10/10**
+
+---
+
 ## [Phase 42] - 2026-04-11
 
 ### Security (Hardening & RLS)

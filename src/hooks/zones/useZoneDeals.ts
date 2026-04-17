@@ -26,7 +26,7 @@ async function fetchStages(zoneId: string, pipelineId?: string | null): Promise<
     .eq('zone_id', zoneId);
     
   if (pipelineId) {
-    query.eq('pipeline_id', pipelineId);
+    query = query.eq('pipeline_id', pipelineId);
   }
     
   const { data, error } = await query.order('order_index');
@@ -456,4 +456,43 @@ export function useZoneDealComments(zoneId: string | null, dealId: string | null
     updateComment: async (id: string, content: string) => updateCommentMutation.mutateAsync({ id, content }),
     deleteComment: async (id: string) => deleteCommentMutation.mutateAsync(id),
   };
+}
+
+// ─── Hook: Auto-initialize default pipeline ───
+/**
+ * Silently creates a "Основная воронка" pipeline when the zone has no pipelines yet.
+ * Call once at the ZoneDealsScreen mount level.
+ */
+export function useZonePipelineAutoInit(zoneId: string | null) {
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
+
+  const { data: pipelines = [], isFetched } = useQuery({
+    queryKey: zoneDealsKeys.pipelines(safeZoneId),
+    queryFn: () => fetchPipelines(safeZoneId),
+    enabled: !!zoneId,
+    staleTime: 60_000,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await (supabase
+        .from('zone_pipelines' as any)
+        .insert({ zone_id: zoneId, name: 'Основная воронка', is_default: true, order_index: 0 } as any)
+        .select()
+        .single() as any);
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
+  });
+
+  // Fire only once per session per zone
+  const sessionKey = `lnkmx_pipeline_init_${zoneId}`;
+  if (isFetched && pipelines.length === 0 && zoneId && typeof window !== 'undefined') {
+    if (!window.sessionStorage.getItem(sessionKey)) {
+      window.sessionStorage.setItem(sessionKey, '1');
+      createMutation.mutate();
+    }
+  }
 }
