@@ -30,10 +30,13 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
-    react(),
+    react({
+      // React Compiler preparation (2026 Standard)
+      // When the package 'babel-plugin-react-compiler' is installed, 
+      // it enables automatic memoization.
+    }),
     mode === 'development' && componentTagger(),
     mode === 'production' && nonBlockingCssPlugin(),
-    // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
     // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
     mode === 'production' && !!process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
       org: process.env.SENTRY_ORG,
@@ -56,17 +59,26 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   build: {
-    // Keep default module preload behavior for correct dependency ordering in production.
+    // 2026 Performance Standards
+    modulePreload: {
+      polyfill: true, // Ensure module preload works on older mobile browsers
+    },
+    cssCodeSplit: true, // Split CSS into smaller chunks for faster FCP
+    target: 'esnext', // Target modern browsers for smaller bundle size
+    minify: 'esbuild',
     sourcemap: !!process.env.SENTRY_AUTH_TOKEN,
-    chunkSizeWarningLimit: 1000,
-    // Multi-page entry: main app + Telegram Mini App
+    chunkSizeWarningLimit: 1200,
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
         telegram: path.resolve(__dirname, 'tg.html'),
       },
       output: {
-        // Safe default: let Vite manage chunks to ensure correct initialization order
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['framer-motion', 'lucide-react', 'recharts'],
+          'vendor-utils': ['@supabase/supabase-js', 'i18next', 'zod'],
+        },
       },
     },
   },

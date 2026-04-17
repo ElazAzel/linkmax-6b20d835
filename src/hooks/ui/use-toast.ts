@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { Capacitor } from "@capacitor/core";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
 
@@ -142,6 +144,11 @@ function toast({ ...props }: Toast) {
       type: "UPDATE_TOAST",
       toast: { ...props, id },
     });
+  
+  // Haptic feedback for new notifications on mobile
+  if (Capacitor.isNativePlatform()) {
+    Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+  }
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id });
 
   dispatch({

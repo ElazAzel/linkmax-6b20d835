@@ -1,0 +1,9 @@
+pre-commit:
+  parallel: true
+  commands:
+    linter:
+      run: npm run lint {staged_files}
+    typecheck:
+      run: npm run typecheck
+    i18n-check:
+      run: npm run i18n:check

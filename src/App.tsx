@@ -14,6 +14,11 @@ import { RoutePrefetchManager } from "@/components/performance/RoutePrefetchMana
 import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
+import { PostHogProvider } from 'posthog-js/react';
+import { initPostHog } from "@/lib/posthog";
+
+// Initialize PostHog before rendering
+initPostHog();
 
 // Lazy load non-critical shell components to reduce main bundle
 const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
@@ -123,36 +128,38 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <TMAProvider>
-          <AuthProvider>
-            <LanguageProvider>
-              <TooltipProvider>
-                <SkipToMainContent />
-                <Suspense fallback={null}>
-                  <Toaster />
-                  <Sonner />
-                  <CommandPalette />
-                </Suspense>
-                <RoutePrefetchManager />
-                <RouteWebVitalsMonitor />
-                <RouteErrorBoundary>
-                  <div id="main-content" className="outline-none" tabIndex={-1}>
-                    <Suspense fallback={<PageLoader />}>
-                      <Outlet />
-                    </Suspense>
-                  </div>
-                </RouteErrorBoundary>
-                <Suspense fallback={null}>
-                  <PWAInstallPrompt />
-                  <PWAUpdatePrompt />
-                  <CookieConsent />
-                </Suspense>
-              </TooltipProvider>
-            </LanguageProvider>
-          </AuthProvider>
-        </TMAProvider>
-      </QueryClientProvider>
+      <PostHogProvider>
+        <QueryClientProvider client={queryClient}>
+          <TMAProvider>
+            <AuthProvider>
+              <LanguageProvider>
+                <TooltipProvider>
+                  <SkipToMainContent />
+                  <Suspense fallback={null}>
+                    <Toaster />
+                    <Sonner />
+                    <CommandPalette />
+                  </Suspense>
+                  <RoutePrefetchManager />
+                  <RouteWebVitalsMonitor />
+                  <RouteErrorBoundary>
+                    <div id="main-content" className="outline-none" tabIndex={-1}>
+                      <Suspense fallback={<PageLoader />}>
+                        <Outlet />
+                      </Suspense>
+                    </div>
+                  </RouteErrorBoundary>
+                  <Suspense fallback={null}>
+                    <PWAInstallPrompt />
+                    <PWAUpdatePrompt />
+                    <CookieConsent />
+                  </Suspense>
+                </TooltipProvider>
+              </LanguageProvider>
+            </AuthProvider>
+          </TMAProvider>
+        </QueryClientProvider>
+      </PostHogProvider>
     </HelmetProvider>
   );
 };

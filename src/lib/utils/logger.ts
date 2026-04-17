@@ -4,7 +4,9 @@
  * - Provides consistent error tracking
  * - Performance monitoring support
  * - Sentry integration for production error tracking via @sentry/react (lazy-loaded)
+ * - PostHog integration for event-linked error tracking
  */
+import { posthog } from '@/lib/posthog';
 
 const isDev = import.meta.env?.DEV ?? (typeof process !== 'undefined' && process.env?.NODE_ENV === 'development');
 const isProd = !isDev;
@@ -76,12 +78,27 @@ export const logger = {
 
   warn(message: string, options?: LogOptions): void {
     console.warn(formatMessage('warn', message, options), options?.data ?? '');
-    if (isProd) reportToSentry(message, 'warning', undefined, options);
+    if (isProd) {
+      reportToSentry(message, 'warning', undefined, options);
+      posthog.capture('log_warning', {
+        message,
+        context: options?.context,
+        data: options?.data
+      });
+    }
   },
 
   error(message: string, error?: unknown, options?: LogOptions): void {
     console.error(formatMessage('error', message, options), error ?? '');
-    if (isProd) reportToSentry(message, 'error', error, options);
+    if (isProd) {
+      reportToSentry(message, 'error', error, options);
+      posthog.capture('log_error', {
+        message,
+        error_msg: error instanceof Error ? error.message : String(error),
+        context: options?.context,
+        data: options?.data
+      });
+    }
   },
 
   trace(message: string, options?: LogOptions): void {

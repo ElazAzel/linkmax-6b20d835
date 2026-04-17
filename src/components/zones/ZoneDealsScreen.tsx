@@ -29,6 +29,8 @@ import { DealCard } from './deals/DealCard';
 import { DealDetailSheet } from './deals/DealDetailSheet';
 import { ZonePipelineSettings } from './settings/ZonePipelineSettings';
 import { useAppError } from '@/hooks/useAppError';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Capacitor } from '@capacitor/core';
 
 interface ZoneDealsScreenProps {
   zoneId: string;
@@ -222,9 +224,18 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     return map;
   }, [currentDeals, currentStages, filterOverdue, filterAssignee, filterDateFrom, filterDateTo, filterValueMin, filterValueMax]);
 
-  const handleDragStart = useCallback((event: any) => {
+  const handleDragStart = useCallback(async (event: any) => {
     const deal = event.active.data.current?.deal as ZoneDeal | undefined;
     setActiveDragDeal(deal || null);
+    
+    // Haptic feedback on mobile
+    if (Capacitor.isNativePlatform()) {
+      try {
+        await Haptics.impact({ style: ImpactStyle.Light });
+      } catch (e) {
+        // Silently ignore if haptics fail
+      }
+    }
   }, []);
 
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
@@ -246,6 +257,9 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     }
 
     try {
+      if (Capacitor.isNativePlatform()) {
+        await Haptics.impact({ style: ImpactStyle.Medium });
+      }
       await moveDealToStage(dealId, targetStageId);
       const stage = currentStages.find((s) => s.id === targetStageId);
       if (stage) {
@@ -264,6 +278,13 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       await updateDeal(deal.id, { status: 'won' } as Partial<ZoneDeal>);
       await addActivity(deal.id, 'status_change', 'Deal marked as Won');
       toast.success(t('zones.deals.markedWon', 'Deal marked as won!'));
+      
+      // Analytics
+      posthog.capture('deal_won', {
+        deal_id: deal.id,
+        value: deal.value_amount,
+        zone_id: zoneId
+      });
     } catch (err: any) {
       handleError(err);
     }
@@ -278,6 +299,13 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       await updateDeal(deal.id, { status: 'lost', lost_reason: pendingLostReason.trim() || null } as Partial<ZoneDeal>);
       await addActivity(deal.id, 'status_change', `Deal lost: ${pendingLostReason.trim() || 'No reason'}`);
       toast.info(t('zones.deals.markedLost', 'Deal marked as lost'));
+      
+      // Analytics
+      posthog.capture('deal_lost', {
+        deal_id: deal.id,
+        reason: pendingLostReason.trim() || 'unspecified',
+        zone_id: zoneId
+      });
     } catch (err: any) {
       handleError(err);
     }

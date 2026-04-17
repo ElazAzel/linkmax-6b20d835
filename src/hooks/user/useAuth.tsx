@@ -3,6 +3,7 @@ import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/platform/supabase/client';
 import { storage } from '@/lib/storage';
 import { logger } from '@/lib/utils/logger';
+import { posthog } from '@/lib/posthog';
 
 interface AuthContextType {
   user: User | null;
@@ -43,6 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setSession(null);
           setUser(null);
           setLoading(false);
+          // Analytics reset
+          posthog.reset();
           return;
         }
 
@@ -54,6 +57,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Analytics identification
+        if (session?.user) {
+          posthog.identify(session.user.id, {
+            email: session.user.email,
+          });
+        }
 
         // Check for pending Telegram chat ID after signup
         if (_event === 'SIGNED_IN' && session?.user) {
