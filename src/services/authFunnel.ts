@@ -59,7 +59,7 @@ export async function trackAuthEvent(
         event_type: `auth:${event}`,
         metadata: enriched,
       })
-      .then(({ error }) => {
+      .then(({ error }: { error: unknown }) => {
         if (error) {
           logger.debug('Auth funnel insert failed', { context: 'authFunnel', data: error });
         }
