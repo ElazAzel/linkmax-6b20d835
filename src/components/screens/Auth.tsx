@@ -27,6 +27,9 @@ import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { trackAuthEvent } from '@/services/authFunnel';
 
 // Zod schema is created inside the component to access t()
 // We define a factory function here
