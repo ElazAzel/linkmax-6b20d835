@@ -68,8 +68,10 @@ const TABS: NavTab[] = [
 const MORE_ITEMS: NavTab[] = [
   { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор', path: '' },
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
-  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
-  { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
+  { id: 'zone-deals', icon: Contact, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки', path: '' },
+  { id: 'zone-tasks', icon: Calendar, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи', path: '' },
+  { id: 'zone-invoices', icon: FileText, labelKey: 'zones.nav.invoices', defaultLabel: 'Финансы', path: '' },
+  { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки', path: '' },
 ];
 
 // Tabs that count as "more" active

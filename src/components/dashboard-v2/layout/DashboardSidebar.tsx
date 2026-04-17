@@ -93,6 +93,33 @@ const SECTIONS: SidebarSection[] = [
   },
 ];
 
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
+import Kanban from 'lucide-react/dist/esm/icons/kanban';
+import CheckSquare from 'lucide-react/dist/esm/icons/check-square';
+import Receipt from 'lucide-react/dist/esm/icons/receipt';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Package from 'lucide-react/dist/esm/icons/package';
+import Settings2 from 'lucide-react/dist/esm/icons/settings-2';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+
+const BUSINESS_SECTION: SidebarSection = {
+  id: 'business-zone',
+  titleKey: 'dashboard.sidebar.business_zone',
+  defaultTitle: 'Бизнес-зона',
+  items: [
+    { id: 'zone-dashboard', icon: LayoutDashboard, labelKey: 'zones.nav.dashboard', defaultLabel: 'Дашборд' },
+    { id: 'zone-deals', icon: Kanban, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки' },
+    { id: 'zone-contacts', icon: Contact, labelKey: 'zones.nav.contacts', defaultLabel: 'Контакты' },
+    { id: 'zone-tasks', icon: CheckSquare, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи' },
+    { id: 'zone-inbox', icon: Mail, labelKey: 'zones.nav.inbox', defaultLabel: 'Сообщения' },
+    { id: 'zone-calendar', icon: Calendar, labelKey: 'zones.nav.calendar', defaultLabel: 'Календарь' },
+    { id: 'zone-invoices', icon: Receipt, labelKey: 'zones.nav.invoices', defaultLabel: 'Финансы' },
+    { id: 'zone-products', icon: Package, labelKey: 'zones.nav.products', defaultLabel: 'Продукты' },
+    { id: 'zone-automations', icon: Zap, labelKey: 'zones.nav.automations', defaultLabel: 'Автоматизации' },
+    { id: 'zone-settings', icon: Settings2, labelKey: 'zones.nav.settings', defaultLabel: 'Настройки зоны' },
+  ],
+};
+
 export const DashboardSidebar = memo(function DashboardSidebar({
   activeTab,
   onTabChange,
@@ -109,8 +136,8 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-analytics', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-resources'];
 
   const handleItemClick = (itemId: string) => {
-    // Gate zone items behind business tier
-    if (ZONE_ITEM_IDS.includes(itemId) && !isBusinessTier) {
+    const canUseBusinessZone = isPremium || isBusinessTier;
+    if (ZONE_ITEM_IDS.includes(itemId) && !canUseBusinessZone) {
       navigate('/pricing');
       return;
     }
@@ -271,6 +298,21 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         <div className="space-y-1 mb-6 mt-2">
           {MAIN_ITEMS.map((item) => renderItem(item))}
         </div>
+
+        {/* Business Zone section (if accessible) */}
+        {isBusinessTier && (
+          <div className="mb-6">
+            <div className="mx-2 mb-4 h-px bg-border/20" />
+            {!collapsed && (
+              <div className="text-xs font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
+                <span>{t(BUSINESS_SECTION.titleKey, BUSINESS_SECTION.defaultTitle)}</span>
+              </div>
+            )}
+            <div className="space-y-1">
+              {BUSINESS_SECTION.items.map((item) => renderItem(item))}
+            </div>
+          </div>
+        )}
 
         {/* Sections */}
         {SECTIONS.map((section, idx) => (

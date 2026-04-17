@@ -91,7 +91,7 @@ export const PRO_LIMITS: TierFeatures = {
   canUsePremiumFrames: true,
   canUseAdvancedThemes: true,
   canUseCustomPageBackground: true,
-  canUseBusinessZone: false, // Only business tier
+  canUseBusinessZone: true, // Enabled for both Pro and Business
 };
 
 // Business tier = Pro + Business Zone access
