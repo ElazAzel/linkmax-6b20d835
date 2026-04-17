@@ -27,6 +27,9 @@ import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { trackAuthEvent } from '@/services/authFunnel';
 
 // Zod schema is created inside the component to access t()
 // We define a factory function here
@@ -68,11 +71,19 @@ export default function Auth() {
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [signupEmailSent, setSignupEmailSent] = useState(false);
   const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signup');
 
   // Telegram password reset state
   const [telegramResetStep, setTelegramResetStep] = useState<TelegramResetStep>('request');
   const [telegramChatId, setTelegramChatId] = useState('');
   const [resetToken, setResetToken] = useState('');
+
+  // Track form view once on mount
+  useEffect(() => {
+    trackAuthEvent('auth_form_view', { mode: 'initial' });
+  }, []);
 
   // Get referral code, mode, and growth source from URL
   const refCode = searchParams.get('ref');
@@ -152,6 +163,7 @@ export default function Auth() {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    trackAuthEvent('auth_submit_attempt', { method: 'email_signup' });
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get('signup-email') as string;
@@ -165,6 +177,7 @@ export default function Auth() {
       toast.error(firstError.message);
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signup', stage: 'validation', error: firstError.message });
       return;
     }
 
@@ -175,6 +188,7 @@ export default function Auth() {
       handleError(error, t('messages.failedToSignUp'));
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signup', stage: 'submit', error: error.message });
       return;
     }
 
@@ -182,11 +196,13 @@ export default function Auth() {
       setSignupEmailSent(true);
       playSuccess();
       setIsLoading(false);
+      trackAuthEvent('auth_success', { method: 'email_signup', requires_email_confirm: true });
       return;
     }
 
     playSuccess();
     toast.success(t('messages.accountCreated'));
+    trackAuthEvent('auth_success', { method: 'email_signup', requires_email_confirm: false });
     // Auth state change will trigger redirect
     setIsLoading(false);
   };
@@ -194,6 +210,7 @@ export default function Auth() {
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    trackAuthEvent('auth_submit_attempt', { method: 'email_signin' });
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get('signin-email') as string;
@@ -207,6 +224,7 @@ export default function Auth() {
       toast.error(firstError.message);
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signin', stage: 'validation', error: firstError.message });
       return;
     }
 
@@ -217,11 +235,13 @@ export default function Auth() {
       handleError(error, t('messages.failedToSignIn'));
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signin', stage: 'submit', error: error.message });
       return;
     }
 
     playSuccess();
     toast.success(t('auth.welcomeBack', 'Welcome back!'));
+    trackAuthEvent('auth_success', { method: 'email_signin' });
     // Auth state change will trigger redirect
   };
 
@@ -366,9 +386,11 @@ export default function Auth() {
   };
 
   const handleGoogleSignIn = async () => {
+    trackAuthEvent('auth_oauth_click', { provider: 'google' });
     setIsOAuthLoading('google');
     const { error } = await signInWithGoogle(safeReturnTo);
     if (error) {
+      trackAuthEvent('auth_error', { method: 'google', error: error.message });
       handleError(error, t('messages.failedToSignIn'));
       playError();
     }
@@ -376,9 +398,11 @@ export default function Auth() {
   };
 
   const handleAppleSignIn = async () => {
+    trackAuthEvent('auth_oauth_click', { provider: 'apple' });
     setIsOAuthLoading('apple');
     const { error } = await signInWithApple(safeReturnTo);
     if (error) {
+      trackAuthEvent('auth_error', { method: 'apple', error: error.message });
       handleError(error, t('messages.failedToSignIn'));
       playError();
     }
@@ -386,6 +410,7 @@ export default function Auth() {
   };
 
   const handleTelegramAuth = async (telegramData: any) => {
+    trackAuthEvent('auth_oauth_click', { provider: 'telegram' });
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);
     if (error) {
@@ -527,79 +552,75 @@ export default function Auth() {
               </CardContent>
             </Card>
           ) : (
-            /* Auth Card - Liquid Glass */
+            /* Auth Card - Liquid Glass — Optimized for conversion */
             <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl">{t('auth.getStarted')}</CardTitle>
-                <CardDescription>
-                  {t('auth.signInToAccount')}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl">
+                    {t('auth.heroTitle', 'Создайте свою lnkmx.my страницу')}
+                  </CardTitle>
+                </div>
+                <CardDescription className="text-sm">
+                  {t('auth.heroSubtitle', 'AI соберёт сайт за 2 минуты. Бесплатно навсегда.')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* OAuth Buttons */}
-                <div className="space-y-3">
-                  {/* Telegram Login */}
-                  <div className={`transition-opacity duration-300 ${isOAuthLoading === 'telegram' ? 'opacity-50 pointer-events-none' : ''}`}>
-                    <TelegramLoginButton
-                      botName={import.meta.env.VITE_TELEGRAM_BOT_NAME || 'linkmaxmy_bot'}
-                      onAuth={handleTelegramAuth}
-                      buttonSize="large"
-                      cornerRadius={16}
-                    />
-                  </div>
+                {/* PRIMARY: Google OAuth — biggest, fastest path */}
+                <Button
+                  type="button"
+                  className="w-full gap-3 h-14 rounded-2xl bg-white text-gray-900 hover:bg-white/90 border border-border/30 shadow-glass-lg font-semibold text-base transition-all duration-300 hover:scale-[1.01]"
+                  onClick={handleGoogleSignIn}
+                  disabled={isOAuthLoading !== null || isLoading}
+                  data-testid="google-signin-primary"
+                >
+                  {isOAuthLoading === 'google' ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <svg className="h-5 w-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                    </svg>
+                  )}
+                  {t('auth.continueWithGoogle')}
+                </Button>
 
-                  <Button
+                {/* SECONDARY: Email expand toggle */}
+                {!showEmailForm && (
+                  <button
                     type="button"
-                    variant="outline"
-                    className="w-full gap-2 h-12 rounded-2xl bg-card/40 backdrop-blur-xl border-border/30 hover:bg-card/60 hover:border-border/50 transition-all duration-300"
-                    onClick={handleGoogleSignIn}
-                    disabled={isOAuthLoading !== null || isLoading}
+                    onClick={() => {
+                      setShowEmailForm(true);
+                      trackAuthEvent('auth_expand_email');
+                    }}
+                    className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors py-2 flex items-center justify-center gap-1.5"
+                    data-testid="expand-email-form"
                   >
-                    {isOAuthLoading === 'google' ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <svg className="h-5 w-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                      </svg>
-                    )}
-                    {t('auth.continueWithGoogle')}
-                  </Button>
+                    {t('auth.continueWithEmail', 'или продолжить с email')}
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </button>
+                )}
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full gap-2 h-12 rounded-2xl bg-card/40 backdrop-blur-xl border-border/30 hover:bg-card/60 hover:border-border/50 transition-all duration-300"
-                    onClick={handleAppleSignIn}
-                    disabled={isOAuthLoading !== null || isLoading}
-                  >
-                    {isOAuthLoading === 'apple' ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
-                      </svg>
-                    )}
-                    {t('auth.continueWithApple')}
-                  </Button>
-                </div>
+                {showEmailForm && (
+                  <>
+                    <div className="relative py-1">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-border/30" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-card/60 backdrop-blur-xl px-3 text-muted-foreground">{t('common.or', 'или')}</span>
+                      </div>
+                    </div>
 
-                <div className="relative py-2">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-border/30" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card/60 backdrop-blur-xl px-3 text-muted-foreground">{t('auth.orContinueWith')}</span>
-                  </div>
-                </div>
-
-                <Tabs defaultValue="signin" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
-                    <TabsTrigger value="signin" data-testid="signin-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signIn')}</TabsTrigger>
-                    <TabsTrigger value="signup" data-testid="signup-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signUp')}</TabsTrigger>
-                  </TabsList>
+                    <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as 'signin' | 'signup'); trackAuthEvent('auth_tab_switch', { tab: v }); }} className="w-full">
+                      <TabsList className="grid w-full grid-cols-2 h-11 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
+                        <TabsTrigger value="signup" data-testid="signup-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass text-xs sm:text-sm">{t('auth.signUp')}</TabsTrigger>
+                        <TabsTrigger value="signin" data-testid="signin-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass text-xs sm:text-sm">{t('auth.signIn')}</TabsTrigger>
+                      </TabsList>
 
                   <TabsContent value="signin">
                     {authMode === 'reset' ? (
@@ -836,6 +857,47 @@ export default function Auth() {
                     )}
                   </TabsContent>
                 </Tabs>
+                  </>
+                )}
+
+                {/* Tertiary: alternative providers, collapsed */}
+                {!showMoreOptions ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowMoreOptions(true)}
+                    className="w-full text-xs text-muted-foreground/70 hover:text-muted-foreground transition-colors py-1"
+                    data-testid="show-more-providers"
+                  >
+                    {t('auth.moreOptions', 'Другие способы входа')}
+                  </button>
+                ) : (
+                  <div className="space-y-2 pt-2 border-t border-border/20">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full gap-2 h-11 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 hover:bg-card/60 text-sm"
+                      onClick={handleAppleSignIn}
+                      disabled={isOAuthLoading !== null || isLoading}
+                    >
+                      {isOAuthLoading === 'apple' ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+                        </svg>
+                      )}
+                      {t('auth.continueWithApple')}
+                    </Button>
+                    <div className={`transition-opacity duration-300 ${isOAuthLoading === 'telegram' ? 'opacity-50 pointer-events-none' : ''}`}>
+                      <TelegramLoginButton
+                        botName={import.meta.env.VITE_TELEGRAM_BOT_NAME || 'linkmaxmy_bot'}
+                        onAuth={handleTelegramAuth}
+                        buttonSize="medium"
+                        cornerRadius={12}
+                      />
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
