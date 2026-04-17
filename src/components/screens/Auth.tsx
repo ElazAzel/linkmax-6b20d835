@@ -163,6 +163,7 @@ export default function Auth() {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    trackAuthEvent('auth_submit_attempt', { method: 'email_signup' });
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get('signup-email') as string;
@@ -176,6 +177,7 @@ export default function Auth() {
       toast.error(firstError.message);
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signup', stage: 'validation', error: firstError.message });
       return;
     }
 
@@ -186,6 +188,7 @@ export default function Auth() {
       handleError(error, t('messages.failedToSignUp'));
       playError();
       setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signup', stage: 'submit', error: error.message });
       return;
     }
 
@@ -193,11 +196,13 @@ export default function Auth() {
       setSignupEmailSent(true);
       playSuccess();
       setIsLoading(false);
+      trackAuthEvent('auth_success', { method: 'email_signup', requires_email_confirm: true });
       return;
     }
 
     playSuccess();
     toast.success(t('messages.accountCreated'));
+    trackAuthEvent('auth_success', { method: 'email_signup', requires_email_confirm: false });
     // Auth state change will trigger redirect
     setIsLoading(false);
   };
