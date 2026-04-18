@@ -4,10 +4,17 @@
 import { supabase } from '@/platform/supabase/client';
 import type { AppDatabase } from '@/platform/supabase/extended-types';
 import type { PremiumStatusResult, ApiResult } from '@/types/api';
+import {
+  getTierCommissionRate as getContractTierCommissionRate,
+  normalizeAppPremiumTier,
+  toDatabasePremiumTier,
+  type AppPremiumTier,
+  type DatabasePremiumTier,
+} from '@/domain/billing/tiers';
 
 // ============= Domain Types & Constants =============
 
-export type PremiumTier = 'identity' | 'starter' | 'pro' | 'business';
+export type PremiumTier = AppPremiumTier;
 
 export interface PremiumStatus {
   isPremium: boolean;
@@ -188,12 +195,7 @@ export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): F
  * Starter: 7%, Pro: 1%, Business: 0%
  */
 export function getTierCommissionRate(tier: PremiumTier): number {
-  switch (tier) {
-    case 'business': return 0;
-    case 'pro': return 0.01;
-    case 'starter': return 0.07;
-    default: return 0;
-  }
+  return getContractTierCommissionRate(tier);
 }
 
 // ============= Helper Functions =============
@@ -313,7 +315,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const premiumActive = premiumExpiresAt ? premiumExpiresAt > now : false;
     
     // Determine tier based on profile data
-    let tier: 'identity' | 'starter' | 'pro' | 'business' = 'identity';
+    let tier: PremiumTier = 'identity';
     let isPremium = false;
     
     // Check if user has active premium
@@ -322,15 +324,11 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const hasActivePremium = premiumActive || isPremiumFlagValid || inTrial;
     
     // Map tier from profile
-    const profileTier = data.premium_tier;
+    const profileTier = normalizeAppPremiumTier(data.premium_tier);
     
     if (hasActivePremium) {
       isPremium = true;
-      // Map to new tier system
-      if (profileTier === 'business') tier = 'business';
-      else if (profileTier === 'pro') tier = 'pro';
-      else if (profileTier === 'starter') tier = 'starter';
-      else tier = 'pro'; // Default for legacy premium users
+      tier = profileTier === 'identity' ? 'pro' : profileTier; // Default for legacy premium users
     } else if (profileTier === 'starter') {
       // Starter is free tier with commission-based monetization
       tier = 'starter';
@@ -341,6 +339,42 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
   } catch (error) {
     return { isPremium: false, tier: 'identity', trialEndsAt: null, inTrial: false };
   }
+}
+
+export async function updateUserPremiumTier(
+  userId: string,
+  tier: PremiumTier | DatabasePremiumTier
+): Promise<ApiResult<boolean>> {
+  try {
+    const dbTier = toDatabasePremiumTier(tier);
+    const isPaidTier = dbTier === 'pro' || dbTier === 'business';
+    const updateData: Partial<AppDatabase['public']['Tables']['user_profiles']['Update']> = {
+      premium_tier: dbTier,
+      is_premium: isPaidTier,
+    };
+
+    if (!isPaidTier) {
+      updateData.premium_expires_at = null;
+      updateData.trial_ends_at = null;
+    }
+
+    const { error } = await supabase
+      .from('user_profiles')
+      .update(updateData)
+      .eq('id', userId);
+
+    if (error) {
+      return { data: null, error: wrapError(error) };
+    }
+
+    return { data: true, error: null };
+  } catch (error) {
+    return { data: null, error: wrapError(error) };
+  }
+}
+
+export function activateStarterTier(userId: string): Promise<ApiResult<boolean>> {
+  return updateUserPremiumTier(userId, 'starter');
 }
 
 /**

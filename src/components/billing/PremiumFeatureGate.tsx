@@ -10,6 +10,7 @@ import Lock from 'lucide-react/dist/esm/icons/lock';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { useFreemiumLimits, type FreeTier } from '@/hooks/user/useFreemiumLimits';
+import { hasTierAccess } from '@/domain/billing/tiers';
 
 interface PremiumFeatureGateProps {
   requiredTier: FreeTier;
@@ -32,16 +33,7 @@ export function PremiumFeatureGate({
   const navigate = useNavigate();
   const { currentTier } = useFreemiumLimits();
 
-  // Tier hierarchy: free < pro
-  const tierLevel = (tier: FreeTier): number => {
-    switch (tier) {
-      case 'business': return 3;
-      case 'pro': return 2;
-      default: return 1;
-    }
-  };
-
-  const hasAccess = tierLevel(currentTier) >= tierLevel(requiredTier);
+  const hasAccess = hasTierAccess(currentTier, requiredTier);
 
   if (hasAccess) {
     return <>{children}</>;
@@ -49,7 +41,7 @@ export function PremiumFeatureGate({
 
   const tierNames: Record<string, string> = {
     free: 'BASIC',
-    starter: 'BASIC',
+    starter: 'STARTER',
     identity: 'BASIC',
     pro: 'PRO',
     business: 'BUSINESS',
@@ -124,13 +116,5 @@ export function PremiumFeatureGate({
 export function useFeatureAccess(requiredTier: FreeTier): boolean {
   const { currentTier } = useFreemiumLimits();
 
-  const tierLevel = (tier: FreeTier): number => {
-    switch (tier) {
-      case 'business': return 3;
-      case 'pro': return 2;
-      default: return 1;
-    }
-  };
-
-  return tierLevel(currentTier) >= tierLevel(requiredTier);
+  return hasTierAccess(currentTier, requiredTier);
 }

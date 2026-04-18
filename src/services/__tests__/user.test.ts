@@ -77,6 +77,12 @@ describe('UserService', () => {
             expect(limits.maxAIPageGenerationsPerMonth).toBe(1);
             expect(limits.showWatermark).toBe(true);
         });
+
+        it('should return starter limits for commission-based starter users', () => {
+            const limits = UserService.getUserLimits({ isPremium: false, inTrial: false, trialEndsAt: null, tier: 'starter' });
+            expect(limits.canUsePayments).toBe(true);
+            expect(limits.showWatermark).toBe(false);
+        });
     });
 
     describe('getTierCommissionRate', () => {
@@ -150,6 +156,21 @@ describe('UserService', () => {
             expect(status.tier).toBe('pro');
         });
 
+        it('should keep starter as a non-premium commission tier', async () => {
+            vi.mocked(supabase.from).mockReturnValue({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({
+                    data: { is_premium: false, premium_tier: 'starter', trial_ends_at: null, premium_expires_at: null },
+                    error: null
+                }),
+            } as any);
+
+            const status = await UserService.checkPremiumStatus('u1');
+            expect(status.isPremium).toBe(false);
+            expect(status.tier).toBe('starter');
+        });
+
         it('should handle expired premium correctly', async () => {
             const pastDate = new Date();
             pastDate.setDate(pastDate.getDate() - 7);
@@ -177,6 +198,24 @@ describe('UserService', () => {
             const status = await UserService.checkPremiumStatus('u1');
             expect(status.isPremium).toBe(false);
             expect(status.tier).toBe('identity');
+        });
+
+        it('should activate starter as a non-premium tier and clear paid expiry state', async () => {
+            const query = {
+                update: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockResolvedValue({ error: null }),
+            };
+            vi.mocked(supabase.from).mockReturnValue(query as any);
+
+            const result = await UserService.activateStarterTier('u1');
+
+            expect(result.data).toBe(true);
+            expect(query.update).toHaveBeenCalledWith(expect.objectContaining({
+                premium_tier: 'starter',
+                is_premium: false,
+                premium_expires_at: null,
+                trial_ends_at: null,
+            }));
         });
     });
 

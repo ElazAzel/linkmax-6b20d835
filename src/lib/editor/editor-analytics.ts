@@ -2,6 +2,7 @@
  * Editor Analytics - Friction tracking for editor interactions
  * Tracks meaningful editor events to understand bottlenecks
  */
+import type { Json } from '@/platform/supabase/types';
 
 export type EditorAnalyticsAction =
   | 'block_added'
@@ -98,11 +99,11 @@ export function trackEditorAction(
       supabase
         .from('analytics')
         .insert([{
-          event_type: `editor.${action}`,
-          metadata: (meta ? JSON.parse(JSON.stringify(meta)) : null),
-          page_id: null as any,
+          event_type: `editor:${action}`,
+          metadata: meta ? (JSON.parse(JSON.stringify(meta)) as Json) : null,
+          page_id: null,
           block_id: meta?.blockId ?? null,
-        }] as any)
+        }])
         .then(() => {});
     });
   } catch {
