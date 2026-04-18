@@ -7577,5 +7577,8 @@
     "pricing": {
       "billedYearly": "Жылына {{price}} төленеді"
     }
+  },
+  "tma": {
+    "home_greeting": "Сәлем, {{name}} 👋"
   }
 }
