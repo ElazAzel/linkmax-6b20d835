@@ -15,7 +15,7 @@
     "analyze:layers": "depcruise --config config/dependency-cruiser.cjs --output-type err src",
     "analyze:unused": "knip --config config/knip.config.ts",
     "quality:gate": "npm run analyze:cycles && npm run analyze:layers && npm run analyze:unused",
-    "quality:check": "npm run lint && npm run lint:i18n && npm run i18n:check && npm run typecheck:strict && npm run quality:gate",
+    "quality:check": "npm run lint && npm run lint:i18n && npm run i18n:check && npm run typecheck:strict && npm run quality:baseline && npm run quality:gate",
     "e2e": "playwright test",
     "e2e:ci": "playwright test --reporter=line",
     "preview": "vite preview",
@@ -41,7 +41,8 @@
     "mobile:open:ios": "npx cap open ios",
     "skills:browse": "ai-agent-skills",
     "skills:list": "ai-agent-skills list",
-    "skills:doctor": "ai-agent-skills doctor"
+    "skills:doctor": "ai-agent-skills doctor",
+    "quality:baseline": "node scripts/quality-baseline-check.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
