@@ -2,7 +2,7 @@
  * BlockManager - Unified structure & reorder panel
  * Combines block navigation, quick actions, and reordering in one mobile-optimized sheet
  */
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import {
@@ -99,6 +99,12 @@ export const BlockManager = memo(function BlockManager({
   // Local state for reordering
   const [localBlocks, setLocalBlocks] = useState<Block[]>(blocks);
   const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    setLocalBlocks(blocks);
+    setHasChanges(false);
+  }, [blocks, open]);
 
   // Reset when opening
   const handleOpenChange = useCallback((isOpen: boolean) => {
