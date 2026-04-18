@@ -97,9 +97,16 @@ export class AutosaveBatcher {
    * Synchronous flush for beforeunload
    */
   private flushSync = (): void => {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+
     if (this.pendingMutation) {
       // Can't await in beforeunload, fire-and-forget
-      this.flushCallback?.();
+      this.flushCallback?.().catch((err) => {
+        console.error('[autosave-batcher] sync flush failed:', err);
+      });
       this.pendingMutation = null;
     }
   };

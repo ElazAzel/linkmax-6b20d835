@@ -18,8 +18,8 @@ export interface KnowledgeItem {
  * Sørensen–Dice coefficient for string similarity
  */
 function stringSimilarity(str1: string, str2: string): number {
-  const s1 = str1.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
-  const s2 = str2.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+  const s1 = str1.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+  const s2 = str2.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
   
   if (s1 === s2) return 1;
   if (s1.length < 2 || s2.length < 2) return 0;
@@ -153,10 +153,18 @@ export class ExpertEngine {
     const commercialKeywords = ['цена', 'сколько', 'купить', 'заказать', 'записаться', 'встреча', 'консультация', 'прайс', 'тариф', 'связаться', 'номер', 'телефон', 'whatsapp', 'телеграм'];
     const hasCommercialKeywords = commercialKeywords.some(kw => cleanInput.includes(kw));
 
-    const scored = this.knowledge.map(item => ({
-      ...item,
-      score: Math.max(...item.keywords.map(kw => stringSimilarity(userInput, kw)))
-    }));
+    const scored = this.knowledge.map(item => {
+      const keywordScores = item.keywords.map(kw => {
+        const similarity = stringSimilarity(userInput, kw);
+        const directInclusionBoost = cleanInput.includes(String(kw).toLowerCase()) ? 0.35 : 0;
+        return Math.min(1, similarity + directInclusionBoost);
+      });
+
+      return {
+        ...item,
+        score: keywordScores.length > 0 ? Math.max(...keywordScores) : 0,
+      };
+    });
 
     // Sort by score
     scored.sort((a, b) => (b.score || 0) - (a.score || 0));
