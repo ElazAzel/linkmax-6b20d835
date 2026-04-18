@@ -106,6 +106,7 @@ const Install = lazy(() => import("./pages/Install"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Alternatives = lazy(() => import("./pages/Alternatives"));
+const AlternativeDetail = lazy(() => import("./pages/AlternativeDetail"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminTranslations = lazy(() => import("./pages/AdminTranslations"));
 const AdminTemplateEditor = lazy(() => import("./pages/AdminTemplateEditor"));
@@ -164,6 +165,7 @@ const router = createBrowserRouter([
       { path: "gallery", element: <Gallery /> },
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
+      { path: "alternatives/:competitor", element: <AlternativeDetail /> },
       { path: "seo-landing", element: <SeoLanding /> },
       { path: "admin", element: <Admin /> },
       { path: "admin/translations", element: <AdminTranslations /> },
