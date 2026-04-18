@@ -87,13 +87,18 @@ export const fintechService = {
         metadata?: Record<string, unknown>;
     }) {
         try {
+            if (!Number.isFinite(params.amount) || params.amount <= 0) {
+                throw new Error('Amount must be greater than 0');
+            }
+
+            const normalizedAmount = Number(params.amount.toFixed(2));
             // Get dynamic commission rate based on user's tier
             const commissionRate = await getUserCommissionRate(params.userId);
 
             // Calculate amounts per Q2 "Starter Tier" logic
-            const grossAmount = params.amount;
+            const grossAmount = normalizedAmount;
             const feeAmount = Number((grossAmount * commissionRate).toFixed(2));
-            const netAmount = grossAmount - feeAmount;
+            const netAmount = Number((grossAmount - feeAmount).toFixed(2));
 
             const { data: wallet, error: walletError } = await supabase
                 .from('user_wallets')
@@ -208,6 +213,12 @@ export const fintechService = {
 
     async requestPayout(params: { userId: string; amount: number; method: PayoutMethod; notes?: string }) {
         const { userId, amount, method, notes } = params;
+        if (!Number.isFinite(amount) || amount <= 0) {
+            throw new Error('Amount must be greater than 0');
+        }
+        if (!method?.type || !method?.value) {
+            throw new Error('Payout method is invalid');
+        }
 
         const { data: wallet } = await supabase
             .from('user_wallets')
