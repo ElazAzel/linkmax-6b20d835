@@ -15,7 +15,7 @@ import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMo
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
 import { PostHogProvider } from 'posthog-js/react';
-import { initPostHog } from "@/lib/posthog";
+import { initPostHog, POSTHOG_KEY, POSTHOG_HOST } from "@/lib/posthog";
 
 // Initialize PostHog before rendering
 initPostHog();
