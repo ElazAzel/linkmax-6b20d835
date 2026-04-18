@@ -28,6 +28,7 @@ export interface AnalyticsData {
     totalSessions: number;
     avgSessionDuration: number;
     bounceRate: number;
+    totalConversions: number;
 
     // Trends
     viewsTrend: number;
@@ -68,7 +69,7 @@ const COLORS = {
 
 export function useAdminAnalytics() {
     const [loading, setLoading] = useState(true);
-    const [period, setPeriod] = useState<'7d' | '14d' | '30d' | '90d'>('30d');
+    const [period, setPeriod] = useState<'7d' | '30d' | '90d' | 'all'>('30d');
     const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
     const [filters, setFilters] = useState<AnalyticsFilters>({
         devices: [],
@@ -79,11 +80,19 @@ export function useAdminAnalytics() {
     const getPeriodDays = useCallback(() => {
         switch (period) {
             case '7d': return 7;
-            case '14d': return 14;
             case '30d': return 30;
             case '90d': return 90;
+            case 'all': return 3650;
         }
     }, [period]);
+
+    const getString = (obj: Record<string, unknown> | null | undefined, ...keys: string[]): string | undefined => {
+        for (const key of keys) {
+            const val = obj?.[key];
+            if (typeof val === 'string' && val.length > 0) return val;
+        }
+        return undefined;
+    };
 
     const loadAnalytics = useCallback(async () => {
         setLoading(true);
@@ -130,15 +139,10 @@ export function useAdminAnalytics() {
             const visitorIds = new Set<string>();
             const sessionIds = new Set<string>();
 
-            const getString = (obj: Record<string, unknown> | null | undefined, key: string): string | undefined => {
-                const val = obj?.[key];
-                return typeof val === 'string' ? val : undefined;
-            };
-
             events.forEach(e => {
                 const meta = e.metadata as Record<string, unknown> | null;
-                const visitorId = getString(meta, 'visitorId') || getString(meta, 'visitor_id');
-                const sessionId = getString(meta, 'sessionId') || getString(meta, 'session_id');
+                const visitorId = getString(meta, 'visitorId', 'visitor_id');
+                const sessionId = getString(meta, 'sessionId', 'session_id');
 
                 if (visitorId) visitorIds.add(visitorId);
                 if (sessionId) sessionIds.add(sessionId);
@@ -166,8 +170,8 @@ export function useAdminAnalytics() {
                 const daySessions = new Set<string>();
                 dayEvents.forEach(e => {
                     const meta = e.metadata as Record<string, unknown> | null;
-                    const visitorId = getString(meta, 'visitor_id');
-                    const sessionId = getString(meta, 'session_id');
+                    const visitorId = getString(meta, 'visitorId', 'visitor_id');
+                    const sessionId = getString(meta, 'sessionId', 'session_id');
                     if (visitorId) dayVisitors.add(visitorId);
                     if (sessionId) daySessions.add(sessionId);
                 });
@@ -217,7 +221,7 @@ export function useAdminAnalytics() {
             const deviceCounts: Record<string, number> = { desktop: 0, mobile: 0, tablet: 0, unknown: 0 };
             events.forEach(e => {
                 const meta = e.metadata as Record<string, unknown> | null;
-                const device = getString(meta, 'device') || getString(meta, 'device_type') || 'unknown';
+                const device = getString(meta, 'device', 'device_type') || 'unknown';
                 deviceCounts[device] = (deviceCounts[device] || 0) + 1;
             });
 
@@ -232,7 +236,7 @@ export function useAdminAnalytics() {
             const sourceCounts: Record<string, number> = {};
             events.forEach(e => {
                 const meta = e.metadata as Record<string, unknown> | null;
-                const source = getString(meta, 'source') || getString(meta, 'referrer_source') || 'direct';
+                const source = getString(meta, 'source', 'referrer_source') || 'direct';
                 sourceCounts[source] = (sourceCounts[source] || 0) + 1;
             });
 
@@ -283,10 +287,10 @@ export function useAdminAnalytics() {
             events.forEach(e => {
                 if (e.event_type !== 'click') return;
                 const meta = e.metadata as Record<string, unknown> | null;
-                const blockRef = e.block_id || getString(meta, 'blockId') || getString(meta, 'blockType');
+                const blockRef = e.block_id || getString(meta, 'blockId', 'block_id', 'blockType', 'block_type');
                 if (!blockRef) return;
                 if (!blockClickCounts[blockRef]) {
-                    blockClickCounts[blockRef] = { type: getString(meta, 'blockType') || getString(meta, 'block_type') || 'Unknown', clicks: 0 };
+                    blockClickCounts[blockRef] = { type: getString(meta, 'blockType', 'block_type') || 'Unknown', clicks: 0 };
                 }
                 blockClickCounts[blockRef].clicks++;
             });
@@ -339,6 +343,7 @@ export function useAdminAnalytics() {
                 totalSessions: sessionIds.size,
                 avgSessionDuration: 0,
                 bounceRate: 0,
+                totalConversions: events.filter(e => e.event_type === 'conversion').length,
                 viewsTrend: calcTrend(views, prevViews),
                 clicksTrend: calcTrend(clicks, prevClicks),
                 sharesTrend: calcTrend(shares, prevShares),
