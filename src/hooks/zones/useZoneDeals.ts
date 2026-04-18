@@ -161,7 +161,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     mutationFn: async (pipeline: Partial<ZonePipeline>) => {
       const { data, error } = await supabase
         .from('zone_pipelines')
-        .insert({ ...pipeline, zone_id: zoneId })
+        .insert({ ...pipeline, zone_id: zoneId } as any)
         .select()
         .single();
       if (error) throw error;
@@ -207,7 +207,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
     mutationFn: async (stage: Partial<ZoneDealStage>) => {
       const { data, error } = await supabase
         .from('zone_deal_stages')
-        .insert({ ...stage, zone_id: zoneId, pipeline_id: pipelineId })
+        .insert({ ...stage, zone_id: zoneId, pipeline_id: pipelineId } as any)
         .select()
         .single();
       if (error) throw error;
