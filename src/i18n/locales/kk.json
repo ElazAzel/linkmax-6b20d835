@@ -7459,7 +7459,100 @@
     "toastEarned": "+{{count}} Linkkon {{action}} үшін алынды!"
   },
   "translation": {
-    "browserLanguageDetected": "Браузер тілі анықталған: {{language}}"
+    "browserLanguageDetected": "Браузер тілі анықталған: {{language}}",
+    "auth": {
+      "title": "LinkMAX-қа қош келдіңіз",
+      "subtitle": "Бизнеске арналған AI-парақша 2 минутта",
+      "heroTitle": "lnkmx.my парақшаңызды жасаңыз",
+      "heroSubtitle": "AI сайтты 2 минутта құрастырады. Мәңгі тегін.",
+      "signIn": "Кіру",
+      "signUp": "Тіркелу",
+      "signingIn": "Кіру...",
+      "welcomeBack": "Қайта оралуыңызбен",
+      "email": "Email",
+      "password": "Құпиясөз",
+      "confirmPassword": "Құпиясөзді растау",
+      "continueWithGoogle": "Google арқылы жалғастыру",
+      "continueWithApple": "Apple арқылы жалғастыру",
+      "continueWithEmail": "Email арқылы жалғастыру",
+      "moreOptions": "Кірудің басқа жолдары",
+      "backToHome": "Басты бетке",
+      "backToSignIn": "Кіруге қайту",
+      "forgotPassword": "Құпиясөзді ұмыттыңыз ба?",
+      "resetPassword": "Құпиясөзді қалпына келтіру",
+      "resetDescription": "Email енгізіңіз — қалпына келтіру сілтемесін жібереміз.",
+      "sendResetLink": "Сілтеме жіберу",
+      "checkEmail": "Поштаңызды тексеріңіз",
+      "resetEmailSent": "Құпиясөзді қалпына келтіру хаты жіберілді",
+      "signupEmailSent": "Растау хаты жіберілді",
+      "goToDashboard": "Кабинетке өту",
+      "passwordHint": "Кемінде 8 таңба, әріптер мен цифрлар",
+      "newPassword": "Жаңа құпиясөз",
+      "enterNewPassword": "Жаңа құпиясөзді енгізіңіз",
+      "updatePassword": "Құпиясөзді жаңарту",
+      "passwordUpdated": "Құпиясөз жаңартылды",
+      "passwordUpdatedDesc": "Енді жаңа құпиясөзбен кіре аласыз.",
+      "seo": {
+        "title": "LinkMAX-қа кіру",
+        "description": "Link-in-bio парақшаңызды жасау үшін LinkMAX-қа кіріңіз."
+      },
+      "oauthError": "Авторизация қатесі",
+      "referral": {
+        "bonus": "Бонус",
+        "invited": "Сізді шақырды",
+        "success": "Реферал коды қолданылды"
+      },
+      "telegram": {
+        "recoverViaTelegram": "Telegram арқылы қалпына келтіру",
+        "recoveryTitle": "Telegram арқылы қалпына келтіру",
+        "back": "Артқа",
+        "codeSent": "Код Telegram-ға жіберілді",
+        "codeSendError": "Кодты жіберу мүмкін болмады",
+        "connectionError": "Қосылым қатесі",
+        "enterChatId": "Telegram ID енгізіңіз",
+        "enterCode": "Telegram кодын енгізіңіз",
+        "getCode": "Кодты алу",
+        "invalidChatId": "Қате Telegram ID",
+        "invalidToken": "Қате код",
+        "newPassword": "Жаңа құпиясөз",
+        "notFound": "Telegram табылмады",
+        "passwordChanged": "Құпиясөз өзгертілді",
+        "resetError": "Құпиясөзді қалпына келтіру мүмкін болмады",
+        "savePassword": "Құпиясөзді сақтау",
+        "saving": "Сақтауда…",
+        "sendFailed": "Жіберу мүмкін болмады",
+        "sending": "Жіберілуде…"
+      },
+      "validation": {
+        "email": "Дұрыс email енгізіңіз",
+        "emailMax": "Email 255 таңбадан аспауы керек",
+        "passwordMin": "Кемінде 8 таңба",
+        "passwordUppercase": "Кемінде бір бас әріп болуы керек",
+        "passwordLowercase": "Кемінде бір кіші әріп болуы керек",
+        "passwordNumber": "Кемінде бір цифр болуы керек"
+      }
+    },
+    "common": {
+      "or": "немесе",
+      "loading": "Жүктелуде…",
+      "errors": {
+        "invalidEmail": "Қате email",
+        "passwordMismatch": "Құпиясөздер сәйкес келмейді",
+        "resetFailed": "Құпиясөзді қалпына келтіру мүмкін болмады",
+        "updateFailed": "Жаңарту мүмкін болмады"
+      }
+    },
+    "legal": {
+      "agreeToTerms": "Мен келісемін",
+      "andThe": "және",
+      "termsLink": "Қызмет шарттарымен",
+      "privacyLink": "Құпиялылық саясатымен"
+    },
+    "messages": {
+      "accountCreated": "Аккаунт жасалды",
+      "failedToSignIn": "Кіру мүмкін болмады",
+      "failedToSignUp": "Аккаунт жасау мүмкін болмады"
+    }
   },
   "zones": {
     "analytics": {
