@@ -25,6 +25,7 @@ import Languages from 'lucide-react/dist/esm/icons/languages';
 import Handshake from 'lucide-react/dist/esm/icons/handshake';
 import Banknote from 'lucide-react/dist/esm/icons/banknote';
 import Search from 'lucide-react/dist/esm/icons/search';
+import Brain from 'lucide-react/dist/esm/icons/brain';
 
 // Lazy load heavy tab components
 const AdminOverviewTab = lazy(() => import('@/components/admin/AdminOverviewTab').then(m => ({ default: m.AdminOverviewTab })));
@@ -127,6 +128,15 @@ export default function Admin() {
               <h1 className="text-lg md:text-xl font-bold">{t('admin.title')}</h1>
             </div>
             <div className="flex items-center gap-2 md:gap-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/admin/language-algorithms')}
+                className="h-8 px-2 md:px-3"
+              >
+                <Brain className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">{t('admin.languageAlgorithms', 'Языки и алгоритмы')}</span>
+              </Button>
               <Button
                 variant="outline"
                 size="sm"

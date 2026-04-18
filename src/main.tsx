@@ -109,6 +109,7 @@ const Alternatives = lazy(() => import("./pages/Alternatives"));
 const AlternativeDetail = lazy(() => import("./pages/AlternativeDetail"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminTranslations = lazy(() => import("./pages/AdminTranslations"));
+const AdminLanguageAlgorithms = lazy(() => import("./pages/AdminLanguageAlgorithms"));
 const AdminTemplateEditor = lazy(() => import("./pages/AdminTemplateEditor"));
 const TeamPage = lazy(() => import("./pages/TeamPage"));
 const CollabPage = lazy(() => import("./pages/CollabPage"));
@@ -168,6 +169,7 @@ const router = createBrowserRouter([
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
       { path: "seo-landing", element: <SeoLanding /> },
       { path: "admin", element: <Admin /> },
+      { path: "admin/language-algorithms", element: <AdminLanguageAlgorithms /> },
       { path: "admin/translations", element: <AdminTranslations /> },
       { path: "admin/templates/new", element: <AdminTemplateEditor /> },
       { path: "admin/templates/:id", element: <AdminTemplateEditor /> },

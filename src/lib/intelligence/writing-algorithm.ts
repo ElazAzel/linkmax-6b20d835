@@ -235,6 +235,28 @@ const PATTERNS: Record<string, SuggestionPack> = {
     }
 };
 
+export function getWritingNiches(): string[] {
+    return Object.keys(PATTERNS);
+}
+
+export function getWritingAlgorithmStats(): { niches: number; totalTemplates: number } {
+    const niches = Object.keys(PATTERNS).length;
+    const totalTemplates = Object.values(PATTERNS).reduce((acc, pack) => {
+        return acc
+            + pack.headings.length
+            + pack.descriptions.length
+            + pack.links.length
+            + pack.buttons.length
+            + pack.faqQuestions.length
+            + pack.faqAnswers.length
+            + pack.messengerMessages.length
+            + pack.productNames.length
+            + pack.productDescriptions.length;
+    }, 0);
+
+    return { niches, totalTemplates };
+}
+
 export interface SuggestionContext {
     city?: string;
     profession?: string;
