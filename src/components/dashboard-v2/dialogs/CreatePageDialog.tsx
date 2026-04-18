@@ -1,7 +1,7 @@
 /**
  * CreatePageDialog - Dialog for creating a new page
  */
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import Crown from 'lucide-react/dist/esm/icons/crown';
@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import type { PageLimits } from '@/hooks/page/useMultiPage';
+import { sanitizeSlug, validateSlug } from '@/lib/utils/slug';
 
 interface CreatePageDialogProps {
   open: boolean;
@@ -44,16 +45,34 @@ export const CreatePageDialog = memo(function CreatePageDialog({
 
   const canCreate = limits?.canCreate ?? true;
 
+  useEffect(() => {
+    if (open) {
+      setTitle('');
+      setSlug('');
+      setError(null);
+      setLoading(false);
+    }
+  }, [open]);
+
   const handleCreate = async () => {
     if (!title.trim()) {
       setError(t('dashboard.createPage.titleRequired', 'Title is required'));
       return;
     }
 
+    const sanitizedSlug = sanitizeSlug(slug);
+    if (sanitizedSlug) {
+      const validation = validateSlug(sanitizedSlug);
+      if (!validation.valid) {
+        setError(t('dashboard.createPage.invalidSlug', 'URL must be 3-30 characters, lowercase letters, numbers, and hyphens only'));
+        return;
+      }
+    }
+
     setLoading(true);
     setError(null);
 
-    const result = await onCreatePage(title.trim(), slug.trim() || undefined);
+    const result = await onCreatePage(title.trim(), sanitizedSlug || undefined);
 
     setLoading(false);
 
@@ -75,7 +94,7 @@ export const CreatePageDialog = memo(function CreatePageDialog({
 
   const handleSlugChange = (value: string) => {
     // Sanitize slug input
-    const sanitized = value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+    const sanitized = sanitizeSlug(value);
     setSlug(sanitized);
   };
 
