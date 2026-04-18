@@ -150,7 +150,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
 
   const renderItem = (item: SidebarItem) => {
     const isActive = activeTab === item.id;
-    const isZoneLocked = ZONE_ITEM_IDS.includes(item.id) && !isBusinessTier;
+    const isZoneLocked = ZONE_ITEM_IDS.includes(item.id) && !isPremium && !isBusinessTier;
     const Icon = item.icon;
     const badge = item.id === 'activity' ? activityBadge : item.badge;
 
@@ -299,8 +299,8 @@ export const DashboardSidebar = memo(function DashboardSidebar({
           {MAIN_ITEMS.map((item) => renderItem(item))}
         </div>
 
-        {/* Business Zone section (if accessible) */}
-        {isBusinessTier && (
+        {/* Business Zone section (Pro + Business tier) */}
+        {(isPremium || isBusinessTier) && (
           <div className="mb-6">
             <div className="mx-2 mb-4 h-px bg-border/20" />
             {!collapsed && (
