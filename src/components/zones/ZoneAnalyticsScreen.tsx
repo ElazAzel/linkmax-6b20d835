@@ -148,10 +148,10 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                         <div className="p-2 rounded-xl bg-primary/10">
                             <TrendingUp className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                         </div>
-                        {t('zones.analytics.title', 'Analytics & Reports')}
+                        {t('zones.analytics.title', 'Аналитика и отчёты')}
                     </h1>
                     <p className="text-sm md:text-base text-muted-foreground mt-1 ml-[44px]">
-                        {t('zones.analytics.subtitle', 'Sales, finances and team performance summary.')}
+                        {t('zones.analytics.subtitle', 'Сводка по продажам, финансам и эффективности команды.')}
                     </p>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -187,7 +187,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                 <Card className="bg-primary/5 border-primary/20">
                     <CardContent className="p-4 md:p-6">
                         <div className="flex items-center justify-between pb-2">
-                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.activeValue', 'Open deals value')}</p>
+                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.activeValue', 'Сумма активных сделок')}</p>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </div>
                         <div className="text-xl md:text-2xl font-bold">{dealMetrics.totalOpenValue.toLocaleString()}</div>
@@ -200,7 +200,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                 <Card>
                     <CardContent className="p-4 md:p-6">
                         <div className="flex items-center justify-between pb-2">
-                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.winRate', 'Win Rate')}</p>
+                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.winRate', 'Процент побед')}</p>
                             <Target className="h-4 w-4 text-muted-foreground" />
                         </div>
                         <div className="text-xl md:text-2xl font-bold">{Math.round(dealMetrics.winRate)}%</div>
@@ -211,7 +211,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                 <Card>
                     <CardContent className="p-4 md:p-6">
                         <div className="flex items-center justify-between pb-2">
-                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.tasksDone', 'Completed tasks')}</p>
+                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.tasksDone', 'Выполненные задачи')}</p>
                             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
                         </div>
                         <div className="text-xl md:text-2xl font-bold flex items-end gap-1">
@@ -220,7 +220,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                         {tasks.overdue > 0 ? (
                             <p className="text-xs text-destructive mt-1 font-medium">{tasks.overdue} {t('zones.analytics.overdue', 'overdue')}</p>
                         ) : (
-                            <p className="text-xs text-green-600 mt-1 font-medium">{t('zones.analytics.noOverdue', 'No overdue')}</p>
+                            <p className="text-xs text-green-600 mt-1 font-medium">{t('zones.analytics.noOverdue', 'Без просрочек')}</p>
                         )}
                     </CardContent>
                 </Card>
@@ -228,7 +228,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                 <Card>
                     <CardContent className="p-4 md:p-6">
                         <div className="flex items-center justify-between pb-2">
-                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.paidValue', 'Paid invoices')}</p>
+                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.paidValue', 'Оплаченные счета')}</p>
                             <FileText className="h-4 w-4 text-muted-foreground" />
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-green-600">{invoiceMetrics.totalPaidAmount.toLocaleString()}</div>
@@ -244,7 +244,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                 <Card>
                     <CardContent className="p-4 md:p-6">
                         <div className="flex items-center justify-between pb-2">
-                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.newContacts', 'New contacts')}</p>
+                            <p className="text-xs md:text-sm font-medium">{t('zones.analytics.newContacts', 'Новые контакты')}</p>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </div>
                         <div className="text-xl md:text-2xl font-bold">{newContactsCount}</div>
@@ -260,23 +260,23 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                 <CardHeader className="pb-2">
                     <CardTitle className="flex items-center gap-2 text-lg">
                         <DollarSign className="h-5 w-5" />
-                        {t('zones.analytics.plSummary', 'Revenue Summary')}
+                        {t('zones.analytics.plSummary', 'Сводка по выручке')}
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         <div className="p-4 bg-green-500/10 rounded-xl">
-                            <p className="text-xs text-muted-foreground">{t('zones.analytics.grossRevenue', 'Gross Revenue')}</p>
+                            <p className="text-xs text-muted-foreground">{t('zones.analytics.grossRevenue', 'Валовая выручка')}</p>
                             <p className="text-2xl font-bold text-green-600">{invoiceMetrics.totalPaidAmount.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">{invoiceMetrics.paid} {t('zones.analytics.paidInvoices', 'paid invoices')}</p>
                         </div>
                         <div className="p-4 bg-yellow-500/10 rounded-xl">
-                            <p className="text-xs text-muted-foreground">{t('zones.analytics.pendingRevenue', 'Pending Revenue')}</p>
+                            <p className="text-xs text-muted-foreground">{t('zones.analytics.pendingRevenue', 'Ожидаемая выручка')}</p>
                             <p className="text-2xl font-bold text-yellow-600">{invoiceMetrics.totalPendingAmount.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">{invoiceMetrics.pending} {t('zones.analytics.awaitingPayment', 'awaiting payment')}</p>
                         </div>
                         <div className="p-4 bg-muted/30 rounded-xl">
-                            <p className="text-xs text-muted-foreground">{t('zones.analytics.wonDealsValue', 'Won Deals Value')}</p>
+                            <p className="text-xs text-muted-foreground">{t('zones.analytics.wonDealsValue', 'Сумма выигранных сделок')}</p>
                             <p className="text-2xl font-bold">{dealMetrics.totalWonValue.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">{dealMetrics.won} {t('zones.analytics.closedDeals', 'closed deals')}</p>
                         </div>

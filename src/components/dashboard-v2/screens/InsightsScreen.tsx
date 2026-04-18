@@ -50,7 +50,7 @@ interface InsightsScreenProps {
   onApplyInsight: (action: { type: string; blockId?: string; data?: Record<string, unknown> }) => void;
 }
 
-type Period = '7d' | '14d' | '30d';
+type Period = '7d' | '30d' | '90d' | 'all';
 type Tab = 'overview' | 'traffic' | 'blocks' | 'funnel' | 'experiments';
 
 const containerVariants = {
@@ -84,9 +84,7 @@ export const InsightsScreen = memo(function InsightsScreen({
 
   const handlePeriodChange = (p: Period) => {
     setPeriod(p);
-    if (p === '7d') setAnalyticsPeriod('week');
-    else if (p === '14d') setAnalyticsPeriod('two_weeks');
-    else if (p === '30d') setAnalyticsPeriod('month');
+    setAnalyticsPeriod(p);
   };
 
   // Use real analytics data with fallbacks
@@ -276,7 +274,7 @@ export const InsightsScreen = memo(function InsightsScreen({
       {/* Period Selector */}
       <div className="px-[var(--space-page-px)] pb-5">
         <div className="flex gap-2 p-1.5 glass-subtle rounded-[1.5rem] border-white/10 shadow-inner">
-          {(['7d', '14d', '30d'] as Period[]).map((p) => (
+          {(['7d', '30d', '90d', 'all'] as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => handlePeriodChange(p)}
@@ -287,7 +285,10 @@ export const InsightsScreen = memo(function InsightsScreen({
                   : "text-muted-foreground/50 hover:text-muted-foreground hover:bg-white/5"
               )}
             >
-              {t(`dashboard.insights.period.${p}`, p === '7d' ? '7 дней' : p === '14d' ? '14 дней' : '30 дней')}
+              {t(
+                `dashboard.insights.period.${p}`,
+                p === '7d' ? '7 дней' : p === '30d' ? '30 дней' : p === '90d' ? '90 дней' : 'Всё время'
+              )}
             </button>
           ))}
         </div>
@@ -420,6 +421,32 @@ export const InsightsScreen = memo(function InsightsScreen({
                       />
                     </motion.div>
                   </div>
+
+                  <motion.div variants={itemVariants}>
+                    <Card className="p-4 border-border/40">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-sm font-semibold">
+                          {t('analytics.dataQuality.title', 'Качество данных')}
+                        </h3>
+                        <span className="text-xs text-muted-foreground">
+                          {t('analytics.dataQuality.subtitle', 'Заполненность метаданных')}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {[
+                          { key: 'visitor', label: t('analytics.dataQuality.visitor', 'Visitor ID'), value: analytics?.dataQuality.visitorCoverage ?? 0 },
+                          { key: 'session', label: t('analytics.dataQuality.session', 'Session ID'), value: analytics?.dataQuality.sessionCoverage ?? 0 },
+                          { key: 'device', label: t('analytics.dataQuality.device', 'Device'), value: analytics?.dataQuality.deviceCoverage ?? 0 },
+                          { key: 'source', label: t('analytics.dataQuality.source', 'Source'), value: analytics?.dataQuality.sourceCoverage ?? 0 },
+                        ].map(item => (
+                          <div key={item.key} className="rounded-lg bg-muted/30 p-3">
+                            <p className="text-xs text-muted-foreground">{item.label}</p>
+                            <p className="text-lg font-bold">{Math.round(item.value)}%</p>
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  </motion.div>
 
                   {/* Chart */}
                   {stats.dailyData.length > 0 && (
