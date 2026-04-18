@@ -83,6 +83,7 @@ type LandingEventType =
   | 'landing_section_view'
   | 'cta_create_click'
   | 'cta_gallery_click'
+  | 'cta_login_click'
   | 'cta_pricing_click'
   | 'pricing_toggle'
   | 'signup_start'
@@ -210,12 +211,13 @@ export function useLandingAnalytics() {
   }, []);
 
   // Track CTA clicks
-  const trackCtaClick = useCallback((ctaType: 'create' | 'gallery' | 'pricing' | 'signup', location?: string) => {
+  const trackCtaClick = useCallback((ctaType: 'create' | 'gallery' | 'pricing' | 'signup' | 'login', location?: string) => {
     if (isBot() || isDevTraffic()) return;
 
     const eventTypeMap: Record<string, LandingEventType> = {
       create: 'cta_create_click',
       gallery: 'cta_gallery_click',
+      login: 'cta_login_click',
       pricing: 'cta_pricing_click',
       signup: 'signup_start',
     };
@@ -287,8 +289,11 @@ export function useLandingAnalytics() {
 }
 
 // Intersection Observer hook for section tracking
-export function useSectionObserver(sectionId: string, trackSectionView: (id: string) => void) {
-  const sectionRef = useRef<HTMLElement>(null);
+export function useSectionObserver<T extends HTMLElement = HTMLElement>(
+  sectionId: string,
+  trackSectionView: (id: string) => void
+) {
+  const sectionRef = useRef<T>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
