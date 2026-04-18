@@ -425,7 +425,7 @@ LinkMAX/
 │   ├── lib/                       # Утилиты и хелперы
 │   ├── types/                     # TypeScript определения
 │   ├── i18n/locales/              # 16 языковых файлов
-│   └── integrations/supabase/     # Supabase клиент и типы
+│   └── platform/supabase/         # Supabase клиент и типы
 │
 ├── supabase/
 │   ├── functions/                 # 28+ Edge Functions

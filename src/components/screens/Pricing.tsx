@@ -25,14 +25,16 @@ import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { useCurrencyRate, BASE_PRICES_USD, FIXED_PRICES_KZT, getTotalPriceKzt } from '@/hooks/useCurrencyRate';
-import { supabase } from '@/platform/supabase/client';
+import { useAuth } from '@/hooks/user/useAuth';
+import { activateStarterTier } from '@/services/user';
 
 type BillingPeriod = 3 | 6 | 12;
 
 export default function Pricing() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const { isPremium, tier, isLoading } = usePremiumStatus();
+  const { tier, isLoading, refresh: refreshPremiumStatus } = usePremiumStatus();
+  const { user } = useAuth();
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(12);
 
   const { data: currentRate = 497.33 } = useCurrencyRate();
@@ -97,13 +99,13 @@ export default function Pricing() {
 
     if (planKey === 'starter') {
       try {
-        const { data: user } = await supabase.auth.getUser();
-        if (!user.user) {
+        if (!user) {
           navigate('/auth');
           return;
         }
-        const { error } = await supabase.from('user_profiles').update({ premium_tier: 'starter' }).eq('id', user.user.id);
+        const { error } = await activateStarterTier(user.id);
         if (error) throw error;
+        await refreshPremiumStatus();
         toast.success(t('pricing.starterActivated', 'Тариф Starter активирован!'));
         setTimeout(() => navigate('/dashboard/activity'), 1500);
       } catch (err) {

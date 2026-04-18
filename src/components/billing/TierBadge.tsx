@@ -11,16 +11,20 @@ interface TierBadgeProps {
 }
 
 export function TierBadge({ tier, size = 'md', showIcon = true }: TierBadgeProps) {
-  const tierConfig = {
+  const tierConfig: Record<FreeTier | 'free', {
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    className: string;
+  }> = {
     free: {
       label: 'BASIC',
       icon: Zap,
       className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',
     },
     starter: {
-      label: 'BASIC',
+      label: 'STARTER',
       icon: Zap,
-      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',
+      className: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     },
     identity: {
       label: 'BASIC',
@@ -39,7 +43,7 @@ export function TierBadge({ tier, size = 'md', showIcon = true }: TierBadgeProps
     },
   };
 
-  const config = (tierConfig as any)[tier] || tierConfig.free;
+  const config = tierConfig[tier] || tierConfig.identity;
   const Icon = config.icon;
 
   const sizeClasses = {

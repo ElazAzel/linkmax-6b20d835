@@ -1162,7 +1162,7 @@ npm run start
 
 ### Known Issues & Tech Debt
 
-- **Supabase TypeScript Sync:** `src/hooks/` for Business Zones features currently rely on `as any` because tables like `zone_contact_notes`, `zone_pipelines`, `zone_task_checklist` are missing from the dynamically generated `src/integrations/supabase/types.ts`. Any attempt to strongly type the `PostgrestBuilder` without a synchronized schema collapses existing mappings to `never`. Fix requires a manual run of `supabase gen types` configured to this precise Cloud project branch to fully resolve ESLint warnings in the hooks layer.
+- **Supabase TypeScript Sync:** `src/hooks/` for Business Zones features currently rely on `as any` because tables like `zone_contact_notes`, `zone_pipelines`, `zone_task_checklist` are missing from the dynamically generated `src/platform/supabase/types.ts`. Any attempt to strongly type the `PostgrestBuilder` without a synchronized schema collapses existing mappings to `never`. Fix requires a manual run of `supabase gen types` configured to this precise Cloud project branch to fully resolve ESLint warnings in the hooks layer.
 
 ---
 
