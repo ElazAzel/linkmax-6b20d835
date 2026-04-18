@@ -7450,7 +7450,8 @@
     "description": "{{count}} blocks"
   },
   "templates": {
-    "notEnoughTokens": "Not enough tokens. Need {{amount}} more."
+    "notEnoughTokens": "Not enough tokens. Need {{amount}} more.",
+    "purchaseTemplate": "Purchasing a template: {{name}}"
   },
   "tokens": {
     "insufficientForPremium": "Insufficient Linkkon. Need {{count}} tokens.",
@@ -7576,5 +7577,8 @@
     "pricing": {
       "billedYearly": "Billed yearly at {{price}}"
     }
+  },
+  "tma": {
+    "home_greeting": "Hi, {{name}} 👋"
   }
 }

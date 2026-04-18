@@ -7577,5 +7577,8 @@
     "pricing": {
       "billedYearly": "Оплата {{price}} в год"
     }
+  },
+  "tma": {
+    "home_greeting": "Привет, {{name}} 👋"
   }
 }
