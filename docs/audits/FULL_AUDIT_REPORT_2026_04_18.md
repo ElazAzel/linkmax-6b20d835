@@ -211,7 +211,7 @@
 
 ## Фаза 0–30 дней (стабилизация)
 - [ ] Восстановить green quality baseline (typecheck/lint/i18n checks в CI).
-- [x] **Старт выполнен:** добавлен автоматический guardrail `npm run quality:baseline`, который блокирует рост `any` и `console.log` относительно текущего baseline.
+- [x] **Старт выполнен:** добавлен автоматический guardrail `npm run quality:baseline` (на базе `config/quality-baseline.json`) и интегрирован в CI/quality-check для блокировки роста `any` и `console.log`.
 - [ ] Ограничить новые `any` и внедрить policy по логированию.
 - [ ] Определить North Star + guardrails и связать с событийной моделью.
 - [ ] Сформировать release-critical тест-матрицу.

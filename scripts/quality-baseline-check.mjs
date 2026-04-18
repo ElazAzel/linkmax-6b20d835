@@ -1,24 +1,39 @@
 #!/usr/bin/env node
 import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
-const defaults = {
-  anyMax: 808,
-  consoleLogMax: 24,
+const BASELINE_PATH = 'config/quality-baseline.json';
+
+const loadBaseline = () => {
+  const raw = readFileSync(BASELINE_PATH, 'utf8');
+  const parsed = JSON.parse(raw);
+
+  if (!Number.isFinite(parsed.anyMax) || !Number.isFinite(parsed.consoleLogMax)) {
+    throw new Error(`Invalid baseline values in ${BASELINE_PATH}`);
+  }
+
+  return {
+    anyMax: parsed.anyMax,
+    consoleLogMax: parsed.consoleLogMax,
+  };
 };
 
+const baseline = loadBaseline();
+
 const thresholds = {
-  anyMax: Number(process.env.ANY_MAX ?? defaults.anyMax),
-  consoleLogMax: Number(process.env.CONSOLE_LOG_MAX ?? defaults.consoleLogMax),
+  anyMax: Number(process.env.ANY_MAX ?? baseline.anyMax),
+  consoleLogMax: Number(process.env.CONSOLE_LOG_MAX ?? baseline.consoleLogMax),
 };
 
 const countMatches = (command) => {
-  try {
-    const output = execSync(command, { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
-    const parsed = Number(output);
-    return Number.isFinite(parsed) ? parsed : 0;
-  } catch {
-    return 0;
+  const output = execSync(command, { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
+  const parsed = Number(output);
+
+  if (!Number.isFinite(parsed)) {
+    throw new Error(`Failed to parse numeric output for command: ${command}`);
   }
+
+  return parsed;
 };
 
 const metrics = {
@@ -27,6 +42,7 @@ const metrics = {
 };
 
 console.log('Quality baseline check');
+console.log(`- baseline file: ${BASELINE_PATH}`);
 console.log(`- any usages: ${metrics.any} (max: ${thresholds.anyMax})`);
 console.log(`- console.log usages: ${metrics.consoleLog} (max: ${thresholds.consoleLogMax})`);
 
