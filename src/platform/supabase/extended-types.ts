@@ -468,16 +468,19 @@ export type AppDatabase = Omit<Database, 'public'> & {
             kaspi_widget_enabled: boolean | null;
             premium_tier: string | null;
             premium_expires_at: string | null;
+            fcm_token: string | null;
           };
           Insert: Database['public']['Tables']['user_profiles']['Insert'] & {
             kaspi_widget_enabled?: boolean | null;
             premium_tier?: string | null;
             premium_expires_at?: string | null;
+            fcm_token?: string | null;
           };
           Update: Database['public']['Tables']['user_profiles']['Update'] & {
             kaspi_widget_enabled?: boolean | null;
             premium_tier?: string | null;
             premium_expires_at?: string | null;
+            fcm_token?: string | null;
           };
           Relationships: Database['public']['Tables']['user_profiles']['Relationships'];
         };
