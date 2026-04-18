@@ -209,6 +209,7 @@ const router = createBrowserRouter([
 });
 
 import { PushService } from "@/lib/notifications/push-service";
+import { logger } from "@/lib/utils/logger";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -232,17 +233,17 @@ if ('serviceWorker' in navigator) {
               if (navigator.serviceWorker.controller) {
                 // New update available - notify user or auto-reload
                 // In this case, we prefer a silent reload after user interaction or next start
-                console.log('New content is available; please refresh.');
+                logger.info('New content is available; please refresh.', { context: 'service-worker' });
               } else {
                 // Content is cached for offline use
-                console.log('Content is cached for offline use.');
+                logger.info('Content is cached for offline use.', { context: 'service-worker' });
               }
             }
           };
         }
       };
     }).catch((error) => {
-      console.error('SW registration failed:', error);
+      logger.error('SW registration failed', error, { context: 'service-worker' });
     });
   });
 }

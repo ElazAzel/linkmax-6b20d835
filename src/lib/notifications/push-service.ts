@@ -1,13 +1,14 @@
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/utils/logger';
 
 export class PushService {
   private static isInitialized = false;
 
   static async init() {
     if (!Capacitor.isNativePlatform()) {
-      console.log('[PushService] Non-native platform, skipping initialization');
+      logger.debug('Non-native platform, skipping initialization', { context: 'push-service' });
       return;
     }
 
@@ -17,29 +18,29 @@ export class PushService {
       await this.addListeners();
       await this.registerNotifications();
       this.isInitialized = true;
-      console.log('[PushService] Initialized');
+      logger.info('Push service initialized', { context: 'push-service' });
     } catch (error) {
-      console.error('[PushService] Initialization failed', error);
+      logger.error('Push service initialization failed', error, { context: 'push-service' });
     }
   }
 
   private static async addListeners() {
     await PushNotifications.addListener('registration', async ({ value: token }) => {
-      console.log('[PushService] Registration success, token:', token);
+      logger.info('Push registration success', { context: 'push-service', data: { token } });
       await this.saveToken(token);
     });
 
     await PushNotifications.addListener('registrationError', (err: any) => {
-      console.error('[PushService] Registration error:', err.error);
+      logger.error('Push registration error', err.error, { context: 'push-service' });
     });
 
     await PushNotifications.addListener('pushNotificationReceived', (notification) => {
-      console.log('[PushService] Notification received:', notification);
+      logger.debug('Push notification received', { context: 'push-service', data: notification });
       // You can show a custom UI toast here if the app is in foreground
     });
 
     await PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-      console.log('[PushService] Notification action performed:', notification);
+      logger.debug('Push notification action performed', { context: 'push-service', data: notification });
       const data = notification.notification.data;
       if (data?.url) {
         window.location.href = data.url;
@@ -72,9 +73,9 @@ export class PushService {
       .eq('id', user.id);
 
     if (error) {
-      console.error('[PushService] Failed to save token to Supabase', error);
+      logger.error('Failed to save token to Supabase', error, { context: 'push-service' });
     } else {
-      console.log('[PushService] Token saved to profile');
+      logger.info('Token saved to profile', { context: 'push-service' });
     }
   }
 
