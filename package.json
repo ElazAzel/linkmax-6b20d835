@@ -41,7 +41,8 @@
     "mobile:open:ios": "npx cap open ios",
     "skills:browse": "ai-agent-skills",
     "skills:list": "ai-agent-skills list",
-    "skills:doctor": "ai-agent-skills doctor"
+    "skills:doctor": "ai-agent-skills doctor",
+    "quality:baseline": "node scripts/quality-baseline-check.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
