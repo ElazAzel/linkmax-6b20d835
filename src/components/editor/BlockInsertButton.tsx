@@ -31,7 +31,6 @@ import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
-import { getLucideIcon } from '@/lib/utils/icon-utils';
 import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
@@ -273,7 +272,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
     const isLocked = !canUseBlock(block.tier);
-    const IconComponent = getLucideIcon(block.icon);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
     const marker = showRelevantBadge && !isLocked
       ? {
@@ -366,7 +364,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     const blockTier = (manifest.isPremium ? 'pro' : 'free') as BlockTier;
     const isLocked = !canUseBlock(blockTier);
-    const IconComponent = getLucideIcon(manifest.icon);
     const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
 
     return (
