@@ -128,7 +128,7 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <PostHogProvider>
+      <PostHogProvider apiKey={POSTHOG_KEY} options={{ api_host: POSTHOG_HOST }}>
         <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>
