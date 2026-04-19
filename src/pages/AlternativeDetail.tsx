@@ -30,7 +30,7 @@ export default function AlternativeDetail() {
 
   const onCta = (source: string) => {
     trackMarketingEvent({
-      eventType: 'alternatives_migration_cta_click',
+      eventType: 'alternatives_cta_click',
       metadata: { source, competitor: profile.competitor },
     });
     navigate('/auth');

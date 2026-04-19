@@ -229,7 +229,7 @@ export function BlockEditorV2({
                     <div className="p-4">
                         <Suspense fallback={<div className="h-20 bg-muted animate-pulse rounded-xl" />}>
                             <BlockRenderer
-                                block={deferredFormData}
+                                block={deferredFormData as Block}
                                 isPreview={true}
                             />
                         </Suspense>
@@ -255,7 +255,7 @@ export function BlockEditorV2({
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
             onClose={handleCloseAttempt}
-            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates })}
+            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates } as Partial<Block>)}
             enablePreview={block.type !== 'profile'}
             previewComponent={previewComponent}
             onDelete={onDelete ? () => setShowDeleteDialog(true) : undefined}
