@@ -1,9 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { getAppDomain } from '@/lib/utils/url-helpers';
+import type { TelegramAuthPayload } from '@/types/telegram-auth';
+
+declare global {
+    interface Window {
+        onTelegramAuth?: (user: TelegramAuthPayload) => void;
+    }
+}
 
 interface TelegramLoginButtonProps {
     botName: string;
-    onAuth: (user: any) => void;
+    onAuth: (user: TelegramAuthPayload) => void;
     buttonSize?: 'large' | 'medium' | 'small';
     cornerRadius?: number;
     requestAccess?: 'write';
@@ -33,7 +40,7 @@ export function TelegramLoginButton({
         }
 
         // Expose callback to global window object for the script to call
-        (window as any).onTelegramAuth = onAuth;
+        window.onTelegramAuth = onAuth;
 
         const script = document.createElement('script');
         script.src = 'https://telegram.org/js/telegram-widget.js?22';

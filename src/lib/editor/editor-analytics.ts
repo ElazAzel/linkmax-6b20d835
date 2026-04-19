@@ -96,13 +96,14 @@ export function trackEditorAction(
 
     // Insert into analytics table async
     import('@/platform/supabase/client').then(({ supabase }) => {
+      const metadata = meta ? (JSON.parse(JSON.stringify(meta)) as Json) : null;
       supabase
         .from('analytics')
         .insert([{
           event_type: `editor:${action}`,
-          metadata: meta ? (JSON.parse(JSON.stringify(meta)) as Json) : null,
+          metadata,
           page_id: null,
-          block_id: meta?.blockId ?? null,
+          block_id: null,
         }])
         .then(() => {});
     });

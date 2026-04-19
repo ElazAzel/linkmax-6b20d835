@@ -1,12 +1,12 @@
 /**
- * AIBuilderWizard — 5-step stepper wizard
+ * AIBuilderWizard — deterministic smart page builder
  * Step 1: User info (name, bio, contacts, services, socials, media links)
- * Step 2: Niche selection (from templates DB categories)
- * Step 3: Template carousel (admin templates from DB)
- * Step 4: AI generating (fills template with personalized content)
+ * Step 2: Niche selection
+ * Step 3: Business input
+ * Step 4: deterministic generation (no AI / no edge function)
  * Step 5: Complete
  */
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -18,26 +18,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
-import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
-import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
-import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
-import { generateBlocksFromTemplate } from '@/lib/blocks/internal-builder';
 import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
-import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { storage } from '@/lib/storage';
+import { buildSmartPage, type SmartBuilderUserInfo } from '@/lib/onboarding/smart-page-builder';
 
 interface AIBuilderWizardProps {
   open: boolean;
@@ -48,28 +42,7 @@ interface AIBuilderWizardProps {
   isOnboarding?: boolean;
 }
 
-interface DBTemplate {
-  id: string;
-  name: string;
-  description: string | null;
-  category: string;
-  blocks: any;
-  preview_image: string | null;
-  is_premium: boolean | null;
-}
-
-interface UserInfo {
-  name: string;
-  bio: string;
-  goal?: OnboardingGoal;
-  contacts: string;
-  services: string;
-  socials: string;
-  mediaLinks: string;
-  expertGoal?: string;
-  expertOffer?: string;
-  expertChannel?: 'telegram' | 'email';
-}
+type UserInfo = SmartBuilderUserInfo;
 
 type Step = 'goal' | 'niche' | 'description' | 'generating' | 'complete';
 
@@ -82,7 +55,6 @@ function getStepProgress(step: Step): number {
 
 export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = false }: AIBuilderWizardProps) {
   const { t } = useTranslation();
-  const { canUseAIPageGeneration, incrementAIPageGeneration } = useFreemiumLimits();
 
   const [step, setStep] = useState<Step>('goal');
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -99,9 +71,8 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   });
   const [selectedGoal, setSelectedGoal] = useState<OnboardingGoal | null>(null);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<DBTemplate | null>(null);
-  const [loadingTemplates, setLoadingTemplates] = useState(false);
   const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
+  const [generatedProfile, setGeneratedProfile] = useState<{ name: string; bio: string } | null>(null);
 
   // Reset state when dialog opens
   useEffect(() => {
@@ -109,7 +80,8 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
       setStep('goal');
       setSelectedGoal(null);
       setSelectedNiche(null);
-      setSelectedTemplate(null);
+      setGeneratedBlocks([]);
+      setGeneratedProfile(null);
     }
   }, [open]);
 
@@ -120,46 +92,8 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     setStep('niche');
   };
 
-  const handleSelectNiche = async (niche: Niche) => {
+  const handleSelectNiche = (niche: Niche) => {
     setSelectedNiche(niche);
-    
-    // Automatically pick the first template for the niche to reduce friction
-    setLoadingTemplates(true);
-    try {
-      const { data, error } = await supabase
-        .from('templates')
-        .select('id, name, description, category, blocks, preview_image, is_premium')
-        .eq('category', niche)
-        .eq('is_public', true)
-        .order('sort_order', { ascending: true })
-        .limit(1);
-
-      if (error) throw error;
-      if (data && data.length > 0) {
-        setSelectedTemplate(data[0]);
-      } else {
-        // Fallback for niches without templates
-        setSelectedTemplate({
-          id: 'basic-niche-template',
-          name: t(`niches.${niche}`, niche),
-          description: null,
-          category: niche,
-          blocks: [
-            { type: 'profile' },
-            { type: 'catalog' },
-            { type: 'messenger' },
-            { type: 'socials' }
-          ],
-          preview_image: null,
-          is_premium: false,
-        });
-      }
-    } catch (err) {
-      console.error('Failed to auto-select template:', err);
-    } finally {
-      setLoadingTemplates(false);
-    }
-
     setStep('description');
   };
 
@@ -171,58 +105,32 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     setStep('niche');
   };
 
-  const handleBackToTemplate = () => {
-    setStep('niche'); // Since we skip template selection, back from description goes to niche
-  };
-
   const handleGenerate = useCallback(async () => {
-    if (!selectedNiche || !selectedTemplate) {
-      toast.error(t('aiBuilder.selectTemplate', 'Выберите шаблон'));
-      return;
-    }
-
-    if (!canUseAIPageGeneration()) {
-      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
+    if (!selectedNiche) {
+      toast.error(t('aiBuilder.selectTemplate', 'Select a business category'));
       return;
     }
 
     setStep('generating');
 
     try {
-      // Build user description for AI
-      const userDescription = [
-        `Цель: ${selectedGoal ? t(`aiBuilder.goals.${selectedGoal}`) : ''}`,
-        `Ниша: ${selectedNiche ? t(`niches.${selectedNiche}`) : ''}`,
-        `Имя/Название: ${userInfo.name}`,
-        `Описание: ${userInfo.bio}`,
-      ].filter(Boolean).join('\n');
+      const result = buildSmartPage({
+        userInfo: { ...userInfo, goal: selectedGoal ?? userInfo.goal },
+        niche: selectedNiche,
+        goal: selectedGoal,
+      });
 
-      // Generate structural layout and inject user data synchronously
-      const finalBlocks: Block[] = generateBlocksFromTemplate(
-        Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
-        { ...userInfo, bio: userInfo.bio }
-      );
+      await new Promise(resolve => setTimeout(resolve, 700));
 
-      // Brief delay to simulate generation and keep UX smooth
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      incrementAIPageGeneration();
-
-      // Extract profile
-      const profile = {
-        name: userInfo.name,
-        bio: userInfo.bio || `${userInfo.services || ''}`,
-      };
-
-      setGeneratedBlocks(finalBlocks);
+      setGeneratedBlocks(result.blocks);
+      setGeneratedProfile(result.profile);
       setStep('complete');
     } catch (err) {
-      console.error('AI Builder error:', err);
-      toast.error(t('aiBuilder.error', 'Ошибка генерации. Попробуйте ещё раз.'));
+      console.error('Smart Builder error:', err);
+      toast.error(t('aiBuilder.error', 'Could not build the page. Try again.'));
       setStep('description');
     }
-  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, canUseAIPageGeneration, incrementAIPageGeneration, onComplete, onClose, t]);
-
+  }, [selectedNiche, userInfo, selectedGoal, t]);
   const handleSkip = () => {
     storage.set('niche_onboarding_completed', 'true');
     storage.set('onboarding_completed', 'true');
@@ -233,9 +141,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[95vh] overflow-hidden p-0 gap-0 rounded-[24px] border-0 bg-card/98 backdrop-blur-3xl">
-        <DialogTitle className="sr-only">{t('aiBuilder.title', 'AI Builder')}</DialogTitle>
+        <DialogTitle className="sr-only">Умный конструктор LinkMAX</DialogTitle>
         <DialogDescription className="sr-only">
-          {t('aiBuilder.description', 'Create your page with AI')}
+          Алгоритмы LinkMAX собирают страницу без AI и внешних генераторов.
         </DialogDescription>
 
         {/* Progress */}
@@ -253,10 +161,10 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           <div className="p-6 pt-4 animate-fade-in text-center sm:text-left">
             <div className="mb-6">
               <h2 className="text-2xl font-black mb-1">
-                {t('aiBuilder.goals.title')}
+                Что должна сделать страница?
               </h2>
               <p className="text-muted-foreground text-sm">
-                {t('aiBuilder.goals.subtitle')}
+                Выберите главный результат, а конструктор подберёт структуру.
               </p>
             </div>
 
@@ -298,7 +206,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               </Button>
               <div>
                 <h2 className="text-xl font-black">
-                  {t('aiBuilder.nicheTitle', 'Выберите сферню')}
+                  {t('aiBuilder.nicheTitle', 'Выберите сферу')}
                 </h2>
                 <p className="text-muted-foreground text-sm">
                   {t('aiBuilder.nicheDesc', 'Подберём оформление под вашу деятельность')}
@@ -338,9 +246,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h2 className="text-xl font-black mb-0.5">{t('aiBuilder.descStep.title')} ✨</h2>
+                <h2 className="text-xl font-black mb-0.5">Дайте алгоритму факты</h2>
                 <p className="text-muted-foreground text-sm">
-                  {t('aiBuilder.descStep.hint')}
+                  Чем точнее оффер и контакты, тем ближе страница к публикации.
                 </p>
               </div>
             </div>
@@ -348,39 +256,70 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
             <div className="space-y-6">
               <div className="space-y-4 bg-muted/30 p-5 rounded-[32px] border border-border/50 shadow-inner">
                 <div className="space-y-2">
-                  <Label className="text-base font-bold ml-1">{t('aiBuilder.name')} <span className="text-destructive">*</span></Label>
+                  <Label className="text-base font-bold ml-1">Имя или название <span className="text-destructive">*</span></Label>
                   <Input
                     value={userInfo.name}
                     onChange={(e) => setUserInfo(p => ({ ...p, name: e.target.value }))}
-                    placeholder={t('aiBuilder.namePlaceholder')}
+                    placeholder="Например: Алия, психолог-консультант"
                     className="h-14 rounded-2xl bg-background/80 border-border/30 focus:border-primary/50 text-lg"
                     autoFocus
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-base font-bold ml-1">{t('aiBuilder.descStep.label')}</Label>
+                  <Label className="text-base font-bold ml-1">Кто вы и чем помогаете</Label>
                   <Textarea
                     value={userInfo.bio}
                     onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
-                    placeholder={t('aiBuilder.descStep.placeholder')}
+                    placeholder="Коротко: для кого вы, какой результат даёте, чем отличаетесь."
                     className="rounded-2xl min-h-[120px] bg-background/80 border-border/30 focus:border-primary/50 text-base resize-none leading-relaxed"
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-base font-bold ml-1">Услуги или продукты</Label>
+                  <Textarea
+                    value={userInfo.services}
+                    onChange={(e) => setUserInfo(p => ({ ...p, services: e.target.value }))}
+                    placeholder="Консультация 15000 тг, сопровождение 80000 тг, аудит 45000 тг"
+                    className="rounded-2xl min-h-[96px] bg-background/80 border-border/30 focus:border-primary/50 text-base resize-none leading-relaxed"
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label className="text-base font-bold ml-1">Контакты</Label>
+                    <Input
+                      value={userInfo.contacts}
+                      onChange={(e) => setUserInfo(p => ({ ...p, contacts: e.target.value }))}
+                      placeholder="+7 777 000 00 00, @telegram"
+                      className="h-12 rounded-2xl bg-background/80 border-border/30 focus:border-primary/50 text-base"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-base font-bold ml-1">Соцсети</Label>
+                    <Input
+                      value={userInfo.socials}
+                      onChange={(e) => setUserInfo(p => ({ ...p, socials: e.target.value }))}
+                      placeholder="instagram.com/name, t.me/name"
+                      className="h-12 rounded-2xl bg-background/80 border-border/30 focus:border-primary/50 text-base"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="pt-2">
                 <Button
                   onClick={handleGenerate}
-                  disabled={!userInfo.name.trim() || loadingTemplates}
+                  disabled={!userInfo.name.trim()}
                   className="w-full h-16 rounded-[24px] font-black text-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 group relative overflow-hidden bg-primary"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-transparent animate-shimmer" />
                   <Sparkles className="h-6 w-6 mr-3 group-hover:rotate-12 transition-transform" />
-                  {t('aiBuilder.nicheQuestions.generateBtn', 'Магия InkMAX ✨')}
+                  Собрать страницу
                 </Button>
                 <p className="text-center text-xs text-muted-foreground mt-4 px-8">
-                  {t('aiBuilder.generatingDesc')}
+                  Без AI: скоринг оффера, выбор revenue-flow, CTA, доверие, контакты и адаптивная сетка.
                 </p>
               </div>
             </div>
@@ -400,22 +339,22 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               {/* Simulated blocks building up */}
               <div className="flex flex-col-reverse items-center gap-3 w-full px-8">
                 <div className="h-8 w-full bg-primary/20 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-300 flex items-center justify-center text-xs text-primary/70 overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.socials ? t('aiBuilder.gen.socials', 'Подключение соцсетей...') : t('aiBuilder.gen.footer', 'Сборка футера...')}
+                  {userInfo.socials ? 'Подключение соцсетей...' : 'Сборка контактов...'}
                 </div>
                 <div className="h-12 w-full bg-primary/40 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-200 flex items-center justify-center text-xs text-primary/80 font-medium overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.services ? `${t('aiBuilder.gen.services', 'Парсинг услуг:')} ${userInfo.services.slice(0, 15)}...` : t('aiBuilder.gen.blocks', 'Настройка блоков...')}
+                  {userInfo.services ? `Парсинг услуг: ${userInfo.services.slice(0, 15)}...` : 'Настройка блоков...'}
                 </div>
                 <div className="h-16 w-full bg-primary/60 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-100 flex items-center justify-center text-sm text-primary-foreground font-bold shadow-md overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.name ? userInfo.name : t('aiBuilder.gen.profile', 'Гидратация профиля...')}
+                  {userInfo.name ? userInfo.name : 'Гидратация профиля...'}
                 </div>
               </div>
             </div>
 
             <h3 className="text-2xl font-black mb-3">
-              {t('aiBuilder.generatingTitle', 'Нейро-алгоритм собирает страницу')}
+              Алгоритм собирает страницу
             </h3>
             <p className="text-muted-foreground mb-6">
-              {t('aiBuilder.generatingDesc', 'Умные эвристики размещают ваш контент по сетке шаблона')}
+              Подбираем revenue-flow, порядок блоков, CTA и быстрые действия.
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
@@ -448,11 +387,12 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                   className="w-full h-14 rounded-2xl font-black text-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/25"
                   onClick={() => {
                     onComplete(
-                      { name: userInfo.name, bio: userInfo.bio || '' },
+                      generatedProfile ?? { name: userInfo.name, bio: userInfo.bio || '' },
                       generatedBlocks,
                       selectedNiche!
                     );
                     storage.set('ai_builder_used', 'true');
+                    storage.set('smart_builder_used', 'true');
                     storage.set('niche_onboarding_completed', 'true');
                     storage.set('onboarding_completed', 'true');
                     storage.set('wizard_wants_publish', 'true');
@@ -468,11 +408,12 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                   className="w-full h-12 rounded-xl text-muted-foreground"
                   onClick={() => {
                     onComplete(
-                      { name: userInfo.name, bio: userInfo.bio || '' },
+                      generatedProfile ?? { name: userInfo.name, bio: userInfo.bio || '' },
                       generatedBlocks,
                       selectedNiche!
                     );
                     storage.set('ai_builder_used', 'true');
+                    storage.set('smart_builder_used', 'true');
                     storage.set('niche_onboarding_completed', 'true');
                     storage.set('onboarding_completed', 'true');
                     onClose();

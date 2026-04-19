@@ -96,6 +96,7 @@ const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').t
 
 import { storage } from '@/lib/storage';
 import { prefetchRouteChunks } from '@/lib/routing/route-prefetch';
+import type { Block, PageData, PageTheme } from '@/types/page';
 
 // Lazy load heavy components for better bundle splitting
 const BlockEditorV2 = lazy(() => import('@/components/editor/BlockEditorV2').then(m => ({ default: m.BlockEditorV2 })));
@@ -103,8 +104,6 @@ const TemplateGallery = lazy(() => import('@/components/editor/TemplateGallery')
 const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarketplace').then(m => ({ default: m.TemplateMarketplace })));
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
 const AIGenerator = lazy(() => import('@/components/editor/AIGenerator').then(m => ({ default: m.AIGenerator })));
-/** @deprecated Use AIBuilderWizard instead */
-const QuickStartFlow = lazy(() => import('@/components/onboarding/QuickStartFlow').then(m => ({ default: m.QuickStartFlow })));
 const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
 const InstallPromptDialog = lazy(() => import('@/components/pwa/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
@@ -135,7 +134,7 @@ function DashboardV2Inner() {
   const pageVersionsRef = useRef<ReturnType<typeof usePageVersions> | null>(null);
 
   // Callback for saving version on each publish
-  const handlePublishVersion = useCallback((pageData: import('@/types/page').PageData) => {
+  const handlePublishVersion = useCallback((pageData: PageData) => {
     if (pageData?.id && pageVersionsRef.current) {
       pageVersionsRef.current.saveVersion(
         pageData.id,
@@ -190,6 +189,7 @@ function DashboardV2Inner() {
   }, [searchParams, location.pathname]);
 
   const activationAction = searchParams.get('action');
+  const welcomeAction = searchParams.get('welcome');
 
   // UI State
   const [migrationKey, setMigrationKey] = useState(0);
@@ -200,17 +200,19 @@ function DashboardV2Inner() {
   const [showMyTemplates, setShowMyTemplates] = useState(false);
   const [showTokens, setShowTokens] = useState(false);
   const [showMarketplace, setShowMarketplace] = useState(false);
-  const [showQuickStart, setShowQuickStart] = useState(false);
   const [showCreatePage, setShowCreatePage] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
 
   // Page versions
-  const handleRestoreVersion = useCallback((blocks: any[], theme?: any, seo?: any) => {
+  const handleRestoreVersion = useCallback((blocks: Block[], theme?: PageTheme, seo?: object) => {
+    const restoredSeo = seo as Partial<PageData['seo']> | undefined;
     dashboard.updatePageDataPartial({
       blocks,
       theme: theme || dashboard.pageData?.theme,
-      seo: seo ? { ...dashboard.pageData?.seo, ...seo } : dashboard.pageData?.seo,
+      seo: restoredSeo
+        ? { title: '', description: '', keywords: [], ...dashboard.pageData?.seo, ...restoredSeo }
+        : dashboard.pageData?.seo,
     });
     setShowVersions(false);
   }, [dashboard]);
@@ -227,7 +229,7 @@ function DashboardV2Inner() {
   const seoTitle = t('dashboard.seo.title', 'LinkMAX Dashboard');
   const seoDescription = t('dashboard.seo.description', 'Manage your LinkMAX pages, leads, and analytics.');
 
-  // QuickStartFlow removed — AIBuilderWizard handles all onboarding via useDashboardOnboarding
+  // QuickStartFlow removed; Smart Builder handles onboarding via useDashboardOnboarding.
 
   useEffect(() => {
     // Prefetch only nearest probable next transitions by active dashboard tab
@@ -377,6 +379,15 @@ function DashboardV2Inner() {
       setSearchParams(next, { replace: true });
     }
   }, [activationAction, currentTab, searchParams, setSearchParams, setCommandPaletteOpen]);
+
+  useEffect(() => {
+    if (welcomeAction !== '1' || currentTab !== 'editor') return;
+
+    dashboard.onboardingState.openAIBuilderFromSettings();
+    const next = new URLSearchParams(searchParams);
+    next.delete('welcome');
+    setSearchParams(next, { replace: true });
+  }, [welcomeAction, currentTab, dashboard.onboardingState, searchParams, setSearchParams]);
 
   // Loading state
   if (dashboard.loading || multiPage.loading) {
@@ -662,7 +673,7 @@ function DashboardV2Inner() {
                   // Page settings props
                   pageTitle={multiPage.activePage?.title}
                   pageSlug={multiPage.activePage?.slug}
-                  customDomain={(multiPage.activePage as any)?.custom_domain}
+                  customDomain={multiPage.activePage?.custom_domain}
                   isPaid={multiPage.activePage?.isPaid}
                   isPrimaryPaid={multiPage.activePage?.isPrimaryPaid}
                   seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}
@@ -683,14 +694,15 @@ function DashboardV2Inner() {
                     return result;
                   }}
                   onUpdateSeo={(seo) => {
+                    const nextSeo: PageData['seo'] = {
+                      title: '',
+                      description: '',
+                      keywords: [],
+                      ...dashboard.pageData?.seo,
+                      ...seo,
+                    };
                     dashboard.updatePageDataPartial({
-                      seo: { 
-                        title: '',
-                        description: '',
-                        keywords: [],
-                        ...dashboard.pageData?.seo, 
-                        ...seo 
-                      } as any, // Cast to any because of required fields in SEO type vs optional in partial
+                      seo: nextSeo,
                     });
                   }}
                   onUpdateBranding={(branding) => {
@@ -852,7 +864,7 @@ function DashboardV2Inner() {
             />
           )}
 
-          {/* AI Builder Wizard (onboarding + settings) */}
+          {/* Smart Builder wizard (onboarding + settings) */}
           {dashboard.onboardingState.showAIBuilderWizard && (
             <AIBuilderWizard
               open={dashboard.onboardingState.showAIBuilderWizard}
@@ -923,7 +935,8 @@ function DashboardV2Inner() {
               onClose={() => setShowTheme(false)}
               currentTheme={dashboard.pageData?.theme || {}}
               onThemeChange={(theme) => {
-                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } as any });
+                if (!dashboard.pageData?.theme) return;
+                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData.theme, ...theme } });
               }}
               isPremium={dashboard.isPremium}
               onUpgrade={() => navigate('/pricing')}

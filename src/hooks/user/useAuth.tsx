@@ -4,6 +4,17 @@ import { supabase } from '@/platform/supabase/client';
 import { storage } from '@/lib/storage';
 import { logger } from '@/lib/utils/logger';
 import { posthog } from '@/lib/posthog';
+import { NEW_USER_BUILDER_ROUTE } from '@/lib/onboarding/routes';
+import type { TelegramAuthPayload } from '@/types/telegram-auth';
+
+interface TelegramAuthResponse {
+  valid?: boolean;
+  error?: string;
+  session?: {
+    access_token: string;
+    refresh_token: string;
+  };
+}
 
 interface AuthContextType {
   user: User | null;
@@ -13,7 +24,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }>;
   signInWithGoogle: (returnTo?: string) => Promise<{ error: Error | null }>;
   signInWithApple: (returnTo?: string) => Promise<{ error: Error | null }>;
-  signInWithTelegram: (telegramData: any) => Promise<{ error: Error | null }>;
+  signInWithTelegram: (telegramData: TelegramAuthPayload) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -108,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/dashboard`;
+    const redirectUrl = `${window.location.origin}/auth/callback?returnTo=${encodeURIComponent(NEW_USER_BUILDER_ROUTE)}`;
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -158,9 +169,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error: error || null };
   };
 
-  const signInWithTelegram = async (telegramData: any) => {
+  const signInWithTelegram = async (telegramData: TelegramAuthPayload) => {
     try {
-      const { data, error: invokeError } = await supabase.functions.invoke('auth-telegram-web', {
+      const { data, error: invokeError } = await supabase.functions.invoke<TelegramAuthResponse>('auth-telegram-web', {
         body: { telegramData }
       });
 
@@ -177,9 +188,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       return { error: null };
-    } catch (err: any) {
-      logger.error('Telegram sign-in error:', err, { context: 'Auth' });
-      return { error: err };
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error('Telegram sign-in failed');
+      logger.error('Telegram sign-in error:', error, { context: 'Auth' });
+      return { error };
     }
   };
 

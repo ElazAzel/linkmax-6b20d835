@@ -59,7 +59,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
             .from('pages')
             .select('service_slugs')
             .eq('id', pageId)
-            .single();
+            .maybeSingle();
           if (row?.service_slugs) {
             previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
           }
@@ -122,7 +122,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
 
         // Save first with retry logic
         let retries = 2;
-        let lastError: any = null;
+        let lastError: unknown = null;
         let savedPageId: string | undefined;
 
         while (retries > 0) {
@@ -185,7 +185,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
                 .from('pages')
                 .select('service_slugs')
                 .eq('id', pageIdForIndexing)
-                .single();
+                .maybeSingle();
               const currentSvcSlugs = pageRow?.service_slugs as unknown as Record<string, ServiceSlugEntryRaw> | null;
               const previousSvcSlugs = previousServiceSlugsRef.current;
               

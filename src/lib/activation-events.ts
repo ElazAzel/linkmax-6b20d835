@@ -94,7 +94,14 @@ export async function trackActivationEvent(
       }]);
 
     if (error) {
-      logger.error('Failed to track activation event', error, { context: 'activation-events' });
+      if (error.code === '42501') {
+        logger.debug('Activation event skipped by analytics RLS', {
+          context: 'activation-events',
+          data: { pageId, eventType },
+        });
+      } else {
+        logger.error('Failed to track activation event', error, { context: 'activation-events' });
+      }
     }
   } catch (err) {
     // Fire-and-forget: never block UI for analytics

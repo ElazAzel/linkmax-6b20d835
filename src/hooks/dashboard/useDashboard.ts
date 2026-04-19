@@ -28,6 +28,14 @@ interface UseDashboardOptions {
   editorHistory?: EditorHistoryType;
 }
 
+type UserProfilesLastSeenClient = {
+  from: (table: 'user_profiles') => {
+    update: (values: { last_seen_at: string }) => {
+      eq: (column: 'id', value: string) => Promise<unknown>;
+    };
+  };
+};
+
 export function useDashboard(options?: UseDashboardOptions) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -50,7 +58,10 @@ export function useDashboard(options?: UseDashboardOptions) {
     const updateLastSeen = async () => {
       try {
         const { supabase } = await import('@/platform/supabase/client');
-        await (supabase.from('user_profiles') as any).update({ last_seen_at: new Date().toISOString() }).eq('id', user.id);
+        await (supabase as unknown as UserProfilesLastSeenClient)
+          .from('user_profiles')
+          .update({ last_seen_at: new Date().toISOString() })
+          .eq('id', user.id);
       } catch { /* non-critical */ }
     };
     updateLastSeen();
@@ -121,8 +132,8 @@ export function useDashboard(options?: UseDashboardOptions) {
   const handleNicheComplete = useCallback(
     (profile: { name: string; bio: string }, blocks: Block[], niche: Niche) => {
       handleUpdateProfile(profile);
-      // APPEND new blocks to existing ones (don't replace)
-      blocks.forEach((block) => {
+      // Profile is updated above; only append revenue/contact/content blocks.
+      blocks.filter((block) => block.type !== 'profile').forEach((block) => {
         cloudState.addBlock(block);
       });
       cloudState.updateNiche(niche);
@@ -133,6 +144,7 @@ export function useDashboard(options?: UseDashboardOptions) {
   const onboardingState = useDashboardOnboarding({
     isUserReady: !!user,
     isPageReady: !!cloudState.pageData,
+    userId: user?.id,
     blockCount: cloudState.pageData?.blocks.length || 0,
     onNicheComplete: handleNicheComplete,
   });

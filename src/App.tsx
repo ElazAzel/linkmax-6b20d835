@@ -15,10 +15,7 @@ import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMo
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
 import { PostHogProvider } from 'posthog-js/react';
-import { initPostHog, POSTHOG_KEY, POSTHOG_HOST } from "@/lib/posthog";
-
-// Initialize PostHog before rendering
-initPostHog();
+import { POSTHOG_KEY, POSTHOG_HOST, POSTHOG_OPTIONS } from "@/lib/posthog";
 
 // Lazy load non-critical shell components to reduce main bundle
 const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
@@ -128,7 +125,7 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <PostHogProvider apiKey={POSTHOG_KEY} options={{ api_host: POSTHOG_HOST }}>
+      <PostHogProvider apiKey={POSTHOG_KEY} options={{ api_host: POSTHOG_HOST, ...POSTHOG_OPTIONS }}>
         <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>

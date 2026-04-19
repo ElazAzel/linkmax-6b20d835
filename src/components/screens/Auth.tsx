@@ -30,6 +30,9 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { trackAuthEvent } from '@/services/authFunnel';
+import { session } from '@/lib/storage';
+import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
+import type { TelegramAuthPayload } from '@/types/telegram-auth';
 
 // Zod schema is created inside the component to access t()
 // We define a factory function here
@@ -155,7 +158,11 @@ export default function Auth() {
           }
         });
       }
-      navigate(safeReturnTo || '/dashboard');
+      const shouldOpenBuilder = session.get<boolean>(NEW_USER_BUILDER_SESSION_KEY);
+      if (shouldOpenBuilder) {
+        session.remove(NEW_USER_BUILDER_SESSION_KEY);
+      }
+      navigate(safeReturnTo || (shouldOpenBuilder ? NEW_USER_BUILDER_ROUTE : '/dashboard'));
     }
   }, [user, navigate, refCode, authMode, safeReturnTo]);
 
@@ -181,9 +188,11 @@ export default function Auth() {
       return;
     }
 
+    session.set(NEW_USER_BUILDER_SESSION_KEY, true);
     const { data, error } = await signUp(validation.data.email, validation.data.password);
 
     if (error) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
       logger.error('Signup error:', error, { context: 'Auth' });
       handleError(error, t('messages.failedToSignUp'));
       playError();
@@ -409,7 +418,7 @@ export default function Auth() {
     setIsOAuthLoading(null);
   };
 
-  const handleTelegramAuth = async (telegramData: any) => {
+  const handleTelegramAuth = async (telegramData: TelegramAuthPayload) => {
     trackAuthEvent('auth_oauth_click', { provider: 'telegram' });
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);
