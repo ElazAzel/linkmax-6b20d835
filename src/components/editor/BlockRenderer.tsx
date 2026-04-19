@@ -81,13 +81,16 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   const { onBlockClick, onBlockView } = useAnalytics();
   const { i18n } = useTranslation();
 
-  // Track impression on mount (only for public pages)
+  // Track impression on mount (only for public pages).
+  // Previously this only fired for experiment blocks, which made regular
+  // block-level analytics (views/CTR) nearly empty.
   useEffect(() => {
-    if (!isPreview && !isEditorMode && block.experimentId) {
+    const isTrackable = BLOCK_MANIFEST[block.type as BlockType]?.renderMode === 'trackable';
+    if (!isPreview && !isEditorMode && isTrackable) {
       const title = getBlockTitle(block, i18n.language as SupportedLanguage);
       onBlockView(block.id, block.type, title, block.experimentId, block.variantLabel);
     }
-  }, [block.id, block.experimentId, block.variantLabel, isPreview, isEditorMode, onBlockView, i18n.language]);
+  }, [block.id, block.type, block.experimentId, block.variantLabel, isPreview, isEditorMode, onBlockView, i18n.language]);
 
   const handleClick = useCallback(() => {
     if (!isPreview) {
