@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { 
   FRAME_OPTIONS, 
   type FrameOption,
@@ -47,6 +48,10 @@ const FramePreviewItem = memo(function FramePreviewItem({
   return (
     <div
       onClick={onClick}
+      onKeyDown={(event) => handleKeyboardActivation(event, onClick)}
+      role="button"
+      tabIndex={0}
+      aria-pressed={selected}
       className={cn(
         'flex flex-col items-center gap-2 p-2 rounded-xl cursor-pointer transition-all duration-200',
         'hover:bg-muted/50',
@@ -139,6 +144,9 @@ export const FrameSelector = memo(function FrameSelector({
       {!isPremium && (
         <div 
           onClick={onUpgradeClick}
+          onKeyDown={onUpgradeClick ? (event) => handleKeyboardActivation(event, onUpgradeClick) : undefined}
+          role="button"
+          tabIndex={0}
           className="flex items-center gap-2 p-3 bg-warning/10 border border-warning/20 rounded-xl cursor-pointer hover:bg-warning/20 transition-colors"
         >
           <Crown className="w-4 h-4 text-warning flex-shrink-0" />

@@ -17,6 +17,7 @@ import Palette from 'lucide-react/dist/esm/icons/palette';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { Button } from '@/components/ui/button';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 
 interface NicheCard {
@@ -79,6 +80,9 @@ export function NichesDetailSection() {
               className={`group relative p-4 sm:p-5 lg:p-6 rounded-2xl bg-card/60 backdrop-blur-xl border border-border/40 hover:border-primary/50 transition-all duration-300 hover:shadow-glass-lg hover:-translate-y-1 cursor-pointer opacity-0 ${sectionAnimation.isVisible ? 'animate-slide-in-up' : ''}`}
               style={{ animationDelay: `${200 + index * 60}ms` }}
               onClick={handleStartClick}
+              onKeyDown={(event) => handleKeyboardActivation(event, handleStartClick)}
+              role="button"
+              tabIndex={0}
             >
               <div className={`absolute -inset-px rounded-2xl bg-gradient-to-br ${niche.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
 

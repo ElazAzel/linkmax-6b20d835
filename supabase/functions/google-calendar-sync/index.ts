@@ -12,6 +12,11 @@ const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_CALENDAR_API = "https://www.googleapis.com/calendar/v3";
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
+const ALLOWED_REDIRECTS = [
+    { protocol: "https:", host: "lnkmx.my" },
+    { protocol: "http:", host: "localhost:8080" },
+    { protocol: "http:", host: "127.0.0.1:8080" },
+];
 
 serve(async (req) => {
     if (req.method === "OPTIONS") {
@@ -41,6 +46,7 @@ serve(async (req) => {
 
         const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
         const GOOGLE_CLIENT_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET");
+        const GCAL_STATE_SECRET = Deno.env.get("GCAL_STATE_SECRET");
 
         if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
             return new Response(JSON.stringify({ error: "Google Calendar not configured" }), {
@@ -66,6 +72,15 @@ serve(async (req) => {
         if (action === "get_auth_url") {
             const { redirect_url } = payload;
             if (!redirect_url) throw new Error("Missing redirect_url");
+            if (!GCAL_STATE_SECRET) {
+                return new Response(JSON.stringify({ error: "Google Calendar state secret not configured" }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    status: 503,
+                });
+            }
+            if (!isAllowedAppRedirect(redirect_url)) {
+                throw new Error("Invalid redirect_url");
+            }
 
             const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
             const callbackUrl = `${supabaseUrl}/functions/v1/gcal-callback`;
@@ -77,7 +92,7 @@ serve(async (req) => {
             const encoder = new TextEncoder();
             const key = await crypto.subtle.importKey(
                 "raw",
-                encoder.encode(GOOGLE_CLIENT_SECRET),
+                encoder.encode(GCAL_STATE_SECRET),
                 { name: "HMAC", hash: "SHA-256" },
                 false,
                 ["sign"]
@@ -183,6 +198,15 @@ serve(async (req) => {
                 p_user_id: user.id,
                 p_provider: "google_calendar",
             });
+
+            await supabaseAdmin
+                .from("user_integrations_status")
+                .upsert({
+                    user_id: user.id,
+                    provider: "google_calendar",
+                    is_connected: false,
+                    updated_at: new Date().toISOString(),
+                }, { onConflict: "user_id,provider" });
 
             // Disable gcal_sync_enabled on user_profiles
             await supabaseAdmin
@@ -373,6 +397,17 @@ serve(async (req) => {
         });
     }
 });
+
+function isAllowedAppRedirect(redirectUrl: string): boolean {
+    try {
+        const url = new URL(redirectUrl);
+        return ALLOWED_REDIRECTS.some(
+            (allowed) => url.protocol === allowed.protocol && url.host === allowed.host
+        );
+    } catch {
+        return false;
+    }
+}
 
 /**
  * Get a valid access token, refreshing if needed.

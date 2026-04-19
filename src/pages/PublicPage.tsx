@@ -209,12 +209,14 @@ export default function PublicPage() {
   }, [slug]);
 
   const handleShare = async () => {
+    const canNativeShare = 'share' in navigator;
+
     // Track share event
     if (pageData?.id) {
-      trackShare(pageData.id, (!!navigator.share) ? 'native' : 'clipboard');
+      trackShare(pageData.id, canNativeShare ? 'native' : 'clipboard');
     }
 
-    if (navigator.share) {
+    if (canNativeShare) {
       navigator.share({
         title: pageData?.seo?.title || pageData?.seo?.description || t('share.defaultTitle', 'Check out my page'),
         url: currentUrl,

@@ -11,6 +11,7 @@ import {
 import Autoplay from 'embla-carousel-autoplay';
 import type { CarouselBlock as CarouselBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface CarouselBlockProps {
   block: CarouselBlockType;
@@ -69,7 +70,10 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
               <CarouselItem key={index} className="pl-0">
                 <div
                   className="aspect-[16/9] overflow-hidden bg-black/20 cursor-pointer"
-                  onClick={() => handleImageClick(image.link)}
+                  onClick={image.link ? () => handleImageClick(image.link) : undefined}
+                  onKeyDown={image.link ? (event) => handleKeyboardActivation(event, () => handleImageClick(image.link)) : undefined}
+                  role="link"
+                  tabIndex={image.link ? 0 : undefined}
                 >
                   <img
                     src={image.url}

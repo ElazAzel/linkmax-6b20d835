@@ -39,8 +39,6 @@ export const FinanceScreen = memo(function FinanceScreen() {
         retry: 2,
     });
 
-    if (isLoading) return <LoadingState skeleton={<LoadingSkeleton />} />;
-
     const balance = data?.wallet?.balance || 0;
     const currency = data?.wallet?.currency || 'KZT';
     const transactions = data?.transactions || [];
@@ -55,6 +53,8 @@ export const FinanceScreen = memo(function FinanceScreen() {
         });
         return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
     }, [transactions]);
+
+    if (isLoading) return <LoadingState skeleton={<LoadingSkeleton />} />;
 
     const getGroupTitle = (dateKey: string) => {
         const date = new Date(dateKey);

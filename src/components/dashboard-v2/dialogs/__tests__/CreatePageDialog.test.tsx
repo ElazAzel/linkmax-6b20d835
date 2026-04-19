@@ -18,7 +18,14 @@ describe('CreatePageDialog', () => {
       <CreatePageDialog
         open
         onOpenChange={vi.fn()}
-        limits={{ canCreate: true, currentPages: 0, maxPages: 1 }}
+        limits={{
+          tier: 'free',
+          canCreate: true,
+          currentPages: 0,
+          maxPages: 1,
+          paidPages: 0,
+          freePages: 0,
+        }}
         isPremium={false}
         onCreatePage={onCreatePage}
         onUpgrade={vi.fn()}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
 
 interface ImageBlockProps {
@@ -59,7 +60,9 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
           hasLink && 'cursor-pointer'
         )}
         onClick={hasLink ? handleClick : undefined}
-        role={hasLink ? 'link' : undefined}
+        onKeyDown={hasLink ? (event) => handleKeyboardActivation(event, handleClick) : undefined}
+        role="link"
+        tabIndex={hasLink ? 0 : undefined}
       >
         <div className={cn(
           "relative overflow-hidden h-full w-full",

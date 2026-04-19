@@ -29,6 +29,7 @@ import { useTokens } from '@/hooks/user/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
 import { trackPurchase } from '@/lib/analytics';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface ProductBlockProps {
   block: ProductBlockType;
@@ -199,6 +200,11 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
   );
 
   // Compact mobile-optimized card layout
+  const openProductDetail = () => {
+    if (onClick) onClick();
+    setIsDetailOpen(true);
+  };
+
   const ProductCard = () => (
     <div
       className={cn(
@@ -211,10 +217,10 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
         backgroundColor: block.blockStyle?.backgroundColor,
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
-      onClick={() => {
-        if (onClick) onClick();
-        setIsDetailOpen(true);
-      }}
+      onClick={openProductDetail}
+      onKeyDown={(event) => handleKeyboardActivation(event, openProductDetail)}
+      role="button"
+      tabIndex={0}
     >
       <div className="flex gap-3 p-4">
         {/* Compact image */}

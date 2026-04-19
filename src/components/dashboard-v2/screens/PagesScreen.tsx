@@ -302,7 +302,7 @@ export const PagesScreen = memo(function PagesScreen({
                         </div>
 
                         {/* Quick Actions */}
-                        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-1" onClickCapture={(e) => e.stopPropagation()}>
                           <Button
                             variant="ghost"
                             size="icon"

@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { getLocale } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import Star from 'lucide-react/dist/esm/icons/star';
 import Tag from 'lucide-react/dist/esm/icons/tag';
 
@@ -83,6 +84,9 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
             <div
               key={item.id}
               onClick={() => onBlockClick(block.id, block.type, `${title} - ${name}`)}
+              onKeyDown={(event) => handleKeyboardActivation(event, () => onBlockClick(block.id, block.type, `${title} - ${name}`))}
+              role="button"
+              tabIndex={0}
               className={cn(
                 'flex items-center justify-between gap-3 p-4 rounded-2xl cursor-pointer',
                 'glass-card backdrop-blur-sm border-white/10 shadow-glass',
