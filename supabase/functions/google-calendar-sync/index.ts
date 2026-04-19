@@ -39,9 +39,13 @@ serve(async (req) => {
             Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
         );
 
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (authError || !user) {
-            throw new Error("Unauthorized");
+        // Auth is optional: user-initiated actions need it,
+        // server-to-server calls (check_availability, push_booking) use service role.
+        const authHeader = req.headers.get("Authorization");
+        let user: { id: string } | null = null;
+        if (authHeader && !authHeader.includes(Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "___")) {
+            const { data } = await supabaseClient.auth.getUser();
+            user = data.user ?? null;
         }
 
         const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
