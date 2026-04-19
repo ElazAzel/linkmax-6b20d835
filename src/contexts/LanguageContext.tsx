@@ -159,18 +159,61 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Whitelist of field names that contain user-facing text and should be translated
+  // even when stored as plain strings (legacy data not yet migrated to I18nText).
+  const TRANSLATABLE_FIELD_NAMES = new Set([
+    'title', 'description', 'text', 'bio', 'name', 'label', 'caption',
+    'buttonText', 'buttonLabel', 'cta', 'ctaLabel', 'ctaText',
+    'subtitle', 'heading', 'subheading', 'placeholder', 'helperText',
+    'question', 'answer', 'quote', 'author', 'role', 'company',
+    'message', 'greeting', 'tagline', 'displayName', 'alt',
+    'address', 'location', 'venue', 'note', 'hint',
+  ]);
+
+  // Heuristic: avoid translating strings that look like URLs, emails, identifiers, code, or pure numbers
+  const isLikelyTranslatable = (s: string): boolean => {
+    const v = s.trim();
+    if (v.length < 2) return false;
+    if (/^https?:\/\//i.test(v)) return false;
+    if (/^[\w.-]+@[\w.-]+\.\w+$/.test(v)) return false;
+    if (/^[\d\s+()-]+$/.test(v)) return false; // phone-like / numeric
+    if (/^#[0-9a-f]{3,8}$/i.test(v)) return false; // hex color
+    if (/^[a-z0-9_-]+$/i.test(v) && !/\s/.test(v) && v.length < 30) return false; // slug/id
+    return /[a-zA-Zа-яА-ЯёЁ\u0370-\u1FFF\u4E00-\u9FFF]/.test(v); // contains letters
+  };
+
   // Recursively translate all multilingual fields in an object to multiple languages
   const translateObject = async (
     obj: any,
-    targetLanguages: LocaleCode[]
+    targetLanguages: LocaleCode[],
+    fieldName?: string,
+    defaultSourceLang: LocaleCode = 'ru'
   ): Promise<any> => {
-    if (!obj || typeof obj !== 'object') return obj;
+    if (obj === null || obj === undefined) return obj;
+
+    // Plain string in a known translatable field → wrap and translate
+    if (typeof obj === 'string') {
+      if (!fieldName || !TRANSLATABLE_FIELD_NAMES.has(fieldName)) return obj;
+      if (!isLikelyTranslatable(obj)) return obj;
+
+      const languagesNeedingTranslation = targetLanguages.filter(lang => lang !== defaultSourceLang);
+      if (languagesNeedingTranslation.length === 0) {
+        return { [defaultSourceLang]: obj };
+      }
+      const translations = await translateText(obj, defaultSourceLang, languagesNeedingTranslation);
+      if (translations) {
+        return { [defaultSourceLang]: obj, ...translations };
+      }
+      return obj;
+    }
+
+    if (typeof obj !== 'object') return obj;
 
     // If it's a multilingual object (I18nText or legacy MultilingualString)
     if (isI18nText(obj) || isMultilingualString(obj)) {
-      // Find source language with content
-      const keys = Object.keys(obj);
-      const sourceLang = keys.find(k => (obj as any)[k] && String((obj as any)[k]).trim()) as LocaleCode | undefined;
+      // Find source language with content (prefer ru → en → first non-empty)
+      const preferredOrder = ['ru', 'en', 'kk', ...Object.keys(obj)];
+      const sourceLang = preferredOrder.find(k => (obj as any)[k] && String((obj as any)[k]).trim()) as LocaleCode | undefined;
       if (!sourceLang) return obj;
 
       // Filter out languages that already have content
@@ -192,7 +235,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // If it's an array
     if (Array.isArray(obj)) {
       const results = await Promise.all(
-        obj.map(item => translateObject(item, targetLanguages))
+        obj.map(item => translateObject(item, targetLanguages, fieldName, defaultSourceLang))
       );
       return results;
     }
@@ -200,7 +243,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // If it's a regular object, recursively translate
     const result: Record<string, unknown> = {};
     for (const key of Object.keys(obj)) {
-      result[key] = await translateObject(obj[key] as any, targetLanguages);
+      result[key] = await translateObject((obj as any)[key], targetLanguages, key, defaultSourceLang);
     }
     return result;
   };
@@ -213,6 +256,25 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return translateBlocksToMultipleLanguagesInternal(blocks, [targetLang]);
   }, []);
 
+  // Detect best source language across all blocks (most-used non-empty lang in i18n fields, fallback 'ru')
+  const detectSourceLanguage = (blocks: TranslatedBlock[]): LocaleCode => {
+    const counts: Record<string, number> = {};
+    const visit = (v: any) => {
+      if (!v) return;
+      if (typeof v === 'object' && !Array.isArray(v) && (isI18nText(v) || isMultilingualString(v))) {
+        for (const k of Object.keys(v)) {
+          if (v[k] && String(v[k]).trim()) counts[k] = (counts[k] || 0) + 1;
+        }
+        return;
+      }
+      if (Array.isArray(v)) v.forEach(visit);
+      else if (typeof v === 'object') Object.values(v).forEach(visit);
+    };
+    blocks.forEach(b => visit(b.content));
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    return ((sorted[0]?.[0]) || 'ru') as LocaleCode;
+  };
+
   // Translate blocks to multiple languages
   const translateBlocksToMultipleLanguagesInternal = async (
     blocks: TranslatedBlock[],
@@ -223,73 +285,23 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     setIsTranslating(true);
 
     try {
-      const fieldsToCheck = ['title', 'description', 'text', 'bio', 'name', 'label', 'caption', 'buttonText', 'question', 'answer'];
-      let needsTranslation = false;
-
-      // Check if any field needs translation
-      for (const block of blocks) {
-        const content = block.content as any;
-        if (!content) continue;
-
-        for (const field of fieldsToCheck) {
-          const fieldValue = content[field];
-          if (fieldValue && (isI18nText(fieldValue) || isMultilingualString(fieldValue))) {
-            for (const targetLang of targetLanguages) {
-              if (!(fieldValue as any)[targetLang]?.trim()) {
-                // Check if there's source content
-                const hasSource = Object.values(fieldValue).some(v => typeof v === 'string' && v.trim());
-                if (hasSource) {
-                  needsTranslation = true;
-                  break;
-                }
-              }
-            }
-          }
-          if (needsTranslation) break;
-        }
-
-        // Check nested items
-        if (!needsTranslation && content.items && Array.isArray(content.items)) {
-          for (const item of content.items as any[]) {
-            for (const field of fieldsToCheck) {
-              const fieldValue = item[field];
-              if (fieldValue && (isI18nText(fieldValue) || isMultilingualString(fieldValue))) {
-                for (const targetLang of targetLanguages) {
-                  if (!(fieldValue as any)[targetLang]?.trim()) {
-                    const hasSource = Object.values(fieldValue).some(v => typeof v === 'string' && v.trim());
-                    if (hasSource) {
-                      needsTranslation = true;
-                      break;
-                    }
-                  }
-                }
-              }
-              if (needsTranslation) break;
-            }
-            if (needsTranslation) break;
-          }
-        }
-
-        if (needsTranslation) break;
-      }
-
-      if (!needsTranslation) {
+      const sourceLang = detectSourceLanguage(blocks);
+      // Skip if all targets are the source language
+      const realTargets = targetLanguages.filter(l => l !== sourceLang);
+      if (realTargets.length === 0) {
         setIsTranslating(false);
         return blocks;
       }
 
-      // Translate all blocks
+      // Translate all blocks (translateObject internally skips fields that don't need work)
       const translatedBlocks = await Promise.all(
         blocks.map(async (block) => {
           if (!block.content) return block;
-
-          const translatedContent = await translateObject(block.content, targetLanguages);
+          const translatedContent = await translateObject(block.content, targetLanguages, undefined, sourceLang);
           return { ...block, content: translatedContent };
         })
       );
 
-      const langNames = targetLanguages.map(l => LANGUAGE_NAMES[l] || l).join(', ');
-      toast.success(t('language.autoTranslatedTo', 'Переведено на: {{languages}}', { languages: langNames }));
       return translatedBlocks;
     } catch (error) {
       console.error('Auto-translation error:', error);
@@ -299,6 +311,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       setIsTranslating(false);
     }
   };
+
 
   const translateBlocksToMultipleLanguages = useCallback(
     translateBlocksToMultipleLanguagesInternal,
