@@ -50,7 +50,8 @@ export const EXCLUSION_LABELS: Record<ExclusionReason, string> = {
   unpublished: 'Страница не опубликована',
 };
 
-const INDEXABLE_THRESHOLD = 25;
+export const INDEXABLE_THRESHOLD = 25;
+export const ALMOST_READY_THRESHOLD = 15;
 
 export function computeQualityScore(pageData: PageData): QualityBreakdown {
   const profileBlock = pageData.blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
@@ -130,10 +131,10 @@ export function getSearchReadinessStatus(score: number): {
   label: string;
   color: string;
 } {
-  if (score >= 40) {
+  if (score >= INDEXABLE_THRESHOLD) {
     return { status: 'ready', label: 'Готово к поиску', color: 'emerald' };
   }
-  if (score >= 20) {
+  if (score >= ALMOST_READY_THRESHOLD) {
     return { status: 'almost', label: 'Почти готово', color: 'amber' };
   }
   return { status: 'not_ready', label: 'Не готово для поиска', color: 'red' };

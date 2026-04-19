@@ -328,6 +328,19 @@ export async function savePage(
       return { data: null, error: wrapError(upsertError) };
     }
 
+    if (typeof pageData.isIndexable === 'boolean') {
+      const { error: visibilityError } = await supabase
+        .from('pages')
+        .update({ is_indexable: pageData.isIndexable })
+        .eq('id', pageId as string)
+        .eq('user_id', userId);
+
+      if (visibilityError) {
+        logger.error('Error saving search visibility', visibilityError, { context: 'pages', data: { pageId, userId } });
+        return { data: null, error: wrapError(visibilityError) };
+      }
+    }
+
     // Prepare blocks for atomic save
     const blocksData = pageData.blocks.map((block, index) => ({
       type: block.type,
@@ -402,7 +415,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
         niche, preview_url, quality_score, is_indexable, last_snapshot_at,
         is_paid, is_primary_paid, page_type, integrations, favicon_url,
         hide_branding, organization_id, custom_domain, city, country_code,
-        profession, entity_type,
+        profession, entity_type, contact_email, contact_phone, contact_whatsapp,
         blocks(*)
       `)
       .eq('slug', slug)
@@ -434,6 +447,8 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       seo: pg.seo_meta as unknown as PageData['seo'],
       isPremium: activeBlocks.some((b: DbBlock) => b.is_premium),
       isPublished: pg.is_published || false,
+      isIndexable: pg.is_indexable ?? true,
+      updatedAt: pg.updated_at || null,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
       gridConfig: (pg.grid_config as unknown as GridConfig) || undefined,
@@ -443,6 +458,13 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       organization_id: pg.organization_id || undefined,
+      city: pg.city || undefined,
+      profession: pg.profession || undefined,
+      entity_type: pg.entity_type === 'organization' ? 'organization' : 'person',
+      contact_email: pg.contact_email || undefined,
+      contact_phone: pg.contact_phone || undefined,
+      contact_whatsapp: pg.contact_whatsapp || undefined,
+      quality_score: pg.quality_score ?? undefined,
       experiments
     };
 
@@ -466,7 +488,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
         niche, preview_url, quality_score, is_indexable, last_snapshot_at,
         is_paid, is_primary_paid, page_type, integrations, favicon_url,
         hide_branding, organization_id, custom_domain, city, country_code,
-        profession, entity_type,
+        profession, entity_type, contact_email, contact_phone, contact_whatsapp,
         blocks(*), private_page_data(*)
       `)
       .eq('custom_domain', domain)
@@ -494,6 +516,8 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       seo: pg.seo_meta as unknown as PageData['seo'],
       isPremium: activeBlocks.some((b: DbBlock) => b.is_premium),
       isPublished: pg.is_published || false,
+      isIndexable: pg.is_indexable ?? true,
+      updatedAt: pg.updated_at || null,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
       gridConfig: (pg.grid_config as unknown as GridConfig) || undefined,
@@ -503,6 +527,13 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       organization_id: pg.organization_id || undefined,
+      city: pg.city || undefined,
+      profession: pg.profession || undefined,
+      entity_type: pg.entity_type === 'organization' ? 'organization' : 'person',
+      contact_email: pg.contact_email || undefined,
+      contact_phone: pg.contact_phone || undefined,
+      contact_whatsapp: pg.contact_whatsapp || undefined,
+      quality_score: pg.quality_score ?? undefined,
       experiments
     };
 
@@ -564,6 +595,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       webhook_url: pg.webhook_url || undefined,
       webhook_secret: pg.webhook_secret || undefined,
       organization_id: pg.organization_id || undefined,
+      isIndexable: pg.is_indexable ?? true,
       updatedAt: pg.updated_at || null,
       experiments: mapExperimentData(pg.experiments || []),
       // Entity fields

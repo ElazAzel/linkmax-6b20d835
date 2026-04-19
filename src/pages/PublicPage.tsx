@@ -316,6 +316,9 @@ export default function PublicPage() {
             ]}
             problemStatement="Need a simple professional landing page to showcase work and accept leads"
             solutionStatement="lnkmx profile page with custom blocks, CTAs, and lead capture forms"
+            manageRobots={false}
+            citationAuthor={pageData.seo?.title || pageData.slug || 'User Profile'}
+            citationDate={pageData?.updatedAt || undefined}
           />
 
           {/* Crawler-friendly content for no-JS fallback */}

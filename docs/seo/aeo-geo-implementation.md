@@ -122,7 +122,7 @@ Bot detection and prerendering is handled by the Cloudflare Worker:
 
 ## Quality Gate
 
-Pages are indexed only if quality score >= 40:
+Pages are indexed only if quality score >= 25 and `is_indexable` is not explicitly disabled:
 
 | Criteria | Points |
 |----------|--------|

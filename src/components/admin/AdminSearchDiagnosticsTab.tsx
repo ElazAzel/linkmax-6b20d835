@@ -19,6 +19,7 @@ import FileX from 'lucide-react/dist/esm/icons/file-x';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import { cn } from '@/lib/utils/utils';
+import { ALMOST_READY_THRESHOLD, INDEXABLE_THRESHOLD } from '@/lib/seo/quality-score';
 
 interface ServiceSlugEntry {
   slug: string;
@@ -31,6 +32,7 @@ interface DiagnosticPage {
   slug: string;
   title: string | null;
   is_published: boolean;
+  is_indexable: boolean | null;
   quality_score: number | null;
   quality_breakdown: Record<string, { passed: boolean; points: number }> | null;
   index_exclusion_reasons: string[] | null;
@@ -79,7 +81,7 @@ const EXCLUSION_LABELS: Record<string, string> = {
 async function fetchDiagnosticPages(): Promise<DiagnosticPage[]> {
   const { data, error } = await supabase
     .from('pages')
-    .select('id, slug, title, is_published, quality_score, quality_breakdown, index_exclusion_reasons, last_indexnow_at, service_slugs, city, profession, niche, view_count, updated_at')
+    .select('id, slug, title, is_published, is_indexable, quality_score, quality_breakdown, index_exclusion_reasons, last_indexnow_at, service_slugs, city, profession, niche, view_count, updated_at')
     .order('updated_at', { ascending: false })
     .limit(200);
 
@@ -216,7 +218,7 @@ export function AdminSearchDiagnosticsTab() {
   const stats = useMemo(() => {
     if (!pages) return { total: 0, published: 0, indexable: 0, avgScore: 0, withIndexNow: 0 };
     const published = pages.filter(p => p.is_published);
-    const indexable = published.filter(p => (p.quality_score || 0) >= 40);
+    const indexable = published.filter(p => p.is_indexable !== false && (p.quality_score || 0) >= INDEXABLE_THRESHOLD);
     const avgScore = published.length > 0
       ? Math.round(published.reduce((s, p) => s + (p.quality_score || 0), 0) / published.length)
       : 0;
@@ -283,7 +285,7 @@ export function AdminSearchDiagnosticsTab() {
           <TableBody>
             {filtered.map(page => {
               const score = page.quality_score || 0;
-              const isIndexable = page.is_published && score >= 40;
+              const isIndexable = page.is_published && page.is_indexable !== false && score >= INDEXABLE_THRESHOLD;
               const exclusions = page.index_exclusion_reasons || [];
               const children = parseChildEntities(page.service_slugs, page.slug, isIndexable);
               const activeChildren = children.filter(c => c.state !== 'removed');
@@ -312,7 +314,7 @@ export function AdminSearchDiagnosticsTab() {
                       <Progress value={score} className="h-1.5 w-16" />
                       <span className={cn(
                         'text-sm font-bold tabular-nums',
-                        score >= 40 ? 'text-emerald-600' : score >= 20 ? 'text-amber-600' : 'text-red-500'
+                        score >= INDEXABLE_THRESHOLD ? 'text-emerald-600' : score >= ALMOST_READY_THRESHOLD ? 'text-amber-600' : 'text-red-500'
                       )}>{score}</span>
                     </div>
                   </TableCell>
