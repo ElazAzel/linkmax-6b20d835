@@ -263,7 +263,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       if (!v) return;
       if (typeof v === 'object' && !Array.isArray(v) && (isI18nText(v) || isMultilingualString(v))) {
         for (const k of Object.keys(v)) {
-          if (v[k] && String(v[k]).trim()) counts[k] = (counts[k] || 0) + 1;
+          const val = (v as any)[k];
+          if (val && String(val).trim()) counts[k] = (counts[k] || 0) + 1;
         }
         return;
       }
