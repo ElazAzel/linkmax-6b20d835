@@ -101,7 +101,7 @@ export function trackEditorAction(
         .insert([{
           event_type: `editor:${action}`,
           metadata: meta ? (JSON.parse(JSON.stringify(meta)) as Json) : null,
-          page_id: null,
+          page_id: null as unknown as string,
           block_id: meta?.blockId ?? null,
         }])
         .then(() => {});
