@@ -20,9 +20,9 @@
 
 Превратить PWA в нативное приложение для App Store / Google Play.
 
-- **[NEW] Capacitor Integration**: Обертка Vite-приложения в нативный контейнер.
-- **[MODIFY] Mobile-First UI Standard**: Унификация всех модальных окон в Bottom Sheets (выдвижные панели).
-- **[NEW] Push Notifications**: Интеграция Firebase/OneSignal для уведомлений.
+- [x] **[NEW] Capacitor Integration**: Обертка Vite-приложения в нативный контейнер.
+- [x] **[MODIFY] Mobile-First UI Standard**: Унификация ключевых mobile-модалок в Bottom Sheets (выдвижные панели).
+- [x] **[NEW] Push Notifications**: Базовая интеграция push-уведомлений через Capacitor PushNotifications.
 
 ## Q3 2026: Глубина продукта (CRM 2.0) (P1)
 
@@ -32,10 +32,10 @@
 
 Сделать CRM конкурентоспособной по сравнению с AmoCRM для малого бизнеса.
 
-- [ ] **[NEW] Multiple Sales Pipelines**: Возможность создавать разные воронки под разные услуги (например: "Обучение" и "Консультации").
+- [x] **[NEW] Multiple Sales Pipelines**: Возможность создавать разные воронки под разные услуги (например: "Обучение" и "Консультации").
 - [x] **[NEW] Custom Fields (JSONB)**: Динамические поля в карточках контактов и сделок (ID-based keys).
 - [x] **[NEW] Bulk Actions**: Групповое управление сделками в Kanban-доске.
-- [ ] **[NEW] Command Palette (Cmd+K)**: Глобальный поиск и быстрое создание блоков/сделок с клавиатуры.
+- [x] **[NEW] Command Palette (Cmd+K)**: Глобальный поиск и быстрые действия с клавиатуры.
 
 ### 📊 Фаза 19: "Enterprise Tools: Docs & Exports" (Август - Сентябрь)
 
@@ -43,9 +43,9 @@
 
 Плотная интеграция в документооборот пользователя.
 
-- **[NEW] Document Generator (PDF)**: Автоматическая генерация Счетов, Актов и Договоров на базе данных сделки.
-- **[NEW] Data Portability**: Экспорт всех контактов и лидов в Excel/CSV по одному клику.
-- **[NEW] P&L Dashboard**: Финансовый отчет о доходах и расходах (Profit & Loss).
+- [x] **[NEW] Document Generator (PDF)**: Автоматическая генерация Счетов, Актов и Договоров на базе данных сделки.
+- [x] **[NEW] Data Portability**: Экспорт контактов/лидов/аналитики в Excel/CSV по одному клику.
+- [x] **[NEW] P&L Dashboard**: Финансовый отчет о доходах и расходах (Profit & Loss).
 
 ## Q4 2026: Fintech & AI Ecosystem (P2)
 
@@ -55,9 +55,9 @@
 
 Трансформация lnkmx в финансовый хаб и AI-помощника.
 
-- **[NEW] Internal Wallet (Ledger)**: Система внутреннего баланса пользователя.
-- **[NEW] Digital Goods Engine**: Автоматизированная продажа цифровых файлов (гайды, курсы) с защищенными ссылками.
-- **[NEW] AI Financial Advisor**: Использование Gemini для анализа воронки продаж и советов по увеличению чека.
+- [x] **[NEW] Internal Wallet (Ledger)**: Система внутреннего баланса пользователя.
+- [~] **[NEW] Digital Goods Engine**: Частично реализовано, защищенная доставка файлов остается в backlog.
+- [~] **[NEW] AI Financial Advisor**: Частично реализовано через AI Insights, полнофункциональный advisor в backlog.
 
 ---
 
