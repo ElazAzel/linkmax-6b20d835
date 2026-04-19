@@ -309,7 +309,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // so also check metadata.blockId for the content-level ID
       events.filter(e => e.event_type === 'click').forEach(e => {
         const blockRef = e.block_id
-          || getMetaString(e.metadata, 'blockId', 'block_id', 'blockType', 'block_type');
+          || getMetaString(e.metadata, 'blockId', 'block_id');
         if (!blockRef) return;
         const stats = blockStatsMap.get(blockRef);
         if (stats) {
