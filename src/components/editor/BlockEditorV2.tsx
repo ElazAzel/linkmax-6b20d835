@@ -255,7 +255,7 @@ export function BlockEditorV2({
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
             onClose={handleCloseAttempt}
-            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates })}
+            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates } as Partial<Block>)}
             enablePreview={block.type !== 'profile'}
             previewComponent={previewComponent}
             onDelete={onDelete ? () => setShowDeleteDialog(true) : undefined}
