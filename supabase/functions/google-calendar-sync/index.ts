@@ -39,9 +39,13 @@ serve(async (req) => {
             Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
         );
 
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (authError || !user) {
-            throw new Error("Unauthorized");
+        // Auth is optional: user-initiated actions need it,
+        // server-to-server calls (check_availability, push_booking) use service role.
+        const authHeader = req.headers.get("Authorization");
+        let user: { id: string } | null = null;
+        if (authHeader && !authHeader.includes(Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "___")) {
+            const { data } = await supabaseClient.auth.getUser();
+            user = data.user ?? null;
         }
 
         const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
@@ -66,7 +70,14 @@ serve(async (req) => {
             throw new Error("Invalid JSON payload");
         }
 
-        console.log(`[GCAL] Action: ${action}`, { user_id: user.id });
+        const SERVER_ACTIONS = new Set(["check_availability", "push_booking", "create_event"]);
+        if (!user && !SERVER_ACTIONS.has(action)) {
+            return new Response(JSON.stringify({ error: "Unauthorized" }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 401,
+            });
+        }
+        console.log(`[GCAL] Action: ${action}`, { user_id: user?.id ?? "service" });
 
         // ─── Generate Google OAuth URL ───
         if (action === "get_auth_url") {
@@ -222,7 +233,7 @@ serve(async (req) => {
         // ─── Check availability (pull busy slots) ───
         if (action === "check_availability") {
             const { time_min, time_max, staff_id, owner_id } = payload;
-            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user.id };
+            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user?.id };
             const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
@@ -269,7 +280,7 @@ serve(async (req) => {
         // ─── Create event in Google Calendar ───
         if (action === "create_event") {
             const { summary, description, start, end, location, timezone, staff_id, owner_id } = payload;
-            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user.id };
+            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user?.id };
             const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
