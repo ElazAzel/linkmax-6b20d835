@@ -70,7 +70,14 @@ serve(async (req) => {
             throw new Error("Invalid JSON payload");
         }
 
-        console.log(`[GCAL] Action: ${action}`, { user_id: user.id });
+        const SERVER_ACTIONS = new Set(["check_availability", "push_booking", "create_event"]);
+        if (!user && !SERVER_ACTIONS.has(action)) {
+            return new Response(JSON.stringify({ error: "Unauthorized" }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 401,
+            });
+        }
+        console.log(`[GCAL] Action: ${action}`, { user_id: user?.id ?? "service" });
 
         // ─── Generate Google OAuth URL ───
         if (action === "get_auth_url") {
