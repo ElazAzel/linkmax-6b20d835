@@ -280,7 +280,7 @@ serve(async (req) => {
         // ─── Create event in Google Calendar ───
         if (action === "create_event") {
             const { summary, description, start, end, location, timezone, staff_id, owner_id } = payload;
-            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user.id };
+            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user?.id };
             const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
