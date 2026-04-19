@@ -16,21 +16,25 @@ import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import Flame from 'lucide-react/dist/esm/icons/flame';
 import BadgeCheck from 'lucide-react/dist/esm/icons/badge-check';
 import { useQueryClient } from '@tanstack/react-query';
+import { normalizeDatabasePremiumTier } from '@/domain/billing/tiers';
 
 function getTierFromUser(user: AdminUserData): AdminPremiumTier {
+  const tier = normalizeDatabasePremiumTier(user.premium_tier);
+  if (tier === 'starter') return 'starter';
   if (!user.is_premium) return 'free';
-  if (user.premium_tier === 'business') return 'business';
-  return 'pro';
+  return tier === 'business' ? 'business' : 'pro';
 }
 
 const TIER_BADGE_VARIANTS: Record<AdminPremiumTier, 'secondary' | 'default' | 'destructive'> = {
   free: 'secondary',
+  starter: 'secondary',
   pro: 'default',
   business: 'destructive',
 };
 
 const TIER_LABELS: Record<AdminPremiumTier, string> = {
   free: 'Free',
+  starter: 'Starter',
   pro: 'Pro',
   business: 'Business',
 };
@@ -136,7 +140,7 @@ export function AdminUsersTab() {
                           {format(new Date(adminUser.premium_expires_at), 'dd.MM.yyyy', { locale: getDateLocale() })}
                         </span>
                       ) : (
-                        currentTier !== 'free' ? <span className="text-muted-foreground">∞</span> : '-'
+                        currentTier === 'pro' || currentTier === 'business' ? <span className="text-muted-foreground">∞</span> : '-'
                       )}
                     </TableCell>
                     <TableCell>
@@ -170,6 +174,7 @@ export function AdminUsersTab() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="free">Free</SelectItem>
+                            <SelectItem value="starter">Starter</SelectItem>
                             <SelectItem value="pro">Pro</SelectItem>
                             <SelectItem value="business">Business</SelectItem>
                           </SelectContent>

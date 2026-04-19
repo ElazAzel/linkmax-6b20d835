@@ -106,8 +106,10 @@ const Install = lazy(() => import("./pages/Install"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Alternatives = lazy(() => import("./pages/Alternatives"));
+const AlternativeDetail = lazy(() => import("./pages/AlternativeDetail"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminTranslations = lazy(() => import("./pages/AdminTranslations"));
+const AdminLanguageAlgorithms = lazy(() => import("./pages/AdminLanguageAlgorithms"));
 const AdminTemplateEditor = lazy(() => import("./pages/AdminTemplateEditor"));
 const TeamPage = lazy(() => import("./pages/TeamPage"));
 const CollabPage = lazy(() => import("./pages/CollabPage"));
@@ -164,8 +166,10 @@ const router = createBrowserRouter([
       { path: "gallery", element: <Gallery /> },
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
+      { path: "alternatives/:competitor", element: <AlternativeDetail /> },
       { path: "seo-landing", element: <SeoLanding /> },
       { path: "admin", element: <Admin /> },
+      { path: "admin/language-algorithms", element: <AdminLanguageAlgorithms /> },
       { path: "admin/translations", element: <AdminTranslations /> },
       { path: "admin/templates/new", element: <AdminTemplateEditor /> },
       { path: "admin/templates/:id", element: <AdminTemplateEditor /> },
@@ -209,6 +213,7 @@ const router = createBrowserRouter([
 });
 
 import { PushService } from "@/lib/notifications/push-service";
+import { logger } from "@/lib/utils/logger";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -232,17 +237,17 @@ if ('serviceWorker' in navigator) {
               if (navigator.serviceWorker.controller) {
                 // New update available - notify user or auto-reload
                 // In this case, we prefer a silent reload after user interaction or next start
-                console.log('New content is available; please refresh.');
+                logger.info('New content is available; please refresh.', { context: 'service-worker' });
               } else {
                 // Content is cached for offline use
-                console.log('Content is cached for offline use.');
+                logger.info('Content is cached for offline use.', { context: 'service-worker' });
               }
             }
           };
         }
       };
     }).catch((error) => {
-      console.error('SW registration failed:', error);
+      logger.error('SW registration failed', error, { context: 'service-worker' });
     });
   });
 }

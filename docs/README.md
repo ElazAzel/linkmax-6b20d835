@@ -1,7 +1,7 @@
 # 📚 Индекс документации LinkMAX (ex-lnkmx)
 
 **Версия:** 3.1.0
-**Дата обновления:** 4 апреля 2026
+**Дата обновления:** 18 апреля 2026
 **Статус:** Production Ready (Phase 40: Zenith) ✅
 
 Добро пожаловать в портал документации **LinkMAX**.
@@ -23,6 +23,7 @@
 3. **[DEVELOPER-QUICKSTART.md](getting-started/DEVELOPER-QUICKSTART.md)** — Быстрый старт для разработчиков (установка, команды).
 4. **[GLOSSARY.md](GLOSSARY.md)** — Глоссарий терминов проекта.
 5. **[README.md](../README.md)** — Корневой README проекта (обзор платформы).
+6. **[DOCS_FRESHNESS_AUDIT_2026_04_18.md](audits/DOCS_FRESHNESS_AUDIT_2026_04_18.md)** — проверка актуальности всей документации (порог 60 дней).
 
 ### Для разработчиков
 
@@ -38,7 +39,7 @@
 
 1. **[TESTING.md](testing/TESTING.md)** — Стратегия тестирования.
 2. **[DEPLOYMENT-CHECKLIST.md](deployment/DEPLOYMENT-CHECKLIST.md)** — Чеклист выкатки.
-3. **[FULL_PLATFORM_AUDIT_2026_02_18.md](audits/FULL_PLATFORM_AUDIT_2026_02_18.md)** — Отчёт о полном аудите.
+3. **[FULL_AUDIT_REPORT_2026_04_18.md](audits/FULL_AUDIT_REPORT_2026_04_18.md)** — Отчёт о полном аудите.
 
 ### Для Product-менеджеров
 

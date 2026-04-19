@@ -20,6 +20,7 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { getAppDomain } from '@/lib/utils/url-helpers';
+import { ALTERNATIVE_PROFILES } from '@/lib/alternatives-data';
 
 // SEO Component for Alternatives page
 function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
@@ -401,6 +402,34 @@ export default function Alternatives() {
               <Button size="lg" variant="ghost" onClick={() => handleCtaClick('/gallery', 'hero_tertiary')} className="rounded-xl">
                 {t('alternatives.hero.ctaTertiary', 'Посмотреть примеры')}
               </Button>
+            </div>
+          </section>
+
+
+          {/* Competitor detail pages */}
+          <section className="mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">
+              {t('alternatives.details.title', 'Точечные сравнения по конкурентам')}
+            </h2>
+            <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-6">
+              {t('alternatives.details.description', 'Выберите конкретный продукт и получите пошаговый план миграции на LinkMAX.')}
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {ALTERNATIVE_PROFILES.map((profile) => (
+                <Card key={profile.slug} className="hover:border-primary/50 transition-colors">
+                  <CardContent className="p-5 space-y-3">
+                    <Badge variant="secondary">{profile.category}</Badge>
+                    <h3 className="font-semibold text-lg">LinkMAX vs {profile.competitor}</h3>
+                    <p className="text-sm text-muted-foreground">{profile.summary}</p>
+                    <Button asChild size="sm" variant="outline" className="w-full">
+                      <Link to={profile.route}>
+                        {t('alternatives.details.open', 'Открыть сравнение')}
+                        <ExternalLink className="h-4 w-4 ml-2" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </section>
 

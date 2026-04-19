@@ -34,7 +34,7 @@ The codebase is hosted in a **Private** repository to protect intellectual prope
 In **Phase 42 (April 2026)**, the platform underwent a major security hardening initiative (JWT enforcement, RLS 2.0, GDPR).
 In **Phase 43 (April 2026)**, the platform finalized its pivot to the **Token Economy** and achieved deep **Telegram Mini App (TMA)** integration:
 
-In **Phase 45 (April 2026)**, the platform focused on **"Modernization & Doping"**:
+In **Phase 44 (April 2026)**, the platform focused on **"Modernization & Doping"**:
 - **Telemetry Layer**: Global PostHog integration with user identification and server-side synchronized event tracking.
 - **Haptic Engine**: Tactile feedback for mobile CRM (drag-and-drop) and global notifications.
 - **Vite 6 Optimization**: Advanced modular chunking and React Compiler preparation for sub-second FCP.
@@ -106,7 +106,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | Custom domain | No | Yes | Yes |
 | Offline CRM | No | **Yes (PWA V2)** | **Yes (PWA V2)** |
 
-- **Full Report**: [UX_UI_AUDIT_REPORT_2026_03_12.md](file:///c:/Users/i.azelkhanov/.gemini/antigravity/brain/e9ed3a0d-5f2f-4e48-b33f-7e907b04b0d6/UX_UI_AUDIT_REPORT_2026_03_12.md)
+- **Full Report**: [ux-audit-report.md](audits/ux-audit-report.md)
 
 ### [2026-03-23] Phase 6 & 7: Architecture & Security
 
@@ -1162,7 +1162,7 @@ npm run start
 
 ### Known Issues & Tech Debt
 
-- **Supabase TypeScript Sync:** `src/hooks/` for Business Zones features currently rely on `as any` because tables like `zone_contact_notes`, `zone_pipelines`, `zone_task_checklist` are missing from the dynamically generated `src/integrations/supabase/types.ts`. Any attempt to strongly type the `PostgrestBuilder` without a synchronized schema collapses existing mappings to `never`. Fix requires a manual run of `supabase gen types` configured to this precise Cloud project branch to fully resolve ESLint warnings in the hooks layer.
+- **Supabase TypeScript Sync:** `src/hooks/` for Business Zones features currently rely on `as any` because tables like `zone_contact_notes`, `zone_pipelines`, `zone_task_checklist` are missing from the dynamically generated `src/platform/supabase/types.ts`. Any attempt to strongly type the `PostgrestBuilder` without a synchronized schema collapses existing mappings to `never`. Fix requires a manual run of `supabase gen types` configured to this precise Cloud project branch to fully resolve ESLint warnings in the hooks layer.
 
 ---
 

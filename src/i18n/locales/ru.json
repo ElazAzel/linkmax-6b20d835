@@ -7453,14 +7453,106 @@
     "notEnoughTokens": "Недостаточно токенов. Нужен еще {{amount}} Линкон.",
     "purchaseTemplate": "Покупка шаблона: {{name}}"
   },
-
   "tokens": {
     "insufficientForPremium": "Недостаточно Линкон. Нужно {{count}} токенов.",
     "insufficientForPurchase": "Недостаточно Линкон. Нужно {{count}} токенов.",
     "toastEarned": "+{{count}} Линккон за {{action}}!"
   },
   "translation": {
-    "browserLanguageDetected": "Определён язык браузера: {{language}}"
+    "browserLanguageDetected": "Определён язык браузера: {{language}}",
+    "auth": {
+      "title": "Добро пожаловать в LinkMAX",
+      "subtitle": "AI-страница для бизнеса за 2 минуты",
+      "heroTitle": "Создайте свою lnkmx.my страницу",
+      "heroSubtitle": "AI соберёт сайт за 2 минуты. Бесплатно навсегда.",
+      "signIn": "Войти",
+      "signUp": "Создать аккаунт",
+      "signingIn": "Входим…",
+      "welcomeBack": "С возвращением",
+      "email": "Email",
+      "password": "Пароль",
+      "confirmPassword": "Повторите пароль",
+      "continueWithGoogle": "Продолжить с Google",
+      "continueWithApple": "Продолжить с Apple",
+      "continueWithEmail": "Продолжить через Email",
+      "moreOptions": "Другие способы входа",
+      "backToHome": "На главную",
+      "backToSignIn": "Назад ко входу",
+      "forgotPassword": "Забыли пароль?",
+      "resetPassword": "Сбросить пароль",
+      "resetDescription": "Введите email — пришлём ссылку для сброса пароля.",
+      "sendResetLink": "Отправить ссылку",
+      "checkEmail": "Проверьте почту",
+      "resetEmailSent": "Письмо для сброса пароля отправлено",
+      "signupEmailSent": "Письмо подтверждения отправлено",
+      "goToDashboard": "Перейти в кабинет",
+      "passwordHint": "Минимум 8 символов, буквы и цифры",
+      "newPassword": "Новый пароль",
+      "enterNewPassword": "Введите новый пароль",
+      "updatePassword": "Обновить пароль",
+      "passwordUpdated": "Пароль обновлён",
+      "passwordUpdatedDesc": "Теперь вы можете войти с новым паролем.",
+      "seo": {
+        "title": "Войти в LinkMAX",
+        "description": "Войдите в LinkMAX, чтобы создать и опубликовать вашу link-in-bio страницу."
+      },
+      "oauthError": "Ошибка авторизации",
+      "referral": {
+        "bonus": "Бонус",
+        "invited": "Вас пригласил",
+        "success": "Реферальный код применён"
+      },
+      "telegram": {
+        "recoverViaTelegram": "Восстановить через Telegram",
+        "recoveryTitle": "Восстановление через Telegram",
+        "back": "Назад",
+        "codeSent": "Код отправлен в Telegram",
+        "codeSendError": "Не удалось отправить код",
+        "connectionError": "Ошибка подключения",
+        "enterChatId": "Введите ваш Telegram ID",
+        "enterCode": "Введите код из Telegram",
+        "getCode": "Получить код",
+        "invalidChatId": "Некорректный Telegram ID",
+        "invalidToken": "Неверный код",
+        "newPassword": "Новый пароль",
+        "notFound": "Telegram не найден",
+        "passwordChanged": "Пароль изменён",
+        "resetError": "Не удалось сбросить пароль",
+        "savePassword": "Сохранить пароль",
+        "saving": "Сохраняем…",
+        "sendFailed": "Не удалось отправить",
+        "sending": "Отправляем…"
+      },
+      "validation": {
+        "email": "Введите корректный email",
+        "emailMax": "Email не должен превышать 255 символов",
+        "passwordMin": "Минимум 8 символов",
+        "passwordUppercase": "Должна быть хотя бы одна заглавная буква",
+        "passwordLowercase": "Должна быть хотя бы одна строчная буква",
+        "passwordNumber": "Должна быть хотя бы одна цифра"
+      }
+    },
+    "common": {
+      "or": "или",
+      "loading": "Загрузка…",
+      "errors": {
+        "invalidEmail": "Некорректный email",
+        "passwordMismatch": "Пароли не совпадают",
+        "resetFailed": "Не удалось сбросить пароль",
+        "updateFailed": "Не удалось обновить"
+      }
+    },
+    "legal": {
+      "agreeToTerms": "Я согласен с",
+      "andThe": "и",
+      "termsLink": "Условиями использования",
+      "privacyLink": "Политикой конфиденциальности"
+    },
+    "messages": {
+      "accountCreated": "Аккаунт создан",
+      "failedToSignIn": "Не удалось войти",
+      "failedToSignUp": "Не удалось создать аккаунт"
+    }
   },
   "zones": {
     "analytics": {
@@ -7485,5 +7577,8 @@
     "pricing": {
       "billedYearly": "Оплата {{price}} в год"
     }
+  },
+  "tma": {
+    "home_greeting": "Привет, {{name}} 👋"
   }
 }

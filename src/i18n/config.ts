@@ -167,6 +167,21 @@ i18n
         console.warn(`[i18n] Missing key: "${key}" for languages: [${lngs.join(', ')}], namespace: "${ns}"`);
       }
       : undefined,
+    // If a key is missing AND no fallback string is supplied via t(key, fallback),
+    // convert the last segment into a human-readable string instead of showing the raw key.
+    // Example: 'auth.continueWithGoogle' -> 'Continue with google'
+    parseMissingKeyHandler: (key: string, defaultValue?: string) => {
+      if (defaultValue && defaultValue !== key) return defaultValue;
+      const last = key.split('.').pop() || key;
+      // camelCase / snake_case / kebab-case -> spaced words
+      const spaced = last
+        .replace(/[_-]+/g, ' ')
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+      return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+    },
     returnEmptyString: false,
     returnNull: false,
   });

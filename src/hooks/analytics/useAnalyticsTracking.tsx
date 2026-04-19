@@ -49,7 +49,7 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
     (blockId: string, blockType?: string, blockTitle?: string, experimentId?: string, variantLabel?: string) => {
       if (!pageId || !trackingEnabled) return;
       trackBlockClick(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
-      trackClickLink(blockTitle, blockType);
+      trackClickLink(blockTitle);
     },
     [pageId, trackingEnabled]
   );

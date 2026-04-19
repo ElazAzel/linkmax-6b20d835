@@ -2,6 +2,7 @@
  * API-related types for Supabase operations
  */
 import type { PageData, Block, PageTheme } from './page';
+import type { AppPremiumTier } from '@/domain/billing/tiers';
 
 // ============= Database Types =============
 
@@ -123,7 +124,7 @@ export interface PublishPageResult {
  */
 export interface PremiumStatusResult {
   isPremium: boolean;
-  tier: 'identity' | 'starter' | 'pro' | 'business';
+  tier: AppPremiumTier;
   trialEndsAt: string | null;
   inTrial: boolean;
 }

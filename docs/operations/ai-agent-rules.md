@@ -87,7 +87,7 @@
 - Все Edge Functions валидируют входные данные через **Zod**
 - Ответы типизированы через TypeScript интерфейсы
 - Ошибки возвращают стандартный формат: `{ error: string, code: string }`
-- Supabase типы берутся **только** из `src/integrations/supabase/types.ts`
+- Supabase типы берутся **только** из `src/platform/supabase/types.ts`
 - Никаких `any` — строгая типизация (Zero-Any policy)
 
 ---

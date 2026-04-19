@@ -74,7 +74,7 @@ export function BlockEditorV2({
 }: BlockEditorV2Props) {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
-    const [formData, setFormData] = useState<any>(() => block ? { ...block } : {});
+    const [formData, setFormData] = useState<Partial<Block>>(() => block ? { ...block } : {});
     const [isSaving, setIsSaving] = useState(false);
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -94,7 +94,7 @@ export function BlockEditorV2({
     }, [block]);
 
     // Check for unsaved changes
-    const handleFormChange = useCallback((updates: any) => {
+    const handleFormChange = useCallback((updates: Partial<Block>) => {
         setFormData(updates);
         setHasUnsavedChanges(true);
 
@@ -110,7 +110,7 @@ export function BlockEditorV2({
     }, [enableAutosave, autosaveDelay]);
 
     // Perform save
-    const performSave = useCallback(async (data: any, closeAfter: boolean = true) => {
+    const performSave = useCallback(async (data: Partial<Block>, closeAfter: boolean = true) => {
         setIsSaving(true);
         try {
             await onSave(data);
@@ -140,6 +140,14 @@ export function BlockEditorV2({
             }
         };
     }, []);
+
+    // Ensure editor state is synchronized whenever the sheet/dialog is reopened.
+    useEffect(() => {
+        if (!isOpen || !block) return;
+        setFormData({ ...block });
+        setHasUnsavedChanges(false);
+        setLastSaved(null);
+    }, [isOpen, block]);
 
     // Intercept close attempt
     const [showUnsavedDialog, setShowUnsavedDialog] = useState(false);
@@ -199,7 +207,7 @@ export function BlockEditorV2({
         }
 
         const EditorComponent = manifest.editor;
-        const editorProps: any = { ...commonProps };
+        const editorProps: Record<string, unknown> = { ...commonProps };
 
         // Special case: profile editor gets onComplete
         if (block.type === 'profile') {
@@ -221,7 +229,7 @@ export function BlockEditorV2({
                     <div className="p-4">
                         <Suspense fallback={<div className="h-20 bg-muted animate-pulse rounded-xl" />}>
                             <BlockRenderer
-                                block={deferredFormData}
+                                block={deferredFormData as Block}
                                 isPreview={true}
                             />
                         </Suspense>
@@ -247,7 +255,7 @@ export function BlockEditorV2({
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
             onClose={handleCloseAttempt}
-            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates })}
+            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates } as Partial<Block>)}
             enablePreview={block.type !== 'profile'}
             previewComponent={previewComponent}
             onDelete={onDelete ? () => setShowDeleteDialog(true) : undefined}

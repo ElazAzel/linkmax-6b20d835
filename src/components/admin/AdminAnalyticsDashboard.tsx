@@ -119,9 +119,9 @@ export function AdminAnalyticsDashboard() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="7d">{t('admin.periods.7d')}</SelectItem>
-              <SelectItem value="14d">{t('admin.periods.14d')}</SelectItem>
               <SelectItem value="30d">{t('admin.periods.30d')}</SelectItem>
               <SelectItem value="90d">{t('admin.periods.90d')}</SelectItem>
+              <SelectItem value="all">{t('admin.periods.all', 'All time')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -174,7 +174,7 @@ export function AdminAnalyticsDashboard() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t('admin.conversionRate')}</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.ctr', 'CTR')}</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -184,7 +184,10 @@ export function AdminAnalyticsDashboard() {
                 : '0.0'}%
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Test CTR
+              {t('admin.ctrFormula', 'Клики / просмотры')}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {t('admin.conversions', 'Conversions')}: {formatNumber(analytics.totalConversions)}
             </p>
           </CardContent>
         </Card>
