@@ -28,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { PremiumFeatureGate } from '@/components/billing/PremiumFeatureGate';
 import type { Niche } from '@/lib/niches';
+import { INDEXABLE_THRESHOLD } from '@/lib/seo/quality-score';
 
 const COUNTRY_OPTIONS = [
   { value: 'KZ', label: '🇰🇿 Казахстан' },
@@ -111,10 +112,10 @@ const SEOScoreBadge = memo(function SEOScoreBadge({ score }: { score?: number })
     if (score === undefined || score === null) return null;
 
     const color = score >= 70 ? 'text-green-600 bg-green-500/10 border-green-500/20' :
-                  score >= 40 ? 'text-amber-600 bg-amber-500/10 border-amber-500/20' :
+                  score >= INDEXABLE_THRESHOLD ? 'text-amber-600 bg-amber-500/10 border-amber-500/20' :
                   'text-red-600 bg-red-500/10 border-red-500/20';
     const label = score >= 70 ? t('seo.good', 'Хорошо') :
-                  score >= 40 ? t('seo.average', 'Средне') :
+                  score >= INDEXABLE_THRESHOLD ? t('seo.average', 'Средне') :
                   t('seo.weak', 'Слабо');
 
     return (

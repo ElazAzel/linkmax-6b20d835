@@ -120,7 +120,7 @@
     "react-i18next": "15.4.1",
     "react-image-crop": "^11.0.10",
     "react-resizable-panels": "^2.1.9",
-    "react-router-dom": "6.29.0",
+    "react-router-dom": "6.30.3",
     "recharts": "^3.6.0",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",

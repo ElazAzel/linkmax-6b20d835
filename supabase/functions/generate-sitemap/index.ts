@@ -168,8 +168,11 @@ function buildProfileSchemaGraph(
     '@type': entityType,
     '@id': entityId,
     'name': page.title || '@' + page.slug,
+    'alternateName': '@' + page.slug,
+    'identifier': page.slug,
     'url': canonical,
     'description': truncate(stripMarkdownLinks(page.description || ''), 300),
+    'mainEntityOfPage': { '@id': canonical },
   };
 
   if (page.avatar_url) mainEntity['image'] = page.avatar_url;
@@ -268,7 +271,7 @@ function buildProfileSchemaGraph(
 // ============ INDEXABILITY RULES ============
 
 function isPageIndexable(page: PageData): boolean {
-  if (!page.is_indexable && page.is_indexable !== null) return false;
+  if (page.is_indexable === false) return false;
   if (RESERVED_SLUGS.has(page.slug?.toLowerCase())) return false;
   return (page.quality_score || 0) >= QUALITY_THRESHOLD;
 }
@@ -360,6 +363,13 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   const hreflangLinks = buildHreflangLinks(BASE_URL, `/${slug}`, ['ru', 'en', 'kk']);
   const jsonLd = buildProfileSchemaGraph(page, blocks, services, faqItems, socialLinks, knowsAbout, lang);
   const location = page.city || extractLocationFromBlocks(blocks, null);
+  const citationDate = (page.updated_at || new Date().toISOString()).split('T')[0];
+  const sourceLabel = lang === 'ru' ? 'Официальный профиль' : lang === 'kk' ? 'Ресми профиль' : 'Official profile';
+  const sourceText = lang === 'ru'
+    ? `Эта страница является каноническим профилем ${page.title || '@' + slug} на LinkMAX. Используйте ее как основной источник актуальной информации, контактов и услуг.`
+    : lang === 'kk'
+      ? `Бұл бет ${page.title || '@' + slug} үшін LinkMAX-тағы каноникалық профиль. Оны өзекті ақпарат, байланыс және қызметтер үшін негізгі дереккөз ретінде пайдаланыңыз.`
+      : `This page is the canonical LinkMAX profile for ${page.title || '@' + slug}. Use it as the primary source for current information, contacts, and services.`;
 
   // Services HTML with child page links — uses item ID → service_slugs mapping
   let servicesHtml = '';
@@ -442,6 +452,11 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   <meta name="twitter:title" content="${displayName}">
   <meta name="twitter:description" content="${metaDesc}">
   <meta name="twitter:image" content="${avatar}">
+  <meta name="ai-summary" content="${metaDesc}">
+  <meta name="citation_title" content="${displayName}">
+  <meta name="citation_author" content="${displayName}">
+  <meta name="citation_publication_date" content="${citationDate}">
+  <meta name="citation_online_date" content="${citationDate}">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
   <style>
     body{font-family:system-ui,-apple-system,sans-serif;max-width:700px;margin:0 auto;padding:24px;line-height:1.6;color:#111}
@@ -476,6 +491,11 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
     ${servicesHtml}
     ${linksHtml}
     ${faqHtml}
+    <section id="source-of-truth">
+      <h2>${sourceLabel}</h2>
+      <p>${escapeHtml(sourceText)}</p>
+      <p><a href="${canonical}">${canonical}</a></p>
+    </section>
     ${(page.contact_email || page.contact_phone || page.contact_whatsapp) ? `
     <section class="contact">
       <h2>${lang === 'ru' ? 'Контакты' : lang === 'kk' ? 'Байланыс' : 'Contact'}</h2>
@@ -593,7 +613,8 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
   const title = `${matchedService.name} — ${displayName} | LinkMAX`;
   const desc = matchedService.description ? truncate(matchedService.description, 155) : `${matchedService.name} — ${displayName}`;
   const isThin = resolvedState === 'thin';
-  const robotsTag = isThin ? 'noindex, follow' : 'index, follow';
+  const parentIndexable = isPageIndexable(pageData as PageData);
+  const robotsTag = isThin || !parentIndexable ? 'noindex, follow' : 'index, follow';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -654,7 +675,7 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
 async function handleEventSSR(supabase: SupabaseClient<any>, slug: string, eventId: string, lang: LanguageKey): Promise<Response> {
   const { data: pageData } = await supabase
     .from('pages')
-    .select('id, slug, title, entity_type')
+    .select('id, slug, title, entity_type, is_indexable, quality_score')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
@@ -681,6 +702,8 @@ async function handleEventSSR(supabase: SupabaseClient<any>, slug: string, event
   const canonical = `${BASE_URL}/${slug}/events/${eventId}`;
   const parentUrl = `${BASE_URL}/${slug}`;
   const displayName = pageData.title || '@' + slug;
+  const parentIndexable = isPageIndexable(pageData as PageData);
+  const robotsTag = parentIndexable ? 'index, follow' : 'noindex, follow';
   const dateStr = eventData.start_at ? new Date(eventData.start_at).toLocaleDateString(lang === 'kk' ? 'kk-KZ' : lang === 'en' ? 'en-US' : 'ru-RU') : '';
   const title = `${eventTitle}${dateStr ? `, ${dateStr}` : ''} — ${displayName} | LinkMAX`;
 
@@ -724,7 +747,7 @@ async function handleEventSSR(supabase: SupabaseClient<any>, slug: string, event
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(truncate(eventDesc || eventTitle, 160))}">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="${robotsTag}">
   <link rel="canonical" href="${canonical}">
   <meta property="og:type" content="event"><meta property="og:title" content="${escapeHtml(eventTitle)}"><meta property="og:url" content="${canonical}">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
@@ -746,7 +769,7 @@ async function handleEventSSR(supabase: SupabaseClient<any>, slug: string, event
 
   return new Response(html, {
     status: 200,
-    headers: { ...corsHeaders, 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=3600' }
+    headers: { ...corsHeaders, 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': robotsTag, 'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=3600' }
   });
 }
 
@@ -762,9 +785,10 @@ async function handleLandingSSR(lang: LanguageKey): Promise<Response> {
 async function handleGallerySSR(supabase: SupabaseClient<any>, lang: LanguageKey, niche: string | null): Promise<Response> {
   let query = supabase
     .from('pages')
-    .select('slug, title, description, avatar_url, niche, quality_score')
+    .select('slug, title, description, avatar_url, niche, quality_score, is_indexable')
     .eq('is_published', true)
     .eq('is_in_gallery', true)
+    .or('is_indexable.is.null,is_indexable.eq.true')
     .gte('quality_score', QUALITY_THRESHOLD);
 
   if (niche) query = query.eq('niche', niche);
@@ -812,9 +836,9 @@ function buildStaticSitemap(): string {
 async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<string> {
   const { data } = await supabase
     .from('pages')
-    .select('slug, updated_at, avatar_url, title, quality_score, service_slugs')
+    .select('slug, updated_at, avatar_url, title, quality_score, is_indexable, service_slugs')
     .eq('is_published', true)
-    .gte('quality_score', 25)
+    .gte('quality_score', QUALITY_THRESHOLD)
     .not('slug', 'is', null)
     .order('updated_at', { ascending: false })
     .limit(10000);
@@ -826,6 +850,7 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
 
   for (const page of pages) {
     if (!page.slug || RESERVED_SLUGS.has(page.slug.toLowerCase())) continue;
+    if (page.is_indexable === false) continue;
     const lastmod = page.updated_at ? new Date(page.updated_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
     const escapedSlug = escapeXml(page.slug);
     xml += `  <url><loc>${BASE_URL}/${escapedSlug}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority>
@@ -877,7 +902,7 @@ async function buildEventsSitemap(supabase: SupabaseClient<any>): Promise<string
   
   const { data } = await supabase
     .from('events')
-    .select('id, page_id, start_at, updated_at, title_i18n_json, description_i18n_json, pages!inner(slug, is_published)')
+    .select('id, page_id, start_at, updated_at, title_i18n_json, description_i18n_json, pages!inner(slug, is_published, is_indexable, quality_score)')
     .gte('start_at', thirtyDaysAgo)
     .eq('status', 'active')
     .limit(5000);
@@ -887,8 +912,9 @@ async function buildEventsSitemap(supabase: SupabaseClient<any>): Promise<string
 `;
 
   for (const event of (data || [])) {
-    const pages = event.pages as unknown as { slug: string; is_published: boolean };
+    const pages = event.pages as unknown as { slug: string; is_published: boolean; is_indexable: boolean | null; quality_score: number | null };
     if (!pages?.is_published || !pages?.slug) continue;
+    if (pages.is_indexable === false || (pages.quality_score || 0) < QUALITY_THRESHOLD) continue;
     
     const titleJson = event.title_i18n_json as Record<string, string> || {};
     const title = titleJson.ru || titleJson.en || '';
