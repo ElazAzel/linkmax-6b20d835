@@ -61,7 +61,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
         )}
         onClick={hasLink ? handleClick : undefined}
         onKeyDown={hasLink ? (event) => handleKeyboardActivation(event, handleClick) : undefined}
-        role="link"
+        role={hasLink ? 'link' : undefined}
         tabIndex={hasLink ? 0 : undefined}
       >
         <div className={cn(

@@ -557,7 +557,7 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
 
             {/* Quick actions for new leads */}
             {lead.status === 'new' && lead.phone ? (
-              <div className="flex items-center gap-2" onClickCapture={e => e.stopPropagation()}>
+              <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={handleWhatsAppReply}
                   className="h-11 w-11 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"

@@ -72,7 +72,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
                   className="aspect-[16/9] overflow-hidden bg-black/20 cursor-pointer"
                   onClick={image.link ? () => handleImageClick(image.link) : undefined}
                   onKeyDown={image.link ? (event) => handleKeyboardActivation(event, () => handleImageClick(image.link)) : undefined}
-                  role="link"
+                  role={image.link ? 'link' : undefined}
                   tabIndex={image.link ? 0 : undefined}
                 >
                   <img
