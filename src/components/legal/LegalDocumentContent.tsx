@@ -1084,4 +1084,3 @@ export function LegalDocumentContent({
     </>
   );
 }
-
