@@ -126,8 +126,23 @@ export function useDashboard(options?: UseDashboardOptions) {
         cloudState.addBlock(block);
       });
       cloudState.updateNiche(niche);
+
+      // If wizard requested immediate publish, fire it after a short delay
+      // (let block additions settle into pageData first)
+      import('@/lib/storage').then(({ storage }) => {
+        if (storage.get<string>('wizard_wants_publish') === 'true') {
+          storage.remove('wizard_wants_publish');
+          setTimeout(() => {
+            cloudState.publish().then(() => {
+              toast.success(t('dashboard.publishedFromWizard', 'Страница опубликована! 🎉'));
+            }).catch((err) => {
+              console.warn('Auto-publish from wizard failed:', err);
+            });
+          }, 1200);
+        }
+      });
     },
-    [handleUpdateProfile, cloudState]
+    [handleUpdateProfile, cloudState, t]
   );
 
   const onboardingState = useDashboardOnboarding({

@@ -7,9 +7,11 @@ import type { Niche } from '@/lib/niches';
 import { storage } from '@/lib/storage';
 
 const STORAGE_KEYS = {
-  AI_BUILDER_USED: 'ai_builder_used',
-  NICHE_COMPLETED: 'niche_onboarding_completed',
   ONBOARDING_COMPLETED: 'onboarding_completed',
+  // Legacy keys read for backwards compatibility (existing users)
+  LEGACY_AI_BUILDER_USED: 'ai_builder_used',
+  LEGACY_NICHE_COMPLETED: 'niche_onboarding_completed',
+  LEGACY_LINKMAX_COMPLETED: 'linkmax_onboarding_completed',
 } as const;
 
 /** Minimum block count to skip onboarding (user already has content) */
@@ -41,17 +43,21 @@ export function useDashboardOnboarding({
   useEffect(() => {
     if (!isUserReady || !isPageReady) return;
 
-    const hasUsedAIBuilder = storage.get<string>(STORAGE_KEYS.AI_BUILDER_USED);
-    const hasCompletedNiche = storage.get<string>(STORAGE_KEYS.NICHE_COMPLETED);
-    const hasCompletedOnboarding = storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED);
+    // Read unified key + any legacy keys (for users who completed onboarding before refactor)
+    const completed =
+      storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED) ||
+      storage.get<string>(STORAGE_KEYS.LEGACY_AI_BUILDER_USED) ||
+      storage.get<string>(STORAGE_KEYS.LEGACY_NICHE_COMPLETED) ||
+      storage.get<string>(STORAGE_KEYS.LEGACY_LINKMAX_COMPLETED);
 
     // Skip if user already has content (more than 2 blocks)
     const hasExistingContent = blockCount > MIN_BLOCKS_TO_SKIP_ONBOARDING;
 
-    if (hasExistingContent || hasUsedAIBuilder || hasCompletedNiche || hasCompletedOnboarding) {
-      // Auto-mark as completed
-      if (!hasCompletedNiche) storage.set(STORAGE_KEYS.NICHE_COMPLETED, 'true');
-      if (!hasCompletedOnboarding) storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    if (hasExistingContent || completed) {
+      // Migrate to single unified key
+      if (!storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED)) {
+        storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+      }
       return;
     }
 
@@ -60,7 +66,6 @@ export function useDashboardOnboarding({
   }, [isUserReady, isPageReady, blockCount]);
 
   const handleAIBuilderClose = useCallback(() => {
-    storage.set(STORAGE_KEYS.NICHE_COMPLETED, 'true');
     storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
     setShowAIBuilderWizard(false);
   }, []);
@@ -68,8 +73,6 @@ export function useDashboardOnboarding({
   const handleAIBuilderComplete = useCallback(
     (profile: OnboardingProfile, blocks: Block[], niche: Niche) => {
       onNicheComplete(profile, blocks, niche);
-      storage.set(STORAGE_KEYS.AI_BUILDER_USED, 'true');
-      storage.set(STORAGE_KEYS.NICHE_COMPLETED, 'true');
       storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
       setShowAIBuilderWizard(false);
     },
