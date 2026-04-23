@@ -319,7 +319,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               </Button>
               <div>
                 <h2 className="text-xl font-black">
-                  {t('aiBuilder.nicheTitle', 'Выберите сферню')}
+                  {t('aiBuilder.nicheTitle', 'Выберите сферу')}
                 </h2>
                 <p className="text-muted-foreground text-sm">
                   {t('aiBuilder.nicheDesc', 'Подберём оформление под вашу деятельность')}
@@ -398,7 +398,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-transparent animate-shimmer" />
                   <Sparkles className="h-6 w-6 mr-3 group-hover:rotate-12 transition-transform" />
-                  {t('aiBuilder.nicheQuestions.generateBtn', 'Магия InkMAX ✨')}
+                  {t('aiBuilder.nicheQuestions.generateBtn', 'Сгенерировать магию ✨')}
                 </Button>
                 <p className="text-center text-xs text-muted-foreground mt-4 px-8">
                   {t('aiBuilder.generatingDesc')}
@@ -433,10 +433,10 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
             </div>
 
             <h3 className="text-2xl font-black mb-3">
-              {t('aiBuilder.generatingTitle', 'Нейро-алгоритм собирает страницу')}
+              {t('aiBuilder.generatingTitle', 'AI собирает вашу страницу')}
             </h3>
             <p className="text-muted-foreground mb-6">
-              {t('aiBuilder.generatingDesc', 'Умные эвристики размещают ваш контент по сетке шаблона')}
+              {t('aiBuilder.generatingDesc', 'Подбираем шаблон, заполняем профиль и раскладываем блоки')}
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
@@ -468,15 +468,13 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                   size="lg"
                   className="w-full h-14 rounded-2xl font-black text-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/25"
                   onClick={() => {
+                    storage.set('onboarding_completed', 'true');
+                    storage.set('wizard_wants_publish', 'true');
                     onComplete(
                       { name: userInfo.name, bio: userInfo.bio || '' },
                       generatedBlocks,
                       selectedNiche!
                     );
-                    storage.set('ai_builder_used', 'true');
-                    storage.set('niche_onboarding_completed', 'true');
-                    storage.set('onboarding_completed', 'true');
-                    storage.set('wizard_wants_publish', 'true');
                     toast.success(t('aiBuilder.success', '✨ Страница создана!'));
                     onClose();
                   }}
@@ -488,14 +486,12 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                   variant="ghost"
                   className="w-full h-12 rounded-xl text-muted-foreground"
                   onClick={() => {
+                    storage.set('onboarding_completed', 'true');
                     onComplete(
                       { name: userInfo.name, bio: userInfo.bio || '' },
                       generatedBlocks,
                       selectedNiche!
                     );
-                    storage.set('ai_builder_used', 'true');
-                    storage.set('niche_onboarding_completed', 'true');
-                    storage.set('onboarding_completed', 'true');
                     onClose();
                   }}
                 >
