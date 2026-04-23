@@ -188,43 +188,64 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
     setStep('generating');
 
+    let finalBlocks: Block[] = [];
+    let aiProfile: { name?: string; bio?: string } | null = null;
+
+    // 1) Try real AI generation via niche-builder edge function
     try {
-      // Build user description for AI
-      const userDescription = [
-        `Цель: ${selectedGoal ? t(`aiBuilder.goals.${selectedGoal}`) : ''}`,
-        `Ниша: ${selectedNiche ? t(`niches.${selectedNiche}`) : ''}`,
-        `Имя/Название: ${userInfo.name}`,
-        `Описание: ${userInfo.bio}`,
+      const details = [
+        userInfo.bio,
+        userInfo.services ? `Услуги: ${userInfo.services}` : '',
+        userInfo.contacts ? `Контакты: ${userInfo.contacts}` : '',
+        userInfo.socials ? `Соцсети: ${userInfo.socials}` : '',
+        selectedGoal ? `Цель: ${t(`aiBuilder.goals.${selectedGoal}`, selectedGoal)}` : '',
       ].filter(Boolean).join('\n');
 
-      // Generate structural layout and inject user data synchronously
-      const finalBlocks: Block[] = generateBlocksFromTemplate(
+      const { data, error } = await supabase.functions.invoke('ai-content-generator', {
+        body: {
+          type: 'niche-builder',
+          input: {
+            niche: selectedNiche,
+            name: userInfo.name,
+            details,
+          },
+        },
+      });
+
+      if (error) throw error;
+      const aiBlocks = Array.isArray(data?.blocks) ? data.blocks : null;
+      if (aiBlocks && aiBlocks.length > 0) {
+        // Normalize AI blocks through createBaseBlock to ensure ids/positions
+        finalBlocks = aiBlocks.map((b: any, idx: number) => {
+          const base = createBaseBlock(b.type || 'text');
+          return { ...base, ...b, position: idx } as Block;
+        });
+        aiProfile = data?.profile || null;
+      }
+    } catch (err) {
+      console.warn('niche-builder failed, falling back to template:', err);
+    }
+
+    // 2) Fallback to deterministic template if AI failed or returned empty
+    if (finalBlocks.length === 0) {
+      finalBlocks = generateBlocksFromTemplate(
         Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
         { ...userInfo, bio: userInfo.bio }
       );
-
-      // Brief delay to simulate generation and keep UX smooth
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      incrementAIPageGeneration();
-
-      // Extract profile
-      const profile = {
-        name: userInfo.name,
-        bio: userInfo.bio || `${userInfo.services || ''}`,
-      };
-
-      setGeneratedBlocks(finalBlocks);
-      setStep('complete');
-    } catch (err) {
-      console.error('AI Builder error:', err);
-      toast.error(t('aiBuilder.error', 'Ошибка генерации. Попробуйте ещё раз.'));
-      setStep('description');
     }
-  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, canUseAIPageGeneration, incrementAIPageGeneration, onComplete, onClose, t]);
+
+    incrementAIPageGeneration();
+
+    // Update profile bio from AI if user left it empty
+    if (aiProfile?.bio && !userInfo.bio) {
+      setUserInfo(p => ({ ...p, bio: aiProfile!.bio! }));
+    }
+
+    setGeneratedBlocks(finalBlocks);
+    setStep('complete');
+  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, canUseAIPageGeneration, incrementAIPageGeneration, t]);
 
   const handleSkip = () => {
-    storage.set('niche_onboarding_completed', 'true');
     storage.set('onboarding_completed', 'true');
     onClose();
   };
