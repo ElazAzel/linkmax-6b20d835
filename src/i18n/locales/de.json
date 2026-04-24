@@ -5823,7 +5823,29 @@
       "stub_upcoming": "Coming soon in the next update",
       "tab_links": "Links",
       "tab_profile": "Profile",
-      "tab_qr": "QR Code"
+      "tab_qr": "QR Code",
+      "settingsTitle": "TMA Settings",
+      "settingsSubtitle": "Configure your app presence within the Telegram ecosystem.",
+      "botConnection": "Bot Connection",
+      "botDesc": "Connect your own Telegram Bot for a white-label experience.",
+      "setupBot": "Configure Bot Token",
+      "uiControl": "UI Control",
+      "language": "Language",
+      "languageDesc": "Choose your preferred interface language.",
+      "syncTheme": "Sync Theme Colors",
+      "hapticFeedback": "Haptic Feedback",
+      "expandedMode": "Full Height Mode",
+      "advancedSettings": "Advanced Bot Features",
+      "pushNotifications": "Push Notifications",
+      "pushDesc": "Send service updates directly via the bot.",
+      "customDomain": "Bot Domain Mapping",
+      "domainDesc": "Map your bot to a custom subdomain.",
+      "paymentsTitle": "TMA Payments",
+      "paymentsSubtitle": "Manage native Telegram payments and checkout.",
+      "availableBalance": "Available Balance",
+      "withdraw": "Withdraw",
+      "withdrawStarted": "Withdrawal Request",
+      "withdrawDesc": "Please select a payout method in your global settings to continue."
     },
     "toasts": {
       "ai": {
@@ -7440,7 +7462,100 @@
     "toastEarned": "+{{amount}} Tokens {{count}} {{action}}"
   },
   "translation": {
-    "browserLanguageDetected": "Browsersprache erkannt: {{language}}"
+    "browserLanguageDetected": "Browsersprache erkannt: {{language}}",
+    "auth": {
+      "title": "Welcome to LinkMAX",
+      "subtitle": "AI-powered page for your business in 2 minutes",
+      "heroTitle": "Create your lnkmx.my page",
+      "heroSubtitle": "AI builds your site in 2 minutes. Free forever.",
+      "signIn": "Sign in",
+      "signUp": "Sign up",
+      "signingIn": "Signing in…",
+      "welcomeBack": "Welcome back",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "continueWithGoogle": "Continue with Google",
+      "continueWithApple": "Continue with Apple",
+      "continueWithEmail": "Continue with Email",
+      "moreOptions": "More sign-in options",
+      "backToHome": "Back to home",
+      "backToSignIn": "Back to sign in",
+      "forgotPassword": "Forgot password?",
+      "resetPassword": "Reset password",
+      "resetDescription": "Enter your email and we will send you a reset link.",
+      "sendResetLink": "Send reset link",
+      "checkEmail": "Check your email",
+      "resetEmailSent": "Password reset email sent",
+      "signupEmailSent": "Confirmation email sent",
+      "goToDashboard": "Go to dashboard",
+      "passwordHint": "At least 8 characters, letters and numbers",
+      "newPassword": "New password",
+      "enterNewPassword": "Enter new password",
+      "updatePassword": "Update password",
+      "passwordUpdated": "Password updated",
+      "passwordUpdatedDesc": "You can now sign in with your new password.",
+      "seo": {
+        "title": "Sign in to LinkMAX",
+        "description": "Sign in to LinkMAX to create and publish your link-in-bio page."
+      },
+      "oauthError": "Authorization error",
+      "referral": {
+        "bonus": "Bonus",
+        "invited": "You were invited by",
+        "success": "Referral code applied"
+      },
+      "telegram": {
+        "recoverViaTelegram": "Recover via Telegram",
+        "recoveryTitle": "Telegram recovery",
+        "back": "Back",
+        "codeSent": "Code sent to Telegram",
+        "codeSendError": "Failed to send code",
+        "connectionError": "Connection error",
+        "enterChatId": "Enter your Telegram ID",
+        "enterCode": "Enter Telegram code",
+        "getCode": "Get code",
+        "invalidChatId": "Invalid Telegram ID",
+        "invalidToken": "Invalid code",
+        "newPassword": "New password",
+        "notFound": "Telegram not found",
+        "passwordChanged": "Password changed",
+        "resetError": "Failed to reset password",
+        "savePassword": "Save password",
+        "saving": "Saving…",
+        "sendFailed": "Failed to send",
+        "sending": "Sending…"
+      },
+      "validation": {
+        "email": "Please enter a valid email address",
+        "emailMax": "Email must be less than 255 characters",
+        "passwordMin": "Password must be at least 8 characters",
+        "passwordUppercase": "Password must contain at least one uppercase letter",
+        "passwordLowercase": "Password must contain at least one lowercase letter",
+        "passwordNumber": "Password must contain at least one number"
+      }
+    },
+    "common": {
+      "or": "or",
+      "loading": "Loading…",
+      "errors": {
+        "invalidEmail": "Invalid email",
+        "passwordMismatch": "Passwords do not match",
+        "resetFailed": "Failed to reset password",
+        "updateFailed": "Failed to update"
+      }
+    },
+    "legal": {
+      "agreeToTerms": "I agree to the",
+      "andThe": "and the",
+      "termsLink": "Terms of Service",
+      "privacyLink": "Privacy Policy"
+    },
+    "messages": {
+      "accountCreated": "Account created",
+      "failedToSignIn": "Failed to sign in",
+      "failedToSignUp": "Failed to sign up"
+    }
   },
   "zones": {
     "analytics": {

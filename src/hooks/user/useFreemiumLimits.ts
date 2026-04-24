@@ -1,5 +1,6 @@
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { storage } from '@/lib/storage';
+import type { AppPremiumTier } from '@/domain/billing/tiers';
 
 // Block tiers based on pricing plans (Free + Pro only)
 // booking + form moved to FREE to enable core thesis: social traffic → booking → prepayment
@@ -18,7 +19,7 @@ export const PRO_EXTENDED_BLOCKS = [
   'download', 'countdown', 'community'
 ] as const;
 
-export type FreeTier = 'identity' | 'starter' | 'pro' | 'business';
+export type FreeTier = AppPremiumTier;
 
 // Feature flags for each tier
 export interface TierFeatures {

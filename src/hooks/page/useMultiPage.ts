@@ -10,6 +10,7 @@ import { useOrganizations } from '@/hooks/useOrganizations';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { storage } from '@/lib/storage';
+import { sanitizeSlug, slugifyTitle, validateSlug } from '@/lib/utils/slug';
 
 // ============= Types =============
 
@@ -63,6 +64,7 @@ interface PageRow {
 // ============= Constants =============
 
 const ACTIVE_PAGE_KEY = 'active_page_id';
+const DEFAULT_PAGE_TITLE = 'My Page';
 
 // ============= Hook =============
 
@@ -199,75 +201,119 @@ export function useMultiPage() {
     }
 
     try {
-      // Generate a unique slug
-      let finalSlug = slug?.toLowerCase().replace(/[^a-z0-9-]/g, '') || '';
-
-      if (!finalSlug) {
-        finalSlug = `page-${Date.now().toString(36)}`;
+      const normalizedTitle = title.trim() || DEFAULT_PAGE_TITLE;
+      const sanitizedInputSlug = slug ? sanitizeSlug(slug) : '';
+      if (sanitizedInputSlug) {
+        const validation = validateSlug(sanitizedInputSlug);
+        if (!validation.valid) {
+          return { success: false, error: validation.error };
+        }
       }
 
-      // Check slug uniqueness
-      const { data: existingSlug } = await supabase
-        .from('pages')
-        .select('id')
-        .eq('slug', finalSlug)
-        .maybeSingle();
+      const baseSlug = sanitizedInputSlug || slugifyTitle(normalizedTitle) || `page-${Date.now().toString(36)}`;
+      let newPage: { id: string; slug: string } | null = null;
 
-      if (existingSlug) {
-        finalSlug = `${finalSlug}-${Date.now().toString(36).slice(-4)}`;
-      }
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const suffix = attempt === 0 ? '' : `-${Date.now().toString(36).slice(-4)}-${attempt}`;
+        const candidateSlug = `${baseSlug}${suffix}`.slice(0, 30);
+        const candidateValidation = validateSlug(candidateSlug);
+        if (!candidateValidation.valid) {
+          return { success: false, error: candidateValidation.error };
+        }
 
-      // Create the page (use insert with object that matches existing schema)
-      const { data: newPage, error: createError } = await supabase
-        .from('pages')
-        .insert({
-          user_id: user.id,
-          organization_id: currentOrg?.id ?? null,
-          title: title || 'My Page',
-          slug: finalSlug,
-          theme_settings: {
-            backgroundColor: 'hsl(var(--background))',
-            textColor: 'hsl(var(--foreground))',
-            buttonStyle: 'rounded',
-            fontFamily: 'sans',
-          },
-          seo_meta: {
-            title: title || 'My lnkmx.my Page',
-            description: 'Check out my links',
-            keywords: [],
-          },
-          editor_mode: 'grid',
-        })
-        .select('id, slug')
-        .single();
-
-      if (createError) {
-        throw createError;
-      }
-
-      // Create default profile block
-      if (newPage) {
-        await supabase
-          .from('blocks')
+        const { data, error: createError } = await supabase
+          .from('pages')
           .insert({
-            page_id: newPage.id,
-            type: 'profile',
-            position: 0,
-            content: {
-              id: `profile-${newPage.id}`,
-              type: 'profile',
-              name: title || 'My Page',
+            user_id: user.id,
+            organization_id: currentOrg?.id ?? null,
+            title: normalizedTitle,
+            slug: candidateSlug,
+            theme_settings: {
+              backgroundColor: 'hsl(0 0% 100%)',
+              textColor: 'hsl(224 71% 4%)',
+              buttonStyle: 'rounded',
+              fontFamily: 'sans',
             },
-            is_premium: false,
-          });
+            seo_meta: {
+              title: normalizedTitle,
+              description: null,
+              keywords: [],
+            },
+            editor_mode: 'grid',
+          })
+          .select('id, slug')
+          .single();
+
+        if (createError) {
+          if (createError.code === '23505') {
+            if (sanitizedInputSlug) {
+              return { success: false, error: 'slug_taken' };
+            }
+            continue;
+          }
+          throw createError;
+        }
+
+        newPage = data;
+        break;
       }
 
-      // Refresh pages list
-      await loadPages();
+      if (!newPage) {
+        return { success: false, error: 'slug_taken' };
+      }
 
-      // Switch to new page
+      const { error: blockError } = await supabase
+        .from('blocks')
+        .insert({
+          page_id: newPage.id,
+          type: 'profile',
+          position: 0,
+          content: {
+            id: `profile-${newPage.id}`,
+            type: 'profile',
+            name: normalizedTitle,
+          },
+          is_premium: false,
+        });
+
+      if (blockError) {
+        await supabase
+          .from('pages')
+          .delete()
+          .eq('id', newPage.id)
+          .eq('user_id', user.id);
+
+        throw blockError;
+      }
+
+      const optimisticPage: UserPage = {
+        id: newPage.id,
+        title: normalizedTitle,
+        slug: newPage.slug,
+        isPublished: false,
+        isPaid: false,
+        isPrimaryPaid: false,
+        viewCount: 0,
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      };
+
+      setPages(prev => [optimisticPage, ...prev]);
+      setLimits(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          currentPages: prev.currentPages + 1,
+          freePages: prev.freePages + 1,
+          canCreate: prev.currentPages + 1 < prev.maxPages,
+        };
+      });
+
+      void loadPages();
+
       if (newPage?.id) {
-        switchPage(newPage.id);
+        setActivePageId(newPage.id);
+        storage.set(ACTIVE_PAGE_KEY, newPage.id);
       }
 
       return {
@@ -282,7 +328,7 @@ export function useMultiPage() {
         error: err instanceof Error ? err.message : 'Failed to create page',
       };
     }
-  }, [user?.id, limits, loadPages, switchPage, currentOrg?.id]);
+  }, [user?.id, limits, loadPages, currentOrg?.id]);
 
   // Set primary paid page
   const setPrimaryPaidPage = useCallback(async (pageId: string): Promise<{ success: boolean; error?: string }> => {
@@ -365,9 +411,9 @@ export function useMultiPage() {
     }
 
     // Validate slug
-    const slugRegex = /^[a-z0-9-]+$/;
-    if (!slugRegex.test(newSlug) || newSlug.length < 3 || newSlug.length > 30) {
-      return { success: false, error: 'invalid_slug' };
+    const validation = validateSlug(newSlug);
+    if (!validation.valid) {
+      return { success: false, error: validation.error };
     }
 
     try {
@@ -390,6 +436,7 @@ export function useMultiPage() {
         .eq('user_id', user.id);
 
       if (updateError) {
+        if (updateError.code === '23505') return { success: false, error: 'slug_taken' };
         throw updateError;
       }
 

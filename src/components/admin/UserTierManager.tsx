@@ -22,8 +22,9 @@ import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import Shield from 'lucide-react/dist/esm/icons/shield';
 import { format, addDays, addMonths, addYears } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
+import { normalizeDatabasePremiumTier, type DatabasePremiumTier } from '@/domain/billing/tiers';
 
-type PremiumTier = 'free' | 'pro' | 'business';
+type PremiumTier = DatabasePremiumTier;
 
 interface UserTierData {
   id: string;
@@ -84,6 +85,7 @@ export function UserTierManager() {
 
       const usersWithRoles = (profilesData || []).map(user => ({
         ...user,
+        premium_tier: normalizeDatabasePremiumTier(user.premium_tier),
         isAdmin: adminUserIds.has(user.id)
       })) as UserTierData[];
 
@@ -98,7 +100,7 @@ export function UserTierManager() {
 
   const openEditDialog = (user: UserTierData) => {
     setEditingUser(user);
-    setNewTier((user.premium_tier as PremiumTier) || 'free');
+    setNewTier(normalizeDatabasePremiumTier(user.premium_tier));
     setExpiresAt(user.premium_expires_at ? user.premium_expires_at.split('T')[0] : '');
     setIsAdmin(user.isAdmin || false);
   };
@@ -109,10 +111,11 @@ export function UserTierManager() {
     setSaving(true);
     try {
       // Update user profile
+      const isPaidTier = newTier === 'pro' || newTier === 'business';
       const updateData: Partial<Tables<'user_profiles'>> = {
         premium_tier: newTier,
-        premium_expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
-        is_premium: newTier !== 'free'
+        premium_expires_at: isPaidTier && expiresAt ? new Date(expiresAt).toISOString() : null,
+        is_premium: isPaidTier
       };
 
       const { error: profileError } = await supabase
@@ -175,6 +178,8 @@ export function UserTierManager() {
 
   const getTierBadge = (tier: PremiumTier) => {
     switch (tier) {
+      case 'starter':
+        return <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">{t('admin.tierStarter', 'Starter')}</Badge>;
       case 'pro':
         return <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white">{t('admin.tierPro')}</Badge>;
       case 'business':
@@ -185,7 +190,7 @@ export function UserTierManager() {
   };
 
   const getExpiryStatus = (user: UserTierData) => {
-    if (user.premium_tier === 'free') return null;
+    if (user.premium_tier === 'free' || user.premium_tier === 'starter') return null;
 
     const expiresAt = user.premium_expires_at;
     if (!expiresAt) return <span className="text-green-500 text-xs">{t('admin.lifetime')}</span>;
@@ -242,11 +247,17 @@ export function UserTierManager() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{users.filter(u => u.premium_tier === 'free' || !u.premium_tier).length}</div>
             <div className="text-sm text-muted-foreground">{t('admin.tierFree')}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-emerald-500">{users.filter(u => u.premium_tier === 'starter').length}</div>
+            <div className="text-sm text-muted-foreground">{t('admin.tierStarter', 'Starter')}</div>
           </CardContent>
         </Card>
         <Card>
@@ -349,6 +360,7 @@ export function UserTierManager() {
                                   </SelectTrigger>
                                   <SelectContent>
                                     <SelectItem value="free">{t('admin.tierFree')}</SelectItem>
+                                    <SelectItem value="starter">{t('admin.tierStarter', 'Starter')}</SelectItem>
                                     <SelectItem value="pro">{t('admin.tierPro')}</SelectItem>
                                     <SelectItem value="business">{t('admin.tierBusiness', 'Business')}</SelectItem>
                                   </SelectContent>
@@ -370,7 +382,7 @@ export function UserTierManager() {
                                 />
                               </div>
 
-                              {newTier !== 'free' && (
+                              {(newTier === 'pro' || newTier === 'business') && (
                                 <div className="space-y-2">
                                   <Label className="flex items-center gap-2">
                                     <Calendar className="h-4 w-4" />

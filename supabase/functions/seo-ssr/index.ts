@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const DOMAIN = 'https://lnkmx.my';
+const INDEXABLE_QUALITY_THRESHOLD = 25;
 
 // ==============================================
 // Rate limiting — in-memory (resets on cold start, acceptable for DDoS mitigation)
@@ -120,7 +121,7 @@ serve(async (req: Request) => {
     // Fetch page data - only published pages
     const { data: page, error: pageError } = await supabase
       .from('pages')
-      .select('id, slug, title, description, avatar_url, updated_at, niche')
+      .select('id, slug, title, description, avatar_url, updated_at, niche, quality_score, is_indexable')
       .eq('slug', slug)
       .eq('is_published', true)
       .single();
@@ -168,6 +169,8 @@ serve(async (req: Request) => {
     const canonical = `${DOMAIN}/${slug}`;
     const avatar = page.avatar_url || `${DOMAIN}/og-image.png`;
     const niche = page.niche || 'business';
+    const indexable = page.is_indexable !== false && (page.quality_score || 0) >= INDEXABLE_QUALITY_THRESHOLD;
+    const robotsTag = indexable ? 'index, follow, max-image-preview:large' : 'noindex, follow';
 
     // Build body content from blocks
     let bodyContent = '';
@@ -255,9 +258,12 @@ serve(async (req: Request) => {
         {
           "@type": schemaType,
           "name": page.title || '@' + slug,
+          "alternateName": '@' + slug,
+          "identifier": slug,
           "url": canonical,
           "image": avatar,
-          "description": cleanDesc.slice(0, 300)
+          "description": cleanDesc.slice(0, 300),
+          "mainEntityOfPage": { "@id": canonical }
         }
       ]
     };
@@ -270,7 +276,7 @@ serve(async (req: Request) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${displayName} - lnkmx.my</title>
   <meta name="description" content="${metaDesc}">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="${robotsTag}">
   <link rel="canonical" href="${canonical}">
   
   <!-- Hreflang for international SEO (critical — SPA version is not seen by all crawlers) -->
@@ -333,7 +339,7 @@ serve(async (req: Request) => {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/html; charset=utf-8',
-        'X-Robots-Tag': 'index, follow',
+        'X-Robots-Tag': robotsTag,
         'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
       }
     });

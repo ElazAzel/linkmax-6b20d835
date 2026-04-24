@@ -18,6 +18,7 @@ import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/types/page';
 import { createMultilingualString, isMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateCatalogBlock } from '@/lib/blocks/block-validators';
@@ -242,6 +243,10 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                     <div
                       className="flex items-center gap-2 cursor-pointer"
                       onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}
+                      onKeyDown={(event) => handleKeyboardActivation(event, () => setExpandedItem(expandedItem === item.id ? null : item.id))}
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={expandedItem === item.id}
                     >
                       <GripVertical className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       {item.image ? (

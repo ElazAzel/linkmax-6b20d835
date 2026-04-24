@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
-import { encode as base64Encode, decode as base64Decode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
+import { decode as base64Decode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
 
 /**
  * gcal-callback — OAuth 2.0 callback handler for Google Calendar
@@ -20,6 +20,18 @@ import { encode as base64Encode, decode as base64Decode } from "https://deno.lan
  */
 
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
+const ALLOWED_REDIRECTS = [
+    { protocol: "https:", host: "lnkmx.my" },
+    { protocol: "http:", host: "localhost:8080" },
+    { protocol: "http:", host: "127.0.0.1:8080" },
+];
+
+interface GcalState {
+    user_id: string;
+    redirect_url: string;
+    ts: number;
+    sig: string;
+}
 
 serve(async (req) => {
     const url = new URL(req.url);
@@ -29,68 +41,37 @@ serve(async (req) => {
 
     const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
     const GOOGLE_CLIENT_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET");
-    const HMAC_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET") || "gcal-hmac-fallback";
+    const GCAL_STATE_SECRET = Deno.env.get("GCAL_STATE_SECRET");
 
     // Default fallback redirect
-    const fallbackRedirect = url.origin.replace(
-        /\.supabase\.co$/,
-        "" // Will be overridden by state
-    );
+    const fallbackRedirect = "https://lnkmx.my/dashboard/settings";
 
     // Handle error from Google
     if (error) {
         console.error("Google OAuth error:", error);
-        return Response.redirect(
-            `${fallbackRedirect}/dashboard/settings?gcal_error=${encodeURIComponent(error)}`,
-            302
-        );
+        let redirectUrl = fallbackRedirect;
+        if (stateParam && GCAL_STATE_SECRET) {
+            try {
+                redirectUrl = (await parseAndVerifyState(stateParam, GCAL_STATE_SECRET)).redirect_url;
+            } catch (stateError) {
+                console.error("Google OAuth error state validation failed:", stateError);
+            }
+        }
+        return Response.redirect(withQueryParam(redirectUrl, "gcal_error", error), 302);
     }
 
     if (!code || !stateParam) {
         return new Response("Missing code or state parameter", { status: 400 });
     }
 
-    if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+    if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GCAL_STATE_SECRET) {
         return new Response("Google Calendar not configured on server", { status: 503 });
     }
 
     try {
         // Decode and validate state
-        const stateStr = new TextDecoder().decode(base64Decode(stateParam));
-        const state = JSON.parse(stateStr);
-        const { user_id, redirect_url, ts, sig } = state;
-
-        if (!user_id || !redirect_url) {
-            throw new Error("Invalid state: missing user_id or redirect_url");
-        }
-
-        // Verify HMAC signature
-        const encoder = new TextEncoder();
-        const key = await crypto.subtle.importKey(
-            "raw",
-            encoder.encode(HMAC_SECRET),
-            { name: "HMAC", hash: "SHA-256" },
-            false,
-            ["verify"]
-        );
-
-        const dataToVerify = `${user_id}:${redirect_url}:${ts}`;
-        const sigBytes = new Uint8Array(base64Decode(sig));
-        const isValid = await crypto.subtle.verify(
-            "HMAC",
-            key,
-            sigBytes.buffer as ArrayBuffer,
-            encoder.encode(dataToVerify)
-        );
-
-        if (!isValid) {
-            throw new Error("Invalid state signature");
-        }
-
-        // Check timestamp (allow 10 min window)
-        if (Date.now() - ts > 10 * 60 * 1000) {
-            throw new Error("State expired");
-        }
+        const state = await parseAndVerifyState(stateParam, GCAL_STATE_SECRET);
+        const { user_id, redirect_url } = state;
 
         // Build the redirect_uri (must match what was used when generating auth URL)
         const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
@@ -115,7 +96,7 @@ serve(async (req) => {
             console.error("Token exchange error:", tokens);
             const errorMsg = tokens.error_description || tokens.error;
             return Response.redirect(
-                `${redirect_url}?gcal_error=${encodeURIComponent(errorMsg)}`,
+                withQueryParam(redirect_url, "gcal_error", errorMsg),
                 302
             );
         }
@@ -163,7 +144,7 @@ serve(async (req) => {
         console.log(`Google Calendar connected for user ${user_id}`);
 
         // Redirect back to the app
-        return Response.redirect(`${redirect_url}?gcal_connected=true`, 302);
+        return Response.redirect(withQueryParam(redirect_url, "gcal_connected", "true"), 302);
     } catch (err: unknown) {
         console.error("gcal-callback error:", err);
         const message = err instanceof Error ? err.message : String(err);
@@ -173,3 +154,62 @@ serve(async (req) => {
         );
     }
 });
+
+async function parseAndVerifyState(stateParam: string, secret: string): Promise<GcalState> {
+    const stateStr = new TextDecoder().decode(base64Decode(stateParam));
+    const state = JSON.parse(stateStr) as Partial<GcalState>;
+    const { user_id, redirect_url, ts, sig } = state;
+
+    if (!user_id || !redirect_url || !ts || !sig) {
+        throw new Error("Invalid state payload");
+    }
+
+    if (!isAllowedAppRedirect(redirect_url)) {
+        throw new Error("Invalid app redirect");
+    }
+
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(secret),
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["verify"]
+    );
+
+    const dataToVerify = `${user_id}:${redirect_url}:${ts}`;
+    const sigBytes = new Uint8Array(base64Decode(sig));
+    const isValid = await crypto.subtle.verify(
+        "HMAC",
+        key,
+        sigBytes.buffer as ArrayBuffer,
+        encoder.encode(dataToVerify)
+    );
+
+    if (!isValid) {
+        throw new Error("Invalid state signature");
+    }
+
+    if (Date.now() - ts > 10 * 60 * 1000) {
+        throw new Error("State expired");
+    }
+
+    return { user_id, redirect_url, ts, sig };
+}
+
+function isAllowedAppRedirect(redirectUrl: string): boolean {
+    try {
+        const url = new URL(redirectUrl);
+        return ALLOWED_REDIRECTS.some(
+            (allowed) => url.protocol === allowed.protocol && url.host === allowed.host
+        );
+    } catch {
+        return false;
+    }
+}
+
+function withQueryParam(redirectUrl: string, key: string, value: string): string {
+    const url = new URL(redirectUrl);
+    url.searchParams.set(key, value);
+    return url.toString();
+}

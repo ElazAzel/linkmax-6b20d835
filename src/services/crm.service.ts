@@ -1,6 +1,7 @@
 import { supabase } from '@/platform/supabase/client';
 import type { Lead } from '@/hooks/crm/useLeads';
 import type { ZoneDeal } from '@/types/zones';
+import { logger } from '@/lib/utils/logger';
 
 export interface CrmMetrics {
   totalLeads: number;
@@ -80,8 +81,8 @@ export class CrmService {
 
     // Trigger side effects
     if (newStatus === 'converted') {
-       // Could trigger automation or specific analytics event
-       console.log(`CRM: Lead ${leadId} successfully converted.`);
+      // Could trigger automation or specific analytics event
+      logger.info(`Lead ${leadId} successfully converted`, { context: 'crm-service' });
     }
   }
 
@@ -171,7 +172,7 @@ export class CrmService {
         }
       });
     } catch (e) {
-      console.error('CRM: Failed to notify expert via Telegram', e);
+      logger.error('Failed to notify expert via Telegram', e, { context: 'crm-service' });
     }
   }
 

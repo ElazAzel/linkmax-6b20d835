@@ -1,71 +1,74 @@
 
-## Анализ: что сделано и что осталось
 
-### Сделано за последние итерации
-- Лендинг полностью локализован (Hero, Bento, Pricing, Demo, Testimonials, Footer, Nav)
-- Реальные кейсы как social proof (Almau 360+ лидов)
-- Pricing упрощён до Starter/Pro
-- Inline username claim в Hero
-- Bottom CTA добавлен
-- Сайдбар/нижняя навигация почищены от мёртвых иконок
+## Page Builder — следующий раунд улучшений
 
-### Метрики (из последнего отчёта)
-- 7 дней: 59 visitors, 140 views, 6 переходов на /auth, **0 регистраций**
-- Главная боль: трафик есть → конверсии в регистрацию нет
+### Что не докручено сейчас
 
-### Куда двигаться — варианты
+**1. Шаблонов меньше, чем ниш.** В БД 6 шаблонов (`expert, beauty, fitness, business, tech, services`), а в `NICHES` — 16 значений. 10 ниш (`education, health, art, food, music, fashion, travel, realestate, events, other`) не имеют шаблона и уходят в захардкоженный fallback из 4 блоков (`profile/catalog/messenger/socials`). Тип `catalog` в манифесте отсутствует — fallback фактически даёт сломанный «голый» скелет.
 
-**A. Конверсия /auth → регистрация (рекомендую)**
-Трафик доходит до /auth, но не регистрируется. Это узкое горлышко №1.
-- Аудит формы регистрации: лишние поля, ошибки валидации, мобильный UX
-- Pre-fill username из Hero (проверить что работает end-to-end)
-- Добавить «Войти через Google» одним кликом если ещё нет
-- Упростить экран: один CTA, минимум полей, явный value prop сверху
+**2. AI-промпт `niche-builder` не знает про новые ниши.** В `nichePrompts` Edge-функции прописаны только `barber/photographer/psychologist/fitness/musician/designer/teacher/shop/marketer/beauty/chef`. Для `expert, business, tech, services, education, health, art, food, fashion, travel, realestate, events, other` всегда подставляется generic «специалиста с услугами и контактами». AI генерирует обезличенно.
 
-**B. Активация существующих юзеров (61 чел)**
-- Email/Telegram реактивация для 58 неактивных
-- Показать им кейс Almau, дать триггер вернуться
+**3. AI возвращает блоки с типами, которых у нас нет.** Промпт обещает `link, product, testimonial, video, carousel`, а в новых шаблонах используются `pricing, gallery, booking, testimonials, form, links`. Это рассинхрон: AI-сборка и шаблон-сборка дают разные структуры → пользователь видит «не то, что в превью».
 
-**C. Onboarding после регистрации**
-- AI-wizard уже есть, но проверить end-to-end на реальном новом юзере
-- Time-to-first-page должен быть <2 мин
-- Time-to-first-lead — добавить шаг «подключи Telegram» сразу
+**4. Шаг `description` спрашивает только имя+bio.** План #4 из прошлого раунда (опциональные `services`/`contacts`) не был реализован — поля в `userInfo` объявлены, но в UI отсутствуют. AI получает пустые `details`, поэтому контент общий.
 
-**D. SEO/контент для органики**
-- Лендинги под ниши: /для-репетиторов, /для-бьюти-мастеров
-- Каждый — отдельная страница с релевантным кейсом
+**5. Превью шаблона юзер не видит.** `selectedTemplate` авто-выбирается первым, шаг с каруселью пресетов пропущен. Юзер не понимает, что именно соберётся.
 
-### Мой выбор: **A (конверсия /auth)**
+**6. Цель (`goal`) не передаётся в AI.** В `details` склеивается локализованная строка цели, но Edge-функция её игнорирует — ни в `systemPrompt`, ни в логике нет `input.goal`. CTA в собранной странице не подстраиваются под «лиды vs продажи vs визитка».
 
-Это самое узкое место. 6 человек дошли до формы — значит интерес есть, но что-то их останавливает. До того как лить больше трафика или строить новые фичи — нужно починить эту воронку.
+**7. На шаге `generating` нет реального таймаута.** Если Gemini подвиснет, юзер сидит на лоадере неограниченно. Нужен `Promise.race` с 25–30 сек.
 
-### План работ (одна итерация)
+**8. На `complete` нельзя вернуться назад.** Если результат не нравится — только закрыть и потерять прогресс. Нет «Перегенерировать с другой нишей/целью».
 
-```text
-1. Прочитать src/pages/Auth.tsx + связанные компоненты
-2. Проверить что username из Hero корректно pre-fill'ится
-3. Аудит UX:
-   - сколько полей
-   - есть ли Google OAuth кнопка наверху
-   - понятный value prop
-   - mobile layout (большинство трафика — мобильный)
-4. Упростить:
-   - Google OAuth первым, крупно
-   - Email/пароль — свернуть в "или продолжить email"
-   - Добавить мини-заголовок "Создайте свою lnkmx.my страницу за 2 минуты"
-   - Если username pre-filled — показать визуально (lnkmx.my/username бейдж)
-5. Добавить аналитику на каждый шаг auth-формы
-   (какое поле — точка отказа)
-6. Проверить flow end-to-end
-```
+---
+
+### План
+
+**Шаг 1. Засеять оставшиеся 10 ниш шаблонами** (миграция).
+По 1 шаблону для `education, health, art, food, music, fashion, travel, realestate, events, other` — 5–7 блоков с реалистичной структурой под нишу. Используем только существующие типы из манифеста (`profile, text, pricing, links, gallery, testimonials, form, faq, booking, messenger, socials, product, video, countdown, separator`). Fallback из 4-блочного `catalog`-скелета удалить — теперь он не нужен.
+
+**Шаг 2. Расширить `nichePrompts` в `ai-content-generator`.**
+Добавить промпт-описания для всех 16 ниш (`expert`, `education`, `business`, `health`, `art`, `food`, `music`, `tech`, `fashion`, `travel`, `realestate`, `events`, `services`, `other`). Каждое описание — 1–2 предложения с типичными услугами/контентом для ниши.
+
+**Шаг 3. Синхронизировать список типов блоков в AI-промпте.**
+Заменить устаревший список (`link, product, testimonial, carousel`) на актуальный из манифеста: добавить `pricing, gallery, testimonials (множ.), form, booking, links, faq`. Удалить недоступные `carousel`/`product` (или оставить только если они реально в манифесте — проверим).
+
+**Шаг 4. Передавать `goal` в AI.**
+Расширить тело запроса: `body.input.goal = selectedGoal`. В Edge-функции внутри `niche-builder` добавить goal-aware блок промпта: для `leads` — упор на `form/messenger/booking`, для `sales` — `pricing/product/payments`, для `brand` — `text/gallery/socials`, для `events` — `countdown/booking/form`.
+
+**Шаг 5. Добавить опциональные поля в шаг `description`.**
+Раскрывающийся блок «Добавить детали (необязательно)»: `services` (textarea, по строке) и `contacts` (Instagram/Telegram/WhatsApp одной строкой). Эти поля уже объявлены в `userInfo` и нужно только пробросить их в форму и в `details` для AI.
+
+**Шаг 6. Вернуть превью шаблона перед генерацией.**
+Между `niche` и `description` показать мини-карточку выбранного шаблона: иконки блоков по порядку + 1–2 строки описания + ссылка «Выбрать другой» (открывает карусель альтернативных шаблонов из той же ниши). Это снимет эффект «непонятно, что соберётся».
+
+**Шаг 7. Таймаут и безопасный fallback.**
+В `handleGenerate` обернуть `supabase.functions.invoke` в `Promise.race` с 25-секундным таймером. По таймауту/ошибке — тихо переключаться на `generateBlocksFromTemplate` без шумного toast-error; в логи писать `console.warn`.
+
+**Шаг 8. «Перегенерировать» на шаге `complete`.**
+Кнопка-секондари «🔄 Перегенерировать» рядом с «Опубликовать»/«Отредактировать»: возвращает на шаг `generating` и заново зовёт AI с теми же параметрами. Чтобы избежать абуза — лимит 2 ретрая в сессии (state-флаг).
+
+**Шаг 9. UX-полировка.**
+- На `generating` крутящийся текст-ticker реальных шагов: «Подбираем шаблон…» → «Спрашиваем у AI…» → «Раскладываем блоки…» (3 фазы с задержками, привязаны к реальным точкам кода через state).
+- При успехе AI отдельно показывать «✓ AI сгенерировал контент», при fallback — «✓ Шаблон применён» — честность повышает доверие.
+
+---
 
 ### Технические детали
-- Файлы: `src/pages/Auth.tsx`, компоненты формы, `src/services/analytics.ts`
-- Аналитика: новые eventType — `auth_form_view`, `auth_field_focus`, `auth_submit_attempt`, `auth_error`, `auth_success`
-- Без миграций БД (таблица `marketing_analytics_events` уже есть)
-- Без новых edge functions
 
-### Что НЕ делаю в этой итерации
-- Email-реактивацию (отдельная большая задача)
-- SEO-страницы под ниши (требует копирайта)
-- Изменения onboarding после регистрации (следующий шаг после фикса auth)
+| Файл | Действия |
+|---|---|
+| `supabase/migrations/<new>.sql` | INSERT 10 шаблонов в `templates` для нехватающих ниш. Все `is_public=true`, осмысленный `sort_order`, корректные `category`. |
+| `supabase/functions/ai-content-generator/index.ts` | Расширить `nichePrompts` до 16 записей. Заменить список типов блоков на актуальный (сверка с `BLOCK_MANIFEST`). Добавить чтение и использование `input.goal`. |
+| `src/components/onboarding/AIBuilderWizard.tsx` | (a) Добавить опциональные поля `services`/`contacts` на шаге `description` (collapsible). (b) Добавить шаг-превью шаблона между `niche` и `description` (или мини-карточку в `description`). (c) Передавать `goal` в `body.input.goal`. (d) `Promise.race` с таймаутом 25с. (e) Кнопка «Перегенерировать» на `complete` со счётчиком ретраев. (f) Удалить хардкоженный `catalog`-fallback в `handleSelectNiche`. |
+| `src/locales/{ru,en,kk,uz}/translation.json` | Ключи: `aiBuilder.servicesLabel`, `aiBuilder.servicesPlaceholder`, `aiBuilder.contactsLabel`, `aiBuilder.contactsPlaceholder`, `aiBuilder.moreDetailsToggle`, `aiBuilder.previewTitle`, `aiBuilder.regenerate`, `aiBuilder.aiSucceeded`, `aiBuilder.fallbackUsed`, `aiBuilder.timeout`. |
+
+### Что НЕ трогаем
+- БД-схему `templates` (только сидинг).
+- `useDashboard.ts` — обработчик публикации уже работает.
+- `useDashboardOnboarding.ts` — унификация ключей сделана.
+- Сам редактор и `BlockRenderer`.
+
+### Риски
+- Если AI вернёт блоки с `type`, отсутствующим в манифесте, `createBaseBlock` бросит — уже обёрнуто в try/catch на уровне `useDashboardAI`, но в `AIBuilderWizard.handleGenerate` сейчас НЕ обёрнуто. Нужно добавить фильтрацию `aiBlocks` по списку известных типов перед `createBaseBlock`.
+

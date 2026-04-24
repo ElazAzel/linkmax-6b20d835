@@ -18,6 +18,7 @@ export interface QualityGateResult {
 }
 
 // Minimum requirements for indexation
+export const INDEXABLE_QUALITY_THRESHOLD = 25;
 const MIN_BLOCKS_FOR_INDEX = 2;
 const MIN_CONTENT_LENGTH = 50;
 const MAX_EXTERNAL_LINKS_NEW_ACCOUNT = 10;
@@ -111,10 +112,10 @@ export function evaluateQualityGate(
   // Ensure score is within bounds
   score = Math.max(0, Math.min(100, score));
 
-  // Pass if score >= 40 and no critical reasons
+  // Pass if score meets the platform indexability threshold and has no critical reasons.
   const criticalReasons = ['blocked_domain'];
   const hasCritical = reasons.some(r => criticalReasons.includes(r));
-  const passed = score >= 40 && !hasCritical;
+  const passed = score >= INDEXABLE_QUALITY_THRESHOLD && !hasCritical;
 
   return {
     passed,

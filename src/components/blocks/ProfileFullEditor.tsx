@@ -40,6 +40,7 @@ import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { getI18nText, createMultilingualString, isMultilingualString, type SupportedLanguage, type MultilingualString } from '@/lib/i18n-helpers';
@@ -307,6 +308,9 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                   formData.coverImage ? "border-transparent" : "border-border bg-muted/30"
                 )}
                 onClick={() => coverInputRef.current?.click()}
+                onKeyDown={(event) => handleKeyboardActivation(event, () => coverInputRef.current?.click())}
+                role="button"
+                tabIndex={0}
               >
                 {formData.coverImage ? (
                   <>
@@ -405,6 +409,9 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                 <div
                   className="relative cursor-pointer group"
                   onClick={() => avatarInputRef.current?.click()}
+                  onKeyDown={(event) => handleKeyboardActivation(event, () => avatarInputRef.current?.click())}
+                  role="button"
+                  tabIndex={0}
                 >
                   <Avatar className="h-32 w-32 ring-4 ring-primary/20 ring-offset-4 ring-offset-background">
                     <AvatarImage src={formData.avatar} alt="" />

@@ -1,7 +1,7 @@
 /**
  * CreatePageDialog - Dialog for creating a new page
  */
-import { memo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import Crown from 'lucide-react/dist/esm/icons/crown';
@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import type { PageLimits } from '@/hooks/page/useMultiPage';
+import { sanitizeSlug, validateSlug } from '@/lib/utils/slug';
 
 interface CreatePageDialogProps {
   open: boolean;
@@ -43,6 +44,20 @@ export const CreatePageDialog = memo(function CreatePageDialog({
   const [error, setError] = useState<string | null>(null);
 
   const canCreate = limits?.canCreate ?? true;
+  const sanitizedSlug = useMemo(() => sanitizeSlug(slug), [slug]);
+  const slugValidation = useMemo(() => {
+    if (!sanitizedSlug) return { valid: true };
+    return validateSlug(sanitizedSlug);
+  }, [sanitizedSlug]);
+
+  useEffect(() => {
+    if (open) {
+      setTitle('');
+      setSlug('');
+      setError(null);
+      setLoading(false);
+    }
+  }, [open]);
 
   const handleCreate = async () => {
     if (!title.trim()) {
@@ -50,34 +65,47 @@ export const CreatePageDialog = memo(function CreatePageDialog({
       return;
     }
 
+    if (sanitizedSlug) {
+      if (!slugValidation.valid) {
+        setError(t('dashboard.createPage.invalidSlug', 'URL must be 3-30 characters, lowercase letters, numbers, and hyphens only'));
+        return;
+      }
+    }
+
     setLoading(true);
     setError(null);
 
-    const result = await onCreatePage(title.trim(), slug.trim() || undefined);
+    try {
+      const result = await onCreatePage(title.trim(), sanitizedSlug || undefined);
 
-    setLoading(false);
-
-    if (result.success) {
-      setTitle('');
-      setSlug('');
-      onOpenChange(false);
-    } else {
-      // Translate error
-      const errorKey = result.error || 'unknown';
-      const errorMessages: Record<string, string> = {
-        page_limit_exceeded: t('dashboard.createPage.limitExceeded', 'Page limit exceeded. Upgrade to Pro for more pages.'),
-        slug_taken: t('dashboard.createPage.slugTaken', 'This URL is already taken'),
-        invalid_slug: t('dashboard.createPage.invalidSlug', 'URL must be 3-30 characters, lowercase letters, numbers, and hyphens only'),
-      };
-      setError(errorMessages[errorKey] || result.error || t('dashboard.createPage.error', 'Failed to create page'));
+      if (result.success) {
+        setTitle('');
+        setSlug('');
+        onOpenChange(false);
+      } else {
+        // Translate error
+        const errorKey = result.error || 'unknown';
+        const errorMessages: Record<string, string> = {
+          page_limit_exceeded: t('dashboard.createPage.limitExceeded', 'Page limit exceeded. Upgrade to Pro for more pages.'),
+          slug_taken: t('dashboard.createPage.slugTaken', 'This URL is already taken'),
+          invalid_slug: t('dashboard.createPage.invalidSlug', 'URL must be 3-30 characters, lowercase letters, numbers, and hyphens only'),
+        };
+        setError(errorMessages[errorKey] || result.error || t('dashboard.createPage.error', 'Failed to create page'));
+      }
+    } catch {
+      setError(t('dashboard.createPage.error', 'Failed to create page'));
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSlugChange = (value: string) => {
     // Sanitize slug input
-    const sanitized = value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+    const sanitized = sanitizeSlug(value);
     setSlug(sanitized);
   };
+
+  const canSubmit = Boolean(title.trim()) && slugValidation.valid && !loading;
 
   // Show upgrade prompt if can't create
   if (!canCreate && !isPremium) {
@@ -172,6 +200,11 @@ export const CreatePageDialog = memo(function CreatePageDialog({
             <p className="text-xs text-muted-foreground">
               {t('dashboard.createPage.slugHint', '3-30 characters, lowercase letters, numbers, and hyphens only')}
             </p>
+            {!!sanitizedSlug && !slugValidation.valid && (
+              <p className="text-xs text-destructive">
+                {t('dashboard.createPage.invalidSlug', 'URL must be 3-30 characters, lowercase letters, numbers, and hyphens only')}
+              </p>
+            )}
           </div>
 
           {limits && (
@@ -187,7 +220,7 @@ export const CreatePageDialog = memo(function CreatePageDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             {t('common.cancel', 'Cancel')}
           </Button>
-          <Button onClick={handleCreate} disabled={loading} className="rounded-xl">
+          <Button onClick={handleCreate} disabled={!canSubmit} className="rounded-xl">
             {loading ? t('common.creating', 'Creating...') : t('dashboard.createPage.create', 'Create page')}
           </Button>
         </DialogFooter>

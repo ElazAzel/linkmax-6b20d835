@@ -13,6 +13,7 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import Instagram from 'lucide-react/dist/esm/icons/instagram';
 import Youtube from 'lucide-react/dist/esm/icons/youtube';
 import Twitter from 'lucide-react/dist/esm/icons/twitter';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface DemoBlock {
   id: string;
@@ -206,6 +207,9 @@ export function InteractiveDemo() {
                         <span 
                           className="flex-1 text-xs sm:text-sm truncate cursor-text"
                           onClick={() => setEditingBlock(block.id)}
+                          onKeyDown={(event) => handleKeyboardActivation(event, () => setEditingBlock(block.id))}
+                          role="button"
+                          tabIndex={0}
                         >
                           {block.content}
                         </span>

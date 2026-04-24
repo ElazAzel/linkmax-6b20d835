@@ -30,10 +30,21 @@ import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import type { Lead } from '@/hooks/crm/useLeads';
+import { trackLeadReplied, trackLeadStatusChanged } from '@/lib/activation-events';
 
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
 
 const STATUS_FILTERS = ['all', 'new', 'contacted', 'qualified', 'converted', 'lost'] as const;
+
+function getLeadPageId(lead: Lead | undefined): string | null {
+    const metadata = lead?.metadata;
+    if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
+        return null;
+    }
+
+    const pageId = (metadata as Record<string, unknown>).page_id;
+    return typeof pageId === 'string' ? pageId : null;
+}
 
 export const LeadsScreen = memo(function LeadsScreen() {
     const { t } = useTranslation();
@@ -69,13 +80,26 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
     const updateLeadStatus = async (leadId: string, newStatus: LeadStatus) => {
         try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const previousLead = leads.find(lead => lead.id === leadId);
             const { error } = await supabase
                 .from('leads')
                 .update({ status: newStatus, updated_at: new Date().toISOString() })
-                .eq('id', leadId);
+                .eq('id', leadId)
+                .eq('user_id', user.id);
 
             if (error) throw error;
             setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status: newStatus } : l));
+
+            if (previousLead && previousLead.status !== newStatus) {
+                const pageId = getLeadPageId(previousLead);
+                if (pageId) {
+                    trackLeadStatusChanged(pageId, leadId, String(previousLead.status), newStatus);
+                }
+            }
+
             toast.success(t('crm.status.' + newStatus));
         } catch (e) {
             console.error('Status update error', e);
@@ -147,20 +171,35 @@ export const LeadsScreen = memo(function LeadsScreen() {
         );
     };
 
-    const openWhatsApp = (phone: string) => {
-        window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}`, '_blank');
+    const trackReplyAction = (lead: Lead, channel: string) => {
+        const pageId = getLeadPageId(lead);
+        if (pageId) {
+            trackLeadReplied(pageId, lead.id, channel);
+        }
     };
 
-    const openTelegram = (phone: string) => {
-        window.open(`https://t.me/${phone.replace(/[^0-9]/g, '')}`, '_blank');
+    const openWhatsApp = (lead: Lead) => {
+        if (!lead.phone) return;
+        trackReplyAction(lead, 'whatsapp');
+        window.open(`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}`, '_blank');
     };
 
-    const openCall = (phone: string) => {
-        window.open(`tel:${phone}`, '_self');
+    const openTelegram = (lead: Lead) => {
+        if (!lead.phone) return;
+        trackReplyAction(lead, 'telegram');
+        window.open(`https://t.me/${lead.phone.replace(/[^0-9]/g, '')}`, '_blank');
     };
 
-    const openEmail = (email: string) => {
-        window.open(`mailto:${email}`, '_self');
+    const openCall = (lead: Lead) => {
+        if (!lead.phone) return;
+        trackReplyAction(lead, 'call');
+        window.open(`tel:${lead.phone}`, '_self');
+    };
+
+    const openEmail = (lead: Lead) => {
+        if (!lead.email) return;
+        trackReplyAction(lead, 'email');
+        window.open(`mailto:${lead.email}`, '_self');
     };
 
     return (
@@ -348,7 +387,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                                     variant="secondary"
                                                     size="sm"
                                                     className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
-                                                    onClick={() => openWhatsApp(lead.phone!)}
+                                                    onClick={() => openWhatsApp(lead)}
                                                 >
                                                     <MessageCircle className="h-4 w-4 mr-2" />
                                                     WA
@@ -357,7 +396,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                                     variant="secondary"
                                                     size="sm"
                                                     className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
-                                                    onClick={() => openTelegram(lead.phone!)}
+                                                    onClick={() => openTelegram(lead)}
                                                 >
                                                     <Send className="h-4 w-4 mr-2" />
                                                     TG
@@ -366,7 +405,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                                     variant="ghost"
                                                     size="icon"
                                                     className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
-                                                    onClick={() => openCall(lead.phone!)}
+                                                    onClick={() => openCall(lead)}
                                                 >
                                                     <Phone className="h-5 w-5" />
                                                 </Button>
@@ -377,7 +416,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                                 variant="ghost"
                                                 size="icon"
                                                 className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
-                                                onClick={() => openEmail(lead.email!)}
+                                                onClick={() => openEmail(lead)}
                                             >
                                                 <Mail className="h-5 w-5" />
                                             </Button>

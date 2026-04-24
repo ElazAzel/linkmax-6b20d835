@@ -13,6 +13,9 @@ interface AISearchOptimizerProps {
     problemStatement?: string;
     solutionStatement?: string;
     keyFeatures?: string[];
+    manageRobots?: boolean;
+    citationAuthor?: string;
+    citationDate?: string;
 }
 
 /**
@@ -30,6 +33,9 @@ export function AISearchOptimizer({
     problemStatement,
     solutionStatement,
     keyFeatures = [],
+    manageRobots = true,
+    citationAuthor,
+    citationDate,
 }: AISearchOptimizerProps) {
     const { i18n } = useTranslation();
 
@@ -47,19 +53,21 @@ export function AISearchOptimizer({
             meta.content = content;
         };
 
-        // AI Crawler Permissions
-        setMetaTag('robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
-        setMetaTag('googlebot', 'index, follow, max-snippet:-1, max-image-preview:large');
-        setMetaTag('googlebot-news', 'index, follow');
-        setMetaTag('bingbot', 'index, follow, max-snippet:-1, max-image-preview:large');
+        if (manageRobots) {
+            // AI Crawler Permissions
+            setMetaTag('robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
+            setMetaTag('googlebot', 'index, follow, max-snippet:-1, max-image-preview:large');
+            setMetaTag('googlebot-news', 'index, follow');
+            setMetaTag('bingbot', 'index, follow, max-snippet:-1, max-image-preview:large');
 
-        // AI-specific bot permissions
-        setMetaTag('GPTBot', 'index, follow');
-        setMetaTag('ChatGPT-User', 'index, follow');
-        setMetaTag('Google-Extended', 'index, follow');
-        setMetaTag('PerplexityBot', 'index, follow');
-        setMetaTag('ClaudeBot', 'index, follow');
-        setMetaTag('anthropic-ai', 'index, follow');
+            // AI-specific bot permissions
+            setMetaTag('GPTBot', 'index, follow');
+            setMetaTag('ChatGPT-User', 'index, follow');
+            setMetaTag('Google-Extended', 'index, follow');
+            setMetaTag('PerplexityBot', 'index, follow');
+            setMetaTag('ClaudeBot', 'index, follow');
+            setMetaTag('anthropic-ai', 'index, follow');
+        }
 
         // Natural Language Q&A for AI
         if (primaryQuestion && primaryAnswer) {
@@ -97,8 +105,8 @@ export function AISearchOptimizer({
 
         // Citation metadata
         setMetaTag('citation_title', entityName);
-        setMetaTag('citation_author', 'LinkMAX Team');
-        setMetaTag('citation_publication_date', new Date().toISOString().split('T')[0]);
+        setMetaTag('citation_author', citationAuthor || (pageType === 'profile' ? entityName : 'LinkMAX Team'));
+        setMetaTag('citation_publication_date', (citationDate || new Date().toISOString()).split('T')[0]);
         setMetaTag('citation_language', i18n.language);
 
         // AI Context Tags
@@ -177,7 +185,7 @@ export function AISearchOptimizer({
             const schemasToRemove = document.querySelectorAll('script#ai-defined-term-schema, script#ai-entity-graph');
             schemasToRemove.forEach(schema => schema.remove());
         };
-    }, [pageType, primaryQuestion, primaryAnswer, entityName, entityCategory, useCases, targetAudience, problemStatement, solutionStatement, keyFeatures, i18n.language]);
+    }, [pageType, primaryQuestion, primaryAnswer, entityName, entityCategory, useCases, targetAudience, problemStatement, solutionStatement, keyFeatures, manageRobots, citationAuthor, citationDate, i18n.language]);
 
     return null;
 }

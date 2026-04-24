@@ -71,32 +71,13 @@ serve(async (req) => {
   }
 
   try {
-    // Authenticate user
+    // Public endpoint: no auth required (needed for guest visitors on public pages).
+    // Abuse is mitigated by per-IP rate limiting below.
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const authClient = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: { user }, error: authError } = await authClient.auth.getUser();
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
-                      req.headers.get('x-real-ip') || 
+    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+                      req.headers.get('x-real-ip') ||
                       'unknown';
 
     const supabase = createClient(supabaseUrl, supabaseKey);

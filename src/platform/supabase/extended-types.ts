@@ -703,26 +703,26 @@ export type AppDatabase = Omit<Database, 'public'> & {
         analytics: {
           Row: {
             id: string;
-            page_id: string;
+            page_id: string | null;
             block_id: string | null;
             event_type: string;
-            metadata: any | null;
+            metadata: Json | null;
             created_at: string;
           };
           Insert: {
             id?: string;
-            page_id: string;
+            page_id: string | null;
             block_id?: string | null;
             event_type: string;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
           };
           Update: {
             id?: string;
-            page_id?: string;
+            page_id?: string | null;
             block_id?: string | null;
             event_type?: string;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
           };
           Relationships: [];

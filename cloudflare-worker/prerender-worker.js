@@ -139,15 +139,21 @@ async function handleRequest(request, env) {
 
   if (!isPlatformDomain) {
     // Custom domain → resolve slug, SSR for all agents
-    const resolveUrl = `${FUNCTION_URL}/resolve-domain?domain=${hostname}`;
+    const resolveUrl = `https://${SUPABASE_PROJECT}.supabase.co/functions/v1/resolve-domain`;
     let slug = null;
     try {
       const resolveRes = await fetch(resolveUrl, {
-        headers: { 'Authorization': `Bearer ${env.SUPABASE_ANON_KEY}` }
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${env.SUPABASE_ANON_KEY}`,
+          'apikey': env.SUPABASE_ANON_KEY || '',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ hostname }),
       });
       if (resolveRes.ok) {
         const data = await resolveRes.json();
-        slug = data.slug;
+        slug = data.found ? data.slug : null;
       }
     } catch (e) {
       console.error('[Worker] Domain resolution error:', e);

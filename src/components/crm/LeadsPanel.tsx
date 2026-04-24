@@ -259,7 +259,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                         } ${statusColors[status]}`}
                     >
                       <div className="text-base sm:text-lg font-bold">{stats[status]}</div>
-                      <div className="text-[10px] sm:text-xs uppercase opacity-70 whitespace-normal break-words text-wrap leading-tight">
+                      <div className="text-xs uppercase opacity-70 whitespace-normal break-words text-wrap leading-tight">
                         {t(`crm.status.${status}`, status)}
                       </div>
                     </Button>

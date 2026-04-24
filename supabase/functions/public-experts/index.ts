@@ -64,9 +64,9 @@ serve(async (req) => {
     // Query published, indexable pages with minimum quality
     let query = supabase
       .from('pages')
-      .select('id, slug, title, description, avatar_url, niche, updated_at, seo_meta, quality_score')
+      .select('id, slug, title, description, avatar_url, niche, updated_at, seo_meta, quality_score, is_indexable')
       .eq('is_published', true)
-      .eq('is_indexable', true)
+      .or('is_indexable.is.null,is_indexable.eq.true')
       .gte('quality_score', 25)
       .order('view_count', { ascending: false })
       .limit(limit);

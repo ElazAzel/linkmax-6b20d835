@@ -11,6 +11,7 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import type { FAQItem } from '@/types/page';
 import { createMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { useDashboard } from '@/hooks/dashboard/useDashboard';
 import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
 import { toast } from 'sonner';
@@ -111,6 +112,10 @@ function FAQBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
                 <div
                   className="flex items-center gap-2 cursor-pointer p-3"
                   onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}
+                  onKeyDown={(event) => handleKeyboardActivation(event, () => setExpandedItem(expandedItem === item.id ? null : item.id))}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expandedItem === item.id}
                 >
                   <GripVertical className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <div className="flex-1 min-w-0">

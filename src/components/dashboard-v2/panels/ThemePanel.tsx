@@ -10,6 +10,8 @@ import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Image from 'lucide-react/dist/esm/icons/image';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Type from 'lucide-react/dist/esm/icons/type';
+import WandSparkles from 'lucide-react/dist/esm/icons/wand-sparkles';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -248,7 +250,7 @@ export const ThemePanel = memo(function ThemePanel({
         </SheetHeader>
 
         <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v)} className="w-full">
-          <TabsList className="w-full grid grid-cols-2 m-4 mx-5" style={{ width: 'calc(100% - 40px)' }}>
+          <TabsList className="w-full grid grid-cols-3 m-4 mx-5" style={{ width: 'calc(100% - 40px)' }}>
             <TabsTrigger value="themes" className="gap-2">
               <Palette className="h-4 w-4" />
               {t('themes.themes', 'Темы')}
@@ -256,6 +258,10 @@ export const ThemePanel = memo(function ThemePanel({
             <TabsTrigger value="background" className="gap-2">
               <Image className="h-4 w-4" />
               {t('themes.background', 'Фон')}
+            </TabsTrigger>
+            <TabsTrigger value="style" className="gap-2">
+              <Type className="h-4 w-4" />
+              {t('themes.style', 'Стиль')}
             </TabsTrigger>
           </TabsList>
 
@@ -471,6 +477,94 @@ export const ThemePanel = memo(function ThemePanel({
                   </Button>
                 </Card>
               )}
+            </div>
+          </TabsContent>
+
+          {/* Style Tab */}
+          <TabsContent value="style" className="p-5 pt-0 space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('themes.fontFamily', 'Шрифт страницы')}</Label>
+                <Select
+                  value={currentTheme.fontFamily || 'sans'}
+                  onValueChange={(fontFamily: 'sans' | 'serif' | 'mono') => onThemeChange({ ...currentTheme, fontFamily })}
+                >
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sans">{t('themes.fontSans', 'Sans / Современный')}</SelectItem>
+                    <SelectItem value="serif">{t('themes.fontSerif', 'Serif / Элегантный')}</SelectItem>
+                    <SelectItem value="mono">{t('themes.fontMono', 'Mono / Техно')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('themes.buttonStyle', 'Стиль кнопок')}</Label>
+                <Select
+                  value={currentTheme.buttonStyle || 'rounded'}
+                  onValueChange={(buttonStyle: 'default' | 'rounded' | 'pill' | 'gradient') => onThemeChange({ ...currentTheme, buttonStyle })}
+                >
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="default">{t('themes.buttonDefault', 'Классический')}</SelectItem>
+                    <SelectItem value="rounded">{t('themes.buttonRounded', 'Скругленный')}</SelectItem>
+                    <SelectItem value="pill">{t('themes.buttonPill', 'Pill')}</SelectItem>
+                    <SelectItem value="gradient">{t('themes.buttonGradient', 'Градиент')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('themes.iconStyle', 'Стиль иконок')}</Label>
+                <Select
+                  value={currentTheme.iconStyle || 'rounded'}
+                  onValueChange={(iconStyle: 'rounded' | 'square' | 'duotone') => onThemeChange({ ...currentTheme, iconStyle })}
+                >
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rounded">{t('themes.iconRounded', 'Мягкие')}</SelectItem>
+                    <SelectItem value="square">{t('themes.iconSquare', 'Квадратные')}</SelectItem>
+                    <SelectItem value="duotone">{t('themes.iconDuotone', 'Duo tone')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('themes.animationStyle', 'Анимации')}</Label>
+                <Select
+                  value={currentTheme.animationStyle || 'gentle'}
+                  onValueChange={(animationStyle: 'none' | 'gentle' | 'energetic') => onThemeChange({ ...currentTheme, animationStyle })}
+                >
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">{t('themes.animationNone', 'Без анимации')}</SelectItem>
+                    <SelectItem value="gentle">{t('themes.animationGentle', 'Плавные')}</SelectItem>
+                    <SelectItem value="energetic">{t('themes.animationEnergetic', 'Активные')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Card className="p-4 bg-muted/20 border-border/50">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <WandSparkles className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold">{t('themes.styleApplied', 'Стили применяются к публичной странице')}</h4>
+                    <p className="text-xs text-muted-foreground">
+                      {t('themes.styleAppliedDesc', 'Шрифты, кнопки, иконки и анимации сразу видны посетителям вашей страницы.')}
+                    </p>
+                  </div>
+                </div>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>
