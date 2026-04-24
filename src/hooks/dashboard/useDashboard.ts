@@ -17,6 +17,7 @@ import { useDashboardAuthGuard } from '@/hooks/dashboard/useDashboardAuthGuard';
 import { useAchievements } from '@/hooks/user/useAchievements';
 import { useSoundEffects } from '@/hooks/ui/useSoundEffects';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
+import { storage } from '@/lib/storage';
 
 
 import type { Block, PageData } from '@/types/page';
@@ -127,22 +128,27 @@ export function useDashboard(options?: UseDashboardOptions) {
       });
       cloudState.updateNiche(niche);
 
+      if (storage.get<string>('wizard_next_action') === 'connect_telegram') {
+        storage.remove('wizard_next_action');
+        setTimeout(() => {
+          navigate('/dashboard/settings?highlight=telegram');
+        }, 900);
+      }
+
       // If wizard requested immediate publish, fire it after a short delay
       // (let block additions settle into pageData first)
-      import('@/lib/storage').then(({ storage }) => {
-        if (storage.get<string>('wizard_wants_publish') === 'true') {
-          storage.remove('wizard_wants_publish');
-          setTimeout(() => {
-            cloudState.publish().then(() => {
-              toast.success(t('dashboard.publishedFromWizard', 'Страница опубликована! 🎉'));
-            }).catch((err) => {
-              console.warn('Auto-publish from wizard failed:', err);
-            });
-          }, 1200);
-        }
-      });
+      if (storage.get<string>('wizard_wants_publish') === 'true') {
+        storage.remove('wizard_wants_publish');
+        setTimeout(() => {
+          cloudState.publish().then(() => {
+            toast.success(t('dashboard.publishedFromWizard', 'Страница опубликована! 🎉'));
+          }).catch((err) => {
+            console.warn('Auto-publish from wizard failed:', err);
+          });
+        }, 1200);
+      }
     },
-    [handleUpdateProfile, cloudState, t]
+    [handleUpdateProfile, cloudState, navigate, t]
   );
 
   const onboardingState = useDashboardOnboarding({

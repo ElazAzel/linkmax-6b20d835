@@ -1,25 +1,39 @@
 import { useState, useEffect, useCallback } from 'react';
-import { toast } from 'sonner';
-import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
-import type { Niche } from '@/lib/niches';
+import { NICHES, type Niche } from '@/lib/niches';
 
 import { storage } from '@/lib/storage';
 
 const STORAGE_KEYS = {
   ONBOARDING_COMPLETED: 'onboarding_completed',
+  ONBOARDING_DISMISSED_AT: 'onboarding_dismissed_at',
   // Legacy keys read for backwards compatibility (existing users)
   LEGACY_AI_BUILDER_USED: 'ai_builder_used',
   LEGACY_NICHE_COMPLETED: 'niche_onboarding_completed',
   LEGACY_LINKMAX_COMPLETED: 'linkmax_onboarding_completed',
 } as const;
 
+const SIGNUP_CONTEXT_KEYS = {
+  from: 'lnkmx_signup_from',
+  niche: 'lnkmx_signup_niche',
+  refSlug: 'lnkmx_signup_ref_slug',
+  desiredSlug: 'lnkmx_signup_desired_slug',
+} as const;
+
 /** Minimum block count to skip onboarding (user already has content) */
 const MIN_BLOCKS_TO_SKIP_ONBOARDING = 2;
+const DISMISS_SNOOZE_MS = 24 * 60 * 60 * 1000;
 
 interface OnboardingProfile {
   name: string;
   bio: string;
+}
+
+interface SignupOnboardingContext {
+  initialNiche?: Niche;
+  from?: string;
+  refSlug?: string;
+  desiredSlug?: string;
 }
 
 interface UseDashboardOnboardingOptions {
@@ -30,18 +44,53 @@ interface UseDashboardOnboardingOptions {
   onNicheComplete: (profile: OnboardingProfile, blocks: Block[], niche: Niche) => void;
 }
 
+function isNiche(value: string | null): value is Niche {
+  return Boolean(value && NICHES.includes(value as Niche));
+}
+
+function readSessionValue(key: string): string | undefined {
+  if (typeof window === 'undefined') return undefined;
+  try {
+    return window.sessionStorage.getItem(key) || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function clearSignupContext(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    Object.values(SIGNUP_CONTEXT_KEYS).forEach((key) => window.sessionStorage.removeItem(key));
+  } catch {
+    // Non-critical: context only improves onboarding personalization.
+  }
+}
+
+function readSignupContext(): SignupOnboardingContext {
+  const niche = readSessionValue(SIGNUP_CONTEXT_KEYS.niche) || null;
+  return {
+    initialNiche: isNiche(niche) ? niche : undefined,
+    from: readSessionValue(SIGNUP_CONTEXT_KEYS.from),
+    refSlug: readSessionValue(SIGNUP_CONTEXT_KEYS.refSlug),
+    desiredSlug: readSessionValue(SIGNUP_CONTEXT_KEYS.desiredSlug),
+  };
+}
+
 export function useDashboardOnboarding({
   isUserReady,
   isPageReady,
   blockCount,
   onNicheComplete,
 }: UseDashboardOnboardingOptions) {
-  const { t } = useTranslation();
   const [showAIBuilderWizard, setShowAIBuilderWizard] = useState(false);
+  const [signupContext, setSignupContext] = useState<SignupOnboardingContext>(() => readSignupContext());
 
   // Check onboarding status on mount — show wizard ONLY for brand-new users
   useEffect(() => {
     if (!isUserReady || !isPageReady) return;
+
+    const nextSignupContext = readSignupContext();
+    setSignupContext(nextSignupContext);
 
     // Read unified key + any legacy keys (for users who completed onboarding before refactor)
     const completed =
@@ -49,6 +98,8 @@ export function useDashboardOnboarding({
       storage.get<string>(STORAGE_KEYS.LEGACY_AI_BUILDER_USED) ||
       storage.get<string>(STORAGE_KEYS.LEGACY_NICHE_COMPLETED) ||
       storage.get<string>(STORAGE_KEYS.LEGACY_LINKMAX_COMPLETED);
+    const dismissedAt = storage.get<number>(STORAGE_KEYS.ONBOARDING_DISMISSED_AT);
+    const dismissedRecently = dismissedAt ? Date.now() - dismissedAt < DISMISS_SNOOZE_MS : false;
 
     // Skip if user already has content (more than 2 blocks)
     const hasExistingContent = blockCount > MIN_BLOCKS_TO_SKIP_ONBOARDING;
@@ -61,12 +112,15 @@ export function useDashboardOnboarding({
       return;
     }
 
+    if (dismissedRecently) return;
+
     // New user with no content — show AI Builder wizard
-    setTimeout(() => setShowAIBuilderWizard(true), 500);
+    const timer = window.setTimeout(() => setShowAIBuilderWizard(true), 500);
+    return () => window.clearTimeout(timer);
   }, [isUserReady, isPageReady, blockCount]);
 
   const handleAIBuilderClose = useCallback(() => {
-    storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    storage.set(STORAGE_KEYS.ONBOARDING_DISMISSED_AT, Date.now());
     setShowAIBuilderWizard(false);
   }, []);
 
@@ -74,6 +128,8 @@ export function useDashboardOnboarding({
     (profile: OnboardingProfile, blocks: Block[], niche: Niche) => {
       onNicheComplete(profile, blocks, niche);
       storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+      storage.remove(STORAGE_KEYS.ONBOARDING_DISMISSED_AT);
+      clearSignupContext();
       setShowAIBuilderWizard(false);
     },
     [onNicheComplete]
@@ -81,11 +137,13 @@ export function useDashboardOnboarding({
 
   // Manual open from settings (for existing users)
   const openAIBuilderFromSettings = useCallback(() => {
+    setSignupContext(readSignupContext());
     setShowAIBuilderWizard(true);
   }, []);
 
   return {
     showAIBuilderWizard,
+    signupContext,
     handleAIBuilderClose,
     handleAIBuilderComplete,
     openAIBuilderFromSettings,

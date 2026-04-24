@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -51,6 +51,17 @@ const createAuthSchema = (t: (key: string, fallback: string) => string) =>
 type AuthMode = 'signin' | 'signup' | 'reset' | 'reset-telegram' | 'update-password';
 type TelegramResetStep = 'request' | 'verify';
 
+function normalizeDesiredSlug(value: string | null): string | null {
+  if (!value) return null;
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .replace(/^@/, '')
+    .replace(/[^a-z0-9._-]/g, '')
+    .slice(0, 32);
+  return normalized.length >= 3 ? normalized : null;
+}
+
 export default function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -71,9 +82,12 @@ export default function Auth() {
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [signupEmailSent, setSignupEmailSent] = useState(false);
   const [passwordUpdated, setPasswordUpdated] = useState(false);
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(() => searchParams.get('method') === 'email');
   const [showMoreOptions, setShowMoreOptions] = useState(false);
-  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signup');
+  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>(() =>
+    searchParams.get('mode') === 'signin' ? 'signin' : 'signup'
+  );
+  const fieldFocusRef = useRef<Set<string>>(new Set());
 
   // Telegram password reset state
   const [telegramResetStep, setTelegramResetStep] = useState<TelegramResetStep>('request');
@@ -91,13 +105,33 @@ export default function Auth() {
   const fromSource = searchParams.get('from');
   const nicheParam = searchParams.get('niche');
   const refSlug = searchParams.get('ref_slug');
+  const desiredSlug = normalizeDesiredSlug(searchParams.get('username') || searchParams.get('slug'));
+  const previewSlug = desiredSlug || normalizeDesiredSlug(refSlug);
+  const hasSignupContext = Boolean(fromSource || nicheParam || previewSlug);
+
+  const nicheContextLabel =
+    nicheParam === 'beauty'
+      ? t('auth.context.beauty', 'для записи клиентов')
+      : nicheParam === 'education'
+        ? t('auth.context.education', 'для занятий и учеников')
+        : nicheParam
+          ? t('auth.context.generic', 'под вашу сферу')
+          : null;
+
+  const trackFieldFocus = (field: string, mode: 'signin' | 'signup' | 'reset' = activeTab) => {
+    const key = `${mode}:${field}`;
+    if (fieldFocusRef.current.has(key)) return;
+    fieldFocusRef.current.add(key);
+    trackAuthEvent('auth_field_focus', { field, mode });
+  };
 
   // Store growth source params in window.sessionStorage for post-auth use
   useEffect(() => {
     if (fromSource) window.sessionStorage.setItem('lnkmx_signup_from', fromSource);
     if (nicheParam) window.sessionStorage.setItem('lnkmx_signup_niche', nicheParam);
     if (refSlug) window.sessionStorage.setItem('lnkmx_signup_ref_slug', refSlug);
-  }, [fromSource, nicheParam, refSlug]);
+    if (desiredSlug) window.sessionStorage.setItem('lnkmx_signup_desired_slug', desiredSlug);
+  }, [fromSource, nicheParam, refSlug, desiredSlug]);
 
   // Persistence for deep-linking
   const hashParams = new URL(window.location.href).hash.substring(1);
@@ -111,6 +145,11 @@ export default function Auth() {
 
   useEffect(() => {
     if (authError) {
+      trackAuthEvent('auth_error', {
+        method: 'oauth_redirect',
+        stage: 'redirect',
+        error: authErrorDescription || authError,
+      });
       toast.error(t('auth.oauthError', 'Authentication Error: {{error}}', { error: authErrorDescription || authError }));
       // Clean up URL without triggering re-renders
       const newUrl = new URL(window.location.href);
@@ -386,7 +425,7 @@ export default function Auth() {
   };
 
   const handleGoogleSignIn = async () => {
-    trackAuthEvent('auth_oauth_click', { provider: 'google' });
+    trackAuthEvent('auth_oauth_click', { provider: 'google', intent: activeTab });
     setIsOAuthLoading('google');
     const { error } = await signInWithGoogle(safeReturnTo);
     if (error) {
@@ -398,7 +437,7 @@ export default function Auth() {
   };
 
   const handleAppleSignIn = async () => {
-    trackAuthEvent('auth_oauth_click', { provider: 'apple' });
+    trackAuthEvent('auth_oauth_click', { provider: 'apple', intent: activeTab });
     setIsOAuthLoading('apple');
     const { error } = await signInWithApple(safeReturnTo);
     if (error) {
@@ -409,8 +448,8 @@ export default function Auth() {
     setIsOAuthLoading(null);
   };
 
-  const handleTelegramAuth = async (telegramData: any) => {
-    trackAuthEvent('auth_oauth_click', { provider: 'telegram' });
+  const handleTelegramAuth = async (telegramData: Record<string, unknown>) => {
+    trackAuthEvent('auth_oauth_click', { provider: 'telegram', intent: activeTab });
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);
     if (error) {
@@ -566,6 +605,21 @@ export default function Auth() {
                 <CardDescription className="text-sm">
                   {t('auth.heroSubtitle', 'AI соберёт сайт за 2 минуты. Бесплатно навсегда.')}
                 </CardDescription>
+                {hasSignupContext && (
+                  <div className="mt-3 rounded-2xl border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-semibold text-primary">
+                        {t('auth.context.title', 'Продолжим настройку')}
+                      </span>
+                      {nicheContextLabel && <span>{nicheContextLabel}</span>}
+                      {previewSlug && (
+                        <span className="rounded-full bg-background/70 px-2 py-0.5 font-mono text-[11px] text-foreground">
+                          lnkmx.my/{previewSlug}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* PRIMARY: Google OAuth — biggest, fastest path */}
@@ -586,7 +640,9 @@ export default function Auth() {
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                   )}
-                  {t('auth.continueWithGoogle', 'Продолжить с Google')}
+                  {activeTab === 'signin'
+                    ? t('auth.continueWithGoogle', 'Продолжить с Google')
+                    : t('auth.createWithGoogle', 'Создать через Google')}
                 </Button>
 
                 {/* SECONDARY: Email expand toggle */}
@@ -657,6 +713,7 @@ export default function Auth() {
                               type="email"
                               placeholder="your@email.com"
                               required
+                              onFocus={() => trackFieldFocus('email', 'reset')}
                               className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                             />
                           </div>
@@ -754,6 +811,7 @@ export default function Auth() {
                             data-testid="signin-email-input"
                             placeholder="your@email.com"
                             required
+                            onFocus={() => trackFieldFocus('email', 'signin')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                         </div>
@@ -775,6 +833,7 @@ export default function Auth() {
                             data-testid="signin-password-input"
                             placeholder="••••••••"
                             required
+                            onFocus={() => trackFieldFocus('password', 'signin')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                         </div>
@@ -819,6 +878,7 @@ export default function Auth() {
                             data-testid="signup-email-input"
                             placeholder="your@email.com"
                             required
+                            onFocus={() => trackFieldFocus('email', 'signup')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                         </div>
@@ -831,6 +891,7 @@ export default function Auth() {
                             data-testid="signup-password-input"
                             placeholder="••••••••"
                             required
+                            onFocus={() => trackFieldFocus('password', 'signup')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                           <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
@@ -838,7 +899,13 @@ export default function Auth() {
                           </p>
                         </div>
                         <div className="flex items-start space-x-2">
-                          <Checkbox id="terms" data-testid="terms-checkbox" required className="mt-0.5" />
+                          <Checkbox
+                            id="terms"
+                            data-testid="terms-checkbox"
+                            required
+                            className="mt-0.5"
+                            onFocus={() => trackFieldFocus('terms', 'signup')}
+                          />
                           <label htmlFor="terms" className="text-sm text-muted-foreground leading-tight">
                             {t('legal.agreeToTerms')}{' '}
                             <TermsLink className="text-primary hover:underline">
@@ -864,7 +931,10 @@ export default function Auth() {
                 {!showMoreOptions ? (
                   <button
                     type="button"
-                    onClick={() => setShowMoreOptions(true)}
+                    onClick={() => {
+                      setShowMoreOptions(true);
+                      trackAuthEvent('auth_more_options_expand');
+                    }}
                     className="w-full text-xs text-muted-foreground/70 hover:text-muted-foreground transition-colors py-1"
                     data-testid="show-more-providers"
                   >

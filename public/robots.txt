@@ -13,6 +13,9 @@ Disallow: /team/
 # Explicitly allow discovery pathways
 Allow: /experts
 Allow: /gallery
+Allow: /для-бьюти-мастеров
+Allow: /для-репетиторов
+Allow: /for/
 Allow: /llms.txt
 Allow: /sitemap.xml
 

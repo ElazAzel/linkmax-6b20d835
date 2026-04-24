@@ -857,6 +857,8 @@ function DashboardV2Inner() {
               onClose={dashboard.onboardingState.handleAIBuilderClose}
               onComplete={dashboard.onboardingState.handleAIBuilderComplete}
               isOnboarding={true}
+              initialNiche={dashboard.onboardingState.signupContext.initialNiche}
+              signupContext={dashboard.onboardingState.signupContext}
             />
           )}
 

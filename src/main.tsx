@@ -122,6 +122,7 @@ const EventScanner = lazy(() => import("./pages/EventScanner"));
 const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 const ForMasters = lazy(() => import("./pages/ForMasters"));
+const NicheLanding = lazy(() => import("./pages/NicheLanding"));
 const FromPage = lazy(() => import("./pages/FromPage"));
 const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
 
@@ -181,7 +182,10 @@ const router = createBrowserRouter([
       { path: "payment-terms", element: <PaymentTerms /> },
       { path: "experts", element: <Experts /> },
       { path: "experts/:tag", element: <Experts /> },
+      { path: "для-репетиторов", element: <NicheLanding landingKey="tutors" /> },
+      { path: "для-бьюти-мастеров", element: <NicheLanding landingKey="beauty-masters" /> },
       { path: "for-masters", element: <ForMasters /> },
+      { path: "for/:landingSlug", element: <NicheLanding /> },
       { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
