@@ -4,6 +4,7 @@
 > **Дата:** 24 апреля 2026  
 > **Горизонт:** 18 недель  
 > **Источник правил:** `docs/operations/KAIZEN_SYSTEM_PROJECT_DESCRIPTION.md`  
+> **Текущая доска реализации:** `docs/operations/KAIZEN_ACTIVE_REGISTER.md`
 > **Фокус:** эксперты и консультанты, mobile-first запуск бизнеса, Time to Value, лиды, бронирования, платежи, надежность
 
 ---
@@ -216,3 +217,25 @@ Baseline по каждому KPI фиксируется в первом 0-2 не
 7. **KZN-017:** повторяющиеся bugs -> тест/checklist/правило.
 
 Этот пакет создает основу: команда начинает улучшать LinkMAX измеримо, не перегружая продукт и не ослабляя безопасность.
+
+### 10.1 Реализация первого пакета
+
+| ID | Артефакт | Статус |
+| :--- | :--- | :--- |
+| KZN-001 | `KAIZEN_ACTIVE_REGISTER.md` | Implemented baseline |
+| KZN-002 | Ownership matrix в `KAIZEN_ACTIVE_REGISTER.md` | In progress до назначения конкретных имен |
+| KZN-003 | `KAIZEN_BASELINE_QUERIES.sql` | Implemented baseline |
+| KZN-004 | AI Builder wizard events | Implemented measurement step |
+| KZN-007 | `BLOCK_FEATURE_CHECKLIST.md` | Implemented baseline |
+| KZN-017 | `RELIABILITY_REPEAT_BUG_PLAYBOOK.md` | Implemented baseline |
+| KZN-018 | `RLS_PUBLIC_FLOW_CHECKLIST.md` | Implemented baseline |
+| KZN-019 | `RELEASE_QUALITY_CHECKLIST.md` | Implemented baseline |
+
+### 10.2 Safe product implementation started
+
+| ID | Изменение | Статус |
+| :--- | :--- | :--- |
+| KZN-010 | CRM lead quick actions теперь пишут `activation:lead_replied`, а status updates пишут `activation:lead_status_changed`. | Implemented safe step |
+| KZN-004 | AI Builder onboarding теперь пишет `activation:wizard_started`, `activation:wizard_niche_selected`, `activation:wizard_completed`, если известен `pageId`. | Implemented measurement step |
+| KZN-018 | Lead status update в dashboard дополнительно фильтруется по `user_id` на клиентском запросе. | Implemented safe step |
+| KZN-017 | В `useLeads` убраны оставшиеся `any` на lead source/status/update path. | Implemented safe step |

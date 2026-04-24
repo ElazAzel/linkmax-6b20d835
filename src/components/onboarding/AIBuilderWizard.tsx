@@ -6,7 +6,7 @@
  * Step 4: AI generating (fills template with personalized content)
  * Step 5: Complete
  */
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -23,7 +23,6 @@ import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Check from 'lucide-react/dist/esm/icons/check';
@@ -42,6 +41,11 @@ import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { storage } from '@/lib/storage';
+import {
+  trackWizardCompleted,
+  trackWizardNicheSelected,
+  trackWizardStarted,
+} from '@/lib/activation-events';
 
 // Whitelist of block types supported by the editor (must match block-factory.ts)
 const KNOWN_BLOCK_TYPES = new Set([
@@ -53,6 +57,47 @@ const KNOWN_BLOCK_TYPES = new Set([
 const AI_TIMEOUT_MS = 25000;
 const MAX_REGENERATE_RETRIES = 2;
 
+type TemplateBlockDraft = Record<string, unknown> & { type: string };
+type TemplateBlocksInput = Parameters<typeof generateBlocksFromTemplate>[0];
+
+interface AIProfileDraft {
+  name?: string;
+  bio?: string;
+}
+
+interface AIContentPayload {
+  profile?: AIProfileDraft | null;
+  blocks?: unknown;
+}
+
+interface AIContentResponse extends AIContentPayload {
+  result?: AIContentPayload;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function hasTemplateBlockType(value: unknown): value is TemplateBlockDraft {
+  return isRecord(value) && typeof value.type === 'string';
+}
+
+function isKnownTemplateBlock(value: unknown): value is TemplateBlockDraft {
+  return hasTemplateBlockType(value) && KNOWN_BLOCK_TYPES.has(value.type);
+}
+
+function getTemplateBlockPreviews(value: unknown): TemplateBlockDraft[] {
+  return Array.isArray(value) ? value.filter(hasTemplateBlockType) : [];
+}
+
+function getKnownTemplateBlockDrafts(value: unknown): TemplateBlockDraft[] {
+  return Array.isArray(value) ? value.filter(isKnownTemplateBlock) : [];
+}
+
+function getTemplateBlocksInput(value: unknown): TemplateBlocksInput {
+  return Array.isArray(value) ? value as TemplateBlocksInput : [];
+}
+
 interface AIBuilderWizardProps {
   open: boolean;
   onClose: () => void;
@@ -62,6 +107,8 @@ interface AIBuilderWizardProps {
   isOnboarding?: boolean;
   /** Niche captured from signup source, e.g. /auth?niche=beauty */
   initialNiche?: Niche;
+  /** Current page id for activation analytics. Optional so settings flow can stay independent. */
+  pageId?: string;
   signupContext?: {
     from?: string;
     refSlug?: string;
@@ -74,7 +121,7 @@ interface DBTemplate {
   name: string;
   description: string | null;
   category: string;
-  blocks: any;
+  blocks: unknown;
   preview_image: string | null;
   is_premium: boolean | null;
 }
@@ -105,8 +152,8 @@ export function AIBuilderWizard({
   open,
   onClose,
   onComplete,
-  isOnboarding = false,
   initialNiche,
+  pageId,
   signupContext,
 }: AIBuilderWizardProps) {
   const { t } = useTranslation();
@@ -134,6 +181,23 @@ export function AIBuilderWizard({
   const [genPhase, setGenPhase] = useState<'template' | 'ai' | 'layout'>('template');
   const [usedAI, setUsedAI] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const startTrackedForOpenRef = useRef(false);
+  const selectedTemplateBlocks = useMemo(
+    () => getTemplateBlockPreviews(selectedTemplate?.blocks),
+    [selectedTemplate?.blocks]
+  );
+
+  useEffect(() => {
+    if (!open) {
+      startTrackedForOpenRef.current = false;
+      return;
+    }
+
+    if (pageId && !startTrackedForOpenRef.current) {
+      trackWizardStarted(pageId);
+      startTrackedForOpenRef.current = true;
+    }
+  }, [open, pageId]);
 
   // Reset state when dialog opens
   useEffect(() => {
@@ -193,6 +257,7 @@ export function AIBuilderWizard({
 
     if (initialNiche) {
       setSelectedNiche(initialNiche);
+      if (pageId) trackWizardNicheSelected(pageId, initialNiche);
       await loadTemplateForNiche(initialNiche);
       setStep('description');
       return;
@@ -203,6 +268,7 @@ export function AIBuilderWizard({
 
   const handleSelectNiche = async (niche: Niche) => {
     setSelectedNiche(niche);
+    if (pageId) trackWizardNicheSelected(pageId, niche);
     await loadTemplateForNiche(niche);
 
     setStep('description');
@@ -240,7 +306,7 @@ export function AIBuilderWizard({
         userInfo.socials ? `Соцсети: ${userInfo.socials}` : '',
       ].filter(Boolean).join('\n');
 
-      const aiCall = supabase.functions.invoke('ai-content-generator', {
+      const aiCall = supabase.functions.invoke<AIContentResponse>('ai-content-generator', {
         body: {
           type: 'niche-builder',
           input: {
@@ -255,22 +321,22 @@ export function AIBuilderWizard({
         setTimeout(() => resolve({ data: null, error: new Error('ai-timeout') }), AI_TIMEOUT_MS)
       );
 
-      const { data, error } = await Promise.race([aiCall, timeoutPromise]) as any;
+      const { data, error } = await Promise.race([aiCall, timeoutPromise]);
       if (error) throw error;
 
       // Edge function wraps response in `result`: { result: { profile, blocks } }
-      const payload = data?.result || data;
-      const aiBlocks = Array.isArray(payload?.blocks) ? payload.blocks : null;
+      const payload = data?.result ?? data ?? null;
+      const aiBlocks = getKnownTemplateBlockDrafts(payload?.blocks);
 
-      if (aiBlocks && aiBlocks.length > 0) {
+      if (aiBlocks.length > 0) {
         setGenPhase('layout');
         // Filter unknown block types and normalize through factory
         finalBlocks = aiBlocks
-          .filter((b: any) => b && typeof b.type === 'string' && KNOWN_BLOCK_TYPES.has(b.type))
-          .map((b: any, idx: number) => {
+          .map((b) => {
             try {
               const base = createBaseBlock(b.type);
-              return { ...base, ...b, position: idx } as Block;
+              const { type: _type, ...blockOverrides } = b;
+              return { ...base, ...blockOverrides } as Block;
             } catch {
               return null;
             }
@@ -287,7 +353,7 @@ export function AIBuilderWizard({
     if (finalBlocks.length === 0) {
       setGenPhase('layout');
       finalBlocks = generateBlocksFromTemplate(
-        Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
+        getTemplateBlocksInput(selectedTemplate.blocks),
         { ...userInfo, bio: userInfo.bio }
       );
     }
@@ -325,16 +391,12 @@ export function AIBuilderWizard({
     await runGeneration();
   }, [retryCount, runGeneration, t]);
 
-  const handleSkip = () => {
-    storage.set('onboarding_completed', 'true');
-    onClose();
-  };
-
   const finishWizard = (options?: { publish?: boolean; nextAction?: 'connect_telegram' }) => {
     if (!selectedNiche) return;
     storage.set('onboarding_completed', 'true');
     if (options?.publish) storage.set('wizard_wants_publish', 'true');
     if (options?.nextAction) storage.set('wizard_next_action', options.nextAction);
+    if (pageId) trackWizardCompleted(pageId, selectedNiche);
 
     onComplete(
       { name: userInfo.name, bio: userInfo.bio || '' },
@@ -497,10 +559,10 @@ export function AIBuilderWizard({
                     </p>
                   </div>
                   <p className="text-xs text-muted-foreground mb-3">
-                    {selectedTemplate.name} · {Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks.length : 0} {t('aiBuilder.blocks', 'блоков')}
+                    {selectedTemplate.name} · {selectedTemplateBlocks.length} {t('aiBuilder.blocks', 'блоков')}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {Array.isArray(selectedTemplate.blocks) && selectedTemplate.blocks.slice(0, 8).map((b: any, i: number) => (
+                    {selectedTemplateBlocks.slice(0, 8).map((b, i) => (
                       <span key={i} className="text-[10px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
                         {b.type}
                       </span>
