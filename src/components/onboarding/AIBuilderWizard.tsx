@@ -28,6 +28,7 @@ import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Send from 'lucide-react/dist/esm/icons/send';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
@@ -59,6 +60,13 @@ interface AIBuilderWizardProps {
   onComplete: (profile: { name: string; bio: string }, blocks: Block[], niche: Niche) => void;
   /** If true, this is first-time onboarding popup */
   isOnboarding?: boolean;
+  /** Niche captured from signup source, e.g. /auth?niche=beauty */
+  initialNiche?: Niche;
+  signupContext?: {
+    from?: string;
+    refSlug?: string;
+    desiredSlug?: string;
+  };
 }
 
 interface DBTemplate {
@@ -93,7 +101,14 @@ function getStepProgress(step: Step): number {
   return Math.round(((idx + 1) / STEPS.length) * 100);
 }
 
-export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = false }: AIBuilderWizardProps) {
+export function AIBuilderWizard({
+  open,
+  onClose,
+  onComplete,
+  isOnboarding = false,
+  initialNiche,
+  signupContext,
+}: AIBuilderWizardProps) {
   const { t } = useTranslation();
   const { canUseAIPageGeneration, incrementAIPageGeneration } = useFreemiumLimits();
 
@@ -125,24 +140,15 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     if (open) {
       setStep('goal');
       setSelectedGoal(null);
-      setSelectedNiche(null);
+      setSelectedNiche(initialNiche ?? null);
       setSelectedTemplate(null);
       setShowMoreDetails(false);
       setUsedAI(false);
       setRetryCount(0);
     }
-  }, [open]);
+  }, [initialNiche, open]);
 
-
-  const handleSelectGoal = (goal: OnboardingGoal) => {
-    setSelectedGoal(goal);
-    setUserInfo(p => ({ ...p, goal }));
-    setStep('niche');
-  };
-
-  const handleSelectNiche = async (niche: Niche) => {
-    setSelectedNiche(niche);
-
+  const loadTemplateForNiche = useCallback(async (niche: Niche) => {
     // Pick the first template for the niche (all 16 niches now have templates)
     setLoadingTemplates(true);
     try {
@@ -179,6 +185,25 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     } finally {
       setLoadingTemplates(false);
     }
+  }, [t]);
+
+  const handleSelectGoal = async (goal: OnboardingGoal) => {
+    setSelectedGoal(goal);
+    setUserInfo(p => ({ ...p, goal }));
+
+    if (initialNiche) {
+      setSelectedNiche(initialNiche);
+      await loadTemplateForNiche(initialNiche);
+      setStep('description');
+      return;
+    }
+
+    setStep('niche');
+  };
+
+  const handleSelectNiche = async (niche: Niche) => {
+    setSelectedNiche(niche);
+    await loadTemplateForNiche(niche);
 
     setStep('description');
   };
@@ -305,6 +330,20 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     onClose();
   };
 
+  const finishWizard = (options?: { publish?: boolean; nextAction?: 'connect_telegram' }) => {
+    if (!selectedNiche) return;
+    storage.set('onboarding_completed', 'true');
+    if (options?.publish) storage.set('wizard_wants_publish', 'true');
+    if (options?.nextAction) storage.set('wizard_next_action', options.nextAction);
+
+    onComplete(
+      { name: userInfo.name, bio: userInfo.bio || '' },
+      generatedBlocks,
+      selectedNiche
+    );
+    toast.success(t('aiBuilder.success', '✨ Страница создана!'));
+  };
+
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
@@ -334,13 +373,22 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               <p className="text-muted-foreground text-sm">
                 {t('aiBuilder.goals.subtitle')}
               </p>
+              {initialNiche && (
+                <div className="mt-3 inline-flex flex-wrap items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
+                  <span>{t('aiBuilder.signupContext.niche', 'Сфера уже подставлена:')}</span>
+                  <span>{NICHE_ICONS[initialNiche]} {t(`niches.${initialNiche}`, initialNiche)}</span>
+                  {signupContext?.desiredSlug && (
+                    <span className="text-primary/80">lnkmx.my/{signupContext.desiredSlug}</span>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-4">
               {ONBOARDING_GOALS.map((goal) => (
                 <button
                   key={goal}
-                  onClick={() => handleSelectGoal(goal)}
+                  onClick={() => void handleSelectGoal(goal)}
                   className={cn(
                     "group p-5 rounded-3xl border-2 border-border/50 bg-card/40 backdrop-blur-xl transition-all duration-300",
                     "hover:scale-[1.02] hover:border-primary/50 hover:bg-card/80 hover:shadow-glass-lg",
@@ -418,6 +466,22 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 <p className="text-muted-foreground text-sm">
                   {t('aiBuilder.descStep.hint')}
                 </p>
+                {selectedNiche && (
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                      {NICHE_ICONS[selectedNiche]} {t(`niches.${selectedNiche}`, selectedNiche)}
+                    </span>
+                    {initialNiche && (
+                      <button
+                        type="button"
+                        onClick={handleBackToTemplate}
+                        className="text-xs font-semibold text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                      >
+                        {t('aiBuilder.changeNiche', 'Изменить сферу')}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -577,37 +641,43 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                   : t('aiBuilder.fallbackUsed', '✓ Шаблон применён')}
               </p>
 
+              <Card className="mb-4 p-3 text-left bg-background/70 border-border/50 rounded-2xl">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 h-9 w-9 shrink-0 rounded-xl bg-sky-500/10 flex items-center justify-center">
+                    <Send className="h-4 w-4 text-sky-500" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold">
+                      {t('aiBuilder.telegramNext.title', 'Следующий шаг: заявки в Telegram')}
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {t('aiBuilder.telegramNext.desc', 'Подключите уведомления, чтобы сразу видеть новые заявки и записи.')}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+
               <div className="space-y-3">
                 <Button
                   size="lg"
                   className="w-full h-14 rounded-2xl font-black text-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/25"
-                  onClick={() => {
-                    storage.set('onboarding_completed', 'true');
-                    storage.set('wizard_wants_publish', 'true');
-                    onComplete(
-                      { name: userInfo.name, bio: userInfo.bio || '' },
-                      generatedBlocks,
-                      selectedNiche!
-                    );
-                    toast.success(t('aiBuilder.success', '✨ Страница создана!'));
-                    onClose();
-                  }}
+                  onClick={() => finishWizard({ publish: true })}
                 >
                   <Share2 className="h-5 w-5 mr-2" />
                   {t('aiBuilder.complete.publishNow', 'Опубликовать сейчас')}
                 </Button>
                 <Button
+                  variant="outline"
+                  className="w-full h-12 rounded-xl"
+                  onClick={() => finishWizard({ nextAction: 'connect_telegram' })}
+                >
+                  <Send className="h-4 w-4 mr-2" />
+                  {t('aiBuilder.telegramNext.cta', 'Подключить Telegram')}
+                </Button>
+                <Button
                   variant="ghost"
                   className="w-full h-12 rounded-xl text-muted-foreground"
-                  onClick={() => {
-                    storage.set('onboarding_completed', 'true');
-                    onComplete(
-                      { name: userInfo.name, bio: userInfo.bio || '' },
-                      generatedBlocks,
-                      selectedNiche!
-                    );
-                    onClose();
-                  }}
+                  onClick={() => finishWizard()}
                 >
                   {t('aiBuilder.complete.editFirst', 'Сначала отредактировать')}
                 </Button>
