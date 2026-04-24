@@ -47,6 +47,13 @@ vi.mock('@/lib/utils/logger', () => ({
     },
 }));
 
+vi.mock('@/lib/posthog', () => ({
+    posthog: {
+        identify: vi.fn(),
+        reset: vi.fn(),
+    },
+}));
+
 const wrapper = ({ children }: { children: React.ReactNode }) => (
     <AuthProvider>{children}</AuthProvider>
 );
@@ -200,7 +207,29 @@ describe('useAuth', () => {
             expect(mockSignInWithOAuth).toHaveBeenCalledWith({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin,
+                    redirectTo: `${window.location.origin}/auth/callback?returnTo=%2Fdashboard`,
+                },
+            });
+        });
+
+        it('passes a safe returnTo through the auth callback', async () => {
+            mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+
+            await waitFor(() => {
+                expect(result.current.loading).toBe(false);
+            });
+
+            await act(async () => {
+                const { error } = await result.current.signInWithGoogle('/dashboard/settings');
+                expect(error).toBeNull();
+            });
+
+            expect(mockSignInWithOAuth).toHaveBeenCalledWith({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}/auth/callback?returnTo=%2Fdashboard%2Fsettings`,
                 },
             });
         });
@@ -224,7 +253,7 @@ describe('useAuth', () => {
             expect(mockSignInWithOAuth).toHaveBeenCalledWith({
                 provider: 'apple',
                 options: {
-                    redirectTo: window.location.origin,
+                    redirectTo: `${window.location.origin}/auth/callback?returnTo=%2Fdashboard`,
                 },
             });
         });

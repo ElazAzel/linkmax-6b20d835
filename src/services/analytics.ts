@@ -547,17 +547,17 @@ export async function trackBlockClick(
   // We need to look up the real DB UUID to increment clicks.
   if (blockId && pageId) {
     try {
-      // Find the actual DB block by matching content->>'id' or content->>'type'
-      const { data: blockRow } = await supabase
+      // Find the actual DB block by matching stable content id.
+      // Fallback by type was producing incorrect attribution when multiple blocks shared a type.
+      const { data: blockRows } = await supabase
         .from('blocks')
         .select('id')
         .eq('page_id', pageId)
-        .or(`content->>id.eq.${blockId},content->>type.eq.${blockType}`)
-        .limit(1)
-        .maybeSingle();
+        .eq('content->>id', blockId)
+        .limit(2);
 
-      if (blockRow?.id) {
-        await supabase.rpc('increment_block_clicks', { block_uuid: blockRow.id });
+      if (blockRows && blockRows.length === 1) {
+        await supabase.rpc('increment_block_clicks', { block_uuid: blockRows[0].id });
       }
     } catch {
       // Silent fail

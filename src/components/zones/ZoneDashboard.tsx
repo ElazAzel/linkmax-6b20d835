@@ -163,7 +163,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <MetricCard
             icon={<Target className="h-4 w-4 text-primary" />}
-            label={t('zones.dashboard.pipeline', 'Pipeline')}
+            label={t('zones.dashboard.pipeline', 'Воронка')}
             value={`${formatCurrencyValue(metrics.pipelineValue)} ₸`}
             sub={t('zones.dashboard.openDealsCount', '{{count}} открытых сделок', { count: metrics.open })}
           />
@@ -176,7 +176,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
           />
           <MetricCard
             icon={<TrendingUp className="h-4 w-4 text-blue-500" />}
-            label={t('zones.dashboard.winRate', 'Win Rate')}
+            label={t('zones.dashboard.winRate', 'Процент побед')}
             value={`${metrics.winRate}%`}
             sub={`${metrics.won}W / ${metrics.lost}L`}
           />
@@ -202,8 +202,8 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                     <div style={{ width: '100%', minHeight: 220, minWidth: 0 }}>
                       <ResponsiveContainer width="100%" height={220}>
                         <BarChart data={stageBarData} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-                          <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
-                          <YAxis tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} allowDecimals={false} />
+                          <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} allowDecimals={false} />
                           <Tooltip
                             contentStyle={{ backgroundColor: 'hsl(var(--background))', borderRadius: '12px', border: '1px solid hsl(var(--border)/0.5)' }}
                             formatter={(value: number | undefined, name: string | undefined) => [

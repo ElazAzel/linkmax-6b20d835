@@ -54,9 +54,9 @@ export function AnalyticsPanel() {
     );
   }
 
-  const chartData = period === 'month' || period === 'all'
-    ? analytics.monthlyData
-    : period === 'week'
+  const chartData = period === '30d'
+    ? analytics.dailyData
+    : period === '90d' || period === 'all'
       ? analytics.weeklyData
       : analytics.dailyData;
 
@@ -77,17 +77,17 @@ export function AnalyticsPanel() {
         <div className="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
           <Tabs value={period} onValueChange={(v: string) => setPeriod(v as TimePeriod)}>
             <TabsList className="grid w-full min-w-[280px] grid-cols-4">
-              <TabsTrigger value="day" className="text-xs sm:text-xs px-2">
-                {t('analytics.today', 'Today')}
+              <TabsTrigger value="7d" className="text-xs sm:text-xs px-2">
+                {t('analytics.period.7d', '7 дней')}
               </TabsTrigger>
-              <TabsTrigger value="week" className="text-xs sm:text-xs px-2">
-                {t('analytics.week', 'Week')}
+              <TabsTrigger value="30d" className="text-xs sm:text-xs px-2">
+                {t('analytics.period.30d', '30 дней')}
               </TabsTrigger>
-              <TabsTrigger value="month" className="text-xs sm:text-xs px-2">
-                {t('analytics.month', 'Month')}
+              <TabsTrigger value="90d" className="text-xs sm:text-xs px-2">
+                {t('analytics.period.90d', '90 дней')}
               </TabsTrigger>
               <TabsTrigger value="all" className="text-xs sm:text-xs px-2">
-                {t('analytics.all', 'All')}
+                {t('analytics.period.all', 'Всё время')}
               </TabsTrigger>
             </TabsList>
           </Tabs>

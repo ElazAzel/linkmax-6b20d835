@@ -2,6 +2,11 @@
  * User Entity - Core domain model for users
  * Pure business logic, no external dependencies
  */
+import {
+  getTierCommissionRate as getContractTierCommissionRate,
+  getTierDisplayName as getContractTierDisplayName,
+  type AppPremiumTier,
+} from '@/domain/billing/tiers';
 
 // ============= Value Objects =============
 
@@ -124,7 +129,7 @@ export function isTrialExpiringSoon(status: PremiumStatus): boolean {
  */
 export const CRM_FREE_INBOUND_LIMIT = 50;
 
-export type PremiumTier = 'identity' | 'starter' | 'pro' | 'business';
+export type PremiumTier = AppPremiumTier;
 
 export interface FreemiumLimits {
   maxBlocks: number;
@@ -191,7 +196,9 @@ export const PRO_TIER_LIMITS: FreemiumLimits = {
  * Get user's limits based on tier
  */
 export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): FreemiumLimits {
-  if (status.tier === 'pro' || status.isPremium) return PRO_TIER_LIMITS;
+  if (status.tier === 'starter' || status.tier === 'pro' || status.tier === 'business' || status.isPremium) {
+    return PRO_TIER_LIMITS;
+  }
   return FREE_TIER_LIMITS;
 }
 
@@ -199,12 +206,7 @@ export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): F
  * Get tier display name
  */
 export function getTierDisplayName(tier: PremiumTier): string {
-  switch (tier) {
-    case 'business': return 'BUSINESS';
-    case 'pro': return 'PRO';
-    case 'starter': return 'STARTER';
-    default: return 'IDENTITY';
-  }
+  return getContractTierDisplayName(tier);
 }
 
 /**
@@ -212,10 +214,5 @@ export function getTierDisplayName(tier: PremiumTier): string {
  * Starter: 7%, Pro: 1%, Business: 0%
  */
 export function getTierCommissionRate(tier: PremiumTier): number {
-  switch (tier) {
-    case 'business': return 0;
-    case 'pro': return 0.01;
-    case 'starter': return 0.07;
-    default: return 0; // Identity tier has no transactions
-  }
+  return getContractTierCommissionRate(tier);
 }

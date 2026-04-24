@@ -103,6 +103,9 @@ export function EnhancedSEOHead({
         isNewAccount
       );
       const meta = generatePageMeta(profile, safeBlocks, slug, qualityGate, language);
+      if (pageData.isIndexable === false) {
+        meta.robots = 'noindex, follow';
+      }
 
       // Generate Answer Block for AEO
       const answerBlock = generateAnswerBlock(safeBlocks, slug, language);
@@ -153,7 +156,7 @@ export function EnhancedSEOHead({
         entityLinks: { sameAs: [], knowsAbout: [] },
       };
     }
-  }, [pageData.blocks, slug, language, updatedAt, isNewAccount, pageUrl]);
+  }, [pageData.blocks, pageData.isIndexable, slug, language, updatedAt, isNewAccount, pageUrl]);
 
   useEffect(() => {
     const { meta, geoSchemas, qualityGate, answerBlock } = seoData;

@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/card';
 import { searchUsers } from '@/services/collaboration';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import i18n from '@/i18n/config';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface UserSearchResult {
   id: string;
@@ -119,6 +120,9 @@ function ShoutoutBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
                   key={user.id} 
                   className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-muted transition-colors"
                   onClick={() => selectUser(user)}
+                  onKeyDown={(event) => handleKeyboardActivation(event, () => selectUser(user))}
+                  role="button"
+                  tabIndex={0}
                 >
                   <Avatar className="h-10 w-10">
                     <AvatarImage src={user.avatar_url || ''} />

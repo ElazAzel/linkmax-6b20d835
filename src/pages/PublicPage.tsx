@@ -46,6 +46,47 @@ const ChatbotWidget = lazy(() => import('@/components/chat/ChatbotWidget').then(
 const LanguageSwitcher = lazy(() => import('@/components/translation/LanguageSwitcher').then(m => ({ default: m.LanguageSwitcher })));
 const TrackingScripts = lazy(() => import('@/components/analytics/TrackingScripts').then(m => ({ default: m.TrackingScripts })));
 
+const FONT_FAMILY_MAP = {
+  sans: "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif",
+  serif: "ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif",
+  mono: "'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace",
+} as const;
+
+function getButtonStyleClass(buttonStyle?: PageData['theme']['buttonStyle']) {
+  switch (buttonStyle) {
+    case 'pill':
+      return 'rounded-full';
+    case 'gradient':
+      return 'rounded-xl border-transparent bg-gradient-to-r from-violet-500 via-indigo-500 to-sky-500 text-white hover:opacity-90';
+    case 'default':
+      return 'rounded-md';
+    default:
+      return 'rounded-xl';
+  }
+}
+
+function getIconStyleClass(iconStyle?: PageData['theme']['iconStyle']) {
+  switch (iconStyle) {
+    case 'square':
+      return 'rounded-none';
+    case 'duotone':
+      return 'rounded-lg bg-primary/10 text-primary p-1';
+    default:
+      return 'rounded-full bg-primary/10 p-1';
+  }
+}
+
+function getAnimationConfig(animationStyle?: PageData['theme']['animationStyle']) {
+  switch (animationStyle) {
+    case 'none':
+      return { duration: 0, y: 0 };
+    case 'energetic':
+      return { duration: 0.35, y: 16 };
+    default:
+      return { duration: 0.6, y: 8 };
+  }
+}
+
 export default function PublicPage() {
   const { t } = useTranslation();
   const { compressed, slug } = useParams<{ compressed?: string; slug?: string }>();
@@ -168,12 +209,14 @@ export default function PublicPage() {
   }, [slug]);
 
   const handleShare = async () => {
+    const canNativeShare = 'share' in navigator;
+
     // Track share event
     if (pageData?.id) {
-      trackShare(pageData.id, (!!navigator.share) ? 'native' : 'clipboard');
+      trackShare(pageData.id, canNativeShare ? 'native' : 'clipboard');
     }
 
-    if (navigator.share) {
+    if (canNativeShare) {
       navigator.share({
         title: pageData?.seo?.title || pageData?.seo?.description || t('share.defaultTitle', 'Check out my page'),
         url: currentUrl,
@@ -213,6 +256,10 @@ export default function PublicPage() {
 
   const customBackground = pageData?.theme?.customBackground;
   const backgroundStyle = getPageBackgroundStyle(customBackground);
+  const pageFontFamily = pageData?.theme?.fontFamily || 'sans';
+  const pageAnimation = getAnimationConfig(pageData?.theme?.animationStyle);
+  const buttonStyleClass = getButtonStyleClass(pageData?.theme?.buttonStyle);
+  const iconStyleClass = getIconStyleClass(pageData?.theme?.iconStyle);
 
   return (
     <AnimatePresence mode="wait">
@@ -224,11 +271,15 @@ export default function PublicPage() {
         <motion.div
           key="content"
           className="min-h-screen bg-background"
-          style={backgroundStyle}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          style={{
+            ...backgroundStyle,
+            color: pageData?.theme?.textColor || 'inherit',
+            fontFamily: FONT_FAMILY_MAP[pageFontFamily],
+          }}
+          initial={{ opacity: 0, y: pageAnimation.y }}
+          animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: pageAnimation.duration }}
         >
           {/* Enhanced Auto-SEO with Schema.org and Quality Gate */}
           <EnhancedSEOHead
@@ -265,6 +316,9 @@ export default function PublicPage() {
             ]}
             problemStatement="Need a simple professional landing page to showcase work and accept leads"
             solutionStatement="lnkmx profile page with custom blocks, CTAs, and lead capture forms"
+            manageRobots={false}
+            citationAuthor={pageData.seo?.title || pageData.slug || 'User Profile'}
+            citationDate={pageData?.updatedAt || undefined}
           />
 
           {/* Crawler-friendly content for no-JS fallback */}
@@ -306,12 +360,12 @@ export default function PublicPage() {
 
                 {/* Share Section - Mobile Optimized */}
                 <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-2 justify-center">
-                  <Button variant="outline" onClick={handleShare} className="w-full sm:w-auto">
-                    <Share2 className="h-4 w-4 mr-2" />
+                  <Button variant="outline" onClick={handleShare} className={cn("w-full sm:w-auto", buttonStyleClass)}>
+                    <Share2 className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                     {t('share.shareLink', 'Поделиться')}
                   </Button>
-                  <Button variant="outline" onClick={() => setShowQR(true)} className="w-full sm:w-auto">
-                    <QrCode className="h-4 w-4 mr-2" />
+                  <Button variant="outline" onClick={() => setShowQR(true)} className={cn("w-full sm:w-auto", buttonStyleClass)}>
+                    <QrCode className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                     {t('share.qrCode', 'QR-код')}
                   </Button>
                 </div>

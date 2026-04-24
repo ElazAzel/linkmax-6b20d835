@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { useAuth } from '@/hooks/user/useAuth';
-import { startOfDay, startOfWeek, startOfMonth, subDays, subWeeks, subMonths, format, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval } from 'date-fns';
+import { subDays, subMonths, format, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval } from 'date-fns';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -57,6 +57,12 @@ export interface AnalyticsSummary {
   bounceRate: number; // percentage
   returningVisitors: number; // percentage
   totalConversions: number;
+  dataQuality: {
+    visitorCoverage: number;
+    sessionCoverage: number;
+    deviceCoverage: number;
+    sourceCoverage: number;
+  };
   staffStats?: StaffStats[];
   personalStaffStats?: StaffStats;
 }
@@ -81,7 +87,15 @@ export interface DeviceBreakdown {
   desktop: number;
 }
 
-export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
+export type TimePeriod = '7d' | '30d' | '90d' | 'all';
+
+function getMetaString(metadata: Record<string, unknown> | null | undefined, ...keys: string[]): string | undefined {
+  for (const key of keys) {
+    const value = metadata?.[key];
+    if (typeof value === 'string' && value.length > 0) return value;
+  }
+  return undefined;
+}
 
 /** Pass `null` when the dashboard page is not ready yet — avoids resolving the wrong page via `limit(1)`. Omit the argument for legacy “first page of user” behaviour. */
 export function usePageAnalytics(externalPageId?: string | null) {
@@ -93,7 +107,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
   const [loading, setLoading] = useState(() => (externalPageId !== undefined ? !!externalPageId : true));
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [period, setPeriod] = useState<TimePeriod>('week');
+  const [period, setPeriod] = useState<TimePeriod>('30d');
   const [isStaffMember, setIsStaffMember] = useState(false);
   const [currentStaffId, setCurrentStaffId] = useState<string | null>(null);
   const [staffMemberName, setStaffMemberName] = useState<string | null>(null);
@@ -164,28 +178,33 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       const now = new Date();
       let startDate: Date;
-      let previousStartDate: Date;
+      let previousStartDate: Date | null;
 
       switch (period) {
-        case 'day':
-          startDate = startOfDay(now);
-          previousStartDate = subDays(startDate, 1);
-          break;
-        case 'week':
+        case '7d':
           startDate = subDays(now, 7);
           previousStartDate = subDays(startDate, 7);
           break;
-        case 'two_weeks':
-          startDate = subDays(now, 14);
-          previousStartDate = subDays(startDate, 14);
-          break;
-        case 'month':
+        case '30d':
           startDate = subDays(now, 30);
           previousStartDate = subDays(startDate, 30);
           break;
-        default:
-          startDate = subMonths(now, 12); // Last 12 months for "all"
-          previousStartDate = subMonths(startDate, 12);
+        case '90d':
+          startDate = subDays(now, 90);
+          previousStartDate = subDays(startDate, 90);
+          break;
+        case 'all': {
+          const { data: firstEvent } = await supabase
+            .from('analytics')
+            .select('created_at')
+            .eq('page_id', pageId)
+            .order('created_at', { ascending: true })
+            .limit(1)
+            .maybeSingle();
+          startDate = firstEvent?.created_at ? new Date(firstEvent.created_at) : subMonths(now, 12);
+          previousStartDate = null;
+          break;
+        }
       }
 
       // Fetch all analytics for current period
@@ -203,12 +222,16 @@ export function usePageAnalytics(externalPageId?: string | null) {
       if (error) throw error;
 
       // Fetch previous period for comparison
-      const { data: previousEvents } = await supabase
-        .from('analytics')
-        .select('*')
-        .eq('page_id', pageId)
-        .gte('created_at', previousStartDate.toISOString())
-        .lt('created_at', startDate.toISOString());
+      let previousEvents: AnalyticsEvent[] = [];
+      if (previousStartDate) {
+        const { data } = await supabase
+          .from('analytics')
+          .select('*')
+          .eq('page_id', pageId)
+          .gte('created_at', previousStartDate.toISOString())
+          .lt('created_at', startDate.toISOString());
+        previousEvents = (data as AnalyticsEvent[]) || [];
+      }
 
       // Fetch blocks for the page to get block info
       const { data: blocks } = await supabase
@@ -217,7 +240,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
         .eq('page_id', pageId);
 
       const events = (currentEvents as AnalyticsEvent[]) || [];
-      const prevEvents = (previousEvents as AnalyticsEvent[]) || [];
+      const prevEvents = previousEvents;
 
       // Calculate totals
       const totalViews = events.filter(e => e.event_type === 'view').length;
@@ -239,9 +262,10 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       // Unique visitors by visitorId from metadata
       const uniqueVisitorIds = new Set(events
-        .filter(e => e.event_type === 'view' && e.metadata?.visitorId)
-        .map(e => e.metadata.visitorId as string));
-      const uniqueVisitors = uniqueVisitorIds.size || Math.ceil(totalViews * 0.7);
+        .filter(e => e.event_type === 'view')
+        .map(e => getMetaString(e.metadata, 'visitorId', 'visitor_id'))
+        .filter((value): value is string => !!value));
+      const uniqueVisitors = uniqueVisitorIds.size;
 
       // Days in period for average
       const daysInPeriod = Math.max(1, Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
@@ -285,8 +309,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // so also check metadata.blockId for the content-level ID
       events.filter(e => e.event_type === 'click').forEach(e => {
         const blockRef = e.block_id
-          || (e.metadata as any)?.blockId
-          || (e.metadata as any)?.blockType; // fallback to type matching
+          || getMetaString(e.metadata, 'blockId', 'block_id');
         if (!blockRef) return;
         const stats = blockStatsMap.get(blockRef);
         if (stats) {
@@ -298,8 +321,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
       events.filter(e => e.event_type === 'view').forEach(e => {
         const blockRef =
           e.block_id
-          || (e.metadata as any)?.blockId
-          || (e.metadata as any)?.block_id;
+          || getMetaString(e.metadata, 'blockId', 'block_id');
         if (!blockRef) return;
         const stats = blockStatsMap.get(blockRef);
         if (stats) {
@@ -328,7 +350,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // Calculate traffic sources
       const sourceMap = new Map<string, number>();
       events.filter(e => e.event_type === 'view').forEach(e => {
-        const source = e.metadata?.source || 'direct';
+        const source = getMetaString(e.metadata, 'source', 'referrer_source') || 'direct';
         sourceMap.set(source, (sourceMap.get(source) || 0) + 1);
       });
       const trafficSources: TrafficSource[] = Array.from(sourceMap.entries())
@@ -343,7 +365,8 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // Calculate device breakdown
       const deviceCounts = { mobile: 0, tablet: 0, desktop: 0 };
       events.filter(e => e.event_type === 'view').forEach(e => {
-        const device = e.metadata?.device as 'mobile' | 'tablet' | 'desktop' | undefined;
+        const deviceRaw = getMetaString(e.metadata, 'device', 'device_type');
+        const device = deviceRaw as 'mobile' | 'tablet' | 'desktop' | undefined;
         if (device && device in deviceCounts) {
           deviceCounts[device]++;
         } else {
@@ -355,8 +378,8 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // Calculate geography breakdown
       const geoMap = new Map<string, { country: string; countryCode: string; count: number }>();
       events.filter(e => e.event_type === 'view').forEach(e => {
-        const countryCode = (e.metadata?.country as string) || 'unknown';
-        const country = (e.metadata?.countryName as string) || countryCode;
+        const countryCode = getMetaString(e.metadata, 'country', 'country_code') || 'unknown';
+        const country = getMetaString(e.metadata, 'countryName', 'country_name') || countryCode;
         const existing = geoMap.get(countryCode);
         if (existing) {
           existing.count++;
@@ -374,7 +397,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // Calculate bounce rate based on sessions (a bounce = session with view but no click)
       const sessionEvents = new Map<string, Set<string>>();
       events.forEach(e => {
-        const sid = (e.metadata?.sessionId as string) || e.id;
+        const sid = getMetaString(e.metadata, 'sessionId', 'session_id') || e.id;
         if (!sessionEvents.has(sid)) sessionEvents.set(sid, new Set());
         sessionEvents.get(sid)!.add(e.event_type);
       });
@@ -398,7 +421,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       if (sessionEndEvents) {
         sessionEndEvents.forEach((e: any) => {
-          const d = e.metadata?.sessionDuration;
+          const d = e.metadata?.sessionDuration ?? e.metadata?.session_duration;
           if (typeof d === 'number' && d > 0 && d < 3600) {
             allDurations.push(d);
           }
@@ -407,8 +430,12 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       // Also check durations embedded in view metadata
       events
-        .filter(e => e.metadata?.sessionDuration && typeof e.metadata.sessionDuration === 'number')
-        .forEach(e => allDurations.push(e.metadata.sessionDuration as number));
+        .forEach(e => {
+          const duration = e.metadata?.sessionDuration ?? e.metadata?.session_duration;
+          if (typeof duration === 'number' && duration > 0 && duration < 3600) {
+            allDurations.push(duration);
+          }
+        });
 
       const avgSessionDuration = allDurations.length > 0
         ? Math.round(allDurations.reduce((sum, d) => sum + d, 0) / allDurations.length)
@@ -416,9 +443,10 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       // Calculate returning visitors — visitorId with >1 unique sessionId
       const visitorSessions = new Map<string, Set<string>>();
-      events.filter(e => e.event_type === 'view' && e.metadata?.visitorId).forEach(e => {
-        const vid = e.metadata.visitorId as string;
-        const sid = (e.metadata?.sessionId as string) || e.id;
+      events.filter(e => e.event_type === 'view').forEach(e => {
+        const vid = getMetaString(e.metadata, 'visitorId', 'visitor_id');
+        if (!vid) return;
+        const sid = getMetaString(e.metadata, 'sessionId', 'session_id') || e.id;
         if (!visitorSessions.has(vid)) visitorSessions.set(vid, new Set());
         visitorSessions.get(vid)!.add(sid);
       });
@@ -448,6 +476,13 @@ export function usePageAnalytics(externalPageId?: string | null) {
         .gte('created_at', startDate.toISOString());
 
       const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);
+
+      const viewEvents = events.filter(e => e.event_type === 'view');
+      const visitorCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'visitorId', 'visitor_id')).length;
+      const sessionCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'sessionId', 'session_id')).length;
+      const deviceCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'device', 'device_type')).length;
+      const sourceCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'source', 'referrer_source')).length;
+      const denominator = viewEvents.length || 1;
 
       // Staff Performance Calculation
       let staffStats: StaffStats[] = [];
@@ -525,6 +560,12 @@ export function usePageAnalytics(externalPageId?: string | null) {
         bounceRate,
         returningVisitors: returningVisitorsPercent,
         totalConversions,
+        dataQuality: {
+          visitorCoverage: (visitorCoverageCount / denominator) * 100,
+          sessionCoverage: (sessionCoverageCount / denominator) * 100,
+          deviceCoverage: (deviceCoverageCount / denominator) * 100,
+          sourceCoverage: (sourceCoverageCount / denominator) * 100,
+        },
         staffStats,
         personalStaffStats
       });

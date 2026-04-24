@@ -33,9 +33,10 @@ export const BeforeAfterBlock = React.memo(function BeforeAfterBlock({ block }: 
     setSliderPosition(percentage);
   }, []);
 
-  const handleMouseDown = useCallback(() => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     isDragging.current = true;
-  }, []);
+    handleMove(e.clientX);
+  }, [handleMove]);
 
   const handleMouseUp = useCallback(() => {
     isDragging.current = false;
@@ -50,9 +51,14 @@ export const BeforeAfterBlock = React.memo(function BeforeAfterBlock({ block }: 
     handleMove(e.touches[0].clientX);
   }, [handleMove]);
 
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    handleMove(e.clientX);
-  }, [handleMove]);
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    setSliderPosition((current) => {
+      const delta = e.key === 'ArrowLeft' ? -5 : 5;
+      return Math.max(0, Math.min(100, current + delta));
+    });
+  }, []);
 
   if (!block.beforeImage || !block.afterImage) {
     return (
@@ -78,7 +84,13 @@ export const BeforeAfterBlock = React.memo(function BeforeAfterBlock({ block }: 
         onMouseLeave={handleMouseUp}
         onMouseMove={handleMouseMove}
         onTouchMove={handleTouchMove}
-        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        role="slider"
+        tabIndex={0}
+        aria-label={title || t('blocks.beforeAfter.slider', 'Before and after comparison')}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(sliderPosition)}
       >
         {/* After Image (Background) */}
         <img

@@ -1,7 +1,8 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { Json } from '@/platform/supabase/types';
-import { getTierCommissionRate, type PremiumTier } from '@/services/user';
+import { getTierCommissionRate } from '@/services/user';
+import { normalizeAppPremiumTier } from '@/domain/billing/tiers';
 
 export type TransactionType = 'income' | 'withdrawal' | 'fee' | 'refund' | 'stars';
 export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'cancelled';
@@ -41,15 +42,7 @@ export type PayoutMethod = {
     details?: Record<string, unknown>;
 };
 
-// Dynamic commission rates per ADR 0026
-// Starter: 7%, Pro: 1%, Business: 0%, Identity: N/A
-const TIER_RATES = {
-    starter: 0.07,
-    pro: 0.01,
-    business: 0.00,
-} as const;
-
-const DEFAULT_TAKE_RATE = TIER_RATES.starter;
+const DEFAULT_TAKE_RATE = getTierCommissionRate('starter');
 
 /**
  * Get commission rate for a user based on their tier
@@ -66,8 +59,11 @@ export async function getUserCommissionRate(userId: string): Promise<number> {
             return DEFAULT_TAKE_RATE;
         }
 
-        const tier = (data.premium_tier as PremiumTier) || (data.is_premium ? 'pro' : 'starter');
-        return getTierCommissionRate(tier);
+        const tier = normalizeAppPremiumTier(data.premium_tier);
+        const effectiveTier = tier === 'identity'
+            ? (data.is_premium ? 'pro' : 'starter')
+            : tier;
+        return getTierCommissionRate(effectiveTier);
     } catch {
         return DEFAULT_TAKE_RATE;
     }
@@ -87,13 +83,18 @@ export const fintechService = {
         metadata?: Record<string, unknown>;
     }) {
         try {
+            if (!Number.isFinite(params.amount) || params.amount <= 0) {
+                throw new Error('Amount must be greater than 0');
+            }
+
+            const normalizedAmount = Number(params.amount.toFixed(2));
             // Get dynamic commission rate based on user's tier
             const commissionRate = await getUserCommissionRate(params.userId);
 
             // Calculate amounts per Q2 "Starter Tier" logic
-            const grossAmount = params.amount;
+            const grossAmount = normalizedAmount;
             const feeAmount = Number((grossAmount * commissionRate).toFixed(2));
-            const netAmount = grossAmount - feeAmount;
+            const netAmount = Number((grossAmount - feeAmount).toFixed(2));
 
             const { data: wallet, error: walletError } = await supabase
                 .from('user_wallets')
@@ -208,6 +209,12 @@ export const fintechService = {
 
     async requestPayout(params: { userId: string; amount: number; method: PayoutMethod; notes?: string }) {
         const { userId, amount, method, notes } = params;
+        if (!Number.isFinite(amount) || amount <= 0) {
+            throw new Error('Amount must be greater than 0');
+        }
+        if (!method?.type || !method?.value) {
+            throw new Error('Payout method is invalid');
+        }
 
         const { data: wallet } = await supabase
             .from('user_wallets')

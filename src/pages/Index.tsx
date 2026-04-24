@@ -6,7 +6,6 @@ import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { getAppDomain } from '@/lib/utils/url-helpers';
-import { LoadingSkeleton } from '@/components/dashboard-v2/common/LoadingSkeleton';
 
 // Critical above-fold components - load eagerly
 import { HeroSectionExpert } from '@/components/landing/v2/HeroSectionExpert';
@@ -39,15 +38,17 @@ export default function Index() {
   const { trackSectionView, trackCtaClick } = useLandingAnalytics();
   const { trackMarketingEvent, trackOnce } = useMarketingAnalytics();
 
+  type CtaType = 'create' | 'gallery' | 'pricing' | 'signup' | 'login';
+
   // Method to handle navigation and tracking
-  const handleNav = useCallback((path: string, section: string) => {
-    trackCtaClick(section as 'create' | 'gallery' | 'pricing' | 'signup', path);
+  const handleNav = useCallback((path: string, ctaType: CtaType, location: string) => {
+    trackCtaClick(ctaType, location);
     navigate(path);
   }, [navigate, trackCtaClick]);
 
-  const handleCreatePage = useCallback((location: string) => {
-    trackMarketingEvent({ eventType: 'signup_from_landing', metadata: { location } });
-    handleNav('/auth', location);
+  const handleCreatePage = useCallback((location: string, ctaType: 'signup' | 'pricing' = 'signup') => {
+    trackMarketingEvent({ eventType: 'signup_from_landing', metadata: { location, ctaType } });
+    handleNav('/auth', ctaType, location);
   }, [handleNav, trackMarketingEvent]);
 
   // Analytics observers
@@ -60,10 +61,10 @@ export default function Index() {
     [trackOnce, trackSectionView]
   );
 
-  useSectionObserver('hero', trackMarketingSection);
-  useSectionObserver('features', trackMarketingSection);
-  useSectionObserver('demo', trackMarketingSection);
-  useSectionObserver('pricing', trackMarketingSection);
+  const heroSectionRef = useSectionObserver<HTMLDivElement>('hero', trackMarketingSection);
+  const featuresSectionRef = useSectionObserver<HTMLDivElement>('features', trackMarketingSection);
+  const demoSectionRef = useSectionObserver<HTMLDivElement>('demo', trackMarketingSection);
+  const pricingSectionRef = useSectionObserver<HTMLDivElement>('pricing', trackMarketingSection);
 
   return (
     <>
@@ -91,15 +92,15 @@ export default function Index() {
         </Suspense>
         
         <DynamicIslandNav
-          onLogin={() => handleNav('/auth', 'nav_login')}
+          onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
         />
 
         <main className="flex-grow">
-          <div id="hero">
+          <div id="hero" ref={heroSectionRef}>
             <HeroSectionExpert
               onStart={() => handleCreatePage('hero_cta')}
-              onExamples={() => handleNav('/gallery', 'hero_examples')}
+              onExamples={() => handleNav('/gallery', 'gallery', 'hero_examples')}
             />
           </div>
 
@@ -107,23 +108,25 @@ export default function Index() {
             <LogoTicker />
           </Suspense>
 
-          <Suspense fallback={<div className="h-96" />}>
-            <BentoGridSection />
-          </Suspense>
+          <div ref={featuresSectionRef}>
+            <Suspense fallback={<div className="h-96" />}>
+              <BentoGridSection />
+            </Suspense>
+          </div>
 
-          <div id="demo" className="relative z-0">
+          <div id="demo" ref={demoSectionRef} className="relative z-0">
             <Suspense fallback={<div className="h-96" />}>
               <InteractiveDemo />
             </Suspense>
           </div>
 
-          <div className="relative z-20 bg-transparent">
+          <div ref={pricingSectionRef} className="relative z-20 bg-transparent">
             <Suspense fallback={<div className="h-96" />}>
               <Testimonials />
             </Suspense>
 
             <Suspense fallback={<div className="h-96" />}>
-              <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
+              <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`, 'pricing')} />
             </Suspense>
           </div>
 

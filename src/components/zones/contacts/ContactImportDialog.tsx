@@ -12,6 +12,7 @@ import FileSpreadsheet from 'lucide-react/dist/esm/icons/file-spreadsheet';
 import { toast } from 'sonner';
 import type { ZoneContact } from '@/types/zones';
 import { useAppError } from '@/hooks/useAppError';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface ContactImportDialogProps {
   open: boolean;
@@ -165,6 +166,9 @@ export const ContactImportDialog = memo(function ContactImportDialog({
             <div
               className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-muted/50 transition-colors"
               onClick={() => fileRef.current?.click()}
+              onKeyDown={(event) => handleKeyboardActivation(event, () => fileRef.current?.click())}
+              role="button"
+              tabIndex={0}
             >
               <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
               <p className="text-sm font-medium">{t('zones.contacts.uploadFile', 'Upload CSV or Excel file')}</p>

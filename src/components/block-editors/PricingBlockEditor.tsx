@@ -18,6 +18,7 @@ import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
 import type { PricingBlock, PricingItem, Currency, ServiceType } from '@/types/page';
 import { createMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface PricingBlockEditorProps {
   formData: Partial<PricingBlock>;
@@ -124,7 +125,14 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
             return (
               <Card key={item.id} className={cn('transition-all', expandedItem === item.id && 'ring-2 ring-primary')}>
                 <CardContent className="p-3">
-                  <div className="flex items-center gap-2 cursor-pointer" onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}>
+                  <div
+                    className="flex items-center gap-2 cursor-pointer"
+                    onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}
+                    onKeyDown={(event) => handleKeyboardActivation(event, () => setExpandedItem(expandedItem === item.id ? null : item.id))}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={expandedItem === item.id}
+                  >
                     <GripVertical className="h-4 w-4 text-muted-foreground" />
                     {serviceType && <span>{serviceType.emoji}</span>}
                     {item.featured && <Star className="h-4 w-4 text-primary" />}

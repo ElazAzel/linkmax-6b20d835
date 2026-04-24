@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/user/useAuth';
 import { checkPremiumStatus as checkPremiumStatusService } from '@/services/user';
 import { logger } from '@/lib/utils/logger';
+import { normalizeAppPremiumTier, type AppPremiumTier } from '@/domain/billing/tiers';
 
-export type PremiumTier = 'identity' | 'starter' | 'pro' | 'business';
+export type PremiumTier = AppPremiumTier;
 
 export function usePremiumStatus() {
   const { user } = useAuth();
@@ -32,9 +33,8 @@ export function usePremiumStatus() {
     try {
       const status = await checkPremiumStatusService(user.id);
       setIsPremium(status.isPremium);
-      // Map tier correctly: identity/starter/pro/business
-      const mappedTier = status.tier || (status.isPremium ? 'pro' : 'identity');
-      setTier(mappedTier as PremiumTier);
+      const mappedTier = normalizeAppPremiumTier(status.tier);
+      setTier(mappedTier === 'identity' && status.isPremium ? 'pro' : mappedTier);
       setInTrial(status.inTrial);
       setTrialEndsAt(status.trialEndsAt);
     } catch (error) {

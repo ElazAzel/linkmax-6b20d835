@@ -1,5 +1,16 @@
 # Changelog
 
+## [Phase 45] - 2026-04-18
+
+### Documentation Governance & Freshness Audit
+- **Freshness Automation**: Added reproducible script `scripts/audit-docs-freshness.mjs` to detect markdown files older than a configurable window (default 60 days).
+- **NPM Command**: Added `docs:audit:freshness` script to standardize documentation freshness checks in release workflows.
+- **Full Docs Audit Report**: Added `docs/audits/DOCS_FRESHNESS_AUDIT_2026_04_18.md` with methodology, metrics, and freshness distribution snapshot.
+- **Index Alignment**: Updated `docs/README.md` links to point to latest full audit and added direct link to the freshness report.
+- **Snapshot Consistency**: Fixed stale/inconsistent references in `PLATFORM_SNAPSHOT.md` (phase alignment and invalid local `file:///` link).
+
+---
+
 ## [Phase 44] - 2026-04-17
 
 ### CRM Depth: Multiple Pipelines & Stage Management

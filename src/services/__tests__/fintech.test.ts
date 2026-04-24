@@ -153,6 +153,18 @@ describe('fintechService', () => {
             const result = await fintechService.recordPendingIncome(mockParams);
             expect(result).toBeNull();
         });
+
+        it('should throw if amount is zero or negative', async () => {
+            await expect(fintechService.recordPendingIncome({
+                ...mockParams,
+                amount: 0
+            })).rejects.toThrow('Amount must be greater than 0');
+
+            await expect(fintechService.recordPendingIncome({
+                ...mockParams,
+                amount: -10
+            })).rejects.toThrow('Amount must be greater than 0');
+        });
     });
 
     describe('getWalletOverview error handling', () => {
@@ -207,6 +219,20 @@ describe('fintechService', () => {
                  amount: 500,
                  method: { type: 'card', value: '1234' }
              })).rejects.toThrow('Insufficient funds');
+        });
+
+        it('should throw for invalid payout amount or method', async () => {
+            await expect(fintechService.requestPayout({
+                userId: 'u1',
+                amount: 0,
+                method: { type: 'card', value: '1234' }
+            })).rejects.toThrow('Amount must be greater than 0');
+
+            await expect(fintechService.requestPayout({
+                userId: 'u1',
+                amount: 10,
+                method: { type: '', value: '' }
+            })).rejects.toThrow('Payout method is invalid');
         });
     });
 });

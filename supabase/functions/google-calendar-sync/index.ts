@@ -12,6 +12,11 @@ const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_CALENDAR_API = "https://www.googleapis.com/calendar/v3";
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
+const ALLOWED_REDIRECTS = [
+    { protocol: "https:", host: "lnkmx.my" },
+    { protocol: "http:", host: "localhost:8080" },
+    { protocol: "http:", host: "127.0.0.1:8080" },
+];
 
 serve(async (req) => {
     if (req.method === "OPTIONS") {
@@ -34,13 +39,18 @@ serve(async (req) => {
             Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
         );
 
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (authError || !user) {
-            throw new Error("Unauthorized");
+        // Auth is optional: user-initiated actions need it,
+        // server-to-server calls (check_availability, push_booking) use service role.
+        const authHeader = req.headers.get("Authorization");
+        let user: { id: string } | null = null;
+        if (authHeader && !authHeader.includes(Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "___")) {
+            const { data } = await supabaseClient.auth.getUser();
+            user = data.user ?? null;
         }
 
         const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
         const GOOGLE_CLIENT_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET");
+        const GCAL_STATE_SECRET = Deno.env.get("GCAL_STATE_SECRET");
 
         if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
             return new Response(JSON.stringify({ error: "Google Calendar not configured" }), {
@@ -60,12 +70,28 @@ serve(async (req) => {
             throw new Error("Invalid JSON payload");
         }
 
-        console.log(`[GCAL] Action: ${action}`, { user_id: user.id });
+        const SERVER_ACTIONS = new Set(["check_availability", "push_booking", "create_event"]);
+        if (!user && !SERVER_ACTIONS.has(action)) {
+            return new Response(JSON.stringify({ error: "Unauthorized" }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 401,
+            });
+        }
+        console.log(`[GCAL] Action: ${action}`, { user_id: user?.id ?? "service" });
 
         // ─── Generate Google OAuth URL ───
         if (action === "get_auth_url") {
             const { redirect_url } = payload;
             if (!redirect_url) throw new Error("Missing redirect_url");
+            if (!GCAL_STATE_SECRET) {
+                return new Response(JSON.stringify({ error: "Google Calendar state secret not configured" }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    status: 503,
+                });
+            }
+            if (!isAllowedAppRedirect(redirect_url)) {
+                throw new Error("Invalid redirect_url");
+            }
 
             const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
             const callbackUrl = `${supabaseUrl}/functions/v1/gcal-callback`;
@@ -77,7 +103,7 @@ serve(async (req) => {
             const encoder = new TextEncoder();
             const key = await crypto.subtle.importKey(
                 "raw",
-                encoder.encode(GOOGLE_CLIENT_SECRET),
+                encoder.encode(GCAL_STATE_SECRET),
                 { name: "HMAC", hash: "SHA-256" },
                 false,
                 ["sign"]
@@ -184,6 +210,15 @@ serve(async (req) => {
                 p_provider: "google_calendar",
             });
 
+            await supabaseAdmin
+                .from("user_integrations_status")
+                .upsert({
+                    user_id: user.id,
+                    provider: "google_calendar",
+                    is_connected: false,
+                    updated_at: new Date().toISOString(),
+                }, { onConflict: "user_id,provider" });
+
             // Disable gcal_sync_enabled on user_profiles
             await supabaseAdmin
                 .from("user_profiles")
@@ -198,7 +233,7 @@ serve(async (req) => {
         // ─── Check availability (pull busy slots) ───
         if (action === "check_availability") {
             const { time_min, time_max, staff_id, owner_id } = payload;
-            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user.id };
+            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user?.id };
             const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
@@ -245,7 +280,7 @@ serve(async (req) => {
         // ─── Create event in Google Calendar ───
         if (action === "create_event") {
             const { summary, description, start, end, location, timezone, staff_id, owner_id } = payload;
-            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user.id };
+            const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user?.id };
             const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
@@ -373,6 +408,17 @@ serve(async (req) => {
         });
     }
 });
+
+function isAllowedAppRedirect(redirectUrl: string): boolean {
+    try {
+        const url = new URL(redirectUrl);
+        return ALLOWED_REDIRECTS.some(
+            (allowed) => url.protocol === allowed.protocol && url.host === allowed.host
+        );
+    } catch {
+        return false;
+    }
+}
 
 /**
  * Get a valid access token, refreshing if needed.

@@ -36,6 +36,7 @@ import { logger } from '@/lib/utils/logger';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
 import { useAdminTranslations, flattenObject, setNestedValue } from '@/hooks/admin/useAdminTranslations';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 
 // DB translations are used primarily via useAdminTranslations hook
@@ -482,6 +483,10 @@ export default function AdminTranslations() {
                         ${isSelected ? 'border-primary bg-primary/10 ring-2 ring-primary/50' : 'border-border hover:border-primary/50'}
                       `}
                       onClick={() => setSelectedLang(langCode)}
+                      onKeyDown={(event) => handleKeyboardActivation(event, () => setSelectedLang(langCode))}
+                      role="button"
+                      tabIndex={0}
+                      aria-pressed={isSelected}
                     >
                       <span className="text-lg">{lang.flag}</span>
                       <div>
@@ -807,6 +812,12 @@ export default function AdminTranslations() {
                                       setEditingKey(key);
                                       setEditValue(value);
                                     }}
+                                    onKeyDown={(event) => handleKeyboardActivation(event, () => {
+                                      setEditingKey(key);
+                                      setEditValue(value);
+                                    })}
+                                    role="button"
+                                    tabIndex={0}
                                   >
                                     {value || <span className="text-muted-foreground italic">Нажмите чтобы добавить...</span>}
                                   </div>

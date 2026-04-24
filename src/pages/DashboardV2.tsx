@@ -20,10 +20,9 @@ import { useEditorStore } from '@/store/useEditorStore';
 import type { EditorContext } from '@/lib/editor/editor-commands';
 
 // Zone context
-import { ZoneProvider, useZoneContext } from '@/contexts/ZoneContext';
+import { ZoneProvider } from '@/contexts/ZoneContext';
 
 // SEO
-import { supabase } from '@/platform/supabase/client';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
@@ -94,7 +93,6 @@ const LoadingState = () => (
 // 2026 Living Canvas Background
 const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
-import { storage } from '@/lib/storage';
 import { prefetchRouteChunks } from '@/lib/routing/route-prefetch';
 
 // Lazy load heavy components for better bundle splitting
@@ -103,12 +101,9 @@ const TemplateGallery = lazy(() => import('@/components/editor/TemplateGallery')
 const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarketplace').then(m => ({ default: m.TemplateMarketplace })));
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
 const AIGenerator = lazy(() => import('@/components/editor/AIGenerator').then(m => ({ default: m.AIGenerator })));
-/** @deprecated Use AIBuilderWizard instead */
-const QuickStartFlow = lazy(() => import('@/components/onboarding/QuickStartFlow').then(m => ({ default: m.QuickStartFlow })));
 const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
 const InstallPromptDialog = lazy(() => import('@/components/pwa/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
-const ShareAfterPublishDialog = lazy(() => import('@/components/referral/ShareAfterPublishDialog').then(m => ({ default: m.ShareAfterPublishDialog })));
 const TokensPanel = lazy(() => import('@/components/tokens/TokensPanel').then(m => ({ default: m.TokensPanel })));
 const FriendsPanel = lazy(() => import('@/components/friends/FriendsPanel').then(m => ({ default: m.FriendsPanel })));
 const MyTemplatesPanel = lazy(() => import('@/components/templates/MyTemplatesPanel').then(m => ({ default: m.MyTemplatesPanel })));
@@ -119,6 +114,9 @@ const CreatePageDialogLazy = lazy(() => import('@/components/dashboard-v2/dialog
 const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.PageVersionsDialog })));
 
 import type { Niche } from '@/lib/niches';
+import type { Block, PageData, PageTheme } from '@/types/page';
+
+type PageSeo = PageData['seo'];
 
 type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'developers' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
 
@@ -135,7 +133,7 @@ function DashboardV2Inner() {
   const pageVersionsRef = useRef<ReturnType<typeof usePageVersions> | null>(null);
 
   // Callback for saving version on each publish
-  const handlePublishVersion = useCallback((pageData: import('@/types/page').PageData) => {
+  const handlePublishVersion = useCallback((pageData: PageData) => {
     if (pageData?.id && pageVersionsRef.current) {
       pageVersionsRef.current.saveVersion(
         pageData.id,
@@ -153,7 +151,7 @@ function DashboardV2Inner() {
   const editorHistory = useEditorHistory(
     [],
     {
-      onStateChange: (blocks) => {
+      onStateChange: (_blocks) => {
         // Will be wired after dashboard is available
       },
     }
@@ -163,7 +161,7 @@ function DashboardV2Inner() {
   // Core state - with onPublish callback for automatic versioning + editorHistory
   const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
   const multiPage = useMultiPage();
-  const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
+  const { limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
 
   // P2: Editor store (must be before early returns)
@@ -200,17 +198,23 @@ function DashboardV2Inner() {
   const [showMyTemplates, setShowMyTemplates] = useState(false);
   const [showTokens, setShowTokens] = useState(false);
   const [showMarketplace, setShowMarketplace] = useState(false);
-  const [showQuickStart, setShowQuickStart] = useState(false);
   const [showCreatePage, setShowCreatePage] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
 
   // Page versions
-  const handleRestoreVersion = useCallback((blocks: any[], theme?: any, seo?: any) => {
+  const handleRestoreVersion = useCallback((blocks: Block[], theme?: PageTheme, seo?: Partial<PageSeo>) => {
+    const restoredSeo: PageSeo | undefined = seo ? {
+      title: dashboard.pageData?.seo.title ?? '',
+      description: dashboard.pageData?.seo.description ?? '',
+      keywords: dashboard.pageData?.seo.keywords ?? [],
+      ...seo,
+    } : dashboard.pageData?.seo;
+
     dashboard.updatePageDataPartial({
       blocks,
       theme: theme || dashboard.pageData?.theme,
-      seo: seo ? { ...dashboard.pageData?.seo, ...seo } : dashboard.pageData?.seo,
+      seo: restoredSeo,
     });
     setShowVersions(false);
   }, [dashboard]);
@@ -272,22 +276,6 @@ function DashboardV2Inner() {
       toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to create page'));
     }
     return { success: result.success, error: result.error };
-  }, [multiPage, t]);
-
-  const handleUpdateSlug = useCallback(async (pageId: string, newSlug: string) => {
-    const result = await multiPage.updatePageSlug(pageId, newSlug);
-    if (!result.success) {
-      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to update slug'));
-    }
-    return result;
-  }, [multiPage, t]);
-
-  const handleUpdateCustomDomain = useCallback(async (pageId: string, newDomain: string | null) => {
-    const result = await multiPage.updatePageCustomDomain(pageId, newDomain);
-    if (!result.success) {
-      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to update custom domain'));
-    }
-    return result;
   }, [multiPage, t]);
 
   // Handle edit page (navigate to editor)
@@ -564,7 +552,7 @@ function DashboardV2Inner() {
                       toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
                     }
                   }}
-                  onUpgradePage={(id) => {
+                  onUpgradePage={(_id) => {
                     navigate('/pricing');
                   }}
                   onUpgradePlan={() => navigate('/pricing')}
@@ -589,7 +577,7 @@ function DashboardV2Inner() {
                   slug={dashboard.pageData?.slug || ''}
                   blocks={dashboard.pageData?.blocks || []}
                   isPremium={dashboard.isPremium}
-                  onApplyInsight={(action) => {
+                  onApplyInsight={(_action) => {
                     handleTabChange('home');
                   }}
                 />
@@ -662,7 +650,7 @@ function DashboardV2Inner() {
                   // Page settings props
                   pageTitle={multiPage.activePage?.title}
                   pageSlug={multiPage.activePage?.slug}
-                  customDomain={(multiPage.activePage as any)?.custom_domain}
+                  customDomain={multiPage.activePage?.custom_domain ?? undefined}
                   isPaid={multiPage.activePage?.isPaid}
                   isPrimaryPaid={multiPage.activePage?.isPrimaryPaid}
                   seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}
@@ -683,14 +671,16 @@ function DashboardV2Inner() {
                     return result;
                   }}
                   onUpdateSeo={(seo) => {
+                    const mergedSeo = { ...dashboard.pageData?.seo, ...seo };
+                    const nextSeo: PageSeo = {
+                      title: mergedSeo.title ?? '',
+                      description: mergedSeo.description ?? '',
+                      keywords: mergedSeo.keywords ?? [],
+                      image: mergedSeo.image,
+                    };
+
                     dashboard.updatePageDataPartial({
-                      seo: { 
-                        title: '',
-                        description: '',
-                        keywords: [],
-                        ...dashboard.pageData?.seo, 
-                        ...seo 
-                      } as any, // Cast to any because of required fields in SEO type vs optional in partial
+                      seo: nextSeo,
                     });
                   }}
                   onUpdateBranding={(branding) => {
@@ -859,6 +849,9 @@ function DashboardV2Inner() {
               onClose={dashboard.onboardingState.handleAIBuilderClose}
               onComplete={dashboard.onboardingState.handleAIBuilderComplete}
               isOnboarding={true}
+              initialNiche={dashboard.onboardingState.signupContext.initialNiche}
+              pageId={dashboard.pageData.id}
+              signupContext={dashboard.onboardingState.signupContext}
             />
           )}
 
@@ -923,7 +916,8 @@ function DashboardV2Inner() {
               onClose={() => setShowTheme(false)}
               currentTheme={dashboard.pageData?.theme || {}}
               onThemeChange={(theme) => {
-                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } as any });
+                if (!dashboard.pageData) return;
+                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData.theme, ...theme } });
               }}
               isPremium={dashboard.isPremium}
               onUpgrade={() => navigate('/pricing')}

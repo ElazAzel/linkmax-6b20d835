@@ -36,6 +36,7 @@ import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { compressImage } from '@/lib/utils/image-compression';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { toast } from 'sonner';
 import { ImageCropper } from '@/components/form-fields/ImageCropper';
 import { RichTextEditor } from '@/components/form-fields/RichTextEditor';
@@ -385,6 +386,9 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
       <div
         className={`relative w-full ${getCoverHeight()} overflow-hidden group/cover ${!block.coverImage ? 'bg-muted border-2 border-dashed border-border cursor-pointer' : ''}`}
         onClick={!block.coverImage ? handleCoverClick : undefined}
+        onKeyDown={!block.coverImage ? (event) => handleKeyboardActivation(event, handleCoverClick) : undefined}
+        role="button"
+        tabIndex={!block.coverImage ? 0 : undefined}
         title={!block.coverImage ? t('profile.clickToChangeCover', 'Click to add cover') : undefined}
       >
         {block.coverImage ? (
@@ -511,6 +515,9 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
           <div
             className={`${getShadowClass()} relative cursor-pointer group/avatar rounded-full`}
             onClick={handleAvatarClick}
+            onKeyDown={(event) => handleKeyboardActivation(event, handleAvatarClick)}
+            role="button"
+            tabIndex={0}
             title={t('profile.clickToChangeAvatar', 'Click to change avatar')}
           >
             <Avatar className={`${getAvatarSize()} ring-4 ring-primary ring-offset-4 ring-offset-background`}>

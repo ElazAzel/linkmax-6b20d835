@@ -2,8 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { useToast } from '@/hooks/ui/use-toast';
 import { useTranslation } from 'react-i18next';
+import { normalizeDatabasePremiumTier, type DatabasePremiumTier } from '@/domain/billing/tiers';
 
-export type AdminPremiumTier = 'free' | 'pro' | 'business';
+export type AdminPremiumTier = DatabasePremiumTier;
 
 export interface AdminUserData {
   id: string;
@@ -11,7 +12,7 @@ export interface AdminUserData {
   username: string | null;
   display_name: string | null;
   is_premium: boolean;
-  premium_tier: string | null;
+  premium_tier: AdminPremiumTier | null;
   premium_expires_at: string | null;
   trial_ends_at: string | null;
   created_at: string;
@@ -30,6 +31,7 @@ async function fetchUsers(): Promise<AdminUserData[]> {
 
   return (data || []).map(u => ({
     ...u,
+    premium_tier: normalizeDatabasePremiumTier(u.premium_tier),
     email: 'hidden@example.com'
   })) as AdminUserData[];
 }
@@ -51,12 +53,12 @@ export function useSetUserTier() {
   return useMutation({
     mutationFn: async ({ userId, tier }: { userId: string; tier: AdminPremiumTier }) => {
       const updates: Record<string, unknown> = {
-        premium_tier: tier === 'free' ? null : tier,
-        is_premium: tier !== 'free',
+        premium_tier: tier,
+        is_premium: tier === 'pro' || tier === 'business',
       };
 
-      // If downgrading to free, clear premium expiry
-      if (tier === 'free') {
+      // Free and Starter are not paid subscriptions, so expiry/trial state should not linger.
+      if (tier === 'free' || tier === 'starter') {
         updates.premium_expires_at = null;
         updates.trial_ends_at = null;
       }
@@ -70,7 +72,12 @@ export function useSetUserTier() {
       return tier;
     },
     onSuccess: (tier) => {
-      const tierNames: Record<string, string> = { free: 'Free', pro: 'Pro', business: 'Business' };
+      const tierNames: Record<AdminPremiumTier, string> = {
+        free: 'Free',
+        starter: 'Starter',
+        pro: 'Pro',
+        business: 'Business',
+      };
       toast({
         title: t('admin.statusUpdated') || 'Статус обновлён',
         description: `Тариф: ${tierNames[tier]}`,
