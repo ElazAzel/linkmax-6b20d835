@@ -406,7 +406,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           </div>
         )}
 
-        {/* Step 3: Simplified Description */}
+        {/* Step 3: Description + Template Preview + Optional Details */}
         {step === 'description' && (
           <div className="p-6 pt-4 animate-fade-in flex flex-col">
             <div className="flex items-center gap-3 mb-6 shrink-0">
@@ -421,7 +421,30 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               </div>
             </div>
 
-            <div className="space-y-6">
+            <ScrollArea className="max-h-[60vh]">
+            <div className="space-y-4 pr-2">
+              {/* Template Preview Card */}
+              {selectedTemplate && (
+                <div className="p-4 rounded-2xl border border-border/50 bg-muted/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <LayoutTemplate className="h-4 w-4 text-primary" />
+                    <p className="text-sm font-bold">
+                      {t('aiBuilder.previewTitle', 'Будущая структура страницы')}
+                    </p>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    {selectedTemplate.name} · {Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks.length : 0} {t('aiBuilder.blocks', 'блоков')}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {Array.isArray(selectedTemplate.blocks) && selectedTemplate.blocks.slice(0, 8).map((b: any, i: number) => (
+                      <span key={i} className="text-[10px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                        {b.type}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-4 bg-muted/30 p-5 rounded-[32px] border border-border/50 shadow-inner">
                 <div className="space-y-2">
                   <Label className="text-base font-bold ml-1">{t('aiBuilder.name')} <span className="text-destructive">*</span></Label>
@@ -440,9 +463,42 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                     value={userInfo.bio}
                     onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
                     placeholder={t('aiBuilder.descStep.placeholder')}
-                    className="rounded-2xl min-h-[120px] bg-background/80 border-border/30 focus:border-primary/50 text-base resize-none leading-relaxed"
+                    className="rounded-2xl min-h-[100px] bg-background/80 border-border/30 focus:border-primary/50 text-base resize-none leading-relaxed"
                   />
                 </div>
+
+                {/* Optional Details (Collapsible) */}
+                <Collapsible open={showMoreDetails} onOpenChange={setShowMoreDetails}>
+                  <CollapsibleTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                    >
+                      <ChevronDown className={cn("h-4 w-4 transition-transform", showMoreDetails && "rotate-180")} />
+                      {t('aiBuilder.moreDetailsToggle', 'Добавить детали (необязательно)')}
+                    </button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="space-y-4 pt-3">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold ml-1">{t('aiBuilder.servicesLabel', 'Услуги (по строке)')}</Label>
+                      <Textarea
+                        value={userInfo.services}
+                        onChange={(e) => setUserInfo(p => ({ ...p, services: e.target.value }))}
+                        placeholder={t('aiBuilder.servicesPlaceholder', 'Маникюр - 5000 тг\nПедикюр - 7000 тг')}
+                        className="rounded-2xl min-h-[80px] bg-background/80 border-border/30 text-sm resize-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold ml-1">{t('aiBuilder.contactsLabel', 'Контакты')}</Label>
+                      <Input
+                        value={userInfo.contacts}
+                        onChange={(e) => setUserInfo(p => ({ ...p, contacts: e.target.value }))}
+                        placeholder={t('aiBuilder.contactsPlaceholder', 'Instagram @nick, t.me/user, +77001234567')}
+                        className="h-12 rounded-2xl bg-background/80 border-border/30 text-sm"
+                      />
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
 
               <div className="pt-2">
@@ -460,35 +516,34 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 </p>
               </div>
             </div>
+            </ScrollArea>
           </div>
         )}
 
         {/* Step 4: Generating */}
         {step === 'generating' && (
           <div className="p-6 py-12 text-center animate-fade-in flex flex-col items-center">
-            {/* Animation Container */}
             <div className="relative w-full max-w-sm h-48 mx-auto mb-8 bg-muted/30 rounded-2xl border-2 border-dashed border-primary/20 overflow-hidden flex items-end justify-center pb-4">
-              {/* Magic Wand hovering */}
               <div className="absolute top-4 inset-x-0 flex justify-center animate-bounce">
-                <Wand2 className="h-8 w-8 text-primary shadow-primary/50 drop-shadow-lg" />
+                <Wand2 className="h-8 w-8 text-primary drop-shadow-lg" />
               </div>
-
-              {/* Simulated blocks building up */}
               <div className="flex flex-col-reverse items-center gap-3 w-full px-8">
-                <div className="h-8 w-full bg-primary/20 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-300 flex items-center justify-center text-xs text-primary/70 overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.socials ? t('aiBuilder.gen.socials', 'Подключение соцсетей...') : t('aiBuilder.gen.footer', 'Сборка футера...')}
+                <div className="h-8 w-full bg-primary/20 rounded-lg flex items-center justify-center text-xs text-primary/70 px-2 whitespace-nowrap overflow-hidden">
+                  {t('aiBuilder.gen.footer', 'Сборка футера...')}
                 </div>
-                <div className="h-12 w-full bg-primary/40 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-200 flex items-center justify-center text-xs text-primary/80 font-medium overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.services ? `${t('aiBuilder.gen.services', 'Парсинг услуг:')} ${userInfo.services.slice(0, 15)}...` : t('aiBuilder.gen.blocks', 'Настройка блоков...')}
+                <div className="h-12 w-full bg-primary/40 rounded-lg flex items-center justify-center text-xs text-primary-foreground font-medium px-2 whitespace-nowrap overflow-hidden">
+                  {t('aiBuilder.gen.blocks', 'Настройка блоков...')}
                 </div>
-                <div className="h-16 w-full bg-primary/60 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-100 flex items-center justify-center text-sm text-primary-foreground font-bold shadow-md overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.name ? userInfo.name : t('aiBuilder.gen.profile', 'Гидратация профиля...')}
+                <div className="h-16 w-full bg-primary/60 rounded-lg flex items-center justify-center text-sm text-primary-foreground font-bold shadow-md px-2 whitespace-nowrap overflow-hidden">
+                  {userInfo.name || t('aiBuilder.gen.profile', 'Гидратация профиля...')}
                 </div>
               </div>
             </div>
 
             <h3 className="text-2xl font-black mb-3">
-              {t('aiBuilder.generatingTitle', 'AI собирает вашу страницу')}
+              {genPhase === 'template' && t('aiBuilder.phaseTemplate', 'Подбираем шаблон…')}
+              {genPhase === 'ai' && t('aiBuilder.phaseAI', 'Спрашиваем у AI…')}
+              {genPhase === 'layout' && t('aiBuilder.phaseLayout', 'Раскладываем блоки…')}
             </h3>
             <p className="text-muted-foreground mb-6">
               {t('aiBuilder.generatingDesc', 'Подбираем шаблон, заполняем профиль и раскладываем блоки')}
@@ -500,10 +555,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           </div>
         )}
 
-        {/* Step 5: Complete (Gamified Certificate) */}
+        {/* Step 5: Complete */}
         {step === 'complete' && (
           <div className="p-6 py-12 text-center relative overflow-hidden flex flex-col items-center justify-center min-h-[400px]">
-            {/* Background decoration */}
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-emerald-500/10 pointer-events-none" />
 
             <div className="relative z-10 animate-in zoom-in duration-700 max-w-sm w-full text-center">
@@ -514,8 +568,13 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               <h2 className="text-2xl font-black mb-2">
                 {t('aiBuilder.complete.title', '✨ Страница готова!')}
               </h2>
-              <p className="text-muted-foreground mb-6">
+              <p className="text-muted-foreground mb-2">
                 {t('aiBuilder.complete.desc', 'Опубликуйте её, чтобы получить ссылку и первых посетителей')}
+              </p>
+              <p className="text-xs text-primary font-semibold mb-6">
+                {usedAI
+                  ? t('aiBuilder.aiSucceeded', '✓ AI сгенерировал контент')
+                  : t('aiBuilder.fallbackUsed', '✓ Шаблон применён')}
               </p>
 
               <div className="space-y-3">
@@ -552,6 +611,17 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 >
                   {t('aiBuilder.complete.editFirst', 'Сначала отредактировать')}
                 </Button>
+                {retryCount < MAX_REGENERATE_RETRIES && (
+                  <Button
+                    variant="outline"
+                    className="w-full h-11 rounded-xl text-sm"
+                    onClick={handleRegenerate}
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    {t('aiBuilder.regenerate', 'Перегенерировать')}
+                    {retryCount > 0 && ` (${MAX_REGENERATE_RETRIES - retryCount})`}
+                  </Button>
+                )}
               </div>
             </div>
           </div>
