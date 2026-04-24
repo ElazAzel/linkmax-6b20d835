@@ -142,8 +142,8 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
   const handleSelectNiche = async (niche: Niche) => {
     setSelectedNiche(niche);
-    
-    // Automatically pick the first template for the niche to reduce friction
+
+    // Pick the first template for the niche (all 16 niches now have templates)
     setLoadingTemplates(true);
     try {
       const { data, error } = await supabase
@@ -158,7 +158,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
       if (data && data.length > 0) {
         setSelectedTemplate(data[0]);
       } else {
-        // Fallback for niches without templates
+        // Should not happen now (all niches seeded), but keep a minimal safe fallback
         setSelectedTemplate({
           id: 'basic-niche-template',
           name: t(`niches.${niche}`, niche),
@@ -166,7 +166,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           category: niche,
           blocks: [
             { type: 'profile' },
-            { type: 'catalog' },
+            { type: 'text', content: 'Расскажите о себе' },
             { type: 'messenger' },
             { type: 'socials' }
           ],
@@ -192,55 +192,67 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   };
 
   const handleBackToTemplate = () => {
-    setStep('niche'); // Since we skip template selection, back from description goes to niche
+    setStep('niche');
   };
 
-  const handleGenerate = useCallback(async () => {
-    if (!selectedNiche || !selectedTemplate) {
-      toast.error(t('aiBuilder.selectTemplate', 'Выберите шаблон'));
-      return;
-    }
-
-    if (!canUseAIPageGeneration()) {
-      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
-      return;
-    }
+  const runGeneration = useCallback(async () => {
+    if (!selectedNiche || !selectedTemplate) return;
 
     setStep('generating');
+    setGenPhase('template');
 
     let finalBlocks: Block[] = [];
     let aiProfile: { name?: string; bio?: string } | null = null;
+    let aiSucceeded = false;
 
-    // 1) Try real AI generation via niche-builder edge function
+    // 1) Try real AI generation via niche-builder edge function with timeout
     try {
+      setGenPhase('ai');
       const details = [
         userInfo.bio,
         userInfo.services ? `Услуги: ${userInfo.services}` : '',
         userInfo.contacts ? `Контакты: ${userInfo.contacts}` : '',
         userInfo.socials ? `Соцсети: ${userInfo.socials}` : '',
-        selectedGoal ? `Цель: ${t(`aiBuilder.goals.${selectedGoal}`, selectedGoal)}` : '',
       ].filter(Boolean).join('\n');
 
-      const { data, error } = await supabase.functions.invoke('ai-content-generator', {
+      const aiCall = supabase.functions.invoke('ai-content-generator', {
         body: {
           type: 'niche-builder',
           input: {
             niche: selectedNiche,
             name: userInfo.name,
             details,
+            goal: selectedGoal || undefined,
           },
         },
       });
+      const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
+        setTimeout(() => resolve({ data: null, error: new Error('ai-timeout') }), AI_TIMEOUT_MS)
+      );
 
+      const { data, error } = await Promise.race([aiCall, timeoutPromise]) as any;
       if (error) throw error;
-      const aiBlocks = Array.isArray(data?.blocks) ? data.blocks : null;
+
+      // Edge function wraps response in `result`: { result: { profile, blocks } }
+      const payload = data?.result || data;
+      const aiBlocks = Array.isArray(payload?.blocks) ? payload.blocks : null;
+
       if (aiBlocks && aiBlocks.length > 0) {
-        // Normalize AI blocks through createBaseBlock to ensure ids/positions
-        finalBlocks = aiBlocks.map((b: any, idx: number) => {
-          const base = createBaseBlock(b.type || 'text');
-          return { ...base, ...b, position: idx } as Block;
-        });
-        aiProfile = data?.profile || null;
+        setGenPhase('layout');
+        // Filter unknown block types and normalize through factory
+        finalBlocks = aiBlocks
+          .filter((b: any) => b && typeof b.type === 'string' && KNOWN_BLOCK_TYPES.has(b.type))
+          .map((b: any, idx: number) => {
+            try {
+              const base = createBaseBlock(b.type);
+              return { ...base, ...b, position: idx } as Block;
+            } catch {
+              return null;
+            }
+          })
+          .filter(Boolean) as Block[];
+        aiProfile = payload?.profile || null;
+        if (finalBlocks.length > 0) aiSucceeded = true;
       }
     } catch (err) {
       console.warn('niche-builder failed, falling back to template:', err);
@@ -248,6 +260,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
     // 2) Fallback to deterministic template if AI failed or returned empty
     if (finalBlocks.length === 0) {
+      setGenPhase('layout');
       finalBlocks = generateBlocksFromTemplate(
         Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
         { ...userInfo, bio: userInfo.bio }
@@ -262,8 +275,30 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     }
 
     setGeneratedBlocks(finalBlocks);
+    setUsedAI(aiSucceeded);
     setStep('complete');
-  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, canUseAIPageGeneration, incrementAIPageGeneration, t]);
+  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, incrementAIPageGeneration]);
+
+  const handleGenerate = useCallback(async () => {
+    if (!selectedNiche || !selectedTemplate) {
+      toast.error(t('aiBuilder.selectTemplate', 'Выберите шаблон'));
+      return;
+    }
+    if (!canUseAIPageGeneration()) {
+      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
+      return;
+    }
+    await runGeneration();
+  }, [selectedNiche, selectedTemplate, canUseAIPageGeneration, runGeneration, t]);
+
+  const handleRegenerate = useCallback(async () => {
+    if (retryCount >= MAX_REGENERATE_RETRIES) {
+      toast.info(t('aiBuilder.regenerateLimit', 'Достигнут лимит перегенераций'));
+      return;
+    }
+    setRetryCount(c => c + 1);
+    await runGeneration();
+  }, [retryCount, runGeneration, t]);
 
   const handleSkip = () => {
     storage.set('onboarding_completed', 'true');
