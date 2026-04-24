@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
@@ -29,6 +30,8 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
@@ -38,6 +41,16 @@ import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { storage } from '@/lib/storage';
+
+// Whitelist of block types supported by the editor (must match block-factory.ts)
+const KNOWN_BLOCK_TYPES = new Set([
+  'profile', 'link', 'button', 'text', 'image', 'socials', 'product', 'video',
+  'carousel', 'messenger', 'form', 'testimonial', 'separator', 'catalog',
+  'faq', 'countdown', 'pricing', 'booking',
+]);
+
+const AI_TIMEOUT_MS = 25000;
+const MAX_REGENERATE_RETRIES = 2;
 
 interface AIBuilderWizardProps {
   open: boolean;
