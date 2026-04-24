@@ -1,77 +1,74 @@
 
 
-## Аудит «Конструктора страницы» для новых пользователей
+## Page Builder — следующий раунд улучшений
 
-### Что я нашёл (главные проблемы)
+### Что не докручено сейчас
 
-**1. В БД нет ни одного публичного шаблона** (`SELECT … FROM templates WHERE is_public=true` → 0 строк).
-Из-за этого `AIBuilderWizard` на шаге выбора ниши всегда падает в хардкоженный fallback из 4 блоков (`profile + catalog + messenger + socials`) — независимо от того, выбрал пользователь «Барбер», «Эксперт» или «Фитнес». Получается «один и тот же скелет» для всех ниш.
+**1. Шаблонов меньше, чем ниш.** В БД 6 шаблонов (`expert, beauty, fitness, business, tech, services`), а в `NICHES` — 16 значений. 10 ниш (`education, health, art, food, music, fashion, travel, realestate, events, other`) не имеют шаблона и уходят в захардкоженный fallback из 4 блоков (`profile/catalog/messenger/socials`). Тип `catalog` в манифесте отсутствует — fallback фактически даёт сломанный «голый» скелет.
 
-**2. Дублирующиеся визарды и ветви онбординга.** В кодовой базе сосуществуют четыре конкурирующих компонента:
-- `AIBuilderWizard.tsx` — реально показывается новым юзерам (5 шагов: goal → niche → description → generating → complete)
-- `OnboardingWizard.tsx` — мёртвый код, не подключён нигде
-- `QuickStartFlow.tsx` — мёртвый код
-- `NicheOnboarding.tsx` — мёртвый код
+**2. AI-промпт `niche-builder` не знает про новые ниши.** В `nichePrompts` Edge-функции прописаны только `barber/photographer/psychologist/fitness/musician/designer/teacher/shop/marketer/beauty/chef`. Для `expert, business, tech, services, education, health, art, food, fashion, travel, realestate, events, other` всегда подставляется generic «специалиста с услугами и контактами». AI генерирует обезличенно.
 
-Все они пишут в **разные** localStorage-ключи (`linkmax_onboarding_completed`, `niche_onboarding_completed`, `ai_builder_used`, `onboarding_completed`) — отсюда плавающее поведение «у меня визард открылся снова» / «не открылся вообще».
+**3. AI возвращает блоки с типами, которых у нас нет.** Промпт обещает `link, product, testimonial, video, carousel`, а в новых шаблонах используются `pricing, gallery, booking, testimonials, form, links`. Это рассинхрон: AI-сборка и шаблон-сборка дают разные структуры → пользователь видит «не то, что в превью».
 
-**3. Шаг «generating» — фейк.** В `AIBuilderWizard.handleGenerate` нет вызова AI:
-```ts
-await new Promise(resolve => setTimeout(resolve, 1500)); // искусственная задержка
-```
-Контент собирается чисто детерминистическим `generateBlocksFromTemplate` (regex по `services`/`socials`/`contacts`). При этом UI на шаге `description` спрашивает только `name` + `bio` — поля `services`, `socials`, `contacts`, `mediaLinks` в `userInfo` остаются пустыми, поэтому почти все эвристики гидратации не срабатывают. На выходе — голый шаблон с подставленным именем.
+**4. Шаг `description` спрашивает только имя+bio.** План #4 из прошлого раунда (опциональные `services`/`contacts`) не был реализован — поля в `userInfo` объявлены, но в UI отсутствуют. AI получает пустые `details`, поэтому контент общий.
 
-**4. Поломанная подача.** Текст «Нейро-алгоритм собирает страницу… Магия InkMAX ✨» обещает AI, а реально AI не вызывается. Это вызывает разочарование, даже если технически блоки появились.
+**5. Превью шаблона юзер не видит.** `selectedTemplate` авто-выбирается первым, шаг с каруселью пресетов пропущен. Юзер не понимает, что именно соберётся.
 
-**5. Edge `ai-content-generator` `niche-builder`** реально умеет генерировать контент через Gemini, но **этот код-путь больше не вызывается** — старый `OnboardingWizard` его дёргал, новый `AIBuilderWizard` обходит.
+**6. Цель (`goal`) не передаётся в AI.** В `details` склеивается локализованная строка цели, но Edge-функция её игнорирует — ни в `systemPrompt`, ни в логике нет `input.goal`. CTA в собранной странице не подстраиваются под «лиды vs продажи vs визитка».
 
-**6. Опечатки в i18n** на проде: «Выберите сферню», «Магия InkMAX» (должно быть LinkMAX).
+**7. На шаге `generating` нет реального таймаута.** Если Gemini подвиснет, юзер сидит на лоадере неограниченно. Нужен `Promise.race` с 25–30 сек.
 
-**7. Шаг «опубликовать сейчас»** ставит флаг `wizard_wants_publish=true`, но обработчика этого флага в дашборде нет (поиск по коду пустой) — кнопка ничего не публикует.
+**8. На `complete` нельзя вернуться назад.** Если результат не нравится — только закрыть и потерять прогресс. Нет «Перегенерировать с другой нишей/целью».
 
 ---
 
-### План исправления
+### План
 
-**Шаг 1. Унификация онбординга (cleanup).**
-- Удалить мёртвые `OnboardingWizard.tsx`, `QuickStartFlow.tsx`, `NicheOnboarding.tsx`.
-- Свести storage-ключи к одному: `onboarding_completed`. Мигрировать чтение старых ключей за совместимость.
-- Оставить `AIBuilderWizard` как единственный визард.
+**Шаг 1. Засеять оставшиеся 10 ниш шаблонами** (миграция).
+По 1 шаблону для `education, health, art, food, music, fashion, travel, realestate, events, other` — 5–7 блоков с реалистичной структурой под нишу. Используем только существующие типы из манифеста (`profile, text, pricing, links, gallery, testimonials, form, faq, booking, messenger, socials, product, video, countdown, separator`). Fallback из 4-блочного `catalog`-скелета удалить — теперь он не нужен.
 
-**Шаг 2. Починить генерацию (главное).**
-Заменить фейковую `setTimeout`-задержку на реальный вызов edge-функции `ai-content-generator` с типом `niche-builder` (он уже работает и возвращает `{ profile, blocks }`). Передавать `niche + name + bio + goal` как `details`. Сохранить `generateBlocksFromTemplate` как fallback при ошибке/таймауте AI.
+**Шаг 2. Расширить `nichePrompts` в `ai-content-generator`.**
+Добавить промпт-описания для всех 16 ниш (`expert`, `education`, `business`, `health`, `art`, `food`, `music`, `tech`, `fashion`, `travel`, `realestate`, `events`, `services`, `other`). Каждое описание — 1–2 предложения с типичными услугами/контентом для ниши.
 
-**Шаг 3. Засеять templates таблицу.**
-Создать миграцию с базовым набором публичных шаблонов хотя бы для топ-6 ниш (`expert`, `beauty`, `fitness`, `services`, `business`, `tech`) — по 5–7 блоков каждый, с разнообразной структурой (hero, услуги, отзывы, контакты, форма). Это даст визарду реальные «скелеты» вместо одного fallback на всех.
+**Шаг 3. Синхронизировать список типов блоков в AI-промпте.**
+Заменить устаревший список (`link, product, testimonial, carousel`) на актуальный из манифеста: добавить `pricing, gallery, testimonials (множ.), form, booking, links, faq`. Удалить недоступные `carousel`/`product` (или оставить только если они реально в манифесте — проверим).
 
-**Шаг 4. Расширить шаг «description».**
-Добавить опциональные поля `services` (textarea с подсказкой «по строке на услугу, можно с ценой») и `contacts` (Instagram/WhatsApp/Telegram). Они уже умеют парситься в `internal-builder.ts`, но пустуют. Поля свернуть в expandable «Добавить детали (необязательно)», чтобы не пугать новых юзеров.
+**Шаг 4. Передавать `goal` в AI.**
+Расширить тело запроса: `body.input.goal = selectedGoal`. В Edge-функции внутри `niche-builder` добавить goal-aware блок промпта: для `leads` — упор на `form/messenger/booking`, для `sales` — `pricing/product/payments`, для `brand` — `text/gallery/socials`, для `events` — `countdown/booking/form`.
 
-**Шаг 5. Honest UX.**
-- Переписать тексты шага `generating`: убрать «Нейро-алгоритм», показывать честный прогресс («Подбираем шаблон → Заполняем профиль → Раскладываем блоки»).
-- Исправить опечатки: «сферню» → «сферу», «InkMAX» → «LinkMAX» (в `ru.json` и `kk.json`).
+**Шаг 5. Добавить опциональные поля в шаг `description`.**
+Раскрывающийся блок «Добавить детали (необязательно)»: `services` (textarea, по строке) и `contacts` (Instagram/Telegram/WhatsApp одной строкой). Эти поля уже объявлены в `userInfo` и нужно только пробросить их в форму и в `details` для AI.
 
-**Шаг 6. Починить «Опубликовать сейчас».**
-Добавить в `useDashboard` обработчик: при наличии `wizard_wants_publish` после `handleNicheComplete` вызвать `cloudState.publishPage()` и тостить результат, затем чистить флаг.
+**Шаг 6. Вернуть превью шаблона перед генерацией.**
+Между `niche` и `description` показать мини-карточку выбранного шаблона: иконки блоков по порядку + 1–2 строки описания + ссылка «Выбрать другой» (открывает карусель альтернативных шаблонов из той же ниши). Это снимет эффект «непонятно, что соберётся».
 
-**Шаг 7. Тест-проверка для новых юзеров.**
-После изменений — пройти полный путь signup → wizard → редактор: убедиться, что (а) визард открывается ровно один раз, (б) после генерации в редакторе появляется ≥5 разнообразных блоков с реальным контентом, (в) кнопка «опубликовать» публикует.
+**Шаг 7. Таймаут и безопасный fallback.**
+В `handleGenerate` обернуть `supabase.functions.invoke` в `Promise.race` с 25-секундным таймером. По таймауту/ошибке — тихо переключаться на `generateBlocksFromTemplate` без шумного toast-error; в логи писать `console.warn`.
+
+**Шаг 8. «Перегенерировать» на шаге `complete`.**
+Кнопка-секондари «🔄 Перегенерировать» рядом с «Опубликовать»/«Отредактировать»: возвращает на шаг `generating` и заново зовёт AI с теми же параметрами. Чтобы избежать абуза — лимит 2 ретрая в сессии (state-флаг).
+
+**Шаг 9. UX-полировка.**
+- На `generating` крутящийся текст-ticker реальных шагов: «Подбираем шаблон…» → «Спрашиваем у AI…» → «Раскладываем блоки…» (3 фазы с задержками, привязаны к реальным точкам кода через state).
+- При успехе AI отдельно показывать «✓ AI сгенерировал контент», при fallback — «✓ Шаблон применён» — честность повышает доверие.
 
 ---
 
-### Технические детали (для разработчиков)
+### Технические детали
 
-| Файл | Действие |
+| Файл | Действия |
 |---|---|
-| `src/components/onboarding/AIBuilderWizard.tsx` | Заменить `setTimeout(1500)` на `supabase.functions.invoke('ai-content-generator', { body: { type: 'niche-builder', input: { niche, name, details: bio, services, contacts } } })`. Fallback на `generateBlocksFromTemplate` при ошибке. Расширить форму на шаге `description`. |
-| `src/hooks/dashboard/useDashboardOnboarding.ts` | Свести 3 storage-ключа в один `onboarding_completed`, читать старые для миграции. |
-| `src/hooks/dashboard/useDashboard.ts` | В `handleNicheComplete` после применения проверить `storage.get('wizard_wants_publish')`, вызвать публикацию, удалить флаг. |
-| `supabase/migrations/<new>.sql` | INSERT 6×шаблонов в `public.templates` с `is_public=true`, разные `category`, осмысленные `blocks` JSON. |
-| Удалить файлы | `src/components/onboarding/OnboardingWizard.tsx`, `QuickStartFlow.tsx`, `NicheOnboarding.tsx` + ссылки. |
-| `src/locales/{ru,kk,en,uz}/translation.json` | Исправить опечатки `nicheTitle`, `aiBuilder.nicheQuestions.generateBtn`. |
-| `supabase/functions/ai-content-generator/index.ts` | Расширить `niche-builder` промпт, чтобы возвращал 5–7 блоков (сейчас может вернуть и 3). Не критично. |
+| `supabase/migrations/<new>.sql` | INSERT 10 шаблонов в `templates` для нехватающих ниш. Все `is_public=true`, осмысленный `sort_order`, корректные `category`. |
+| `supabase/functions/ai-content-generator/index.ts` | Расширить `nichePrompts` до 16 записей. Заменить список типов блоков на актуальный (сверка с `BLOCK_MANIFEST`). Добавить чтение и использование `input.goal`. |
+| `src/components/onboarding/AIBuilderWizard.tsx` | (a) Добавить опциональные поля `services`/`contacts` на шаге `description` (collapsible). (b) Добавить шаг-превью шаблона между `niche` и `description` (или мини-карточку в `description`). (c) Передавать `goal` в `body.input.goal`. (d) `Promise.race` с таймаутом 25с. (e) Кнопка «Перегенерировать» на `complete` со счётчиком ретраев. (f) Удалить хардкоженный `catalog`-fallback в `handleSelectNiche`. |
+| `src/locales/{ru,en,kk,uz}/translation.json` | Ключи: `aiBuilder.servicesLabel`, `aiBuilder.servicesPlaceholder`, `aiBuilder.contactsLabel`, `aiBuilder.contactsPlaceholder`, `aiBuilder.moreDetailsToggle`, `aiBuilder.previewTitle`, `aiBuilder.regenerate`, `aiBuilder.aiSucceeded`, `aiBuilder.fallbackUsed`, `aiBuilder.timeout`. |
 
 ### Что НЕ трогаем
-- `GridEditor` / `BlockEditorV2` — сам редактор работает корректно, drag&drop, autosave и preview исправны (проверено).
-- `BlockRenderer`, манифест блоков — стабильны.
+- БД-схему `templates` (только сидинг).
+- `useDashboard.ts` — обработчик публикации уже работает.
+- `useDashboardOnboarding.ts` — унификация ключей сделана.
+- Сам редактор и `BlockRenderer`.
+
+### Риски
+- Если AI вернёт блоки с `type`, отсутствующим в манифесте, `createBaseBlock` бросит — уже обёрнуто в try/catch на уровне `useDashboardAI`, но в `AIBuilderWizard.handleGenerate` сейчас НЕ обёрнуто. Нужно добавить фильтрацию `aiBlocks` по списку известных типов перед `createBaseBlock`.
 
