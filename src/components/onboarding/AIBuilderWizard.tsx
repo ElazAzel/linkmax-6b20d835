@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
@@ -29,6 +30,8 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
@@ -38,6 +41,16 @@ import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { storage } from '@/lib/storage';
+
+// Whitelist of block types supported by the editor (must match block-factory.ts)
+const KNOWN_BLOCK_TYPES = new Set([
+  'profile', 'link', 'button', 'text', 'image', 'socials', 'product', 'video',
+  'carousel', 'messenger', 'form', 'testimonial', 'separator', 'catalog',
+  'faq', 'countdown', 'pricing', 'booking',
+]);
+
+const AI_TIMEOUT_MS = 25000;
+const MAX_REGENERATE_RETRIES = 2;
 
 interface AIBuilderWizardProps {
   open: boolean;
@@ -102,6 +115,10 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   const [selectedTemplate, setSelectedTemplate] = useState<DBTemplate | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
   const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
+  const [showMoreDetails, setShowMoreDetails] = useState(false);
+  const [genPhase, setGenPhase] = useState<'template' | 'ai' | 'layout'>('template');
+  const [usedAI, setUsedAI] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Reset state when dialog opens
   useEffect(() => {
@@ -110,6 +127,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
       setSelectedGoal(null);
       setSelectedNiche(null);
       setSelectedTemplate(null);
+      setShowMoreDetails(false);
+      setUsedAI(false);
+      setRetryCount(0);
     }
   }, [open]);
 
@@ -122,8 +142,8 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
   const handleSelectNiche = async (niche: Niche) => {
     setSelectedNiche(niche);
-    
-    // Automatically pick the first template for the niche to reduce friction
+
+    // Pick the first template for the niche (all 16 niches now have templates)
     setLoadingTemplates(true);
     try {
       const { data, error } = await supabase
@@ -138,7 +158,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
       if (data && data.length > 0) {
         setSelectedTemplate(data[0]);
       } else {
-        // Fallback for niches without templates
+        // Should not happen now (all niches seeded), but keep a minimal safe fallback
         setSelectedTemplate({
           id: 'basic-niche-template',
           name: t(`niches.${niche}`, niche),
@@ -146,7 +166,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           category: niche,
           blocks: [
             { type: 'profile' },
-            { type: 'catalog' },
+            { type: 'text', content: 'Расскажите о себе' },
             { type: 'messenger' },
             { type: 'socials' }
           ],
@@ -172,55 +192,67 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   };
 
   const handleBackToTemplate = () => {
-    setStep('niche'); // Since we skip template selection, back from description goes to niche
+    setStep('niche');
   };
 
-  const handleGenerate = useCallback(async () => {
-    if (!selectedNiche || !selectedTemplate) {
-      toast.error(t('aiBuilder.selectTemplate', 'Выберите шаблон'));
-      return;
-    }
-
-    if (!canUseAIPageGeneration()) {
-      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
-      return;
-    }
+  const runGeneration = useCallback(async () => {
+    if (!selectedNiche || !selectedTemplate) return;
 
     setStep('generating');
+    setGenPhase('template');
 
     let finalBlocks: Block[] = [];
     let aiProfile: { name?: string; bio?: string } | null = null;
+    let aiSucceeded = false;
 
-    // 1) Try real AI generation via niche-builder edge function
+    // 1) Try real AI generation via niche-builder edge function with timeout
     try {
+      setGenPhase('ai');
       const details = [
         userInfo.bio,
         userInfo.services ? `Услуги: ${userInfo.services}` : '',
         userInfo.contacts ? `Контакты: ${userInfo.contacts}` : '',
         userInfo.socials ? `Соцсети: ${userInfo.socials}` : '',
-        selectedGoal ? `Цель: ${t(`aiBuilder.goals.${selectedGoal}`, selectedGoal)}` : '',
       ].filter(Boolean).join('\n');
 
-      const { data, error } = await supabase.functions.invoke('ai-content-generator', {
+      const aiCall = supabase.functions.invoke('ai-content-generator', {
         body: {
           type: 'niche-builder',
           input: {
             niche: selectedNiche,
             name: userInfo.name,
             details,
+            goal: selectedGoal || undefined,
           },
         },
       });
+      const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
+        setTimeout(() => resolve({ data: null, error: new Error('ai-timeout') }), AI_TIMEOUT_MS)
+      );
 
+      const { data, error } = await Promise.race([aiCall, timeoutPromise]) as any;
       if (error) throw error;
-      const aiBlocks = Array.isArray(data?.blocks) ? data.blocks : null;
+
+      // Edge function wraps response in `result`: { result: { profile, blocks } }
+      const payload = data?.result || data;
+      const aiBlocks = Array.isArray(payload?.blocks) ? payload.blocks : null;
+
       if (aiBlocks && aiBlocks.length > 0) {
-        // Normalize AI blocks through createBaseBlock to ensure ids/positions
-        finalBlocks = aiBlocks.map((b: any, idx: number) => {
-          const base = createBaseBlock(b.type || 'text');
-          return { ...base, ...b, position: idx } as Block;
-        });
-        aiProfile = data?.profile || null;
+        setGenPhase('layout');
+        // Filter unknown block types and normalize through factory
+        finalBlocks = aiBlocks
+          .filter((b: any) => b && typeof b.type === 'string' && KNOWN_BLOCK_TYPES.has(b.type))
+          .map((b: any, idx: number) => {
+            try {
+              const base = createBaseBlock(b.type);
+              return { ...base, ...b, position: idx } as Block;
+            } catch {
+              return null;
+            }
+          })
+          .filter(Boolean) as Block[];
+        aiProfile = payload?.profile || null;
+        if (finalBlocks.length > 0) aiSucceeded = true;
       }
     } catch (err) {
       console.warn('niche-builder failed, falling back to template:', err);
@@ -228,6 +260,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
     // 2) Fallback to deterministic template if AI failed or returned empty
     if (finalBlocks.length === 0) {
+      setGenPhase('layout');
       finalBlocks = generateBlocksFromTemplate(
         Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
         { ...userInfo, bio: userInfo.bio }
@@ -242,8 +275,30 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     }
 
     setGeneratedBlocks(finalBlocks);
+    setUsedAI(aiSucceeded);
     setStep('complete');
-  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, canUseAIPageGeneration, incrementAIPageGeneration, t]);
+  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, incrementAIPageGeneration]);
+
+  const handleGenerate = useCallback(async () => {
+    if (!selectedNiche || !selectedTemplate) {
+      toast.error(t('aiBuilder.selectTemplate', 'Выберите шаблон'));
+      return;
+    }
+    if (!canUseAIPageGeneration()) {
+      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
+      return;
+    }
+    await runGeneration();
+  }, [selectedNiche, selectedTemplate, canUseAIPageGeneration, runGeneration, t]);
+
+  const handleRegenerate = useCallback(async () => {
+    if (retryCount >= MAX_REGENERATE_RETRIES) {
+      toast.info(t('aiBuilder.regenerateLimit', 'Достигнут лимит перегенераций'));
+      return;
+    }
+    setRetryCount(c => c + 1);
+    await runGeneration();
+  }, [retryCount, runGeneration, t]);
 
   const handleSkip = () => {
     storage.set('onboarding_completed', 'true');
@@ -351,7 +406,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           </div>
         )}
 
-        {/* Step 3: Simplified Description */}
+        {/* Step 3: Description + Template Preview + Optional Details */}
         {step === 'description' && (
           <div className="p-6 pt-4 animate-fade-in flex flex-col">
             <div className="flex items-center gap-3 mb-6 shrink-0">
@@ -366,7 +421,30 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               </div>
             </div>
 
-            <div className="space-y-6">
+            <ScrollArea className="max-h-[60vh]">
+            <div className="space-y-4 pr-2">
+              {/* Template Preview Card */}
+              {selectedTemplate && (
+                <div className="p-4 rounded-2xl border border-border/50 bg-muted/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <LayoutTemplate className="h-4 w-4 text-primary" />
+                    <p className="text-sm font-bold">
+                      {t('aiBuilder.previewTitle', 'Будущая структура страницы')}
+                    </p>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    {selectedTemplate.name} · {Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks.length : 0} {t('aiBuilder.blocks', 'блоков')}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {Array.isArray(selectedTemplate.blocks) && selectedTemplate.blocks.slice(0, 8).map((b: any, i: number) => (
+                      <span key={i} className="text-[10px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                        {b.type}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-4 bg-muted/30 p-5 rounded-[32px] border border-border/50 shadow-inner">
                 <div className="space-y-2">
                   <Label className="text-base font-bold ml-1">{t('aiBuilder.name')} <span className="text-destructive">*</span></Label>
@@ -385,9 +463,42 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                     value={userInfo.bio}
                     onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
                     placeholder={t('aiBuilder.descStep.placeholder')}
-                    className="rounded-2xl min-h-[120px] bg-background/80 border-border/30 focus:border-primary/50 text-base resize-none leading-relaxed"
+                    className="rounded-2xl min-h-[100px] bg-background/80 border-border/30 focus:border-primary/50 text-base resize-none leading-relaxed"
                   />
                 </div>
+
+                {/* Optional Details (Collapsible) */}
+                <Collapsible open={showMoreDetails} onOpenChange={setShowMoreDetails}>
+                  <CollapsibleTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                    >
+                      <ChevronDown className={cn("h-4 w-4 transition-transform", showMoreDetails && "rotate-180")} />
+                      {t('aiBuilder.moreDetailsToggle', 'Добавить детали (необязательно)')}
+                    </button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="space-y-4 pt-3">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold ml-1">{t('aiBuilder.servicesLabel', 'Услуги (по строке)')}</Label>
+                      <Textarea
+                        value={userInfo.services}
+                        onChange={(e) => setUserInfo(p => ({ ...p, services: e.target.value }))}
+                        placeholder={t('aiBuilder.servicesPlaceholder', 'Маникюр - 5000 тг\nПедикюр - 7000 тг')}
+                        className="rounded-2xl min-h-[80px] bg-background/80 border-border/30 text-sm resize-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold ml-1">{t('aiBuilder.contactsLabel', 'Контакты')}</Label>
+                      <Input
+                        value={userInfo.contacts}
+                        onChange={(e) => setUserInfo(p => ({ ...p, contacts: e.target.value }))}
+                        placeholder={t('aiBuilder.contactsPlaceholder', 'Instagram @nick, t.me/user, +77001234567')}
+                        className="h-12 rounded-2xl bg-background/80 border-border/30 text-sm"
+                      />
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
 
               <div className="pt-2">
@@ -405,35 +516,34 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 </p>
               </div>
             </div>
+            </ScrollArea>
           </div>
         )}
 
         {/* Step 4: Generating */}
         {step === 'generating' && (
           <div className="p-6 py-12 text-center animate-fade-in flex flex-col items-center">
-            {/* Animation Container */}
             <div className="relative w-full max-w-sm h-48 mx-auto mb-8 bg-muted/30 rounded-2xl border-2 border-dashed border-primary/20 overflow-hidden flex items-end justify-center pb-4">
-              {/* Magic Wand hovering */}
               <div className="absolute top-4 inset-x-0 flex justify-center animate-bounce">
-                <Wand2 className="h-8 w-8 text-primary shadow-primary/50 drop-shadow-lg" />
+                <Wand2 className="h-8 w-8 text-primary drop-shadow-lg" />
               </div>
-
-              {/* Simulated blocks building up */}
               <div className="flex flex-col-reverse items-center gap-3 w-full px-8">
-                <div className="h-8 w-full bg-primary/20 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-300 flex items-center justify-center text-xs text-primary/70 overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.socials ? t('aiBuilder.gen.socials', 'Подключение соцсетей...') : t('aiBuilder.gen.footer', 'Сборка футера...')}
+                <div className="h-8 w-full bg-primary/20 rounded-lg flex items-center justify-center text-xs text-primary/70 px-2 whitespace-nowrap overflow-hidden">
+                  {t('aiBuilder.gen.footer', 'Сборка футера...')}
                 </div>
-                <div className="h-12 w-full bg-primary/40 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-200 flex items-center justify-center text-xs text-primary/80 font-medium overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.services ? `${t('aiBuilder.gen.services', 'Парсинг услуг:')} ${userInfo.services.slice(0, 15)}...` : t('aiBuilder.gen.blocks', 'Настройка блоков...')}
+                <div className="h-12 w-full bg-primary/40 rounded-lg flex items-center justify-center text-xs text-primary-foreground font-medium px-2 whitespace-nowrap overflow-hidden">
+                  {t('aiBuilder.gen.blocks', 'Настройка блоков...')}
                 </div>
-                <div className="h-16 w-full bg-primary/60 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-100 flex items-center justify-center text-sm text-primary-foreground font-bold shadow-md overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.name ? userInfo.name : t('aiBuilder.gen.profile', 'Гидратация профиля...')}
+                <div className="h-16 w-full bg-primary/60 rounded-lg flex items-center justify-center text-sm text-primary-foreground font-bold shadow-md px-2 whitespace-nowrap overflow-hidden">
+                  {userInfo.name || t('aiBuilder.gen.profile', 'Гидратация профиля...')}
                 </div>
               </div>
             </div>
 
             <h3 className="text-2xl font-black mb-3">
-              {t('aiBuilder.generatingTitle', 'AI собирает вашу страницу')}
+              {genPhase === 'template' && t('aiBuilder.phaseTemplate', 'Подбираем шаблон…')}
+              {genPhase === 'ai' && t('aiBuilder.phaseAI', 'Спрашиваем у AI…')}
+              {genPhase === 'layout' && t('aiBuilder.phaseLayout', 'Раскладываем блоки…')}
             </h3>
             <p className="text-muted-foreground mb-6">
               {t('aiBuilder.generatingDesc', 'Подбираем шаблон, заполняем профиль и раскладываем блоки')}
@@ -445,10 +555,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           </div>
         )}
 
-        {/* Step 5: Complete (Gamified Certificate) */}
+        {/* Step 5: Complete */}
         {step === 'complete' && (
           <div className="p-6 py-12 text-center relative overflow-hidden flex flex-col items-center justify-center min-h-[400px]">
-            {/* Background decoration */}
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-emerald-500/10 pointer-events-none" />
 
             <div className="relative z-10 animate-in zoom-in duration-700 max-w-sm w-full text-center">
@@ -459,8 +568,13 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               <h2 className="text-2xl font-black mb-2">
                 {t('aiBuilder.complete.title', '✨ Страница готова!')}
               </h2>
-              <p className="text-muted-foreground mb-6">
+              <p className="text-muted-foreground mb-2">
                 {t('aiBuilder.complete.desc', 'Опубликуйте её, чтобы получить ссылку и первых посетителей')}
+              </p>
+              <p className="text-xs text-primary font-semibold mb-6">
+                {usedAI
+                  ? t('aiBuilder.aiSucceeded', '✓ AI сгенерировал контент')
+                  : t('aiBuilder.fallbackUsed', '✓ Шаблон применён')}
               </p>
 
               <div className="space-y-3">
@@ -497,6 +611,17 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 >
                   {t('aiBuilder.complete.editFirst', 'Сначала отредактировать')}
                 </Button>
+                {retryCount < MAX_REGENERATE_RETRIES && (
+                  <Button
+                    variant="outline"
+                    className="w-full h-11 rounded-xl text-sm"
+                    onClick={handleRegenerate}
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    {t('aiBuilder.regenerate', 'Перегенерировать')}
+                    {retryCount > 0 && ` (${MAX_REGENERATE_RETRIES - retryCount})`}
+                  </Button>
+                )}
               </div>
             </div>
           </div>

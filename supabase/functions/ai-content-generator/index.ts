@@ -352,73 +352,86 @@ Return ONLY the items array with 'overrides' populated. Keep technical fields (i
 
       case 'niche-builder': {
         const nichePrompts: Record<string, string> = {
+          // Legacy keys (kept for backward compatibility)
           barber: 'барбера/парикмахера с услугами стрижки, бороды, укладки. Добавь ссылки на запись, портфолио работ, прайс-лист.',
           photographer: 'фотографа с портфолио, услугами съёмки (портрет, свадьба, предметная), ценами и контактами для записи.',
           psychologist: 'психолога/терапевта с описанием услуг (консультации, терапия), форматами работы (онлайн/офлайн) и записью.',
-          fitness: 'фитнес-тренера с программами тренировок, онлайн-курсами, персональными занятиями и отзывами клиентов.',
           musician: 'музыканта/артиста со ссылками на стриминговые платформы, концерты, мерч и социальные сети.',
           designer: 'дизайнера с портфолио работ, услугами (логотипы, брендинг, веб-дизайн) и ценами.',
           teacher: 'репетитора/преподавателя с предметами, форматами занятий, ценами и записью на пробный урок.',
           shop: 'магазина/бренда с товарами, акциями, доставкой и контактами для заказа.',
           marketer: 'маркетолога/SMM-специалиста с услугами, кейсами, ценами и бесплатной консультацией.',
-          beauty: 'мастера красоты (маникюр, макияж, брови) с услугами, портфолио и записью.',
           chef: 'повара/кондитера с меню, услугами кейтеринга, мастер-классами и заказом.',
+          // Current 16 niches from src/lib/niches.ts
+          expert: 'эксперта/коуча/консультанта с описанием экспертизы, программами, отзывами клиентов и формой записи на консультацию.',
+          education: 'преподавателя/репетитора/онлайн-курса с программами обучения, ценами, отзывами учеников и формой записи на пробный урок.',
+          business: 'бизнеса/B2B-консультанта с услугами, кейсами, ценами и формой обращения. Профессиональный тон.',
+          fitness: 'фитнес-тренера с программами тренировок, онлайн-курсами, персональными занятиями и отзывами клиентов.',
+          health: 'психолога/wellness-специалиста с описанием услуг (консультации, терапия), форматами работы (онлайн/офлайн), записью и FAQ о конфиденциальности.',
+          beauty: 'мастера красоты (маникюр, макияж, брови, ресницы) с услугами, портфолио в карусели и онлайн-записью.',
+          art: 'художника/иллюстратора/креатора с портфолио в карусели, услугами на заказ, ценами и контактами.',
+          food: 'шефа/кондитера/фуд-блогера с меню, услугами кейтеринга, мастер-классами и формой заказа.',
+          music: 'музыканта/DJ/артиста со ссылками на Spotify/Apple Music, видео, концертами, countdown к релизу и соцсетями.',
+          tech: 'IT-специалиста/разработчика с описанием стека, услугами (разработка, консалтинг), кейсами и контактами.',
+          fashion: 'стилиста/fashion-эксперта с лук-буком в карусели, услугами (разбор гардероба, шопинг), ценами и записью.',
+          travel: 'тревел-блогера/гида с авторскими маршрутами в карусели, ценами, FAQ о турах и формой брони.',
+          realestate: 'риелтора/агента недвижимости с услугами, актуальными объектами в карусели, отзывами клиентов и формой заявки.',
+          events: 'организатора события с countdown до даты, описанием программы, тарифами на билеты и формой регистрации.',
+          services: 'специалиста сферы услуг с прайс-листом, отзывами клиентов, FAQ и быстрой связью через мессенджеры.',
+          other: 'универсального профиля: расскажи о себе, ссылки на проекты, соцсети и контакты для связи.',
         };
 
         const nicheDescription = nichePrompts[input.niche] || 'специалиста с услугами и контактами';
+
+        // Goal-specific guidance
+        const goalGuidance: Record<string, string> = {
+          leads: 'ЦЕЛЬ — СБОР ЗАЯВОК. Обязательно добавь form (форму захвата) и booking (запись), а также messenger в начале. CTA-кнопки в стиле "Оставить заявку", "Записаться на консультацию".',
+          sales: 'ЦЕЛЬ — ПРОДАЖИ. Сделай упор на pricing/product блоки с понятными ценами и описаниями. Добавь testimonial (соц. доказательство). CTA в стиле "Купить", "Заказать".',
+          brand: 'ЦЕЛЬ — ЛИЧНЫЙ БРЕНД. Сделай упор на красивый profile, text-секции с историей, carousel с работами/фото и socials. Меньше продающих CTA, больше storytelling.',
+          events: 'ЦЕЛЬ — СОБЫТИЕ. Обязательно добавь countdown к дате, pricing с тарифами билетов, form для регистрации.',
+        };
+        const goalBlock = input.goal && goalGuidance[input.goal] ? `\n\n${goalGuidance[input.goal]}` : '';
 
         systemPrompt = `Ты AI-конструктор профессиональных страниц lnkmx.my. Создай полную страницу для ${nicheDescription}
 
 ИНФОРМАЦИЯ:
 - Имя: "${input.name}"
-- Детали: "${input.details || 'не указаны'}"
+- Детали: "${input.details || 'не указаны'}"${goalBlock}
 
-СОЗДАЙ ПОЛНУЮ СТРАНИЦУ с 10-15 блоками, включая ВСЕ секции:
+СОЗДАЙ ПОЛНУЮ СТРАНИЦУ с 6-10 блоками, разнообразную и осмысленную для ниши.
 
-1. ПРОФИЛЬ (profile):
-   - name: имя/название бизнеса
-   - bio: краткое описание с эмодзи (2-3 строки)
+ДОСТУПНЫЕ ТИПЫ БЛОКОВ (используй ТОЛЬКО их, иначе блок будет проигнорирован):
+- profile: { name: string, bio: string (с эмодзи, 2-3 строки) }
+- text: { content: string, style: "heading"|"paragraph"|"quote", alignment: "center"|"left" }
+- link: { title: string (с эмодзи), url: string, icon: "globe"|"instagram"|"telegram"|"youtube"|"tiktok", style: "rounded"|"pill" }
+- product: { name: string, description: string, price: number, currency: "KZT", image?: string }
+- pricing: { items: [{ id: "1", title: string, price: string, description: string }] } — для прайс-листа услуг (3-5 позиций)
+- testimonial: { testimonials: [{ name, role, text, rating: 5 }] } — 2-3 отзыва (ИМЕННО singular: "testimonial")
+- faq: { items: [{ id: "1", question: string, answer: string }] } — 2-4 вопроса
+- form: { title: string, fields: [{ name, label }] } — форма захвата лидов
+- booking: { title: string } — слот для онлайн-записи
+- messenger: { messengers: [{ platform: "telegram"|"whatsapp", username: string }] }
+- socials: { platforms: [{ name: string, url: string, icon: string }] }
+- video: { url: string, title: string }
+- carousel: { title: string, images: [{ url, alt }] } — для портфолио/галерей (используй URL с images.unsplash.com)
+- countdown: { title: string, targetDate: "2026-12-31T20:00:00Z" }
+- separator: { style: "line" }
 
-2. СОЦСЕТИ (2-4 блока link):
-   - Ссылки на Instagram, Telegram, YouTube и т.д.
-   - Используй эмодзи в заголовках
+ОБЯЗАТЕЛЬНО:
+1. Первый блок — ВСЕГДА profile.
+2. Последний блок — messenger или form.
+3. Все цены — реалистичные в KZT для Казахстана.
+4. Текст на русском, профессиональный.
+5. НЕ ИСПОЛЬЗУЙ типы которых нет в списке (link/products/testimonials в множ. — недопустимо).
 
-3. УСЛУГИ/ТОВАРЫ (2-4 блока product):
-   - Реалистичные цены в KZT для Казахстана
-   - Конкретные описания услуг
-
-4. ОТЗЫВЫ (testimonial):
-   - 2-3 реалистичных отзыва клиентов
-   - С именами и ролями
-
-5. FAQ (faq):
-   - 2-3 частых вопроса для этой ниши
-
-6. КОНТАКТЫ (messenger):
-   - WhatsApp и/или Telegram
-
-ТИПЫ БЛОКОВ (все с blockSize: "full" или "half"):
-- profile: { name, bio }
-- link: { title, url, icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill", blockSize: "half" }
-- text: { content, style: "heading|paragraph|quote", alignment: "center|left", blockSize: "full" }
-- product: { name, description, price: number, currency: "KZT", blockSize: "half" }
-- testimonial: { testimonials: [{ name, role, text, rating: 5 }], blockSize: "full" }
-- faq: { items: [{ question, answer }], blockSize: "full" }
-- messenger: { messengers: [{ platform: "telegram|whatsapp", username }], blockSize: "half" }
-- socials: { platforms: [{ platform, url }], blockSize: "full" }
-- video: { url, title, blockSize: "full" }
-- countdown: { title, endDate, style: "modern", blockSize: "full" }
-- separator: { style: "line", blockSize: "full" }
-- carousel: { images: [{ url, alt }], title, blockSize: "full" }
-
-ОТВЕТ В JSON:
+ОТВЕТ СТРОГО В JSON:
 {
   "profile": { "name": "...", "bio": "..." },
-  "blocks": [... 10-15 блоков ...]
+  "blocks": [... 6-10 блоков ...]
 }
 
-Текст на русском, профессиональный. Return ONLY valid JSON, no markdown.`;
-        userPrompt = `Создай полную страницу для ниши: ${input.niche}. Имя: ${input.name}. Детали: ${input.details || 'нет'}`;
+Return ONLY valid JSON, no markdown.`;
+        userPrompt = `Создай страницу для ниши "${input.niche}". Имя: ${input.name}. Цель: ${input.goal || 'не указана'}. Детали: ${input.details || 'нет'}`;
         break;
       }
 
