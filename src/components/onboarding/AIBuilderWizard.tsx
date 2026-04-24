@@ -115,6 +115,10 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   const [selectedTemplate, setSelectedTemplate] = useState<DBTemplate | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
   const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
+  const [showMoreDetails, setShowMoreDetails] = useState(false);
+  const [genPhase, setGenPhase] = useState<'template' | 'ai' | 'layout'>('template');
+  const [usedAI, setUsedAI] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Reset state when dialog opens
   useEffect(() => {
@@ -123,6 +127,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
       setSelectedGoal(null);
       setSelectedNiche(null);
       setSelectedTemplate(null);
+      setShowMoreDetails(false);
+      setUsedAI(false);
+      setRetryCount(0);
     }
   }, [open]);
 
