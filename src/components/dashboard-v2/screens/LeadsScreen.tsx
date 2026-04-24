@@ -33,17 +33,38 @@ import type { Lead } from '@/hooks/crm/useLeads';
 import { trackLeadReplied, trackLeadStatusChanged } from '@/lib/activation-events';
 
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
+type ReplyChannel = 'whatsapp' | 'telegram' | 'call' | 'email';
 
 const STATUS_FILTERS = ['all', 'new', 'contacted', 'qualified', 'converted', 'lost'] as const;
 
-function getLeadPageId(lead: Lead | undefined): string | null {
+function getLeadMetadata(lead: Lead | undefined): Record<string, unknown> | null {
     const metadata = lead?.metadata;
     if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
         return null;
     }
 
-    const pageId = (metadata as Record<string, unknown>).page_id;
+    return metadata as Record<string, unknown>;
+}
+
+function getLeadPageId(lead: Lead | undefined): string | null {
+    const pageId = getLeadMetadata(lead)?.page_id;
     return typeof pageId === 'string' ? pageId : null;
+}
+
+function getLeadTelegramHref(lead: Lead): string | null {
+    const metadata = getLeadMetadata(lead);
+    const rawHandle = metadata?.telegram_username ?? metadata?.telegram_handle ?? metadata?.telegram;
+    if (typeof rawHandle === 'string' && rawHandle.trim()) {
+        const handle = rawHandle
+            .trim()
+            .replace(/^https?:\/\/t\.me\//i, '')
+            .replace(/^@/, '');
+
+        if (handle) return `https://t.me/${encodeURIComponent(handle)}`;
+    }
+
+    const digits = lead.phone?.replace(/[^0-9]/g, '');
+    return digits ? `tg://resolve?phone=${digits}` : null;
 }
 
 export const LeadsScreen = memo(function LeadsScreen() {
@@ -171,35 +192,63 @@ export const LeadsScreen = memo(function LeadsScreen() {
         );
     };
 
-    const trackReplyAction = (lead: Lead, channel: string) => {
+    const markLeadContactedAfterReply = async (lead: Lead) => {
+        if (lead.status !== 'new') return;
+
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { error } = await supabase
+                .from('leads')
+                .update({ status: 'contacted', updated_at: new Date().toISOString() })
+                .eq('id', lead.id)
+                .eq('user_id', user.id)
+                .eq('status', 'new');
+
+            if (error) throw error;
+
+            setLeads(prev => prev.map(l => l.id === lead.id ? { ...l, status: 'contacted' } : l));
+
+            const pageId = getLeadPageId(lead);
+            if (pageId) {
+                trackLeadStatusChanged(pageId, lead.id, 'new', 'contacted');
+            }
+        } catch (e) {
+            console.error('Auto-contact lead error', e);
+        }
+    };
+
+    const trackReplyAction = (lead: Lead, channel: ReplyChannel) => {
         const pageId = getLeadPageId(lead);
         if (pageId) {
             trackLeadReplied(pageId, lead.id, channel);
         }
     };
 
-    const openWhatsApp = (lead: Lead) => {
-        if (!lead.phone) return;
-        trackReplyAction(lead, 'whatsapp');
-        window.open(`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}`, '_blank');
+    const handleReplyAction = (lead: Lead, channel: ReplyChannel, href: string, target: '_blank' | '_self') => {
+        trackReplyAction(lead, channel);
+        void markLeadContactedAfterReply(lead);
+        window.open(href, target);
     };
 
-    const openTelegram = (lead: Lead) => {
+    const openWhatsApp = (lead: Lead) => {
         if (!lead.phone) return;
-        trackReplyAction(lead, 'telegram');
-        window.open(`https://t.me/${lead.phone.replace(/[^0-9]/g, '')}`, '_blank');
+        handleReplyAction(lead, 'whatsapp', `https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}`, '_blank');
+    };
+
+    const openTelegram = (lead: Lead, href: string) => {
+        handleReplyAction(lead, 'telegram', href, href.startsWith('tg://') ? '_self' : '_blank');
     };
 
     const openCall = (lead: Lead) => {
         if (!lead.phone) return;
-        trackReplyAction(lead, 'call');
-        window.open(`tel:${lead.phone}`, '_self');
+        handleReplyAction(lead, 'call', `tel:${lead.phone}`, '_self');
     };
 
     const openEmail = (lead: Lead) => {
         if (!lead.email) return;
-        trackReplyAction(lead, 'email');
-        window.open(`mailto:${lead.email}`, '_self');
+        handleReplyAction(lead, 'email', `mailto:${lead.email}`, '_self');
     };
 
     return (
@@ -311,6 +360,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                         filteredLeads.map((lead) => {
                             const config = statusConfig[lead.status as LeadStatus] || statusConfig.new;
                             const StatusIcon = config.icon;
+                            const telegramHref = getLeadTelegramHref(lead);
 
                             return (
                                 <Card 
@@ -382,34 +432,36 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                     {/* Quick Actions */}
                                     <div className="flex items-center gap-2 pt-4 border-t border-white/5">
                                         {lead.phone && (
-                                            <>
-                                                <Button
-                                                    variant="secondary"
-                                                    size="sm"
-                                                    className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
-                                                    onClick={() => openWhatsApp(lead)}
-                                                >
-                                                    <MessageCircle className="h-4 w-4 mr-2" />
-                                                    WA
-                                                </Button>
-                                                <Button
-                                                    variant="secondary"
-                                                    size="sm"
-                                                    className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
-                                                    onClick={() => openTelegram(lead)}
-                                                >
-                                                    <Send className="h-4 w-4 mr-2" />
-                                                    TG
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
-                                                    onClick={() => openCall(lead)}
-                                                >
-                                                    <Phone className="h-5 w-5" />
-                                                </Button>
-                                            </>
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
+                                                onClick={() => openWhatsApp(lead)}
+                                            >
+                                                <MessageCircle className="h-4 w-4 mr-2" />
+                                                WA
+                                            </Button>
+                                        )}
+                                        {telegramHref && (
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
+                                                onClick={() => openTelegram(lead, telegramHref)}
+                                            >
+                                                <Send className="h-4 w-4 mr-2" />
+                                                TG
+                                            </Button>
+                                        )}
+                                        {lead.phone && (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
+                                                onClick={() => openCall(lead)}
+                                            >
+                                                <Phone className="h-5 w-5" />
+                                            </Button>
                                         )}
                                         {lead.email && (
                                             <Button

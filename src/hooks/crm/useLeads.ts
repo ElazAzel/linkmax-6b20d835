@@ -132,21 +132,31 @@ export function useLeads() {
   /** Quick reply: auto-set status to contacted (silent, no toast) */
   const quickReply = async (id: string) => {
     if (!user) return false;
-    try {
-      const { error } = await supabase
-        .from('leads')
-        .update({ status: 'contacted' })
-        .eq('id', id)
-        .eq('user_id', user.id);
-      if (error) throw error;
-      setLeads(prev => prev.map(lead =>
-        lead.id === id ? { ...lead, status: 'contacted' } : lead
-      ));
+    const previousLead = leads.find(lead => lead.id === id);
+    const pageId = getLeadPageId(previousLead);
 
-      const previousLead = leads.find(lead => lead.id === id);
-      const pageId = getLeadPageId(previousLead);
+    try {
       if (pageId) {
         trackLeadReplied(pageId, id, 'quick_reply');
+      }
+
+      if (previousLead?.status === 'new') {
+        const { error } = await supabase
+          .from('leads')
+          .update({ status: 'contacted', updated_at: new Date().toISOString() })
+          .eq('id', id)
+          .eq('user_id', user.id)
+          .eq('status', 'new');
+
+        if (error) throw error;
+
+        setLeads(prev => prev.map(lead =>
+          lead.id === id ? { ...lead, status: 'contacted' } : lead
+        ));
+
+        if (pageId) {
+          trackLeadStatusChanged(pageId, id, 'new', 'contacted');
+        }
       }
 
       return true;
