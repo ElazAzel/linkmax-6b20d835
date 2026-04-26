@@ -211,33 +211,25 @@ function CalendarExportMenu({ zoneId, t }: { zoneId: string; t: any }) {
   const [copying, setCopying] = useState(false);
 
   const handleExportAllICS = useCallback(async () => {
-    // Fetch bookings and generate a combined ICS file
-    const { data: zone } = await supabase
-      .from('zones' as any)
-      .select('calendar_feed_token, name')
-      .eq('id', zoneId)
-      .single();
+    // calendar_feed_token is sensitive — fetched via secure RPC (owner/admin only)
+    const { data: token } = await supabase
+      .rpc('get_zone_calendar_feed_token' as never, { p_zone_id: zoneId } as never);
 
-    if (!zone) return;
-    const zoneData = zone as any;
+    if (!token || typeof token !== 'string') return;
 
-    // Open the feed URL for download
-    const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${zoneData.calendar_feed_token}`;
+    const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${token}`;
     window.open(feedUrl, '_blank');
   }, [zoneId]);
 
   const handleCopyFeedUrl = useCallback(async () => {
     setCopying(true);
     try {
-      const { data: zone } = await supabase
-        .from('zones' as any)
-        .select('calendar_feed_token')
-        .eq('id', zoneId)
-        .single();
+      const { data: token } = await supabase
+        .rpc('get_zone_calendar_feed_token' as never, { p_zone_id: zoneId } as never);
 
-      if (!zone) return;
-      const zoneData = zone as any;
-      const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${zoneData.calendar_feed_token}`;
+      if (!token || typeof token !== 'string') return;
+
+      const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${token}`;
       await navigator.clipboard.writeText(feedUrl);
       toast({ title: t('zones.calendar.feedCopied', 'Ссылка на календарь скопирована') });
     } catch {
