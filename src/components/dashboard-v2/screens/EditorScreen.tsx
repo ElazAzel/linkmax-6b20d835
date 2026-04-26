@@ -74,6 +74,7 @@ interface EditorScreenProps {
   // Versions
   onOpenVersions?: () => void;
   deepLinkAction?: string | null;
+  recentlyAddedBlockId?: string | null;
 }
 
 export const EditorScreen = memo(function EditorScreen({
@@ -99,6 +100,7 @@ export const EditorScreen = memo(function EditorScreen({
   onRedo,
   onOpenVersions,
   deepLinkAction,
+  recentlyAddedBlockId,
 }: EditorScreenProps) {
   const { t } = useTranslation();
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
@@ -593,6 +595,7 @@ export const EditorScreen = memo(function EditorScreen({
             onReorderBlocks={onReorderBlocks}
             onDuplicateBlock={onDuplicateBlock}
             onInsertPreset={handleInsertPresetWithFriction}
+            recentlyAddedBlockId={recentlyAddedBlockId}
           />
         </Suspense>
       </RenderContextProvider>
