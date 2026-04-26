@@ -297,6 +297,22 @@ function SortableGridBlockItem({
         />
       )}
 
+      {/* Empty-hint chip — appears when block is missing required data */}
+      {emptyHint.isEmpty && !isDragging && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(block);
+          }}
+          className="absolute top-1.5 left-12 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/90 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
+          aria-label={t(emptyHint.hintKey, emptyHint.hintLabel)}
+        >
+          <Edit2 className="h-3 w-3" />
+          <span>{t(emptyHint.hintKey, emptyHint.hintLabel)}</span>
+        </button>
+      )}
+
       {/* Block type label - bottom-left */}
       <div className="absolute bottom-1.5 left-1.5 z-30 pointer-events-none">
         <span className="inline-block px-1.5 py-px rounded-md bg-background text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
@@ -454,6 +470,7 @@ export const GridEditor = memo(function GridEditor({
   onTransform,
   onInsertPreset,
   pageNiche,
+  recentlyAddedBlockId,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -751,12 +768,13 @@ export const GridEditor = memo(function GridEditor({
             const reordered = arrayMove(contentBlocks, index, index + 1);
             onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
           } : undefined}
+          isRecentlyAdded={recentlyAddedBlockId === block.id}
         />
       );
     });
 
     return items;
-  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks]);
+  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId]);
 
   return (
     <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-2 pb-32 md:pb-24">
