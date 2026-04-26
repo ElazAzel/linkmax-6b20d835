@@ -113,10 +113,9 @@ export function TeamsTab({
   const handleCopyInviteLink = async (team: Team) => {
     if (!onGetInviteCode) return;
 
-    let code = team.invite_code;
-    if (!code) {
-      code = await onGetInviteCode(team.id);
-    }
+    // invite_code is sensitive — always fetch via secure RPC,
+    // do not rely on team.invite_code from public list query.
+    const code = await onGetInviteCode(team.id);
 
     if (code) {
       const inviteUrl = `${window.location.origin}/join-team/${code}`;
