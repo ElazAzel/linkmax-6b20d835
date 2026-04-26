@@ -356,5 +356,6 @@ export function useBlockEditor({
     undoLastDelete,
     hasUndo: deletedBlocks.length > 0,
     isPremiumBlock,
+    recentlyAddedBlockId,
   };
 }
