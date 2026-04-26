@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -38,7 +38,26 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
   const [avatarUrl, setAvatarUrl] = useState(team.avatar_url || '');
   const [niche, setNiche] = useState(team.niche || 'other');
   const [isPublic, setIsPublic] = useState(team.is_public);
-  const [inviteCode, setInviteCode] = useState(team.invite_code || '');
+  const [inviteCode, setInviteCode] = useState<string>('');
+
+  // Invite code is sensitive — fetched via secure RPC, not from public team row.
+  useEffect(() => {
+    let cancelled = false;
+    if (!isOwner) {
+      setInviteCode('');
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .rpc('get_team_invite_code' as never, { p_team_id: team.id } as never);
+      if (!cancelled && typeof data === 'string') {
+        setInviteCode(data);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [team.id, isOwner]);
 
   const inviteUrl = inviteCode ? `${window.location.origin}/join/${inviteCode}` : '';
 
