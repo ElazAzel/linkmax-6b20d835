@@ -67,6 +67,18 @@ export function useBlockEditor({
 
   const opRef = useRef(false);
 
+  // Highlight ring + auto-scroll target for the most recently inserted block
+  const [recentlyAddedBlockId, setRecentlyAddedBlockId] = useState<string | null>(null);
+  const recentlyAddedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const markRecentlyAdded = useCallback((id: string) => {
+    setRecentlyAddedBlockId(id);
+    if (recentlyAddedTimerRef.current) clearTimeout(recentlyAddedTimerRef.current);
+    recentlyAddedTimerRef.current = setTimeout(() => {
+      setRecentlyAddedBlockId((curr) => (curr === id ? null : curr));
+    }, 1800);
+  }, []);
+
   /**
    * Check if block type requires premium subscription
    */
