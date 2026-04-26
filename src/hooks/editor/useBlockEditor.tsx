@@ -143,7 +143,7 @@ export function useBlockEditor({
         return { success: false, error: 'Block creation failed' };
       }
     },
-    [isPremiumBlock, addBlock, blocks, playAdd, playError, onBlockHint, onQuestComplete, onClaimBlockToken, t, editorHistory, storeAddRecent]
+    [isPremiumBlock, addBlock, blocks, playAdd, playError, onBlockHint, onQuestComplete, onClaimBlockToken, t, editorHistory, storeAddRecent, markRecentlyAdded, setEditingBlock, setEditorOpen]
   );
 
   /**
@@ -183,7 +183,7 @@ export function useBlockEditor({
         return { success: false, error: 'Preset creation failed' };
       }
     },
-    [isPremiumBlock, addBlock, blocks, playAdd, playError, t, editorHistory, storeAddRecent]
+    [isPremiumBlock, addBlock, blocks, playAdd, playError, t, editorHistory, storeAddRecent, markRecentlyAdded]
   );
 
   /**
