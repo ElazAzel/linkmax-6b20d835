@@ -105,8 +105,21 @@ export function useBlockEditor({
         const newBlock = createBlock(blockType);
         addBlock(newBlock, position);
         playAdd?.();
-        toast.success(t('blocks.added', 'Block added'));
+        markRecentlyAdded(newBlock.id);
         onBlockHint?.(blockType, newBlock.id);
+
+        // For incomplete-by-default block types, immediately open the editor
+        // so the user lands directly in the form they need to fill in.
+        const willAutoOpenEditor = INCOMPLETE_BY_DEFAULT_TYPES.has(blockType);
+        if (willAutoOpenEditor) {
+          // Defer to next tick so addBlock state propagates first
+          setTimeout(() => {
+            setEditingBlock(newBlock);
+            setEditorOpen(true);
+          }, 60);
+        } else {
+          toast.success(t('blocks.added', 'Block added'));
+        }
 
         // Record to history
         const newBlocks = [...previousBlocks];
@@ -150,6 +163,7 @@ export function useBlockEditor({
         const newBlock = createBlock(preset.blockType, preset.overrides);
         addBlock(newBlock, targetPosition);
         playAdd?.();
+        markRecentlyAdded(newBlock.id);
         toast.success(t('blocks.added', 'Block added'));
 
         const newBlocks = [...previousBlocks];
