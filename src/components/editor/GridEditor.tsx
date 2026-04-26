@@ -58,6 +58,7 @@ import { BlockContextToolbar } from './BlockContextToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
