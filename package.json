@@ -42,7 +42,6 @@
     "skills:browse": "ai-agent-skills",
     "skills:list": "ai-agent-skills list",
     "skills:doctor": "ai-agent-skills doctor",
-    "quality:baseline": "node scripts/quality-baseline-check.mjs"
     "quality:baseline": "node scripts/quality-baseline-check.mjs",
     "docs:audit:freshness": "node scripts/audit-docs-freshness.mjs --scope=docs --days=60"
   },
