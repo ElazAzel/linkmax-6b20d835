@@ -171,6 +171,7 @@ function SortableGridBlockItem({
   isLast = false,
   onMoveUp,
   onMoveDown,
+  isRecentlyAdded = false,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const {
