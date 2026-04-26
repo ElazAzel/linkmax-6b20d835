@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { incrementChallengeProgress, recordActivity } from '@/services/social';
 import { useEditorStore } from '@/store/useEditorStore';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { addRecentBlockType, addRecentPreset } from '@/lib/editor/editor-session';
+import { INCOMPLETE_BY_DEFAULT_TYPES } from '@/lib/blocks/block-utils';
 import type { Block } from '@/types/page';
 import type { DeletedBlockInfo, BlockInsertResult } from '@/types/block-editor-types';
 import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
@@ -66,6 +67,18 @@ export function useBlockEditor({
 
   const opRef = useRef(false);
 
+  // Highlight ring + auto-scroll target for the most recently inserted block
+  const [recentlyAddedBlockId, setRecentlyAddedBlockId] = useState<string | null>(null);
+  const recentlyAddedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const markRecentlyAdded = useCallback((id: string) => {
+    setRecentlyAddedBlockId(id);
+    if (recentlyAddedTimerRef.current) clearTimeout(recentlyAddedTimerRef.current);
+    recentlyAddedTimerRef.current = setTimeout(() => {
+      setRecentlyAddedBlockId((curr) => (curr === id ? null : curr));
+    }, 1800);
+  }, []);
+
   /**
    * Check if block type requires premium subscription
    */
@@ -92,8 +105,21 @@ export function useBlockEditor({
         const newBlock = createBlock(blockType);
         addBlock(newBlock, position);
         playAdd?.();
-        toast.success(t('blocks.added', 'Block added'));
+        markRecentlyAdded(newBlock.id);
         onBlockHint?.(blockType, newBlock.id);
+
+        // For incomplete-by-default block types, immediately open the editor
+        // so the user lands directly in the form they need to fill in.
+        const willAutoOpenEditor = INCOMPLETE_BY_DEFAULT_TYPES.has(blockType);
+        if (willAutoOpenEditor) {
+          // Defer to next tick so addBlock state propagates first
+          setTimeout(() => {
+            setEditingBlock(newBlock);
+            setEditorOpen(true);
+          }, 60);
+        } else {
+          toast.success(t('blocks.added', 'Block added'));
+        }
 
         // Record to history
         const newBlocks = [...previousBlocks];
@@ -117,7 +143,7 @@ export function useBlockEditor({
         return { success: false, error: 'Block creation failed' };
       }
     },
-    [isPremiumBlock, addBlock, blocks, playAdd, playError, onBlockHint, onQuestComplete, onClaimBlockToken, t, editorHistory, storeAddRecent]
+    [isPremiumBlock, addBlock, blocks, playAdd, playError, onBlockHint, onQuestComplete, onClaimBlockToken, t, editorHistory, storeAddRecent, markRecentlyAdded, setEditingBlock, setEditorOpen]
   );
 
   /**
@@ -137,6 +163,7 @@ export function useBlockEditor({
         const newBlock = createBlock(preset.blockType, preset.overrides);
         addBlock(newBlock, targetPosition);
         playAdd?.();
+        markRecentlyAdded(newBlock.id);
         toast.success(t('blocks.added', 'Block added'));
 
         const newBlocks = [...previousBlocks];
@@ -156,7 +183,7 @@ export function useBlockEditor({
         return { success: false, error: 'Preset creation failed' };
       }
     },
-    [isPremiumBlock, addBlock, blocks, playAdd, playError, t, editorHistory, storeAddRecent]
+    [isPremiumBlock, addBlock, blocks, playAdd, playError, t, editorHistory, storeAddRecent, markRecentlyAdded]
   );
 
   /**
@@ -329,5 +356,6 @@ export function useBlockEditor({
     undoLastDelete,
     hasUndo: deletedBlocks.length > 0,
     isPremiumBlock,
+    recentlyAddedBlockId,
   };
 }

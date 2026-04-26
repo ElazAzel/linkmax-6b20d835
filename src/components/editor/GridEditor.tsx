@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useMemo, useId, useRef } from 'react';
+import { memo, useCallback, useState, useMemo, useId, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
@@ -58,6 +58,7 @@ import { BlockContextToolbar } from './BlockContextToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
@@ -120,6 +121,8 @@ interface GridEditorProps {
   onTransform?: (block: Block, toType: BlockType) => void;
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => void;
   pageNiche?: string;
+  /** Block ID that was just inserted — gets a one-time appear animation + ring */
+  recentlyAddedBlockId?: string | null;
 }
 
 interface SortableGridBlockItemProps {
@@ -145,6 +148,7 @@ interface SortableGridBlockItemProps {
   onMoveUp?: () => void;
   onMoveDown?: () => void;
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset) => void;
+  isRecentlyAdded?: boolean;
 }
 
 function SortableGridBlockItem({
@@ -168,6 +172,7 @@ function SortableGridBlockItem({
   isLast = false,
   onMoveUp,
   onMoveDown,
+  isRecentlyAdded = false,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const {
@@ -196,9 +201,27 @@ function SortableGridBlockItem({
 
   const selected = isSelected || isMultiSelected;
 
+  // Empty-hint detection (e.g. link without URL)
+  const emptyHint = useMemo(() => getBlockEmptyHint(block), [block]);
+
+  // Smooth scroll into view + ring highlight when this block was just inserted
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const setRefs = useCallback((node: HTMLDivElement | null) => {
+    wrapperRef.current = node;
+    setNodeRef(node);
+  }, [setNodeRef]);
+
+  useEffect(() => {
+    if (isRecentlyAdded && wrapperRef.current) {
+      requestAnimationFrame(() => {
+        wrapperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  }, [isRecentlyAdded]);
+
   return (
     <div
-      ref={setNodeRef}
+      ref={setRefs}
       style={style}
       className={cn(
         'relative group transition-all duration-300 rounded-2xl border-0',
@@ -211,6 +234,8 @@ function SortableGridBlockItem({
         // P4: Selection ring
         selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
         isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
+        // Recently-added: glowing ring + scale-in fade
+        isRecentlyAdded && !isDragging && 'ring-2 ring-primary/70 ring-offset-2 ring-offset-background animate-scale-in',
         // P5: Review mode dimming
         isDimmed && 'opacity-30 pointer-events-none',
       )}
@@ -270,6 +295,22 @@ function SortableGridBlockItem({
           block={block}
           onSave={(id, updates) => onUpdateBlock(id, updates)}
         />
+      )}
+
+      {/* Empty-hint chip — appears when block is missing required data */}
+      {emptyHint.isEmpty && !isDragging && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(block);
+          }}
+          className="absolute top-1.5 left-12 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/90 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
+          aria-label={t(emptyHint.hintKey, emptyHint.hintLabel)}
+        >
+          <Edit2 className="h-3 w-3" />
+          <span>{t(emptyHint.hintKey, emptyHint.hintLabel)}</span>
+        </button>
       )}
 
       {/* Block type label - bottom-left */}
@@ -429,6 +470,7 @@ export const GridEditor = memo(function GridEditor({
   onTransform,
   onInsertPreset,
   pageNiche,
+  recentlyAddedBlockId,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -726,12 +768,13 @@ export const GridEditor = memo(function GridEditor({
             const reordered = arrayMove(contentBlocks, index, index + 1);
             onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
           } : undefined}
+          isRecentlyAdded={recentlyAddedBlockId === block.id}
         />
       );
     });
 
     return items;
-  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks]);
+  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId]);
 
   return (
     <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-2 pb-32 md:pb-24">

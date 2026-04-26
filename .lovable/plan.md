@@ -1,136 +1,103 @@
-План полного аудита LinkMAX
+## Проблема
 
-Цель: провести не только скан, но и практический аудит с исправлениями: база данных/RLS, backend-функции, frontend-XSS/CSP, зависимости, CI/build и документация по остаточным рискам.
+Когда пользователь добавляет блок в редакторе, он получает «голый» дефолт: «Click Me», «New Link», «Enter your text here», https://example.com, заглушки Unsplash. Блок появляется резко, без анимации и без объяснения «что делать дальше». Это не выглядит «красиво» и сбивает UX.
 
-## 1. Зафиксировать текущую картину
+Сейчас красивая шторка добавления (`BlockInsertButton`) уже сделана хорошо. Боль — это **момент после нажатия**: визуальная вставка блока на холст и его пустой стартовый вид.
 
-- Перезапустить security scan и сохранить список активных findings.
-- Разделить findings на 3 группы:
-  - реальные уязвимости, которые надо исправить;
-  - intentional/by design публичные данные, которые надо документировать и пометить как принятый риск;
-  - ложные/информационные срабатывания.
-- Проверить, что предыдущая ошибка `package.json`/`quality:baseline` не вернулась, и что production build устанавливается/собирается.
+## Цель
 
-Уже видно по скану:
-- error: `teams.invite_code` виден всем, кто может читать публичные команды;
-- error: `zones.calendar_feed_token` виден всем участникам зоны;
-- warn: `telegram_bot_settings` доступна только service-role, нужно подтвердить/закрепить модель доступа;
-- warn: множество публично читаемых объектов видны через GraphQL introspection;
-- warn: CSP сейчас содержит `unsafe-inline`, `unsafe-eval`, широкие `img-src https: http:`;
-- info/by design: контактные поля published pages публичны как CTA бизнес-страницы.
+Сделать момент создания блока приятным, понятным и эстетичным, **ничего не сломав**:
+- Стартовые значения должны выглядеть как готовый кусок страницы, а не как форма «Lorem ipsum».
+- Блок должен **плавно появляться** на холсте с фокусом и подсказкой «нажми, чтобы редактировать».
+- Если поле обязательное (например URL у Link) — должно быть визуальное приглашение, а не строка-подделка `https://example.com`.
+- Сохранить всю существующую логику: типы блоков, manifest, аналитика, premium-гейтинг, история, undo/redo.
 
-## 2. Исправить критичные проблемы в базе данных
+## Что меняем
 
-### 2.1 Team invite codes
+### 1. Новые «эстетичные» дефолты для блоков (`src/lib/blocks/block-factory.ts`)
 
-- Убрать возможность читать `invite_code` через обычный `SELECT teams` для `anon`/`authenticated`.
-- Перевести чтение invite-кода в безопасный backend/RPC-путь только для owner/admin/team member с нужными правами.
-- Проверить и обновить клиентский код, если где-то ожидается `invite_code` напрямую из `teams`.
-- Оставить публичное чтение безопасных полей команды: `id`, `name`, `slug`, `description`, `avatar_url`, `niche`, `is_public`.
+Заменяем «голые» строки и фейковые URL на дружелюбные плейсхолдеры через i18n-ключи (с фоллбэками RU/EN), и убираем фейковые `https://example.com`, чтобы вместо них было пусто (поле подсветится в редакторе и в превью покажется приглашение).
 
-### 2.2 Zone calendar feed token
+Точечные правки:
+- `link`: `title` → «Новая ссылка», `url` → `''` (вместо `https://example.com`), `icon` → `globe` (как сейчас).
+- `button`: `title` → «Нажми меня», `url` → `''`. Дефолтный градиент уже норм.
+- `text`: `content` → «Напишите что-нибудь интересное…» (placeholder-стиль), `style` → `paragraph`.
+- `image`: оставляем красивую дефолтную картинку Unsplash (это ок) + alt из i18n.
+- `socials`: вместо двух «фейковых» соцсетей с урлами `https://instagram.com` — массив с одним элементом без url (`{ icon: 'instagram', url: '' }`), чтобы пользователь сразу заполнил.
+- `messenger`: то же — один пустой messenger c `platform: 'whatsapp', username: ''`.
+- `product`, `catalog`, `pricing`: оставляем демо-данные (это правда помогает понять блок), но с более нейтральными названиями («Пример товара» вместо «New Product»).
+- `video`: убираем мем-ссылку Rick Roll, ставим `url: ''` + красивый плейсхолдер-постер.
+- `download`: `fileUrl: ''` (как сейчас) — оставляем.
+- `form`, `faq`, `testimonial`, `booking`, `event`, `community`, `pricing` — уже имеют осмысленные демо-данные, оставляем.
+- `scratch`, `countdown`, `before_after`, `map`, `avatar`, `separator`, `custom_code` — мелкие косметические правки текстов.
 
-- Запретить чтение `calendar_feed_token` обычным участникам зоны.
-- Дать доступ к токену только owner/admin через отдельную безопасную функцию или отдельную защищённую таблицу настроек.
-- Проверить `calendar-feed` backend-функцию: токен должен валидироваться server-side, без раскрытия всем участникам.
-- При необходимости добавить функцию регенерации токена для owner/admin.
+Все строки прогоняем через i18n-ключи `blocks.defaults.*` с RU/EN/KK, чтобы дефолты были на языке интерфейса.
 
-### 2.3 Telegram bot settings
+### 2. Анимация появления блока на холсте
 
-- Проверить все записи/чтения `telegram_bot_settings`: сейчас они идут через backend-функцию Telegram bot webhook.
-- Если пользовательский UI не управляет этими настройками напрямую — оставить таблицу service-only, добавить constraints/индексы и пометить finding как accepted/intentional.
-- Если UI должен управлять настройками — добавить scoped RLS-политики `user_id = auth.uid()` и обновить код.
+В `src/components/editor/InlineEditableBlock.tsx`:
+- При маунте нового блока (по флагу `isNewlyAdded`, который мы прокинем из `useBlockEditor` через context/state) применяем класс `animate-block-create`: scale 0.96 → 1.0, opacity 0 → 1, лёгкий glow-ring (`ring-2 ring-primary/40`) на 1.2с, затем плавно затухает.
+- Добавляем soft-haptic на мобиле (он уже есть в проекте — `useHapticFeedback().lightTap()`).
+- Автоскролл к новому блоку с `behavior: 'smooth', block: 'center'` через `requestAnimationFrame` после маунта.
 
-### 2.4 GraphQL introspection exposure
+В `tailwind.config.ts` (или в `index.css` через `@layer utilities`) добавляем кейфрейм `block-create` (scale + opacity + ring-fade). Опираемся на существующие animation-утилиты, упомянутые в memory.
 
-- Проверить, используется ли GraphQL endpoint в приложении.
-- Если GraphQL не используется — ограничить/отключить публичную GraphQL introspection-доступность на уровне прав.
-- Если часть публичных объектов нужна — оставить только безопасные public views вместо прямого доступа к таблицам с чувствительными колонками.
-- Все intentional public objects задокументировать и пометить в security findings.
+### 3. «Empty hint» внутри блока в режиме редактирования
 
-## 3. Проверить RLS и multi-tenant boundaries
+Когда блок создан, но обязательные поля пустые (например `url` у `link`/`button`, `username` у `messenger`), показываем внутри блока ненавязчивый прозрачный оверлей-подсказку «Нажмите ✏️ чтобы добавить ссылку». Используем существующую логику в `InlineEditableBlock` (overlay уже есть для hover/touch).
 
-- Полный проход по всем таблицам с чувствительными данными:
-  - `user_profiles`
-  - `billing_history`
-  - `token_transactions`, `user_tokens`, wallet tables
-  - zone CRM tables
-  - bookings/leads/event registrations
-  - realtime tables: `zone_conversations`, `zone_messages`, `zone_automations`
-- Проверить, что:
-  - владельцы видят только свои данные;
-  - участники зоны видят только свою зону;
-  - admin-доступ идёт через `user_roles` + `has_role`, не через client-side флаги;
-  - функции `SECURITY DEFINER` имеют `SET search_path = public` и внутренние проверки `auth.uid()`.
-- Для realtime: либо подтвердить per-row RLS-фильтрацию, либо убрать лишние таблицы из realtime publication / сузить подписки.
+Реализация: маленький helper `getBlockEmptyHint(block)` в `src/lib/blocks/block-utils.ts`, возвращает `{ isEmpty: boolean, hintKey: string }`. Если `isEmpty`, в `InlineEditableBlock` поверх контента показываем чип «Заполните → ✏️».
 
-## 4. Backend-функции и публичные endpoints
+### 4. Открытие редактора блока сразу после вставки (опционально, smart-defaults)
 
-- Проверить каждую public backend-функцию с `verify_jwt = false`:
-  - lead/booking формы;
-  - webhooks;
-  - SEO/public endpoints;
-  - tracking pixel;
-  - translate/public content.
-- Для каждой функции проверить:
-  - input validation и length limits;
-  - rate limiting;
-  - CORS;
-  - отсутствие service-role утечек в ответах;
-  - webhook signature/API-key validation там, где нужно.
-- Усилить endpoints, где есть gaps: Zod/manual validation, status codes, safe error responses.
+Для блоков, где без заполнения смысла нет (`link`, `button`, `messenger`, `video`, `download`, `map`, `community`, `custom_code`), после `addBlock` сразу открываем `BlockEditorWrapper` (Sheet). Для блоков с готовым демо (`text`, `image`, `socials`, `faq`, `testimonial`, `pricing`, `product`, `catalog`, `event`, `booking`, `separator`, `countdown`, `scratch`, `before_after`, `avatar`) — НЕ открываем, чтобы пользователь сначала увидел результат.
 
-## 5. Frontend security audit
+Управляется белым списком `AUTO_OPEN_EDITOR_TYPES` в `useBlockEditor.tsx`, прокидывается в `onBlockHint` callback (он уже существует, см. строка 96).
 
-- Найти и проверить все места с:
-  - `dangerouslySetInnerHTML` / `innerHTML`;
-  - пользовательским HTML;
-  - custom widgets / embedded code;
-  - URL construction для WhatsApp/email/external links;
-  - direct localStorage/sessionStorage.
-- Исправить рискованные места:
-  - DOMPurify перед HTML render/PDF generation;
-  - `encodeURIComponent` для внешних URL;
-  - безопасная storage utility вместо прямого storage, кроме явно допустимых recovery/auth случаев.
+### 5. Hint-toast вместо короткого «Block added»
 
-## 6. CSP и browser hardening
+Сейчас после вставки показывается `toast.success('Block added')`. Заменяем на более полезный:
+- Если блок открылся в редакторе → toast НЕ показываем (редактор уже фидбек).
+- Если блок просто добавлен на холст → toast «Блок добавлен — потяните вверх чтобы перетащить, нажмите ✏️ чтобы редактировать», 3.5с, без перекрытия с автоскроллом.
 
-- Ужесточить CSP в `index.html`:
-  - убрать `unsafe-eval`, если production build проходит;
-  - добавить `object-src 'none'`, `base-uri 'self'`, `frame-ancestors`/`form-action`;
-  - сузить `img-src`, где возможно;
-  - сохранить только реально используемые third-party origins.
-- Проверить, не ломаются Telegram OAuth, analytics, CAPTCHA, fonts, Lovable Cloud, AI gateway.
+### 6. Качество сетки/выравнивания (минимальные правки рендера)
 
-## 7. Dependencies, CI и build
+В `src/components/blocks/LinkBlock.tsx`, `ButtonBlock.tsx`, `SocialsBlock.tsx`:
+- Убираем дублирование `border-white/10` когда есть кастомный `blockStyle` (мелкая регрессия — сейчас на тёмной теме иногда видна паразитная рамка).
+- Унифицируем `min-h-[56px]` → `min-h-12` (Tailwind токен), консистентно с design system.
+- Для пустых дефолтных Link/Button (без url) делаем приглушённый стиль (opacity 0.85 + dashed-ring), чтобы визуально читалось «черновик».
 
-- Запустить dependency/security audit через доступный registry/tooling.
-- Проверить lockfiles: сейчас есть `bun.lock` и `package-lock.json`; определить безопасный единый install path для production/CI.
-- Запустить:
-  - typecheck;
-  - lint/security tests;
-  - unit tests;
-  - production build.
-- Исправить найденные build/CI проблемы, не трогая auto-generated backend client/types files.
+## Что НЕ трогаем (страховка от регрессий)
 
-## 8. Документация и security findings
+- `BlockInsertButton.tsx` — шторка уже хорошая, только убедимся, что новые дефолты не ломают `recommendedBlocks`.
+- `block-manifest.ts`, типы блоков (`src/types/page.ts`) — не меняем сигнатуры.
+- `internal-builder.ts`, `useDashboardAI.ts`, `AdminTemplateEditor.tsx` — продолжают вызывать `createBlock(type)` с теми же сигнатурами; новые дефолты их не сломают.
+- Тесты `src/lib/blocks/__tests__/block-factory.test.ts` — обновим ожидания только там, где явно проверяется конкретное значение (например `createBlock('link').url === 'https://example.com'`).
+- Premium-гейтинг, аналитика, история, undo/redo — без изменений.
 
-- Обновить security documentation:
-  - что публично by design: published page contacts/media;
-  - какие таблицы service-only;
-  - какие endpoints public и почему;
-  - residual risks.
-- Через security findings отметить исправленные issues как fixed.
-- Для intentional findings добавить clear ignore reason, чтобы следующие сканы не возвращали их как незакрытые проблемы.
+## Технические детали
 
-## Технические изменения, которые ожидаются после approve
+**Файлы, которые поменяем:**
+1. `src/lib/blocks/block-factory.ts` — новые дефолты + i18n-helper-фоллбэки.
+2. `src/lib/blocks/block-utils.ts` — `getBlockEmptyHint()`, маленькая утилита.
+3. `src/hooks/editor/useBlockEditor.tsx` — флаг `isNewlyAdded`, белый список авто-открытия редактора, обновлённые toast-ы.
+4. `src/components/editor/InlineEditableBlock.tsx` — appear-анимация, autoScroll, empty-hint chip.
+5. `src/components/blocks/LinkBlock.tsx`, `ButtonBlock.tsx` — приглушённый «draft» стиль для пустого URL.
+6. `src/index.css` — keyframe `block-create` + utility-класс `animate-block-create`.
+7. `src/i18n/locales/{ru,en,kk}.json` — ключи `blocks.defaults.*`, `blocks.hints.*`.
+8. `src/lib/blocks/__tests__/block-factory.test.ts` — обновить assertions под новые дефолты.
 
-- Database migration для column-level/table-level access hardening:
-  - safe access к `teams.invite_code`;
-  - restricted access к `zones.calendar_feed_token`;
-  - возможное ограничение GraphQL/public grants;
-  - optional secure RPC для invite/calendar token flows.
-- Code changes в React/backend-функциях для новых безопасных путей чтения данных.
-- CSP update в `index.html`.
-- Санитизация HTML/PDF/custom content flows.
-- Финальная проверка: security scan + build + typecheck + targeted tests.
+**Безопасность изменений:**
+- `createBlock()` остаётся синхронным, тот же тип возвращаемого значения.
+- Все новые поля — необязательные (placeholder-строки в i18n с фоллбэком).
+- Анимация работает через CSS-класс на одном внешнем `<div>` — не задевает DnD-логику.
+- Эмпти-хинт — оверлей `position:absolute pointer-events-none` поверх блока в режиме hover/edit.
+
+## Результат
+
+После добавления любого блока:
+1. Блок плавно «вырастает» на холсте с лёгким glow-кольцом.
+2. Камера сама подъезжает к нему.
+3. Если блок «пустой по сути» (Link/Button/Messenger/Video/Map/Code/Download) — мгновенно открывается удобный редактор.
+4. Если блок «самодостаточный» (Text/Image/FAQ/Pricing/…) — пользователь сразу видит красивый готовый результат с чипом «✏️ Редактировать».
+5. Никаких больше «https://example.com» и «New Link».
