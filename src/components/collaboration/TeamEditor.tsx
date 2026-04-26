@@ -89,7 +89,6 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
         ...team,
         ...data,
         is_public: data.is_public ?? false,
-        invite_code: inviteCode
       });
       toast.success(t('teams.updated', 'Команда обновлена'));
     } catch (error) {
