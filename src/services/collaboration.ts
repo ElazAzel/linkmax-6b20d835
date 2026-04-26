@@ -457,50 +457,39 @@ export async function removeMemberFromTeam(
   return { success: true };
 }
 
-// Generate or get invite code for team
+// Generate or get invite code for team (owner/admin only via secure RPC)
 export async function generateTeamInviteCode(teamId: string): Promise<string | null> {
-  // First check if code already exists
-  const { data: team } = await supabase
-    .from('teams')
-    .select('invite_code')
-    .eq('id', teamId)
-    .maybeSingle();
+  // Try to read existing code via secure RPC (owner/admin only)
+  const { data: existing, error: readError } = await supabase
+    .rpc('get_team_invite_code' as never, { p_team_id: teamId } as never);
 
-  if (team?.invite_code) {
-    return team.invite_code;
+  if (!readError && existing) {
+    return existing as unknown as string;
   }
 
-  // Generate new code
-  const code = `team-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
+  // Otherwise rotate to create a fresh code
+  const { data: rotated, error: rotateError } = await supabase
+    .rpc('rotate_team_invite_code' as never, { p_team_id: teamId } as never);
 
-  const { error } = await supabase
-    .from('teams')
-    .update({ invite_code: code })
-    .eq('id', teamId);
-
-  if (error) {
-    logger.error('Error generating invite code', error, { context: 'collaboration', data: { teamId } });
+  if (rotateError) {
+    logger.error('Error generating invite code', rotateError, { context: 'collaboration', data: { teamId } });
     return null;
   }
 
-  return code;
+  return (rotated as unknown as string) ?? null;
 }
 
-// Reset invite code
+// Reset invite code (owner/admin only via secure RPC)
 export async function resetTeamInviteCode(teamId: string): Promise<string | null> {
-  const code = `team-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
-
-  const { error } = await supabase
-    .from('teams')
-    .update({ invite_code: code })
-    .eq('id', teamId);
+  const { data, error } = await supabase
+    .rpc('rotate_team_invite_code' as never, { p_team_id: teamId } as never);
 
   if (error) {
     logger.error('Error resetting invite code', error, { context: 'collaboration', data: { teamId } });
     return null;
   }
 
-  return code;
+  return (data as unknown as string) ?? null;
 }
 
 // Join team by invite code
