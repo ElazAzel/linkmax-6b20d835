@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { incrementChallengeProgress, recordActivity } from '@/services/social';
 import { useEditorStore } from '@/store/useEditorStore';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { addRecentBlockType, addRecentPreset } from '@/lib/editor/editor-session';
+import { INCOMPLETE_BY_DEFAULT_TYPES } from '@/lib/blocks/block-utils';
 import type { Block } from '@/types/page';
 import type { DeletedBlockInfo, BlockInsertResult } from '@/types/block-editor-types';
 import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
