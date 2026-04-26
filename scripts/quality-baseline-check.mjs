@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import { extname, join } from 'node:path';
 
 const BASELINE_PATH = 'config/quality-baseline.json';
 
@@ -25,20 +25,43 @@ const thresholds = {
   consoleLogMax: Number(process.env.CONSOLE_LOG_MAX ?? baseline.consoleLogMax),
 };
 
-const countMatches = (command) => {
-  const output = execSync(command, { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
-  const parsed = Number(output);
+const SOURCE_DIR = 'src';
+const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx']);
 
-  if (!Number.isFinite(parsed)) {
-    throw new Error(`Failed to parse numeric output for command: ${command}`);
+const collectSourceFiles = (directory) => {
+  const entries = readdirSync(directory, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    const entryPath = join(directory, entry.name);
+
+    if (entry.isDirectory()) {
+      files.push(...collectSourceFiles(entryPath));
+      continue;
+    }
+
+    if (entry.isFile() && SOURCE_EXTENSIONS.has(extname(entry.name))) {
+      files.push(entryPath);
+    }
   }
 
-  return parsed;
+  return files;
+};
+
+const countMatchingLines = (pattern) => {
+  let matches = 0;
+
+  for (const filePath of collectSourceFiles(SOURCE_DIR)) {
+    const lines = readFileSync(filePath, 'utf8').split(/\r?\n/);
+    matches += lines.filter((line) => pattern.test(line)).length;
+  }
+
+  return matches;
 };
 
 const metrics = {
-  any: countMatches("rg -n '\\bany\\b' src --glob '*.{ts,tsx}' | wc -l"),
-  consoleLog: countMatches("rg -n 'console\\.log\\(' src --glob '*.{ts,tsx}' | wc -l"),
+  any: countMatchingLines(/\bany\b/),
+  consoleLog: countMatchingLines(/console\.log\(/),
 };
 
 console.log('Quality baseline check');

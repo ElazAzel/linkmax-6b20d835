@@ -235,7 +235,7 @@ Baseline по каждому KPI фиксируется в первом 0-2 не
 
 | ID | Изменение | Статус |
 | :--- | :--- | :--- |
-| KZN-010 | CRM lead quick actions теперь пишут `activation:lead_replied`, а status updates пишут `activation:lead_status_changed`. | Implemented safe step |
+| KZN-010 | CRM lead quick actions теперь пишут `activation:lead_replied`, а первый ответ переводит только новый лид в `contacted`, не даунгрейдит поздние статусы и пишет `activation:lead_status_changed`. | Implemented platform step |
 | KZN-004 | AI Builder onboarding теперь пишет `activation:wizard_started`, `activation:wizard_niche_selected`, `activation:wizard_completed`, если известен `pageId`. | Implemented measurement step |
 | KZN-018 | Lead status update в dashboard дополнительно фильтруется по `user_id` на клиентском запросе. | Implemented safe step |
 | KZN-017 | В `useLeads` убраны оставшиеся `any` на lead source/status/update path. | Implemented safe step |
