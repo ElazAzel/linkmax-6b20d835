@@ -4019,6 +4019,7 @@ export type Database = {
           slug: string
         }[]
       }
+      get_team_invite_code: { Args: { p_team_id: string }; Returns: string }
       get_team_owner: { Args: { p_team_id: string }; Returns: string }
       get_token_analytics: {
         Args: { p_end_date?: string; p_start_date?: string }
@@ -4041,6 +4042,10 @@ export type Database = {
       }
       get_user_pages: { Args: { p_user_id: string }; Returns: Json }
       get_user_zone_ids: { Args: { p_user_id: string }; Returns: string[] }
+      get_zone_calendar_feed_token: {
+        Args: { p_zone_id: string }
+        Returns: string
+      }
       get_zone_invite_by_token: { Args: { p_token: string }; Returns: Json }
       get_zone_member_limit: { Args: { p_plan_code: string }; Returns: number }
       has_role: {
@@ -4108,10 +4113,15 @@ export type Database = {
             Returns: Json
           }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
+      regenerate_zone_calendar_feed_token: {
+        Args: { p_zone_id: string }
+        Returns: string
+      }
       remove_zone_member: {
         Args: { p_member_user_id: string; p_zone_id: string }
         Returns: Json
       }
+      rotate_team_invite_code: { Args: { p_team_id: string }; Returns: string }
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }
         Returns: undefined

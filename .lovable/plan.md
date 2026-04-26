@@ -1,74 +1,136 @@
+План полного аудита LinkMAX
 
+Цель: провести не только скан, но и практический аудит с исправлениями: база данных/RLS, backend-функции, frontend-XSS/CSP, зависимости, CI/build и документация по остаточным рискам.
 
-## Page Builder — следующий раунд улучшений
+## 1. Зафиксировать текущую картину
 
-### Что не докручено сейчас
+- Перезапустить security scan и сохранить список активных findings.
+- Разделить findings на 3 группы:
+  - реальные уязвимости, которые надо исправить;
+  - intentional/by design публичные данные, которые надо документировать и пометить как принятый риск;
+  - ложные/информационные срабатывания.
+- Проверить, что предыдущая ошибка `package.json`/`quality:baseline` не вернулась, и что production build устанавливается/собирается.
 
-**1. Шаблонов меньше, чем ниш.** В БД 6 шаблонов (`expert, beauty, fitness, business, tech, services`), а в `NICHES` — 16 значений. 10 ниш (`education, health, art, food, music, fashion, travel, realestate, events, other`) не имеют шаблона и уходят в захардкоженный fallback из 4 блоков (`profile/catalog/messenger/socials`). Тип `catalog` в манифесте отсутствует — fallback фактически даёт сломанный «голый» скелет.
+Уже видно по скану:
+- error: `teams.invite_code` виден всем, кто может читать публичные команды;
+- error: `zones.calendar_feed_token` виден всем участникам зоны;
+- warn: `telegram_bot_settings` доступна только service-role, нужно подтвердить/закрепить модель доступа;
+- warn: множество публично читаемых объектов видны через GraphQL introspection;
+- warn: CSP сейчас содержит `unsafe-inline`, `unsafe-eval`, широкие `img-src https: http:`;
+- info/by design: контактные поля published pages публичны как CTA бизнес-страницы.
 
-**2. AI-промпт `niche-builder` не знает про новые ниши.** В `nichePrompts` Edge-функции прописаны только `barber/photographer/psychologist/fitness/musician/designer/teacher/shop/marketer/beauty/chef`. Для `expert, business, tech, services, education, health, art, food, fashion, travel, realestate, events, other` всегда подставляется generic «специалиста с услугами и контактами». AI генерирует обезличенно.
+## 2. Исправить критичные проблемы в базе данных
 
-**3. AI возвращает блоки с типами, которых у нас нет.** Промпт обещает `link, product, testimonial, video, carousel`, а в новых шаблонах используются `pricing, gallery, booking, testimonials, form, links`. Это рассинхрон: AI-сборка и шаблон-сборка дают разные структуры → пользователь видит «не то, что в превью».
+### 2.1 Team invite codes
 
-**4. Шаг `description` спрашивает только имя+bio.** План #4 из прошлого раунда (опциональные `services`/`contacts`) не был реализован — поля в `userInfo` объявлены, но в UI отсутствуют. AI получает пустые `details`, поэтому контент общий.
+- Убрать возможность читать `invite_code` через обычный `SELECT teams` для `anon`/`authenticated`.
+- Перевести чтение invite-кода в безопасный backend/RPC-путь только для owner/admin/team member с нужными правами.
+- Проверить и обновить клиентский код, если где-то ожидается `invite_code` напрямую из `teams`.
+- Оставить публичное чтение безопасных полей команды: `id`, `name`, `slug`, `description`, `avatar_url`, `niche`, `is_public`.
 
-**5. Превью шаблона юзер не видит.** `selectedTemplate` авто-выбирается первым, шаг с каруселью пресетов пропущен. Юзер не понимает, что именно соберётся.
+### 2.2 Zone calendar feed token
 
-**6. Цель (`goal`) не передаётся в AI.** В `details` склеивается локализованная строка цели, но Edge-функция её игнорирует — ни в `systemPrompt`, ни в логике нет `input.goal`. CTA в собранной странице не подстраиваются под «лиды vs продажи vs визитка».
+- Запретить чтение `calendar_feed_token` обычным участникам зоны.
+- Дать доступ к токену только owner/admin через отдельную безопасную функцию или отдельную защищённую таблицу настроек.
+- Проверить `calendar-feed` backend-функцию: токен должен валидироваться server-side, без раскрытия всем участникам.
+- При необходимости добавить функцию регенерации токена для owner/admin.
 
-**7. На шаге `generating` нет реального таймаута.** Если Gemini подвиснет, юзер сидит на лоадере неограниченно. Нужен `Promise.race` с 25–30 сек.
+### 2.3 Telegram bot settings
 
-**8. На `complete` нельзя вернуться назад.** Если результат не нравится — только закрыть и потерять прогресс. Нет «Перегенерировать с другой нишей/целью».
+- Проверить все записи/чтения `telegram_bot_settings`: сейчас они идут через backend-функцию Telegram bot webhook.
+- Если пользовательский UI не управляет этими настройками напрямую — оставить таблицу service-only, добавить constraints/индексы и пометить finding как accepted/intentional.
+- Если UI должен управлять настройками — добавить scoped RLS-политики `user_id = auth.uid()` и обновить код.
 
----
+### 2.4 GraphQL introspection exposure
 
-### План
+- Проверить, используется ли GraphQL endpoint в приложении.
+- Если GraphQL не используется — ограничить/отключить публичную GraphQL introspection-доступность на уровне прав.
+- Если часть публичных объектов нужна — оставить только безопасные public views вместо прямого доступа к таблицам с чувствительными колонками.
+- Все intentional public objects задокументировать и пометить в security findings.
 
-**Шаг 1. Засеять оставшиеся 10 ниш шаблонами** (миграция).
-По 1 шаблону для `education, health, art, food, music, fashion, travel, realestate, events, other` — 5–7 блоков с реалистичной структурой под нишу. Используем только существующие типы из манифеста (`profile, text, pricing, links, gallery, testimonials, form, faq, booking, messenger, socials, product, video, countdown, separator`). Fallback из 4-блочного `catalog`-скелета удалить — теперь он не нужен.
+## 3. Проверить RLS и multi-tenant boundaries
 
-**Шаг 2. Расширить `nichePrompts` в `ai-content-generator`.**
-Добавить промпт-описания для всех 16 ниш (`expert`, `education`, `business`, `health`, `art`, `food`, `music`, `tech`, `fashion`, `travel`, `realestate`, `events`, `services`, `other`). Каждое описание — 1–2 предложения с типичными услугами/контентом для ниши.
+- Полный проход по всем таблицам с чувствительными данными:
+  - `user_profiles`
+  - `billing_history`
+  - `token_transactions`, `user_tokens`, wallet tables
+  - zone CRM tables
+  - bookings/leads/event registrations
+  - realtime tables: `zone_conversations`, `zone_messages`, `zone_automations`
+- Проверить, что:
+  - владельцы видят только свои данные;
+  - участники зоны видят только свою зону;
+  - admin-доступ идёт через `user_roles` + `has_role`, не через client-side флаги;
+  - функции `SECURITY DEFINER` имеют `SET search_path = public` и внутренние проверки `auth.uid()`.
+- Для realtime: либо подтвердить per-row RLS-фильтрацию, либо убрать лишние таблицы из realtime publication / сузить подписки.
 
-**Шаг 3. Синхронизировать список типов блоков в AI-промпте.**
-Заменить устаревший список (`link, product, testimonial, carousel`) на актуальный из манифеста: добавить `pricing, gallery, testimonials (множ.), form, booking, links, faq`. Удалить недоступные `carousel`/`product` (или оставить только если они реально в манифесте — проверим).
+## 4. Backend-функции и публичные endpoints
 
-**Шаг 4. Передавать `goal` в AI.**
-Расширить тело запроса: `body.input.goal = selectedGoal`. В Edge-функции внутри `niche-builder` добавить goal-aware блок промпта: для `leads` — упор на `form/messenger/booking`, для `sales` — `pricing/product/payments`, для `brand` — `text/gallery/socials`, для `events` — `countdown/booking/form`.
+- Проверить каждую public backend-функцию с `verify_jwt = false`:
+  - lead/booking формы;
+  - webhooks;
+  - SEO/public endpoints;
+  - tracking pixel;
+  - translate/public content.
+- Для каждой функции проверить:
+  - input validation и length limits;
+  - rate limiting;
+  - CORS;
+  - отсутствие service-role утечек в ответах;
+  - webhook signature/API-key validation там, где нужно.
+- Усилить endpoints, где есть gaps: Zod/manual validation, status codes, safe error responses.
 
-**Шаг 5. Добавить опциональные поля в шаг `description`.**
-Раскрывающийся блок «Добавить детали (необязательно)»: `services` (textarea, по строке) и `contacts` (Instagram/Telegram/WhatsApp одной строкой). Эти поля уже объявлены в `userInfo` и нужно только пробросить их в форму и в `details` для AI.
+## 5. Frontend security audit
 
-**Шаг 6. Вернуть превью шаблона перед генерацией.**
-Между `niche` и `description` показать мини-карточку выбранного шаблона: иконки блоков по порядку + 1–2 строки описания + ссылка «Выбрать другой» (открывает карусель альтернативных шаблонов из той же ниши). Это снимет эффект «непонятно, что соберётся».
+- Найти и проверить все места с:
+  - `dangerouslySetInnerHTML` / `innerHTML`;
+  - пользовательским HTML;
+  - custom widgets / embedded code;
+  - URL construction для WhatsApp/email/external links;
+  - direct localStorage/sessionStorage.
+- Исправить рискованные места:
+  - DOMPurify перед HTML render/PDF generation;
+  - `encodeURIComponent` для внешних URL;
+  - безопасная storage utility вместо прямого storage, кроме явно допустимых recovery/auth случаев.
 
-**Шаг 7. Таймаут и безопасный fallback.**
-В `handleGenerate` обернуть `supabase.functions.invoke` в `Promise.race` с 25-секундным таймером. По таймауту/ошибке — тихо переключаться на `generateBlocksFromTemplate` без шумного toast-error; в логи писать `console.warn`.
+## 6. CSP и browser hardening
 
-**Шаг 8. «Перегенерировать» на шаге `complete`.**
-Кнопка-секондари «🔄 Перегенерировать» рядом с «Опубликовать»/«Отредактировать»: возвращает на шаг `generating` и заново зовёт AI с теми же параметрами. Чтобы избежать абуза — лимит 2 ретрая в сессии (state-флаг).
+- Ужесточить CSP в `index.html`:
+  - убрать `unsafe-eval`, если production build проходит;
+  - добавить `object-src 'none'`, `base-uri 'self'`, `frame-ancestors`/`form-action`;
+  - сузить `img-src`, где возможно;
+  - сохранить только реально используемые third-party origins.
+- Проверить, не ломаются Telegram OAuth, analytics, CAPTCHA, fonts, Lovable Cloud, AI gateway.
 
-**Шаг 9. UX-полировка.**
-- На `generating` крутящийся текст-ticker реальных шагов: «Подбираем шаблон…» → «Спрашиваем у AI…» → «Раскладываем блоки…» (3 фазы с задержками, привязаны к реальным точкам кода через state).
-- При успехе AI отдельно показывать «✓ AI сгенерировал контент», при fallback — «✓ Шаблон применён» — честность повышает доверие.
+## 7. Dependencies, CI и build
 
----
+- Запустить dependency/security audit через доступный registry/tooling.
+- Проверить lockfiles: сейчас есть `bun.lock` и `package-lock.json`; определить безопасный единый install path для production/CI.
+- Запустить:
+  - typecheck;
+  - lint/security tests;
+  - unit tests;
+  - production build.
+- Исправить найденные build/CI проблемы, не трогая auto-generated backend client/types files.
 
-### Технические детали
+## 8. Документация и security findings
 
-| Файл | Действия |
-|---|---|
-| `supabase/migrations/<new>.sql` | INSERT 10 шаблонов в `templates` для нехватающих ниш. Все `is_public=true`, осмысленный `sort_order`, корректные `category`. |
-| `supabase/functions/ai-content-generator/index.ts` | Расширить `nichePrompts` до 16 записей. Заменить список типов блоков на актуальный (сверка с `BLOCK_MANIFEST`). Добавить чтение и использование `input.goal`. |
-| `src/components/onboarding/AIBuilderWizard.tsx` | (a) Добавить опциональные поля `services`/`contacts` на шаге `description` (collapsible). (b) Добавить шаг-превью шаблона между `niche` и `description` (или мини-карточку в `description`). (c) Передавать `goal` в `body.input.goal`. (d) `Promise.race` с таймаутом 25с. (e) Кнопка «Перегенерировать» на `complete` со счётчиком ретраев. (f) Удалить хардкоженный `catalog`-fallback в `handleSelectNiche`. |
-| `src/locales/{ru,en,kk,uz}/translation.json` | Ключи: `aiBuilder.servicesLabel`, `aiBuilder.servicesPlaceholder`, `aiBuilder.contactsLabel`, `aiBuilder.contactsPlaceholder`, `aiBuilder.moreDetailsToggle`, `aiBuilder.previewTitle`, `aiBuilder.regenerate`, `aiBuilder.aiSucceeded`, `aiBuilder.fallbackUsed`, `aiBuilder.timeout`. |
+- Обновить security documentation:
+  - что публично by design: published page contacts/media;
+  - какие таблицы service-only;
+  - какие endpoints public и почему;
+  - residual risks.
+- Через security findings отметить исправленные issues как fixed.
+- Для intentional findings добавить clear ignore reason, чтобы следующие сканы не возвращали их как незакрытые проблемы.
 
-### Что НЕ трогаем
-- БД-схему `templates` (только сидинг).
-- `useDashboard.ts` — обработчик публикации уже работает.
-- `useDashboardOnboarding.ts` — унификация ключей сделана.
-- Сам редактор и `BlockRenderer`.
+## Технические изменения, которые ожидаются после approve
 
-### Риски
-- Если AI вернёт блоки с `type`, отсутствующим в манифесте, `createBaseBlock` бросит — уже обёрнуто в try/catch на уровне `useDashboardAI`, но в `AIBuilderWizard.handleGenerate` сейчас НЕ обёрнуто. Нужно добавить фильтрацию `aiBlocks` по списку известных типов перед `createBaseBlock`.
-
+- Database migration для column-level/table-level access hardening:
+  - safe access к `teams.invite_code`;
+  - restricted access к `zones.calendar_feed_token`;
+  - возможное ограничение GraphQL/public grants;
+  - optional secure RPC для invite/calendar token flows.
+- Code changes в React/backend-функциях для новых безопасных путей чтения данных.
+- CSP update в `index.html`.
+- Санитизация HTML/PDF/custom content flows.
+- Финальная проверка: security scan + build + typecheck + targeted tests.
