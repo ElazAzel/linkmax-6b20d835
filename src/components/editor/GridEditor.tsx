@@ -200,9 +200,27 @@ function SortableGridBlockItem({
 
   const selected = isSelected || isMultiSelected;
 
+  // Empty-hint detection (e.g. link without URL)
+  const emptyHint = useMemo(() => getBlockEmptyHint(block), [block]);
+
+  // Smooth scroll into view + ring highlight when this block was just inserted
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const setRefs = useCallback((node: HTMLDivElement | null) => {
+    wrapperRef.current = node;
+    setNodeRef(node);
+  }, [setNodeRef]);
+
+  useEffect(() => {
+    if (isRecentlyAdded && wrapperRef.current) {
+      requestAnimationFrame(() => {
+        wrapperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  }, [isRecentlyAdded]);
+
   return (
     <div
-      ref={setNodeRef}
+      ref={setRefs}
       style={style}
       className={cn(
         'relative group transition-all duration-300 rounded-2xl border-0',
@@ -215,6 +233,8 @@ function SortableGridBlockItem({
         // P4: Selection ring
         selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
         isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
+        // Recently-added: glowing ring + scale-in fade
+        isRecentlyAdded && !isDragging && 'ring-2 ring-primary/70 ring-offset-2 ring-offset-background animate-scale-in',
         // P5: Review mode dimming
         isDimmed && 'opacity-30 pointer-events-none',
       )}
