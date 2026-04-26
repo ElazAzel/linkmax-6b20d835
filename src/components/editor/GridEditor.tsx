@@ -120,6 +120,8 @@ interface GridEditorProps {
   onTransform?: (block: Block, toType: BlockType) => void;
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => void;
   pageNiche?: string;
+  /** Block ID that was just inserted — gets a one-time appear animation + ring */
+  recentlyAddedBlockId?: string | null;
 }
 
 interface SortableGridBlockItemProps {
@@ -145,6 +147,7 @@ interface SortableGridBlockItemProps {
   onMoveUp?: () => void;
   onMoveDown?: () => void;
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset) => void;
+  isRecentlyAdded?: boolean;
 }
 
 function SortableGridBlockItem({
