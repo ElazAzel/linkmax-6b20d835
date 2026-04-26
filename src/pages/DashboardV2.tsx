@@ -505,6 +505,7 @@ function DashboardV2Inner() {
                   onRedo={editorHistory.redo}
                   onOpenVersions={() => setShowVersions(true)}
                   deepLinkAction={activationAction}
+                  recentlyAddedBlockId={dashboard.blockEditor.recentlyAddedBlockId}
                 />
               </ScreenErrorBoundary>
             </div>
