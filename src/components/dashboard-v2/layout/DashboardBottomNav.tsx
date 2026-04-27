@@ -36,6 +36,13 @@ interface DashboardBottomNavProps {
 
 const TABS: NavTab[] = [
   {
+    id: 'home',
+    icon: Home,
+    labelKey: 'dashboard.nav.home',
+    defaultLabel: 'Главная',
+    path: '/dashboard/home',
+  },
+  {
     id: 'editor',
     icon: PenTool,
     labelKey: 'dashboard.nav.editor',
@@ -56,17 +63,9 @@ const TABS: NavTab[] = [
     defaultLabel: 'Аналитика',
     path: '/dashboard/insights',
   },
-  {
-    id: 'settings',
-    icon: Settings,
-    labelKey: 'dashboard.nav.settings',
-    defaultLabel: 'Настройки',
-    path: '/dashboard/settings',
-  },
 ];
 
 const MORE_ITEMS: NavTab[] = [
-  { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор', path: '' },
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
   { id: 'zone-deals', icon: Contact, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-tasks', icon: Calendar, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи', path: '' },
@@ -109,32 +108,35 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
               const Icon = tab.icon;
               const badge = tab.id === 'activity' ? activityBadge : undefined;
 
+              const label = t(tab.labelKey, tab.defaultLabel);
               return (
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab)}
+                  aria-label={label}
+                  aria-current={isActive ? 'page' : undefined}
                   className={cn(
-                    "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-300 active:scale-90 min-w-0 h-full",
-                    isActive ? "text-primary scale-110" : "text-muted-foreground/60"
+                    "relative flex flex-col items-center justify-center gap-1 transition-all duration-200 active:scale-95 min-w-0 h-full",
+                    isActive ? "text-primary" : "text-muted-foreground"
                   )}
                   data-testid={`${tab.id}-tab`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="bottomNavIndicator"
-                      className="absolute -top-1 w-8 h-1 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                      className="absolute -top-1 w-8 h-1 rounded-full bg-primary"
                     />
                   )}
                   <div className="relative">
-                    <Icon className={cn("h-5 w-5 shrink-0 transition-transform", isActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
+                    <Icon className="h-5 w-5 shrink-0" />
                     {badge && badge > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-black border-2 border-background">
+                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold border-2 border-background">
                         {badge > 99 ? '99+' : badge}
                       </span>
                     )}
                   </div>
-                  <span className={cn("text-[10px] font-bold leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal text-center break-words", isActive ? "text-primary" : "text-muted-foreground/80")}>
-                    {t(tab.labelKey, tab.defaultLabel)}
+                  <span className={cn("text-[11px] font-medium leading-none max-w-full px-0.5 truncate", isActive ? "text-primary" : "text-muted-foreground")}>
+                    {label}
                   </span>
                 </button>
               );
@@ -143,19 +145,21 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
             {/* More button */}
             <button
               onClick={() => { haptic.lightTap(); setMoreOpen(true); }}
+              aria-label={t('dashboard.nav.more', 'Ещё')}
+              aria-expanded={moreOpen}
               className={cn(
-                "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-300 active:scale-90 min-w-0 h-full",
-                isMoreActive ? "text-primary scale-110" : "text-muted-foreground/60"
+                "relative flex flex-col items-center justify-center gap-1 transition-all duration-200 active:scale-95 min-w-0 h-full",
+                isMoreActive ? "text-primary" : "text-muted-foreground"
               )}
             >
               {isMoreActive && (
                 <motion.div
                   layoutId="bottomNavIndicator"
-                  className="absolute -top-1 w-8 h-1 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                  className="absolute -top-1 w-8 h-1 rounded-full bg-primary"
                 />
               )}
-              <MoreHorizontal className={cn("h-5 w-5 shrink-0", isMoreActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
-              <span className={cn("text-[10px] font-bold leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal text-center break-words", isMoreActive ? "text-primary" : "text-muted-foreground/80")}>
+              <MoreHorizontal className="h-5 w-5 shrink-0" />
+              <span className={cn("text-[11px] font-medium leading-none max-w-full px-0.5 truncate", isMoreActive ? "text-primary" : "text-muted-foreground")}>
                 {t('dashboard.nav.more', 'Ещё')}
               </span>
             </button>

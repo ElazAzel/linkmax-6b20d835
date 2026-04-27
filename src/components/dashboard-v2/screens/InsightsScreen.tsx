@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatCard } from '../common/StatCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
@@ -338,26 +339,45 @@ export const InsightsScreen = memo(function InsightsScreen({
           <>
             {/* Tab Navigation */}
             <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
-              <TabsList className="flex overflow-x-auto scrollbar-hide w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1 items-center gap-1 shadow-inner glass-subtle">
-                <TabsTrigger value="overview" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <ChartBar className="h-3.5 w-3.5 mr-1 shrink-0" />
+              {/* Mobile: Select dropdown */}
+              <div className="md:hidden">
+                <Select value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)}>
+                  <SelectTrigger className="h-12 w-full rounded-2xl bg-white/5 border-white/10" aria-label={t('analytics.tabs.label', 'Раздел аналитики')}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="overview"><ChartBar className="h-4 w-4 inline mr-2" />{t('analytics.tabs.overview', 'Обзор')}</SelectItem>
+                    <SelectItem value="traffic"><Globe className="h-4 w-4 inline mr-2" />{t('analytics.tabs.traffic', 'Трафик')}</SelectItem>
+                    <SelectItem value="blocks"><Target className="h-4 w-4 inline mr-2" />{t('analytics.tabs.blocks', 'Блоки')}</SelectItem>
+                    <SelectItem value="funnel"><TrendingUp className="h-4 w-4 inline mr-2" />{t('analytics.tabs.funnel', 'Воронка')}</SelectItem>
+                    {isPremium && (
+                      <SelectItem value="experiments"><FlaskConical className="h-4 w-4 inline mr-2" />{t('analytics.tabs.experiments', 'Тесты')}</SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Desktop: TabsList */}
+              <TabsList className="hidden md:flex w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1 items-center gap-1 shadow-inner glass-subtle">
+                <TabsTrigger value="overview" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <ChartBar className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.overview', 'Обзор')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="traffic" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
+                <TabsTrigger value="traffic" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <Globe className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.traffic', 'Трафик')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="blocks" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <Target className="h-3.5 w-3.5 mr-1 shrink-0" />
+                <TabsTrigger value="blocks" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <Target className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.blocks', 'Блоки')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="funnel" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <TrendingUp className="h-3.5 w-3.5 mr-1 shrink-0" />
+                <TabsTrigger value="funnel" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <TrendingUp className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.funnel', 'Воронка')}</span>
                 </TabsTrigger>
                 {isPremium && (
-                  <TabsTrigger value="experiments" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                    <FlaskConical className="h-3.5 w-3.5 mr-1 shrink-0" />
+                  <TabsTrigger value="experiments" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                    <FlaskConical className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                     <span>{t('analytics.tabs.experiments', 'Тесты')}</span>
                   </TabsTrigger>
                 )}

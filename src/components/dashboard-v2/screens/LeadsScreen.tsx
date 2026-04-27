@@ -39,8 +39,13 @@ import { trackLeadReplied, trackLeadStatusChanged } from '@/lib/activation-event
 
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
 type ReplyChannel = 'whatsapp' | 'telegram' | 'call' | 'email';
+type StatusFilter = 'active' | 'all' | LeadStatus;
 
-const STATUS_FILTERS = ['all', 'new', 'contacted', 'qualified', 'converted', 'lost'] as const;
+const PRIMARY_FILTERS: { id: StatusFilter; labelKey: string; defaultLabel: string }[] = [
+    { id: 'active', labelKey: 'dashboard.leads.filterActive', defaultLabel: 'Активные' },
+    { id: 'all', labelKey: 'dashboard.leads.filterAll', defaultLabel: 'Все' },
+];
+const SECONDARY_STATUSES: LeadStatus[] = ['new', 'contacted', 'qualified', 'converted', 'lost'];
 
 function getLeadMetadata(lead: Lead | undefined): Record<string, unknown> | null {
     const metadata = lead?.metadata;
@@ -77,7 +82,8 @@ export const LeadsScreen = memo(function LeadsScreen() {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<typeof STATUS_FILTERS[number]>('all');
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+    const [filterSheetOpen, setFilterSheetOpen] = useState(false);
     const [loadError, setLoadError] = useState(false);
 
     const fetchLeads = useCallback(async () => {
@@ -154,7 +160,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
     };
 
     const filteredLeads = leads.filter(lead => {
-        const matchesStatus = statusFilter === 'all' || lead.status === statusFilter;
+        const status = lead.status as LeadStatus;
+        const matchesStatus =
+            statusFilter === 'all'
+                ? true
+                : statusFilter === 'active'
+                    ? status === 'new' || status === 'contacted' || status === 'qualified'
+                    : status === statusFilter;
         const matchesSearch = !searchQuery ||
             lead.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             lead.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -164,12 +176,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
     const stats = {
         all: leads.length,
+        active: leads.filter(l => ['new','contacted','qualified'].includes(l.status as string)).length,
         new: leads.filter(l => l.status === 'new').length,
         contacted: leads.filter(l => l.status === 'contacted').length,
         qualified: leads.filter(l => l.status === 'qualified').length,
         converted: leads.filter(l => l.status === 'converted').length,
         lost: leads.filter(l => l.status === 'lost').length,
-    };
+    } as const;
 
     const statusConfig: Record<LeadStatus, { bg: string; text: string; icon: React.ComponentType<{className?: string}> }> = {
         new: { bg: 'bg-blue-500', text: 'text-white', icon: Sparkles },
@@ -290,27 +303,25 @@ export const LeadsScreen = memo(function LeadsScreen() {
             />
 
             <div className="px-[var(--space-page-px)] py-4 space-y-4">
-                {/* Status Filter Pills */}
-                <div className="overflow-x-auto scrollbar-hide pb-2">
-                    <div className="flex gap-3 min-w-max px-0.5">
-                        {STATUS_FILTERS.map((status) => {
-                            const count = stats[status];
-                            const isActive = statusFilter === status;
+                {/* Status Filter — primary segments + filter sheet */}
+                <div className="flex items-center gap-2">
+                    <div className="flex gap-2 flex-1 min-w-0">
+                        {PRIMARY_FILTERS.map((f) => {
+                            const count = stats[f.id as 'active' | 'all'];
+                            const isActive = statusFilter === f.id;
                             return (
                                 <button
-                                    key={status}
-                                    onClick={() => setStatusFilter(status)}
+                                    key={f.id}
+                                    onClick={() => setStatusFilter(f.id)}
+                                    aria-pressed={isActive}
                                     className={cn(
-                                        "h-11 px-5 rounded-2xl text-xs uppercase font-black tracking-widest whitespace-nowrap transition-all flex items-center gap-2.5 shadow-glass-sm",
+                                        "h-11 px-4 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 flex-1 justify-center",
                                         isActive
-                                            ? "bg-primary text-primary-foreground shadow-lg scale-105"
-                                            : "bg-white/5 text-muted-foreground/60 hover:bg-white/10 border border-white/10"
+                                            ? "bg-primary text-primary-foreground"
+                                            : "bg-white/5 text-muted-foreground hover:bg-white/10 border border-white/10"
                                     )}
                                 >
-                                    {status === 'all'
-                                        ? t('dashboard.leads.filterAll', 'Все')
-                                        : t(`crm.status.${status}`)
-                                    }
+                                    {t(f.labelKey, f.defaultLabel)}
                                     <Badge variant="secondary" className={cn(
                                         "h-5 min-w-[20px] px-1 rounded-md text-xs border-none",
                                         isActive ? "bg-white/20 text-white" : "bg-white/10"
@@ -321,7 +332,60 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             );
                         })}
                     </div>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className={cn(
+                            "h-11 px-3 rounded-2xl shrink-0",
+                            !PRIMARY_FILTERS.some(f => f.id === statusFilter) && "bg-primary text-primary-foreground border-primary"
+                        )}
+                        onClick={() => setFilterSheetOpen(true)}
+                        aria-label={t('dashboard.leads.openFilters', 'Все статусы')}
+                    >
+                        <Filter className="h-4 w-4" />
+                        {!PRIMARY_FILTERS.some(f => f.id === statusFilter) && (
+                            <span className="ml-2 text-xs font-semibold">{t(`crm.status.${statusFilter}`)}</span>
+                        )}
+                    </Button>
                 </div>
+
+                {/* Filter Sheet — secondary statuses */}
+                {filterSheetOpen && (
+                    <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={() => setFilterSheetOpen(false)}>
+                        <div className="bg-background w-full rounded-t-3xl p-5 space-y-3 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-base font-semibold">{t('dashboard.leads.filterByStatus', 'Фильтр по статусу')}</h3>
+                                <Button variant="ghost" size="sm" onClick={() => setFilterSheetOpen(false)}><X className="h-4 w-4" /></Button>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                {(['active','all',...SECONDARY_STATUSES] as StatusFilter[]).map((s) => {
+                                    const isActive = statusFilter === s;
+                                    const label = s === 'all'
+                                        ? t('dashboard.leads.filterAll', 'Все')
+                                        : s === 'active'
+                                            ? t('dashboard.leads.filterActive', 'Активные')
+                                            : t(`crm.status.${s}`);
+                                    const count = stats[s];
+                                    return (
+                                        <button
+                                            key={s}
+                                            onClick={() => { setStatusFilter(s); setFilterSheetOpen(false); }}
+                                            className={cn(
+                                                "h-12 px-4 rounded-2xl text-sm font-medium flex items-center justify-between transition-all",
+                                                isActive ? "bg-primary text-primary-foreground" : "bg-white/5 hover:bg-white/10 border border-white/10"
+                                            )}
+                                        >
+                                            <span>{label}</span>
+                                            <Badge variant="secondary" className={cn("h-5 min-w-[20px] px-1.5 rounded-md text-xs border-none", isActive ? "bg-white/20 text-white" : "bg-white/10")}>
+                                                {count}
+                                            </Badge>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Search */}
                 <div className="relative">
