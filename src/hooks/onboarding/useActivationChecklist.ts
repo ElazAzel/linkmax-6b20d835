@@ -51,6 +51,22 @@ export function useActivationChecklist({
     const hasFirstLead = leadsCount >= 1;
     const isTelegramConnected = !!telegramChatId;
 
+    // Service Sales Workflow checks: услуги с ценой + контактная кнопка/мессенджер
+    const hasPricingWithItems = pageData.blocks.some(
+      (b) =>
+        b.type === 'pricing' &&
+        Array.isArray((b as any)?.content?.items) &&
+        (b as any).content.items.length > 0
+    );
+    const hasContactChannel = pageData.blocks.some((b) => {
+      if (b.type === 'socials') return true;
+      if (b.type === 'link') {
+        const url = String((b as any)?.content?.url || '').toLowerCase();
+        return /(wa\.me|whatsapp|t\.me|telegram|instagram|tel:|mailto:)/.test(url);
+      }
+      return false;
+    });
+
     const items: ActivationStep[] = [
       {
         id: 'create-page',
@@ -67,6 +83,22 @@ export function useActivationChecklist({
         action: onOpenEditor,
         ctaKey: 'activation.cta.addBlock',
         href: '/dashboard/home?tab=editor&action=add-block',
+      },
+      {
+        id: 'add-services',
+        labelKey: 'activation.steps.addServices',
+        completed: hasPricingWithItems,
+        action: onOpenEditor,
+        ctaKey: 'activation.cta.addServices',
+        href: '/dashboard/home?tab=editor&action=add-pricing',
+      },
+      {
+        id: 'add-contact',
+        labelKey: 'activation.steps.addContact',
+        completed: hasContactChannel,
+        action: onOpenEditor,
+        ctaKey: 'activation.cta.addContact',
+        href: '/dashboard/home?tab=editor&action=add-socials',
       },
       {
         id: 'publish',
