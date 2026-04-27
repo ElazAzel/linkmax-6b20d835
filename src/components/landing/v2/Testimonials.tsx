@@ -90,33 +90,43 @@ export const Testimonials = () => {
                 </Reveal>
                 <Reveal delay={100}>
                     <p className="text-center text-muted-foreground mb-12 max-w-lg mx-auto">
-                        {t('landing.testimonials.subtitle', 'Experts, coaches, and small businesses trust LinkMAX to grow.')}
+                        {t('landing.testimonials.subtitle_v2', 'Микро-команды, агентства и эксперты используют LinkMAX, чтобы превращать заявки в выручку.')}
                     </p>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 relative z-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 relative z-10">
                     {testimonials.map((testimonial, i) => (
-                        <Reveal key={i} delay={i * 100}>
-                            <div className="glass border-white/10 rounded-2xl sm:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-6 transition-all duration-700 hover:-translate-y-3 hover:bg-white/10 shadow-glass-lg group h-full relative overflow-hidden">
+                        <Reveal key={i} delay={i * 80}>
+                            <div className="glass border-white/10 rounded-2xl sm:rounded-[2rem] p-6 sm:p-7 flex flex-col gap-4 transition-all duration-700 hover:-translate-y-2 hover:bg-white/10 shadow-glass-lg group h-full relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                                
-                                <div className="flex gap-1.5 text-primary relative">
-                                    {[...Array(5)].map((_, j) => (
-                                        <Star key={j} className="w-4 h-4 fill-current drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)] group-hover:scale-125 transition-transform duration-500" style={{ transitionDelay: `${j * 50}ms` }} />
-                                    ))}
+
+                                <div className="flex items-start justify-between gap-3 relative">
+                                    <div className="flex gap-1 text-primary">
+                                        {[...Array(5)].map((_, j) => (
+                                            <Star key={j} className="w-3.5 h-3.5 fill-current" />
+                                        ))}
+                                    </div>
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-xl sm:text-2xl font-black tabular-nums tracking-tight bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">
+                                            {testimonial.metric}
+                                        </span>
+                                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 text-right max-w-[140px] leading-tight">
+                                            {testimonial.metricLabel}
+                                        </span>
+                                    </div>
                                 </div>
-                                
-                                <p className="text-base md:text-lg leading-relaxed text-foreground/80 font-medium italic relative">
-                                    "{testimonial.content}"
+
+                                <p className="text-sm md:text-base leading-relaxed text-foreground/85 font-medium relative">
+                                    «{testimonial.content}»
                                 </p>
-                                
-                                <div className="flex items-center gap-4 mt-auto relative pt-4 border-t border-white/5">
-                                    <div className="h-12 w-12 border-2 border-white/20 rounded-2xl shadow-glass flex items-center justify-center bg-primary/10 text-xl">
+
+                                <div className="flex items-center gap-3 mt-auto relative pt-4 border-t border-white/5">
+                                    <div className="h-10 w-10 border-2 border-white/20 rounded-2xl shadow-glass flex items-center justify-center bg-primary/10 text-lg">
                                         {testimonial.avatar}
                                     </div>
                                     <div>
-                                        <div className="text-sm font-black tracking-tight text-foreground">{testimonial.name}</div>
-                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">{testimonial.role}</div>
+                                        <div className="text-sm font-bold tracking-tight text-foreground">{testimonial.name}</div>
+                                        <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary/70">{testimonial.role}</div>
                                     </div>
                                 </div>
                             </div>
