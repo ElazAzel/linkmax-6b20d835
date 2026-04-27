@@ -278,50 +278,9 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
         })}
       </Card>
 
-      <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1 mt-8">
-        {t('settings.integrations.title', 'Integrations')}
-      </h3>
-      <Card className="divide-y divide-border/50 overflow-hidden">
-        <div className="flex items-center gap-4 p-4">
-          <div className="h-11 w-11 rounded-2xl flex items-center justify-center shrink-0 bg-blue-500/15">
-            <CalendarSync className="h-5 w-5 text-blue-500" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Google Calendar</span>
-              {calendarStatus.isConnected && (
-                <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
-                  {t('settings.integrations.active', 'Active')}
-                </Badge>
-              )}
-            </div>
-            <p className="text-sm text-muted-foreground truncate">
-              {t('settings.integrations.gcalDesc', 'Sync bookings with your calendar')}
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="shrink-0 rounded-xl"
-            disabled={linkingProvider === 'google_calendar' || gcalIsLoading}
-            onClick={() => calendarStatus.isConnected ? handleDisconnectGcal() : handleConnectGcal()}
-          >
-            {linkingProvider === 'google_calendar' || gcalIsLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : calendarStatus.isConnected ? (
-              <>
-                <Unlink className="h-4 w-4 mr-1" />
-                {t('settings.linkedAccounts.unlink', 'Unlink')}
-              </>
-            ) : (
-              <>
-                <Link2 className="h-4 w-4 mr-1" />
-                {t('settings.linkedAccounts.link', 'Link')}
-              </>
-            )}
-          </Button>
-        </div>
-      </Card>
+      {/* Google Calendar integration временно скрыта до конфигурации OAuth-секретов
+          (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET / GCAL_STATE_SECRET).
+          Раскомментировать после добавления секретов в Lovable Cloud. */}
     </div>
   );
 }
