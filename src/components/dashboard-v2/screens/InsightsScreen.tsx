@@ -25,6 +25,9 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatCard } from '../common/StatCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { EmptyState } from '../common/EmptyState';
+import { SmartEmptyState } from '@/components/ui/smart-empty-state';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Edit3 from 'lucide-react/dist/esm/icons/edit-3';
 import { ErrorState } from '../common/ErrorState';
 import {
   AnalyticsChart,
@@ -296,18 +299,40 @@ export const InsightsScreen = memo(function InsightsScreen({
 
       <div className="px-[var(--space-page-px)] pb-24 space-y-7">
         {!hasData ? (
-          <EmptyState
+          <SmartEmptyState
             icon={Eye}
-            title={t('dashboard.insights.noData', 'Нет данных')}
-            description={t('dashboard.insights.noDataDesc', 'Опубликуйте страницу, чтобы начать собирать статистику')}
-            action={{
-              label: t('common.share', 'Поделиться'),
+            eyebrow={t('dashboard.insights.emptyEyebrow', 'Аналитика появится после первых визитов')}
+            title={t('dashboard.insights.noData', 'Пока нет данных')}
+            description={t('dashboard.insights.noDataDesc', 'Поделитесь ссылкой на страницу — каждый просмотр, клик и заявка будут отслеживаться в реальном времени.')}
+            checklist={[
+              {
+                label: t('dashboard.insights.checklist.publish', 'Страница опубликована'),
+                done: true,
+              },
+              {
+                label: t('dashboard.insights.checklist.share', 'Поделитесь ссылкой'),
+                hint: t('dashboard.insights.checklist.shareHint', 'Instagram bio, WhatsApp статус, визитка'),
+              },
+              {
+                label: t('dashboard.insights.checklist.wait', 'Дождитесь первых посетителей'),
+                hint: t('dashboard.insights.checklist.waitHint', 'Обычно первые данные появляются в течение часа'),
+              },
+            ]}
+            primaryCta={{
+              label: t('dashboard.insights.copyLink', 'Скопировать ссылку'),
               onClick: () => {
                 const url = window.location.origin + '/' + slug;
                 navigator.clipboard.writeText(url);
                 toast.success(t('common.copied', 'Ссылка скопирована'));
-              }
+              },
+              icon: Share2,
             }}
+            secondaryCta={{
+              label: t('dashboard.insights.editPage', 'Редактировать'),
+              onClick: () => window.open('/dashboard?tab=editor', '_self'),
+              icon: Edit3,
+            }}
+            footer={t('dashboard.insights.emptyFooter', '📊 Мы фиксируем просмотры, клики, источники, гео и устройства')}
           />
         ) : (
           <>
