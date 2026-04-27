@@ -60,10 +60,16 @@ export const FreemiumBlockLimit = memo(function FreemiumBlockLimit({
           </AlertDescription>
           
           <Progress value={percentage} className="h-1.5" />
-          
+
+          {isAtLimit && (
+            <div className="pt-2">
+              <UpgradeBenefits compact />
+            </div>
+          )}
+
           {(isAtLimit || isNearLimit) && (
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               onClick={openPremiumPurchase}
               className="mt-4 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 w-full font-bold shadow-lg shadow-primary/25 rounded-xl h-10"
             >
