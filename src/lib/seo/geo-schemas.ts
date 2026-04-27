@@ -10,6 +10,7 @@ import type { Block, PricingBlock, EventBlock, FAQBlock, SocialsBlock, BookingBl
 import { getI18nText } from '@/lib/i18n-helpers';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 import type { AnswerBlockData } from './answer-block';
+import { extractAiCta, type AiContactAction } from './ai-cta-extractor';
 
 export interface GEOSchemas {
   /** Main entity schema (Person/Organization/LocalBusiness) */
