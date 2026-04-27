@@ -56,11 +56,14 @@ export function generateGEOSchemas(
 
   const graph: object[] = [];
 
-  // 1. Main Entity (Person/Organization/LocalBusiness)
-  const mainEntity = generateMainEntity(validBlocks, context, pageUrl);
+  // Pre-compute AI CTA (contacts, price range, booking) — used to enrich main entity
+  const aiCta = extractAiCta(validBlocks, context.slug, context.language);
+
+  // 1. Main Entity (Person/Organization/LocalBusiness) — enriched with contactPoint + potentialAction
+  const mainEntity = generateMainEntity(validBlocks, context, pageUrl, aiCta);
   graph.push(mainEntity);
 
-  // 2. WebPage/ProfilePage
+  // 2. WebPage/ProfilePage — with SpeakableSpecification for voice assistants
   const webPage = generateWebPage(context, pageUrl, now);
   graph.push(webPage);
 
