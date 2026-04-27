@@ -4008,6 +4008,7 @@ export type Database = {
           version_id: string
         }[]
       }
+      get_public_trust_metrics: { Args: never; Returns: Json }
       get_team_by_invite_code: {
         Args: { p_code: string }
         Returns: {
