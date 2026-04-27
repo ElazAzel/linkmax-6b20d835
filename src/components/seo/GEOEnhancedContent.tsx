@@ -22,6 +22,7 @@ import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts } from '@/lib/seo/key-facts';
 import { generateAutoFAQ, extractFAQContext, hasUserFAQ } from '@/lib/seo/auto-faq';
 import { extractEntityLinks } from '@/lib/seo/entity-linking';
+import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
 
 interface GEOEnhancedContentProps {
   blocks: Block[];
