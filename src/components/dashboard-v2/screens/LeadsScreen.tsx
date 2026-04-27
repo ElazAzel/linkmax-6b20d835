@@ -349,18 +349,53 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             }}
                         />
                     ) : filteredLeads.length === 0 ? (
-                        <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
-                            <EmptyState
-                                icon={Mail}
-                                title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
-                                description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов.')}
-                                action={{
-                                    label: t('dashboard.leads.emptyCta', 'Перейти в редактор'),
-                                    onClick: () => window.open('/dashboard?tab=editor', '_self')
+                        leads.length === 0 ? (
+                            // Zero-state: ни одного лида. Активационный гид.
+                            <SmartEmptyState
+                                icon={Inbox}
+                                eyebrow={t('dashboard.leads.emptyEyebrow', 'Готовы принимать заявки?')}
+                                title={t('dashboard.leads.emptyTitle', 'Здесь появятся ваши клиенты')}
+                                description={t('dashboard.leads.emptyDesc', 'Каждая заявка с формы, бронирования или сообщения попадёт сюда. Сделайте 3 шага, чтобы начать получать лиды.')}
+                                checklist={[
+                                    {
+                                        label: t('dashboard.leads.checklist.publish', 'Опубликуйте свою страницу'),
+                                        hint: t('dashboard.leads.checklist.publishHint', 'Без публикации страницу не увидят клиенты'),
+                                    },
+                                    {
+                                        label: t('dashboard.leads.checklist.form', 'Добавьте форму или кнопку связи'),
+                                        hint: t('dashboard.leads.checklist.formHint', 'WhatsApp, Telegram, форма заявки или бронирование'),
+                                    },
+                                    {
+                                        label: t('dashboard.leads.checklist.share', 'Поделитесь ссылкой в соцсетях'),
+                                        hint: t('dashboard.leads.checklist.shareHint', 'Instagram bio, Telegram, визитки — где видят ваши клиенты'),
+                                    },
+                                ]}
+                                primaryCta={{
+                                    label: t('dashboard.leads.emptyCta', 'Открыть редактор'),
+                                    onClick: () => window.open('/dashboard?tab=editor', '_self'),
+                                    icon: Edit3,
                                 }}
-                                className="py-12"
+                                secondaryCta={{
+                                    label: t('dashboard.leads.emptyShareCta', 'Поделиться страницей'),
+                                    onClick: () => window.open('/dashboard?tab=pages', '_self'),
+                                    icon: Share2,
+                                }}
+                                footer={t('dashboard.leads.emptyFooter', '💡 Совет: первая заявка обычно приходит в течение 48 часов после публикации')}
                             />
-                        </Card>
+                        ) : (
+                            // Filter-empty state: лиды есть, но фильтр не совпал
+                            <SmartEmptyState
+                                icon={Filter}
+                                title={t('dashboard.leads.filterEmptyTitle', 'Ничего не найдено')}
+                                description={t('dashboard.leads.filterEmptyDesc', 'Попробуйте изменить фильтр или поиск')}
+                                primaryCta={{
+                                    label: t('dashboard.leads.resetFilter', 'Сбросить фильтры'),
+                                    onClick: () => { setStatusFilter('all'); setSearchQuery(''); },
+                                    variant: 'outline',
+                                }}
+                                compact
+                            />
+                        )
                     ) : (
                         filteredLeads.map((lead) => {
                             const config = statusConfig[lead.status as LeadStatus] || statusConfig.new;
