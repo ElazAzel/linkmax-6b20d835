@@ -1,88 +1,174 @@
 
-# Полная пересборка LinkMAX под бизнес-привлекательность
+# UX/UI Аудит LinkMAX
 
-Сегмент №1 — **малый бизнес / агентства / команды**. Цели: конверсия лендинга ↑, Free→Paid ↑, retention ↑, инвест-привлекательность ↑. Монетизация — **усиленная транзакционная модель**.
+Ниже — структурный аудит платформы по экранам, с обнаруженными проблемами и приоритетом фиксов. Аудит основан на чтении исходников ключевых экранов (`Index`, `DashboardV2`, `HomeScreen`, `EditorScreen`, `LeadsScreen`, `PagesScreen`, `InsightsScreen`, `SettingsScreen`, `PublicPage`, `DashboardLayout`, `DashboardBottomNav`, `DashboardSidebar`).
 
-## Новое позиционирование
+---
 
-**Было:** «Business OS для соло‑предпринимателей» (широко, размыто, конкурирует со всеми).
+## 1. Landing (`/`)
 
-**Станет:** **«Sales OS для бизнеса на услугах»** — одна ссылка превращает входящий трафик в оплаченные заявки. Витрина + входящие из мессенджеров + CRM + бронирование + онлайн‑оплата за 15 минут.
+**Сильные стороны**
+- Чёткий «Premium / Living Canvas» стиль, Dynamic Island навигация, Bento-grid, Sticky Mobile CTA.
+- SEO/AEO-стек на месте (Speakable, GEO, AISearchOptimizer).
+- Революня calc + Comparison + Testimonials = хорошая воронка убеждения.
 
-Якоря коммуникации:
-- «Каждая заявка — в одной inbox‑ленте, ничего не теряется».
-- «Платите 0 ₸, пока не зарабатываете» (Starter 0 ₸ + 7%).
-- «Команда из 3–10 человек работает с заявками с телефона».
-- Anti‑Bitrix / Anti‑amoCRM для сервисного бизнеса: «3 клика вместо 3‑дневного внедрения».
+**Проблемы**
+- **Когнитивная перегрузка above-the-fold на мобильных (393×573)**: hero + DynamicIsland + LiquidCursor (десктоп) + GrainOverlay + CanvasBackground + Sticky CTA одновременно создают визуальный шум, на маленьких экранах CTA «теряется».
+- **Двойные CTA**: nav-signup + hero-signup + sticky-mobile-CTA + bottom-CTA — пользователь видит 4 одинаковых призыва, без явной приоритезации (primary vs secondary).
+- **LogoTicker / social proof** иногда грузится позже hero — мелькание layout shift.
+- **Pricing «Aurora»** красиво, но цена/фичи сравниваются по двум планам Starter/Pro — отсутствует явный «recommended» бейдж и якорный pricing (старая цена → новая).
+- **FAQ** не имеет inline-search/раскрытия по группам — длинный аккордеон на мобильных.
 
-## Новая модель монетизации (усиленная транзакционная)
+**P0 фиксы**
+- Привести CTA к одному primary-стилю на странице и одному вторичному (Outline). Sticky Mobile CTA = только когда hero ушёл за viewport.
+- Зарезервировать высоту LogoTicker (CLS).
+- Добавить «Most popular» бейдж и якорную цену в Pricing.
 
-| Тариф | Цена | Кому | Триггер апгрейда |
-|---|---|---|---|
-| **Identity** | 0 ₸ | Тестируют | Watermark, лимит 1 страница |
-| **Starter** | 0 ₸ + **5%** с продаж (было 7%) | Соло, до 50 заявок/мес | Снижаем фрикцию; апгрейд при росте оборота |
-| **Pro** | 2 900 ₸/мес + 1% | Активный бизнес | Математика: выгоднее >40k ₸ оборота |
-| **Team (новое)** | 7 900 ₸/мес + 1% | Агентства, 3–10 чел. | Командная inbox, роли, аналитика менеджера |
+---
 
-Новые рычаги:
-- **14‑дневный Pro‑trial** при регистрации (без карты) — главный двигатель Free→Paid.
-- **In‑app paywall‑модули** на ключевых пресечениях (3‑я страница, 51‑я заявка, экспорт CSV, удаление watermark, командный доступ).
-- **Annual −20%** + бейдж «−2 месяца» в /pricing.
-- Прозрачный расчёт «Starter vs Pro» — слайдер оборота прямо на /pricing.
+## 2. Dashboard (`/dashboard/*`)
 
-## План работ (4 итерации)
+**Архитектура**
+- Mobile: Bottom nav (5 кнопок) + «Ещё» Sheet с 6 пунктами.
+- Desktop: Sidebar с группами (Pages, Business tools, Settings).
+- Контент в карточке `rounded-[2.5rem] border-border/5` внутри `max-w-7xl`.
 
-### Итерация 1 — Позиционирование и витрина
-1. Обновить тексты и герой `HeroSectionExpert`: новый H1, подзаголовок про «inbox заявок», 2 CTA («Создать бесплатно», «Смотреть демо 60 сек»).
-2. `LogoTicker` → «Используют 1200+ мастеров и команд» + реальные ниши (бьюти, репетиторы, фитнес, агентства).
-3. `BentoGridSection` переписать под 6 ценностей: Витрина → Мессенджеры → Inbox → Бронирование → Оплата → Аналитика.
-4. `Testimonials`: 6 кейсов с цифрами (выручка ↑, заявки ↑, время реакции ↓), фото, ниша, тариф.
-5. Новая секция **«Считаем вашу выгоду»**: интерактивный калькулятор Starter vs Pro vs «делаю сам».
-6. Новая секция **«Сравнение»**: LinkMAX vs Linktree vs amoCRM/Bitrix (3 колонки: цена, время запуска, мобильность, CRM, оплата).
-7. `PricingAurora` → новая 4‑тарифная сетка + toggle Monthly/Annual + калькулятор комиссии.
-8. `FAQSection`: топ‑10 возражений (комиссия, безопасность данных, перенос, домен, команда, отчёты).
-9. `BottomCTA`: «Запустите витрину за 15 минут» + соц‑прувы.
+**Проблемы**
+- **Несимметрия mobile vs desktop nav**: на мобильном «Главная/Обзор» спрятан в «Ещё», хотя это логичный home → пользователь, попав в `editor` сразу, не видит активацию/чек-лист без открытия sheet. Это ломает onboarding-loop.
+- **`p-2 md:p-8` + внутренний `rounded-[2.5rem]` + `border-border/5`**: на мобильном двойной контейнер съедает горизонтальное пространство (~12px каждый край) и даёт «карточка в карточке» эффект. Контент и так узкий.
+- **DashboardBottomNav: текст `text-[10px] uppercase tracking-tighter font-bold`** + `whitespace-normal break-words` — на 393px «Аналитика» переносится, теряя выравнивание иконок.
+- **`AnimatePresence mode="wait"` + `y: 12 → -12`** на каждое переключение таба — ощущается медленно (500ms easing curve), особенно с lazy-loading скрина.
+- **HomeScreen**: одновременно показывает Activation Checklist + StatusBadge + Page Card + MetricsGrid + ConversionFunnel + Sources + Operator + Wallet + RepeatCustomers. На мобильном это длинный скролл без иерархии — нет «above-the-fold value».
+- **InsightsScreen**: 5 табов (overview, traffic, blocks, funnel, experiments) в одном `TabsList` — на 393px не помещается, появляется нечитаемый горизонтальный скролл.
+- **LeadsScreen**: фильтр статусов (`all/new/contacted/qualified/converted/lost`) — 6 чипов в строку на мобильном неудобны; нет «save view» / «default = только new+contacted».
+- **PagesScreen**: лимиты (`Progress` + `currentPages/maxPages`) и upgrade-CTA не закреплены — теряются при скролле длинного списка.
+- **SettingsScreen**: 30+ пропсов в одном экране, нет навигационной hierarchy («где я?») кроме 2 табов «Page / Account». При большом количестве полей нужны якорные подгруппы и search.
+- **DashboardHeader дублируется в каждом screen** — вместо одного top-bar в layout. Это ведёт к разным title/back-логикам.
+- **Скелетоны разные на каждом экране** — отсутствует единый стандарт `LoadingSkeleton`.
 
-### Итерация 2 — Онбординг и «магия первого использования»
-1. **Welcome Wizard 3 шага** (новый): ниша → имя/город → автогенерация витрины с 4 блоками + примером услуги через Gemini.
-2. Чек‑лист «Готов к продажам» в дашборде: 5 пунктов (фото, услуга с ценой, мессенджер, оплата, поделиться). Прогресс‑бар + награда (доп. дни trial).
-3. **«Получи первую заявку за 24 часа»**: после публикации — модал с генерируемым текстом для соцсетей и QR.
-4. Стартовые шаблоны под нишу (12 пресетов: бьюти, репетитор, психолог, фитнес, фотограф, мастерская, ремонт, юрист, кейтеринг, ивент, агентство, команда).
-5. Push/email напоминания на день 1/3/7 с конкретными next‑best‑actions.
+**P0 фиксы**
+- Перенести `home` в bottom nav (Главная вместо «Аналитика» как 1-й таб) и в desktop sidebar в `MAIN_ITEMS`. Аналитику оставить второстепенной.
+- Сократить `p-2` до `p-0` на mobile + убрать внутренний `border` карточки (или layout-карточка ИЛИ screen-карточка, не оба).
+- Bottom nav: не uppercase, `text-[11px]`, без `tracking-tighter`, без `break-words` (truncate ellipsis).
+- Снизить переход экрана до 200ms `ease-out`, без `y` — только opacity.
+- InsightsScreen: tabs → `Select` на mobile, `TabsList` только на md+.
+- LeadsScreen: дефолтный фильтр «активные» (new+contacted) и собранный «Filter» Sheet вместо ряда чипов.
 
-### Итерация 3 — In‑product paywalls и Team‑тариф
-1. Унифицированный компонент `<UpgradePaywall reason="…">` с разными контекстами (страницы, заявки, экспорт, домен, командные роли).
-2. Все триггеры идут через единую точку Robokassa (см. memory: standardized‑payment‑flow).
-3. **Team‑тариф (DB + UI)**: новый `plan_code='team'` в `zone_subscriptions`, лимит 10 участников, ролевые модели уже есть.
-4. Командная inbox: фильтр по ответственному, метрики «заявка→ответ (мин)», SLA‑бейджи, недельный дайджест на email.
-5. «Скидка лояльности» 1 раз: при отмене подписки — оффер −30% на 3 мес.
-6. Реферальная программа из БД (`referral_codes` уже есть): «3 друга → 1 мес Pro бесплатно», публичная страница `/refer`.
+**P1 фиксы**
+- Единый `DashboardHeader` в `DashboardLayout` с slot’ами (title, actions).
+- Поиск в SettingsScreen + collapsible подгруппы.
+- HomeScreen: чек-лист в свернутом виде (collapse), когда активация ≥ 80%; KPIs выше fold.
 
-### Итерация 4 — Метрики и инвест‑витрина
-1. **Admin Growth Dashboard**: MAU, активация, Free→Paid CR, GMV, take‑rate, MRR, churn, LTV/CAC. Источник — существующие таблицы `pages`, `bookings`, `event_registrations`, `zone_deals`, `user_profiles`.
-2. Публичная страница `/about/traction` с обезличенными growth‑числами для прессы и инвесторов.
-3. Обновить `docs/product/PITCH_DECK.md` и `4_INVESTMENT_MEMO.md` под новую модель и Team‑тариф.
-4. SEO‑витрина: 3 нишевых лендинга (`/for/beauty`, `/for/tutors`, `/for/agencies`) на основе `NicheLanding` с локализованными кейсами и калькулятором.
+---
 
-## Технические детали
+## 3. Editor (`/dashboard/home?tab=editor`)
 
-- **Лендинг**: правки в `src/components/landing/v2/*` + `src/pages/Index.tsx`. Создать `PricingCalculator.tsx`, `ComparisonTable.tsx`, `NicheCases.tsx`.
-- **Pricing**: `src/components/screens/Pricing.tsx` + `src/domain/billing/tiers.ts` — добавить `team` тариф (см. файл `tiers.ts`, нужен новый ключ во всех `Record<TierKey,…>`).
-- **Onboarding Wizard**: новый `src/components/onboarding/WelcomeWizard.tsx` + использовать существующий AI Builder (Gemini, см. memory `gemini-api-features-and-builder-logic-updated-v2`).
-- **Trial**: `user_profiles.trial_ends_at` уже существует — выставлять `now() + 14 days` в `handle_new_user`. Миграция: обновить триггер.
-- **Paywalls**: единый компонент `src/components/billing/UpgradePaywall.tsx`. Триггеры в местах создания страниц/команд/экспорта.
-- **Team plan**: миграция — добавить `team` в перечисления и в `get_zone_member_limit` (limit=10). Новая RLS — без изменений (текущая схема уже поддерживает).
-- **Growth dashboard**: новый раздел в `src/pages/Admin.tsx`. Запросы — через RPC `get_growth_metrics(p_from, p_to)` (новая SECURITY DEFINER функция, доступна только `has_role('admin')`).
-- **i18n**: новые ключи в `ru/en/kk/uz` через скрипт `scripts/auto-translate-fast.mjs` после правок.
-- **Аналитика**: расширить `useMarketingAnalytics` событиями `pricing_calculator_used`, `comparison_view`, `paywall_shown`, `paywall_converted`.
+**Сильные стороны**
+- Mobile-first GridEditor, Structure View, Friction Recovery, Activation Checklist на месте.
+- Undo/Redo, History, AI generator, Templates — мощный функционал.
 
-## Что вынесено за рамки этой итерации
-- Native iOS/Android push (требует отдельного релизного цикла).
-- Эквайринг собственный (Stripe/Paddle MOR) — обсудим отдельно после Team‑тарифа.
-- Маркетплейс шаблонов и API/Webhooks для Pro — следующий квартал.
+**Проблемы**
+- **Top bar сильно перегружен**: Preview + Share + Templates + AI + Undo + Redo + Versions + Structure + Lightbulb + Layers (≥10 кнопок). На 393px они уезжают за край или схлопываются в иконки без подписей — без tooltip'ов на тач-устройствах непонятно, что они делают.
+- **«MousePointerClick» / «AlertCircle» / «Lightbulb»** — без явного значения для нового пользователя.
+- **Friction Recovery banner** показывается над холстом, но иногда закрывает первую секцию.
+- **Add block UI**: floating «+» vs slot-based vs preset-based — три ментальные модели одновременно.
+- **Editor + Settings + Theme + Versions** — все в виде drawer’ов, но открываются с разных сторон (`right`, `bottom`, `dialog`), без общего паттерна.
 
-## Ожидаемый эффект
-- Конверсия лендинг → регистрация: +40–60% (за счёт нового H1, кейсов, калькулятора, demo).
-- Free → Paid: +50–80% (trial + paywalls + чек‑лист).
-- ARPU: +25% (Team‑тариф у 5–8% Pro‑юзеров).
-- Инвест‑питч: показываем GMV + take‑rate + Team — три источника выручки вместо одного.
+**P0 фиксы**
+- Сгруппировать тулбар: `[Preview] [Share]` слева, `[Undo Redo]` центр, `[…]` справа (overflow menu для AI/Templates/Versions/Structure).
+- Tooltip + label-on-hover на десктопе и aria-label на мобильном; на длинном тапе — подсказка.
+- Friction Recovery → toast или нижний bar, не over-canvas.
+
+**P1 фиксы**
+- Единая ментальная модель Add Block: «Inline +» между блоками + «Insert Sheet» с поиском. Убрать второй вход.
+- Унифицировать drawers: на mobile все side="bottom", на desktop side="right".
+
+---
+
+## 4. Public Page (`/{slug}`)
+
+**Сильные стороны**
+- Корректный SEO/AEO, JSON-LD, Speakable, share-dialog с QR.
+- Animations через framer-motion, Heatmap tracking.
+- Skeleton + ErrorState на месте.
+
+**Проблемы**
+- **Контент-лимит ширины**: рендер блоков в одну колонку без `max-w` может растягивать text-blocks на больших экранах (>700px), плохо для читаемости.
+- **Watermark «Made on LinkMAX»** на free tier — не перепроверял, но обычно это поглощается контентом и пользователи путают с реальным CTA.
+- **Share Dialog**: copy + QR + ExternalLink — но нет «Поделиться в WhatsApp/Telegram» прямой кнопкой (хотя это primary-канал распространения для целевой аудитории KZ/RU).
+- **Language switcher** lazy-loaded — мелькание при первой загрузке.
+
+**P0 фиксы**
+- Ограничить content width до `max-w-[680px] mx-auto` на text/long-form блоках.
+- В Share Dialog добавить native share + WhatsApp/Telegram кнопки.
+
+**P1 фиксы**
+- Префетч language switcher или статичный fallback на сервере.
+
+---
+
+## 5. Auth & Onboarding
+
+- `Auth.tsx` — реэкспорт из `components/screens/Auth`. Не аудировал детально, но проверить:
+  - **Двухступенчатая активация**: после регистрации сразу AI Builder Wizard (мемори-правило). На мобильном Wizard должен быть полноэкранный, без ухода в скролл.
+  - **OAuth кнопки**: Google primary, не утоплены.
+  - **Email confirm**: должен быть ясный экран «проверьте почту» с resend.
+
+**P1 фиксы**
+- Провести отдельный аудит Auth-экрана и Wizard’а после P0.
+
+---
+
+## 6. Кроссэкранные UX-стандарты
+
+**Проблемы**
+- **Иконки lucide импортируются по одной (`from 'lucide-react/dist/esm/icons/...'`)** — корректно для бандла, но дублирование в каждом файле снижает читабельность. Рассмотреть `@/components/icons` барель.
+- **Empty States**: внедрены `SmartEmptyState` (хорошо!), но соседствуют со старыми `EmptyState` в одних и тех же файлах — фрагментация. Завершить миграцию.
+- **Toasters**: используется `sonner` — хорошо, но нет единого правила длительности/позиции.
+- **Цветовые токены**: `text-muted-foreground/60`, `border-border/5`, `border-border/10` — слишком много альфа-вариантов. Свести к 2-3 семантическим уровням.
+- **Шрифт CTA**: смесь `font-bold uppercase tracking-tighter` (bottom nav) и `font-medium` (cards) — нет typography scale.
+- **Доступность (a11y)**: на bottom-nav кнопках нет `aria-label` (только текст внутри), кнопки иконок в editor без aria. Контрастность `text-muted-foreground/60` на тёмном фоне ниже WCAG AA.
+
+**P0 фиксы**
+- Единый компонент `EmptyState` (мигрировать всё в `SmartEmptyState`, удалить старый).
+- Sonner: единый конфиг (`position="top-center" duration={3000}` на mobile).
+- Аудит `aria-label` на всех icon-only кнопках.
+
+**P1 фиксы**
+- Зачистить альфа-токены, оставить `border-border`, `border-border-strong`, `text-muted`, `text-muted-strong`.
+
+---
+
+## Приоритезированный план реализации
+
+### Спринт 1 (P0) — «Quick wins»
+1. **Bottom Nav redesign**: home → 1-й таб; tabs `text-[11px]` без uppercase/break-words; единые `aria-label`.
+2. **Dashboard layout cleanup**: убрать двойной padding/border (`p-2`+`rounded-[2.5rem]`+`border`) → один контейнер.
+3. **Tab transition**: 500ms y-translate → 200ms opacity-only.
+4. **Editor toolbar**: сгруппировать в 3 кластера, overflow menu для редкой части.
+5. **Insights tabs**: на mobile → `Select`, на desktop → `TabsList`.
+6. **Leads filter**: дефолт «активные» + filter Sheet вместо ряда чипов.
+7. **Landing CTA**: один primary, один secondary; Sticky CTA только после hero.
+8. **Public Page share**: добавить WhatsApp/Telegram кнопки + native share.
+
+### Спринт 2 (P1) — «Системные стандарты»
+9. **Единый `DashboardHeader`** в layout со slot-ами.
+10. **HomeScreen иерархия**: KPIs above the fold; чек-лист сворачиваемый.
+11. **Settings**: search + collapsible подгруппы.
+12. **Drawers унификация**: mobile=bottom, desktop=right.
+13. **Empty States**: завершить миграцию на `SmartEmptyState`, удалить старый.
+14. **Editor add-block**: одна модель (inline + Insert Sheet).
+15. **Public Page max-width** на текстовых блоках.
+
+### Спринт 3 (P2) — «Polish»
+16. Цветовые/типографические токены: свести альфа-варианты, ввести typography scale.
+17. A11y-аудит icon-only кнопок (aria-label, focus rings).
+18. Auth/Wizard отдельный аудит и оптимизация.
+19. Pricing: «Most popular» бейдж, якорная цена.
+20. CLS на Landing (LogoTicker, lazy-блоки).
+
+---
+
+## Что делать дальше
+
+После одобрения этого плана я начну со **Спринта 1 (P0)** — это 8 задач, которые дадут самый заметный UX-улучшения за минимум кода. Если хочешь, могу начать только с 1–4 (Dashboard core), либо с 7–8 (Landing/Public), либо целиком — скажи приоритет.
