@@ -82,7 +82,8 @@ export const LeadsScreen = memo(function LeadsScreen() {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<typeof STATUS_FILTERS[number]>('all');
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+    const [filterSheetOpen, setFilterSheetOpen] = useState(false);
     const [loadError, setLoadError] = useState(false);
 
     const fetchLeads = useCallback(async () => {
