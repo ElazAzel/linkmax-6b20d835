@@ -20,6 +20,7 @@ import { extractEntityLinks } from '@/lib/seo/entity-linking';
 import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts as generateEnhancedKeyFacts } from '@/lib/seo/key-facts';
 import { generateAutoFAQ, extractFAQContext, hasUserFAQ } from '@/lib/seo/auto-faq';
+import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
 
 interface CrawlerFriendlyContentProps {
   blocks: Block[];
