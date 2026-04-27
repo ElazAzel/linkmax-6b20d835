@@ -1,143 +1,108 @@
 ## Цель
 
-Превратить редактор блоков из «панели управления с кнопками везде» в **тихий канвас + контекстный интеллект**, по паттернам 2026 (Framer, Notion, Figma Sites, Linear): минимум хрома по умолчанию, всё нужное появляется по контексту, первое действие — за один тап, ценность («ты ближе к первому лиду») всегда на виду.
+Сделать модуль «Бизнес-Зоны» полностью рабочим: устранить все ошибки 400 в network-логе, добавить недостающие таблицы, привести экраны в порядок, проверить безопасность (RLS) и edge-функции, обновить memory (Stop List сейчас официально замораживает зоны — но пользователь явно просит реактивировать).
 
-## Что не так сейчас
+## Что сейчас сломано (подтверждено)
 
-1. **Шум в шапке**: 4 фильтр-чипа (Шаблоны/История/Структура/Проблемные/CTA) + квадрат иконок + Publish + Live-pill — всё конкурирует за внимание.
-2. **Шум на блоках**: на каждом блоке постоянно видны drag-handle, type-label, 3–4 кнопки в правом углу, hover-overlay.
-3. **Дублирующиеся точки добавления**: Insert-divider между каждой парой + большой dashed «add» снизу + FAB на мобайле + ещё `BlockInsertButton` в empty-state. Пользователь не знает, какой использовать.
-4. **Нет «продающего» сигнала прогресса**: блоки добавлены, но не видно «насколько готова страница к продажам».
-5. **Превью прячется** за иконкой глаза — на мобайле нет split-view.
-6. **Нет inline-правки заголовков** на видном уровне; все клики ведут в bottom-sheet.
-
-## Новая архитектура — три слоя
+В network-логах текущей сессии видны ошибки 400 от PostgREST:
 
 ```text
-┌───────────────────────────────────────────────────┐
-│ Top Bar (compact, 56px)                           │
-│  [Back] [Page name ▾]   [progress·preview]  [⚡]  │
-├───────────────────────────────────────────────────┤
-│                                                   │
-│         CANVAS (тихий, без хрома)                 │
-│                                                   │
-│   • Hover/tap → floating BlockToolbar (popover)   │
-│   • Selected block → bottom contextual bar        │
-│   • Insert → only between hover + sticky "+ Add"  │
-│                                                   │
-├───────────────────────────────────────────────────┤
-│ Smart Action Dock (sticky bottom, 64px)           │
-│  [+ Block] [✨ AI] [👁 Preview] [🚀 Publish ▸]    │
-└───────────────────────────────────────────────────┘
+GET zone_deals?...&deleted_at=is.null  → 400  column zone_deals.deleted_at does not exist
+GET zone_tasks?...&deleted_at=is.null  → 400  column zone_tasks.deleted_at does not exist
 ```
 
-## Компоненты
+Дополнительный аудит хуков и БД выявил, что в коде используются **5 таблиц**, которых **нет в БД**, но коде они есть с приведением `as any`, поэтому ошибка вылезает только в рантайме:
 
-### 1. `EditorTopBar` (новый, заменяет actions+bottomSlot в DashboardHeader)
+- `zone_task_checklist`
+- `zone_task_comments`
+- `zone_deal_products`
+- `zone_resources`
+- (events/bookings таблицы зон — экраны существуют, но используют общие `bookings`/`events` без `zone_id`)
 
-- Высота 56px, sticky, `bg-background/80 backdrop-blur-md`.
-- Слева: back + **page switcher** с inline-edit названия страницы.
-- Центр: **PageHealthMeter** — компактная полоска прогресса «3 из 5 шагов до продаж» (использует существующий `useActivationChecklist`); клик → раскрывает чек-лист в popover. Это и есть «продающий сигнал».
-- Справа: **Preview** (iconButton, на ≥md показывает label), **Publish/Share** (primary, gradient если не опубликовано, secondary если опубликовано → меняется на «Поделиться»).
-- Undo/Redo, Структура, Версии, Review-modes уезжают в **overflow-menu (⋯)** + работают через keyboard shortcuts (`⌘Z`, `⌘⇧Z`, `⌘K` уже есть).
+Из-за этого экраны Канбан, Задачи, Карточка сделки (товары/комментарии), Календарь ресурсов — пустые/падают.
 
-### 2. `EditorCanvas` (рефактор GridEditor)
+Стратегический контекст: в memory зафиксирован «Stop List» по Бизнес-Зонам (заморожены, скрыты из навигации, фокус на Service Sales Workflow). Пользователь явно просит снова сделать рабочим — обновим memory.
 
-- Убрать постоянно видимые: drag-handle, type-label, кнопки edit/duplicate/delete на каждом блоке.
-- На hover (desktop) / single-tap (mobile): показать **`FloatingBlockToolbar`** (popover, 5 иконок: edit, duplicate, transform, AI-improve, delete) над блоком — паттерн Notion/Framer.
-- Long-press / multi-select: подсветить + показывать существующий `BulkActionBar`.
-- Type-label оставить, но только для **selected/hover** блока (бейдж в углу появляется fade-in 150ms).
-- **Empty hint chip** (амбер «нужен URL») остаётся — это product critical.
-- **Insert-divider**: показывать только между hover-парой + один в самом низу. Убрать дубль внизу-FAB-empty-state.
+## План работ (4 этапа)
 
-### 3. `SmartActionDock` (новый, sticky bottom)
+### Этап 1. Миграция БД — фундамент
 
-- Высота 64px на мобайле, 56px десктоп.
-- 4 кнопки равной важности: **+ Add Block** (primary, hint label «Что добавить?»), **AI Improve** (если ≥1 блок: «Улучшить страницу»), **Preview** (toggle split-view на десктопе), **Publish** (primary CTA после готовности; меняется на Share после публикации).
-- При публикации → micro-celebration animation (scale-in + emerald check).
-- На мобайле заменяет текущий FAB + bottom dashed «add» + bottom DashboardBottomNav поднимается над ним (z-index согласован).
+Создаём одну миграцию со всеми schema-изменениями.
 
-### 4. `PageHealthMeter` (новый виджет в TopBar)
+1. **Soft-delete колонки** на основных таблицах:
+   - `zone_deals.deleted_at timestamptz null`
+   - `zone_tasks.deleted_at timestamptz null`
+   - `zone_invoices.deleted_at timestamptz null`
+   - `zone_documents.deleted_at timestamptz null`
+   - `zone_contacts.deleted_at timestamptz null`
+   - индексы `WHERE deleted_at IS NULL` для горячих выборок.
 
-- Источник: `useActivationChecklist` (уже есть).
-- Видно: `▓▓▓░░ 3/5 · Готова на 60%` + tooltip «следующее: добавить контактную кнопку».
-- Клик → popover со списком шагов с иконками (galочки + remaining).
-- Цвет: muted при <60%, primary при 60–99%, emerald + confetti-ping при 100%.
-- Это создаёт «продающий» loop: пользователь видит, что ещё нужно сделать, чтобы получать лиды.
+2. **Новые таблицы** (с RLS через `is_zone_member`/`is_zone_admin`, аналогично существующим политикам):
+   - `zone_task_checklist (id, task_id, zone_id, title, is_done, order_index, created_at)`
+   - `zone_task_comments (id, task_id, zone_id, user_id, content, created_at, updated_at)`
+   - `zone_deal_products (id, deal_id, zone_id, product_id, quantity, unit_price, subtotal, created_at)`
+   - `zone_resources (id, zone_id, name, type, color, capacity, created_at)` — для календаря ресурсов.
 
-### 5. `FloatingBlockToolbar` (новый, заменяет absolute-кнопки в SortableGridBlockItem)
+3. **RLS-политики** для каждой новой таблицы:
+   - SELECT: `is_zone_member(zone_id, auth.uid())`
+   - INSERT/UPDATE/DELETE: `is_zone_member` или `is_zone_admin` (по аналогии с существующими).
 
-- Появляется над выделенным/hover блоком, position: floating-ui (`@floating-ui/react` уже в зависимостях через radix).
-- 5 иконок: Edit · Duplicate · Transform (rename type) · AI-Improve · Delete.
-- Mobile: при long-press/edit-tap раскрывается как bottom action sheet (используем уже существующий `MobileBlockActions`).
-- Drag-handle превращается в **hold-anywhere-on-block** (сразу drag после 200ms hold) — паттерн Linear/Notion.
+4. **Триггеры** `updated_at` где нужно (`zone_task_comments`).
 
-### 6. Inline-edit заголовков
+### Этап 2. Синхронизация фронтенда с БД
 
-- Расширить `InlineTextEditor` так, чтобы в блоках с `title`/`subtitle` (button, link, header, profile) клик по тексту прямо в канвасе → contenteditable, без открытия sheet.
-- Уже есть `supportsInlineEdit` — добавить туда text-block + header + button.
+1. **Хуки** — убедиться, что после миграции существующий код в `useZoneDeals`, `useZoneTasks`, `useZoneResources`, `useZoneDealProducts` и т. д. работает. Удалить `as any` каст там, где после регенерации типов он больше не нужен.
 
-### 7. Превью
+2. **Экраны зон** — пройти каждый и подтвердить рабочее состояние:
+   - `ZoneDashboard` — KPI, последние сделки/задачи
+   - `ZoneDealsScreen` — Канбан + bulk-операции + drag-and-drop стадий
+   - `ZoneTasksScreen` — список + чек-листы + комментарии
+   - `ZoneContactsScreen` — CRUD контактов
+   - `ZoneInboxScreen` — Telegram-conversations
+   - `ZoneInvoicesScreen` — Robokassa-инвойсы
+   - `ZoneDocumentsScreen` — шаблоны и сгенерированные документы
+   - `ZoneAutomationsScreen` — триггеры (run-zone-automations edge function)
+   - `ZoneAnalyticsScreen` — графики
+   - `ZoneSettingsScreen` — план, участники, инвайты, биллинг
+   - `ZoneEventsScreen`, `ZoneProductsScreen`, `ZoneBookingsCalendarScreen` — связь с zone_id.
 
-- Десктоп: добавить toggle «Split View» (canvas | live preview iframe `FramePreview` уже есть). 50/50 layout, sticky.
-- Мобайл: Preview = full-screen sheet с устройством-frame (iPhone-like), кнопкой share.
+3. **Empty-states**: где данных нет — показать SmartEmptyState с CTA (по стандарту `mem://design/smart-empty-states-standard`), а не белый экран.
 
-## Поведение и микровзаимодействия
+4. **Skeleton**: проверить, что во время загрузки нет «прыжков», все экраны имеют единый header (по стандарту `mem://design/dashboard-header-slots`).
 
-- Все transitions ≤200ms ease-out, opacity-only (по Sprint 1 стандарту).
-- Drag-feedback: `scale(0.98)` + `ring-primary/40`, тень `0 8px 24px hsl(var(--primary)/0.15)`.
-- Recently-added блок: `animate-scale-in` + auto-scroll, ring fade-out за 1.5s (уже есть, оставить).
-- Hover-on-canvas-divider: divider раскрывается из 1px в 32px кнопку «+ Add», с тонким лейблом «Insert between».
-- Friction-recovery (`useFrictionRecovery`) → `Toast` сверху, не баннер на канвасе.
+### Этап 3. Возврат навигации + RLS-аудит
 
-## Что не трогаем
+1. **Навигация Business-Zone** в `DashboardSidebar` и `DashboardBottomNav` уже жёстко закрыта `canUseBusinessZone()` — оставляем как есть (только Business-tier видит). Но убедимся, что для Business-пользователя пункты доступны и все табы (`zone-dashboard`, `zone-deals`, …, `zone-settings`) ведут на рабочие экраны.
 
-- `BlockRenderer`, `BLOCK_MANIFEST`, типы блоков, репозитории.
-- Логика `useEditorStore`, sections, multi-select, transform-engine, friction-recovery — всё переиспользуем.
-- Save/autosave, undo/redo, версии — только перенос UI.
-- `StructureView`, `BulkActionBar`, `MobileBlockActions`, `BlockContextToolbar`, `ExperimentSetupDialog` — оставляем, подключаем через новые точки входа.
+2. **RLS-аудит**: запустим Supabase linter, прогоним RLS-проверки для всех `zone_*` таблиц, особенно для новых. Убедимся, что `is_zone_member` использует SECURITY DEFINER (предотвращение recursion).
 
-## Новые/изменяемые файлы
+3. **Edge-функции** `run-zone-automations` и `send-zone-notification` — проверим, что они находят существующие данные и не падают на новых таблицах.
 
-**Новые:**
-- `src/components/editor/v2/EditorTopBar.tsx`
-- `src/components/editor/v2/SmartActionDock.tsx`
-- `src/components/editor/v2/PageHealthMeter.tsx`
-- `src/components/editor/v2/FloatingBlockToolbar.tsx`
-- `src/components/editor/v2/SplitPreviewLayout.tsx`
+### Этап 4. Memory & документация
 
-**Меняем:**
-- `src/components/dashboard-v2/screens/EditorScreen.tsx` — заменить `DashboardHeader` actions/bottomSlot на `EditorTopBar`, добавить `SmartActionDock`, перенести баннеры в `Toast`.
-- `src/components/editor/GridEditor.tsx` — убрать постоянные кнопки/handle/label, подключить `FloatingBlockToolbar`, схлопнуть точки добавления, hold-to-drag.
-- `src/components/editor/InlineTextEditor.tsx` — расширить `supportsInlineEdit`.
-- `src/lib/editor/inline-edit-config.ts` — добавить header/button/text.
-
-## План работ (один заход)
-
-1. Создать `EditorTopBar` + `PageHealthMeter` + `SmartActionDock`. Подключить в `EditorScreen`, скрыть старые actions/toolbar.
-2. Создать `FloatingBlockToolbar`. Рефакторить `SortableGridBlockItem`: убрать постоянные кнопки и handle; включить hold-to-drag и hover/tap toolbar.
-3. Схлопнуть insert-points: оставить hover-divider между блоками + один dashed-add в конце; убрать FAB и empty-state дубль (заменить на dock).
-4. Расширить inline-edit на header/button/profile-name; убедиться что bottom-sheet остаётся fallback.
-5. Добавить Split Preview на десктопе через `SplitPreviewLayout` + `FramePreview`.
-6. Перенести Friction/Tip/Onboarding баннеры в `useToast` (не загромождать канвас).
-7. Унести Структура/Версии/Review chips в overflow-menu в TopBar.
-8. Прогнать `tsc --noEmit`, smoke-test в браузере: добавить блок → редактирование → publish; проверить mobile dock не перекрывает BottomNav (z-index, padding-bottom).
+1. Обновить `mem://product-strategy/development-stop-list-updated` — снять флаг «заморожены» с Бизнес-Зон, отметить, что теперь это рабочий B2B-модуль для Business-tier (>1 пользователя в команде).
+2. Создать `mem://product/business-zones-active-2026` — короткое summary: что такое Бизнес-Зона, какие модули, какой тариф, какие RLS-предположения.
+3. Краткая запись в `docs/features/` — список модулей зоны и edge-функций.
 
 ## Технические детали
 
-- **Floating UI**: использовать `@radix-ui/react-popover` + `Portal`, чтобы FloatingBlockToolbar не клиппился под grid.
-- **z-index** дисциплина: canvas `z-0`, block-overlays `z-10`, floating toolbar `z-30`, dock `z-40`, top bar `z-50`, dialogs `z-[60]`.
-- **Mobile padding-bottom**: канвас получает `pb-[calc(env(safe-area-inset-bottom)+128px)]` чтобы dock + BottomNav не перекрывали.
-- **A11y**: dock имеет `role="toolbar" aria-label="Editor actions"`, кнопки — `aria-keyshortcuts`. Floating toolbar управляется клавиатурой (Tab/Enter/Esc).
-- **Сохранить i18n keys**, добавить новые: `editor.dock.add`, `editor.dock.ai`, `editor.dock.preview`, `editor.dock.publish`, `editor.health.label`, `editor.health.next`, `editor.topbar.overflow`.
-- **Не ломать**: те же props у `EditorScreen`, тот же контракт `onInsertBlock/onEditBlock/...`. Изменения чисто презентационные + перенос триггеров.
+- **Миграция SQL** — одна транзакция; все ALTER + CREATE TABLE + CREATE POLICY + CREATE INDEX.
+- **Совместимость**: `deleted_at IS NULL` — все существующие строки автоматически попадут в выборку.
+- **Типы Supabase** (`src/integrations/supabase/types.ts`) перегенерируются автоматически после миграции — далее `as any` касты в хуках можно убрать постепенно.
+- **Тесты**: smoke-проверка вручную через preview (Канбан, добавление задачи, чек-лист, комментарий, инвойс, документ).
+- **Не трогаем**: `zone_events`, `zone_bookings_calendar`, `zone_messages`/`zone_conversations` — они уже существуют и работают через свои таблицы (`bookings`/`events` с `zone_id` или собственные `zone_messages`).
 
-## Acceptance criteria
+## Что получит пользователь
 
-- На канвасе по умолчанию **нет ни одной кнопки** на блоках (всё по контексту).
-- В шапке **≤4 интерактивных элемента** одновременно (Back/Switcher · Health · Preview · Publish).
-- Первое действие нового пользователя — **«+ Add Block»** в доке — достижимо за один тап с любого экрана редактора.
-- Прогресс-бар «готова к продажам» виден всегда; клик показывает следующий шаг.
-- На мобайле dock не перекрывает блоки и согласован с BottomNav.
-- Десктоп: split-preview работает и обновляется при изменениях.
-- `bunx tsc --noEmit` зелёный, smoke-flow добавления/редактирования/публикации работает без регрессий.
+- Канбан сделок открывается без ошибок 400, drag-and-drop работает.
+- Задачи: создание, чек-листы, комментарии, удаление — рабочее.
+- Карточка сделки: список товаров и комментарии не падают.
+- Инвойсы и документы получают «корзину» (soft-delete).
+- Контакты не теряются при удалении.
+- Все экраны имеют единый header и пустые состояния.
+- RLS чистая, проходит linter, изоляция между зонами гарантирована.
+- Memory обновлена — будущие сессии знают, что Бизнес-Зоны снова активны.
+
+## Ожидаемое время
+
+Большой объём, ориентир: 1 миграция + ~10 файлов хуков/экранов + 2 memory-файла. Должно уложиться в одну итерацию default-mode.
