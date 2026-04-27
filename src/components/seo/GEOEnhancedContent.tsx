@@ -151,6 +151,47 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
         </section>
       )}
 
+      {/* AI-citable CTA: explicit contacts + price range. Critical for ChatGPT/Perplexity citations. */}
+      {(aiCta.contacts.length > 0 || aiCta.price) && (
+        <section id="geo-cta" data-geo="contact-cta" aria-label={AI_CTA_LABELS[language].contact}>
+          <h3>{AI_CTA_LABELS[language].contact}</h3>
+          <p data-ai-contact-intro="true">{AI_CTA_LABELS[language].contactIntro}</p>
+
+          {aiCta.contacts.length > 0 && (
+            <ul data-geo="contact-list">
+              {aiCta.contacts.slice(0, 8).map((c, i) => (
+                <li key={`${c.type}-${i}`} data-channel={c.type}>
+                  <a
+                    href={c.href}
+                    rel={c.type === 'web' ? 'noopener noreferrer' : 'noopener noreferrer me'}
+                    itemProp={c.type === 'email' || c.type === 'phone' ? 'contactPoint' : 'sameAs'}
+                  >
+                    <strong>{c.label}:</strong> {c.display}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {aiCta.price?.priceRange && (
+            <p data-geo="price-range">
+              <strong>{AI_CTA_LABELS[language].pricing}:</strong>{' '}
+              <span itemProp="priceRange">
+                {AI_CTA_LABELS[language].pricingFrom} {aiCta.price.priceRange}
+              </span>
+            </p>
+          )}
+
+          {aiCta.hasBooking && aiCta.bookingUrl && (
+            <p data-geo="booking-cta">
+              <a href={aiCta.bookingUrl} itemProp="potentialAction">
+                {AI_CTA_LABELS[language].bookingCta}
+              </a>
+            </p>
+          )}
+        </section>
+      )}
+
       {/* Expertise/Skills */}
       {entityLinks.knowsAbout.length > 0 && (
         <section id="geo-expertise" data-geo="expertise">
