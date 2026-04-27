@@ -61,16 +61,19 @@ export const DashboardLayout = memo(function DashboardLayout({
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ 
-              duration: 0.5, 
-              ease: [0.22, 1, 0.36, 1] 
+              duration: 0.2, 
+              ease: 'easeOut' 
             }}
-            className="w-full h-full p-2 md:p-8"
+            className={cn("w-full h-full", isMobile ? "p-0" : "p-8")}
           >
-            <div className="max-w-7xl mx-auto bg-background rounded-[2.5rem] min-h-full border border-border/5 overflow-visible">
+            <div className={cn(
+              "max-w-7xl mx-auto min-h-full overflow-visible",
+              isMobile ? "bg-transparent" : "bg-background rounded-[2.5rem] border border-border/5"
+            )}>
               {children}
             </div>
           </motion.div>
