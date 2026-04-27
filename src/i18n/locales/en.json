@@ -133,6 +133,8 @@
     "steps": {
       "createPage": "Create your page",
       "addBlock": "Add your first block",
+      "addServices": "Add services with pricing",
+      "addContact": "Add a contact button",
       "publish": "Publish your page",
       "connectTelegram": "Connect Telegram",
       "firstLead": "Get your first lead",
@@ -143,6 +145,8 @@
     "cta": {
       "openEditor": "Open",
       "addBlock": "Add",
+      "addServices": "Add",
+      "addContact": "Add",
       "publish": "Publish",
       "connectTelegram": "Connect",
       "promotePage": "Promote"
