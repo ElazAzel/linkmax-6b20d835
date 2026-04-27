@@ -45,13 +45,15 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
   let pricingBlock: PricingBlock | undefined;
   let faqBlock: FAQBlock | undefined;
   let eventBlocks: EventBlock[] = [];
+  let aiCta: ReturnType<typeof extractAiCta> = { contacts: [], hasBooking: false };
 
   try {
     profile = extractProfileFromBlocks(validBlocks, language);
     answerBlock = generateAnswerBlock(validBlocks, slug, language);
     keyFacts = generateKeyFacts(validBlocks, answerBlock, profile.name, language);
     entityLinks = extractEntityLinks(validBlocks, language);
-    
+    aiCta = extractAiCta(validBlocks, slug, language);
+
     const shouldGenerateAutoFAQ = !hasUserFAQ(validBlocks);
     const faqContext = extractFAQContext(validBlocks, profile.name, answerBlock.niche, answerBlock.location, language);
     autoFAQItems = shouldGenerateAutoFAQ ? generateAutoFAQ(faqContext, language, 3) : [];
