@@ -41,6 +41,7 @@ const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTa
 const AdminFintechTab = lazy(() => import('@/components/admin/AdminFintechTab').then(m => ({ default: m.AdminFintechTab })));
 const AdminSearchDiagnosticsTab = lazy(() => import('@/components/admin/AdminSearchDiagnosticsTab').then(m => ({ default: m.AdminSearchDiagnosticsTab })));
 const AdminBroadcastTab = lazy(() => import('@/components/admin/AdminBroadcastTab').then(m => ({ default: m.AdminBroadcastTab })));
+const AdminGrowthTab = lazy(() => import('@/components/admin/AdminGrowthTab').then(m => ({ default: m.AdminGrowthTab })));
 
 function TabLoader() {
   return (
@@ -90,6 +91,7 @@ export default function Admin() {
 
   const tabs = [
     { value: 'overview', label: t('admin.overview'), icon: BarChart3 },
+    { value: 'growth', label: t('admin.growth', 'Growth'), icon: TrendingUp },
     { value: 'users', label: t('admin.users'), icon: Users },
     { value: 'pages', label: t('admin.pages'), icon: FileText },
     { value: 'tokens', label: t('admin.tokens', 'Токены'), icon: Coins },
@@ -179,6 +181,10 @@ export default function Admin() {
             <Suspense fallback={<TabLoader />}>
               <TabsContent value="overview">
                 <AdminOverviewTab />
+              </TabsContent>
+
+              <TabsContent value="growth">
+                <AdminGrowthTab />
               </TabsContent>
 
               <TabsContent value="users">
