@@ -32,7 +32,11 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatusBadge } from '../common/StatusBadge';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SmartEmptyState } from '@/components/ui/smart-empty-state';
 import { LoadingState } from '@/components/ui/loading-state';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import SearchX from 'lucide-react/dist/esm/icons/search-x';
 
 interface PageItem {
   id: string;
@@ -233,19 +237,46 @@ export const PagesScreen = memo(function PagesScreen({
 
         {/* Pages List */}
         {filteredPages.length === 0 ? (
-          <EmptyState
-            icon={<Plus className="w-8 h-8" />}
-            title={pages.length === 0
-              ? t('dashboard.pages.emptyTitle', 'No pages yet')
-              : t('dashboard.pages.noResults', 'No pages found')
-            }
-            description={pages.length === 0
-              ? t('dashboard.pages.emptyDescription', 'Create your first page to get started')
-              : t('dashboard.pages.noResultsDescription', 'Try adjusting your search or filters')
-            }
-            ctaLabel={pages.length === 0 ? t('dashboard.pages.createFirst', 'Create Page') : undefined}
-            onCtaClick={pages.length === 0 ? onCreatePage : undefined}
-          />
+          pages.length === 0 ? (
+            <SmartEmptyState
+              icon={FileText}
+              eyebrow={t('dashboard.pages.emptyEyebrow', 'Первый шаг к продажам')}
+              title={t('dashboard.pages.emptyTitle', 'Создайте свою первую страницу')}
+              description={t('dashboard.pages.emptyDescription', 'Одна ссылка вместо сайта, Linktree, Calendly и формы заявки. AI-ассистент соберёт страницу за 60 секунд.')}
+              checklist={[
+                {
+                  label: t('dashboard.pages.checklist.choose', 'Выберите нишу или шаблон'),
+                  hint: t('dashboard.pages.checklist.chooseHint', '12+ готовых пресетов: красота, фитнес, обучение, услуги'),
+                },
+                {
+                  label: t('dashboard.pages.checklist.fill', 'Заполните услуги и контакты'),
+                  hint: t('dashboard.pages.checklist.fillHint', 'AI поможет с описаниями и заголовками'),
+                },
+                {
+                  label: t('dashboard.pages.checklist.publish', 'Опубликуйте и поделитесь'),
+                  hint: t('dashboard.pages.checklist.publishHint', 'Получите свою короткую ссылку lnkmx.my/имя'),
+                },
+              ]}
+              primaryCta={{
+                label: t('dashboard.pages.createFirst', 'Создать страницу'),
+                onClick: onCreatePage,
+                icon: Wand2,
+              }}
+              footer={t('dashboard.pages.emptyFooter', '🚀 Бесплатно навсегда · 5 блоков · кастомное оформление')}
+            />
+          ) : (
+            <SmartEmptyState
+              icon={SearchX}
+              title={t('dashboard.pages.noResults', 'Страницы не найдены')}
+              description={t('dashboard.pages.noResultsDescription', 'Попробуйте изменить фильтр или поисковый запрос')}
+              primaryCta={{
+                label: t('dashboard.pages.resetFilter', 'Сбросить'),
+                onClick: () => { setSearch(''); setFilter('all'); },
+                variant: 'outline',
+              }}
+              compact
+            />
+          )
         ) : (
           <div className="grid gap-3">
             {filteredPages.map((page) => (
