@@ -22,6 +22,8 @@ import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
+import { EditorTopBar } from '@/components/editor/v2/EditorTopBar';
+import { SmartActionDock } from '@/components/editor/v2/SmartActionDock';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
 import { storage } from '@/lib/storage';
