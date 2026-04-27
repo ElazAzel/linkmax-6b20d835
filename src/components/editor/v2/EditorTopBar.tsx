@@ -53,7 +53,7 @@ export interface EditorTopBarProps {
   onOpenVersions?: () => void;
   onOpenTemplates?: () => void;
   onOpenAI?: () => void;
-  reviewMode?: 'normal' | 'problematic' | 'cta_contact';
+  reviewMode?: string;
   onToggleReviewMode?: (mode: 'problematic' | 'cta_contact') => void;
   hasContent?: boolean;
 
