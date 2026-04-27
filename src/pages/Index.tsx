@@ -25,6 +25,8 @@ const PremiumFooter = lazy(() => import('@/components/landing/v2/PremiumFooter')
 const BottomCTA = lazy(() => import('@/components/landing/v2/BottomCTA').then(m => ({ default: m.BottomCTA })));
 const RevenueCalculator = lazy(() => import('@/components/landing/v2/RevenueCalculator').then(m => ({ default: m.RevenueCalculator })));
 const ComparisonTable = lazy(() => import('@/components/landing/v2/ComparisonTable').then(m => ({ default: m.ComparisonTable })));
+const FAQSection = lazy(() => import('@/components/landing/v2/FAQSection').then(m => ({ default: m.FAQSection })));
+const StickyMobileCTA = lazy(() => import('@/components/landing/v2/StickyMobileCTA').then(m => ({ default: m.StickyMobileCTA })));
 const GrainOverlay = lazy(() => import('@/components/landing/v2/GrainOverlay').then(m => ({ default: m.GrainOverlay })));
 const LiquidCursor = lazy(() => import('@/components/landing/v2/LiquidCursor').then(m => ({ default: m.LiquidCursor })));
 const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
