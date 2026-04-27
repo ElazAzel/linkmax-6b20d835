@@ -47,6 +47,7 @@ export const PremiumFooter = () => {
                         <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">{t('footer.product', 'Product')}</h4>
                         <div className="flex flex-col gap-4">
                             <button onClick={() => navigate('/gallery')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('landingV5.footer.examples', 'Examples')}</button>
+                            <button onClick={() => navigate('/customers')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.customers', 'Customers')}</button>
                             <button onClick={() => navigate('/pricing')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('landingV5.footer.pricing', 'Pricing')}</button>
                             <button onClick={() => navigate('/alternatives')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.alternatives', 'Alternatives')}</button>
                         </div>

@@ -125,6 +125,7 @@ const ForMasters = lazy(() => import("./pages/ForMasters"));
 const NicheLanding = lazy(() => import("./pages/NicheLanding"));
 const FromPage = lazy(() => import("./pages/FromPage"));
 const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
+const Customers = lazy(() => import("./pages/Customers"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -165,6 +166,7 @@ const router = createBrowserRouter([
       { path: "dashboard/team", element: <Dashboard /> },
       { path: "install", element: <Install /> },
       { path: "gallery", element: <Gallery /> },
+      { path: "customers", element: <Customers /> },
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
