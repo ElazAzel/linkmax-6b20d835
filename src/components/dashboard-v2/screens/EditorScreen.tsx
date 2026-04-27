@@ -342,36 +342,40 @@ export const EditorScreen = memo(function EditorScreen({
           <div className="flex items-center justify-between gap-3">
             {/* Left: Title */}
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-black text-gradient truncate">
+              <h1 className="text-xl font-bold truncate">
                 {t('dashboard.editor.title', 'Редактор')}
               </h1>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <p className="text-xs text-muted-foreground font-medium">
                   {blockCount} {t('dashboard.editor.blocks', 'блоков')}
                 </p>
               </div>
             </div>
 
             {/* Center: Undo/Redo */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
+                aria-label={t('editor.undo', 'Отменить')}
+                title={t('editor.undo', 'Отменить')}
+                className="h-10 w-10 p-0 rounded-xl"
                 onClick={handleUndoWithFriction}
                 disabled={!canUndo}
               >
-                <Undo2 className="h-5 w-5 md:h-4 md:w-4" />
+                <Undo2 className="h-4 w-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
+                aria-label={t('editor.redo', 'Повторить')}
+                title={t('editor.redo', 'Повторить')}
+                className="h-10 w-10 p-0 rounded-xl"
                 onClick={handleRedoWithFriction}
                 disabled={!canRedo}
               >
-                <Redo2 className="h-5 w-5 md:h-4 md:w-4" />
+                <Redo2 className="h-4 w-4" />
               </Button>
             </div>
 
@@ -380,20 +384,22 @@ export const EditorScreen = memo(function EditorScreen({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
+                aria-label={t('editor.preview', 'Превью')}
+                title={t('editor.preview', 'Превью')}
+                className="h-10 w-10 p-0 rounded-xl"
                 onClick={onPreview}
               >
-                <Eye className="h-5 w-5 md:h-4 md:w-4" />
+                <Eye className="h-4 w-4" />
               </Button>
               <Button
                 size="sm"
                 className={cn(
-                  "h-11 md:h-9 rounded-2xl md:rounded-xl font-black text-xs uppercase tracking-widest px-5 md:px-4",
-                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
+                  "h-10 rounded-xl font-semibold text-sm px-4",
+                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground"
                 )}
                 onClick={onShare}
               >
-                <Share2 className="h-4 w-4 md:h-3.5 md:w-3.5 mr-2 md:mr-1.5" />
+                <Share2 className="h-4 w-4 mr-1.5" />
                 {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
               </Button>
             </div>
@@ -401,17 +407,17 @@ export const EditorScreen = memo(function EditorScreen({
         </div>
 
         {/* Quick tools bar */}
-        <div className="px-4 py-2.5 flex gap-2.5 overflow-x-auto scrollbar-hide border-t border-border/10 bg-card">
+        <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide border-t border-border/10 bg-card">
           {/* Show templates only for pages without content */}
           {!hasContent && (
             <Button
               variant="outline"
               size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
+              className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
               onClick={onOpenTemplates}
             >
               <LayoutTemplate className="h-4 w-4" />
-              <span className="text-xs font-black uppercase tracking-widest">{t('editor.templates', 'Шаблоны')}</span>
+              <span>{t('editor.templates', 'Шаблоны')}</span>
             </Button>
           )}
 
@@ -420,11 +426,11 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
+              className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
               onClick={onOpenVersions}
             >
               <History className="h-4 w-4" />
-              <span className="text-xs font-black uppercase tracking-widest">{t('editor.versions', 'История')}</span>
+              <span>{t('editor.versions', 'История')}</span>
             </Button>
           )}
 
@@ -433,11 +439,11 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
+              className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
               onClick={() => setStructureOpen(true)}
             >
               <Layers className="h-4 w-4" />
-              <span className="text-xs font-black uppercase tracking-widest">{t('editor.structure', 'Структура')}</span>
+              <span>{t('editor.structure', 'Структура')}</span>
             </Button>
           )}
 
@@ -448,25 +454,25 @@ export const EditorScreen = memo(function EditorScreen({
                 variant={reviewMode === 'problematic' ? 'default' : 'outline'}
                 size="sm"
                 className={cn(
-                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm transition-all",
-                  reviewMode === 'problematic' ? "bg-red-500 text-white border-none" : "border-border/20 bg-card"
+                  "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-all",
+                  reviewMode === 'problematic' && "bg-destructive text-destructive-foreground border-none"
                 )}
                 onClick={() => toggleReviewMode('problematic')}
               >
                 <AlertCircle className="h-4 w-4" />
-                <span className="text-xs font-black uppercase tracking-widest">{t('editor.problematic', 'Проблемные')}</span>
+                <span>{t('editor.problematic', 'Проблемные')}</span>
               </Button>
               <Button
                 variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
                 size="sm"
                 className={cn(
-                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm transition-all",
-                  reviewMode === 'cta_contact' ? "bg-emerald-500 text-white border-none" : "border-border/20 bg-card"
+                  "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-all",
+                  reviewMode === 'cta_contact' && "bg-emerald-500 text-white border-none"
                 )}
                 onClick={() => toggleReviewMode('cta_contact')}
               >
                 <MousePointerClick className="h-4 w-4" />
-                <span className="text-xs font-black uppercase tracking-widest">{t('editor.cta', 'CTA')}</span>
+                <span>{t('editor.cta', 'CTA')}</span>
               </Button>
             </>
           )}
