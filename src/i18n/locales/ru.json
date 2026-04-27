@@ -133,6 +133,8 @@
     "steps": {
       "createPage": "Создайте страницу",
       "addBlock": "Добавьте первый блок",
+      "addServices": "Добавьте услуги с ценой",
+      "addContact": "Добавьте кнопку связи",
       "publish": "Опубликуйте страницу",
       "connectTelegram": "Подключите Telegram",
       "firstLead": "Получите первый отклик",
@@ -143,6 +145,8 @@
     "cta": {
       "openEditor": "Открыть",
       "addBlock": "Добавить",
+      "addServices": "Добавить",
+      "addContact": "Добавить",
       "publish": "Опубликовать",
       "connectTelegram": "Подключить",
       "promotePage": "Продвинуть"
