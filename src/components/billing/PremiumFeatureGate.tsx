@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { useFreemiumLimits, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { hasTierAccess } from '@/domain/billing/tiers';
+import { UpgradeBenefits } from './UpgradeBenefits';
 
 interface PremiumFeatureGateProps {
   requiredTier: FreeTier;
