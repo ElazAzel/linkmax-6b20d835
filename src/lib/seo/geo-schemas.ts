@@ -116,12 +116,85 @@ export function generateGEOSchemas(
 }
 
 /**
- * Generate main entity schema
+ * Map AiContactAction to schema.org ContactPoint
+ */
+function contactToContactPoint(c: AiContactAction): Record<string, unknown> {
+  const base: Record<string, unknown> = {
+    '@type': 'ContactPoint',
+    contactType: c.label,
+  };
+  if (c.type === 'phone') {
+    base.telephone = c.display;
+  } else if (c.type === 'email') {
+    base.email = c.display;
+  } else {
+    base.url = c.href;
+  }
+  return base;
+}
+
+/**
+ * Build potentialAction array (CommunicateAction / ReserveAction) so that
+ * AI engines can render "Contact" / "Book" buttons in their answer cards.
+ */
+function buildPotentialActions(
+  contacts: AiContactAction[],
+  bookingUrl: string | undefined,
+  pageUrl: string
+): object[] {
+  const actions: object[] = [];
+
+  // Primary communicate actions for direct contact channels
+  for (const c of contacts.slice(0, 4)) {
+    if (c.type === 'web') continue;
+    actions.push({
+      '@type': 'CommunicateAction',
+      name: c.label,
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: c.href,
+        actionPlatform: [
+          'https://schema.org/DesktopWebPlatform',
+          'https://schema.org/MobileWebPlatform',
+        ],
+      },
+    });
+  }
+
+  // Booking action
+  if (bookingUrl) {
+    actions.push({
+      '@type': 'ReserveAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: bookingUrl,
+        actionPlatform: [
+          'https://schema.org/DesktopWebPlatform',
+          'https://schema.org/MobileWebPlatform',
+        ],
+      },
+      result: { '@type': 'Reservation', name: 'Booking confirmation' },
+    });
+  } else {
+    // Fallback: generic ViewAction on the page itself
+    actions.push({
+      '@type': 'ViewAction',
+      target: pageUrl,
+    });
+  }
+
+  return actions;
+}
+
+/**
+ * Generate main entity schema — enriched with telephone, contactPoint,
+ * potentialAction, priceRange so it is citable by ChatGPT/Perplexity/Claude.
  */
 function generateMainEntity(
   blocks: Block[],
   context: SchemaContext,
-  pageUrl: string
+  pageUrl: string,
+  aiCta: ReturnType<typeof extractAiCta>
 ): object {
   const { entityType } = context.answerBlock;
 
@@ -149,9 +222,29 @@ function generateMainEntity(
     entity.knowsAbout = context.answerBlock.services;
   }
 
+  // ---- Direct contact enrichment (works for any entity type) ----
+  const phoneContact = aiCta.contacts.find((c) => c.type === 'phone');
+  const emailContact = aiCta.contacts.find((c) => c.type === 'email');
+  if (phoneContact) entity.telephone = phoneContact.display;
+  if (emailContact) entity.email = emailContact.display;
+
+  if (aiCta.contacts.length > 0) {
+    entity.contactPoint = aiCta.contacts.slice(0, 6).map(contactToContactPoint);
+  }
+
+  if (aiCta.price?.priceRange) {
+    entity.priceRange = aiCta.price.priceRange;
+  }
+
+  // potentialAction: critical for AI cards ("Book", "Call", "WhatsApp")
+  const actions = buildPotentialActions(aiCta.contacts, aiCta.bookingUrl, pageUrl);
+  if (actions.length > 0) {
+    entity.potentialAction = actions;
+  }
+
   // Add location-specific fields for LocalBusiness
   if (entityType === 'LocalBusiness') {
-    const mapBlock = blocks.find(b => b.type === 'map') as MapBlock | undefined;
+    const mapBlock = blocks.find((b) => b.type === 'map') as MapBlock | undefined;
     if (mapBlock?.address) {
       entity.address = {
         '@type': 'PostalAddress',
@@ -172,7 +265,8 @@ function generateMainEntity(
 }
 
 /**
- * Generate WebPage/ProfilePage schema
+ * Generate WebPage/ProfilePage schema with SpeakableSpecification —
+ * enables Google Assistant / voice search to read the answer summary aloud.
  */
 function generateWebPage(
   context: SchemaContext,
@@ -202,6 +296,11 @@ function generateWebPage(
       name: 'lnkmx',
       url: getAppDomain(),
       logo: `${getAppDomain()}/favicon.jpg`,
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['#geo-answer', '#geo-cta', '[data-ai-summary="true"]'],
+      xpath: ['/html/head/meta[@name="ai-summary"]/@content'],
     },
   };
 }
