@@ -219,7 +219,7 @@ export function extractAiCta(
   let price: AiPriceInfo | undefined;
   if (pricingBlock?.items?.length) {
     const prices: number[] = [];
-    let currency = pricingBlock.currency || 'KZT';
+    let currency: string = (pricingBlock.currency as unknown as string) || 'KZT';
     for (const item of pricingBlock.items) {
       if (!item || typeof item !== 'object') continue;
       const raw = (item as { price?: unknown }).price;
@@ -230,8 +230,9 @@ export function extractAiCta(
             ? Number(String(raw).replace(/[^\d.]/g, ''))
             : NaN;
       if (Number.isFinite(n) && n > 0) prices.push(n);
-      if ((item as { currency?: string }).currency) {
-        currency = (item as { currency?: string }).currency || currency;
+      const itemCurrency = (item as { currency?: unknown }).currency;
+      if (typeof itemCurrency === 'string' && itemCurrency) {
+        currency = itemCurrency;
       }
     }
     if (prices.length > 0) {
