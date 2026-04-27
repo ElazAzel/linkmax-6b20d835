@@ -3991,6 +3991,7 @@ export type Database = {
         Args: { p_event_id: string }
         Returns: number
       }
+      get_growth_metrics: { Args: { p_days?: number }; Returns: Json }
       get_page_search_diagnostics: {
         Args: { p_page_id: string }
         Returns: Json
