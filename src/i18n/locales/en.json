@@ -7330,6 +7330,14 @@
     "upgradeToEdit": "Обновите до {{tier}} для редактирования",
     "viewOnlyHint": "Требуется {{tier}} для редактирования"
   },
+  "upgradeBenefits": {
+    "b1Title": "All blocks & forms",
+    "b1Desc": "Leads, booking, payments",
+    "b2Title": "1% fee instead of 5%",
+    "b2Desc": "Pays off from $130 revenue",
+    "b3Title": "Custom domain · no branding",
+    "b3Desc": "Professional look"
+  },
   "funnel": {
     "insightGoodConversion": "Хорошая конверсия {{rate}}%!",
     "insightHighCtr": "Отличный CTR ({{rate}}%)! Контент вовлекает пользователей.",
