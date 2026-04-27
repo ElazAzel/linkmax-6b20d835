@@ -136,6 +136,38 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
           </section>
         )}
 
+        {/* AI / search-bot CTA: explicit contacts + price + booking */}
+        {(aiCta.contacts.length > 0 || aiCta.price) && (
+          <section id="contact-cta" aria-label={AI_CTA_LABELS[language].contact}>
+            <h2>{AI_CTA_LABELS[language].contact}</h2>
+            <p>{AI_CTA_LABELS[language].contactIntro}</p>
+            {aiCta.contacts.length > 0 && (
+              <ul>
+                {aiCta.contacts.slice(0, 8).map((c, i) => (
+                  <li key={`${c.type}-${i}`}>
+                    <a href={c.href} rel={c.type === 'web' ? 'noopener noreferrer' : 'noopener noreferrer me'}>
+                      <strong>{c.label}:</strong> {c.display}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {aiCta.price?.priceRange && (
+              <p>
+                <strong>{AI_CTA_LABELS[language].pricing}:</strong>{' '}
+                <span itemProp="priceRange">
+                  {AI_CTA_LABELS[language].pricingFrom} {aiCta.price.priceRange}
+                </span>
+              </p>
+            )}
+            {aiCta.hasBooking && aiCta.bookingUrl && (
+              <p>
+                <a href={aiCta.bookingUrl}>{AI_CTA_LABELS[language].bookingCta}</a>
+              </p>
+            )}
+          </section>
+        )}
+
         {/* Additional text content */}
         {textBlocks.length > 0 && (
           <section aria-label="Details">
