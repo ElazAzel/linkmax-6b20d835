@@ -1,174 +1,143 @@
+## Цель
 
-# UX/UI Аудит LinkMAX
+Превратить редактор блоков из «панели управления с кнопками везде» в **тихий канвас + контекстный интеллект**, по паттернам 2026 (Framer, Notion, Figma Sites, Linear): минимум хрома по умолчанию, всё нужное появляется по контексту, первое действие — за один тап, ценность («ты ближе к первому лиду») всегда на виду.
 
-Ниже — структурный аудит платформы по экранам, с обнаруженными проблемами и приоритетом фиксов. Аудит основан на чтении исходников ключевых экранов (`Index`, `DashboardV2`, `HomeScreen`, `EditorScreen`, `LeadsScreen`, `PagesScreen`, `InsightsScreen`, `SettingsScreen`, `PublicPage`, `DashboardLayout`, `DashboardBottomNav`, `DashboardSidebar`).
+## Что не так сейчас
 
----
+1. **Шум в шапке**: 4 фильтр-чипа (Шаблоны/История/Структура/Проблемные/CTA) + квадрат иконок + Publish + Live-pill — всё конкурирует за внимание.
+2. **Шум на блоках**: на каждом блоке постоянно видны drag-handle, type-label, 3–4 кнопки в правом углу, hover-overlay.
+3. **Дублирующиеся точки добавления**: Insert-divider между каждой парой + большой dashed «add» снизу + FAB на мобайле + ещё `BlockInsertButton` в empty-state. Пользователь не знает, какой использовать.
+4. **Нет «продающего» сигнала прогресса**: блоки добавлены, но не видно «насколько готова страница к продажам».
+5. **Превью прячется** за иконкой глаза — на мобайле нет split-view.
+6. **Нет inline-правки заголовков** на видном уровне; все клики ведут в bottom-sheet.
 
-## 1. Landing (`/`)
+## Новая архитектура — три слоя
 
-**Сильные стороны**
-- Чёткий «Premium / Living Canvas» стиль, Dynamic Island навигация, Bento-grid, Sticky Mobile CTA.
-- SEO/AEO-стек на месте (Speakable, GEO, AISearchOptimizer).
-- Революня calc + Comparison + Testimonials = хорошая воронка убеждения.
+```text
+┌───────────────────────────────────────────────────┐
+│ Top Bar (compact, 56px)                           │
+│  [Back] [Page name ▾]   [progress·preview]  [⚡]  │
+├───────────────────────────────────────────────────┤
+│                                                   │
+│         CANVAS (тихий, без хрома)                 │
+│                                                   │
+│   • Hover/tap → floating BlockToolbar (popover)   │
+│   • Selected block → bottom contextual bar        │
+│   • Insert → only between hover + sticky "+ Add"  │
+│                                                   │
+├───────────────────────────────────────────────────┤
+│ Smart Action Dock (sticky bottom, 64px)           │
+│  [+ Block] [✨ AI] [👁 Preview] [🚀 Publish ▸]    │
+└───────────────────────────────────────────────────┘
+```
 
-**Проблемы**
-- **Когнитивная перегрузка above-the-fold на мобильных (393×573)**: hero + DynamicIsland + LiquidCursor (десктоп) + GrainOverlay + CanvasBackground + Sticky CTA одновременно создают визуальный шум, на маленьких экранах CTA «теряется».
-- **Двойные CTA**: nav-signup + hero-signup + sticky-mobile-CTA + bottom-CTA — пользователь видит 4 одинаковых призыва, без явной приоритезации (primary vs secondary).
-- **LogoTicker / social proof** иногда грузится позже hero — мелькание layout shift.
-- **Pricing «Aurora»** красиво, но цена/фичи сравниваются по двум планам Starter/Pro — отсутствует явный «recommended» бейдж и якорный pricing (старая цена → новая).
-- **FAQ** не имеет inline-search/раскрытия по группам — длинный аккордеон на мобильных.
+## Компоненты
 
-**P0 фиксы**
-- Привести CTA к одному primary-стилю на странице и одному вторичному (Outline). Sticky Mobile CTA = только когда hero ушёл за viewport.
-- Зарезервировать высоту LogoTicker (CLS).
-- Добавить «Most popular» бейдж и якорную цену в Pricing.
+### 1. `EditorTopBar` (новый, заменяет actions+bottomSlot в DashboardHeader)
 
----
+- Высота 56px, sticky, `bg-background/80 backdrop-blur-md`.
+- Слева: back + **page switcher** с inline-edit названия страницы.
+- Центр: **PageHealthMeter** — компактная полоска прогресса «3 из 5 шагов до продаж» (использует существующий `useActivationChecklist`); клик → раскрывает чек-лист в popover. Это и есть «продающий сигнал».
+- Справа: **Preview** (iconButton, на ≥md показывает label), **Publish/Share** (primary, gradient если не опубликовано, secondary если опубликовано → меняется на «Поделиться»).
+- Undo/Redo, Структура, Версии, Review-modes уезжают в **overflow-menu (⋯)** + работают через keyboard shortcuts (`⌘Z`, `⌘⇧Z`, `⌘K` уже есть).
 
-## 2. Dashboard (`/dashboard/*`)
+### 2. `EditorCanvas` (рефактор GridEditor)
 
-**Архитектура**
-- Mobile: Bottom nav (5 кнопок) + «Ещё» Sheet с 6 пунктами.
-- Desktop: Sidebar с группами (Pages, Business tools, Settings).
-- Контент в карточке `rounded-[2.5rem] border-border/5` внутри `max-w-7xl`.
+- Убрать постоянно видимые: drag-handle, type-label, кнопки edit/duplicate/delete на каждом блоке.
+- На hover (desktop) / single-tap (mobile): показать **`FloatingBlockToolbar`** (popover, 5 иконок: edit, duplicate, transform, AI-improve, delete) над блоком — паттерн Notion/Framer.
+- Long-press / multi-select: подсветить + показывать существующий `BulkActionBar`.
+- Type-label оставить, но только для **selected/hover** блока (бейдж в углу появляется fade-in 150ms).
+- **Empty hint chip** (амбер «нужен URL») остаётся — это product critical.
+- **Insert-divider**: показывать только между hover-парой + один в самом низу. Убрать дубль внизу-FAB-empty-state.
 
-**Проблемы**
-- **Несимметрия mobile vs desktop nav**: на мобильном «Главная/Обзор» спрятан в «Ещё», хотя это логичный home → пользователь, попав в `editor` сразу, не видит активацию/чек-лист без открытия sheet. Это ломает onboarding-loop.
-- **`p-2 md:p-8` + внутренний `rounded-[2.5rem]` + `border-border/5`**: на мобильном двойной контейнер съедает горизонтальное пространство (~12px каждый край) и даёт «карточка в карточке» эффект. Контент и так узкий.
-- **DashboardBottomNav: текст `text-[10px] uppercase tracking-tighter font-bold`** + `whitespace-normal break-words` — на 393px «Аналитика» переносится, теряя выравнивание иконок.
-- **`AnimatePresence mode="wait"` + `y: 12 → -12`** на каждое переключение таба — ощущается медленно (500ms easing curve), особенно с lazy-loading скрина.
-- **HomeScreen**: одновременно показывает Activation Checklist + StatusBadge + Page Card + MetricsGrid + ConversionFunnel + Sources + Operator + Wallet + RepeatCustomers. На мобильном это длинный скролл без иерархии — нет «above-the-fold value».
-- **InsightsScreen**: 5 табов (overview, traffic, blocks, funnel, experiments) в одном `TabsList` — на 393px не помещается, появляется нечитаемый горизонтальный скролл.
-- **LeadsScreen**: фильтр статусов (`all/new/contacted/qualified/converted/lost`) — 6 чипов в строку на мобильном неудобны; нет «save view» / «default = только new+contacted».
-- **PagesScreen**: лимиты (`Progress` + `currentPages/maxPages`) и upgrade-CTA не закреплены — теряются при скролле длинного списка.
-- **SettingsScreen**: 30+ пропсов в одном экране, нет навигационной hierarchy («где я?») кроме 2 табов «Page / Account». При большом количестве полей нужны якорные подгруппы и search.
-- **DashboardHeader дублируется в каждом screen** — вместо одного top-bar в layout. Это ведёт к разным title/back-логикам.
-- **Скелетоны разные на каждом экране** — отсутствует единый стандарт `LoadingSkeleton`.
+### 3. `SmartActionDock` (новый, sticky bottom)
 
-**P0 фиксы**
-- Перенести `home` в bottom nav (Главная вместо «Аналитика» как 1-й таб) и в desktop sidebar в `MAIN_ITEMS`. Аналитику оставить второстепенной.
-- Сократить `p-2` до `p-0` на mobile + убрать внутренний `border` карточки (или layout-карточка ИЛИ screen-карточка, не оба).
-- Bottom nav: не uppercase, `text-[11px]`, без `tracking-tighter`, без `break-words` (truncate ellipsis).
-- Снизить переход экрана до 200ms `ease-out`, без `y` — только opacity.
-- InsightsScreen: tabs → `Select` на mobile, `TabsList` только на md+.
-- LeadsScreen: дефолтный фильтр «активные» (new+contacted) и собранный «Filter» Sheet вместо ряда чипов.
+- Высота 64px на мобайле, 56px десктоп.
+- 4 кнопки равной важности: **+ Add Block** (primary, hint label «Что добавить?»), **AI Improve** (если ≥1 блок: «Улучшить страницу»), **Preview** (toggle split-view на десктопе), **Publish** (primary CTA после готовности; меняется на Share после публикации).
+- При публикации → micro-celebration animation (scale-in + emerald check).
+- На мобайле заменяет текущий FAB + bottom dashed «add» + bottom DashboardBottomNav поднимается над ним (z-index согласован).
 
-**P1 фиксы**
-- Единый `DashboardHeader` в `DashboardLayout` с slot’ами (title, actions).
-- Поиск в SettingsScreen + collapsible подгруппы.
-- HomeScreen: чек-лист в свернутом виде (collapse), когда активация ≥ 80%; KPIs выше fold.
+### 4. `PageHealthMeter` (новый виджет в TopBar)
 
----
+- Источник: `useActivationChecklist` (уже есть).
+- Видно: `▓▓▓░░ 3/5 · Готова на 60%` + tooltip «следующее: добавить контактную кнопку».
+- Клик → popover со списком шагов с иконками (galочки + remaining).
+- Цвет: muted при <60%, primary при 60–99%, emerald + confetti-ping при 100%.
+- Это создаёт «продающий» loop: пользователь видит, что ещё нужно сделать, чтобы получать лиды.
 
-## 3. Editor (`/dashboard/home?tab=editor`)
+### 5. `FloatingBlockToolbar` (новый, заменяет absolute-кнопки в SortableGridBlockItem)
 
-**Сильные стороны**
-- Mobile-first GridEditor, Structure View, Friction Recovery, Activation Checklist на месте.
-- Undo/Redo, History, AI generator, Templates — мощный функционал.
+- Появляется над выделенным/hover блоком, position: floating-ui (`@floating-ui/react` уже в зависимостях через radix).
+- 5 иконок: Edit · Duplicate · Transform (rename type) · AI-Improve · Delete.
+- Mobile: при long-press/edit-tap раскрывается как bottom action sheet (используем уже существующий `MobileBlockActions`).
+- Drag-handle превращается в **hold-anywhere-on-block** (сразу drag после 200ms hold) — паттерн Linear/Notion.
 
-**Проблемы**
-- **Top bar сильно перегружен**: Preview + Share + Templates + AI + Undo + Redo + Versions + Structure + Lightbulb + Layers (≥10 кнопок). На 393px они уезжают за край или схлопываются в иконки без подписей — без tooltip'ов на тач-устройствах непонятно, что они делают.
-- **«MousePointerClick» / «AlertCircle» / «Lightbulb»** — без явного значения для нового пользователя.
-- **Friction Recovery banner** показывается над холстом, но иногда закрывает первую секцию.
-- **Add block UI**: floating «+» vs slot-based vs preset-based — три ментальные модели одновременно.
-- **Editor + Settings + Theme + Versions** — все в виде drawer’ов, но открываются с разных сторон (`right`, `bottom`, `dialog`), без общего паттерна.
+### 6. Inline-edit заголовков
 
-**P0 фиксы**
-- Сгруппировать тулбар: `[Preview] [Share]` слева, `[Undo Redo]` центр, `[…]` справа (overflow menu для AI/Templates/Versions/Structure).
-- Tooltip + label-on-hover на десктопе и aria-label на мобильном; на длинном тапе — подсказка.
-- Friction Recovery → toast или нижний bar, не over-canvas.
+- Расширить `InlineTextEditor` так, чтобы в блоках с `title`/`subtitle` (button, link, header, profile) клик по тексту прямо в канвасе → contenteditable, без открытия sheet.
+- Уже есть `supportsInlineEdit` — добавить туда text-block + header + button.
 
-**P1 фиксы**
-- Единая ментальная модель Add Block: «Inline +» между блоками + «Insert Sheet» с поиском. Убрать второй вход.
-- Унифицировать drawers: на mobile все side="bottom", на desktop side="right".
+### 7. Превью
 
----
+- Десктоп: добавить toggle «Split View» (canvas | live preview iframe `FramePreview` уже есть). 50/50 layout, sticky.
+- Мобайл: Preview = full-screen sheet с устройством-frame (iPhone-like), кнопкой share.
 
-## 4. Public Page (`/{slug}`)
+## Поведение и микровзаимодействия
 
-**Сильные стороны**
-- Корректный SEO/AEO, JSON-LD, Speakable, share-dialog с QR.
-- Animations через framer-motion, Heatmap tracking.
-- Skeleton + ErrorState на месте.
+- Все transitions ≤200ms ease-out, opacity-only (по Sprint 1 стандарту).
+- Drag-feedback: `scale(0.98)` + `ring-primary/40`, тень `0 8px 24px hsl(var(--primary)/0.15)`.
+- Recently-added блок: `animate-scale-in` + auto-scroll, ring fade-out за 1.5s (уже есть, оставить).
+- Hover-on-canvas-divider: divider раскрывается из 1px в 32px кнопку «+ Add», с тонким лейблом «Insert between».
+- Friction-recovery (`useFrictionRecovery`) → `Toast` сверху, не баннер на канвасе.
 
-**Проблемы**
-- **Контент-лимит ширины**: рендер блоков в одну колонку без `max-w` может растягивать text-blocks на больших экранах (>700px), плохо для читаемости.
-- **Watermark «Made on LinkMAX»** на free tier — не перепроверял, но обычно это поглощается контентом и пользователи путают с реальным CTA.
-- **Share Dialog**: copy + QR + ExternalLink — но нет «Поделиться в WhatsApp/Telegram» прямой кнопкой (хотя это primary-канал распространения для целевой аудитории KZ/RU).
-- **Language switcher** lazy-loaded — мелькание при первой загрузке.
+## Что не трогаем
 
-**P0 фиксы**
-- Ограничить content width до `max-w-[680px] mx-auto` на text/long-form блоках.
-- В Share Dialog добавить native share + WhatsApp/Telegram кнопки.
+- `BlockRenderer`, `BLOCK_MANIFEST`, типы блоков, репозитории.
+- Логика `useEditorStore`, sections, multi-select, transform-engine, friction-recovery — всё переиспользуем.
+- Save/autosave, undo/redo, версии — только перенос UI.
+- `StructureView`, `BulkActionBar`, `MobileBlockActions`, `BlockContextToolbar`, `ExperimentSetupDialog` — оставляем, подключаем через новые точки входа.
 
-**P1 фиксы**
-- Префетч language switcher или статичный fallback на сервере.
+## Новые/изменяемые файлы
 
----
+**Новые:**
+- `src/components/editor/v2/EditorTopBar.tsx`
+- `src/components/editor/v2/SmartActionDock.tsx`
+- `src/components/editor/v2/PageHealthMeter.tsx`
+- `src/components/editor/v2/FloatingBlockToolbar.tsx`
+- `src/components/editor/v2/SplitPreviewLayout.tsx`
 
-## 5. Auth & Onboarding
+**Меняем:**
+- `src/components/dashboard-v2/screens/EditorScreen.tsx` — заменить `DashboardHeader` actions/bottomSlot на `EditorTopBar`, добавить `SmartActionDock`, перенести баннеры в `Toast`.
+- `src/components/editor/GridEditor.tsx` — убрать постоянные кнопки/handle/label, подключить `FloatingBlockToolbar`, схлопнуть точки добавления, hold-to-drag.
+- `src/components/editor/InlineTextEditor.tsx` — расширить `supportsInlineEdit`.
+- `src/lib/editor/inline-edit-config.ts` — добавить header/button/text.
 
-- `Auth.tsx` — реэкспорт из `components/screens/Auth`. Не аудировал детально, но проверить:
-  - **Двухступенчатая активация**: после регистрации сразу AI Builder Wizard (мемори-правило). На мобильном Wizard должен быть полноэкранный, без ухода в скролл.
-  - **OAuth кнопки**: Google primary, не утоплены.
-  - **Email confirm**: должен быть ясный экран «проверьте почту» с resend.
+## План работ (один заход)
 
-**P1 фиксы**
-- Провести отдельный аудит Auth-экрана и Wizard’а после P0.
+1. Создать `EditorTopBar` + `PageHealthMeter` + `SmartActionDock`. Подключить в `EditorScreen`, скрыть старые actions/toolbar.
+2. Создать `FloatingBlockToolbar`. Рефакторить `SortableGridBlockItem`: убрать постоянные кнопки и handle; включить hold-to-drag и hover/tap toolbar.
+3. Схлопнуть insert-points: оставить hover-divider между блоками + один dashed-add в конце; убрать FAB и empty-state дубль (заменить на dock).
+4. Расширить inline-edit на header/button/profile-name; убедиться что bottom-sheet остаётся fallback.
+5. Добавить Split Preview на десктопе через `SplitPreviewLayout` + `FramePreview`.
+6. Перенести Friction/Tip/Onboarding баннеры в `useToast` (не загромождать канвас).
+7. Унести Структура/Версии/Review chips в overflow-menu в TopBar.
+8. Прогнать `tsc --noEmit`, smoke-test в браузере: добавить блок → редактирование → publish; проверить mobile dock не перекрывает BottomNav (z-index, padding-bottom).
 
----
+## Технические детали
 
-## 6. Кроссэкранные UX-стандарты
+- **Floating UI**: использовать `@radix-ui/react-popover` + `Portal`, чтобы FloatingBlockToolbar не клиппился под grid.
+- **z-index** дисциплина: canvas `z-0`, block-overlays `z-10`, floating toolbar `z-30`, dock `z-40`, top bar `z-50`, dialogs `z-[60]`.
+- **Mobile padding-bottom**: канвас получает `pb-[calc(env(safe-area-inset-bottom)+128px)]` чтобы dock + BottomNav не перекрывали.
+- **A11y**: dock имеет `role="toolbar" aria-label="Editor actions"`, кнопки — `aria-keyshortcuts`. Floating toolbar управляется клавиатурой (Tab/Enter/Esc).
+- **Сохранить i18n keys**, добавить новые: `editor.dock.add`, `editor.dock.ai`, `editor.dock.preview`, `editor.dock.publish`, `editor.health.label`, `editor.health.next`, `editor.topbar.overflow`.
+- **Не ломать**: те же props у `EditorScreen`, тот же контракт `onInsertBlock/onEditBlock/...`. Изменения чисто презентационные + перенос триггеров.
 
-**Проблемы**
-- **Иконки lucide импортируются по одной (`from 'lucide-react/dist/esm/icons/...'`)** — корректно для бандла, но дублирование в каждом файле снижает читабельность. Рассмотреть `@/components/icons` барель.
-- **Empty States**: внедрены `SmartEmptyState` (хорошо!), но соседствуют со старыми `EmptyState` в одних и тех же файлах — фрагментация. Завершить миграцию.
-- **Toasters**: используется `sonner` — хорошо, но нет единого правила длительности/позиции.
-- **Цветовые токены**: `text-muted-foreground/60`, `border-border/5`, `border-border/10` — слишком много альфа-вариантов. Свести к 2-3 семантическим уровням.
-- **Шрифт CTA**: смесь `font-bold uppercase tracking-tighter` (bottom nav) и `font-medium` (cards) — нет typography scale.
-- **Доступность (a11y)**: на bottom-nav кнопках нет `aria-label` (только текст внутри), кнопки иконок в editor без aria. Контрастность `text-muted-foreground/60` на тёмном фоне ниже WCAG AA.
+## Acceptance criteria
 
-**P0 фиксы**
-- Единый компонент `EmptyState` (мигрировать всё в `SmartEmptyState`, удалить старый).
-- Sonner: единый конфиг (`position="top-center" duration={3000}` на mobile).
-- Аудит `aria-label` на всех icon-only кнопках.
-
-**P1 фиксы**
-- Зачистить альфа-токены, оставить `border-border`, `border-border-strong`, `text-muted`, `text-muted-strong`.
-
----
-
-## Приоритезированный план реализации
-
-### Спринт 1 (P0) — «Quick wins»
-1. **Bottom Nav redesign**: home → 1-й таб; tabs `text-[11px]` без uppercase/break-words; единые `aria-label`.
-2. **Dashboard layout cleanup**: убрать двойной padding/border (`p-2`+`rounded-[2.5rem]`+`border`) → один контейнер.
-3. **Tab transition**: 500ms y-translate → 200ms opacity-only.
-4. **Editor toolbar**: сгруппировать в 3 кластера, overflow menu для редкой части.
-5. **Insights tabs**: на mobile → `Select`, на desktop → `TabsList`.
-6. **Leads filter**: дефолт «активные» + filter Sheet вместо ряда чипов.
-7. **Landing CTA**: один primary, один secondary; Sticky CTA только после hero.
-8. **Public Page share**: добавить WhatsApp/Telegram кнопки + native share.
-
-### Спринт 2 (P1) — «Системные стандарты»
-9. **Единый `DashboardHeader`** в layout со slot-ами.
-10. **HomeScreen иерархия**: KPIs above the fold; чек-лист сворачиваемый.
-11. **Settings**: search + collapsible подгруппы.
-12. **Drawers унификация**: mobile=bottom, desktop=right.
-13. **Empty States**: завершить миграцию на `SmartEmptyState`, удалить старый.
-14. **Editor add-block**: одна модель (inline + Insert Sheet).
-15. **Public Page max-width** на текстовых блоках.
-
-### Спринт 3 (P2) — «Polish»
-16. Цветовые/типографические токены: свести альфа-варианты, ввести typography scale.
-17. A11y-аудит icon-only кнопок (aria-label, focus rings).
-18. Auth/Wizard отдельный аудит и оптимизация.
-19. Pricing: «Most popular» бейдж, якорная цена.
-20. CLS на Landing (LogoTicker, lazy-блоки).
-
----
-
-## Что делать дальше
-
-После одобрения этого плана я начну со **Спринта 1 (P0)** — это 8 задач, которые дадут самый заметный UX-улучшения за минимум кода. Если хочешь, могу начать только с 1–4 (Dashboard core), либо с 7–8 (Landing/Public), либо целиком — скажи приоритет.
+- На канвасе по умолчанию **нет ни одной кнопки** на блоках (всё по контексту).
+- В шапке **≤4 интерактивных элемента** одновременно (Back/Switcher · Health · Preview · Publish).
+- Первое действие нового пользователя — **«+ Add Block»** в доке — достижимо за один тап с любого экрана редактора.
+- Прогресс-бар «готова к продажам» виден всегда; клик показывает следующий шаг.
+- На мобайле dock не перекрывает блоки и согласован с BottomNav.
+- Десктоп: split-preview работает и обновляется при изменениях.
+- `bunx tsc --noEmit` зелёный, smoke-flow добавления/редактирования/публикации работает без регрессий.
