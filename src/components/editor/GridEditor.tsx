@@ -55,6 +55,7 @@ import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { canCreateSection, createSection, getSections, type SectionMeta } from '@/lib/editor/section-engine';
 import { BlockContextToolbar } from './BlockContextToolbar';
+import { FloatingBlockToolbar } from './v2/FloatingBlockToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
