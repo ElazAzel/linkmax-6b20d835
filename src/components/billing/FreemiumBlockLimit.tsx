@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { FREE_LIMITS } from '@/hooks/user/useFreemiumLimits';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import { UpgradeBenefits } from './UpgradeBenefits';
 
 interface FreemiumBlockLimitProps {
   currentBlocks: number;
