@@ -523,6 +523,16 @@ export const EditorScreen = memo(function EditorScreen({
           />
         </Suspense>
       )}
+
+      {/* Smart Action Dock — primary action surface */}
+      <SmartActionDock
+        onAddBlock={triggerAddBlock}
+        onAIImprove={onOpenAI}
+        onPreview={onPreview}
+        onPublish={onShare}
+        isPublished={isPublished}
+        hasContent={hasContent}
+      />
     </div>
   );
 });
