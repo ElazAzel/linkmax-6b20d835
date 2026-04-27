@@ -27,29 +27,53 @@ export const Testimonials = () => {
 
     const testimonials = [
         {
-            name: 'Entrepreneurship Almau',
-            role: t('landing.testimonials.role1', '709 просмотров · Образование'),
-            content: t('landing.testimonials.review1', "Создали страницу за 5 минут с AI. 360+ заявок через WhatsApp за первый месяц — все уведомления приходят в Telegram."),
-            avatar: "🎓"
+            name: t('landing.testimonials.name1_v2', 'Айгерим, студия маникюра'),
+            role: t('landing.testimonials.role1_v2', 'Алматы · 2 мастера · Pro'),
+            metric: '+186%',
+            metricLabel: t('landing.testimonials.metric1_v2', 'к выручке за 3 месяца'),
+            content: t('landing.testimonials.review1_v2', 'Перенесли запись из директа на витрину. Теперь клиенты бронируют сами и оплачивают предоплату — простоев почти нет.'),
+            avatar: '💅',
         },
         {
-            name: 'Elazart Studio',
-            role: t('landing.testimonials.role2', '641 просмотр · Бизнес, Алматы'),
-            content: t('landing.testimonials.review2', "Перенесли портфолио из Instagram на свою страницу. Клиенты сразу видят прайс и пишут в WhatsApp — конверсия выросла."),
-            avatar: "🎨"
+            name: t('landing.testimonials.name2_v2', 'Дмитрий, репетитор по математике'),
+            role: t('landing.testimonials.role2_v2', 'Астана · соло · Starter'),
+            metric: '4 мин',
+            metricLabel: t('landing.testimonials.metric2_v2', 'среднее время ответа'),
+            content: t('landing.testimonials.review2_v2', 'Заявки с лендинга, Instagram и WhatsApp падают в одну ленту. Перестал терять родителей, которые писали ночью.'),
+            avatar: '📐',
         },
         {
-            name: t('landing.testimonials.name3', 'Home Cakes Asel'),
-            role: t('landing.testimonials.role3', '55 просмотров · Кулинария'),
-            content: t('landing.testimonials.review3', "Торты на заказ — нужен прайс и фото. Собрала страницу за 3 минуты, теперь клиенты не спрашивают цены в директе."),
-            avatar: "🧁"
+            name: t('landing.testimonials.name3_v2', 'Студия Elazart'),
+            role: t('landing.testimonials.role3_v2', 'Караганда · 4 человека · Team'),
+            metric: '+312',
+            metricLabel: t('landing.testimonials.metric3_v2', 'оплаченных заявок за 90 дней'),
+            content: t('landing.testimonials.review3_v2', 'Команда работает прямо с телефона. Видно, кто взял заявку, когда ответил, какой статус — Bitrix больше не нужен.'),
+            avatar: '🎨',
         },
         {
-            name: t('landing.testimonials.name4', 'Coach Arman'),
-            role: t('landing.testimonials.role4', '49 просмотров · Фитнес'),
-            content: t('landing.testimonials.review4', "Расписание, прайс и кнопка записи — всё на одной странице. Уведомления о записях прямо в Telegram."),
-            avatar: "💪"
-        }
+            name: t('landing.testimonials.name4_v2', 'Coach Arman'),
+            role: t('landing.testimonials.role4_v2', 'Online · соло · Pro'),
+            metric: '×3',
+            metricLabel: t('landing.testimonials.metric4_v2', 'рост платных подписчиков'),
+            content: t('landing.testimonials.review4_v2', 'Витрина, расписание и оплата — на одной странице. С Linktree такого было не собрать никогда.'),
+            avatar: '💪',
+        },
+        {
+            name: t('landing.testimonials.name5_v2', 'Asel, домашняя кондитерская'),
+            role: t('landing.testimonials.role5_v2', 'Алматы · соло · Starter'),
+            metric: '0 ₸',
+            metricLabel: t('landing.testimonials.metric5_v2', 'абонплаты — только 5% с заказа'),
+            content: t('landing.testimonials.review5_v2', 'Платила только когда сама зарабатывала. Через 4 месяца оборот вырос — переключилась на Pro и теперь экономлю на комиссии.'),
+            avatar: '🧁',
+        },
+        {
+            name: t('landing.testimonials.name6_v2', 'Агентство BrightDigital'),
+            role: t('landing.testimonials.role6_v2', 'Шымкент · 7 человек · Team'),
+            metric: '−40%',
+            metricLabel: t('landing.testimonials.metric6_v2', 'затрат на инструменты'),
+            content: t('landing.testimonials.review6_v2', 'Закрыли подписки на amoCRM, Calendly и Tilda. Теперь у каждого клиента — своя командная inbox с SLA.'),
+            avatar: '🏢',
+        },
     ];
 
     return (
@@ -60,39 +84,49 @@ export const Testimonials = () => {
             <div className="container px-4 mx-auto relative">
                 <Reveal>
                     <h2 className="text-section-title text-center mb-4">
-                        {t('landing.testimonials.title', 'Реальные результаты')}{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight', 'наших пользователей')}</span>
+                        {t('landing.testimonials.title_v2', 'Цифры от реальных')}{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight_v2', 'команд и мастеров')}</span>
                     </h2>
                 </Reveal>
                 <Reveal delay={100}>
                     <p className="text-center text-muted-foreground mb-12 max-w-lg mx-auto">
-                        {t('landing.testimonials.subtitle', 'Experts, coaches, and small businesses trust LinkMAX to grow.')}
+                        {t('landing.testimonials.subtitle_v2', 'Микро-команды, агентства и эксперты используют LinkMAX, чтобы превращать заявки в выручку.')}
                     </p>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 relative z-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 relative z-10">
                     {testimonials.map((testimonial, i) => (
-                        <Reveal key={i} delay={i * 100}>
-                            <div className="glass border-white/10 rounded-2xl sm:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-6 transition-all duration-700 hover:-translate-y-3 hover:bg-white/10 shadow-glass-lg group h-full relative overflow-hidden">
+                        <Reveal key={i} delay={i * 80}>
+                            <div className="glass border-white/10 rounded-2xl sm:rounded-[2rem] p-6 sm:p-7 flex flex-col gap-4 transition-all duration-700 hover:-translate-y-2 hover:bg-white/10 shadow-glass-lg group h-full relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                                
-                                <div className="flex gap-1.5 text-primary relative">
-                                    {[...Array(5)].map((_, j) => (
-                                        <Star key={j} className="w-4 h-4 fill-current drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)] group-hover:scale-125 transition-transform duration-500" style={{ transitionDelay: `${j * 50}ms` }} />
-                                    ))}
+
+                                <div className="flex items-start justify-between gap-3 relative">
+                                    <div className="flex gap-1 text-primary">
+                                        {[...Array(5)].map((_, j) => (
+                                            <Star key={j} className="w-3.5 h-3.5 fill-current" />
+                                        ))}
+                                    </div>
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-xl sm:text-2xl font-black tabular-nums tracking-tight bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">
+                                            {testimonial.metric}
+                                        </span>
+                                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 text-right max-w-[140px] leading-tight">
+                                            {testimonial.metricLabel}
+                                        </span>
+                                    </div>
                                 </div>
-                                
-                                <p className="text-base md:text-lg leading-relaxed text-foreground/80 font-medium italic relative">
-                                    "{testimonial.content}"
+
+                                <p className="text-sm md:text-base leading-relaxed text-foreground/85 font-medium relative">
+                                    «{testimonial.content}»
                                 </p>
-                                
-                                <div className="flex items-center gap-4 mt-auto relative pt-4 border-t border-white/5">
-                                    <div className="h-12 w-12 border-2 border-white/20 rounded-2xl shadow-glass flex items-center justify-center bg-primary/10 text-xl">
+
+                                <div className="flex items-center gap-3 mt-auto relative pt-4 border-t border-white/5">
+                                    <div className="h-10 w-10 border-2 border-white/20 rounded-2xl shadow-glass flex items-center justify-center bg-primary/10 text-lg">
                                         {testimonial.avatar}
                                     </div>
                                     <div>
-                                        <div className="text-sm font-black tracking-tight text-foreground">{testimonial.name}</div>
-                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">{testimonial.role}</div>
+                                        <div className="text-sm font-bold tracking-tight text-foreground">{testimonial.name}</div>
+                                        <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary/70">{testimonial.role}</div>
                                     </div>
                                 </div>
                             </div>
