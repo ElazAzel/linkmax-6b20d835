@@ -2735,6 +2735,7 @@ export type Database = {
           company: string | null
           created_at: string
           custom_fields: Json | null
+          deleted_at: string | null
           email: string | null
           id: string
           name: string
@@ -2754,6 +2755,7 @@ export type Database = {
           company?: string | null
           created_at?: string
           custom_fields?: Json | null
+          deleted_at?: string | null
           email?: string | null
           id?: string
           name: string
@@ -2773,6 +2775,7 @@ export type Database = {
           company?: string | null
           created_at?: string
           custom_fields?: Json | null
+          deleted_at?: string | null
           email?: string | null
           id?: string
           name?: string
@@ -2994,6 +2997,61 @@ export type Database = {
           },
         ]
       }
+      zone_deal_products: {
+        Row: {
+          created_at: string
+          deal_id: string
+          id: string
+          product_id: string | null
+          quantity: number
+          subtotal: number
+          unit_price: number
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          deal_id: string
+          id?: string
+          product_id?: string | null
+          quantity?: number
+          subtotal?: number
+          unit_price?: number
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          deal_id?: string
+          id?: string
+          product_id?: string | null
+          quantity?: number
+          subtotal?: number
+          unit_price?: number
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_deal_products_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "zone_deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_deal_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "zone_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_deal_products_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_deal_stages: {
         Row: {
           color: string | null
@@ -3039,6 +3097,7 @@ export type Database = {
           created_at: string
           currency: string | null
           custom_fields: Json | null
+          deleted_at: string | null
           id: string
           lost_reason: string | null
           next_step: string | null
@@ -3058,6 +3117,7 @@ export type Database = {
           created_at?: string
           currency?: string | null
           custom_fields?: Json | null
+          deleted_at?: string | null
           id?: string
           lost_reason?: string | null
           next_step?: string | null
@@ -3077,6 +3137,7 @@ export type Database = {
           created_at?: string
           currency?: string | null
           custom_fields?: Json | null
+          deleted_at?: string | null
           id?: string
           lost_reason?: string | null
           next_step?: string | null
@@ -3168,6 +3229,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           deal_id: string | null
+          deleted_at: string | null
           document_number: string | null
           file_url: string | null
           id: string
@@ -3182,6 +3244,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           deal_id?: string | null
+          deleted_at?: string | null
           document_number?: string | null
           file_url?: string | null
           id?: string
@@ -3196,6 +3259,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           deal_id?: string | null
+          deleted_at?: string | null
           document_number?: string | null
           file_url?: string | null
           id?: string
@@ -3335,6 +3399,7 @@ export type Database = {
           created_at: string
           currency: string
           deal_id: string | null
+          deleted_at: string | null
           description: string | null
           id: string
           paid_at: string | null
@@ -3349,6 +3414,7 @@ export type Database = {
           created_at?: string
           currency?: string
           deal_id?: string | null
+          deleted_at?: string | null
           description?: string | null
           id?: string
           paid_at?: string | null
@@ -3363,6 +3429,7 @@ export type Database = {
           created_at?: string
           currency?: string
           deal_id?: string | null
+          deleted_at?: string | null
           description?: string | null
           id?: string
           paid_at?: string | null
@@ -3627,6 +3694,47 @@ export type Database = {
           },
         ]
       }
+      zone_resources: {
+        Row: {
+          capacity: number | null
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+          type: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          capacity?: number | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          type?: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          capacity?: number | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          type?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_resources_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_subscriptions: {
         Row: {
           created_at: string
@@ -3674,6 +3782,96 @@ export type Database = {
           },
         ]
       }
+      zone_task_checklist: {
+        Row: {
+          created_at: string
+          id: string
+          is_done: boolean
+          order_index: number
+          task_id: string
+          title: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_done?: boolean
+          order_index?: number
+          task_id: string
+          title: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_done?: boolean
+          order_index?: number
+          task_id?: string
+          title?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_task_checklist_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "zone_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_task_checklist_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_task_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          task_id: string
+          updated_at: string
+          user_id: string
+          zone_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          task_id: string
+          updated_at?: string
+          user_id: string
+          zone_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          task_id?: string
+          updated_at?: string
+          user_id?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_task_comments_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "zone_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_task_comments_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_tasks: {
         Row: {
           assigned_to: string | null
@@ -3682,6 +3880,7 @@ export type Database = {
           created_at: string
           created_by: string
           deal_id: string | null
+          deleted_at: string | null
           description: string | null
           due_date: string | null
           id: string
@@ -3698,6 +3897,7 @@ export type Database = {
           created_at?: string
           created_by: string
           deal_id?: string | null
+          deleted_at?: string | null
           description?: string | null
           due_date?: string | null
           id?: string
@@ -3714,6 +3914,7 @@ export type Database = {
           created_at?: string
           created_by?: string
           deal_id?: string | null
+          deleted_at?: string | null
           description?: string | null
           due_date?: string | null
           id?: string
