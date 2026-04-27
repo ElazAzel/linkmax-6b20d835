@@ -764,64 +764,49 @@ export const GridEditor = memo(function GridEditor({
         </DragOverlay>
       </DndContext>
 
-      {/* Bottom Add Button */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <motion.div
-          className="col-span-1 md:col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8"
-          initial={{ opacity: 0, y: 20 }}
+      {/* Subtle bottom add — quiet hint, not a duplicate CTA. Primary action lives in SmartActionDock. */}
+      {contentBlocks.length > 0 && (
+        <motion.button
+          type="button"
+          onClick={() => openInsertSheet(blocks.length)}
+          className="w-full mt-4 h-14 rounded-2xl border border-dashed border-border/40 bg-transparent hover:bg-accent/30 hover:border-border transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.15, duration: 0.25 }}
         >
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            pageNiche={pageNiche}
-            existingBlocks={blocks.map(b => b.type as BlockType)}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
-        </motion.div>
-      </div>
-
-      {/* Empty state */}
-      {contentBlocks.length === 0 && (
-        <div className="text-center py-12 border-2 border-dashed border-border rounded-2xl mx-2 bg-card">
-          <p className="text-base text-muted-foreground mb-4 px-6">
-            {t('dashboard.addFirstBlock', 'Нажмите + чтобы добавить первый блок')}
-          </p>
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            existingBlocks={blocks.map(b => b.type as BlockType)}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
-        </div>
+          <Plus className="h-4 w-4" />
+          <span className="text-sm font-medium">
+            {t('editor.insert.addBelow', 'Добавить блок ниже')}
+          </span>
+        </motion.button>
       )}
 
-      {/* Fixed FAB on mobile */}
-      {isMobile && (
+      {/* Empty state — single, generous, friendly */}
+      {contentBlocks.length === 0 && (
         <motion.div
-          className="fixed bottom-24 right-4 z-40"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="text-center py-16 px-6 mt-2 rounded-3xl bg-gradient-to-br from-primary/5 via-card to-card border border-border/10"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
+          <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <Plus className="h-7 w-7 text-primary" strokeWidth={2.5} />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-1">
+            {t('dashboard.empty.title', 'Соберите страницу за минуту')}
+          </h3>
+          <p className="text-sm text-muted-foreground mb-5 max-w-sm mx-auto">
+            {t('dashboard.empty.desc', 'Начните с оффера, кнопки или мессенджера — всё, чтобы получить первого клиента.')}
+          </p>
+          <button
+            type="button"
+            onClick={() => openInsertSheet(blocks.length)}
+            data-onboarding="add-block"
+            className="inline-flex items-center gap-2 h-11 rounded-xl px-5 bg-primary text-primary-foreground font-semibold text-sm shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.4)] hover:bg-primary/90 active:scale-[0.98] transition-all"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2.5} />
+            {t('dashboard.empty.cta', 'Добавить первый блок')}
+          </button>
         </motion.div>
       )}
 
