@@ -122,6 +122,14 @@ export default function Index() {
             </Suspense>
           </div>
 
+          <Suspense fallback={<div className="h-96" />}>
+            <ComparisonTable />
+          </Suspense>
+
+          <Suspense fallback={<div className="h-96" />}>
+            <RevenueCalculator />
+          </Suspense>
+
           <div ref={pricingSectionRef} className="relative z-20 bg-transparent">
             <Suspense fallback={<div className="h-96" />}>
               <Testimonials />
