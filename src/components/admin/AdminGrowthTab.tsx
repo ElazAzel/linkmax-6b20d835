@@ -73,7 +73,7 @@ export function AdminGrowthTab() {
   const load = async (period: number) => {
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.rpc('get_growth_metrics', { p_days: period });
+    const { data, error } = await (supabase.rpc as any)('get_growth_metrics', { p_days: period });
     if (error) {
       setError(error.message);
       setLoading(false);
