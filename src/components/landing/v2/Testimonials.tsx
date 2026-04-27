@@ -27,29 +27,53 @@ export const Testimonials = () => {
 
     const testimonials = [
         {
-            name: 'Entrepreneurship Almau',
-            role: t('landing.testimonials.role1', '709 просмотров · Образование'),
-            content: t('landing.testimonials.review1', "Создали страницу за 5 минут с AI. 360+ заявок через WhatsApp за первый месяц — все уведомления приходят в Telegram."),
-            avatar: "🎓"
+            name: t('landing.testimonials.name1_v2', 'Айгерим, студия маникюра'),
+            role: t('landing.testimonials.role1_v2', 'Алматы · 2 мастера · Pro'),
+            metric: '+186%',
+            metricLabel: t('landing.testimonials.metric1_v2', 'к выручке за 3 месяца'),
+            content: t('landing.testimonials.review1_v2', 'Перенесли запись из директа на витрину. Теперь клиенты бронируют сами и оплачивают предоплату — простоев почти нет.'),
+            avatar: '💅',
         },
         {
-            name: 'Elazart Studio',
-            role: t('landing.testimonials.role2', '641 просмотр · Бизнес, Алматы'),
-            content: t('landing.testimonials.review2', "Перенесли портфолио из Instagram на свою страницу. Клиенты сразу видят прайс и пишут в WhatsApp — конверсия выросла."),
-            avatar: "🎨"
+            name: t('landing.testimonials.name2_v2', 'Дмитрий, репетитор по математике'),
+            role: t('landing.testimonials.role2_v2', 'Астана · соло · Starter'),
+            metric: '4 мин',
+            metricLabel: t('landing.testimonials.metric2_v2', 'среднее время ответа'),
+            content: t('landing.testimonials.review2_v2', 'Заявки с лендинга, Instagram и WhatsApp падают в одну ленту. Перестал терять родителей, которые писали ночью.'),
+            avatar: '📐',
         },
         {
-            name: t('landing.testimonials.name3', 'Home Cakes Asel'),
-            role: t('landing.testimonials.role3', '55 просмотров · Кулинария'),
-            content: t('landing.testimonials.review3', "Торты на заказ — нужен прайс и фото. Собрала страницу за 3 минуты, теперь клиенты не спрашивают цены в директе."),
-            avatar: "🧁"
+            name: t('landing.testimonials.name3_v2', 'Студия Elazart'),
+            role: t('landing.testimonials.role3_v2', 'Караганда · 4 человека · Team'),
+            metric: '+312',
+            metricLabel: t('landing.testimonials.metric3_v2', 'оплаченных заявок за 90 дней'),
+            content: t('landing.testimonials.review3_v2', 'Команда работает прямо с телефона. Видно, кто взял заявку, когда ответил, какой статус — Bitrix больше не нужен.'),
+            avatar: '🎨',
         },
         {
-            name: t('landing.testimonials.name4', 'Coach Arman'),
-            role: t('landing.testimonials.role4', '49 просмотров · Фитнес'),
-            content: t('landing.testimonials.review4', "Расписание, прайс и кнопка записи — всё на одной странице. Уведомления о записях прямо в Telegram."),
-            avatar: "💪"
-        }
+            name: t('landing.testimonials.name4_v2', 'Coach Arman'),
+            role: t('landing.testimonials.role4_v2', 'Online · соло · Pro'),
+            metric: '×3',
+            metricLabel: t('landing.testimonials.metric4_v2', 'рост платных подписчиков'),
+            content: t('landing.testimonials.review4_v2', 'Витрина, расписание и оплата — на одной странице. С Linktree такого было не собрать никогда.'),
+            avatar: '💪',
+        },
+        {
+            name: t('landing.testimonials.name5_v2', 'Asel, домашняя кондитерская'),
+            role: t('landing.testimonials.role5_v2', 'Алматы · соло · Starter'),
+            metric: '0 ₸',
+            metricLabel: t('landing.testimonials.metric5_v2', 'абонплаты — только 5% с заказа'),
+            content: t('landing.testimonials.review5_v2', 'Платила только когда сама зарабатывала. Через 4 месяца оборот вырос — переключилась на Pro и теперь экономлю на комиссии.'),
+            avatar: '🧁',
+        },
+        {
+            name: t('landing.testimonials.name6_v2', 'Агентство BrightDigital'),
+            role: t('landing.testimonials.role6_v2', 'Шымкент · 7 человек · Team'),
+            metric: '−40%',
+            metricLabel: t('landing.testimonials.metric6_v2', 'затрат на инструменты'),
+            content: t('landing.testimonials.review6_v2', 'Закрыли подписки на amoCRM, Calendly и Tilda. Теперь у каждого клиента — своя командная inbox с SLA.'),
+            avatar: '🏢',
+        },
     ];
 
     return (
