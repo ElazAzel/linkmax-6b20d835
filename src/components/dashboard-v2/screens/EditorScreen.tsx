@@ -22,6 +22,8 @@ import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
+import { EditorTopBar } from '@/components/editor/v2/EditorTopBar';
+import { SmartActionDock } from '@/components/editor/v2/SmartActionDock';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
 import { storage } from '@/lib/storage';
@@ -334,147 +336,55 @@ export const EditorScreen = memo(function EditorScreen({
     return <LoadingSkeleton />;
   }
 
-  const editorActions = (
-    <>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t('editor.undo', 'Отменить')}
-        title={t('editor.undo', 'Отменить')}
-        className="h-10 w-10 rounded-xl"
-        onClick={handleUndoWithFriction}
-        disabled={!canUndo}
-      >
-        <Undo2 className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t('editor.redo', 'Повторить')}
-        title={t('editor.redo', 'Повторить')}
-        className="h-10 w-10 rounded-xl"
-        onClick={handleRedoWithFriction}
-        disabled={!canRedo}
-      >
-        <Redo2 className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t('editor.preview', 'Превью')}
-        title={t('editor.preview', 'Превью')}
-        className="h-10 w-10 rounded-xl"
-        onClick={onPreview}
-      >
-        <Eye className="h-4 w-4" />
-      </Button>
-      <Button
-        size="sm"
-        className={cn(
-          "h-10 rounded-xl font-semibold text-sm px-4",
-          !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground"
-        )}
-        onClick={onShare}
-      >
-        <Share2 className="h-4 w-4 mr-1.5" />
-        {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
-      </Button>
-    </>
-  );
-
-  const editorToolbar = (
-    <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide">
-      {!hasContent && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
-          onClick={onOpenTemplates}
-        >
-          <LayoutTemplate className="h-4 w-4" />
-          <span>{t('editor.templates', 'Шаблоны')}</span>
-        </Button>
-      )}
-      {hasContent && onOpenVersions && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
-          onClick={onOpenVersions}
-        >
-          <History className="h-4 w-4" />
-          <span>{t('editor.versions', 'История')}</span>
-        </Button>
-      )}
-      {hasContent && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
-          onClick={() => setStructureOpen(true)}
-        >
-          <Layers className="h-4 w-4" />
-          <span>{t('editor.structure', 'Структура')}</span>
-        </Button>
-      )}
-      {hasContent && (
-        <>
-          <Button
-            variant={reviewMode === 'problematic' ? 'default' : 'outline'}
-            size="sm"
-            className={cn(
-              "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-colors",
-              reviewMode === 'problematic' && "bg-destructive text-destructive-foreground border-none"
-            )}
-            onClick={() => toggleReviewMode('problematic')}
-          >
-            <AlertCircle className="h-4 w-4" />
-            <span>{t('editor.problematic', 'Проблемные')}</span>
-          </Button>
-          <Button
-            variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
-            size="sm"
-            className={cn(
-              "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-colors",
-              reviewMode === 'cta_contact' && "bg-emerald-500 text-white border-none"
-            )}
-            onClick={() => toggleReviewMode('cta_contact')}
-          >
-            <MousePointerClick className="h-4 w-4" />
-            <span>{t('editor.cta', 'CTA')}</span>
-          </Button>
-        </>
-      )}
-    </div>
-  );
+  // Trigger insert-sheet by clicking the hidden anchor placed inside the canvas.
+  const triggerAddBlock = useCallback(() => {
+    const target = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
+    target?.click();
+  }, []);
 
   return (
     <div className="min-h-screen safe-area-top">
-      <DashboardHeader
-        title={t('dashboard.editor.title', 'Редактор')}
-        subtitle={`${blockCount} ${t('dashboard.editor.blocks', 'блоков')}`}
-        actions={editorActions}
-        bottomSlot={editorToolbar}
+      <EditorTopBar
+        titleSlot={
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-base md:text-lg font-semibold tracking-tight text-foreground truncate">
+              {t('dashboard.editor.title', 'Редактор')}
+            </h1>
+            <div className="flex items-center gap-1.5">
+              <div className={cn('h-1.5 w-1.5 rounded-full', isPublished ? 'bg-emerald-500' : 'bg-muted-foreground/40')} />
+              <p className="text-[11px] text-muted-foreground">
+                {blockCount} {t('dashboard.editor.blocks', 'блоков')}
+                {!isPublished && ` · ${t('editor.draft', 'черновик')}`}
+              </p>
+            </div>
+          </div>
+        }
+        health={{
+          steps: activation.steps,
+          completedCount: activation.completedCount,
+          totalCount: activation.totalCount,
+          progress: activation.progress,
+          isComplete: activation.steps.length > 0 && activation.completedCount === activation.totalCount,
+          onStepClick: activation.handleStepClick,
+        }}
+        isPublished={isPublished}
+        onPreview={onPreview}
+        onShare={onShare}
+        canUndo={canUndo}
+        canRedo={canRedo}
+        onUndo={handleUndoWithFriction}
+        onRedo={handleRedoWithFriction}
+        onOpenStructure={() => setStructureOpen(true)}
+        onOpenVersions={onOpenVersions}
+        onOpenTemplates={onOpenTemplates}
+        onOpenAI={onOpenAI}
+        reviewMode={reviewMode}
+        onToggleReviewMode={toggleReviewMode}
+        hasContent={hasContent}
       />
 
-      {/* Single priority banner — max 1 at a time */}
+      {/* Quiet inline banner — celebration / friction / intelligence / tip / onboarding (max 1) */}
       {(() => {
-        // Priority: Activation > Celebration > Friction > Intelligence > Tips > Onboarding
-        if (activation.isVisible) {
-          return (
-            <div className="mx-4 mt-4 animate-fade-in">
-              <ActivationChecklist
-                steps={activation.steps}
-                completedCount={activation.completedCount}
-                totalCount={activation.totalCount}
-                progress={activation.progress}
-                canDismiss={activation.canDismiss}
-                onDismiss={activation.dismiss}
-                onStepClick={activation.handleStepClick}
-              />
-            </div>
-          );
-        }
         if (activation.showCelebration) {
           return (
             <div className="mx-4 mt-4 animate-fade-in zoom-in-95 duration-500">
@@ -502,17 +412,17 @@ export const EditorScreen = memo(function EditorScreen({
           const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
           if (top) {
             return (
-              <div className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3.5 shadow-sm">
+              <div className="mx-4 mt-3 flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
                 <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <Lightbulb className="h-4.5 w-4.5 text-primary" />
+                  <Lightbulb className="h-4 w-4 text-primary" />
                 </div>
                 <span className="text-xs font-medium text-foreground/80 flex-1 leading-relaxed">
                   {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
                 </span>
-                <Badge variant="outline" className="text-xs font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
+                <Badge variant="outline" className="text-[10px] font-semibold uppercase tracking-wider shrink-0 border-primary/20 bg-primary/5 text-primary">
                   {top.priority}
                 </Badge>
-                <Button type="button" variant="ghost" size="icon" onClick={() => setDismissedHint(top.id)} className="h-10 w-10 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0">
+                <Button type="button" variant="ghost" size="icon" onClick={() => setDismissedHint(top.id)} className="h-8 w-8 rounded-lg hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0">
                   <X className="h-4 w-4" />
                 </Button>
               </div>
@@ -541,15 +451,15 @@ export const EditorScreen = memo(function EditorScreen({
           );
         }
         if (onboardingHints.length > 0) {
-          const hint = onboardingHints[0]; // Show only the first hint
+          const hint = onboardingHints[0];
           return (
             <div className="mx-4 mt-3 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
               <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-black uppercase tracking-wider">{hint.title}</p>
+                <p className="text-xs font-semibold">{hint.title}</p>
                 <p className="text-xs text-muted-foreground mt-1">{hint.description}</p>
               </div>
-              <Button size="sm" className="h-11 px-5 rounded-xl text-xs font-black uppercase tracking-wider" onClick={hint.onCta}>
+              <Button size="sm" className="h-9 px-4 rounded-xl text-xs font-semibold" onClick={hint.onCta}>
                 {hint.ctaLabel}
               </Button>
               <button className="p-1 rounded-lg hover:bg-white/10 text-muted-foreground" onClick={() => dismissOnboardingHint(hint.id)} aria-label={t('common.dismiss', 'Скрыть')}>
@@ -613,6 +523,16 @@ export const EditorScreen = memo(function EditorScreen({
           />
         </Suspense>
       )}
+
+      {/* Smart Action Dock — primary action surface */}
+      <SmartActionDock
+        onAddBlock={triggerAddBlock}
+        onAIImprove={onOpenAI}
+        onPreview={onPreview}
+        onPublish={onShare}
+        isPublished={isPublished}
+        hasContent={hasContent}
+      />
     </div>
   );
 });

@@ -55,6 +55,7 @@ import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { canCreateSection, createSection, getSections, type SectionMeta } from '@/lib/editor/section-engine';
 import { BlockContextToolbar } from './BlockContextToolbar';
+import { FloatingBlockToolbar } from './v2/FloatingBlockToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
@@ -219,16 +220,21 @@ function SortableGridBlockItem({
     }
   }, [isRecentlyAdded]);
 
+  const [isHovered, setIsHovered] = useState(false);
+  const showToolbar = isHovered || selected;
+
   return (
     <div
       ref={setRefs}
       style={style}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-all duration-300 rounded-2xl border-0',
+        'relative group transition-all duration-200 rounded-2xl border-0',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
-        isDragging && 'opacity-50 ring-4 ring-primary/30 scale-95 z-50',
+        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
         // P4: Selection ring
@@ -240,22 +246,16 @@ function SortableGridBlockItem({
         isDimmed && 'opacity-30 pointer-events-none',
       )}
     >
-      {/* Drag Handle */}
+      {/* Hold-anywhere drag handle (covers full block, low priority) */}
       <div
         className={cn(
-          "absolute top-2 left-2 z-40 touch-none",
-          isMobile
-            ? "opacity-100"
-            : "cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity",
-          isDragging && "opacity-0"
+          'absolute inset-0 z-10 touch-none',
+          isDragging ? 'cursor-grabbing' : 'cursor-grab',
         )}
         {...attributes}
         {...listeners}
-      >
-        <div className="bg-card p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
-          <GripVertical className="h-5 w-5 text-muted-foreground" />
-        </div>
-      </div>
+        aria-hidden="true"
+      />
 
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
@@ -263,10 +263,10 @@ function SortableGridBlockItem({
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click Overlay */}
+        {/* Click Overlay — sits above hold-drag, captures click/dblclick */}
         <button
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/20 active:bg-accent/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/10 active:bg-accent/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -305,7 +305,7 @@ function SortableGridBlockItem({
             e.stopPropagation();
             onEdit(block);
           }}
-          className="absolute top-1.5 left-12 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/90 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
+          className="absolute top-2 left-2 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/95 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
           aria-label={t(emptyHint.hintKey, emptyHint.hintLabel)}
         >
           <Edit2 className="h-3 w-3" />
@@ -313,74 +313,26 @@ function SortableGridBlockItem({
         </button>
       )}
 
-      {/* Block type label - bottom-left */}
-      <div className="absolute bottom-1.5 left-1.5 z-30 pointer-events-none">
-        <span className="inline-block px-1.5 py-px rounded-md bg-background text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
+      {/* Block type label — only on hover/select to keep canvas quiet */}
+      <div
+        className={cn(
+          'absolute bottom-2 left-2 z-30 pointer-events-none transition-opacity duration-200',
+          showToolbar && !isDragging ? 'opacity-100' : 'opacity-0',
+        )}
+      >
+        <span className="inline-block px-1.5 py-px rounded-md bg-background/90 backdrop-blur text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
           {typeLabel}
         </span>
       </div>
 
-      {/* Controls - top-right */}
-      <div className={cn(
-        "absolute top-1.5 right-1.5 flex gap-1 z-30 transition-opacity",
-        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-      )}>
-        <Button
-          size="sm"
-          variant="secondary"
-          className="h-7 w-7 p-0 rounded-lg shadow-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEdit(block);
-          }}
-          onTouchEnd={(e) => { e.stopPropagation(); }}
-        >
-          <Edit2 className="h-3.5 w-3.5" />
-        </Button>
-        {block.type !== 'profile' && (
-          <Button
-            size="sm"
-            variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm hidden sm:flex"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onDuplicate?.(block.id);
-            }}
-            onTouchEnd={(e) => { e.stopPropagation(); }}
-          >
-            <Copy className="h-3.5 w-3.5" />
-          </Button>
-        )}
-        {isPremium && block.type !== 'profile' && (
-          <Button
-            size="sm"
-            variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm border-primary/20 hover:border-primary/50 hidden sm:flex"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onStartExperiment?.(block);
-            }}
-          >
-            <FlaskConical className="h-3.5 w-3.5 text-primary" />
-          </Button>
-        )}
-        <Button
-          size="sm"
-          variant="destructive"
-          className="h-7 w-7 p-0 rounded-lg shadow-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onDelete(block.id);
-          }}
-          onTouchEnd={(e) => { e.stopPropagation(); }}
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
-      </div>
+      {/* Floating toolbar — appears on hover/select. On mobile показываем при выделении */}
+      <FloatingBlockToolbar
+        visible={showToolbar && !isDragging && !isMultiSelected}
+        isProfile={block.type === 'profile'}
+        onEdit={() => onEdit(block)}
+        onDuplicate={onDuplicate ? () => onDuplicate(block.id) : undefined}
+        onDelete={() => onDelete(block.id)}
+      />
 
       {/* P5: Context toolbar for single-selected block */}
       {isSelected && !isMultiSelected && !isDragging && (
@@ -812,64 +764,49 @@ export const GridEditor = memo(function GridEditor({
         </DragOverlay>
       </DndContext>
 
-      {/* Bottom Add Button */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <motion.div
-          className="col-span-1 md:col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8"
-          initial={{ opacity: 0, y: 20 }}
+      {/* Subtle bottom add — quiet hint, not a duplicate CTA. Primary action lives in SmartActionDock. */}
+      {contentBlocks.length > 0 && (
+        <motion.button
+          type="button"
+          onClick={() => openInsertSheet(blocks.length)}
+          className="w-full mt-4 h-14 rounded-2xl border border-dashed border-border/40 bg-transparent hover:bg-accent/30 hover:border-border transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.15, duration: 0.25 }}
         >
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            pageNiche={pageNiche}
-            existingBlocks={blocks.map(b => b.type as BlockType)}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
-        </motion.div>
-      </div>
-
-      {/* Empty state */}
-      {contentBlocks.length === 0 && (
-        <div className="text-center py-12 border-2 border-dashed border-border rounded-2xl mx-2 bg-card">
-          <p className="text-base text-muted-foreground mb-4 px-6">
-            {t('dashboard.addFirstBlock', 'Нажмите + чтобы добавить первый блок')}
-          </p>
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            existingBlocks={blocks.map(b => b.type as BlockType)}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
-        </div>
+          <Plus className="h-4 w-4" />
+          <span className="text-sm font-medium">
+            {t('editor.insert.addBelow', 'Добавить блок ниже')}
+          </span>
+        </motion.button>
       )}
 
-      {/* Fixed FAB on mobile */}
-      {isMobile && (
+      {/* Empty state — single, generous, friendly */}
+      {contentBlocks.length === 0 && (
         <motion.div
-          className="fixed bottom-24 right-4 z-40"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="text-center py-16 px-6 mt-2 rounded-3xl bg-gradient-to-br from-primary/5 via-card to-card border border-border/10"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
+          <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <Plus className="h-7 w-7 text-primary" strokeWidth={2.5} />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-1">
+            {t('dashboard.empty.title', 'Соберите страницу за минуту')}
+          </h3>
+          <p className="text-sm text-muted-foreground mb-5 max-w-sm mx-auto">
+            {t('dashboard.empty.desc', 'Начните с оффера, кнопки или мессенджера — всё, чтобы получить первого клиента.')}
+          </p>
+          <button
+            type="button"
+            onClick={() => openInsertSheet(blocks.length)}
+            data-onboarding="add-block"
+            className="inline-flex items-center gap-2 h-11 rounded-xl px-5 bg-primary text-primary-foreground font-semibold text-sm shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.4)] hover:bg-primary/90 active:scale-[0.98] transition-all"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2.5} />
+            {t('dashboard.empty.cta', 'Добавить первый блок')}
+          </button>
         </motion.div>
       )}
 
