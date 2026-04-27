@@ -219,16 +219,21 @@ function SortableGridBlockItem({
     }
   }, [isRecentlyAdded]);
 
+  const [isHovered, setIsHovered] = useState(false);
+  const showToolbar = isHovered || selected;
+
   return (
     <div
       ref={setRefs}
       style={style}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-all duration-300 rounded-2xl border-0',
+        'relative group transition-all duration-200 rounded-2xl border-0',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
-        isDragging && 'opacity-50 ring-4 ring-primary/30 scale-95 z-50',
+        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
         // P4: Selection ring
@@ -240,22 +245,16 @@ function SortableGridBlockItem({
         isDimmed && 'opacity-30 pointer-events-none',
       )}
     >
-      {/* Drag Handle */}
+      {/* Hold-anywhere drag handle (covers full block, low priority) */}
       <div
         className={cn(
-          "absolute top-2 left-2 z-40 touch-none",
-          isMobile
-            ? "opacity-100"
-            : "cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity",
-          isDragging && "opacity-0"
+          'absolute inset-0 z-10 touch-none',
+          isDragging ? 'cursor-grabbing' : 'cursor-grab',
         )}
         {...attributes}
         {...listeners}
-      >
-        <div className="bg-card p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
-          <GripVertical className="h-5 w-5 text-muted-foreground" />
-        </div>
-      </div>
+        aria-hidden="true"
+      />
 
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
@@ -263,10 +262,10 @@ function SortableGridBlockItem({
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click Overlay */}
+        {/* Click Overlay — sits above hold-drag, captures click/dblclick */}
         <button
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/20 active:bg-accent/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/10 active:bg-accent/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -305,7 +304,7 @@ function SortableGridBlockItem({
             e.stopPropagation();
             onEdit(block);
           }}
-          className="absolute top-1.5 left-12 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/90 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
+          className="absolute top-2 left-2 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/95 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
           aria-label={t(emptyHint.hintKey, emptyHint.hintLabel)}
         >
           <Edit2 className="h-3 w-3" />
@@ -313,74 +312,26 @@ function SortableGridBlockItem({
         </button>
       )}
 
-      {/* Block type label - bottom-left */}
-      <div className="absolute bottom-1.5 left-1.5 z-30 pointer-events-none">
-        <span className="inline-block px-1.5 py-px rounded-md bg-background text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
+      {/* Block type label — only on hover/select to keep canvas quiet */}
+      <div
+        className={cn(
+          'absolute bottom-2 left-2 z-30 pointer-events-none transition-opacity duration-200',
+          showToolbar && !isDragging ? 'opacity-100' : 'opacity-0',
+        )}
+      >
+        <span className="inline-block px-1.5 py-px rounded-md bg-background/90 backdrop-blur text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
           {typeLabel}
         </span>
       </div>
 
-      {/* Controls - top-right */}
-      <div className={cn(
-        "absolute top-1.5 right-1.5 flex gap-1 z-30 transition-opacity",
-        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-      )}>
-        <Button
-          size="sm"
-          variant="secondary"
-          className="h-7 w-7 p-0 rounded-lg shadow-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEdit(block);
-          }}
-          onTouchEnd={(e) => { e.stopPropagation(); }}
-        >
-          <Edit2 className="h-3.5 w-3.5" />
-        </Button>
-        {block.type !== 'profile' && (
-          <Button
-            size="sm"
-            variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm hidden sm:flex"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onDuplicate?.(block.id);
-            }}
-            onTouchEnd={(e) => { e.stopPropagation(); }}
-          >
-            <Copy className="h-3.5 w-3.5" />
-          </Button>
-        )}
-        {isPremium && block.type !== 'profile' && (
-          <Button
-            size="sm"
-            variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm border-primary/20 hover:border-primary/50 hidden sm:flex"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onStartExperiment?.(block);
-            }}
-          >
-            <FlaskConical className="h-3.5 w-3.5 text-primary" />
-          </Button>
-        )}
-        <Button
-          size="sm"
-          variant="destructive"
-          className="h-7 w-7 p-0 rounded-lg shadow-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onDelete(block.id);
-          }}
-          onTouchEnd={(e) => { e.stopPropagation(); }}
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
-      </div>
+      {/* Floating toolbar — appears on hover/select. On mobile показываем при выделении */}
+      <FloatingBlockToolbar
+        visible={showToolbar && !isDragging && !(isMultiSelected && selectedBlockIds.size > 1)}
+        isProfile={block.type === 'profile'}
+        onEdit={() => onEdit(block)}
+        onDuplicate={onDuplicate ? () => onDuplicate(block.id) : undefined}
+        onDelete={() => onDelete(block.id)}
+      />
 
       {/* P5: Context toolbar for single-selected block */}
       {isSelected && !isMultiSelected && !isDragging && (
