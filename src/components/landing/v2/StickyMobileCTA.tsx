@@ -18,7 +18,9 @@ export const StickyMobileCTA = () => {
       const scrolled = window.scrollY;
       const nearBottom =
         window.innerHeight + scrolled >= document.documentElement.scrollHeight - 400;
-      setVisible(scrolled > 600 && !nearBottom);
+      // Hero takes ~100vh; show sticky only after fully past hero
+      const heroHeight = window.innerHeight;
+      setVisible(scrolled > heroHeight * 0.9 && !nearBottom);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -32,14 +34,16 @@ export const StickyMobileCTA = () => {
         visible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
       )}
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.75rem)' }}
+      aria-hidden={!visible}
     >
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-transparent pointer-events-none" />
       <button
         type="button"
         onClick={() => navigate('/auth')}
-        className="relative pointer-events-auto w-full h-14 rounded-2xl bg-primary text-primary-foreground font-black text-sm shadow-glass-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform border border-primary/20"
+        aria-label={t('landing.stickyCta.label', 'Создать страницу — бесплатно')}
+        className="relative pointer-events-auto w-full h-14 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
       >
-        <span className="uppercase tracking-wider">
+        <span>
           {t('landing.stickyCta.label', 'Создать страницу — бесплатно')}
         </span>
         <ArrowRight className="w-4 h-4" />
