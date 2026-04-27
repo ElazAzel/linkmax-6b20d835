@@ -39,8 +39,13 @@ import { trackLeadReplied, trackLeadStatusChanged } from '@/lib/activation-event
 
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
 type ReplyChannel = 'whatsapp' | 'telegram' | 'call' | 'email';
+type StatusFilter = 'active' | 'all' | LeadStatus;
 
-const STATUS_FILTERS = ['all', 'new', 'contacted', 'qualified', 'converted', 'lost'] as const;
+const PRIMARY_FILTERS: { id: StatusFilter; labelKey: string; defaultLabel: string }[] = [
+    { id: 'active', labelKey: 'dashboard.leads.filterActive', defaultLabel: 'Активные' },
+    { id: 'all', labelKey: 'dashboard.leads.filterAll', defaultLabel: 'Все' },
+];
+const SECONDARY_STATUSES: LeadStatus[] = ['new', 'contacted', 'qualified', 'converted', 'lost'];
 
 function getLeadMetadata(lead: Lead | undefined): Record<string, unknown> | null {
     const metadata = lead?.metadata;
