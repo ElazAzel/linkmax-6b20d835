@@ -45,6 +45,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
   let faqBlock: FAQBlock | undefined;
   let eventBlocks: EventBlock[] = [];
   let pricingBlock: PricingBlock | undefined;
+  let aiCta: ReturnType<typeof extractAiCta> = { contacts: [], hasBooking: false };
 
   try {
     profile = extractProfileFromBlocks(validBlocks, language);
@@ -52,7 +53,8 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
     entityLinks = extractEntityLinks(validBlocks, language);
     answerBlock = generateAnswerBlock(validBlocks, slug, language);
     keyFacts = generateEnhancedKeyFacts(validBlocks, answerBlock, profile.name, language);
-    
+    aiCta = extractAiCta(validBlocks, slug, language);
+
     const shouldGenerateAutoFAQ = !hasUserFAQ(validBlocks);
     const faqContext = extractFAQContext(validBlocks, profile.name, answerBlock.niche, answerBlock.location, language);
     autoFAQItems = shouldGenerateAutoFAQ ? generateAutoFAQ(faqContext, language, 5) : [];
