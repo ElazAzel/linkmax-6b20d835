@@ -142,6 +142,10 @@ export default function Index() {
             </Suspense>
           </div>
 
+          <Suspense fallback={<div className="h-96" />}>
+            <FAQSection />
+          </Suspense>
+
           <Suspense fallback={<div className="h-40" />}>
             <BottomCTA />
           </Suspense>
@@ -149,6 +153,10 @@ export default function Index() {
 
         <Suspense fallback={<div className="h-40" />}>
           <PremiumFooter />
+        </Suspense>
+
+        <Suspense fallback={null}>
+          <StickyMobileCTA />
         </Suspense>
       </div>
     </>
