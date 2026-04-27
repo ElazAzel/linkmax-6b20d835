@@ -179,7 +179,11 @@ export function extractAiCta(
     let display = trimmed;
     if (type === 'phone') display = sanitizePhone(trimmed.replace(/^tel:/i, ''));
     else if (type === 'email') display = trimmed.replace(/^mailto:/i, '');
-    const labelText = getI18nText((lb as { title?: unknown }).title, language) || PLATFORM_LABEL[type];
+    const rawTitle = (lb as { title?: unknown }).title;
+    const labelText =
+      (rawTitle && (typeof rawTitle === 'string' || typeof rawTitle === 'object')
+        ? getI18nText(rawTitle as Parameters<typeof getI18nText>[0], language)
+        : '') || PLATFORM_LABEL[type];
     push({ type, label: labelText, href, display });
   }
 
