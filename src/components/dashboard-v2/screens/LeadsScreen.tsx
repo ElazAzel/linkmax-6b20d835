@@ -160,7 +160,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
     };
 
     const filteredLeads = leads.filter(lead => {
-        const matchesStatus = statusFilter === 'all' || lead.status === statusFilter;
+        const status = lead.status as LeadStatus;
+        const matchesStatus =
+            statusFilter === 'all'
+                ? true
+                : statusFilter === 'active'
+                    ? status === 'new' || status === 'contacted' || status === 'qualified'
+                    : status === statusFilter;
         const matchesSearch = !searchQuery ||
             lead.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             lead.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -170,12 +176,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
     const stats = {
         all: leads.length,
+        active: leads.filter(l => ['new','contacted','qualified'].includes(l.status as string)).length,
         new: leads.filter(l => l.status === 'new').length,
         contacted: leads.filter(l => l.status === 'contacted').length,
         qualified: leads.filter(l => l.status === 'qualified').length,
         converted: leads.filter(l => l.status === 'converted').length,
         lost: leads.filter(l => l.status === 'lost').length,
-    };
+    } as const;
 
     const statusConfig: Record<LeadStatus, { bg: string; text: string; icon: React.ComponentType<{className?: string}> }> = {
         new: { bg: 'bg-blue-500', text: 'text-white', icon: Sparkles },
