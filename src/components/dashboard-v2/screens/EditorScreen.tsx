@@ -334,150 +334,128 @@ export const EditorScreen = memo(function EditorScreen({
     return <LoadingSkeleton />;
   }
 
+  const editorActions = (
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        aria-label={t('editor.undo', 'Отменить')}
+        title={t('editor.undo', 'Отменить')}
+        className="h-10 w-10 rounded-xl"
+        onClick={handleUndoWithFriction}
+        disabled={!canUndo}
+      >
+        <Undo2 className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        aria-label={t('editor.redo', 'Повторить')}
+        title={t('editor.redo', 'Повторить')}
+        className="h-10 w-10 rounded-xl"
+        onClick={handleRedoWithFriction}
+        disabled={!canRedo}
+      >
+        <Redo2 className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        aria-label={t('editor.preview', 'Превью')}
+        title={t('editor.preview', 'Превью')}
+        className="h-10 w-10 rounded-xl"
+        onClick={onPreview}
+      >
+        <Eye className="h-4 w-4" />
+      </Button>
+      <Button
+        size="sm"
+        className={cn(
+          "h-10 rounded-xl font-semibold text-sm px-4",
+          !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground"
+        )}
+        onClick={onShare}
+      >
+        <Share2 className="h-4 w-4 mr-1.5" />
+        {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
+      </Button>
+    </>
+  );
+
+  const editorToolbar = (
+    <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide">
+      {!hasContent && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
+          onClick={onOpenTemplates}
+        >
+          <LayoutTemplate className="h-4 w-4" />
+          <span>{t('editor.templates', 'Шаблоны')}</span>
+        </Button>
+      )}
+      {hasContent && onOpenVersions && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
+          onClick={onOpenVersions}
+        >
+          <History className="h-4 w-4" />
+          <span>{t('editor.versions', 'История')}</span>
+        </Button>
+      )}
+      {hasContent && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
+          onClick={() => setStructureOpen(true)}
+        >
+          <Layers className="h-4 w-4" />
+          <span>{t('editor.structure', 'Структура')}</span>
+        </Button>
+      )}
+      {hasContent && (
+        <>
+          <Button
+            variant={reviewMode === 'problematic' ? 'default' : 'outline'}
+            size="sm"
+            className={cn(
+              "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-colors",
+              reviewMode === 'problematic' && "bg-destructive text-destructive-foreground border-none"
+            )}
+            onClick={() => toggleReviewMode('problematic')}
+          >
+            <AlertCircle className="h-4 w-4" />
+            <span>{t('editor.problematic', 'Проблемные')}</span>
+          </Button>
+          <Button
+            variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
+            size="sm"
+            className={cn(
+              "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-colors",
+              reviewMode === 'cta_contact' && "bg-emerald-500 text-white border-none"
+            )}
+            onClick={() => toggleReviewMode('cta_contact')}
+          >
+            <MousePointerClick className="h-4 w-4" />
+            <span>{t('editor.cta', 'CTA')}</span>
+          </Button>
+        </>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen safe-area-top">
-      {/* Header with actions */}
-      <div className="sticky top-0 z-40 bg-background border-b border-border/10">
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between gap-3">
-            {/* Left: Title */}
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-bold truncate">
-                {t('dashboard.editor.title', 'Редактор')}
-              </h1>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                <p className="text-xs text-muted-foreground font-medium">
-                  {blockCount} {t('dashboard.editor.blocks', 'блоков')}
-                </p>
-              </div>
-            </div>
-
-            {/* Center: Undo/Redo */}
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                aria-label={t('editor.undo', 'Отменить')}
-                title={t('editor.undo', 'Отменить')}
-                className="h-10 w-10 p-0 rounded-xl"
-                onClick={handleUndoWithFriction}
-                disabled={!canUndo}
-              >
-                <Undo2 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                aria-label={t('editor.redo', 'Повторить')}
-                title={t('editor.redo', 'Повторить')}
-                className="h-10 w-10 p-0 rounded-xl"
-                onClick={handleRedoWithFriction}
-                disabled={!canRedo}
-              >
-                <Redo2 className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Right: Actions */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                aria-label={t('editor.preview', 'Превью')}
-                title={t('editor.preview', 'Превью')}
-                className="h-10 w-10 p-0 rounded-xl"
-                onClick={onPreview}
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-              <Button
-                size="sm"
-                className={cn(
-                  "h-10 rounded-xl font-semibold text-sm px-4",
-                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground"
-                )}
-                onClick={onShare}
-              >
-                <Share2 className="h-4 w-4 mr-1.5" />
-                {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick tools bar */}
-        <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide border-t border-border/10 bg-card">
-          {/* Show templates only for pages without content */}
-          {!hasContent && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
-              onClick={onOpenTemplates}
-            >
-              <LayoutTemplate className="h-4 w-4" />
-              <span>{t('editor.templates', 'Шаблоны')}</span>
-            </Button>
-          )}
-
-          {/* Show version history for pages with content */}
-          {hasContent && onOpenVersions && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
-              onClick={onOpenVersions}
-            >
-              <History className="h-4 w-4" />
-              <span>{t('editor.versions', 'История')}</span>
-            </Button>
-          )}
-
-          {/* P5: Structure View button */}
-          {hasContent && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium"
-              onClick={() => setStructureOpen(true)}
-            >
-              <Layers className="h-4 w-4" />
-              <span>{t('editor.structure', 'Структура')}</span>
-            </Button>
-          )}
-
-          {/* P5: Review mode filter chips */}
-          {hasContent && (
-            <>
-              <Button
-                variant={reviewMode === 'problematic' ? 'default' : 'outline'}
-                size="sm"
-                className={cn(
-                  "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-all",
-                  reviewMode === 'problematic' && "bg-destructive text-destructive-foreground border-none"
-                )}
-                onClick={() => toggleReviewMode('problematic')}
-              >
-                <AlertCircle className="h-4 w-4" />
-                <span>{t('editor.problematic', 'Проблемные')}</span>
-              </Button>
-              <Button
-                variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
-                size="sm"
-                className={cn(
-                  "h-9 rounded-xl shrink-0 gap-2 px-3 text-xs font-medium transition-all",
-                  reviewMode === 'cta_contact' && "bg-emerald-500 text-white border-none"
-                )}
-                onClick={() => toggleReviewMode('cta_contact')}
-              >
-                <MousePointerClick className="h-4 w-4" />
-                <span>{t('editor.cta', 'CTA')}</span>
-              </Button>
-            </>
-          )}
-        </div>
-      </div>
+      <DashboardHeader
+        title={t('dashboard.editor.title', 'Редактор')}
+        subtitle={`${blockCount} ${t('dashboard.editor.blocks', 'блоков')}`}
+        actions={editorActions}
+        bottomSlot={editorToolbar}
+      />
 
       {/* Single priority banner — max 1 at a time */}
       {(() => {
