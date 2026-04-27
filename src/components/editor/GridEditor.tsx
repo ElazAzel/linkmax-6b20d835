@@ -327,7 +327,7 @@ function SortableGridBlockItem({
 
       {/* Floating toolbar — appears on hover/select. On mobile показываем при выделении */}
       <FloatingBlockToolbar
-        visible={showToolbar && !isDragging && !(isMultiSelected && selectedBlockIds.size > 1)}
+        visible={showToolbar && !isDragging && !isMultiSelected}
         isProfile={block.type === 'profile'}
         onEdit={() => onEdit(block)}
         onDuplicate={onDuplicate ? () => onDuplicate(block.id) : undefined}
