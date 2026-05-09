@@ -4222,7 +4222,7 @@ export type Database = {
           slug: string
         }[]
       }
-      get_team_invite_code: { Args: { p_team_id: string }; Returns: string }
+      get_team_invite_code: { Args: { _team_id: string }; Returns: string }
       get_team_owner: { Args: { p_team_id: string }; Returns: string }
       get_token_analytics: {
         Args: { p_end_date?: string; p_start_date?: string }
