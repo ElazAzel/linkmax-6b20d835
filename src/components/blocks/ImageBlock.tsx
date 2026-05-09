@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
@@ -13,8 +13,8 @@ interface ImageBlockProps {
 
 export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: ImageBlockProps) {
   const { i18n } = useTranslation();
-  const alt = getI18nText(block.alt, i18n.language as SupportedLanguage);
-  const caption = getI18nText(block.caption, i18n.language as SupportedLanguage);
+  const alt = useMemo(() => getI18nText(block.alt, i18n.language as SupportedLanguage), [block.alt, i18n.language]);
+  const caption = useMemo(() => getI18nText(block.caption, i18n.language as SupportedLanguage), [block.caption, i18n.language]);
 
   const isBanner = block.style === 'banner';
   const hasLink = Boolean(block.link);

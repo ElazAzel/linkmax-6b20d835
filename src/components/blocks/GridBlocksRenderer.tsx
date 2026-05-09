@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { cn } from '@/lib/utils/utils';
@@ -16,6 +16,75 @@ interface GridBlocksRendererProps {
 }
 
 /**
+ * GridBlockItem - Extracted and memoized component for individual grid items.
+ * Prevents re-rendering all blocks when only one changes.
+ */
+const GridBlockItem = memo(function GridBlockItem({
+  block,
+  isPreview,
+  pageOwnerId,
+  pageId,
+  isOwnerPremium,
+  ownerTier,
+}: {
+  block: Block;
+  isPreview: boolean;
+  pageOwnerId?: string;
+  pageId?: string;
+  isOwnerPremium?: boolean;
+  ownerTier?: PremiumTier;
+}) {
+  // Determine grid span based on block size
+  const blockSize = block.blockSize || 'small';
+  const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
+
+  // Map dimensions to Tailwind classes
+  const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
+  const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
+
+  const contentAlignment = block.blockStyle?.contentAlignment || 'center';
+  const alignmentClass = contentAlignment === 'top'
+    ? 'items-start'
+    : contentAlignment === 'bottom'
+      ? 'items-end'
+      : 'items-center';
+
+  // Blocks that shouldn't have the default card background/borders
+  const TRANSPARENT_BLOCKS = ['separator', 'socials', 'spacer'];
+  const isTransparent = TRANSPARENT_BLOCKS.includes(block.type);
+
+  return (
+    <motion.div
+      className={cn(
+        'overflow-hidden flex transition-all duration-300 rounded-xl',
+        !isTransparent && 'bg-card border-0 hover:scale-[1.01]',
+        isTransparent && 'bg-transparent border-0 hover:scale-[1.01]',
+        alignmentClass,
+        colSpanClass,
+        rowSpanClass,
+        !isTransparent && 'min-h-[140px]',
+        !isTransparent && dimensions.gridRows === 2 && 'min-h-[296px]'
+      )}
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 20 } }
+      }}
+    >
+      <div className="w-full h-full">
+        <BlockRenderer
+          block={block}
+          isPreview={isPreview}
+          pageOwnerId={pageOwnerId}
+          pageId={pageId}
+          isOwnerPremium={isOwnerPremium}
+          ownerTier={ownerTier}
+        />
+      </div>
+    </motion.div>
+  );
+});
+
+/**
  * Renders blocks in a responsive 2-column grid layout.
  * Used in both editor preview and public page for consistent layout.
  * Matches GridEditor.tsx behavior using grid-flow-row-dense.
@@ -30,10 +99,20 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   className,
 }: GridBlocksRendererProps) {
   // Guard against undefined/null blocks
-  const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
+  const validBlocks = useMemo(() =>
+    (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b),
+    [blocks]
+  );
 
-  const profileBlock = validBlocks.find(b => b.type === 'profile');
-  const contentBlocks = validBlocks.filter(b => b.type !== 'profile');
+  const profileBlock = useMemo(() =>
+    validBlocks.find(b => b.type === 'profile'),
+    [validBlocks]
+  );
+
+  const contentBlocks = useMemo(() =>
+    validBlocks.filter(b => b.type !== 'profile'),
+    [validBlocks]
+  );
 
   return (
     <div className={cn('space-y-4', className)}>
@@ -75,59 +154,17 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             }
           }}
         >
-          {contentBlocks.map((block) => {
-            // Determine grid span based on block size
-            const blockSize = block.blockSize || 'small';
-            // Use type assertion or direct import if simple import fails, but BLOCK_SIZE_DIMENSIONS should be available
-            // Fallback to small if not found
-            const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
-
-            // Map dimensions to Tailwind classes
-            const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-            const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
-
-            const contentAlignment = block.blockStyle?.contentAlignment || 'center';
-            const alignmentClass = contentAlignment === 'top'
-              ? 'items-start'
-              : contentAlignment === 'bottom'
-                ? 'items-end'
-                : 'items-center';
-
-            // Blocks that shouldn't have the default card background/borders
-            const TRANSPARENT_BLOCKS = ['separator', 'socials', 'spacer'];
-            const isTransparent = TRANSPARENT_BLOCKS.includes(block.type);
-
-            return (
-              <motion.div
-                key={block.id}
-                className={cn(
-                  'overflow-hidden flex transition-all duration-300 rounded-xl',
-                  !isTransparent && 'bg-card border-0 hover:scale-[1.01]',
-                  isTransparent && 'bg-transparent border-0 hover:scale-[1.01]',
-                  alignmentClass,
-                  colSpanClass,
-                  rowSpanClass,
-                  !isTransparent && 'min-h-[140px]',
-                  !isTransparent && dimensions.gridRows === 2 && 'min-h-[296px]'
-                )}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 20 } }
-                }}
-              >
-                <div className="w-full h-full">
-                  <BlockRenderer
-                    block={block}
-                    isPreview={isPreview}
-                    pageOwnerId={pageOwnerId}
-                    pageId={pageId}
-                    isOwnerPremium={isOwnerPremium}
-                    ownerTier={ownerTier}
-                  />
-                </div>
-              </motion.div>
-            );
-          })}
+          {contentBlocks.map((block) => (
+            <GridBlockItem
+              key={block.id}
+              block={block}
+              isPreview={isPreview}
+              pageOwnerId={pageOwnerId}
+              pageId={pageId}
+              isOwnerPremium={isOwnerPremium}
+              ownerTier={ownerTier}
+            />
+          ))}
         </motion.div>
       )}
     </div>

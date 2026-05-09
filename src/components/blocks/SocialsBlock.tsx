@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Instagram from 'lucide-react/dist/esm/icons/instagram';
 import Send from 'lucide-react/dist/esm/icons/send';
@@ -94,7 +94,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatformClick }: SocialsBlockProps) {
   const { i18n } = useTranslation();
-  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
+  const title = useMemo(() => getI18nText(block.title, i18n.language as SupportedLanguage), [block.title, i18n.language]);
 
   const handleClick = (url: string) => {
     // Track click first

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
@@ -14,7 +14,7 @@ interface ButtonBlockProps {
 export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }: ButtonBlockProps) {
   const { i18n } = useTranslation();
   const handleClick = createBlockClickHandler(block.url, onClick);
-  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
+  const title = useMemo(() => getI18nText(block.title, i18n.language as SupportedLanguage), [block.title, i18n.language]);
 
   const alignmentClass = block.alignment === 'left' ? 'justify-start' 
     : block.alignment === 'right' ? 'justify-end' 
