@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useMemo, useEffect } from 'react';
+import { Suspense, useCallback, useMemo, useEffect, memo } from 'react';
 import type { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -75,7 +75,7 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
   return typeof rawTitle === 'object' ? getI18nText(rawTitle, lang) : String(rawTitle);
 }
 
-export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
+export const BlockRenderer = memo(function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
   const renderContext = useRenderContext();
   const isEditorMode = renderContext === 'editor';
   const { onBlockClick, onBlockView } = useAnalytics();
@@ -90,7 +90,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       const title = getBlockTitle(block, i18n.language as SupportedLanguage);
       onBlockView(block.id, block.type, title, block.experimentId, block.variantLabel);
     }
-  }, [block.id, block.type, block.experimentId, block.variantLabel, isPreview, isEditorMode, onBlockView, i18n.language]);
+  }, [block.id, block.type, block.experimentId, block.variantLabel, isPreview, isEditorMode, onBlockView, i18n.language, block]);
 
   const handleClick = useCallback(() => {
     if (!isPreview) {
@@ -99,35 +99,42 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
     }
   }, [block, isPreview, onBlockClick, i18n.language]);
 
-  if (!isPreview && !isBlockVisible(block)) {
+  const isVisible = useMemo(() => isPreview || isBlockVisible(block), [isPreview, block]);
+
+  const manifest = useMemo(() => BLOCK_MANIFEST[block.type as BlockType], [block.type]);
+
+  const animationClass = useMemo(() => getAnimationClass(block.blockStyle), [block.blockStyle]);
+  const animationStyle = useMemo(() => getAnimationStyle(block.blockStyle), [block.blockStyle]);
+
+  // Build props for the renderer
+  const rendererProps = useMemo(() => {
+    const props: Record<string, any> = {
+      block,
+      isPreview,
+      pageOwnerId,
+      pageId,
+      isOwnerPremium,
+      ownerTier,
+    };
+
+    // Map rendererPropsKeys to actual handlers
+    if (manifest?.rendererPropsKeys) {
+      for (const key of manifest.rendererPropsKeys) {
+        if (key === 'onClick' || key === 'onPlatformClick') {
+          props[key] = handleClick;
+        }
+      }
+    }
+    return props;
+  }, [block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier, manifest, handleClick]);
+
+  if (!isVisible) {
     return null;
   }
 
-  const manifest = BLOCK_MANIFEST[block.type as BlockType];
   if (!manifest) return null;
 
-  const animationClass = getAnimationClass(block.blockStyle);
-  const animationStyle = getAnimationStyle(block.blockStyle);
   const RendererComponent = manifest.renderer;
-
-  // Build props for the renderer
-  const rendererProps: Record<string, any> = {
-    block,
-    isPreview,
-    pageOwnerId,
-    pageId,
-    isOwnerPremium,
-    ownerTier,
-  };
-
-  // Map rendererPropsKeys to actual handlers
-  if (manifest.rendererPropsKeys) {
-    for (const key of manifest.rendererPropsKeys) {
-      if (key === 'onClick' || key === 'onPlatformClick') {
-        rendererProps[key] = handleClick;
-      }
-    }
-  }
 
   const inner = (
     <Suspense fallback={<BlockSkeleton />}>
@@ -160,4 +167,4 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       </div>
     </BlockErrorBoundary>
   );
-}
+});
