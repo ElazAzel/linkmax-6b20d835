@@ -30,18 +30,40 @@ export const ZoneNotificationBell = memo(function ZoneNotificationBell({ zoneId 
   const { t } = useTranslation();
   const { notifications, unreadCount, markAsRead, markAllRead } = useZoneNotifications(zoneId);
 
+  const bellLabel =
+    unreadCount > 0
+      ? t('zone.notifications.ariaLabelUnread', {
+          defaultValue: 'Уведомления, {{count}} непрочитанных',
+          count: unreadCount,
+        })
+      : t('zone.notifications.ariaLabel', 'Уведомления');
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative h-8 w-8">
-          <Bell className="h-4 w-4" />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative h-8 w-8"
+          aria-label={bellLabel}
+        >
+          <Bell className="h-4 w-4" aria-hidden="true" />
           {unreadCount > 0 && (
             <Badge
+              aria-hidden="true"
               className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] px-1 text-xs font-bold bg-destructive text-destructive-foreground border-0"
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </Badge>
           )}
+          <span className="sr-only" aria-live="polite">
+            {unreadCount > 0
+              ? t('zone.notifications.unreadCount', {
+                  defaultValue: '{{count}} непрочитанных уведомлений',
+                  count: unreadCount,
+                })
+              : ''}
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
