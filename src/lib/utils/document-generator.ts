@@ -1,8 +1,6 @@
 /**
  * Document Generator - Renders templates with variables and generates PDFs
  */
-// import jsPDF from 'jspdf'; // Removed static import for bundle optimization
-// import html2canvas from 'html2canvas'; // Removed static import for bundle optimization
 import { ZoneContact, ZoneDeal, ZoneDocumentTemplate } from '@/types/zones';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
