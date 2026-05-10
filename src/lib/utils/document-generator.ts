@@ -101,18 +101,34 @@ export function buildDocumentVariables(
 // =============== Template Rendering ===============
 
 /**
+ * 🛡️ Sentinel: Escape HTML-significant characters in untrusted variable values
+ * before substituting them into HTML templates. Without this, attacker-controlled
+ * fields like contact_name = "<img src=x onerror=...>" execute as script when
+ * the rendered template is fed to dangerouslySetInnerHTML or html2canvas in PDF
+ * generation. Templates themselves remain HTML — only variable values are escaped.
+ */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
  * Replace template variables with actual values
  * Supports {{ variable }} and {{variable}} syntax
  */
 export function renderTemplate(template: string, variables: DocumentVariables): string {
   let rendered = template;
-  
-  // Replace all {{variable}} patterns
+
+  // Replace all {{variable}} patterns with HTML-escaped values to prevent XSS
   rendered = rendered.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, key) => {
     const value = variables[key];
-    return value !== undefined ? value : match;
+    return value !== undefined ? escapeHtml(String(value)) : match;
   });
-  
+
   return rendered;
 }
 
