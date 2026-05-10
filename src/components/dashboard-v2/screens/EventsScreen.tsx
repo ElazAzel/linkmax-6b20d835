@@ -105,42 +105,53 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
         if (error) throw error;
 
-        const eventsWithStats: EventData[] = await Promise.all(
-          (eventsData || []).map(async (event) => {
-            const { data: regs } = await supabase
-              .from('event_registrations')
-              .select('id, status, event_tickets(status)')
-              .eq('event_id', event.id);
+        const eventIds = (eventsData || []).map(e => e.id);
+        const { data: allRegs, error: regsError } = eventIds.length > 0
+          ? await supabase
+            .from('event_registrations')
+            .select('id, status, event_id, event_tickets(status)')
+            .in('event_id', eventIds)
+          : { data: [], error: null };
 
-            const total = regs?.filter(r => r.status !== 'cancelled').length || 0;
-            const checkedIn = regs?.filter(r =>
-              r.event_tickets?.some((t: { status: string }) => t.status === 'used')
-            ).length || 0;
-            const pending = regs?.filter(r => r.status === 'pending').length || 0;
+        if (regsError) throw regsError;
 
-            return {
-              id: event.id,
-              blockId: event.block_id,
-              pageId: event.page_id,
-              pageSlug: (event.pages as { slug: string })?.slug || '',
-              title: (event.title_i18n_json as Record<string, string>)?.[i18n.language] ||
-                (event.title_i18n_json as Record<string, string>)?.ru ||
-                t('events.untitled', 'Без названия'),
-              startAt: event.start_at,
-              endAt: event.end_at,
-              locationType: event.location_type || 'online',
-              locationValue: event.location_value,
-              status: event.status || 'draft',
-              capacity: event.capacity,
-              isPaid: event.is_paid || false,
-              price: event.price_amount,
-              currency: event.currency,
-              totalRegistrations: total,
-              checkedIn,
-              pendingApproval: pending,
-            };
-          })
-        );
+        const regsByEvent = (allRegs || []).reduce((acc, reg) => {
+          if (!acc[reg.event_id]) acc[reg.event_id] = [];
+          acc[reg.event_id].push(reg);
+          return acc;
+        }, {} as Record<string, any[]>);
+
+        const eventsWithStats: EventData[] = (eventsData || []).map((event) => {
+          const regs = regsByEvent[event.id] || [];
+
+          const total = regs.filter(r => r.status !== 'cancelled').length;
+          const checkedIn = regs.filter(r =>
+            r.event_tickets?.some((t: { status: string }) => t.status === 'used')
+          ).length;
+          const pending = regs.filter(r => r.status === 'pending').length;
+
+          return {
+            id: event.id,
+            blockId: event.block_id,
+            pageId: event.page_id,
+            pageSlug: (event.pages as { slug: string })?.slug || '',
+            title: (event.title_i18n_json as Record<string, string>)?.[i18n.language] ||
+              (event.title_i18n_json as Record<string, string>)?.ru ||
+              t('events.untitled', 'Без названия'),
+            startAt: event.start_at,
+            endAt: event.end_at,
+            locationType: event.location_type || 'online',
+            locationValue: event.location_value,
+            status: event.status || 'draft',
+            capacity: event.capacity,
+            isPaid: event.is_paid || false,
+            price: event.price_amount,
+            currency: event.currency,
+            totalRegistrations: total,
+            checkedIn,
+            pendingApproval: pending,
+          };
+        });
 
         setEvents(eventsWithStats);
       } catch (error) {
