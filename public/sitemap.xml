@@ -85,12 +85,7 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Niche Categories -->
-  <url><loc>https://lnkmx.my/experts/beauty</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/fitness</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/business</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/education</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/consulting</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <!-- Dynamic profiles available at /[slug] -->
 
   <!-- Dynamic profiles available at /[slug] -->
   <!-- This static file acts as a seed, the edge function handles full dynamic index -->
