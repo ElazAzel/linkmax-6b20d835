@@ -86,7 +86,6 @@
   </url>
 
   <!-- Dynamic profiles available at /[slug] -->
-  <!-- This static file acts as a seed, the edge function handles full dynamic index -->
 
   <!-- Dynamic profiles available at /[slug] -->
   <!-- This static file acts as a seed, the edge function handles full dynamic index -->
