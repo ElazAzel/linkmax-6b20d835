@@ -18,10 +18,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const title = t(
       'seo.landing.title',
       isRussian
-        ? 'LinkMAX - операционная система для микробизнеса | Конструктор страниц + CRM'
+        ? 'LinkMAX — страницы, CRM и аналитика для микробизнеса'
         : isKazakh
-          ? 'LinkMAX - микробизнеске арналған операциялық жүйе | Бет конструкторы + CRM'
-          : 'LinkMAX - The Micro-Business OS | Page Builder + CRM + Analytics'
+          ? 'LinkMAX — беттер, CRM және аналитика микробизнеске'
+          : 'LinkMAX — Pages, CRM & Analytics for Micro-Business'
     );
     document.title = title;
 
