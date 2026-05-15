@@ -60,7 +60,7 @@ class RouteErrorBoundary extends React.Component<
     return { hasError: true };
   }
   componentDidCatch(error: unknown) {
-    console.error('Route error:', error);
+    console.error('Route error:', error); // eslint-disable-line no-console
   }
   render() {
     if (this.state.hasError) {
@@ -82,24 +82,29 @@ class RouteErrorBoundary extends React.Component<
   }
 }
 
-const App = () => {
+  const App = () => {
   // Defer non-critical init until user interacts or after 8s
   useEffect(() => {
     let fired = false;
+    let cancelled = false;
     const run = () => {
-      if (fired) return;
+      if (fired || cancelled) return;
       fired = true;
       ['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>
         window.removeEventListener(e, run)
       );
       _ric(() => {
+        if (cancelled) return;
         // Clear old storage versions
         import('@/lib/storage').then(({ storage }) => {
+          if (cancelled) return;
           storage.clearOldVersions();
         });
         // Sync translations from DB
         import('./i18n/config').then(({ default: i18n }) => {
+          if (cancelled) return;
           import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
+            if (cancelled) return;
             syncI18nWithDB(i18n);
           });
         });
@@ -109,7 +114,7 @@ const App = () => {
       window.addEventListener(e, run, { once: true, passive: true })
     );
     const timer = setTimeout(run, 8000);
-    return () => { clearTimeout(timer); };
+    return () => { clearTimeout(timer); cancelled = true; };
   }, []);
 
   // Listen for OAuth errors in URL

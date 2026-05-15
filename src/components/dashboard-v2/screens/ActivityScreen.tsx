@@ -518,7 +518,7 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
                   {t('operator.repeat.badge', 'Повторный')}
                 </Badge>
               )}
-              {lead.metadata?.intent === 'commercial' && (
+              {(lead.metadata as Record<string, string> | null)?.intent === 'commercial' && (
                 <Badge className="h-5 px-2 bg-orange-500/10 text-orange-600 text-xs font-black uppercase tracking-wider border-orange-500/20 shrink-0 rounded-full animate-pulse">
                   🔥 {t('crm.chatbot.hot', 'Hot')}
                 </Badge>

@@ -5,12 +5,14 @@
         "noImplicitAny": true
     },
     "include": [
-        "src/lib/**/*",
-        "src/domain/**/*",
-        "src/use-cases/**/*",
-        "src/repositories/**/*",
-        "src/services/**/*",
-        "src/types/**/*",
+        "src/**/*.ts",
+        "src/**/*.tsx",
         "src/vite-env.d.ts"
+    ],
+    "exclude": [
+        "src/**/__tests__/**",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/testing/**"
     ]
 }

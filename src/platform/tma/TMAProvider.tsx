@@ -68,6 +68,7 @@ export const TMAProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     if (!webApp?.MainButton) return;
     
     webApp.MainButton.setText(text);
+    webApp.MainButton.offClick(webApp.MainButton.onClick);
     webApp.MainButton.onClick(onClick);
     if (visible) webApp.MainButton.show();
     else webApp.MainButton.hide();

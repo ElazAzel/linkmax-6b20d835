@@ -241,12 +241,13 @@ export function initSessionDurationTracking(pageId: string) {
 
     // Use sendBeacon for reliable delivery on page unload
     if (navigator.sendBeacon) {
-      const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
       const blob = new Blob([payload], {
         type: 'application/json',
       });
-      navigator.sendBeacon(url, blob);
+      navigator.sendBeacon(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analytics-beacon`,
+        blob
+      );
     }
   };
 
@@ -459,7 +460,7 @@ export async function trackEvent({
           }
         });
       } catch (e) {
-        // Silent fail for proxy
+        logger.debug('Pixel proxy failed', { data: e });
       }
     }
   } catch (error) {
@@ -484,10 +485,9 @@ export async function logChatQuery(
     const session_data = getOrCreateSession();
     const geo = await getGeoInfo().catch(() => null);
 
-    // Using 'as any' until supabase types are re-generated with expert_queries table
-    await (supabase.from('expert_queries' as any) as any).insert({
+    await supabase.from('expert_queries').insert({
       page_id: pageId,
-      query_text: queryText.substring(0, 500), // Cap length
+      query_text: queryText.substring(0, 500),
       has_response: hasResponse,
       metadata: {
         ...metadata,

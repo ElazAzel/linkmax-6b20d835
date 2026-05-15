@@ -64,7 +64,7 @@ export default defineConfig(({ mode }) => ({
       polyfill: true, // Ensure module preload works on older mobile browsers
     },
     cssCodeSplit: true, // Split CSS into smaller chunks for faster FCP
-    target: 'esnext', // Target modern browsers for smaller bundle size
+    target: 'es2021', // Compatible with modern browsers while supporting older mobile
     minify: 'esbuild',
     sourcemap: !!process.env.SENTRY_AUTH_TOKEN,
     chunkSizeWarningLimit: 1200,

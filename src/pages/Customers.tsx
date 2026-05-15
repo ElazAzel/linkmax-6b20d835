@@ -19,6 +19,7 @@ import Quote from 'lucide-react/dist/esm/icons/quote';
 import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import DOMPurify from 'dompurify';
 
 const PremiumFooter = lazy(() => import('@/components/landing/v2/PremiumFooter').then(m => ({ default: m.PremiumFooter })));
 
@@ -133,7 +134,7 @@ export default function Customers() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(JSON.stringify(jsonLd)) }} />
 
       <main className="min-h-screen bg-background">
         {/* Hero */}

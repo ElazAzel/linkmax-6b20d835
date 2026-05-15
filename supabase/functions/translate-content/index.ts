@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { hashIpAddress } from "../_shared/utils.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -34,11 +35,12 @@ const LANGUAGE_NAMES: Record<string, string> = {
 // Rate limiting: 20 requests per minute per IP (increased for multi-language)
 async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string): Promise<boolean> {
   const windowStart = new Date(Date.now() - 60000).toISOString();
+  const ipHash = await hashIpAddress(ipAddress);
   
   const { data: existingLimit } = await supabase
     .from('rate_limits')
     .select('*')
-    .eq('ip_address', ipAddress)
+    .eq('ip_address', ipHash)
     .eq('endpoint', endpoint)
     .gte('window_start', windowStart)
     .single();
@@ -55,7 +57,7 @@ async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string
     await supabase
       .from('rate_limits')
       .insert({
-        ip_address: ipAddress,
+        ip_address: ipHash,
         endpoint: endpoint,
         request_count: 1,
         window_start: new Date().toISOString()

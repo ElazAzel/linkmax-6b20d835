@@ -66,6 +66,18 @@ interface LeadDetailsProps {
   onOpenChange: (open: boolean) => void;
 }
 
+interface LeadMetadata {
+  chat_lead?: boolean;
+  intent?: string;
+  last_query?: string;
+  conversation?: Array<{role: string; content: string}>;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  referrer?: string;
+  page_id?: string;
+}
+
 const statusColors: Record<LeadStatus, string> = {
   new: 'bg-blue-500/20 text-blue-500 border-blue-500/30',
   contacted: 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30',
@@ -134,9 +146,9 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
   const handleGenerateDraft = () => {
     const text = generateSmartDraft(
       lead.name, 
-      lead.metadata?.intent || 'informational', 
-      lead.metadata?.last_query || '', 
-      lead.metadata?.conversation || []
+      (lead.metadata as LeadMetadata | null)?.intent || 'informational', 
+      (lead.metadata as LeadMetadata | null)?.last_query || '', 
+      (lead.metadata as LeadMetadata | null)?.conversation as any || []
     );
     setDraft(text);
   };
@@ -217,35 +229,35 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
           </h4>
 
           {/* Expert Engine Insight - Phase 28 */}
-          {lead.metadata.chat_lead && (
+          {(lead.metadata as LeadMetadata).chat_lead && (
             <div className="mb-4 p-3 bg-primary/5 border border-primary/20 rounded-2xl space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-black uppercase tracking-widest text-primary">Assistant Insight</span>
                 <Badge variant="outline" className="text-[9px] bg-primary/10 border-primary/20">
-                  {lead.metadata.intent === 'commercial' ? '🔥 High Intent' : 'ℹ️ Info Seeking'}
+                  {(lead.metadata as LeadMetadata).intent === 'commercial' ? '🔥 High Intent' : 'ℹ️ Info Seeking'}
                 </Badge>
               </div>
               
-              {lead.metadata.last_query && (
+              {(lead.metadata as LeadMetadata).last_query && (
                 <div className="p-2.5 bg-background/50 rounded-xl border border-white/5 italic text-xs leading-relaxed">
-                  "{lead.metadata.last_query}"
+                  "{(lead.metadata as LeadMetadata).last_query}"
                 </div>
               )}
               
               <p className="text-[10px] text-muted-foreground leading-tight">
-                {lead.metadata.intent === 'commercial' 
+                {(lead.metadata as LeadMetadata).intent === 'commercial' 
                   ? t('crm.chatbot.commercialDesc', 'Пользователь проявил коммерческий интерес перед отправкой формы.')
                   : t('crm.chatbot.infoDesc', 'Пользователь задавал уточняющие вопросы ассистенту.')}
               </p>
 
               {/* Chat History - Phase 31 */}
-              {Array.isArray(lead.metadata.conversation) && lead.metadata.conversation.length > 0 && (
+              {Array.isArray((lead.metadata as LeadMetadata | null)?.conversation) && ((lead.metadata as LeadMetadata | null)?.conversation?.length ?? 0) > 0 && (
                 <div className="mt-3 pt-3 border-t border-primary/10">
                   <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60 mb-2 block">
                     {t('crm.chatbot.history', 'История диалога')}
                   </span>
                   <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
-                    {lead.metadata.conversation.map((msg: any, idx: number) => (
+                    {(lead.metadata as LeadMetadata | null)?.conversation?.map((msg: any, idx: number) => (
                       <div 
                         key={idx} 
                         className={cn(
@@ -334,31 +346,31 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
               </h4>
               
               <div className="grid grid-cols-2 gap-2">
-                {lead.metadata.utm_source && (
+                {(lead.metadata as LeadMetadata).utm_source && (
                   <div className="p-2 bg-blue-500/5 rounded-xl border border-blue-500/10">
                     <span className="text-xs font-black text-blue-400 block mb-0.5 uppercase">Source</span>
-                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_source}</span>
+                    <span className="text-xs font-bold truncate block">{(lead.metadata as LeadMetadata).utm_source}</span>
                   </div>
                 )}
-                {lead.metadata.utm_medium && (
+                {(lead.metadata as LeadMetadata).utm_medium && (
                   <div className="p-2 bg-purple-500/5 rounded-xl border border-purple-500/10">
                     <span className="text-xs font-black text-purple-400 block mb-0.5 uppercase">Medium</span>
-                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_medium}</span>
+                    <span className="text-xs font-bold truncate block">{(lead.metadata as LeadMetadata).utm_medium}</span>
                   </div>
                 )}
-                {lead.metadata.utm_campaign && (
+                {(lead.metadata as LeadMetadata).utm_campaign && (
                   <div className="p-2 bg-violet-500/5 rounded-xl border border-violet-500/10 col-span-2">
                     <span className="text-xs font-black text-violet-400 block mb-0.5 uppercase">Campaign</span>
-                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_campaign}</span>
+                    <span className="text-xs font-bold truncate block">{(lead.metadata as LeadMetadata).utm_campaign}</span>
                   </div>
                 )}
-                {lead.metadata.referrer && (
+                {(lead.metadata as LeadMetadata).referrer && (
                   <div className="p-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 col-span-2">
                     <span className="text-xs font-black text-emerald-400 block mb-0.5 uppercase flex items-center gap-1">
                       <Globe className="h-2 w-2" />
                       Referrer
                     </span>
-                    <span className="text-xs font-medium truncate block opacity-80 italic">{lead.metadata.referrer}</span>
+                    <span className="text-xs font-medium truncate block opacity-80 italic">{(lead.metadata as LeadMetadata).referrer}</span>
                   </div>
                 )}
               </div>

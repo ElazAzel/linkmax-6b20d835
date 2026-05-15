@@ -93,7 +93,7 @@ function mapExperimentData(experiments: RawExperiment[]): PageExperiment[] {
   return (experiments || []).map((exp) => ({
     id: exp.id,
     page_id: exp.page_id,
-    block_id: (exp as any).block_id || '',
+    block_id: exp.block_id || '',
     name: exp.name,
     status: exp.status as PageExperiment['status'],
     started_at: exp.started_at || undefined,
@@ -104,7 +104,7 @@ function mapExperimentData(experiments: RawExperiment[]): PageExperiment[] {
       variant_key: v.variant_key || '',
       base_block_id: v.base_block_id || '',
       variant_label: v.variant_label || '',
-      block_data: (v.block_data as unknown) as Partial<Block>,
+      block_data: v.block_data as unknown as Partial<Block>,
       traffic_weight: v.traffic_weight ?? 0,
       created_at: v.created_at || '',
     }))
@@ -226,7 +226,7 @@ export function validateBlock(block: Partial<Block>): { valid: boolean; errors: 
  * Check if page has premium content
  */
 export function hasPremiumContent(blocks: Block[]): boolean {
-  const PREMIUM_TYPES = ['video', 'carousel', 'custom_code', 'form', 'newsletter', 'testimonial', 'scratch', 'catalog', 'countdown'];
+  const PREMIUM_TYPES = ['video', 'carousel', 'custom_code', 'form', 'newsletter', 'testimonial', 'scratch', 'catalog', 'countdown', 'booking', 'event', 'pricing', 'faq', 'community'];
   return blocks.some(block => PREMIUM_TYPES.includes(block.type));
 }
 
@@ -312,7 +312,7 @@ export async function savePage(
         p_avatar_style: { type: 'default', color: '#000000' } as unknown as Json,
         p_theme_settings: pageData.theme as unknown as Json,
         p_seo_meta: pageData.seo as unknown as Json,
-        p_editor_mode: pageData.editorMode || 'linear',
+      p_editor_mode: pageData.editorMode || 'grid',
         p_grid_config: (pageData.gridConfig || null) as unknown as Json,
         p_integrations: (pageData.integrations || null) as unknown as Json,
         p_favicon_url: pageData.favicon_url || undefined,
@@ -365,28 +365,34 @@ export async function savePage(
 
     // Save preview_url if provided
     if (pageData.previewUrl !== undefined) {
-      await supabase
+      const { error: previewError } = await supabase
         .from('pages')
         .update({ preview_url: pageData.previewUrl || null })
         .eq('id', pageId as string);
+      if (previewError) {
+        logger.error('Error saving preview URL', previewError, { context: 'pages' });
+      }
     }
 
     // Save chatbot context if provided
     if (chatbotContext !== undefined) {
-      await supabase.from('private_page_data').upsert(
+      const { error: ctxError } = await supabase.from('private_page_data').upsert(
         {
           page_id: pageId as string,
-          chatbot_context: (chatbotContext || null) as unknown as string,
+          chatbot_context: chatbotContext || null,
           updated_at: new Date().toISOString(),
         },
         { onConflict: 'page_id' }
       );
+      if (ctxError) {
+        logger.error('Error saving chatbot context', ctxError, { context: 'pages' });
+      }
     }
 
-    // Fetch and return the saved page
+    // Fetch and return the saved page with blocks
     const { data: page, error: fetchError } = await supabase
       .from('pages')
-      .select('*')
+      .select('*, blocks(*)')
       .eq('id', pageId as string)
       .single();
 
@@ -632,6 +638,25 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
  */
 export async function publishPage(userId: string): Promise<PublishPageResult> {
   try {
+    const { data: page } = await supabase
+      .from('pages')
+      .select('id')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (!page) return { slug: null, error: new Error('Page not found') };
+
+    const { data: blocks } = await supabase
+      .from('blocks')
+      .select('content')
+      .eq('page_id', page.id);
+
+    const parsedBlocks = (blocks || []).map(b => b.content as unknown as Block);
+    const validation = canPublishPage(parsedBlocks);
+    if (!validation.canPublish) {
+      return { slug: null, error: new Error(validation.reason) };
+    }
+
     const { data, error } = await supabase
       .from('pages')
       .update({ is_published: true })

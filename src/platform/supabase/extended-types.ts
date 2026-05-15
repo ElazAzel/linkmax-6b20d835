@@ -146,6 +146,8 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id: string;
             experiment_id: string;
             variant_key: string;
+            base_block_id: string;
+            variant_label: string;
             block_data: Json;
             traffic_weight: number | null;
             created_at: string;
@@ -154,6 +156,8 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             experiment_id: string;
             variant_key: string;
+            base_block_id?: string;
+            variant_label?: string;
             block_data: Json;
             traffic_weight?: number | null;
             created_at?: string;
@@ -162,6 +166,8 @@ export type AppDatabase = Omit<Database, 'public'> & {
             id?: string;
             experiment_id?: string;
             variant_key?: string;
+            base_block_id?: string;
+            variant_label?: string;
             block_data?: Json;
             traffic_weight?: number | null;
             created_at?: string;
@@ -330,7 +336,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             tags?: string[];
             telegram_user_id?: string | null;
             telegram_username?: string | null;
-            custom_fields?: any | null;
+            custom_fields?: Json | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -349,7 +355,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             tags?: string[];
             telegram_user_id?: string | null;
             telegram_username?: string | null;
-            custom_fields?: any | null;
+            custom_fields?: Json | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -526,7 +532,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             source: Database["public"]["Enums"]["lead_source"];
             automation_sent_count: number | null;
             last_automation_check: string | null;
-            metadata: any | null;
+            metadata: Json | null;
             created_at: string;
             updated_at: string;
           };
@@ -541,7 +547,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             source?: Database["public"]["Enums"]["lead_source"];
             automation_sent_count?: number | null;
             last_automation_check?: string | null;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -556,7 +562,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             source?: Database["public"]["Enums"]["lead_source"];
             automation_sent_count?: number | null;
             last_automation_check?: string | null;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -798,7 +804,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             description: string | null;
             related_entity_id: string | null;
             related_entity_type: string | null;
-            metadata: any | null;
+            metadata: Json | null;
             created_at: string;
           };
           Insert: {
@@ -813,7 +819,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             description?: string | null;
             related_entity_id?: string | null;
             related_entity_type?: string | null;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
           };
           Update: {
@@ -828,7 +834,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             description?: string | null;
             related_entity_id?: string | null;
             related_entity_type?: string | null;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
           };
           Relationships: [];
@@ -839,7 +845,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             user_id: string;
             amount: number;
             payment_method: string;
-            payment_details: any;
+            payment_details: Json;
             status: 'pending' | 'approved' | 'rejected' | 'completed';
             processed_at: string | null;
             created_at: string;
@@ -849,7 +855,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             user_id: string;
             amount: number;
             payment_method: string;
-            payment_details: any;
+            payment_details: Json;
             status?: 'pending' | 'approved' | 'rejected' | 'completed';
             processed_at?: string | null;
             created_at?: string;
@@ -859,7 +865,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             user_id?: string;
             amount?: number;
             payment_method?: string;
-            payment_details?: any;
+            payment_details?: Json;
             status?: 'pending' | 'approved' | 'rejected' | 'completed';
             processed_at?: string | null;
             created_at?: string;
@@ -977,7 +983,35 @@ export type AppDatabase = Omit<Database, 'public'> & {
           };
           Relationships: [];
         };
+        expert_queries: {
+          Row: {
+            id: string;
+            page_id: string;
+            query_text: string;
+            has_response: boolean;
+            metadata: Json | null;
+            created_at: string;
+          };
+          Insert: {
+            id?: string;
+            page_id: string;
+            query_text: string;
+            has_response?: boolean;
+            metadata?: Json | null;
+            created_at?: string;
+          };
+          Update: {
+            id?: string;
+            page_id?: string;
+            query_text?: string;
+            has_response?: boolean;
+            metadata?: Json | null;
+            created_at?: string;
+          };
+          Relationships: [];
+        };
       }
     >
   }
 };
+
