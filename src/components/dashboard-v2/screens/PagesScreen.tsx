@@ -333,6 +333,7 @@ export const PagesScreen = memo(function PagesScreen({
                         </div>
 
                         {/* Quick Actions */}
+                        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- pure event-stop wrapper; inner buttons handle interaction */}
                         <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                           <Button
                             variant="ghost"

@@ -68,6 +68,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
             const alt = getI18nText(image.alt, i18n.language as SupportedLanguage) || `Slide ${index + 1}`;
             return (
               <CarouselItem key={index} className="pl-0">
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when image.link present */}
                 <div
                   className="aspect-[16/9] overflow-hidden bg-black/20 cursor-pointer"
                   onClick={image.link ? () => handleImageClick(image.link) : undefined}
