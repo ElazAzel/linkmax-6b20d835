@@ -1,108 +1,69 @@
-## Цель
+# План выявления и устранения ошибок LinkMAX
 
-Сделать модуль «Бизнес-Зоны» полностью рабочим: устранить все ошибки 400 в network-логе, добавить недостающие таблицы, привести экраны в порядок, проверить безопасность (RLS) и edge-функции, обновить memory (Stop List сейчас официально замораживает зоны — но пользователь явно просит реактивировать).
+Цель: один сквозной проход по 4 слоям (статика, runtime, backend, E2E) с фиксами всего найденного и закреплением в CI/мониторинге, чтобы регрессии не возвращались.
 
-## Что сейчас сломано (подтверждено)
+## Этап 1. Статический анализ (день 1)
 
-В network-логах текущей сессии видны ошибки 400 от PostgREST:
+1. `npm run typecheck` — собрать все TS-ошибки в `tmp/typecheck.txt`, классифицировать (any, missing types, null-safety) и пофиксить по файлам.
+2. `npm run lint` — прогон ESLint + плагинов `i18n` и `jsx-a11y`. Чинить error-level, warnings заносить в baseline (`config/quality-baseline.json`) и снижать порог `anyMax`/`consoleLogMax`.
+3. `npm run analyze:cycles` (dependency-cruiser) — выявить циклы, нарушения слоёв Domain → UseCases → Repositories → UI; разорвать через интерфейсы.
+4. `scripts/check-locale-coverage.mjs` + `scripts/audit-english.mjs` — найти хардкод-строки и пропуски `ru/en/kk/uz`, добавить ключи.
+5. `scripts/quality-baseline-check.mjs` — зафиксировать новый baseline после фиксов.
 
-```text
-GET zone_deals?...&deleted_at=is.null  → 400  column zone_deals.deleted_at does not exist
-GET zone_tasks?...&deleted_at=is.null  → 400  column zone_tasks.deleted_at does not exist
-```
+## Этап 2. Runtime-ошибки в браузере (день 2)
 
-Дополнительный аудит хуков и БД выявил, что в коде используются **5 таблиц**, которых **нет в БД**, но коде они есть с приведением `as any`, поэтому ошибка вылезает только в рантайме:
+1. Активировать Sentry Session Replay (DSN уже подключён в `src/lib/utils/sentry.ts`) — поднять `replaysOnErrorSampleRate` до 0.3 на prod, посмотреть топ-5 issues за 7 дней.
+2. Прогон preview-вью ключевых маршрутов (`/`, `/dashboard`, `/editor/:id`, `/p/:slug`, `/crm`, `/zones`) с `code--read_console_logs` и `code--read_network_requests`; зафиксировать ошибки и 4xx/5xx запросы.
+3. Проверить `BlockErrorBoundary` и `ScreenErrorBoundary` — добавить отчётность в Sentry там, где её нет, и fallback-UI для пустых экранов.
+4. Прогнать `npm run test` (Vitest) — фиксы упавших unit-тестов.
 
-- `zone_task_checklist`
-- `zone_task_comments`
-- `zone_deal_products`
-- `zone_resources`
-- (events/bookings таблицы зон — экраны существуют, но используют общие `bookings`/`events` без `zone_id`)
+## Этап 3. Backend и Edge Functions (день 3)
 
-Из-за этого экраны Канбан, Задачи, Карточка сделки (товары/комментарии), Календарь ресурсов — пустые/падают.
+1. `supabase--linter` — устранить все security/perf warnings (особенно RLS, missing indexes).
+2. `supabase--analytics_query` по `postgres_logs` уровня ERROR/FATAL за 7 дней — выявить медленные/падающие запросы.
+3. `supabase--edge_function_logs` по критичным функциям: `lead-webhook`, `robokassa-webhook`, `telegram-bot`, `ai-generator`, `health-check`. Каждая ошибка → fix + Deno-тест.
+4. Прогон `supabase--test_edge_functions` — добавить тесты для функций без покрытия.
+5. Проверить `health-check` на проде через `supabase--curl_edge_functions` — должна возвращать 200.
 
-Стратегический контекст: в memory зафиксирован «Stop List» по Бизнес-Зонам (заморожены, скрыты из навигации, фокус на Service Sales Workflow). Пользователь явно просит снова сделать рабочим — обновим memory.
+## Этап 4. E2E-сценарии (день 4)
 
-## План работ (4 этапа)
+1. `npx playwright test` по существующим спекам (`e2e/auth-flow`, `page-creation`, `crm-workflow`, `fintech-flow`, `zone-upgrade`, `add-block-sheet`, `language-switch`).
+2. Падения → фиксы кода или обновление селекторов.
+3. Добавить smoke для непокрытых критичных флоу: публикация страницы, приём лида в Telegram, оплата Robokassa.
+4. Visual regression (`e2e/visual-regression.spec.ts`) — обновить baseline после UI-правок только если diff осознанный.
 
-### Этап 1. Миграция БД — фундамент
+## Этап 5. Закрепление в CI и мониторинге (день 5)
 
-Создаём одну миграцию со всеми schema-изменениями.
-
-1. **Soft-delete колонки** на основных таблицах:
-   - `zone_deals.deleted_at timestamptz null`
-   - `zone_tasks.deleted_at timestamptz null`
-   - `zone_invoices.deleted_at timestamptz null`
-   - `zone_documents.deleted_at timestamptz null`
-   - `zone_contacts.deleted_at timestamptz null`
-   - индексы `WHERE deleted_at IS NULL` для горячих выборок.
-
-2. **Новые таблицы** (с RLS через `is_zone_member`/`is_zone_admin`, аналогично существующим политикам):
-   - `zone_task_checklist (id, task_id, zone_id, title, is_done, order_index, created_at)`
-   - `zone_task_comments (id, task_id, zone_id, user_id, content, created_at, updated_at)`
-   - `zone_deal_products (id, deal_id, zone_id, product_id, quantity, unit_price, subtotal, created_at)`
-   - `zone_resources (id, zone_id, name, type, color, capacity, created_at)` — для календаря ресурсов.
-
-3. **RLS-политики** для каждой новой таблицы:
-   - SELECT: `is_zone_member(zone_id, auth.uid())`
-   - INSERT/UPDATE/DELETE: `is_zone_member` или `is_zone_admin` (по аналогии с существующими).
-
-4. **Триггеры** `updated_at` где нужно (`zone_task_comments`).
-
-### Этап 2. Синхронизация фронтенда с БД
-
-1. **Хуки** — убедиться, что после миграции существующий код в `useZoneDeals`, `useZoneTasks`, `useZoneResources`, `useZoneDealProducts` и т. д. работает. Удалить `as any` каст там, где после регенерации типов он больше не нужен.
-
-2. **Экраны зон** — пройти каждый и подтвердить рабочее состояние:
-   - `ZoneDashboard` — KPI, последние сделки/задачи
-   - `ZoneDealsScreen` — Канбан + bulk-операции + drag-and-drop стадий
-   - `ZoneTasksScreen` — список + чек-листы + комментарии
-   - `ZoneContactsScreen` — CRUD контактов
-   - `ZoneInboxScreen` — Telegram-conversations
-   - `ZoneInvoicesScreen` — Robokassa-инвойсы
-   - `ZoneDocumentsScreen` — шаблоны и сгенерированные документы
-   - `ZoneAutomationsScreen` — триггеры (run-zone-automations edge function)
-   - `ZoneAnalyticsScreen` — графики
-   - `ZoneSettingsScreen` — план, участники, инвайты, биллинг
-   - `ZoneEventsScreen`, `ZoneProductsScreen`, `ZoneBookingsCalendarScreen` — связь с zone_id.
-
-3. **Empty-states**: где данных нет — показать SmartEmptyState с CTA (по стандарту `mem://design/smart-empty-states-standard`), а не белый экран.
-
-4. **Skeleton**: проверить, что во время загрузки нет «прыжков», все экраны имеют единый header (по стандарту `mem://design/dashboard-header-slots`).
-
-### Этап 3. Возврат навигации + RLS-аудит
-
-1. **Навигация Business-Zone** в `DashboardSidebar` и `DashboardBottomNav` уже жёстко закрыта `canUseBusinessZone()` — оставляем как есть (только Business-tier видит). Но убедимся, что для Business-пользователя пункты доступны и все табы (`zone-dashboard`, `zone-deals`, …, `zone-settings`) ведут на рабочие экраны.
-
-2. **RLS-аудит**: запустим Supabase linter, прогоним RLS-проверки для всех `zone_*` таблиц, особенно для новых. Убедимся, что `is_zone_member` использует SECURITY DEFINER (предотвращение recursion).
-
-3. **Edge-функции** `run-zone-automations` и `send-zone-notification` — проверим, что они находят существующие данные и не падают на новых таблицах.
-
-### Этап 4. Memory & документация
-
-1. Обновить `mem://product-strategy/development-stop-list-updated` — снять флаг «заморожены» с Бизнес-Зон, отметить, что теперь это рабочий B2B-модуль для Business-tier (>1 пользователя в команде).
-2. Создать `mem://product/business-zones-active-2026` — короткое summary: что такое Бизнес-Зона, какие модули, какой тариф, какие RLS-предположения.
-3. Краткая запись в `docs/features/` — список модулей зоны и edge-функций.
+1. Установить `lefthook` (pre-commit: lint+typecheck изменённых файлов, pre-push: vitest).
+2. Расширить `.github/workflows/ci.yml`: добавить шаги `analyze:cycles`, `check-locale-coverage`, `quality-baseline-check`, e2e smoke. Блокировать merge при падении.
+3. Sentry: настроить алерты в Telegram-бот на new issue + error spike.
+4. Создать дашборд ошибок в `Admin → Growth` (расширить `get_growth_metrics` RPC полем error_rate из Sentry API или собственной таблицы `app_errors`).
+5. Документировать процесс в `docs/operations/RELIABILITY_REPEAT_BUG_PLAYBOOK.md` (обновить) и `docs/testing/TESTING.md`.
 
 ## Технические детали
 
-- **Миграция SQL** — одна транзакция; все ALTER + CREATE TABLE + CREATE POLICY + CREATE INDEX.
-- **Совместимость**: `deleted_at IS NULL` — все существующие строки автоматически попадут в выборку.
-- **Типы Supabase** (`src/integrations/supabase/types.ts`) перегенерируются автоматически после миграции — далее `as any` касты в хуках можно убрать постепенно.
-- **Тесты**: smoke-проверка вручную через preview (Канбан, добавление задачи, чек-лист, комментарий, инвойс, документ).
-- **Не трогаем**: `zone_events`, `zone_bookings_calendar`, `zone_messages`/`zone_conversations` — они уже существуют и работают через свои таблицы (`bookings`/`events` с `zone_id` или собственные `zone_messages`).
+- Baseline для регрессий: `config/quality-baseline.json` (anyMax, consoleLogMax) — снижаем после каждого этапа.
+- Sentry фильтры в `src/lib/utils/sentry.ts` уже отсекают шум расширений и AbortError — не трогаем.
+- Edge Functions используют ESM `npm:` импорты — соблюдаем стандарт из памяти `edge-functions-stability-standard`.
+- RLS-фиксы через `SECURITY DEFINER` RPC (память `rls-recursion-prevention-standard`), миграции через `supabase--migration`.
+- Не делаем manual chunks для React/Router в Vite (память `runtime-stability-and-hydration-standard`).
+- i18n: новые ключи добавляются во все 4 локали (`ru` базовый), русский — fallback.
 
-## Что получит пользователь
+## Артефакты
 
-- Канбан сделок открывается без ошибок 400, drag-and-drop работает.
-- Задачи: создание, чек-листы, комментарии, удаление — рабочее.
-- Карточка сделки: список товаров и комментарии не падают.
-- Инвойсы и документы получают «корзину» (soft-delete).
-- Контакты не теряются при удалении.
-- Все экраны имеют единый header и пустые состояния.
-- RLS чистая, проходит linter, изоляция между зонами гарантирована.
-- Memory обновлена — будущие сессии знают, что Бизнес-Зоны снова активны.
+- `docs/audits/ERROR_AUDIT_2026_05_16.md` — сводный отчёт с топ-ошибками по слоям, приоритетами и ссылками на фиксы.
+- `.jules/error-hunt.md` — журнал найденных и закрытых проблем.
+- Обновлённый `config/quality-baseline.json`.
+- Обновлённый CI workflow.
 
-## Ожидаемое время
+## Порядок исполнения
 
-Большой объём, ориентир: 1 миграция + ~10 файлов хуков/экранов + 2 memory-файла. Должно уложиться в одну итерацию default-mode.
+```text
+Day 1: Static  ──► фиксы TS/ESLint/cycles/i18n
+Day 2: Runtime ──► Sentry triage + console/network sweep + Vitest
+Day 3: Backend ──► linter + pg logs + edge logs + deno tests
+Day 4: E2E     ──► Playwright прогон + новые smoke
+Day 5: CI/Mon  ──► lefthook + CI gates + Sentry alerts + dashboard
+```
+
+После одобрения начну с Этапа 1 и буду отчитываться после каждого слоя.
