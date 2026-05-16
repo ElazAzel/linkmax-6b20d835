@@ -185,22 +185,22 @@ export const fintechService = {
 
             if (pendingError) {
                 if (pendingError.code === 'PGRST205' || pendingError.code === '42P01') {
+                    return {
+                        wallet,
+                        transactions: (transactions || []) as WalletTransaction[],
+                        pendingGMV: 0,
+                    };
+                }
+                throw pendingError;
+            }
+
+            const pendingGMV = (pendingData || []).reduce((acc: number, curr: { gross_amount: number | string }) => acc + Number(curr.gross_amount || 0), 0);
+
             return {
                 wallet,
                 transactions: (transactions || []) as WalletTransaction[],
-                pendingGMV: 0,
+                pendingGMV
             };
-        }
-        throw pendingError;
-    }
-
-    const pendingGMV = (pendingData || []).reduce((acc: number, curr: { gross_amount: number | string }) => acc + Number(curr.gross_amount || 0), 0);
-
-    return {
-        wallet,
-        transactions: (transactions || []) as WalletTransaction[],
-        pendingGMV
-    };
         } catch (err) {
             logger.error('Failed to get wallet overview', err);
             throw err;

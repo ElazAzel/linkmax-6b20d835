@@ -166,23 +166,34 @@ describe('pagesService', () => {
     });
     describe('publishPage', () => {
         it('should update is_published to true and return slug', async () => {
-            const mockPageData = { slug: 'test-slug' };
             const mockFrom = vi.mocked(supabase.from);
-            
+
+            // Step 1: fetch page id
             mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'page-1' }, error: null }),
+            } as any);
+            // Step 2: fetch blocks for canPublishPage check
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockResolvedValue({ data: [{ content: { type: 'profile' } }], error: null }),
+            } as any);
+            // Step 3: update and return slug
+            const updateChain = {
                 update: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 select: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: mockPageData, error: null })
-            } as any);
+                maybeSingle: vi.fn().mockResolvedValue({ data: { slug: 'test-slug' }, error: null }),
+            };
+            mockFrom.mockReturnValueOnce(updateChain as any);
 
             const result = await pagesService.publishPage('test-user-id');
 
             expect(result.error).toBeNull();
             expect(result.slug).toEqual('test-slug');
-            
-            const updateCall = vi.mocked(mockFrom).mock.results[0].value.update;
-            expect(updateCall).toHaveBeenCalledWith({ is_published: true });
+
+            expect(updateChain.update).toHaveBeenCalledWith({ is_published: true });
         });
     });
 
