@@ -110,7 +110,7 @@ export class ExpertEngine {
 
         case 'messenger':
           this.knowledge.push({
-            keywords: ['связаться', 'номер', 'телефон', 'написать', 'контакты', 'whatsapp', 'telegram'],
+            keywords: ['связаться', 'номер', 'телефон', 'написать', 'контакты', 'whatsapp', 'telegram', 'телеграм', 'телеграмм', 'ватсап', 'вотсап', 'байланыс'],
             answer: 'Вы можете написать мне напрямую, используя кнопки мессенджеров на этой странице.',
             category: 'contact'
           });
