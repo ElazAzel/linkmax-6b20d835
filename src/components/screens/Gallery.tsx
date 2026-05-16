@@ -316,7 +316,7 @@ export default function Gallery() {
             </div>
 
             {/* City filter pills */}
-            {cities.length > 0 && (
+            {(cities?.length ?? 0) > 0 && (
               <div className="px-4 pb-2 overflow-x-auto scrollbar-hide">
                 <div className="flex gap-1.5 min-w-max">
                   <button
@@ -330,7 +330,7 @@ export default function Gallery() {
                   >
                     📍 {t('gallery.allCities', 'Все города')}
                   </button>
-                  {cities.slice(0, 15).map((c) => (
+                  {(cities ?? []).slice(0, 15).map((c) => (
                     <button
                       key={c}
                       onClick={() => setSelectedCity(selectedCity === c ? null : c)}

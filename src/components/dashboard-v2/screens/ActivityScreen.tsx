@@ -557,6 +557,7 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
 
             {/* Quick actions for new leads */}
             {lead.status === 'new' && lead.phone ? (
+              // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- pure event-stop wrapper; inner buttons handle interaction
               <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={handleWhatsAppReply}

@@ -332,15 +332,16 @@ export const EditorScreen = memo(function EditorScreen({
     storage.set('editor_context_tips_disabled', next);
   }, [disabledTips]);
 
-  if (loading || !pageData) {
-    return <LoadingSkeleton />;
-  }
-
   // Trigger insert-sheet by clicking the hidden anchor placed inside the canvas.
+  // Must be declared before any early return to satisfy rules-of-hooks.
   const triggerAddBlock = useCallback(() => {
     const target = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
     target?.click();
   }, []);
+
+  if (loading || !pageData) {
+    return <LoadingSkeleton />;
+  }
 
   return (
     <div className="min-h-screen safe-area-top">

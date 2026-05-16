@@ -1,8 +1,12 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import TelegramApp from '../TelegramApp';
 import { supabase } from '@/platform/supabase/client';
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const renderApp = () => render(<QueryClientProvider client={queryClient}><TelegramApp /></QueryClientProvider>);
 
 // Mock Supabase
 vi.mock('@/platform/supabase/client', () => ({
@@ -24,6 +28,16 @@ vi.mock('@/platform/supabase/client', () => ({
       setSession: vi.fn(() => Promise.resolve({ data: { session: {} }, error: null })),
     },
   },
+}));
+
+// Mock auth/zone hooks that require provider context
+vi.mock('@/hooks/user/useAuth', () => ({
+  useAuth: () => ({ user: null, session: null, loading: false }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+vi.mock('@/hooks/zones/useZones', () => ({
+  useZones: () => ({ zones: [], currentZone: null, loading: false, switchZone: vi.fn() }),
 }));
 
 describe('TelegramApp', () => {

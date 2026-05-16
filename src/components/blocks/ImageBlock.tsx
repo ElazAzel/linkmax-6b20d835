@@ -53,6 +53,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
 
   return (
     <div className={cn("w-full flex flex-col", alignmentClass)}>
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when interactive */}
       <div
         className={cn(
           "relative group",
