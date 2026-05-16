@@ -351,7 +351,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
                 {/* Filter Sheet — secondary statuses */}
                 {filterSheetOpen && (
-                    {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- backdrop dismiss; Esc handled by sheet semantics */}
+                    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- backdrop dismiss; Esc handled by sheet semantics
                     <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={() => setFilterSheetOpen(false)}>
                         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- inner panel only stops propagation */}
                         <div className="bg-background w-full rounded-t-3xl p-5 space-y-3 shadow-2xl" onClick={(e) => e.stopPropagation()}>
