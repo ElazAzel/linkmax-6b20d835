@@ -26,6 +26,16 @@ vi.mock('@/platform/supabase/client', () => ({
   },
 }));
 
+// Mock auth/zone hooks that require provider context
+vi.mock('@/hooks/user/useAuth', () => ({
+  useAuth: () => ({ user: null, session: null, loading: false }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+vi.mock('@/hooks/zones/useZones', () => ({
+  useZones: () => ({ zones: [], currentZone: null, loading: false, switchZone: vi.fn() }),
+}));
+
 describe('TelegramApp', () => {
   beforeEach(() => {
     vi.clearAllMocks();
