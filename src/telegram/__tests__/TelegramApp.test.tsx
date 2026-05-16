@@ -1,8 +1,12 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import TelegramApp from '../TelegramApp';
 import { supabase } from '@/platform/supabase/client';
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const renderApp = () => render(<QueryClientProvider client={queryClient}><TelegramApp /></QueryClientProvider>);
 
 // Mock Supabase
 vi.mock('@/platform/supabase/client', () => ({
