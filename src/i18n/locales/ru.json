@@ -4920,6 +4920,10 @@
     },
     "pwa": {
       "install": "Установите приложение",
+      "installTitle": "Установить lnkmx.my",
+      "installDescription": "Добавьте приложение на главный экран для быстрого доступа и работы оффлайн",
+      "installButton": "Установить",
+      "later": "Позже",
       "updateAvailable": "Доступно обновление"
     },
     "quests": {

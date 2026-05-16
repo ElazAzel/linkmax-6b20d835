@@ -5,107 +5,32 @@ import { supabase } from '@/platform/supabase/client';
 import type { AppDatabase } from '@/platform/supabase/extended-types';
 import type { PremiumStatusResult, ApiResult } from '@/types/api';
 import {
-  getTierCommissionRate as getContractTierCommissionRate,
   normalizeAppPremiumTier,
   toDatabasePremiumTier,
   type AppPremiumTier,
   type DatabasePremiumTier,
 } from '@/domain/billing/tiers';
+import {
+  calculatePremiumStatus as domainCalculatePremiumStatus,
+  getUserLimits as domainGetUserLimits,
+  getTierCommissionRate as domainGetTierCommissionRate,
+  validateUsername as domainValidateUsername,
+  normalizeUsername as domainNormalizeUsername,
+  type PremiumStatus,
+  type FreemiumLimits,
+  type PremiumTier,
+  FREE_TIER_LIMITS,
+  STARTER_TIER_LIMITS,
+  PRO_TIER_LIMITS,
+  CRM_FREE_INBOUND_LIMIT,
+} from '@/domain/entities';
+import { normalizeError } from '@/domain/value-objects/Result';
 
-// ============= Domain Types & Constants =============
+// Re-export domain constants and types for backward compatibility
+export { FREE_TIER_LIMITS, STARTER_TIER_LIMITS, PRO_TIER_LIMITS, CRM_FREE_INBOUND_LIMIT };
+export type { PremiumStatus, FreemiumLimits, PremiumTier };
 
-export type PremiumTier = AppPremiumTier;
-
-export interface PremiumStatus {
-  isPremium: boolean;
-  inTrial: boolean;
-  trialEndsAt: string | null;
-  daysRemaining?: number;
-}
-
-export interface FreemiumLimits {
-  maxBlocks: number;
-  maxAIPageGenerationsPerMonth: number;
-  canUseAnalytics: boolean;
-  canUseCRM: boolean;
-  showWatermark: boolean;
-  maxLeadsPerMonth: number;
-  canUseScheduler: boolean;
-  canUsePixels: boolean;
-  canUseCustomDomain: boolean;
-  canUseChatbot: boolean;
-  canUseAutoNotifications: boolean;
-  canUsePayments: boolean;
-  canUseWhiteLabel: boolean;
-  canUseMultiPage: boolean;
-  canUseVerificationBadge: boolean;
-  canUsePremiumFrames: boolean;
-  canUseAdvancedThemes: boolean;
-}
-
-export const CRM_FREE_INBOUND_LIMIT = 50;
-
-export const IDENTITY_TIER_LIMITS: FreemiumLimits = {
-  maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 1,
-  canUseAnalytics: false,
-  canUseCRM: true,
-  showWatermark: true,
-  maxLeadsPerMonth: 50,
-  canUseScheduler: false,
-  canUsePixels: false,
-  canUseCustomDomain: false,
-  canUseChatbot: false,
-  canUseAutoNotifications: false,
-  canUsePayments: false,
-  canUseWhiteLabel: false,
-  canUseMultiPage: false,
-  canUseVerificationBadge: false,
-  canUsePremiumFrames: false,
-  canUseAdvancedThemes: false,
-};
-
-export const STARTER_TIER_LIMITS: FreemiumLimits = {
-  maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 5,
-  canUseAnalytics: true,
-  canUseCRM: true,
-  showWatermark: false,
-  maxLeadsPerMonth: Infinity,
-  canUseScheduler: true,
-  canUsePixels: true,
-  canUseCustomDomain: true,
-  canUseChatbot: true,
-  canUseAutoNotifications: true,
-  canUsePayments: true,
-  canUseWhiteLabel: false,
-  canUseMultiPage: true,
-  canUseVerificationBadge: true,
-  canUsePremiumFrames: true,
-  canUseAdvancedThemes: true,
-};
-
-export const PRO_TIER_LIMITS: FreemiumLimits = {
-  maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 10,
-  canUseAnalytics: true,
-  canUseCRM: true,
-  showWatermark: false,
-  maxLeadsPerMonth: Infinity,
-  canUseScheduler: true,
-  canUsePixels: true,
-  canUseCustomDomain: true,
-  canUseChatbot: true,
-  canUseAutoNotifications: true,
-  canUsePayments: true,
-  canUseWhiteLabel: true,
-  canUseMultiPage: true,
-  canUseVerificationBadge: true,
-  canUsePremiumFrames: true,
-  canUseAdvancedThemes: true,
-};
-
-// ============= Types =============
+// ============= DB Types (kept in service layer) =============
 export type UserProfile = AppDatabase['public']['Tables']['user_profiles']['Row'];
 
 export interface UpdateUsernameResult {
@@ -113,103 +38,43 @@ export interface UpdateUsernameResult {
   error?: string;
 }
 
-// ============= Validation =============
-
-const USERNAME_REGEX = /^[a-z0-9_-]+$/;
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 30;
-
 /**
- * Validate username format and length
+ * Validate username format and length (delegates to domain)
  */
 export function validateUsername(username: string): { valid: boolean; error?: string } {
-  if (!username || username.trim().length === 0) {
-    return { valid: false, error: 'Username is required' };
-  }
-
-  const trimmed = username.trim();
-
-  if (trimmed.length < USERNAME_MIN_LENGTH) {
-    return { valid: false, error: `Username must be at least ${USERNAME_MIN_LENGTH} characters` };
-  }
-
-  if (trimmed.length > USERNAME_MAX_LENGTH) {
-    return { valid: false, error: `Username must be less than ${USERNAME_MAX_LENGTH} characters` };
-  }
-
-  if (!USERNAME_REGEX.test(trimmed)) {
-    return {
-      valid: false,
-      error: 'Username can only contain lowercase letters, numbers, hyphens, and underscores',
-    };
-  }
-
-  return { valid: true };
+  return domainValidateUsername(username);
 }
 
 /**
- * Normalize username to lowercase
+ * Normalize username to lowercase (delegates to domain)
  */
 export function normalizeUsername(username: string): string {
-  return username.toLowerCase().trim();
+  return domainNormalizeUsername(username);
 }
 
 /**
- * Calculate premium status from profile data (pure function)
+ * Calculate premium status from DB profile data (adapts DB shape to domain)
  */
 export function calculatePremiumStatus(profile: { is_premium: boolean; trial_ends_at: string | null } | null): PremiumStatus {
-  if (!profile) {
-    return { isPremium: false, inTrial: false, trialEndsAt: null };
-  }
-
-  const now = new Date();
-  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
-  const inTrial = trialEndsAt ? trialEndsAt > now : false;
-  const isPremium = profile.is_premium || inTrial;
-
-  let daysRemaining: number | undefined;
-  if (trialEndsAt && inTrial) {
-    daysRemaining = Math.ceil((trialEndsAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  }
-
-  return {
-    isPremium,
-    inTrial,
+  if (!profile) return domainCalculatePremiumStatus(null);
+  return domainCalculatePremiumStatus({
+    isPremium: profile.is_premium,
     trialEndsAt: profile.trial_ends_at,
-    daysRemaining,
-  };
+  });
 }
 
 /**
- * Get user's limits based on tier
+ * Get user's limits based on tier (delegates to domain)
  */
 export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): FreemiumLimits {
-  if (status.tier === 'business') return PRO_TIER_LIMITS; // Business uses same feature limits as Pro but for teams
-  if (status.tier === 'pro' || status.isPremium) return PRO_TIER_LIMITS;
-  if (status.tier === 'starter') return STARTER_TIER_LIMITS;
-  return IDENTITY_TIER_LIMITS;
+  return domainGetUserLimits(status);
 }
 
 /**
- * Get commission rate based on tier (per ADR 0026)
- * Starter: 7%, Pro: 1%, Business: 0%
+ * Get commission rate based on tier (delegates to domain)
  */
 export function getTierCommissionRate(tier: PremiumTier): number {
-  return getContractTierCommissionRate(tier);
-}
-
-// ============= Helper Functions =============
-
-/**
- * Wrap error in standard Error object
- */
-function wrapError(error: unknown): Error {
-  if (error instanceof Error) return error;
-  if (typeof error === 'string') return new Error(error);
-  if (error && typeof error === 'object' && 'message' in error) {
-    return new Error(String((error as { message: unknown }).message));
-  }
-  return new Error('Unknown error');
+  return domainGetTierCommissionRate(tier);
 }
 
 // ============= API Functions =============
@@ -226,12 +91,12 @@ export async function loadUserProfile(userId: string): Promise<ApiResult<UserPro
       .maybeSingle();
 
     if (error && error.code !== 'PGRST116') {
-      return { data: null, error: wrapError(error) };
+      return { data: null, error: normalizeError(error) };
     }
 
     return { data, error: null };
   } catch (error) {
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 
@@ -364,12 +229,12 @@ export async function updateUserPremiumTier(
       .eq('id', userId);
 
     if (error) {
-      return { data: null, error: wrapError(error) };
+      return { data: null, error: normalizeError(error) };
     }
 
     return { data: true, error: null };
   } catch (error) {
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 
@@ -391,12 +256,12 @@ export async function updateEmailNotifications(
       .eq('id', userId);
 
     if (error) {
-      return { data: null, error: wrapError(error) };
+      return { data: null, error: normalizeError(error) };
     }
 
     return { data: enabled, error: null };
   } catch (error) {
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 
@@ -418,12 +283,12 @@ export async function updateTelegramNotifications(
       .eq('id', userId);
 
     if (error) {
-      return { data: null, error: wrapError(error) };
+      return { data: null, error: normalizeError(error) };
     }
 
     return { data: enabled, error: null };
   } catch (error) {
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 
@@ -441,12 +306,12 @@ export async function updateKaspiWidget(
       .eq('id', userId);
 
     if (error) {
-      return { data: null, error: wrapError(error) };
+      return { data: null, error: normalizeError(error) };
     }
 
     return { data: enabled, error: null };
   } catch (error) {
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Download from 'lucide-react/dist/esm/icons/download';
@@ -13,6 +14,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt() {
+  const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -95,17 +97,17 @@ export function PWAInstallPrompt() {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-sm mb-1">Установить lnkmx.my</h3>
+          <h3 className="font-semibold text-sm mb-1">{t('pwa.installTitle')}</h3>
           <p className="text-xs text-muted-foreground mb-3">
-            Добавьте приложение на главный экран для быстрого доступа и работы оффлайн
+            {t('pwa.installDescription')}
           </p>
 
           <div className="flex gap-2">
             <Button size="sm" onClick={handleInstall} className="flex-1">
-              Установить
+              {t('pwa.installButton')}
             </Button>
             <Button size="sm" variant="ghost" onClick={handleDismiss}>
-              Позже
+              {t('pwa.later')}
             </Button>
           </div>
         </div>

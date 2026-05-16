@@ -5,6 +5,7 @@ import { createDefaultPageData } from '@/lib/constants';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
+import { normalizeError } from '@/domain/value-objects/Result';
 
 // ============= Block & Page Value Objects =============
 
@@ -73,18 +74,6 @@ export interface PublishPageResult {
 }
 
 // ============= Helpers =============
-
-/**
- * Wrap error in standard Error object
- */
-function wrapError(error: unknown): Error {
-  if (error instanceof Error) return error;
-  if (typeof error === 'string') return new Error(error);
-  if (error && typeof error === 'object' && 'message' in error) {
-    return new Error(String((error as { message: unknown }).message));
-  }
-  return new Error('Unknown error');
-}
 
 /**
  * Map raw database experiment data to PageExperiment type
@@ -325,7 +314,7 @@ export async function savePage(
 
     if (upsertError) {
       logger.error('Error upserting page', upsertError, { context: 'pages', data: { userId, slug } });
-      return { data: null, error: wrapError(upsertError) };
+      return { data: null, error: normalizeError(upsertError) };
     }
 
     if (typeof pageData.isIndexable === 'boolean') {
@@ -337,7 +326,7 @@ export async function savePage(
 
       if (visibilityError) {
         logger.error('Error saving search visibility', visibilityError, { context: 'pages', data: { pageId, userId } });
-        return { data: null, error: wrapError(visibilityError) };
+        return { data: null, error: normalizeError(visibilityError) };
       }
     }
 
@@ -360,7 +349,7 @@ export async function savePage(
 
     if (blocksError) {
       logger.error('Error saving blocks', blocksError, { context: 'pages', data: { pageId } });
-      return { data: null, error: wrapError(blocksError) };
+      return { data: null, error: normalizeError(blocksError) };
     }
 
     // Save preview_url if provided
@@ -397,13 +386,13 @@ export async function savePage(
       .single();
 
     if (fetchError) {
-      return { data: null, error: wrapError(fetchError) };
+      return { data: null, error: normalizeError(fetchError) };
     }
 
     return { data: page as unknown as DbPage, error: null };
   } catch (error) {
     logger.error('Error saving page', error, { context: 'pages', data: { userId } });
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 
@@ -429,10 +418,10 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       .maybeSingle();
 
     if (pageError) {
-      return { data: null, error: wrapError(pageError) };
+      return { data: null, error: normalizeError(pageError) };
     }
 
-    if (pageError) return { data: null, error: wrapError(pageError) };
+    if (pageError) return { data: null, error: normalizeError(pageError) };
     if (!page) return { data: null, error: null };
 
     const pg = page as unknown as DbPage;
@@ -476,7 +465,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
 
     return { data: pageData, error: null };
   } catch (error) {
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 
@@ -501,7 +490,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       .eq('is_published', true)
       .maybeSingle();
 
-    if (pageError) return { data: null, error: wrapError(pageError) };
+    if (pageError) return { data: null, error: normalizeError(pageError) };
     if (!page) return { data: null, error: null };
 
     const pg = page as unknown as DbPage;
@@ -545,7 +534,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
 
     return { data: pageData, error: null };
   } catch (error) {
-    return { data: null, error: wrapError(error) };
+    return { data: null, error: normalizeError(error) };
   }
 }
 
@@ -568,7 +557,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
           error: null,
         };
       }
-      return { data: null, chatbotContext: null, error: wrapError(pageError) };
+      return { data: null, chatbotContext: null, error: normalizeError(pageError) };
     }
 
     if (!page) {
@@ -629,7 +618,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
 
     return { data: pageData, chatbotContext: chatbotContext || null, error: null };
   } catch (error) {
-    return { data: null, chatbotContext: null, error: wrapError(error) };
+    return { data: null, chatbotContext: null, error: normalizeError(error) };
   }
 }
 
@@ -664,12 +653,12 @@ export async function publishPage(userId: string): Promise<PublishPageResult> {
       .select('slug')
       .maybeSingle();
 
-    if (error) return { slug: null, error: wrapError(error) };
+    if (error) return { slug: null, error: normalizeError(error) };
     if (!data) return { slug: null, error: new Error('Page not found') };
 
     return { slug: data.slug, error: null };
   } catch (error) {
-    return { slug: null, error: wrapError(error) };
+    return { slug: null, error: normalizeError(error) };
   }
 }
 
@@ -683,10 +672,10 @@ export async function updatePageNiche(userId: string, niche: string): Promise<{ 
       .update({ niche })
       .eq('user_id', userId);
 
-    if (error) return { error: wrapError(error) };
+    if (error) return { error: normalizeError(error) };
     return { error: null };
   } catch (error) {
-    return { error: wrapError(error) };
+    return { error: normalizeError(error) };
   }
 }
 
@@ -714,10 +703,10 @@ export async function updatePageEntityFields(
       .update(fields)
       .eq('user_id', userId);
 
-    if (error) return { error: wrapError(error) };
+    if (error) return { error: normalizeError(error) };
     return { error: null };
   } catch (error) {
-    return { error: wrapError(error) };
+    return { error: normalizeError(error) };
   }
 }
 

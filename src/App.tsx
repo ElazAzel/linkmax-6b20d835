@@ -1,6 +1,3 @@
-// Polyfill requestIdleCallback for Safari
-const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
-
 import React, { Suspense, useEffect, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
@@ -93,7 +90,8 @@ class RouteErrorBoundary extends React.Component<
       ['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>
         window.removeEventListener(e, run)
       );
-      _ric(() => {
+      const ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
+      ric(() => {
         if (cancelled) return;
         // Clear old storage versions
         import('@/lib/storage').then(({ storage }) => {

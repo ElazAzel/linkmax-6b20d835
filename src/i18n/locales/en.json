@@ -4920,6 +4920,10 @@
     },
     "pwa": {
       "install": "Install the application",
+      "installTitle": "Install lnkmx.my",
+      "installDescription": "Add the app to your home screen for quick access and offline work",
+      "installButton": "Install",
+      "later": "Later",
       "updateAvailable": "Update available"
     },
     "quests": {

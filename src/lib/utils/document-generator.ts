@@ -3,7 +3,16 @@
  */
 import { ZoneContact, ZoneDeal, ZoneDocumentTemplate } from '@/types/zones';
 import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import type { Locale } from 'date-fns';
+import { ru, enUS, kk, de, es, fr, it, pt, uk, uz, be, tr, ja, ko, zhCN, ar } from 'date-fns/locale';
+
+const dateFnsLocales: Record<string, Locale> = {
+  ru, en: enUS, kk, de, es, fr, it, pt, uk, uz, be, tr, ja, ko, zh: zhCN, ar,
+};
+
+function getDateFnsLocale(locale?: string): Locale {
+  return locale && dateFnsLocales[locale] ? dateFnsLocales[locale] : ru;
+}
 
 // =============== Variable Definitions ===============
 
@@ -82,10 +91,11 @@ export function extractVariablesFromDeal(deal: ZoneDeal | null | undefined): Par
 export function buildDocumentVariables(
   contact?: ZoneContact | null,
   deal?: ZoneDeal | null,
-  documentNumber?: string | null
+  documentNumber?: string | null,
+  locale?: string
 ): DocumentVariables {
   const now = new Date();
-  const formattedDate = format(now, 'd MMMM yyyy', { locale: ru });
+  const formattedDate = format(now, 'd MMMM yyyy', { locale: getDateFnsLocale(locale) });
   
   return {
     ...extractVariablesFromContact(contact),

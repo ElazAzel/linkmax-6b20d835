@@ -62,19 +62,23 @@ export function clearSessionStorageCache(): void {
   session.clear(); // Ensure namespaced session storage is cleared too
 }
 
+interface AppSetting {
+  value: string;
+}
+
 /**
  * Fetch current cache version from the database
  */
 async function fetchRemoteCacheVersion(): Promise<string> {
   try {
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from('app_settings')
       .select('value')
       .eq('key', 'cache_version')
-      .single();
+      .single<AppSetting>();
 
     if (error || !data) return FALLBACK_CACHE_VERSION;
-    return (data as any).value;
+    return data.value;
   } catch {
     return FALLBACK_CACHE_VERSION;
   }
@@ -122,7 +126,7 @@ export async function bumpCacheVersion(): Promise<{ success: boolean; newVersion
   const currentVersion = await fetchRemoteCacheVersion();
   const newVersion = String(parseInt(currentVersion, 10) + 1);
 
-  const { error } = await (supabase as any)
+  const { error } = await supabase
     .from('app_settings')
     .update({ value: newVersion, updated_at: new Date().toISOString() })
     .eq('key', 'cache_version');
