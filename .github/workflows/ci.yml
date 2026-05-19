@@ -50,6 +50,14 @@ jobs:
       - name: Hardened Quality Gate
         run: npm run quality:check
 
+      # Audit 2026-05-16: block merges that introduce dependency cycles
+      # or break i18n key coverage across ru/en/kk/uz.
+      - name: Dependency Cycles
+        run: npm run analyze:cycles
+
+      - name: Locale Coverage
+        run: npm run i18n:check-coverage
+
   unit-tests:
     name: Unit Tests (with Coverage)
     runs-on: ubuntu-latest

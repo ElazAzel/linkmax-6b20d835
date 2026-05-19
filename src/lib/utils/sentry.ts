@@ -19,9 +19,10 @@ if (SENTRY_DSN) {
         // Performance Monitoring
         tracesSampleRate: isDev ? 1.0 : 0.2, // 20% of transactions in prod
 
-        // Session Replay (optional, only in production)
+        // Session Replay (only in production). Audit 2026-05-16: raised
+        // on-error sample rate to 0.3 to catch low-frequency runtime bugs.
         replaysSessionSampleRate: 0,
-        replaysOnErrorSampleRate: isDev ? 0 : 0.1, // 10% of errors get replays
+        replaysOnErrorSampleRate: isDev ? 0 : 0.3, // 30% of errors get replays
 
         // Don't send PII by default
         sendDefaultPii: false,
