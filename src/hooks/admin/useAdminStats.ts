@@ -26,83 +26,40 @@ export interface PlatformStats {
   totalShoutouts: number;
 }
 
+/**
+ * Perf 2026-05-19: collapsed 22 parallel `count: 'exact'` round-trips
+ * (which forced full table scans on `pages`, `analytics`, `blocks` and
+ * also pulled every page row to sum `view_count` client-side) into a
+ * single `get_admin_platform_stats` RPC. The RPC runs all aggregates
+ * server-side in one transaction and is admin-gated via `has_role`.
+ */
 async function fetchPlatformStats(): Promise<PlatformStats> {
-  const now = new Date().toISOString();
-  
-  // Batch all count queries together for efficiency
-  const [
-    { count: totalUsers },
-    { count: premiumUsers },
-    { count: activeTrials },
-    { count: usersWithStreak },
-    { count: totalPages },
-    { count: publishedPages },
-    { count: galleryPages },
-    { data: viewData },
-    { count: totalClicks },
-    { count: totalShares },
-    { count: totalBlocks },
-    { count: totalFriendships },
-    { count: acceptedFriendships },
-    { count: pendingFriendships },
-    { count: totalCollaborations },
-    { count: acceptedCollaborations },
-    { count: totalTeams },
-    { count: totalTeamMembers },
-    { count: totalLeads },
-    { count: totalReferrals },
-    { count: totalAchievements },
-    { count: totalShoutouts }
-  ] = await Promise.all([
-    supabase.from('user_profiles').select('*', { count: 'exact', head: true }),
-    supabase.from('user_profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true),
-    supabase.from('user_profiles').select('*', { count: 'exact', head: true }).gt('trial_ends_at', now),
-    supabase.from('user_profiles').select('*', { count: 'exact', head: true }).gt('current_streak', 0),
-    supabase.from('pages').select('*', { count: 'exact', head: true }),
-    supabase.from('pages').select('*', { count: 'exact', head: true }).eq('is_published', true),
-    supabase.from('pages').select('*', { count: 'exact', head: true }).eq('is_in_gallery', true),
-    supabase.from('pages').select('view_count'),
-    supabase.from('analytics').select('*', { count: 'exact', head: true }).eq('event_type', 'click'),
-    supabase.from('analytics').select('*', { count: 'exact', head: true }).eq('event_type', 'share'),
-    supabase.from('blocks').select('*', { count: 'exact', head: true }),
-    supabase.from('friendships').select('*', { count: 'exact', head: true }),
-    supabase.from('friendships').select('*', { count: 'exact', head: true }).eq('status', 'accepted'),
-    supabase.from('friendships').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
-    supabase.from('collaborations').select('*', { count: 'exact', head: true }),
-    supabase.from('collaborations').select('*', { count: 'exact', head: true }).eq('status', 'accepted'),
-    supabase.from('teams').select('*', { count: 'exact', head: true }),
-    supabase.from('team_members').select('*', { count: 'exact', head: true }),
-    supabase.from('leads').select('*', { count: 'exact', head: true }),
-    supabase.from('referrals').select('*', { count: 'exact', head: true }),
-    supabase.from('user_achievements').select('*', { count: 'exact', head: true }),
-    supabase.from('shoutouts').select('*', { count: 'exact', head: true })
-  ]);
-
-  const totalViews = viewData?.reduce((sum, p) => sum + (p.view_count || 0), 0) || 0;
-
+  const { data, error } = await supabase.rpc('get_admin_platform_stats');
+  if (error) throw error;
+  const s = (data ?? {}) as Partial<PlatformStats>;
   return {
-    totalUsers: totalUsers || 0,
-    totalPages: totalPages || 0,
-    publishedPages: publishedPages || 0,
-    totalViews,
-    totalClicks: totalClicks || 0,
-    totalShares: totalShares || 0,
-    premiumUsers: premiumUsers || 0,
-    activeTrials: activeTrials || 0,
-    totalBlocks: totalBlocks || 0,
-    totalFriendships: totalFriendships || 0,
-    acceptedFriendships: acceptedFriendships || 0,
-    pendingFriendships: pendingFriendships || 0,
-    totalCollaborations: totalCollaborations || 0,
-    acceptedCollaborations: acceptedCollaborations || 0,
-    totalTeams: totalTeams || 0,
-    totalTeamMembers: totalTeamMembers || 0,
-    totalLeads: totalLeads || 0,
-    galleryPages: galleryPages || 0,
-    totalReferrals: totalReferrals || 0,
-    totalAchievements: totalAchievements || 0,
-    usersWithStreak: usersWithStreak || 0,
-    totalShoutouts: totalShoutouts || 0
+    totalUsers: s.totalUsers ?? 0,
+    totalPages: s.totalPages ?? 0,
+    publishedPages: s.publishedPages ?? 0,
+    totalViews: s.totalViews ?? 0,
+    totalClicks: s.totalClicks ?? 0,
+    totalShares: s.totalShares ?? 0,
+    premiumUsers: s.premiumUsers ?? 0,
+    activeTrials: s.activeTrials ?? 0,
+    totalBlocks: s.totalBlocks ?? 0,
+    totalFriendships: s.totalFriendships ?? 0,
+    acceptedFriendships: s.acceptedFriendships ?? 0,
+    pendingFriendships: s.pendingFriendships ?? 0,
+    totalCollaborations: s.totalCollaborations ?? 0,
+    acceptedCollaborations: s.acceptedCollaborations ?? 0,
+    totalTeams: s.totalTeams ?? 0,
+    totalTeamMembers: s.totalTeamMembers ?? 0,
+    totalLeads: s.totalLeads ?? 0,
+    galleryPages: s.galleryPages ?? 0,
+    totalReferrals: s.totalReferrals ?? 0,
+    totalAchievements: s.totalAchievements ?? 0,
+    usersWithStreak: s.usersWithStreak ?? 0,
+    totalShoutouts: s.totalShoutouts ?? 0,
   };
 }
 
@@ -110,7 +67,9 @@ export function useAdminStats() {
   return useQuery({
     queryKey: ['admin-platform-stats'],
     queryFn: fetchPlatformStats,
-    staleTime: 60000, // 1 minute
+    staleTime: 5 * 60_000, // 5 minutes — admin overview rarely needs sub-minute freshness
+    gcTime: 10 * 60_000,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }
