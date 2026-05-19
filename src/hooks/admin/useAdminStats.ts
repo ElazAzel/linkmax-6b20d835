@@ -34,7 +34,8 @@ export interface PlatformStats {
  * server-side in one transaction and is admin-gated via `has_role`.
  */
 async function fetchPlatformStats(): Promise<PlatformStats> {
-  const { data, error } = await supabase.rpc('get_admin_platform_stats');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- types regenerate after migration deploys
+  const { data, error } = await (supabase.rpc as any)('get_admin_platform_stats');
   if (error) throw error;
   const s = (data ?? {}) as Partial<PlatformStats>;
   return {
