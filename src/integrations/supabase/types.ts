@@ -4187,6 +4187,7 @@ export type Database = {
       }
       generate_referral_code: { Args: { p_user_id: string }; Returns: string }
       generate_unique_slug: { Args: { base_slug: string }; Returns: string }
+      get_admin_platform_stats: { Args: never; Returns: Json }
       get_auth_user_email: { Args: never; Returns: string }
       get_event_registration_count: {
         Args: { p_event_id: string }
