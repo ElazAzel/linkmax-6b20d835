@@ -7,3 +7,12 @@ pre-commit:
       run: npm run typecheck
     i18n-check:
       run: npm run i18n:check
+
+pre-push:
+  parallel: false
+  commands:
+    # Audit 2026-05-16: ensure unit tests and dep-cycle analysis pass before push.
+    tests:
+      run: npm run test:ci
+    cycles:
+      run: npm run analyze:cycles
