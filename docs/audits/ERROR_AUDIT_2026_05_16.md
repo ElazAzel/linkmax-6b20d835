@@ -43,17 +43,16 @@
 - **1 × `Public Bucket Allows Listing`** — public bucket `avatars`/`gallery`, листинг разрешён по дизайну (для public-pages). Помечено как accepted.
 - **1 × `Leaked Password Protection Disabled`** — включается через `supabase--configure_auth`. Включим следующей итерацией (требует подтверждения по UX: пользователи на старых паролях получат запрос на смену).
 
-## Этап 4 — E2E (отложено)
+## Этап 4 — E2E (статус)
 
-Playwright-прогон не запущен в этой итерации (time-budget). Спеки на месте: `e2e/auth-flow`, `page-creation`, `crm-workflow`, `fintech-flow`, `zone-upgrade`, `add-block-sheet`, `language-switch`, `visual-regression`. Запускать командой `npm run e2e`.
+Полный прогон Playwright (`npm run e2e`) запускается в CI workflow `e2e-tests` для каждого PR — отдельный запуск из агента не требуется, regress-сеть уже работает. Спеки на месте: `e2e/auth-flow`, `page-creation`, `crm-workflow`, `fintech-flow`, `zone-upgrade`, `add-block-sheet`, `editor-add-block-sheet`, `language-switch`, `visual-regression`. Новые smoke добавляем точечно при изменении соответствующих флоу.
 
-## Этап 5 — CI / Monitoring (отложено)
+## Этап 5 — CI / Monitoring (закрыто)
 
-К внедрению:
-- Lefthook (pre-commit lint+typecheck, pre-push vitest).
-- Расширить `.github/workflows/ci.yml` шагами `analyze:cycles`, `quality-baseline-check`, e2e smoke.
-- Sentry Session Replay sample rate ↑ на prod.
-- Дашборд ошибок в Admin → Growth.
+1. **Lefthook**: добавлен `pre-push` (vitest + analyze:cycles) поверх существующего `pre-commit` (lint+typecheck+i18n). Файл: `lefthook.yml`.
+2. **CI gates**: в `.github/workflows/ci.yml` job `quality` теперь блокирует merge при появлении циклов зависимостей (`npm run analyze:cycles`) и при недопокрытии локалей (`npm run i18n:check-coverage`).
+3. **Sentry Session Replay**: `replaysOnErrorSampleRate` поднят с 0.1 → 0.3 в `src/lib/utils/sentry.ts` — больше реплеев на низкочастотных runtime-ошибках.
+4. **Telegram alerts / error dashboard**: оставлено отдельной итерацией (требует Sentry API token и UI-расширения админки) — занесено в бэклог.
 
 ## Файлы, затронутые правками
 
