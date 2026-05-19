@@ -1,5 +1,4 @@
 import { supabase } from '@/platform/supabase/client';
-import { subDays, startOfDay, eachDayOfInterval, format } from 'date-fns';
 
 export interface AdminDailyStats {
     date: string;
