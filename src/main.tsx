@@ -126,6 +126,8 @@ const NicheLanding = lazy(() => import("./pages/NicheLanding"));
 const FromPage = lazy(() => import("./pages/FromPage"));
 const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
 const Customers = lazy(() => import("./pages/Customers"));
+const BlogIndex = lazy(() => import("./pages/BlogIndex"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
