@@ -62,7 +62,7 @@ export default function BlogPost() {
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
       </Helmet>
 
-      {post.faq && post.faq.length > 0 && <FAQSchema items={post.faq} />}
+      {post.faq && post.faq.length > 0 && <FAQSchema faqItems={post.faq} />}
 
       <Link
         to="/blog"
