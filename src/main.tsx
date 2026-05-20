@@ -188,6 +188,17 @@ const router = createBrowserRouter([
       { path: "для-бьюти-мастеров", element: <NicheLanding landingKey="beauty-masters" /> },
       { path: "for-masters", element: <ForMasters /> },
       { path: "for/:landingSlug", element: <NicheLanding /> },
+      // SEO keyword landings (2026-05 sprint)
+      { path: "taplink-alternative", element: <NicheLanding landingKey="taplink-alternative" /> },
+      { path: "sayt-vizitka-dlya-uslug", element: <NicheLanding landingKey="sayt-vizitka" /> },
+      { path: "multilink", element: <NicheLanding landingKey="multilink" /> },
+      { path: "link-in-bio-ru", element: <NicheLanding landingKey="link-in-bio" /> },
+      { path: "vizitka-onlayn", element: <NicheLanding landingKey="vizitka-onlayn" /> },
+      // Programmatic niche pages /dlya/{niche}
+      { path: "dlya/:landingSlug", element: <NicheLanding /> },
+      // Blog
+      { path: "blog", element: <BlogIndex /> },
+      { path: "blog/:slug", element: <BlogPost /> },
       { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
