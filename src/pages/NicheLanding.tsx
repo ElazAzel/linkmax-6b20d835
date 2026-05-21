@@ -135,6 +135,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
       />
       <FAQSchema id={`faq-${landing.key}`} faqItems={landing.faq} />
       {serviceSchema && <StructuredData id={`service-${landing.key}`} data={serviceSchema} />}
+      {howToSchema && <StructuredData id={`howto-${landing.key}`} data={howToSchema} />}
+      {speakableSchema && <StructuredData id={`speakable-${landing.key}`} data={speakableSchema} />}
 
       <div className="min-h-screen bg-background text-foreground">
         <header className="absolute inset-x-0 top-0 z-20">
