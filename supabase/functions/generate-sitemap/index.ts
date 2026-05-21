@@ -42,12 +42,31 @@ const RESERVED_SLUGS = new Set([
   'p', 'crm', 'settings', 'editor', 'gallery', 'experts', 'pricing',
   'alternatives', 'terms', 'privacy', 'payment-terms', 'for-masters',
   'seo-landing', 'sitemap', 'robots', 'collab', 'from', 'invites',
+  'blog', 'dlya',
+  'taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink',
+  'link-in-bio-ru', 'vizitka-onlayn',
 ]);
 
 const NICHE_TAGS = [
   'beauty', 'fitness', 'health', 'education', 'consulting',
   'coaching', 'design', 'marketing', 'music', 'photo', 'tech',
   'food', 'travel', 'fashion', 'art', 'realty', 'services', 'events', 'business', 'other'
+];
+
+// Blog posts (keep in sync with src/lib/blog-posts.ts)
+const BLOG_SLUGS = [
+  'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
+  'kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane',
+  'telegram-vizitka-dlya-koucha-poshagovo',
+];
+
+// Programmatic niche landings (/dlya/{niche})
+const NICHE_LANDINGS = ['photographer', 'coach', 'master', 'psychologist', 'fitness', 'designer'];
+
+// Keyword landings
+const KEYWORD_LANDINGS = [
+  'taplink-alternative', 'sayt-vizitka-dlya-uslug',
+  'multilink', 'link-in-bio-ru', 'vizitka-onlayn',
 ];
 
 // Static pages for sitemap
@@ -62,6 +81,10 @@ const STATIC_PAGES = [
   { loc: '/terms', changefreq: 'yearly', priority: '0.3' },
   { loc: '/privacy', changefreq: 'yearly', priority: '0.3' },
   { loc: '/payment-terms', changefreq: 'yearly', priority: '0.3' },
+  { loc: '/blog', changefreq: 'weekly', priority: '0.8' },
+  ...KEYWORD_LANDINGS.map((slug) => ({ loc: `/${slug}`, changefreq: 'monthly', priority: '0.85' })),
+  ...NICHE_LANDINGS.map((slug) => ({ loc: `/dlya/${slug}`, changefreq: 'monthly', priority: '0.75' })),
+  ...BLOG_SLUGS.map((slug) => ({ loc: `/blog/${slug}`, changefreq: 'monthly', priority: '0.7' })),
 ];
 
 // Types

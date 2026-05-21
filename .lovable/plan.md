@@ -166,3 +166,17 @@ W6: GSC sync + Admin SEO Health + алерты
 | Conversion с органики → signup | — | 3–5% |
 
 После одобрения начну с Этапа 1 (SEO-фундамент + sync документации) и буду отчитываться после каждой недели.
+
+---
+
+## Прогресс — W1 завершён
+
+- ✅ Добавлены 5 keyword-лендингов + 6 `/dlya/{niche}` (niche-landing-data.ts)
+- ✅ Создан блог: `BlogIndex`, `BlogPost`, `blog-posts.ts` (3 статьи с FAQPage/BreadcrumbList JSON-LD)
+- ✅ Маршруты в `src/main.tsx` с lazy-load
+- ✅ `public/sitemap.xml` — +15 URL
+- ✅ `supabase/functions/generate-sitemap/index.ts` — STATIC_PAGES расширен (динамическая генерация blog/landings/niches)
+- ✅ `cloudflare-worker/prerender-worker.js` — разделение PRIVATE vs PUBLIC_SPA: новые лендинги индексируются (без noindex), проходят SPA-маршрутом
+- ✅ Исправлен баг slug с кириллицей в `telegram-vizitka-dlya-koucha-poshagovo`
+
+**Следующий шаг (W2):** Контент-наполнение 5 лендингов + AEO Answer Blocks + sync `PITCH_DECK.md` и `docs/product/4_INVESTMENT_MEMO.md` с актуальной моделью (Starter/Pro, 7%/1%).
