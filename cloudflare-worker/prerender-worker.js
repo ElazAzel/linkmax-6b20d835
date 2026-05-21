@@ -23,6 +23,14 @@ const BLACKLIST_PREFIXES = [
   'collab',
   'from',
   'p',  // compressed preview
+  // SPA-rendered SEO landings (React + react-helmet-async handles meta)
+  'blog',
+  'dlya',
+  'taplink-alternative',
+  'sayt-vizitka-dlya-uslug',
+  'multilink',
+  'link-in-bio-ru',
+  'vizitka-onlayn',
 ];
 
 // Known SPA-only routes that should NOT be SSR'd
