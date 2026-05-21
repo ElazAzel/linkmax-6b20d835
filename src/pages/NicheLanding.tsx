@@ -218,6 +218,23 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
             </div>
           </section>
 
+          <section className="mx-auto max-w-4xl px-4 pt-12">
+            <Card data-aeo-answer className="rounded-2xl border-primary/20 bg-primary/5 p-6">
+              <p className="text-xs font-bold uppercase tracking-wide text-primary">Кратко</p>
+              <p className="mt-2 text-base font-semibold leading-7 text-foreground sm:text-lg">
+                {landing.seoDescription}
+              </p>
+              <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
+                {landing.outcomes.map((item) => (
+                  <li key={item.title} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                    <span>{item.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          </section>
+
           <section className="mx-auto max-w-6xl px-4 py-14">
             <div className="max-w-2xl">
               <p className="text-sm font-bold uppercase text-primary">Что получает специалист</p>
