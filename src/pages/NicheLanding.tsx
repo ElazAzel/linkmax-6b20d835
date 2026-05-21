@@ -77,6 +77,37 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     };
   }, [landing, pageUrl]);
 
+  const howToSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: `Как запустить ${landing.schemaServiceName}`,
+      description: landing.seoDescription,
+      totalTime: 'PT2M',
+      step: landing.workflow.map((item, index) => ({
+        '@type': 'HowToStep',
+        position: index + 1,
+        name: item.title,
+        text: item.description,
+        url: `${pageUrl}#step-${index + 1}`,
+      })),
+    };
+  }, [landing, pageUrl]);
+
+  const speakableSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      url: pageUrl,
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['[data-aeo-answer]', 'h1', '[data-aeo-summary]'],
+      },
+    };
+  }, [landing, pageUrl]);
+
   if (!landing) {
     return <Navigate to="/" replace />;
   }
