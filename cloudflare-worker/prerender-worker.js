@@ -105,7 +105,7 @@ function getSSRTarget(pathname) {
   const first = segments[0].toLowerCase();
 
   // Blacklisted → no SSR
-  if (isBlacklisted(first)) return null;
+  if (isSpaPassthrough(first)) return null;
 
   // Marketing pages
   if (segments.length === 1 && SSR_MARKETING_PAGES.has(first)) {
