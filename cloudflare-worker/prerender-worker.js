@@ -241,7 +241,7 @@ async function handleRequest(request, env) {
     const response = await fetch(request);
     // Add noindex for blacklisted routes
     const clean = pathname.replace(/^\/+/, '').split('/')[0];
-    if (isBlacklisted(clean) && isBot(userAgent)) {
+    if (isPrivate(clean) && isBot(userAgent)) {
       const headers = new Headers(response.headers);
       headers.set('X-Robots-Tag', 'noindex, nofollow');
       return new Response(response.body, { status: response.status, headers });
