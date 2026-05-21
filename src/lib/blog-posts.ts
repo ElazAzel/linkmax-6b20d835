@@ -125,7 +125,7 @@ export const BLOG_POSTS: BlogPost[] = [
     cta: { label: 'Принимать оплаты через страницу', href: '/auth?ref=blog-kz-payments' },
   },
   {
-    slug: 'telegram-vizitka-dlya-kouча-poshagovo',
+    slug: 'telegram-vizitka-dlya-koucha-poshagovo',
     title: 'Telegram-визитка для коуча: пошаговая инструкция',
     description:
       'Как собрать профессиональную визитку коуча в Telegram: бот, мини-апп, ссылка lnkmx.my, прайс, отзывы и приём заявок на бесплатную сессию.',
