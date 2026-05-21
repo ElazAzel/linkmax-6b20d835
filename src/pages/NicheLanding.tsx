@@ -169,7 +169,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                 <h1 className="max-w-4xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
                   {landing.title}
                 </h1>
-                <p className="mt-5 max-w-2xl text-base leading-7 text-white/82 sm:text-lg">
+                <p data-aeo-summary className="mt-5 max-w-2xl text-base leading-7 text-white/82 sm:text-lg">
                   {landing.description}
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
