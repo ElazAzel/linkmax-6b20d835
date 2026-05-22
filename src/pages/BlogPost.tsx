@@ -70,6 +70,7 @@ export default function BlogPost() {
         <meta property="article:published_time" content={post.publishedAt} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(speakableLd)}</script>
       </Helmet>
 
       {post.faq && post.faq.length > 0 && <FAQSchema faqItems={post.faq} />}
