@@ -64,7 +64,7 @@
 
 ## 6. Financial Ask & Use of Funds
 
-**Sseeking**: **$250,000 (Pre-Seed/Seed)** via SAFE/Convertible Note.
+**Seeking**: **$250,000 (Pre-Seed/Seed)** via SAFE/Convertible Note.
 
 **Allocation**:
 *   **40% Product & Engineering**:
