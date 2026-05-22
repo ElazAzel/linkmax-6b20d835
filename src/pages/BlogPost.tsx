@@ -103,6 +103,7 @@ export default function BlogPost() {
 
         {/* Answer Block for AEO / featured snippets */}
         <aside
+          data-aeo-answer
           className="rounded-lg bg-muted/50 p-4 text-sm leading-relaxed"
           aria-label="Краткий ответ"
         >
