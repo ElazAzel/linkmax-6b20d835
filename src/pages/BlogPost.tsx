@@ -47,6 +47,16 @@ export default function BlogPost() {
     ],
   };
 
+  const speakableLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    url,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['[data-aeo-answer]', 'h1', 'h2'],
+    },
+  };
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Helmet>
