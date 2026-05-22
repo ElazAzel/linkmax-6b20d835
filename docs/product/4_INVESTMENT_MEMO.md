@@ -26,15 +26,15 @@
 ### Serviceable Obtainable Market (SOM)
 **Central Asia (KZ/UZ) + Niche Verticals**:
 *   Target: 100,000 Paid Users within 24 months.
-*   Revenue Potential: ~$7M ARR.
+*   Revenue Potential: ~$15M ARR (subscription + transaction take rate).
 
 ---
 
 ## 3. The Problem & Solution
 
-*   **Problem**: Solopreneurs currently stitch together 3-5 tools (Wix, Calendly, Google Forms) costing $50+/mo. It's expensive, complex, and desktop-first.
-*   **Solution**: **lnkmx** consolidates this into one $7/mo subscription. Setup takes 15 minutes on a phone.
-*   **Moat**: Unlike Linktree, we own the **Data Layer** (CRM/Bookings), creating high switching costs.
+*   **Problem**: Solopreneurs currently stitch together 3-5 tools (Wix, Calendly, Google Forms, Stripe Payment Links) costing $50+/mo. It's expensive, complex, and desktop-first.
+*   **Solution**: **lnkmx** consolidates this into one tier — **Starter (Free, 7% commission)** or **Pro ($13 / 6 000 ₸ per month, 1% commission)**. Setup takes 15 minutes on a phone.
+*   **Moat**: Unlike Linktree, we own the **Data Layer** (CRM/Bookings/Payments), creating high switching costs. Pricing is aligned with customer growth — we win when they win.
 
 ---
 
@@ -42,16 +42,19 @@
 *   **Product**: Live in Production (Web + PWA + Capacitor iOS/Android).
 *   **i18n**: 16 languages (RU, EN, KK primary; DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR lazy-loaded).
 *   **Users**: Beta phase active.
-*   **CAC**: Organic (Zero paid spend). Driven by viral watermark.
-*   **Retention**: Initial feedback shows high stickiness due to CRM and Business Zone (Kanban, Tasks).
+*   **CAC**: Organic (Zero paid spend). Driven by viral watermark on Starter pages.
+*   **Retention**: Initial feedback shows high stickiness due to CRM, Business Zone (Kanban, Tasks) and payment workflow lock-in.
+*   **Instrumentation**: Live admin dashboard at `/admin/growth` tracks GMV, MRR, MAU/DAU, Free→Paid conversion.
 
 ---
 
 ## 5. Unit Economics (Projected)
 
-*   **ARPU (Average Revenue Per User)**: $7/mo (Pro Plan).
-*   **LTV (Lifetime Value)**: $168 (Assume 24 mo retention).
-    *   *Why high retention?* Moving a CRM/Client database is hard.
+*   **Pro ARPU**: ~$13/mo subscription + 1% of GMV processed.
+*   **Starter ARPU**: 7% of GMV processed (no subscription).
+*   **Blended ARPU**: $9–11/mo at scale (mix of Pro subscription + Starter transactional).
+*   **LTV (Lifetime Value)**: ~$220 (24 mo retention, blended).
+    *   *Why high retention?* Moving CRM + client database + payment pipeline is hard.
 *   **CAC (Customer Acquisition Cost)**: <$15 (Blended).
     *   Viral/Organic: $0.
     *   Paid: $30.
