@@ -47,6 +47,16 @@ export default function BlogPost() {
     ],
   };
 
+  const speakableLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    url,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['[data-aeo-answer]', 'h1', 'h2'],
+    },
+  };
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Helmet>
@@ -60,6 +70,7 @@ export default function BlogPost() {
         <meta property="article:published_time" content={post.publishedAt} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(speakableLd)}</script>
       </Helmet>
 
       {post.faq && post.faq.length > 0 && <FAQSchema faqItems={post.faq} />}
@@ -92,6 +103,7 @@ export default function BlogPost() {
 
         {/* Answer Block for AEO / featured snippets */}
         <aside
+          data-aeo-answer
           className="rounded-lg bg-muted/50 p-4 text-sm leading-relaxed"
           aria-label="Краткий ответ"
         >

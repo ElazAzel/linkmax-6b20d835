@@ -58,6 +58,8 @@ const BLOG_SLUGS = [
   'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
   'kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane',
   'telegram-vizitka-dlya-koucha-poshagovo',
+  'taplink-vs-linkmax-sravnenie-2026',
+  'sayt-vizitka-dlya-fotografa-chto-vklyuchit',
 ];
 
 // Programmatic niche landings (/dlya/{niche})
