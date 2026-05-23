@@ -1450,6 +1450,7 @@ export type Database = {
           id: string
           index_exclusion_reasons: string[] | null
           integrations: Json | null
+          is_home: boolean
           is_in_gallery: boolean | null
           is_indexable: boolean | null
           is_paid: boolean | null
@@ -1459,6 +1460,7 @@ export type Database = {
           last_snapshot_at: string | null
           niche: string | null
           organization_id: string | null
+          page_path: string | null
           page_type: string | null
           preview_url: string | null
           profession: string | null
@@ -1466,6 +1468,7 @@ export type Database = {
           quality_score: number | null
           seo_meta: Json | null
           service_slugs: Json | null
+          site_id: string | null
           slug: string
           theme_settings: Json | null
           title: string | null
@@ -1494,6 +1497,7 @@ export type Database = {
           id?: string
           index_exclusion_reasons?: string[] | null
           integrations?: Json | null
+          is_home?: boolean
           is_in_gallery?: boolean | null
           is_indexable?: boolean | null
           is_paid?: boolean | null
@@ -1503,6 +1507,7 @@ export type Database = {
           last_snapshot_at?: string | null
           niche?: string | null
           organization_id?: string | null
+          page_path?: string | null
           page_type?: string | null
           preview_url?: string | null
           profession?: string | null
@@ -1510,6 +1515,7 @@ export type Database = {
           quality_score?: number | null
           seo_meta?: Json | null
           service_slugs?: Json | null
+          site_id?: string | null
           slug: string
           theme_settings?: Json | null
           title?: string | null
@@ -1538,6 +1544,7 @@ export type Database = {
           id?: string
           index_exclusion_reasons?: string[] | null
           integrations?: Json | null
+          is_home?: boolean
           is_in_gallery?: boolean | null
           is_indexable?: boolean | null
           is_paid?: boolean | null
@@ -1547,6 +1554,7 @@ export type Database = {
           last_snapshot_at?: string | null
           niche?: string | null
           organization_id?: string | null
+          page_path?: string | null
           page_type?: string | null
           preview_url?: string | null
           profession?: string | null
@@ -1554,6 +1562,7 @@ export type Database = {
           quality_score?: number | null
           seo_meta?: Json | null
           service_slugs?: Json | null
+          site_id?: string | null
           slug?: string
           theme_settings?: Json | null
           title?: string | null
@@ -1561,7 +1570,15 @@ export type Database = {
           user_id?: string
           view_count?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pages_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       partners: {
         Row: {
@@ -1807,6 +1824,57 @@ export type Database = {
           to_user_id?: string
         }
         Relationships: []
+      }
+      sites: {
+        Row: {
+          created_at: string
+          footer_blocks: Json
+          header_blocks: Json
+          id: string
+          name: string
+          primary_page_id: string | null
+          settings: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          footer_blocks?: Json
+          header_blocks?: Json
+          id?: string
+          name?: string
+          primary_page_id?: string | null
+          settings?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          footer_blocks?: Json
+          header_blocks?: Json
+          id?: string
+          name?: string
+          primary_page_id?: string | null
+          settings?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sites_primary_page_id_fkey"
+            columns: ["primary_page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sites_primary_page_id_fkey"
+            columns: ["primary_page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       team_members: {
         Row: {

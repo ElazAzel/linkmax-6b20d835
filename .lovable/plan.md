@@ -1,182 +1,96 @@
-## План повышения актуальности LinkMAX (SEO + Продукт + Маркетинг)
+# План: LinkMAX → Полноценный конструктор сайтов (Tilda-like)
 
-Цель: за 6 недель закрыть критический разрыв с Taplink/Linktree в RU/KZ/CIS, поднять органический трафик с 0 до 3–5 K/мес, привести позиционирование и техдокументацию в соответствие с текущей моделью (Starter/Pro, 7%/1% fee, Editor-first, Messenger-centric).
-
----
-
-### Этап 1. SEO-фундамент (Неделя 1)
-
-**1.1 Активация публичных страниц `/{username}` в индексе**
-- Проверить, что `cloudflare-worker/prerender-worker.js` отдаёт SSR-HTML ботам для всех опубликованных страниц.
-- Добавить в `supabase/functions/generate-sitemap` динамический блок для всех `pages` где `is_published=true`, с `<lastmod>` из `updated_at` и `<changefreq>weekly</changefreq>`.
-- Прописать `<link rel="canonical">` на `https://lnkmx.my/{slug}` в SSR-выдаче (а не на preview-домен).
-- Проверить IndexNow ping (Yandex/Bing) при `publish_page` — должен срабатывать в edge function.
-
-**1.2 Активация существующих `/alternatives/{competitor}`**
-- Найти страницы alternatives в `src/pages/` (упомянуты в `docs/seo/INDEXING.md`).
-- Добавить их в `public/sitemap.xml` и в динамический sitemap.
-- Прописать JSON-LD `SoftwareApplication` + сравнительную таблицу (LinkMAX vs Taplink/Linktree/Mssg.me).
-- Hreflang ru/en/kk/uz.
-
-**1.3 Аудит документов**
-- Обновить `docs/AUDIT_REPORT_2026_03_10.md`, `ZENITH_FINAL_AUDIT_*` и `docs/product/2_BUSINESS_FINANCIAL_MODEL.md` под актуальную модель: Starter/Pro (без Business в публичном прайсе), комиссии 7%/1%, Business Zones как B2B-надстройка.
-- Синхронизировать `PITCH_DECK.md` и `docs/product/4_INVESTMENT_MEMO.md`.
+Цель: быстро и экономно эволюционировать LinkMAX из линк-ин-био в мульти-страничный сайт-конструктор, переиспользуя ~80% существующего кода (28+ блоков, редактор, SSR/SEO, CRM, платежи). Никаких переписываний — наращиваем слои.
 
 ---
 
-### Этап 2. SEO-контент под низкоконкурентные запросы (Недели 2–3)
+## Текущая позиция (что уже есть)
 
-**2.1 Лендинги с KD 9–19**
-Создать в `src/pages/landings/`:
-- `/taplink-alternative` (KD ~25, intent: switch)
-- `/sayt-vizitka-dlya-uslug` (KD 19, 2400/мес)
-- `/multilink` (KD 9, 110/мес — лёгкая победа)
-- `/link-in-bio-ru` (KD ~15)
-- `/vizitka-onlayn` (KD ~20)
+- 28+ блоков, drag-n-drop редактор, темы, кастомный фон
+- Multi-page (есть `PageSwitcher`, базовый роутинг по slug)
+- SSR/AEO/SEO, sitemap, JSON-LD, Speakable
+- CRM/сделки/инвойсы, платежи Robokassa/Kaspi
+- Кастомные домены (`lnkmx.my` через Cloudflare)
+- Editor v2: tihiy canvas + SmartActionDock + FloatingBlockToolbar
 
-Структура каждого лендинга:
-- H1 с точным keyword
-- Hero + 3 USP + сравнительная таблица + 6–10 FAQ (FAQPage schema)
-- CTA «Создать бесплатно» → `/auth?ref=lp-{slug}`
-- Внутренние ссылки на `/gallery`, `/pricing`, `/experts`
-
-**2.2 SEO-блог `/blog/`**
-10 статей под информационные запросы (KD<30):
-- «Как сделать сайт-визитку для мастера маникюра»
-- «Как принимать оплату через WhatsApp в Казахстане»
-- «Telegram-визитка для коуча: пошагово»
-- «Multilink vs обычный сайт: что выбрать в 2026»
-- «Как оформить ИП самозанятому и принимать платежи»
-- + 5 нишевых под услуги (репетитор, мастер, фотограф, психолог, фитнес)
-
-Каждая статья: 1500–2500 слов, Article schema, breadcrumbs, related posts.
-
-**2.3 SEO-страницы по нишам (программная генерация)**
-- `/dlya/{niche}` — 20 страниц (мастер, коуч, репетитор, ...) с шаблоном «Сайт-визитка для {niche}».
-- Использовать данные из `expert-engine.ts` (теги ниш).
+Чего не хватает для "Тильды":
+1. Полноценные секции (Hero, Features, Pricing, Footer) — не как одиночные блоки, а как **готовые модули с настройками**
+2. Многостраничность с навигацией (Header/Menu блок, связывание страниц)
+3. Zero-block (свободное позиционирование) или хотя бы 12-колоночная сетка
+4. Библиотека шаблонов целых сайтов (а не одной страницы)
+5. Формы с интеграциями (lead → CRM/Email/Webhook) — частично есть
+6. Кастомный код (HTML/CSS/JS embed) — критично для Tilda-аудитории
 
 ---
 
-### Этап 3. AEO / GEO (Неделя 3, параллельно)
+## Стратегия: 4 спринта × 1-2 недели
 
-- Расширить `docs/seo/aeo-geo-implementation.md`: Answer Block (короткий ответ в начале каждой статьи), Speakable schema, LocalBusiness для публичных страниц с городом.
-- В `src/lib/seo/` добавить генератор HowTo schema для статей-инструкций.
-- AI-traffic detection (ChatGPT/Perplexity/Claude/Gemini) — отслеживать в `analytics` отдельным `source=ai`.
+### Sprint 1 (1 неделя): **Multi-Page Foundation**
+Превращаем "одна страница на юзера" в "сайт = коллекция страниц".
 
----
+- **Header/Navigation блок** (новый, 1 шт): меню по страницам сайта, логотип, sticky, mobile-burger
+- **Footer блок** (новый): копирайт, соцсети, мини-меню
+- **Page Manager UI**: список страниц сайта в Dashboard, создание/удаление/переименование, выбор "главной"
+- **Site-level settings**: общий header/footer, расшариваются между страницами (через `site_settings` jsonb)
+- **Роутинг**: `/{username}` = главная, `/{username}/{page-slug}` = вложенные
 
-### Этап 4. Продуктовые «допинги» (Недели 3–4)
+Технически: добавить таблицу `sites` (1 user → 1 site → N pages), миграция текущих `pages` в эту модель с обратной совместимостью.
 
-Из `.gemini/antigravity/.../implementation_plan.md` — приоритет A+C:
-- `@capacitor/haptics` + `@capacitor/keyboard` для нативного ощущения в мобильном app.
-- `nuqs` для фильтров CRM/Leads (shareable URL).
-- React Query persist (offline-first для дашборда).
-- PostHog session replay (нужны secrets — спросить пользователя).
+### Sprint 2 (1-2 недели): **Section Library + Templates**
+Tilda сильна готовыми секциями. У нас 28 блоков — превращаем их в "секции".
 
----
+- **Section presets**: 40-50 готовых композиций (Hero-01..10, Features-01..08, Pricing-01..05, About, Team, Contacts, CTA, Testimonials, Gallery, FAQ) — все на базе существующих блоков
+- **Section Picker UI**: визуальная галерея с превью при вставке (заменит/дополнит текущий AddBlockSheet)
+- **Site Templates**: 10-15 полных шаблонов сайтов (Landing SaaS, Restaurant, Photographer, Coach, Agency, Local Business, Event, Course, Portfolio, Shop)
+- Шаблоны = JSON в `src/lib/site-templates/`, применяются через "Create from template" в onboarding
 
-### Этап 5. Конверсия публичных страниц (Неделя 4)
+### Sprint 3 (1-2 недели): **Power-User Features**
+То, без чего Tilda-аудитория не переедет.
 
-Из памяти `public-page-aeo-conversion-stack`:
-- Проверить CTA-блок `tel:` / `wa.me` / `t.me` на каждой публичной странице.
-- LocalBusiness + Speakable schema.
-- Добавить trust-signals: `get_public_trust_metrics` RPC (уже есть) → виджет на `/customers`.
-- A/B-тест двух CTA-вариантов через `feature_flags`.
+- **HTML/CSS/JS Embed блок**: безопасная sandbox-вставка (iframe-srcdoc), для виджетов
+- **Form Builder улучшения**: drag-drop полей, валидация, conditional logic, интеграции (Telegram, Email, Webhook, Google Sheets через edge-функцию)
+- **Контейнеры/колонки**: 2/3/4-колоночная сетка внутри секции (расширение `GridConfig`)
+- **Анимации на скролл**: fade-in/slide через `IntersectionObserver` + `data-animate` атрибут (без новых либ)
+- **SEO per-page**: title/description/og:image на каждую страницу (расширить существующий `seo` объект)
 
----
-
-### Этап 6. Дистрибуция и линкбилдинг (Недели 5–6)
-
-- Подача в каталоги: Product Hunt (RU launch), Indie Hackers, AppSumo, Producter, Startpack, Otzovik.
-- Гостевые посты на vc.ru, habr.ru/companies, spark.ru — 5 публикаций.
-- Партнёрки: Robokassa, Cloudpayments, Pact — взаимные ссылки.
-- Цель: +50 referring domains за 6 недель (с 8 до 58, AS 2 → 15+).
-
----
-
-### Этап 7. Аналитика и закрепление (Неделя 6)
-
-- Расширить `Admin → Growth`: добавить виджет «SEO traffic» (organic sessions/day, top landing pages, top keywords из GSC API).
-- GSC API integration → edge function `gsc-sync` (раз в сутки кеш позиций топ-100 keywords).
-- Дашборд «SEO Health»: indexed pages count, avg position, CTR, impressions.
-- Алерты в Telegram при падении трафика >20% WoW.
+### Sprint 4 (1 неделя): **Polish + Pricing Reposition**
+- **Site Stats**: аналитика по страницам (трафик, конверсии) — расширение существующего трекинга
+- **A/B тесты на уровне страницы** (сейчас на блоках)
+- **Repositioning**: лендинг `/` обновить — "Конструктор сайтов и линк-в-био", добавить /websites сравнительную страницу vs Tilda/Wix
+- **Pricing tweak**: Pro $13/мес — оставить, добавить лимит "до 5 страниц" на Starter, "безлимит" на Pro
+- **Миграция onboarding**: AI Wizard спрашивает "линк-в-био или сайт" → разные стартовые шаблоны
 
 ---
 
-### Открытый вопрос (требует решения пользователя)
+## Технические решения (минимум риска)
 
-Домен `lnkmx.my` геопривязан к Малайзии — это режет ранжирование в RU/KZ. Варианты:
-- **A**: оставить `.my`, продвигать через hreflang+GSC геотаргетинг (бесплатно, +6 мес до результата).
-- **B**: купить `linkmax.com` / `linkmax.io` (~$2–5K), 301-redirect, перенести бренд (быстрее, дороже).
-- **C**: купить `.ru` / `.kz` / `.uz` для региональных версий (~$30/год, +языковые сабдомены).
-
----
-
-### Технические детали
-
-**Файлы для создания:**
-- `src/pages/landings/TaplinkAlternative.tsx`, `SaytVizitka.tsx`, `Multilink.tsx`, `LinkInBio.tsx`, `VizitkaOnlayn.tsx`
-- `src/pages/blog/` (10 MDX/TSX статей) + `src/components/blog/BlogLayout.tsx`
-- `src/pages/dlya/[niche].tsx` (программная генерация)
-- `src/components/seo/AnswerBlock.tsx`, `HowToSchema.tsx`
-- `supabase/functions/gsc-sync/index.ts`
-- `src/components/admin/growth/SEOHealthWidget.tsx`
-
-**Файлы для обновления:**
-- `supabase/functions/generate-sitemap/index.ts` — динамика для `pages`, alternatives, landings, blog
-- `public/robots.txt` — Allow для `/blog`, `/dlya`, `/alternatives`
-- `cloudflare-worker/prerender-worker.js` — добавить роуты `/blog/*`, `/dlya/*`, `/alternatives/*`, `/{landing-slugs}`
-- `src/App.tsx` — роуты для лендингов/блога
-- `src/i18n/locales/{ru,en,kk,uz}/seo.json` — переводы новых страниц
-- `docs/product/4_INVESTMENT_MEMO.md`, `PITCH_DECK.md`, `docs/AUDIT_REPORT_*` — синхронизация модели
-
-**Миграции:**
-- `blog_posts` table (slug, locale, title, content, published_at, author_id, tags) + RLS
-- `landing_metrics` table для A/B-тестов
-- Опционально: `seo_keywords_tracking` (если решим хранить GSC данные локально)
-
-**Скрипты:**
-- `scripts/generate-niche-pages.mjs` — генератор 20 страниц `/dlya/{niche}` из списка
-- `scripts/check-seo-coverage.mjs` — проверка что все роуты в sitemap
+1. **БД**: новая таблица `sites(id, user_id, name, primary_page_id, settings jsonb)`. `pages` получает `site_id` (nullable для обратной совместимости). Триггер `page_snapshots` сохраняем.
+2. **Routing**: `App.tsx` — добавить `/:username/:pageSlug?` поверх существующего `/:username`. SSR-prerender worker расширить аналогично.
+3. **Sections vs Blocks**: секция = массив блоков с предзаданными настройками + опциональный wrapper. Не вводим новую сущность в БД — секция это просто preset для вставки.
+4. **Templates storage**: JSON-файлы в репо (не БД) — версионируются, легко обновлять, ноль латентности.
+5. **Embed безопасность**: `<iframe sandbox="allow-scripts" srcdoc="...">`, CSP, лимит по размеру для Starter.
+6. **i18n**: все новые UI-строки сразу в 4 локали (ru/en/kk/uz) — по memory rules.
 
 ---
 
-### Очерёдность исполнения
+## Что НЕ делаем (Stop List)
 
-```text
-W1: SEO-фундамент (sitemap + canonical + alternatives + docs sync)
-W2: 5 лендингов + Multilink/Vizitka контент
-W3: AEO/GEO + блог (5 первых статей)
-W4: 5 нишевых статей + 20 /dlya + продуктовые допинги (haptics, nuqs)
-W5: Дистрибуция (Product Hunt, vc.ru, гостевые)
-W6: GSC sync + Admin SEO Health + алерты
-```
+- Не пишем zero-block (свободное позиционирование) — дорого, мобайл-нестабильно. 12-колоночная сетка покроет 95% кейсов.
+- Не делаем визуальный CSS-редактор à la Webflow — оставляем preset-стили + token-based theming.
+- Не трогаем CRM/Business Zones — они уже работают.
+- Не меняем стек (React 18, Vite, Tailwind, Supabase).
 
 ---
 
-### Метрики успеха (через 6 недель)
+## KPI после внедрения
 
-| Метрика | Сейчас | Цель |
-|---|---|---|
-| Organic traffic (Semrush ru) | 0 | 3–5K/мес |
-| Indexed pages | ~10 | 200+ |
-| Referring domains | 8 | 50+ |
-| Authority Score | 2 | 15+ |
-| Top-10 keywords | 0 | 25+ |
-| Conversion с органики → signup | — | 3–5% |
-
-После одобрения начну с Этапа 1 (SEO-фундамент + sync документации) и буду отчитываться после каждой недели.
+- Среднее число страниц на активного юзера: 1 → 3+
+- Доля сайтов с custom header/footer: >60%
+- Conversion Starter → Pro: +30% (за счёт лимита страниц)
+- Новый сегмент: "малый бизнес ищет замену Tilda" — отслеживаем через UTM/ASK-в-onboarding
 
 ---
 
-## Прогресс — W1 завершён
+## Порядок старта
 
-- ✅ Добавлены 5 keyword-лендингов + 6 `/dlya/{niche}` (niche-landing-data.ts)
-- ✅ Создан блог: `BlogIndex`, `BlogPost`, `blog-posts.ts` (3 статьи с FAQPage/BreadcrumbList JSON-LD)
-- ✅ Маршруты в `src/main.tsx` с lazy-load
-- ✅ `public/sitemap.xml` — +15 URL
-- ✅ `supabase/functions/generate-sitemap/index.ts` — STATIC_PAGES расширен (динамическая генерация blog/landings/niches)
-- ✅ `cloudflare-worker/prerender-worker.js` — разделение PRIVATE vs PUBLIC_SPA: новые лендинги индексируются (без noindex), проходят SPA-маршрутом
-- ✅ Исправлен баг slug с кириллицей в `telegram-vizitka-dlya-koucha-poshagovo`
-
-**Следующий шаг (W2):** Контент-наполнение 5 лендингов + AEO Answer Blocks + sync `PITCH_DECK.md` и `docs/product/4_INVESTMENT_MEMO.md` с актуальной моделью (Starter/Pro, 7%/1%).
+Начинаем со **Sprint 1** (Multi-Page Foundation) — без него остальные спринты не имеют смысла. Скажи "поехали" и я начну с миграции БД (`sites` table) и Header/Footer блоков.
