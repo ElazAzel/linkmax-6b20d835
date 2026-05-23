@@ -89,7 +89,29 @@ function getAnimationConfig(animationStyle?: PageData['theme']['animationStyle']
 
 export default function PublicPage() {
   const { t } = useTranslation();
-  const { compressed, slug } = useParams<{ compressed?: string; slug?: string }>();
+  const { compressed, slug, pagePath } = useParams<{ compressed?: string; slug?: string; pagePath?: string }>();
+  // Sprint 1: Multi-Page — when /:slug/p/:pagePath is hit, resolve to the sub-page's actual slug.
+  const [resolvedSubSlug, setResolvedSubSlug] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    if (slug && pagePath) {
+      import('@/services/sites').then(({ loadSitePageByPath }) =>
+        loadSitePageByPath(slug, pagePath).then((sub) => {
+          if (cancelled || !sub) return;
+          // Fetch the sub-page's slug
+          import('@/integrations/supabase/client').then(({ supabase }) =>
+            supabase.from('pages').select('slug').eq('id', sub.id).maybeSingle().then(({ data }) => {
+              if (!cancelled && data?.slug) setResolvedSubSlug(data.slug);
+            })
+          );
+        })
+      );
+    } else {
+      setResolvedSubSlug(null);
+    }
+    return () => { cancelled = true; };
+  }, [slug, pagePath]);
+  const effectiveSlug = pagePath ? (resolvedSubSlug ?? undefined) : slug;
   const [compressedPageData, setCompressedPageData] = useState<PageData | null>(null);
   const [showQR, setShowQR] = useState(false);
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
