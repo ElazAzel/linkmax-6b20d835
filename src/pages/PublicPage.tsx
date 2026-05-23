@@ -180,7 +180,7 @@ export default function PublicPage() {
 
   // Determine which data source to use
   const pageData = slug ? cachedPageData : compressedPageData;
-  const loading = slug ? isLoadingCached : false;
+  const loading = slug ? (isLoadingCached || (!!pagePath && !resolvedSubSlug)) : false;
 
   // Check if page owner is premium (for auto-verification badge)
   const { data: ownerPremiumStatus } = useQuery({
