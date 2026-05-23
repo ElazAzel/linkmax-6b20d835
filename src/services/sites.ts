@@ -41,8 +41,7 @@ export async function getMySite(userId: string): Promise<Site | null> {
 export async function ensureSiteForUser(userId: string, defaultName = 'My Site'): Promise<Site | null> {
   const existing = await getMySite(userId);
   if (existing) return existing;
-  const { data, error } = await supabase
-    .from('sites' as never)
+  const { data, error } = await (supabase.from('sites' as never) as any)
     .insert({ user_id: userId, name: defaultName })
     .select('*')
     .single();
