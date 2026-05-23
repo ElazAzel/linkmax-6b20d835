@@ -161,7 +161,7 @@ export default function PublicPage() {
   }, []);
 
   // Use React Query for slug-based pages (with caching)
-  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(slug);
+  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(effectiveSlug);
 
   // Use React Query for custom domain based pages
   const { data: domainPageData, isLoading: isLoadingDomain, error: domainError } = usePublicPageByDomain(customDomain || undefined);
