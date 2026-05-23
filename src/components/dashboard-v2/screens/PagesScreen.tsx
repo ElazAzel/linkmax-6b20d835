@@ -178,6 +178,9 @@ export const PagesScreen = memo(function PagesScreen({
       />
 
       <div className="p-4 space-y-4">
+        {/* Sprint 1: Multi-Page — site sub-pages manager */}
+        <SitePagesManager />
+
         {/* Limits Counter */}
         {limits && (
           <Card className="p-4 rounded-2xl">
