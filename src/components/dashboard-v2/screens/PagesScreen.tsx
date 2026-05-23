@@ -37,6 +37,7 @@ import { LoadingState } from '@/components/ui/loading-state';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import SearchX from 'lucide-react/dist/esm/icons/search-x';
+import { SitePagesManager } from '../site/SitePagesManager';
 
 interface PageItem {
   id: string;
