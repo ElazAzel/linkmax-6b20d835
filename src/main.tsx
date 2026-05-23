@@ -206,6 +206,8 @@ const router = createBrowserRouter([
       { path: "p/:compressed", element: <PublicPage /> },
       { path: ":slug/services/:serviceSlug", element: <PublicServicePage /> },
       { path: ":slug/events/:eventId", element: <PublicEventPage /> },
+      // Sprint 1: Multi-Page sub-pages (e.g. /username/p/about, /username/p/pricing)
+      { path: ":slug/p/:pagePath", element: <PublicPage /> },
       { path: ":slug", element: <PublicPage /> },
       {
         path: "*",

@@ -89,7 +89,29 @@ function getAnimationConfig(animationStyle?: PageData['theme']['animationStyle']
 
 export default function PublicPage() {
   const { t } = useTranslation();
-  const { compressed, slug } = useParams<{ compressed?: string; slug?: string }>();
+  const { compressed, slug, pagePath } = useParams<{ compressed?: string; slug?: string; pagePath?: string }>();
+  // Sprint 1: Multi-Page — when /:slug/p/:pagePath is hit, resolve to the sub-page's actual slug.
+  const [resolvedSubSlug, setResolvedSubSlug] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    if (slug && pagePath) {
+      import('@/services/sites').then(({ loadSitePageByPath }) =>
+        loadSitePageByPath(slug, pagePath).then((sub) => {
+          if (cancelled || !sub) return;
+          // Fetch the sub-page's slug
+          import('@/integrations/supabase/client').then(({ supabase }) =>
+            supabase.from('pages').select('slug').eq('id', sub.id).maybeSingle().then(({ data }) => {
+              if (!cancelled && data?.slug) setResolvedSubSlug(data.slug);
+            })
+          );
+        })
+      );
+    } else {
+      setResolvedSubSlug(null);
+    }
+    return () => { cancelled = true; };
+  }, [slug, pagePath]);
+  const effectiveSlug = pagePath ? (resolvedSubSlug ?? undefined) : slug;
   const [compressedPageData, setCompressedPageData] = useState<PageData | null>(null);
   const [showQR, setShowQR] = useState(false);
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
@@ -139,7 +161,7 @@ export default function PublicPage() {
   }, []);
 
   // Use React Query for slug-based pages (with caching)
-  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(slug);
+  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(effectiveSlug);
 
   // Use React Query for custom domain based pages
   const { data: domainPageData, isLoading: isLoadingDomain, error: domainError } = usePublicPageByDomain(customDomain || undefined);
@@ -158,7 +180,7 @@ export default function PublicPage() {
 
   // Determine which data source to use
   const pageData = slug ? cachedPageData : compressedPageData;
-  const loading = slug ? isLoadingCached : false;
+  const loading = slug ? (isLoadingCached || (!!pagePath && !resolvedSubSlug)) : false;
 
   // Check if page owner is premium (for auto-verification badge)
   const { data: ownerPremiumStatus } = useQuery({
