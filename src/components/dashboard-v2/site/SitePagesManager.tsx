@@ -25,6 +25,14 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/user/useAuth';
 import { useMySite, useSitePages, useCreateSubPage } from '@/hooks/sites/useSite';
+import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const PATH_RX = /^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/;
 
@@ -48,6 +56,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [path, setPath] = useState('');
+  const [sectionId, setSectionId] = useState<SectionPresetId>('hero');
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
@@ -67,15 +76,19 @@ export const SitePagesManager = memo(function SitePagesManager() {
       toast.error(t('dashboard.sitePages.pathTaken', 'Такой путь уже существует'));
       return;
     }
+    const preset = getSectionPreset(sectionId);
+    const seedBlocks = preset ? preset.build() : [];
     const result = await createSubPage.mutateAsync({
       pagePath: normalized,
       title: title.trim() || normalized,
+      seedBlocks,
     });
     if (result) {
       toast.success(t('dashboard.sitePages.created', 'Страница создана'));
       setOpen(false);
       setTitle('');
       setPath('');
+      setSectionId('hero');
     } else {
       toast.error(t('dashboard.sitePages.createError', 'Не удалось создать страницу'));
     }
@@ -135,6 +148,29 @@ export const SitePagesManager = memo(function SitePagesManager() {
                     {t(
                       'dashboard.sitePages.pathHint',
                       'Латиница, цифры, дефисы. До 40 символов.'
+                    )}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="sub-section">
+                    {t('dashboard.sitePages.sectionLabel', 'Стартовая секция')}
+                  </Label>
+                  <Select value={sectionId} onValueChange={(v: string) => setSectionId(v as SectionPresetId)}>
+                    <SelectTrigger id="sub-section">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SECTION_PRESETS.map((s) => (
+                        <SelectItem key={s.id} value={s.id}>
+                          {t(s.labelKey, s.labelFallback)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">
+                    {t(
+                      getSectionPreset(sectionId)?.descKey || '',
+                      getSectionPreset(sectionId)?.descFallback || ''
                     )}
                   </p>
                 </div>
