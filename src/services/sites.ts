@@ -102,14 +102,14 @@ export async function updateSite(
   return mapSite(data as Record<string, unknown>);
 }
 
-/** Add a new sub-page to a site. */
+/** Add a new sub-page to a site, optionally seeded with starter blocks. */
 export async function createSubPage(input: {
   siteId: string;
   userId: string;
   pagePath: string;
   title: string;
+  seedBlocks?: Block[];
 }): Promise<{ id: string } | null> {
-  // slug must be globally unique; prefix with site to avoid collisions
   const slug = `${input.siteId.slice(0, 8)}-${input.pagePath}`;
   const { data, error } = await supabase
     .from('pages')
@@ -125,5 +125,18 @@ export async function createSubPage(input: {
     .select('id')
     .single();
   if (error || !data) return null;
-  return data as { id: string };
+
+  const pageId = (data as { id: string }).id;
+
+  if (input.seedBlocks && input.seedBlocks.length > 0) {
+    const rows = input.seedBlocks.map((block, position) => ({
+      page_id: pageId,
+      type: block.type,
+      position,
+      content: block as unknown as Record<string, unknown>,
+    }));
+    await (supabase.from('blocks') as any).insert(rows);
+  }
+
+  return { id: pageId };
 }
