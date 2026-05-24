@@ -51,7 +51,7 @@ export function useUpdateSite(siteId: string | undefined) {
 export function useCreateSubPage(siteId: string | undefined, userId: string | undefined) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (input: { pagePath: string; title: string }) => {
+    mutationFn: (input: { pagePath: string; title: string; seedBlocks?: Parameters<typeof createSubPage>[0]['seedBlocks'] }) => {
       if (!siteId || !userId) throw new Error('siteId and userId required');
       return createSubPage({ siteId, userId, ...input });
     },
