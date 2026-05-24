@@ -155,7 +155,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
                   <Label htmlFor="sub-section">
                     {t('dashboard.sitePages.sectionLabel', 'Стартовая секция')}
                   </Label>
-                  <Select value={sectionId} onValueChange={(v) => setSectionId(v as SectionPresetId)}>
+                  <Select value={sectionId} onValueChange={(v: string) => setSectionId(v as SectionPresetId)}>
                     <SelectTrigger id="sub-section">
                       <SelectValue />
                     </SelectTrigger>
