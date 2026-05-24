@@ -17,6 +17,7 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { PublicPageSkeleton } from '@/components/public/PublicPageSkeleton';
 import { PublicPageError } from '@/components/public/PublicPageError';
+import { SiteHeaderNav } from '@/components/public/SiteHeaderNav';
 import { decompressPageData } from '@/lib/utils/compression';
 import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
 import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
@@ -368,6 +369,8 @@ export default function PublicPage() {
                   <div className="h-9 w-9 rounded-lg bg-background/70 animate-pulse" />
                 )}
               </div>
+
+              <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
 
               <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
                 {/* Grid Blocks - Same layout as editor */}
