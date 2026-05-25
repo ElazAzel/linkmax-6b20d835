@@ -317,7 +317,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               size="icon"
               variant="ghost"
               className="h-7 w-7 text-destructive hover:text-destructive"
-              onClick={() => setPendingDelete({ id: p.id, title: p.title || p.page_path })}
+              onClick={() => setPendingDelete({ id: p.id, title: p.title || p.page_path || '' })}
               aria-label={t('common.delete', 'Удалить')}
               title={t('common.delete', 'Удалить')}
             >
