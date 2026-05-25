@@ -109,6 +109,7 @@ export const EditorScreen = memo(function EditorScreen({
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
   const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
+  const [sectionPickerOpen, setSectionPickerOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
