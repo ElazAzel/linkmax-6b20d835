@@ -341,6 +341,14 @@ export const EditorScreen = memo(function EditorScreen({
     target?.click();
   }, []);
 
+  // Sprint 2: append a section preset (group of blocks) to the end of the page.
+  const handleInsertSection = useCallback((sectionBlocks: Block[], presetId: string) => {
+    if (!pageData || sectionBlocks.length === 0) return;
+    onReorderBlocks([...pageData.blocks, ...sectionBlocks]);
+    pushFrictionEvent('block_added', `section:${presetId}`);
+    trackEditorAction('section_inserted', { source: 'picker', preset: presetId });
+  }, [pageData, onReorderBlocks, pushFrictionEvent]);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
