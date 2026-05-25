@@ -42,6 +42,7 @@ export type EditorAnalyticsAction =
   | 'section_duplicated'
   | 'section_deleted'
   | 'section_merged'
+  | 'section_inserted'
   // P5: Review modes
   | 'review_mode_entered'
   | 'review_mode_exited'
