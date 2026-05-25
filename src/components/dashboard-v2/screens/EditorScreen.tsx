@@ -506,6 +506,32 @@ export const EditorScreen = memo(function EditorScreen({
       </RenderContextProvider>
       </div>
 
+      {/* Sprint 2: Section picker — append ready-made groups of blocks */}
+      <div className="mx-4 mt-3 mb-2 flex justify-center">
+        <button
+          type="button"
+          onClick={() => setSectionPickerOpen(true)}
+          className={cn(
+            'inline-flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-semibold',
+            'border border-dashed border-border/60 text-muted-foreground',
+            'hover:border-primary/50 hover:text-foreground hover:bg-accent transition-colors',
+          )}
+        >
+          <LayoutTemplate className="h-4 w-4" />
+          {t('editor.sections.picker.cta', '+ Секция (готовый шаблон)')}
+        </button>
+      </div>
+
+      {sectionPickerOpen && (
+        <Suspense fallback={null}>
+          <SectionPickerSheet
+            open={sectionPickerOpen}
+            onOpenChange={setSectionPickerOpen}
+            onInsert={handleInsertSection}
+          />
+        </Suspense>
+      )}
+
       {/* P5: Structure View 2.0 */}
       {structureOpen && (
         <Suspense fallback={null}>
