@@ -9,6 +9,8 @@ import {
   listSitePages,
   updateSite,
   createSubPage,
+  deleteSubPage,
+  setPagePublished,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
