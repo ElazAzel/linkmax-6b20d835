@@ -9,6 +9,8 @@ import {
   listSitePages,
   updateSite,
   createSubPage,
+  deleteSubPage,
+  setPagePublished,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
@@ -55,6 +57,27 @@ export function useCreateSubPage(siteId: string | undefined, userId: string | un
       if (!siteId || !userId) throw new Error('siteId and userId required');
       return createSubPage({ siteId, userId, ...input });
     },
+    onSuccess: () => {
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
+
+export function useDeleteSubPage(siteId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (pageId: string) => deleteSubPage(pageId),
+    onSuccess: () => {
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
+
+export function useSetPagePublished(siteId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { pageId: string; isPublished: boolean }) =>
+      setPagePublished(input.pageId, input.isPublished),
     onSuccess: () => {
       if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
     },

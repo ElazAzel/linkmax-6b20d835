@@ -140,3 +140,32 @@ export async function createSubPage(input: {
 
   return { id: pageId };
 }
+
+/** Delete a sub-page (refuses to delete the home page). */
+export async function deleteSubPage(pageId: string): Promise<boolean> {
+  const { data: page, error: getErr } = await supabase
+    .from('pages')
+    .select('id, is_home')
+    .eq('id', pageId)
+    .maybeSingle();
+  if (getErr || !page) return false;
+  if ((page as { is_home: boolean }).is_home) return false;
+
+  // Best-effort cleanup of related blocks (FK cascade may also handle this).
+  await supabase.from('blocks').delete().eq('page_id', pageId);
+
+  const { error } = await supabase.from('pages').delete().eq('id', pageId);
+  return !error;
+}
+
+/** Toggle (or explicitly set) the published state of a page. */
+export async function setPagePublished(
+  pageId: string,
+  isPublished: boolean,
+): Promise<boolean> {
+  const { error } = await supabase
+    .from('pages')
+    .update({ is_published: isPublished } as never)
+    .eq('id', pageId);
+  return !error;
+}
