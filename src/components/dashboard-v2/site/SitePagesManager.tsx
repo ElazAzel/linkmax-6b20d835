@@ -277,6 +277,29 @@ export const SitePagesManager = memo(function SitePagesManager() {
                 {t('dashboard.sitePages.draft', 'Черновик')}
               </Badge>
             )}
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-7 w-7"
+              disabled={setPublished.isPending}
+              onClick={() => handleTogglePublish(p.id, p.is_published)}
+              aria-label={
+                p.is_published
+                  ? t('dashboard.sitePages.unpublish', 'Снять с публикации')
+                  : t('dashboard.sitePages.publish', 'Опубликовать')
+              }
+              title={
+                p.is_published
+                  ? t('dashboard.sitePages.unpublish', 'Снять с публикации')
+                  : t('dashboard.sitePages.publish', 'Опубликовать')
+              }
+            >
+              {p.is_published ? (
+                <EyeOff className="w-3.5 h-3.5" />
+              ) : (
+                <Eye className="w-3.5 h-3.5" />
+              )}
+            </Button>
             {p.is_published && homePage && (
               <Button
                 size="icon"
@@ -290,9 +313,49 @@ export const SitePagesManager = memo(function SitePagesManager() {
                 <ExternalLink className="w-3.5 h-3.5" />
               </Button>
             )}
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-7 w-7 text-destructive hover:text-destructive"
+              onClick={() => setPendingDelete({ id: p.id, title: p.title || p.page_path })}
+              aria-label={t('common.delete', 'Удалить')}
+              title={t('common.delete', 'Удалить')}
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </Button>
           </div>
         ))}
       </CardContent>
+
+      <AlertDialog
+        open={!!pendingDelete}
+        onOpenChange={(o) => !o && setPendingDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t('dashboard.sitePages.deleteTitle', 'Удалить страницу?')}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t(
+                'dashboard.sitePages.deleteDesc',
+                'Страница «{{title}}» и все её блоки будут удалены без возможности восстановления.',
+                { title: pendingDelete?.title || '' },
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              disabled={deleteSubPage.isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t('common.delete', 'Удалить')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 });
