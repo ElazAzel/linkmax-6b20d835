@@ -41,6 +41,7 @@ import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m => ({ default: m.GridEditor })));
 const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
+const SectionPickerSheet = lazy(() => import('@/components/editor/sections/SectionPickerSheet').then(m => ({ default: m.SectionPickerSheet })));
 
 const EditorCanvasSkeleton = () => (
   <div className="space-y-4 p-4 animate-pulse">
