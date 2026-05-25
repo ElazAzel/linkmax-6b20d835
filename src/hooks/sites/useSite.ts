@@ -63,5 +63,26 @@ export function useCreateSubPage(siteId: string | undefined, userId: string | un
   });
 }
 
+export function useDeleteSubPage(siteId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (pageId: string) => deleteSubPage(pageId),
+    onSuccess: () => {
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
+
+export function useSetPagePublished(siteId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { pageId: string; isPublished: boolean }) =>
+      setPagePublished(input.pageId, input.isPublished),
+    onSuccess: () => {
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
+
 // Re-export for direct use
 export { getMySite } from '@/services/sites';
