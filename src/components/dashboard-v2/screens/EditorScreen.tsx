@@ -41,6 +41,7 @@ import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m => ({ default: m.GridEditor })));
 const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
+const SectionPickerSheet = lazy(() => import('@/components/editor/sections/SectionPickerSheet').then(m => ({ default: m.SectionPickerSheet })));
 
 const EditorCanvasSkeleton = () => (
   <div className="space-y-4 p-4 animate-pulse">
@@ -108,6 +109,7 @@ export const EditorScreen = memo(function EditorScreen({
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
   const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
+  const [sectionPickerOpen, setSectionPickerOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
@@ -339,6 +341,14 @@ export const EditorScreen = memo(function EditorScreen({
     target?.click();
   }, []);
 
+  // Sprint 2: append a section preset (group of blocks) to the end of the page.
+  const handleInsertSection = useCallback((sectionBlocks: Block[], presetId: string) => {
+    if (!pageData || sectionBlocks.length === 0) return;
+    onReorderBlocks([...pageData.blocks, ...sectionBlocks]);
+    pushFrictionEvent('block_added', `section:${presetId}`);
+    trackEditorAction('section_inserted', { source: 'picker', preset: presetId });
+  }, [pageData, onReorderBlocks, pushFrictionEvent]);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
@@ -495,6 +505,32 @@ export const EditorScreen = memo(function EditorScreen({
         </Suspense>
       </RenderContextProvider>
       </div>
+
+      {/* Sprint 2: Section picker — append ready-made groups of blocks */}
+      <div className="mx-4 mt-3 mb-2 flex justify-center">
+        <button
+          type="button"
+          onClick={() => setSectionPickerOpen(true)}
+          className={cn(
+            'inline-flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-semibold',
+            'border border-dashed border-border/60 text-muted-foreground',
+            'hover:border-primary/50 hover:text-foreground hover:bg-accent transition-colors',
+          )}
+        >
+          <LayoutTemplate className="h-4 w-4" />
+          {t('editor.sections.picker.cta', '+ Секция (готовый шаблон)')}
+        </button>
+      </div>
+
+      {sectionPickerOpen && (
+        <Suspense fallback={null}>
+          <SectionPickerSheet
+            open={sectionPickerOpen}
+            onOpenChange={setSectionPickerOpen}
+            onInsert={handleInsertSection}
+          />
+        </Suspense>
+      )}
 
       {/* P5: Structure View 2.0 */}
       {structureOpen && (
