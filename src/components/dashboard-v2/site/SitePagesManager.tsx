@@ -71,14 +71,41 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const { data: site, isLoading: siteLoading } = useMySite(userId);
   const { data: pages = [], isLoading: pagesLoading } = useSitePages(site?.id);
   const createSubPage = useCreateSubPage(site?.id, userId);
+  const deleteSubPage = useDeleteSubPage(site?.id);
+  const setPublished = useSetPagePublished(site?.id);
 
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [path, setPath] = useState('');
   const [sectionId, setSectionId] = useState<SectionPresetId>('hero');
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string } | null>(null);
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
+
+  const handleTogglePublish = async (pageId: string, current: boolean) => {
+    const ok = await setPublished.mutateAsync({ pageId, isPublished: !current });
+    if (ok) {
+      toast.success(
+        !current
+          ? t('dashboard.sitePages.publishedToast', 'Страница опубликована')
+          : t('dashboard.sitePages.unpublishedToast', 'Страница снята с публикации'),
+      );
+    } else {
+      toast.error(t('dashboard.sitePages.toggleError', 'Не удалось изменить статус'));
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!pendingDelete) return;
+    const ok = await deleteSubPage.mutateAsync(pendingDelete.id);
+    if (ok) {
+      toast.success(t('dashboard.sitePages.deleted', 'Страница удалена'));
+    } else {
+      toast.error(t('dashboard.sitePages.deleteError', 'Не удалось удалить страницу'));
+    }
+    setPendingDelete(null);
+  };
 
   const handleCreate = async () => {
     const normalized = normalizePath(path || title);
