@@ -61,7 +61,7 @@ export interface EditorAnalyticsMeta {
   blockType?: string;
   blockId?: string;
   position?: number;
-  source?: 'grid' | 'structure' | 'palette' | 'preset' | 'keyboard' | 'toolbar';
+  source?: 'grid' | 'structure' | 'palette' | 'preset' | 'keyboard' | 'toolbar' | 'picker';
   presetId?: string;
   commandId?: string;
   searchQuery?: string;
