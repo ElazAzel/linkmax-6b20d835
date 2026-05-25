@@ -9,6 +9,9 @@ import Plus from 'lucide-react/dist/esm/icons/plus';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Home from 'lucide-react/dist/esm/icons/home';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,10 +24,26 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/user/useAuth';
-import { useMySite, useSitePages, useCreateSubPage } from '@/hooks/sites/useSite';
+import {
+  useMySite,
+  useSitePages,
+  useCreateSubPage,
+  useDeleteSubPage,
+  useSetPagePublished,
+} from '@/hooks/sites/useSite';
 import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
 import {
   Select,
