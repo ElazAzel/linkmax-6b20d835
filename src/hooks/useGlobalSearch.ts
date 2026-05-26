@@ -40,10 +40,10 @@ export function useGlobalSearch() {
       // typically ~3-4× faster when a zone is active (4 parallel requests vs serial).
       const pagesPromise = (supabase
         .from('pages')
-        .select('id, slug, title, updated_at') as any)
+        .select('id, slug, title, updated_at, page_path, is_home, site_id') as any)
         .eq('owner_id', user.id)
-        .ilike('title', `%${sanitized}%`)
-        .limit(5);
+        .or(`title.ilike.%${sanitized}%,page_path.ilike.%${sanitized}%,slug.ilike.%${sanitized}%`)
+        .limit(8);
 
       const zoneId = currentZone?.id;
       const contactsPromise = zoneId
