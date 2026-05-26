@@ -546,6 +546,19 @@ export const SitePagesManager = memo(function SitePagesManager() {
       <div className="pt-3">
         <SiteNavFooterEditor site={site} pages={pages} userId={userId} />
       </div>
+
+      <PaywallModal
+        open={paywallOpen}
+        onOpenChange={setPaywallOpen}
+        source="subpage-limit"
+        headline={t('paywall.subpages.headline', 'Лимит страниц на Starter')}
+        description={t(
+          'paywall.subpages.description',
+          'Starter даёт 1 главную + {{n}} подстраницы. Pro снимает лимит и убирает брендинг.',
+          { n: SUBPAGE_LIMIT_STARTER },
+        )}
+      />
     </Card>
   );
 });
+
