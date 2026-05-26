@@ -50,17 +50,41 @@ export const PaywallModal = memo(function PaywallModal({
 }: Props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { inTrial, trialEndsAt, refresh } = usePremiumStatus();
+  const [trialLoading, setTrialLoading] = useState(false);
+  const trialEligible = !inTrial && !trialEndsAt;
 
   useEffect(() => {
     if (open) {
-      safeCapture('paywall_shown', { source });
+      safeCapture('paywall_shown', { source, trial_eligible: trialEligible });
     }
-  }, [open, source]);
+  }, [open, source, trialEligible]);
 
   const handleUpgrade = () => {
     safeCapture('paywall_cta_click', { source, target: 'pricing' });
     onOpenChange(false);
     navigate('/pricing');
+  };
+
+  const handleStartTrial = async () => {
+    setTrialLoading(true);
+    safeCapture('paywall_cta_click', { source, target: 'trial' });
+    const res = await startProTrial();
+    setTrialLoading(false);
+    if (res.ok) {
+      safeCapture('trial_started', { source });
+      await refresh();
+      toast.success(t('paywall.trialStarted', 'Pro-триал на 7 дней активирован'));
+      onOpenChange(false);
+    } else if (res.error === 'trial_already_used') {
+      toast.error(t('paywall.trialUsed', 'Пробный период уже использован'));
+    } else if (res.error === 'already_premium') {
+      toast.info(t('paywall.alreadyPro', 'У вас уже активен Pro'));
+      await refresh();
+      onOpenChange(false);
+    } else {
+      toast.error(t('paywall.trialError', 'Не удалось активировать триал'));
+    }
   };
 
   const handleDismiss = (v: boolean) => {
@@ -105,10 +129,28 @@ export const PaywallModal = memo(function PaywallModal({
           ))}
         </ul>
 
-        <DialogFooter className="gap-2">
+        {trialEligible && (
+          <p className="text-xs text-muted-foreground -mt-1">
+            {t('paywall.trialHint', 'Попробуйте 7 дней Pro бесплатно — без привязки карты.')}
+          </p>
+        )}
+
+        <DialogFooter className="gap-2 sm:gap-2 flex-col-reverse sm:flex-row">
           <Button variant="ghost" onClick={() => handleDismiss(false)}>
             {t('common.later', 'Позже')}
           </Button>
+          {trialEligible && (
+            <Button
+              variant="outline"
+              onClick={handleStartTrial}
+              disabled={trialLoading}
+              className="rounded-xl"
+            >
+              {trialLoading
+                ? t('common.loading', 'Загрузка…')
+                : t('paywall.startTrial', 'Попробовать 7 дней')}
+            </Button>
+          )}
           <Button onClick={handleUpgrade} className="rounded-xl">
             {t('paywall.cta', 'Перейти на Pro')}
           </Button>
