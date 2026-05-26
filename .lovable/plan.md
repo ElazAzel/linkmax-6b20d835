@@ -56,9 +56,9 @@ Tilda сильна готовыми секциями. У нас 28 блоков 
 ### Sprint 4 (1 неделя): **Polish + Pricing Reposition**
 - [x] **Site Stats**: per-page views/clicks (RPC `get_site_pages_stats`) в `SitePagesManager`
 - [x] **Sub-pages в sitemap**: `/{home_slug}/p/{page_path}` отдаются в `sitemap-profiles.xml`
+- [x] **Pricing tweak**: лимит «до 2 подстраниц» на Starter с CTA на Pro в `SitePagesManager`
 - [ ] **A/B тесты на уровне страницы** (сейчас на блоках)
 - [ ] **Repositioning** лендинга и `/websites` сравнительная страница vs Tilda/Wix
-- [ ] **Pricing tweak**: лимит "до 5 страниц" на Starter
 - [ ] **Onboarding fork**: AI Wizard — "линк-в-био или сайт"
 
 ---
