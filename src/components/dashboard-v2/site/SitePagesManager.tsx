@@ -99,6 +99,17 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const [settingsFor, setSettingsFor] = useState<{ id: string; label: string } | null>(null);
   const [paywallOpen, setPaywallOpen] = useState(false);
 
+  // Cmd+K deep-links: /dashboard?tab=pages&action=new-subpage
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const action = searchParams.get('action');
+    if (action === 'new-subpage') {
+      setOpen(true);
+      searchParams.delete('action');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
 
