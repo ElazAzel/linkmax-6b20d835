@@ -111,6 +111,34 @@ export const SitePagesManager = memo(function SitePagesManager() {
     setPendingDelete(null);
   };
 
+  const handleSaveEdit = async () => {
+    if (!editing) return;
+    const normalized = normalizePath(editing.path);
+    if (!PATH_RX.test(normalized)) {
+      toast.error(
+        t('dashboard.sitePages.invalidPath', 'Путь должен содержать только латинские буквы, цифры и дефис'),
+      );
+      return;
+    }
+    if (subPages.some((p) => p.id !== editing.id && p.page_path === normalized)) {
+      toast.error(t('dashboard.sitePages.pathTaken', 'Такой путь уже существует'));
+      return;
+    }
+    const res = await updateSubPageMut.mutateAsync({
+      pageId: editing.id,
+      title: editing.title,
+      pagePath: normalized,
+    });
+    if (res.ok) {
+      toast.success(t('dashboard.sitePages.updated', 'Страница обновлена'));
+      setEditing(null);
+    } else if (res.error === 'path_taken') {
+      toast.error(t('dashboard.sitePages.pathTaken', 'Такой путь уже существует'));
+    } else {
+      toast.error(t('dashboard.sitePages.updateError', 'Не удалось обновить страницу'));
+    }
+  };
+
   const handleCreate = async () => {
     const normalized = normalizePath(path || title);
     if (!PATH_RX.test(normalized)) {
