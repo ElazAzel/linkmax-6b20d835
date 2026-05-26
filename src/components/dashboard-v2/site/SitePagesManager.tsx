@@ -209,7 +209,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               size="sm"
               variant="default"
               className="rounded-xl"
-              onClick={() => navigate('/pricing')}
+              onClick={() => setPaywallOpen(true)}
             >
               {t('dashboard.sitePages.upgrade', 'Обновить до Pro')}
             </Button>
