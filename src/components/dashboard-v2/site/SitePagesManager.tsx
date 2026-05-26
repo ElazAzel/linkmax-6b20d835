@@ -45,6 +45,7 @@ import {
   useDeleteSubPage,
   useSetPagePublished,
   useUpdateSubPage,
+  useSitePagesStats,
 } from '@/hooks/sites/useSite';
 import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
 import {
