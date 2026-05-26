@@ -160,13 +160,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
 
   const handleCreate = async () => {
     if (reachedLimit) {
-      toast.error(
-        t(
-          'dashboard.sitePages.limitToast',
-          'Лимит страниц на Starter ({{n}} подстраниц). Обновитесь до Pro.',
-          { n: SUBPAGE_LIMIT_STARTER },
-        ),
-      );
+      setPaywallOpen(true);
       return;
     }
     const normalized = normalizePath(path || title);
