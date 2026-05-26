@@ -232,3 +232,45 @@ export async function getSitePagesStats(
   }
   return out;
 }
+
+/**
+ * Apply a multi-page site template: batch-create sub-pages, each seeded with
+ * composed blocks. Skips pages whose path already exists (idempotent re-apply).
+ * Returns the number of pages actually created and any path collisions skipped.
+ */
+export async function applySiteTemplate(input: {
+  siteId: string;
+  userId: string;
+  pages: Array<{ path: string; title: string; seedBlocks: Block[] }>;
+}): Promise<{ created: number; skipped: string[] }> {
+  const { data: existing } = await supabase
+    .from('pages')
+    .select('page_path')
+    .eq('site_id', input.siteId);
+  const taken = new Set(
+    (existing as Array<{ page_path: string | null }> | null)
+      ?.map((r) => r.page_path)
+      .filter((p): p is string => !!p) ?? [],
+  );
+
+  let created = 0;
+  const skipped: string[] = [];
+  for (const p of input.pages) {
+    if (taken.has(p.path)) {
+      skipped.push(p.path);
+      continue;
+    }
+    const res = await createSubPage({
+      siteId: input.siteId,
+      userId: input.userId,
+      pagePath: p.path,
+      title: p.title,
+      seedBlocks: p.seedBlocks,
+    });
+    if (res) {
+      created += 1;
+      taken.add(p.path);
+    }
+  }
+  return { created, skipped };
+}

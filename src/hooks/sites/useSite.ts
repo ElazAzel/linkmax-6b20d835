@@ -13,6 +13,7 @@ import {
   setPagePublished,
   updateSubPage,
   getSitePagesStats,
+  applySiteTemplate,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
@@ -109,5 +110,18 @@ export function useSitePagesStats(siteId: string | undefined, days = 30) {
     queryFn: () => (siteId ? getSitePagesStats(siteId, days) : Promise.resolve({})),
     enabled: !!siteId,
     staleTime: 60 * 1000,
+  });
+}
+
+export function useApplySiteTemplate(siteId: string | undefined, userId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (pages: Parameters<typeof applySiteTemplate>[0]['pages']) => {
+      if (!siteId || !userId) throw new Error('siteId and userId required');
+      return applySiteTemplate({ siteId, userId, pages });
+    },
+    onSuccess: () => {
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
   });
 }
