@@ -14,6 +14,9 @@ import {
   updateSubPage,
   getSitePagesStats,
   applySiteTemplate,
+  getPageSettings,
+  updatePageSettings,
+  type PageSettingsPayload,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
