@@ -45,6 +45,7 @@ import {
   useDeleteSubPage,
   useSetPagePublished,
   useUpdateSubPage,
+  useSitePagesStats,
 } from '@/hooks/sites/useSite';
 import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
 import {
@@ -72,6 +73,8 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const userId = user?.id;
   const { data: site, isLoading: siteLoading } = useMySite(userId);
   const { data: pages = [], isLoading: pagesLoading } = useSitePages(site?.id);
+  const pageStatsQuery = useSitePagesStats(site?.id, 30);
+  const pageStats = (pageStatsQuery.data ?? {}) as Record<string, { views: number; clicks: number }>;
   const createSubPage = useCreateSubPage(site?.id, userId);
   const deleteSubPage = useDeleteSubPage(site?.id);
   const setPublished = useSetPagePublished(site?.id);
@@ -278,6 +281,11 @@ export const SitePagesManager = memo(function SitePagesManager() {
               </div>
               <div className="text-xs text-muted-foreground truncate">/{homePage.slug}</div>
             </div>
+            <div className="text-[10px] text-muted-foreground tabular-nums whitespace-nowrap">
+              {(pageStats[homePage.id]?.views ?? 0).toLocaleString()} {t('dashboard.sitePages.views', 'просм.')}
+              {' · '}
+              {(pageStats[homePage.id]?.clicks ?? 0).toLocaleString()} {t('dashboard.sitePages.clicks', 'клик.')}
+            </div>
             <Badge variant="secondary" className="text-xs">
               {t('dashboard.sitePages.home', 'Главная')}
             </Badge>
@@ -299,6 +307,11 @@ export const SitePagesManager = memo(function SitePagesManager() {
               <div className="text-xs text-muted-foreground truncate">
                 /{homePage?.slug}/p/{p.page_path}
               </div>
+            </div>
+            <div className="text-[10px] text-muted-foreground tabular-nums whitespace-nowrap hidden sm:block">
+              {(pageStats[p.id]?.views ?? 0).toLocaleString()} {t('dashboard.sitePages.views', 'просм.')}
+              {' · '}
+              {(pageStats[p.id]?.clicks ?? 0).toLocaleString()} {t('dashboard.sitePages.clicks', 'клик.')}
             </div>
             {p.is_published ? (
               <Badge variant="secondary" className="text-xs">

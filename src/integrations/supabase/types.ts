@@ -4287,6 +4287,14 @@ export type Database = {
         }[]
       }
       get_public_trust_metrics: { Args: never; Returns: Json }
+      get_site_pages_stats: {
+        Args: { _days?: number; _site_id: string }
+        Returns: {
+          clicks: number
+          page_id: string
+          views: number
+        }[]
+      }
       get_team_by_invite_code: {
         Args: { p_code: string }
         Returns: {
