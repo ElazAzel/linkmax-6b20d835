@@ -546,6 +546,10 @@ export const SitePagesManager = memo(function SitePagesManager() {
         pageLabel={settingsFor?.label}
         onClose={() => setSettingsFor(null)}
       />
+
+      <div className="pt-3">
+        <SiteNavFooterEditor site={site} pages={pages} userId={userId} />
+      </div>
     </Card>
   );
 });
