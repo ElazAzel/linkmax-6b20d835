@@ -10,6 +10,7 @@ import FileText from 'lucide-react/dist/esm/icons/file-text';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Home from 'lucide-react/dist/esm/icons/home';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
 import { Button } from '@/components/ui/button';
@@ -43,6 +44,7 @@ import {
   useCreateSubPage,
   useDeleteSubPage,
   useSetPagePublished,
+  useUpdateSubPage,
 } from '@/hooks/sites/useSite';
 import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
 import {
@@ -73,12 +75,14 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const createSubPage = useCreateSubPage(site?.id, userId);
   const deleteSubPage = useDeleteSubPage(site?.id);
   const setPublished = useSetPagePublished(site?.id);
+  const updateSubPageMut = useUpdateSubPage(site?.id);
 
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [path, setPath] = useState('');
   const [sectionId, setSectionId] = useState<SectionPresetId>('hero');
   const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string } | null>(null);
+  const [editing, setEditing] = useState<{ id: string; title: string; path: string } | null>(null);
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
@@ -105,6 +109,34 @@ export const SitePagesManager = memo(function SitePagesManager() {
       toast.error(t('dashboard.sitePages.deleteError', 'Не удалось удалить страницу'));
     }
     setPendingDelete(null);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editing) return;
+    const normalized = normalizePath(editing.path);
+    if (!PATH_RX.test(normalized)) {
+      toast.error(
+        t('dashboard.sitePages.invalidPath', 'Путь должен содержать только латинские буквы, цифры и дефис'),
+      );
+      return;
+    }
+    if (subPages.some((p) => p.id !== editing.id && p.page_path === normalized)) {
+      toast.error(t('dashboard.sitePages.pathTaken', 'Такой путь уже существует'));
+      return;
+    }
+    const res = await updateSubPageMut.mutateAsync({
+      pageId: editing.id,
+      title: editing.title,
+      pagePath: normalized,
+    });
+    if (res.ok) {
+      toast.success(t('dashboard.sitePages.updated', 'Страница обновлена'));
+      setEditing(null);
+    } else if (res.error === 'path_taken') {
+      toast.error(t('dashboard.sitePages.pathTaken', 'Такой путь уже существует'));
+    } else {
+      toast.error(t('dashboard.sitePages.updateError', 'Не удалось обновить страницу'));
+    }
   };
 
   const handleCreate = async () => {
@@ -316,6 +348,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
             <Button
               size="icon"
               variant="ghost"
+              className="h-7 w-7"
+              onClick={() => setEditing({ id: p.id, title: p.title || '', path: p.page_path || '' })}
+              aria-label={t('common.edit', 'Изменить')}
+              title={t('common.edit', 'Изменить')}
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
               className="h-7 w-7 text-destructive hover:text-destructive"
               onClick={() => setPendingDelete({ id: p.id, title: p.title || p.page_path || '' })}
               aria-label={t('common.delete', 'Удалить')}
@@ -356,6 +398,61 @@ export const SitePagesManager = memo(function SitePagesManager() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {t('dashboard.sitePages.editTitle', 'Изменить страницу')}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="edit-title">
+                {t('dashboard.sitePages.titleLabel', 'Название')}
+              </Label>
+              <Input
+                id="edit-title"
+                value={editing?.title || ''}
+                onChange={(e) => setEditing((s) => (s ? { ...s, title: e.target.value } : s))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-path">
+                {t('dashboard.sitePages.pathLabel', 'Путь (URL)')}
+              </Label>
+              <div className="flex items-center gap-1 text-sm">
+                <span className="text-muted-foreground">
+                  /{homePage?.slug || 'username'}/p/
+                </span>
+                <Input
+                  id="edit-path"
+                  value={editing?.path || ''}
+                  onChange={(e) => setEditing((s) => (s ? { ...s, path: e.target.value } : s))}
+                  className="flex-1"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t(
+                  'dashboard.sitePages.editPathHint',
+                  'Изменение пути меняет публичный URL — старые ссылки перестанут работать.',
+                )}
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditing(null)}>
+              {t('common.cancel', 'Отмена')}
+            </Button>
+            <Button
+              onClick={handleSaveEdit}
+              disabled={updateSubPageMut.isPending || !editing?.path.trim()}
+            >
+              {t('common.save', 'Сохранить')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 });

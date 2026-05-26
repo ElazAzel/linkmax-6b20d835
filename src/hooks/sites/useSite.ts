@@ -11,6 +11,7 @@ import {
   createSubPage,
   deleteSubPage,
   setPagePublished,
+  updateSubPage,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
@@ -78,6 +79,17 @@ export function useSetPagePublished(siteId: string | undefined) {
   return useMutation({
     mutationFn: (input: { pageId: string; isPublished: boolean }) =>
       setPagePublished(input.pageId, input.isPublished),
+    onSuccess: () => {
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
+
+export function useUpdateSubPage(siteId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { pageId: string; title?: string; pagePath?: string }) =>
+      updateSubPage(input.pageId, { title: input.title, pagePath: input.pagePath }),
     onSuccess: () => {
       if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
     },
