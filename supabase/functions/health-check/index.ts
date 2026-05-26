@@ -1,7 +1,6 @@
 /// <reference lib="deno.ns" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -14,41 +13,60 @@ serve(async (req) => {
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const health: Record<string, any> = {
+    // Admin auth required — health internals leak server posture
+    const authHeader = req.headers.get("Authorization");
+    let isAdmin = false;
+    if (authHeader?.startsWith("Bearer ")) {
+        try {
+            const supabaseAuth = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? "", {
+                global: { headers: { Authorization: authHeader } },
+            });
+            const token = authHeader.replace("Bearer ", "");
+            const { data: claimsData } = await supabaseAuth.auth.getClaims(token);
+            const userId = claimsData?.claims?.sub as string | undefined;
+            if (userId) {
+                const { data } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
+                isAdmin = !!data;
+            }
+        } catch { /* ignore */ }
+    }
+    if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+    }
+
+    const health: Record<string, unknown> = {
         status: "ok",
         timestamp: new Date().toISOString(),
-        services: {
-            database: "unknown",
-            storage: "unknown",
-            env_vars: "ok",
-        },
+        services: { database: "unknown", storage: "unknown", env_vars: "ok" },
     };
+    const services = health.services as Record<string, string>;
 
     try {
-        // 1. Check Database
         const { error: dbError } = await supabase.from("pages").select("count", { count: "exact", head: true });
-        health.services.database = dbError ? `error: ${dbError.message}` : "online";
+        services.database = dbError ? "error" : "online";
         if (dbError) health.status = "error";
 
-        // 2. Check Required Env Vars
         const requiredEnvVars = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "RESEND_API_KEY", "TELEGRAM_BOT_TOKEN"];
-        const missingVars = requiredEnvVars.filter((v) => !Deno.env.get(v));
-        if (missingVars.length > 0) {
-            health.services.env_vars = `missing: ${missingVars.join(", ")}`;
+        const missingCount = requiredEnvVars.filter((v) => !Deno.env.get(v)).length;
+        if (missingCount > 0) {
+            // Do not leak specific env var names to clients
+            services.env_vars = `missing:${missingCount}`;
             health.status = "error";
         }
 
-        // 3. Check Storage (Optional check if bucket exists)
-        const { data: buckets, error: storageError } = await supabase.storage.listBuckets();
-        health.services.storage = storageError ? `error: ${storageError.message}` : "online";
+        const { error: storageError } = await supabase.storage.listBuckets();
+        services.storage = storageError ? "error" : "online";
         if (storageError) health.status = "error";
-
     } catch (err: unknown) {
         health.status = "error";
-        health.error = err instanceof Error ? err.message : String(err);
+        health.error = err instanceof Error ? "internal error" : "internal error";
+        console.error("health-check error", err);
     }
 
     return new Response(JSON.stringify(health), {
