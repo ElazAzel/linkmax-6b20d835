@@ -203,6 +203,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
           <CardTitle className="text-base font-medium">
             {t('dashboard.sitePages.title', 'Страницы сайта')}
           </CardTitle>
+          {reachedLimit ? (
+            <Button
+              size="sm"
+              variant="default"
+              className="rounded-xl"
+              onClick={() => navigate('/pricing')}
+            >
+              {t('dashboard.sitePages.upgrade', 'Обновить до Pro')}
+            </Button>
+          ) : (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button size="sm" variant="outline" className="rounded-xl">
