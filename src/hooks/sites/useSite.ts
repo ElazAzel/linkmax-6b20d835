@@ -85,5 +85,16 @@ export function useSetPagePublished(siteId: string | undefined) {
   });
 }
 
+export function useUpdateSubPage(siteId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { pageId: string; title?: string; pagePath?: string }) =>
+      updateSubPage(input.pageId, { title: input.title, pagePath: input.pagePath }),
+    onSuccess: () => {
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
+
 // Re-export for direct use
 export { getMySite } from '@/services/sites';
