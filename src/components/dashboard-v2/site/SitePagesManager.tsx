@@ -11,6 +11,7 @@ import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Home from 'lucide-react/dist/esm/icons/home';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Pencil from 'lucide-react/dist/esm/icons/pencil';
+import Settings from 'lucide-react/dist/esm/icons/settings';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
 import { Button } from '@/components/ui/button';
@@ -51,6 +52,7 @@ import {
 } from '@/hooks/sites/useSite';
 import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
 import { SiteTemplateGallery } from './SiteTemplateGallery';
+import { PageSettingsDrawer } from './PageSettingsDrawer';
 import {
   Select,
   SelectContent,
@@ -91,6 +93,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const [sectionId, setSectionId] = useState<SectionPresetId>('hero');
   const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string } | null>(null);
   const [editing, setEditing] = useState<{ id: string; title: string; path: string } | null>(null);
+  const [settingsFor, setSettingsFor] = useState<{ id: string; label: string } | null>(null);
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
@@ -328,6 +331,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
             <Badge variant="secondary" className="text-xs">
               {t('dashboard.sitePages.home', 'Главная')}
             </Badge>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-7 w-7"
+              onClick={() => setSettingsFor({ id: homePage.id, label: homePage.title || homePage.slug })}
+              aria-label={t('pageSettings.open', 'Настройки страницы')}
+              title={t('pageSettings.open', 'Настройки страницы')}
+            >
+              <Settings className="w-3.5 h-3.5" />
+            </Button>
           </div>
         )}
         {!isPremium && (
@@ -416,6 +429,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
               title={t('common.edit', 'Изменить')}
             >
               <Pencil className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-7 w-7"
+              onClick={() => setSettingsFor({ id: p.id, label: p.title || p.page_path || '' })}
+              aria-label={t('pageSettings.open', 'Настройки страницы')}
+              title={t('pageSettings.open', 'Настройки страницы')}
+            >
+              <Settings className="w-3.5 h-3.5" />
             </Button>
             <Button
               size="icon"
@@ -515,6 +538,13 @@ export const SitePagesManager = memo(function SitePagesManager() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <PageSettingsDrawer
+        siteId={site?.id}
+        pageId={settingsFor?.id ?? null}
+        pageLabel={settingsFor?.label}
+        onClose={() => setSettingsFor(null)}
+      />
     </Card>
   );
 });

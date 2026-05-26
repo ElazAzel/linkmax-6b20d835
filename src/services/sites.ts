@@ -210,6 +210,52 @@ export async function updateSubPage(
   return { ok: !error, error: error?.message };
 }
 
+export interface PageSeoMeta {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  og_image?: string;
+}
+
+export interface PageSettingsPayload {
+  seo_meta: PageSeoMeta;
+  favicon_url: string | null;
+  is_indexable: boolean;
+  hide_branding: boolean;
+}
+
+/** Fetch SEO + branding settings for a single page (owner only via RLS). */
+export async function getPageSettings(pageId: string): Promise<PageSettingsPayload | null> {
+  const { data, error } = await supabase
+    .from('pages')
+    .select('seo_meta, favicon_url, is_indexable, hide_branding')
+    .eq('id', pageId)
+    .maybeSingle();
+  if (error || !data) return null;
+  const row = data as Record<string, unknown>;
+  return {
+    seo_meta: (row.seo_meta as PageSeoMeta) ?? {},
+    favicon_url: (row.favicon_url as string | null) ?? null,
+    is_indexable: (row.is_indexable as boolean) ?? true,
+    hide_branding: (row.hide_branding as boolean) ?? false,
+  };
+}
+
+/** Patch SEO + branding settings for a single page. */
+export async function updatePageSettings(
+  pageId: string,
+  patch: Partial<PageSettingsPayload>,
+): Promise<boolean> {
+  const update: Record<string, unknown> = {};
+  if (patch.seo_meta !== undefined) update.seo_meta = patch.seo_meta;
+  if (patch.favicon_url !== undefined) update.favicon_url = patch.favicon_url;
+  if (patch.is_indexable !== undefined) update.is_indexable = patch.is_indexable;
+  if (patch.hide_branding !== undefined) update.hide_branding = patch.hide_branding;
+  if (Object.keys(update).length === 0) return true;
+  const { error } = await supabase.from('pages').update(update as never).eq('id', pageId);
+  return !error;
+}
+
 export type SitePageStat = { page_id: string; views: number; clicks: number };
 
 /** Per-page views/clicks for the last N days (default 30). Owner-only via RPC. */
