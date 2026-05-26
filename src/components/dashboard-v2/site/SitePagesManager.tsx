@@ -398,6 +398,61 @@ export const SitePagesManager = memo(function SitePagesManager() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {t('dashboard.sitePages.editTitle', 'Изменить страницу')}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="edit-title">
+                {t('dashboard.sitePages.titleLabel', 'Название')}
+              </Label>
+              <Input
+                id="edit-title"
+                value={editing?.title || ''}
+                onChange={(e) => setEditing((s) => (s ? { ...s, title: e.target.value } : s))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-path">
+                {t('dashboard.sitePages.pathLabel', 'Путь (URL)')}
+              </Label>
+              <div className="flex items-center gap-1 text-sm">
+                <span className="text-muted-foreground">
+                  /{homePage?.slug || 'username'}/p/
+                </span>
+                <Input
+                  id="edit-path"
+                  value={editing?.path || ''}
+                  onChange={(e) => setEditing((s) => (s ? { ...s, path: e.target.value } : s))}
+                  className="flex-1"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t(
+                  'dashboard.sitePages.editPathHint',
+                  'Изменение пути меняет публичный URL — старые ссылки перестанут работать.',
+                )}
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditing(null)}>
+              {t('common.cancel', 'Отмена')}
+            </Button>
+            <Button
+              onClick={handleSaveEdit}
+              disabled={updateSubPageMut.isPending || !editing?.path.trim()}
+            >
+              {t('common.save', 'Сохранить')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 });
