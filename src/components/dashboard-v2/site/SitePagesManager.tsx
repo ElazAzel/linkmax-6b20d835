@@ -331,6 +331,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
             <Badge variant="secondary" className="text-xs">
               {t('dashboard.sitePages.home', 'Главная')}
             </Badge>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-7 w-7"
+              onClick={() => setSettingsFor({ id: homePage.id, label: homePage.title || homePage.slug })}
+              aria-label={t('pageSettings.open', 'Настройки страницы')}
+              title={t('pageSettings.open', 'Настройки страницы')}
+            >
+              <Settings className="w-3.5 h-3.5" />
+            </Button>
           </div>
         )}
         {!isPremium && (
