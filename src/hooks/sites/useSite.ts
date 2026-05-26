@@ -187,3 +187,17 @@ export function useUpdateSiteFooter(siteId: string | undefined, userId: string |
     },
   });
 }
+
+export function useUpdateSiteRedirects(siteId: string | undefined, userId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (redirects: SiteRedirect[]) => {
+      if (!siteId) throw new Error('siteId required');
+      return updateSiteRedirects(siteId, redirects);
+    },
+    onSuccess: () => {
+      if (userId) qc.invalidateQueries({ queryKey: siteKeys.mySite(userId) });
+      if (siteId) qc.invalidateQueries({ queryKey: ['site-redirects'] });
+    },
+  });
+}
