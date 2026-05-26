@@ -18,11 +18,11 @@
 ## Спринт 1 (нед 1-2): Закрепление Site Builder
 **Цель:** довести multi-page до production-grade и сделать его очевидным в UI.
 
-- Templates Gallery: 5-7 готовых многостраничных шаблонов (Услуги, Эксперт, Кафе, Магазин, Школа, Портфолио, Лендинг-продукт). Применение в 1 клик через `createSubPage` + seed blocks.
-- Page Settings drawer: SEO (title/description/og-image), favicon, custom path validation, 301-редиректы при смене path.
-- Navigation Builder: ручная сортировка пунктов меню, hide-from-nav флаг, группировка (dropdown).
-- Footer Block (sitewide): один футер на все страницы сайта.
-- Onboarding update: после регистрации — выбор «1 страница» vs «Сайт из шаблона».
+- ✅ Templates Gallery: 6 многостраничных шаблонов + applySiteTemplate (idempotent).
+- ✅ Page Settings drawer: SEO title/description/og-image, favicon, indexable, hide-branding (Pro).
+- ✅ Navigation Builder: ручная сортировка пунктов меню (↑/↓), hide-from-nav, сохранение в site.settings.nav.
+- ✅ Footer Block (sitewide): включаемый футер (text/links/copyright) в site.settings.footer, рендер в PublicPage.
+- 🔜 Onboarding update: после регистрации — выбор «1 страница» vs «Сайт из шаблона».
 
 ## Спринт 2 (нед 3-4): Конверсия и монетизация
 **Цель:** поднять Starter→Pro на multi-page лимите.
