@@ -152,6 +152,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
   };
 
   const handleCreate = async () => {
+    if (reachedLimit) {
+      toast.error(
+        t(
+          'dashboard.sitePages.limitToast',
+          'Лимит страниц на Starter ({{n}} подстраниц). Обновитесь до Pro.',
+          { n: SUBPAGE_LIMIT_STARTER },
+        ),
+      );
+      return;
+    }
     const normalized = normalizePath(path || title);
     if (!PATH_RX.test(normalized)) {
       toast.error(
