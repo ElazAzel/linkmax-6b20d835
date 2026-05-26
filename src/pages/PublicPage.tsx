@@ -427,6 +427,8 @@ export default function PublicPage() {
                 {showWatermark && <div className="h-16" />}
               </div>
 
+              <SiteFooter ownerUserId={pageData?.userId} />
+
               {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
               <FreemiumWatermark show={showWatermark} slug={slug} />
 
