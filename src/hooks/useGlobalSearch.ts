@@ -40,10 +40,10 @@ export function useGlobalSearch() {
       // typically ~3-4× faster when a zone is active (4 parallel requests vs serial).
       const pagesPromise = (supabase
         .from('pages')
-        .select('id, slug, title, updated_at') as any)
+        .select('id, slug, title, updated_at, page_path, is_home, site_id') as any)
         .eq('owner_id', user.id)
-        .ilike('title', `%${sanitized}%`)
-        .limit(5);
+        .or(`title.ilike.%${sanitized}%,page_path.ilike.%${sanitized}%,slug.ilike.%${sanitized}%`)
+        .limit(8);
 
       const zoneId = currentZone?.id;
       const contactsPromise = zoneId
@@ -81,12 +81,22 @@ export function useGlobalSearch() {
       ] = await Promise.all([pagesPromise, contactsPromise, dealsPromise, tasksPromise]);
 
       if (pages) {
+        // Build a map of site_id -> home slug for sub-page subtitles
+        const homeSlugBySite: Record<string, string> = {};
         (pages as any[]).forEach(p => {
+          if (p.is_home && p.site_id) homeSlugBySite[p.site_id] = p.slug;
+        });
+        (pages as any[]).forEach(p => {
+          const isSub = !p.is_home && p.page_path && p.site_id;
+          const homeSlug = isSub ? homeSlugBySite[p.site_id] : null;
+          const subtitle = isSub
+            ? (homeSlug ? `/${homeSlug}/p/${p.page_path}` : `/p/${p.page_path}`)
+            : `/${p.slug}`;
           searchResults.push({
             id: p.id,
             type: 'page',
-            title: p.title || p.slug,
-            subtitle: `/${p.slug}`,
+            title: p.title || p.slug || p.page_path,
+            subtitle,
             url: `/dashboard/pages/${p.id}`,
             date: p.updated_at,
           });

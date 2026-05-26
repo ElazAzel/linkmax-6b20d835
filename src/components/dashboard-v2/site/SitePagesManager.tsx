@@ -3,7 +3,8 @@
  * Lets the user list, add, and open sub-pages of their site.
  * Self-contained: fetches its own site + page list via hooks.
  */
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
@@ -97,6 +98,17 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const [editing, setEditing] = useState<{ id: string; title: string; path: string } | null>(null);
   const [settingsFor, setSettingsFor] = useState<{ id: string; label: string } | null>(null);
   const [paywallOpen, setPaywallOpen] = useState(false);
+
+  // Cmd+K deep-links: /dashboard?tab=pages&action=new-subpage
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const action = searchParams.get('action');
+    if (action === 'new-subpage') {
+      setOpen(true);
+      searchParams.delete('action');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);

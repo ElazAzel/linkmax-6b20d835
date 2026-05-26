@@ -94,6 +94,18 @@ export function GlobalCommandPalette() {
         {searchQuery.length === 0 && (
           <>
             <CommandGroup heading={t('search.groups.quickActions', 'Quick Actions')}>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=pages&action=new-subpage'); }}>
+                <Plus className="h-4 w-4 mr-2" />
+                {t('search.actions.newSubPage', 'Добавить страницу сайта')}
+              </CommandItem>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=pages&action=site-template'); }}>
+                <Layout className="h-4 w-4 mr-2" />
+                {t('search.actions.applyTemplate', 'Применить шаблон сайта')}
+              </CommandItem>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=editor&action=add-section'); }}>
+                <Plus className="h-4 w-4 mr-2 text-primary" />
+                {t('search.actions.addSection', 'Добавить секцию')}
+              </CommandItem>
               <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/crm?sheet=lead'); }}>
                 <Plus className="h-4 w-4 mr-2" />
                 {t('crm.createLead', 'Create Lead')}
