@@ -96,6 +96,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string } | null>(null);
   const [editing, setEditing] = useState<{ id: string; title: string; path: string } | null>(null);
   const [settingsFor, setSettingsFor] = useState<{ id: string; label: string } | null>(null);
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
