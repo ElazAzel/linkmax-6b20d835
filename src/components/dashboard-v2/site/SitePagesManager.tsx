@@ -312,6 +312,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               {(pageStats[p.id]?.views ?? 0).toLocaleString()} {t('dashboard.sitePages.views', 'просм.')}
               {' · '}
               {(pageStats[p.id]?.clicks ?? 0).toLocaleString()} {t('dashboard.sitePages.clicks', 'клик.')}
+            </div>
             {p.is_published ? (
               <Badge variant="secondary" className="text-xs">
                 {t('dashboard.sitePages.published', 'Опубликована')}
