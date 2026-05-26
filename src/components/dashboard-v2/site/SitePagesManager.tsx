@@ -308,6 +308,10 @@ export const SitePagesManager = memo(function SitePagesManager() {
                 /{homePage?.slug}/p/{p.page_path}
               </div>
             </div>
+            <div className="text-[10px] text-muted-foreground tabular-nums whitespace-nowrap hidden sm:block">
+              {(pageStats[p.id]?.views ?? 0).toLocaleString()} {t('dashboard.sitePages.views', 'просм.')}
+              {' · '}
+              {(pageStats[p.id]?.clicks ?? 0).toLocaleString()} {t('dashboard.sitePages.clicks', 'клик.')}
             {p.is_published ? (
               <Badge variant="secondary" className="text-xs">
                 {t('dashboard.sitePages.published', 'Опубликована')}
