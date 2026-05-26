@@ -128,3 +128,28 @@ export function useApplySiteTemplate(siteId: string | undefined, userId: string 
     },
   });
 }
+
+export const pageSettingsKey = (pageId: string) => ['page', 'settings', pageId] as const;
+
+export function usePageSettings(pageId: string | undefined) {
+  return useQuery({
+    queryKey: pageSettingsKey(pageId || ''),
+    queryFn: () => (pageId ? getPageSettings(pageId) : Promise.resolve(null)),
+    enabled: !!pageId,
+    staleTime: 30 * 1000,
+  });
+}
+
+export function useUpdatePageSettings(siteId: string | undefined, pageId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (patch: Partial<PageSettingsPayload>) => {
+      if (!pageId) throw new Error('pageId required');
+      return updatePageSettings(pageId, patch);
+    },
+    onSuccess: () => {
+      if (pageId) qc.invalidateQueries({ queryKey: pageSettingsKey(pageId) });
+      if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
