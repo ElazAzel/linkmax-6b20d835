@@ -126,7 +126,30 @@ export const SiteNavFooterEditor = memo(function SiteNavFooterEditor({ site, pag
     else toast.error(t('siteFooter.saveError', 'Не удалось сохранить футер'));
   };
 
+  // ----- REDIRECTS state -----
+  const initialRedirects = useMemo(() => readSiteRedirects(site?.settings ?? {}), [site?.settings]);
+  const [redirects, setRedirects] = useState<SiteRedirect[]>([]);
+  useEffect(() => {
+    setRedirects(initialRedirects);
+  }, [initialRedirects]);
+
+  const addRedirect = () => {
+    if (redirects.length >= 50) return;
+    setRedirects((p) => [...p, { from: '', to: '', code: 301 }]);
+  };
+  const removeRedirect = (idx: number) =>
+    setRedirects((p) => p.filter((_, i) => i !== idx));
+  const patchRedirect = (idx: number, patch: Partial<SiteRedirect>) =>
+    setRedirects((p) => p.map((r, i) => (i === idx ? { ...r, ...patch } : r)));
+
+  const saveRedirects = async () => {
+    const ok = await updateRedirects.mutateAsync(redirects);
+    if (ok) toast.success(t('siteRedirects.savedToast', 'Редиректы сохранены'));
+    else toast.error(t('siteRedirects.saveError', 'Не удалось сохранить редиректы'));
+  };
+
   if (!site) return null;
+
 
   return (
     <Card className="border-0 shadow-none bg-muted/30">
