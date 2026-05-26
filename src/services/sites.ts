@@ -320,3 +320,84 @@ export async function applySiteTemplate(input: {
   }
   return { created, skipped };
 }
+
+// ---------- Navigation & Footer settings (stored in site.settings) ----------
+
+export interface SiteNavConfig {
+  /** Ordered list of pageIds (subset that overrides default order). Pages not listed go after, in default order. */
+  order: string[];
+  /** PageIds that should NOT appear in the public nav. Home is always shown. */
+  hidden: string[];
+}
+
+export interface SiteFooterLink {
+  label: string;
+  url: string;
+}
+
+export interface SiteFooterConfig {
+  enabled: boolean;
+  text?: string;
+  copyright?: string;
+  links?: SiteFooterLink[];
+}
+
+export function readSiteNav(settings: Record<string, unknown> | null | undefined): SiteNavConfig {
+  const nav = (settings as { nav?: Partial<SiteNavConfig> } | null | undefined)?.nav ?? {};
+  return {
+    order: Array.isArray(nav.order) ? nav.order.filter((x): x is string => typeof x === 'string') : [],
+    hidden: Array.isArray(nav.hidden) ? nav.hidden.filter((x): x is string => typeof x === 'string') : [],
+  };
+}
+
+export function readSiteFooter(settings: Record<string, unknown> | null | undefined): SiteFooterConfig {
+  const footer = (settings as { footer?: Partial<SiteFooterConfig> } | null | undefined)?.footer ?? {};
+  return {
+    enabled: !!footer.enabled,
+    text: typeof footer.text === 'string' ? footer.text : '',
+    copyright: typeof footer.copyright === 'string' ? footer.copyright : '',
+    links: Array.isArray(footer.links)
+      ? footer.links
+          .filter(
+            (l): l is SiteFooterLink =>
+              !!l && typeof (l as SiteFooterLink).label === 'string' && typeof (l as SiteFooterLink).url === 'string',
+          )
+          .slice(0, 8)
+      : [],
+  };
+}
+
+/** Patch `site.settings.nav` (shallow merge). */
+export async function updateSiteNav(siteId: string, patch: Partial<SiteNavConfig>): Promise<boolean> {
+  const { data: row } = await supabase
+    .from('sites' as never)
+    .select('settings')
+    .eq('id', siteId)
+    .maybeSingle();
+  const settings = ((row as { settings?: Record<string, unknown> } | null)?.settings ?? {}) as Record<string, unknown>;
+  const current = readSiteNav(settings);
+  const next: SiteNavConfig = { ...current, ...patch };
+  const { error } = await supabase
+    .from('sites' as never)
+    .update({ settings: { ...settings, nav: next } } as never)
+    .eq('id', siteId);
+  return !error;
+}
+
+/** Patch `site.settings.footer` (shallow merge). */
+export async function updateSiteFooter(siteId: string, patch: Partial<SiteFooterConfig>): Promise<boolean> {
+  const { data: row } = await supabase
+    .from('sites' as never)
+    .select('settings')
+    .eq('id', siteId)
+    .maybeSingle();
+  const settings = ((row as { settings?: Record<string, unknown> } | null)?.settings ?? {}) as Record<string, unknown>;
+  const current = readSiteFooter(settings);
+  const next: SiteFooterConfig = { ...current, ...patch };
+  const { error } = await supabase
+    .from('sites' as never)
+    .update({ settings: { ...settings, footer: next } } as never)
+    .eq('id', siteId);
+  return !error;
+}
+
