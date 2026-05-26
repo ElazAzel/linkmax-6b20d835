@@ -8,7 +8,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 
 // Critical above-fold components - load eagerly
-import { HeroSectionExpert } from '@/components/landing/v2/HeroSectionExpert';
+import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 
 // Below-fold & non-critical components - lazy loaded
