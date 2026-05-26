@@ -13,10 +13,13 @@ import ArrowDownLeft from 'lucide-react/dist/esm/icons/arrow-down-left';
 import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Zap from 'lucide-react/dist/esm/icons/zap';
+import Download from 'lucide-react/dist/esm/icons/download';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 
 const GET_DATE_LOCALE = (lang: string) => {
