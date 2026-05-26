@@ -50,6 +50,7 @@ import {
   useSitePagesStats,
 } from '@/hooks/sites/useSite';
 import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
+import { SiteTemplateGallery } from './SiteTemplateGallery';
 import {
   Select,
   SelectContent,
@@ -213,6 +214,13 @@ export const SitePagesManager = memo(function SitePagesManager() {
               {t('dashboard.sitePages.upgrade', 'Обновить до Pro')}
             </Button>
           ) : (
+          <div className="flex items-center gap-2">
+            <SiteTemplateGallery
+              siteId={site.id}
+              userId={userId}
+              remainingSlots={Number.isFinite(subPageLimit) ? subPageLimit - subPages.length : 99}
+              disabled={reachedLimit}
+            />
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button size="sm" variant="outline" className="rounded-xl">
@@ -298,6 +306,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          </div>
           )}
         </div>
       </CardHeader>
