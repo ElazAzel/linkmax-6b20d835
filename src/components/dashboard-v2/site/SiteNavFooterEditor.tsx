@@ -19,10 +19,16 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { readSiteNav, readSiteFooter, type SiteFooterLink } from '@/services/sites';
+import {
+  readSiteNav,
+  readSiteFooter,
+  readSiteRedirects,
+  type SiteFooterLink,
+  type SiteRedirect,
+} from '@/services/sites';
 import type { Site } from '@/types/site';
 import type { SitePageSummary } from '@/types/site';
-import { useUpdateSiteNav, useUpdateSiteFooter } from '@/hooks/sites/useSite';
+import { useUpdateSiteNav, useUpdateSiteFooter, useUpdateSiteRedirects } from '@/hooks/sites/useSite';
 
 interface Props {
   site: Site | null | undefined;
@@ -34,6 +40,7 @@ export const SiteNavFooterEditor = memo(function SiteNavFooterEditor({ site, pag
   const { t } = useTranslation();
   const updateNav = useUpdateSiteNav(site?.id, userId);
   const updateFooter = useUpdateSiteFooter(site?.id, userId);
+  const updateRedirects = useUpdateSiteRedirects(site?.id, userId);
 
   // ----- NAV state (subset of subPages — home is always pinned, not editable) -----
   const subPages = useMemo(() => pages.filter((p) => !p.is_home), [pages]);
@@ -119,7 +126,30 @@ export const SiteNavFooterEditor = memo(function SiteNavFooterEditor({ site, pag
     else toast.error(t('siteFooter.saveError', 'Не удалось сохранить футер'));
   };
 
+  // ----- REDIRECTS state -----
+  const initialRedirects = useMemo(() => readSiteRedirects(site?.settings ?? {}), [site?.settings]);
+  const [redirects, setRedirects] = useState<SiteRedirect[]>([]);
+  useEffect(() => {
+    setRedirects(initialRedirects);
+  }, [initialRedirects]);
+
+  const addRedirect = () => {
+    if (redirects.length >= 50) return;
+    setRedirects((p) => [...p, { from: '', to: '', code: 301 }]);
+  };
+  const removeRedirect = (idx: number) =>
+    setRedirects((p) => p.filter((_, i) => i !== idx));
+  const patchRedirect = (idx: number, patch: Partial<SiteRedirect>) =>
+    setRedirects((p) => p.map((r, i) => (i === idx ? { ...r, ...patch } : r)));
+
+  const saveRedirects = async () => {
+    const ok = await updateRedirects.mutateAsync(redirects);
+    if (ok) toast.success(t('siteRedirects.savedToast', 'Редиректы сохранены'));
+    else toast.error(t('siteRedirects.saveError', 'Не удалось сохранить редиректы'));
+  };
+
   if (!site) return null;
+
 
   return (
     <Card className="border-0 shadow-none bg-muted/30">
@@ -301,7 +331,79 @@ export const SiteNavFooterEditor = memo(function SiteNavFooterEditor({ site, pag
             </div>
           )}
         </section>
+
+        {/* --- Redirects Manager --- */}
+        <section className="space-y-3 pt-2 border-t border-border/40">
+          <div className="flex items-center justify-between gap-3 pt-3">
+            <div className="space-y-1">
+              <h3 className="text-sm font-medium">
+                {t('siteRedirects.title', 'Редиректы')}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {t(
+                  'siteRedirects.hint',
+                  'Перенаправляйте старые пути на новые. Полезно при переименовании страниц.',
+                )}
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="default"
+              className="rounded-xl"
+              onClick={saveRedirects}
+              disabled={updateRedirects.isPending}
+            >
+              {t('common.save', 'Сохранить')}
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            {redirects.length === 0 && (
+              <p className="text-xs text-muted-foreground py-1 px-1">
+                {t(
+                  'siteRedirects.empty',
+                  'Пока нет редиректов. Добавьте первый — например, со старого /old на новый /p/about.',
+                )}
+              </p>
+            )}
+            {redirects.map((r, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  value={r.from}
+                  onChange={(e) => patchRedirect(i, { from: e.target.value })}
+                  placeholder={t('siteRedirects.fromPh', 'old-path или /p/old')}
+                  className="flex-1"
+                  maxLength={120}
+                />
+                <span className="text-muted-foreground text-xs">→</span>
+                <Input
+                  value={r.to}
+                  onChange={(e) => patchRedirect(i, { to: e.target.value })}
+                  placeholder="/p/about или https://…"
+                  className="flex-[2]"
+                  maxLength={400}
+                />
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8 text-destructive hover:text-destructive"
+                  onClick={() => removeRedirect(i)}
+                  aria-label={t('common.delete', 'Удалить')}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </Button>
+              </div>
+            ))}
+            {redirects.length < 50 && (
+              <Button size="sm" variant="outline" className="rounded-xl" onClick={addRedirect}>
+                <Plus className="w-3.5 h-3.5 mr-1" />
+                {t('siteRedirects.add', 'Добавить редирект')}
+              </Button>
+            )}
+          </div>
+        </section>
       </CardContent>
     </Card>
   );
 });
+

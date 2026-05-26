@@ -401,3 +401,99 @@ export async function updateSiteFooter(siteId: string, patch: Partial<SiteFooter
   return !error;
 }
 
+// ---------- Redirects (stored in site.settings.redirects) ----------
+
+export interface SiteRedirect {
+  /** Source path matched against the request, with or without leading slash. e.g. "old-about" or "/p/old". */
+  from: string;
+  /** Destination. Internal path ("/p/about") or absolute URL ("https://…"). */
+  to: string;
+  /** 301 (permanent, default) or 302 (temporary). */
+  code?: 301 | 302;
+}
+
+export function readSiteRedirects(
+  settings: Record<string, unknown> | null | undefined,
+): SiteRedirect[] {
+  const arr = (settings as { redirects?: unknown } | null | undefined)?.redirects;
+  if (!Array.isArray(arr)) return [];
+  return arr
+    .filter(
+      (r): r is SiteRedirect =>
+        !!r &&
+        typeof (r as SiteRedirect).from === 'string' &&
+        typeof (r as SiteRedirect).to === 'string',
+    )
+    .map((r) => ({
+      from: r.from.trim(),
+      to: r.to.trim(),
+      code: (r.code === 302 ? 302 : 301) as 301 | 302,
+    }))
+    .filter((r) => r.from && r.to)
+    .slice(0, 50);
+}
+
+function normalizeRedirectFrom(s: string): string {
+  let v = (s || '').trim().toLowerCase();
+  if (!v) return '';
+  if (v.startsWith('/')) v = v.slice(1);
+  if (v.startsWith('p/')) v = v.slice(2);
+  if (v.endsWith('/')) v = v.slice(0, -1);
+  return v;
+}
+
+/** Find the first redirect matching the given sub-page path. */
+export function matchRedirect(
+  redirects: SiteRedirect[],
+  pagePath: string | undefined | null,
+): SiteRedirect | null {
+  if (!pagePath) return null;
+  const needle = normalizeRedirectFrom(pagePath);
+  if (!needle) return null;
+  for (const r of redirects) {
+    if (normalizeRedirectFrom(r.from) === needle) return r;
+  }
+  return null;
+}
+
+/** Replace `site.settings.redirects` entirely (cleaned + capped). */
+export async function updateSiteRedirects(
+  siteId: string,
+  redirects: SiteRedirect[],
+): Promise<boolean> {
+  const { data: row } = await supabase
+    .from('sites' as never)
+    .select('settings')
+    .eq('id', siteId)
+    .maybeSingle();
+  const settings = ((row as { settings?: Record<string, unknown> } | null)?.settings ?? {}) as Record<string, unknown>;
+  const cleaned = readSiteRedirects({ redirects });
+  const { error } = await supabase
+    .from('sites' as never)
+    .update({ settings: { ...settings, redirects: cleaned } } as never)
+    .eq('id', siteId);
+  return !error;
+}
+
+/** Load a site's settings.redirects directly by home slug — for public runtime use. */
+export async function loadSiteRedirectsByHomeSlug(
+  homeSlug: string,
+): Promise<SiteRedirect[]> {
+  const { data: home } = await supabase
+    .from('pages')
+    .select('site_id')
+    .eq('slug', homeSlug)
+    .eq('is_published', true)
+    .maybeSingle();
+  const siteId = (home as { site_id?: string } | null)?.site_id;
+  if (!siteId) return [];
+  const { data: row } = await supabase
+    .from('sites' as never)
+    .select('settings')
+    .eq('id', siteId)
+    .maybeSingle();
+  const settings = ((row as { settings?: Record<string, unknown> } | null)?.settings ?? {}) as Record<string, unknown>;
+  return readSiteRedirects(settings);
+}
+
+

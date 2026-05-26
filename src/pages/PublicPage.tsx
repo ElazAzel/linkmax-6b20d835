@@ -97,15 +97,30 @@ export default function PublicPage() {
   useEffect(() => {
     let cancelled = false;
     if (slug && pagePath) {
-      import('@/services/sites').then(({ loadSitePageByPath }) =>
+      import('@/services/sites').then(({ loadSitePageByPath, loadSiteRedirectsByHomeSlug, matchRedirect }) =>
         loadSitePageByPath(slug, pagePath).then((sub) => {
-          if (cancelled || !sub) return;
-          // Fetch the sub-page's slug
-          import('@/integrations/supabase/client').then(({ supabase }) =>
-            supabase.from('pages').select('slug').eq('id', sub.id).maybeSingle().then(({ data }) => {
-              if (!cancelled && data?.slug) setResolvedSubSlug(data.slug);
-            })
-          );
+          if (cancelled) return;
+          if (sub) {
+            import('@/integrations/supabase/client').then(({ supabase }) =>
+              supabase.from('pages').select('slug').eq('id', sub.id).maybeSingle().then(({ data }) => {
+                if (!cancelled && data?.slug) setResolvedSubSlug(data.slug);
+              })
+            );
+            return;
+          }
+          // Sub-page not found — try a site-level redirect before showing error.
+          loadSiteRedirectsByHomeSlug(slug).then((redirects) => {
+            if (cancelled) return;
+            const hit = matchRedirect(redirects, pagePath);
+            if (!hit) return;
+            const dest = hit.to;
+            if (/^https?:\/\//i.test(dest)) {
+              window.location.replace(dest);
+            } else {
+              const path = dest.startsWith('/') ? dest : `/${slug}/p/${dest.replace(/^p\//, '')}`;
+              window.location.replace(path);
+            }
+          });
         })
       );
     } else {

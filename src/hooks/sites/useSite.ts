@@ -18,9 +18,11 @@ import {
   updatePageSettings,
   updateSiteNav,
   updateSiteFooter,
+  updateSiteRedirects,
   type PageSettingsPayload,
   type SiteNavConfig,
   type SiteFooterConfig,
+  type SiteRedirect,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
@@ -182,6 +184,20 @@ export function useUpdateSiteFooter(siteId: string | undefined, userId: string |
     onSuccess: () => {
       if (userId) qc.invalidateQueries({ queryKey: siteKeys.mySite(userId) });
       if (siteId) qc.invalidateQueries({ queryKey: ['site-footer'] });
+    },
+  });
+}
+
+export function useUpdateSiteRedirects(siteId: string | undefined, userId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (redirects: SiteRedirect[]) => {
+      if (!siteId) throw new Error('siteId required');
+      return updateSiteRedirects(siteId, redirects);
+    },
+    onSuccess: () => {
+      if (userId) qc.invalidateQueries({ queryKey: siteKeys.mySite(userId) });
+      if (siteId) qc.invalidateQueries({ queryKey: ['site-redirects'] });
     },
   });
 }

@@ -22,16 +22,18 @@
 - ✅ Page Settings drawer: SEO title/description/og-image, favicon, indexable, hide-branding (Pro).
 - ✅ Navigation Builder: ручная сортировка пунктов меню (↑/↓), hide-from-nav, сохранение в site.settings.nav.
 - ✅ Footer Block (sitewide): включаемый футер (text/links/copyright) в site.settings.footer, рендер в PublicPage.
+- ✅ Redirects Manager: site.settings.redirects (from→to, 301/302), runtime-резолв в PublicPage при ненайденной sub-page.
 - 🔜 Onboarding update: после регистрации — выбор «1 страница» vs «Сайт из шаблона».
 
 ## Спринт 2 (нед 3-4): Конверсия и монетизация
 **Цель:** поднять Starter→Pro на multi-page лимите.
 
-- Soft paywall: при попытке создать 3-ю страницу — модалка с превью Pro + триал 7 дней (одноразовый).
-- Upgrade telemetry: события `paywall_shown`, `paywall_cta_click`, `trial_started` в analytics.
-- Pricing page rewrite под новый Bento-стиль; FAQ с акцентом на «полноценный сайт за цену линка».
-- Kaspi QR one-click из любой Pro-CTA (карточка сделки, paywall, settings).
-- A/B тест: лимит Starter 2 vs 3 страницы — измерить conversion.
+- ✅ Soft paywall modal (PaywallModal): срабатывает при попытке создать 3-ю страницу + клике «Обновить до Pro».
+- ✅ Upgrade telemetry: `paywall_shown`, `paywall_cta_click`, `paywall_dismissed` (posthog).
+- 🔜 Триал 7 дней (одноразовый) в PaywallModal.
+- 🔜 Pricing page rewrite под новый Bento-стиль; FAQ с акцентом на «полноценный сайт за цену линка».
+- 🔜 Kaspi QR one-click из любой Pro-CTA (карточка сделки, paywall, settings).
+- 🔜 A/B тест: лимит Starter 2 vs 3 страницы — измерить conversion.
 
 ## Спринт 3 (нед 5-6): CRM Depth (Q3 roadmap)
 - Multiple pipelines на зону + переключатель.

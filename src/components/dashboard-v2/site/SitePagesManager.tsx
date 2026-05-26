@@ -40,7 +40,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/user/useAuth';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
-import { useNavigate } from 'react-router-dom';
+// navigate removed: paywall handles all upgrade CTAs now.
 import {
   useMySite,
   useSitePages,
@@ -54,6 +54,7 @@ import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/s
 import { SiteTemplateGallery } from './SiteTemplateGallery';
 import { PageSettingsDrawer } from './PageSettingsDrawer';
 import { SiteNavFooterEditor } from './SiteNavFooterEditor';
+import { PaywallModal } from '@/components/billing/PaywallModal';
 import {
   Select,
   SelectContent,
@@ -76,7 +77,7 @@ function normalizePath(input: string): string {
 export const SitePagesManager = memo(function SitePagesManager() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate();
+  // navigate removed; PaywallModal handles upgrade CTA.
   const userId = user?.id;
   const { isPremium } = usePremiumStatus();
   const { data: site, isLoading: siteLoading } = useMySite(userId);
@@ -95,6 +96,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string } | null>(null);
   const [editing, setEditing] = useState<{ id: string; title: string; path: string } | null>(null);
   const [settingsFor, setSettingsFor] = useState<{ id: string; label: string } | null>(null);
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
@@ -158,13 +160,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
 
   const handleCreate = async () => {
     if (reachedLimit) {
-      toast.error(
-        t(
-          'dashboard.sitePages.limitToast',
-          'Лимит страниц на Starter ({{n}} подстраниц). Обновитесь до Pro.',
-          { n: SUBPAGE_LIMIT_STARTER },
-        ),
-      );
+      setPaywallOpen(true);
       return;
     }
     const normalized = normalizePath(path || title);
@@ -213,7 +209,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               size="sm"
               variant="default"
               className="rounded-xl"
-              onClick={() => navigate('/pricing')}
+              onClick={() => setPaywallOpen(true)}
             >
               {t('dashboard.sitePages.upgrade', 'Обновить до Pro')}
             </Button>
@@ -550,6 +546,19 @@ export const SitePagesManager = memo(function SitePagesManager() {
       <div className="pt-3">
         <SiteNavFooterEditor site={site} pages={pages} userId={userId} />
       </div>
+
+      <PaywallModal
+        open={paywallOpen}
+        onOpenChange={setPaywallOpen}
+        source="subpage-limit"
+        headline={t('paywall.subpages.headline', 'Лимит страниц на Starter')}
+        description={t(
+          'paywall.subpages.description',
+          'Starter даёт 1 главную + {{n}} подстраницы. Pro снимает лимит и убирает брендинг.',
+          { n: SUBPAGE_LIMIT_STARTER },
+        )}
+      />
     </Card>
   );
 });
+
