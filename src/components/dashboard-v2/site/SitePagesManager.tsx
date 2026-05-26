@@ -38,6 +38,8 @@ import {
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/user/useAuth';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
+import { useNavigate } from 'react-router-dom';
 import {
   useMySite,
   useSitePages,
