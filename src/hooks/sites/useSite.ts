@@ -11,6 +11,7 @@ import {
   createSubPage,
   deleteSubPage,
   setPagePublished,
+  updateSubPage,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
