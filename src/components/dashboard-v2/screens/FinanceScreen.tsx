@@ -107,10 +107,31 @@ export const FinanceScreen = memo(function FinanceScreen() {
 
                 {/* Transactions History */}
                 <div className="space-y-5">
-                    <h3 className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] px-1 flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4" />
-                        {t('finance.transactions', 'История транзакций')}
-                    </h3>
+                    <div className="flex items-center justify-between gap-3 px-1">
+                        <h3 className="text-xs font-black text-muted-foreground/60 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <TrendingUp className="h-4 w-4" />
+                            {t('finance.transactions', 'История транзакций')}
+                        </h3>
+                        {transactions.length > 0 && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 gap-1.5 text-xs font-bold uppercase tracking-wider"
+                                onClick={async () => {
+                                    try {
+                                        const { exportWalletTransactionsToExcel } = await import('@/lib/export/excel-export-wallet');
+                                        await exportWalletTransactionsToExcel({ transactions, currency });
+                                        toast.success(t('finance.export.success', 'Экспорт готов'));
+                                    } catch (e: any) {
+                                        toast.error(e?.message || t('finance.export.error', 'Не удалось экспортировать'));
+                                    }
+                                }}
+                            >
+                                <Download className="h-3.5 w-3.5" />
+                                {t('common.export', 'Экспорт')}
+                            </Button>
+                        )}
+                    </div>
 
                     {transactions.length === 0 ? (
                         <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
