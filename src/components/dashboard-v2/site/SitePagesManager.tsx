@@ -38,6 +38,8 @@ import {
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/user/useAuth';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
+import { useNavigate } from 'react-router-dom';
 import {
   useMySite,
   useSitePages,
@@ -70,7 +72,9 @@ function normalizePath(input: string): string {
 export const SitePagesManager = memo(function SitePagesManager() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const userId = user?.id;
+  const { isPremium } = usePremiumStatus();
   const { data: site, isLoading: siteLoading } = useMySite(userId);
   const { data: pages = [], isLoading: pagesLoading } = useSitePages(site?.id);
   const pageStatsQuery = useSitePagesStats(site?.id, 30);
@@ -89,6 +93,11 @@ export const SitePagesManager = memo(function SitePagesManager() {
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
+
+  // Starter: до 2 подстраниц (3 страницы всего). Pro: безлимит.
+  const SUBPAGE_LIMIT_STARTER = 2;
+  const subPageLimit = isPremium ? Infinity : SUBPAGE_LIMIT_STARTER;
+  const reachedLimit = subPages.length >= subPageLimit;
 
   const handleTogglePublish = async (pageId: string, current: boolean) => {
     const ok = await setPublished.mutateAsync({ pageId, isPublished: !current });
@@ -143,6 +152,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
   };
 
   const handleCreate = async () => {
+    if (reachedLimit) {
+      toast.error(
+        t(
+          'dashboard.sitePages.limitToast',
+          'Лимит страниц на Starter ({{n}} подстраниц). Обновитесь до Pro.',
+          { n: SUBPAGE_LIMIT_STARTER },
+        ),
+      );
+      return;
+    }
     const normalized = normalizePath(path || title);
     if (!PATH_RX.test(normalized)) {
       toast.error(
@@ -184,6 +203,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
           <CardTitle className="text-base font-medium">
             {t('dashboard.sitePages.title', 'Страницы сайта')}
           </CardTitle>
+          {reachedLimit ? (
+            <Button
+              size="sm"
+              variant="default"
+              className="rounded-xl"
+              onClick={() => navigate('/pricing')}
+            >
+              {t('dashboard.sitePages.upgrade', 'Обновить до Pro')}
+            </Button>
+          ) : (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button size="sm" variant="outline" className="rounded-xl">
@@ -269,6 +298,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          )}
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
@@ -290,6 +320,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
               {t('dashboard.sitePages.home', 'Главная')}
             </Badge>
           </div>
+        )}
+        {!isPremium && (
+          <p className="text-[11px] text-muted-foreground px-2 pt-1">
+            {t(
+              'dashboard.sitePages.starterLimit',
+              'Starter: до {{n}} подстраниц. Pro — без лимита.',
+              { n: SUBPAGE_LIMIT_STARTER },
+            )}{' '}
+            <span className="tabular-nums">({subPages.length}/{SUBPAGE_LIMIT_STARTER})</span>
+          </p>
         )}
         {subPages.length === 0 && (
           <p className="text-xs text-muted-foreground py-2 px-2">
