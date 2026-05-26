@@ -16,7 +16,11 @@ import {
   applySiteTemplate,
   getPageSettings,
   updatePageSettings,
+  updateSiteNav,
+  updateSiteFooter,
   type PageSettingsPayload,
+  type SiteNavConfig,
+  type SiteFooterConfig,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
