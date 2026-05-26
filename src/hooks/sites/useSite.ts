@@ -18,9 +18,11 @@ import {
   updatePageSettings,
   updateSiteNav,
   updateSiteFooter,
+  updateSiteRedirects,
   type PageSettingsPayload,
   type SiteNavConfig,
   type SiteFooterConfig,
+  type SiteRedirect,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
