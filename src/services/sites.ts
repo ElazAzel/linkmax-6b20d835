@@ -209,3 +209,26 @@ export async function updateSubPage(
     .eq('id', pageId);
   return { ok: !error, error: error?.message };
 }
+
+export type SitePageStat = { page_id: string; views: number; clicks: number };
+
+/** Per-page views/clicks for the last N days (default 30). Owner-only via RPC. */
+export async function getSitePagesStats(
+  siteId: string,
+  days = 30,
+): Promise<Record<string, SitePageStat>> {
+  const { data, error } = await supabase.rpc('get_site_pages_stats' as never, {
+    _site_id: siteId,
+    _days: days,
+  } as never);
+  if (error || !Array.isArray(data)) return {};
+  const out: Record<string, SitePageStat> = {};
+  for (const row of data as Array<{ page_id: string; views: number | string; clicks: number | string }>) {
+    out[row.page_id] = {
+      page_id: row.page_id,
+      views: Number(row.views) || 0,
+      clicks: Number(row.clicks) || 0,
+    };
+  }
+  return out;
+}
