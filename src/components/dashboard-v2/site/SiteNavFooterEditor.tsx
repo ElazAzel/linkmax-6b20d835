@@ -331,7 +331,79 @@ export const SiteNavFooterEditor = memo(function SiteNavFooterEditor({ site, pag
             </div>
           )}
         </section>
+
+        {/* --- Redirects Manager --- */}
+        <section className="space-y-3 pt-2 border-t border-border/40">
+          <div className="flex items-center justify-between gap-3 pt-3">
+            <div className="space-y-1">
+              <h3 className="text-sm font-medium">
+                {t('siteRedirects.title', 'Редиректы')}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {t(
+                  'siteRedirects.hint',
+                  'Перенаправляйте старые пути на новые. Полезно при переименовании страниц.',
+                )}
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="default"
+              className="rounded-xl"
+              onClick={saveRedirects}
+              disabled={updateRedirects.isPending}
+            >
+              {t('common.save', 'Сохранить')}
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            {redirects.length === 0 && (
+              <p className="text-xs text-muted-foreground py-1 px-1">
+                {t(
+                  'siteRedirects.empty',
+                  'Пока нет редиректов. Добавьте первый — например, со старого /old на новый /p/about.',
+                )}
+              </p>
+            )}
+            {redirects.map((r, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  value={r.from}
+                  onChange={(e) => patchRedirect(i, { from: e.target.value })}
+                  placeholder={t('siteRedirects.fromPh', 'old-path или /p/old')}
+                  className="flex-1"
+                  maxLength={120}
+                />
+                <span className="text-muted-foreground text-xs">→</span>
+                <Input
+                  value={r.to}
+                  onChange={(e) => patchRedirect(i, { to: e.target.value })}
+                  placeholder="/p/about или https://…"
+                  className="flex-[2]"
+                  maxLength={400}
+                />
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8 text-destructive hover:text-destructive"
+                  onClick={() => removeRedirect(i)}
+                  aria-label={t('common.delete', 'Удалить')}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </Button>
+              </div>
+            ))}
+            {redirects.length < 50 && (
+              <Button size="sm" variant="outline" className="rounded-xl" onClick={addRedirect}>
+                <Plus className="w-3.5 h-3.5 mr-1" />
+                {t('siteRedirects.add', 'Добавить редирект')}
+              </Button>
+            )}
+          </div>
+        </section>
       </CardContent>
     </Card>
   );
 });
+
