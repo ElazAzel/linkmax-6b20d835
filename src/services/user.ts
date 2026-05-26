@@ -387,13 +387,16 @@ export type StartProTrialResult =
  */
 export async function startProTrial(): Promise<StartProTrialResult> {
   try {
-    const { data, error } = await supabase.rpc('start_pro_trial');
+    // Types regenerate async; cast until then.
+    const rpc = supabase.rpc as unknown as (name: string) => Promise<{ data: unknown; error: unknown }>;
+    const { data, error } = await rpc('start_pro_trial');
     if (error) return { ok: false, error: 'unknown' };
-    const payload = data as { ok: boolean; trial_ends_at?: string; error?: string } | null;
+    const payload = data as { ok?: boolean; trial_ends_at?: string; error?: string } | null;
     if (payload?.ok && payload.trial_ends_at) {
       return { ok: true, trialEndsAt: payload.trial_ends_at };
     }
-    return { ok: false, error: (payload?.error as StartProTrialResult extends { ok: false; error: infer E } ? E : never) ?? 'unknown' };
+    const err = (payload?.error ?? 'unknown') as StartProTrialResult extends { ok: false; error: infer E } ? E : never;
+    return { ok: false, error: err };
   } catch {
     return { ok: false, error: 'unknown' };
   }
