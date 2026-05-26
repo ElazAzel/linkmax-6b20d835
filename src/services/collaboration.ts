@@ -294,9 +294,10 @@ export async function getMyTeams(): Promise<Team[]> {
 
   if (teamIds.length === 0) return [];
 
+  const TEAM_PUBLIC_COLS = 'id, name, description, avatar_url, slug, owner_id, niche, is_public, created_at, updated_at';
   const { data, error } = await supabase
     .from('teams')
-    .select('*')
+    .select(TEAM_PUBLIC_COLS)
     .in('id', teamIds);
 
   if (error) {
@@ -310,7 +311,7 @@ export async function getMyTeams(): Promise<Team[]> {
 export async function getTeamWithMembers(teamId: string): Promise<Team | null> {
   const { data: team, error } = await supabase
     .from('teams')
-    .select('*')
+    .select('id, name, description, avatar_url, slug, owner_id, niche, is_public, created_at, updated_at')
     .eq('id', teamId)
     .maybeSingle();
 
