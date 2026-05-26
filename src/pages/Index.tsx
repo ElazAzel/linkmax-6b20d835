@@ -38,7 +38,7 @@ const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').t
 export default function Index() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const isMobile = useIsMobile();
+
   const { trackSectionView, trackCtaClick } = useLandingAnalytics();
   const { trackMarketingEvent, trackOnce } = useMarketingAnalytics();
 
