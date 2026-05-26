@@ -73,7 +73,8 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const userId = user?.id;
   const { data: site, isLoading: siteLoading } = useMySite(userId);
   const { data: pages = [], isLoading: pagesLoading } = useSitePages(site?.id);
-  const { data: pageStats = {} } = useSitePagesStats(site?.id, 30);
+  const { data: pageStats = {} as Record<string, { views: number; clicks: number }> } =
+    useSitePagesStats(site?.id, 30);
   const createSubPage = useCreateSubPage(site?.id, userId);
   const deleteSubPage = useDeleteSubPage(site?.id);
   const setPublished = useSetPagePublished(site?.id);
