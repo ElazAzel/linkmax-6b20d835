@@ -99,3 +99,15 @@ export function useUpdateSubPage(siteId: string | undefined) {
 
 // Re-export for direct use
 export { getMySite } from '@/services/sites';
+
+export const sitePagesStatsKey = (siteId: string, days: number) =>
+  ['site', 'pages-stats', siteId, days] as const;
+
+export function useSitePagesStats(siteId: string | undefined, days = 30) {
+  return useQuery({
+    queryKey: sitePagesStatsKey(siteId || '', days),
+    queryFn: () => (siteId ? getSitePagesStats(siteId, days) : Promise.resolve({})),
+    enabled: !!siteId,
+    staleTime: 60 * 1000,
+  });
+}
