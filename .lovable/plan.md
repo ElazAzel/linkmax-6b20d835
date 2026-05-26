@@ -30,7 +30,7 @@
 
 - ✅ Soft paywall modal (PaywallModal): срабатывает при попытке создать 3-ю страницу + клике «Обновить до Pro».
 - ✅ Upgrade telemetry: `paywall_shown`, `paywall_cta_click`, `paywall_dismissed` (posthog).
-- 🔜 Триал 7 дней (одноразовый) в PaywallModal.
+- ✅ Триал 7 дней (одноразовый, RPC `start_pro_trial`) в PaywallModal.
 - 🔜 Pricing page rewrite под новый Bento-стиль; FAQ с акцентом на «полноценный сайт за цену линка».
 - 🔜 Kaspi QR one-click из любой Pro-CTA (карточка сделки, paywall, settings).
 - 🔜 A/B тест: лимит Starter 2 vs 3 страницы — измерить conversion.

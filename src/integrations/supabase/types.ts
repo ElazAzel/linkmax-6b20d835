@@ -2276,6 +2276,7 @@ export type Database = {
           telegram_language: string | null
           telegram_notifications_enabled: boolean | null
           trial_ends_at: string | null
+          trial_started_at: string | null
           updated_at: string | null
           username: string | null
           verification_reviewed_at: string | null
@@ -2306,6 +2307,7 @@ export type Database = {
           telegram_language?: string | null
           telegram_notifications_enabled?: boolean | null
           trial_ends_at?: string | null
+          trial_started_at?: string | null
           updated_at?: string | null
           username?: string | null
           verification_reviewed_at?: string | null
@@ -2336,6 +2338,7 @@ export type Database = {
           telegram_language?: string | null
           telegram_notifications_enabled?: boolean | null
           trial_ends_at?: string | null
+          trial_started_at?: string | null
           updated_at?: string | null
           username?: string | null
           verification_reviewed_at?: string | null
@@ -4427,6 +4430,7 @@ export type Database = {
         }
         Returns: Json
       }
+      start_pro_trial: { Args: never; Returns: Json }
       sync_block_contact_to_zone: {
         Args: {
           p_email?: string
