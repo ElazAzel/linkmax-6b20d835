@@ -427,7 +427,7 @@ export function readSiteRedirects(
     .map((r) => ({
       from: r.from.trim(),
       to: r.to.trim(),
-      code: r.code === 302 ? 302 : 301,
+      code: (r.code === 302 ? 302 : 301) as 301 | 302,
     }))
     .filter((r) => r.from && r.to)
     .slice(0, 50);
