@@ -7616,5 +7616,57 @@
   },
   "tma": {
     "home_greeting": "Salom, {{name}} 👋"
+  },
+  "siteTemplates": {
+    "trigger": "Sayt shabloni",
+    "title": "Tayyor sayt shablonlari",
+    "subtitle": "Shablonni tanlang — biz sahifalarni yaratamiz va bo'limlar bilan to'ldiramiz. Keyin osongina o'zgartirasiz.",
+    "apply": "Shablonni qo'llash",
+    "applying": "Yaratilmoqda…",
+    "appliedToast": "Yaratilgan sahifalar: {{n}}",
+    "allSkipped": "Shablon sahifalarining barchasi allaqachon mavjud",
+    "applyError": "Shablonni qo'llab bo'lmadi",
+    "noSlots": "Bo'sh sahifa joyi yo'q. Ortiqchasini o'chiring yoki Pro'ga o'ting.",
+    "trimmedHint": "Starter'da dastlabki {{n}} sahifani qo'shamiz. Pro — barchasini.",
+    "services": {
+      "label": "Xizmatlar",
+      "desc": "Agentliklar uchun: bosh sahifa, xizmatlar, narxlar, kontaktlar"
+    },
+    "expert": {
+      "label": "Ekspert",
+      "desc": "Murabbiy va mentorlar uchun: men haqimda, dasturlar, sharhlar, yozilish"
+    },
+    "cafe": {
+      "label": "Kafe / Restoran",
+      "desc": "Menyu, stol band qilish, manzil va kontaktlar"
+    },
+    "school": {
+      "label": "Maktab / Kurslar",
+      "desc": "Kurslar, o'qituvchilar, jadval va arizalar"
+    },
+    "portfolio": {
+      "label": "Portfolio",
+      "desc": "Fotograf va dizaynerlar uchun: ishlar, men haqimda, xizmatlar, aloqa"
+    },
+    "product": {
+      "label": "Mahsulot lendingi",
+      "desc": "Hero, afzalliklar, narxlar, FAQ va yakuniy CTA"
+    },
+    "pages": {
+      "about": "Biz haqimizda",
+      "aboutMe": "Men haqimda",
+      "aboutSchool": "Maktab haqida",
+      "services": "Xizmatlar",
+      "contacts": "Kontaktlar",
+      "contact": "Aloqa",
+      "programs": "Dasturlar",
+      "faq": "FAQ",
+      "menu": "Menyu",
+      "booking": "Band qilish",
+      "courses": "Kurslar",
+      "works": "Ishlar",
+      "features": "Imkoniyatlar",
+      "pricing": "Narxlar"
+    }
   }
 }

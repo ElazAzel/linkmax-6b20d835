@@ -7628,5 +7628,57 @@
   },
   "tma": {
     "home_greeting": "Hi, {{name}} 👋"
+  },
+  "siteTemplates": {
+    "trigger": "Site template",
+    "title": "Ready-made site templates",
+    "subtitle": "Pick a template — we'll create the pages and fill them with sections. Easy to edit later.",
+    "apply": "Apply template",
+    "applying": "Creating…",
+    "appliedToast": "Pages created: {{n}}",
+    "allSkipped": "All template pages already exist",
+    "applyError": "Couldn't apply the template",
+    "noSlots": "No free page slots. Remove some pages or upgrade to Pro.",
+    "trimmedHint": "On Starter we'll add the first {{n}} pages. Pro gets all.",
+    "services": {
+      "label": "Services",
+      "desc": "Perfect for agencies: home, services, pricing, contacts"
+    },
+    "expert": {
+      "label": "Expert",
+      "desc": "For coaches and mentors: about, programs, testimonials, booking"
+    },
+    "cafe": {
+      "label": "Café / Restaurant",
+      "desc": "Menu, table booking, location and contacts"
+    },
+    "school": {
+      "label": "School / Courses",
+      "desc": "Courses, teachers, schedule and inquiries"
+    },
+    "portfolio": {
+      "label": "Portfolio",
+      "desc": "For photographers and designers: works, about, services, contact"
+    },
+    "product": {
+      "label": "Product landing",
+      "desc": "Hero, benefits, pricing, FAQ and final CTA"
+    },
+    "pages": {
+      "about": "About",
+      "aboutMe": "About me",
+      "aboutSchool": "About school",
+      "services": "Services",
+      "contacts": "Contacts",
+      "contact": "Contact",
+      "programs": "Programs",
+      "faq": "FAQ",
+      "menu": "Menu",
+      "booking": "Booking",
+      "courses": "Courses",
+      "works": "Works",
+      "features": "Features",
+      "pricing": "Pricing"
+    }
   }
 }
