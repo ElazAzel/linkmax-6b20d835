@@ -321,6 +321,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
             </Badge>
           </div>
         )}
+        {!isPremium && (
+          <p className="text-[11px] text-muted-foreground px-2 pt-1">
+            {t(
+              'dashboard.sitePages.starterLimit',
+              'Starter: до {{n}} подстраниц. Pro — без лимита.',
+              { n: SUBPAGE_LIMIT_STARTER },
+            )}{' '}
+            <span className="tabular-nums">({subPages.length}/{SUBPAGE_LIMIT_STARTER})</span>
+          </p>
+        )}
         {subPages.length === 0 && (
           <p className="text-xs text-muted-foreground py-2 px-2">
             {t(
