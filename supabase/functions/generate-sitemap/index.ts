@@ -900,6 +900,42 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
     }
   }
 
+  // Sub-pages (multi-page sites): /{home_slug}/p/{page_path}
+  try {
+    const { data: subPages } = await supabase
+      .from('pages')
+      .select('page_path, site_id, updated_at, is_indexable')
+      .eq('is_published', true)
+      .eq('is_home', false)
+      .not('page_path', 'is', null)
+      .not('site_id', 'is', null)
+      .limit(10000);
+
+    const subs = (subPages || []) as Array<{ page_path: string; site_id: string; updated_at: string | null; is_indexable: boolean | null }>;
+    if (subs.length > 0) {
+      const siteIds = Array.from(new Set(subs.map((p) => p.site_id)));
+      const { data: homeRows } = await supabase
+        .from('pages')
+        .select('site_id, slug, is_published, is_indexable, quality_score')
+        .in('site_id', siteIds)
+        .eq('is_home', true);
+      const homeMap = new Map<string, { slug: string; ok: boolean }>();
+      for (const h of (homeRows || []) as Array<{ site_id: string; slug: string; is_published: boolean; is_indexable: boolean | null; quality_score: number | null }>) {
+        const ok = !!h.is_published && h.is_indexable !== false && (h.quality_score || 0) >= QUALITY_THRESHOLD && !RESERVED_SLUGS.has((h.slug || '').toLowerCase());
+        homeMap.set(h.site_id, { slug: h.slug, ok });
+      }
+      for (const sp of subs) {
+        if (sp.is_indexable === false) continue;
+        const home = homeMap.get(sp.site_id);
+        if (!home || !home.ok || !home.slug) continue;
+        const lastmod = sp.updated_at ? new Date(sp.updated_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+        xml += `  <url><loc>${BASE_URL}/${escapeXml(home.slug)}/p/${escapeXml(sp.page_path)}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>\n`;
+      }
+    }
+  } catch (_e) {
+    // sub-pages are best-effort in sitemap
+  }
+
   xml += `</urlset>`;
   return xml;
 }

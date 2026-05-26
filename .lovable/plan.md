@@ -54,11 +54,12 @@ Tilda сильна готовыми секциями. У нас 28 блоков 
 - **SEO per-page**: title/description/og:image на каждую страницу (расширить существующий `seo` объект)
 
 ### Sprint 4 (1 неделя): **Polish + Pricing Reposition**
-- **Site Stats**: аналитика по страницам (трафик, конверсии) — расширение существующего трекинга
-- **A/B тесты на уровне страницы** (сейчас на блоках)
-- **Repositioning**: лендинг `/` обновить — "Конструктор сайтов и линк-в-био", добавить /websites сравнительную страницу vs Tilda/Wix
-- **Pricing tweak**: Pro $13/мес — оставить, добавить лимит "до 5 страниц" на Starter, "безлимит" на Pro
-- **Миграция onboarding**: AI Wizard спрашивает "линк-в-био или сайт" → разные стартовые шаблоны
+- [x] **Site Stats**: per-page views/clicks (RPC `get_site_pages_stats`) в `SitePagesManager`
+- [x] **Sub-pages в sitemap**: `/{home_slug}/p/{page_path}` отдаются в `sitemap-profiles.xml`
+- [ ] **A/B тесты на уровне страницы** (сейчас на блоках)
+- [ ] **Repositioning** лендинга и `/websites` сравнительная страница vs Tilda/Wix
+- [ ] **Pricing tweak**: лимит "до 5 страниц" на Starter
+- [ ] **Onboarding fork**: AI Wizard — "линк-в-био или сайт"
 
 ---
 
