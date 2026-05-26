@@ -348,6 +348,16 @@ export const SitePagesManager = memo(function SitePagesManager() {
             <Button
               size="icon"
               variant="ghost"
+              className="h-7 w-7"
+              onClick={() => setEditing({ id: p.id, title: p.title || '', path: p.page_path || '' })}
+              aria-label={t('common.edit', 'Изменить')}
+              title={t('common.edit', 'Изменить')}
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
               className="h-7 w-7 text-destructive hover:text-destructive"
               onClick={() => setPendingDelete({ id: p.id, title: p.title || p.page_path || '' })}
               aria-label={t('common.delete', 'Удалить')}
