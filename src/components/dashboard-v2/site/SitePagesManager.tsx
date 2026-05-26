@@ -10,6 +10,7 @@ import FileText from 'lucide-react/dist/esm/icons/file-text';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Home from 'lucide-react/dist/esm/icons/home';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
 import { Button } from '@/components/ui/button';
