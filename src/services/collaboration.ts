@@ -36,7 +36,7 @@ export interface Team {
   owner_id: string;
   niche: string | null;
   is_public: boolean;
-  invite_code: string | null;
+  invite_code?: string | null;
   created_at: string;
   members?: TeamMember[];
 }
