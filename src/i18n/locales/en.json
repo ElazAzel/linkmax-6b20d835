@@ -7262,6 +7262,42 @@
         "trust2": "Free plan available",
         "trust3": "Setup in 60 seconds"
       }
+    },
+    "v5": {
+      "badge": "New generation of LinkMAX",
+      "title1": "Site + CRM + Payments",
+      "title2": "in one OS",
+      "subtitle": "A professional builder for experts and small business. Build multi-page sites, manage leads and accept payments — no code required.",
+      "cta_primary": "Try for free",
+      "cta_secondary": "View demo",
+      "bento": {
+        "builder": {
+          "title": "Multi-page Builder",
+          "desc": "Build complex sites with blogs, portfolios and landings in a few clicks."
+        },
+        "ai": {
+          "eyebrow": "AI Builder",
+          "title": "Generated in 30 seconds",
+          "desc": "Type your niche — get a ready site."
+        },
+        "pay": {
+          "title": "Payments",
+          "desc": "Kaspi, Robokassa, Stripe"
+        },
+        "crm": {
+          "title": "Mini-CRM",
+          "desc": "Lead notifications straight to your Telegram. Stay on top of your pipeline.",
+          "notify_title": "New lead!",
+          "notify_desc": "Anna — Booking at 2:00 PM",
+          "pipeline": "Pipeline: 12 active",
+          "pipeline_desc": "Conversion 24%"
+        },
+        "analytics": {
+          "title": "Analytics",
+          "desc": "Full visibility into visits and sales.",
+          "week": "this week"
+        }
+      }
     }
   },
   "analytics": {

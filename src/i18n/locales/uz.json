@@ -7258,6 +7258,42 @@
         "trust2": "Креаторов",
         "trust3": "Языков"
       }
+    },
+    "v5": {
+      "badge": "LinkMAX-ning yangi avlodi",
+      "title1": "Sayt + CRM + To‘lovlar",
+      "title2": "bitta OS ichida",
+      "subtitle": "Ekspertlar va kichik biznes uchun professional konstruktor. Ko‘p sahifali saytlar yarating, lidlarni boshqaring va to‘lovlarni qabul qiling — kodsiz.",
+      "cta_primary": "Bepul sinab ko‘rish",
+      "cta_secondary": "Demoni ko‘rish",
+      "bento": {
+        "builder": {
+          "title": "Ko‘p sahifali konstruktor",
+          "desc": "Bloglar, portfolio va lendinglar bilan murakkab saytlarni bir necha bosishda yarating."
+        },
+        "ai": {
+          "eyebrow": "AI Builder",
+          "title": "30 soniyada generatsiya",
+          "desc": "Nishani yozing — tayyor saytni oling."
+        },
+        "pay": {
+          "title": "To‘lovlar",
+          "desc": "Kaspi, Robokassa, Stripe"
+        },
+        "crm": {
+          "title": "Mini-CRM",
+          "desc": "Lidlar haqida bildirishnomalar to‘g‘ridan-to‘g‘ri Telegramingizga. Savdo voronkasini nazorat qiling.",
+          "notify_title": "Yangi ariza!",
+          "notify_desc": "Anna — 14:00 ga yozuv",
+          "pipeline": "Voronka: 12 ishda",
+          "pipeline_desc": "Konversiya 24%"
+        },
+        "analytics": {
+          "title": "Analytics",
+          "desc": "Tashriflar va sotuvlar to‘liq shaffofligi.",
+          "week": "hafta ichida"
+        }
+      }
     }
   },
   "analytics": {
