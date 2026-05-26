@@ -7668,5 +7668,29 @@
       "features": "Imkoniyatlar",
       "pricing": "Narxlar"
     }
+  },
+  "siteNav": {
+    "title": "Sayt menyusi va futeri",
+    "subtitle": "Menyudagi sahifalar tartibi",
+    "hint": "Bosh sahifa har doim birinchi. Yashirilgan elementlar navigatsiyada ko‘rinmaydi.",
+    "empty": "Hozircha qo‘shimcha sahifalar yo‘q — menyuni sozlash uchun ularni yuqorida qo‘shing.",
+    "moveUp": "Yuqoriga",
+    "moveDown": "Pastga",
+    "hide": "Menyudan yashirish",
+    "show": "Menyuda ko‘rsatish",
+    "savedToast": "Sayt menyusi yangilandi",
+    "saveError": "Menyuni saqlab bo‘lmadi"
+  },
+  "siteFooter": {
+    "title": "Sayt futeri",
+    "hint": "Har bir sahifaning pastki qismida ko‘rinadi.",
+    "textLabel": "Matn / tavsif",
+    "textPh": "Qisqa tavsif, missiya yoki aloqa iborasi",
+    "linksLabel": "Havolalar",
+    "linkLabelPh": "Nomi",
+    "addLink": "Havola qo‘shish",
+    "copyrightLabel": "Mualliflik huquqi",
+    "savedToast": "Futer saqlandi",
+    "saveError": "Futerni saqlab bo‘lmadi"
   }
 }

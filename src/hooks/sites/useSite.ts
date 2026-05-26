@@ -16,7 +16,11 @@ import {
   applySiteTemplate,
   getPageSettings,
   updatePageSettings,
+  updateSiteNav,
+  updateSiteFooter,
   type PageSettingsPayload,
+  type SiteNavConfig,
+  type SiteFooterConfig,
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
@@ -150,6 +154,34 @@ export function useUpdatePageSettings(siteId: string | undefined, pageId: string
     onSuccess: () => {
       if (pageId) qc.invalidateQueries({ queryKey: pageSettingsKey(pageId) });
       if (siteId) qc.invalidateQueries({ queryKey: siteKeys.pages(siteId) });
+    },
+  });
+}
+
+export function useUpdateSiteNav(siteId: string | undefined, userId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (patch: Partial<SiteNavConfig>) => {
+      if (!siteId) throw new Error('siteId required');
+      return updateSiteNav(siteId, patch);
+    },
+    onSuccess: () => {
+      if (userId) qc.invalidateQueries({ queryKey: siteKeys.mySite(userId) });
+      if (siteId) qc.invalidateQueries({ queryKey: ['site-nav'] });
+    },
+  });
+}
+
+export function useUpdateSiteFooter(siteId: string | undefined, userId: string | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (patch: Partial<SiteFooterConfig>) => {
+      if (!siteId) throw new Error('siteId required');
+      return updateSiteFooter(siteId, patch);
+    },
+    onSuccess: () => {
+      if (userId) qc.invalidateQueries({ queryKey: siteKeys.mySite(userId) });
+      if (siteId) qc.invalidateQueries({ queryKey: ['site-footer'] });
     },
   });
 }

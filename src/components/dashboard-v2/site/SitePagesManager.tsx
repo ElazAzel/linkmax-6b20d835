@@ -53,6 +53,7 @@ import {
 import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/sections/section-presets';
 import { SiteTemplateGallery } from './SiteTemplateGallery';
 import { PageSettingsDrawer } from './PageSettingsDrawer';
+import { SiteNavFooterEditor } from './SiteNavFooterEditor';
 import {
   Select,
   SelectContent,
@@ -545,6 +546,10 @@ export const SitePagesManager = memo(function SitePagesManager() {
         pageLabel={settingsFor?.label}
         onClose={() => setSettingsFor(null)}
       />
+
+      <div className="pt-3">
+        <SiteNavFooterEditor site={site} pages={pages} userId={userId} />
+      </div>
     </Card>
   );
 });

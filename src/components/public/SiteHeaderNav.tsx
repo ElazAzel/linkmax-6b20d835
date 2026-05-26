@@ -1,12 +1,13 @@
 /**
- * SiteHeaderNav — Sprint 1: auto-navigation on public pages.
- * Renders a slim top nav when a site has 2+ pages (home + sub-pages).
- * No new block type — just a presentational header above page content.
+ * SiteHeaderNav — Sprint 1 + Navigation Builder.
+ * Renders a slim top nav when a site has 2+ pages, respecting per-site
+ * navigation settings (custom order + hidden flags).
  */
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils/utils';
+import { readSiteNav } from '@/services/sites';
 
 interface NavItem {
   id: string;
@@ -22,19 +23,23 @@ interface Props {
   className?: string;
 }
 
-async function fetchSiteNav(userId: string): Promise<NavItem[]> {
-  // 1) Find the user's site
+interface SiteNavData {
+  pages: NavItem[];
+  navSettings: ReturnType<typeof readSiteNav>;
+}
+
+async function fetchSiteNav(userId: string): Promise<SiteNavData> {
   const { data: site } = await supabase
     .from('sites' as never)
-    .select('id')
+    .select('id, settings')
     .eq('user_id', userId)
     .order('created_at', { ascending: true })
     .limit(1)
     .maybeSingle();
-  const siteId = (site as { id?: string } | null)?.id;
-  if (!siteId) return [];
+  const siteRow = site as { id?: string; settings?: Record<string, unknown> } | null;
+  const siteId = siteRow?.id;
+  if (!siteId) return { pages: [], navSettings: { order: [], hidden: [] } };
 
-  // 2) Get published pages of that site
   const { data: pages } = await supabase
     .from('pages')
     .select('id, slug, page_path, is_home, title')
@@ -42,7 +47,11 @@ async function fetchSiteNav(userId: string): Promise<NavItem[]> {
     .eq('is_published', true)
     .order('is_home', { ascending: false })
     .order('created_at', { ascending: true });
-  return (pages as NavItem[] | null) ?? [];
+
+  return {
+    pages: (pages as NavItem[] | null) ?? [],
+    navSettings: readSiteNav(siteRow?.settings),
+  };
 }
 
 export const SiteHeaderNav = memo(function SiteHeaderNav({
@@ -50,12 +59,37 @@ export const SiteHeaderNav = memo(function SiteHeaderNav({
   currentPageId,
   className,
 }: Props) {
-  const { data: items = [] } = useQuery({
+  const { data } = useQuery({
     queryKey: ['site-nav', ownerUserId],
-    queryFn: () => (ownerUserId ? fetchSiteNav(ownerUserId) : Promise.resolve([])),
+    queryFn: () => (ownerUserId ? fetchSiteNav(ownerUserId) : Promise.resolve({ pages: [], navSettings: { order: [], hidden: [] } })),
     enabled: !!ownerUserId,
     staleTime: 5 * 60 * 1000,
   });
+
+  const items = useMemo(() => {
+    if (!data) return [];
+    const hidden = new Set(data.navSettings.hidden);
+    const visible = data.pages.filter((p) => p.is_home || !hidden.has(p.id));
+
+    // Apply custom order to non-home pages: listed first (in order), then the rest.
+    const home = visible.find((p) => p.is_home);
+    const subs = visible.filter((p) => !p.is_home);
+    const order = data.navSettings.order;
+    if (order.length) {
+      const byId = new Map(subs.map((p) => [p.id, p] as const));
+      const ordered: NavItem[] = [];
+      for (const id of order) {
+        const p = byId.get(id);
+        if (p) {
+          ordered.push(p);
+          byId.delete(id);
+        }
+      }
+      ordered.push(...byId.values());
+      return home ? [home, ...ordered] : ordered;
+    }
+    return home ? [home, ...subs] : subs;
+  }, [data]);
 
   if (items.length < 2) return null;
 

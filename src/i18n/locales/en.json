@@ -7680,5 +7680,29 @@
       "features": "Features",
       "pricing": "Pricing"
     }
+  },
+  "siteNav": {
+    "title": "Navigation & footer",
+    "subtitle": "Page order in the menu",
+    "hint": "The home page is always first. Hidden items do not appear in navigation.",
+    "empty": "No sub-pages yet — add them above to configure the menu.",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "hide": "Hide from menu",
+    "show": "Show in menu",
+    "savedToast": "Site menu updated",
+    "saveError": "Failed to save the menu"
+  },
+  "siteFooter": {
+    "title": "Site footer",
+    "hint": "Shown at the bottom of every site page.",
+    "textLabel": "Text / description",
+    "textPh": "Short description, mission, or contact line",
+    "linksLabel": "Links",
+    "linkLabelPh": "Label",
+    "addLink": "Add link",
+    "copyrightLabel": "Copyright",
+    "savedToast": "Footer saved",
+    "saveError": "Failed to save footer"
   }
 }
