@@ -298,6 +298,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          )}
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
