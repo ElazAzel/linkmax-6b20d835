@@ -40,6 +40,7 @@ export const SiteNavFooterEditor = memo(function SiteNavFooterEditor({ site, pag
   const { t } = useTranslation();
   const updateNav = useUpdateSiteNav(site?.id, userId);
   const updateFooter = useUpdateSiteFooter(site?.id, userId);
+  const updateRedirects = useUpdateSiteRedirects(site?.id, userId);
 
   // ----- NAV state (subset of subPages — home is always pinned, not editable) -----
   const subPages = useMemo(() => pages.filter((p) => !p.is_home), [pages]);
