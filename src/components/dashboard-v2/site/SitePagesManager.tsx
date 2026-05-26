@@ -306,6 +306,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          </div>
           )}
         </div>
       </CardHeader>
