@@ -3,7 +3,8 @@
  * Lets the user list, add, and open sub-pages of their site.
  * Self-contained: fetches its own site + page list via hooks.
  */
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
