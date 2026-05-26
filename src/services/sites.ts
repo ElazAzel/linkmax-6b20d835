@@ -169,3 +169,43 @@ export async function setPagePublished(
     .eq('id', pageId);
   return !error;
 }
+
+/** Rename a sub-page (title) and/or change its URL path. Home page path cannot change. */
+export async function updateSubPage(
+  pageId: string,
+  patch: { title?: string; pagePath?: string },
+): Promise<{ ok: boolean; error?: string }> {
+  const { data: page } = await supabase
+    .from('pages')
+    .select('id, is_home, site_id, page_path')
+    .eq('id', pageId)
+    .maybeSingle();
+  if (!page) return { ok: false, error: 'not_found' };
+  const isHome = (page as { is_home: boolean }).is_home;
+
+  const update: Record<string, unknown> = {};
+  if (typeof patch.title === 'string') update.title = patch.title.trim() || null;
+
+  if (typeof patch.pagePath === 'string' && !isHome) {
+    const newPath = patch.pagePath;
+    // Uniqueness within the site
+    const siteId = (page as { site_id: string }).site_id;
+    const { data: clash } = await supabase
+      .from('pages')
+      .select('id')
+      .eq('site_id', siteId)
+      .eq('page_path', newPath)
+      .neq('id', pageId)
+      .maybeSingle();
+    if (clash) return { ok: false, error: 'path_taken' };
+    update.page_path = newPath;
+  }
+
+  if (Object.keys(update).length === 0) return { ok: true };
+
+  const { error } = await supabase
+    .from('pages')
+    .update(update as never)
+    .eq('id', pageId);
+  return { ok: !error, error: error?.message };
+}
