@@ -75,12 +75,14 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const createSubPage = useCreateSubPage(site?.id, userId);
   const deleteSubPage = useDeleteSubPage(site?.id);
   const setPublished = useSetPagePublished(site?.id);
+  const updateSubPageMut = useUpdateSubPage(site?.id);
 
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [path, setPath] = useState('');
   const [sectionId, setSectionId] = useState<SectionPresetId>('hero');
   const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string } | null>(null);
+  const [editing, setEditing] = useState<{ id: string; title: string; path: string } | null>(null);
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
