@@ -54,6 +54,7 @@ import { SECTION_PRESETS, getSectionPreset, type SectionPresetId } from '@/lib/s
 import { SiteTemplateGallery } from './SiteTemplateGallery';
 import { PageSettingsDrawer } from './PageSettingsDrawer';
 import { SiteNavFooterEditor } from './SiteNavFooterEditor';
+import { PaywallModal } from '@/components/billing/PaywallModal';
 import {
   Select,
   SelectContent,
