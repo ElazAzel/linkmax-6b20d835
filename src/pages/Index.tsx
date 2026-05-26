@@ -4,7 +4,7 @@ import { useCallback, lazy, Suspense } from 'react';
 import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLandingAnalytics';
 import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
-import { useIsMobile } from '@/hooks/ui/use-mobile';
+
 import { getAppDomain } from '@/lib/utils/url-helpers';
 
 // Critical above-fold components - load eagerly
