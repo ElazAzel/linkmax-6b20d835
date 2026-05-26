@@ -87,14 +87,7 @@ export default function Index() {
         <AISearchOptimizer pageType="homepage" entityName="LinkMAX" entityCategory="SaaS" />
       </Suspense>
 
-      <div className="bg-transparent min-h-screen text-foreground selection:bg-primary/30 relative overflow-x-hidden">
-        {/* PREMIUM LAYERS */}
-        <Suspense fallback={null}>
-          <CanvasBackground />
-          <GrainOverlay />
-          {!isMobile && <LiquidCursor />}
-        </Suspense>
-        
+      <div className="bg-[#fafbfc] min-h-screen text-foreground selection:bg-blue-100 selection:text-blue-600 relative overflow-x-hidden">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
@@ -102,11 +95,12 @@ export default function Index() {
 
         <main className="flex-grow">
           <div id="hero" ref={heroSectionRef}>
-            <HeroSectionExpert
+            <HeroBentoOS
               onStart={() => handleCreatePage('hero_cta')}
               onExamples={() => handleNav('/gallery', 'gallery', 'hero_examples')}
             />
           </div>
+
 
           <Suspense fallback={<div className="h-20" />}>
             <LogoTicker />
