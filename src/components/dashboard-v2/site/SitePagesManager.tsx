@@ -538,6 +538,13 @@ export const SitePagesManager = memo(function SitePagesManager() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <PageSettingsDrawer
+        siteId={site?.id}
+        pageId={settingsFor?.id ?? null}
+        pageLabel={settingsFor?.label}
+        onClose={() => setSettingsFor(null)}
+      />
     </Card>
   );
 });
