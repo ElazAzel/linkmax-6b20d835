@@ -72,7 +72,9 @@ function normalizePath(input: string): string {
 export const SitePagesManager = memo(function SitePagesManager() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const userId = user?.id;
+  const { isPremium } = usePremiumStatus();
   const { data: site, isLoading: siteLoading } = useMySite(userId);
   const { data: pages = [], isLoading: pagesLoading } = useSitePages(site?.id);
   const pageStatsQuery = useSitePagesStats(site?.id, 30);
@@ -91,6 +93,11 @@ export const SitePagesManager = memo(function SitePagesManager() {
 
   const homePage = pages.find((p) => p.is_home);
   const subPages = pages.filter((p) => !p.is_home);
+
+  // Starter: до 2 подстраниц (3 страницы всего). Pro: безлимит.
+  const SUBPAGE_LIMIT_STARTER = 2;
+  const subPageLimit = isPremium ? Infinity : SUBPAGE_LIMIT_STARTER;
+  const reachedLimit = subPages.length >= subPageLimit;
 
   const handleTogglePublish = async (pageId: string, current: boolean) => {
     const ok = await setPublished.mutateAsync({ pageId, isPublished: !current });
