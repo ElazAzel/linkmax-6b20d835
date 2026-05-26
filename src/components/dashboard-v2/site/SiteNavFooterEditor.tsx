@@ -19,10 +19,16 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { readSiteNav, readSiteFooter, type SiteFooterLink } from '@/services/sites';
+import {
+  readSiteNav,
+  readSiteFooter,
+  readSiteRedirects,
+  type SiteFooterLink,
+  type SiteRedirect,
+} from '@/services/sites';
 import type { Site } from '@/types/site';
 import type { SitePageSummary } from '@/types/site';
-import { useUpdateSiteNav, useUpdateSiteFooter } from '@/hooks/sites/useSite';
+import { useUpdateSiteNav, useUpdateSiteFooter, useUpdateSiteRedirects } from '@/hooks/sites/useSite';
 
 interface Props {
   site: Site | null | undefined;
