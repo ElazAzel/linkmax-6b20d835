@@ -77,7 +77,7 @@ function normalizePath(input: string): string {
 export const SitePagesManager = memo(function SitePagesManager() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate();
+  // navigate removed; PaywallModal handles upgrade CTA.
   const userId = user?.id;
   const { isPremium } = usePremiumStatus();
   const { data: site, isLoading: siteLoading } = useMySite(userId);
