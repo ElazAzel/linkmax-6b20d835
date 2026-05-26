@@ -56,7 +56,7 @@ export async function exportWalletTransactionsToExcel({
     Number(tx.gross_amount ?? 0),
     Number(tx.fee_amount ?? 0),
     Number(tx.net_amount ?? 0),
-    tx.currency || currency,
+    currency,
     tx.description || '',
     tx.related_entity_type
       ? `${tx.related_entity_type}:${tx.related_entity_id ?? ''}`
