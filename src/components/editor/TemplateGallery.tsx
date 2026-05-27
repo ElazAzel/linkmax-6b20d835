@@ -37,7 +37,7 @@ import {
   createTemplateBlock
 } from '@/data/templates';
 
-const CATEGORIES: TemplateCategoryKey[] = [...TEMPLATE_CATEGORY_KEYS];
+const CATEGORIES: TemplateCategoryKey[] = TEMPLATE_CATEGORY_KEYS.filter((c) => c !== 'all');
 
 interface TemplateGalleryProps {
   open: boolean;
