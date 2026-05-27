@@ -46,7 +46,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   ]);
 
   return (
-    <div className={cn('space-y-5', className)}>
+    <div className={cn('space-y-6', className)}>
       {/* Profile Block — always full bleed */}
       {profileBlock && (
         <motion.div
@@ -69,7 +69,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {/* Bento grid */}
       {contentBlocks.length > 0 && (
         <motion.div
-          className="grid grid-cols-2 gap-2.5 sm:gap-3.5 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+          className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
           initial="hidden"
           animate="show"
           viewport={{ once: true }}
@@ -77,7 +77,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             hidden: { opacity: 0 },
             show: {
               opacity: 1,
-              transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+              transition: { staggerChildren: 0.05, delayChildren: 0.04 },
             },
           }}
         >
