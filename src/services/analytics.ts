@@ -448,20 +448,9 @@ export async function trackEvent({
       metadata: enrichedMetadata as Json,
     });
 
-    // Send to Pixel Proxy if enabled
-    if (eventType === 'view' || eventType === 'click') {
-      try {
-        await supabase.functions.invoke('pixel-proxy', {
-          body: {
-            pageId,
-            eventType,
-            metadata: enrichedMetadata
-          }
-        });
-      } catch (e) {
-        // Silent fail for proxy
-      }
-    }
+    // Note: third-party pixel forwarding is handled client-side via
+    // `src/lib/analytics.ts` (sendBeacon → pixel-proxy with the proper
+    // { pageId, event, eventData } payload). Avoid duplicating it here.
   } catch (error) {
     // Silent fail for analytics - don't break user experience
     logger.debug('Analytics tracking failed', { data: error });
