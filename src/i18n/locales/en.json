@@ -7704,5 +7704,16 @@
     "copyrightLabel": "Copyright",
     "savedToast": "Footer saved",
     "saveError": "Failed to save footer"
+  },
+  "onboardingScope": {
+    "eyebrow": "Let's start",
+    "title": "One page or a full site?",
+    "subtitle": "Start with a lightweight link-in-bio page, or assemble a full site from a ready-made template.",
+    "singleTitle": "Single page",
+    "singleDesc": "Classic link-in-bio: blocks, contacts, messengers. Fastest start.",
+    "siteTitle": "Site from template",
+    "recommended": "Recommended",
+    "siteDesc": "Several ready pages (Home, Services, FAQ) with navigation and footer.",
+    "later": "Later"
   }
 }

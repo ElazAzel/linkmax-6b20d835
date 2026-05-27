@@ -7692,5 +7692,16 @@
     "copyrightLabel": "Mualliflik huquqi",
     "savedToast": "Futer saqlandi",
     "saveError": "Futerni saqlab bo‘lmadi"
+  },
+  "onboardingScope": {
+    "eyebrow": "Nimadan boshlaymiz",
+    "title": "Bitta sahifa yoki to‘liq sayt?",
+    "subtitle": "Yengil link-in-bio sahifadan boshlash yoki tayyor shablondan to‘liq sayt yig‘ish mumkin.",
+    "singleTitle": "Bitta sahifa",
+    "singleDesc": "Klassik link-in-bio: bloklar, kontaktlar, messenjerlar. Tezkor start.",
+    "siteTitle": "Shablondan sayt",
+    "recommended": "Tavsiya etamiz",
+    "siteDesc": "Bir nechta tayyor sahifa (Asosiy, Xizmatlar, FAQ) navigatsiya va futer bilan.",
+    "later": "Keyinroq"
   }
 }

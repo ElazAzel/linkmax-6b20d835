@@ -102,6 +102,7 @@ const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarke
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
 const AIGenerator = lazy(() => import('@/components/editor/AIGenerator').then(m => ({ default: m.AIGenerator })));
 const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
+const OnboardingScopeChoice = lazy(() => import('@/components/onboarding/OnboardingScopeChoice').then(m => ({ default: m.OnboardingScopeChoice })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
 const InstallPromptDialog = lazy(() => import('@/components/pwa/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
 const TokensPanel = lazy(() => import('@/components/tokens/TokensPanel').then(m => ({ default: m.TokensPanel })));
@@ -840,6 +841,15 @@ function DashboardV2Inner() {
             <AchievementNotification
               achievement={dashboard.achievements.newAchievement}
               onDismiss={dashboard.achievements.dismissAchievementNotification}
+            />
+          )}
+
+          {/* Scope chooser — first-time gate (single page vs full site) */}
+          {dashboard.onboardingState.showScopeChoice && (
+            <OnboardingScopeChoice
+              open={dashboard.onboardingState.showScopeChoice}
+              onChooseSingle={dashboard.onboardingState.handleChooseSingle}
+              onClose={dashboard.onboardingState.handleScopeClose}
             />
           )}
 
