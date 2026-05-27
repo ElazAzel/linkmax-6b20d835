@@ -98,13 +98,20 @@ export const SitePagesManager = memo(function SitePagesManager() {
   const [editing, setEditing] = useState<{ id: string; title: string; path: string } | null>(null);
   const [settingsFor, setSettingsFor] = useState<{ id: string; label: string } | null>(null);
   const [paywallOpen, setPaywallOpen] = useState(false);
+  const [templateOpen, setTemplateOpen] = useState(false);
 
-  // Cmd+K deep-links: /dashboard?tab=pages&action=new-subpage
+  // Cmd+K / onboarding deep-links:
+  //   /dashboard?tab=pages&action=new-subpage   → open "new page" dialog
+  //   /dashboard?tab=pages&action=site-template → open template gallery
   const [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
     const action = searchParams.get('action');
     if (action === 'new-subpage') {
       setOpen(true);
+      searchParams.delete('action');
+      setSearchParams(searchParams, { replace: true });
+    } else if (action === 'site-template') {
+      setTemplateOpen(true);
       searchParams.delete('action');
       setSearchParams(searchParams, { replace: true });
     }
