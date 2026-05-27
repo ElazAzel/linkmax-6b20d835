@@ -7107,6 +7107,22 @@
       "publicPageV2": {
         "poweredBy": "Tomonidan qo'llab-quvvatlanadi"
       }
+    },
+    "detail": {
+      "ctaHeader": "Bepul boshlash",
+      "badge": "Koʻchish qoʻllanmasi",
+      "bestForLabel": "Eng yaxshi stsenariy:",
+      "comparePricing": "Tariflarni solishtirish",
+      "migrationTitle": "1 kunlik koʻchish rejasi",
+      "advantagesTitle": "LinkMAX bu stsenariyda nega kuchli",
+      "ctaTitle": "Koʻchishga tayyormisiz?",
+      "ctaSubtitle": "Sahifa, CRM va bandlovni bitta ilovada ishga tushiring va birinchi sotuvgacha boʻlgan yoʻlni qisqartiring.",
+      "ctaButton": "Akkaunt yaratish",
+      "otherTitle": "Boshqa solishtirishlar",
+      "metaTail": "Solishtiring va sahifa + CRM + bandlovni bitta oynada ishga tushiring.",
+      "table": {
+        "metric": "Mezon"
+      }
     }
   },
   "landing": {

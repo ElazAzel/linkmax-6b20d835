@@ -7111,6 +7111,22 @@
       "publicPageV2": {
         "poweredBy": "Powered by"
       }
+    },
+    "detail": {
+      "ctaHeader": "Start free",
+      "badge": "Migration guide",
+      "bestForLabel": "Best fit for",
+      "comparePricing": "Compare pricing",
+      "migrationTitle": "1-day migration plan",
+      "advantagesTitle": "Why LinkMAX wins here",
+      "ctaTitle": "Ready to migrate from",
+      "ctaSubtitle": "Launch your page, CRM and booking in one app — and shorten the path to first sale.",
+      "ctaButton": "Create account",
+      "otherTitle": "Other comparisons",
+      "metaTail": "Compare and launch page + CRM + booking in one window.",
+      "table": {
+        "metric": "Metric"
+      }
     }
   },
   "landing": {
