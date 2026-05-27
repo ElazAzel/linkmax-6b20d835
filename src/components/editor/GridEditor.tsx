@@ -729,10 +729,10 @@ export const GridEditor = memo(function GridEditor({
   }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId]);
 
   return (
-    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-2 pb-32 md:pb-24">
+    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-5 pb-32 md:pb-24 bg-surface-quiet rounded-card">
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
-        <div className="relative isolate bg-card rounded-2xl overflow-hidden" data-onboarding="profile-block" data-editor-block>
+        <div className="relative isolate qb-card overflow-hidden" data-onboarding="profile-block" data-editor-block>
           <InlineProfileEditor
             block={profileBlock}
             onUpdate={(updates) => onUpdateBlock(profileBlock.id, updates)}
