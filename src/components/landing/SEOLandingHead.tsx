@@ -104,14 +104,20 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       document.head.appendChild(fontLink);
     }
 
-    // Canonical
-    setLinkTag('canonical', `${getAppDomain()}/`);
+    // Canonical: reflect the current language-prefixed route if present.
+    const domain = getAppDomain();
+    const pathLang = (typeof window !== 'undefined'
+      ? window.location.pathname.match(/^\/(ru|en|kk|uz)(\/|$)/)?.[1]
+      : null);
+    const canonicalPath = pathLang ? `/${pathLang}` : '/';
+    setLinkTag('canonical', `${domain}${canonicalPath}`);
 
-    // Hreflang tags for international SEO
-    setLinkTag('alternate', `${getAppDomain()}/?lang=ru`, 'ru');
-    setLinkTag('alternate', `${getAppDomain()}/?lang=en`, 'en');
-    setLinkTag('alternate', `${getAppDomain()}/?lang=kk`, 'kk');
-    setLinkTag('alternate', `${getAppDomain()}/`, 'x-default');
+    // Hreflang tags for international SEO — use clean path-based URLs
+    setLinkTag('alternate', `${domain}/ru`, 'ru');
+    setLinkTag('alternate', `${domain}/en`, 'en');
+    setLinkTag('alternate', `${domain}/kk`, 'kk');
+    setLinkTag('alternate', `${domain}/uz`, 'uz');
+    setLinkTag('alternate', `${domain}/`, 'x-default');
 
     // Update html lang attribute
     document.documentElement.lang = currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : 'ru';
