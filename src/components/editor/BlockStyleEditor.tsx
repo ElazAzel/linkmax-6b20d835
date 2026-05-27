@@ -161,7 +161,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
           <Field label={t('blockStyle.font', 'Шрифт')}>
             <Select
               value={style.fontFamily || 'sans'}
-              onValueChange={(v) => update({ fontFamily: v as BlockFontFamily })}
+              onValueChange={(v: string) => update({ fontFamily: v as BlockFontFamily })}
             >
               <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                 <SelectValue />
@@ -179,7 +179,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
           <Field label={t('blockStyle.textEffect', 'Эффект текста')}>
             <Select
               value={style.textEffect || 'none'}
-              onValueChange={(v) => update({ textEffect: v as BlockStyle['textEffect'] })}
+              onValueChange={(v: string) => update({ textEffect: v as BlockStyle['textEffect'] })}
             >
               <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                 <SelectValue />
@@ -212,7 +212,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
           <Field label={t('blockStyle.radius', 'Скругление')}>
             <Select
               value={style.borderRadius || 'lg'}
-              onValueChange={(v) => update({ borderRadius: v as BlockStyle['borderRadius'] })}
+              onValueChange={(v: string) => update({ borderRadius: v as BlockStyle['borderRadius'] })}
             >
               <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                 <SelectValue />
@@ -230,7 +230,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
           <Field label={t('blockStyle.shadow', 'Тень')}>
             <Select
               value={style.shadow || 'none'}
-              onValueChange={(v) => update({ shadow: v as BlockStyle['shadow'] })}
+              onValueChange={(v: string) => update({ shadow: v as BlockStyle['shadow'] })}
             >
               <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                 <SelectValue />
@@ -249,7 +249,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
           <Field label={t('blockStyle.borderWidth', 'Толщина рамки')}>
             <Select
               value={style.borderWidth || 'none'}
-              onValueChange={(v) => update({ borderWidth: v as BlockStyle['borderWidth'] })}
+              onValueChange={(v: string) => update({ borderWidth: v as BlockStyle['borderWidth'] })}
             >
               <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                 <SelectValue />
@@ -274,7 +274,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
           <Field label={t('blockStyle.padding', 'Отступы')}>
             <Select
               value={style.padding || 'md'}
-              onValueChange={(v) => update({ padding: v as BlockStyle['padding'] })}
+              onValueChange={(v: string) => update({ padding: v as BlockStyle['padding'] })}
             >
               <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                 <SelectValue />
@@ -292,7 +292,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
           <Field label={t('blockStyle.contentAlign', 'Контент')}>
             <Select
               value={style.contentAlignment || 'center'}
-              onValueChange={(v) => update({ contentAlignment: v as BlockStyle['contentAlignment'] })}
+              onValueChange={(v: string) => update({ contentAlignment: v as BlockStyle['contentAlignment'] })}
             >
               <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                 <SelectValue />
@@ -316,7 +316,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
         <Field label={t('blockStyle.hover', 'Hover-эффект')}>
           <Select
             value={style.hoverEffect || 'none'}
-            onValueChange={(v) => update({ hoverEffect: v as BlockStyle['hoverEffect'] })}
+            onValueChange={(v: string) => update({ hoverEffect: v as BlockStyle['hoverEffect'] })}
           >
             <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
               <SelectValue />
