@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Quiet Bento — единый визуальный язык 2026 */
+@import './styles/quiet-bento.css';
+
 
 
 /* Shimmer animation for lazy loading */
