@@ -239,6 +239,8 @@ export const SitePagesManager = memo(function SitePagesManager() {
               userId={userId}
               remainingSlots={Number.isFinite(subPageLimit) ? subPageLimit - subPages.length : 99}
               disabled={reachedLimit}
+              open={templateOpen}
+              onOpenChange={setTemplateOpen}
             />
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
