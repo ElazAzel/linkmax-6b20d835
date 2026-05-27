@@ -34,6 +34,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 import { cn } from '@/lib/utils/utils';
 import { BlockEditorShell } from '../block-editors/BlockEditorShell';
+import { BlockStyleEditor } from './BlockStyleEditor';
 import type { Block } from '@/types/page';
 import { BLOCK_MANIFEST, getBlockIcon } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
