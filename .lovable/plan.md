@@ -23,7 +23,7 @@
 - ✅ Navigation Builder: ручная сортировка пунктов меню (↑/↓), hide-from-nav, сохранение в site.settings.nav.
 - ✅ Footer Block (sitewide): включаемый футер (text/links/copyright) в site.settings.footer, рендер в PublicPage.
 - ✅ Redirects Manager: site.settings.redirects (from→to, 301/302), runtime-резолв в PublicPage при ненайденной sub-page.
-- 🔜 Onboarding update: после регистрации — выбор «1 страница» vs «Сайт из шаблона».
+- ✅ Onboarding update: scope-выбор «1 страница» vs «Сайт из шаблона» (OnboardingScopeChoice → deep-link `?action=site-template`).
 
 ## Спринт 2 (нед 3-4): Конверсия и монетизация
 **Цель:** поднять Starter→Pro на multi-page лимите.
