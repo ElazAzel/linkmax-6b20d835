@@ -120,7 +120,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     setLinkTag('alternate', `${domain}/`, 'x-default');
 
     // Update html lang attribute
-    document.documentElement.lang = currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : 'ru';
+    document.documentElement.lang = ['ru','en','kk','uz'].includes(currentLanguage) ? currentLanguage : 'ru';
 
     // OG Image
     const ogImageUrl = `${getAppDomain()}/og-image.png`;
