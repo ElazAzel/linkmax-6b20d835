@@ -400,6 +400,26 @@ export default function Customers() {
           </section>
         )}
 
+        {/* Real Case Studies */}
+        <section className="container mx-auto px-4 py-16 md:py-20">
+          <div className="text-center mb-10">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary/70 mb-3">
+              {t('customers.cases.eyebrow', 'Кейсы с цифрами')}
+            </p>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight">
+              {t('customers.cases.title', 'Было / стало: реальные клиенты')}
+            </h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-xl mx-auto">
+              {t('customers.cases.subtitle', 'Метрики собраны по согласию авторов на основе данных LinkMAX за последние 90 дней.')}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl mx-auto">
+            {CASE_STUDIES.map((cs) => (
+              <CaseStudyCard key={cs.brand} cs={cs} />
+            ))}
+          </div>
+        </section>
+
         {/* Testimonials */}
         <section className="container mx-auto px-4 py-16 md:py-20">
           <div className="text-center mb-10">
