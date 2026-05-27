@@ -844,6 +844,15 @@ function DashboardV2Inner() {
             />
           )}
 
+          {/* Scope chooser — first-time gate (single page vs full site) */}
+          {dashboard.onboardingState.showScopeChoice && (
+            <OnboardingScopeChoice
+              open={dashboard.onboardingState.showScopeChoice}
+              onChooseSingle={dashboard.onboardingState.handleChooseSingle}
+              onClose={dashboard.onboardingState.handleScopeClose}
+            />
+          )}
+
           {/* AI Builder Wizard (onboarding + settings) */}
           {dashboard.onboardingState.showAIBuilderWizard && (
             <AIBuilderWizard
