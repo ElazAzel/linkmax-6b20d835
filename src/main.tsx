@@ -128,6 +128,7 @@ const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
 const Customers = lazy(() => import("./pages/Customers"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -137,6 +138,11 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Index /> },
       { path: "index", element: <Index /> },
+      // Language-prefixed homepage for international SEO (/ru, /en, /kk, /uz)
+      { path: "ru", element: <LocaleIndex /> },
+      { path: "en", element: <LocaleIndex /> },
+      { path: "kk", element: <LocaleIndex /> },
+      { path: "uz", element: <LocaleIndex /> },
       { path: "auth", element: <Auth /> },
       { path: "auth/callback", element: <AuthCallback /> },
       { path: "dashboard", element: <Dashboard /> },
