@@ -1,0 +1,132 @@
+/* ============================================================
+   QUIET BENTO — единый визуальный язык 2026
+   Поверхности, радиусы, тени, утилиты.
+   Применяется поверх Liquid Glass токенов.
+   ============================================================ */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --surface-quiet: 220 20% 98%;        /* основной фон дашборда */
+    --surface-raised: 0 0% 100%;         /* приподнятая карточка */
+    --surface-sunk: 220 14% 96%;         /* утопленный блок (input, hover) */
+    --surface-glass: 0 0% 100% / 0.72;   /* стеклянные акценты */
+
+    /* Радиусы — единая шкала */
+    --radius-card: 1.75rem;       /* 28px карточки */
+    --radius-control: 0.875rem;   /* 14px кнопки/инпуты */
+    --radius-chip: 999px;         /* pill */
+
+    /* Тени — две, не больше */
+    --shadow-soft:
+      0 1px 2px hsl(220 14% 10% / 0.04),
+      0 4px 16px -4px hsl(220 14% 10% / 0.06);
+    --shadow-lift:
+      0 2px 4px hsl(220 14% 10% / 0.05),
+      0 12px 32px -8px hsl(220 14% 10% / 0.12);
+
+    /* Hairline border (полупиксельный визуально) */
+    --hairline: 220 13% 91%;
+  }
+
+  .dark {
+    --surface-quiet: 220 18% 8%;
+    --surface-raised: 220 16% 12%;
+    --surface-sunk: 220 16% 10%;
+    --surface-glass: 220 16% 12% / 0.72;
+
+    --shadow-soft:
+      0 1px 2px hsl(0 0% 0% / 0.4),
+      0 4px 16px -4px hsl(0 0% 0% / 0.3);
+    --shadow-lift:
+      0 2px 4px hsl(0 0% 0% / 0.5),
+      0 12px 32px -8px hsl(0 0% 0% / 0.5);
+
+    --hairline: 220 14% 18%;
+  }
+}
+
+@layer components {
+  /* Плотная карточка — без blur, контентная */
+  .qb-card {
+    background: hsl(var(--surface-raised));
+    border: 1px solid hsl(var(--hairline));
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-soft);
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+  .qb-card-hover:hover {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-1px);
+  }
+
+  /* Полностью тихая поверхность — для второстепенного контента */
+  .qb-card-quiet {
+    background: hsl(var(--surface-quiet));
+    border: 1px solid hsl(var(--hairline));
+    border-radius: var(--radius-card);
+  }
+
+  /* Стекло — точечно: top-bar, bottom nav, command palette, floating toolbars */
+  .qb-glass {
+    background: hsl(var(--surface-glass));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(var(--hairline));
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* Pill-капсула для action dock */
+  .qb-dock {
+    background: hsl(var(--surface-glass));
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid hsl(var(--hairline));
+    border-radius: var(--radius-chip);
+    box-shadow: var(--shadow-lift);
+  }
+
+  /* Inputs / buttons */
+  .qb-control {
+    border-radius: var(--radius-control);
+    border: 1px solid hsl(var(--hairline));
+    background: hsl(var(--surface-raised));
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .qb-control:focus-within {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
+  }
+
+  /* Hairline divider */
+  .qb-hairline {
+    border-color: hsl(var(--hairline));
+  }
+
+  /* Bento grid — ровные тайлы, дыхание */
+  .qb-bento {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 768px) {
+    .qb-bento { gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  /* Tile spans для bento */
+  .qb-tile-wide { grid-column: span 2; }
+  .qb-tile-tall { grid-row: span 2; }
+  .qb-tile-large { grid-column: span 2; grid-row: span 2; }
+}
+
+@layer utilities {
+  .rounded-card { border-radius: var(--radius-card); }
+  .rounded-control { border-radius: var(--radius-control); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-lift { box-shadow: var(--shadow-lift); }
+  .bg-surface-quiet { background-color: hsl(var(--surface-quiet)); }
+  .bg-surface-raised { background-color: hsl(var(--surface-raised)); }
+  .bg-surface-sunk { background-color: hsl(var(--surface-sunk)); }
+  .border-hairline { border-color: hsl(var(--hairline)); }
+}
