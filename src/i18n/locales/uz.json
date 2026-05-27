@@ -127,34 +127,38 @@
     "upgrade": "Yangilash"
   },
   "activation": {
-    "celebrationDesc": "Sahifangiz ishlamoqda va natija keltirmoqda",
+    "celebrationDesc": "Sahifangiz e'lon qilindi va natija keltirmoqda",
     "celebrationTitle": "🎉 Tabriklaymiz!",
-    "progress": "{{total}} tadan {{done}} tasi",
+    "progress": "{{total}} dan {{done}}",
     "steps": {
       "createPage": "Sahifa yarating",
-      "addBlock": "Birinchi blokingizni qo'shing",
-      "publish": "Chop eting",
-      "connectTelegram": "Telegramga ulaning",
-      "firstLead": "Birinchi rahbarni oling",
+      "addBlock": "Birinchi blokni qoʻshing",
+      "publish": "Sahifani eʼlon qiling",
+      "connectTelegram": "Telegram ulang",
+      "firstLead": "Birinchi mijozni oling",
       "firstBooking": "Birinchi yozilishni oling",
       "firstConversion": "Birinchi javobni oling",
-      "firstVisitor": "Birinchi tashrif buyuruvchini oling"
+      "firstVisitor": "Birinchi tashrif buyuruvchini oling",
+      "addServices": "Narxlari bilan xizmatlar qoʻshing",
+      "addContact": "Aloqa tugmasini qoʻshing"
     },
     "cta": {
-      "openEditor": "Ochiq",
-      "addBlock": "Qo'shish",
-      "publish": "Nashr qilish",
+      "openEditor": "Ochish",
+      "addBlock": "Qoʻshish",
+      "publish": "Eʼlon qilish",
       "connectTelegram": "Ulanish",
-      "promotePage": "Rag'batlantirish"
+      "promotePage": "Targʻib qilish",
+      "addServices": "Qoʻshish",
+      "addContact": "Qoʻshish"
     },
     "tips": {
-      "addBlock": "Birinchi blokni qo'shing — havola, tovar yoki video",
-      "addForm": "Kontakt yig'ish shaklini qo'shing — shakli bor har 5-sahifa lidlar oladi",
-      "growTraffic": "Ko'proq tashrif buyuruvchilarni jalb qilish uchun havolani ijtimoiy tarmoqlarda ulashing",
-      "publish": "Sahifani havola orqali foydalanish mumkin bo'lishi uchun chop eting",
-      "shareForVisitor": "Havolani ulashing — 10 tadan 5 ta foydalanuvchi birinchi soatda birinchi tashrif buyuruvchini oladi"
+      "addBlock": "Birinchi blokni qoʻshing — havola, mahsulot yoki video",
+      "addForm": "Forma qoʻshing — formali har 5-sahifa arizalar oladi",
+      "growTraffic": "Havolangizni ijtimoiy tarmoqlarda ulashing, koʻproq tashrif buyuruvchi jalb qiling",
+      "publish": "Havola orqali ochilishi uchun sahifani eʼlon qiling",
+      "shareForVisitor": "Havolani ulashing — 10 dan 5 tasi bir soat ichida birinchi tashrif buyuruvchini oladi"
     },
-    "title": "Sahifani ishga tushiring"
+    "title": "Sahifangizni ishga tushiring"
   },
   "admin": {
     "accepted": "qabul qilingan",
@@ -7636,33 +7640,33 @@
   "siteTemplates": {
     "trigger": "Sayt shabloni",
     "title": "Tayyor sayt shablonlari",
-    "subtitle": "Shablonni tanlang — biz sahifalarni yaratamiz va bo'limlar bilan to'ldiramiz. Keyin osongina o'zgartirasiz.",
-    "apply": "Shablonni qo'llash",
+    "subtitle": "Shablon tanlang — biz sahifalarni yaratamiz va bo‘limlar bilan to‘ldiramiz. Keyin oson tahrirlanadi.",
+    "apply": "Shablonni qo‘llash",
     "applying": "Yaratilmoqda…",
     "appliedToast": "Yaratilgan sahifalar: {{n}}",
-    "allSkipped": "Shablon sahifalarining barchasi allaqachon mavjud",
-    "applyError": "Shablonni qo'llab bo'lmadi",
-    "noSlots": "Bo'sh sahifa joyi yo'q. Ortiqchasini o'chiring yoki Pro'ga o'ting.",
-    "trimmedHint": "Starter'da dastlabki {{n}} sahifani qo'shamiz. Pro — barchasini.",
+    "allSkipped": "Shablonning barcha sahifalari allaqachon mavjud",
+    "applyError": "Shablonni qoʻllab boʻlmadi",
+    "noSlots": "Bo‘sh sahifa slotlari yo‘q. Sahifalarni o‘chiring yoki Pro-ga o‘ting.",
+    "trimmedHint": "Starter-da birinchi {{n}} sahifani qo‘shamiz. Pro — hammasini.",
     "services": {
       "label": "Xizmatlar",
-      "desc": "Agentliklar uchun: bosh sahifa, xizmatlar, narxlar, kontaktlar"
+      "desc": "Agentliklar uchun: bosh, xizmatlar, narxlar, aloqalar"
     },
     "expert": {
       "label": "Ekspert",
-      "desc": "Murabbiy va mentorlar uchun: men haqimda, dasturlar, sharhlar, yozilish"
+      "desc": "Kouchlar va mentorlarga: o‘zim haqimda, dasturlar, sharhlar, yozilish"
     },
     "cafe": {
       "label": "Kafe / Restoran",
-      "desc": "Menyu, stol band qilish, manzil va kontaktlar"
+      "desc": "Menyu, stol broni, joylashuv va aloqalar"
     },
     "school": {
       "label": "Maktab / Kurslar",
-      "desc": "Kurslar, o'qituvchilar, jadval va arizalar"
+      "desc": "Kurslar, o‘qituvchilar, jadval va arizalar"
     },
     "portfolio": {
       "label": "Portfolio",
-      "desc": "Fotograf va dizaynerlar uchun: ishlar, men haqimda, xizmatlar, aloqa"
+      "desc": "Fotograf va dizaynerlarga: ishlar, o‘zim haqimda, xizmatlar, aloqa"
     },
     "product": {
       "label": "Mahsulot lendingi",
@@ -7673,41 +7677,41 @@
       "aboutMe": "Men haqimda",
       "aboutSchool": "Maktab haqida",
       "services": "Xizmatlar",
-      "contacts": "Kontaktlar",
+      "contacts": "Aloqalar",
       "contact": "Aloqa",
       "programs": "Dasturlar",
       "faq": "FAQ",
       "menu": "Menyu",
-      "booking": "Band qilish",
+      "booking": "Yozilish",
       "courses": "Kurslar",
       "works": "Ishlar",
-      "features": "Imkoniyatlar",
+      "features": "Afzalliklari",
       "pricing": "Narxlar"
     }
   },
   "siteNav": {
-    "title": "Sayt menyusi va futeri",
+    "title": "Navigatsiya va footer",
     "subtitle": "Menyudagi sahifalar tartibi",
-    "hint": "Bosh sahifa har doim birinchi. Yashirilgan elementlar navigatsiyada ko‘rinmaydi.",
-    "empty": "Hozircha qo‘shimcha sahifalar yo‘q — menyuni sozlash uchun ularni yuqorida qo‘shing.",
+    "hint": "Bosh sahifa har doim birinchi. Yashirin bandlar navigatsiyada koʻrinmaydi.",
+    "empty": "Hozircha ichki sahifalar yoʻq — menyuni sozlash uchun yuqorida qoʻshing.",
     "moveUp": "Yuqoriga",
     "moveDown": "Pastga",
     "hide": "Menyudan yashirish",
-    "show": "Menyuda ko‘rsatish",
+    "show": "Menyuda koʻrsatish",
     "savedToast": "Sayt menyusi yangilandi",
-    "saveError": "Menyuni saqlab bo‘lmadi"
+    "saveError": "Menyuni saqlab boʻlmadi"
   },
   "siteFooter": {
-    "title": "Sayt futeri",
-    "hint": "Har bir sahifaning pastki qismida ko‘rinadi.",
+    "title": "Sayt footeri",
+    "hint": "Saytning har sahifasining pastida koʻrsatiladi.",
     "textLabel": "Matn / tavsif",
-    "textPh": "Qisqa tavsif, missiya yoki aloqa iborasi",
+    "textPh": "Qisqa tavsif, missiya yoki aloqa qatori",
     "linksLabel": "Havolalar",
-    "linkLabelPh": "Nomi",
-    "addLink": "Havola qo‘shish",
+    "linkLabelPh": "Yorliq",
+    "addLink": "Havola qoʻshish",
     "copyrightLabel": "Mualliflik huquqi",
-    "savedToast": "Futer saqlandi",
-    "saveError": "Futerni saqlab bo‘lmadi"
+    "savedToast": "Footer saqlandi",
+    "saveError": "Footerni saqlab boʻlmadi"
   },
   "onboardingScope": {
     "eyebrow": "Nimadan boshlaymiz",
@@ -7719,5 +7723,13 @@
     "recommended": "Tavsiya etamiz",
     "siteDesc": "Bir nechta tayyor sahifa (Asosiy, Xizmatlar, FAQ) navigatsiya va futer bilan.",
     "later": "Keyinroq"
+  },
+  "upgradeBenefits": {
+    "b1Title": "Barcha bloklar va formalar",
+    "b1Desc": "Arizalar, bron, toʻlovlar",
+    "b2Title": "7% oʻrniga 1% komissiya",
+    "b2Desc": "50 000 ₸ aylanmasidan boshlab qoplanadi",
+    "b3Title": "Oʻz domeningiz · brendingsiz",
+    "b3Desc": "Professional koʻrinish"
   }
 }
