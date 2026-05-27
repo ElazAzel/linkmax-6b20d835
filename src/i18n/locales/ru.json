@@ -7111,6 +7111,22 @@
       "publicPageV2": {
         "poweredBy": "Питаться от"
       }
+    },
+    "detail": {
+      "ctaHeader": "Начать бесплатно",
+      "badge": "Гид по миграции",
+      "bestForLabel": "Лучший сценарий для",
+      "comparePricing": "Сравнить тарифы",
+      "migrationTitle": "План миграции за 1 день",
+      "advantagesTitle": "Почему LinkMAX сильнее в этом сценарии",
+      "ctaTitle": "Готовы к миграции с",
+      "ctaSubtitle": "Запустите страницу, CRM и booking в одном интерфейсе и сократите путь до первой сделки.",
+      "ctaButton": "Создать аккаунт",
+      "otherTitle": "Другие сравнения",
+      "metaTail": "Сравните и запустите страницу + CRM + booking в одном окне.",
+      "table": {
+        "metric": "Критерий"
+      }
     }
   },
   "landing": {
