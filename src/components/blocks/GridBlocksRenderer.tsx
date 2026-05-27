@@ -108,20 +108,11 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 key={block.id}
                 className={cn(
                   'group relative flex overflow-hidden',
-                  'rounded-[28px]',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
-                  !isTransparent && [
-                    // 2026 tile shell: crisp surface, hair-line ring, soft ambient shadow
-                    'bg-card',
-                    'ring-1 ring-border/40',
-                    'shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.10)]',
-                    'transition-[transform,box-shadow,border-color] duration-300 ease-out',
-                    'hover:-translate-y-0.5',
-                    'hover:shadow-[0_2px_4px_rgba(15,23,42,0.05),0_18px_40px_-16px_rgba(15,23,42,0.18)]',
-                    'hover:ring-border/70',
-                  ],
+                  // Unified BlockShell via Quiet Bento tokens
+                  !isTransparent && 'qb-card qb-card-hover',
                   isTransparent && 'bg-transparent',
                   // Square tiles get an aspect lock so they feel intentional in bento rhythm
                   !isTransparent && isSquare && 'aspect-square',
@@ -129,10 +120,10 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                   !isTransparent && !isSquare && !isTall && 'min-h-[120px]',
                 )}
                 variants={{
-                  hidden: { opacity: 0, y: 14, scale: 0.985 },
+                  hidden: { opacity: 0, y: 12, scale: 0.99 },
                   show: {
                     opacity: 1, y: 0, scale: 1,
-                    transition: { type: 'spring', stiffness: 240, damping: 24 },
+                    transition: { type: 'spring', stiffness: 260, damping: 26 },
                   },
                 }}
               >
@@ -140,7 +131,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 {!isTransparent && (
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-[28px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.06),transparent_60%)]"
+                    className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
                   />
                 )}
                 <div className="relative w-full h-full">
