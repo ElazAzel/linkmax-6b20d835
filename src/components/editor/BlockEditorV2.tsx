@@ -34,6 +34,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 import { cn } from '@/lib/utils/utils';
 import { BlockEditorShell } from '../block-editors/BlockEditorShell';
+import { BlockStyleEditor } from './BlockStyleEditor';
 import type { Block } from '@/types/page';
 import { BLOCK_MANIFEST, getBlockIcon } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
@@ -239,6 +240,11 @@ export function BlockEditorV2({
         </div>
     );
 
+    // Style tab — universal customization for any non-profile block
+    const styleTabContent = block.type !== 'profile' ? (
+        <BlockStyleEditor formData={formData} onChange={handleFormChange} />
+    ) : undefined;
+
     // Shell content
     const shellContent = (
         <BlockEditorShell
@@ -249,7 +255,9 @@ export function BlockEditorV2({
                     <BlockIcon className="h-5 w-5 text-primary" />
                 </Suspense>
             }
-            useTabs={false}
+            useTabs={!!styleTabContent}
+            contentTab={styleTabContent ? renderEditor() : undefined}
+            styleTab={styleTabContent}
             isSaving={isSaving}
             lastSaved={lastSaved}
             hasUnsavedChanges={hasUnsavedChanges}
@@ -260,8 +268,7 @@ export function BlockEditorV2({
             previewComponent={previewComponent}
             onDelete={onDelete ? () => setShowDeleteDialog(true) : undefined}
         >
-
-            {renderEditor()}
+            {!styleTabContent && renderEditor()}
         </BlockEditorShell>
     );
 

@@ -103,22 +103,55 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             const isSquare = dimensions.gridCols === 1 && dimensions.gridRows === 1;
             const isTall = dimensions.gridCols === 1 && dimensions.gridRows === 2;
 
+            // Translate BlockStyle into wrapper-level visuals so user customizations are visible
+            const bs = block.blockStyle;
+            const wrapperStyle: React.CSSProperties = {};
+            const radiusMap: Record<string, string> = {
+              none: '0px', sm: '12px', md: '18px', lg: '28px', full: '9999px',
+            };
+            const borderWidthMap: Record<string, string> = { none: '0px', thin: '1px', medium: '2px', thick: '3px' };
+            const shadowMap: Record<string, string> = {
+              none: 'none',
+              sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+              md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+              lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+              xl: '0 20px 25px -5px rgb(0 0 0 / 0.15)',
+              glow: '0 0 24px hsl(var(--primary) / 0.45)',
+            };
+            if (bs?.backgroundColor) wrapperStyle.backgroundColor = bs.backgroundColor;
+            if (bs?.backgroundGradient) wrapperStyle.backgroundImage = bs.backgroundGradient;
+            if (bs?.borderRadius) wrapperStyle.borderRadius = radiusMap[bs.borderRadius];
+            if (bs?.borderWidth && bs.borderWidth !== 'none') {
+              wrapperStyle.borderWidth = borderWidthMap[bs.borderWidth];
+              wrapperStyle.borderStyle = 'solid';
+              wrapperStyle.borderColor = bs.borderColor || 'hsl(var(--border))';
+            }
+            if (bs?.shadow) wrapperStyle.boxShadow = shadowMap[bs.shadow];
+            const hoverClass =
+              bs?.hoverEffect === 'scale' ? 'hover:scale-[1.02]'
+              : bs?.hoverEffect === 'lift' ? 'hover:-translate-y-1'
+              : bs?.hoverEffect === 'glow' ? 'hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)]'
+              : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
+              : '';
+            const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
+
             return (
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex overflow-hidden',
+                  'group relative flex overflow-hidden transition-all duration-300',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
-                  // Unified BlockShell via Quiet Bento tokens
-                  !isTransparent && 'qb-card qb-card-hover',
+                  // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
+                  !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
                   isTransparent && 'bg-transparent',
-                  // Square tiles get an aspect lock so they feel intentional in bento rhythm
+                  hoverClass,
                   !isTransparent && isSquare && 'aspect-square',
                   !isTransparent && isTall && 'min-h-[280px]',
                   !isTransparent && !isSquare && !isTall && 'min-h-[120px]',
                 )}
+                style={!isTransparent ? wrapperStyle : undefined}
                 variants={{
                   hidden: { opacity: 0, y: 12, scale: 0.99 },
                   show: {
@@ -128,7 +161,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 }}
               >
                 {/* Ambient hover sheen */}
-                {!isTransparent && (
+                {!isTransparent && !hasCustomBg && (
                   <div
                     aria-hidden
                     className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
