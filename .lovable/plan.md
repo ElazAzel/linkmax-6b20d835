@@ -1,92 +1,66 @@
-# Глобальный план LinkMAX (12 недель + горизонт 6 мес)
+## Цель
 
-## Где мы сейчас
-- Multi-page builder (Sprint 1-4) реализован: `sites`, sub-pages, SectionPicker, лимит Starter=2.
-- Главная переехала на Bento OS (`HeroBentoOS`), i18n ключи `landing.v5.*` добавлены для 4 языков.
-- SEO/AEO: 11 лендингов, блог, sitemap, Speakable/HowTo schema.
-- Backend: серверные RPC для админки, RLS hardened.
-- Позиционирование: «Сайт + CRM + Платежи в одной OS».
+Снять «сложность» и привести 4 поверхности (Dashboard, Editor, Blocks, Public Page) к одному визуальному языку — **Quiet Bento**: тишина и порядок Apple/Linear + смысловая плотность Bento.me. Ликвид-стекло остаётся, но только как акцент, а не как фон всего интерфейса.
 
-## Цели горизонта
-1. Закрепить переход «Link-in-bio → Site Builder» в продукте, маркетинге и продаже.
-2. Закрыть Q3 roadmap: CRM Depth, native mobile, экспорт/отчёты.
-3. Снять блокеры монетизации: Kaspi/Robokassa one-click, конверсия Starter→Pro.
-4. Подготовить Q4 Fintech Core (Wallet, Digital Goods).
+## Принципы (применяются ко всем 4 поверхностям)
 
----
+1. **Один радиус**: `--radius-card: 28px`, `--radius-control: 14px`, `--radius-pill: 999px`. Убрать зоопарк `rounded-xl/2xl/3xl`.
+2. **Одна тень**: `--shadow-soft` (для карточек) + `--shadow-lift` (для hover/active). Убрать `shadow-lg/xl/2xl` россыпью.
+3. **Стекло — точечно**: только top-bar, bottom nav, command palette, floating toolbars. Контентные карточки — **плотные**, без `backdrop-blur`.
+4. **Цвет**: 1 нейтральная база + 1 акцент. Спрятать второстепенные tinted-градиенты в карточках статистики.
+5. **Типографика**: одна шкала (12/14/16/20/28/40), `tracking-tight` на заголовках, `font-medium` (не bold) для UI-надписей.
+6. **Состояния**: единый `SmartEmptyState` (уже есть), единый `LoadingSkeleton`, единый `ErrorState`. Запретить ad-hoc спиннеры.
 
-## Спринт 1 (нед 1-2): Закрепление Site Builder
-**Цель:** довести multi-page до production-grade и сделать его очевидным в UI.
+## Этапы
 
-- ✅ Templates Gallery: 6 многостраничных шаблонов + applySiteTemplate (idempotent).
-- ✅ Page Settings drawer: SEO title/description/og-image, favicon, indexable, hide-branding (Pro).
-- ✅ Navigation Builder: ручная сортировка пунктов меню (↑/↓), hide-from-nav, сохранение в site.settings.nav.
-- ✅ Footer Block (sitewide): включаемый футер (text/links/copyright) в site.settings.footer, рендер в PublicPage.
-- ✅ Redirects Manager: site.settings.redirects (from→to, 301/302), runtime-резолв в PublicPage при ненайденной sub-page.
-- ✅ Onboarding update: scope-выбор «1 страница» vs «Сайт из шаблона» (OnboardingScopeChoice → deep-link `?action=site-template`).
+### Sprint A — Design tokens (фундамент, 1 проход)
+- `src/index.css`: добавить новые semantic-токены (`--radius-card`, `--shadow-soft`, `--shadow-lift`, `--surface-quiet`, `--surface-raised`, `--surface-glass`).
+- `tailwind.config.ts`: пробросить `rounded-card`, `shadow-soft`, `shadow-lift`, `bg-surface-quiet`, `bg-surface-raised`, `bg-surface-glass`.
+- Файл `src/styles/quiet-bento.css` с утилитами `.qb-card`, `.qb-card-raised`, `.qb-glass`, `.qb-control`.
 
-## Спринт 2 (нед 3-4): Конверсия и монетизация
-**Цель:** поднять Starter→Pro на multi-page лимите.
+### Sprint B — Dashboard shell
+- `DashboardLayout.tsx`: убрать «карточку-контейнер» `rounded-[2.5rem] border` вокруг контента — она дублирует фон и создаёт «коробку в коробке». Контент кладётся прямо на `--surface-quiet`.
+- `DashboardSidebar`: уменьшить иконки до 18px, убрать активный «pill»-фон → заменить на тонкую левую черту 2px + увеличенный `font-medium`.
+- `DashboardBottomNav`: стекло остаётся, но контраст активной иконки делается через цвет, не через капсулу.
+- `HomeScreen`: 1 главная Bento-карточка (статус страницы + Edit/Publish/Share как chips), 3 KPI в одной строке, секция «Что улучшить» (AI-рекомендации) — без декоративных градиентов.
+- `PagesScreen` / `InsightsScreen`: единый header через `DashboardHeader` слоты, карточки `.qb-card`.
 
-- ✅ Soft paywall modal (PaywallModal): срабатывает при попытке создать 3-ю страницу + клике «Обновить до Pro».
-- ✅ Upgrade telemetry: `paywall_shown`, `paywall_cta_click`, `paywall_dismissed` (posthog).
-- ✅ Триал 7 дней (одноразовый, RPC `start_pro_trial`) в PaywallModal.
-- 🔜 Pricing page rewrite под новый Bento-стиль; FAQ с акцентом на «полноценный сайт за цену линка».
-- 🔜 Kaspi QR one-click из любой Pro-CTA (карточка сделки, paywall, settings).
-- 🔜 A/B тест: лимит Starter 2 vs 3 страницы — измерить conversion.
+### Sprint C — Editor canvas
+- `EditorTopBar`: высота h-14, только Health/Save/Preview/Publish; убрать дубль-кнопки.
+- `SmartActionDock`: одна плавающая капсула снизу `+ Блок · AI · Превью · Опубликовать`, glass.
+- `GridEditor`: спрятать сетку (dots) по умолчанию, показывать при drag. Hover-state блока — только outline 1px + `shadow-lift`, без подсветки фона.
+- `FloatingBlockToolbar`: появляется только на selected, не на hover (меньше шума).
+- Add Block Sheet: убрать вкладки → одна вертикальная лента категорий слева + grid справа, поиск всегда фокусирован.
 
-## Спринт 3 (нед 5-6): CRM Depth (Q3 roadmap)
-- Multiple pipelines на зону + переключатель.
-- Custom Fields для Deals и Contacts (text/number/select/date).
-- Export: CSV/Excel для leads, deals, contacts, transactions.
-- PDF-генерация инвойсов и актов (уже частично — допилить шаблоны и брендинг).
-- Cmd+K Command Palette: проверка покрытия sub-pages и sections.
+### Sprint D — Сами блоки (внутренняя вёрстка)
+- Единый `BlockShell` (обёртка): `.qb-card`, padding по пресету (`sm/md/lg`), консистентные `title`/`subtitle`/`media`/`cta` слоты.
+- Привести `LinkBlock`, `ButtonBlock`, `ProductBlock`, `MessengerBlock`, `TestimonialBlock`, `FAQBlock`, `PricingBlock`, `EventBlock` к этому shell.
+- Иконки соцсетей в `SocialsBlock` — монохром по умолчанию, цветные только на hover.
+- `ProfileBlock`: убрать тяжёлый glass-фон, оставить аватар + имя + bio + 1 ряд chip-actions.
 
-## Спринт 4 (нед 7-8): Mobile & PWA V2
-- Capacitor 8: `@capacitor/haptics` на drag-n-drop в Kanban, `@capacitor/keyboard` для форм.
-- Offline-first: `@tanstack/react-query-persist-client` + IndexedDB для CRM (контакты, задачи, сделки).
-- App Store / Google Play submission (iOS bundle уже есть, нужны скриншоты, описания, privacy).
-- Push-уведомления о лидах через Capacitor Push + существующий Telegram-канал как fallback.
+### Sprint E — Публичная страница
+- `GridBlocksRenderer`: интеллектуальная Bento-раскладка уже есть → добавить «дыхание» (28px gap на мобиле уменьшить до 12px, между секциями — 32px), плавный fade-in (stagger 40ms, не 100ms).
+- `SiteHeaderNav`: компактный, стекло только при скролле > 8px.
+- `SiteFooter`: минимальный, 1 строка, без декоративных блоков.
+- CTA-блок (tel/wa/tg) — закрепить как `sticky bottom-4` на мобиле, но визуально как `.qb-glass` капсула.
 
-## Спринт 5 (нед 9-10): SEO Scale & Content
-- W5-W6 из старого SEO-плана: SSR-оптимизация для sub-pages (sitemap уже готов, нужен prerender), canonical/hreflang на каждой sub-page.
-- 6 новых сравнительных лендингов (vs Tilda, vs Bitrix24, vs Notion Sites, vs Carrd, vs Beacons, vs Koji).
-- 8 SEO-статей в блог по AEO-формату (question-led, Speakable).
-- Локализация лендингов на kk/uz (сейчас только ru/en полностью).
-- Customers page v2: реальные кейсы с метриками.
+### Sprint F — Чистка
+- Удалить устаревшие `shadow-lg`/`rounded-3xl`/`bg-gradient-to-*` в дашборде и редакторе через codemod (`scripts/quiet-bento-codemod.mjs`).
+- Прогнать `npm run lint`, исправить i18n-ключи если ломаются.
 
-## Спринт 6 (нед 11-12): Q4 Fintech Foundation
-- Internal Wallet: таблица `wallets` + `wallet_transactions` (уже есть, добавить UI).
-- Payout request flow (manual approval на старте, автоматизация позже).
-- Digital Goods MVP: загрузка файла → защищённая ссылка после оплаты (signed URL с TTL).
-- AI Financial Insights v0: weekly digest «доход/расход/прогноз» через Gemini на агрегатах.
+## Технические детали
 
----
+- Токены HSL (как требует design-system standard), все цвета только семантические.
+- Сохранить совместимость с тёмной темой (`.dark` уже есть).
+- Никаких миграций БД, никаких изменений бизнес-логики.
+- E2E (`e2e/editor-add-block-sheet.spec.ts`, `e2e/page-creation.spec.ts`) проходят без правок — селекторы по `data-testid` уже стоят.
 
-## Параллельные треки (всё время)
-- **DX:** Lefthook git-hooks, React Compiler в report-mode, nuqs для URL-state в фильтрах CRM.
-- **Observability:** Sentry Session Replay активация, PostHog при наличии ключа.
-- **i18n hygiene:** автопроверка покрытия 4 языков на каждом PR.
-- **Security:** ежемесячный security scan, audit RLS на новых таблицах.
+## Что НЕ делаем сейчас
 
-## Технический контур (для разработки)
-- Новые таблицы: `page_templates`, `nav_items`, `custom_fields`, `pipelines`, `wallets_payouts`, `digital_goods`.
-- Новые RPC: `apply_page_template`, `request_payout`, `get_financial_insights`.
-- Новые edge-функции: `signed-download` (digital goods), `apple-push` / `fcm-push`.
-- Файлы UI: `SiteSettingsDrawer`, `NavigationBuilder`, `TemplateGallery`, `PaywallModal`, `WalletScreen`, `DigitalGoodsManager`.
+- Не трогаем CRM/Zones/Billing UI (вне 4 поверхностей).
+- Не меняем структуру роутов и i18n-ключи.
+- Не вводим новые шрифты.
 
-## Метрики успеха (12 нед)
-- Доля пользователей с ≥2 страницами: 5% → 25%.
-- Conversion Starter→Pro: текущий baseline +50%.
-- D30 retention: +10 п.п. за счёт CRM-данных и offline PWA.
-- Органический трафик: +40% (sub-pages в индексе + новые лендинги).
-- App Store rating: ≥4.5 на старте.
+## Порядок выполнения
 
-## Что НЕ делаем (Stop List)
-- Не возвращаем Business Zones в Solo-UI (только Business-tier).
-- Не добавляем токены/Linkkon в core-воронку оплат.
-- Не переписываем editor engine — только расширяем.
-- Не вводим 3-й тариф между Starter и Pro.
-
-## Приоритет следующего шага
-Старт со Спринта 1 (Templates + Page Settings) — это сразу повышает воспринимаемую ценность multi-page и питает paywall в Спринте 2.
+A → B → C → D → E → F. После каждого спринта — короткое демо-скриншот в чат, чтобы вы могли сказать «дальше» или «откатить».
