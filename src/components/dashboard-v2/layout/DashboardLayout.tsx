@@ -36,7 +36,7 @@ export const DashboardLayout = memo(function DashboardLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-transparent flex overflow-hidden translate-z-0">
+    <div className="min-h-screen bg-surface-quiet flex overflow-hidden translate-z-0">
       <GlobalCommandPalette />
       {!isMobile && (
         <DashboardSidebar
@@ -64,16 +64,10 @@ export const DashboardLayout = memo(function DashboardLayout({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ 
-              duration: 0.2, 
-              ease: 'easeOut' 
-            }}
-            className={cn("w-full h-full", isMobile ? "p-0" : "p-8")}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className={cn("w-full h-full", isMobile ? "p-0" : "px-6 py-6")}
           >
-            <div className={cn(
-              "max-w-7xl mx-auto min-h-full overflow-visible",
-              isMobile ? "bg-transparent" : "bg-background rounded-[2.5rem] border border-border/5"
-            )}>
+            <div className="max-w-7xl mx-auto min-h-full overflow-visible">
               {children}
             </div>
           </motion.div>
