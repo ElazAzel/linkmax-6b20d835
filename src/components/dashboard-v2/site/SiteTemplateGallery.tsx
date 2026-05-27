@@ -51,6 +51,9 @@ interface SiteTemplateGalleryProps {
   remainingSlots: number;
   /** Whether the trigger button should be disabled (e.g. no remaining slots). */
   disabled?: boolean;
+  /** Optional controlled open state (lets parent open via deep-link). */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export const SiteTemplateGallery = memo(function SiteTemplateGallery({
@@ -58,9 +61,16 @@ export const SiteTemplateGallery = memo(function SiteTemplateGallery({
   userId,
   remainingSlots,
   disabled = false,
+  open: openProp,
+  onOpenChange,
 }: SiteTemplateGalleryProps) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = openProp ?? internalOpen;
+  const setOpen = (next: boolean) => {
+    if (onOpenChange) onOpenChange(next);
+    else setInternalOpen(next);
+  };
   const [selected, setSelected] = useState<SiteTemplateId | null>(null);
   const apply = useApplySiteTemplate(siteId, userId);
 
