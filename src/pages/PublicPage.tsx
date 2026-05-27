@@ -399,14 +399,14 @@ export default function PublicPage() {
                   isPreview={false}
                 />
 
-                {/* Share Section - Mobile Optimized */}
-                <div className="mt-6 sm:mt-8 space-y-3">
+                {/* Share Section - Mobile Optimized. Force readable contrast independent of page theme textColor. */}
+                <div className="mt-6 sm:mt-8 space-y-3 [color:hsl(var(--foreground))]">
                   <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                    <Button variant="outline" onClick={handleShare} className={cn("w-full sm:w-auto", buttonStyleClass)}>
+                    <Button variant="outline" onClick={handleShare} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
                       <Share2 className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                       {t('share.shareLink', 'Поделиться')}
                     </Button>
-                    <Button variant="outline" onClick={() => setShowQR(true)} className={cn("w-full sm:w-auto", buttonStyleClass)}>
+                    <Button variant="outline" onClick={() => setShowQR(true)} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
                       <QrCode className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                       {t('share.qrCode', 'QR-код')}
                     </Button>
@@ -417,7 +417,7 @@ export default function PublicPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t('share.whatsapp', 'Поделиться в WhatsApp')}
-                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
+                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
                       onClick={() => pageData?.id && trackShare(pageData.id, 'whatsapp')}
                     >
                       WhatsApp
@@ -427,13 +427,14 @@ export default function PublicPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t('share.telegram', 'Поделиться в Telegram')}
-                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
+                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
                       onClick={() => pageData?.id && trackShare(pageData.id, 'telegram')}
                     >
                       Telegram
                     </a>
                   </div>
                 </div>
+
 
               {/* Branding - hidden when watermark is shown OR if white-label is active (premium only) */}
               {/* Branding handled by FreemiumWatermark */}
