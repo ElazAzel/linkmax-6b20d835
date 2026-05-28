@@ -856,9 +856,17 @@ function buildPaymentCopy(lang: LegalLanguage, domain: string): LegalDocumentCop
           ],
         },
         {
-          title: '10. Changes',
+          title: '10. Merchant of Record (Paddle)',
           paragraphs: [
-            'LinkMAX may update plans, pricing, fees, payment methods, providers, and these Payment Terms for future purchases or future billing periods. The updated version becomes effective upon publication unless another date is stated.',
+            'LinkMax subscriptions and other paid digital products are sold through our online reseller Paddle.com Market Limited ("Paddle"). Paddle acts as the Merchant of Record for these orders. This means Paddle - not LinkMax - is the seller on the receipt for the payment transaction.',
+            'Paddle handles checkout, payment processing, fraud screening, invoicing, sales tax / VAT / GST collection and remittance, billing inquiries, and refunds. The buyer\'s payment contract for the transaction is with Paddle, and Paddle\'s Checkout Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) and Refund Policy (https://www.paddle.com/legal/refund-policy) apply alongside these Payment Terms.',
+            'Refund requests for LinkMax subscriptions purchased through Paddle should be submitted via paddle.net or to Paddle buyer support. LinkMax will assist where needed but the refund is processed by Paddle. Standard refunds are available within 14 calendar days of the original purchase as described in Section 7 above; some restrictions may apply per Paddle\'s Refund Policy and applicable law.',
+          ],
+        },
+        {
+          title: '11. Changes',
+          paragraphs: [
+            'LinkMax may update plans, pricing, fees, payment methods, providers, and these Payment Terms for future purchases or future billing periods. The updated version becomes effective upon publication unless another date is stated.',
           ],
         },
       ],
