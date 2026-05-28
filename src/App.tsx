@@ -25,6 +25,7 @@ const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").
 const PWAUpdatePrompt = lazy(() => import("@/components/pwa/PWAUpdatePrompt").then(m => ({ default: m.PWAUpdatePrompt })));
 const CookieConsent = lazy(() => import("@/components/legal/CookieConsent").then(m => ({ default: m.CookieConsent })));
 const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalette").then(m => ({ default: m.CommandPalette })));
+const PaymentTestModeBanner = lazy(() => import("@/components/PaymentTestModeBanner").then(m => ({ default: m.PaymentTestModeBanner })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -143,6 +144,7 @@ const App = () => {
                   <RoutePrefetchManager />
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>
+                    <PaymentTestModeBanner />
                     <div id="main-content" className="outline-none" tabIndex={-1}>
                       <Suspense fallback={<PageLoader />}>
                         <Outlet />
