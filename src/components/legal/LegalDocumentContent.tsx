@@ -520,9 +520,17 @@ function buildTermsCopy(lang: LegalLanguage, domain: string): LegalDocumentCopy 
           ],
         },
         {
-          title: '15. Updates',
+          title: '15. Merchant of Record (Paddle)',
           paragraphs: [
-            `LinkMAX may update these Terms. The updated version becomes effective upon publication at ${domain}/terms unless another effective date is stated.`,
+            'Our order process for LinkMax subscriptions and other paid digital products is conducted by our online reseller Paddle.com Market Limited ("Paddle"). Paddle is the Merchant of Record for all such orders.',
+            'Paddle provides the checkout, processes payments, issues invoices and receipts, collects and remits applicable sales tax, VAT, or GST, handles billing inquiries, and processes returns and refunds on our behalf. By completing a purchase, the buyer enters into a separate contract with Paddle for the payment transaction and agrees to Paddle\'s Checkout Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) and Paddle\'s Refund Policy (https://www.paddle.com/legal/refund-policy), in addition to these Terms and the LinkMax Payment Terms.',
+            'For billing, payment, invoice, tax, or refund questions, buyers should contact Paddle via paddle.net or via Paddle\'s buyer support. For product, account, or feature questions, buyers should contact LinkMax support.',
+          ],
+        },
+        {
+          title: '16. Updates',
+          paragraphs: [
+            `LinkMax may update these Terms. The updated version becomes effective upon publication at ${domain}/terms unless another effective date is stated.`,
           ],
         },
       ],
@@ -634,9 +642,17 @@ function buildTermsCopy(lang: LegalLanguage, domain: string): LegalDocumentCopy 
           ],
         },
         {
-          title: '15. Жаңартулар',
+          title: '15. Merchant of Record (Paddle)',
           paragraphs: [
-            `LinkMAX осы Келісімді жаңарта алады. Жаңа нұсқа ${domain}/terms мекенжайында жарияланған сәттен бастап күшіне енеді, егер басқа күн көрсетілмесе.`,
+            'LinkMax жазылымдары мен басқа да ақылы цифрлық өнімдер бойынша тапсырыс беру процесін біздің онлайн-реселлеріміз Paddle.com Market Limited ("Paddle") жүргізеді. Paddle осындай тапсырыстардың барлығы үшін Merchant of Record болып табылады.',
+            'Paddle checkout-ты қамтамасыз етеді, төлемдерді өңдейді, шот-фактуралар мен түбіртектерді шығарады, қолданылатын сату салығын, VAT немесе GST жинап, аударады, төлемге қатысты сұрауларды өңдейді және біздің атымыздан қайтарулар мен возвраттарды жүзеге асырады. Сатып алуды аяқтай отырып, сатып алушы Paddle-мен төлем транзакциясы бойынша жеке шартқа отырады және осы Келісім мен LinkMax Төлем шарттарына қосымша Paddle Checkout Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) және Paddle Refund Policy (https://www.paddle.com/legal/refund-policy) шарттарын қабылдайды.',
+            'Төлем, шот, салық немесе қайтару мәселелері бойынша сатып алушылар Paddle-ге paddle.net арқылы немесе Paddle қолдау қызметі арқылы хабарласуы тиіс. Өнім, аккаунт немесе функциялар бойынша сұрақтар LinkMax қолдау қызметіне жіберіледі.',
+          ],
+        },
+        {
+          title: '16. Жаңартулар',
+          paragraphs: [
+            `LinkMax осы Келісімді жаңарта алады. Жаңа нұсқа ${domain}/terms мекенжайында жарияланған сәттен бастап күшіне енеді, егер басқа күн көрсетілмесе.`,
           ],
         },
       ],
@@ -746,12 +762,20 @@ function buildTermsCopy(lang: LegalLanguage, domain: string): LegalDocumentCopy 
           'К настоящему Соглашению применяется право Республики Казахстан. Споры сначала решаются через переговоры и поддержку. Если спор не урегулирован, он рассматривается компетентным судом, если обязательный закон не предусматривает иной порядок.',
         ],
       },
-      {
-        title: '15. Обновления',
-        paragraphs: [
-          `LinkMAX может обновлять Соглашение. Новая редакция вступает в силу с момента публикации на ${domain}/terms, если в ней не указана другая дата.`,
-        ],
-      },
+        {
+          title: '15. Реселлер и Merchant of Record (Paddle)',
+          paragraphs: [
+            'Процесс приема заказов на подписки LinkMax и другие платные цифровые продукты осуществляется нашим онлайн-реселлером Paddle.com Market Limited ("Paddle"). Paddle является Merchant of Record (продавцом по записи) для всех таких заказов.',
+            'Paddle обеспечивает checkout, обрабатывает платежи, выставляет счета и квитанции, собирает и перечисляет применимые налоги с продаж, НДС или GST, обрабатывает запросы по биллингу и осуществляет возвраты от нашего имени. Совершая покупку, покупатель заключает отдельный договор с Paddle на платежную транзакцию и принимает Paddle Checkout Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) и Paddle Refund Policy (https://www.paddle.com/legal/refund-policy) в дополнение к настоящему Соглашению и Условиям оплаты LinkMax.',
+            'По вопросам биллинга, платежей, счетов, налогов и возвратов покупатели обращаются в Paddle через paddle.net или службу поддержки Paddle. По вопросам продукта, аккаунта и функций - в поддержку LinkMax.',
+          ],
+        },
+        {
+          title: '16. Обновления',
+          paragraphs: [
+            `LinkMax может обновлять Соглашение. Новая редакция вступает в силу с момента публикации на ${domain}/terms, если в ней не указана другая дата.`,
+          ],
+        },
     ],
   };
 }
@@ -832,9 +856,17 @@ function buildPaymentCopy(lang: LegalLanguage, domain: string): LegalDocumentCop
           ],
         },
         {
-          title: '10. Changes',
+          title: '10. Merchant of Record (Paddle)',
           paragraphs: [
-            'LinkMAX may update plans, pricing, fees, payment methods, providers, and these Payment Terms for future purchases or future billing periods. The updated version becomes effective upon publication unless another date is stated.',
+            'LinkMax subscriptions and other paid digital products are sold through our online reseller Paddle.com Market Limited ("Paddle"). Paddle acts as the Merchant of Record for these orders. This means Paddle - not LinkMax - is the seller on the receipt for the payment transaction.',
+            'Paddle handles checkout, payment processing, fraud screening, invoicing, sales tax / VAT / GST collection and remittance, billing inquiries, and refunds. The buyer\'s payment contract for the transaction is with Paddle, and Paddle\'s Checkout Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) and Refund Policy (https://www.paddle.com/legal/refund-policy) apply alongside these Payment Terms.',
+            'Refund requests for LinkMax subscriptions purchased through Paddle should be submitted via paddle.net or to Paddle buyer support. LinkMax will assist where needed but the refund is processed by Paddle. Standard refunds are available within 14 calendar days of the original purchase as described in Section 7 above; some restrictions may apply per Paddle\'s Refund Policy and applicable law.',
+          ],
+        },
+        {
+          title: '11. Changes',
+          paragraphs: [
+            'LinkMax may update plans, pricing, fees, payment methods, providers, and these Payment Terms for future purchases or future billing periods. The updated version becomes effective upon publication unless another date is stated.',
           ],
         },
       ],
@@ -916,9 +948,17 @@ function buildPaymentCopy(lang: LegalLanguage, domain: string): LegalDocumentCop
           ],
         },
         {
-          title: '10. Өзгерістер',
+          title: '10. Merchant of Record (Paddle)',
           paragraphs: [
-            'LinkMAX болашақ сатып алулар немесе болашақ төлем кезеңдері үшін тарифтерді, бағаларды, алымдарды, төлем әдістерін, провайдерлерді және осы Төлем шарттарын жаңарта алады. Жаңа нұсқа жарияланған сәттен бастап күшіне енеді, егер басқа күн көрсетілмесе.',
+            'LinkMax жазылымдары мен басқа да ақылы цифрлық өнімдер біздің онлайн-реселлеріміз Paddle.com Market Limited ("Paddle") арқылы сатылады. Paddle осы тапсырыстар бойынша Merchant of Record болып табылады, яғни төлем транзакциясының түбіртегінде сатушы ретінде LinkMax емес, Paddle көрсетіледі.',
+            'Paddle checkout, төлемдерді өңдеу, fraud screening, шот шығару, sales tax / VAT / GST жинау және аудару, төлемге қатысты сұрауларды және возвраттарды жүзеге асырады. Сатып алушының төлем шарты Paddle-мен жасалады, ал осы Төлем шарттарымен қатар Paddle Checkout Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) және Refund Policy (https://www.paddle.com/legal/refund-policy) қолданылады.',
+            'Paddle арқылы сатып алынған LinkMax жазылымдары бойынша возврат сұраулары paddle.net арқылы немесе Paddle сатып алушы қолдау қызметіне жіберіледі. LinkMax қажет жерде көмек көрсетеді, бірақ возвратты Paddle өңдейді. Стандартты возврат 7-бөлімде сипатталғандай бастапқы сатып алудан кейін 14 күнтізбелік күн ішінде қолжетімді; кейбір шектеулер Paddle Refund Policy және қолданылатын заңға сәйкес қолданылуы мүмкін.',
+          ],
+        },
+        {
+          title: '11. Өзгерістер',
+          paragraphs: [
+            'LinkMax болашақ сатып алулар немесе болашақ төлем кезеңдері үшін тарифтерді, бағаларды, алымдарды, төлем әдістерін, провайдерлерді және осы Төлем шарттарын жаңарта алады. Жаңа нұсқа жарияланған сәттен бастап күшіне енеді, егер басқа күн көрсетілмесе.',
           ],
         },
       ],
@@ -999,9 +1039,17 @@ function buildPaymentCopy(lang: LegalLanguage, domain: string): LegalDocumentCop
         ],
       },
       {
-        title: '10. Изменения',
+        title: '10. Реселлер и Merchant of Record (Paddle)',
         paragraphs: [
-          'LinkMAX может обновлять тарифы, цены, сборы, способы оплаты, провайдеров и настоящие Условия оплаты для будущих покупок или будущих платежных периодов. Обновленная версия вступает в силу с момента публикации, если не указана другая дата.',
+          'Подписки LinkMax и другие платные цифровые продукты продаются через нашего онлайн-реселлера Paddle.com Market Limited ("Paddle"). Paddle выступает Merchant of Record по этим заказам - это значит, что в чеке по платежной транзакции продавцом указан именно Paddle, а не LinkMax.',
+          'Paddle обеспечивает checkout, обработку платежей, антифрод, выставление счетов, сбор и перечисление налогов с продаж / НДС / GST, обработку запросов по биллингу и возвраты. Платежный договор покупателя заключается с Paddle, и наряду с настоящими Условиями оплаты применяются Paddle Checkout Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms) и Paddle Refund Policy (https://www.paddle.com/legal/refund-policy).',
+          'Запросы на возврат по подпискам LinkMax, купленным через Paddle, направляются через paddle.net или в службу поддержки покупателей Paddle. LinkMax помогает там, где это нужно, но сам возврат обрабатывает Paddle. Стандартный возврат доступен в течение 14 календарных дней с момента покупки, как описано в разделе 7 выше; отдельные ограничения могут применяться согласно Paddle Refund Policy и применимому закону.',
+        ],
+      },
+      {
+        title: '11. Изменения',
+        paragraphs: [
+          'LinkMax может обновлять тарифы, цены, сборы, способы оплаты, провайдеров и настоящие Условия оплаты для будущих покупок или будущих платежных периодов. Обновленная версия вступает в силу с момента публикации, если не указана другая дата.',
         ],
       },
     ],
