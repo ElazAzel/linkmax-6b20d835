@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
-import { startProTrial } from '@/services/user';
+import { usePaddleCheckout } from '@/hooks/usePaddleCheckout';
 import { toast } from 'sonner';
 
 interface Props {
@@ -50,9 +50,9 @@ export const PaywallModal = memo(function PaywallModal({
 }: Props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { inTrial, trialEndsAt, refresh } = usePremiumStatus();
-  const [trialLoading, setTrialLoading] = useState(false);
-  const trialEligible = !inTrial && !trialEndsAt;
+  const { inTrial } = usePremiumStatus();
+  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
+  const trialEligible = !inTrial;
 
   useEffect(() => {
     if (open) {
@@ -60,31 +60,15 @@ export const PaywallModal = memo(function PaywallModal({
     }
   }, [open, source, trialEligible]);
 
+  const handleStartTrial = async () => {
+    safeCapture('paywall_cta_click', { source, target: 'trial' });
+    await openCheckout({ priceId: 'pro_monthly' });
+  };
+
   const handleUpgrade = () => {
     safeCapture('paywall_cta_click', { source, target: 'pricing' });
     onOpenChange(false);
     navigate('/pricing');
-  };
-
-  const handleStartTrial = async () => {
-    setTrialLoading(true);
-    safeCapture('paywall_cta_click', { source, target: 'trial' });
-    const res = await startProTrial();
-    setTrialLoading(false);
-    if (res.ok) {
-      safeCapture('trial_started', { source });
-      await refresh();
-      toast.success(t('paywall.trialStarted', 'Pro-триал на 7 дней активирован'));
-      onOpenChange(false);
-    } else if (res.error === 'trial_already_used') {
-      toast.error(t('paywall.trialUsed', 'Пробный период уже использован'));
-    } else if (res.error === 'already_premium') {
-      toast.info(t('paywall.alreadyPro', 'У вас уже активен Pro'));
-      await refresh();
-      onOpenChange(false);
-    } else {
-      toast.error(t('paywall.trialError', 'Не удалось активировать триал'));
-    }
   };
 
   const handleDismiss = (v: boolean) => {
@@ -131,7 +115,7 @@ export const PaywallModal = memo(function PaywallModal({
 
         {trialEligible && (
           <p className="text-xs text-muted-foreground -mt-1">
-            {t('paywall.trialHint', 'Попробуйте 7 дней Pro бесплатно — без привязки карты.')}
+            {t('paywall.trialHint', '7 дней бесплатно, отмена в любой момент. Затем $13/мес.')}
           </p>
         )}
 
@@ -139,20 +123,15 @@ export const PaywallModal = memo(function PaywallModal({
           <Button variant="ghost" onClick={() => handleDismiss(false)}>
             {t('common.later', 'Позже')}
           </Button>
-          {trialEligible && (
-            <Button
-              variant="outline"
-              onClick={handleStartTrial}
-              disabled={trialLoading}
-              className="rounded-xl"
-            >
-              {trialLoading
-                ? t('common.loading', 'Загрузка…')
-                : t('paywall.startTrial', 'Попробовать 7 дней')}
-            </Button>
-          )}
-          <Button onClick={handleUpgrade} className="rounded-xl">
-            {t('paywall.cta', 'Перейти на Pro')}
+          <Button variant="outline" onClick={handleUpgrade} className="rounded-xl">
+            {t('paywall.compareCta', 'Сравнить тарифы')}
+          </Button>
+          <Button onClick={handleStartTrial} disabled={checkoutLoading} className="rounded-xl">
+            {checkoutLoading
+              ? t('common.loading', 'Загрузка…')
+              : trialEligible
+                ? t('paywall.startTrial', 'Начать 7 дней бесплатно')
+                : t('paywall.cta', 'Перейти на Pro')}
           </Button>
         </DialogFooter>
       </DialogContent>
