@@ -93,21 +93,19 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
       "flex w-full",
       block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'
     )}>
-      <Button
-        variant="ghost"
+      <button
+        type="button"
+        onClick={handleClick}
         className={cn(
-          "w-full justify-between h-auto min-h-[56px] py-3 px-4 sm:px-6",
-          "glass-button backdrop-blur-md",
-          "hover:scale-[1.02] transition-all shadow-glass hover:shadow-glass-lg rounded-xl",
-          "active:scale-[0.98]",
+          "qb-card qb-card-hover w-full flex items-center justify-between gap-3",
+          "min-h-[56px] py-3 px-4 sm:px-5",
+          "active:scale-[0.99] transition-transform",
           getButtonClass(block.style),
-          hasAnyCustomStyle ? 'border-transparent hover:bg-transparent' : 'border-white/10',
+          hasAnyCustomStyle && 'border-transparent',
           isImageBackground && 'relative overflow-hidden'
         )}
-        onClick={handleClick}
         style={combinedStyle}
       >
-        {/* Overlay for image backgrounds */}
         {isImageBackground && (
           <div className="absolute inset-0 bg-black/30 pointer-events-none" />
         )}
@@ -124,25 +122,33 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
               onLoad={() => setFaviconLoaded(true)}
             />
           ) : (
-            <FallbackIcon className={cn(
-              "h-6 w-6 flex-shrink-0",
-              hasAnyCustomStyle ? '' : 'text-primary'
-            )} style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined} />
+            <FallbackIcon
+              className={cn("h-5 w-5 flex-shrink-0", hasAnyCustomStyle ? '' : 'text-primary')}
+              style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined}
+            />
           )}
-          <span className={cn(
-            "font-medium text-sm sm:text-base line-clamp-2 text-left",
-            hasLegacyBackground ? 'text-white drop-shadow-md' : hasBlockStyle ? '' : 'text-foreground',
-            textEffectClass
-          )} style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined}>
+          <span
+            className={cn(
+              "font-medium text-sm sm:text-base line-clamp-2 text-left tracking-tight",
+              hasLegacyBackground ? 'text-white drop-shadow-md' : hasBlockStyle ? '' : 'text-foreground',
+              textEffectClass
+            )}
+            style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined}
+          >
             {title}
           </span>
         </div>
-        <ExternalLink className={cn(
-          "h-4 w-4 flex-shrink-0 ml-2",
-          isImageBackground && 'relative z-10',
-          hasLegacyBackground ? 'text-white/80' : hasBlockStyle ? '' : 'text-muted-foreground'
-        )} style={blockStyleObj.color ? { color: blockStyleObj.color, opacity: 0.8 } : undefined} />
-      </Button>
+        <ExternalLink
+          className={cn(
+            "h-4 w-4 flex-shrink-0 ml-2",
+            isImageBackground && 'relative z-10',
+            hasLegacyBackground ? 'text-white/80' : hasBlockStyle ? '' : 'text-muted-foreground'
+          )}
+          style={blockStyleObj.color ? { color: blockStyleObj.color, opacity: 0.8 } : undefined}
+        />
+      </button>
     </div>
   );
+});
+
 });
