@@ -4,6 +4,7 @@ import type { FAQBlock as FAQBlockType } from '@/types/page';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { getI18nText } from '@/lib/i18n-helpers';
 import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
+import { BlockShell, SectionHeader } from './shells/BlockShell';
 
 interface FAQBlockProps {
   block: FAQBlockType;
@@ -17,30 +18,23 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
 
   if (!block.items || block.items.length === 0) {
     return (
-      <div className="w-full p-4 rounded-xl bg-card border border-border text-center text-muted-foreground text-sm">
+      <BlockShell variant="quiet" padding="md" className="text-center text-muted-foreground text-sm">
         {t('blocks.faq.empty', 'Добавьте вопросы и ответы')}
-      </div>
+      </BlockShell>
     );
   }
 
   return (
     <div
-      className="w-full space-y-2"
+      className="w-full"
       style={{
         backgroundColor: block.blockStyle?.backgroundColor,
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
     >
-      {title && (
-        <div className="flex items-center gap-3 px-2 mb-4">
-          <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
-            <HelpCircle className="h-4 w-4" />
-          </div>
-          <h3 className="font-bold text-sm text-gradient">{title}</h3>
-        </div>
-      )}
+      {title && <SectionHeader icon={<HelpCircle className="h-4 w-4" />} title={title} />}
 
-      <Accordion type="single" collapsible className="w-full space-y-3">
+      <Accordion type="single" collapsible className="w-full space-y-2">
         {block.items.map((item) => {
           const question = getI18nText(item.question, currentLang);
           const answer = getI18nText(item.answer, currentLang);
@@ -49,12 +43,12 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
             <AccordionItem
               key={item.id}
               value={item.id}
-              className="glass-card backdrop-blur-md border-white/10 rounded-2xl px-5 shadow-glass data-[state=open]:shadow-primary/10 data-[state=open]:border-primary/20 transition-all duration-300"
+              className="qb-card px-5 transition-shadow data-[state=open]:shadow-lift"
             >
-              <AccordionTrigger className="text-left text-sm font-bold hover:no-underline py-4 gap-3 text-foreground/90 data-[state=open]:text-primary">
+              <AccordionTrigger className="text-left text-sm font-medium hover:no-underline py-4 gap-3 text-foreground data-[state=open]:text-primary">
                 {question}
               </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground/80 pb-4 leading-relaxed font-medium">
+              <AccordionContent className="text-sm text-muted-foreground pb-4 leading-relaxed">
                 {answer}
               </AccordionContent>
             </AccordionItem>
