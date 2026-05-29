@@ -121,7 +121,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
   if (isSubscribed) {
     return (
-      <Card className="p-5 sm:p-6 bg-card/60 backdrop-blur-xl border-white/10 shadow-glass rounded-[2rem] animate-in zoom-in-95 duration-500">
+      <Card className="p-5 sm:p-6 bg-card/60  border-hairline shadow-soft rounded-[2rem] animate-in zoom-in-95 duration-500">
         <div className="flex flex-col items-center gap-3 text-center py-6">
           <div className="p-4 rounded-full bg-primary/20 text-primary shadow-inner">
             <CheckCircle className="h-8 w-8" />
@@ -136,7 +136,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
   }
 
   return (
-    <div className="w-full p-6 sm:p-8 rounded-[2.2rem] glass-card backdrop-blur-2xl border-white/10 shadow-glass-xl relative overflow-hidden group transition-all duration-500 hover:shadow-primary/5">
+    <div className="w-full p-6 sm:p-8 rounded-[2.2rem] qb-card border-hairline shadow-lift relative overflow-hidden group transition-all duration-500 hover:shadow-primary/5">
       {/* Background glow effects */}
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-all duration-700" />
       <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/5 blur-[80px] rounded-full group-hover:bg-blue-500/10 transition-all duration-700" />
@@ -166,7 +166,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
               placeholder={t('newsletter.emailPlaceholder', 'Ваш email')}
               required
               disabled={isSubmitting}
-              className="h-14 rounded-2xl glass-input bg-white/5 border-white/5 focus:border-primary/40 focus:bg-white/10 text-base font-semibold transition-all duration-300 placeholder:text-foreground/30"
+              className="h-14 rounded-2xl glass-input bg-white/5 border-hairline focus:border-primary/40 focus:bg-white/10 text-base font-semibold transition-all duration-300 placeholder:text-foreground/30"
             />
           </div>
 
