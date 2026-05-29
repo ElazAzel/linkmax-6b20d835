@@ -642,7 +642,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 1.05 }}
-          className="w-full rounded-2xl overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass"
+          className="w-full rounded-2xl overflow-hidden qb-card border-hairline shadow-soft"
         >
           <div className="p-6 text-center space-y-5 relative overflow-hidden">
             {/* Background glow Decor */}
@@ -805,7 +805,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
   }
 
   return (
-    <div className="w-full rounded-2xl overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass">
+    <div className="w-full rounded-2xl overflow-hidden qb-card border-hairline shadow-soft">
       {/* Header */}
       <div className="p-5 sm:p-6 pb-2">
         <div className="flex items-center gap-3">
@@ -900,7 +900,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                   <button
                     key={member.id}
                     onClick={() => setSelectedStaffId(member.id)}
-                    className="flex items-center gap-4 p-4 rounded-3xl bg-white/5 border border-white/10 hover:border-primary/40 hover:bg-primary/5 transition-all group text-left"
+                    className="flex items-center gap-4 p-4 rounded-3xl bg-white/5 border border-hairline hover:border-primary/40 hover:bg-primary/5 transition-all group text-left"
                   >
                     <div className="relative">
                       {member.avatar_url ? (
@@ -955,7 +955,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
               )}
               
               {/* Calendar */}
-              <div className="flex justify-center -mx-2 bg-primary/5 rounded-3xl p-3 border border-white/5 shadow-inner">
+              <div className="flex justify-center -mx-2 bg-primary/5 rounded-3xl p-3 border border-hairline shadow-inner">
                 <Calendar
                   mode="single"
                   selected={selectedDate}
@@ -993,7 +993,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
               animate={{ opacity: 1, y: 0 }}
               className="space-y-4"
             >
-              <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 shadow-sm">
+              <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-white/5 border border-hairline shadow-sm">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="p-2 rounded-xl bg-primary/10 text-primary">
                     <CalendarDays className="h-4 w-4" />
@@ -1031,7 +1031,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                   </span>
                 </div>
               ) : slots.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-12 gap-4 text-center bg-white/5 rounded-3xl border border-dashed border-white/10">
+                <div className="flex flex-col items-center justify-center py-12 gap-4 text-center bg-white/5 rounded-3xl border border-dashed border-hairline">
                   <div className="p-4 rounded-full bg-white/5 text-muted-foreground/30 shadow-inner">
                     <Info className="h-10 w-10" />
                   </div>
@@ -1063,7 +1063,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                         slot.available
                           ? selectedSlot?.time === slot.time
                             ? "bg-primary text-primary-foreground shadow-xl shadow-primary/40 scale-105 z-10 border-transparent font-black ring-2 ring-primary/20"
-                            : "glass-card hover:border-primary/40 hover:bg-primary/5 active:scale-95 border-white/5 font-bold"
+                            : "qb-card hover:border-primary/40 hover:bg-primary/5 active:scale-95 border-hairline font-bold"
                           : "bg-white/5 opacity-10 cursor-not-allowed border-transparent grayscale"
                       )}
                     >
@@ -1136,7 +1136,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
       </AnimatePresence>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 py-4 px-4 bg-black/5 border-t border-white/5">
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 py-4 px-4 bg-black/5 border-t border-hairline">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full border border-primary/40 bg-white/5" />
           <span className="text-[10px] sm:text-xs font-black text-muted-foreground/80 uppercase tracking-tight sm:tracking-widest">{t('booking.available', 'Свободно')}</span>
@@ -1149,8 +1149,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
 
       {/* Booking Form Dialog — Reduced friction */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="sm:max-w-md glass-card backdrop-blur-xl border-white/10 shadow-2xl p-0 overflow-hidden">
-          <div className="p-6 pb-4 border-b border-white/5">
+        <DialogContent className="sm:max-w-md qb-card border-hairline shadow-2xl p-0 overflow-hidden">
+          <div className="p-6 pb-4 border-b border-hairline">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gradient">
                 <div className="p-2 rounded-xl bg-primary/10 text-primary">
@@ -1209,7 +1209,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                 onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 required
                 placeholder={t('booking.namePlaceholder', 'Введите имя')}
-                className="h-12 rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium"
+                className="h-12 rounded-xl glass-input border-hairline focus:border-primary/50 transition-all font-medium"
               />
             </div>
 
@@ -1225,7 +1225,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                 onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+7 (___) ___-__-__"
                 required
-                className="h-12 rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium"
+                className="h-12 rounded-xl glass-input border-hairline focus:border-primary/50 transition-all font-medium"
               />
             </div>
 
@@ -1254,7 +1254,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                     onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     placeholder="email@example.com"
                     required={block.requireEmail}
-                    className="h-12 rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium"
+                    className="h-12 rounded-xl glass-input border-hairline focus:border-primary/50 transition-all font-medium"
                   />
                 </div>
 
@@ -1268,7 +1268,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                     onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
                     placeholder={t('booking.notesPlaceholder', 'Дополнительная информация...')}
                     rows={2}
-                    className="rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium resize-none"
+                    className="rounded-xl glass-input border-hairline focus:border-primary/50 transition-all font-medium resize-none"
                   />
                 </div>
               </div>

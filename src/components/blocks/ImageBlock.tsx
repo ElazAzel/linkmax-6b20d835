@@ -22,15 +22,15 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
   const getImageClass = () => {
     switch (block.style) {
       case 'polaroid':
-        return 'p-3 sm:p-4 bg-white/5 backdrop-blur-md border border-white/10 shadow-glass rotate-[-2deg] hover:rotate-0 transition-all duration-500 rounded-sm hover:shadow-glass-lg';
+        return 'p-3 sm:p-4 bg-white/5  border border-hairline shadow-soft rotate-[-2deg] hover:rotate-0 transition-all duration-500 rounded-sm hover:shadow-lift';
       case 'vignette':
-        return 'relative rounded-2xl shadow-glass after:absolute after:inset-0 after:shadow-[inset_0_0_100px_rgba(0,0,0,0.4)] after:pointer-events-none after:rounded-2xl';
+        return 'relative rounded-2xl shadow-soft after:absolute after:inset-0 after:shadow-[inset_0_0_100px_rgba(0,0,0,0.4)] after:pointer-events-none after:rounded-2xl';
       case 'circle':
-        return 'rounded-full aspect-square object-cover shadow-glass-lg border-2 border-white/10';
+        return 'rounded-full aspect-square object-cover shadow-lift border-2 border-hairline';
       case 'banner':
-        return 'w-full rounded-2xl glass-card backdrop-blur-md border-white/10 shadow-glass-xl';
+        return 'w-full rounded-2xl qb-card border-hairline shadow-lift';
       default:
-        return 'rounded-2xl shadow-glass border border-white/5 transition-all duration-300 hover:shadow-glass-lg glass-card backdrop-blur-[2px]';
+        return 'rounded-2xl shadow-soft border border-hairline transition-all duration-300 hover:shadow-lift qb-card[2px]';
     }
   };
 
@@ -109,7 +109,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
               )} />
 
               {/* External link icon */}
-              <div className="absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-background/90 backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-10">
+              <div className="absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-background/90  rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-10">
                 <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-foreground" />
               </div>
             </>

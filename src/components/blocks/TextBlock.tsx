@@ -43,7 +43,7 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
         <blockquote
           className={cn(
             "relative p-4 sm:p-6 rounded-2xl",
-            "glass backdrop-blur-md border-l-4 border-primary/50 shadow-glass",
+            "glass  border-l-4 border-primary/50 shadow-soft",
             "italic whitespace-pre-line break-words hyphens-auto text-sm sm:text-base lg:text-lg font-medium",
             alignmentClass,
             textEffectClass,
