@@ -568,24 +568,31 @@ serve(async (req: Request) => {
         replyMarkup = getHelpKeyboard(lang);
       } else if (data?.startsWith('lead_status:')) {
         const [_, status, leadId] = data.split(':');
-        
-        // Update lead/deal status in DB
-        const { error: updateError } = await supabase
-          .from('leads')
-          .update({ status })
-          .eq('id', leadId);
 
-        if (updateError) {
-          console.error('Error updating lead status:', updateError);
-          responseText = m.lead_error;
+        // Ownership check: only the lead's owner (linked Telegram user) may update it
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
+        if (!profile) {
+          responseText = m.not_linked;
         } else {
-          // Map status code to display name
-          const statusNames: Record<string, string> = {
-            'contacted': lang === 'ru' ? 'В работе' : lang === 'kk' ? 'Жұмыста' : 'In Progress',
-            'won': lang === 'ru' ? 'Продано' : lang === 'kk' ? 'Сатылды' : 'Won'
-          };
-          responseText = m.lead_updated(statusNames[status] || status);
+          const { error: updateError, data: updated } = await supabase
+            .from('leads')
+            .update({ status })
+            .eq('id', leadId)
+            .eq('user_id', profile.id)
+            .select('id');
+
+          if (updateError || !updated || updated.length === 0) {
+            console.error('Error updating lead status:', updateError);
+            responseText = m.lead_error;
+          } else {
+            const statusNames: Record<string, string> = {
+              'contacted': lang === 'ru' ? 'В работе' : lang === 'kk' ? 'Жұмыста' : 'In Progress',
+              'won': lang === 'ru' ? 'Продано' : lang === 'kk' ? 'Сатылды' : 'Won'
+            };
+            responseText = m.lead_updated(statusNames[status] || status);
+          }
         }
+
       } else if (data?.startsWith('leads_page:')) {
         const page = parseInt(data.split(':')[1]);
         const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
