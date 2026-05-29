@@ -150,5 +150,3 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
     </div>
   );
 });
-
-});
