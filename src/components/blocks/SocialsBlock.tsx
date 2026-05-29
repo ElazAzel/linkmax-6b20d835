@@ -145,13 +145,13 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
               key={index}
               onClick={() => handleClick(url)}
               className={cn(
-                "group relative w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300",
-                "glass-card backdrop-blur-md shadow-glass",
-                "hover:shadow-glass-lg active:scale-90"
+                "group relative w-12 h-12 rounded-control flex items-center justify-center",
+                "bg-surface-raised border border-hairline shadow-soft",
+                "transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5 active:scale-95"
               )}
               aria-label={platform.name || iconKey}
             >
-              <Icon className="w-5 h-5 text-foreground/80 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
+              <Icon className="w-5 h-5 text-foreground/80 group-hover:text-primary transition-colors duration-200" />
             </button>
           );
         })}
@@ -159,3 +159,4 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
     </div>
   );
 });
+
