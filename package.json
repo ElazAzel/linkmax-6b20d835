@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "start": "vite preview",
     "lint": "eslint .",
-    "lint:i18n": "LINT_I18N=true eslint . --ext .ts,.tsx",
+    "lint:i18n": "LINT_I18N=true eslint .",
     "analyze:deps": "depcruise --config config/dependency-cruiser.cjs --output-type text src",
     "analyze:cycles": "depcruise --config config/dependency-cruiser.cjs --output-type err src",
     "analyze:layers": "depcruise --config config/dependency-cruiser.cjs --output-type err src",
