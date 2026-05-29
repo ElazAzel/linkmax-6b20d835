@@ -3,7 +3,6 @@
  */
 import type { PageData, Block, PageTheme } from './page';
 import type { AppPremiumTier } from '@/domain/billing/tiers';
-import { normalizeError } from '@/domain/value-objects/Result';
 
 // ============= Database Types =============
 
@@ -170,6 +169,22 @@ export interface GenerateUniqueSlugInput {
 }
 
 // ============= Helper Functions =============
+
+/**
+ * Wrap any error into a standard Error object
+ */
+export function normalizeError(error: unknown): Error {
+  if (error instanceof Error) {
+    return error;
+  }
+  if (typeof error === 'string') {
+    return new Error(error);
+  }
+  if (error && typeof error === 'object' && 'message' in error) {
+    return new Error(String((error as { message: unknown }).message));
+  }
+  return new Error('Unknown error occurred');
+}
 
 /**
  * Create a successful API result

@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { hasThirdPartyConsent } from '@/components/legal/CookieConsent';
 import { setCurrentPageId } from '@/lib/analytics';
-import DOMPurify from 'dompurify';
 
 import type { PageIntegrations } from '@/types/page';
 
@@ -88,7 +87,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
                 const s = b.getElementsByTagName('script')[0];
                 s.parentNode?.insertBefore(t, s);
             }
-            window.fbq('init', DOMPurify.sanitize(integrations.fb_pixel));
+            window.fbq('init', integrations.fb_pixel);
             window.fbq('track', 'PageView');
         }
 
@@ -115,7 +114,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
                 const a = document.getElementsByTagName("script")[0];
                 a.parentNode?.insertBefore(o, a);
             };
-            ttq.load(DOMPurify.sanitize(integrations.tt_pixel));
+            ttq.load(integrations.tt_pixel);
             ttq.page();
         }
 
@@ -143,7 +142,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             });
 
             gtag('js', new Date());
-            gtag('config', DOMPurify.sanitize(integrations.ga4_id), {
+            gtag('config', integrations.ga4_id, {
                 send_page_view: false // Manual tracking on route change
             });
 
@@ -165,7 +164,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
                 try {
                     window.ym = window.ym || function (...args: unknown[]) { (window.ym.a = window.ym.a || []).push(args) };
                     window.ym.l = 1 * new Date().getTime();
-                    window.ym(DOMPurify.sanitize(integrations.yandex_metrika!), "init", {
+                    window.ym(integrations.yandex_metrika!, "init", {
                         clickmap: true,
                         trackLinks: true,
                         accurateTrackBounce: true,
@@ -204,7 +203,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             });
         }
         if (integrations.yandex_metrika && window.ym) {
-            window.ym(DOMPurify.sanitize(integrations.yandex_metrika), 'hit', window.location.href);
+            window.ym(integrations.yandex_metrika, 'hit', window.location.href);
         }
     }, [pathname, integrations]);
 

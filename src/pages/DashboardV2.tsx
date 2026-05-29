@@ -3,13 +3,12 @@
  * Entry point for the redesigned dashboard experience
  */
 import { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
 // State hooks
 import { useDashboard } from '@/hooks/dashboard/useDashboard';
-import { useDashboardTab } from '@/hooks/dashboard/useDashboardTab';
 import { useMultiPage } from '@/hooks/page/useMultiPage';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { useLeads } from '@/hooks/crm/useLeads';
@@ -33,9 +32,7 @@ import {
   PageSwitcher,
 } from '@/components/dashboard-v2/layout';
 import { PublicationRitual } from '@/components/dashboard-v2/dialogs/PublicationRitual';
-import { ScreenErrorBoundary, ScreenLoader, LoadingState } from '@/components/dashboard-v2/common';
-import type { TabId } from '@/components/dashboard-v2/dashboard-tabs';
-import { ALL_TABS, ZONE_TABS } from '@/components/dashboard-v2/dashboard-tabs';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
 import { Button } from '@/components/ui/button';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 
@@ -72,6 +69,27 @@ import {
 } from '@/components/zones/ZoneWrappers';
 import { ZoneCommandPalette } from '@/components/zones/ZoneCommandPalette';
 
+// Screen loading fallback
+const ScreenLoader = () => (
+  <div className="flex items-center justify-center min-h-[400px]">
+    <div className="animate-pulse space-y-4 w-full max-w-md px-4">
+      <div className="h-8 bg-muted rounded-lg w-3/4" />
+      <div className="h-32 bg-muted rounded-xl" />
+      <div className="h-12 bg-muted rounded-lg" />
+    </div>
+  </div>
+);
+
+// Inline fallback components (previously from deleted dashboard barrel)
+const LoadingState = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-pulse space-y-4 w-full max-w-md px-4">
+      <div className="h-8 bg-muted rounded-lg w-3/4" />
+      <div className="h-32 bg-muted rounded-xl" />
+      <div className="h-12 bg-muted rounded-lg" />
+    </div>
+  </div>
+);
 // 2026 Living Canvas Background
 const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
@@ -84,6 +102,7 @@ const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarke
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
 const AIGenerator = lazy(() => import('@/components/editor/AIGenerator').then(m => ({ default: m.AIGenerator })));
 const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
+const OnboardingScopeChoice = lazy(() => import('@/components/onboarding/OnboardingScopeChoice').then(m => ({ default: m.OnboardingScopeChoice })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
 const InstallPromptDialog = lazy(() => import('@/components/pwa/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
 const TokensPanel = lazy(() => import('@/components/tokens/TokensPanel').then(m => ({ default: m.TokensPanel })));
@@ -100,9 +119,15 @@ import type { Block, PageData, PageTheme } from '@/types/page';
 
 type PageSeo = PageData['seo'];
 
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'developers' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
+
+const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-analytics', 'zone-resources'];
+const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'finance', 'monetize', 'settings', 'developers', 'events', 'leads', 'team', ...ZONE_TABS];
+
 function DashboardV2Inner() {
   const navigate = useNavigate();
-  const { currentTab, handleTabChange, searchParams, setSearchParams } = useDashboardTab();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
 
   // Page versions - hook defined early for onPublish callback
@@ -142,6 +167,26 @@ function DashboardV2Inner() {
 
   // P2: Editor store (must be before early returns)
   const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
+
+  // Current tab from URL - support both query params and pathname
+  const currentTab = useMemo((): TabId => {
+    // Check for events routes first
+    if (location.pathname.startsWith('/dashboard/events')) {
+      return 'events';
+    }
+    // First check query params
+    const tabParam = searchParams.get('tab') as TabId;
+    if (tabParam && ALL_TABS.includes(tabParam)) {
+      return tabParam;
+    }
+    // Fall back to pathname
+    const pathParts = location.pathname.split('/');
+    const lastPart = pathParts[pathParts.length - 1];
+    if (ALL_TABS.includes(lastPart)) {
+      return lastPart as TabId;
+    }
+    return 'editor';
+  }, [searchParams, location.pathname]);
 
   const activationAction = searchParams.get('action');
 
@@ -205,6 +250,17 @@ function DashboardV2Inner() {
       prefetchRouteChunks(['publicPage', 'editor']);
     }
   }, [currentTab]);
+
+  // Handle tab change - navigate to the proper route
+  const handleTabChange = useCallback((tabId: string) => {
+    if (tabId === 'home') {
+      navigate('/dashboard/home');
+    } else if (tabId === 'editor') {
+      navigate('/dashboard/home?tab=editor');
+    } else {
+      navigate(`/dashboard/${tabId}`);
+    }
+  }, [navigate]);
 
   // Handle page switch
   const handlePageSwitch = useCallback((pageId: string) => {
@@ -785,6 +841,15 @@ function DashboardV2Inner() {
             <AchievementNotification
               achievement={dashboard.achievements.newAchievement}
               onDismiss={dashboard.achievements.dismissAchievementNotification}
+            />
+          )}
+
+          {/* Scope chooser — first-time gate (single page vs full site) */}
+          {dashboard.onboardingState.showScopeChoice && (
+            <OnboardingScopeChoice
+              open={dashboard.onboardingState.showScopeChoice}
+              onChooseSingle={dashboard.onboardingState.handleChooseSingle}
+              onClose={dashboard.onboardingState.handleScopeClose}
             />
           )}
 

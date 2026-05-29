@@ -316,8 +316,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const translateBlocksToMultipleLanguages = useCallback(
     translateBlocksToMultipleLanguagesInternal,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [t]
   );
 
   return (

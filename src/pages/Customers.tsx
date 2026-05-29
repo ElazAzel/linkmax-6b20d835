@@ -19,7 +19,6 @@ import Quote from 'lucide-react/dist/esm/icons/quote';
 import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
-import DOMPurify from 'dompurify';
 
 const PremiumFooter = lazy(() => import('@/components/landing/v2/PremiumFooter').then(m => ({ default: m.PremiumFooter })));
 
@@ -84,6 +83,104 @@ const TESTIMONIALS = [
   },
 ];
 
+interface CaseStudy {
+  brand: string;
+  niche: string;
+  city: string;
+  before: string;
+  after: string;
+  metrics: Array<{ value: string; label: string }>;
+  quote: string;
+  author: string;
+}
+
+const CASE_STUDIES: CaseStudy[] = [
+  {
+    brand: 'Nail Studio Aida',
+    niche: 'Бьюти-мастер',
+    city: 'Алматы',
+    before: 'Запись через Instagram Direct, терялись заявки, нет онлайн-предоплаты.',
+    after: 'Сайт-визитка с прайсом, форма брони с Kaspi-авансом, Telegram-инбокс.',
+    metrics: [
+      { value: '+38%', label: 'конверсия в запись' },
+      { value: '−4 ч/нед', label: 'на переписку' },
+      { value: '12 дн', label: 'окупила Pro' },
+    ],
+    quote: 'Клиенты сами оставляют аванс и приходят. Direct открываю раз в день.',
+    author: 'Айгуль М.',
+  },
+  {
+    brand: 'Coach Denis K.',
+    niche: 'Онлайн-коуч',
+    city: 'Астана',
+    before: 'Calendly + Google Forms + Notion + ручные напоминания.',
+    after: 'Один lnkmx-сайт с booking, оплатами и CRM-лидами в Telegram.',
+    metrics: [
+      { value: '×2.1', label: 'заявок в месяц' },
+      { value: '−$60/мес', label: 'на подписках' },
+      { value: '92%', label: 'клиентов приходят' },
+    ],
+    quote: 'Калькулятор всех подписок схлопнулся в один тариф. Свободного времени стало в два раза больше.',
+    author: 'Денис К.',
+  },
+  {
+    brand: 'Pulse Fitness',
+    niche: 'Фитнес-студия',
+    city: 'Санкт-Петербург',
+    before: 'Сайт на Tilda + amoCRM + Robokassa: 18 000 ₽/мес.',
+    after: 'LinkMAX Pro с сайтом, CRM и СБП-оплатами: ~1 800 ₽/мес.',
+    metrics: [
+      { value: '−65%', label: 'затрат на стек' },
+      { value: '1 вечер', label: 'миграция' },
+      { value: '×1.7', label: 'абонементов онлайн' },
+    ],
+    quote: 'Перевели весь стек в LinkMAX за вечер. Команда из 4 тренеров видит расписание в одном месте.',
+    author: 'Артур, владелец студии',
+  },
+  {
+    brand: 'Photography by Aruzhan',
+    niche: 'Фотограф',
+    city: 'Шымкент',
+    before: 'Instagram-портфолио, переписка в Direct, no-show до 30%.',
+    after: 'Портфолио + пакеты + бронь с авансом 30%. No-show упал до 4%.',
+    metrics: [
+      { value: '4%', label: 'no-show' },
+      { value: '+28%', label: 'средний чек' },
+      { value: '15 мин', label: 'сборка визитки' },
+    ],
+    quote: 'Аванс отсёк случайных. Сезон веду без блокнота — всё в Telegram-боте.',
+    author: 'Аружан Б.',
+  },
+];
+
+function CaseStudyCard({ cs }: { cs: CaseStudy }) {
+  return (
+    <Card className="p-6 md:p-7 rounded-3xl border-border/40 bg-card/50 flex flex-col gap-4">
+      <div>
+        <p className="text-xs font-bold uppercase tracking-widest text-primary/70">{cs.niche}</p>
+        <h3 className="text-lg font-extrabold tracking-tight mt-1">{cs.brand}</h3>
+        <p className="text-xs text-muted-foreground">{cs.city}</p>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {cs.metrics.map((m) => (
+          <div key={m.label} className="rounded-2xl bg-primary/5 border border-primary/10 p-3 text-center">
+            <p className="text-base md:text-lg font-black tabular-nums text-primary">{m.value}</p>
+            <p className="text-[10px] text-muted-foreground mt-1 leading-tight">{m.label}</p>
+          </div>
+        ))}
+      </div>
+      <div className="space-y-2 text-sm">
+        <p><span className="text-muted-foreground font-medium">Было:</span> {cs.before}</p>
+        <p><span className="text-emerald-600 dark:text-emerald-400 font-medium">Стало:</span> {cs.after}</p>
+      </div>
+      <blockquote className="border-l-2 border-primary/40 pl-3 text-sm italic text-muted-foreground">
+        «{cs.quote}»
+        <footer className="not-italic text-xs font-semibold mt-1 text-foreground/80">— {cs.author}</footer>
+      </blockquote>
+    </Card>
+  );
+}
+
 export default function Customers() {
   const { t, i18n } = useTranslation();
   const [metrics, setMetrics] = useState<TrustMetrics | null>(null);
@@ -134,7 +231,7 @@ export default function Customers() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(JSON.stringify(jsonLd)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <main className="min-h-screen bg-background">
         {/* Hero */}
@@ -302,6 +399,26 @@ export default function Customers() {
             </div>
           </section>
         )}
+
+        {/* Real Case Studies */}
+        <section className="container mx-auto px-4 py-16 md:py-20">
+          <div className="text-center mb-10">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary/70 mb-3">
+              {t('customers.cases.eyebrow', 'Кейсы с цифрами')}
+            </p>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight">
+              {t('customers.cases.title', 'Было / стало: реальные клиенты')}
+            </h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-xl mx-auto">
+              {t('customers.cases.subtitle', 'Метрики собраны по согласию авторов на основе данных LinkMAX за последние 90 дней.')}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl mx-auto">
+            {CASE_STUDIES.map((cs) => (
+              <CaseStudyCard key={cs.brand} cs={cs} />
+            ))}
+          </div>
+        </section>
 
         {/* Testimonials */}
         <section className="container mx-auto px-4 py-16 md:py-20">

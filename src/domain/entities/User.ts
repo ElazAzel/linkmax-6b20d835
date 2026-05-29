@@ -80,7 +80,7 @@ export function normalizeUsername(username: string): string {
 /**
  * Calculate premium status from profile data
  */
-export function calculatePremiumStatus(profile: { isPremium: boolean; trialEndsAt: string | null } | null): PremiumStatus {
+export function calculatePremiumStatus(profile: UserProfile | null): PremiumStatus {
   if (!profile) {
     return { isPremium: false, inTrial: false, trialEndsAt: null };
   }
@@ -171,27 +171,6 @@ export const FREE_TIER_LIMITS: FreemiumLimits = {
   canUseAdvancedThemes: false,
 };
 
-// Starter tier — commission-based (no subscription), but with most premium features
-export const STARTER_TIER_LIMITS: FreemiumLimits = {
-  maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 5,
-  canUseAnalytics: true,
-  canUseCRM: true,
-  showWatermark: false,
-  maxLeadsPerMonth: Infinity,
-  canUseScheduler: true,
-  canUsePixels: true,
-  canUseCustomDomain: true,
-  canUseChatbot: true,
-  canUseAutoNotifications: true,
-  canUsePayments: true,
-  canUseWhiteLabel: false,
-  canUseMultiPage: true,
-  canUseVerificationBadge: true,
-  canUsePremiumFrames: true,
-  canUseAdvancedThemes: true,
-};
-
 // Pro tier includes ALL premium features (AI capped at 10/mo)
 export const PRO_TIER_LIMITS: FreemiumLimits = {
   maxBlocks: Infinity,
@@ -217,9 +196,9 @@ export const PRO_TIER_LIMITS: FreemiumLimits = {
  * Get user's limits based on tier
  */
 export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): FreemiumLimits {
-  if (status.tier === 'business') return PRO_TIER_LIMITS;
-  if (status.tier === 'pro' || status.isPremium) return PRO_TIER_LIMITS;
-  if (status.tier === 'starter') return STARTER_TIER_LIMITS;
+  if (status.tier === 'starter' || status.tier === 'pro' || status.tier === 'business' || status.isPremium) {
+    return PRO_TIER_LIMITS;
+  }
   return FREE_TIER_LIMITS;
 }
 

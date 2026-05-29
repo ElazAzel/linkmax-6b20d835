@@ -121,7 +121,7 @@ describe('AdminService', () => {
                 order: vi.fn().mockResolvedValue({ data: [{ created_at: new Date().toISOString() }], error: null }),
             } as any);
 
-            const result = await AdminService.getCumulativeUsers(1);
+            const result = await AdminService.getCumulativeUsers();
             expect(result).toBeDefined();
         });
     });

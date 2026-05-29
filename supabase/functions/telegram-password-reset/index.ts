@@ -22,14 +22,6 @@ function generateToken(): string {
   return token;
 }
 
-async function hashToken(token: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(token);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
 async function sendTelegramMessage(chatId: string, text: string): Promise<boolean> {
   if (!isConfigured()) {
     console.log("Telegram gateway not configured");
@@ -78,13 +70,12 @@ Deno.serve(async (req) => {
       const resetToken = generateToken();
       const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
-      // Save token hash to database (never store plaintext tokens)
-      const tokenHash = await hashToken(resetToken);
+      // Save token to database
       const { error: tokenError } = await supabaseAdmin
         .from('password_reset_tokens')
         .insert({
           user_id: profile.id,
-          token: tokenHash,
+          token: resetToken,
           expires_at: expiresAt.toISOString()
         });
 
@@ -122,12 +113,11 @@ Deno.serve(async (req) => {
         );
       }
 
-      // Hash the provided token and look up by hash
-      const tokenHash = await hashToken(token.toUpperCase());
+      // Find and validate token
       const { data: resetData, error: resetError } = await supabaseAdmin
         .from('password_reset_tokens')
         .select('*')
-        .eq('token', tokenHash)
+        .eq('token', token.toUpperCase())
         .eq('used', false)
         .gt('expires_at', new Date().toISOString())
         .maybeSingle();

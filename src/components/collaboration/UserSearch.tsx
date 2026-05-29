@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { searchUsersWithNiche } from '@/services/collaboration';
+import { searchUsers } from '@/services/collaboration';
 import { getUserPageSlug } from '@/services/friends';
 import { toast } from 'sonner';
 
@@ -44,7 +44,7 @@ export function UserSearch({ mode, placeholder, onCollabRequest, onShoutout, onT
   const handleSearch = useCallback(async () => {
     if (!query.trim() || query.length < 2) return;
     setSearching(true);
-    const users = await searchUsersWithNiche(query);
+    const users = await searchUsers(query);
     setResults(users);
     setSearching(false);
   }, [query]);

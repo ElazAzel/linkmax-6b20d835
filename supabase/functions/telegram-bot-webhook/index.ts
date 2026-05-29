@@ -467,13 +467,41 @@ serve(async (req: Request) => {
       return new Response(JSON.stringify({ error: 'Server configuration error' }), { status: 500, headers: corsHeaders });
     }
 
-    // Handle webhook registration
+    // Handle webhook registration — admin-only, registers with secret_token
     const reqUrl2 = new URL(req.url);
     if (reqUrl2.searchParams.get('action') === 'register') {
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader?.startsWith('Bearer ')) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      const supaAuth = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') ?? '', { global: { headers: { Authorization: authHeader } } });
+      const tok = authHeader.replace('Bearer ', '');
+      const { data: claims } = await supaAuth.auth.getClaims(tok);
+      const uid = claims?.claims?.sub as string | undefined;
+      const supaAdmin = createClient(supabaseUrl, supabaseServiceKey);
+      const isAdminCheck = uid ? (await supaAdmin.rpc('has_role', { _user_id: uid, _role: 'admin' })).data : false;
+      if (!isAdminCheck) {
+        return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
       const { callTelegram } = await import("../_shared/telegram.ts");
       const webhookUrl = `${supabaseUrl}/functions/v1/telegram-bot-webhook`;
-      const result = await callTelegram('setWebhook', { url: webhookUrl });
-      return new Response(JSON.stringify({ ok: true, webhook: webhookUrl, result }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      const secretToken = Deno.env.get('TELEGRAM_WEBHOOK_SECRET') || '';
+      const setWebhookPayload: Record<string, unknown> = { url: webhookUrl };
+      if (secretToken) setWebhookPayload.secret_token = secretToken;
+      const result = await callTelegram('setWebhook', setWebhookPayload);
+      return new Response(JSON.stringify({ ok: true, webhook: webhookUrl, secured: !!secretToken, result }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    // Verify Telegram secret token header to ensure caller is Telegram
+    const expectedSecret = Deno.env.get('TELEGRAM_WEBHOOK_SECRET');
+    if (expectedSecret) {
+      const incomingSecret = req.headers.get('X-Telegram-Bot-Api-Secret-Token');
+      if (incomingSecret !== expectedSecret) {
+        console.warn('[Webhook] Invalid or missing secret token');
+        return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    } else {
+      console.warn('[Webhook] TELEGRAM_WEBHOOK_SECRET not set — webhook is unauthenticated. Set it and re-register.');
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -540,24 +568,31 @@ serve(async (req: Request) => {
         replyMarkup = getHelpKeyboard(lang);
       } else if (data?.startsWith('lead_status:')) {
         const [_, status, leadId] = data.split(':');
-        
-        // Update lead/deal status in DB
-        const { error: updateError } = await supabase
-          .from('leads')
-          .update({ status })
-          .eq('id', leadId);
 
-        if (updateError) {
-          console.error('Error updating lead status:', updateError);
-          responseText = m.lead_error;
+        // Ownership check: only the lead's owner (linked Telegram user) may update it
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
+        if (!profile) {
+          responseText = m.not_linked;
         } else {
-          // Map status code to display name
-          const statusNames: Record<string, string> = {
-            'contacted': lang === 'ru' ? 'В работе' : lang === 'kk' ? 'Жұмыста' : 'In Progress',
-            'won': lang === 'ru' ? 'Продано' : lang === 'kk' ? 'Сатылды' : 'Won'
-          };
-          responseText = m.lead_updated(statusNames[status] || status);
+          const { error: updateError, data: updated } = await supabase
+            .from('leads')
+            .update({ status })
+            .eq('id', leadId)
+            .eq('user_id', profile.id)
+            .select('id');
+
+          if (updateError || !updated || updated.length === 0) {
+            console.error('Error updating lead status:', updateError);
+            responseText = m.lead_error;
+          } else {
+            const statusNames: Record<string, string> = {
+              'contacted': lang === 'ru' ? 'В работе' : lang === 'kk' ? 'Жұмыста' : 'In Progress',
+              'won': lang === 'ru' ? 'Продано' : lang === 'kk' ? 'Сатылды' : 'Won'
+            };
+            responseText = m.lead_updated(statusNames[status] || status);
+          }
         }
+
       } else if (data?.startsWith('leads_page:')) {
         const page = parseInt(data.split(':')[1]);
         const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);

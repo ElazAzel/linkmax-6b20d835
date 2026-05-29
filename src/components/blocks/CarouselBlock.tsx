@@ -49,7 +49,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
   }
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl glass-card backdrop-blur-md border-white/10 shadow-glass">
+    <div className="w-full overflow-hidden rounded-2xl qb-card border-hairline shadow-soft">
       {title && (
         <div className="p-4 sm:p-5 pb-0">
           <h3 className="font-bold text-base sm:text-lg text-gradient truncate">{title}</h3>
@@ -68,6 +68,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
             const alt = getI18nText(image.alt, i18n.language as SupportedLanguage) || `Slide ${index + 1}`;
             return (
               <CarouselItem key={index} className="pl-0">
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when image.link present */}
                 <div
                   className="aspect-[16/9] overflow-hidden bg-black/20 cursor-pointer"
                   onClick={image.link ? () => handleImageClick(image.link) : undefined}
@@ -88,8 +89,8 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
         </CarouselContent>
         {block.images.length > 1 && (
           <>
-            <CarouselPrevious className="left-4 h-10 w-10 glass-button shadow-glass border-white/10" />
-            <CarouselNext className="right-4 h-10 w-10 glass-button shadow-glass border-white/10" />
+            <CarouselPrevious className="left-4 h-10 w-10 glass-button shadow-soft border-hairline" />
+            <CarouselNext className="right-4 h-10 w-10 glass-button shadow-soft border-hairline" />
           </>
         )}
       </Carousel>

@@ -6,8 +6,8 @@
  * Bot detection only for analytics tagging.
  */
 
-// BLACKLIST: Private pages - never SSR, never index
-const BLACKLIST_PREFIXES = [
+// PRIVATE: app pages — never SSR, never index
+const PRIVATE_PREFIXES = [
   'auth',
   'dashboard',
   'dashboard-v2',
@@ -25,8 +25,21 @@ const BLACKLIST_PREFIXES = [
   'p',  // compressed preview
 ];
 
-// Known SPA-only routes that should NOT be SSR'd
-const SPA_ONLY_PREFIXES = new Set(BLACKLIST_PREFIXES);
+// PUBLIC SPA: indexable React-rendered marketing/SEO routes (no edge-SSR available).
+// Passed through to origin SPA; meta handled by react-helmet-async client-side.
+const PUBLIC_SPA_PREFIXES = [
+  'blog',
+  'dlya',
+  'taplink-alternative',
+  'sayt-vizitka-dlya-uslug',
+  'multilink',
+  'link-in-bio-ru',
+  'vizitka-onlayn',
+];
+
+const PRIVATE_SET = new Set(PRIVATE_PREFIXES);
+const PUBLIC_SPA_SET = new Set(PUBLIC_SPA_PREFIXES);
+const SPA_ONLY_PREFIXES = new Set([...PRIVATE_PREFIXES, ...PUBLIC_SPA_PREFIXES]);
 
 // Public routes that get SSR (marketing + entity + child pages)
 const SSR_MARKETING_PAGES = new Set([
@@ -72,7 +85,11 @@ function isStaticFile(pathname) {
   return STATIC_EXTENSIONS.has(pathname.substring(lastDot).toLowerCase());
 }
 
-function isBlacklisted(firstSegment) {
+function isPrivate(firstSegment) {
+  return PRIVATE_SET.has(firstSegment);
+}
+
+function isSpaPassthrough(firstSegment) {
   return SPA_ONLY_PREFIXES.has(firstSegment);
 }
 
@@ -88,7 +105,7 @@ function getSSRTarget(pathname) {
   const first = segments[0].toLowerCase();
 
   // Blacklisted → no SSR
-  if (isBlacklisted(first)) return null;
+  if (isSpaPassthrough(first)) return null;
 
   // Marketing pages
   if (segments.length === 1 && SSR_MARKETING_PAGES.has(first)) {
@@ -224,7 +241,7 @@ async function handleRequest(request, env) {
     const response = await fetch(request);
     // Add noindex for blacklisted routes
     const clean = pathname.replace(/^\/+/, '').split('/')[0];
-    if (isBlacklisted(clean) && isBot(userAgent)) {
+    if (isPrivate(clean) && isBot(userAgent)) {
       const headers = new Headers(response.headers);
       headers.set('X-Robots-Tag', 'noindex, nofollow');
       return new Response(response.body, { status: response.status, headers });

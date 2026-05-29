@@ -1,3 +1,6 @@
+// Polyfill requestIdleCallback for Safari
+const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
+
 import React, { Suspense, useEffect, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
@@ -22,6 +25,7 @@ const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").
 const PWAUpdatePrompt = lazy(() => import("@/components/pwa/PWAUpdatePrompt").then(m => ({ default: m.PWAUpdatePrompt })));
 const CookieConsent = lazy(() => import("@/components/legal/CookieConsent").then(m => ({ default: m.CookieConsent })));
 const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalette").then(m => ({ default: m.CommandPalette })));
+const PaymentTestModeBanner = lazy(() => import("@/components/PaymentTestModeBanner").then(m => ({ default: m.PaymentTestModeBanner })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -57,7 +61,7 @@ class RouteErrorBoundary extends React.Component<
     return { hasError: true };
   }
   componentDidCatch(error: unknown) {
-    console.error('Route error:', error); // eslint-disable-line no-console
+    console.error('Route error:', error);
   }
   render() {
     if (this.state.hasError) {
@@ -79,30 +83,24 @@ class RouteErrorBoundary extends React.Component<
   }
 }
 
-  const App = () => {
+const App = () => {
   // Defer non-critical init until user interacts or after 8s
   useEffect(() => {
     let fired = false;
-    let cancelled = false;
     const run = () => {
-      if (fired || cancelled) return;
+      if (fired) return;
       fired = true;
       ['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>
         window.removeEventListener(e, run)
       );
-      const ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
-      ric(() => {
-        if (cancelled) return;
+      _ric(() => {
         // Clear old storage versions
         import('@/lib/storage').then(({ storage }) => {
-          if (cancelled) return;
           storage.clearOldVersions();
         });
         // Sync translations from DB
         import('./i18n/config').then(({ default: i18n }) => {
-          if (cancelled) return;
           import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
-            if (cancelled) return;
             syncI18nWithDB(i18n);
           });
         });
@@ -112,7 +110,7 @@ class RouteErrorBoundary extends React.Component<
       window.addEventListener(e, run, { once: true, passive: true })
     );
     const timer = setTimeout(run, 8000);
-    return () => { clearTimeout(timer); cancelled = true; };
+    return () => { clearTimeout(timer); };
   }, []);
 
   // Listen for OAuth errors in URL
@@ -146,6 +144,7 @@ class RouteErrorBoundary extends React.Component<
                   <RoutePrefetchManager />
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>
+                    <PaymentTestModeBanner />
                     <div id="main-content" className="outline-none" tabIndex={-1}>
                       <Suspense fallback={<PageLoader />}>
                         <Outlet />

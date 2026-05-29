@@ -57,7 +57,7 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
 
   return (
     <Card
-      className="overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass rounded-2xl"
+      className="overflow-hidden qb-card border-hairline shadow-soft rounded-2xl"
       onClick={() => onClick?.()}
     >
       {title && (

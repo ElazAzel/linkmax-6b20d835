@@ -77,6 +77,37 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     };
   }, [landing, pageUrl]);
 
+  const howToSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: `Как запустить ${landing.schemaServiceName}`,
+      description: landing.seoDescription,
+      totalTime: 'PT2M',
+      step: landing.workflow.map((item, index) => ({
+        '@type': 'HowToStep',
+        position: index + 1,
+        name: item.title,
+        text: item.description,
+        url: `${pageUrl}#step-${index + 1}`,
+      })),
+    };
+  }, [landing, pageUrl]);
+
+  const speakableSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      url: pageUrl,
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['[data-aeo-answer]', 'h1', '[data-aeo-summary]'],
+      },
+    };
+  }, [landing, pageUrl]);
+
   if (!landing) {
     return <Navigate to="/" replace />;
   }
@@ -104,6 +135,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
       />
       <FAQSchema id={`faq-${landing.key}`} faqItems={landing.faq} />
       {serviceSchema && <StructuredData id={`service-${landing.key}`} data={serviceSchema} />}
+      {howToSchema && <StructuredData id={`howto-${landing.key}`} data={howToSchema} />}
+      {speakableSchema && <StructuredData id={`speakable-${landing.key}`} data={speakableSchema} />}
 
       <div className="min-h-screen bg-background text-foreground">
         <header className="absolute inset-x-0 top-0 z-20">
@@ -136,7 +169,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                 <h1 className="max-w-4xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
                   {landing.title}
                 </h1>
-                <p className="mt-5 max-w-2xl text-base leading-7 text-white/82 sm:text-lg">
+                <p data-aeo-summary className="mt-5 max-w-2xl text-base leading-7 text-white/82 sm:text-lg">
                   {landing.description}
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -183,6 +216,23 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                 );
               })}
             </div>
+          </section>
+
+          <section className="mx-auto max-w-4xl px-4 pt-12">
+            <Card data-aeo-answer className="rounded-2xl border-primary/20 bg-primary/5 p-6">
+              <p className="text-xs font-bold uppercase tracking-wide text-primary">Кратко</p>
+              <p className="mt-2 text-base font-semibold leading-7 text-foreground sm:text-lg">
+                {landing.seoDescription}
+              </p>
+              <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
+                {landing.outcomes.map((item) => (
+                  <li key={item.title} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                    <span>{item.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
           </section>
 
           <section className="mx-auto max-w-6xl px-4 py-14">

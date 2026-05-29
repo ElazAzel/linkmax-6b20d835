@@ -17,7 +17,7 @@ export interface WalletTransaction {
     type: TransactionType | string;
     status: TransactionStatus;
     description: string | null;
-    metadata: Record<string, unknown> | null;
+    metadata: Record<string, unknown>;
     related_entity_id?: string | null;
     related_entity_type?: string | null;
     created_at: string;
@@ -187,7 +187,7 @@ export const fintechService = {
                 if (pendingError.code === 'PGRST205' || pendingError.code === '42P01') {
                     return {
                         wallet,
-                        transactions: (transactions || []) as WalletTransaction[],
+                        transactions: (transactions || []),
                         pendingGMV: 0,
                     };
                 }
@@ -198,7 +198,7 @@ export const fintechService = {
 
             return {
                 wallet,
-                transactions: (transactions || []) as WalletTransaction[],
+                transactions: (transactions || []),
                 pendingGMV
             };
         } catch (err) {

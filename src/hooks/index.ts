@@ -22,7 +22,6 @@ export * from './analytics/usePageAnalytics';
 export * from './analytics/useLandingAnalytics';
 export * from './crm/useLeads';
 export * from './dashboard/useDashboardMetrics';
-export * from './dashboard/useDashboardTab';
 export * from './zones/useZones';
 export * from './zones/useZoneContacts';
 export * from './zones/useZoneDeals';

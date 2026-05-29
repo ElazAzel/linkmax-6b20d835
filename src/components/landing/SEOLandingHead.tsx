@@ -18,10 +18,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const title = t(
       'seo.landing.title',
       isRussian
-        ? 'LinkMAX - операционная система для микробизнеса | Конструктор страниц + CRM'
+        ? 'LinkMAX — страницы, CRM и аналитика для микробизнеса'
         : isKazakh
-          ? 'LinkMAX - микробизнеске арналған операциялық жүйе | Бет конструкторы + CRM'
-          : 'LinkMAX - The Micro-Business OS | Page Builder + CRM + Analytics'
+          ? 'LinkMAX — беттер, CRM және аналитика микробизнеске'
+          : 'LinkMAX — Pages, CRM & Analytics for Micro-Business'
     );
     document.title = title;
 
@@ -56,10 +56,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const description = t(
       'seo.landing.description',
       isRussian
-        ? 'LinkMAX - операционная система для микробизнеса. Конструктор страниц, мини-CRM, аналитика и AI-генерация. Создайте сайт, принимайте заявки и управляйте клиентами в одном месте.'
+        ? 'Конструктор страниц с AI, мини-CRM и аналитика кликов для микробизнеса. Создайте сайт, принимайте заявки и управляйте клиентами.'
         : isKazakh
-          ? 'LinkMAX - микробизнеске арналған операциялық жүйе. Бет конструкторы, мини-CRM, аналитика және AI. Сайт жасаңыз, өтінімдер алыңыз және клиенттерді бір жерде басқарыңыз.'
-          : 'LinkMAX - The Micro-Business OS. Page builder, mini-CRM, analytics, and AI generation. Build your site, capture leads, and manage clients in one place.'
+          ? 'AI бет конструкторы, мини-CRM және аналитика. Сайт жасаңыз, өтінімдер алыңыз және клиенттерді бір жерде басқарыңыз.'
+          : 'AI page builder, mini-CRM, and click analytics for micro-business. Build your site, capture leads, and manage clients in one place.'
     );
     setMetaTag('description', description);
 
@@ -104,17 +104,23 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       document.head.appendChild(fontLink);
     }
 
-    // Canonical
-    setLinkTag('canonical', `${getAppDomain()}/`);
+    // Canonical: reflect the current language-prefixed route if present.
+    const domain = getAppDomain();
+    const pathLang = (typeof window !== 'undefined'
+      ? window.location.pathname.match(/^\/(ru|en|kk|uz)(\/|$)/)?.[1]
+      : null);
+    const canonicalPath = pathLang ? `/${pathLang}` : '/';
+    setLinkTag('canonical', `${domain}${canonicalPath}`);
 
-    // Hreflang tags for international SEO
-    setLinkTag('alternate', `${getAppDomain()}/?lang=ru`, 'ru');
-    setLinkTag('alternate', `${getAppDomain()}/?lang=en`, 'en');
-    setLinkTag('alternate', `${getAppDomain()}/?lang=kk`, 'kk');
-    setLinkTag('alternate', `${getAppDomain()}/`, 'x-default');
+    // Hreflang tags for international SEO — use clean path-based URLs
+    setLinkTag('alternate', `${domain}/ru`, 'ru');
+    setLinkTag('alternate', `${domain}/en`, 'en');
+    setLinkTag('alternate', `${domain}/kk`, 'kk');
+    setLinkTag('alternate', `${domain}/uz`, 'uz');
+    setLinkTag('alternate', `${domain}/`, 'x-default');
 
     // Update html lang attribute
-    document.documentElement.lang = currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : 'ru';
+    document.documentElement.lang = ['ru','en','kk','uz'].includes(currentLanguage) ? currentLanguage : 'ru';
 
     // OG Image
     const ogImageUrl = `${getAppDomain()}/og-image.png`;

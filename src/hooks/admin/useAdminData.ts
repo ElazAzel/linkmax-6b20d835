@@ -4,35 +4,20 @@ import { toast } from 'sonner';
 import { useAppError } from '@/hooks/useAppError';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Perf 2026-05-19: collapsed 6 parallel client-side aggregations
+ * (each pulling raw rows from analytics/blocks/user_profiles) into
+ * a single `get_admin_dashboard_aggregates` RPC. Results are cached
+ * for 5 minutes to avoid re-fetch storms.
+ */
 export function useAdminStats(days = 14) {
     return useQuery({
-        queryKey: ['admin-stats', days],
-        queryFn: async () => {
-            const [
-                dailyGrowth,
-                userDistribution,
-                eventDistribution,
-                cumulativeUsers,
-                socialStats,
-                blockTypeStats
-            ] = await Promise.all([
-                AdminService.getDailyGrowth(days),
-                AdminService.getUserStatusDistribution(),
-                AdminService.getEventDistribution(),
-                AdminService.getCumulativeUsers(30),
-                AdminService.getSocialStats(),
-                AdminService.getBlockTypeStats()
-            ]);
-
-            return {
-                dailyGrowth,
-                userDistribution,
-                eventDistribution,
-                cumulativeUsers,
-                socialStats,
-                blockTypeStats
-            };
-        }
+        queryKey: ['admin-dashboard', days],
+        queryFn: () => AdminService.getDashboardAggregates(days),
+        staleTime: 5 * 60_000,
+        gcTime: 10 * 60_000,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
     });
 }
 

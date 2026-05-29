@@ -1,5 +1,4 @@
 import { supabase } from '@/platform/supabase/client';
-import { subDays, startOfDay, eachDayOfInterval, format } from 'date-fns';
 
 export interface AdminDailyStats {
     date: string;
@@ -67,167 +66,75 @@ const COLORS = {
     free: '#6b7280'
 };
 
+export interface AdminDashboardAggregates {
+    dailyGrowth: AdminDailyStats[];
+    userDistribution: AdminUserStatus[];
+    eventDistribution: AdminEventTypeStats[];
+    cumulativeUsers: { date: string; total: number }[];
+    socialStats: AdminSocialStats[];
+    blockTypeStats: AdminBlockTypeStats[];
+}
+
+const BLOCK_PALETTE = [
+    '#8b5cf6', '#10b981', '#06b6d4', '#f97316', '#ec4899',
+    '#eab308', '#3b82f6', '#ef4444', '#14b8a6', '#a855f7'
+];
+
+/**
+ * Perf 2026-05-19: every chart on the admin dashboard used to fetch
+ * full tables (analytics, blocks, user_profiles) and aggregate them
+ * in the browser. They now share a single admin-gated RPC that does
+ * all GROUP BY / window aggregation on the server.
+ */
+async function fetchDashboardAggregates(days = 14): Promise<AdminDashboardAggregates> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- types regenerate after migration deploys
+    const { data, error } = await (supabase.rpc as any)('get_admin_dashboard_aggregates', {
+        p_days: days,
+        p_cumulative_days: 30,
+        p_block_limit: 10,
+    });
+    if (error) throw error;
+    const raw = (data ?? {}) as Partial<AdminDashboardAggregates> & {
+        blockTypeStats?: { name: string; count: number }[];
+    };
+    return {
+        dailyGrowth: raw.dailyGrowth ?? [],
+        userDistribution: raw.userDistribution ?? [],
+        eventDistribution: raw.eventDistribution ?? [],
+        cumulativeUsers: raw.cumulativeUsers ?? [],
+        socialStats: raw.socialStats ?? [],
+        blockTypeStats: (raw.blockTypeStats ?? []).map((b, i) => ({
+            name: b.name,
+            count: b.count,
+            color: BLOCK_PALETTE[i % BLOCK_PALETTE.length],
+        })),
+    };
+}
+
 export const AdminService = {
+    getDashboardAggregates: fetchDashboardAggregates,
+
+    // Backwards-compatible wrappers — all sourced from the single RPC.
     async getDailyGrowth(days = 14): Promise<AdminDailyStats[]> {
-        const startDate = subDays(new Date(), days);
-
-        const [
-            { data: usersData },
-            { data: pagesData },
-            { data: analyticsData },
-            { data: blocksData },
-            { data: friendshipsData },
-            { data: collabsData }
-        ] = await Promise.all([
-            supabase.from('user_profiles').select('created_at').gte('created_at', startDate.toISOString()),
-            supabase.from('pages').select('created_at').gte('created_at', startDate.toISOString()),
-            supabase.from('analytics').select('event_type, created_at').gte('created_at', startDate.toISOString()),
-            supabase.from('blocks').select('created_at').gte('created_at', startDate.toISOString()),
-            supabase.from('friendships').select('created_at').gte('created_at', startDate.toISOString()),
-            supabase.from('collaborations').select('created_at').gte('created_at', startDate.toISOString())
-        ]);
-
-        const dateRange = eachDayOfInterval({ start: startDate, end: new Date() });
-
-        return dateRange.map(day => {
-            const dayStart = startOfDay(day);
-            const dayEnd = new Date(dayStart);
-            dayEnd.setDate(dayEnd.getDate() + 1);
-
-            const dateStr = format(day, 'dd.MM');
-
-            const filterByDay = (items: Record<string, unknown>[] | null) =>
-                (items || []).filter(item => {
-                    if (!item.created_at) return false;
-                    const d = new Date(item.created_at as string);
-                    return d >= dayStart && d < dayEnd;
-                }).length || 0;
-
-            const dayEvents = analyticsData?.filter(e => {
-                if (!e.created_at) return false;
-                const d = new Date(e.created_at);
-                return d >= dayStart && d < dayEnd;
-            }) || [];
-
-            return {
-                date: dateStr,
-                users: filterByDay(usersData),
-                pages: filterByDay(pagesData),
-                views: dayEvents.filter(e => e.event_type === 'view').length,
-                clicks: dayEvents.filter(e => e.event_type === 'click').length,
-                shares: dayEvents.filter(e => e.event_type === 'share').length,
-                blocks: filterByDay(blocksData),
-                friendships: filterByDay(friendshipsData),
-                collabs: filterByDay(collabsData)
-            };
-        });
+        return (await fetchDashboardAggregates(days)).dailyGrowth;
     },
-
     async getUserStatusDistribution(): Promise<AdminUserStatus[]> {
-        const now = new Date().toISOString();
-
-        const [
-            { count: premiumCount },
-            { count: trialCount },
-            { count: totalCount }
-        ] = await Promise.all([
-            supabase.from('user_profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true),
-            supabase.from('user_profiles').select('*', { count: 'exact', head: true }).eq('is_premium', false).gt('trial_ends_at', now),
-            supabase.from('user_profiles').select('*', { count: 'exact', head: true })
-        ]);
-
-        const freeCount = (totalCount || 0) - (premiumCount || 0) - (trialCount || 0);
-
-        return [
-            { name: 'Premium', value: premiumCount || 0, color: COLORS.premium },
-            { name: 'Trial', value: trialCount || 0, color: COLORS.trial },
-            { name: 'Free', value: Math.max(0, freeCount), color: COLORS.free }
-        ];
+        return (await fetchDashboardAggregates()).userDistribution;
     },
-
     async getEventDistribution(): Promise<AdminEventTypeStats[]> {
-        const { data } = await supabase.from('analytics').select('event_type');
-
-        const counts = { view: 0, click: 0, share: 0 };
-        data?.forEach(e => {
-            if (e.event_type in counts) {
-                counts[e.event_type as keyof typeof counts]++;
-            }
-        });
-
-        return [
-            { name: 'Views', count: counts.view, color: COLORS.views },
-            { name: 'Clicks', count: counts.click, color: COLORS.clicks },
-            { name: 'Shares', count: counts.share, color: COLORS.shares }
-        ];
+        return (await fetchDashboardAggregates()).eventDistribution;
     },
-
-    async getCumulativeUsers(days = 30): Promise<{ date: string; total: number }[]> {
-        const { data } = await supabase
-            .from('user_profiles')
-            .select('created_at')
-            .order('created_at', { ascending: true });
-
-        if (!data || data.length === 0) return [];
-
-        const dateMap = new Map<string, number>();
-        let cumulative = 0;
-
-        data.forEach(u => {
-            if (!u.created_at) return;
-            const dateStr = format(new Date(u.created_at), 'dd.MM');
-            cumulative++;
-            dateMap.set(dateStr, cumulative);
-        });
-
-        const entries = Array.from(dateMap.entries());
-        return entries.slice(-days).map(([date, total]) => ({ date, total }));
+    async getCumulativeUsers(): Promise<{ date: string; total: number }[]> {
+        return (await fetchDashboardAggregates()).cumulativeUsers;
     },
-
     async getSocialStats(): Promise<AdminSocialStats[]> {
-        const [
-            { count: totalFriends },
-            { count: acceptedFriends },
-            { count: totalCollabs },
-            { count: acceptedCollabs },
-            { count: totalTeams }
-        ] = await Promise.all([
-            supabase.from('friendships').select('*', { count: 'exact', head: true }),
-            supabase.from('friendships').select('*', { count: 'exact', head: true }).eq('status', 'accepted'),
-            supabase.from('collaborations').select('*', { count: 'exact', head: true }),
-            supabase.from('collaborations').select('*', { count: 'exact', head: true }).eq('status', 'accepted'),
-            supabase.from('teams').select('*', { count: 'exact', head: true })
-        ]);
-
-        return [
-            { name: 'Friends', total: totalFriends || 0, accepted: acceptedFriends || 0 },
-            { name: 'Collabs', total: totalCollabs || 0, accepted: acceptedCollabs || 0 },
-            { name: 'Teams', total: totalTeams || 0, accepted: totalTeams || 0 }
-        ];
+        return (await fetchDashboardAggregates()).socialStats;
+    },
+    async getBlockTypeStats(): Promise<AdminBlockTypeStats[]> {
+        return (await fetchDashboardAggregates()).blockTypeStats;
     },
 
-    async getBlockTypeStats(limit = 10): Promise<AdminBlockTypeStats[]> {
-        const { data } = await supabase.from('blocks').select('type');
 
-        const typeCounts: Record<string, number> = {};
-        data?.forEach(block => {
-            typeCounts[block.type] = (typeCounts[block.type] || 0) + 1;
-        });
-
-        const colorPalette = [
-            '#8b5cf6', '#10b981', '#06b6d4', '#f97316', '#ec4899',
-            '#eab308', '#3b82f6', '#ef4444', '#14b8a6', '#a855f7'
-        ];
-
-        return Object.entries(typeCounts)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, limit)
-            .map(([name, count], index) => ({
-                name: name.charAt(0).toUpperCase() + name.slice(1),
-                count,
-                color: colorPalette[index % colorPalette.length]
-            }));
-    },
 
     // Partners CRUD
     async getPartners(): Promise<Partner[]> {

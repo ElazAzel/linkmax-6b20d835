@@ -153,9 +153,8 @@ export class CrmService {
       }
 
       // 2. Prepare AI Insights
-      const meta = lead.metadata as Record<string, string> | null;
-      const intent = meta?.intent === 'commercial' ? '🔥 Коммерческий интерес' : 'ℹ️ Инфо-запрос';
-      const lastQuery = meta?.last_query || '—';
+      const intent = lead.metadata?.intent === 'commercial' ? '🔥 Коммерческий интерес' : 'ℹ️ Инфо-запрос';
+      const lastQuery = lead.metadata?.last_query || '—';
       const crmLink = `https://lnkmx.my/crm?lead=${lead.id}`;
 
       // 3. Invoke Edge Function

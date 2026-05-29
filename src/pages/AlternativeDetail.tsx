@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Check from 'lucide-react/dist/esm/icons/check';
@@ -17,6 +18,7 @@ export default function AlternativeDetail() {
   const { competitor } = useParams();
   const profile = getAlternativeProfile(competitor);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { trackMarketingEvent } = useMarketingAnalytics();
 
   const canonicalUrl = useMemo(
@@ -36,12 +38,16 @@ export default function AlternativeDetail() {
     navigate('/auth');
   };
 
+  // Per-competitor translatable bundle, with RU fallback to data file.
+  const tr = (field: string, fallback: string) =>
+    t(`alternatives.profiles.${profile.slug}.${field}`, fallback);
+
   return (
     <>
       <SEOMetaEnhancer
         pageUrl={canonicalUrl}
-        pageTitle={`LinkMAX vs ${profile.competitor}: миграция на local-first business OS`}
-        pageDescription={`${profile.summary} Сравните ${profile.competitor} и LinkMAX и запустите страницу + CRM + booking в одном окне.`}
+        pageTitle={`LinkMAX vs ${profile.competitor}: ${tr('seoTitle', 'миграция на local-first business OS')}`}
+        pageDescription={`${tr('summary', profile.summary)} ${t('alternatives.detail.metaTail', 'Сравните и запустите страницу + CRM + booking в одном окне.')}`}
         type="article"
         section="Alternatives"
       />
@@ -58,39 +64,66 @@ export default function AlternativeDetail() {
             </div>
             <div className="flex items-center gap-2">
               <LanguageSwitcher />
-              <Button size="sm" onClick={() => onCta('header')}>Начать бесплатно</Button>
+              <Button size="sm" onClick={() => onCta('header')}>
+                {t('alternatives.detail.ctaHeader', 'Начать бесплатно')}
+              </Button>
             </div>
           </div>
         </header>
 
         <main className="container mx-auto px-4 py-10 max-w-4xl space-y-8">
           <section className="space-y-4">
-            <Badge className="bg-primary/10 text-primary border-primary/20">Migration guide</Badge>
+            <Badge className="bg-primary/10 text-primary border-primary/20">
+              {t('alternatives.detail.badge', 'Migration guide')}
+            </Badge>
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
               LinkMAX vs {profile.competitor}
             </h1>
-            <p className="text-muted-foreground text-lg">{profile.summary}</p>
+            <p className="text-muted-foreground text-lg">{tr('summary', profile.summary)}</p>
             <p className="text-sm text-muted-foreground">
-              Лучший сценарий для {profile.competitor}: {profile.bestFor}
+              {t('alternatives.detail.bestForLabel', 'Лучший сценарий для')} {profile.competitor}: {tr('bestFor', profile.bestFor)}
             </p>
             <div className="flex flex-wrap gap-3">
               <Button onClick={() => onCta('hero_primary')}>
                 <Sparkles className="h-4 w-4 mr-2" />
-                {profile.migrationCta}
+                {tr('migrationCta', profile.migrationCta)}
               </Button>
               <Button variant="outline" asChild>
                 <Link to="/pricing">
-                  Сравнить тарифы
+                  {t('alternatives.detail.comparePricing', 'Сравнить тарифы')}
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
             </div>
           </section>
 
+          {profile.compareRows && profile.compareRows.length > 0 && (
+            <section className="rounded-2xl border border-border/60 overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/40">
+                  <tr>
+                    <th className="text-left px-4 py-3 font-semibold">{t('alternatives.detail.table.metric', 'Критерий')}</th>
+                    <th className="text-left px-4 py-3 font-semibold">{profile.competitor}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-primary">LinkMAX</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {profile.compareRows.map((row) => (
+                    <tr key={row.label} className="border-t border-border/40">
+                      <td className="px-4 py-3 font-medium">{row.label}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{row.them}</td>
+                      <td className="px-4 py-3 font-semibold text-primary">{row.us}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
+
           <section className="grid md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>План миграции за 1 день</CardTitle>
+                <CardTitle>{t('alternatives.detail.migrationTitle', 'План миграции за 1 день')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3 text-sm text-muted-foreground">
@@ -106,7 +139,7 @@ export default function AlternativeDetail() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Почему LinkMAX сильнее в этом сценарии</CardTitle>
+                <CardTitle>{t('alternatives.detail.advantagesTitle', 'Почему LinkMAX сильнее в этом сценарии')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3 text-sm text-muted-foreground">
@@ -122,15 +155,19 @@ export default function AlternativeDetail() {
           </section>
 
           <section className="rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center space-y-3">
-            <h2 className="text-2xl font-bold">Готовы к миграции с {profile.competitor}?</h2>
+            <h2 className="text-2xl font-bold">
+              {t('alternatives.detail.ctaTitle', 'Готовы к миграции с')} {profile.competitor}?
+            </h2>
             <p className="text-muted-foreground">
-              Запустите страницу, CRM и booking в одном интерфейсе и сократите путь до первой сделки.
+              {t('alternatives.detail.ctaSubtitle', 'Запустите страницу, CRM и booking в одном интерфейсе и сократите путь до первой сделки.')}
             </p>
-            <Button size="lg" onClick={() => onCta('bottom')}>Создать аккаунт</Button>
+            <Button size="lg" onClick={() => onCta('bottom')}>
+              {t('alternatives.detail.ctaButton', 'Создать аккаунт')}
+            </Button>
           </section>
 
           <section>
-            <h3 className="font-semibold mb-3">Другие сравнения</h3>
+            <h3 className="font-semibold mb-3">{t('alternatives.detail.otherTitle', 'Другие сравнения')}</h3>
             <div className="flex flex-wrap gap-2">
               {ALTERNATIVE_PROFILES.filter((item) => item.slug !== profile.slug).map((item) => (
                 <Button key={item.slug} variant="outline" size="sm" asChild>

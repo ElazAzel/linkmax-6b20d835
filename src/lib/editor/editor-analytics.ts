@@ -42,6 +42,7 @@ export type EditorAnalyticsAction =
   | 'section_duplicated'
   | 'section_deleted'
   | 'section_merged'
+  | 'section_inserted'
   // P5: Review modes
   | 'review_mode_entered'
   | 'review_mode_exited'
@@ -60,7 +61,7 @@ export interface EditorAnalyticsMeta {
   blockType?: string;
   blockId?: string;
   position?: number;
-  source?: 'grid' | 'structure' | 'palette' | 'preset' | 'keyboard' | 'toolbar';
+  source?: 'grid' | 'structure' | 'palette' | 'preset' | 'keyboard' | 'toolbar' | 'picker';
   presetId?: string;
   commandId?: string;
   searchQuery?: string;

@@ -3,7 +3,6 @@
  * with variable substitution and PDF export
  */
 import React, { useState, useMemo, useEffect } from 'react';
-import DOMPurify from 'dompurify';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -215,7 +214,7 @@ export const ZoneDocumentGenerator = ({
                   <div 
                     className="bg-white text-black p-8 rounded-lg shadow-lg border prose prose-sm max-w-none"
                     style={{ fontFamily: 'Times New Roman, serif' }}
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(previewHTML) }}
+                    dangerouslySetInnerHTML={{ __html: previewHTML }}
                   />
                 </div>
               </ScrollArea>

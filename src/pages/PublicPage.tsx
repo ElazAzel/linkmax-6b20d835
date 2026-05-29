@@ -17,6 +17,8 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { PublicPageSkeleton } from '@/components/public/PublicPageSkeleton';
 import { PublicPageError } from '@/components/public/PublicPageError';
+import { SiteHeaderNav } from '@/components/public/SiteHeaderNav';
+import { SiteFooter } from '@/components/public/SiteFooter';
 import { decompressPageData } from '@/lib/utils/compression';
 import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
 import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
@@ -89,7 +91,44 @@ function getAnimationConfig(animationStyle?: PageData['theme']['animationStyle']
 
 export default function PublicPage() {
   const { t } = useTranslation();
-  const { compressed, slug } = useParams<{ compressed?: string; slug?: string }>();
+  const { compressed, slug, pagePath } = useParams<{ compressed?: string; slug?: string; pagePath?: string }>();
+  // Sprint 1: Multi-Page — when /:slug/p/:pagePath is hit, resolve to the sub-page's actual slug.
+  const [resolvedSubSlug, setResolvedSubSlug] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    if (slug && pagePath) {
+      import('@/services/sites').then(({ loadSitePageByPath, loadSiteRedirectsByHomeSlug, matchRedirect }) =>
+        loadSitePageByPath(slug, pagePath).then((sub) => {
+          if (cancelled) return;
+          if (sub) {
+            import('@/integrations/supabase/client').then(({ supabase }) =>
+              supabase.from('pages').select('slug').eq('id', sub.id).maybeSingle().then(({ data }) => {
+                if (!cancelled && data?.slug) setResolvedSubSlug(data.slug);
+              })
+            );
+            return;
+          }
+          // Sub-page not found — try a site-level redirect before showing error.
+          loadSiteRedirectsByHomeSlug(slug).then((redirects) => {
+            if (cancelled) return;
+            const hit = matchRedirect(redirects, pagePath);
+            if (!hit) return;
+            const dest = hit.to;
+            if (/^https?:\/\//i.test(dest)) {
+              window.location.replace(dest);
+            } else {
+              const path = dest.startsWith('/') ? dest : `/${slug}/p/${dest.replace(/^p\//, '')}`;
+              window.location.replace(path);
+            }
+          });
+        })
+      );
+    } else {
+      setResolvedSubSlug(null);
+    }
+    return () => { cancelled = true; };
+  }, [slug, pagePath]);
+  const effectiveSlug = pagePath ? (resolvedSubSlug ?? undefined) : slug;
   const [compressedPageData, setCompressedPageData] = useState<PageData | null>(null);
   const [showQR, setShowQR] = useState(false);
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
@@ -139,7 +178,7 @@ export default function PublicPage() {
   }, []);
 
   // Use React Query for slug-based pages (with caching)
-  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(slug);
+  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(effectiveSlug);
 
   // Use React Query for custom domain based pages
   const { data: domainPageData, isLoading: isLoadingDomain, error: domainError } = usePublicPageByDomain(customDomain || undefined);
@@ -158,7 +197,7 @@ export default function PublicPage() {
 
   // Determine which data source to use
   const pageData = slug ? cachedPageData : compressedPageData;
-  const loading = slug ? isLoadingCached : false;
+  const loading = slug ? (isLoadingCached || (!!pagePath && !resolvedSubSlug)) : false;
 
   // Check if page owner is premium (for auto-verification badge)
   const { data: ownerPremiumStatus } = useQuery({
@@ -347,6 +386,8 @@ export default function PublicPage() {
                 )}
               </div>
 
+              <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
+
               <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
                 {/* Grid Blocks - Same layout as editor */}
                 <GridBlocksRenderer
@@ -358,14 +399,14 @@ export default function PublicPage() {
                   isPreview={false}
                 />
 
-                {/* Share Section - Mobile Optimized */}
-                <div className="mt-6 sm:mt-8 space-y-3">
+                {/* Share Section - Mobile Optimized. Force readable contrast independent of page theme textColor. */}
+                <div className="mt-6 sm:mt-8 space-y-3 [color:hsl(var(--foreground))]">
                   <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                    <Button variant="outline" onClick={handleShare} className={cn("w-full sm:w-auto", buttonStyleClass)}>
+                    <Button variant="outline" onClick={handleShare} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
                       <Share2 className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                       {t('share.shareLink', 'Поделиться')}
                     </Button>
-                    <Button variant="outline" onClick={() => setShowQR(true)} className={cn("w-full sm:w-auto", buttonStyleClass)}>
+                    <Button variant="outline" onClick={() => setShowQR(true)} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
                       <QrCode className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                       {t('share.qrCode', 'QR-код')}
                     </Button>
@@ -376,7 +417,7 @@ export default function PublicPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t('share.whatsapp', 'Поделиться в WhatsApp')}
-                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
+                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
                       onClick={() => pageData?.id && trackShare(pageData.id, 'whatsapp')}
                     >
                       WhatsApp
@@ -386,7 +427,7 @@ export default function PublicPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t('share.telegram', 'Поделиться в Telegram')}
-                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
+                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
                       onClick={() => pageData?.id && trackShare(pageData.id, 'telegram')}
                     >
                       Telegram
@@ -394,12 +435,15 @@ export default function PublicPage() {
                   </div>
                 </div>
 
+
               {/* Branding - hidden when watermark is shown OR if white-label is active (premium only) */}
               {/* Branding handled by FreemiumWatermark */}
 
                 {/* Extra padding for watermark */}
                 {showWatermark && <div className="h-16" />}
               </div>
+
+              <SiteFooter ownerUserId={pageData?.userId} />
 
               {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
               <FreemiumWatermark show={showWatermark} slug={slug} />

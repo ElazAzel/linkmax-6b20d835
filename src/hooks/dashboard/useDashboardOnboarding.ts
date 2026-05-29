@@ -82,17 +82,17 @@ export function useDashboardOnboarding({
   blockCount,
   onNicheComplete,
 }: UseDashboardOnboardingOptions) {
+  const [showScopeChoice, setShowScopeChoice] = useState(false);
   const [showAIBuilderWizard, setShowAIBuilderWizard] = useState(false);
   const [signupContext, setSignupContext] = useState<SignupOnboardingContext>(() => readSignupContext());
 
-  // Check onboarding status on mount — show wizard ONLY for brand-new users
+  // Check onboarding status on mount — show scope choice ONLY for brand-new users
   useEffect(() => {
     if (!isUserReady || !isPageReady) return;
 
     const nextSignupContext = readSignupContext();
     setSignupContext(nextSignupContext);
 
-    // Read unified key + any legacy keys (for users who completed onboarding before refactor)
     const completed =
       storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED) ||
       storage.get<string>(STORAGE_KEYS.LEGACY_AI_BUILDER_USED) ||
@@ -101,11 +101,9 @@ export function useDashboardOnboarding({
     const dismissedAt = storage.get<number>(STORAGE_KEYS.ONBOARDING_DISMISSED_AT);
     const dismissedRecently = dismissedAt ? Date.now() - dismissedAt < DISMISS_SNOOZE_MS : false;
 
-    // Skip if user already has content (more than 2 blocks)
     const hasExistingContent = blockCount > MIN_BLOCKS_TO_SKIP_ONBOARDING;
 
     if (hasExistingContent || completed) {
-      // Migrate to single unified key
       if (!storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED)) {
         storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
       }
@@ -114,10 +112,20 @@ export function useDashboardOnboarding({
 
     if (dismissedRecently) return;
 
-    // New user with no content — show AI Builder wizard
-    const timer = window.setTimeout(() => setShowAIBuilderWizard(true), 500);
+    // New user with no content — show scope chooser first.
+    const timer = window.setTimeout(() => setShowScopeChoice(true), 500);
     return () => window.clearTimeout(timer);
   }, [isUserReady, isPageReady, blockCount]);
+
+  const handleScopeClose = useCallback(() => {
+    storage.set(STORAGE_KEYS.ONBOARDING_DISMISSED_AT, Date.now());
+    setShowScopeChoice(false);
+  }, []);
+
+  const handleChooseSingle = useCallback(() => {
+    setShowScopeChoice(false);
+    setShowAIBuilderWizard(true);
+  }, []);
 
   const handleAIBuilderClose = useCallback(() => {
     storage.set(STORAGE_KEYS.ONBOARDING_DISMISSED_AT, Date.now());
@@ -135,15 +143,17 @@ export function useDashboardOnboarding({
     [onNicheComplete]
   );
 
-  // Manual open from settings (for existing users)
   const openAIBuilderFromSettings = useCallback(() => {
     setSignupContext(readSignupContext());
     setShowAIBuilderWizard(true);
   }, []);
 
   return {
+    showScopeChoice,
     showAIBuilderWizard,
     signupContext,
+    handleScopeClose,
+    handleChooseSingle,
     handleAIBuilderClose,
     handleAIBuilderComplete,
     openAIBuilderFromSettings,

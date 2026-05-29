@@ -94,6 +94,9 @@ export async function trackActivationEvent(
       }]);
 
     if (error) {
+      // RLS denies inserts for unpublished pages — это ожидаемо, тихо игнорируем
+      const code = (error as { code?: string }).code;
+      if (code === '42501' || code === 'PGRST301' || code === '403') return;
       logger.error('Failed to track activation event', error, { context: 'activation-events' });
     }
   } catch (err) {

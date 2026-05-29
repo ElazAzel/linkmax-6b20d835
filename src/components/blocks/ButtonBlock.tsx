@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
@@ -14,7 +14,7 @@ interface ButtonBlockProps {
 export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }: ButtonBlockProps) {
   const { i18n } = useTranslation();
   const handleClick = createBlockClickHandler(block.url, onClick);
-  const title = useMemo(() => getI18nText(block.title, i18n.language as SupportedLanguage), [block.title, i18n.language]);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   const alignmentClass = block.alignment === 'left' ? 'justify-start' 
     : block.alignment === 'right' ? 'justify-end' 
@@ -39,11 +39,11 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
     : block.width === 'auto' ? 'w-auto'
     : 'w-full sm:w-auto sm:min-w-[280px] sm:max-w-md';
 
-  const sizeClass = block.size === 'xs' ? 'px-4 py-2 text-xs rounded-xl'
-    : block.size === 'sm' ? 'px-5 py-3 text-sm rounded-xl'
-    : block.size === 'lg' ? 'px-8 sm:px-10 py-5 text-base sm:text-lg rounded-2xl'
-    : block.size === 'xl' ? 'px-10 sm:px-12 py-6 text-lg sm:text-xl rounded-3xl'
-    : 'px-6 sm:px-8 py-4 text-sm sm:text-base rounded-2xl';
+  const sizeClass = block.size === 'xs' ? 'px-4 py-2 text-xs'
+    : block.size === 'sm' ? 'px-5 py-3 text-sm'
+    : block.size === 'lg' ? 'px-8 sm:px-10 py-5 text-base sm:text-lg'
+    : block.size === 'xl' ? 'px-10 sm:px-12 py-6 text-lg sm:text-xl'
+    : 'px-6 sm:px-8 py-4 text-sm sm:text-base';
 
   return (
     <div className={cn("flex w-full", alignmentClass)}>
@@ -51,29 +51,24 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
         onClick={handleClick}
         className={cn(
           widthClass,
-          "relative overflow-hidden font-semibold",
-          sizeClass,
-          "shadow-glass-lg backdrop-blur-xl transition-all duration-300",
-          "hover:shadow-glass-xl hover:scale-[1.02] active:scale-[0.98]",
+          "relative overflow-hidden font-medium tracking-tight rounded-card",
+          "shadow-soft hover:shadow-lift transition-all duration-200",
+          "hover:-translate-y-px active:scale-[0.99]",
           "break-words hyphens-auto",
+          sizeClass,
           getHoverClass(block.hoverEffect),
-          hasLegacyBackground 
-            ? 'text-white drop-shadow-md' 
-            : hasBlockStyle 
-              ? '' 
-              : 'bg-primary text-primary-foreground border border-primary/20'
+          hasLegacyBackground
+            ? 'text-white drop-shadow-md'
+            : hasBlockStyle
+              ? ''
+              : 'bg-primary text-primary-foreground'
         )}
         style={combinedStyle}
       >
-        {/* Overlay for image backgrounds to ensure text readability */}
         {isImageBackground && (
           <div className="absolute inset-0 bg-black/30 pointer-events-none" />
         )}
         <span className={cn("relative z-10 line-clamp-2", textEffectClass)}>{title}</span>
-        {/* Glass reflection overlay */}
-        {!hasBlockStyle && (
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none z-20" />
-        )}
       </button>
     </div>
   );

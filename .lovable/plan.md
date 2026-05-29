@@ -1,108 +1,66 @@
 ## Цель
 
-Сделать модуль «Бизнес-Зоны» полностью рабочим: устранить все ошибки 400 в network-логе, добавить недостающие таблицы, привести экраны в порядок, проверить безопасность (RLS) и edge-функции, обновить memory (Stop List сейчас официально замораживает зоны — но пользователь явно просит реактивировать).
+Снять «сложность» и привести 4 поверхности (Dashboard, Editor, Blocks, Public Page) к одному визуальному языку — **Quiet Bento**: тишина и порядок Apple/Linear + смысловая плотность Bento.me. Ликвид-стекло остаётся, но только как акцент, а не как фон всего интерфейса.
 
-## Что сейчас сломано (подтверждено)
+## Принципы (применяются ко всем 4 поверхностям)
 
-В network-логах текущей сессии видны ошибки 400 от PostgREST:
+1. **Один радиус**: `--radius-card: 28px`, `--radius-control: 14px`, `--radius-pill: 999px`. Убрать зоопарк `rounded-xl/2xl/3xl`.
+2. **Одна тень**: `--shadow-soft` (для карточек) + `--shadow-lift` (для hover/active). Убрать `shadow-lg/xl/2xl` россыпью.
+3. **Стекло — точечно**: только top-bar, bottom nav, command palette, floating toolbars. Контентные карточки — **плотные**, без `backdrop-blur`.
+4. **Цвет**: 1 нейтральная база + 1 акцент. Спрятать второстепенные tinted-градиенты в карточках статистики.
+5. **Типографика**: одна шкала (12/14/16/20/28/40), `tracking-tight` на заголовках, `font-medium` (не bold) для UI-надписей.
+6. **Состояния**: единый `SmartEmptyState` (уже есть), единый `LoadingSkeleton`, единый `ErrorState`. Запретить ad-hoc спиннеры.
 
-```text
-GET zone_deals?...&deleted_at=is.null  → 400  column zone_deals.deleted_at does not exist
-GET zone_tasks?...&deleted_at=is.null  → 400  column zone_tasks.deleted_at does not exist
-```
+## Этапы
 
-Дополнительный аудит хуков и БД выявил, что в коде используются **5 таблиц**, которых **нет в БД**, но коде они есть с приведением `as any`, поэтому ошибка вылезает только в рантайме:
+### Sprint A — Design tokens (фундамент, 1 проход)
+- `src/index.css`: добавить новые semantic-токены (`--radius-card`, `--shadow-soft`, `--shadow-lift`, `--surface-quiet`, `--surface-raised`, `--surface-glass`).
+- `tailwind.config.ts`: пробросить `rounded-card`, `shadow-soft`, `shadow-lift`, `bg-surface-quiet`, `bg-surface-raised`, `bg-surface-glass`.
+- Файл `src/styles/quiet-bento.css` с утилитами `.qb-card`, `.qb-card-raised`, `.qb-glass`, `.qb-control`.
 
-- `zone_task_checklist`
-- `zone_task_comments`
-- `zone_deal_products`
-- `zone_resources`
-- (events/bookings таблицы зон — экраны существуют, но используют общие `bookings`/`events` без `zone_id`)
+### Sprint B — Dashboard shell
+- `DashboardLayout.tsx`: убрать «карточку-контейнер» `rounded-[2.5rem] border` вокруг контента — она дублирует фон и создаёт «коробку в коробке». Контент кладётся прямо на `--surface-quiet`.
+- `DashboardSidebar`: уменьшить иконки до 18px, убрать активный «pill»-фон → заменить на тонкую левую черту 2px + увеличенный `font-medium`.
+- `DashboardBottomNav`: стекло остаётся, но контраст активной иконки делается через цвет, не через капсулу.
+- `HomeScreen`: 1 главная Bento-карточка (статус страницы + Edit/Publish/Share как chips), 3 KPI в одной строке, секция «Что улучшить» (AI-рекомендации) — без декоративных градиентов.
+- `PagesScreen` / `InsightsScreen`: единый header через `DashboardHeader` слоты, карточки `.qb-card`.
 
-Из-за этого экраны Канбан, Задачи, Карточка сделки (товары/комментарии), Календарь ресурсов — пустые/падают.
+### Sprint C — Editor canvas
+- `EditorTopBar`: высота h-14, только Health/Save/Preview/Publish; убрать дубль-кнопки.
+- `SmartActionDock`: одна плавающая капсула снизу `+ Блок · AI · Превью · Опубликовать`, glass.
+- `GridEditor`: спрятать сетку (dots) по умолчанию, показывать при drag. Hover-state блока — только outline 1px + `shadow-lift`, без подсветки фона.
+- `FloatingBlockToolbar`: появляется только на selected, не на hover (меньше шума).
+- Add Block Sheet: убрать вкладки → одна вертикальная лента категорий слева + grid справа, поиск всегда фокусирован.
 
-Стратегический контекст: в memory зафиксирован «Stop List» по Бизнес-Зонам (заморожены, скрыты из навигации, фокус на Service Sales Workflow). Пользователь явно просит снова сделать рабочим — обновим memory.
+### Sprint D — Сами блоки (внутренняя вёрстка)
+- Единый `BlockShell` (обёртка): `.qb-card`, padding по пресету (`sm/md/lg`), консистентные `title`/`subtitle`/`media`/`cta` слоты.
+- Привести `LinkBlock`, `ButtonBlock`, `ProductBlock`, `MessengerBlock`, `TestimonialBlock`, `FAQBlock`, `PricingBlock`, `EventBlock` к этому shell.
+- Иконки соцсетей в `SocialsBlock` — монохром по умолчанию, цветные только на hover.
+- `ProfileBlock`: убрать тяжёлый glass-фон, оставить аватар + имя + bio + 1 ряд chip-actions.
 
-## План работ (4 этапа)
+### Sprint E — Публичная страница
+- `GridBlocksRenderer`: интеллектуальная Bento-раскладка уже есть → добавить «дыхание» (28px gap на мобиле уменьшить до 12px, между секциями — 32px), плавный fade-in (stagger 40ms, не 100ms).
+- `SiteHeaderNav`: компактный, стекло только при скролле > 8px.
+- `SiteFooter`: минимальный, 1 строка, без декоративных блоков.
+- CTA-блок (tel/wa/tg) — закрепить как `sticky bottom-4` на мобиле, но визуально как `.qb-glass` капсула.
 
-### Этап 1. Миграция БД — фундамент
-
-Создаём одну миграцию со всеми schema-изменениями.
-
-1. **Soft-delete колонки** на основных таблицах:
-   - `zone_deals.deleted_at timestamptz null`
-   - `zone_tasks.deleted_at timestamptz null`
-   - `zone_invoices.deleted_at timestamptz null`
-   - `zone_documents.deleted_at timestamptz null`
-   - `zone_contacts.deleted_at timestamptz null`
-   - индексы `WHERE deleted_at IS NULL` для горячих выборок.
-
-2. **Новые таблицы** (с RLS через `is_zone_member`/`is_zone_admin`, аналогично существующим политикам):
-   - `zone_task_checklist (id, task_id, zone_id, title, is_done, order_index, created_at)`
-   - `zone_task_comments (id, task_id, zone_id, user_id, content, created_at, updated_at)`
-   - `zone_deal_products (id, deal_id, zone_id, product_id, quantity, unit_price, subtotal, created_at)`
-   - `zone_resources (id, zone_id, name, type, color, capacity, created_at)` — для календаря ресурсов.
-
-3. **RLS-политики** для каждой новой таблицы:
-   - SELECT: `is_zone_member(zone_id, auth.uid())`
-   - INSERT/UPDATE/DELETE: `is_zone_member` или `is_zone_admin` (по аналогии с существующими).
-
-4. **Триггеры** `updated_at` где нужно (`zone_task_comments`).
-
-### Этап 2. Синхронизация фронтенда с БД
-
-1. **Хуки** — убедиться, что после миграции существующий код в `useZoneDeals`, `useZoneTasks`, `useZoneResources`, `useZoneDealProducts` и т. д. работает. Удалить `as any` каст там, где после регенерации типов он больше не нужен.
-
-2. **Экраны зон** — пройти каждый и подтвердить рабочее состояние:
-   - `ZoneDashboard` — KPI, последние сделки/задачи
-   - `ZoneDealsScreen` — Канбан + bulk-операции + drag-and-drop стадий
-   - `ZoneTasksScreen` — список + чек-листы + комментарии
-   - `ZoneContactsScreen` — CRUD контактов
-   - `ZoneInboxScreen` — Telegram-conversations
-   - `ZoneInvoicesScreen` — Robokassa-инвойсы
-   - `ZoneDocumentsScreen` — шаблоны и сгенерированные документы
-   - `ZoneAutomationsScreen` — триггеры (run-zone-automations edge function)
-   - `ZoneAnalyticsScreen` — графики
-   - `ZoneSettingsScreen` — план, участники, инвайты, биллинг
-   - `ZoneEventsScreen`, `ZoneProductsScreen`, `ZoneBookingsCalendarScreen` — связь с zone_id.
-
-3. **Empty-states**: где данных нет — показать SmartEmptyState с CTA (по стандарту `mem://design/smart-empty-states-standard`), а не белый экран.
-
-4. **Skeleton**: проверить, что во время загрузки нет «прыжков», все экраны имеют единый header (по стандарту `mem://design/dashboard-header-slots`).
-
-### Этап 3. Возврат навигации + RLS-аудит
-
-1. **Навигация Business-Zone** в `DashboardSidebar` и `DashboardBottomNav` уже жёстко закрыта `canUseBusinessZone()` — оставляем как есть (только Business-tier видит). Но убедимся, что для Business-пользователя пункты доступны и все табы (`zone-dashboard`, `zone-deals`, …, `zone-settings`) ведут на рабочие экраны.
-
-2. **RLS-аудит**: запустим Supabase linter, прогоним RLS-проверки для всех `zone_*` таблиц, особенно для новых. Убедимся, что `is_zone_member` использует SECURITY DEFINER (предотвращение recursion).
-
-3. **Edge-функции** `run-zone-automations` и `send-zone-notification` — проверим, что они находят существующие данные и не падают на новых таблицах.
-
-### Этап 4. Memory & документация
-
-1. Обновить `mem://product-strategy/development-stop-list-updated` — снять флаг «заморожены» с Бизнес-Зон, отметить, что теперь это рабочий B2B-модуль для Business-tier (>1 пользователя в команде).
-2. Создать `mem://product/business-zones-active-2026` — короткое summary: что такое Бизнес-Зона, какие модули, какой тариф, какие RLS-предположения.
-3. Краткая запись в `docs/features/` — список модулей зоны и edge-функций.
+### Sprint F — Чистка
+- Удалить устаревшие `shadow-lg`/`rounded-3xl`/`bg-gradient-to-*` в дашборде и редакторе через codemod (`scripts/quiet-bento-codemod.mjs`).
+- Прогнать `npm run lint`, исправить i18n-ключи если ломаются.
 
 ## Технические детали
 
-- **Миграция SQL** — одна транзакция; все ALTER + CREATE TABLE + CREATE POLICY + CREATE INDEX.
-- **Совместимость**: `deleted_at IS NULL` — все существующие строки автоматически попадут в выборку.
-- **Типы Supabase** (`src/integrations/supabase/types.ts`) перегенерируются автоматически после миграции — далее `as any` касты в хуках можно убрать постепенно.
-- **Тесты**: smoke-проверка вручную через preview (Канбан, добавление задачи, чек-лист, комментарий, инвойс, документ).
-- **Не трогаем**: `zone_events`, `zone_bookings_calendar`, `zone_messages`/`zone_conversations` — они уже существуют и работают через свои таблицы (`bookings`/`events` с `zone_id` или собственные `zone_messages`).
+- Токены HSL (как требует design-system standard), все цвета только семантические.
+- Сохранить совместимость с тёмной темой (`.dark` уже есть).
+- Никаких миграций БД, никаких изменений бизнес-логики.
+- E2E (`e2e/editor-add-block-sheet.spec.ts`, `e2e/page-creation.spec.ts`) проходят без правок — селекторы по `data-testid` уже стоят.
 
-## Что получит пользователь
+## Что НЕ делаем сейчас
 
-- Канбан сделок открывается без ошибок 400, drag-and-drop работает.
-- Задачи: создание, чек-листы, комментарии, удаление — рабочее.
-- Карточка сделки: список товаров и комментарии не падают.
-- Инвойсы и документы получают «корзину» (soft-delete).
-- Контакты не теряются при удалении.
-- Все экраны имеют единый header и пустые состояния.
-- RLS чистая, проходит linter, изоляция между зонами гарантирована.
-- Memory обновлена — будущие сессии знают, что Бизнес-Зоны снова активны.
+- Не трогаем CRM/Zones/Billing UI (вне 4 поверхностей).
+- Не меняем структуру роутов и i18n-ключи.
+- Не вводим новые шрифты.
 
-## Ожидаемое время
+## Порядок выполнения
 
-Большой объём, ориентир: 1 миграция + ~10 файлов хуков/экранов + 2 memory-файла. Должно уложиться в одну итерацию default-mode.
+A → B → C → D → E → F. После каждого спринта — короткое демо-скриншот в чат, чтобы вы могли сказать «дальше» или «откатить».

@@ -42,12 +42,33 @@ const RESERVED_SLUGS = new Set([
   'p', 'crm', 'settings', 'editor', 'gallery', 'experts', 'pricing',
   'alternatives', 'terms', 'privacy', 'payment-terms', 'for-masters',
   'seo-landing', 'sitemap', 'robots', 'collab', 'from', 'invites',
+  'blog', 'dlya',
+  'taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink',
+  'link-in-bio-ru', 'vizitka-onlayn',
 ]);
 
 const NICHE_TAGS = [
   'beauty', 'fitness', 'health', 'education', 'consulting',
   'coaching', 'design', 'marketing', 'music', 'photo', 'tech',
   'food', 'travel', 'fashion', 'art', 'realty', 'services', 'events', 'business', 'other'
+];
+
+// Blog posts (keep in sync with src/lib/blog-posts.ts)
+const BLOG_SLUGS = [
+  'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
+  'kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane',
+  'telegram-vizitka-dlya-koucha-poshagovo',
+  'taplink-vs-linkmax-sravnenie-2026',
+  'sayt-vizitka-dlya-fotografa-chto-vklyuchit',
+];
+
+// Programmatic niche landings (/dlya/{niche})
+const NICHE_LANDINGS = ['photographer', 'coach', 'master', 'psychologist', 'fitness', 'designer'];
+
+// Keyword landings
+const KEYWORD_LANDINGS = [
+  'taplink-alternative', 'sayt-vizitka-dlya-uslug',
+  'multilink', 'link-in-bio-ru', 'vizitka-onlayn',
 ];
 
 // Static pages for sitemap
@@ -62,6 +83,10 @@ const STATIC_PAGES = [
   { loc: '/terms', changefreq: 'yearly', priority: '0.3' },
   { loc: '/privacy', changefreq: 'yearly', priority: '0.3' },
   { loc: '/payment-terms', changefreq: 'yearly', priority: '0.3' },
+  { loc: '/blog', changefreq: 'weekly', priority: '0.8' },
+  ...KEYWORD_LANDINGS.map((slug) => ({ loc: `/${slug}`, changefreq: 'monthly', priority: '0.85' })),
+  ...NICHE_LANDINGS.map((slug) => ({ loc: `/dlya/${slug}`, changefreq: 'monthly', priority: '0.75' })),
+  ...BLOG_SLUGS.map((slug) => ({ loc: `/blog/${slug}`, changefreq: 'monthly', priority: '0.7' })),
 ];
 
 // Types
@@ -873,6 +898,42 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
         }
       }
     }
+  }
+
+  // Sub-pages (multi-page sites): /{home_slug}/p/{page_path}
+  try {
+    const { data: subPages } = await supabase
+      .from('pages')
+      .select('page_path, site_id, updated_at, is_indexable')
+      .eq('is_published', true)
+      .eq('is_home', false)
+      .not('page_path', 'is', null)
+      .not('site_id', 'is', null)
+      .limit(10000);
+
+    const subs = (subPages || []) as Array<{ page_path: string; site_id: string; updated_at: string | null; is_indexable: boolean | null }>;
+    if (subs.length > 0) {
+      const siteIds = Array.from(new Set(subs.map((p) => p.site_id)));
+      const { data: homeRows } = await supabase
+        .from('pages')
+        .select('site_id, slug, is_published, is_indexable, quality_score')
+        .in('site_id', siteIds)
+        .eq('is_home', true);
+      const homeMap = new Map<string, { slug: string; ok: boolean }>();
+      for (const h of (homeRows || []) as Array<{ site_id: string; slug: string; is_published: boolean; is_indexable: boolean | null; quality_score: number | null }>) {
+        const ok = !!h.is_published && h.is_indexable !== false && (h.quality_score || 0) >= QUALITY_THRESHOLD && !RESERVED_SLUGS.has((h.slug || '').toLowerCase());
+        homeMap.set(h.site_id, { slug: h.slug, ok });
+      }
+      for (const sp of subs) {
+        if (sp.is_indexable === false) continue;
+        const home = homeMap.get(sp.site_id);
+        if (!home || !home.ok || !home.slug) continue;
+        const lastmod = sp.updated_at ? new Date(sp.updated_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+        xml += `  <url><loc>${BASE_URL}/${escapeXml(home.slug)}/p/${escapeXml(sp.page_path)}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>\n`;
+      }
+    }
+  } catch (_e) {
+    // sub-pages are best-effort in sitemap
   }
 
   xml += `</urlset>`;

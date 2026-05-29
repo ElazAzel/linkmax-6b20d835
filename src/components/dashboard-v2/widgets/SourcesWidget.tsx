@@ -34,9 +34,8 @@ export const SourcesWidget = memo(function SourcesWidget({ className }: SourcesW
     };
 
     leads.forEach(lead => {
-      const meta = lead.metadata as Record<string, unknown> | null;
-      const utmSource = (meta?.utm_source as string)?.toLowerCase();
-      const referrer = (meta?.referrer as string)?.toLowerCase();
+      const utmSource = (lead.metadata?.utm_source as string)?.toLowerCase();
+      const referrer = (lead.metadata?.referrer as string)?.toLowerCase();
 
       if (utmSource?.includes('instagram') || referrer?.includes('instagram')) counts.instagram++;
       else if (utmSource?.includes('facebook') || referrer?.includes('facebook')) counts.facebook++;

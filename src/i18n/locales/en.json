@@ -4920,10 +4920,6 @@
     },
     "pwa": {
       "install": "Install the application",
-      "installTitle": "Install lnkmx.my",
-      "installDescription": "Add the app to your home screen for quick access and offline work",
-      "installButton": "Install",
-      "later": "Later",
       "updateAvailable": "Update available"
     },
     "quests": {
@@ -7115,6 +7111,22 @@
       "publicPageV2": {
         "poweredBy": "Powered by"
       }
+    },
+    "detail": {
+      "ctaHeader": "Start free",
+      "badge": "Migration guide",
+      "bestForLabel": "Best fit for",
+      "comparePricing": "Compare pricing",
+      "migrationTitle": "1-day migration plan",
+      "advantagesTitle": "Why LinkMAX wins here",
+      "ctaTitle": "Ready to migrate from",
+      "ctaSubtitle": "Launch your page, CRM and booking in one app — and shorten the path to first sale.",
+      "ctaButton": "Create account",
+      "otherTitle": "Other comparisons",
+      "metaTail": "Compare and launch page + CRM + booking in one window.",
+      "table": {
+        "metric": "Metric"
+      }
     }
   },
   "landing": {
@@ -7265,6 +7277,42 @@
         "trust1": "No credit card required",
         "trust2": "Free plan available",
         "trust3": "Setup in 60 seconds"
+      }
+    },
+    "v5": {
+      "badge": "New generation of LinkMAX",
+      "title1": "Site + CRM + Payments",
+      "title2": "in one OS",
+      "subtitle": "A professional builder for experts and small business. Build multi-page sites, manage leads and accept payments — no code required.",
+      "cta_primary": "Try for free",
+      "cta_secondary": "View demo",
+      "bento": {
+        "builder": {
+          "title": "Multi-page Builder",
+          "desc": "Build complex sites with blogs, portfolios and landings in a few clicks."
+        },
+        "ai": {
+          "eyebrow": "AI Builder",
+          "title": "Generated in 30 seconds",
+          "desc": "Type your niche — get a ready site."
+        },
+        "pay": {
+          "title": "Payments",
+          "desc": "Kaspi, Robokassa, Stripe"
+        },
+        "crm": {
+          "title": "Mini-CRM",
+          "desc": "Lead notifications straight to your Telegram. Stay on top of your pipeline.",
+          "notify_title": "New lead!",
+          "notify_desc": "Anna — Booking at 2:00 PM",
+          "pipeline": "Pipeline: 12 active",
+          "pipeline_desc": "Conversion 24%"
+        },
+        "analytics": {
+          "title": "Analytics",
+          "desc": "Full visibility into visits and sales.",
+          "week": "this week"
+        }
       }
     }
   },
@@ -7596,5 +7644,92 @@
   },
   "tma": {
     "home_greeting": "Hi, {{name}} 👋"
+  },
+  "siteTemplates": {
+    "trigger": "Site template",
+    "title": "Ready-made site templates",
+    "subtitle": "Pick a template — we'll create the pages and fill them with sections. Easy to edit later.",
+    "apply": "Apply template",
+    "applying": "Creating…",
+    "appliedToast": "Pages created: {{n}}",
+    "allSkipped": "All template pages already exist",
+    "applyError": "Couldn't apply the template",
+    "noSlots": "No free page slots. Remove some pages or upgrade to Pro.",
+    "trimmedHint": "On Starter we'll add the first {{n}} pages. Pro gets all.",
+    "services": {
+      "label": "Services",
+      "desc": "Perfect for agencies: home, services, pricing, contacts"
+    },
+    "expert": {
+      "label": "Expert",
+      "desc": "For coaches and mentors: about, programs, testimonials, booking"
+    },
+    "cafe": {
+      "label": "Café / Restaurant",
+      "desc": "Menu, table booking, location and contacts"
+    },
+    "school": {
+      "label": "School / Courses",
+      "desc": "Courses, teachers, schedule and inquiries"
+    },
+    "portfolio": {
+      "label": "Portfolio",
+      "desc": "For photographers and designers: works, about, services, contact"
+    },
+    "product": {
+      "label": "Product landing",
+      "desc": "Hero, benefits, pricing, FAQ and final CTA"
+    },
+    "pages": {
+      "about": "About",
+      "aboutMe": "About me",
+      "aboutSchool": "About school",
+      "services": "Services",
+      "contacts": "Contacts",
+      "contact": "Contact",
+      "programs": "Programs",
+      "faq": "FAQ",
+      "menu": "Menu",
+      "booking": "Booking",
+      "courses": "Courses",
+      "works": "Works",
+      "features": "Features",
+      "pricing": "Pricing"
+    }
+  },
+  "siteNav": {
+    "title": "Navigation & footer",
+    "subtitle": "Page order in the menu",
+    "hint": "The home page is always first. Hidden items do not appear in navigation.",
+    "empty": "No sub-pages yet — add them above to configure the menu.",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "hide": "Hide from menu",
+    "show": "Show in menu",
+    "savedToast": "Site menu updated",
+    "saveError": "Failed to save the menu"
+  },
+  "siteFooter": {
+    "title": "Site footer",
+    "hint": "Shown at the bottom of every site page.",
+    "textLabel": "Text / description",
+    "textPh": "Short description, mission, or contact line",
+    "linksLabel": "Links",
+    "linkLabelPh": "Label",
+    "addLink": "Add link",
+    "copyrightLabel": "Copyright",
+    "savedToast": "Footer saved",
+    "saveError": "Failed to save footer"
+  },
+  "onboardingScope": {
+    "eyebrow": "Let's start",
+    "title": "One page or a full site?",
+    "subtitle": "Start with a lightweight link-in-bio page, or assemble a full site from a ready-made template.",
+    "singleTitle": "Single page",
+    "singleDesc": "Classic link-in-bio: blocks, contacts, messengers. Fastest start.",
+    "siteTitle": "Site from template",
+    "recommended": "Recommended",
+    "siteDesc": "Several ready pages (Home, Services, FAQ) with navigation and footer.",
+    "later": "Later"
   }
 }

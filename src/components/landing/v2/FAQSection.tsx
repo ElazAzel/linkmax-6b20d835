@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import { SectionWrapper } from '@/components/shared/SectionWrapper';
 import { cn } from '@/lib/utils/utils';
-import DOMPurify from 'dompurify';
 
 interface FAQItem {
   q: string;
@@ -129,7 +128,7 @@ export const FAQSection = () => {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(JSON.stringify({
+            __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'FAQPage',
               mainEntity: faqs.map((f) => ({
@@ -137,7 +136,7 @@ export const FAQSection = () => {
                 name: f.q,
                 acceptedAnswer: { '@type': 'Answer', text: f.a },
               })),
-            })),
+            }),
           }}
         />
       </div>

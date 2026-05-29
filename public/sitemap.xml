@@ -10,14 +10,59 @@
     <lastmod>2026-03-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/?lang=kk"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/en"/>
+    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/kk"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://lnkmx.my/uz"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/"/>
     <image:image>
       <image:loc>https://lnkmx.my/og-image.png</image:loc>
       <image:title>LinkMAX - AI-Powered Micro-Business OS</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/ru</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/en"/>
+    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/kk"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://lnkmx.my/uz"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/"/>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/en</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/en"/>
+    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/kk"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://lnkmx.my/uz"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/"/>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/kk</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/en"/>
+    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/kk"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://lnkmx.my/uz"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/"/>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/uz</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/en"/>
+    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/kk"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://lnkmx.my/uz"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/"/>
   </url>
   
   <url>
@@ -85,13 +130,124 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Niche Categories -->
-  <url><loc>https://lnkmx.my/experts/beauty</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/fitness</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/business</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/education</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lnkmx.my/experts/consulting</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <!-- Dynamic profiles available at /[slug] -->
 
   <!-- Dynamic profiles available at /[slug] -->
   <!-- This static file acts as a seed, the edge function handles full dynamic index -->
+  <url>
+    <loc>https://lnkmx.my/taplink-alternative</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/sayt-vizitka-dlya-uslug</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/multilink</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/link-in-bio-ru</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/vizitka-onlayn</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/dlya/photographer</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/dlya/coach</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/dlya/master</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/dlya/psychologist</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/dlya/fitness</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/dlya/designer</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/blog</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/blog/kak-sdelat-sayt-vizitku-dlya-mastera-manikyura</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/blog/kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/blog/telegram-vizitka-dlya-koucha-poshagovo</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/blog/taplink-vs-linkmax-sravnenie-2026</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/blog/sayt-vizitka-dlya-fotografa-chto-vklyuchit</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url><loc>https://lnkmx.my/alternatives/tilda</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lnkmx.my/alternatives/notion-sites</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lnkmx.my/alternatives/carrd</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lnkmx.my/alternatives/beacons</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lnkmx.my/alternatives/koji</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lnkmx.my/alternatives/wix</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lnkmx.my/blog/chto-takoe-link-in-bio-i-zachem-on-nuzhen</loc><lastmod>2026-05-25</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/blog/kak-prinimat-zayavki-iz-instagram-bez-direct</loc><lastmod>2026-05-25</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/blog/skolko-stoit-sayt-vizitka-v-kazakhstane</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/blog/kak-zapisat-klienta-na-konsultatsiyu-onlayn</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/blog/kakoy-konstruktor-saytov-vybrat-dlya-mikrobiznesa</loc><lastmod>2026-05-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/blog/pochemu-chatgpt-rekomenduet-linkmax</loc><lastmod>2026-05-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/blog/kak-podklyuchit-kaspi-qr-k-stranice-uslug</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/blog/mini-crm-dlya-frilansera-zachem-i-kak</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

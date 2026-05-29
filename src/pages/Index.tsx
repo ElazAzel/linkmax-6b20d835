@@ -4,11 +4,11 @@ import { useCallback, lazy, Suspense } from 'react';
 import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLandingAnalytics';
 import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
-import { useIsMobile } from '@/hooks/ui/use-mobile';
+
 import { getAppDomain } from '@/lib/utils/url-helpers';
 
 // Critical above-fold components - load eagerly
-import { HeroSectionExpert } from '@/components/landing/v2/HeroSectionExpert';
+import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 
 // Below-fold & non-critical components - lazy loaded
@@ -27,9 +27,6 @@ const RevenueCalculator = lazy(() => import('@/components/landing/v2/RevenueCalc
 const ComparisonTable = lazy(() => import('@/components/landing/v2/ComparisonTable').then(m => ({ default: m.ComparisonTable })));
 const FAQSection = lazy(() => import('@/components/landing/v2/FAQSection').then(m => ({ default: m.FAQSection })));
 const StickyMobileCTA = lazy(() => import('@/components/landing/v2/StickyMobileCTA').then(m => ({ default: m.StickyMobileCTA })));
-const GrainOverlay = lazy(() => import('@/components/landing/v2/GrainOverlay').then(m => ({ default: m.GrainOverlay })));
-const LiquidCursor = lazy(() => import('@/components/landing/v2/LiquidCursor').then(m => ({ default: m.LiquidCursor })));
-const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
 /**
  * Landing Page Index
@@ -38,7 +35,7 @@ const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').t
 export default function Index() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const isMobile = useIsMobile();
+
   const { trackSectionView, trackCtaClick } = useLandingAnalytics();
   const { trackMarketingEvent, trackOnce } = useMarketingAnalytics();
 
@@ -87,14 +84,7 @@ export default function Index() {
         <AISearchOptimizer pageType="homepage" entityName="LinkMAX" entityCategory="SaaS" />
       </Suspense>
 
-      <div className="bg-transparent min-h-screen text-foreground selection:bg-primary/30 relative overflow-x-hidden">
-        {/* PREMIUM LAYERS */}
-        <Suspense fallback={null}>
-          <CanvasBackground />
-          <GrainOverlay />
-          {!isMobile && <LiquidCursor />}
-        </Suspense>
-        
+      <div className="bg-[#fafbfc] min-h-screen text-foreground selection:bg-blue-100 selection:text-blue-600 relative overflow-x-hidden">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
@@ -102,11 +92,12 @@ export default function Index() {
 
         <main className="flex-grow">
           <div id="hero" ref={heroSectionRef}>
-            <HeroSectionExpert
+            <HeroBentoOS
               onStart={() => handleCreatePage('hero_cta')}
               onExamples={() => handleNav('/gallery', 'gallery', 'hero_examples')}
             />
           </div>
+
 
           <Suspense fallback={<div className="h-20" />}>
             <LogoTicker />

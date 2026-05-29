@@ -167,7 +167,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
           onClick={handleBuy}
           disabled={isPurchasing}
           className={cn(
-            "w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-glass hover:shadow-glass-lg transition-all",
+            "w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-soft hover:shadow-lift transition-all",
             !hasEnoughTokens && tokenPrice && "bg-primary shadow-primary/20",
             "active:scale-[0.98]"
           )}
@@ -209,8 +209,8 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
     <div
       className={cn(
         "w-full rounded-2xl overflow-hidden cursor-pointer",
-        "glass-card backdrop-blur-md",
-        "shadow-glass hover:shadow-glass-lg border-white/10 transition-all duration-300",
+        "qb-card",
+        "shadow-soft hover:shadow-lift border-hairline transition-all duration-300",
         "active:scale-[0.98]"
       )}
       style={{

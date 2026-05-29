@@ -49,6 +49,7 @@ vi.mock('@/hooks/social/useGallery', () => ({
     ],
     loading: false,
     likePage: vi.fn(),
+    cities: [],
   }),
 }));
 

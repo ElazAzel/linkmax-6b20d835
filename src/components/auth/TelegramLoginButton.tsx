@@ -18,8 +18,6 @@ export function TelegramLoginButton({
 }: TelegramLoginButtonProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isValidDomain, setIsValidDomain] = useState(true);
-    const onAuthRef = useRef(onAuth);
-    onAuthRef.current = onAuth;
 
     useEffect(() => {
         try {
@@ -35,7 +33,7 @@ export function TelegramLoginButton({
         }
 
         // Expose callback to global window object for the script to call
-        (window as any).onTelegramAuth = (user: any) => onAuthRef.current(user);
+        (window as any).onTelegramAuth = onAuth;
 
         const script = document.createElement('script');
         script.src = 'https://telegram.org/js/telegram-widget.js?22';
