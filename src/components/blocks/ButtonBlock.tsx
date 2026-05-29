@@ -73,5 +73,3 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
     </div>
   );
 });
-
-});
