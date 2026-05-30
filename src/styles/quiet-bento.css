@@ -105,6 +105,7 @@
 /* Utility helpers (без @layer — простые классы) */
 .rounded-card { border-radius: var(--radius-card); }
 .rounded-control { border-radius: var(--radius-control); }
+.rounded-pill { border-radius: 9999px; }
 .shadow-soft { box-shadow: var(--shadow-soft); }
 .shadow-lift { box-shadow: var(--shadow-lift); }
 .bg-surface-quiet { background-color: hsl(var(--surface-quiet)); }
