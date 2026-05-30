@@ -1,9 +1,9 @@
 /**
- * SiteHeaderNav — Sprint 1 + Navigation Builder.
- * Renders a slim top nav when a site has 2+ pages, respecting per-site
- * navigation settings (custom order + hidden flags).
+ * SiteHeaderNav — Quiet Bento (Sprint E):
+ * scroll-aware glass (transparent at top, glass after scroll > 8px),
+ * compact pill links, respects per-site navigation settings.
  */
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils/utils';
@@ -66,12 +66,19 @@ export const SiteHeaderNav = memo(function SiteHeaderNav({
     staleTime: 5 * 60 * 1000,
   });
 
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const items = useMemo(() => {
     if (!data) return [];
     const hidden = new Set(data.navSettings.hidden);
     const visible = data.pages.filter((p) => p.is_home || !hidden.has(p.id));
 
-    // Apply custom order to non-home pages: listed first (in order), then the rest.
     const home = visible.find((p) => p.is_home);
     const subs = visible.filter((p) => !p.is_home);
     const order = data.navSettings.order;
@@ -102,7 +109,10 @@ export const SiteHeaderNav = memo(function SiteHeaderNav({
   return (
     <nav
       className={cn(
-        'sticky top-0 z-30 w-full bg-background/80 backdrop-blur-md border-b border-border/40',
+        'sticky top-0 z-30 w-full transition-all duration-200',
+        scrolled
+          ? 'bg-background/75 backdrop-blur-md border-b border-hairline shadow-soft'
+          : 'bg-transparent border-b border-transparent',
         className,
       )}
       aria-label="Site navigation"
@@ -115,10 +125,10 @@ export const SiteHeaderNav = memo(function SiteHeaderNav({
               key={p.id}
               href={linkFor(p)}
               className={cn(
-                'px-3 h-8 inline-flex items-center rounded-lg text-sm whitespace-nowrap transition-colors',
+                'px-3 h-8 inline-flex items-center rounded-control text-sm font-medium whitespace-nowrap transition-colors',
                 active
-                  ? 'bg-foreground text-background'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted',
+                  ? 'text-foreground bg-foreground/10'
+                  : 'text-muted-foreground hover:text-foreground',
               )}
             >
               {p.title || (p.is_home ? 'Главная' : p.page_path)}

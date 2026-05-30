@@ -19,6 +19,7 @@ import { PublicPageSkeleton } from '@/components/public/PublicPageSkeleton';
 import { PublicPageError } from '@/components/public/PublicPageError';
 import { SiteHeaderNav } from '@/components/public/SiteHeaderNav';
 import { SiteFooter } from '@/components/public/SiteFooter';
+import { StickyContactCTA } from '@/components/public/StickyContactCTA';
 import { decompressPageData } from '@/lib/utils/compression';
 import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
 import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
@@ -444,6 +445,9 @@ export default function PublicPage() {
               </div>
 
               <SiteFooter ownerUserId={pageData?.userId} />
+
+              {/* Mobile sticky contact capsule — Quiet Bento Sprint E */}
+              <StickyContactCTA blocks={displayBlocks as Block[]} pageId={pageData?.id} />
 
               {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
               <FreemiumWatermark show={showWatermark} slug={slug} />

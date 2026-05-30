@@ -1,7 +1,6 @@
 /**
- * SiteFooter — sitewide footer rendered on every public page of a site.
+ * SiteFooter — Quiet Bento (Sprint E): minimal one-line footer.
  * Configured via site.settings.footer ({ enabled, text, copyright, links }).
- * Renders nothing if not enabled. Lightweight: one supabase query, cached.
  */
 import { memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -45,31 +44,29 @@ export const SiteFooter = memo(function SiteFooter({ ownerUserId, className }: P
   return (
     <footer
       className={cn(
-        'mt-8 sm:mt-12 border-t border-border/40 bg-background/60',
+        'mt-8 border-t border-hairline',
         className,
       )}
     >
-      <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-6 space-y-3 text-sm">
-        {hasText && (
-          <p className="text-muted-foreground whitespace-pre-line">{footer.text}</p>
-        )}
+      <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          {hasCopy && <span>{footer.copyright}</span>}
+          {hasText && <span className="opacity-80">{footer.text}</span>}
+        </div>
         {hasLinks && (
-          <nav className="flex flex-wrap gap-x-4 gap-y-2" aria-label="Footer">
+          <nav className="flex flex-wrap gap-x-3 gap-y-1" aria-label="Footer">
             {footer.links!.map((l, i) => (
               <a
                 key={`${l.url}-${i}`}
                 href={l.url}
                 target={/^https?:\/\//.test(l.url) ? '_blank' : undefined}
                 rel="noopener noreferrer"
-                className="text-foreground/80 hover:text-foreground underline-offset-4 hover:underline"
+                className="hover:text-foreground transition-colors underline-offset-4 hover:underline"
               >
                 {l.label}
               </a>
             ))}
           </nav>
-        )}
-        {hasCopy && (
-          <p className="text-xs text-muted-foreground">{footer.copyright}</p>
         )}
       </div>
     </footer>
