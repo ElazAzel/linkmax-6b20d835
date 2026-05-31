@@ -164,36 +164,9 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://lnkmx.my/dlya/photographer</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/dlya/coach</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/dlya/master</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/dlya/psychologist</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/dlya/fitness</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Programmatic /dlya/* niche landings are emitted by the dynamic
+       sitemap endpoint (Supabase edge function `generate-sitemap`),
+       which Cloudflare Worker rewrites for /sitemap.xml in production. -->
   <url>
     <loc>https://lnkmx.my/dlya/designer</loc>
     <lastmod>2026-05-20</lastmod>
