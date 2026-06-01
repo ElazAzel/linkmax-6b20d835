@@ -49,8 +49,8 @@ serve(async (req: Request) => {
     const callerRole = claimsData.claims.role;
     if (callerRole !== "service_role") {
       const { data: isMember } = await supabase.rpc("is_zone_member", {
-        _zone_id: zone_id,
-        _user_id: claimsData.claims.sub,
+        p_zone_id: zone_id,
+        p_user_id: claimsData.claims.sub,
       });
       if (!isMember) {
         return createErrorResponse("Forbidden", 403);
