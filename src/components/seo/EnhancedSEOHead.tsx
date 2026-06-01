@@ -96,6 +96,15 @@ export function EnhancedSEOHead({
     try {
       const safeBlocks = (pageData.blocks || []).filter((b): b is NonNullable<typeof b> => b != null && typeof b === 'object' && 'type' in b);
       const profile = extractProfileFromBlocks(safeBlocks, language);
+      // Fall back to page-level metadata (title/description/avatar set on the page record itself)
+      // so pages without a dedicated profile/avatar block still get correct title/description/og.
+      const pageTitleFallback = (pageData as any).title || (pageData.seo as any)?.title;
+      const pageDescFallback = (pageData as any).description || (pageData.seo as any)?.description;
+      const pageAvatarFallback = (pageData as any).avatar_url || (pageData as any).avatarUrl;
+      if (!profile.name && pageTitleFallback) profile.name = pageTitleFallback;
+      if (!profile.bio && pageDescFallback) profile.bio = pageDescFallback;
+      if (!profile.avatar && pageAvatarFallback) profile.avatar = pageAvatarFallback;
+
       const qualityGate = evaluateQualityGate(
         safeBlocks,
         profile.name,
@@ -103,8 +112,13 @@ export function EnhancedSEOHead({
         isNewAccount
       );
       const meta = generatePageMeta(profile, safeBlocks, slug, qualityGate, language);
+      // Authoritative source of indexability is the DB flag, not the client heuristic.
+      // If the page is explicitly opted out, respect it; otherwise allow indexing so
+      // search engines don't see a spurious noindex while blocks are still hydrating.
       if (pageData.isIndexable === false) {
         meta.robots = 'noindex, follow';
+      } else {
+        meta.robots = 'index, follow, max-image-preview:large, max-snippet:-1';
       }
 
       // Generate Answer Block for AEO
