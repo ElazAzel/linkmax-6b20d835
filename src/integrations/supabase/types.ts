@@ -4290,6 +4290,10 @@ export type Database = {
         Args: { p_challenge_id: string }
         Returns: Json
       }
+      compute_page_quality_score: {
+        Args: { p_page_id: string }
+        Returns: number
+      }
       convert_tokens_to_premium: { Args: { p_user_id: string }; Returns: Json }
       create_user_page: {
         Args: { p_slug: string; p_title: string; p_user_id: string }
