@@ -169,20 +169,6 @@ describe('pagesService', () => {
             const mockPageData = { slug: 'test-slug' };
             const mockFrom = vi.mocked(supabase.from);
             
-            // 1. load page id
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'page-123' }, error: null })
-            } as any);
-
-            // 2. load blocks content
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockResolvedValue({ data: [{ content: { id: '1', type: 'profile' } }], error: null })
-            } as any);
-
-            // 3. update page is_published
             mockFrom.mockReturnValueOnce({
                 update: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
@@ -195,7 +181,7 @@ describe('pagesService', () => {
             expect(result.error).toBeNull();
             expect(result.slug).toEqual('test-slug');
             
-            const updateCall = vi.mocked(mockFrom).mock.results[2].value.update;
+            const updateCall = vi.mocked(mockFrom).mock.results[0].value.update;
             expect(updateCall).toHaveBeenCalledWith({ is_published: true });
         });
     });

@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "start": "vite preview",
     "lint": "eslint .",
-    "lint:i18n": "LINT_I18N=true eslint .",
+    "lint:i18n": "LINT_I18N=true eslint . --ext .ts,.tsx",
     "analyze:deps": "depcruise --config config/dependency-cruiser.cjs --output-type text src",
     "analyze:cycles": "depcruise --config config/dependency-cruiser.cjs --output-type err src",
     "analyze:layers": "depcruise --config config/dependency-cruiser.cjs --output-type err src",
@@ -43,7 +43,9 @@
     "skills:list": "ai-agent-skills list",
     "skills:doctor": "ai-agent-skills doctor",
     "quality:baseline": "node scripts/quality-baseline-check.mjs",
-    "docs:audit:freshness": "node scripts/audit-docs-freshness.mjs --scope=docs --days=60"
+    "docs:audit:freshness": "node scripts/audit-docs-freshness.mjs --scope=docs --days=60",
+    "predev": "node scripts/generate-sitemap.mjs",
+    "prebuild": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",

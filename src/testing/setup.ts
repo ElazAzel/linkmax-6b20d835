@@ -122,34 +122,3 @@ Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
   value: vi.fn(),
   writable: true,
 });
-
-// Mock framer-motion globally to avoid unhandled easing / steps(1) errors in JSDOM environment
-vi.mock('framer-motion', () => {
-  const React = require('react');
-  const dummyComponent = (TagName: string) => {
-    return React.forwardRef(({ children, whileHover, whileTap, animate, initial, exit, transition, variants, layout, ...props }: any, ref: any) => {
-      return React.createElement(TagName, { ...props, ref }, children);
-    });
-  };
-
-  const motion = new Proxy({} as any, {
-    get: (target, tag: string) => {
-      if (typeof tag !== 'string') return undefined;
-      if (!target[tag]) {
-        target[tag] = dummyComponent(tag);
-      }
-      return target[tag];
-    }
-  });
-
-  return {
-    motion,
-    AnimatePresence: ({ children }: any) => children,
-    useAnimation: () => ({
-      start: () => Promise.resolve(),
-      stop: () => {},
-    }),
-    useReducedMotion: () => true,
-    LayoutGroup: ({ children }: any) => children,
-  };
-});

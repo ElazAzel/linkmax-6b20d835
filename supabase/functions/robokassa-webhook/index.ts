@@ -60,7 +60,7 @@ serve(async (req: Request) => {
         const calculatedSignature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
 
         if (calculatedSignature !== signatureValue.toUpperCase()) {
-            console.error("Invalid signature", { calculatedSignature, received: signatureValue, signatureString });
+            console.error("Invalid signature", { calculatedSignature, received: signatureValue, invId, outSum });
             return new Response("BAD SIGNATURE", { status: 400 });
         }
 

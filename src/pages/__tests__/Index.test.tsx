@@ -48,8 +48,8 @@ vi.mock('@/components/landing/SEOLandingHead', () => ({
   SEOLandingHead: () => <div data-testid="seo-head" />,
 }));
 
-vi.mock('@/components/landing/v3/HeroBentoOS', () => ({
-  HeroBentoOS: ({ onStart, onExamples }: { onStart: () => void; onExamples: () => void }) => (
+vi.mock('@/components/landing/v2/HeroSectionExpert', () => ({
+  HeroSectionExpert: ({ onStart, onExamples }: { onStart: () => void; onExamples: () => void }) => (
     <div>
       <button onClick={onStart}>hero-start</button>
       <button onClick={onExamples}>hero-examples</button>

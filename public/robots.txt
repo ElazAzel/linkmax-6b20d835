@@ -61,6 +61,8 @@ User-agent: QwenBot
 Allow: /
 
 Sitemap: https://lnkmx.my/sitemap.xml
+Sitemap: https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap/sitemap-profiles.xml
+Sitemap: https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap/sitemap-events.xml
 
 # Host
 Host: https://lnkmx.my

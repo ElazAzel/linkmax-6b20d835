@@ -30,15 +30,6 @@ beforeEach(() => {
     vi.mocked(supabase.from).mockReset();
     vi.mocked(supabase.rpc).mockReset();
 
-    // Mock DateTimeFormat resolvedOptions to return America/New_York timezone
-    vi.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => {
-        return {
-            resolvedOptions: () => ({
-                timeZone: 'America/New_York',
-            }),
-        } as any;
-    });
-
     // Setup global mocks
     Object.defineProperty(global, 'navigator', {
         value: {
@@ -75,7 +66,6 @@ afterEach(() => {
     Object.defineProperty(global, 'navigator', { value: originalNavigator });
     Object.defineProperty(global, 'screen', { value: originalScreen });
     Object.defineProperty(global, 'document', { value: originalDocument });
-    vi.restoreAllMocks();
 });
 
 describe('analyticsService', () => {

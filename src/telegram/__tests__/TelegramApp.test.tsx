@@ -76,18 +76,18 @@ describe('TelegramApp', () => {
   });
 
   it('renders loading state initially', async () => {
-    renderApp();
+    render(<TelegramApp />);
     // Since validateAuth is async, it should show a loading state if we had one in the UI
     // In current implementation, TelegramRouter renders screens based on state
   });
 
   it('calls Telegram.ready() on mount', async () => {
-    renderApp();
+    render(<TelegramApp />);
     expect(window.Telegram!.WebApp.ready).toHaveBeenCalled();
   });
 
   it('validates auth with server on mount', async () => {
-    renderApp();
+    render(<TelegramApp />);
     await waitFor(() => {
       expect(supabase.functions.invoke).toHaveBeenCalledWith(
         'validate-telegram-miniapp',

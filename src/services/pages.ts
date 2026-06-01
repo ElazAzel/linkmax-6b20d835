@@ -632,25 +632,6 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
  */
 export async function publishPage(userId: string): Promise<PublishPageResult> {
   try {
-    const { data: page } = await supabase
-      .from('pages')
-      .select('id')
-      .eq('user_id', userId)
-      .maybeSingle();
-
-    if (!page) return { slug: null, error: new Error('Page not found') };
-
-    const { data: blocks } = await supabase
-      .from('blocks')
-      .select('content')
-      .eq('page_id', page.id);
-
-    const parsedBlocks = (blocks || []).map(b => b.content as unknown as Block);
-    const validation = canPublishPage(parsedBlocks);
-    if (!validation.canPublish) {
-      return { slug: null, error: new Error(validation.reason) };
-    }
-
     const { data, error } = await supabase
       .from('pages')
       .update({ is_published: true })
