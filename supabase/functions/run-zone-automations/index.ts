@@ -19,6 +19,7 @@ serve(async (req: Request) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const body = await req.json();
@@ -32,6 +33,28 @@ serve(async (req: Request) => {
 
     if (!zone_id || !trigger_type) {
       return createErrorResponse("zone_id and trigger_type are required", 400);
+    }
+
+    // Auth: require JWT and zone membership (or service-role server-to-server call)
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return createErrorResponse("Unauthorized", 401);
+    }
+    const token = authHeader.replace("Bearer ", "");
+    const authClient = createClient(supabaseUrl, anonKey);
+    const { data: claimsData, error: claimsErr } = await authClient.auth.getClaims(token);
+    if (claimsErr || !claimsData?.claims?.sub) {
+      return createErrorResponse("Unauthorized", 401);
+    }
+    const callerRole = claimsData.claims.role;
+    if (callerRole !== "service_role") {
+      const { data: isMember } = await supabase.rpc("is_zone_member", {
+        _zone_id: zone_id,
+        _user_id: claimsData.claims.sub,
+      });
+      if (!isMember) {
+        return createErrorResponse("Forbidden", 403);
+      }
     }
 
     const { data: automations, error: autoError } = await supabase
