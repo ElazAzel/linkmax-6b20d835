@@ -57,8 +57,9 @@ serve(async (req) => {
       )
     }
 
-    // Only the user themselves or service_role may credit a wallet
-    if (callerRole !== 'service_role' && callerId !== payload.userId) {
+    // Only service_role (trusted server-to-server calls, e.g. verified payment webhooks)
+    // may credit a wallet. End-users must never invoke this directly.
+    if (callerRole !== 'service_role') {
       return new Response(JSON.stringify({ error: 'Forbidden' }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
