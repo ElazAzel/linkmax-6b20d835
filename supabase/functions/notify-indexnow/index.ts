@@ -130,7 +130,9 @@ serve(async (req: Request) => {
       await db.from('indexing_submissions').insert(skipRows);
     }
 
-    const validUrls = allUrls.slice(0, 100).filter(u => u.startsWith('https://'));
+    // Security: only accept URLs on our own host (function is verify_jwt=false).
+    const allowedPrefix = `https://${HOST}/`;
+    const validUrls = allUrls.slice(0, 100).filter(u => u.startsWith(allowedPrefix));
     if (validUrls.length === 0) {
       // All URLs were skipped but skip_entries were logged
       if (skip_entries && skip_entries.length > 0) {
