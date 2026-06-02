@@ -94,6 +94,9 @@ verify_jwt = false
 [functions.seo-ssr]
 verify_jwt = false
 
+[functions.notify-indexnow]
+verify_jwt = false # Public: called by DB trigger on page publish; host-validates URLs internally
+
 [functions.pixel-proxy]
 verify_jwt = false # Public: tracking pixel
 
