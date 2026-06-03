@@ -202,8 +202,72 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",
-        "availableLanguage": ["Russian", "English", "Kazakh"]
+        "availableLanguage": ["Russian", "English", "Kazakh", "Uzbek"]
       }
+    }
+    </script>
+
+  <!-- BreadcrumbList Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://lnkmx.my/" },
+        { "@type": "ListItem", "position": 2, "name": "Тарифы", "item": "https://lnkmx.my/pricing" },
+        { "@type": "ListItem", "position": 3, "name": "Галерея", "item": "https://lnkmx.my/gallery" },
+        { "@type": "ListItem", "position": 4, "name": "Эксперты", "item": "https://lnkmx.my/experts" }
+      ]
+    }
+    </script>
+
+  <!-- FAQPage Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Сколько стоит LinkMAX?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Identity бесплатно навсегда (1 страница). Starter — 0₸/мес + 7% с продаж. Pro — от 3045₸/мес при оплате за год, 1% комиссия и безлимит страниц."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Нужно ли уметь программировать?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Нет. LinkMAX — это no-code конструктор: вы собираете страницу из готовых блоков drag & drop, а AI помогает сгенерировать тексты и дизайн."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Можно ли подключить свой домен?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да. На тарифах Starter и Pro можно подключить собственный домен через Cloudflare DNS. SSL-сертификат выпускается автоматически."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Как принимать заявки от клиентов?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Все заявки попадают в встроенный CRM и мгновенно приходят в Telegram. Поддерживаются формы, бронирование, оплаты и переписка через WhatsApp/Telegram."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "На каких языках работает LinkMAX?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Интерфейс доступен на русском, английском, казахском и узбекском языках."
+          }
+        }
+      ]
     }
     </script>
 </head>
