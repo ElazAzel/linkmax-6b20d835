@@ -64,7 +64,7 @@ export const OfflineBadge = memo(function OfflineBadge({ className }: { classNam
         className,
       )}
     >
-      <CloudCheck className="h-3.5 w-3.5" aria-hidden />
+      <Wifi className="h-3.5 w-3.5" aria-hidden />
       <span>{t('pwa.restored', 'Сеть восстановлена — синхронизируем')}</span>
     </div>
   );
