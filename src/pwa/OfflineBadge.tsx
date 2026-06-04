@@ -9,7 +9,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import WifiOff from 'lucide-react/dist/esm/icons/wifi-off';
-import CloudCheck from 'lucide-react/dist/esm/icons/cloud-check';
+import Wifi from 'lucide-react/dist/esm/icons/wifi';
 import { cn } from '@/lib/utils/utils';
 import { useOnlineStatus } from './useOnlineStatus';
 
