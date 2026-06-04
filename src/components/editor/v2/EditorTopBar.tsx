@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils/utils';
 import { PageHealthMeter, type PageHealthMeterProps } from './PageHealthMeter';
+import { OfflineBadge } from '@/pwa/OfflineBadge';
 
 export interface EditorTopBarProps {
   /** Title slot — обычно PageSwitcher или текст */
@@ -93,6 +94,11 @@ export const EditorTopBar = memo(function EditorTopBar({
       {/* Left: title slot */}
       <div className="flex items-center gap-2 min-w-0 flex-1">
         {titleSlot}
+      </div>
+
+      {/* Offline indicator — visible at all sizes, silent when online */}
+      <div className="flex items-center shrink-0">
+        <OfflineBadge />
       </div>
 
       {/* Center: health (desktop, hidden on small mobile) */}
