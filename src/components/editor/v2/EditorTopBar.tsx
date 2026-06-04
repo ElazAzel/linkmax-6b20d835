@@ -96,9 +96,13 @@ export const EditorTopBar = memo(function EditorTopBar({
         {titleSlot}
       </div>
 
-      {/* Center: health (desktop, hidden on small mobile) */}
-      <div className="hidden xs:flex items-center justify-center gap-2 shrink-0">
+      {/* Offline indicator — visible at all sizes, silent when online */}
+      <div className="flex items-center shrink-0">
         <OfflineBadge />
+      </div>
+
+      {/* Center: health (desktop, hidden on small mobile) */}
+      <div className="hidden xs:flex items-center justify-center shrink-0">
         <PageHealthMeter {...health} />
       </div>
 
