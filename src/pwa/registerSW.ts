@@ -64,7 +64,7 @@ async function unregisterAppSW(): Promise<void> {
         .map((r) => r.unregister()),
     );
   } catch (err) {
-    logger.warn('SW unregister failed', { context: 'pwa', error: err });
+    logger.warn(`SW unregister failed: ${String(err)}`, { context: 'pwa' });
   }
 }
 
