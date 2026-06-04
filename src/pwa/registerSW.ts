@@ -82,7 +82,7 @@ export function registerServiceWorker(): void {
     navigator.serviceWorker
       .register(SW_PATH)
       .then((reg) => {
-        logger.info('SW registered', { context: 'pwa', scope: reg.scope });
+        logger.info(`SW registered (scope: ${reg.scope})`, { context: 'pwa' });
         reg.onupdatefound = () => {
           const installing = reg.installing;
           if (!installing) return;
