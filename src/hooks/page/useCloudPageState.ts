@@ -47,9 +47,10 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   // Update local state when cached data loads - ONLY on initial load
   // This prevents cache updates from overwriting local changes
   useEffect(() => {
-    const pageId = userData?.pageData?.id;
-    if (pageId && !initialLoadDoneRef.current) {
-      let nextPageData = userData.pageData;
+    const serverPage = userData?.pageData;
+    const pageId = serverPage?.id;
+    if (serverPage && pageId && !initialLoadDoneRef.current) {
+      let nextPageData: PageData = serverPage;
       // Offline draft recovery: restore newer local snapshot if it exists
       try {
         const draft = loadDraft<PageData>(pageId);
