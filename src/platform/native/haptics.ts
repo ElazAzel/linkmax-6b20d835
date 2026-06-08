@@ -19,10 +19,10 @@ async function loadHaptics() {
   return cachedHaptics;
 }
 
-const webVibrate = (ms: number) => {
+const webVibrate = (pattern: number | number[]) => {
   try {
     if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-      navigator.vibrate(ms);
+      (navigator.vibrate as (p: number | number[]) => boolean)(pattern);
     }
   } catch {
     /* noop */
@@ -39,7 +39,7 @@ export async function haptic(intensity: Intensity = 'light'): Promise<void> {
       case 'medium': return webVibrate(15);
       case 'success': return webVibrate(20);
       case 'warning': return webVibrate(30);
-      case 'error': return webVibrate([20, 40, 20]) as unknown as void;
+      case 'error': return webVibrate([20, 40, 20]);
       case 'selection': return webVibrate(5);
       case 'light':
       default: return webVibrate(10);

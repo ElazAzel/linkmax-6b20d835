@@ -104,6 +104,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveDragTask(event.active.data.current?.task ?? null);
+    hapticLight();
   }, []);
 
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
@@ -113,7 +114,13 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
     const task = active.data.current?.task as ZoneTask | undefined;
     const newStatus = over.data.current?.status as TaskStatus | undefined;
     if (!task || !newStatus || task.status === newStatus) return;
-    await updateTask(task.id, { status: newStatus });
+    try {
+      await updateTask(task.id, { status: newStatus });
+      hapticSuccess();
+    } catch (e) {
+      hapticError();
+      throw e;
+    }
   }, [updateTask]);
 
   const handleCreate = async () => {

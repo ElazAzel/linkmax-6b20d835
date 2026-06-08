@@ -228,15 +228,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const handleDragStart = useCallback(async (event: any) => {
     const deal = event.active.data.current?.deal as ZoneDeal | undefined;
     setActiveDragDeal(deal || null);
-    
-    // Haptic feedback on mobile
-    if (Capacitor.isNativePlatform()) {
-      try {
-        await Haptics.impact({ style: ImpactStyle.Light });
-      } catch (e) {
-        // Silently ignore if haptics fail
-      }
-    }
+    hapticLight();
   }, []);
 
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
@@ -253,20 +245,20 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     const isLastStage = lastStage && targetStageId === lastStage.id;
 
     if (isLastStage) {
+      hapticMedium();
       setPendingWonLost({ deal, targetStageId });
       return;
     }
 
     try {
-      if (Capacitor.isNativePlatform()) {
-        await Haptics.impact({ style: ImpactStyle.Medium });
-      }
+      hapticSuccess();
       await moveDealToStage(dealId, targetStageId);
       const stage = currentStages.find((s) => s.id === targetStageId);
       if (stage) {
         await addActivity(dealId, 'stage_change', `Moved to ${stage.name}`);
       }
     } catch (err: any) {
+      hapticError();
       handleError(err);
     }
   }, [currentDeals, currentStages, moveDealToStage, addActivity]);
