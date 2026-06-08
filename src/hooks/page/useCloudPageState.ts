@@ -49,10 +49,27 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   useEffect(() => {
     const pageId = userData?.pageData?.id;
     if (pageId && !initialLoadDoneRef.current) {
-      setPageData(userData.pageData);
+      let nextPageData = userData.pageData;
+      // Offline draft recovery: restore newer local snapshot if it exists
+      try {
+        const draft = loadDraft<PageData>(pageId);
+        const serverUpdatedAt = userData.pageData.updatedAt
+          ? new Date(userData.pageData.updatedAt).getTime()
+          : 0;
+        if (draft && draft.savedAt > serverUpdatedAt + 1000) {
+          nextPageData = draft.data;
+          toast.info('Восстановлены несохранённые правки');
+          hasLocalChangesRef.current = true;
+        } else if (draft) {
+          // Server is newer — drop stale draft
+          clearDraft(pageId);
+        }
+      } catch {
+        // ignore
+      }
+      setPageData(nextPageData);
       setChatbotContext(userData.chatbotContext || '');
       initialLoadDoneRef.current = true;
-      hasLocalChangesRef.current = false;
       // P2.11: Seed previous service_slugs on initial load
       void (async () => {
         try {
