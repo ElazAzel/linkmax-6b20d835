@@ -117,6 +117,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     // Set pending status immediately
     setSaveStatus('pending');
 
+    // Persist offline draft snapshot immediately (survives refresh/crash)
+    if (data.id) {
+      saveDraft(data.id, data);
+    }
+
     // Clear existing timer
     if (autoSaveTimerRef.current) {
       clearTimeout(autoSaveTimerRef.current);
