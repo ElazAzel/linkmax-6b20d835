@@ -15,6 +15,7 @@ import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
 import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
 import { normalizeAppError } from '@/lib/errors/app-error-normalizer';
+import { saveDraft, loadDraft, clearDraft } from '@/pwa/offlineDraftCache';
 
 // Request versioning to prevent stale writes
 let saveRequestVersion = 0;
@@ -46,12 +47,30 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   // Update local state when cached data loads - ONLY on initial load
   // This prevents cache updates from overwriting local changes
   useEffect(() => {
-    const pageId = userData?.pageData?.id;
-    if (pageId && !initialLoadDoneRef.current) {
-      setPageData(userData.pageData);
+    const serverPage = userData?.pageData;
+    const pageId = serverPage?.id;
+    if (serverPage && pageId && !initialLoadDoneRef.current) {
+      let nextPageData: PageData = serverPage;
+      // Offline draft recovery: restore newer local snapshot if it exists
+      try {
+        const draft = loadDraft<PageData>(pageId);
+        const serverUpdatedAt = serverPage.updatedAt
+          ? new Date(serverPage.updatedAt).getTime()
+          : 0;
+        if (draft && draft.savedAt > serverUpdatedAt + 1000) {
+          nextPageData = draft.data;
+          toast.info('Восстановлены несохранённые правки');
+          hasLocalChangesRef.current = true;
+        } else if (draft) {
+          // Server is newer — drop stale draft
+          clearDraft(pageId);
+        }
+      } catch {
+        // ignore
+      }
+      setPageData(nextPageData);
       setChatbotContext(userData.chatbotContext || '');
       initialLoadDoneRef.current = true;
-      hasLocalChangesRef.current = false;
       // P2.11: Seed previous service_slugs on initial load
       void (async () => {
         try {
@@ -97,6 +116,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
 
     // Set pending status immediately
     setSaveStatus('pending');
+
+    // Persist offline draft snapshot immediately (survives refresh/crash)
+    if (data.id) {
+      saveDraft(data.id, data);
+    }
 
     // Clear existing timer
     if (autoSaveTimerRef.current) {
@@ -214,6 +238,8 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         // Final check after all async ops
         if (thisRequestVersion === saveRequestVersion) {
           setSaveStatus('saved');
+          // Server confirmed — clear local offline snapshot
+          if (pageIdToUse) clearDraft(pageIdToUse);
         }
       } catch (error) {
         // Only set error if this is still the active request
