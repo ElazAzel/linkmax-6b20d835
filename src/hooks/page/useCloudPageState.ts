@@ -54,8 +54,8 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
       // Offline draft recovery: restore newer local snapshot if it exists
       try {
         const draft = loadDraft<PageData>(pageId);
-        const serverUpdatedAt = userData.pageData.updatedAt
-          ? new Date(userData.pageData.updatedAt).getTime()
+        const serverUpdatedAt = serverPage.updatedAt
+          ? new Date(serverPage.updatedAt).getTime()
           : 0;
         if (draft && draft.savedAt > serverUpdatedAt + 1000) {
           nextPageData = draft.data;
