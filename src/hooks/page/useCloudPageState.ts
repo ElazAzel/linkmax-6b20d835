@@ -15,6 +15,7 @@ import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
 import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
 import { normalizeAppError } from '@/lib/errors/app-error-normalizer';
+import { saveDraft, loadDraft, clearDraft } from '@/pwa/offlineDraftCache';
 
 // Request versioning to prevent stale writes
 let saveRequestVersion = 0;
