@@ -29,8 +29,7 @@ import { DealCard } from './deals/DealCard';
 import { DealDetailSheet } from './deals/DealDetailSheet';
 import { ZonePipelineSettings } from './settings/ZonePipelineSettings';
 import { useAppError } from '@/hooks/useAppError';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { Capacitor } from '@capacitor/core';
+import { hapticLight, hapticMedium, hapticSuccess, hapticError } from '@/platform/native/haptics';
 import { posthog } from '@/lib/posthog';
 
 interface ZoneDealsScreenProps {
