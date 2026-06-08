@@ -241,6 +241,7 @@ const router = createBrowserRouter([
 
 import { PushService } from "@/lib/notifications/push-service";
 import { registerServiceWorker } from "@/pwa/registerSW";
+import { installKeyboardHandlers } from "@/platform/native/keyboard";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -250,6 +251,9 @@ createRoot(document.getElementById("root")!).render(
 
 // Initialize Push Notifications for native mobile
 PushService.init();
+
+// Smooth keyboard handling on iOS/Android (no-op on web)
+installKeyboardHandlers();
 
 // Guarded Service Worker registration (skips Lovable preview / dev / iframe)
 registerServiceWorker();
