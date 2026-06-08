@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DndContext, DragOverlay, PointerSensor, TouchSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from '@dnd-kit/core';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import type { ZoneTask, TaskStatus, TaskPriority, TaskRecurrenceRule } from '@/types/zones';
+import { hapticLight, hapticSuccess, hapticError } from '@/platform/native/haptics';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneContext } from '@/contexts/ZoneContext';
