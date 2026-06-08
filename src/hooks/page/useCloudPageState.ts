@@ -238,6 +238,8 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         // Final check after all async ops
         if (thisRequestVersion === saveRequestVersion) {
           setSaveStatus('saved');
+          // Server confirmed — clear local offline snapshot
+          if (pageIdToUse) clearDraft(pageIdToUse);
         }
       } catch (error) {
         // Only set error if this is still the active request
