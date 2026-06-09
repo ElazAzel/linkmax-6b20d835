@@ -41,8 +41,10 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
     updateConversation,
   } = useZoneInbox(zoneId);
 
+  const { createDeal } = useZoneDeals(zoneId);
   const [messageInput, setMessageInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [creatingDeal, setCreatingDeal] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
