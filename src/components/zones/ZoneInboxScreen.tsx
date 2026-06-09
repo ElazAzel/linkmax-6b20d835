@@ -4,6 +4,7 @@
 import { memo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useZoneInbox } from '@/hooks/zones/useZoneInbox';
+import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,7 @@ import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import User from 'lucide-react/dist/esm/icons/user';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Archive from 'lucide-react/dist/esm/icons/archive';
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
