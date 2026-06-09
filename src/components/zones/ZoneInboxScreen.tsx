@@ -81,6 +81,31 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
     }
   };
 
+  const handleConvertToDeal = async () => {
+    if (!activeConversation) return;
+    setCreatingDeal(true);
+    try {
+      const title = activeConversation.title
+        || activeConversation.contact?.name
+        || t('zones.inbox.dealFrom', 'Сделка из диалога');
+      const deal = await createDeal({
+        title,
+        contact_id: activeConversation.contact_id || undefined,
+        source: `inbox:${activeConversation.channel}`,
+        currency: 'KZT',
+        value_amount: 0,
+      } as any);
+      if (deal) {
+        toast.success(t('zones.inbox.dealCreated', 'Сделка создана'));
+      }
+    } catch (err) {
+      console.error('Convert to deal error:', err);
+      toast.error(t('zones.inbox.dealError', 'Не удалось создать сделку'));
+    } finally {
+      setCreatingDeal(false);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
