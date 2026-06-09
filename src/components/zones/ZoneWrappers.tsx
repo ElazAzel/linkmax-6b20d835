@@ -1,6 +1,12 @@
-import { lazy } from 'react';
+import { lazy, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useZoneContext } from '@/contexts/ZoneContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { toast } from 'sonner';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
 
 // Lazy load zone screens
 const ZoneDashboard = lazy(() => import('./ZoneDashboard').then(m => ({ default: m.ZoneDashboard })));
@@ -20,7 +26,73 @@ const ResourcesScreen = lazy(() => import('@/components/dashboard-v2/screens/Res
 
 function NoZone() {
     const { t } = useTranslation();
-    return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    const { createZone } = useZoneContext();
+    const [open, setOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [busy, setBusy] = useState(false);
+
+    const slugify = (s: string) =>
+        s.toLowerCase().trim().replace(/[^a-z0-9а-я\s-]/gi, '').replace(/\s+/g, '-').slice(0, 40) || `zone-${Date.now()}`;
+
+    const handleCreate = async () => {
+        const trimmed = name.trim();
+        if (!trimmed) return;
+        setBusy(true);
+        try {
+            await createZone(trimmed, slugify(trimmed));
+            toast.success(t('zones.created', 'Зона создана'));
+            setOpen(false);
+            setName('');
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : t('zones.createError', 'Не удалось создать зону');
+            console.error(err);
+            toast.error(msg);
+        } finally {
+            setBusy(false);
+        }
+    };
+
+    return (
+        <div className="p-8 flex flex-col items-center justify-center text-center min-h-[50vh]">
+            <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                <Building2 className="h-7 w-7 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold mb-2">{t('zones.empty.title', 'У вас пока нет бизнес-зоны')}</h2>
+            <p className="text-sm text-muted-foreground max-w-sm mb-6">
+                {t('zones.empty.desc', 'Зона объединяет сделки, контакты, инвойсы и документы для команды. Создайте первую за 10 секунд.')}
+            </p>
+            <Button onClick={() => setOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                {t('zones.create', 'Создать зону')}
+            </Button>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t('zones.create', 'Создать зону')}</DialogTitle>
+                        <DialogDescription>
+                            {t('zones.createHint', 'Например: «Студия Алия», «Агентство Astana», «Моё ИП».')}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <Input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder={t('zones.namePlaceholder', 'Название зоны')}
+                        onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+                        autoFocus
+                    />
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setOpen(false)} disabled={busy}>
+                            {t('common.cancel', 'Отмена')}
+                        </Button>
+                        <Button onClick={handleCreate} disabled={!name.trim() || busy}>
+                            {busy ? t('common.loading', 'Создаём...') : t('common.create', 'Создать')}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
 }
 
 /** Zone screen wrappers that read ZoneContext */
