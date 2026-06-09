@@ -139,6 +139,17 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
           )}
         </div>
         <div className="flex gap-2">
+          {activeConversation && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleConvertToDeal}
+              disabled={creatingDeal}
+            >
+              <Briefcase className="h-3 w-3 mr-1" />
+              {creatingDeal ? t('common.loading', 'Создаём...') : t('zones.inbox.toDeal', 'В сделку')}
+            </Button>
+          )}
           {activeConversation && activeConversation.status === 'open' && (
             <Button
               variant="outline"
