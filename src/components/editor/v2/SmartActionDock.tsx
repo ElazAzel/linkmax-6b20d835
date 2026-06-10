@@ -19,6 +19,7 @@ import Rocket from 'lucide-react/dist/esm/icons/rocket';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { hapticLight, hapticSelection, hapticSuccess } from '@/platform/native/haptics';
 
 export interface SmartActionDockProps {
   onAddBlock: () => void;
