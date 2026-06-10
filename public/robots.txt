@@ -17,6 +17,8 @@ Allow: /для-бьюти-мастеров
 Allow: /для-репетиторов
 Allow: /for/
 Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /llms-en.txt
 Allow: /sitemap.xml
 
 # AI Crawlers - welcome
