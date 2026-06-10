@@ -84,6 +84,8 @@ export async function haptic(intensity: Intensity = 'light'): Promise<void> {
 // Convenience shortcuts
 export const hapticLight = () => haptic('light');
 export const hapticMedium = () => haptic('medium');
+export const hapticHeavy = () => haptic('heavy');
 export const hapticSelection = () => haptic('selection');
 export const hapticSuccess = () => haptic('success');
+export const hapticWarning = () => haptic('warning');
 export const hapticError = () => haptic('error');
