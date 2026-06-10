@@ -1,53 +1,59 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import {
+  hapticLight,
+  hapticMedium,
+  hapticHeavy,
+  hapticSuccess,
+  hapticError,
+  hapticWarning,
+  hapticSelection,
+} from '@/platform/native/haptics';
 
 type HapticPattern = 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' | 'selection' | 'impact';
 
-const patterns: Record<HapticPattern, number | number[]> = {
-  light: 10,
-  medium: 25,
-  heavy: 50,
-  success: [10, 50, 10],
-  error: [50, 100, 50],
-  warning: [30, 50, 30],
-  selection: 5,
-  impact: [20, 30],
-};
-
+/**
+ * Unified haptics hook — routes through the native bridge (@capacitor/haptics
+ * on iOS/Android) and falls back to navigator.vibrate on web.
+ */
 export function useHapticFeedback() {
   const vibrate = useCallback((pattern: HapticPattern = 'medium') => {
-    // Check if Vibration API is supported
-    if (!navigator.vibrate) {
-      return false;
-    }
-
-    try {
-      navigator.vibrate(patterns[pattern]);
-      return true;
-    } catch (error) {
-      // Silently fail - haptic feedback is not critical
-      return false;
+    switch (pattern) {
+      case 'light':
+      case 'selection':
+        (pattern === 'selection' ? hapticSelection : hapticLight)();
+        return true;
+      case 'medium':
+      case 'impact':
+        hapticMedium();
+        return true;
+      case 'heavy':
+        hapticHeavy();
+        return true;
+      case 'success':
+        hapticSuccess();
+        return true;
+      case 'error':
+        hapticError();
+        return true;
+      case 'warning':
+        hapticWarning();
+        return true;
+      default:
+        hapticMedium();
+        return true;
     }
   }, []);
 
-  const lightTap = useCallback(() => vibrate('light'), [vibrate]);
-  const mediumTap = useCallback(() => vibrate('medium'), [vibrate]);
-  const heavyTap = useCallback(() => vibrate('heavy'), [vibrate]);
-  const success = useCallback(() => vibrate('success'), [vibrate]);
-  const error = useCallback(() => vibrate('error'), [vibrate]);
-  const warning = useCallback(() => vibrate('warning'), [vibrate]);
-  const selection = useCallback(() => vibrate('selection'), [vibrate]);
-  const impact = useCallback(() => vibrate('impact'), [vibrate]);
-
-  return {
+  return useMemo(() => ({
     vibrate,
-    lightTap,
-    mediumTap,
-    heavyTap,
-    success,
-    error,
-    warning,
-    selection,
-    impact,
-    isSupported: typeof navigator !== 'undefined' && 'vibrate' in navigator,
-  };
+    lightTap: () => hapticLight(),
+    mediumTap: () => hapticMedium(),
+    heavyTap: () => hapticHeavy(),
+    success: () => hapticSuccess(),
+    error: () => hapticError(),
+    warning: () => hapticWarning(),
+    selection: () => hapticSelection(),
+    impact: () => hapticMedium(),
+    isSupported: true,
+  }), [vibrate]);
 }
