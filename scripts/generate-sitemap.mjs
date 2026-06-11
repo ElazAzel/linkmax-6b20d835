@@ -61,7 +61,7 @@ function buildUrlEntry({ loc, lastmod, changefreq, priority, hreflang }) {
 }
 
 async function fetchIndexablePages() {
-  const url = `${SUPABASE_URL}/rest/v1/pages?select=slug,updated_at,is_indexable,quality_score,is_published&is_published=eq.true&quality_score=gte.${QUALITY_THRESHOLD}&order=updated_at.desc.nullslast&limit=10000`;
+  const url = `${SUPABASE_URL}/rest/v1/pages?select=slug,updated_at,published_at,is_indexable,quality_score,is_published&is_published=eq.true&quality_score=gte.${QUALITY_THRESHOLD}&order=updated_at.desc.nullslast&limit=10000`;
   try {
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
@@ -76,6 +76,16 @@ async function fetchIndexablePages() {
     console.warn('[sitemap] fetch error', err.message);
     return [];
   }
+}
+
+// Pick the most recent of (updated_at, published_at), fall back to today.
+function pickLastmod(row, today) {
+  const candidates = [row.updated_at, row.published_at]
+    .filter(Boolean)
+    .map((d) => new Date(d).getTime())
+    .filter((t) => Number.isFinite(t));
+  if (!candidates.length) return today;
+  return new Date(Math.max(...candidates)).toISOString().slice(0, 10);
 }
 
 async function main() {
