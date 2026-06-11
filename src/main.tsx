@@ -180,6 +180,7 @@ const router = createBrowserRouter([
       { path: "alternatives", element: <Alternatives /> },
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
       { path: "seo-landing", element: <SeoLanding /> },
+      { path: "seo-check", element: <SeoCheck /> },
       { path: "admin", element: <Admin /> },
       { path: "admin/language-algorithms", element: <AdminLanguageAlgorithms /> },
       { path: "admin/translations", element: <AdminTranslations /> },
