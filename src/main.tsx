@@ -129,6 +129,7 @@ const Customers = lazy(() => import("./pages/Customers"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
+const SeoCheck = lazy(() => import("./pages/SeoCheck"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -179,6 +180,7 @@ const router = createBrowserRouter([
       { path: "alternatives", element: <Alternatives /> },
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
       { path: "seo-landing", element: <SeoLanding /> },
+      { path: "seo-check", element: <SeoCheck /> },
       { path: "admin", element: <Admin /> },
       { path: "admin/language-algorithms", element: <AdminLanguageAlgorithms /> },
       { path: "admin/translations", element: <AdminTranslations /> },
