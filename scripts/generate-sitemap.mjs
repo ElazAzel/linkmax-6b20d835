@@ -98,7 +98,7 @@ async function main() {
     ...NICHE_LANDINGS.map((s) => ({ loc: `/dlya/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.75' })),
     ...pages.map((p) => ({
       loc: `/${p.slug}`,
-      lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
+      lastmod: pickLastmod(p, today),
       changefreq: 'weekly',
       priority: '0.7',
     })),
@@ -116,7 +116,8 @@ async function main() {
   ].join('\n');
 
   writeFileSync(resolve('public/sitemap.xml'), xml);
-  console.log(`[sitemap] Wrote ${entries.length} entries (${pages.length} user pages)`);
+  const withLastmod = entries.filter((e) => e.lastmod).length;
+  console.log(`[sitemap] Wrote ${entries.length} entries (${pages.length} user pages, ${withLastmod} with <lastmod>)`);
 }
 
 main().catch((err) => {
