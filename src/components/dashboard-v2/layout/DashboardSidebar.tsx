@@ -302,7 +302,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
           <div className="mb-6">
             <div className="mx-2 mb-4 h-px bg-border/20" />
             {!collapsed && (
-              <div className="text-xs font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
+              <div className="text-[11px] font-medium text-muted-foreground/70 tracking-tight px-3 mb-2 flex items-center justify-between">
                 <span>{t(BUSINESS_SECTION.titleKey, BUSINESS_SECTION.defaultTitle)}</span>
               </div>
             )}
@@ -326,7 +326,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="text-xs font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
+                  <div className="text-[11px] font-medium text-muted-foreground/70 tracking-tight px-3 mb-2 flex items-center justify-between">
                     <span>{t(section.titleKey, section.defaultTitle)}</span>
                   </div>
                 </motion.div>
