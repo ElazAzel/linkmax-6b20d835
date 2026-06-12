@@ -4389,6 +4389,7 @@ export type Database = {
         Args: { p_zone_id: string }
         Returns: string
       }
+      get_zone_calendar_token: { Args: { _zone_id: string }; Returns: string }
       get_zone_invite_by_token: { Args: { p_token: string }; Returns: Json }
       get_zone_member_limit: { Args: { p_plan_code: string }; Returns: number }
       has_active_subscription: {
