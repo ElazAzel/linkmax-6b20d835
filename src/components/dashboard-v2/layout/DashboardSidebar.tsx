@@ -159,29 +159,27 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         key={item.id}
         onClick={() => handleItemClick(item.id)}
         className={cn(
-          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all relative group",
-          "hover:bg-primary/5 hover:translate-x-1",
-          isActive && "bg-primary/10 text-primary font-bold shadow-sm border-l-2 border-primary min-h-[44px]",
+          "w-full flex items-center gap-3 px-3 py-2 rounded-control transition-colors relative group",
+          "hover:bg-foreground/[0.03]",
+          isActive
+            ? "text-primary font-medium"
+            : "text-muted-foreground hover:text-foreground",
           isZoneLocked && "opacity-50",
           collapsed && "justify-center px-0.5"
         )}
         data-testid={`${item.id}-tab`}
-        whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         layout
       >
         {isActive && (
-          <motion.div
+          <motion.span
             layoutId="activeTabIndicator"
-            className="absolute inset-0 bg-primary/10 rounded-xl -z-1"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[2px] rounded-full bg-primary"
+            transition={{ type: 'spring', stiffness: 400, damping: 32 }}
           />
         )}
 
-        <Icon className={cn("h-5 w-5 shrink-0 z-10 relative", isActive && "text-primary")} />
+        <Icon className={cn("h-[18px] w-[18px] shrink-0", isActive && "text-primary")} />
 
         <AnimatePresence mode="wait">
           {!collapsed && (
@@ -189,18 +187,18 @@ export const DashboardSidebar = memo(function DashboardSidebar({
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: 'auto' }}
               exit={{ opacity: 0, width: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1 text-left flex items-center justify-between overflow-hidden whitespace-nowrap z-10 relative"
+              transition={{ duration: 0.18 }}
+              className="flex-1 text-left flex items-center justify-between overflow-hidden whitespace-nowrap"
             >
               <span className="text-sm truncate">{t(item.labelKey, item.defaultLabel)}</span>
               {badge !== undefined && (
                 <Badge
                   variant="outline"
                   className={cn(
-                    "text-xs h-5 px-1.5 ml-2 shrink-0",
+                    "text-xs h-5 px-1.5 ml-2 shrink-0 border-0",
                     item.badgeVariant === 'premium'
-                      ? "bg-amber-500/20 text-amber-600 border-amber-500/30"
-                      : "bg-primary/20 text-primary border-primary/30"
+                      ? "bg-amber-500/15 text-amber-600"
+                      : "bg-primary/10 text-primary"
                   )}
                 >
                   {badge}
