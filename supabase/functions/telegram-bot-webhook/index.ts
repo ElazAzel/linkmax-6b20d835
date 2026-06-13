@@ -492,17 +492,20 @@ serve(async (req: Request) => {
       return new Response(JSON.stringify({ ok: true, webhook: webhookUrl, secured: !!secretToken, result }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    // Verify Telegram secret token header to ensure caller is Telegram
+    // Verify Telegram secret token header to ensure caller is Telegram.
+    // The check is unconditional — if TELEGRAM_WEBHOOK_SECRET is missing the
+    // webhook refuses every request rather than accepting unauthenticated calls.
     const expectedSecret = Deno.env.get('TELEGRAM_WEBHOOK_SECRET');
-    if (expectedSecret) {
-      const incomingSecret = req.headers.get('X-Telegram-Bot-Api-Secret-Token');
-      if (incomingSecret !== expectedSecret) {
-        console.warn('[Webhook] Invalid or missing secret token');
-        return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      }
-    } else {
-      console.warn('[Webhook] TELEGRAM_WEBHOOK_SECRET not set — webhook is unauthenticated. Set it and re-register.');
+    if (!expectedSecret) {
+      console.error('[Webhook] TELEGRAM_WEBHOOK_SECRET not configured — refusing request.');
+      return new Response(JSON.stringify({ error: 'not_configured' }), { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
+    const incomingSecret = req.headers.get('X-Telegram-Bot-Api-Secret-Token');
+    if (incomingSecret !== expectedSecret) {
+      console.warn('[Webhook] Invalid or missing secret token');
+      return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const update: TelegramUpdate = await req.json();
