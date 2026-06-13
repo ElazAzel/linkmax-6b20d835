@@ -1963,13 +1963,48 @@ export type Database = {
           },
         ]
       }
+      team_secrets: {
+        Row: {
+          created_at: string
+          invite_code: string
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          invite_code: string
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          invite_code?: string
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_secrets_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "public_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_secrets_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teams: {
         Row: {
           avatar_url: string | null
           created_at: string
           description: string | null
           id: string
-          invite_code: string | null
           is_public: boolean | null
           name: string
           niche: string | null
@@ -1982,7 +2017,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
-          invite_code?: string | null
           is_public?: boolean | null
           name: string
           niche?: string | null
@@ -1995,7 +2029,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
-          invite_code?: string | null
           is_public?: boolean | null
           name?: string
           niche?: string | null
@@ -3854,6 +3887,35 @@ export type Database = {
           },
         ]
       }
+      zone_secrets: {
+        Row: {
+          calendar_feed_token: string
+          created_at: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          calendar_feed_token: string
+          created_at?: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          calendar_feed_token?: string
+          created_at?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_secrets_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: true
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_subscriptions: {
         Row: {
           created_at: string
@@ -4069,7 +4131,6 @@ export type Database = {
       }
       zones: {
         Row: {
-          calendar_feed_token: string | null
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
@@ -4085,7 +4146,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -4101,7 +4161,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -4178,32 +4237,6 @@ export type Database = {
           owner_id: string | null
           slug: string | null
           updated_at: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          invite_code?: never
-          is_public?: boolean | null
-          name?: string | null
-          niche?: string | null
-          owner_id?: string | null
-          slug?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          invite_code?: never
-          is_public?: boolean | null
-          name?: string | null
-          niche?: string | null
-          owner_id?: string | null
-          slug?: string | null
-          updated_at?: string | null
         }
         Relationships: []
       }
