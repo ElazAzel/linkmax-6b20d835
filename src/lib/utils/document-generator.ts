@@ -189,7 +189,7 @@ export async function generatePDFFromHTML(
   
   // Create temporary container for rendering
   const container = document.createElement('div');
-  container.innerHTML = htmlContent;
+  container.innerHTML = sanitizeTemplateHtml(htmlContent);
   container.style.cssText = `
     position: fixed;
     left: -9999px;
