@@ -306,7 +306,7 @@ export function generatePreviewHTML(
   highlightUnreplaced = true
 ): string {
   let preview = renderTemplate(template, variables);
-  
+
   if (highlightUnreplaced) {
     // Highlight unreplaced variables
     preview = preview.replace(
@@ -314,6 +314,6 @@ export function generatePreviewHTML(
       '<span style="background-color: #fef3c7; color: #92400e; padding: 2px 4px; border-radius: 3px;">{{$1}}</span>'
     );
   }
-  
-  return preview;
+
+  return sanitizeTemplateHtml(preview);
 }
