@@ -251,7 +251,7 @@ serve(async (req: Request) => {
   } catch (error: any) {
     console.error('Error processing booking:', error);
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
+      JSON.stringify({ success: false, error: 'Request could not be processed. Please try again.' }),
       { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
