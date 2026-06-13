@@ -121,9 +121,8 @@ serve(async (req) => {
     console.error('Experts API error:', error);
     
     return new Response(
-      JSON.stringify({ 
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error',
+      JSON.stringify({
+        error: 'Service temporarily unavailable',
       }),
       {
         status: 500,
