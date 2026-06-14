@@ -61,12 +61,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           {/* Multi-page Site Builder */}
           <div className="md:col-span-8 md:row-span-2 rounded-3xl bg-white border border-slate-200 p-8 flex flex-col justify-between overflow-hidden relative group min-h-[320px]">
             <div className="relative z-10">
-              <h3
+              <h2
                 className="text-2xl font-bold text-slate-900 mb-2"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 {t('landing.v5.bento.builder.title', 'Multi-page Builder')}
-              </h3>
+              </h2>
               <p className="text-slate-500 max-w-xs">
                 {t(
                   'landing.v5.bento.builder.desc',
@@ -96,9 +96,9 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
                   {t('landing.v5.bento.ai.eyebrow', 'AI Builder')}
                 </span>
               </div>
-              <h3 className="text-lg font-semibold mb-1">
+              <h2 className="text-lg font-semibold mb-1">
                 {t('landing.v5.bento.ai.title', 'Генерация за 30 секунд')}
-              </h3>
+              </h2>
               <p className="text-slate-400 text-sm">
                 {t('landing.v5.bento.ai.desc', 'Напишите нишу — получите готовый сайт.')}
               </p>
@@ -111,12 +111,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           {/* Local Payments */}
           <div className="md:col-span-4 md:row-span-1 rounded-3xl bg-white border border-slate-200 p-6 flex items-center justify-between overflow-hidden min-h-[180px]">
             <div>
-              <h3
+              <h2
                 className="text-lg font-bold text-slate-900"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 {t('landing.v5.bento.pay.title', 'Платежи')}
-              </h3>
+              </h2>
               <p className="text-slate-500 text-sm">
                 {t('landing.v5.bento.pay.desc', 'Kaspi, Robokassa, Stripe')}
               </p>
@@ -137,12 +137,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           {/* Mini-CRM & Telegram */}
           <div className="md:col-span-5 md:row-span-2 rounded-3xl bg-[#e8ecf1] p-8 flex flex-col relative overflow-hidden min-h-[320px]">
             <div className="mb-4">
-              <h3
+              <h2
                 className="text-2xl font-bold text-slate-900 mb-2"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 {t('landing.v5.bento.crm.title', 'Mini-CRM')}
-              </h3>
+              </h2>
               <p className="text-slate-600">
                 {t(
                   'landing.v5.bento.crm.desc',
@@ -184,12 +184,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           <div className="md:col-span-7 md:row-span-2 rounded-3xl bg-white border border-slate-200 p-8 flex flex-col min-h-[320px]">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h3
+                <h2
                   className="text-2xl font-bold text-slate-900 mb-1"
                   style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   {t('landing.v5.bento.analytics.title', 'Analytics')}
-                </h3>
+                </h2>
                 <p className="text-slate-500">
                   {t(
                     'landing.v5.bento.analytics.desc',
