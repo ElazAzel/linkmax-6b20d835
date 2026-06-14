@@ -236,6 +236,7 @@ export default function Gallery() {
                     size="icon"
                     className="h-9 w-9 rounded-full shrink-0"
                     onClick={() => setShowSearch(true)}
+                    aria-label={t('common.search', 'Search')}
                   >
                     <Search className="h-4 w-4" />
                   </Button>
