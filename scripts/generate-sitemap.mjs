@@ -41,7 +41,7 @@ const STATIC_PAGES = [
 ];
 
 const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];
-const NICHE_LANDINGS: string[] = [];
+const NICHE_LANDINGS = [];
 
 function buildHreflang(loc) {
   return LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${BASE_URL}/${l}"/>`).join('\n')
