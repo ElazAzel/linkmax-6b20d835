@@ -202,7 +202,7 @@ export default function Gallery() {
           <div className="max-w-6xl mx-auto px-4 py-3">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full shrink-0" asChild>
-                <Link to="/">
+                <Link to="/" aria-label={t('common.back', 'Go back')}>
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
               </Button>
