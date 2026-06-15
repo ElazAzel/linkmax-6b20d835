@@ -88,7 +88,8 @@ export function EnhancedSEOHead({
   isNewAccount = false,
 }: EnhancedSEOHeadProps) {
   const { i18n } = useTranslation();
-  const language = i18n.language as 'ru' | 'en' | 'kk';
+  const rawLang = (i18n.language || 'ru').split('-')[0];
+  const language = (['ru', 'en', 'kk'].includes(rawLang) ? rawLang : 'ru') as 'ru' | 'en' | 'kk';
   const slug = pageData.slug || '';
 
   // Memoize all SEO computations - wrapped in try-catch for safety
