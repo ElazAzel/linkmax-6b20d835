@@ -120,7 +120,7 @@ export function generateAnswerBlock(
   slug: string,
   language: 'ru' | 'en' | 'kk' = 'ru'
 ): AnswerBlockData {
-  const t = TRANSLATIONS[language];
+  const t = TRANSLATIONS[language] ?? TRANSLATIONS.ru;
 
   // Guard against undefined/null blocks
   const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
@@ -309,7 +309,7 @@ interface SummaryParams {
  */
 function buildSummary(params: SummaryParams): string {
   const { name, niche, location, services, hasBooking, language } = params;
-  const t = TRANSLATIONS[language];
+  const t = TRANSLATIONS[language] ?? TRANSLATIONS.ru;
 
   const parts: string[] = [];
 
@@ -348,7 +348,7 @@ function buildSummary(params: SummaryParams): string {
  * Generate structured Answer Block HTML for noscript fallback
  */
 export function generateAnswerBlockHtml(data: AnswerBlockData, language: 'ru' | 'en' | 'kk'): string {
-  const t = TRANSLATIONS[language];
+  const t = TRANSLATIONS[language] ?? TRANSLATIONS.ru;
 
   return `
     <section id="answer" class="answer-block" itemscope itemtype="https://schema.org/${data.entityType}">
