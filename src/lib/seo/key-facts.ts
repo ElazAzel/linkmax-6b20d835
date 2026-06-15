@@ -90,7 +90,7 @@ export function generateKeyFacts(
   language: 'ru' | 'en' | 'kk' = 'ru'
 ): KeyFact[] {
   const facts: KeyFact[] = [];
-  const labels = FACT_LABELS[language];
+  const labels = FACT_LABELS[language] ?? FACT_LABELS.ru;
 
   // Guard against undefined/null blocks
   const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
