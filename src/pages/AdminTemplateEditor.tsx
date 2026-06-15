@@ -239,7 +239,7 @@ export default function AdminTemplateEditor() {
                                 />
                                 {data.preview_image && (
                                     <div className="mt-2 aspect-video w-full overflow-hidden rounded-md border bg-muted">
-                                        <img src={data.preview_image} alt="Preview" className="h-full w-full object-cover" />
+                                        <img src={data.preview_image} alt={`Website template preview: ${data.name || 'template'}`} className="h-full w-full object-cover" />
                                     </div>
                                 )}
                             </div>
