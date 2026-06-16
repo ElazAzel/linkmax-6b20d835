@@ -469,6 +469,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
                     <Input
                       data-testid="add-block-search"
+                      autoFocus
                       placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}

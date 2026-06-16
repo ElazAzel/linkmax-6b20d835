@@ -221,7 +221,8 @@ function SortableGridBlockItem({
   }, [isRecentlyAdded]);
 
   const [isHovered, setIsHovered] = useState(false);
-  const showToolbar = isHovered || selected;
+  // Quiet canvas: toolbar appears only on selection (kept hover for label/affordance hint)
+  const showToolbar = selected;
 
   return (
     <div
@@ -230,10 +231,12 @@ function SortableGridBlockItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-all duration-200 rounded-2xl border-0',
+        'relative group transition-shadow duration-200 rounded-2xl border-0',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
+        // Quiet hover: 1px outline + soft lift, no background tint
+        !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
         isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
@@ -266,7 +269,7 @@ function SortableGridBlockItem({
         {/* Click Overlay — sits above hold-drag, captures click/dblclick */}
         <button
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/10 active:bg-accent/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -317,7 +320,7 @@ function SortableGridBlockItem({
       <div
         className={cn(
           'absolute bottom-2 left-2 z-30 pointer-events-none transition-opacity duration-200',
-          showToolbar && !isDragging ? 'opacity-100' : 'opacity-0',
+          (isHovered || selected) && !isDragging ? 'opacity-100' : 'opacity-0',
         )}
       >
         <span className="inline-block px-1.5 py-px rounded-md bg-background/90 backdrop-blur text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
