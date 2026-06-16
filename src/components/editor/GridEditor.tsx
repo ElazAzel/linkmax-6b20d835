@@ -221,7 +221,8 @@ function SortableGridBlockItem({
   }, [isRecentlyAdded]);
 
   const [isHovered, setIsHovered] = useState(false);
-  const showToolbar = isHovered || selected;
+  // Quiet canvas: toolbar appears only on selection (kept hover for label/affordance hint)
+  const showToolbar = selected;
 
   return (
     <div
@@ -230,10 +231,12 @@ function SortableGridBlockItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-all duration-200 rounded-2xl border-0',
+        'relative group transition-shadow duration-200 rounded-2xl border-0',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
+        // Quiet hover: 1px outline + soft lift, no background tint
+        !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
         isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
