@@ -320,7 +320,7 @@ function SortableGridBlockItem({
       <div
         className={cn(
           'absolute bottom-2 left-2 z-30 pointer-events-none transition-opacity duration-200',
-          showToolbar && !isDragging ? 'opacity-100' : 'opacity-0',
+          (isHovered || selected) && !isDragging ? 'opacity-100' : 'opacity-0',
         )}
       >
         <span className="inline-block px-1.5 py-px rounded-md bg-background/90 backdrop-blur text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
