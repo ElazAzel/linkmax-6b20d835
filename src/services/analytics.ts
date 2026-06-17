@@ -253,6 +253,11 @@ export function initSessionDurationTracking(pageId: string) {
     const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`;
 
+    if (navigator.sendBeacon) {
+      const accepted = navigator.sendBeacon(`${url}?apikey=${apiKey}`, new Blob([payload], { type: 'application/json' }));
+      if (accepted) return;
+    }
+
     if (typeof fetch === 'function') {
       void fetch(url, {
         method: 'POST',
@@ -265,11 +270,6 @@ export function initSessionDurationTracking(pageId: string) {
           Prefer: 'return=minimal',
         },
       }).catch(() => undefined);
-      return;
-    }
-
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(`${url}?apikey=${apiKey}`, new Blob([payload], { type: 'application/json' }));
     }
   };
 
