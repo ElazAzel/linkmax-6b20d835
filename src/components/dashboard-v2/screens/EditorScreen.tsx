@@ -268,8 +268,7 @@ export const EditorScreen = memo(function EditorScreen({
         description: t('editor.onboarding.addBlockDesc', 'Начните с оффера, ссылки или формы — это первый шаг к лидам.'),
         ctaLabel: t('editor.onboarding.addBlockCta', 'Добавить блок'),
         onCta: () => {
-          const addBlockButton = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
-          addBlockButton?.click();
+          window.dispatchEvent(new CustomEvent('editor:open-insert-sheet'));
         },
       });
     }
