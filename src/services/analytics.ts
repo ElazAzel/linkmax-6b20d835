@@ -208,6 +208,7 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
 
 let _pageLoadTime = Date.now();
 let _sessionDurationTrackedPageId: string | null = null;
+let _sessionDurationTrackingKey: string | null = null;
 let _sessionDurationCleanup: (() => void) | null = null;
 let _sessionDurationSentKey: string | null = null;
 
@@ -225,10 +226,11 @@ export function initSessionDurationTracking(pageId: string) {
   const analyticsSession = getOrCreateSession();
   const trackingKey = `${pageId}:${analyticsSession.id}`;
 
-  if (_sessionDurationTrackedPageId === pageId && _sessionDurationSentKey !== trackingKey) return;
+  if (_sessionDurationTrackedPageId === pageId && _sessionDurationTrackingKey === trackingKey) return;
 
   _sessionDurationCleanup?.();
   _sessionDurationTrackedPageId = pageId;
+  _sessionDurationTrackingKey = trackingKey;
   _sessionDurationSentKey = null;
   _pageLoadTime = Date.now();
 
