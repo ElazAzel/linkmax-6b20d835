@@ -7,7 +7,7 @@
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
-import { session } from '@/lib/storage';
+import { session, storage } from '@/lib/storage';
 import { trackViewContent, trackClickLink } from '@/lib/analytics';
 
 // ============================================
@@ -208,6 +208,8 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
 
 let _pageLoadTime = Date.now();
 let _sessionDurationTrackedPageId: string | null = null;
+let _sessionDurationCleanup: (() => void) | null = null;
+let _sessionDurationSentKey: string | null = null;
 
 /**
  * Get time spent on page in seconds
@@ -220,43 +222,67 @@ function getTimeOnPage(): number {
  * Initialize session duration tracking — sends duration on page hide/unload
  */
 export function initSessionDurationTracking(pageId: string) {
-  if (_sessionDurationTrackedPageId === pageId) return;
+  const analyticsSession = getOrCreateSession();
+  const trackingKey = `${pageId}:${analyticsSession.id}`;
+
+  if (_sessionDurationTrackedPageId === pageId && _sessionDurationSentKey !== trackingKey) return;
+
+  _sessionDurationCleanup?.();
   _sessionDurationTrackedPageId = pageId;
+  _sessionDurationSentKey = null;
   _pageLoadTime = Date.now();
 
   const sendDuration = () => {
     const duration = getTimeOnPage();
     if (duration < 2) return; // Skip very short visits
+    if (_sessionDurationSentKey === trackingKey) return;
+    _sessionDurationSentKey = trackingKey;
 
-    const session = getOrCreateSession();
     const payload = JSON.stringify({
       page_id: pageId,
       event_type: 'session_end',
       metadata: {
         sessionDuration: duration,
-        visitorId: session.visitorId,
-        sessionId: session.id,
+        visitorId: analyticsSession.visitorId,
+        sessionId: analyticsSession.id,
       },
     });
 
-    // Use sendBeacon for reliable delivery on page unload
+    const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`;
+
+    if (typeof fetch === 'function') {
+      void fetch(url, {
+        method: 'POST',
+        body: payload,
+        keepalive: true,
+        headers: {
+          apikey: apiKey,
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+      }).catch(() => undefined);
+      return;
+    }
+
     if (navigator.sendBeacon) {
-      const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
-      const blob = new Blob([payload], {
-        type: 'application/json',
-      });
-      navigator.sendBeacon(url, blob);
+      navigator.sendBeacon(`${url}?apikey=${apiKey}`, new Blob([payload], { type: 'application/json' }));
     }
   };
 
-  document.addEventListener('visibilitychange', () => {
+  const handleVisibilityChange = () => {
     if (document.visibilityState === 'hidden') {
       sendDuration();
     }
-  });
+  };
 
+  document.addEventListener('visibilitychange', handleVisibilityChange);
   window.addEventListener('pagehide', sendDuration);
+  _sessionDurationCleanup = () => {
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('pagehide', sendDuration);
+  };
 }
 
 /**
@@ -350,6 +376,7 @@ function getUtmParams(): Record<string, string> {
 // Session Management
 // ============================================
 
+const VISITOR_KEY = 'linkmax_analytics_visitor';
 const SESSION_KEY = 'linkmax_analytics_session';
 const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
 
@@ -360,7 +387,20 @@ interface Session {
 }
 
 export function getVisitorId(): string {
-  return getOrCreateSession().visitorId;
+  try {
+    const stored = storage.get<string>(VISITOR_KEY);
+    if (stored) return stored;
+  } catch {
+    // Ignore storage errors
+  }
+
+  const visitorId = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  try {
+    storage.set(VISITOR_KEY, visitorId);
+  } catch {
+    // Ignore storage errors
+  }
+  return visitorId;
 }
 
 function getOrCreateSession(): Session {
@@ -380,7 +420,7 @@ function getOrCreateSession(): Session {
   const sessionData: Session = {
     id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2),
     startedAt: Date.now(),
-    visitorId: getVisitorFingerprint(),
+    visitorId: getVisitorId(),
   };
 
   try {

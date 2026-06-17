@@ -85,7 +85,8 @@ export const InsightsScreen = memo(function InsightsScreen({
   const [period, setPeriod] = useState<Period>('7d');
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const { analytics, loading, error, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics(
-    pageId || null
+    pageId || null,
+    '7d',
   );
 
   const handlePeriodChange = (p: Period) => {
