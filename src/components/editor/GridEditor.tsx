@@ -525,6 +525,17 @@ export const GridEditor = memo(function GridEditor({
     setInsertSheetOpen(true);
   }, []);
 
+  // Listen for global "open insert sheet" event (e.g. from SmartActionDock).
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ position?: number }>).detail;
+      const pos = typeof detail?.position === 'number' ? detail.position : blocks.length;
+      openInsertSheet(pos);
+    };
+    window.addEventListener('editor:open-insert-sheet', handler as EventListener);
+    return () => window.removeEventListener('editor:open-insert-sheet', handler as EventListener);
+  }, [openInsertSheet, blocks.length]);
+
   const handleInsertSheetOpenChange = useCallback((open: boolean) => {
     if (!open) {
       lastInsertSheetCloseAtRef.current = Date.now();
