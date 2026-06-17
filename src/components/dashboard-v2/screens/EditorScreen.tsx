@@ -337,8 +337,7 @@ export const EditorScreen = memo(function EditorScreen({
   // Trigger insert-sheet by clicking the hidden anchor placed inside the canvas.
   // Must be declared before any early return to satisfy rules-of-hooks.
   const triggerAddBlock = useCallback(() => {
-    const target = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
-    target?.click();
+    window.dispatchEvent(new CustomEvent('editor:open-insert-sheet'));
   }, []);
 
   // Sprint 2: append a section preset (group of blocks) to the end of the page.
