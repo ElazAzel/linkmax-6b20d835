@@ -868,6 +868,14 @@ const ROUTE_TO_KEY: Record<string, string> = {
   'fitness-trainer': 'fitness-trainers',
   'designer': 'designers',
   'designers': 'designers',
+  'linktree-alternative': 'linktree-alternative',
+  'crm-dlya-uslug': 'crm-dlya-uslug',
+  'crm-dlya-mastera': 'crm-dlya-uslug',
+  'link-in-bio-en': 'link-in-bio-en',
+  'link-in-bio': 'link-in-bio-en',
+  'linktree-alternative-en': 'linktree-alternative-en',
+  'crm-for-services': 'crm-for-services-en',
+  'crm-for-services-en': 'crm-for-services-en',
 };
 
 export function getNicheLandingByKey(key: string | undefined): NicheLandingData | undefined {
