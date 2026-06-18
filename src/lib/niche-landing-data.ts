@@ -872,7 +872,7 @@ const ROUTE_TO_KEY: Record<string, string> = {
   'crm-dlya-uslug': 'crm-dlya-uslug',
   'crm-dlya-mastera': 'crm-dlya-uslug',
   'link-in-bio-en': 'link-in-bio-en',
-  'link-in-bio': 'link-in-bio-en',
+  'link-in-bio-english': 'link-in-bio-en',
   'linktree-alternative-en': 'linktree-alternative-en',
   'crm-for-services': 'crm-for-services-en',
   'crm-for-services-en': 'crm-for-services-en',
