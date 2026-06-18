@@ -154,4 +154,40 @@
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
+  <url>
+    <loc>https://lnkmx.my/linktree-alternative</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/crm-dlya-uslug</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/link-in-bio</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/link-in-bio"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/link-in-bio-ru"/>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/linktree-alternative-en</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/linktree-alternative-en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/linktree-alternative"/>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/crm-for-services</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/crm-for-services"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/crm-dlya-uslug"/>
+  </url>
 </urlset>
