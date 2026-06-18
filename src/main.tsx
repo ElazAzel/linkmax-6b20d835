@@ -204,6 +204,12 @@ const router = createBrowserRouter([
       { path: "multilink", element: <NicheLanding landingKey="multilink" /> },
       { path: "link-in-bio-ru", element: <NicheLanding landingKey="link-in-bio" /> },
       { path: "vizitka-onlayn", element: <NicheLanding landingKey="vizitka-onlayn" /> },
+      { path: "linktree-alternative", element: <NicheLanding landingKey="linktree-alternative" /> },
+      { path: "crm-dlya-uslug", element: <NicheLanding landingKey="crm-dlya-uslug" /> },
+      // English SEO landings
+      { path: "link-in-bio", element: <NicheLanding landingKey="link-in-bio-en" /> },
+      { path: "linktree-alternative-en", element: <NicheLanding landingKey="linktree-alternative-en" /> },
+      { path: "crm-for-services", element: <NicheLanding landingKey="crm-for-services-en" /> },
       // Programmatic niche pages /dlya/{niche}
       { path: "dlya/:landingSlug", element: <NicheLanding /> },
       // Blog
