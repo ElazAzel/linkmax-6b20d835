@@ -338,6 +338,16 @@ function getReferrerInfo(): { source: string; medium: string } {
     if (hostname.includes('google')) return { source: 'google', medium: 'organic' };
     if (hostname.includes('yandex')) return { source: 'yandex', medium: 'organic' };
     if (hostname.includes('bing')) return { source: 'bing', medium: 'organic' };
+    if (hostname.includes('duckduckgo')) return { source: 'duckduckgo', medium: 'organic' };
+    if (hostname.includes('mail.ru') || hostname.includes('go.mail.ru')) return { source: 'mailru', medium: 'organic' };
+
+    // AI assistants (ChatGPT, Perplexity, Claude, Gemini, Copilot)
+    if (hostname.includes('chatgpt.com') || hostname.includes('chat.openai.com')) return { source: 'chatgpt', medium: 'ai' };
+    if (hostname.includes('perplexity')) return { source: 'perplexity', medium: 'ai' };
+    if (hostname.includes('claude.ai') || hostname.includes('anthropic')) return { source: 'claude', medium: 'ai' };
+    if (hostname.includes('gemini.google') || hostname.includes('bard.google')) return { source: 'gemini', medium: 'ai' };
+    if (hostname.includes('copilot.microsoft') || hostname.includes('bing.com/chat')) return { source: 'copilot', medium: 'ai' };
+    if (hostname.includes('you.com')) return { source: 'you', medium: 'ai' };
 
     return { source: hostname, medium: 'referral' };
   } catch {
