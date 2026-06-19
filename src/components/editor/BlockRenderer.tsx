@@ -110,6 +110,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
 
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
+  const { style: bsStyle, className: bsClass } = getBlockStyles(block.blockStyle);
+  const wrapperStyle = { ...animationStyle, ...bsStyle };
+  const wrapperClass = cn(animationClass, bsClass);
   const RendererComponent = manifest.renderer;
 
   // Build props for the renderer
