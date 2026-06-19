@@ -186,6 +186,10 @@ serve(async (req: Request) => {
 
       // Log each provider submission with child metadata + transition
       if (page_id) {
+        // Initial retry schedule: 5 minutes after first failure
+        const nextRetry = submissionStatus === 'provider_failed'
+          ? new Date(Date.now() + 5 * 60_000).toISOString()
+          : null;
         const rows = validUrls.map(url => {
           const meta = childMeta.get(url);
           return {
@@ -199,6 +203,9 @@ serve(async (req: Request) => {
             submission_status: submissionStatus,
             http_status: httpStatus || null,
             batch_id: batchId,
+            retry_count: 0,
+            next_retry_at: nextRetry,
+            last_attempted_at: new Date().toISOString(),
           };
         });
         await db.from('indexing_submissions').insert(rows);
@@ -208,6 +215,20 @@ serve(async (req: Request) => {
     // Update last_indexnow_at on the page
     if (page_id) {
       await db.from('pages').update({ last_indexnow_at: new Date().toISOString() }).eq('id', page_id);
+    }
+
+    // Fire-and-forget: ask Google Search Console to re-inspect each URL.
+    // The function is a no-op if the GSC connector isn't linked.
+    try {
+      await Promise.all(
+        validUrls.map(url =>
+          db.functions.invoke('google-search-console-submit', {
+            body: { action: 'inspect_url', url, page_id: page_id || undefined },
+          }).catch(() => null)
+        )
+      );
+    } catch (_) {
+      // Best-effort; ignore failures
     }
 
     const diffLog = diff_summary
