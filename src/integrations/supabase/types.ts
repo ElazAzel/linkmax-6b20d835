@@ -997,8 +997,12 @@ export type Database = {
           created_at: string
           http_status: number | null
           id: string
+          last_attempted_at: string | null
+          next_retry_at: string | null
           page_id: string | null
+          payload: Json | null
           provider: string
+          retry_count: number
           skip_reason: string | null
           submission_status: string
           target_url: string
@@ -1012,8 +1016,12 @@ export type Database = {
           created_at?: string
           http_status?: number | null
           id?: string
+          last_attempted_at?: string | null
+          next_retry_at?: string | null
           page_id?: string | null
+          payload?: Json | null
           provider: string
+          retry_count?: number
           skip_reason?: string | null
           submission_status?: string
           target_url: string
@@ -1027,8 +1035,12 @@ export type Database = {
           created_at?: string
           http_status?: number | null
           id?: string
+          last_attempted_at?: string | null
+          next_retry_at?: string | null
           page_id?: string | null
+          payload?: Json | null
           provider?: string
+          retry_count?: number
           skip_reason?: string | null
           submission_status?: string
           target_url?: string
