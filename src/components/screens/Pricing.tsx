@@ -134,7 +134,7 @@ export default function Pricing() {
           <div className="mx-4 mt-3">
             <div className="backdrop-blur-2xl bg-card/50 border border-border/30 rounded-2xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')}>
+                <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} aria-label={t('common.back', 'Назад')}>
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <h1 className="text-xl font-bold text-primary">{t('pricing.title', 'Тарифы')}</h1>
