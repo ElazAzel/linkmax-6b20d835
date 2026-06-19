@@ -148,7 +148,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
         pageOwnerId={pageOwnerId}
         isPreview={isPreview}
       >
-        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
+        <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
           <BlockErrorBoundary>
             {inner}
           </BlockErrorBoundary>
