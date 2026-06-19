@@ -4567,6 +4567,8 @@ export type Database = {
           p_theme_settings: Json
           p_title: string
           p_user_id: string
+          p_webhook_secret?: string
+          p_webhook_url?: string
         }
         Returns: string
       }
