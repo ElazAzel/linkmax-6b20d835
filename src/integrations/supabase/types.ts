@@ -1487,6 +1487,8 @@ export type Database = {
           updated_at: string | null
           user_id: string
           view_count: number | null
+          webhook_secret: string | null
+          webhook_url: string | null
         }
         Insert: {
           avatar_style?: Json | null
@@ -1534,6 +1536,8 @@ export type Database = {
           updated_at?: string | null
           user_id: string
           view_count?: number | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
         }
         Update: {
           avatar_style?: Json | null
@@ -1581,6 +1585,8 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           view_count?: number | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
         }
         Relationships: [
           {
