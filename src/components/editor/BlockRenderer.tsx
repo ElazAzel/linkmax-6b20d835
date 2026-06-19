@@ -160,7 +160,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   // Simple render mode
   return (
     <BlockErrorBoundary>
-      <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
+      <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
         {inner}
       </div>
     </BlockErrorBoundary>
