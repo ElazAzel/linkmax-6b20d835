@@ -6,10 +6,7 @@
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
-import Copy from 'lucide-react/dist/esm/icons/copy';
-import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { Edit2, Copy, Trash2, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 
 export interface FloatingBlockToolbarProps {
