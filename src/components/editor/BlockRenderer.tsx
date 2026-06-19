@@ -3,6 +3,8 @@ import type { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
+import { getBlockStyles } from '@/lib/blocks/block-styling';
+import { cn } from '@/lib/utils/utils';
 import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
