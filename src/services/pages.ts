@@ -415,7 +415,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
         niche, preview_url, quality_score, is_indexable, last_snapshot_at,
         is_paid, is_primary_paid, page_type, integrations, favicon_url,
         hide_branding, organization_id, custom_domain, city, country_code,
-        profession, entity_type, contact_email, contact_phone, contact_whatsapp,
+        profession, entity_type,
         blocks(*)
       `)
       .eq('slug', slug)
@@ -461,9 +461,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       city: pg.city || undefined,
       profession: pg.profession || undefined,
       entity_type: pg.entity_type === 'organization' ? 'organization' : 'person',
-      contact_email: pg.contact_email || undefined,
-      contact_phone: pg.contact_phone || undefined,
-      contact_whatsapp: pg.contact_whatsapp || undefined,
+      // contact_* are owner PII — not exposed to anonymous viewers
       quality_score: pg.quality_score ?? undefined,
       experiments
     };
@@ -488,7 +486,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
         niche, preview_url, quality_score, is_indexable, last_snapshot_at,
         is_paid, is_primary_paid, page_type, integrations, favicon_url,
         hide_branding, organization_id, custom_domain, city, country_code,
-        profession, entity_type, contact_email, contact_phone, contact_whatsapp,
+        profession, entity_type,
         blocks(*), private_page_data(*)
       `)
       .eq('custom_domain', domain)
@@ -530,9 +528,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       city: pg.city || undefined,
       profession: pg.profession || undefined,
       entity_type: pg.entity_type === 'organization' ? 'organization' : 'person',
-      contact_email: pg.contact_email || undefined,
-      contact_phone: pg.contact_phone || undefined,
-      contact_whatsapp: pg.contact_whatsapp || undefined,
+      // contact_* are owner PII — not exposed to anonymous viewers
       quality_score: pg.quality_score ?? undefined,
       experiments
     };
