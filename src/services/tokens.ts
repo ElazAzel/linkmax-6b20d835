@@ -274,7 +274,7 @@ export async function requestWithdrawal(
 export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[]> {
   const { data, error } = await supabase
     .from('token_withdrawals')
-    .select('id, user_id, amount, status, payment_method, admin_notes, processed_by, processed_at, created_at')
+    .select('id, user_id, amount, status, payment_method, processed_at, created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -290,12 +290,13 @@ export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[
     status: w.status as 'pending' | 'approved' | 'rejected' | 'completed',
     paymentMethod: w.payment_method || undefined,
     paymentDetails: undefined,
-    adminNotes: (w as { admin_notes?: string | null }).admin_notes || undefined,
-    processedBy: (w as { processed_by?: string | null }).processed_by || undefined,
+    adminNotes: undefined,
+    processedBy: undefined,
     processedAt: w.processed_at || undefined,
     createdAt: w.created_at,
   }));
 }
+
 
 
 // Admin: Get token analytics
