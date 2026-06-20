@@ -4370,6 +4370,28 @@ export type Database = {
         Returns: Json
       }
       get_admin_platform_stats: { Args: never; Returns: Json }
+      get_admin_withdrawals: {
+        Args: { p_status?: string }
+        Returns: {
+          admin_notes: string | null
+          amount: number
+          created_at: string
+          id: string
+          payment_details: Json | null
+          payment_method: string | null
+          processed_at: string | null
+          processed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "token_withdrawals"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_auth_user_email: { Args: never; Returns: string }
       get_event_registration_count: {
         Args: { p_event_id: string }

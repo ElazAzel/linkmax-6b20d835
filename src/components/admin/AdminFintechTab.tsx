@@ -39,10 +39,9 @@ export const AdminFintechTab = () => {
     const fetchRequests = async () => {
         try {
             setLoading(true);
-            const { data, error } = await (supabase as any)
-                .from('token_withdrawals')
-                .select('*')
-                .order('created_at', { ascending: false });
+            // payment_details is no longer directly SELECT-able from `authenticated`.
+            // Admins must read withdrawals through the SECURITY DEFINER RPC.
+            const { data, error } = await (supabase.rpc as any)('get_admin_withdrawals', { p_status: null });
 
             if (error) throw error;
 
