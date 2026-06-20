@@ -334,19 +334,20 @@ export async function getAllWithdrawals(status?: string): Promise<WithdrawalRequ
   const rows = Array.isArray(data) ? (data as Array<Record<string, unknown>>) : [];
 
 
-  return (data || []).map(w => ({
-    id: w.id,
-    userId: w.user_id,
-    amount: w.amount,
+  return rows.map((w) => ({
+    id: w.id as string,
+    userId: w.user_id as string,
+    amount: w.amount as number,
     status: w.status as 'pending' | 'approved' | 'rejected' | 'completed',
-    paymentMethod: w.payment_method || undefined,
-    paymentDetails: w.payment_details as Record<string, unknown> || undefined,
-    adminNotes: (w as any).admin_notes || undefined,
-    processedBy: (w as any).processed_by || undefined,
-    processedAt: w.processed_at || undefined,
-    createdAt: w.created_at,
+    paymentMethod: (w.payment_method as string | null) || undefined,
+    paymentDetails: (w.payment_details as Record<string, unknown> | null) || undefined,
+    adminNotes: (w.admin_notes as string | null) || undefined,
+    processedBy: (w.processed_by as string | null) || undefined,
+    processedAt: (w.processed_at as string | null) || undefined,
+    createdAt: w.created_at as string,
   }));
 }
+
 
 // Admin: Process withdrawal
 export async function processWithdrawal(
