@@ -383,18 +383,21 @@ export async function savePage(
       );
     }
 
-    // Fetch and return the saved page
-    const { data: page, error: fetchError } = await supabase
-      .from('pages')
-      .select('*')
-      .eq('id', pageId as string)
-      .single();
+    // Fetch and return the saved page via SECURITY DEFINER RPC so the owner
+    // gets back sensitive columns (webhook_*, contact_*) that are revoked
+    // from direct SELECT for the authenticated role.
+    const { data: pageRows, error: fetchError } = await supabase
+      .rpc('get_my_full_page', { p_user_id: userId });
 
     if (fetchError) {
       return { data: null, error: wrapError(fetchError) };
     }
 
-    return { data: page as unknown as DbPage, error: null };
+    const page = Array.isArray(pageRows)
+      ? (pageRows as unknown as DbPage[]).find((p) => p.id === pageId) ?? (pageRows as unknown as DbPage[])[0]
+      : (pageRows as unknown as DbPage);
+
+    return { data: (page ?? null) as unknown as DbPage, error: null };
   } catch (error) {
     logger.error('Error saving page', error, { context: 'pages', data: { userId } });
     return { data: null, error: wrapError(error) };
