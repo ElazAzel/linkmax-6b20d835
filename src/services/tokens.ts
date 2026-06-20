@@ -267,11 +267,14 @@ export async function requestWithdrawal(
   return { success: true };
 }
 
-// Get user's withdrawal history
+// Get user's withdrawal history.
+// `payment_details` is intentionally NOT selected — direct SELECT on that column
+// is revoked from the `authenticated` role. The full record (with bank/wallet info)
+// is available only to admins via the `get_admin_withdrawals` RPC.
 export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[]> {
   const { data, error } = await supabase
     .from('token_withdrawals')
-    .select('*')
+    .select('id, user_id, amount, status, payment_method, admin_notes, processed_by, processed_at, created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -280,19 +283,20 @@ export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[
     return [];
   }
 
-  return (data || []).map(w => ({
+  return (data || []).map((w) => ({
     id: w.id,
     userId: w.user_id,
     amount: w.amount,
     status: w.status as 'pending' | 'approved' | 'rejected' | 'completed',
     paymentMethod: w.payment_method || undefined,
-    paymentDetails: w.payment_details as Record<string, unknown> || undefined,
-    adminNotes: (w as any).admin_notes || undefined,
-    processedBy: (w as any).processed_by || undefined,
+    paymentDetails: undefined,
+    adminNotes: (w as { admin_notes?: string | null }).admin_notes || undefined,
+    processedBy: (w as { processed_by?: string | null }).processed_by || undefined,
     processedAt: w.processed_at || undefined,
     createdAt: w.created_at,
   }));
 }
+
 
 // Admin: Get token analytics
 export async function getTokenAnalytics(startDate?: string, endDate?: string): Promise<Record<string, unknown> | null> {
