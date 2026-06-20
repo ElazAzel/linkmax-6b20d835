@@ -314,23 +314,25 @@ export async function getTokenAnalytics(startDate?: string, endDate?: string): P
   return data as Record<string, unknown>;
 }
 
-// Admin: Get all pending withdrawals
+// Admin: Get all withdrawals (full data incl. payment_details) via SECURITY DEFINER RPC.
+// Direct SELECT on payment_details is revoked from the authenticated role; only this
+// RPC (after has_role admin check) returns the sensitive bank/wallet info.
 export async function getAllWithdrawals(status?: string): Promise<WithdrawalRequest[]> {
-  let query = supabase
-    .from('token_withdrawals')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (status) {
-    query = query.eq('status', status as any);
-  }
-
-  const { data, error } = await query;
+  const { data, error } = await (supabase.rpc as unknown as (
+    fn: string,
+    args?: Record<string, unknown>,
+  ) => Promise<{ data: unknown; error: { message?: string } | null }>)(
+    'get_admin_withdrawals',
+    { p_status: status ?? null },
+  );
 
   if (error) {
     logger.error('Error getting withdrawals', error, { context: 'tokens' });
     return [];
   }
+
+  const rows = Array.isArray(data) ? (data as Array<Record<string, unknown>>) : [];
+
 
   return (data || []).map(w => ({
     id: w.id,
