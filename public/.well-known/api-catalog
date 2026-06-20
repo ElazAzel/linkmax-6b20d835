@@ -1,0 +1,22 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://lnkmx.my/",
+      "service-doc": [
+        { "href": "https://lnkmx.my/docs/api", "type": "text/html", "title": "LinkMax API Documentation" }
+      ],
+      "service-desc": [
+        { "href": "https://lnkmx.my/.well-known/openapi.json", "type": "application/json", "title": "OpenAPI Specification" }
+      ],
+      "status": [
+        { "href": "https://lnkmx.my/api/health", "type": "application/json", "title": "Service Health" }
+      ],
+      "terms-of-service": [
+        { "href": "https://lnkmx.my/terms", "type": "text/html" }
+      ],
+      "privacy-policy": [
+        { "href": "https://lnkmx.my/privacy", "type": "text/html" }
+      ]
+    }
+  ]
+}
