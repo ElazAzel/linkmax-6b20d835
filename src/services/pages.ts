@@ -544,30 +544,44 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
  */
 export async function loadUserPage(userId: string): Promise<LoadUserPageResult> {
   try {
-    const { data: page, error: pageError } = await supabase
-      .from('pages')
-      .select('*, blocks(*), private_page_data(*)')
-      .eq('user_id', userId)
-      .maybeSingle();
+    // Fetch the owner's full row (including sensitive columns) via SECURITY DEFINER RPC.
+    // Direct SELECT on contact_email / contact_phone / contact_whatsapp / webhook_url /
+    // webhook_secret / quality_breakdown / index_exclusion_reasons is no longer granted
+    // to the `authenticated` role; the RPC is the owner-only access path.
+    const { data: rpcRows, error: rpcError } = await (supabase.rpc as unknown as (
+      fn: string,
+      args?: Record<string, unknown>,
+    ) => Promise<{ data: unknown; error: { code?: string; message?: string } | null }>)(
+      'get_my_full_page',
+      { p_user_id: userId },
+    );
 
-    if (pageError) {
-      if (pageError.code === 'PGRST116') {
-        return {
-          data: createDefaultPageData(userId),
-          chatbotContext: null,
-          error: null,
-        };
-      }
-      return { data: null, chatbotContext: null, error: wrapError(pageError) };
+    if (rpcError) {
+      return { data: null, chatbotContext: null, error: wrapError(rpcError) };
     }
 
-    if (!page) {
+    const ownerRow = Array.isArray(rpcRows) ? (rpcRows[0] as Record<string, unknown> | undefined) : null;
+
+    if (!ownerRow) {
       return {
         data: createDefaultPageData(userId),
         chatbotContext: null,
         error: null,
       };
     }
+
+    // Fetch blocks + private_page_data separately (these tables have their own RLS).
+    const [{ data: blocksData }, { data: privateRows }] = await Promise.all([
+      supabase.from('blocks').select('*').eq('page_id', ownerRow.id as string),
+      supabase.from('private_page_data').select('*').eq('page_id', ownerRow.id as string),
+    ]);
+
+    const page = {
+      ...ownerRow,
+      blocks: blocksData ?? [],
+      private_page_data: privateRows ?? [],
+    };
+
     const pg = page as unknown as DbPage;
     const activeBlocks = (pg.blocks as unknown as DbBlock[] || []).filter(b => !b.deleted_at);
 
