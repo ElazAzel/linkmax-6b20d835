@@ -386,8 +386,8 @@ export async function savePage(
     // Fetch and return the saved page via SECURITY DEFINER RPC so the owner
     // gets back sensitive columns (webhook_*, contact_*) that are revoked
     // from direct SELECT for the authenticated role.
-    const { data: pageRows, error: fetchError } = await supabase
-      .rpc('get_my_full_page', { p_user_id: userId });
+    const { data: pageRows, error: fetchError } = await (supabase
+      .rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>)('get_my_full_page', { p_user_id: userId });
 
     if (fetchError) {
       return { data: null, error: wrapError(fetchError) };
