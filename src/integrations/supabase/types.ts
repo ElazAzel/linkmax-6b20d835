@@ -4376,6 +4376,64 @@ export type Database = {
         Returns: number
       }
       get_growth_metrics: { Args: { p_days?: number }; Returns: Json }
+      get_my_full_page: {
+        Args: { p_user_id?: string }
+        Returns: {
+          avatar_style: Json | null
+          avatar_url: string | null
+          city: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_whatsapp: string | null
+          country_code: string | null
+          created_at: string | null
+          custom_domain: string | null
+          description: string | null
+          editor_mode: string
+          entity_type: string | null
+          favicon_url: string | null
+          gallery_featured_at: string | null
+          gallery_likes: number | null
+          grid_config: Json | null
+          hide_branding: boolean | null
+          id: string
+          index_exclusion_reasons: string[] | null
+          integrations: Json | null
+          is_home: boolean
+          is_in_gallery: boolean | null
+          is_indexable: boolean | null
+          is_paid: boolean | null
+          is_primary_paid: boolean | null
+          is_published: boolean | null
+          last_indexnow_at: string | null
+          last_snapshot_at: string | null
+          niche: string | null
+          organization_id: string | null
+          page_path: string | null
+          page_type: string | null
+          preview_url: string | null
+          profession: string | null
+          quality_breakdown: Json | null
+          quality_score: number | null
+          seo_meta: Json | null
+          service_slugs: Json | null
+          site_id: string | null
+          slug: string
+          theme_settings: Json | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          view_count: number | null
+          webhook_secret: string | null
+          webhook_url: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "pages"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_page_search_diagnostics: {
         Args: { p_page_id: string }
         Returns: Json
