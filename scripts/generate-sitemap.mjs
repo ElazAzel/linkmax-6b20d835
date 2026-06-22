@@ -40,8 +40,23 @@ const STATIC_PAGES = [
   { loc: '/payment-terms', changefreq: 'yearly', priority: '0.3' },
 ];
 
-const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];
-const NICHE_LANDINGS = [];
+const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn', 'linktree-alternative', 'crm-dlya-uslug', 'link-in-bio', 'linktree-alternative-en', 'crm-for-services'];
+// Existing /dlya/ landings + 50 audience-targeted SEO landings (2026-06).
+const NICHE_LANDINGS = [
+  'photographer', 'coach', 'master', 'psychologist', 'fitness', 'designer',
+  // 50 new programmatic landings
+  'nutritionist', 'yoga-teacher', 'personal-trainer', 'nail-master', 'lash-master',
+  'brow-master', 'hair-stylist', 'makeup-artist', 'cosmetologist', 'massage-therapist',
+  'tattoo-artist', 'barber',
+  'business-coach', 'life-coach', 'career-coach', 'financial-advisor', 'nutrition-coach',
+  'relationship-coach', 'mindfulness-coach',
+  'english-tutor', 'math-tutor', 'music-teacher', 'art-teacher', 'online-school', 'course-creator',
+  'wedding-photographer', 'videographer', 'illustrator', 'dj', 'musician', 'blogger', 'event-planner',
+  'realtor', 'lawyer', 'notary', 'accountant', 'translator', 'copywriter',
+  'smm-manager', 'marketer', 'consultant',
+  'cleaning-service', 'handyman', 'car-detailing', 'florist', 'catering', 'chef',
+  'dog-trainer', 'interior-designer', 'tour-guide',
+];
 
 function buildHreflang(loc) {
   return LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${BASE_URL}/${l}"/>`).join('\n')
