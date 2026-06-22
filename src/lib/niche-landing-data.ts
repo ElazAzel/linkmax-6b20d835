@@ -1,4 +1,5 @@
 import type { Niche } from '@/lib/niches';
+import { NICHE_LANDINGS_50, NICHE_LANDINGS_50_ROUTE_MAP } from '@/lib/niche-landings-50';
 
 export interface NicheLandingFaq {
   question: string;
