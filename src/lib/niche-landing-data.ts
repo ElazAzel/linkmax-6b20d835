@@ -838,6 +838,7 @@ export const NICHE_LANDINGS: NicheLandingData[] = [
     schemaServiceName: 'LinkMAX CRM for services',
     audience: 'Service businesses, solo pros, beauty studios, coaches, tutors worldwide',
   },
+  ...NICHE_LANDINGS_50,
 ];
 
 const ROUTE_TO_KEY: Record<string, string> = {
