@@ -1,4 +1,5 @@
 import type { Niche } from '@/lib/niches';
+import { NICHE_LANDINGS_50, NICHE_LANDINGS_50_ROUTE_MAP } from '@/lib/niche-landings-50';
 
 export interface NicheLandingFaq {
   question: string;
@@ -837,6 +838,7 @@ export const NICHE_LANDINGS: NicheLandingData[] = [
     schemaServiceName: 'LinkMAX CRM for services',
     audience: 'Service businesses, solo pros, beauty studios, coaches, tutors worldwide',
   },
+  ...NICHE_LANDINGS_50,
 ];
 
 const ROUTE_TO_KEY: Record<string, string> = {
