@@ -316,6 +316,31 @@ function SortableGridBlockItem({
         </button>
       )}
 
+      {/* Always-visible quick-edit pencil — opens the block editor in one tap */}
+      {!isDragging && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onEdit(block);
+          }}
+          onTouchEnd={(e) => e.stopPropagation()}
+          className={cn(
+            'absolute top-2 right-2 z-40 inline-flex items-center justify-center rounded-full',
+            'bg-background/90 backdrop-blur-md border border-border/20 text-foreground/80',
+            'shadow-[0_4px_12px_-4px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:scale-105',
+            'transition-all active:scale-95',
+            isMobile ? 'h-8 w-8 opacity-90' : 'h-7 w-7 opacity-0 group-hover:opacity-100 focus:opacity-100',
+            selected && 'opacity-0',
+          )}
+          aria-label={t('editor.blockToolbar.edit', 'Редактировать')}
+          title={t('editor.blockToolbar.edit', 'Редактировать')}
+        >
+          <Edit2 className="h-3.5 w-3.5" />
+        </button>
+      )}
+
       {/* Block type label — only on hover/select to keep canvas quiet */}
       <div
         className={cn(
