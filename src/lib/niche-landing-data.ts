@@ -878,7 +878,9 @@ const ROUTE_TO_KEY: Record<string, string> = {
   'linktree-alternative-en': 'linktree-alternative-en',
   'crm-for-services': 'crm-for-services-en',
   'crm-for-services-en': 'crm-for-services-en',
+  ...NICHE_LANDINGS_50_ROUTE_MAP,
 };
+
 
 export function getNicheLandingByKey(key: string | undefined): NicheLandingData | undefined {
   if (!key) return undefined;
