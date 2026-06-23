@@ -249,27 +249,23 @@ function SortableGridBlockItem({
         isDimmed && 'opacity-30 pointer-events-none',
       )}
     >
-      {/* Hold-anywhere drag handle (covers full block, low priority) */}
-      <div
-        className={cn(
-          'absolute inset-0 z-10 touch-none',
-          isDragging ? 'cursor-grabbing' : 'cursor-grab',
-        )}
-        {...attributes}
-        {...listeners}
-        aria-hidden="true"
-      />
-
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
         <div className="pointer-events-none w-full h-full isolate bg-card rounded-2xl overflow-hidden" data-editor-block>
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click Overlay — sits above hold-drag, captures click/dblclick */}
+        {/* Click + Drag Overlay — single layer: dnd-kit's PointerSensor
+            (activationConstraint distance:5) starts drag only on movement,
+            otherwise the click fires for selection. */}
         <button
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          {...attributes}
+          {...listeners}
+          className={cn(
+            'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
+            isDragging ? 'cursor-grabbing' : 'cursor-grab',
+          )}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -279,9 +275,6 @@ function SortableGridBlockItem({
             e.preventDefault();
             e.stopPropagation();
             onBlockDoubleClick?.(block);
-          }}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
           }}
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
