@@ -62,6 +62,7 @@ export type LocaleCode = typeof SUPPORTED_LANGUAGES[number] | (string & {});
 
 // Languages that are lazy-loaded (not in initial bundle)
 const LAZY_LANGUAGES = ['de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'] as const;
+const LAZY_SET = new Set<string>(LAZY_LANGUAGES);
 
 // Dynamic import map for lazy locales
 const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>> = {
@@ -102,11 +103,12 @@ async function loadLazyLocale(lang: string): Promise<void> {
 }
 
 // Normalize language code to supported codes
+const SUPPORTED_SET = new Set<string>(SUPPORTED_LANGUAGES);
 const normalizeLanguage = (lng: string): string => {
   if (!lng) return 'ru';
   const langCode = lng.substring(0, 2).toLowerCase();
   if (langCode === 'kz') return 'kk';
-  if (SUPPORTED_LANGUAGES.includes(langCode as any)) return langCode as LocaleCode;
+  if (SUPPORTED_SET.has(langCode)) return langCode as LocaleCode;
   return 'en';
 };
 
@@ -128,18 +130,19 @@ const customLanguageDetector = {
       stored = 'kk';
       storage.setRaw('i18nextLng', 'kk');
     }
-    if (stored && SUPPORTED_LANGUAGES.includes(stored as any)) {
+    if (stored && SUPPORTED_SET.has(stored)) {
       return stored as LocaleCode;
     }
 
     // Check Telegram WebApp context
-    const tg = (window as any).Telegram?.WebApp;
+    interface TelegramWebApp { initDataUnsafe?: { user?: { language_code?: string } }; }
+    const tg = (window as unknown as { Telegram?: { WebApp?: TelegramWebApp } }).Telegram?.WebApp;
     const tgLang = tg?.initDataUnsafe?.user?.language_code;
     if (tgLang) {
       return normalizeLanguage(tgLang);
     }
 
-    const browserLang = navigator.language || (navigator as any).languages?.[0] || '';
+    const browserLang = navigator.language || (navigator as Navigator & { languages?: string[] }).languages?.[0] || '';
     return normalizeLanguage(browserLang);
   },
   cacheUserLanguage(lng: string) {
@@ -183,8 +186,8 @@ i18n
       order: ['customDetector'],
       caches: ['localStorage'],
     },
-    saveMissing: process.env.NODE_ENV === 'development',
-    missingKeyHandler: process.env.NODE_ENV === 'development'
+    saveMissing: import.meta.env.DEV,
+    missingKeyHandler: import.meta.env.DEV
       ? (lngs, ns, key, fallbackValue) => {
         console.warn(`[i18n] Missing key: "${key}" for languages: [${lngs.join(', ')}], namespace: "${ns}"`);
       }
@@ -210,12 +213,12 @@ i18n
 
 // If the detected language is a lazy locale, load it immediately
 const detectedLang = i18n.language;
-if (LAZY_LANGUAGES.includes(detectedLang as any)) {
+if (LAZY_SET.has(detectedLang)) {
   loadLazyLocale(detectedLang);
 }
 
 // Development diagnostics (lazy-loaded)
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   import('@/lib/utils/logger').then(({ logger }) => {
     logger.debug('Initialized with language: ' + i18n.language, { context: 'i18n' });
     logger.debug('Eagerly loaded: ru, en, kk. Lazy locales: ' + LAZY_LANGUAGES.join(', '), { context: 'i18n' });
@@ -231,17 +234,17 @@ if (process.env.NODE_ENV === 'development') {
 // Listen for language changes — lazy-load locale if needed
 i18n.on('languageChanged', (lng) => {
   const normalized = normalizeLanguage(lng);
-  if (normalized !== lng && SUPPORTED_LANGUAGES.includes(normalized as any)) {
+  if (normalized !== lng && SUPPORTED_SET.has(normalized)) {
     i18n.changeLanguage(normalized as LocaleCode);
     return;
   }
 
   // Load lazy locale if switching to a non-primary language
-  if (LAZY_LANGUAGES.includes(normalized as any)) {
+  if (LAZY_SET.has(normalized)) {
     loadLazyLocale(normalized);
   }
 
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     import('@/lib/utils/logger').then(({ logger }) => {
       logger.debug('Language changed to: ' + lng, { context: 'i18n' });
     });

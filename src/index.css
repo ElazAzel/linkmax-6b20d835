@@ -189,7 +189,7 @@
     --chart-5: 45 93% 47%;
 
     /* Typography */
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-sans: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* ========================================
        2026 LIVING CANVAS TOKENS
@@ -229,7 +229,7 @@
     --radius: 1.75rem; /* Larger, more organic circles */
 
     /* Typography */
-    --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
+    --font-heading: 'Space Grotesk', 'Inter', system-ui, sans-serif;
     --text-primary: 1;
     --text-secondary: 0.8;
     --text-tertiary: 0.6;

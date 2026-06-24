@@ -1,10 +1,31 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/platform/supabase/client";
 
 const clientToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
 
+interface PaddleCheckoutSettings {
+  displayMode?: string;
+  theme?: string;
+  allowLogout?: boolean;
+  successUrl?: string;
+  variant?: string;
+}
+
+interface PaddleSDK {
+  Environment: { set: (env: string) => void };
+  Initialize: (config: { token: string }) => void;
+  Checkout: {
+    open: (config: {
+      items: Array<{ priceId: string; quantity: number }>;
+      customer?: { email: string };
+      customData?: Record<string, unknown>;
+      settings: PaddleCheckoutSettings;
+    }) => void;
+  };
+}
+
 declare global {
   interface Window {
-    Paddle: any;
+    Paddle: PaddleSDK;
   }
 }
 

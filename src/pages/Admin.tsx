@@ -8,24 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
-import Shield from 'lucide-react/dist/esm/icons/shield';
-import LogOut from 'lucide-react/dist/esm/icons/log-out';
-import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
-import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
-import Users from 'lucide-react/dist/esm/icons/users';
-import FileText from 'lucide-react/dist/esm/icons/file-text';
-import Activity from 'lucide-react/dist/esm/icons/activity';
-import PieChart from 'lucide-react/dist/esm/icons/pie-chart';
-import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
-import Crown from 'lucide-react/dist/esm/icons/crown';
-import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
-import Coins from 'lucide-react/dist/esm/icons/coins';
-import Languages from 'lucide-react/dist/esm/icons/languages';
-import Handshake from 'lucide-react/dist/esm/icons/handshake';
-import Banknote from 'lucide-react/dist/esm/icons/banknote';
-import Search from 'lucide-react/dist/esm/icons/search';
-import Brain from 'lucide-react/dist/esm/icons/brain';
+import { Activity, Banknote, BarChart3, Brain, Coins, Crown, FileText, Handshake, Languages, Loader2, LogOut, Megaphone, PieChart, Search, Shield, ShieldCheck, TrendingUp, Users } from 'lucide-react';
 
 // Lazy load heavy tab components
 const AdminOverviewTab = lazy(() => import('@/components/admin/AdminOverviewTab').then(m => ({ default: m.AdminOverviewTab })));

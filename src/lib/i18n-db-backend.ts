@@ -1,27 +1,33 @@
 import { i18n } from 'i18next';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from './utils/logger';
+import type { Json } from '@/platform/supabase/types';
+
+interface I18nTranslationRow {
+    lang_code: string;
+    data: Record<string, unknown>;
+    updated_at: string;
+}
 
 /**
  * Fetches translations for a specific language from Supabase.
  */
-export async function fetchTranslationsFromDB(lng: string): Promise<any> {
+export async function fetchTranslationsFromDB(lng: string): Promise<Record<string, unknown> | null> {
     try {
-        const { data, error } = await (supabase
-            .from('i18n_translations' as any) as any)
+        const { data, error } = await supabase
+            .from('i18n_translations' as never)
             .select('data')
             .eq('lang_code', lng)
             .maybeSingle();
 
         if (error) {
-            // PGRST205 = table not found — expected when i18n_translations table hasn't been created
             if (error.code !== 'PGRST205') {
                 logger.error(`Error fetching translations for ${lng}:`, error);
             }
             return null;
         }
 
-        return data?.data || null;
+        return (data as { data: Record<string, unknown> } | null)?.data || null;
     } catch (err) {
         logger.error(`Catch error fetching translations for ${lng}:`, err);
         return null;
@@ -46,14 +52,14 @@ export async function syncI18nWithDB(i18nInstance: i18n, lng?: string) {
 /**
  * Migration helper: Push local JSON data to DB.
  */
-export async function upsertToDB(lng: string, jsonData: any) {
-    const { error } = await (supabase
-        .from('i18n_translations' as any) as any)
+export async function upsertToDB(lng: string, jsonData: Record<string, unknown>) {
+    const { error } = await supabase
+        .from('i18n_translations' as never)
         .upsert({
             lang_code: lng,
-            data: jsonData,
+            data: jsonData as Json,
             updated_at: new Date().toISOString()
-        }, {
+        } as never, {
             onConflict: 'lang_code'
         });
 

@@ -85,12 +85,12 @@ export function getI18nText(
  * Check if value is multilingual (I18nText or legacy MultilingualString)
  * Checks if value is object with at least one string property
  */
-export function isI18nText(value: any): value is I18nText | MultilingualString {
+export function isI18nText(value: unknown): value is I18nText | MultilingualString {
   return (
-    value &&
+    !!value &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
-    Object.values(value).some(v => typeof v === 'string' && v)
+    Object.values(value as Record<string, unknown>).some(v => typeof v === 'string' && v)
   );
 }
 
@@ -98,8 +98,8 @@ export function isI18nText(value: any): value is I18nText | MultilingualString {
  * LEGACY: Check if value is multilingual
  * @deprecated Use isI18nText() instead
  */
-export function isMultilingualString(value: any): value is MultilingualString {
-  return value && typeof value === 'object' && ('ru' in value || 'en' in value || 'kk' in value);
+export function isMultilingualString(value: unknown): value is MultilingualString {
+  return !!value && typeof value === 'object' && ('ru' in (value as Record<string, unknown>) || 'en' in (value as Record<string, unknown>) || 'kk' in (value as Record<string, unknown>));
 }
 
 /**

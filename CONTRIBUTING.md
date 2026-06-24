@@ -42,6 +42,24 @@ git commit -m "feat: add instagram integration to social block"
 4. Link any relevant issues (e.g., `Closes #123`).
 5. Wait for a code review from a team member.
 
+## 🎨 Design System
+
+This project uses the **Liquid Glass** design system. Before making UI changes:
+
+1. Read [`DESIGN.md`](./DESIGN.md) for token reference
+2. Use semantic CSS variables (`--primary`, `--muted`, `--card`) instead of hardcoded colors
+3. Prefer `glass-*` and `qb-*` utility classes for cards and surfaces
+4. Use semantic text classes (`text-display`, `text-hero`, `text-section-title`, etc.)
+5. Import icons from `lucide-react` as **named exports**, not deep imports:
+   ```tsx
+   // ✅ Correct
+   import { Menu, X } from 'lucide-react';
+   // ❌ Wrong
+   import Menu from 'lucide-react/dist/esm/icons/menu';
+   ```
+6. Never use inline `fontFamily` styles — fonts are set globally via CSS variables
+7. Always respect `prefers-reduced-motion`
+
 ## 📐 Coding Standards
 
 ### TypeScript & React

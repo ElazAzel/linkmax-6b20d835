@@ -1,14 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import CalendarCheck from 'lucide-react/dist/esm/icons/calendar-check';
-import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
-import Clock from 'lucide-react/dist/esm/icons/clock';
-import Eye from 'lucide-react/dist/esm/icons/eye';
-import Link2 from 'lucide-react/dist/esm/icons/link-2';
-import Send from 'lucide-react/dist/esm/icons/send';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { ArrowRight, CalendarCheck, CheckCircle2, Clock, Eye, Link2, Send, Sparkles } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';

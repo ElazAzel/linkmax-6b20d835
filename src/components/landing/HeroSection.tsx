@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -6,14 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState, useCallback } from 'react';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import Check from 'lucide-react/dist/esm/icons/check';
-import Bot from 'lucide-react/dist/esm/icons/bot';
-import Zap from 'lucide-react/dist/esm/icons/zap';
-import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
-import Bell from 'lucide-react/dist/esm/icons/bell';
-import Users from 'lucide-react/dist/esm/icons/users';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { ArrowRight, Check, Bot, Zap, MessageSquare, Bell, Users, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 
 interface HeroSectionProps {
@@ -36,9 +29,9 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
   }, [username, navigate]);
 
   const benefits = [
-    { icon: Bot, label: t('landing.hero.benefit1', 'AI создаёт всё сам'), color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' },
-    { icon: MessageSquare, label: t('landing.hero.benefit2', 'Mini-CRM внутри'), color: 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400' },
-    { icon: Bell, label: t('landing.hero.benefit3', 'Telegram-уведомления'), color: 'bg-violet-500/10 border-violet-500/20 text-violet-600 dark:text-violet-400' },
+    { icon: Bot, label: t('landing.hero.benefit1', 'AI СЃРѕР·РґР°С‘С‚ РІСЃС‘ СЃР°Рј'), color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' },
+    { icon: MessageSquare, label: t('landing.hero.benefit2', 'Mini-CRM РІРЅСѓС‚СЂРё'), color: 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400' },
+    { icon: Bell, label: t('landing.hero.benefit3', 'Telegram-СѓРІРµРґРѕРјР»РµРЅРёСЏ'), color: 'bg-violet-500/10 border-violet-500/20 text-violet-600 dark:text-violet-400' },
   ];
 
   return (
@@ -62,7 +55,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             )}
           >
             <Bot className="h-4 w-4 text-primary animate-pulse" />
-            <span className="text-primary font-semibold">{t('landing.hero.badge', 'AI-страница для бизнеса')}</span>
+            <span className="text-primary font-semibold">{t('landing.hero.badge', 'AI-СЃС‚СЂР°РЅРёС†Р° РґР»СЏ Р±РёР·РЅРµСЃР°')}</span>
           </div>
 
           {/* Main headline with staggered reveal */}
@@ -74,10 +67,10 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             style={{ animationDelay: '100ms' }}
           >
             <h1 className="text-[2.25rem] sm:text-[3rem] lg:text-[4rem] xl:text-[4.5rem] font-extrabold tracking-[-0.03em] leading-[1.05]">
-              {t('landing.hero.title', 'AI-страница за минуту,')}
+              {t('landing.hero.title', 'AI-СЃС‚СЂР°РЅРёС†Р° Р·Р° РјРёРЅСѓС‚Сѓ,')}
               <br />
               <span className="text-gradient bg-[length:200%_auto] animate-gradient-x inline-block">
-                {t('landing.hero.titleHighlight', 'которая собирает заявки')}
+                {t('landing.hero.titleHighlight', 'РєРѕС‚РѕСЂР°СЏ СЃРѕР±РёСЂР°РµС‚ Р·Р°СЏРІРєРё')}
               </span>
             </h1>
           </div>
@@ -91,7 +84,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             )}
             style={{ animationDelay: '200ms' }}
           >
-            {t('landing.hero.description', 'Для бьюти-мастеров, экспертов и малого бизнеса. AI-дизайнер + AI-копирайтер + Mini-CRM + Telegram-уведомления о новых клиентах.')}
+            {t('landing.hero.description', 'Р”Р»СЏ Р±СЊСЋС‚Рё-РјР°СЃС‚РµСЂРѕРІ, СЌРєСЃРїРµСЂС‚РѕРІ Рё РјР°Р»РѕРіРѕ Р±РёР·РЅРµСЃР°. AI-РґРёР·Р°Р№РЅРµСЂ + AI-РєРѕРїРёСЂР°Р№С‚РµСЂ + Mini-CRM + Telegram-СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ РЅРѕРІС‹С… РєР»РёРµРЅС‚Р°С….')}
           </p>
 
           {/* Key benefits with hover effects */}
@@ -156,7 +149,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
                 className="rounded-xl font-bold px-5 sm:px-7 bg-gradient-to-r from-primary to-violet-600 hover:from-primary/90 hover:to-violet-600/90 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
                 aria-label={t('landing.hero.createPage', 'Create page')}
               >
-                <span className="hidden sm:inline mr-2">{t('landing.hero.createPage', 'Создать')}</span>
+                <span className="hidden sm:inline mr-2">{t('landing.hero.createPage', 'РЎРѕР·РґР°С‚СЊ')}</span>
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>
@@ -165,15 +158,15 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mt-4 text-muted-foreground">
               <span className="flex items-center gap-1.5 text-sm">
                 <Check className="h-4 w-4 text-primary" />
-                {t('landing.hero.free', 'Бесплатно')}
+                {t('landing.hero.free', 'Р‘РµСЃРїР»Р°С‚РЅРѕ')}
               </span>
               <span className="flex items-center gap-1.5 text-sm">
                 <Zap className="h-4 w-4 text-primary" />
-                {t('landing.hero.noCode', 'Без кода')}
+                {t('landing.hero.noCode', 'Р‘РµР· РєРѕРґР°')}
               </span>
               <span className="flex items-center gap-1.5 text-sm">
                 <Sparkles className="h-4 w-4 text-primary" />
-                {t('landing.hero.aiHelps', 'AI помогает')}
+                {t('landing.hero.aiHelps', 'AI РїРѕРјРѕРіР°РµС‚')}
               </span>
             </div>
           </div>
@@ -193,7 +186,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
               className="text-muted-foreground hover:text-foreground hover:bg-foreground/5 group px-6 py-2"
             >
               <Users className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-              {t('landing.hero.viewExamples', 'Посмотреть примеры')}
+              {t('landing.hero.viewExamples', 'РџРѕСЃРјРѕС‚СЂРµС‚СЊ РїСЂРёРјРµСЂС‹')}
               <ArrowRight className="h-4 w-4 ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
             </Button>
           </div>
@@ -202,3 +195,4 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
     </section>
   );
 }
+

@@ -36,10 +36,10 @@ export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
 
             window.location.href = data.url;
             onSuccess?.();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Payment init error:', error);
             handleError(error, "Ошибка при создании платежа");
-            onError?.(error);
+            if (error instanceof Error) onError?.(error);
         } finally {
             setIsLoading(false);
         }
@@ -70,10 +70,10 @@ export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
 
             window.location.href = data.url;
             onSuccess?.();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Payment init error:', error);
             handleError(error, "Ошибка при создании платежа");
-            onError?.(error);
+            if (error instanceof Error) onError?.(error);
         } finally {
             setIsLoading(false);
         }

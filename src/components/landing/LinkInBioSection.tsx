@@ -1,10 +1,5 @@
-import { useTranslation } from 'react-i18next';
-import Link2 from 'lucide-react/dist/esm/icons/link-2';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
-import Shield from 'lucide-react/dist/esm/icons/shield';
-import Globe from 'lucide-react/dist/esm/icons/globe';
-import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+﻿import { useTranslation } from 'react-i18next';
+import { Link2, Sparkles, TrendingUp, Shield, Globe, Smartphone } from 'lucide-react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 
 export function LinkInBioSection() {
@@ -12,12 +7,12 @@ export function LinkInBioSection() {
   const sectionAnimation = useScrollAnimation();
 
   const benefits = [
-    { icon: Link2, text: t('landing.linkInBio.benefit1', 'Все ссылки в одном месте') },
-    { icon: Sparkles, text: t('landing.linkInBio.benefit2', 'AI создаёт контент') },
-    { icon: TrendingUp, text: t('landing.linkInBio.benefit3', 'Аналитика кликов') },
-    { icon: Shield, text: t('landing.linkInBio.benefit4', 'Без комиссий') },
-    { icon: Globe, text: t('landing.linkInBio.benefit5', 'Свой домен') },
-    { icon: Smartphone, text: t('landing.linkInBio.benefit6', 'Мобильный редактор') },
+    { icon: Link2, text: t('landing.linkInBio.benefit1', 'Р’СЃРµ СЃСЃС‹Р»РєРё РІ РѕРґРЅРѕРј РјРµСЃС‚Рµ') },
+    { icon: Sparkles, text: t('landing.linkInBio.benefit2', 'AI СЃРѕР·РґР°С‘С‚ РєРѕРЅС‚РµРЅС‚') },
+    { icon: TrendingUp, text: t('landing.linkInBio.benefit3', 'РђРЅР°Р»РёС‚РёРєР° РєР»РёРєРѕРІ') },
+    { icon: Shield, text: t('landing.linkInBio.benefit4', 'Р‘РµР· РєРѕРјРёСЃСЃРёР№') },
+    { icon: Globe, text: t('landing.linkInBio.benefit5', 'РЎРІРѕР№ РґРѕРјРµРЅ') },
+    { icon: Smartphone, text: t('landing.linkInBio.benefit6', 'РњРѕР±РёР»СЊРЅС‹Р№ СЂРµРґР°РєС‚РѕСЂ') },
   ];
 
   return (
@@ -33,13 +28,13 @@ export function LinkInBioSection() {
             <h2 
               className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
             >
-              {t('landing.linkInBio.title', 'Что такое Link-in-Bio и зачем он нужен?')}
+              {t('landing.linkInBio.title', 'Р§С‚Рѕ С‚Р°РєРѕРµ Link-in-Bio Рё Р·Р°С‡РµРј РѕРЅ РЅСѓР¶РµРЅ?')}
             </h2>
             <p 
               className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
               style={{ animationDelay: '150ms' }}
             >
-              {t('landing.linkInBio.subtitle', 'Страница ссылок — это мини-сайт, который объединяет все ваши ресурсы: соцсети, мессенджеры, портфолио, товары и услуги')}
+              {t('landing.linkInBio.subtitle', 'РЎС‚СЂР°РЅРёС†Р° СЃСЃС‹Р»РѕРє вЂ” СЌС‚Рѕ РјРёРЅРё-СЃР°Р№С‚, РєРѕС‚РѕСЂС‹Р№ РѕР±СЉРµРґРёРЅСЏРµС‚ РІСЃРµ РІР°С€Рё СЂРµСЃСѓСЂСЃС‹: СЃРѕС†СЃРµС‚Рё, РјРµСЃСЃРµРЅРґР¶РµСЂС‹, РїРѕСЂС‚С„РѕР»РёРѕ, С‚РѕРІР°СЂС‹ Рё СѓСЃР»СѓРіРё')}
             </p>
           </header>
 
@@ -51,13 +46,13 @@ export function LinkInBioSection() {
             <div className="grid md:grid-cols-2 gap-8 items-start">
               <div className="space-y-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
                 <p>
-                  {t('landing.linkInBio.p1', 'Link-in-Bio (линк в био, мультиссылка) — это страница, которую вы размещаете в описании профиля Instagram, TikTok, YouTube или Telegram. Вместо одной ссылки вы получаете полноценный мини-лендинг с кнопками, контактами и даже каталогом товаров.')}
+                  {t('landing.linkInBio.p1', 'Link-in-Bio (Р»РёРЅРє РІ Р±РёРѕ, РјСѓР»СЊС‚РёСЃСЃС‹Р»РєР°) вЂ” СЌС‚Рѕ СЃС‚СЂР°РЅРёС†Р°, РєРѕС‚РѕСЂСѓСЋ РІС‹ СЂР°Р·РјРµС‰Р°РµС‚Рµ РІ РѕРїРёСЃР°РЅРёРё РїСЂРѕС„РёР»СЏ Instagram, TikTok, YouTube РёР»Рё Telegram. Р’РјРµСЃС‚Рѕ РѕРґРЅРѕР№ СЃСЃС‹Р»РєРё РІС‹ РїРѕР»СѓС‡Р°РµС‚Рµ РїРѕР»РЅРѕС†РµРЅРЅС‹Р№ РјРёРЅРё-Р»РµРЅРґРёРЅРі СЃ РєРЅРѕРїРєР°РјРё, РєРѕРЅС‚Р°РєС‚Р°РјРё Рё РґР°Р¶Рµ РєР°С‚Р°Р»РѕРіРѕРј С‚РѕРІР°СЂРѕРІ.')}
                 </p>
                 <p>
-                  {t('landing.linkInBio.p2', 'lnkmx.my — современная альтернатива Linktree и Taplink с AI-генерацией контента. Вы выбираете нишу (барбер, фотограф, тренер, психолог), и искусственный интеллект создаёт готовую страницу за 2 минуты: с профилем, нужными блоками и текстами.')}
+                  {t('landing.linkInBio.p2', 'lnkmx.my вЂ” СЃРѕРІСЂРµРјРµРЅРЅР°СЏ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІР° Linktree Рё Taplink СЃ AI-РіРµРЅРµСЂР°С†РёРµР№ РєРѕРЅС‚РµРЅС‚Р°. Р’С‹ РІС‹Р±РёСЂР°РµС‚Рµ РЅРёС€Сѓ (Р±Р°СЂР±РµСЂ, С„РѕС‚РѕРіСЂР°С„, С‚СЂРµРЅРµСЂ, РїСЃРёС…РѕР»РѕРі), Рё РёСЃРєСѓСЃСЃС‚РІРµРЅРЅС‹Р№ РёРЅС‚РµР»Р»РµРєС‚ СЃРѕР·РґР°С‘С‚ РіРѕС‚РѕРІСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ Р·Р° 2 РјРёРЅСѓС‚С‹: СЃ РїСЂРѕС„РёР»РµРј, РЅСѓР¶РЅС‹РјРё Р±Р»РѕРєР°РјРё Рё С‚РµРєСЃС‚Р°РјРё.')}
                 </p>
                 <p>
-                  {t('landing.linkInBio.p3', 'В отличие от конкурентов, мы не берём комиссию с ваших продаж. Все деньги от товаров и услуг — ваши. А встроенная аналитика и CRM помогают понять, какие ссылки работают лучше всего.')}
+                  {t('landing.linkInBio.p3', 'Р’ РѕС‚Р»РёС‡РёРµ РѕС‚ РєРѕРЅРєСѓСЂРµРЅС‚РѕРІ, РјС‹ РЅРµ Р±РµСЂС‘Рј РєРѕРјРёСЃСЃРёСЋ СЃ РІР°С€РёС… РїСЂРѕРґР°Р¶. Р’СЃРµ РґРµРЅСЊРіРё РѕС‚ С‚РѕРІР°СЂРѕРІ Рё СѓСЃР»СѓРі вЂ” РІР°С€Рё. Рђ РІСЃС‚СЂРѕРµРЅРЅР°СЏ Р°РЅР°Р»РёС‚РёРєР° Рё CRM РїРѕРјРѕРіР°СЋС‚ РїРѕРЅСЏС‚СЊ, РєР°РєРёРµ СЃСЃС‹Р»РєРё СЂР°Р±РѕС‚Р°СЋС‚ Р»СѓС‡С€Рµ РІСЃРµРіРѕ.')}
                 </p>
               </div>
 
@@ -84,7 +79,7 @@ export function LinkInBioSection() {
             style={{ animationDelay: '600ms' }}
           >
             <p className="text-xs text-muted-foreground/60 text-center">
-              {t('landing.linkInBio.keywords', 'Ключевые слова: страница ссылок, линк в био, link in bio, мультиссылка, linktree альтернатива, taplink аналог, мини-лендинг')}
+              {t('landing.linkInBio.keywords', 'РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°: СЃС‚СЂР°РЅРёС†Р° СЃСЃС‹Р»РѕРє, Р»РёРЅРє РІ Р±РёРѕ, link in bio, РјСѓР»СЊС‚РёСЃСЃС‹Р»РєР°, linktree Р°Р»СЊС‚РµСЂРЅР°С‚РёРІР°, taplink Р°РЅР°Р»РѕРі, РјРёРЅРё-Р»РµРЅРґРёРЅРі')}
             </p>
           </footer>
         </article>
@@ -92,3 +87,4 @@ export function LinkInBioSection() {
     </section>
   );
 }
+

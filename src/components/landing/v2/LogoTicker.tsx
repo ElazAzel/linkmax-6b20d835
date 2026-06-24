@@ -1,22 +1,15 @@
-import { useTranslation } from 'react-i18next';
-import Scissors from 'lucide-react/dist/esm/icons/scissors';
-import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
-import Dumbbell from 'lucide-react/dist/esm/icons/dumbbell';
-import Camera from 'lucide-react/dist/esm/icons/camera';
-import Wrench from 'lucide-react/dist/esm/icons/wrench';
-import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
-import Heart from 'lucide-react/dist/esm/icons/heart';
-import Building2 from 'lucide-react/dist/esm/icons/building-2';
+﻿import { useTranslation } from 'react-i18next';
+import { Scissors, GraduationCap, Dumbbell, Camera, Wrench, Briefcase, Heart, Building2 } from 'lucide-react';
 
 const niches = [
-    { Icon: Scissors, key: 'landing.ticker.beauty', fallback: 'Бьюти-мастера' },
-    { Icon: GraduationCap, key: 'landing.ticker.tutors', fallback: 'Репетиторы' },
-    { Icon: Dumbbell, key: 'landing.ticker.fitness', fallback: 'Фитнес-тренеры' },
-    { Icon: Camera, key: 'landing.ticker.photographers', fallback: 'Фотографы' },
-    { Icon: Wrench, key: 'landing.ticker.services', fallback: 'Сервис и ремонт' },
-    { Icon: Briefcase, key: 'landing.ticker.consultants', fallback: 'Консалтинг' },
-    { Icon: Heart, key: 'landing.ticker.psychologists', fallback: 'Психологи' },
-    { Icon: Building2, key: 'landing.ticker.agencies', fallback: 'Агентства' },
+    { Icon: Scissors, key: 'landing.ticker.beauty', fallback: 'Р‘СЊСЋС‚Рё-РјР°СЃС‚РµСЂР°' },
+    { Icon: GraduationCap, key: 'landing.ticker.tutors', fallback: 'Р РµРїРµС‚РёС‚РѕСЂС‹' },
+    { Icon: Dumbbell, key: 'landing.ticker.fitness', fallback: 'Р¤РёС‚РЅРµСЃ-С‚СЂРµРЅРµСЂС‹' },
+    { Icon: Camera, key: 'landing.ticker.photographers', fallback: 'Р¤РѕС‚РѕРіСЂР°С„С‹' },
+    { Icon: Wrench, key: 'landing.ticker.services', fallback: 'РЎРµСЂРІРёСЃ Рё СЂРµРјРѕРЅС‚' },
+    { Icon: Briefcase, key: 'landing.ticker.consultants', fallback: 'РљРѕРЅСЃР°Р»С‚РёРЅРі' },
+    { Icon: Heart, key: 'landing.ticker.psychologists', fallback: 'РџСЃРёС…РѕР»РѕРіРё' },
+    { Icon: Building2, key: 'landing.ticker.agencies', fallback: 'РђРіРµРЅС‚СЃС‚РІР°' },
 ];
 
 export const LogoTicker = () => {
@@ -27,7 +20,7 @@ export const LogoTicker = () => {
         <div className="py-10 bg-transparent border-y border-white/5 backdrop-blur-sm overflow-hidden">
             <div className="container mx-auto px-4 mb-4 text-center">
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                    {t('landing.ticker.title_v2', 'Используют 1 200+ мастеров и команд в этих нишах')}
+                    {t('landing.ticker.title_v2', 'РСЃРїРѕР»СЊР·СѓСЋС‚ 1 200+ РјР°СЃС‚РµСЂРѕРІ Рё РєРѕРјР°РЅРґ РІ СЌС‚РёС… РЅРёС€Р°С…')}
                 </p>
             </div>
             <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
@@ -47,3 +40,4 @@ export const LogoTicker = () => {
         </div>
     );
 };
+

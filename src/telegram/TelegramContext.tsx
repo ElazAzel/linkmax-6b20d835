@@ -223,9 +223,9 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
             logger.debug(
                 `[TelegramApp] Authenticated: ${data.user.first_name} (${data.user.telegram_user_id}), screen: ${parsedRoute.screen}`
             );
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('[TelegramApp] Auth failed:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : String(err));
             setRoute({ screen: 'error' });
         } finally {
             setIsLoading(false);
@@ -282,11 +282,11 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
             try {
                 if (type === 'impact') {
                     webApp.HapticFeedback.impactOccurred(
-                        (style as any) || 'medium'
+                        (style || 'medium') as 'light' | 'medium' | 'heavy' | 'rigid' | 'soft'
                     );
                 } else if (type === 'notification') {
                     webApp.HapticFeedback.notificationOccurred(
-                        (style as any) || 'success'
+                        (style || 'success') as 'error' | 'success' | 'warning'
                     );
                 } else {
                     webApp.HapticFeedback.selectionChanged();

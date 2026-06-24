@@ -7,13 +7,18 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import Users from 'lucide-react/dist/esm/icons/users';
-import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { ArrowLeft, Sparkles, Users } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import type { Block, PageTheme } from '@/types/page';
+
+interface PublicProfileRow {
+  id: string;
+  username: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+}
 
 interface BlockSettings {
   requester_blocks: string[];
@@ -63,12 +68,12 @@ async function fetchCollabPage(collabSlug: string): Promise<CollabPageData | nul
 
   // Fetch user profiles
   const userIds = [collab.requester_id, collab.target_id];
-  const { data: profiles } = await (supabase
-    .from('public_user_profiles' as any)
+  const { data: profiles } = await supabase
+    .from('public_user_profiles' as never)
     .select('id, username, display_name, avatar_url')
-    .in('id', userIds) as any);
+    .in('id', userIds);
 
-  const profileMap = new Map((profiles as any[])?.map((p: any) => [p.id, p]) || []);
+  const profileMap = new Map(((profiles as PublicProfileRow[] | null) || []).map(p => [p.id, p]));
 
   // Fetch blocks from both pages
   const pageIds = [collab.requester_page_id, collab.target_page_id].filter(Boolean) as string[];
@@ -137,8 +142,8 @@ async function fetchCollabPage(collabSlug: string): Promise<CollabPageData | nul
     target_id: collab.target_id,
     requester_page_id: collab.requester_page_id,
     target_page_id: collab.target_page_id,
-    requester: (profileMap.get(collab.requester_id) as any) || null,
-    target: (profileMap.get(collab.target_id) as any) || null,
+    requester: (profileMap.get(collab.requester_id) as PublicProfileRow) || null,
+    target: (profileMap.get(collab.target_id) as PublicProfileRow) || null,
     blocks: allBlocks,
     theme,
     block_settings: blockSettings,

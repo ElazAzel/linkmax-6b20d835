@@ -18,7 +18,7 @@ export const useApiKeys = () => {
       queryClient.invalidateQueries({ queryKey: ["api-keys"] });
       toast.success(t("settings.integrations.apiKeyGenerated"));
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || "Failed to generate API key");
     }
   });
@@ -29,7 +29,7 @@ export const useApiKeys = () => {
       queryClient.invalidateQueries({ queryKey: ["api-keys"] });
       toast.success(t("settings.integrations.apiKeyDeleted"));
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || "Failed to delete API key");
     }
   });

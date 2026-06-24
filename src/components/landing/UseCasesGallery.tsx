@@ -1,19 +1,10 @@
-'use client';
+﻿'use client';
 import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 
-import Camera from 'lucide-react/dist/esm/icons/camera';
-import Scissors from 'lucide-react/dist/esm/icons/scissors';
-import Dumbbell from 'lucide-react/dist/esm/icons/dumbbell';
-import Brain from 'lucide-react/dist/esm/icons/brain';
-import Music from 'lucide-react/dist/esm/icons/music';
-import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
-import Star from 'lucide-react/dist/esm/icons/star';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import Heart from 'lucide-react/dist/esm/icons/heart';
-import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import { Camera, Scissors, Dumbbell, Brain, Music, ShoppingBag, Star, ArrowRight, Heart, Building2 } from 'lucide-react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 
 interface UseCase {
@@ -37,84 +28,84 @@ export function UseCasesGallery() {
       id: 'photographer',
       icon: Camera,
       gradient: 'from-violet-500 to-purple-600',
-      avatar: '📷',
-      name: t('landing.useCases.photographer.name', 'Алексей Фото'),
-      role: t('landing.useCases.photographer.role', 'Фотограф'),
-      description: t('landing.useCases.photographer.desc', 'Портфолио, цены на съёмки, бронирование'),
+      avatar: 'рџ“·',
+      name: t('landing.useCases.photographer.name', 'РђР»РµРєСЃРµР№ Р¤РѕС‚Рѕ'),
+      role: t('landing.useCases.photographer.role', 'Р¤РѕС‚РѕРіСЂР°С„'),
+      description: t('landing.useCases.photographer.desc', 'РџРѕСЂС‚С„РѕР»РёРѕ, С†РµРЅС‹ РЅР° СЃСЉС‘РјРєРё, Р±СЂРѕРЅРёСЂРѕРІР°РЅРёРµ'),
       links: [
-        t('landing.useCases.photographer.link1', '🎨 Портфолио'),
-        t('landing.useCases.photographer.link2', '💰 Прайс-лист'),
-        t('landing.useCases.photographer.link3', '📅 Записаться')
+        t('landing.useCases.photographer.link1', 'рџЋЁ РџРѕСЂС‚С„РѕР»РёРѕ'),
+        t('landing.useCases.photographer.link2', 'рџ’° РџСЂР°Р№СЃ-Р»РёСЃС‚'),
+        t('landing.useCases.photographer.link3', 'рџ“… Р—Р°РїРёСЃР°С‚СЊСЃСЏ')
       ]
     },
     {
       id: 'barber',
       icon: Scissors,
       gradient: 'from-amber-500 to-orange-600',
-      avatar: '💈',
+      avatar: 'рџ’€',
       name: t('landing.useCases.barber.name', 'BarberShop MAX'),
-      role: t('landing.useCases.barber.role', 'Барбершоп'),
-      description: t('landing.useCases.barber.desc', 'Услуги, цены, онлайн-запись'),
+      role: t('landing.useCases.barber.role', 'Р‘Р°СЂР±РµСЂС€РѕРї'),
+      description: t('landing.useCases.barber.desc', 'РЈСЃР»СѓРіРё, С†РµРЅС‹, РѕРЅР»Р°Р№РЅ-Р·Р°РїРёСЃСЊ'),
       links: [
-        t('landing.useCases.barber.link1', '✂️ Услуги'),
-        t('landing.useCases.barber.link2', '📍 Адрес'),
-        t('landing.useCases.barber.link3', '📱 WhatsApp')
+        t('landing.useCases.barber.link1', 'вњ‚пёЏ РЈСЃР»СѓРіРё'),
+        t('landing.useCases.barber.link2', 'рџ“Ќ РђРґСЂРµСЃ'),
+        t('landing.useCases.barber.link3', 'рџ“± WhatsApp')
       ]
     },
     {
       id: 'fitness',
       icon: Dumbbell,
       gradient: 'from-emerald-500 to-teal-600',
-      avatar: '💪',
-      name: t('landing.useCases.fitness.name', 'Мария Фитнес'),
-      role: t('landing.useCases.fitness.role', 'Фитнес-тренер'),
-      description: t('landing.useCases.fitness.desc', 'Программы тренировок, онлайн-курсы'),
+      avatar: 'рџ’Є',
+      name: t('landing.useCases.fitness.name', 'РњР°СЂРёСЏ Р¤РёС‚РЅРµСЃ'),
+      role: t('landing.useCases.fitness.role', 'Р¤РёС‚РЅРµСЃ-С‚СЂРµРЅРµСЂ'),
+      description: t('landing.useCases.fitness.desc', 'РџСЂРѕРіСЂР°РјРјС‹ С‚СЂРµРЅРёСЂРѕРІРѕРє, РѕРЅР»Р°Р№РЅ-РєСѓСЂСЃС‹'),
       links: [
-        t('landing.useCases.fitness.link1', '🏋️ Программы'),
-        t('landing.useCases.fitness.link2', '📹 Онлайн-курс'),
-        t('landing.useCases.fitness.link3', '✉️ Telegram')
+        t('landing.useCases.fitness.link1', 'рџЏ‹пёЏ РџСЂРѕРіСЂР°РјРјС‹'),
+        t('landing.useCases.fitness.link2', 'рџ“№ РћРЅР»Р°Р№РЅ-РєСѓСЂСЃ'),
+        t('landing.useCases.fitness.link3', 'вњ‰пёЏ Telegram')
       ]
     },
     {
       id: 'psychologist',
       icon: Brain,
       gradient: 'from-pink-500 to-rose-600',
-      avatar: '🧠',
-      name: t('landing.useCases.psychologist.name', 'Анна Психолог'),
-      role: t('landing.useCases.psychologist.role', 'Психолог'),
-      description: t('landing.useCases.psychologist.desc', 'Консультации, направления работы'),
+      avatar: 'рџ§ ',
+      name: t('landing.useCases.psychologist.name', 'РђРЅРЅР° РџСЃРёС…РѕР»РѕРі'),
+      role: t('landing.useCases.psychologist.role', 'РџСЃРёС…РѕР»РѕРі'),
+      description: t('landing.useCases.psychologist.desc', 'РљРѕРЅСЃСѓР»СЊС‚Р°С†РёРё, РЅР°РїСЂР°РІР»РµРЅРёСЏ СЂР°Р±РѕС‚С‹'),
       links: [
-        t('landing.useCases.psychologist.link1', '💬 О терапии'),
-        t('landing.useCases.psychologist.link2', '📋 Записаться'),
-        t('landing.useCases.psychologist.link3', '📚 Блог')
+        t('landing.useCases.psychologist.link1', 'рџ’¬ Рћ С‚РµСЂР°РїРёРё'),
+        t('landing.useCases.psychologist.link2', 'рџ“‹ Р—Р°РїРёСЃР°С‚СЊСЃСЏ'),
+        t('landing.useCases.psychologist.link3', 'рџ“љ Р‘Р»РѕРі')
       ]
     },
     {
       id: 'musician',
       icon: Music,
       gradient: 'from-blue-500 to-cyan-600',
-      avatar: '🎵',
+      avatar: 'рџЋµ',
       name: t('landing.useCases.musician.name', 'DJ Max'),
-      role: t('landing.useCases.musician.role', 'Музыкант'),
-      description: t('landing.useCases.musician.desc', 'Музыка, мероприятия, букинг'),
+      role: t('landing.useCases.musician.role', 'РњСѓР·С‹РєР°РЅС‚'),
+      description: t('landing.useCases.musician.desc', 'РњСѓР·С‹РєР°, РјРµСЂРѕРїСЂРёСЏС‚РёСЏ, Р±СѓРєРёРЅРі'),
       links: [
-        t('landing.useCases.musician.link1', '🎧 Spotify'),
-        t('landing.useCases.musician.link2', '🎟️ Мероприятия'),
-        t('landing.useCases.musician.link3', '📞 Букинг')
+        t('landing.useCases.musician.link1', 'рџЋ§ Spotify'),
+        t('landing.useCases.musician.link2', 'рџЋџпёЏ РњРµСЂРѕРїСЂРёСЏС‚РёСЏ'),
+        t('landing.useCases.musician.link3', 'рџ“ћ Р‘СѓРєРёРЅРі')
       ]
     },
     {
       id: 'shop',
       icon: ShoppingBag,
       gradient: 'from-indigo-500 to-blue-600',
-      avatar: '🛍️',
-      name: t('landing.useCases.shop.name', 'Бутик Мода'),
-      role: t('landing.useCases.shop.role', 'Магазин одежды'),
-      description: t('landing.useCases.shop.desc', 'Каталог, доставка, акции'),
+      avatar: 'рџ›ЌпёЏ',
+      name: t('landing.useCases.shop.name', 'Р‘СѓС‚РёРє РњРѕРґР°'),
+      role: t('landing.useCases.shop.role', 'РњР°РіР°Р·РёРЅ РѕРґРµР¶РґС‹'),
+      description: t('landing.useCases.shop.desc', 'РљР°С‚Р°Р»РѕРі, РґРѕСЃС‚Р°РІРєР°, Р°РєС†РёРё'),
       links: [
-        t('landing.useCases.shop.link1', '👗 Каталог'),
-        t('landing.useCases.shop.link2', '🏷️ Акции'),
-        t('landing.useCases.shop.link3', '🚚 Доставка')
+        t('landing.useCases.shop.link1', 'рџ‘— РљР°С‚Р°Р»РѕРі'),
+        t('landing.useCases.shop.link2', 'рџЏ·пёЏ РђРєС†РёРё'),
+        t('landing.useCases.shop.link3', 'рџљљ Р”РѕСЃС‚Р°РІРєР°')
       ]
     }
   ];
@@ -131,19 +122,19 @@ export function UseCasesGallery() {
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in' : ''}`}
           >
             <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
-            <span className="text-primary">{t('landing.useCases.badge', 'Примеры использования')}</span>
+            <span className="text-primary">{t('landing.useCases.badge', 'РџСЂРёРјРµСЂС‹ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ')}</span>
           </div>
           <h2
             className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
-            {t('landing.useCases.title', 'Кто использует lnkmx.my.')}
+            {t('landing.useCases.title', 'РљС‚Рѕ РёСЃРїРѕР»СЊР·СѓРµС‚ lnkmx.my.')}
           </h2>
           <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 font-normal ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '300ms' }}
           >
-            {t('landing.useCases.subtitle', 'Реальные примеры страниц для разных профессий и бизнесов')}
+            {t('landing.useCases.subtitle', 'Р РµР°Р»СЊРЅС‹Рµ РїСЂРёРјРµСЂС‹ СЃС‚СЂР°РЅРёС† РґР»СЏ СЂР°Р·РЅС‹С… РїСЂРѕС„РµСЃСЃРёР№ Рё Р±РёР·РЅРµСЃРѕРІ')}
           </p>
         </div>
 
@@ -206,7 +197,7 @@ export function UseCasesGallery() {
             onClick={() => navigate('/gallery')}
             className="rounded-xl sm:rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all group active:scale-[0.98]"
           >
-            {t('landing.useCases.cta', 'Смотреть все страницы в галерее')}
+            {t('landing.useCases.cta', 'РЎРјРѕС‚СЂРµС‚СЊ РІСЃРµ СЃС‚СЂР°РЅРёС†С‹ РІ РіР°Р»РµСЂРµРµ')}
             <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
@@ -214,3 +205,4 @@ export function UseCasesGallery() {
     </section>
   );
 }
+

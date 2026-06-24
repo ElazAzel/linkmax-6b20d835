@@ -8,8 +8,7 @@
  */
 import { memo, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import WifiOff from 'lucide-react/dist/esm/icons/wifi-off';
-import Wifi from 'lucide-react/dist/esm/icons/wifi';
+import { Wifi, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 import { useOnlineStatus } from './useOnlineStatus';
 

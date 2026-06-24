@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 
 /**
@@ -40,14 +40,15 @@ export const StickyMobileCTA = () => {
       <button
         type="button"
         onClick={() => navigate('/auth')}
-        aria-label={t('landing.stickyCta.label', 'Создать страницу — бесплатно')}
+        aria-label={t('landing.stickyCta.label', 'РЎРѕР·РґР°С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ вЂ” Р±РµСЃРїР»Р°С‚РЅРѕ')}
         className="relative pointer-events-auto w-full h-14 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
       >
         <span>
-          {t('landing.stickyCta.label', 'Создать страницу — бесплатно')}
+          {t('landing.stickyCta.label', 'РЎРѕР·РґР°С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ вЂ” Р±РµСЃРїР»Р°С‚РЅРѕ')}
         </span>
         <ArrowRight className="w-4 h-4" />
       </button>
     </div>
   );
 };
+

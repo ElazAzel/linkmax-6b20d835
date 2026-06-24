@@ -12,9 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { GridEditor } from '@/components/editor/GridEditor';
 import { BlockEditorV2 } from '@/components/editor/BlockEditorV2';
-import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
-import Save from 'lucide-react/dist/esm/icons/save';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import { ArrowLeft, Loader2, Save } from 'lucide-react';
 import type { Block } from '@/types/page';
 import { TEMPLATE_CATEGORY_KEYS, type TemplateCategoryKey, getTemplateCategoryLabel } from '@/lib/templateCategories';
 import { createBlock } from '@/lib/blocks/block-factory';
@@ -68,7 +66,7 @@ export default function AdminTemplateEditor() {
 
             if (error) throw error;
             if (data) {
-                const d = data as any;
+                const d = data as unknown as TemplateData & { id: string };
                 setData({
                     id: d.id,
                     name: d.name,
@@ -77,7 +75,7 @@ export default function AdminTemplateEditor() {
                     is_premium: d.is_premium,
                     is_public: d.is_public,
                     preview_image: d.preview_image || '',
-                    blocks: (d.blocks as Block[]) || [],
+                    blocks: (d.blocks || []) as Block[],
                     sort_order: d.sort_order,
                 });
             }
@@ -166,8 +164,8 @@ export default function AdminTemplateEditor() {
         setData(prev => ({ ...prev, blocks: reorderedBlocks }));
     }, []);
 
-    const handleSaveBlockContent = useCallback((updatedBlock: Block) => {
-        handleUpdateBlock(updatedBlock.id, updatedBlock);
+    const handleSaveBlockContent = useCallback((updatedBlock: Partial<Block>) => {
+        if (updatedBlock.id) handleUpdateBlock(updatedBlock.id, updatedBlock);
         setEditingBlock(null);
     }, [handleUpdateBlock]);
 
@@ -293,7 +291,7 @@ export default function AdminTemplateEditor() {
                     block={editingBlock}
                     isOpen={!!editingBlock}
                     onClose={() => setEditingBlock(null)}
-                    onSave={handleSaveBlockContent as any}
+                    onSave={handleSaveBlockContent}
                     enableAutosave={false}
                 />
             )}

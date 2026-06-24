@@ -2,8 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import Check from 'lucide-react/dist/esm/icons/check';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import { ArrowRight, Check } from 'lucide-react';
 
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';

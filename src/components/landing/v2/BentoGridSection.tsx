@@ -1,15 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils/utils";
 import { useTranslation } from "react-i18next";
 import { BentoGrid, BentoGridItem } from "./BentoGrid";
 import { SectionWrapper } from '@/components/shared/SectionWrapper';
 import { SectionHeading } from '@/components/shared/SectionHeading';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
-import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
-import Send from 'lucide-react/dist/esm/icons/send';
-import Kanban from 'lucide-react/dist/esm/icons/kanban-square';
-import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import { Sparkles, BarChart3, Smartphone, Send, Kanban, Calendar } from 'lucide-react';
 
 /** Reveal on scroll wrapper */
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -48,10 +43,10 @@ const AIBuilderVisual = () => {
       <div className="flex flex-col items-center gap-2 z-10">
         <Sparkles className="w-8 h-8 text-primary animate-pulse" />
         <div className={cn("text-xl font-bold text-primary transition-opacity duration-700", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiPowered', 'AI-Генерация')}
+          {t('landing.bento.aiPowered', 'AI-Р“РµРЅРµСЂР°С†РёСЏ')}
         </div>
         <div className={cn("text-xs text-muted-foreground transition-opacity duration-700 delay-300", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiSub', 'Структура • Тексты • Дизайн')}
+          {t('landing.bento.aiSub', 'РЎС‚СЂСѓРєС‚СѓСЂР° вЂў РўРµРєСЃС‚С‹ вЂў Р”РёР·Р°Р№РЅ')}
         </div>
       </div>
     </div>
@@ -94,9 +89,9 @@ const CRMVisual = () => {
     return () => obs.disconnect();
   }, []);
   const stages = [
-    { label: t('landing.bento.crmNew', 'Новые'), count: 5, color: 'bg-blue-500' },
-    { label: t('landing.bento.crmInProgress', 'В работе'), count: 3, color: 'bg-yellow-500' },
-    { label: t('landing.bento.crmDone', 'Готово'), count: 8, color: 'bg-green-500' },
+    { label: t('landing.bento.crmNew', 'РќРѕРІС‹Рµ'), count: 5, color: 'bg-blue-500' },
+    { label: t('landing.bento.crmInProgress', 'Р’ СЂР°Р±РѕС‚Рµ'), count: 3, color: 'bg-yellow-500' },
+    { label: t('landing.bento.crmDone', 'Р“РѕС‚РѕРІРѕ'), count: 8, color: 'bg-green-500' },
   ];
   return (
     <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 items-center justify-center gap-3 p-4 group-hover/bento:scale-105 transition-transform duration-500">
@@ -138,9 +133,9 @@ const LeadsVisual = () => {
     return () => obs.disconnect();
   }, []);
   const items = [
-    { text: t('landing.bento.lead1', 'Новая заявка: Айгерим К.'), delay: '200ms' },
-    { text: t('landing.bento.lead2', 'Новая заявка: Дмитрий М.'), delay: '500ms' },
-    { text: t('landing.bento.leadCount', '+12 сегодня'), delay: '800ms', highlight: true },
+    { text: t('landing.bento.lead1', 'РќРѕРІР°СЏ Р·Р°СЏРІРєР°: РђР№РіРµСЂРёРј Рљ.'), delay: '200ms' },
+    { text: t('landing.bento.lead2', 'РќРѕРІР°СЏ Р·Р°СЏРІРєР°: Р”РјРёС‚СЂРёР№ Рњ.'), delay: '500ms' },
+    { text: t('landing.bento.leadCount', '+12 СЃРµРіРѕРґРЅСЏ'), delay: '800ms', highlight: true },
   ];
   return (
     <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-sky-500/15 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
@@ -177,7 +172,7 @@ const BookingVisual = () => {
         {['10:00', '11:30', '14:00'].map((time, i) => (
           <div key={i} className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors", i === 1 ? "bg-primary/15 text-primary border border-primary/20" : "bg-muted/50 text-muted-foreground")}>
             <Calendar className="w-3 h-3" />
-            {time} — {t('landing.bento.bookingSlot', 'Свободно')}
+            {time} вЂ” {t('landing.bento.bookingSlot', 'РЎРІРѕР±РѕРґРЅРѕ')}
           </div>
         ))}
       </div>
@@ -190,43 +185,43 @@ export function BentoGridSection() {
 
   const items = [
     {
-      title: t('landing.bento.leadsTitle_v2', 'Inbox заявок: ничего не теряется'),
-      description: t('landing.bento.leadsDesc_v2', 'Заявки из формы, мессенджеров и бронирования — в одной ленте с SLA-таймером. Среднее время первой реакции у клиентов — 4 минуты.'),
+      title: t('landing.bento.leadsTitle_v2', 'Inbox Р·Р°СЏРІРѕРє: РЅРёС‡РµРіРѕ РЅРµ С‚РµСЂСЏРµС‚СЃСЏ'),
+      description: t('landing.bento.leadsDesc_v2', 'Р—Р°СЏРІРєРё РёР· С„РѕСЂРјС‹, РјРµСЃСЃРµРЅРґР¶РµСЂРѕРІ Рё Р±СЂРѕРЅРёСЂРѕРІР°РЅРёСЏ вЂ” РІ РѕРґРЅРѕР№ Р»РµРЅС‚Рµ СЃ SLA-С‚Р°Р№РјРµСЂРѕРј. РЎСЂРµРґРЅРµРµ РІСЂРµРјСЏ РїРµСЂРІРѕР№ СЂРµР°РєС†РёРё Сѓ РєР»РёРµРЅС‚РѕРІ вЂ” 4 РјРёРЅСѓС‚С‹.'),
       header: <LeadsVisual />,
       icon: <Send className="h-5 w-5" />,
       className: "md:col-span-2 md:row-span-2"
     },
     {
-      title: t('landing.bento.crmTitle_v2', 'Мини-CRM для команды'),
-      description: t('landing.bento.crmDesc_v2', 'Канбан со сделками, ответственный за каждую заявку, история переписки. Вместо amoCRM и Bitrix.'),
+      title: t('landing.bento.crmTitle_v2', 'РњРёРЅРё-CRM РґР»СЏ РєРѕРјР°РЅРґС‹'),
+      description: t('landing.bento.crmDesc_v2', 'РљР°РЅР±Р°РЅ СЃРѕ СЃРґРµР»РєР°РјРё, РѕС‚РІРµС‚СЃС‚РІРµРЅРЅС‹Р№ Р·Р° РєР°Р¶РґСѓСЋ Р·Р°СЏРІРєСѓ, РёСЃС‚РѕСЂРёСЏ РїРµСЂРµРїРёСЃРєРё. Р’РјРµСЃС‚Рѕ amoCRM Рё Bitrix.'),
       header: <CRMVisual />,
       icon: <Kanban className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.bookingTitle_v2', 'Онлайн-запись и оплата'),
-      description: t('landing.bento.bookingDesc_v2', 'Клиент бронирует слот и платит сразу. Robokassa и Kaspi QR подключены из коробки.'),
+      title: t('landing.bento.bookingTitle_v2', 'РћРЅР»Р°Р№РЅ-Р·Р°РїРёСЃСЊ Рё РѕРїР»Р°С‚Р°'),
+      description: t('landing.bento.bookingDesc_v2', 'РљР»РёРµРЅС‚ Р±СЂРѕРЅРёСЂСѓРµС‚ СЃР»РѕС‚ Рё РїР»Р°С‚РёС‚ СЃСЂР°Р·Сѓ. Robokassa Рё Kaspi QR РїРѕРґРєР»СЋС‡РµРЅС‹ РёР· РєРѕСЂРѕР±РєРё.'),
       header: <BookingVisual />,
       icon: <Calendar className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-2"
     },
     {
-      title: t('landing.bento.aiTitle_v2', 'AI собирает витрину за 2 минуты'),
-      description: t('landing.bento.aiDesc_v2', 'Опишите услугу — Gemini сделает структуру, описания и цены под вашу нишу.'),
+      title: t('landing.bento.aiTitle_v2', 'AI СЃРѕР±РёСЂР°РµС‚ РІРёС‚СЂРёРЅСѓ Р·Р° 2 РјРёРЅСѓС‚С‹'),
+      description: t('landing.bento.aiDesc_v2', 'РћРїРёС€РёС‚Рµ СѓСЃР»СѓРіСѓ вЂ” Gemini СЃРґРµР»Р°РµС‚ СЃС‚СЂСѓРєС‚СѓСЂСѓ, РѕРїРёСЃР°РЅРёСЏ Рё С†РµРЅС‹ РїРѕРґ РІР°С€Сѓ РЅРёС€Сѓ.'),
       header: <AIBuilderVisual />,
       icon: <Sparkles className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.analyticsTitle_v2', 'Аналитика без GA4'),
-      description: t('landing.bento.analyticsDesc_v2', 'Откуда пришёл клиент, на какой блок кликнул, что купил — без cookie и сторонних сервисов.'),
+      title: t('landing.bento.analyticsTitle_v2', 'РђРЅР°Р»РёС‚РёРєР° Р±РµР· GA4'),
+      description: t('landing.bento.analyticsDesc_v2', 'РћС‚РєСѓРґР° РїСЂРёС€С‘Р» РєР»РёРµРЅС‚, РЅР° РєР°РєРѕР№ Р±Р»РѕРє РєР»РёРєРЅСѓР», С‡С‚Рѕ РєСѓРїРёР» вЂ” Р±РµР· cookie Рё СЃС‚РѕСЂРѕРЅРЅРёС… СЃРµСЂРІРёСЃРѕРІ.'),
       header: <AnalyticsVisual />,
       icon: <BarChart3 className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.mobileTitle_v2', 'Бизнес в кармане'),
-      description: t('landing.bento.mobileDesc_v2', 'Полноценный редактор и CRM работают с телефона. PWA, iOS и Android.'),
+      title: t('landing.bento.mobileTitle_v2', 'Р‘РёР·РЅРµСЃ РІ РєР°СЂРјР°РЅРµ'),
+      description: t('landing.bento.mobileDesc_v2', 'РџРѕР»РЅРѕС†РµРЅРЅС‹Р№ СЂРµРґР°РєС‚РѕСЂ Рё CRM СЂР°Р±РѕС‚Р°СЋС‚ СЃ С‚РµР»РµС„РѕРЅР°. PWA, iOS Рё Android.'),
       header: <MobileVisual />,
       icon: <Smartphone className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
@@ -241,8 +236,8 @@ export function BentoGridSection() {
 
       <Reveal>
         <SectionHeading
-          title={t('landing.bento.sectionTitle_v2', 'Шесть инструментов вместо десяти подписок')}
-          subtitle={t('landing.bento.sectionDesc_v2', 'Витрина, мессенджеры, inbox, бронирование, оплата и аналитика — без интеграций и Zapier.')}
+          title={t('landing.bento.sectionTitle_v2', 'РЁРµСЃС‚СЊ РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ РІРјРµСЃС‚Рѕ РґРµСЃСЏС‚Рё РїРѕРґРїРёСЃРѕРє')}
+          subtitle={t('landing.bento.sectionDesc_v2', 'Р’РёС‚СЂРёРЅР°, РјРµСЃСЃРµРЅРґР¶РµСЂС‹, inbox, Р±СЂРѕРЅРёСЂРѕРІР°РЅРёРµ, РѕРїР»Р°С‚Р° Рё Р°РЅР°Р»РёС‚РёРєР° вЂ” Р±РµР· РёРЅС‚РµРіСЂР°С†РёР№ Рё Zapier.')}
           className="mb-16"
         />
       </Reveal>
@@ -263,3 +258,4 @@ export function BentoGridSection() {
     </SectionWrapper>
   );
 }
+

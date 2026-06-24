@@ -2,7 +2,12 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "strictNullChecks": true,
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": false,
+        "noPropertyAccessFromIndexSignature": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "include": [
         "src/lib/**/*",

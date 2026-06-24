@@ -7,11 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import Building2 from 'lucide-react/dist/esm/icons/building-2';
-import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
-import Check from 'lucide-react/dist/esm/icons/check';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
-import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
+import { ArrowLeft, Building2, Check, Loader2, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -31,10 +27,10 @@ interface InviteData {
 }
 
 async function fetchInvite(token: string): Promise<InviteData | null> {
-    const { data, error } = await supabase.rpc('get_zone_invite_by_token' as any, { p_token: token });
+    const { data, error } = await supabase.rpc('get_zone_invite_by_token' as never, { p_token: token } as never);
 
     if (error || !data) return null;
-    return data as any;
+    return data as InviteData;
 }
 
 export default function AcceptInvite() {
@@ -58,17 +54,17 @@ export default function AcceptInvite() {
 
     const acceptMutation = useMutation({
         mutationFn: async () => {
-            const { data, error } = await supabase.rpc('accept_zone_invite' as any, { p_token: token });
+            const { data, error } = await supabase.rpc('accept_zone_invite' as never, { p_token: token } as never);
             if (error) throw error;
-            const result = data as any;
+            const result = data as { success: boolean; error?: string };
             if (!result.success) throw new Error(result.error);
             return result;
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             toast.success(t('zones.invites.accepted', 'Welcome to the zone!'));
             navigate('/dashboard/zone-dashboard');
         },
-        onError: (err: any) => {
+        onError: (err: Error) => {
             handleError(err, t('common.error', 'Failed to accept invite'));
         }
     });

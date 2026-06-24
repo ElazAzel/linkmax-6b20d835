@@ -8,11 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { getWritingAlgorithmStats, getWritingNiches } from '@/lib/intelligence/writing-algorithm';
-import Languages from 'lucide-react/dist/esm/icons/languages';
-import Brain from 'lucide-react/dist/esm/icons/brain';
-import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
-import Settings from 'lucide-react/dist/esm/icons/settings';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import { ArrowLeft, Brain, Languages, Loader2, Settings } from 'lucide-react';
 
 export default function AdminLanguageAlgorithms() {
   const navigate = useNavigate();

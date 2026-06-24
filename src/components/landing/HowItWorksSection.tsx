@@ -1,14 +1,10 @@
-'use client';
+﻿'use client';
 import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
-import Target from 'lucide-react/dist/esm/icons/target';
-import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
-import Bell from 'lucide-react/dist/esm/icons/bell';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { Target, Wand2, Bell, ArrowRight, Sparkles } from 'lucide-react';
 
 interface HowItWorksSectionProps {
   isVisible: boolean;
@@ -51,13 +47,13 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${isVisible ? 'animate-fade-in' : ''}`}
           >
             <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-primary">{t('landing.howItWorks.badge', '1 минута до результата')}</span>
+            <span className="text-primary">{t('landing.howItWorks.badge', '1 РјРёРЅСѓС‚Р° РґРѕ СЂРµР·СѓР»СЊС‚Р°С‚Р°')}</span>
           </div>
           <h2
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '100ms' }}
           >
-            {t('landing.howItWorks.title', 'Как это работает')}
+            {t('landing.howItWorks.title', 'РљР°Рє СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚')}
           </h2>
         </div>
 
@@ -108,7 +104,7 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
             className="rounded-2xl font-bold px-6 sm:px-8"
           >
             <Sparkles className="mr-2 h-5 w-5 flex-shrink-0" />
-            <span className="truncate">{t('landing.howItWorks.cta', 'Попробовать бесплатно')}</span>
+            <span className="truncate">{t('landing.howItWorks.cta', 'РџРѕРїСЂРѕР±РѕРІР°С‚СЊ Р±РµСЃРїР»Р°С‚РЅРѕ')}</span>
             <ArrowRight className="ml-2 h-5 w-5 flex-shrink-0" />
           </Button>
         </div>
@@ -116,3 +112,4 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
     </section>
   );
 }
+

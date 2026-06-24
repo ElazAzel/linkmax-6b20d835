@@ -1,7 +1,7 @@
 import posthog from 'posthog-js';
 
-export const POSTHOG_KEY = 'phc_zjZKo5DD5eFk8TCkypNFvCndJ6FzCmitFi6iUd6kpuB5';
-export const POSTHOG_HOST = 'https://us.i.posthog.com'; // Standard US cloud host, change if using EU
+export const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY ?? '';
+export const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST ?? 'https://us.i.posthog.com';
 
 export function initPostHog() {
   if (typeof window !== 'undefined' && !posthog.has_opted_out_capturing()) {

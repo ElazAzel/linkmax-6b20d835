@@ -1,1 +1,0 @@
-REVOKE ALL ON FUNCTION public.ping_indexnow_on_page_change() FROM PUBLIC, anon, authenticated;

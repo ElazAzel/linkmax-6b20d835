@@ -2,9 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
-import Menu from 'lucide-react/dist/esm/icons/menu';
-import X from 'lucide-react/dist/esm/icons/x';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 
 // Lazy load LanguageSwitcher — it imports dropdown-menu, switch, input, scroll-area
