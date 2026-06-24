@@ -210,19 +210,12 @@ export function MediaUpload({
                   <span>{t('upload.click', 'Click to upload')}</span>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <span>{t('upload.autoCompress', 'Auto-compressed, max 20MB (GIF supported)')}</span>
-                    {allowGif && isPremium && (
-                      <Badge variant="secondary" className="gap-1 text-xs">
-                        <Sparkles className="h-3 w-3" />
-                        GIF
-                      </Badge>
-                    )}
+                    <Badge variant="secondary" className="gap-1 text-xs">
+                      <Sparkles className="h-3 w-3" />
+                      GIF
+                    </Badge>
                   </div>
-                  {allowGif && !isPremium && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Crown className="h-3 w-3 text-primary" />
-                      <span>{t('upload.gifPremium', 'GIF available with Premium')}</span>
-                    </div>
-                  )}
+
                 </>
               )}
             </Button>
