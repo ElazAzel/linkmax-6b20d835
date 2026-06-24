@@ -9,10 +9,16 @@ import { logger } from '@/lib/utils/logger';
 export type ButtonStyle = 'default' | 'rounded' | 'pill';
 export type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
 
+export type ImageOverlay = 'none' | 'light' | 'dark' | 'custom';
+
 export interface BackgroundConfig {
   type: 'solid' | 'gradient' | 'image';
   value: string;
   gradientAngle?: number;
+  /** Overlay over background image (buttons). Default 'dark' for legacy compatibility. */
+  overlay?: ImageOverlay;
+  /** Custom overlay opacity 0-100 when overlay === 'custom'. */
+  overlayOpacity?: number;
 }
 
 // ============= Styling Utilities =============
