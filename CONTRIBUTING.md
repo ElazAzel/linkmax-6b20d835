@@ -42,6 +42,12 @@ git commit -m "feat: add instagram integration to social block"
 4. Link any relevant issues (e.g., `Closes #123`).
 5. Wait for a code review from a team member.
 
+## ⚙️ Environment & Supabase
+
+- **`.env` is gitignored** — never commit it. Copy `.env.example` and fill in real values.
+- **Supabase clients** (`src/platform/supabase/client.ts`, `src/integrations/supabase/client.ts`) use **lazy initialization via Proxy**. The client isn't created until the first method call (`.from()`, `.auth()`). This prevents crashes on modules that import but don't directly use Supabase.
+- **Env vars are baked at build time** for production (`VITE_*`). Rebuild after any `.env` change.
+
 ## 🎨 Design System
 
 This project uses the **Liquid Glass** design system. Before making UI changes:
@@ -75,6 +81,9 @@ This project uses the **Liquid Glass** design system. Before making UI changes:
 - We use **Tailwind CSS**.
 - Avoid inline styles.
 - Use `cn()` utility for conditional class merging.
+
+### Imports
+- **Lucide icons**: Always use named imports from `lucide-react` (e.g. `import { Heart } from 'lucide-react'`). Never use deep path imports (`lucide-react/dist/esm/icons/xxx`).
 
 ### Linting & Formatting
 Run these commands before committing to ensure your code meets our standards:

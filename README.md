@@ -123,20 +123,14 @@ See [`DESIGN.md`](./DESIGN.md) for complete token documentation.
    Copy `.env.example` to `.env` and set:
 
    ```env
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
-   VITE_SUPABASE_PROJECT_ID=your_project_id
+   VITE_SUPABASE_URL=https://pphdcfxucfndmwulpfwv.supabase.co
+   VITE_SUPABASE_PUBLISHABLE_KEY=your_anon_key
+   VITE_SUPABASE_PROJECT_ID=pphdcfxucfndmwulpfwv
    VITE_APP_DOMAIN=https://lnkmx.my
-   VITE_SENTRY_DSN=
-   VITE_PAYMENTS_CLIENT_TOKEN=
-   VITE_TELEGRAM_BOT_NAME=
-   VITE_TURNSTILE_SITE_KEY=
-   VITE_POSTHOG_KEY=
-   VITE_POSTHOG_HOST=https://us.i.posthog.com
    ```
    Full reference in [`.env.example`](./.env.example)
 
-   *(Ask the team lead for credentials if you don't have them)*
+   > **Note:** The Supabase client uses **lazy initialization** via Proxy — it won't throw on import, only on first actual use (`.from()`, `.auth()`). Create `.env` from `.env.example` with valid credentials before starting the dev server. `VITE_*` env vars are baked into the production build, so rebuild after changing them.
 
 4. **Start Development Server**
 
@@ -184,7 +178,7 @@ linkmax-6b20d835/
 │   └── lib/               # Utilities, SEO, export (PDF/Excel)
 ├── supabase/
 │   ├── functions/         # 28+ Edge Functions
-│   └── migrations/        # Database Schema (258 migrations)
+│   └── migrations/        # Database Schema (15 consolidated migrations)
 ├── cloudflare-worker/     # SSR & sitemap worker
 ├── android/               # Capacitor Android
 ├── ios/                   # Capacitor iOS

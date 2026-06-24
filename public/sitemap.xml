@@ -5,11 +5,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://lnkmx.my/</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
@@ -20,11 +16,7 @@
   </url>
   <url>
     <loc>https://lnkmx.my/ru</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
@@ -35,11 +27,7 @@
   </url>
   <url>
     <loc>https://lnkmx.my/en</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
@@ -50,11 +38,7 @@
   </url>
   <url>
     <loc>https://lnkmx.my/kk</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
@@ -65,11 +49,7 @@
   </url>
   <url>
     <loc>https://lnkmx.my/uz</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/ru"/>
@@ -80,771 +60,463 @@
   </url>
   <url>
     <loc>https://lnkmx.my/gallery</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/experts</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/pricing</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/alternatives</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/for-masters</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/seo-landing</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/customers</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/blog</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/terms</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/privacy</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/payment-terms</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/taplink-alternative</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/sayt-vizitka-dlya-uslug</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/multilink</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/link-in-bio-ru</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/vizitka-onlayn</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/linktree-alternative</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/crm-dlya-uslug</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/link-in-bio</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/linktree-alternative-en</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/crm-for-services</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/photographer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/coach</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/master</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/psychologist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/fitness</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/designer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/nutritionist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/yoga-teacher</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/personal-trainer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/nail-master</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/lash-master</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/brow-master</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/hair-stylist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/makeup-artist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/cosmetologist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/massage-therapist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/tattoo-artist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/barber</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/business-coach</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/life-coach</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/career-coach</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/financial-advisor</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/nutrition-coach</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/relationship-coach</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/mindfulness-coach</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/english-tutor</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/math-tutor</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/music-teacher</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/art-teacher</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/online-school</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/course-creator</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/wedding-photographer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/videographer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/illustrator</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/dj</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/musician</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/blogger</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/event-planner</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/realtor</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/lawyer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/notary</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/accountant</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/translator</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/copywriter</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/smm-manager</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/marketer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/consultant</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/cleaning-service</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/handyman</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/car-detailing</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/florist</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/catering</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/chef</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/dog-trainer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/interior-designer</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://lnkmx.my/dlya/tour-guide</loc>
-<<<<<<< HEAD
-    <lastmod>2026-06-23</lastmod>
-=======
     <lastmod>2026-06-24</lastmod>
->>>>>>> 3b7bfcc8 (fix: complete codebase overhaul — remove lucide deep imports, squash 258→15 migrations, eliminate all ny types, apply design system (DM Sans/Space Grotesk, #0066FF, Liquid Glass))
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
