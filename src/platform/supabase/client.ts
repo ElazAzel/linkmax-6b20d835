@@ -3,23 +3,37 @@ import { createClient } from '@supabase/supabase-js';
 import type { AppDatabase } from './extended-types';
 import { storage } from '@/lib/storage';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-if (!SUPABASE_URL) {
-  throw new Error('VITE_SUPABASE_URL is required. Create .env from .env.example.');
-}
-if (!SUPABASE_PUBLISHABLE_KEY) {
-  throw new Error('VITE_SUPABASE_PUBLISHABLE_KEY is required. Create .env from .env.example.');
-}
 
 // Import the supabase client like this:
 // import { supabase } from "@/platform/supabase/client";
 
-export const supabase = createClient<AppDatabase>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
+let _client: SupabaseClient<AppDatabase> | null = null;
+
+function ensureClient(): SupabaseClient<AppDatabase> {
+  if (!_client) {
+    if (!SUPABASE_URL) {
+      throw new Error('VITE_SUPABASE_URL is required. Create .env from .env.example.');
+    }
+    if (!SUPABASE_PUBLISHABLE_KEY) {
+      throw new Error('VITE_SUPABASE_PUBLISHABLE_KEY is required. Create .env from .env.example.');
+    }
+    _client = createClient<AppDatabase>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      }
+    });
+  }
+  return _client;
+}
+
+export const supabase = new Proxy<SupabaseClient<AppDatabase>>({} as SupabaseClient<AppDatabase>, {
+  get(_, prop) {
+    return ensureClient()[prop as keyof SupabaseClient<AppDatabase>];
   }
 });
