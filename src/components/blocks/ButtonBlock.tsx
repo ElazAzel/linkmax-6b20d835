@@ -65,9 +65,20 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
         )}
         style={combinedStyle}
       >
-        {isImageBackground && (
-          <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-        )}
+        {isImageBackground && (() => {
+          const overlay = block.background?.overlay ?? 'dark';
+          if (overlay === 'none') return null;
+          const opacity = overlay === 'custom'
+            ? Math.max(0, Math.min(100, block.background?.overlayOpacity ?? 30)) / 100
+            : overlay === 'light' ? 0.2 : 0.3;
+          const color = overlay === 'light' ? '255,255,255' : '0,0,0';
+          return (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ backgroundColor: `rgba(${color},${opacity})` }}
+            />
+          );
+        })()}
         <span className={cn("relative z-10 line-clamp-2", textEffectClass)}>{title}</span>
       </button>
     </div>
