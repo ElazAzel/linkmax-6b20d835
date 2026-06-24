@@ -53,6 +53,7 @@ reports/
 
 # Build artifacts and reports
 stats.html
+COMMIT_MSG.txt
 
 # Migration backup folders
 pages_vite_backup/
