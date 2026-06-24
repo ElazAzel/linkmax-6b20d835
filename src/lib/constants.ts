@@ -50,5 +50,5 @@ export const APP_CONFIG = {
   whatsappMessage: 'Hi, I want to purchase a premium LinkMAX.my',
   autoSaveDebounce: 2000,
   undoTimeout: 5000,
-  maxFileSize: 15 * 1024 * 1024, // 15MB
+  maxFileSize: 20 * 1024 * 1024, // 20MB
 } as const;
