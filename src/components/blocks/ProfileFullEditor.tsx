@@ -153,7 +153,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 20 * 1024 * 1024) {
       toast.error(t('upload.fileTooLarge', 'File too large (max 10MB)'));
       return;
     }

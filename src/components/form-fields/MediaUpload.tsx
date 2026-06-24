@@ -209,7 +209,7 @@ export function MediaUpload({
                   <Upload className="h-6 w-6" />
                   <span>{t('upload.click', 'Click to upload')}</span>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>{t('upload.autoCompress', 'Auto-compressed, max 15MB')}</span>
+                    <span>{t('upload.autoCompress', 'Auto-compressed, max 20MB (GIF supported)')}</span>
                     {allowGif && isPremium && (
                       <Badge variant="secondary" className="gap-1 text-xs">
                         <Sparkles className="h-3 w-3" />
