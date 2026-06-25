@@ -251,7 +251,7 @@ serve(async (req: Request) => {
 
         const webhookUrl = page?.integrations?.webhook_url;
 
-        if (webhookUrl) {
+        if (webhookUrl && isSafeWebhookUrl(webhookUrl).ok) {
           console.log(`Sending webhook to ${webhookUrl}`);
           fetch(webhookUrl, {
             method: 'POST',
