@@ -144,7 +144,7 @@ serve(async (req: Request) => {
         }
 
         // 4. Trigger Webhook if configured
-        if (pageData.webhook_url && (await import('../_shared/safe-url.ts')).isSafeWebhookUrl(pageData.webhook_url).ok) {
+        if (pageData.webhook_url && isSafeWebhookUrl(pageData.webhook_url).ok) {
             try {
                 const webhookPayload = {
                     event: 'lead.created',
