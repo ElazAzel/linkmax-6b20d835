@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
 import { sendMessage, isConfigured } from "../_shared/telegram.ts";
+import { isSafeWebhookUrl } from "../_shared/safe-url.ts";
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -143,7 +144,7 @@ serve(async (req: Request) => {
         }
 
         // 4. Trigger Webhook if configured
-        if (pageData.webhook_url) {
+        if (pageData.webhook_url && isSafeWebhookUrl(pageData.webhook_url).ok) {
             try {
                 const webhookPayload = {
                     event: 'lead.created',

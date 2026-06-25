@@ -29,12 +29,26 @@ serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body = await req.json();
 
-    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod, userId } = body;
+    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod } = body;
 
     // Validate required fields
     if (!pageId || !isValidUUID(pageId)) throw new Error('Invalid pageId');
     if (!blockId) throw new Error('Missing blockId');
     if (!slotDate || !slotTime || !clientName) throw new Error('Missing required booking fields');
+
+    // Resolve userId strictly from the verified JWT — never trust client-supplied userId.
+    let verifiedUserId: string | null = null;
+    const authHeader = req.headers.get('Authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+      const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
+      if (anonKey) {
+        const authClient = createClient(supabaseUrl, anonKey);
+        const token = authHeader.replace('Bearer ', '');
+        const { data: claimsData } = await authClient.auth.getClaims(token);
+        const sub = claimsData?.claims?.sub;
+        if (sub && typeof sub === 'string') verifiedUserId = sub;
+      }
+    }
 
     // 1. Get page owner
     const { data: pageData, error: pageError } = await supabase
@@ -178,7 +192,7 @@ serve(async (req: Request) => {
         page_id: pageId,
         block_id: blockId,
         owner_id: pageData.user_id,
-        user_id: userId || null,
+        user_id: verifiedUserId,
         slot_date: sanitize(slotDate, 10),
         slot_time: sanitize(slotTime, 8),
         slot_end_time: slotEndTime ? sanitize(slotEndTime, 8) : null,
