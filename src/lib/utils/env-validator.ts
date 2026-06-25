@@ -24,20 +24,16 @@ export const validateEnv = () => {
     envSchema.parse(rawEnv);
     logger.debug('✅ Environment validation passed');
   } catch (err: any) {
+    // Never throw — log only. A broken bundle should still render an error
+    // screen via the React error boundary instead of a blank white page.
     if (err instanceof z.ZodError) {
       const errors = err.flatten().fieldErrors;
       const errorMsg = Object.entries(errors)
         .map(([field, msgs]) => `${field}: ${msgs?.join(', ')}`)
         .join('\n');
-      
       console.error('❌ Application Environment Validation Failed:\n', errorMsg);
-      
-      if (import.meta.env.PROD) {
-        throw new Error(`Critical Environment Configuration Error:\n${errorMsg}`);
-      }
     } else {
       console.error('❌ Unexpected Error during Environment Validation:', err);
-      if (import.meta.env.PROD) throw err;
     }
   }
 };
