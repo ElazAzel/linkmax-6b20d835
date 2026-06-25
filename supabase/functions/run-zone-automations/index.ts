@@ -157,7 +157,7 @@ serve(async (req: Request) => {
       } else if (auto.action_type === "send_webhook") {
         const webhookUrl = auto.config?.webhook_url as string;
         const webhookSecret = auto.config?.webhook_secret as string;
-        if (webhookUrl) {
+        if (webhookUrl && isSafeWebhookUrl(webhookUrl).ok) {
           // Prepare payload
           const payload = {
             event: trigger_type,
