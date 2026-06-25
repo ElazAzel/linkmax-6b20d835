@@ -1,6 +1,11 @@
-﻿import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, ShieldCheck, Phone, Briefcase, Users, Smartphone } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import { MagneticButton } from './MagneticButton';
 import { Badge } from '@/components/ui/badge';
 
@@ -55,18 +60,18 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                         
                         <Badge variant="outline" className="mb-6 h-9 px-4 text-xs font-semibold glass backdrop-blur-md border-primary/20 text-primary gap-2 shadow-sm rounded-full">
                             <ShieldCheck className="w-3.5 h-3.5" />
-                            {t('landing.expert.badge_v2', 'Sales OS РґР»СЏ Р±РёР·РЅРµСЃР° РЅР° СѓСЃР»СѓРіР°С…')}
+                            {t('landing.expert.badge_v2', 'Sales OS для бизнеса на услугах')}
                         </Badge>
                         
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">
-                            <span className="block text-foreground mb-2">{t('landing.expert.title1_v2', 'РџСЂРµРІСЂР°С‰Р°Р№С‚Рµ С‚СЂР°С„РёРє')}</span>
+                            <span className="block text-foreground mb-2">{t('landing.expert.title1_v2', 'Превращайте трафик')}</span>
                             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-primary animate-[gradient-shift_8s_ease_infinite] bg-[length:200%_auto]">
-                                {t('landing.expert.title2_v2', 'РІ РѕРїР»Р°С‡РµРЅРЅС‹Рµ Р·Р°СЏРІРєРё.')}
+                                {t('landing.expert.title2_v2', 'в оплаченные заявки.')}
                             </span>
                         </h1>
 
                         <p className="text-lg sm:text-xl text-muted-foreground/90 mb-8 leading-relaxed max-w-xl">
-                            {t('landing.expert.subtitle_v2', 'Р’РёС‚СЂРёРЅР° СѓСЃР»СѓРі, РІС…РѕРґСЏС‰РёРµ РёР· РјРµСЃСЃРµРЅРґР¶РµСЂРѕРІ, РѕР±С‰Р°СЏ inbox-Р»РµРЅС‚Р°, Р±СЂРѕРЅРёСЂРѕРІР°РЅРёРµ Рё РѕРЅР»Р°Р№РЅ-РѕРїР»Р°С‚Р° вЂ” РІ РѕРґРЅРѕРј РїСЂРёР»РѕР¶РµРЅРёРё. Р—Р°РїСѓСЃРє Р·Р° 15 РјРёРЅСѓС‚, РѕРїР»Р°С‚Р° С‚РѕР»СЊРєРѕ РєРѕРіРґР° РІС‹ Р·Р°СЂР°Р±Р°С‚С‹РІР°РµС‚Рµ.')}
+                            {t('landing.expert.subtitle_v2', 'Витрина услуг, входящие из мессенджеров, общая inbox-лента, бронирование и онлайн-оплата — в одном приложении. Запуск за 15 минут, оплата только когда вы зарабатываете.')}
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -75,7 +80,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                 size="lg"
                                 className="h-14 px-8 rounded-2xl text-base font-bold bg-primary text-primary-foreground shadow-lg hover:shadow-primary/25 hover:-translate-y-1 transition-all"
                             >
-                                {t('landing.expert.ctaPrimary_v2', 'Р—Р°РїСѓСЃС‚РёС‚СЊ Р·Р° 15 РјРёРЅСѓС‚')}
+                                {t('landing.expert.ctaPrimary_v2', 'Запустить за 15 минут')}
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </MagneticButton>
                             
@@ -84,7 +89,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                 className="h-14 px-8 rounded-2xl text-base font-semibold bg-secondary/50 hover:bg-secondary border border-border/50 transition-all flex items-center justify-center gap-2"
                             >
                                 <Users className="h-4 w-4" />
-                                {t('landing.expert.ctaSecondary_v2', 'РЎРјРѕС‚СЂРµС‚СЊ РєРµР№СЃС‹')}
+                                {t('landing.expert.ctaSecondary_v2', 'Смотреть кейсы')}
                             </button>
                         </div>
                         
@@ -101,11 +106,11 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                         </div>
                                     ))}
                                 </div>
-                                <p><strong className="text-foreground">1 200+</strong> {t('landing.expert.usersCountSuffix_v2', 'РјР°СЃС‚РµСЂРѕРІ Рё РєРѕРјР°РЅРґ')}</p>
+                                <p><strong className="text-foreground">1 200+</strong> {t('landing.expert.usersCountSuffix_v2', 'мастеров и команд')}</p>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span>{t('landing.expert.livePulse', 'Р—Р°СЏРІРѕРє СЃРµРіРѕРґРЅСЏ: ')}<strong className="text-foreground tabular-nums">348</strong></span>
+                                <span>{t('landing.expert.livePulse', 'Заявок сегодня: ')}<strong className="text-foreground tabular-nums">348</strong></span>
                             </div>
                         </div>
                     </div>
@@ -153,11 +158,11 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                         <div style={style2} className="absolute right-0 top-20 w-48 p-4 rounded-2xl glass backdrop-blur-xl border border-white/20 shadow-xl z-30">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                                    <span className="text-xl">рџ’°</span>
+                                    <span className="text-xl">💰</span>
                                 </div>
                                 <div>
-                                    <p className="text-xs font-medium text-muted-foreground mb-0.5">{t('landing.expert.mockupNewPayment', 'РќРѕРІР°СЏ РѕРїР»Р°С‚Р°')}</p>
-                                    <p className="text-sm font-bold text-foreground">+150,000 в‚ё</p>
+                                    <p className="text-xs font-medium text-muted-foreground mb-0.5">{t('landing.expert.mockupNewPayment', 'Новая оплата')}</p>
+                                    <p className="text-sm font-bold text-foreground">+150,000 ₸</p>
                                 </div>
                             </div>
                         </div>
@@ -169,7 +174,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                 </div>
                                 <div>
                                     <p className="text-xs font-medium text-muted-foreground mb-0.5">Smart Draft CRM</p>
-                                    <p className="text-sm font-bold text-foreground">{t('landing.expert.mockupDraftGenerated', 'РћС‚РІРµС‚ СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅ')}</p>
+                                    <p className="text-sm font-bold text-foreground">{t('landing.expert.mockupDraftGenerated', 'Ответ сгенерирован')}</p>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +184,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
 
             {/* Scroll Indicator */}
             <div style={opacityStyle} className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-                <span className="text-xs uppercase tracking-widest text-muted-foreground/50">{t('landing.expert.scrollDown', 'РџСЂРѕРєСЂСѓС‚РёС‚Рµ РІРЅРёР·')}</span>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground/50">{t('landing.expert.scrollDown', 'Прокрутите вниз')}</span>
                 <div className="w-[1px] h-12 bg-gradient-to-b from-primary/50 to-transparent animate-pulse" />
             </div>
 
@@ -187,4 +192,3 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
         </section>
     );
 };
-

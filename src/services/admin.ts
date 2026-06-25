@@ -87,7 +87,8 @@ const BLOCK_PALETTE = [
  * all GROUP BY / window aggregation on the server.
  */
 async function fetchDashboardAggregates(days = 14): Promise<AdminDashboardAggregates> {
-    const { data, error } = await (supabase.rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: { code?: string; message?: string } | null }>)('get_admin_dashboard_aggregates', {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- types regenerate after migration deploys
+    const { data, error } = await (supabase.rpc as any)('get_admin_dashboard_aggregates', {
         p_days: days,
         p_cumulative_days: 30,
         p_block_limit: 10,

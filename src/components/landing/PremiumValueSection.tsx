@@ -1,10 +1,18 @@
-﻿'use client';
+'use client';
 import { useNavigate } from 'react-router-dom';
 
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Bell, Bot, BarChart3, Crown, Check, ArrowRight, Palette, Sparkles } from 'lucide-react';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import Bot from 'lucide-react/dist/esm/icons/bot';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Check from 'lucide-react/dist/esm/icons/check';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface PremiumValueSectionProps {
@@ -20,33 +28,33 @@ export function PremiumValueSection({ isVisible, sectionRef }: PremiumValueSecti
     {
       icon: MessageSquare,
       title: t('landing.premiumValue.crm.title', 'Mini-CRM'),
-      description: t('landing.premiumValue.crm.description', 'Р’СЃРµ Р·Р°СЏРІРєРё СЃ С„РѕСЂРјС‹ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїРѕРїР°РґР°СЋС‚ РІ CRM. РЎС‚Р°С‚СѓСЃС‹: РЅРѕРІС‹Р№ в†’ РІ СЂР°Р±РѕС‚Рµ в†’ Р·Р°РІРµСЂС€С‘РЅ. Р‘РѕР»СЊС€Рµ РЅРёРєР°РєРѕРіРѕ Excel.'),
+      description: t('landing.premiumValue.crm.description', 'Все заявки с формы автоматически попадают в CRM. Статусы: новый → в работе → завершён. Больше никакого Excel.'),
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Bell,
-      title: t('landing.premiumValue.telegram.title', 'Telegram-СѓРІРµРґРѕРјР»РµРЅРёСЏ'),
-      description: t('landing.premiumValue.telegram.description', 'РњРіРЅРѕРІРµРЅРЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РІ Telegram, РєРѕРіРґР° РєР»РёРµРЅС‚ РѕСЃС‚Р°РІР»СЏРµС‚ Р·Р°СЏРІРєСѓ. РќРµ РїСЂРѕРїСѓСЃС‚РёС‚Рµ РЅРё РѕРґРЅРѕРіРѕ Р»РёРґР°.'),
+      title: t('landing.premiumValue.telegram.title', 'Telegram-уведомления'),
+      description: t('landing.premiumValue.telegram.description', 'Мгновенное сообщение в Telegram, когда клиент оставляет заявку. Не пропустите ни одного лида.'),
       color: 'from-violet-500 to-purple-600',
     },
     {
       icon: Bot,
-      title: t('landing.premiumValue.ai.title', 'Р‘РµР·Р»РёРјРёС‚РЅС‹Р№ AI'),
-      description: t('landing.premiumValue.ai.description', 'Р“РµРЅРµСЂР°С†РёСЏ С‚РµРєСЃС‚РѕРІ, Р·Р°РіРѕР»РѕРІРєРѕРІ, РѕРїРёСЃР°РЅРёР№ С‚РѕРІР°СЂРѕРІ - Р±РµР· РѕРіСЂР°РЅРёС‡РµРЅРёР№. AI РєРѕРїРёСЂР°Р№С‚РµСЂ СЂР°Р±РѕС‚Р°РµС‚ РЅР° РІР°СЃ.'),
+      title: t('landing.premiumValue.ai.title', 'Безлимитный AI'),
+      description: t('landing.premiumValue.ai.description', 'Генерация текстов, заголовков, описаний товаров - без ограничений. AI копирайтер работает на вас.'),
       color: 'from-emerald-500 to-teal-500',
     },
     {
       icon: BarChart3,
-      title: t('landing.premiumValue.analytics.title', 'Р Р°СЃС€РёСЂРµРЅРЅР°СЏ Р°РЅР°Р»РёС‚РёРєР°'),
-      description: t('landing.premiumValue.analytics.description', 'РљР°РєРёРµ СЃСЃС‹Р»РєРё РєР»РёРєР°СЋС‚ С‡Р°С‰Рµ, РѕС‚РєСѓРґР° РїСЂРёС…РѕРґСЏС‚ РєР»РёРµРЅС‚С‹, РІ РєР°РєРѕРµ РІСЂРµРјСЏ Р°РєС‚РёРІРЅРѕСЃС‚СЊ РІС‹С€Рµ.'),
+      title: t('landing.premiumValue.analytics.title', 'Расширенная аналитика'),
+      description: t('landing.premiumValue.analytics.description', 'Какие ссылки кликают чаще, откуда приходят клиенты, в какое время активность выше.'),
       color: 'from-amber-500 to-orange-500',
     },
   ];
 
   const bonusFeatures = [
-    t('landing.premiumValue.bonus.themes', 'РџСЂРµРјРёСѓРј-С‚РµРјС‹ Рё Р°РЅРёРјР°С†РёРё'),
-    t('landing.premiumValue.bonus.scheduler', 'РџР»Р°РЅРёСЂРѕРІС‰РёРє Р±Р»РѕРєРѕРІ'),
-    t('landing.premiumValue.bonus.video', 'Р’РёРґРµРѕ Рё РјРµРґРёР°-Р±Р»РѕРєРё'),
+    t('landing.premiumValue.bonus.themes', 'Премиум-темы и анимации'),
+    t('landing.premiumValue.bonus.scheduler', 'Планировщик блоков'),
+    t('landing.premiumValue.bonus.video', 'Видео и медиа-блоки'),
   ];
 
   return (
@@ -57,19 +65,19 @@ export function PremiumValueSection({ isVisible, sectionRef }: PremiumValueSecti
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${isVisible ? 'animate-fade-in' : ''}`}
           >
             <Crown className="h-4 w-4 text-primary" />
-            <span className="text-primary">{t('landing.premiumValue.badge', 'Premium - Р±РѕР»СЊС€Рµ РґРµРЅРµРі')}</span>
+            <span className="text-primary">{t('landing.premiumValue.badge', 'Premium - больше денег')}</span>
           </div>
           <h2
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '100ms' }}
           >
-            {t('landing.premiumValue.title', 'Р—Р°С‡РµРј РїР»Р°С‚РёС‚СЊ Р·Р° Premium')}
+            {t('landing.premiumValue.title', 'Зачем платить за Premium')}
           </h2>
           <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '200ms' }}
           >
-            {t('landing.premiumValue.subtitle', 'РќРµ РІРёР·СѓР°Р»СЊРЅС‹Рµ СѓРєСЂР°С€РµРЅРёСЏ, Р° РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹ РґР»СЏ Р·Р°СЂР°Р±РѕС‚РєР°')}
+            {t('landing.premiumValue.subtitle', 'Не визуальные украшения, а инструменты для заработка')}
           </p>
         </div>
 
@@ -104,7 +112,7 @@ export function PremiumValueSection({ isVisible, sectionRef }: PremiumValueSecti
         >
           <div className="flex items-center gap-3 mb-4">
             <Palette className="h-5 w-5 text-muted-foreground" />
-            <span className="text-sm font-medium text-muted-foreground">{t('landing.premiumValue.bonusTitle', 'Рђ С‚Р°РєР¶Рµ РїСЂРёСЏС‚РЅС‹Рµ Р±РѕРЅСѓСЃС‹:')}</span>
+            <span className="text-sm font-medium text-muted-foreground">{t('landing.premiumValue.bonusTitle', 'А также приятные бонусы:')}</span>
           </div>
           <div className="flex flex-wrap gap-3">
             {bonusFeatures.map((feature, index) => (
@@ -131,14 +139,13 @@ export function PremiumValueSection({ isVisible, sectionRef }: PremiumValueSecti
             className="rounded-2xl font-bold px-6 sm:px-8"
           >
             <Crown className="mr-2 h-5 w-5 flex-shrink-0" />
-            <span className="truncate">{t('landing.premiumValue.cta', 'РџРѕРїСЂРѕР±РѕРІР°С‚СЊ Premium')}</span>
+            <span className="truncate">{t('landing.premiumValue.cta', 'Попробовать Premium')}</span>
           </Button>
           <p className="text-sm text-muted-foreground font-medium">
-            {t('landing.premiumValue.price', 'РћС‚ 3 045 в‚ё/РјРµСЃСЏС† РїСЂРё РѕРїР»Р°С‚Рµ Р·Р° РіРѕРґ (~$6)')}
+            {t('landing.premiumValue.price', 'От 3 045 ₸/месяц при оплате за год (~$6)')}
           </p>
         </div>
       </div>
     </section>
   );
 }
-

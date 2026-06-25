@@ -1,9 +1,11 @@
-﻿'use client';
+'use client';
 import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 
-import { Heart, Mail, MapPin } from 'lucide-react';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
@@ -24,7 +26,7 @@ export const PremiumFooter = () => {
                         lnk<span className="text-primary italic">mx.</span>
                     </span>
                     <p className="text-sm sm:text-lg text-muted-foreground/40 max-w-md mx-auto font-semibold leading-relaxed tracking-tight px-4">
-                        {t('landingV5.footer.description', 'РџР»Р°С‚С„РѕСЂРјР° РґР»СЏ РјР°СЃС‚РµСЂРѕРІ Рё РјР°Р»РѕРіРѕ Р±РёР·РЅРµСЃР°. РЎС‚СЂР°РЅРёС†Р° + CRM + СѓРІРµРґРѕРјР»РµРЅРёСЏ.')}
+                        {t('landingV5.footer.description', 'Платформа для мастеров и малого бизнеса. Страница + CRM + уведомления.')}
                     </p>
                 </div>
 
@@ -90,7 +92,7 @@ export const PremiumFooter = () => {
                             <LanguageSwitcher />
                         </div>
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/30">
-                            {t('landingV5.footer.copyright', { year: currentYear, defaultValue: `В© ${currentYear} Inkmax` })}
+                            {t('landingV5.footer.copyright', { year: currentYear, defaultValue: `© ${currentYear} Inkmax` })}
                         </p>
                     </div>
                     
@@ -102,4 +104,3 @@ export const PremiumFooter = () => {
         </footer>
     );
 };
-

@@ -13,30 +13,15 @@
 
 ---
 
-## Design System
-
-The project uses a **Liquid Glass / Aurora** design system documented in [`DESIGN.md`](./DESIGN.md):
-
-- **CSS Custom Properties** via TailwindCSS — all colors are HSL-based for dynamic theming
-- **Glass Morphism** utilities: `.glass`, `.glass-card`, `.glass-button`, `.glass-input`, `.glass-nav`
-- **Quiet Bento** grid system: `.qb-card`, `.qb-bento`, `.qb-tile-*`
-- **Typography**: DM Sans (body) + Space Grotesk (headings) — loaded from Google Fonts
-- **Dark Mode**: Full dark mode support via `.dark` class
-- **Motion**: Designed for `prefers-reduced-motion`, spring physics, scroll-driven reveals
-- **Responsive**: Mobile-first, fluid spacing, safe-area-inset support, 44px touch targets
-
-See [`DESIGN.md`](./DESIGN.md) for complete token documentation.
-
----
-
 ## ✨ Features
+
 
 ### 🎨 **AI-Powered Page Builder**
 
 - **28+ Block Types**: Profile, links, products, forms, bookings, events, carousels, scratch cards, and more.
 - **Drag & Drop**: Intuitive mobile-first editor (dnd-kit).
 - **AI Generation**: Create entire pages or write copy with one click (Gemini).
-- **Customization**: Themes, fonts, and animations (**Liquid Glass** design system).
+- **Customization**: Themes, fonts, and animations (**Living Canvas** design system).
 - **A/B Testing**: Native multi-variant testing for individual blocks with traffic allocation.
 - **Multi-Page**: Up to 10 pages per user (Pro); each with its own slug and SEO.
 
@@ -78,9 +63,8 @@ See [`DESIGN.md`](./DESIGN.md) for complete token documentation.
 
 - **CSS**: [TailwindCSS 3](https://tailwindcss.com/)
 - **Components**: [shadcn/ui](https://ui.shadcn.com/) (Radix UI)
-- **Design System**: Liquid Glass + Quiet Bento (see [`DESIGN.md`](./DESIGN.md))
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Icons**: [Lucide React](https://lucide.dev/) (named exports)
+- **Icons**: [Lucide React](https://lucide.dev/)
 
 ### Backend & Infra
 
@@ -109,8 +93,8 @@ See [`DESIGN.md`](./DESIGN.md) for complete token documentation.
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/ElazAzel/linkmax-6b20d835.git
-   cd linkmax-6b20d835
+   git clone https://github.com/ElazAzel/inkmax.git
+   cd inkmax
    ```
 
 2. **Install dependencies**
@@ -123,14 +107,13 @@ See [`DESIGN.md`](./DESIGN.md) for complete token documentation.
    Copy `.env.example` to `.env` and set:
 
    ```env
-   VITE_SUPABASE_URL=https://pphdcfxucfndmwulpfwv.supabase.co
-   VITE_SUPABASE_PUBLISHABLE_KEY=your_anon_key
-   VITE_SUPABASE_PROJECT_ID=pphdcfxucfndmwulpfwv
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+   VITE_SUPABASE_PROJECT_ID=your_project_id
    VITE_APP_DOMAIN=https://lnkmx.my
    ```
-   Full reference in [`.env.example`](./.env.example)
 
-   > **Note:** The Supabase client uses **lazy initialization** via Proxy — it won't throw on import, only on first actual use (`.from()`, `.auth()`). Create `.env` from `.env.example` with valid credentials before starting the dev server. `VITE_*` env vars are baked into the production build, so rebuild after changing them.
+   *(Ask the team lead for credentials if you don't have them)*
 
 4. **Start Development Server**
 
@@ -157,32 +140,30 @@ See [`DESIGN.md`](./DESIGN.md) for complete token documentation.
 ## 📂 Project Structure
 
 ```text
-linkmax-6b20d835/
-├── DESIGN.md              # Design system documentation
+lnkmx/
 ├── src/
-│   ├── components/        # Reusable UI & Business Components
-│   │   ├── blocks/        # Public view block renderers
+│   ├── components/       # Reusable UI & Business Components
+│   │   ├── blocks/       # Public view block renderers
 │   │   ├── block-editors/ # Dashboard block editors
-│   │   ├── dashboard-v2/  # Dashboard v2 (screens, layout, analytics)
-│   │   ├── zones/         # Business Zone (CRM, Kanban, Tasks)
-│   │   └── ui/            # Base design system (shadcn)
-│   ├── pages/             # Route-level components (Vite SPA)
-│   ├── hooks/             # Custom React Hooks (60+)
-│   ├── services/          # Business Logic & API calls
-│   ├── domain/            # Core Domain Entities
-│   ├── use-cases/         # Application use cases
-│   ├── repositories/      # Data access layer
-│   ├── platform/          # Platform integrations (Supabase, Robokassa)
-│   ├── i18n/              # Locales (16 languages)
-│   ├── styles/            # Quiet Bento CSS design system
-│   └── lib/               # Utilities, SEO, export (PDF/Excel)
+│   │   ├── dashboard-v2/ # Dashboard v2 (screens, layout, analytics)
+│   │   ├── zones/        # Business Zone (CRM, Kanban, Tasks)
+│   │   └── ui/           # Base design system (shadcn)
+│   ├── pages/            # Route-level components (Vite SPA)
+│   ├── hooks/            # Custom React Hooks (60+)
+│   ├── services/         # Business Logic & API calls
+│   ├── domain/           # Core Domain Entities
+│   ├── use-cases/        # Application use cases
+│   ├── repositories/     # Data access layer
+│   ├── platform/         # Platform integrations (Supabase, Robokassa)
+│   ├── i18n/             # Locales (16 languages)
+│   └── lib/              # Utilities, SEO, export (PDF/Excel)
 ├── supabase/
-│   ├── functions/         # 28+ Edge Functions
-│   └── migrations/        # Database Schema (15 consolidated migrations)
-├── cloudflare-worker/     # SSR & sitemap worker
-├── android/               # Capacitor Android
-├── ios/                   # Capacitor iOS
-└── docs/                  # Documentation
+│   ├── functions/        # 28+ Edge Functions
+│   └── migrations/       # Database Schema
+├── cloudflare-worker/    # SSR & sitemap worker
+├── android/              # Capacitor Android
+├── ios/                  # Capacitor iOS
+└── docs/                 # Documentation
 ```
 
 ## 📖 Documentation

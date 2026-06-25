@@ -47,7 +47,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 // Detect browser language
 function detectBrowserLanguage(): LocaleCode {
   if (typeof window === 'undefined') return 'en';
-  const browserLang = navigator.language || (navigator as Navigator & { userLanguage?: string }).userLanguage || 'en';
+  const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
   const langCode = browserLang.split('-')[0].toLowerCase();
 
   // Check if it's a known language
@@ -184,11 +184,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   // Recursively translate all multilingual fields in an object to multiple languages
   const translateObject = async (
-    obj: unknown,
+    obj: any,
     targetLanguages: LocaleCode[],
     fieldName?: string,
     defaultSourceLang: LocaleCode = 'ru'
-  ): Promise<unknown> => {
+  ): Promise<any> => {
     if (obj === null || obj === undefined) return obj;
 
     // Plain string in a known translatable field → wrap and translate
@@ -210,21 +210,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (typeof obj !== 'object') return obj;
 
     // If it's a multilingual object (I18nText or legacy MultilingualString)
-    const objRecord = obj as Record<string, unknown>;
     if (isI18nText(obj) || isMultilingualString(obj)) {
       // Find source language with content (prefer ru → en → first non-empty)
-      const preferredOrder = ['ru', 'en', 'kk', ...Object.keys(objRecord)];
-      const sourceLang = preferredOrder.find(k => objRecord[k] && String(objRecord[k]).trim()) as LocaleCode | undefined;
+      const preferredOrder = ['ru', 'en', 'kk', ...Object.keys(obj)];
+      const sourceLang = preferredOrder.find(k => (obj as any)[k] && String((obj as any)[k]).trim()) as LocaleCode | undefined;
       if (!sourceLang) return obj;
 
       // Filter out languages that already have content
       const languagesNeedingTranslation = targetLanguages.filter(
-        lang => lang !== sourceLang && (!objRecord[lang] || !String(objRecord[lang]).trim())
+        lang => lang !== sourceLang && (!(obj as any)[lang] || !String((obj as any)[lang]).trim())
       );
 
       if (languagesNeedingTranslation.length === 0) return obj;
 
-      const sourceText = String(objRecord[sourceLang]);
+      const sourceText = String((obj as any)[sourceLang]);
       const translations = await translateText(sourceText, sourceLang, languagesNeedingTranslation);
 
       if (translations) {
@@ -243,8 +242,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
     // If it's a regular object, recursively translate
     const result: Record<string, unknown> = {};
-    for (const key of Object.keys(objRecord)) {
-      result[key] = await translateObject(objRecord[key], targetLanguages, key, defaultSourceLang);
+    for (const key of Object.keys(obj)) {
+      result[key] = await translateObject((obj as any)[key], targetLanguages, key, defaultSourceLang);
     }
     return result;
   };
@@ -260,18 +259,17 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // Detect best source language across all blocks (most-used non-empty lang in i18n fields, fallback 'ru')
   const detectSourceLanguage = (blocks: TranslatedBlock[]): LocaleCode => {
     const counts: Record<string, number> = {};
-    const visit = (v: unknown) => {
+    const visit = (v: any) => {
       if (!v) return;
       if (typeof v === 'object' && !Array.isArray(v) && (isI18nText(v) || isMultilingualString(v))) {
-        const vRecord = v as Record<string, unknown>;
-        for (const k of Object.keys(vRecord)) {
-          const val = vRecord[k];
+        for (const k of Object.keys(v)) {
+          const val = (v as any)[k];
           if (val && String(val).trim()) counts[k] = (counts[k] || 0) + 1;
         }
         return;
       }
       if (Array.isArray(v)) v.forEach(visit);
-      else if (typeof v === 'object') Object.values(v as Record<string, unknown>).forEach(visit);
+      else if (typeof v === 'object') Object.values(v).forEach(visit);
     };
     blocks.forEach(b => visit(b.content));
     const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);

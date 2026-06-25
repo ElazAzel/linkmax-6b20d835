@@ -104,7 +104,7 @@ async function loadAllTranslations(): Promise<Record<LanguageCode, TranslationOb
 export async function getMissingTranslations(): Promise<Record<LanguageCode, string[]>> {
   const translations = await loadAllTranslations();
 
-  const langKeys = {} as Record<LanguageCode, string[]>;
+  const langKeys: Record<LanguageCode, string[]> = {} as any;
   for (const lang of ALL_LANGUAGES) {
     langKeys[lang] = getAllKeys(translations[lang]);
   }
@@ -114,7 +114,7 @@ export async function getMissingTranslations(): Promise<Record<LanguageCode, str
     keys.forEach(key => allKeys.add(key));
   });
 
-  const result = {} as Record<LanguageCode, string[]>;
+  const result: Record<LanguageCode, string[]> = {} as any;
   for (const lang of ALL_LANGUAGES) {
     result[lang] = Array.from(allKeys).filter(key => !langKeys[lang].includes(key));
   }
@@ -127,7 +127,7 @@ export async function getMissingTranslations(): Promise<Record<LanguageCode, str
 export async function generateMissingKeysWithPlaceholders(): Promise<Record<LanguageCode, TranslationObject>> {
   const translations = await loadAllTranslations();
   const missing = await getMissingTranslations();
-  const result = {} as Record<LanguageCode, TranslationObject>;
+  const result: Record<LanguageCode, TranslationObject> = {} as any;
 
   for (const lang of ALL_LANGUAGES) {
     result[lang] = {};
@@ -202,7 +202,7 @@ export async function validateTranslations(): Promise<void> {
 
   console.group('🌐 [i18n] Translation Validation');
 
-  const langKeys = {} as Record<LanguageCode, string[]>;
+  const langKeys: Record<LanguageCode, string[]> = {} as any;
   for (const lang of ALL_LANGUAGES) {
     langKeys[lang] = getAllKeys(translations[lang]);
   }

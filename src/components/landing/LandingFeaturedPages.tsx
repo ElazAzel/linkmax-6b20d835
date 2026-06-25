@@ -1,10 +1,14 @@
-﻿'use client';
+'use client';
 import { useNavigate } from 'react-router-dom';
 
 import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Crown, Eye, Heart, ArrowRight, Loader2 } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -97,7 +101,7 @@ export function LandingFeaturedPages() {
                   {page.niche && (
                     <div className="hidden sm:flex justify-center">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-xs">
-                        <span>{NICHE_ICONS[page.niche as Niche] || 'рџ“Њ'}</span>
+                        <span>{NICHE_ICONS[page.niche as Niche] || '📌'}</span>
                         <span className="text-muted-foreground">
                           {t(`niches.${page.niche}`, page.niche)}
                         </span>
@@ -138,4 +142,3 @@ export function LandingFeaturedPages() {
     </section>
   );
 }
-

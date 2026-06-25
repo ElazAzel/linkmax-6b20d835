@@ -97,9 +97,9 @@ export function evaluateQualityGate(
   }
 
   // Anti-spam: check for blocked domains
-  const linkBlocks = blocks.filter(b => b.type === 'link' || b.type === 'button') as Block[];
+  const linkBlocks = blocks.filter(b => b.type === 'link' || b.type === 'button') as any[];
   for (const block of linkBlocks) {
-    const url = (block as Block & { url?: string }).url?.toLowerCase() || '';
+    const url = block.url?.toLowerCase() || '';
     for (const blockedDomain of BLOCKED_DOMAINS) {
       if (url.includes(blockedDomain)) {
         reasons.push('blocked_domain');
@@ -318,7 +318,7 @@ export function generateSchemas(
   const now = new Date().toISOString();
 
   // Main entity (Person or Organization)
-  const mainEntity: Record<string, unknown> = {
+  const mainEntity: any = {
     '@type': profile.type,
     name: profile.name || 'LinkMAX User',
     url: pageUrl,

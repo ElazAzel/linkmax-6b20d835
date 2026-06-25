@@ -1,5 +1,5 @@
-﻿import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Star } from 'lucide-react';
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Star from 'lucide-react/dist/esm/icons/star';
 import { useTranslation } from "react-i18next";
 import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils/utils";
@@ -27,52 +27,52 @@ export const Testimonials = () => {
 
     const testimonials = [
         {
-            name: t('landing.testimonials.name1_v2', 'РђР№РіРµСЂРёРј, СЃС‚СѓРґРёСЏ РјР°РЅРёРєСЋСЂР°'),
-            role: t('landing.testimonials.role1_v2', 'РђР»РјР°С‚С‹ В· 2 РјР°СЃС‚РµСЂР° В· Pro'),
+            name: t('landing.testimonials.name1_v2', 'Айгерим, студия маникюра'),
+            role: t('landing.testimonials.role1_v2', 'Алматы · 2 мастера · Pro'),
             metric: '+186%',
-            metricLabel: t('landing.testimonials.metric1_v2', 'Рє РІС‹СЂСѓС‡РєРµ Р·Р° 3 РјРµСЃСЏС†Р°'),
-            content: t('landing.testimonials.review1_v2', 'РџРµСЂРµРЅРµСЃР»Рё Р·Р°РїРёСЃСЊ РёР· РґРёСЂРµРєС‚Р° РЅР° РІРёС‚СЂРёРЅСѓ. РўРµРїРµСЂСЊ РєР»РёРµРЅС‚С‹ Р±СЂРѕРЅРёСЂСѓСЋС‚ СЃР°РјРё Рё РѕРїР»Р°С‡РёРІР°СЋС‚ РїСЂРµРґРѕРїР»Р°С‚Сѓ вЂ” РїСЂРѕСЃС‚РѕРµРІ РїРѕС‡С‚Рё РЅРµС‚.'),
-            avatar: 'рџ’…',
+            metricLabel: t('landing.testimonials.metric1_v2', 'к выручке за 3 месяца'),
+            content: t('landing.testimonials.review1_v2', 'Перенесли запись из директа на витрину. Теперь клиенты бронируют сами и оплачивают предоплату — простоев почти нет.'),
+            avatar: '💅',
         },
         {
-            name: t('landing.testimonials.name2_v2', 'Р”РјРёС‚СЂРёР№, СЂРµРїРµС‚РёС‚РѕСЂ РїРѕ РјР°С‚РµРјР°С‚РёРєРµ'),
-            role: t('landing.testimonials.role2_v2', 'РђСЃС‚Р°РЅР° В· СЃРѕР»Рѕ В· Starter'),
-            metric: '4 РјРёРЅ',
-            metricLabel: t('landing.testimonials.metric2_v2', 'СЃСЂРµРґРЅРµРµ РІСЂРµРјСЏ РѕС‚РІРµС‚Р°'),
-            content: t('landing.testimonials.review2_v2', 'Р—Р°СЏРІРєРё СЃ Р»РµРЅРґРёРЅРіР°, Instagram Рё WhatsApp РїР°РґР°СЋС‚ РІ РѕРґРЅСѓ Р»РµРЅС‚Сѓ. РџРµСЂРµСЃС‚Р°Р» С‚РµСЂСЏС‚СЊ СЂРѕРґРёС‚РµР»РµР№, РєРѕС‚РѕСЂС‹Рµ РїРёСЃР°Р»Рё РЅРѕС‡СЊСЋ.'),
-            avatar: 'рџ“ђ',
+            name: t('landing.testimonials.name2_v2', 'Дмитрий, репетитор по математике'),
+            role: t('landing.testimonials.role2_v2', 'Астана · соло · Starter'),
+            metric: '4 мин',
+            metricLabel: t('landing.testimonials.metric2_v2', 'среднее время ответа'),
+            content: t('landing.testimonials.review2_v2', 'Заявки с лендинга, Instagram и WhatsApp падают в одну ленту. Перестал терять родителей, которые писали ночью.'),
+            avatar: '📐',
         },
         {
-            name: t('landing.testimonials.name3_v2', 'РЎС‚СѓРґРёСЏ Elazart'),
-            role: t('landing.testimonials.role3_v2', 'РљР°СЂР°РіР°РЅРґР° В· 4 С‡РµР»РѕРІРµРєР° В· Team'),
+            name: t('landing.testimonials.name3_v2', 'Студия Elazart'),
+            role: t('landing.testimonials.role3_v2', 'Караганда · 4 человека · Team'),
             metric: '+312',
-            metricLabel: t('landing.testimonials.metric3_v2', 'РѕРїР»Р°С‡РµРЅРЅС‹С… Р·Р°СЏРІРѕРє Р·Р° 90 РґРЅРµР№'),
-            content: t('landing.testimonials.review3_v2', 'РљРѕРјР°РЅРґР° СЂР°Р±РѕС‚Р°РµС‚ РїСЂСЏРјРѕ СЃ С‚РµР»РµС„РѕРЅР°. Р’РёРґРЅРѕ, РєС‚Рѕ РІР·СЏР» Р·Р°СЏРІРєСѓ, РєРѕРіРґР° РѕС‚РІРµС‚РёР», РєР°РєРѕР№ СЃС‚Р°С‚СѓСЃ вЂ” Bitrix Р±РѕР»СЊС€Рµ РЅРµ РЅСѓР¶РµРЅ.'),
-            avatar: 'рџЋЁ',
+            metricLabel: t('landing.testimonials.metric3_v2', 'оплаченных заявок за 90 дней'),
+            content: t('landing.testimonials.review3_v2', 'Команда работает прямо с телефона. Видно, кто взял заявку, когда ответил, какой статус — Bitrix больше не нужен.'),
+            avatar: '🎨',
         },
         {
             name: t('landing.testimonials.name4_v2', 'Coach Arman'),
-            role: t('landing.testimonials.role4_v2', 'Online В· СЃРѕР»Рѕ В· Pro'),
-            metric: 'Г—3',
-            metricLabel: t('landing.testimonials.metric4_v2', 'СЂРѕСЃС‚ РїР»Р°С‚РЅС‹С… РїРѕРґРїРёСЃС‡РёРєРѕРІ'),
-            content: t('landing.testimonials.review4_v2', 'Р’РёС‚СЂРёРЅР°, СЂР°СЃРїРёСЃР°РЅРёРµ Рё РѕРїР»Р°С‚Р° вЂ” РЅР° РѕРґРЅРѕР№ СЃС‚СЂР°РЅРёС†Рµ. РЎ Linktree С‚Р°РєРѕРіРѕ Р±С‹Р»Рѕ РЅРµ СЃРѕР±СЂР°С‚СЊ РЅРёРєРѕРіРґР°.'),
-            avatar: 'рџ’Є',
+            role: t('landing.testimonials.role4_v2', 'Online · соло · Pro'),
+            metric: '×3',
+            metricLabel: t('landing.testimonials.metric4_v2', 'рост платных подписчиков'),
+            content: t('landing.testimonials.review4_v2', 'Витрина, расписание и оплата — на одной странице. С Linktree такого было не собрать никогда.'),
+            avatar: '💪',
         },
         {
-            name: t('landing.testimonials.name5_v2', 'Asel, РґРѕРјР°С€РЅСЏСЏ РєРѕРЅРґРёС‚РµСЂСЃРєР°СЏ'),
-            role: t('landing.testimonials.role5_v2', 'РђР»РјР°С‚С‹ В· СЃРѕР»Рѕ В· Starter'),
-            metric: '0 в‚ё',
-            metricLabel: t('landing.testimonials.metric5_v2', 'Р°Р±РѕРЅРїР»Р°С‚С‹ вЂ” С‚РѕР»СЊРєРѕ 5% СЃ Р·Р°РєР°Р·Р°'),
-            content: t('landing.testimonials.review5_v2', 'РџР»Р°С‚РёР»Р° С‚РѕР»СЊРєРѕ РєРѕРіРґР° СЃР°РјР° Р·Р°СЂР°Р±Р°С‚С‹РІР°Р»Р°. Р§РµСЂРµР· 4 РјРµСЃСЏС†Р° РѕР±РѕСЂРѕС‚ РІС‹СЂРѕСЃ вЂ” РїРµСЂРµРєР»СЋС‡РёР»Р°СЃСЊ РЅР° Pro Рё С‚РµРїРµСЂСЊ СЌРєРѕРЅРѕРјР»СЋ РЅР° РєРѕРјРёСЃСЃРёРё.'),
-            avatar: 'рџ§Ѓ',
+            name: t('landing.testimonials.name5_v2', 'Asel, домашняя кондитерская'),
+            role: t('landing.testimonials.role5_v2', 'Алматы · соло · Starter'),
+            metric: '0 ₸',
+            metricLabel: t('landing.testimonials.metric5_v2', 'абонплаты — только 5% с заказа'),
+            content: t('landing.testimonials.review5_v2', 'Платила только когда сама зарабатывала. Через 4 месяца оборот вырос — переключилась на Pro и теперь экономлю на комиссии.'),
+            avatar: '🧁',
         },
         {
-            name: t('landing.testimonials.name6_v2', 'РђРіРµРЅС‚СЃС‚РІРѕ BrightDigital'),
-            role: t('landing.testimonials.role6_v2', 'РЁС‹РјРєРµРЅС‚ В· 7 С‡РµР»РѕРІРµРє В· Team'),
-            metric: 'в€’40%',
-            metricLabel: t('landing.testimonials.metric6_v2', 'Р·Р°С‚СЂР°С‚ РЅР° РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹'),
-            content: t('landing.testimonials.review6_v2', 'Р—Р°РєСЂС‹Р»Рё РїРѕРґРїРёСЃРєРё РЅР° amoCRM, Calendly Рё Tilda. РўРµРїРµСЂСЊ Сѓ РєР°Р¶РґРѕРіРѕ РєР»РёРµРЅС‚Р° вЂ” СЃРІРѕСЏ РєРѕРјР°РЅРґРЅР°СЏ inbox СЃ SLA.'),
-            avatar: 'рџЏў',
+            name: t('landing.testimonials.name6_v2', 'Агентство BrightDigital'),
+            role: t('landing.testimonials.role6_v2', 'Шымкент · 7 человек · Team'),
+            metric: '−40%',
+            metricLabel: t('landing.testimonials.metric6_v2', 'затрат на инструменты'),
+            content: t('landing.testimonials.review6_v2', 'Закрыли подписки на amoCRM, Calendly и Tilda. Теперь у каждого клиента — своя командная inbox с SLA.'),
+            avatar: '🏢',
         },
     ];
 
@@ -84,13 +84,13 @@ export const Testimonials = () => {
             <div className="container px-4 mx-auto relative">
                 <Reveal>
                     <h2 className="text-section-title text-center mb-4">
-                        {t('landing.testimonials.title_v2', 'Р¦РёС„СЂС‹ РѕС‚ СЂРµР°Р»СЊРЅС‹С…')}{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight_v2', 'РєРѕРјР°РЅРґ Рё РјР°СЃС‚РµСЂРѕРІ')}</span>
+                        {t('landing.testimonials.title_v2', 'Цифры от реальных')}{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight_v2', 'команд и мастеров')}</span>
                     </h2>
                 </Reveal>
                 <Reveal delay={100}>
                     <p className="text-center text-muted-foreground mb-12 max-w-lg mx-auto">
-                        {t('landing.testimonials.subtitle_v2', 'РњРёРєСЂРѕ-РєРѕРјР°РЅРґС‹, Р°РіРµРЅС‚СЃС‚РІР° Рё СЌРєСЃРїРµСЂС‚С‹ РёСЃРїРѕР»СЊР·СѓСЋС‚ LinkMAX, С‡С‚РѕР±С‹ РїСЂРµРІСЂР°С‰Р°С‚СЊ Р·Р°СЏРІРєРё РІ РІС‹СЂСѓС‡РєСѓ.')}
+                        {t('landing.testimonials.subtitle_v2', 'Микро-команды, агентства и эксперты используют LinkMAX, чтобы превращать заявки в выручку.')}
                     </p>
                 </Reveal>
 
@@ -117,7 +117,7 @@ export const Testimonials = () => {
                                 </div>
 
                                 <p className="text-sm md:text-base leading-relaxed text-foreground/85 font-medium relative">
-                                    В«{testimonial.content}В»
+                                    «{testimonial.content}»
                                 </p>
 
                                 <div className="flex items-center gap-3 mt-auto relative pt-4 border-t border-white/5">
@@ -137,4 +137,3 @@ export const Testimonials = () => {
         </SectionWrapper>
     );
 };
-

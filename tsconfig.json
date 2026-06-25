@@ -32,9 +32,14 @@
   },
   "exclude": [
     "node_modules",
+    "pages_vite_backup",
+    "tmp_backup",
+    "src/pages_vite_backup",
     "e2e",
     "scripts",
-    "coverage"
+    "compare_locales.ts",
+    "src/main.vite.tsx",
+    "src/app"
   ],
   "include": [
     "src/**/*.ts",

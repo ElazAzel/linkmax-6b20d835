@@ -45,12 +45,12 @@ export async function createExperiment(
         const variantsToInsert = variants.map((v, index) => ({
             experiment_id: experiment.id,
             variant_key: v.variant_key || `variant_${index}`,
-            block_data: v.block_data as unknown as import('@/platform/supabase/types').Json,
+            block_data: v.block_data as any
         }));
 
         const { error: varError } = await supabase
             .from('experiment_variants')
-            .insert(variantsToInsert as never);
+            .insert(variantsToInsert);
 
         if (varError) {
             // Cleanup experiment if variants fail
@@ -140,7 +140,7 @@ export async function setWinningVariant(
                 const { error: blockError } = await supabase
                     .from('blocks')
                     .update({
-                        content: variant.block_data as unknown as import('@/platform/supabase/types').Json
+                        content: variant.block_data as any
                     })
                     .eq('id', experiment.block_id);
 

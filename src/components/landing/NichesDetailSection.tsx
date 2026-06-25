@@ -1,8 +1,20 @@
-﻿'use client';
+'use client';
 import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
-import { Scissors, Camera, Dumbbell, GraduationCap, Heart, Brain, Coffee, ShoppingBag, Building2, Stethoscope, Music, Palette, ArrowRight } from 'lucide-react';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Camera from 'lucide-react/dist/esm/icons/camera';
+import Dumbbell from 'lucide-react/dist/esm/icons/dumbbell';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import Coffee from 'lucide-react/dist/esm/icons/coffee';
+import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import Stethoscope from 'lucide-react/dist/esm/icons/stethoscope';
+import Music from 'lucide-react/dist/esm/icons/music';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { Button } from '@/components/ui/button';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
@@ -50,13 +62,13 @@ export function NichesDetailSection() {
           <h2
             className={`text-2xl sm:text-4xl lg:text-[3rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
           >
-            {t('landing.niches.title', 'Р”Р»СЏ РєРѕРіРѕ РїРѕРґС…РѕРґРёС‚ lnkmx.my?')}
+            {t('landing.niches.title', 'Для кого подходит lnkmx.my?')}
           </h2>
           <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
-            {t('landing.niches.subtitle', 'РњС‹ СЃРѕР·РґР°Р»Рё СЃРїРµС†РёР°Р»СЊРЅС‹Рµ С€Р°Р±Р»РѕРЅС‹ РґР»СЏ РєР°Р¶РґРѕР№ РЅРёС€Рё. AI Р·РЅР°РµС‚ Р±РѕР»Рё РІР°С€РµР№ Р°СѓРґРёС‚РѕСЂРёРё Рё СЃРѕР·РґР°С‘С‚ СЃС‚СЂР°РЅРёС†Сѓ РїРѕРґ РІР°С€Рё Р·Р°РґР°С‡Рё')}
+            {t('landing.niches.subtitle', 'Мы создали специальные шаблоны для каждой ниши. AI знает боли вашей аудитории и создаёт страницу под ваши задачи')}
           </p>
         </header>
 
@@ -104,7 +116,7 @@ export function NichesDetailSection() {
             onClick={handleStartClick}
             className="rounded-2xl font-bold shadow-lg shadow-primary/25 hover:shadow-xl px-8 py-6"
           >
-            {t('landing.niches.cta', 'РЎРѕР·РґР°С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ РґР»СЏ РјРѕРµР№ РЅРёС€Рё')}
+            {t('landing.niches.cta', 'Создать страницу для моей ниши')}
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
@@ -112,4 +124,3 @@ export function NichesDetailSection() {
     </section>
   );
 }
-

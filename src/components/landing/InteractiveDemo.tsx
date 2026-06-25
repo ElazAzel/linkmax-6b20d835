@@ -1,8 +1,18 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link2, Image, Type, Trash2, GripVertical, Plus, Sparkles, Check, Instagram, Youtube, Twitter } from 'lucide-react';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import Image from 'lucide-react/dist/esm/icons/image';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Instagram from 'lucide-react/dist/esm/icons/instagram';
+import Youtube from 'lucide-react/dist/esm/icons/youtube';
+import Twitter from 'lucide-react/dist/esm/icons/twitter';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface DemoBlock {
@@ -21,13 +31,13 @@ const gradients = [
   'from-amber-500 to-orange-500',
 ];
 
-const emojis = ['рџ”—', 'рџЋЁ', 'рџ“ё', 'рџЋµ', 'рџ’ј', 'рџљЂ', 'в­ђ', 'рџ’Ў'];
+const emojis = ['🔗', '🎨', '📸', '🎵', '💼', '🚀', '⭐', '💡'];
 
 export function InteractiveDemo() {
   const { t } = useTranslation();
   const [blocks, setBlocks] = useState<DemoBlock[]>([
-    { id: '1', type: 'link', content: 'My Portfolio', emoji: 'рџЋЁ', gradient: 'from-violet-500 to-purple-600' },
-    { id: '2', type: 'link', content: 'Contact Me', emoji: 'рџ“§', gradient: 'from-blue-500 to-cyan-500' },
+    { id: '1', type: 'link', content: 'My Portfolio', emoji: '🎨', gradient: 'from-violet-500 to-purple-600' },
+    { id: '2', type: 'link', content: 'Contact Me', emoji: '📧', gradient: 'from-blue-500 to-cyan-500' },
   ]);
   const [profileName, setProfileName] = useState('Your Name');
   const [profileBio, setProfileBio] = useState('Digital Creator');
@@ -242,7 +252,7 @@ export function InteractiveDemo() {
                       <div className="relative">
                         <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-primary to-blue-600 p-0.5">
                           <div className="h-full w-full rounded-full bg-card flex items-center justify-center">
-                            <span className="text-xl sm:text-2xl">рџ‘¤</span>
+                            <span className="text-xl sm:text-2xl">👤</span>
                           </div>
                         </div>
                         <div className="absolute -bottom-0.5 sm:-bottom-1 -right-0.5 sm:-right-1 h-5 w-5 sm:h-6 sm:w-6 bg-primary rounded-full flex items-center justify-center shadow-lg">
@@ -313,4 +323,3 @@ export function InteractiveDemo() {
     </section>
   );
 }
-

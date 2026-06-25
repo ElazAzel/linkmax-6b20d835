@@ -1,11 +1,11 @@
-﻿import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { HelpCircle } from 'lucide-react';
+import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 
@@ -137,4 +137,3 @@ export function FAQSection() {
     </section>
   );
 }
-

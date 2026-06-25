@@ -9,7 +9,16 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
-import { ArrowRight, Calendar, FileText, Inbox, Quote, ShieldCheck, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Inbox from 'lucide-react/dist/esm/icons/inbox';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Quote from 'lucide-react/dist/esm/icons/quote';
+import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 
 const PremiumFooter = lazy(() => import('@/components/landing/v2/PremiumFooter').then(m => ({ default: m.PremiumFooter })));
 
@@ -181,7 +190,7 @@ export default function Customers() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const { data, error } = await (supabase.rpc as unknown as (fn: string) => Promise<{ data: unknown; error: unknown }>)('get_public_trust_metrics');
+      const { data, error } = await (supabase.rpc as any)('get_public_trust_metrics');
       if (!mounted) return;
       if (error) {
         console.error('Trust metrics error', error);

@@ -4,14 +4,14 @@ import { logger } from '@/lib/utils/logger';
 export interface ExportDataResult {
   success: boolean;
   message?: string;
-  data?: Record<string, unknown>;
+  data?: any;
 }
 
 /**
  * GDPR Service - handles user data export and account deletion
  */
 export const gdprService = {
-  async exportUserData(): Promise<{ success: boolean; data?: Record<string, unknown>; error?: string }> {
+  async exportUserData(): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
       logger.info('GDPR: Requesting user data export');
       

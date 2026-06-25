@@ -1,15 +1,16 @@
-﻿import { useTranslation } from 'react-i18next';
-import { List, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import List from 'lucide-react/dist/esm/icons/list';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 
 export function TableOfContents() {
   const { t } = useTranslation();
 
   const sections = [
-    { id: 'link-in-bio', label: t('landing.toc.linkInBio', 'Р§С‚Рѕ С‚Р°РєРѕРµ Link-in-Bio') },
-    { id: 'for-whom', label: t('landing.toc.forWhom', 'Р”Р»СЏ РєРѕРіРѕ') },
-    { id: 'features', label: t('landing.toc.features', 'Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё') },
-    { id: 'use-cases', label: t('landing.toc.useCases', 'РџСЂРёРјРµСЂС‹') },
-    { id: 'pricing', label: t('landing.toc.pricing', 'РўР°СЂРёС„С‹') },
+    { id: 'link-in-bio', label: t('landing.toc.linkInBio', 'Что такое Link-in-Bio') },
+    { id: 'for-whom', label: t('landing.toc.forWhom', 'Для кого') },
+    { id: 'features', label: t('landing.toc.features', 'Возможности') },
+    { id: 'use-cases', label: t('landing.toc.useCases', 'Примеры') },
+    { id: 'pricing', label: t('landing.toc.pricing', 'Тарифы') },
     { id: 'faq', label: t('landing.toc.faq', 'FAQ') },
   ];
 
@@ -26,13 +27,13 @@ export function TableOfContents() {
   return (
     <nav 
       className="py-4 sm:py-6 px-5 sm:px-6 border-b border-border/30 bg-muted/10 backdrop-blur-sm sticky top-[72px] sm:top-[80px] z-40"
-      aria-label={t('landing.toc.ariaLabel', 'РЎРѕРґРµСЂР¶Р°РЅРёРµ СЃС‚СЂР°РЅРёС†С‹')}
+      aria-label={t('landing.toc.ariaLabel', 'Содержание страницы')}
     >
       <div className="container mx-auto max-w-6xl">
         <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
           <div className="flex items-center gap-1.5 text-muted-foreground flex-shrink-0">
             <List className="h-4 w-4" />
-            <span className="text-xs font-medium hidden sm:inline">{t('landing.toc.title', 'РЎРѕРґРµСЂР¶Р°РЅРёРµ')}:</span>
+            <span className="text-xs font-medium hidden sm:inline">{t('landing.toc.title', 'Содержание')}:</span>
           </div>
           <ul className="flex items-center gap-1 sm:gap-2">
             {sections.map((section, index) => (
@@ -52,4 +53,3 @@ export function TableOfContents() {
     </nav>
   );
 }
-

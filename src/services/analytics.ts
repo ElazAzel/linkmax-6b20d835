@@ -150,24 +150,24 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
     const apis: Array<{
       url: string;
       headers?: Record<string, string>;
-      parse: (d: Record<string, unknown>) => GeoInfo;
+      parse: (d: any) => GeoInfo;
     }> = [
       {
         url: 'https://ipwho.is/',
-        parse: (d) => ({
-          country: (d.country as string) || 'Unknown',
-          countryCode: (d.country_code as string) || 'XX',
-          city: (d.city as string) || undefined,
-          region: (d.region as string) || undefined,
+        parse: (d: any) => ({
+          country: d.country || 'Unknown',
+          countryCode: d.country_code || 'XX',
+          city: d.city || undefined,
+          region: d.region || undefined,
         }),
       },
       {
         url: 'https://freeipapi.com/api/json',
-        parse: (d) => ({
-          country: (d.countryName as string) || 'Unknown',
-          countryCode: (d.countryCode as string) || 'XX',
-          city: (d.cityName as string) || undefined,
-          region: (d.regionName as string) || undefined,
+        parse: (d: any) => ({
+          country: d.countryName || 'Unknown',
+          countryCode: d.countryCode || 'XX',
+          city: d.cityName || undefined,
+          region: d.regionName || undefined,
         }),
       },
     ];
@@ -525,7 +525,8 @@ export async function logChatQuery(
     const session_data = getOrCreateSession();
     const geo = await getGeoInfo().catch(() => null);
 
-    await (supabase.from('expert_queries' as never) as unknown as { insert: (row: Record<string, unknown>) => Promise<{ error: unknown }> }).insert({
+    // Using 'as any' until supabase types are re-generated with expert_queries table
+    await (supabase.from('expert_queries' as any) as any).insert({
       page_id: pageId,
       query_text: queryText.substring(0, 500), // Cap length
       has_response: hasResponse,

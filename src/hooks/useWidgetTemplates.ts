@@ -15,31 +15,18 @@ export interface WidgetTemplate {
     javascript: string;
 }
 
-interface WidgetTemplateRow {
-    id: string;
-    name: string;
-    name_ru: string | null;
-    description: string | null;
-    description_ru: string | null;
-    category: string;
-    icon: string | null;
-    html: string;
-    css: string | null;
-    javascript: string | null;
-}
-
 export function useWidgetTemplates() {
     return useQuery({
         queryKey: ['widget_templates'],
         queryFn: async () => {
-            const { data, error } = await supabase
-                .from('widget_templates' as never)
+            const { data, error } = await (supabase
+                .from('widget_templates' as any)
                 .select('*')
-                .order('id', { ascending: true });
+                .order('id', { ascending: true }) as any);
 
             if (error) throw error;
 
-            return ((data || []) as WidgetTemplateRow[]).map((t) => ({
+            return (data || []).map((t: any) => ({
                 id: t.id,
                 name: t.name,
                 nameRu: t.name_ru || t.name,
@@ -52,6 +39,6 @@ export function useWidgetTemplates() {
                 javascript: t.javascript || ''
             })) as WidgetTemplate[];
         },
-        staleTime: 1000 * 60 * 10,
+        staleTime: 1000 * 60 * 10, // 10 minutes
     });
 }

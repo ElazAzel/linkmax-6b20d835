@@ -4,7 +4,8 @@ import { logger } from '@/lib/utils/logger';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Home, LayoutDashboard } from 'lucide-react';
+import Home from 'lucide-react/dist/esm/icons/home';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 
 const NotFound = () => {
   const location = useLocation();

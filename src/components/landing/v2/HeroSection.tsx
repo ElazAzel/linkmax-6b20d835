@@ -1,7 +1,13 @@
-﻿import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, Zap, Play, Users, Eye, MessageSquare } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Play from 'lucide-react/dist/esm/icons/play';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
 import { MagneticButton } from './MagneticButton';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -113,15 +119,15 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
 
                 {/* Headline - Editorial Boldness */}
                 <h1 className="max-w-5xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-10 tracking-[-0.04em] leading-[0.9] text-balance">
-                    <span className="block text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]">{t('landing.v4.hero.titleStart', 'AI-СЃС‚СЂР°РЅРёС†Р° Р·Р° РјРёРЅСѓС‚Сѓ,')}</span>
+                    <span className="block text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]">{t('landing.v4.hero.titleStart', 'AI-страница за минуту,')}</span>
                     <span className="block mt-3 sm:mt-6 pb-3 sm:pb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary animate-[gradient-shift_6s_ease_infinite] bg-[length:200%_auto] filter drop-shadow-[0_4px_12px_rgba(var(--primary-rgb),0.3)]">
-                        {t('landing.v4.hero.titleEnd', 'РєР»РёРµРЅС‚С‹ вЂ” РІ Telegram')}
+                        {t('landing.v4.hero.titleEnd', 'клиенты — в Telegram')}
                     </span>
                 </h1>
 
                 {/* Subtitle - Refined Contrast */}
                 <p className="max-w-xl text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground/80 mb-8 sm:mb-12 leading-relaxed font-semibold tracking-tight px-4 md:px-0">
-                    {t('landing.v4.hero.subtitle', 'AI СЃРѕР·РґР°С‘С‚ СЃС‚СЂР°РЅРёС†Сѓ СЃ РїСЂР°Р№СЃРѕРј Рё РєРѕРЅС‚Р°РєС‚Р°РјРё. РљР»РёРµРЅС‚ РЅР°Р¶РёРјР°РµС‚ В«РќР°РїРёСЃР°С‚СЊВ» в†’ РІС‹ РїРѕР»СѓС‡Р°РµС‚Рµ СѓРІРµРґРѕРјР»РµРЅРёРµ РІ Telegram.')}
+                    {t('landing.v4.hero.subtitle', 'AI создаёт страницу с прайсом и контактами. Клиент нажимает «Написать» → вы получаете уведомление в Telegram.')}
                 </p>
 
                 {/* Username Input CTA */}
@@ -153,7 +159,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                             size="lg"
                             className="rounded-xl font-black px-5 sm:px-7 bg-primary text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border-none"
                         >
-                            <span className="hidden sm:inline mr-2">{t('landing.hero.createPage', 'РЎРѕР·РґР°С‚СЊ')}</span>
+                            <span className="hidden sm:inline mr-2">{t('landing.hero.createPage', 'Создать')}</span>
                             <ArrowRight className="h-5 w-5" />
                         </MagneticButton>
                     </div>
@@ -165,7 +171,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                         <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
                             <Play className="w-3 h-3 fill-current group-hover:scale-125 transition-transform duration-500" />
                         </div>
-                        {t('landing.v4.hero.secondary', 'РџРѕСЃРјРѕС‚СЂРµС‚СЊ РїСЂРёРјРµСЂС‹')}
+                        {t('landing.v4.hero.secondary', 'Посмотреть примеры')}
                     </button>
                 </div>
 
@@ -175,19 +181,19 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                         <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
                             <Eye className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={2400} suffix="+" /></span>
-                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust1', 'РџСЂРѕСЃРјРѕС‚СЂРѕРІ')}</span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust1', 'Просмотров')}</span>
                         </div>
                         <div className="w-px h-8 md:h-10 bg-border/20 shrink-0" />
                         <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
                             <Users className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={50} suffix="+" /></span>
-                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust2', 'РЎС‚СЂР°РЅРёС†')}</span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust2', 'Страниц')}</span>
                         </div>
                         <div className="w-px h-8 md:h-10 bg-border/20 shrink-0" />
                         <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
                             <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={360} suffix="+" /></span>
-                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust3', 'Р—Р°СЏРІРѕРє/РјРµСЃ')}</span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust3', 'Заявок/мес')}</span>
                         </div>
                     </div>
                 </div>
@@ -206,4 +212,3 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
         </section>
     );
 };
-

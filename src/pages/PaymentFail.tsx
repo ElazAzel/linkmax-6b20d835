@@ -2,7 +2,9 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, MessageCircle, XCircle } from 'lucide-react';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 
 
 export default function PaymentFail() {

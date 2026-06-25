@@ -6,7 +6,11 @@ import { supabase } from '@/platform/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ArrowRight, CalendarCheck, Clock, Link2, Sparkles } from 'lucide-react';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import CalendarCheck from 'lucide-react/dist/esm/icons/calendar-check';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
@@ -38,7 +42,7 @@ export default function FromPage() {
   // Track watermark landing view
   useEffect(() => {
     if (page?.id) {
-      trackActivationEvent(page.id, 'watermark_landing_view' as const, { ref_slug: slug });
+      trackActivationEvent(page.id, 'watermark_landing_view' as any, { ref_slug: slug });
     }
   }, [page?.id, slug]);
 

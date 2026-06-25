@@ -3,7 +3,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { sendMessage, isConfigured } from "../_shared/telegram.ts";
-import { isSafeWebhookUrl } from "../_shared/safe-url.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -251,7 +250,7 @@ serve(async (req: Request) => {
 
         const webhookUrl = page?.integrations?.webhook_url;
 
-        if (webhookUrl && isSafeWebhookUrl(webhookUrl).ok) {
+        if (webhookUrl) {
           console.log(`Sending webhook to ${webhookUrl}`);
           fetch(webhookUrl, {
             method: 'POST',

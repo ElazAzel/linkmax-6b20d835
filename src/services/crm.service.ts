@@ -2,9 +2,6 @@ import { supabase } from '@/platform/supabase/client';
 import type { Lead } from '@/hooks/crm/useLeads';
 import type { ZoneDeal } from '@/types/zones';
 import { logger } from '@/lib/utils/logger';
-import type { Json } from '@/platform/supabase/types';
-
-interface PostgrestInsert { insert: (row: Record<string, unknown>) => { select: () => { single: () => Promise<Record<string, unknown>> } } }
 
 export interface CrmMetrics {
   totalLeads: number;
@@ -34,7 +31,7 @@ export class CrmService {
 
     // 2. Fetch Zone Deals (only if user has a zone)
     const primaryZoneId = await this.getPrimaryZoneId(userId);
-    let zoneDeals: { status: string | null; value_amount: number | null }[] | null = null;
+    let zoneDeals: any[] | null = null;
     if (primaryZoneId) {
       const { data } = await supabase
         .from('zone_deals')
@@ -52,11 +49,11 @@ export class CrmService {
       .eq('status', 'confirmed')
       .gte('start_time', new Date().toISOString());
 
-    const allLeads = (leads || []) as { status: string | null }[];
+    const allLeads = (leads || []) as any[];
     const totalLeads = allLeads.length;
-    const convertedLeads = allLeads.filter(l => l.status === 'converted' || l.status === 'qualified').length;
+    const convertedLeads = allLeads.filter((l: any) => l.status === 'converted' || l.status === 'qualified').length;
     
-    const pipelineValue = (zoneDeals || []).reduce((sum, d) => sum + (Number(d.value_amount) || 0), 0);
+    const pipelineValue = (zoneDeals || []).reduce((sum: number, d: any) => sum + (Number(d.value_amount) || 0), 0);
 
     const conversionRate = totalLeads > 0 ? (convertedLeads / totalLeads) * 100 : 0;
     const averageCheck = convertedLeads > 0 ? pipelineValue / convertedLeads : 0;
@@ -74,10 +71,10 @@ export class CrmService {
   /**
    * Centralized transition logic with side effects
    */
-  static async transitionLeadStatus(leadId: string, newStatus: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost'): Promise<void> {
+  static async transitionLeadStatus(leadId: string, newStatus: string): Promise<void> {
     const { error } = await supabase
       .from('leads')
-      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .update({ status: newStatus as any, updated_at: new Date().toISOString() })
       .eq('id', leadId);
 
     if (error) throw error;
@@ -99,11 +96,11 @@ export class CrmService {
     phone?: string;
     notes?: string;
     source?: string;
-    metadata?: Record<string, unknown>;
+    metadata?: any;
     pageId?: string;
     blockId?: string;
-    formData?: Record<string, unknown>;
-  }): Promise<{ data: { id: string } | null; error: { message?: string } | null }> {
+    formData?: Record<string, any>;
+  }): Promise<{ data: any; error: any }> {
     // Prepare payload compatible with both legacy and new schema
     const payload = {
       user_id: data.userId,
@@ -111,7 +108,7 @@ export class CrmService {
       email: data.email || null,
       phone: data.phone || null,
       notes: data.notes || null,
-      source: data.source || 'form',
+      source: (data.source as any) || 'form',
       status: 'new',
       // form_data is used in the 2026-02-20 schema
       form_data: {
@@ -126,14 +123,14 @@ export class CrmService {
       block_id: data.blockId || null,
     };
 
-    const { data: lead, error } = await (supabase
-      .from('leads' as never) as unknown as PostgrestInsert)
-      .insert(payload as Record<string, unknown>)
+    const { data: lead, error } = await supabase
+      .from('leads')
+      .insert(payload as any)
       .select()
-      .single() as unknown as { data: { id: string } | null; error: { message?: string } | null };
+      .single();
 
     if (lead && !error) {
-      this.notifyExpert(lead as unknown as Lead);
+      this.notifyExpert(lead as any);
     }
 
     return { data: lead, error };

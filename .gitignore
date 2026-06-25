@@ -51,12 +51,7 @@ reports/
 !reports/README.md
 *.tsbuildinfo
 
-# Build artifacts and reports
-stats.html
-COMMIT_MSG.txt
-
 # Migration backup folders
 pages_vite_backup/
 tmp_backup/
-supabase/migrations_backup/
 

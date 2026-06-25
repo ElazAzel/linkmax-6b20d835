@@ -1,11 +1,11 @@
-﻿import { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { SectionWrapper } from '@/components/shared/SectionWrapper';
 import { SectionHeading } from '@/components/shared/SectionHeading';
-import { TrendingUp } from 'lucide-react';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { cn } from '@/lib/utils/utils';
 
 const PRO_BASE_KZT = 2900;
@@ -14,17 +14,17 @@ const PRO_FEE = 0.01;
 const COMPETITOR_BASE_KZT = 12000; // amoCRM/Bitrix per user
 
 function formatKzt(value: number) {
-    return Math.round(value).toLocaleString('ru-RU') + ' в‚ё';
+    return Math.round(value).toLocaleString('ru-RU') + ' ₸';
 }
 
 export const RevenueCalculator = () => {
     const { t } = useTranslation();
-    const [revenue, setRevenue] = useState(150_000); // в‚ё/РјРµСЃ
+    const [revenue, setRevenue] = useState(150_000); // ₸/мес
 
     const { starterCost, proCost, competitorCost, recommended, savingsVsCompetitor } = useMemo(() => {
         const starter = revenue * STARTER_FEE;
         const pro = PRO_BASE_KZT + revenue * PRO_FEE;
-        const competitor = COMPETITOR_BASE_KZT + revenue * 0.03; // РїРѕРґРїРёСЃРєР° + СЌРєРІР°Р№СЂРёРЅРі
+        const competitor = COMPETITOR_BASE_KZT + revenue * 0.03; // подписка + эквайринг
         return {
             starterCost: starter,
             proCost: pro,
@@ -34,15 +34,15 @@ export const RevenueCalculator = () => {
         };
     }, [revenue]);
 
-    const breakEven = Math.round(PRO_BASE_KZT / (STARTER_FEE - PRO_FEE)); // в‰€ 72500
+    const breakEven = Math.round(PRO_BASE_KZT / (STARTER_FEE - PRO_FEE)); // ≈ 72500
 
     return (
         <SectionWrapper id="calculator" className="bg-transparent overflow-hidden">
             <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
             <SectionHeading
-                title={t('landing.calc.title', 'РЎС‡РёС‚Р°Р№С‚Рµ РІС‹РіРѕРґСѓ РґРѕ С‚РѕРіРѕ, РєР°Рє Р·Р°РїР»Р°С‚РёС‚Рµ')}
-                subtitle={t('landing.calc.subtitle', 'РџРµСЂРµРґРІРёРЅСЊС‚Рµ СЃР»Р°Р№РґРµСЂ Рё СЃСЂР°РІРЅРёС‚Рµ Starter, Pro Рё СЃСЂРµРґРЅСЋСЋ CRM РЅР° СЂС‹РЅРєРµ. РќРёРєР°РєРёС… СЃРєСЂС‹С‚С‹С… СЃР±РѕСЂРѕРІ.')}
+                title={t('landing.calc.title', 'Считайте выгоду до того, как заплатите')}
+                subtitle={t('landing.calc.subtitle', 'Передвиньте слайдер и сравните Starter, Pro и среднюю CRM на рынке. Никаких скрытых сборов.')}
                 className="mb-12"
             />
 
@@ -52,7 +52,7 @@ export const RevenueCalculator = () => {
                 <div className="space-y-3 mb-8 relative">
                     <div className="flex items-center justify-between gap-4">
                         <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                            {t('landing.calc.revenueLabel', 'РћР±РѕСЂРѕС‚ С‡РµСЂРµР· LinkMAX РІ РјРµСЃСЏС†')}
+                            {t('landing.calc.revenueLabel', 'Оборот через LinkMAX в месяц')}
                         </Label>
                         <span className="text-2xl sm:text-3xl font-black tabular-nums tracking-tight text-foreground">
                             {formatKzt(revenue)}
@@ -67,10 +67,10 @@ export const RevenueCalculator = () => {
                         className="cursor-grab active:cursor-grabbing"
                     />
                     <div className="flex justify-between text-[10px] uppercase tracking-wider text-muted-foreground/60 font-semibold">
-                        <span>0 в‚ё</span>
-                        <span>500Рє</span>
-                        <span>1Рњ</span>
-                        <span>2Рњ в‚ё</span>
+                        <span>0 ₸</span>
+                        <span>500к</span>
+                        <span>1М</span>
+                        <span>2М ₸</span>
                     </div>
                 </div>
 
@@ -78,21 +78,21 @@ export const RevenueCalculator = () => {
                     <PlanResultCard
                         name="Starter"
                         cost={starterCost}
-                        sub={t('landing.calc.starterSub', '0 в‚ё + 5% СЃ РїСЂРѕРґР°Р¶')}
+                        sub={t('landing.calc.starterSub', '0 ₸ + 5% с продаж')}
                         active={recommended === 'starter'}
-                        recommendLabel={t('landing.calc.recommended', 'Р РµРєРѕРјРµРЅРґСѓРµРј')}
+                        recommendLabel={t('landing.calc.recommended', 'Рекомендуем')}
                     />
                     <PlanResultCard
                         name="Pro"
                         cost={proCost}
-                        sub={t('landing.calc.proSub', '2 900 в‚ё + 1% СЃ РїСЂРѕРґР°Р¶')}
+                        sub={t('landing.calc.proSub', '2 900 ₸ + 1% с продаж')}
                         active={recommended === 'pro'}
-                        recommendLabel={t('landing.calc.recommended', 'Р РµРєРѕРјРµРЅРґСѓРµРј')}
+                        recommendLabel={t('landing.calc.recommended', 'Рекомендуем')}
                     />
                     <PlanResultCard
                         name={t('landing.calc.competitor', 'amoCRM / Bitrix')}
                         cost={competitorCost}
-                        sub={t('landing.calc.competitorSub', '12 000 в‚ё + СЌРєРІР°Р№СЂРёРЅРі 3%')}
+                        sub={t('landing.calc.competitorSub', '12 000 ₸ + эквайринг 3%')}
                         muted
                     />
                 </div>
@@ -104,17 +104,17 @@ export const RevenueCalculator = () => {
                         </div>
                         <div>
                             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                                {t('landing.calc.savings', 'Р­РєРѕРЅРѕРјРёСЏ vs amoCRM/Bitrix')}
+                                {t('landing.calc.savings', 'Экономия vs amoCRM/Bitrix')}
                             </div>
                             <div className="text-lg font-black tabular-nums text-emerald-500">
-                                {formatKzt(savingsVsCompetitor)} {t('landing.calc.perMonth', '/ РјРµСЃ')}
+                                {formatKzt(savingsVsCompetitor)} {t('landing.calc.perMonth', '/ мес')}
                             </div>
                         </div>
                     </div>
                     <div className="text-xs text-muted-foreground leading-relaxed">
-                        {t('landing.calc.breakEvenNote', 'РўРѕС‡РєР° РїРµСЂРµС…РѕРґР° Starter в†’ Pro: РїСЂРёРјРµСЂРЅРѕ')}{' '}
+                        {t('landing.calc.breakEvenNote', 'Точка перехода Starter → Pro: примерно')}{' '}
                         <strong className="text-foreground tabular-nums">{formatKzt(breakEven)}</strong>{' '}
-                        {t('landing.calc.breakEvenSuffix', 'РѕР±РѕСЂРѕС‚Р° РІ РјРµСЃСЏС†. Р’С‹С€Рµ вЂ” Pro РІС‹РіРѕРґРЅРµРµ, РЅРёР¶Рµ вЂ” РѕСЃС‚Р°РІР°Р№С‚РµСЃСЊ РЅР° Starter.')}
+                        {t('landing.calc.breakEvenSuffix', 'оборота в месяц. Выше — Pro выгоднее, ниже — оставайтесь на Starter.')}
                     </div>
                 </div>
             </div>
@@ -165,4 +165,3 @@ function PlanResultCard({
         </div>
     );
 }
-

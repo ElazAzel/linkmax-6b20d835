@@ -4,7 +4,10 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Copy, ExternalLink, QrCode, Share2 } from 'lucide-react';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import QrCode from 'lucide-react/dist/esm/icons/qr-code';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Copy from 'lucide-react/dist/esm/icons/copy';
 import { GridBlocksRenderer } from '@/components/blocks/GridBlocksRenderer';
 import { FreemiumWatermark } from '@/components/billing/FreemiumWatermark';
 import { EnhancedSEOHead } from '@/components/seo/EnhancedSEOHead';
@@ -28,7 +31,6 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 import type { PageData, PageBackground, Block } from '@/types/page';
-import type { TranslatedBlock } from '@/types/language-context';
 import {
   Dialog,
   DialogContent,
@@ -228,9 +230,9 @@ export default function PublicPage() {
     }
 
     // Translate blocks to current language
-    translateBlocksToLanguage(experimentalBlocks as unknown as TranslatedBlock[], currentLanguage).then((translated) => {
-      if (translated) {
-        setTranslatedBlocks(translated as unknown as Block[]);
+    translateBlocksToLanguage(experimentalBlocks as any[], currentLanguage).then((translated) => {
+      if (translated !== experimentalBlocks as any) {
+        setTranslatedBlocks(translated as any);
       }
     });
   }, [experimentalBlocks, currentLanguage, translateBlocksToLanguage, autoTranslateEnabled]);

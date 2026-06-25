@@ -1,10 +1,16 @@
-﻿'use client';
+'use client';
 import { useNavigate } from 'react-router-dom';
 
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Scissors, Heart, Brain, ArrowRight, Bell, MessageSquare, BarChart3 } from 'lucide-react';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 
 interface TargetAudienceSectionProps {
   isVisible: boolean;
@@ -18,38 +24,38 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
   const audiences = [
     {
       icon: Heart,
-      title: t('landing.targetAudience.beauty.title', 'Р‘СЊСЋС‚Рё-РјР°СЃС‚РµСЂР°'),
-      subtitle: t('landing.targetAudience.beauty.subtitle', 'РњР°РЅРёРєСЋСЂ, Р±СЂРѕРІРё, СЂРµСЃРЅРёС†С‹, РІРѕР»РѕСЃС‹'),
+      title: t('landing.targetAudience.beauty.title', 'Бьюти-мастера'),
+      subtitle: t('landing.targetAudience.beauty.subtitle', 'Маникюр, брови, ресницы, волосы'),
       color: 'from-pink-500 to-rose-500',
       bgColor: 'bg-pink-500/10',
       results: [
-        t('landing.targetAudience.beauty.result1', 'Р’СЃРµ СѓСЃР»СѓРіРё Рё С†РµРЅС‹ - РІ РѕРґРЅРѕР№ СЃСЃС‹Р»РєРµ'),
-        t('landing.targetAudience.beauty.result2', 'РљР»РёРµРЅС‚С‹ Р·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ С‡РµСЂРµР· С„РѕСЂРјСѓ'),
-        t('landing.targetAudience.beauty.result3', 'РЈРІРµРґРѕРјР»РµРЅРёРµ РІ Telegram Рѕ Р·Р°РїРёСЃРё'),
+        t('landing.targetAudience.beauty.result1', 'Все услуги и цены - в одной ссылке'),
+        t('landing.targetAudience.beauty.result2', 'Клиенты записываются через форму'),
+        t('landing.targetAudience.beauty.result3', 'Уведомление в Telegram о записи'),
       ]
     },
     {
       icon: Brain,
-      title: t('landing.targetAudience.expert.title', 'Р­РєСЃРїРµСЂС‚С‹ Рё РєРѕСѓС‡Рё'),
-      subtitle: t('landing.targetAudience.expert.subtitle', 'РџСЃРёС…РѕР»РѕРіРё, СЂРµРїРµС‚РёС‚РѕСЂС‹, РєРѕРЅСЃСѓР»СЊС‚Р°РЅС‚С‹'),
+      title: t('landing.targetAudience.expert.title', 'Эксперты и коучи'),
+      subtitle: t('landing.targetAudience.expert.subtitle', 'Психологи, репетиторы, консультанты'),
       color: 'from-violet-500 to-purple-600',
       bgColor: 'bg-violet-500/10',
       results: [
-        t('landing.targetAudience.expert.result1', 'РџРѕСЂС‚С„РѕР»РёРѕ Рё РѕС‚Р·С‹РІС‹ РІ РєСЂР°СЃРёРІРѕРј РІРёРґРµ'),
-        t('landing.targetAudience.expert.result2', 'Р›РёРґС‹ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІ Mini-CRM'),
-        t('landing.targetAudience.expert.result3', 'РЎС‚Р°С‚СѓСЃС‹ РєР»РёРµРЅС‚РѕРІ: РЅРѕРІС‹Р№ в†’ РІ СЂР°Р±РѕС‚Рµ в†’ РіРѕС‚РѕРІРѕ'),
+        t('landing.targetAudience.expert.result1', 'Портфолио и отзывы в красивом виде'),
+        t('landing.targetAudience.expert.result2', 'Лиды автоматически в Mini-CRM'),
+        t('landing.targetAudience.expert.result3', 'Статусы клиентов: новый → в работе → готово'),
       ]
     },
     {
       icon: Scissors,
-      title: t('landing.targetAudience.business.title', 'РњР°Р»С‹Р№ Р±РёР·РЅРµСЃ'),
-      subtitle: t('landing.targetAudience.business.subtitle', 'Р‘Р°СЂР±РµСЂС‹, С„РѕС‚РѕРіСЂР°С„С‹, РєРѕС„РµР№РЅРё'),
+      title: t('landing.targetAudience.business.title', 'Малый бизнес'),
+      subtitle: t('landing.targetAudience.business.subtitle', 'Барберы, фотографы, кофейни'),
       color: 'from-blue-500 to-cyan-500',
       bgColor: 'bg-blue-500/10',
       results: [
-        t('landing.targetAudience.business.result1', 'РљР°С‚Р°Р»РѕРі С‚РѕРІР°СЂРѕРІ Рё СѓСЃР»СѓРі'),
-        t('landing.targetAudience.business.result2', 'РђРЅР°Р»РёС‚РёРєР°: РѕС‚РєСѓРґР° РїСЂРёС€Р»Рё РєР»РёРµРЅС‚С‹'),
-        t('landing.targetAudience.business.result3', 'РљРѕРЅС‚СЂРѕР»СЊ Р·Р°СЏРІРѕРє Р±РµР· Excel'),
+        t('landing.targetAudience.business.result1', 'Каталог товаров и услуг'),
+        t('landing.targetAudience.business.result2', 'Аналитика: откуда пришли клиенты'),
+        t('landing.targetAudience.business.result3', 'Контроль заявок без Excel'),
       ]
     },
   ];
@@ -61,13 +67,13 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
           <h2
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}
           >
-            {t('landing.targetAudience.title', 'Р”Р»СЏ РєРѕРіРѕ СЃРѕР·РґР°РЅ lnkmx.my')}
+            {t('landing.targetAudience.title', 'Для кого создан lnkmx.my')}
           </h2>
           <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
-            {t('landing.targetAudience.subtitle', 'РљРѕРЅРєСЂРµС‚РЅС‹Рµ СЂРµР·СѓР»СЊС‚Р°С‚С‹ РґР»СЏ РІР°С€РµР№ РЅРёС€Рё')}
+            {t('landing.targetAudience.subtitle', 'Конкретные результаты для вашей ниши')}
           </p>
         </div>
 
@@ -123,7 +129,7 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
             size="lg"
             className="rounded-2xl font-bold px-6 sm:px-8"
           >
-            <span className="truncate">{t('landing.targetAudience.cta', 'РЎРѕР·РґР°С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ')}</span>
+            <span className="truncate">{t('landing.targetAudience.cta', 'Создать страницу')}</span>
             <ArrowRight className="ml-2 h-5 w-5 flex-shrink-0" />
           </Button>
         </div>
@@ -131,4 +137,3 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
     </section>
   );
 }
-

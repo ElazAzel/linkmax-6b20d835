@@ -4,7 +4,7 @@ import animate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  content: ["./src/**/*.{ts,tsx}"],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -235,7 +235,6 @@ export default {
       },
       fontFamily: {
         sans: [
-          'DM Sans',
           'Inter',
           'ui-sans-serif',
           'system-ui',
@@ -248,7 +247,7 @@ export default {
           'sans-serif'
         ],
         heading: [
-          'Space Grotesk',
+          'Manrope',
           'Inter',
           'ui-sans-serif',
           'system-ui',

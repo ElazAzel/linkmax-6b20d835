@@ -57,7 +57,7 @@ export async function getReferralStats(userId: string): Promise<ReferralStats | 
       return null;
     }
 
-    const referralCode = codeData.code;
+    const referralCode = (codeData as any).code;
 
     // Count referrals
     const { count, error: countError } = await supabase

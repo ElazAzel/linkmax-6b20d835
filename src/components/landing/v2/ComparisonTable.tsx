@@ -1,5 +1,6 @@
-﻿import { useTranslation } from 'react-i18next';
-import { Check, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
 import { SectionWrapper } from '@/components/shared/SectionWrapper';
 import { SectionHeading } from '@/components/shared/SectionHeading';
 import { cn } from '@/lib/utils/utils';
@@ -10,21 +11,21 @@ export const ComparisonTable = () => {
     const { t } = useTranslation();
 
     const rows: { label: string; linkmax: Cell; linktree: Cell; bitrix: Cell }[] = [
-        { label: t('landing.compare.r1', 'Р¦РµРЅР° РІС…РѕРґР°'), linkmax: t('landing.compare.r1.linkmax', '0 в‚ё + 5%'), linktree: '$0вЂ“24', bitrix: t('landing.compare.r1.bitrix', 'РѕС‚ 12 000 в‚ё') },
-        { label: t('landing.compare.r2', 'Р’СЂРµРјСЏ Р·Р°РїСѓСЃРєР°'), linkmax: t('landing.compare.r2.linkmax', '15 РјРёРЅСѓС‚'), linktree: t('landing.compare.r2.linktree', '5 РјРёРЅСѓС‚'), bitrix: t('landing.compare.r2.bitrix', '2вЂ“5 РґРЅРµР№') },
-        { label: t('landing.compare.r3', 'Р’РёС‚СЂРёРЅР° СѓСЃР»СѓРі Рё РѕРїР»Р°С‚Р°'), linkmax: true, linktree: false, bitrix: t('landing.compare.r3.bitrix', 'С‡РµСЂРµР· РёРЅС‚РµРіСЂР°С†РёРё') },
-        { label: t('landing.compare.r4', 'Inbox Р·Р°СЏРІРѕРє РёР· РјРµСЃСЃРµРЅРґР¶РµСЂРѕРІ'), linkmax: true, linktree: false, bitrix: true },
-        { label: t('landing.compare.r5', 'РћРЅР»Р°Р№РЅ-Р±СЂРѕРЅРёСЂРѕРІР°РЅРёРµ'), linkmax: true, linktree: false, bitrix: t('landing.compare.r5.bitrix', 'РѕС‚РґРµР»СЊРЅРѕ') },
-        { label: t('landing.compare.r6', 'РњРѕР±РёР»СЊРЅС‹Р№ CRM'), linkmax: true, linktree: false, bitrix: t('landing.compare.r6.bitrix', 'РЅРµСѓРґРѕР±РЅС‹Р№') },
-        { label: t('landing.compare.r7', 'РљРѕРјР°РЅРґР° РґРѕ 10 С‡РµР»РѕРІРµРє'), linkmax: true, linktree: false, bitrix: true },
-        { label: t('landing.compare.r8', 'РџР»Р°С‚РёС‚Рµ С‚РѕР»СЊРєРѕ РєРѕРіРґР° Р·Р°СЂР°Р±Р°С‚С‹РІР°РµС‚Рµ'), linkmax: true, linktree: false, bitrix: false },
+        { label: t('landing.compare.r1', 'Цена входа'), linkmax: t('landing.compare.r1.linkmax', '0 ₸ + 5%'), linktree: '$0–24', bitrix: t('landing.compare.r1.bitrix', 'от 12 000 ₸') },
+        { label: t('landing.compare.r2', 'Время запуска'), linkmax: t('landing.compare.r2.linkmax', '15 минут'), linktree: t('landing.compare.r2.linktree', '5 минут'), bitrix: t('landing.compare.r2.bitrix', '2–5 дней') },
+        { label: t('landing.compare.r3', 'Витрина услуг и оплата'), linkmax: true, linktree: false, bitrix: t('landing.compare.r3.bitrix', 'через интеграции') },
+        { label: t('landing.compare.r4', 'Inbox заявок из мессенджеров'), linkmax: true, linktree: false, bitrix: true },
+        { label: t('landing.compare.r5', 'Онлайн-бронирование'), linkmax: true, linktree: false, bitrix: t('landing.compare.r5.bitrix', 'отдельно') },
+        { label: t('landing.compare.r6', 'Мобильный CRM'), linkmax: true, linktree: false, bitrix: t('landing.compare.r6.bitrix', 'неудобный') },
+        { label: t('landing.compare.r7', 'Команда до 10 человек'), linkmax: true, linktree: false, bitrix: true },
+        { label: t('landing.compare.r8', 'Платите только когда зарабатываете'), linkmax: true, linktree: false, bitrix: false },
     ];
 
     return (
         <SectionWrapper id="compare" className="bg-transparent overflow-hidden">
             <SectionHeading
-                title={t('landing.compare.title', 'РџРѕС‡РµРјСѓ СѓС…РѕРґСЏС‚ РѕС‚ Linktree Рё Bitrix')}
-                subtitle={t('landing.compare.subtitle', 'Linktree вЂ” СЃР»РёС€РєРѕРј РјР°Р»Рѕ. Bitrix Рё amoCRM вЂ” СЃР»РёС€РєРѕРј РјРЅРѕРіРѕ Рё РґРѕСЂРѕРіРѕ. LinkMAX вЂ” СЂРѕРІРЅРѕ С‚Рѕ, С‡С‚Рѕ РЅСѓР¶РЅРѕ СЃРµСЂРІРёСЃРЅРѕРјСѓ Р±РёР·РЅРµСЃСѓ.')}
+                title={t('landing.compare.title', 'Почему уходят от Linktree и Bitrix')}
+                subtitle={t('landing.compare.subtitle', 'Linktree — слишком мало. Bitrix и amoCRM — слишком много и дорого. LinkMAX — ровно то, что нужно сервисному бизнесу.')}
                 className="mb-12"
             />
 
@@ -35,7 +36,7 @@ export const ComparisonTable = () => {
                             <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted-foreground"></th>
                             <th className="p-4 text-center">
                                 <span className="inline-flex items-center gap-2 font-black text-primary text-base">LinkMAX</span>
-                                <div className="text-[10px] font-semibold uppercase tracking-wider text-primary/70 mt-0.5">{t('landing.compare.us', 'Р­С‚Рѕ РјС‹')}</div>
+                                <div className="text-[10px] font-semibold uppercase tracking-wider text-primary/70 mt-0.5">{t('landing.compare.us', 'Это мы')}</div>
                             </th>
                             <th className="p-4 text-center font-black text-muted-foreground/80">Linktree</th>
                             <th className="p-4 text-center font-black text-muted-foreground/80">amoCRM / Bitrix</th>
@@ -75,4 +76,3 @@ function ComparisonCell({ value, highlight }: { value: Cell; highlight?: boolean
         </td>
     );
 }
-

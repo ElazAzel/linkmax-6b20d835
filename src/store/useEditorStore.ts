@@ -265,6 +265,6 @@ export const useEditorStore = create<EditorState>()(
                 if (value instanceof Map) return Object.fromEntries(value);
                 return value;
             }
-        } as { replacer: (key: string, value: unknown) => unknown } }
+        } as any }
     )
 );

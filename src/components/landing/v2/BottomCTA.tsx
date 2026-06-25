@@ -1,6 +1,9 @@
-﻿import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Shield, Zap, Heart } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Heart from 'lucide-react/dist/esm/icons/heart';
 import { MagneticButton } from './MagneticButton';
 import { SectionWrapper } from '@/components/shared/SectionWrapper';
 
@@ -11,18 +14,18 @@ export const BottomCTA = () => {
   const guarantees = [
     {
       icon: Zap,
-      title: t('landing.bottomCta.g1Title', '15 РјРёРЅСѓС‚ РґРѕ Р·Р°РїСѓСЃРєР°'),
-      desc: t('landing.bottomCta.g1Desc', 'AI СЃРѕР·РґР°СЃС‚ РІСЃС‘ Р·Р° РІР°СЃ'),
+      title: t('landing.bottomCta.g1Title', '15 минут до запуска'),
+      desc: t('landing.bottomCta.g1Desc', 'AI создаст всё за вас'),
     },
     {
       icon: Shield,
-      title: t('landing.bottomCta.g2Title', 'Р‘РµР· РєР°СЂС‚С‹'),
-      desc: t('landing.bottomCta.g2Desc', 'РЎС‚Р°СЂС‚ Р°Р±СЃРѕР»СЋС‚РЅРѕ Р±РµСЃРїР»Р°С‚РЅС‹Р№'),
+      title: t('landing.bottomCta.g2Title', 'Без карты'),
+      desc: t('landing.bottomCta.g2Desc', 'Старт абсолютно бесплатный'),
     },
     {
       icon: Heart,
-      title: t('landing.bottomCta.g3Title', 'РџРѕРґРґРµСЂР¶РєР° 24/7'),
-      desc: t('landing.bottomCta.g3Desc', 'Telegram-С‡Р°С‚ СЃ РєРѕРјР°РЅРґРѕР№'),
+      title: t('landing.bottomCta.g3Title', 'Поддержка 24/7'),
+      desc: t('landing.bottomCta.g3Desc', 'Telegram-чат с командой'),
     },
   ];
 
@@ -39,17 +42,17 @@ export const BottomCTA = () => {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
             </span>
             <span className="text-xs font-bold text-foreground/80 uppercase tracking-wider">
-              {t('landing.bottomCta.live', 'РЎРµРіРѕРґРЅСЏ Р·Р°РїСѓСЃС‚РёР»Рё: 47 СЃС‚СЂР°РЅРёС†')}
+              {t('landing.bottomCta.live', 'Сегодня запустили: 47 страниц')}
             </span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-[-0.03em] leading-[1.05]">
-            {t('landing.bottomCta.title', 'Р“РѕС‚РѕРІС‹ РїРѕР»СѓС‡Р°С‚СЊ РєР»РёРµРЅС‚РѕРІ?')}
+            {t('landing.bottomCta.title', 'Готовы получать клиентов?')}
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground/80 max-w-md mx-auto font-semibold">
             {t(
               'landing.bottomCta.subtitle',
-              'AI-СЃС‚СЂР°РЅРёС†Р° Р·Р° 15 РјРёРЅСѓС‚. Р—Р°СЏРІРєРё РІ Telegram. РџРµСЂРІС‹Рµ РєР»РёРµРЅС‚С‹ вЂ” СѓР¶Рµ СЃРµРіРѕРґРЅСЏ.'
+              'AI-страница за 15 минут. Заявки в Telegram. Первые клиенты — уже сегодня.'
             )}
           </p>
 
@@ -60,13 +63,13 @@ export const BottomCTA = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
             <span className="relative z-10 flex items-center gap-3 uppercase tracking-[0.1em]">
-              {t('landing.bottomCta.cta', 'РЎРѕР·РґР°С‚СЊ СЃС‚СЂР°РЅРёС†Сѓ Р±РµСЃРїР»Р°С‚РЅРѕ')}
+              {t('landing.bottomCta.cta', 'Создать страницу бесплатно')}
               <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-500" />
             </span>
           </MagneticButton>
 
           <p className="text-xs text-muted-foreground/60 font-semibold">
-            {t('landing.bottomCta.note', 'Р‘РµСЃРїР»Р°С‚РЅРѕ В· Р‘РµР· РєРѕРґР° В· Р‘РµР· Р±Р°РЅРєРѕРІСЃРєРѕР№ РєР°СЂС‚С‹')}
+            {t('landing.bottomCta.note', 'Бесплатно · Без кода · Без банковской карты')}
           </p>
 
           {/* Guarantees grid */}
@@ -92,4 +95,3 @@ export const BottomCTA = () => {
     </SectionWrapper>
   );
 };
-

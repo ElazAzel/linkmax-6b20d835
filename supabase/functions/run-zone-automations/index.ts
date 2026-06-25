@@ -1,7 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders, createErrorResponse } from "../_shared/utils.ts";
-import { isSafeWebhookUrl } from "../_shared/safe-url.ts";
 
 interface ZoneAutomation {
   id: string;
@@ -157,7 +156,7 @@ serve(async (req: Request) => {
       } else if (auto.action_type === "send_webhook") {
         const webhookUrl = auto.config?.webhook_url as string;
         const webhookSecret = auto.config?.webhook_secret as string;
-        if (webhookUrl && isSafeWebhookUrl(webhookUrl).ok) {
+        if (webhookUrl) {
           // Prepare payload
           const payload = {
             event: trigger_type,

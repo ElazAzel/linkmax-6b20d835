@@ -12,7 +12,6 @@ export default tseslint.config(
   {
     ignores: [
       "dist",
-      "node_modules",
       // Документация и примеры — не продакшен UI; i18n не требуется
       "docs/**",
       "e2e/**",
