@@ -192,7 +192,7 @@ serve(async (req: Request) => {
         page_id: pageId,
         block_id: blockId,
         owner_id: pageData.user_id,
-        user_id: userId || null,
+        user_id: verifiedUserId,
         slot_date: sanitize(slotDate, 10),
         slot_time: sanitize(slotTime, 8),
         slot_end_time: slotEndTime ? sanitize(slotEndTime, 8) : null,
