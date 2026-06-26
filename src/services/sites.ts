@@ -73,18 +73,20 @@ export async function loadSitePageByPath(
     .eq('slug', homeSlug)
     .eq('is_published', true)
     .maybeSingle();
-  if (homeErr || !home || !home.site_id) return null;
+  const homeRow = home as unknown as { site_id: string } | null;
+  if (homeErr || !homeRow || !homeRow.site_id) return null;
 
   // 2) Find the sub-page by site + path
   const { data: sub, error: subErr } = await supabase
     .from('pages')
     .select('id, site_id')
-    .eq('site_id', home.site_id)
+    .eq('site_id', homeRow.site_id)
     .eq('page_path', pagePath)
     .eq('is_published', true)
     .maybeSingle();
-  if (subErr || !sub) return null;
-  return sub as { id: string; site_id: string };
+  const subRow = sub as unknown as { id: string; site_id: string } | null;
+  if (subErr || !subRow) return null;
+  return subRow;
 }
 
 /** Update site header/footer/settings. */
@@ -148,8 +150,9 @@ export async function deleteSubPage(pageId: string): Promise<boolean> {
     .select('id, is_home')
     .eq('id', pageId)
     .maybeSingle();
-  if (getErr || !page) return false;
-  if ((page as { is_home: boolean }).is_home) return false;
+  const pageRow = page as unknown as { is_home: boolean } | null;
+  if (getErr || !pageRow) return false;
+  if (pageRow.is_home) return false;
 
   // Best-effort cleanup of related blocks (FK cascade may also handle this).
   await supabase.from('blocks').delete().eq('page_id', pageId);
@@ -180,8 +183,9 @@ export async function updateSubPage(
     .select('id, is_home, site_id, page_path')
     .eq('id', pageId)
     .maybeSingle();
-  if (!page) return { ok: false, error: 'not_found' };
-  const isHome = (page as { is_home: boolean }).is_home;
+  const pageRow = page as unknown as { is_home: boolean; site_id: string; page_path: string } | null;
+  if (!pageRow) return { ok: false, error: 'not_found' };
+  const isHome = pageRow.is_home;
 
   const update: Record<string, unknown> = {};
   if (typeof patch.title === 'string') update.title = patch.title.trim() || null;
@@ -189,7 +193,7 @@ export async function updateSubPage(
   if (typeof patch.pagePath === 'string' && !isHome) {
     const newPath = patch.pagePath;
     // Uniqueness within the site
-    const siteId = (page as { site_id: string }).site_id;
+    const siteId = pageRow.site_id;
     const { data: clash } = await supabase
       .from('pages')
       .select('id')
