@@ -28,9 +28,9 @@ interface PlanLimits {
   paidPages: number;
   freePages: number;
   blocksUsed: number;
-  blocksLimit: number;
+  blocksLimit: number | null;
   aiGenerationsUsed: number;
-  aiGenerationsLimit: number;
+  aiGenerationsLimit: number | null;
 }
 
 interface MonetizeScreenProps {
@@ -95,9 +95,9 @@ export const MonetizeScreen = memo(function MonetizeScreen({
     paidPages: tier === 'pro' || tier === 'business' ? 1 : 0,
     freePages: tier === 'identity' ? 1 : tier === 'starter' ? 3 : 5,
     blocksUsed: 5,
-    blocksLimit: tier === 'identity' ? 10 : 50,
+    blocksLimit: (tier === "pro" || tier === "business") ? null : (tier === "identity" ? 10 : 50),
     aiGenerationsUsed: 0,
-    aiGenerationsLimit: tier === 'identity' ? 1 : tier === 'starter' ? 5 : 20,
+    aiGenerationsLimit: (tier === "pro" || tier === "business") ? null : (tier === "identity" ? 1 : tier === "starter" ? 5 : 20),
   };
 
   // Features by tier
@@ -260,11 +260,11 @@ export const MonetizeScreen = memo(function MonetizeScreen({
               <div className="flex justify-between text-sm mb-1">
                 <span>{t('dashboard.monetize.blocks', 'Blocks')}</span>
                 <span className="text-muted-foreground">
-                  {defaultLimits.blocksUsed} / {defaultLimits.blocksLimit === Infinity ? '∞' : defaultLimits.blocksLimit}
+                  {defaultLimits.blocksUsed} / {defaultLimits.blocksLimit == null ? '∞' : defaultLimits.blocksLimit}
                 </span>
               </div>
               <Progress 
-                value={defaultLimits.blocksLimit === Infinity ? 10 : (defaultLimits.blocksUsed / defaultLimits.blocksLimit) * 100} 
+                value={defaultLimits.blocksLimit == null ? 10 : (defaultLimits.blocksUsed / defaultLimits.blocksLimit) * 100} 
                 className="h-2"
               />
             </div>
@@ -274,11 +274,11 @@ export const MonetizeScreen = memo(function MonetizeScreen({
               <div className="flex justify-between text-sm mb-1">
                 <span>{t('dashboard.monetize.aiGenerations', 'AI Generations')}</span>
                 <span className="text-muted-foreground">
-                  {defaultLimits.aiGenerationsUsed} / {defaultLimits.aiGenerationsLimit === Infinity ? '∞' : defaultLimits.aiGenerationsLimit}
+                  {defaultLimits.aiGenerationsUsed} / {defaultLimits.aiGenerationsLimit == null ? '∞' : defaultLimits.aiGenerationsLimit}
                 </span>
               </div>
               <Progress 
-                value={defaultLimits.aiGenerationsLimit === Infinity ? 10 : (defaultLimits.aiGenerationsUsed / defaultLimits.aiGenerationsLimit) * 100} 
+                value={defaultLimits.aiGenerationsLimit == null ? 10 : (defaultLimits.aiGenerationsUsed / defaultLimits.aiGenerationsLimit) * 100} 
                 className="h-2"
               />
             </div>

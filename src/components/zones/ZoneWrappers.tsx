@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useZoneContext } from '@/contexts/ZoneContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import Plus from 'lucide-react/dist/esm/icons/plus';
@@ -99,83 +100,83 @@ function NoZone() {
 export function ZoneDashboardWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneDashboard zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneDashboard"><ZoneDashboard zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneDealsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneDealsScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneDealsScreen"><ZoneDealsScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneContactsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneContactsScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneContactsScreen"><ZoneContactsScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneInboxScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneInboxScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneInboxScreen"><ZoneInboxScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneTasksScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneTasksScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneTasksScreen"><ZoneTasksScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneSettingsScreenWrapper() {
     const { currentZone, members, myRole, refetch } = useZoneContext();
     if (!currentZone) return <NoZone />;
-    return <ZoneSettingsScreen zone={currentZone} members={members} myRole={myRole} onRefetch={refetch} />;
+    return <ScreenErrorBoundary screenName="ZoneSettingsScreen"><ZoneSettingsScreen zone={currentZone} members={members} myRole={myRole} onRefetch={refetch} /></ScreenErrorBoundary>;
 }
 
 export function ZoneAutomationsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneAutomationsScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneAutomationsScreen"><ZoneAutomationsScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneInvoicesScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneInvoicesScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneInvoicesScreen"><ZoneInvoicesScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneAnalyticsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneAnalyticsScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneAnalyticsScreen"><ZoneAnalyticsScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneBookingsCalendarScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneBookingsCalendarScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneBookingsCalendarScreen"><ZoneBookingsCalendarScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneEventsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneEventsScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneEventsScreen"><ZoneEventsScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneProductsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneProductsScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneProductsScreen"><ZoneProductsScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }
 
 export function ZoneDocumentsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ZoneDocumentsScreen />;
+    return <ScreenErrorBoundary screenName="ZoneDocumentsScreen"><ZoneDocumentsScreen /></ScreenErrorBoundary>;
 }
 
 export function ZoneResourcesScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
-    return <ResourcesScreen zoneId={currentZoneId} />;
+    return <ScreenErrorBoundary screenName="ZoneResourcesScreen"><ResourcesScreen zoneId={currentZoneId} /></ScreenErrorBoundary>;
 }

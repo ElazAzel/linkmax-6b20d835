@@ -27,7 +27,7 @@ const typeIcons: Record<string, typeof Info> = {
 };
 
 export const ZoneNotificationBell = memo(function ZoneNotificationBell({ zoneId }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { notifications, unreadCount, markAsRead, markAllRead } = useZoneNotifications(zoneId);
 
   const bellLabel =
@@ -109,7 +109,7 @@ export const ZoneNotificationBell = memo(function ZoneNotificationBell({ zoneId 
                       <p className={cn("text-xs truncate", !n.is_read ? "font-bold" : "font-medium")}>{n.title}</p>
                       {n.body && <p className="text-xs text-muted-foreground truncate">{n.body}</p>}
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {formatRelativeTime(n.created_at, 'ru')}
+                        {formatRelativeTime(n.created_at, i18n.language?.split('-')[0] ?? 'en')}
                       </p>
                     </div>
                     {!n.is_read && (
