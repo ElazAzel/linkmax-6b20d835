@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/ui/use-toast";
 import { MagneticButton } from "@/components/landing/v2/MagneticButton";
 
@@ -28,6 +29,7 @@ export default function DeveloperSettings() {
     const { toast } = useToast();
     const [copiedKey, setCopiedKey] = useState<string | null>(null);
     const [mockApiKey, setMockApiKey] = useState("lk_live_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+    const [regenerateConfirmOpen, setRegenerateConfirmOpen] = useState(false);
     
     // UI mock state for webhooks
     const [webhooks, setWebhooks] = useState([
@@ -45,14 +47,13 @@ export default function DeveloperSettings() {
         setTimeout(() => setCopiedKey(null), 2000);
     };
 
-    const regenerateKey = () => {
-        if(confirm("Внимание! Старый ключ перестанет работать моментально. Продолжить?")) {
-            setMockApiKey("lk_live_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
-            toast({
-                title: "Ключ обновлен",
-                description: "Новый API ключ успешно сгенерирован."
-            });
-        }
+    const confirmRegenerateKey = () => {
+        setMockApiKey("lk_live_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+        toast({
+            title: "Ключ обновлен",
+            description: "Новый API ключ успешно сгенерирован."
+        });
+        setRegenerateConfirmOpen(false);
     };
 
     return (
@@ -124,7 +125,7 @@ export default function DeveloperSettings() {
                                         </Button>
                                     </div>
                                 </div>
-                                <Button onClick={regenerateKey} variant="destructive" className="shrink-0 gap-2">
+                                <Button onClick={() => setRegenerateConfirmOpen(true)} variant="destructive" className="shrink-0 gap-2">
                                     <RefreshCw className="w-4 h-4" />
                                     Перевыпустить
                                 </Button>
@@ -245,6 +246,21 @@ export default function DeveloperSettings() {
                     </Card>
                 </TabsContent>
             </Tabs>
+
+            <AlertDialog open={regenerateConfirmOpen} onOpenChange={setRegenerateConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Обновить API ключ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Внимание! Старый ключ перестанет работать моментально. Продолжить?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Отмена</AlertDialogCancel>
+                        <AlertDialogAction onClick={confirmRegenerateKey}>Обновить</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

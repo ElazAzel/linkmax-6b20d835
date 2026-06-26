@@ -186,6 +186,7 @@ export default function AdminTranslations() {
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [deleteConfirmKey, setDeleteConfirmKey] = useState<string | null>(null);
   const [savingKey, setSavingKey] = useState<string | null>(null);
+  const [syncConfirmOpen, setSyncConfirmOpen] = useState(false);
   const [editValue, setEditValue] = useState('');
 
   // Dialogs
@@ -362,13 +363,12 @@ export default function AdminTranslations() {
   };
 
   const syncAllToDB = async () => {
-    if (!confirm('Отправить все текущие переводы в базу данных? Существующие в БД данные будут перезаписаны.')) return;
-
     const payload = activeLanguages.map(lang => ({
       lang,
       data: translations[lang]
     }));
     await upsertFullTranslations(payload);
+    setSyncConfirmOpen(false);
   };
 
   // Toggle namespace
@@ -443,7 +443,7 @@ export default function AdminTranslations() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={syncAllToDB}
+                onClick={() => setSyncConfirmOpen(true)}
                 disabled={saving}
               >
                 {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Upload className="h-4 w-4 mr-1" />}
@@ -887,6 +887,22 @@ export default function AdminTranslations() {
             </CardContent>
           </Card>
         </main>
+
+        {/* Sync to DB confirmation */}
+        <AlertDialog open={syncConfirmOpen} onOpenChange={setSyncConfirmOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Синхронизировать с БД?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Все текущие переводы будут отправлены в базу данных. Существующие в БД данные будут перезаписаны.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Отмена</AlertDialogCancel>
+              <AlertDialogAction onClick={syncAllToDB}>Отправить</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* Delete key confirmation */}
         <AlertDialog open={deleteConfirmKey !== null} onOpenChange={() => setDeleteConfirmKey(null)}>
