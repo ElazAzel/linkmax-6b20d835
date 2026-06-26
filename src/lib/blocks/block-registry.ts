@@ -68,6 +68,8 @@ export function isFreeBlock(type: string): type is FreeBlockType {
 }
 
 export function isPremiumBlock(type: string): type is PremiumBlockType {
+  // Promo: all blocks are free until end of 2026
+  if (isBlocksFreePromoActive()) return false;
   return (PREMIUM_BLOCK_TYPES as readonly string[]).includes(type);
 }
 
