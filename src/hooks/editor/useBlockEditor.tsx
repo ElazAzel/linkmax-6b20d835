@@ -85,6 +85,8 @@ export function useBlockEditor({
    */
   const isPremiumBlock = useCallback(
     (blockType: string): boolean => {
+      // Promo: all blocks are free until end of 2026
+      if (isBlocksFreePromoActive()) return false;
       return (PREMIUM_BLOCK_TYPES as readonly string[]).includes(blockType) && !isPremium;
     },
     [isPremium]
