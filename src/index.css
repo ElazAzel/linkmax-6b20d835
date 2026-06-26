@@ -9,13 +9,8 @@
 
 /* Shimmer animation for lazy loading */
 @keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Chaotic grid animations - slower for calm effect */
@@ -152,7 +147,7 @@
 
     /* Muted - Soft gray glass */
     --muted: 210 15% 94%;
-    --muted-foreground: 220 10% 45%;
+    --muted-foreground: 220 10% 50%;
 
     /* Accent - Light glass tint */
     --accent: 210 30% 96%;
@@ -161,6 +156,18 @@
     /* Destructive - Soft red */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
+
+    /* Success - Emerald */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning - Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Info - Sky */
+    --info: 200 98% 51%;
+    --info-foreground: 0 0% 100%;
 
     /* Borders - Very subtle, almost invisible */
     --border: 220 13% 91%;
@@ -195,12 +202,12 @@
        2026 LIVING CANVAS TOKENS
        ======================================== */
 
-    /* Glass backgrounds with varying opacity - HIGHER REFRACTION */
+    /* Glass backgrounds with varying opacity */
     --glass-bg: 0 0% 100% / 0.65;
     --glass-bg-subtle: 0 0% 100% / 0.35;
     --glass-bg-strong: 0 0% 100% / 0.85;
 
-    /* Blur Radius - Standardized 2026 */
+    /* Blur Radius */
     --glass-blur: 16px;
     --glass-blur-sm: 8px;
     --glass-blur-lg: 24px;
@@ -223,20 +230,29 @@
       0 12px 40px -4px hsl(211 100% 50% / 0.15),
       0 24px 60px -12px hsl(262 83% 58% / 0.12);
 
+    --shadow-glass-xl:
+      0 0 0 1.5px hsl(0 0% 100% / 0.7),
+      0 20px 60px -8px hsl(211 100% 50% / 0.18),
+      0 40px 80px -16px hsl(262 83% 58% / 0.15);
+
     /* Material simulation */
     --grain-opacity: 0.04;
-    --canvas-fluidity: 1.2;
-    --radius: 1.75rem; /* Larger, more organic circles */
+    --radius: 1.75rem;
 
     /* Typography */
     --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
     --text-primary: 1;
     --text-secondary: 0.8;
     --text-tertiary: 0.6;
+
+    /* Section spacing - responsive */
+    --section-gap: clamp(3rem, 8vw, 6rem);
+    --content-gap: clamp(1rem, 3vw, 2rem);
+    --page-padding-x: clamp(1rem, 4vw, 2.5rem);
+    --page-padding-y: clamp(1.5rem, 4vw, 3rem);
   }
 
   .dark {
-    /* Dark mode - Deep, rich blacks with color tints */
     --background: 225 25% 6%;
     --foreground: 210 20% 96%;
 
@@ -253,7 +269,7 @@
     --secondary-foreground: 210 20% 90%;
 
     --muted: 225 15% 13%;
-    --muted-foreground: 220 10% 55%;
+    --muted-foreground: 220 10% 58%;
 
     --accent: 225 20% 14%;
     --accent-foreground: 210 20% 96%;
@@ -261,11 +277,19 @@
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
 
+    --success: 142 71% 55%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 200 98% 56%;
+    --info-foreground: 0 0% 100%;
+
     --border: 225 15% 18%;
     --input: 225 15% 18%;
     --ring: 211 100% 55%;
 
-    /* Sidebar dark - Deep glass */
     --sidebar-background: 225 25% 6%;
     --sidebar-foreground: 210 20% 96%;
     --sidebar-primary: 211 100% 55%;
@@ -276,14 +300,12 @@
     --sidebar-ring: 211 100% 55%;
     --sidebar: 225 20% 10%;
 
-    /* Chart colors dark - Vibrant on dark */
     --chart-1: 211 100% 60%;
     --chart-2: 262 83% 65%;
     --chart-3: 339 76% 65%;
     --chart-4: 142 71% 55%;
     --chart-5: 45 93% 55%;
 
-    /* Living Canvas Dark State */
     --glass-bg: 225 20% 10% / 0.65;
     --glass-bg-subtle: 225 20% 12% / 0.35;
     --glass-bg-strong: 225 20% 8% / 0.85;
@@ -300,6 +322,11 @@
       0 0 0 1.5px hsl(0 0% 100% / 0.08),
       0 20px 60px -8px hsl(0 0% 0% / 0.8),
       0 10px 24px -4px hsl(0 0% 0% / 0.5);
+
+    --shadow-glass-xl:
+      0 0 0 1.5px hsl(0 0% 100% / 0.1),
+      0 30px 80px -8px hsl(0 0% 0% / 0.9),
+      0 16px 40px -6px hsl(0 0% 0% / 0.6);
 
     --grain-opacity: 0.08;
   }
@@ -408,6 +435,24 @@
   }
 
   /* ========================================
+     ALL CAPS TRACKING - use for uppercase text
+     ======================================== */
+  .text-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .text-caps-tight {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .text-caps-wide {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  /* ========================================
      FLUID SPACING SYSTEM
      ======================================== */
   :root {
@@ -415,6 +460,25 @@
     --space-section-y: clamp(3rem, 10vw, 6rem);
     --space-block-gap: clamp(0.5rem, 2vw, 1rem);
     --space-card-p: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  /* Responsive section padding */
+  .section-padding {
+    padding: var(--page-padding-y) var(--page-padding-x);
+  }
+
+  .section-gap {
+    gap: var(--section-gap);
+  }
+
+  .section-padding-y {
+    padding-top: var(--page-padding-y);
+    padding-bottom: var(--page-padding-y);
+  }
+
+  .section-padding-x {
+    padding-left: var(--page-padding-x);
+    padding-right: var(--page-padding-x);
   }
 
   /* ========================================
@@ -627,6 +691,113 @@
       min-height: 44px;
       min-width: 44px;
     }
+  }
+
+  /* ========================================
+     RESPONSIVE LAYOUT UTILITIES
+     ======================================== */
+
+  /* Mobile-first responsive grid */
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--content-gap);
+  }
+
+  @media (min-width: 768px) {
+    .responsive-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .responsive-grid-cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .responsive-grid-cols-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .responsive-grid-cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .responsive-grid-cols-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Responsive stack layout - stacks on mobile, row on desktop */
+  .responsive-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--content-gap);
+  }
+
+  @media (min-width: 768px) {
+    .responsive-stack {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  /* Mobile bottom sheet style panel */
+  @media (max-width: 767px) {
+    .mobile-panel {
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      margin-top: auto;
+    }
+    .mobile-full {
+      border-radius: 0 !important;
+      min-height: 100dvh;
+    }
+    .mobile-inset {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      border-radius: 0 !important;
+      width: 100% !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .desktop-panel {
+      border-radius: var(--radius);
+    }
+  }
+
+  /* Side-by-side on desktop, stacked on mobile */
+  .split-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1rem, 4vw, 2rem);
+  }
+
+  @media (min-width: 1024px) {
+    .split-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+    .split-layout-sidebar {
+      grid-template-columns: 280px 1fr;
+    }
+    .split-layout-content {
+      grid-template-columns: 1fr 320px;
+    }
+  }
+
+  /* Max width container */
+  .content-max {
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Sticky header pattern */
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: hsl(var(--background) / 0.8);
   }
 
   /* Shimmer effect for loading states */

@@ -1,114 +1,177 @@
-/* ============================================================
-   QUIET BENTO — единый визуальный язык 2026
-   Импортируется после tailwind utilities в src/index.css
-   ============================================================ */
+/* ── Quiet Bento Design Language ───────────────────────
+   A calm, card-based visual system with refined glass.
+   Used as the secondary design layer over Liquid Glass.
+*/
 
 :root {
-  --surface-quiet: 220 20% 98%;
+  --surface-quiet: 210 20% 98%;
   --surface-raised: 0 0% 100%;
-  --surface-sunk: 220 14% 96%;
-  --surface-glass: 0 0% 100% / 0.72;
+  --surface-sunk: 210 15% 95%;
+  --surface-glass: 0 0% 100% / 0.5;
 
-  --radius-card: 1.75rem;
+  --radius-card: 1.5rem;
   --radius-control: 0.875rem;
   --radius-chip: 999px;
 
-  --shadow-soft:
-    0 1px 2px hsl(220 14% 10% / 0.04),
-    0 4px 16px -4px hsl(220 14% 10% / 0.06);
-  --shadow-lift:
-    0 2px 4px hsl(220 14% 10% / 0.05),
-    0 12px 32px -8px hsl(220 14% 10% / 0.12);
+  --shadow-soft: 0 2px 16px hsl(0 0% 0% / 0.04);
+  --shadow-lift: 0 8px 32px hsl(0 0% 0% / 0.06);
 
-  --hairline: 220 13% 91%;
+  --hairline: 220 13% 91% / 0.8;
 }
 
 .dark {
-  --surface-quiet: 220 18% 8%;
-  --surface-raised: 220 16% 12%;
-  --surface-sunk: 220 16% 10%;
-  --surface-glass: 220 16% 12% / 0.72;
+  --surface-quiet: 225 25% 6%;
+  --surface-raised: 225 20% 10%;
+  --surface-sunk: 225 25% 4%;
+  --surface-glass: 225 20% 8% / 0.5;
 
-  --shadow-soft:
-    0 1px 2px hsl(0 0% 0% / 0.4),
-    0 4px 16px -4px hsl(0 0% 0% / 0.3);
-  --shadow-lift:
-    0 2px 4px hsl(0 0% 0% / 0.5),
-    0 12px 32px -8px hsl(0 0% 0% / 0.5);
+  --shadow-soft: 0 2px 16px hsl(0 0% 0% / 0.2);
+  --shadow-lift: 0 8px 32px hsl(0 0% 0% / 0.3);
 
-  --hairline: 220 14% 18%;
+  --hairline: 0 0% 100% / 0.06;
 }
 
-/* Плотная карточка — без blur */
+/* Cards without blur (for performance) */
 .qb-card {
   background: hsl(var(--surface-raised));
   border: 1px solid hsl(var(--hairline));
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-soft);
-  transition: box-shadow 200ms ease, transform 200ms ease;
+  transition: all 0.3s ease;
 }
+
 .qb-card-hover:hover {
   box-shadow: var(--shadow-lift);
-  transform: translateY(-1px);
+  border-color: hsl(var(--border));
 }
 
 .qb-card-quiet {
   background: hsl(var(--surface-quiet));
-  border: 1px solid hsl(var(--hairline));
+  border: 1px solid transparent;
   border-radius: var(--radius-card);
 }
 
-/* Стекло — точечно */
+/* Glass card - with blur */
 .qb-glass {
   background: hsl(var(--surface-glass));
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid hsl(var(--hairline));
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-soft);
+  transition: all 0.3s ease;
 }
 
+.qb-glass:hover {
+  box-shadow: var(--shadow-lift);
+  border-color: hsl(var(--border));
+}
+
+/* Dock - pill glass element */
 .qb-dock {
-  background: hsl(var(--surface-glass));
+  background: hsl(var(--glass-bg-strong));
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid hsl(var(--hairline));
+  border: 1px solid hsl(var(--glass-border));
+  border-radius: var(--radius-pill, 9999px);
+  box-shadow: var(--shadow-glass);
+}
+
+/* Form controls */
+.qb-control {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--input));
+  border-radius: var(--radius-control);
+  transition: all 0.2s ease;
+}
+
+.qb-control:focus-within {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.15);
+}
+
+.qb-hairline {
+  border-color: hsl(var(--hairline));
+}
+
+/* Bento Grid */
+.qb-bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .qb-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .qb-bento {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.qb-tile-wide {
+  grid-column: span 1;
+}
+
+@media (min-width: 640px) {
+  .qb-tile-wide {
+    grid-column: span 2;
+  }
+}
+
+.qb-tile-tall {
+  grid-row: span 2;
+}
+
+.qb-tile-large {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+@media (min-width: 640px) {
+  .qb-tile-large {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+/* Utilities */
+.rounded-card {
+  border-radius: var(--radius-card);
+}
+
+.rounded-control {
+  border-radius: var(--radius-control);
+}
+
+.rounded-pill {
   border-radius: var(--radius-chip);
+}
+
+.shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+.shadow-lift {
   box-shadow: var(--shadow-lift);
 }
 
-.qb-control {
-  border-radius: var(--radius-control);
-  border: 1px solid hsl(var(--hairline));
+.bg-surface-quiet {
+  background: hsl(var(--surface-quiet));
+}
+
+.bg-surface-raised {
   background: hsl(var(--surface-raised));
-  transition: border-color 150ms ease, box-shadow 150ms ease;
-}
-.qb-control:focus-within {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
 }
 
-.qb-hairline { border-color: hsl(var(--hairline)); }
-
-.qb-bento {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.bg-surface-sunk {
+  background: hsl(var(--surface-sunk));
 }
-@media (min-width: 768px) {
-  .qb-bento { gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-.qb-tile-wide { grid-column: span 2; }
-.qb-tile-tall { grid-row: span 2; }
-.qb-tile-large { grid-column: span 2; grid-row: span 2; }
 
-/* Utility helpers (без @layer — простые классы) */
-.rounded-card { border-radius: var(--radius-card); }
-.rounded-control { border-radius: var(--radius-control); }
-.rounded-pill { border-radius: 9999px; }
-.shadow-soft { box-shadow: var(--shadow-soft); }
-.shadow-lift { box-shadow: var(--shadow-lift); }
-.bg-surface-quiet { background-color: hsl(var(--surface-quiet)); }
-.bg-surface-raised { background-color: hsl(var(--surface-raised)); }
-.bg-surface-sunk { background-color: hsl(var(--surface-sunk)); }
-.border-hairline { border-color: hsl(var(--hairline)); }
+.border-hairline {
+  border-color: hsl(var(--hairline));
+}
