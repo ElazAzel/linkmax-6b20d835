@@ -4,6 +4,7 @@
  */
 
 import type { BlockType } from '@/types/page';
+import { isBlocksFreePromoActive } from '@/lib/promo/free-blocks-promo';
 
 // ============= Block Categories =============
 
