@@ -386,7 +386,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                     <motion.div variants={itemVariants}>
                       <StatCard
                         icon={Target}
-                        value={`${stats.ctr.toFixed(1)}%`}
+                        value={`${(stats.ctr || 0).toFixed(1)}%`}
                         label={t('dashboard.insights.ctr', 'CTR')}
                         variant="glass"
                       />
@@ -405,10 +405,10 @@ export const InsightsScreen = memo(function InsightsScreen({
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         {[
-                          { key: 'visitor', label: t('analytics.dataQuality.visitor', 'Visitor ID'), value: analytics?.dataQuality.visitorCoverage ?? 0 },
-                          { key: 'session', label: t('analytics.dataQuality.session', 'Session ID'), value: analytics?.dataQuality.sessionCoverage ?? 0 },
-                          { key: 'device', label: t('analytics.dataQuality.device', 'Device'), value: analytics?.dataQuality.deviceCoverage ?? 0 },
-                          { key: 'source', label: t('analytics.dataQuality.source', 'Source'), value: analytics?.dataQuality.sourceCoverage ?? 0 },
+                          { key: 'visitor', label: t('analytics.dataQuality.visitor', 'Visitor ID'), value: analytics?.dataQuality?.visitorCoverage ?? 0 },
+                          { key: 'session', label: t('analytics.dataQuality.session', 'Session ID'), value: analytics?.dataQuality?.sessionCoverage ?? 0 },
+                          { key: 'device', label: t('analytics.dataQuality.device', 'Device'), value: analytics?.dataQuality?.deviceCoverage ?? 0 },
+                          { key: 'source', label: t('analytics.dataQuality.source', 'Source'), value: analytics?.dataQuality?.sourceCoverage ?? 0 },
                         ].map(item => (
                           <div key={item.key} className="rounded-lg bg-muted/30 p-3">
                             <p className="text-xs text-muted-foreground">{item.label}</p>
@@ -631,11 +631,11 @@ export const InsightsScreen = memo(function InsightsScreen({
                             <div className="flex-1 min-w-0">
                               <div className="font-medium truncate">{block.blockTitle}</div>
                               <div className="text-sm text-muted-foreground">
-                                {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {block.ctr.toFixed(1)}%
+                                {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {(block.ctr || 0).toFixed(1)}%
                               </div>
                             </div>
                             <div className="w-20">
-                              <Progress value={Math.min(100, block.ctr * 5)} className="h-2" />
+                              <Progress value={Math.min(100, (block.ctr || 0) * 5)} className="h-2" />
                             </div>
                           </motion.div>
                         ))}
@@ -668,7 +668,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                         <span className="text-sm text-muted-foreground">
                           {t('analytics.funnel.clickRate', 'Клики / Просмотры')}
                         </span>
-                        <span className="font-bold">{stats.ctr.toFixed(1)}%</span>
+                        <span className="font-bold">{(stats.ctr || 0).toFixed(1)}%</span>
                       </div>
                       <div className="flex items-center justify-between py-2 border-b border-border/50">
                         <span className="text-sm text-muted-foreground">

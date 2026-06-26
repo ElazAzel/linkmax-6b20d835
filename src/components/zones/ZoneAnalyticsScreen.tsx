@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,19 @@ import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneInvoices } from '@/hooks/zones/useZoneInvoices';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
 import { useZoneContext } from '@/contexts/ZoneContext';
-import { Target, TrendingUp, TrendingDown, Filter, CheckCircle2, Clock, DollarSign, ListTodo, FileText, Users, Table, BarChart3, FileDown } from 'lucide-react';
+import Target from 'lucide-react/dist/esm/icons/target';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import Filter from 'lucide-react/dist/esm/icons/filter';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
+import ListTodo from 'lucide-react/dist/esm/icons/list-todo';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Table from 'lucide-react/dist/esm/icons/table';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import FileDown from 'lucide-react/dist/esm/icons/file-down';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, LineChart, Line, CartesianGrid, AreaChart, Area } from 'recharts';
@@ -29,7 +41,7 @@ const PERIOD_OPTIONS: { value: Period; labelKey: string; defaultLabel: string }[
 
 const FUNNEL_COLORS = ['#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe'];
 
-export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
+export const ZoneAnalyticsScreen = memo(function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
     const { t } = useTranslation();
     const { metrics, teamMetrics, conversionTrend, loading } = useZoneAnalytics(zoneId);
     const { deals } = useZoneDeals(zoneId);
@@ -507,4 +519,4 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
             </Card>
         </div>
     );
-}
+});
