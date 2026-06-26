@@ -370,8 +370,6 @@ export function getManifestEntry(type: BlockType): BlockManifestEntry | undefine
 /** Check if a block type is premium */
 export function isBlockPremium(type: BlockType): boolean {
   // Promo: all blocks are free until end of 2026
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { isBlocksFreePromoActive } = require('@/lib/promo/free-blocks-promo');
   if (isBlocksFreePromoActive()) return false;
   return BLOCK_MANIFEST[type]?.isPremium ?? false;
 }
