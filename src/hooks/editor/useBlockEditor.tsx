@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import Undo2 from 'lucide-react/dist/esm/icons/undo-2';
 import { createBlock } from '@/lib/blocks/block-factory';
 import { PREMIUM_BLOCK_TYPES } from '@/lib/blocks/block-registry';
+import { isBlocksFreePromoActive } from '@/lib/promo/free-blocks-promo';
 import { APP_CONFIG } from '@/lib/constants';
 import { incrementChallengeProgress, recordActivity } from '@/services/social';
 import { useEditorStore } from '@/store/useEditorStore';
