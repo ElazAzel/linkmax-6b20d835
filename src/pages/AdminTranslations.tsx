@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useDeferredValue, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -35,7 +36,7 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
-import { useAdminTranslations, flattenObject, setNestedValue } from '@/hooks/admin/useAdminTranslations';
+import { useAdminTranslations, setNestedValue } from '@/hooks/admin/useAdminTranslations';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 
@@ -166,6 +167,7 @@ export default function AdminTranslations() {
 
   const {
     translations,
+    flattenedTranslations,
     activeLanguages,
     allKeys,
     saving,
@@ -178,9 +180,12 @@ export default function AdminTranslations() {
   // UI state
   const [selectedLang, setSelectedLang] = useState<string>('en');
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearch = useDeferredValue(searchQuery);
   const [filterMode, setFilterMode] = useState<'all' | 'missing'>('all');
   const [expandedNamespaces, setExpandedNamespaces] = useState<Set<string>>(new Set(['common', 'blocks']));
   const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [deleteConfirmKey, setDeleteConfirmKey] = useState<string | null>(null);
+  const [savingKey, setSavingKey] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
 
   // Dialogs
@@ -196,28 +201,23 @@ export default function AdminTranslations() {
   // Filter keys
   const filteredKeys = useMemo(() => {
     return allKeys.all.filter(key => {
-      // Search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
+      if (deferredSearch) {
+        const query = deferredSearch.toLowerCase();
         const matchesKey = key.toLowerCase().includes(query);
-        const matchesValue = activeLanguages.some(lang => {
-          const trans = translations[lang] || {};
-          const flatObj = flattenObject(trans);
-          return flatObj[key]?.toLowerCase().includes(query);
-        });
+        const matchesValue = activeLanguages.some(lang =>
+          (flattenedTranslations[lang]?.[key] || '').toLowerCase().includes(query)
+        );
         if (!matchesKey && !matchesValue) return false;
       }
 
-      // Missing filter
       if (filterMode === 'missing') {
-        const flat = flattenObject(translations[selectedLang] || {});
-        const hasMissing = activeLanguages.some(l => !flattenObject(translations[l] || {})[key]?.trim());
+        const hasMissing = activeLanguages.some(l => !flattenedTranslations[l]?.[key]?.trim());
         if (!hasMissing) return false;
       }
 
       return true;
     });
-  }, [allKeys.all, searchQuery, filterMode, translations, activeLanguages, selectedLang]);
+  }, [allKeys.all, deferredSearch, filterMode, flattenedTranslations, activeLanguages]);
 
   // Group filtered keys by namespace
   const groupedKeys = useMemo(() => groupKeysByNamespace(filteredKeys), [filteredKeys]);
@@ -226,26 +226,21 @@ export default function AdminTranslations() {
   const stats = useMemo(() => {
     const result: Record<string, number> = {};
     for (const lang of activeLanguages) {
-      const flat = flattenObject(translations[lang] || {});
       let missing = 0;
       for (const key of allKeys.all) {
-        if (!flat[key]?.trim()) missing++;
+        if (!flattenedTranslations[lang]?.[key]?.trim()) missing++;
       }
       result[lang] = missing;
     }
     return result;
-  }, [translations, activeLanguages, allKeys.all]);
-
-  // Get value for a key in a language
-  const getValue = (lang: string, key: string): string => {
-    const flat = flattenObject(translations[lang] || {});
-    return flat[key] || '';
-  };
+  }, [flattenedTranslations, activeLanguages, allKeys.all]);
 
   // Save inline edit
   const handleSaveEdit = async () => {
     if (editingKey) {
+      setSavingKey(editingKey);
       await updateTranslation({ lang: selectedLang, key: editingKey, value: editValue });
+      setSavingKey(null);
       setEditingKey(null);
       setEditValue('');
     }
@@ -296,9 +291,14 @@ export default function AdminTranslations() {
   };
 
   // Delete key
-  const handleDeleteKey = async (key: string) => {
-    if (confirm(`Вы уверены, что хотите удалить ключ "${key}" изо всех языков?`)) {
-      await deleteKey(key);
+  const handleDeleteKey = (key: string) => {
+    setDeleteConfirmKey(key);
+  };
+
+  const confirmDeleteKey = () => {
+    if (deleteConfirmKey) {
+      deleteKey(deleteConfirmKey);
+      setDeleteConfirmKey(null);
     }
   };
 
@@ -759,9 +759,11 @@ export default function AdminTranslations() {
                       <CollapsibleContent className="pl-6 space-y-1 mt-1">
                         {keys.sort().map((key) => {
                           const shortKey = key.substring(namespace.length + 1);
-                          const value = getValue(selectedLang, key);
-                          const enValue = getValue('en', key);
+                          const flat = flattenedTranslations[selectedLang] || {};
+                          const value = flat[key] || '';
+                          const enVal = (flattenedTranslations['en'] || {})[key] || '';
                           const isEmpty = !value.trim();
+                          const isSavingThis = savingKey === key;
 
                           return (
                             <div
@@ -775,7 +777,9 @@ export default function AdminTranslations() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                   <code className="text-xs text-muted-foreground font-mono truncate">{shortKey}</code>
-                                  {isEmpty ? (
+                                  {isSavingThis ? (
+                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                  ) : isEmpty ? (
                                     <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0" />
                                   ) : (
                                     <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400 flex-shrink-0" />
@@ -784,9 +788,9 @@ export default function AdminTranslations() {
 
                                 {editingKey === key ? (
                                   <div className="space-y-2">
-                                    {selectedLang !== 'en' && enValue && (
+                                    {selectedLang !== 'en' && enVal && (
                                       <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
-                                        <span className="font-medium">🇬🇧 EN:</span> {enValue}
+                                        <span className="font-medium">🇬🇧 EN:</span> {enVal}
                                       </div>
                                     )}
                                     <Textarea
@@ -796,11 +800,11 @@ export default function AdminTranslations() {
                                       autoFocus
                                     />
                                     <div className="flex gap-2">
-                                      <Button size="sm" onClick={handleSaveEdit}>
-                                        <Check className="h-3 w-3 mr-1" />
-                                        Сохранить
+                                      <Button size="sm" onClick={handleSaveEdit} disabled={isSavingThis}>
+                                        {isSavingThis ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Check className="h-3 w-3 mr-1" />}
+                                        {isSavingThis ? 'Сохранение...' : 'Сохранить'}
                                       </Button>
-                                      <Button size="sm" variant="outline" onClick={() => setEditingKey(null)}>
+                                      <Button size="sm" variant="outline" onClick={() => setEditingKey(null)} disabled={isSavingThis}>
                                         Отмена
                                       </Button>
                                     </div>
@@ -825,14 +829,14 @@ export default function AdminTranslations() {
                               </div>
 
                               <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                {enValue && selectedLang !== 'en' && (
+                                {enVal && selectedLang !== 'en' && (
                                   <Button
                                     size="icon"
                                     variant="ghost"
                                     className="h-6 w-6"
                                     title="Скопировать с EN"
                                     onClick={() => {
-                                      updateTranslation({ lang: selectedLang, key, value: enValue });
+                                      updateTranslation({ lang: selectedLang, key, value: enVal });
                                     }}
                                   >
                                     <Copy className="h-3 w-3" />
@@ -883,6 +887,22 @@ export default function AdminTranslations() {
             </CardContent>
           </Card>
         </main>
+
+        {/* Delete key confirmation */}
+        <AlertDialog open={deleteConfirmKey !== null} onOpenChange={() => setDeleteConfirmKey(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Удалить ключ?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Вы уверены, что хотите удалить ключ "<strong>{deleteConfirmKey}</strong>" изо всех языков? Это действие нельзя отменить.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Отмена</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDeleteKey}>Удалить</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* Upload Dialog */}
         <LanguageUploadDialog
