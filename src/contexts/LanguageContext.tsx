@@ -285,6 +285,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   ): Promise<TranslatedBlock[]> => {
     if (!blocks?.length || targetLanguages.length === 0) return blocks;
 
+    // Auto-translation of blocks is a paid feature.
+    if (!isPremium) {
+      return blocks;
+    }
+
+
     setIsTranslating(true);
 
     try {
