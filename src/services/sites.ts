@@ -2,7 +2,7 @@
  * Sites service — CRUD for Site containers and helpers for sub-pages.
  * Sprint 1: Multi-Page Foundation.
  */
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import type { Site, SitePageSummary } from '@/types/site';
 import type { Block } from '@/types/blocks';
 

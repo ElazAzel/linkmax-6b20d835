@@ -102,7 +102,7 @@ export default function PublicPage() {
         loadSitePageByPath(slug, pagePath).then((sub) => {
           if (cancelled) return;
           if (sub) {
-            import('@/integrations/supabase/client').then(({ supabase }) =>
+            import('@/platform/supabase/client').then(({ supabase }) =>
               supabase.from('pages').select('slug').eq('id', sub.id).maybeSingle().then(({ data }) => {
                 if (!cancelled && data?.slug) setResolvedSubSlug(data.slug);
               })

@@ -452,6 +452,10 @@ function getOrCreateSession(): Session {
  * Track an analytics event
  * This is the main tracking function used throughout the app
  */
+function isValidUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
 export async function trackEvent({
   pageId,
   eventType,
@@ -463,6 +467,11 @@ export async function trackEvent({
   if (!ANALYTICS_ENABLED) {
     return;
   }
+
+  // Validate UUIDs before sending to avoid 400 errors
+  const safePageId = pageId && isValidUuid(pageId) ? pageId : null;
+  const safeBlockId = blockId && isValidUuid(blockId) ? blockId : null;
+
   try {
     const session = getOrCreateSession();
     const referrer = getReferrerInfo();
@@ -494,8 +503,8 @@ export async function trackEvent({
     };
 
     await supabase.from('analytics').insert({
-      page_id: pageId,
-      block_id: blockId || null,
+      page_id: safePageId,
+      block_id: safeBlockId,
       event_type: eventType,
       metadata: enrichedMetadata as Json,
     });
