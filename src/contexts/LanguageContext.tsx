@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { isI18nText, isMultilingualString } from '@/lib/i18n-helpers';
 import { storage } from '@/lib/storage';
 import { TranslatedBlock } from '@/types/language-context';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 
 // Extended language names for translation
 const LANGUAGE_NAMES: Record<string, string> = {
