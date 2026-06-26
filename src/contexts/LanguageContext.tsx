@@ -70,6 +70,7 @@ export { LanguageContext };
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const { i18n, t } = useTranslation();
+  const { isPremium } = usePremiumStatus();
 
   // Detect browser language on mount
   const [browserLanguage] = useState<LocaleCode>(() => detectBrowserLanguage());
