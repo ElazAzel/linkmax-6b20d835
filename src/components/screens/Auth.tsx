@@ -29,6 +29,9 @@ import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import UserIcon from 'lucide-react/dist/esm/icons/user';
 import { trackAuthEvent } from '@/services/authFunnel';
 
 // Zod schema is created inside the component to access t()
@@ -73,7 +76,7 @@ export const Auth = memo(function Auth() {
     'auth.seo.description',
     'Access your LinkMAX dashboard to build and publish your link in bio page.'
   );
-  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram } = useAuth();
+  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, signOut } = useAuth();
   const { handleError } = useAppError();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
@@ -183,20 +186,32 @@ export const Auth = memo(function Auth() {
     }
   }, [urlMode]);
 
-  // Redirect if already logged in (but not during password update)
+  // Apply referral once when an authenticated user lands on /auth
+  const referralAppliedRef = useRef(false);
   useEffect(() => {
-    if (user && authMode !== 'update-password') {
-      // Apply referral code if present
-      if (refCode) {
-        applyReferralCode(refCode, user.id).then((result) => {
-          if (result.success) {
-            toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
-          }
-        });
-      }
-      navigate(safeReturnTo || '/dashboard');
+    if (user && refCode && !referralAppliedRef.current) {
+      referralAppliedRef.current = true;
+      applyReferralCode(refCode, user.id).then((result) => {
+        if (result.success) {
+          toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
+        }
+      });
     }
-  }, [user, navigate, refCode, authMode, safeReturnTo]);
+  }, [user, refCode, t]);
+
+  // Auto-redirect only when there's an explicit return target or post-auth password update.
+  // Otherwise show the "already signed in" card so the user can choose.
+  useEffect(() => {
+    if (user && authMode !== 'update-password' && safeReturnTo) {
+      navigate(safeReturnTo);
+    }
+  }, [user, navigate, authMode, safeReturnTo]);
+
+  const handleSignOutAndStay = async () => {
+    trackAuthEvent('auth_tab_switch', { tab: 'signout' });
+    await signOut();
+    toast.success(t('auth.signedOut', 'Signed out'));
+  };
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -521,8 +536,46 @@ export const Auth = memo(function Auth() {
             </div>
           </div>
 
-          {/* Password Update Card */}
-          {authMode === 'update-password' ? (
+          {/* Already signed-in panel — quick actions instead of full auth form */}
+          {user && authMode !== 'update-password' ? (
+            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
+                    <UserIcon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <CardTitle className="text-lg truncate">
+                      {t('auth.alreadySignedIn', 'Вы уже вошли')}
+                    </CardTitle>
+                    <CardDescription className="truncate">{user.email}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button
+                  className="w-full h-12 rounded-2xl shadow-glass-lg gap-2 transition-all duration-300 hover:scale-[1.01]"
+                  onClick={() => navigate(safeReturnTo || '/dashboard')}
+                  data-testid="continue-to-dashboard"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  {t('auth.continueToDashboard', 'Продолжить в дашборд')}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 rounded-2xl gap-2"
+                  onClick={handleSignOutAndStay}
+                  data-testid="signout-switch-account"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {t('auth.useAnotherAccount', 'Войти под другим аккаунтом')}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center pt-1">
+                  {t('auth.alreadySignedInHint', 'Можно сменить аккаунт — текущая сессия будет завершена.')}
+                </p>
+              </CardContent>
+            </Card>
+          ) : authMode === 'update-password' ? (
             <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
