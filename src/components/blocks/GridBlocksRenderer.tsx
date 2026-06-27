@@ -138,24 +138,30 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
               : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
               : '';
             const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
+            const hasCustomChrome = hasCustomBg
+              || (bs?.borderWidth && bs.borderWidth !== 'none')
+              || (bs?.shadow && bs.shadow !== 'none');
+            // Media blocks render naked unless user set chrome
+            const isNaked = isTransparent && !hasCustomChrome;
 
             return (
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex overflow-hidden transition-all duration-300',
+                  'group relative flex transition-all duration-300',
+                  !isNaked && 'overflow-hidden',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
                   // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
                   !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
-                  isTransparent && 'bg-transparent',
+                  isTransparent && !hasCustomChrome && 'bg-transparent',
                   hoverClass,
-                  !isTransparent && isSquare && 'aspect-square',
-                  !isTransparent && isTall && 'min-h-[280px]',
-                  !isTransparent && !isSquare && !isTall && 'min-h-[120px]',
+                  !isNaked && isSquare && 'aspect-square',
+                  !isNaked && isTall && 'min-h-[280px]',
+                  !isNaked && !isSquare && !isTall && 'min-h-[120px]',
                 )}
-                style={!isTransparent ? wrapperStyle : undefined}
+                style={!isNaked ? wrapperStyle : undefined}
                 variants={{
                   hidden: { opacity: 0, y: 12, scale: 0.99 },
                   show: {
