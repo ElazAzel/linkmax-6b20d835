@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -26,6 +27,8 @@ export function EmailTemplateEditor() {
   const [editingTemplate, setEditingTemplate] = useState<Partial<EmailTemplate> | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pendingDeleteTplId, setPendingDeleteTplId] = useState<string | null>(null);
 
   useEffect(() => {
     loadTemplates();
@@ -83,16 +86,22 @@ export function EmailTemplateEditor() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm(t('templates.confirmDelete', 'Are you sure you want to delete this template?'))) return;
-    
-    const { error } = await emailTemplatesService.deleteTemplate(id);
+  const handleDelete = (id: string) => {
+    setPendingDeleteTplId(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    if (!pendingDeleteTplId) return;
+    setDeleteConfirmOpen(false);
+    const { error } = await emailTemplatesService.deleteTemplate(pendingDeleteTplId);
     if (!error) {
-      setTemplates(prev => prev.filter(t => t.id !== id));
+      setTemplates(prev => prev.filter(t => t.id !== pendingDeleteTplId));
       toast.success(t('templates.deleted', 'Template deleted'));
     } else {
       toast.error(t('templates.deleteError', 'Failed to delete template'));
     }
+    setPendingDeleteTplId(null);
   };
 
   if (loading) {
@@ -205,6 +214,20 @@ export function EmailTemplateEditor() {
           )}
         </div>
       )}
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('templates.confirmDeleteTitle', 'Delete template')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('templates.confirmDelete', 'Are you sure you want to delete this template?')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirmed}>{t('common.delete', 'Delete')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

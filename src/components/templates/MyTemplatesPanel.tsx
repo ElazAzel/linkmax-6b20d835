@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -75,6 +76,8 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [editingTemplate, setEditingTemplate] = useState<UserTemplate | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pendingDeleteTemplateId, setPendingDeleteTemplateId] = useState<string | null>(null);
 
   useEffect(() => {
     if (open && user) {
@@ -147,25 +150,31 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
     }
   };
 
-  const handleDelete = async (templateId: string) => {
-    if (!confirm(t('templates.confirmDelete', 'Удалить этот шаблон?'))) return;
-    
-    setDeleting(templateId);
+  const handleDelete = (templateId: string) => {
+    setPendingDeleteTemplateId(templateId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!pendingDeleteTemplateId) return;
+    setDeleting(pendingDeleteTemplateId);
     try {
       const { error } = await supabase
         .from('user_templates')
         .delete()
-        .eq('id', templateId);
+        .eq('id', pendingDeleteTemplateId);
 
       if (error) throw error;
       
-      setMyTemplates(prev => prev.filter(t => t.id !== templateId));
+      setMyTemplates(prev => prev.filter(t => t.id !== pendingDeleteTemplateId));
       toast.success(t('templates.deleted', 'Шаблон удалён'));
     } catch (error) {
       console.error('Delete error:', error);
       toast.error(t('templates.deleteError', 'Ошибка удаления'));
     } finally {
       setDeleting(null);
+      setDeleteConfirmOpen(false);
+      setPendingDeleteTemplateId(null);
     }
   };
 
@@ -343,6 +352,19 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
           onUpdated={loadTemplates}
           currentBlocks={currentBlocks}
         />
+
+        <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('templates.confirmDelete', 'Удалить этот шаблон?')}</AlertDialogTitle>
+              <AlertDialogDescription>{t('templates.confirmDeleteDesc', 'Это действие нельзя отменить.')}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeleteConfirm}>{t('common.delete', 'Удалить')}</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </SheetContent>
     </Sheet>
   );

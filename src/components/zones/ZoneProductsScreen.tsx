@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Textarea } from '@/components/ui/textarea';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Search from 'lucide-react/dist/esm/icons/search';
@@ -40,6 +41,8 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
   const [editingProduct, setEditingProduct] = useState<ZoneProduct | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [search, setSearch] = useState('');
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pendingDeleteProductId, setPendingDeleteProductId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return products;
@@ -93,13 +96,21 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm(t('zone.products.confirmDelete', 'Удалить продукт?'))) return;
+  const handleDelete = (id: string) => {
+    setPendingDeleteProductId(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!pendingDeleteProductId) return;
     try {
-      await deleteProduct(id);
+      await deleteProduct(pendingDeleteProductId);
       toast.success(t('zone.products.deleted', 'Продукт удалён'));
     } catch {
       toast.error(t('common.error', 'Ошибка'));
+    } finally {
+      setDeleteConfirmOpen(false);
+      setPendingDeleteProductId(null);
     }
   };
 
@@ -264,6 +275,19 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('zone.products.confirmDelete', 'Удалить продукт?')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('zone.products.confirmDeleteDesc', 'Это действие нельзя отменить.')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm}>{t('common.delete', 'Удалить')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });

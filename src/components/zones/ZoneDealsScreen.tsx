@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -118,6 +119,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const [selectedPresetId, setSelectedPresetId] = useState<string>('');
   const [presetDialogOpen, setPresetDialogOpen] = useState(false);
   const [presetName, setPresetName] = useState('');
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
   /** When user drops deal on last stage, show Won/Lost dialog */
   const [pendingWonLost, setPendingWonLost] = useState<{ deal: ZoneDeal; targetStageId: string } | null>(null);
@@ -336,16 +338,20 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     }
   };
 
-  const handleBulkDelete = async () => {
+  const handleBulkDelete = () => {
     if (selectedDealIds.size === 0) return;
-    if (!confirm(t('zones.deals.bulkDeleteConfirm', `Удалить выбранные сделки (${selectedDealIds.size})?`))) return;
-    
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleBulkDeleteConfirm = async () => {
     try {
       await bulkDeleteDeals(Array.from(selectedDealIds));
       setSelectedDealIds(new Set());
       toast.success(t('zones.deals.bulkDeleted', 'Сделки удалены'));
     } catch (err: any) {
       handleError(err);
+    } finally {
+      setDeleteConfirmOpen(false);
     }
   };
 
@@ -824,6 +830,19 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('zones.deals.bulkDeleteConfirm', 'Удалить выбранные сделки?')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('zones.deals.bulkDeleteConfirmDesc', 'Это действие нельзя отменить.')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleBulkDeleteConfirm}>{t('common.delete', 'Удалить')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Bulk Actions Bar */}
       {selectedDealIds.size > 0 && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-background/80 backdrop-blur-xl border border-primary/20 shadow-2xl rounded-2xl px-6 py-3 flex items-center gap-6 animate-in fade-in slide-in-from-bottom-4">

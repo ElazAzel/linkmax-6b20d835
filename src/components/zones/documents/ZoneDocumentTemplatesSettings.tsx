@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useZoneContext } from '@/contexts/ZoneContext';
 import { Plus, Trash, Edit2, FileText, Check, X, Loader2, Info } from 'lucide-react';
@@ -18,6 +19,8 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
 
     const [isEditing, setIsEditing] = useState(false);
     const [currentTemplate, setCurrentTemplate] = useState<Partial<ZoneDocumentTemplate> | null>(null);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [pendingDeleteTemplateId, setPendingDeleteTemplateId] = useState<string | null>(null);
 
     const handleSave = async () => {
         if (!currentTemplate?.name || !currentTemplate?.content_html) return;
@@ -51,7 +54,7 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <><Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[700px] h-[80vh] flex flex-col p-0 glass-card border-white/10 text-white overflow-hidden">
                 <DialogHeader className="p-6 pb-2">
                     <DialogTitle className="flex items-center gap-2">
@@ -83,7 +86,8 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                                                     size="icon"
                                                     className="h-8 w-8 text-white/60 hover:text-red-400"
                                                     onClick={() => {
-                                                        if (confirm('Удалить шаблон?')) deleteTemplate(tpl.id);
+                                                        setPendingDeleteTemplateId(tpl.id);
+                                                        setDeleteConfirmOpen(true);
                                                     }}
                                                 >
                                                     <Trash className="w-4 h-4" />
@@ -156,5 +160,25 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                 )}
             </DialogContent>
         </Dialog>
+
+        <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Удалить шаблон?</AlertDialogTitle>
+                    <AlertDialogDescription>Это действие нельзя отменить.</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Отмена</AlertDialogCancel>
+                    <AlertDialogAction onClick={async () => {
+                        if (pendingDeleteTemplateId) {
+                            await deleteTemplate(pendingDeleteTemplateId);
+                            setPendingDeleteTemplateId(null);
+                        }
+                        setDeleteConfirmOpen(false);
+                    }}>Удалить</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        </>
     );
 };

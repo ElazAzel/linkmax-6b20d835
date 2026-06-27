@@ -15,6 +15,7 @@ import { useZoneContext } from '@/contexts/ZoneContext';
 import { ZoneDocumentTemplatesSettings } from './ZoneDocumentTemplatesSettings';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 
 type StatusFilter = 'all' | DocumentStatus;
 
@@ -37,6 +38,8 @@ export const ZoneDocumentsScreen = () => {
     const [selectedDocument, setSelectedDocument] = useState<ZoneDocument | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [pendingDeleteDocId, setPendingDeleteDocId] = useState<string | null>(null);
 
     const FILTER_TABS: { value: StatusFilter; labelKey: string; defaultLabel: string }[] = [
         { value: 'all', labelKey: 'zones.documents.filter.all', defaultLabel: 'All' },
@@ -323,11 +326,10 @@ export const ZoneDocumentsScreen = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                                                onClick={() => {
-                                                                    if (confirm(t('zones.documents.confirmDelete', 'Are you sure you want to delete this document?'))) {
-                                                                        deleteDocument(doc.id);
-                                                                    }
-                                                                }}
+                                                onClick={() => {
+                                                    setPendingDeleteDocId(doc.id);
+                                                    setDeleteConfirmOpen(true);
+                                                }}
                                                                 disabled={isDeleting}
                                                             >
                                                                 <Trash className="w-3.5 h-3.5" />
@@ -379,9 +381,10 @@ export const ZoneDocumentsScreen = () => {
                                                         {!isReadOnly && (
                                                             <DropdownMenuItem
                                                                 className="text-destructive focus:text-destructive"
-                                                                onClick={() => {
-                                                                    if (confirm(t('zones.documents.confirmDelete', 'Are you sure you want to delete this document?'))) deleteDocument(doc.id);
-                                                                }}
+                                                            onClick={() => {
+                                                                setPendingDeleteDocId(doc.id);
+                                                                setDeleteConfirmOpen(true);
+                                                            }}
                                                             >
                                                                 <Trash className="w-4 h-4 mr-2" /> {t('zones.documents.actions.delete', 'Delete')}
                                                             </DropdownMenuItem>
@@ -417,6 +420,27 @@ export const ZoneDocumentsScreen = () => {
                     document={selectedDocument}
                     onGenerated={() => setSelectedDocument(null)}
                 />
+
+                <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t('zones.documents.confirmDelete', 'Are you sure?')}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {t('zones.documents.confirmDeleteDesc', 'This action cannot be undone.')}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => {
+                                if (pendingDeleteDocId) {
+                                    deleteDocument(pendingDeleteDocId);
+                                    setPendingDeleteDocId(null);
+                                }
+                                setDeleteConfirmOpen(false);
+                            }}>{t('common.delete', 'Delete')}</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </TooltipProvider>
     );
