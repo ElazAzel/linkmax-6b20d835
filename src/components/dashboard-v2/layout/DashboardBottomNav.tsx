@@ -148,7 +148,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
             >
               <MoreHorizontal className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isMoreActive && "scale-110")} />
               <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isMoreActive ? "font-medium" : "font-normal")}>
-                {t('dashboard.nav.more', 'Ещё')}
+                {t('dashboard.nav.menu', 'Меню')}
               </span>
             </button>
           </div>
