@@ -73,7 +73,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {/* Bento grid */}
       {contentBlocks.length > 0 && (
         <motion.div
-          className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+          className="grid grid-cols-2 gap-4 grid-flow-row-dense auto-rows-[140px] sm:auto-rows-[160px]"
           initial="hidden"
           animate="show"
           viewport={{ once: true }}
