@@ -139,7 +139,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
             {/* More button */}
             <button
               onClick={() => { haptic.lightTap(); setMoreOpen(true); }}
-              aria-label={t('dashboard.nav.more', 'Ещё')}
+              aria-label={t('dashboard.nav.menu', 'Меню')}
               aria-expanded={moreOpen}
               className={cn(
                 "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
@@ -148,7 +148,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
             >
               <MoreHorizontal className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isMoreActive && "scale-110")} />
               <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isMoreActive ? "font-medium" : "font-normal")}>
-                {t('dashboard.nav.more', 'Ещё')}
+                {t('dashboard.nav.menu', 'Меню')}
               </span>
             </button>
           </div>
@@ -159,7 +159,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
         <SheetContent side="bottom" className="rounded-t-2xl px-4 pb-8">
           <SheetHeader>
-            <SheetTitle className="text-left">{t('dashboard.nav.more', 'Ещё')}</SheetTitle>
+            <SheetTitle className="text-left">{t('dashboard.nav.menu', 'Меню')}</SheetTitle>
           </SheetHeader>
           <div className="grid grid-cols-3 gap-3 mt-4">
             {MORE_ITEMS.map(item => {
