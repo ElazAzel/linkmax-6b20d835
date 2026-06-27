@@ -76,7 +76,7 @@ export const Auth = memo(function Auth() {
     'auth.seo.description',
     'Access your LinkMAX dashboard to build and publish your link in bio page.'
   );
-  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram } = useAuth();
+  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, signOut } = useAuth();
   const { handleError } = useAppError();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
