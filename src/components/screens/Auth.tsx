@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -62,7 +62,7 @@ function normalizeDesiredSlug(value: string | null): string | null {
   return normalized.length >= 3 ? normalized : null;
 }
 
-export default function Auth() {
+export const Auth = memo(function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
@@ -982,4 +982,5 @@ export default function Auth() {
       </div>
     </>
   );
-}
+});
+export default Auth;

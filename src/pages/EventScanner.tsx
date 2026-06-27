@@ -2,7 +2,7 @@
  * EventScanner - Mobile-first QR code scanner for event check-in
  * Pro-only feature with camera access, torch toggle, recent scans
  */
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
@@ -49,7 +49,7 @@ interface EventInfo {
   checkedIn: number;
 }
 
-export default function EventScanner() {
+export const EventScanner = memo(function EventScanner() {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -718,4 +718,5 @@ export default function EventScanner() {
       </div>
     </div>
   );
-}
+});
+export default EventScanner;

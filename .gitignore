@@ -54,4 +54,5 @@ reports/
 # Migration backup folders
 pages_vite_backup/
 tmp_backup/
+supabase/migrations_backup/
 

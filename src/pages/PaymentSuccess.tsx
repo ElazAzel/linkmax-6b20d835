@@ -2,13 +2,14 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import Check from 'lucide-react/dist/esm/icons/check';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import { Check, ArrowRight } from 'lucide-react';
 
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import confetti from 'canvas-confetti';
+import { useTranslation } from 'react-i18next';
 
-export default function PaymentSuccess() {
+export const PaymentSuccess = memo(function PaymentSuccess() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,10 +49,10 @@ export default function PaymentSuccess() {
 
                 <div className="space-y-2">
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-purple-600">
-                        Оплата прошла успешно!
+                        {t('paymentSuccess.title', 'Оплата прошла успешно!')}
                     </h1>
                     <p className="text-muted-foreground">
-                        Ваш PRO-аккаунт активирован. Спасибо за доверие!
+                        {t('paymentSuccess.description', 'Ваш PRO-аккаунт активирован. Спасибо за доверие!')}
                     </p>
                 </div>
 
@@ -60,11 +61,11 @@ export default function PaymentSuccess() {
                         className="w-full h-12 text-lg bg-gradient-to-r from-violet-500 to-purple-600 shadow-lg shadow-purple-500/20"
                         onClick={() => navigate('/dashboard')}
                     >
-                        Перейти в кабинет
+                        {t('paymentSuccess.goToDashboard', 'Перейти в кабинет')}
                         <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                 </div>
             </Card>
         </div>
     );
-}
+});

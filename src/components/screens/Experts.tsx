@@ -10,7 +10,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 
 
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, memo } from 'react';
 
 
 import { useTranslation } from 'react-i18next';
@@ -55,7 +55,7 @@ interface ExpertProfile {
   view_count: number | null;
 }
 
-export default function Experts() {
+export const Experts = memo(function Experts() {
   const params = useParams();
   const tag = params?.tag as string;
   const searchParams = useSearchParams();
@@ -348,4 +348,5 @@ export default function Experts() {
       </div>
     </>
   );
-}
+});
+export default Experts;

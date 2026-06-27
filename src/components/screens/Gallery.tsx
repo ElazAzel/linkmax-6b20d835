@@ -3,7 +3,7 @@
  */
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
@@ -35,7 +35,7 @@ import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 type SortMode = 'popular' | 'recent' | 'views';
 
-export default function Gallery() {
+export const Gallery = memo(function Gallery() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -434,4 +434,5 @@ export default function Gallery() {
       </main>
     </>
   );
-}
+});
+export default Gallery;

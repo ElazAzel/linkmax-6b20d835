@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ import { activateStarterTier } from '@/services/user';
 
 type BillingPeriod = 3 | 6 | 12;
 
-export default function Pricing() {
+export const Pricing = memo(function Pricing() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { tier, isLoading, refresh: refreshPremiumStatus } = usePremiumStatus();
@@ -216,4 +216,5 @@ export default function Pricing() {
       </div>
     </>
   );
-}
+});
+export default Pricing;

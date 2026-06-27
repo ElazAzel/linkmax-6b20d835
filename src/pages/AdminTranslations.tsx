@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useDeferredValue, useCallback } from 'react';
+import { useState, useMemo, useRef, useDeferredValue, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
@@ -157,7 +157,7 @@ function mergeDeep(target: TranslationData, source: TranslationData): Translatio
   return result;
 }
 
-export default function AdminTranslations() {
+export const AdminTranslations = memo(function AdminTranslations() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const canonical = `${getAppDomain()}/admin/translations`;
@@ -932,4 +932,5 @@ export default function AdminTranslations() {
       </div>
     </>
   );
-}
+});
+export default AdminTranslations;
