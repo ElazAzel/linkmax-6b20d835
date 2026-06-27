@@ -10,7 +10,7 @@ const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (
 
 import { StrictMode, lazy } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 const Index = lazy(() => import("./pages/Index"));
