@@ -148,18 +148,14 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex transition-all duration-300',
-                  !isNaked && 'overflow-hidden',
+                  'group relative flex transition-all duration-300 overflow-hidden',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
-                  // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
-                  !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
-                  isTransparent && !hasCustomChrome && 'bg-transparent',
+                  // Chrome only when not naked
+                  !isNaked && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
+                  isNaked && 'bg-transparent',
                   hoverClass,
-                  !isNaked && isSquare && 'aspect-square',
-                  !isNaked && isTall && 'min-h-[280px]',
-                  !isNaked && !isSquare && !isTall && 'min-h-[120px]',
                 )}
                 style={!isNaked ? wrapperStyle : undefined}
                 variants={{
