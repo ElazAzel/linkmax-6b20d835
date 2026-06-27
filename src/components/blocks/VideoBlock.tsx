@@ -56,27 +56,22 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   }
 
   return (
-    <Card
-      className="overflow-hidden qb-card border-hairline shadow-soft rounded-2xl"
+    <div
+      className="w-full overflow-hidden rounded-2xl"
       onClick={() => onClick?.()}
     >
       {title && (
-        <CardHeader className="p-4 sm:p-5 pb-2">
-          <CardTitle className="text-base sm:text-lg font-semibold truncate text-gradient">{title}</CardTitle>
-        </CardHeader>
+        <h3 className="text-base sm:text-lg font-semibold truncate mb-2">{title}</h3>
       )}
-      <CardContent className="p-0">
-        <div className={cn("relative w-full bg-black/20", aspectRatioClass)}>
-          <iframe
-            src={embedUrl}
-            className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
-
-            allowFullScreen
-            title={title || 'Video'}
-          />
-        </div>
-      </CardContent>
-    </Card>
+      <div className={cn("relative w-full bg-black/20 overflow-hidden rounded-2xl", aspectRatioClass)}>
+        <iframe
+          src={embedUrl}
+          className="absolute inset-0 w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
+          allowFullScreen
+          title={title || 'Video'}
+        />
+      </div>
+    </div>
   );
 });
