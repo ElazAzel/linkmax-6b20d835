@@ -179,6 +179,8 @@ const router = createBrowserRouter([
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
+      { path: "linkmax-vs-linktree", element: <Navigate to="/alternatives/linktree" replace /> },
+      { path: "blog/linktree-alternative", element: <Navigate to="/alternatives/linktree" replace /> },
       { path: "seo-landing", element: <SeoLanding /> },
       { path: "seo-check", element: <SeoCheck /> },
       { path: "admin", element: <Admin /> },
