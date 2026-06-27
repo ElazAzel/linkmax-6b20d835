@@ -35,8 +35,12 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   const profileBlock = validBlocks.find(b => b.type === 'profile');
   const contentBlocks = validBlocks.filter(b => b.type !== 'profile');
 
-  // Block types that render as ambient layers (no card chrome)
-  const TRANSPARENT_BLOCKS = new Set(['separator', 'socials', 'spacer']);
+  // Block types that render as ambient layers (no card chrome by default)
+  // Media blocks render naked — only show frame if user explicitly set styling
+  const TRANSPARENT_BLOCKS = new Set([
+    'separator', 'socials', 'spacer',
+    'video', 'image', 'carousel', 'gallery', 'embed', 'custom-code', 'map',
+  ]);
   // Block types that naturally need full width when size isn't explicitly set
   const NATURALLY_WIDE = new Set([
     'profile', 'heading', 'text', 'video', 'embed', 'faq',
