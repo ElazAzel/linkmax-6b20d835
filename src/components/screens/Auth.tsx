@@ -29,6 +29,9 @@ import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import UserIcon from 'lucide-react/dist/esm/icons/user';
 import { trackAuthEvent } from '@/services/authFunnel';
 
 // Zod schema is created inside the component to access t()
