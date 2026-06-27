@@ -1,6 +1,6 @@
 import { memo, useMemo, useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Badge } from '@/components/ui/badge';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2';
