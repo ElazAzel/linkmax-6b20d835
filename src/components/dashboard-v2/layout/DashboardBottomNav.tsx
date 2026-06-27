@@ -159,7 +159,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
         <SheetContent side="bottom" className="rounded-t-2xl px-4 pb-8">
           <SheetHeader>
-            <SheetTitle className="text-left">{t('dashboard.nav.more', 'Ещё')}</SheetTitle>
+            <SheetTitle className="text-left">{t('dashboard.nav.menu', 'Меню')}</SheetTitle>
           </SheetHeader>
           <div className="grid grid-cols-3 gap-3 mt-4">
             {MORE_ITEMS.map(item => {
