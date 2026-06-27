@@ -35,8 +35,12 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   const profileBlock = validBlocks.find(b => b.type === 'profile');
   const contentBlocks = validBlocks.filter(b => b.type !== 'profile');
 
-  // Block types that render as ambient layers (no card chrome)
-  const TRANSPARENT_BLOCKS = new Set(['separator', 'socials', 'spacer']);
+  // Block types that render as ambient layers (no card chrome by default)
+  // Media blocks render naked — only show frame if user explicitly set styling
+  const TRANSPARENT_BLOCKS = new Set([
+    'separator', 'socials', 'spacer',
+    'video', 'image', 'carousel', 'gallery', 'embed', 'custom-code', 'map',
+  ]);
   // Block types that naturally need full width when size isn't explicitly set
   const NATURALLY_WIDE = new Set([
     'profile', 'heading', 'text', 'video', 'embed', 'faq',
@@ -134,24 +138,30 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
               : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
               : '';
             const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
+            const hasCustomChrome = hasCustomBg
+              || (bs?.borderWidth && bs.borderWidth !== 'none')
+              || (bs?.shadow && bs.shadow !== 'none');
+            // Media blocks render naked unless user set chrome
+            const isNaked = isTransparent && !hasCustomChrome;
 
             return (
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex overflow-hidden transition-all duration-300',
+                  'group relative flex transition-all duration-300',
+                  !isNaked && 'overflow-hidden',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
                   // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
                   !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
-                  isTransparent && 'bg-transparent',
+                  isTransparent && !hasCustomChrome && 'bg-transparent',
                   hoverClass,
-                  !isTransparent && isSquare && 'aspect-square',
-                  !isTransparent && isTall && 'min-h-[280px]',
-                  !isTransparent && !isSquare && !isTall && 'min-h-[120px]',
+                  !isNaked && isSquare && 'aspect-square',
+                  !isNaked && isTall && 'min-h-[280px]',
+                  !isNaked && !isSquare && !isTall && 'min-h-[120px]',
                 )}
-                style={!isTransparent ? wrapperStyle : undefined}
+                style={!isNaked ? wrapperStyle : undefined}
                 variants={{
                   hidden: { opacity: 0, y: 12, scale: 0.99 },
                   show: {
