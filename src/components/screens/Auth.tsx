@@ -536,8 +536,46 @@ export const Auth = memo(function Auth() {
             </div>
           </div>
 
-          {/* Password Update Card */}
-          {authMode === 'update-password' ? (
+          {/* Already signed-in panel — quick actions instead of full auth form */}
+          {user && authMode !== 'update-password' ? (
+            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
+                    <UserIcon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <CardTitle className="text-lg truncate">
+                      {t('auth.alreadySignedIn', 'Вы уже вошли')}
+                    </CardTitle>
+                    <CardDescription className="truncate">{user.email}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button
+                  className="w-full h-12 rounded-2xl shadow-glass-lg gap-2 transition-all duration-300 hover:scale-[1.01]"
+                  onClick={() => navigate(safeReturnTo || '/dashboard')}
+                  data-testid="continue-to-dashboard"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  {t('auth.continueToDashboard', 'Продолжить в дашборд')}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 rounded-2xl gap-2"
+                  onClick={handleSignOutAndStay}
+                  data-testid="signout-switch-account"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {t('auth.useAnotherAccount', 'Войти под другим аккаунтом')}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center pt-1">
+                  {t('auth.alreadySignedInHint', 'Можно сменить аккаунт — текущая сессия будет завершена.')}
+                </p>
+              </CardContent>
+            </Card>
+          ) : authMode === 'update-password' ? (
             <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
