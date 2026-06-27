@@ -186,20 +186,32 @@ export const Auth = memo(function Auth() {
     }
   }, [urlMode]);
 
-  // Redirect if already logged in (but not during password update)
+  // Apply referral once when an authenticated user lands on /auth
+  const referralAppliedRef = useRef(false);
   useEffect(() => {
-    if (user && authMode !== 'update-password') {
-      // Apply referral code if present
-      if (refCode) {
-        applyReferralCode(refCode, user.id).then((result) => {
-          if (result.success) {
-            toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
-          }
-        });
-      }
-      navigate(safeReturnTo || '/dashboard');
+    if (user && refCode && !referralAppliedRef.current) {
+      referralAppliedRef.current = true;
+      applyReferralCode(refCode, user.id).then((result) => {
+        if (result.success) {
+          toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
+        }
+      });
     }
-  }, [user, navigate, refCode, authMode, safeReturnTo]);
+  }, [user, refCode, t]);
+
+  // Auto-redirect only when there's an explicit return target or post-auth password update.
+  // Otherwise show the "already signed in" card so the user can choose.
+  useEffect(() => {
+    if (user && authMode !== 'update-password' && safeReturnTo) {
+      navigate(safeReturnTo);
+    }
+  }, [user, navigate, authMode, safeReturnTo]);
+
+  const handleSignOutAndStay = async () => {
+    trackAuthEvent('auth_signout_from_auth_page');
+    await signOut();
+    toast.success(t('auth.signedOut', 'Signed out'));
+  };
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
