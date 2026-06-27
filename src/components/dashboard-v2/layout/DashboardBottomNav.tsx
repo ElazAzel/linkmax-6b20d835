@@ -139,7 +139,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
             {/* More button */}
             <button
               onClick={() => { haptic.lightTap(); setMoreOpen(true); }}
-              aria-label={t('dashboard.nav.more', 'Ещё')}
+              aria-label={t('dashboard.nav.menu', 'Меню')}
               aria-expanded={moreOpen}
               className={cn(
                 "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
