@@ -73,7 +73,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {/* Bento grid */}
       {contentBlocks.length > 0 && (
         <motion.div
-          className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+          className="grid grid-cols-2 gap-4 grid-flow-row-dense auto-rows-min"
           initial="hidden"
           animate="show"
           viewport={{ once: true }}
@@ -95,7 +95,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 : BLOCK_SIZE_DIMENSIONS['small'];
 
             const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-            const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
+            // Drop row-span — variable content heights make fixed row tracks fight aspect-ratio media
+            const rowSpanClass = '';
 
             const contentAlignment = block.blockStyle?.contentAlignment || 'center';
             const alignmentClass =
@@ -149,17 +150,13 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 key={block.id}
                 className={cn(
                   'group relative flex transition-all duration-300',
-                  !isNaked && 'overflow-hidden',
+                  !isNaked && 'overflow-hidden min-h-[120px]',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
-                  // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
-                  !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
-                  isTransparent && !hasCustomChrome && 'bg-transparent',
+                  !isNaked && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
+                  isNaked && 'bg-transparent',
                   hoverClass,
-                  !isNaked && isSquare && 'aspect-square',
-                  !isNaked && isTall && 'min-h-[280px]',
-                  !isNaked && !isSquare && !isTall && 'min-h-[120px]',
                 )}
                 style={!isNaked ? wrapperStyle : undefined}
                 variants={{
