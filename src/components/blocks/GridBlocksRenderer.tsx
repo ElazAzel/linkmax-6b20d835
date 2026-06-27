@@ -149,11 +149,11 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex transition-all duration-300 overflow-hidden',
+                  'group relative flex transition-all duration-300',
+                  !isNaked && 'overflow-hidden min-h-[120px]',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
-                  // Chrome only when not naked
                   !isNaked && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
                   isNaked && 'bg-transparent',
                   hoverClass,
