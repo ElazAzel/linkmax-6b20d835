@@ -95,7 +95,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 : BLOCK_SIZE_DIMENSIONS['small'];
 
             const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-            const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
+            // Drop row-span — variable content heights make fixed row tracks fight aspect-ratio media
+            const rowSpanClass = '';
 
             const contentAlignment = block.blockStyle?.contentAlignment || 'center';
             const alignmentClass =
