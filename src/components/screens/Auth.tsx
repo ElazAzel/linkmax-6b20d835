@@ -208,7 +208,7 @@ export const Auth = memo(function Auth() {
   }, [user, navigate, authMode, safeReturnTo]);
 
   const handleSignOutAndStay = async () => {
-    trackAuthEvent('auth_signout_from_auth_page');
+    trackAuthEvent('auth_tab_switch', { tab: 'signout' });
     await signOut();
     toast.success(t('auth.signedOut', 'Signed out'));
   };
