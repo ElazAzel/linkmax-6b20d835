@@ -1,6 +1,6 @@
 import { memo, useMemo, useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Badge } from '@/components/ui/badge';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2';
@@ -164,51 +164,48 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
 
   return (
     <div className={containerClass}>
-      <Card className="overflow-hidden border-primary/20">
+      <div className="overflow-hidden rounded-2xl">
         {showHeader && (
-          <CardHeader className="bg-primary/5 py-2 px-4">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm">{title}</CardTitle>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="gap-1">
-                  <Crown className="h-3 w-3" />
-                  Premium
-                </Badge>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={toggleFullscreen}
-                >
-                  {isFullscreen ? (
-                    <Minimize2 className="h-4 w-4" />
-                  ) : (
-                    <Maximize2 className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
+          <div className="py-2 px-4 flex items-center justify-between">
+            <h3 className="text-sm font-medium">{title}</h3>
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="gap-1">
+                <Crown className="h-3 w-3" />
+                Premium
+              </Badge>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={toggleFullscreen}
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="h-4 w-4" />
+                ) : (
+                  <Maximize2 className="h-4 w-4" />
+                )}
+              </Button>
             </div>
-          </CardHeader>
+          </div>
         )}
-        <CardContent className="p-0">
-          <iframe
-            ref={iframeRef}
-            src={iframeSrc}
-            title={title || 'Custom Content'}
-            className="w-full border-0"
-            style={{
-              height: isFullscreen ? 'calc(100vh - 120px)' : iframeHeight,
-              minHeight: '100px'
-            }}
-            sandbox={
-              block.enableInteraction !== false
-                ? 'allow-scripts'
-                : ''
-            }
-            loading="lazy"
-          />
-        </CardContent>
-      </Card>
+        <iframe
+          ref={iframeRef}
+          src={iframeSrc}
+          title={title || 'Custom Content'}
+          className="w-full border-0 block"
+          style={{
+            height: isFullscreen ? 'calc(100vh - 120px)' : iframeHeight,
+            minHeight: '100px'
+          }}
+          sandbox={
+            block.enableInteraction !== false
+              ? 'allow-scripts'
+              : ''
+          }
+          loading="lazy"
+        />
+      </div>
+
 
       {isFullscreen && (
         <div className="fixed top-4 right-4 z-50">

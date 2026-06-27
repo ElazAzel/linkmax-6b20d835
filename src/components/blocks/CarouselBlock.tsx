@@ -49,7 +49,8 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
   }
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl qb-card border-hairline shadow-soft">
+    <div className="w-full overflow-hidden rounded-2xl">
+
       {title && (
         <div className="p-4 sm:p-5 pb-0">
           <h3 className="font-bold text-base sm:text-lg text-gradient truncate">{title}</h3>
