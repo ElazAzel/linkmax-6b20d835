@@ -10,7 +10,7 @@ const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (
 
 import { StrictMode, lazy } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 const Index = lazy(() => import("./pages/Index"));
@@ -179,6 +179,8 @@ const router = createBrowserRouter([
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
+      { path: "linkmax-vs-linktree", element: <Navigate to="/alternatives/linktree" replace /> },
+      { path: "blog/linktree-alternative", element: <Navigate to="/alternatives/linktree" replace /> },
       { path: "seo-landing", element: <SeoLanding /> },
       { path: "seo-check", element: <SeoCheck /> },
       { path: "admin", element: <Admin /> },
