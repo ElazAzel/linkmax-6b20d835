@@ -97,7 +97,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
         type="button"
         onClick={handleClick}
         className={cn(
-          "qb-card qb-card-hover w-full flex items-center justify-between gap-3",
+          "qb-card qb-card-hover w-full min-w-0 flex items-center justify-between gap-3",
           "min-h-[56px] py-3 px-4 sm:px-5",
           "active:scale-[0.99] transition-transform",
           getButtonClass(block.style),
@@ -129,7 +129,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           )}
           <span
             className={cn(
-              "font-medium text-sm sm:text-base line-clamp-2 text-left tracking-tight",
+              "font-medium text-sm sm:text-base text-left tracking-tight leading-snug break-words hyphens-auto",
               hasLegacyBackground ? 'text-white drop-shadow-md' : hasBlockStyle ? '' : 'text-foreground',
               textEffectClass
             )}
