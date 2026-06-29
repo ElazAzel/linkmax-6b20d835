@@ -117,6 +117,7 @@ async function main() {
     ...STATIC_PAGES.map((p) => ({ ...p, lastmod: p.lastmod || today })),
     ...KEYWORD_LANDINGS.map((s) => ({ loc: `/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.85' })),
     ...NICHE_LANDINGS.map((s) => ({ loc: `/dlya/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.75' })),
+    ...BLOG_POSTS.map((s) => ({ loc: `/blog/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.7' })),
     ...pages.map((p) => ({
       loc: `/${p.slug}`,
       lastmod: pickLastmod(p, today),
