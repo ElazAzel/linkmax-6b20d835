@@ -56,7 +56,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-3",
+        "flex min-w-0 flex-col gap-3 overflow-visible",
         alignmentClass,
         block.blockStyle?.padding && paddingMap[block.blockStyle.padding],
         block.blockStyle?.margin && marginMap[block.blockStyle.margin],
@@ -98,10 +98,10 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
         </div>
       </div>
 
-      <div className="space-y-1.5">
-        <h3 className="text-xl font-bold text-gradient leading-tight">{name}</h3>
+      <div className="w-full min-w-0 space-y-1.5 overflow-visible">
+        <h3 className="text-xl font-bold text-gradient leading-tight break-words hyphens-auto overflow-visible">{name}</h3>
         {subtitle && (
-          <p className="text-sm font-medium text-muted-foreground/80">{subtitle}</p>
+          <p className="text-sm font-medium text-muted-foreground/80 break-words hyphens-auto">{subtitle}</p>
         )}
       </div>
 
