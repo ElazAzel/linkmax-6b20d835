@@ -87,12 +87,6 @@ const HOVER_CLASS: Record<NonNullable<BlockStyle['hoverEffect']>, string> = {
   fade: 'transition-opacity duration-200 hover:opacity-80',
 };
 
-const ALIGN_FLEX: Record<NonNullable<BlockStyle['contentAlignment']>, string> = {
-  top: 'flex-start',
-  center: 'center',
-  bottom: 'flex-end',
-};
-
 export interface BlockStyleResult {
   style: React.CSSProperties;
   className: string;
