@@ -51,7 +51,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
         onClick={handleClick}
         className={cn(
           widthClass,
-          "relative overflow-hidden font-medium tracking-tight rounded-card",
+          "relative min-w-0 overflow-hidden font-medium tracking-tight rounded-card",
           "shadow-soft hover:shadow-lift transition-all duration-200",
           "hover:-translate-y-px active:scale-[0.99]",
           "break-words hyphens-auto",
@@ -79,7 +79,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
             />
           );
         })()}
-        <span className={cn("relative z-10 line-clamp-2", textEffectClass)}>{title}</span>
+        <span className={cn("relative z-10 block leading-snug break-words hyphens-auto", textEffectClass)}>{title}</span>
       </button>
     </div>
   );
