@@ -121,13 +121,13 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
   if (isSubscribed) {
     return (
-      <Card className="p-5 sm:p-6 bg-card/60  border-hairline shadow-soft rounded-[2rem] animate-in zoom-in-95 duration-500">
+      <Card className="p-5 sm:p-6 bg-card/60 border-hairline shadow-soft rounded-[2rem] animate-in zoom-in-95 duration-500 overflow-visible">
         <div className="flex flex-col items-center gap-3 text-center py-6">
           <div className="p-4 rounded-full bg-primary/20 text-primary shadow-inner">
             <CheckCircle className="h-8 w-8" />
           </div>
-          <h3 className="font-bold text-xl tracking-tight mt-2">{t('newsletter.thankYou', 'Спасибо!')}</h3>
-          <p className="text-sm text-foreground/60 max-w-[200px]">
+          <h3 className="font-bold text-xl tracking-tight leading-snug break-words hyphens-auto mt-2">{t('newsletter.thankYou', 'Спасибо!')}</h3>
+          <p className="text-sm text-foreground/60 max-w-[200px] leading-relaxed break-words hyphens-auto">
             {t('newsletter.subscriptionConfirmed', 'Ваша подписка успешно подтверждена.')}
           </p>
         </div>
@@ -146,13 +146,13 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
           <div className="p-2.5 rounded-2xl bg-primary/15 text-primary shadow-[0_0_20px_rgba(var(--primary),0.15)] group-hover:scale-110 transition-transform duration-300">
             <Mail className="h-6 w-6" />
           </div>
-          <h3 className="text-xl font-extrabold tracking-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+          <h3 className="min-w-0 text-xl font-extrabold tracking-tight leading-snug break-words hyphens-auto bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent py-0.5">
             {title || t('newsletter.title', 'Подпишитесь')}
           </h3>
         </div>
 
         {description && (
-          <p className="text-[0.95rem] text-foreground/60 mb-7 leading-relaxed font-medium">
+          <p className="text-[0.95rem] text-foreground/60 mb-7 leading-relaxed font-medium break-words hyphens-auto">
             {description}
           </p>
         )}
