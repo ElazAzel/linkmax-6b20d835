@@ -83,7 +83,7 @@ export const CountdownBlock = React.memo(function CountdownBlock({ block }: Coun
   return (
     <div className="w-full space-y-2 sm:space-y-3">
       {title && (
-        <h3 className="text-lg sm:text-xl font-semibold text-center truncate">{title}</h3>
+        <h3 className="text-lg sm:text-xl font-semibold text-center break-words leading-snug">{title}</h3>
       )}
       
       {isExpired ? (

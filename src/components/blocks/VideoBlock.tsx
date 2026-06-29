@@ -65,7 +65,7 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
       tabIndex={0}
     >
       {title && (
-        <h3 className="text-base sm:text-lg font-semibold truncate mb-2">{title}</h3>
+        <h3 className="text-base sm:text-lg font-semibold leading-snug mb-2 break-words">{title}</h3>
       )}
       <div className={cn("relative w-full bg-black/20 overflow-hidden rounded-2xl", aspectRatioClass)}>
         <iframe

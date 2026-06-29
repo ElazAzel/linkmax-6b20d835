@@ -173,7 +173,7 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
   return (
     <Card className="p-5 sm:p-6 bg-card border-border shadow-sm rounded-xl">
       <div className="flex items-center gap-2 mb-3 sm:mb-4">
-        <h3 className="font-semibold text-base sm:text-lg truncate">{title}</h3>
+        <h3 className="font-semibold text-base sm:text-lg break-words leading-snug">{title}</h3>
         <Crown className="h-4 w-4 text-primary flex-shrink-0" />
       </div>
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
