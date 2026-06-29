@@ -153,10 +153,10 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
 
   return (
     <div className={containerClass}>
-      <div className="overflow-hidden rounded-2xl">
+      <div className="min-w-0 overflow-visible rounded-2xl">
         {showHeader && (
-          <div className="py-2 px-4 flex items-center justify-between">
-            <h3 className="text-sm font-medium">{title}</h3>
+          <div className="py-2 px-1 flex items-center justify-between gap-3">
+            <h3 className="text-sm font-medium leading-snug break-words hyphens-auto min-w-0">{title}</h3>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="gap-1">
                 <Crown className="h-3 w-3" />
