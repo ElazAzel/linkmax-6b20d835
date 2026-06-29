@@ -58,14 +58,14 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
 
   return (
     <div
-      className="w-full overflow-hidden rounded-2xl"
+      className="w-full min-w-0 overflow-visible rounded-2xl"
       onClick={() => onClick?.()}
       onKeyDown={() => onClick?.()}
       role="button"
       tabIndex={0}
     >
       {title && (
-        <h3 className="text-base sm:text-lg font-semibold leading-snug mb-2 break-words">{title}</h3>
+        <h3 className="text-base sm:text-lg font-semibold leading-snug mb-3 break-words hyphens-auto overflow-visible">{title}</h3>
       )}
       <div className={cn("relative w-full bg-black/20 overflow-hidden rounded-2xl", aspectRatioClass)}>
         <iframe
