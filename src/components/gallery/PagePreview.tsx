@@ -54,7 +54,7 @@ export function PagePreview({ slug, title, avatarUrl, previewUrl, className = ''
       )}
       <img
         src={previewUrl}
-        alt={`Preview of ${title || slug}`}
+        alt={`Превью страницы ${title || slug || 'пользователя LinkMAX'}`}
         className={`w-full h-full object-cover object-top transition-opacity duration-300 ${
           imageLoading ? 'opacity-0' : 'opacity-100'
         }`}

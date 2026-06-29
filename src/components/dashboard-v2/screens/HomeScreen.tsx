@@ -326,8 +326,8 @@ export const HomeScreen = memo(function HomeScreen({
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                   {t('dashboard.home.performance', 'Эффективность')}
                 </h3>
-                <Button variant="ghost" size="sm" className="h-10 px-4 text-xs text-primary bg-primary/5 rounded-lg" onClick={onOpenInsights}>
-                  {t('common.more', 'Ещё')}
+                <Button variant="ghost" size="sm" className="h-10 px-4 text-xs text-primary bg-primary/5 rounded-lg" onClick={onOpenInsights} aria-label={t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}>
+                  {t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}
                 </Button>
               </div>
               <MetricsGrid pageId={pageData?.id} />
