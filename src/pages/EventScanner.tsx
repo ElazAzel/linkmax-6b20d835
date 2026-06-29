@@ -33,6 +33,7 @@ import { ru, kk, enUS } from 'date-fns/locale';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { logger } from '@/lib/utils/logger';
 import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 interface ScanResult {
   ticketCode: string;
@@ -531,6 +532,7 @@ export const EventScanner = memo(function EventScanner() {
   }
 
   return (
+    <ScreenErrorBoundary screenName="EventScanner">
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b safe-area-top">
@@ -716,7 +718,8 @@ export const EventScanner = memo(function EventScanner() {
           </ScrollArea>
         </div>
       </div>
-    </div>
+      </div>
+    </ScreenErrorBoundary>
   );
 });
 export default EventScanner;

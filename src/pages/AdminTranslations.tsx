@@ -236,8 +236,61 @@ export const AdminTranslations = memo(function AdminTranslations() {
     return result;
   }, [flattenedTranslations, activeLanguages, allKeys.all]);
 
-  // Save inline edit
-  const handleSaveEdit = async () => {
+  // --- Navigation ---
+
+  const handleNavigateBack = useCallback(() => {
+    navigate('/admin');
+  }, [navigate]);
+
+  // --- Dialog open/close ---
+
+  const handleOpenSyncConfirm = useCallback(() => {
+    setSyncConfirmOpen(true);
+  }, []);
+
+  const handleCloseAddKey = useCallback(() => {
+    setAddKeyOpen(false);
+  }, []);
+
+  const handleOpenUploadDialog = useCallback(() => {
+    setUploadDialogOpen(true);
+  }, []);
+
+  const handleCloseDeleteConfirm = useCallback(() => {
+    setDeleteConfirmKey(null);
+  }, []);
+
+  // --- Search/filter ---
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleLanguageSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setLanguageSearch(e.target.value);
+  }, []);
+
+  const handleFilterAll = useCallback(() => {
+    setFilterMode('all');
+  }, []);
+
+  const handleFilterMissing = useCallback(() => {
+    setFilterMode('missing');
+  }, []);
+
+  // --- Language/region selection ---
+
+  const handleLanguageSelect = useCallback((langCode: string) => {
+    setSelectedLang(langCode);
+  }, []);
+
+  const handleLanguageKeyDown = useCallback((event: React.KeyboardEvent<HTMLElement>, langCode: string) => {
+    handleKeyboardActivation(event, () => setSelectedLang(langCode));
+  }, []);
+
+  // --- CRUD: Save inline edit ---
+
+  const handleSaveEdit = useCallback(async () => {
     if (editingKey) {
       setSavingKey(editingKey);
       await updateTranslation({ lang: selectedLang, key: editingKey, value: editValue });
@@ -245,29 +298,55 @@ export const AdminTranslations = memo(function AdminTranslations() {
       setEditingKey(null);
       setEditValue('');
     }
-  };
+  }, [editingKey, selectedLang, editValue, updateTranslation]);
 
-  // Add new language
-  const handleAddLanguage = async (langCode: string) => {
+  const handleEditValueChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditValue(e.target.value);
+  }, []);
+
+  const handleCancelEdit = useCallback(() => {
+    setEditingKey(null);
+  }, []);
+
+  // --- CRUD: Language management ---
+
+  const handleAddLanguage = useCallback(async (langCode: string) => {
     if (!activeLanguages.includes(langCode)) {
       const emptyLang = copyStructureEmpty(translations['en'] || {});
       await addLanguage(langCode, emptyLang);
     }
     setAddLanguageOpen(false);
     setLanguageSearch('');
-  };
+  }, [activeLanguages, translations, addLanguage]);
 
-  // Remove language
-  const handleRemoveLanguage = (langCode: string) => {
+  const handleAddLanguageFromList = useCallback((langCode: string) => {
+    handleAddLanguage(langCode);
+  }, [handleAddLanguage]);
+
+  const handleRemoveLanguage = useCallback((langCode: string) => {
     if (CORE_LANGUAGES.includes(langCode)) {
       toast.error('Основные языки нельзя удалить');
       return;
     }
     toast.info('Функционал удаления языка из БД в разработке. Язык останется в списке.');
-  };
+  }, []);
 
-  // Add new key
-  const handleAddKey = async () => {
+  const handleRemoveLanguageClick = useCallback((e: React.MouseEvent, langCode: string) => {
+    e.stopPropagation();
+    handleRemoveLanguage(langCode);
+  }, [handleRemoveLanguage]);
+
+  // --- CRUD: Key management ---
+
+  const handleNewKeyNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewKeyName(e.target.value);
+  }, []);
+
+  const handleNewKeyValueChange = useCallback((lang: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewKeyValues(prev => ({ ...prev, [lang]: e.target.value }));
+  }, []);
+
+  const handleAddKey = useCallback(async () => {
     const trimmedKey = newKeyName.trim();
     if (!trimmedKey) {
       toast.error('Введите ключ');
@@ -289,22 +368,69 @@ export const AdminTranslations = memo(function AdminTranslations() {
     setNewKeyName('');
     setNewKeyValues({});
     setAddKeyOpen(false);
-  };
+  }, [newKeyName, allKeys.all, activeLanguages, translations, newKeyValues, upsertFullTranslations]);
 
-  // Delete key
-  const handleDeleteKey = (key: string) => {
+  // --- CRUD: Delete key ---
+
+  const handleDeleteKey = useCallback((key: string) => {
     setDeleteConfirmKey(key);
-  };
+  }, []);
 
-  const confirmDeleteKey = () => {
+  const handleDeleteKeyConfirm = useCallback((key: string) => {
+    handleDeleteKey(key);
+  }, [handleDeleteKey]);
+
+  const confirmDeleteKey = useCallback(() => {
     if (deleteConfirmKey) {
       deleteKey(deleteConfirmKey);
       setDeleteConfirmKey(null);
     }
-  };
+  }, [deleteConfirmKey, deleteKey]);
 
-  // Export
-  const downloadJSON = (lang: string) => {
+  // --- CRUD: Sync ---
+
+  const syncAllToDB = useCallback(async () => {
+    const payload = activeLanguages.map(lang => ({
+      lang,
+      data: translations[lang]
+    }));
+    await upsertFullTranslations(payload);
+    setSyncConfirmOpen(false);
+  }, [activeLanguages, translations, upsertFullTranslations]);
+
+  // --- Editor helpers ---
+
+  const handleStartEdit = useCallback((key: string, value: string) => {
+    setEditingKey(key);
+    setEditValue(value);
+  }, []);
+
+  const handleStartEditKeyDown = useCallback((event: React.KeyboardEvent<HTMLElement>, key: string, value: string) => {
+    handleKeyboardActivation(event, () => {
+      setEditingKey(key);
+      setEditValue(value);
+    });
+  }, []);
+
+  const handleCopyFromEn = useCallback((key: string, enVal: string) => {
+    updateTranslation({ lang: selectedLang, key, value: enVal });
+  }, [selectedLang, updateTranslation]);
+
+  const handleToggleNamespace = useCallback((ns: string) => {
+    setExpandedNamespaces(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(ns)) {
+        newExpanded.delete(ns);
+      } else {
+        newExpanded.add(ns);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  // --- Export/import ---
+
+  const downloadJSON = useCallback((lang: string) => {
     const json = JSON.stringify(translations[lang] || {}, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -314,15 +440,19 @@ export const AdminTranslations = memo(function AdminTranslations() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success(`Файл ${lang}.json скачан`);
-  };
+  }, [translations]);
 
-  const downloadAllJSON = () => {
+  const downloadAllJSON = useCallback(() => {
     for (const lang of activeLanguages) {
       downloadJSON(lang);
     }
-  };
+  }, [activeLanguages, downloadJSON]);
 
-  const copyToClipboard = async (lang: string) => {
+  const handleDownloadSelected = useCallback(() => {
+    downloadJSON(selectedLang);
+  }, [downloadJSON, selectedLang]);
+
+  const copyToClipboard = useCallback(async (lang: string) => {
     try {
       const json = JSON.stringify(translations[lang] || {}, null, 2);
       await navigator.clipboard.writeText(json);
@@ -330,14 +460,17 @@ export const AdminTranslations = memo(function AdminTranslations() {
     } catch {
       toast.error('Не удалось скопировать');
     }
-  };
+  }, [translations]);
 
-  // Import
-  const handleImportClick = () => {
+  const handleCopySelected = useCallback(() => {
+    copyToClipboard(selectedLang);
+  }, [copyToClipboard, selectedLang]);
+
+  const handleImportClick = useCallback(() => {
     fileInputRef.current?.click();
-  };
+  }, []);
 
-  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileImport = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -355,32 +488,19 @@ export const AdminTranslations = memo(function AdminTranslations() {
         fileInputRef.current.value = '';
       }
     }
-  };
+  }, [selectedLang, translations, upsertFullTranslations]);
 
-  // Reset
-  const resetToOriginal = () => {
+  // --- Reset ---
+
+  const resetToOriginal = useCallback(() => {
     toast.info('Сброс к локальным файлам не рекомендуется при использовании БД-бэкэнда.');
-  };
+  }, []);
 
-  const syncAllToDB = async () => {
-    const payload = activeLanguages.map(lang => ({
-      lang,
-      data: translations[lang]
-    }));
-    await upsertFullTranslations(payload);
-    setSyncConfirmOpen(false);
-  };
+  // --- Upload success ---
 
-  // Toggle namespace
-  const toggleNamespace = (ns: string) => {
-    const newExpanded = new Set(expandedNamespaces);
-    if (newExpanded.has(ns)) {
-      newExpanded.delete(ns);
-    } else {
-      newExpanded.add(ns);
-    }
-    setExpandedNamespaces(newExpanded);
-  };
+  const handleUploadSuccess = useCallback(() => {
+    toast.success('Язык успешно загружен и применён');
+  }, []);
 
   // Available languages to add
   const availableToAdd = useMemo(() => {
@@ -394,9 +514,193 @@ export const AdminTranslations = memo(function AdminTranslations() {
   }, [activeLanguages, languageSearch]);
 
   // Get language info
-  const getLangInfo = (code: string) => {
+  const getLangInfo = useCallback((code: string) => {
     return ALL_LANGUAGES.find(l => l.code === code) || { code, name: code.toUpperCase(), flag: '🏳️', region: 'other' };
-  };
+  }, []);
+
+  // Memoized: language badge cards
+  const languageCards = useMemo(() =>
+    activeLanguages.map((langCode) => {
+      const lang = getLangInfo(langCode);
+      const missing = stats[langCode] || 0;
+      const isSelected = selectedLang === langCode;
+      const isCore = CORE_LANGUAGES.includes(langCode);
+
+      return (
+        <div
+          key={langCode}
+          className={`
+            relative group flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all
+            ${isSelected ? 'border-primary bg-primary/10 ring-2 ring-primary/50' : 'border-border hover:border-primary/50'}
+          `}
+          onClick={() => handleLanguageSelect(langCode)}
+          onKeyDown={(event) => handleLanguageKeyDown(event, langCode)}
+          role="button"
+          tabIndex={0}
+          aria-pressed={isSelected}
+        >
+          <span className="text-lg">{lang.flag}</span>
+          <div>
+            <div className="font-medium text-sm">{lang.name}</div>
+            <div className="text-xs text-muted-foreground">
+              {missing > 0 ? (
+                <span className="text-destructive">{missing} отсутствует</span>
+              ) : (
+                <span className="text-green-600 dark:text-green-400">✓ Полный</span>
+              )}
+            </div>
+          </div>
+          {!isCore && (
+            <button
+              className="absolute -top-1 -right-1 hidden group-hover:flex items-center justify-center w-5 h-5 rounded-full bg-destructive text-destructive-foreground"
+              onClick={(e) => handleRemoveLanguageClick(e, langCode)}
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
+          )}
+        </div>
+      );
+    }),
+    [activeLanguages, selectedLang, stats, getLangInfo, handleLanguageSelect, handleLanguageKeyDown, handleRemoveLanguageClick]
+  );
+
+  // Memoized: new-key language inputs
+  const newKeyLanguageInputs = useMemo(() =>
+    activeLanguages.slice(0, 5).map(lang => {
+      const info = getLangInfo(lang);
+      return (
+        <div key={lang} className="flex items-center gap-2">
+          <span className="w-8 text-center">{info.flag}</span>
+          <Input
+            value={newKeyValues[lang] || ''}
+            onChange={(e) => handleNewKeyValueChange(lang, e)}
+            placeholder={`${info.name}...`}
+          />
+        </div>
+      );
+    }),
+    [activeLanguages, newKeyValues, getLangInfo, handleNewKeyValueChange]
+  );
+
+  // Memoized: editor namespace sections
+  const namespaceSections = useMemo(() =>
+    Object.entries(groupedKeys).sort().map(([namespace, keys]) => {
+      const sortedKeys = [...keys].sort();
+      return (
+        <Collapsible
+          key={namespace}
+          open={expandedNamespaces.has(namespace)}
+          onOpenChange={() => handleToggleNamespace(namespace)}
+        >
+          <CollapsibleTrigger className="flex items-center gap-2 w-full p-2 rounded-lg hover:bg-muted/50">
+            {expandedNamespaces.has(namespace) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+            <span className="font-medium">{namespace}</span>
+            <Badge variant="secondary" className="ml-auto">{keys.length}</Badge>
+          </CollapsibleTrigger>
+
+          <CollapsibleContent className="pl-6 space-y-1 mt-1">
+            {sortedKeys.map((key) => {
+              const shortKey = key.substring(namespace.length + 1);
+              const flat = flattenedTranslations[selectedLang] || {};
+              const value = flat[key] || '';
+              const enVal = (flattenedTranslations['en'] || {})[key] || '';
+              const isEmpty = !value.trim();
+              const isSavingThis = savingKey === key;
+
+              return (
+                <div
+                  key={key}
+                  className={`
+                    group flex items-start gap-3 p-2 rounded-lg border
+                    ${isEmpty ? 'border-destructive/30 bg-destructive/5' : 'border-transparent hover:bg-muted/30'}
+                    ${editingKey === key ? 'ring-2 ring-primary' : ''}
+                  `}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <code className="text-xs text-muted-foreground font-mono truncate">{shortKey}</code>
+                      {isSavingThis ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : isEmpty ? (
+                        <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0" />
+                      ) : (
+                        <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400 flex-shrink-0" />
+                      )}
+                    </div>
+
+                    {editingKey === key ? (
+                      <div className="space-y-2">
+                        {selectedLang !== 'en' && enVal && (
+                          <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+                            <span className="font-medium">🇬🇧 EN:</span> {enVal}
+                          </div>
+                        )}
+                        <Textarea
+                          value={editValue}
+                          onChange={handleEditValueChange}
+                          className="min-h-[60px] text-sm"
+                          autoFocus
+                        />
+                        <div className="flex gap-2">
+                          <Button size="sm" onClick={handleSaveEdit} disabled={isSavingThis}>
+                            {isSavingThis ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Check className="h-3 w-3 mr-1" />}
+                            {isSavingThis ? 'Сохранение...' : 'Сохранить'}
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={handleCancelEdit} disabled={isSavingThis}>
+                            Отмена
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className="text-sm cursor-pointer min-h-[24px]"
+                        onClick={() => handleStartEdit(key, value)}
+                        onKeyDown={(event) => handleStartEditKeyDown(event, key, value)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        {value || <span className="text-muted-foreground italic">Нажмите чтобы добавить...</span>}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {enVal && selectedLang !== 'en' && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-6 w-6"
+                        title="Скопировать с EN"
+                        onClick={() => handleCopyFromEn(key, enVal)}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    )}
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-6 w-6 text-destructive"
+                      title="Удалить ключ"
+                      onClick={() => handleDeleteKeyConfirm(key)}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </CollapsibleContent>
+        </Collapsible>
+      );
+    }),
+    [groupedKeys, expandedNamespaces, selectedLang, flattenedTranslations, savingKey, editingKey, editValue,
+     handleToggleNamespace, handleEditValueChange, handleSaveEdit, handleCancelEdit,
+     handleStartEdit, handleStartEditKeyDown, handleCopyFromEn, handleDeleteKeyConfirm]
+  );
 
   if (loading) {
     return (
@@ -430,7 +734,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
         <header className="border-b border-border bg-card/95 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')}>
+              <Button variant="ghost" size="icon" onClick={handleNavigateBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <Shield className="h-6 w-6 text-primary" />
@@ -443,7 +747,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setSyncConfirmOpen(true)}
+                onClick={handleOpenSyncConfirm}
                 disabled={saving}
               >
                 {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Upload className="h-4 w-4 mr-1" />}
@@ -469,50 +773,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {activeLanguages.map((langCode) => {
-                  const lang = getLangInfo(langCode);
-                  const missing = stats[langCode] || 0;
-                  const isSelected = selectedLang === langCode;
-                  const isCore = CORE_LANGUAGES.includes(langCode);
-
-                  return (
-                    <div
-                      key={langCode}
-                      className={`
-                        relative group flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all
-                        ${isSelected ? 'border-primary bg-primary/10 ring-2 ring-primary/50' : 'border-border hover:border-primary/50'}
-                      `}
-                      onClick={() => setSelectedLang(langCode)}
-                      onKeyDown={(event) => handleKeyboardActivation(event, () => setSelectedLang(langCode))}
-                      role="button"
-                      tabIndex={0}
-                      aria-pressed={isSelected}
-                    >
-                      <span className="text-lg">{lang.flag}</span>
-                      <div>
-                        <div className="font-medium text-sm">{lang.name}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {missing > 0 ? (
-                            <span className="text-destructive">{missing} отсутствует</span>
-                          ) : (
-                            <span className="text-green-600 dark:text-green-400">✓ Полный</span>
-                          )}
-                        </div>
-                      </div>
-                      {!isCore && (
-                        <button
-                          className="absolute -top-1 -right-1 hidden group-hover:flex items-center justify-center w-5 h-5 rounded-full bg-destructive text-destructive-foreground"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveLanguage(langCode);
-                          }}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
+                {languageCards}
 
                 {/* Add Language Button */}
                 <Dialog open={addLanguageOpen} onOpenChange={setAddLanguageOpen}>
@@ -534,7 +795,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           value={languageSearch}
-                          onChange={(e) => setLanguageSearch(e.target.value)}
+                          onChange={handleLanguageSearchChange}
                           placeholder="Поиск языка..."
                           className="pl-10"
                         />
@@ -554,7 +815,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                                       key={lang.code}
                                       variant="outline"
                                       className="justify-start h-auto py-2"
-                                      onClick={() => handleAddLanguage(lang.code)}
+                                      onClick={() => handleAddLanguageFromList(lang.code)}
                                     >
                                       <span className="mr-2">{lang.flag}</span>
                                       <span className="truncate">{lang.name}</span>
@@ -618,7 +879,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                   <Input
                     placeholder="Поиск по ключу или значению..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleSearchChange}
                     className="pl-10"
                   />
                 </div>
@@ -627,14 +888,14 @@ export const AdminTranslations = memo(function AdminTranslations() {
                   <Button
                     variant={filterMode === 'all' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setFilterMode('all')}
+                    onClick={handleFilterAll}
                   >
                     Все
                   </Button>
                   <Button
                     variant={filterMode === 'missing' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setFilterMode('missing')}
+                    onClick={handleFilterMissing}
                   >
                     <AlertTriangle className="h-4 w-4 mr-1" />
                     Отсутствующие
@@ -665,25 +926,13 @@ export const AdminTranslations = memo(function AdminTranslations() {
                     <Label>Ключ (dot notation)</Label>
                     <Input
                       value={newKeyName}
-                      onChange={(e) => setNewKeyName(e.target.value)}
+                      onChange={handleNewKeyNameChange}
                       placeholder="e.g., common.newButton"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Переводы</Label>
-                    {activeLanguages.slice(0, 5).map(lang => {
-                      const info = getLangInfo(lang);
-                      return (
-                        <div key={lang} className="flex items-center gap-2">
-                          <span className="w-8 text-center">{info.flag}</span>
-                          <Input
-                            value={newKeyValues[lang] || ''}
-                            onChange={(e) => setNewKeyValues(prev => ({ ...prev, [lang]: e.target.value }))}
-                            placeholder={`${info.name}...`}
-                          />
-                        </div>
-                      );
-                    })}
+                    {newKeyLanguageInputs}
                     {activeLanguages.length > 5 && (
                       <p className="text-xs text-muted-foreground">
                         + ещё {activeLanguages.length - 5} языков (добавятся пустыми)
@@ -692,7 +941,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setAddKeyOpen(false)}>Отмена</Button>
+                  <Button variant="outline" onClick={handleCloseAddKey}>Отмена</Button>
                   <Button onClick={handleAddKey}>Добавить</Button>
                 </DialogFooter>
               </DialogContent>
@@ -709,15 +958,15 @@ export const AdminTranslations = memo(function AdminTranslations() {
               <Upload className="h-4 w-4 mr-1" />
               Импорт JSON ({selectedLang})
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setUploadDialogOpen(true)}>
+            <Button variant="outline" size="sm" onClick={handleOpenUploadDialog}>
               <Upload className="h-4 w-4 mr-1" />
               Загрузить язык из файла
             </Button>
-            <Button variant="outline" size="sm" onClick={() => copyToClipboard(selectedLang)}>
+            <Button variant="outline" size="sm" onClick={handleCopySelected}>
               <Copy className="h-4 w-4 mr-1" />
               Копировать ({selectedLang})
             </Button>
-            <Button variant="outline" size="sm" onClick={() => downloadJSON(selectedLang)}>
+            <Button variant="outline" size="sm" onClick={handleDownloadSelected}>
               <FileJson className="h-4 w-4 mr-1" />
               Скачать ({selectedLang})
             </Button>
@@ -740,124 +989,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
             <CardContent className="p-0">
               <ScrollArea className="h-[600px]">
                 <div className="p-4 space-y-2">
-                  {Object.entries(groupedKeys).sort().map(([namespace, keys]) => (
-                    <Collapsible
-                      key={namespace}
-                      open={expandedNamespaces.has(namespace)}
-                      onOpenChange={() => toggleNamespace(namespace)}
-                    >
-                      <CollapsibleTrigger className="flex items-center gap-2 w-full p-2 rounded-lg hover:bg-muted/50">
-                        {expandedNamespaces.has(namespace) ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
-                        <span className="font-medium">{namespace}</span>
-                        <Badge variant="secondary" className="ml-auto">{keys.length}</Badge>
-                      </CollapsibleTrigger>
-
-                      <CollapsibleContent className="pl-6 space-y-1 mt-1">
-                        {keys.sort().map((key) => {
-                          const shortKey = key.substring(namespace.length + 1);
-                          const flat = flattenedTranslations[selectedLang] || {};
-                          const value = flat[key] || '';
-                          const enVal = (flattenedTranslations['en'] || {})[key] || '';
-                          const isEmpty = !value.trim();
-                          const isSavingThis = savingKey === key;
-
-                          return (
-                            <div
-                              key={key}
-                              className={`
-                                group flex items-start gap-3 p-2 rounded-lg border
-                                ${isEmpty ? 'border-destructive/30 bg-destructive/5' : 'border-transparent hover:bg-muted/30'}
-                                ${editingKey === key ? 'ring-2 ring-primary' : ''}
-                              `}
-                            >
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <code className="text-xs text-muted-foreground font-mono truncate">{shortKey}</code>
-                                  {isSavingThis ? (
-                                    <Loader2 className="h-3 w-3 animate-spin" />
-                                  ) : isEmpty ? (
-                                    <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0" />
-                                  ) : (
-                                    <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400 flex-shrink-0" />
-                                  )}
-                                </div>
-
-                                {editingKey === key ? (
-                                  <div className="space-y-2">
-                                    {selectedLang !== 'en' && enVal && (
-                                      <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
-                                        <span className="font-medium">🇬🇧 EN:</span> {enVal}
-                                      </div>
-                                    )}
-                                    <Textarea
-                                      value={editValue}
-                                      onChange={(e) => setEditValue(e.target.value)}
-                                      className="min-h-[60px] text-sm"
-                                      autoFocus
-                                    />
-                                    <div className="flex gap-2">
-                                      <Button size="sm" onClick={handleSaveEdit} disabled={isSavingThis}>
-                                        {isSavingThis ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Check className="h-3 w-3 mr-1" />}
-                                        {isSavingThis ? 'Сохранение...' : 'Сохранить'}
-                                      </Button>
-                                      <Button size="sm" variant="outline" onClick={() => setEditingKey(null)} disabled={isSavingThis}>
-                                        Отмена
-                                      </Button>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div
-                                    className="text-sm cursor-pointer min-h-[24px]"
-                                    onClick={() => {
-                                      setEditingKey(key);
-                                      setEditValue(value);
-                                    }}
-                                    onKeyDown={(event) => handleKeyboardActivation(event, () => {
-                                      setEditingKey(key);
-                                      setEditValue(value);
-                                    })}
-                                    role="button"
-                                    tabIndex={0}
-                                  >
-                                    {value || <span className="text-muted-foreground italic">Нажмите чтобы добавить...</span>}
-                                  </div>
-                                )}
-                              </div>
-
-                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                {enVal && selectedLang !== 'en' && (
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="h-6 w-6"
-                                    title="Скопировать с EN"
-                                    onClick={() => {
-                                      updateTranslation({ lang: selectedLang, key, value: enVal });
-                                    }}
-                                  >
-                                    <Copy className="h-3 w-3" />
-                                  </Button>
-                                )}
-                                <Button
-                                  size="icon"
-                                  variant="ghost"
-                                  className="h-6 w-6 text-destructive"
-                                  title="Удалить ключ"
-                                  onClick={() => handleDeleteKey(key)}
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </CollapsibleContent>
-                    </Collapsible>
-                  ))}
+                  {namespaceSections}
 
                   {filteredKeys.length === 0 && (
                     <div className="text-center py-12 text-muted-foreground">
@@ -905,7 +1037,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
         </AlertDialog>
 
         {/* Delete key confirmation */}
-        <AlertDialog open={deleteConfirmKey !== null} onOpenChange={() => setDeleteConfirmKey(null)}>
+        <AlertDialog open={deleteConfirmKey !== null} onOpenChange={handleCloseDeleteConfirm}>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Удалить ключ?</AlertDialogTitle>
@@ -924,10 +1056,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
         <LanguageUploadDialog
           open={uploadDialogOpen}
           onOpenChange={setUploadDialogOpen}
-          onSuccess={() => {
-            // Можно добавить логику для обновления переводов
-            toast.success('Язык успешно загружен и применён');
-          }}
+          onSuccess={handleUploadSuccess}
         />
       </div>
     </>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { ALTERNATIVE_PROFILES } from '@/lib/alternatives-data';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 // SEO Component for Alternatives page
 function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
@@ -145,7 +146,7 @@ export default function Alternatives() {
     trackMarketingEvent({ eventType: 'alternatives_view' });
   }, [trackMarketingEvent]);
 
-  const handleCtaClick = (destination: string, location: string) => {
+  const handleCtaClick = useCallback((destination: string, location: string) => {
     trackMarketingEvent({
       eventType: 'alternatives_cta_click',
       metadata: { destination, location },
@@ -157,7 +158,21 @@ export default function Alternatives() {
       });
     }
     navigate(destination);
-  };
+  }, [trackMarketingEvent, navigate]);
+
+  const handleBack = useCallback(() => navigate('/'), [navigate]);
+  const handleHeaderCta = useCallback(() => handleCtaClick('/auth', 'header'), [handleCtaClick]);
+  const handleHeroPrimary = useCallback(() => handleCtaClick('/auth', 'hero_primary'), [handleCtaClick]);
+  const handleHeroSecondary = useCallback(() => handleCtaClick('/pricing', 'hero_secondary'), [handleCtaClick]);
+  const handleHeroTertiary = useCallback(() => handleCtaClick('/gallery', 'hero_tertiary'), [handleCtaClick]);
+  const handleSegmentsCta = useCallback(() => handleCtaClick('/auth', 'segments'), [handleCtaClick]);
+  const handleMatrixCta = useCallback(() => handleCtaClick('/auth', 'matrix'), [handleCtaClick]);
+  const handleWhenToChooseCta = useCallback(() => handleCtaClick('/auth', 'when_to_choose'), [handleCtaClick]);
+  const handleWhenNotChooseGallery = useCallback(() => handleCtaClick('/gallery', 'when_not_choose'), [handleCtaClick]);
+  const handleWhenNotChoosePricing = useCallback(() => handleCtaClick('/pricing', 'when_not_choose_pricing'), [handleCtaClick]);
+  const handleBitrix24Cta = useCallback(() => handleCtaClick('/auth', 'bitrix24'), [handleCtaClick]);
+  const handleFinalPrimary = useCallback(() => handleCtaClick('/auth', 'final_primary'), [handleCtaClick]);
+  const handleFinalSecondary = useCallback(() => handleCtaClick('/gallery', 'final_secondary'), [handleCtaClick]);
 
   const segmentCards = [
     {
@@ -282,8 +297,72 @@ export default function Alternatives() {
     return <span className="text-xs text-muted-foreground">{t('alternatives.matrix.depends', 'Зависит от тарифа')}</span>;
   };
 
+  const alternativeProfilesCards = useMemo(() =>
+    ALTERNATIVE_PROFILES.map((profile) => (
+      <Card key={profile.slug} className="hover:border-primary/50 transition-colors">
+        <CardContent className="p-5 space-y-3">
+          <Badge variant="secondary">{profile.category}</Badge>
+          <h3 className="font-semibold text-lg">LinkMAX vs {profile.competitor}</h3>
+          <p className="text-sm text-muted-foreground">{profile.summary}</p>
+          <Button asChild size="sm" variant="outline" className="w-full">
+            <Link to={profile.route}>
+              {t('alternatives.details.open', 'Открыть сравнение')}
+              <ExternalLink className="h-4 w-4 ml-2" />
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
+    )),
+  [t]);
+
+  const segmentCardsContent = useMemo(() =>
+    segmentCards.map((segment, index) => (
+      <Card key={index} className="group hover:border-primary/50 transition-all duration-300">
+        <CardContent className="p-6">
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary/20 to-violet-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <segment.icon className="h-6 w-6 text-primary" />
+          </div>
+          <h3 className="font-bold text-lg mb-2">{segment.title}</h3>
+          <p className="text-muted-foreground text-sm mb-3">{segment.description}</p>
+          <p className="text-xs text-muted-foreground">{segment.examples}</p>
+        </CardContent>
+      </Card>
+    )),
+  [segmentCards]);
+
+  const comparisonRowsContent = useMemo(() =>
+    comparisonRows.map((row, index) => (
+      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+        <td className="p-4 font-medium">{row.feature}</td>
+        <td className="p-4 text-center bg-primary/5">{renderMatrixValue(row.LinkMAX)}</td>
+        <td className="p-4 text-center">{renderMatrixValue(row.linktree)}</td>
+        <td className="p-4 text-center">{renderMatrixValue(row.taplink)}</td>
+        <td className="p-4 text-center">{renderMatrixValue(row.carrd)}</td>
+        <td className="p-4 text-center">{renderMatrixValue(row.beacons)}</td>
+      </tr>
+    )),
+  [comparisonRows]);
+
+  const whenToChooseContent = useMemo(() =>
+    whenToChoose.map((item, index) => (
+      <li key={index} className="flex items-start gap-2">
+        <Check className="h-4 w-4 text-primary mt-0.5" />
+        <span>{item}</span>
+      </li>
+    )),
+  [whenToChoose]);
+
+  const whenNotToChooseContent = useMemo(() =>
+    whenNotToChoose.map((item, index) => (
+      <li key={index} className="flex items-start gap-2">
+        <X className="h-4 w-4 text-muted-foreground mt-0.5" />
+        <span>{item}</span>
+      </li>
+    )),
+  [whenNotToChoose]);
+
   return (
-    <>
+    <ScreenErrorBoundary screenName="Alternatives">
       <AlternativesSEOHead currentLanguage={i18n.language} />
       <SEOMetaEnhancer
         pageUrl={`${getAppDomain()}/alternatives`}
@@ -338,7 +417,7 @@ export default function Alternatives() {
             <div className="backdrop-blur-2xl bg-card/50 border border-border/30 rounded-2xl shadow-glass-lg">
               <div className="container mx-auto px-4 h-14 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+                  <Button variant="ghost" size="icon" onClick={handleBack}>
                     <ArrowLeft className="h-5 w-5" />
                   </Button>
                   <Link to="/" className="flex items-center gap-2">
@@ -349,7 +428,7 @@ export default function Alternatives() {
                 </div>
                 <div className="flex items-center gap-2">
                   <LanguageSwitcher />
-                  <Button onClick={() => handleCtaClick('/auth', 'header')} size="sm">
+                  <Button onClick={handleHeaderCta} size="sm">
                     {t('alternatives.header.cta', 'Get Started')}
                   </Button>
                 </div>
@@ -387,19 +466,19 @@ export default function Alternatives() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" onClick={() => handleCtaClick('/auth', 'hero_primary')} className="rounded-xl">
+              <Button size="lg" onClick={handleHeroPrimary} className="rounded-xl">
                 <Sparkles className="h-5 w-5 mr-2" />
                 <span data-testid="alternatives-hero-primary-cta">
                   {t('alternatives.hero.ctaPrimary', 'Создать страницу бесплатно')}
                 </span>
               </Button>
-              <Button size="lg" variant="outline" onClick={() => handleCtaClick('/pricing', 'hero_secondary')} className="rounded-xl">
+              <Button size="lg" variant="outline" onClick={handleHeroSecondary} className="rounded-xl">
                 <span data-testid="alternatives-hero-secondary-cta">
                   {t('alternatives.hero.ctaSecondary', 'Посмотреть тарифы')}
                 </span>
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
-              <Button size="lg" variant="ghost" onClick={() => handleCtaClick('/gallery', 'hero_tertiary')} className="rounded-xl">
+              <Button size="lg" variant="ghost" onClick={handleHeroTertiary} className="rounded-xl">
                 {t('alternatives.hero.ctaTertiary', 'Посмотреть примеры')}
               </Button>
             </div>
@@ -415,21 +494,7 @@ export default function Alternatives() {
               {t('alternatives.details.description', 'Выберите конкретный продукт и получите пошаговый план миграции на LinkMAX.')}
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {ALTERNATIVE_PROFILES.map((profile) => (
-                <Card key={profile.slug} className="hover:border-primary/50 transition-colors">
-                  <CardContent className="p-5 space-y-3">
-                    <Badge variant="secondary">{profile.category}</Badge>
-                    <h3 className="font-semibold text-lg">LinkMAX vs {profile.competitor}</h3>
-                    <p className="text-sm text-muted-foreground">{profile.summary}</p>
-                    <Button asChild size="sm" variant="outline" className="w-full">
-                      <Link to={profile.route}>
-                        {t('alternatives.details.open', 'Открыть сравнение')}
-                        <ExternalLink className="h-4 w-4 ml-2" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+              {alternativeProfilesCards}
             </div>
           </section>
 
@@ -440,22 +505,11 @@ export default function Alternatives() {
             </h2>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {segmentCards.map((segment, index) => (
-                <Card key={index} className="group hover:border-primary/50 transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary/20 to-violet-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <segment.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="font-bold text-lg mb-2">{segment.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-3">{segment.description}</p>
-                    <p className="text-xs text-muted-foreground">{segment.examples}</p>
-                  </CardContent>
-                </Card>
-              ))}
+              {segmentCardsContent}
             </div>
 
             <div className="flex justify-center mt-6">
-              <Button onClick={() => handleCtaClick('/auth', 'segments')} className="rounded-xl">
+              <Button onClick={handleSegmentsCta} className="rounded-xl">
                 {t('alternatives.segments.cta', 'Попробовать LinkMAX')}
               </Button>
             </div>
@@ -493,16 +547,7 @@ export default function Alternatives() {
                     </tr>
                   </thead>
                   <tbody>
-                    {comparisonRows.map((row, index) => (
-                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                        <td className="p-4 font-medium">{row.feature}</td>
-                        <td className="p-4 text-center bg-primary/5">{renderMatrixValue(row.LinkMAX)}</td>
-                        <td className="p-4 text-center">{renderMatrixValue(row.linktree)}</td>
-                        <td className="p-4 text-center">{renderMatrixValue(row.taplink)}</td>
-                        <td className="p-4 text-center">{renderMatrixValue(row.carrd)}</td>
-                        <td className="p-4 text-center">{renderMatrixValue(row.beacons)}</td>
-                      </tr>
-                    ))}
+                    {comparisonRowsContent}
                   </tbody>
                 </table>
               </CardContent>
@@ -516,7 +561,7 @@ export default function Alternatives() {
             </p>
 
             <div className="flex justify-center mt-6">
-              <Button onClick={() => handleCtaClick('/auth', 'matrix')} className="rounded-xl">
+              <Button onClick={handleMatrixCta} className="rounded-xl">
                 {t('alternatives.matrix.cta', 'Создать страницу')}
               </Button>
             </div>
@@ -535,15 +580,10 @@ export default function Alternatives() {
                   </h2>
                 </div>
                 <ul className="space-y-3 text-sm text-muted-foreground">
-                  {whenToChoose.map((item, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="h-4 w-4 text-primary mt-0.5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
+                  {whenToChooseContent}
                 </ul>
                 <div className="mt-6">
-                  <Button onClick={() => handleCtaClick('/auth', 'when_to_choose')} className="rounded-xl">
+                  <Button onClick={handleWhenToChooseCta} className="rounded-xl">
                     {t('alternatives.whenToChoose.cta', 'Создать страницу')}
                   </Button>
                 </div>
@@ -559,18 +599,13 @@ export default function Alternatives() {
                   {t('alternatives.whenNotToChoose.title', 'Когда LinkMAX может не подойти')}
                 </h2>
                 <ul className="space-y-3 text-sm text-muted-foreground">
-                  {whenNotToChoose.map((item, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <X className="h-4 w-4 text-muted-foreground mt-0.5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
+                  {whenNotToChooseContent}
                 </ul>
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <Button variant="outline" onClick={() => handleCtaClick('/gallery', 'when_not_choose')} className="rounded-xl">
+                  <Button variant="outline" onClick={handleWhenNotChooseGallery} className="rounded-xl">
                     {t('alternatives.whenNotToChoose.ctaSecondary', 'Посмотреть примеры')}
                   </Button>
-                  <Button onClick={() => handleCtaClick('/pricing', 'when_not_choose_pricing')} className="rounded-xl">
+                  <Button onClick={handleWhenNotChoosePricing} className="rounded-xl">
                     {t('alternatives.whenNotToChoose.ctaPrimary', 'Сравнить тарифы')}
                   </Button>
                 </div>
@@ -630,7 +665,7 @@ export default function Alternatives() {
                   {t('alternatives.bitrix24.positioning', 'LinkMAX — «анти-Битрикс» для соло и микро-бизнеса: простая, быстрая, мобильная CRM и визитка за 15 минут, без внедрения и программистов.')}
                 </p>
                 <div className="mt-6">
-                  <Button onClick={() => handleCtaClick('/auth', 'bitrix24')} className="rounded-xl">
+                  <Button onClick={handleBitrix24Cta} className="rounded-xl">
                     {t('alternatives.bitrix24.cta', 'Создать страницу')}
                   </Button>
                 </div>
@@ -650,11 +685,11 @@ export default function Alternatives() {
               )}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" onClick={() => handleCtaClick('/auth', 'final_primary')} className="rounded-xl">
+              <Button size="lg" onClick={handleFinalPrimary} className="rounded-xl">
                 <Sparkles className="h-5 w-5 mr-2" />
                 {t('alternatives.finalCta.primary', 'Создать страницу')}
               </Button>
-              <Button size="lg" variant="outline" onClick={() => handleCtaClick('/gallery', 'final_secondary')} className="rounded-xl">
+              <Button size="lg" variant="outline" onClick={handleFinalSecondary} className="rounded-xl">
                 {t('alternatives.finalCta.secondary', 'Посмотреть примеры')}
                 <ExternalLink className="h-5 w-5 ml-2" />
               </Button>
@@ -707,6 +742,6 @@ export default function Alternatives() {
           </div>
         </footer>
       </div>
-    </>
+    </ScreenErrorBoundary>
   );
 }

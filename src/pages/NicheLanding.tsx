@@ -19,6 +19,7 @@ import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { getNicheLandingByKey } from '@/lib/niche-landing-data';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { getGalleryPages } from '@/services/gallery';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 interface NicheLandingProps {
   landingKey?: string;
@@ -123,8 +124,116 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     });
   };
 
+  const statsElements = useMemo(() =>
+    landing.stats.map((stat) => (
+      <div key={stat.label} className="rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-xl">
+        <p className="text-lg font-black text-white">{stat.value}</p>
+        <p className="mt-1 text-[11px] leading-tight text-white/70">{stat.label}</p>
+      </div>
+    )),
+    [landing]
+  );
+
+  const featuresElements = useMemo(() =>
+    [
+      { icon: Link2, text: 'Ссылка для bio, рекламы и личных сообщений' },
+      { icon: CalendarCheck, text: 'Заявки, запись и быстрые контакты на одной странице' },
+      { icon: Send, text: 'Telegram-уведомления после публикации' },
+    ].map((item) => {
+      const Icon = item.icon;
+      return (
+        <div key={item.text} className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <Icon className="h-5 w-5 text-primary" />
+          </div>
+          <p className="text-sm font-semibold leading-snug">{item.text}</p>
+        </div>
+      );
+    }),
+    []
+  );
+
+  const outcomeSummaryElements = useMemo(() =>
+    landing.outcomes.map((item) => (
+      <li key={item.title} className="flex items-start gap-2">
+        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+        <span>{item.title}</span>
+      </li>
+    )),
+    [landing]
+  );
+
+  const outcomeCardElements = useMemo(() =>
+    landing.outcomes.map((item) => (
+      <Card key={item.title} className="rounded-2xl border-border/60 bg-card/70 p-5 shadow-sm backdrop-blur-xl">
+        <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+        <h3 className="mt-4 text-lg font-black">{item.title}</h3>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</p>
+      </Card>
+    )),
+    [landing]
+  );
+
+  const workflowElements = useMemo(() =>
+    landing.workflow.map((item, index) => (
+      <div key={item.title} className="flex gap-4 rounded-2xl border border-border/60 bg-background/80 p-4">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-foreground text-sm font-black text-background">
+          {index + 1}
+        </div>
+        <div>
+          <h3 className="font-black">{item.title}</h3>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">{item.description}</p>
+        </div>
+      </div>
+    )),
+    [landing]
+  );
+
+  const galleryElements = useMemo(() =>
+    topPages.map((page) => (
+      <Link key={page.id} to={`/${page.slug}`} target="_blank" className="group">
+        <Card className="overflow-hidden rounded-2xl border-border/60 bg-card/80">
+          <div className="relative aspect-[9/16] bg-muted/40">
+            {page.preview_url ? (
+              <img
+                src={page.preview_url}
+                alt={page.title || landing.visualAlt}
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <Avatar className="h-12 w-12 rounded-xl">
+                  <AvatarImage src={page.avatar_url || undefined} />
+                  <AvatarFallback className="rounded-xl">{page.title?.charAt(0) || 'L'}</AvatarFallback>
+                </Avatar>
+              </div>
+            )}
+            <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-0 transition-opacity group-hover:opacity-100">
+              <Eye className="h-5 w-5 text-white" />
+            </div>
+          </div>
+          <div className="p-2">
+            <p className="truncate text-xs font-semibold">{page.title || 'LinkMAX page'}</p>
+          </div>
+        </Card>
+      </Link>
+    )),
+    [topPages, landing]
+  );
+
+  const faqElements = useMemo(() =>
+    landing.faq.map((item) => (
+      <Card key={item.question} className="rounded-2xl border-border/60 bg-card/70 p-5">
+        <h3 className="font-black">{item.question}</h3>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.answer}</p>
+      </Card>
+    )),
+    [landing]
+  );
+
   return (
-    <>
+    <ScreenErrorBoundary screenName="NicheLanding">
       <StaticSEOHead
         title={landing.seoTitle}
         description={landing.seoDescription}
@@ -188,33 +297,14 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
               </div>
 
               <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2">
-                {landing.stats.map((stat) => (
-                  <div key={stat.label} className="rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-xl">
-                    <p className="text-lg font-black text-white">{stat.value}</p>
-                    <p className="mt-1 text-[11px] leading-tight text-white/70">{stat.label}</p>
-                  </div>
-                ))}
+                {statsElements}
               </div>
             </div>
           </section>
 
           <section className="border-y border-border/60 bg-muted/20">
             <div className="mx-auto grid max-w-6xl gap-4 px-4 py-7 sm:grid-cols-3">
-              {[
-                { icon: Link2, text: 'Ссылка для bio, рекламы и личных сообщений' },
-                { icon: CalendarCheck, text: 'Заявки, запись и быстрые контакты на одной странице' },
-                { icon: Send, text: 'Telegram-уведомления после публикации' },
-              ].map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.text} className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <p className="text-sm font-semibold leading-snug">{item.text}</p>
-                  </div>
-                );
-              })}
+              {featuresElements}
             </div>
           </section>
 
@@ -225,12 +315,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                 {landing.seoDescription}
               </p>
               <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
-                {landing.outcomes.map((item) => (
-                  <li key={item.title} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-                    <span>{item.title}</span>
-                  </li>
-                ))}
+                {outcomeSummaryElements}
               </ul>
             </Card>
           </section>
@@ -243,13 +328,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
               </h2>
             </div>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {landing.outcomes.map((item) => (
-                <Card key={item.title} className="rounded-2xl border-border/60 bg-card/70 p-5 shadow-sm backdrop-blur-xl">
-                  <CheckCircle2 className="h-6 w-6 text-emerald-500" />
-                  <h3 className="mt-4 text-lg font-black">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</p>
-                </Card>
-              ))}
+              {outcomeCardElements}
             </div>
           </section>
 
@@ -265,17 +344,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                 </p>
               </div>
               <div className="space-y-3">
-                {landing.workflow.map((item, index) => (
-                  <div key={item.title} className="flex gap-4 rounded-2xl border border-border/60 bg-background/80 p-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-foreground text-sm font-black text-background">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <h3 className="font-black">{item.title}</h3>
-                      <p className="mt-1 text-sm leading-6 text-muted-foreground">{item.description}</p>
-                    </div>
-                  </div>
-                ))}
+                {workflowElements}
               </div>
             </div>
           </section>
@@ -292,35 +361,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                 </Button>
               </div>
               <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                {topPages.map((page) => (
-                  <Link key={page.id} to={`/${page.slug}`} target="_blank" className="group">
-                    <Card className="overflow-hidden rounded-2xl border-border/60 bg-card/80">
-                      <div className="relative aspect-[9/16] bg-muted/40">
-                        {page.preview_url ? (
-                          <img
-                            src={page.preview_url}
-                            alt={page.title || landing.visualAlt}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="flex h-full items-center justify-center">
-                            <Avatar className="h-12 w-12 rounded-xl">
-                              <AvatarImage src={page.avatar_url || undefined} />
-                              <AvatarFallback className="rounded-xl">{page.title?.charAt(0) || 'L'}</AvatarFallback>
-                            </Avatar>
-                          </div>
-                        )}
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-0 transition-opacity group-hover:opacity-100">
-                          <Eye className="h-5 w-5 text-white" />
-                        </div>
-                      </div>
-                      <div className="p-2">
-                        <p className="truncate text-xs font-semibold">{page.title || 'LinkMAX page'}</p>
-                      </div>
-                    </Card>
-                  </Link>
-                ))}
+                {galleryElements}
               </div>
             </section>
           )}
@@ -331,12 +372,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
               <h2 className="mt-2 text-3xl font-black">Частые вопросы</h2>
             </div>
             <div className="mt-8 space-y-3">
-              {landing.faq.map((item) => (
-                <Card key={item.question} className="rounded-2xl border-border/60 bg-card/70 p-5">
-                  <h3 className="font-black">{item.question}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.answer}</p>
-                </Card>
-              ))}
+              {faqElements}
             </div>
           </section>
 
@@ -360,6 +396,6 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
           </section>
         </main>
       </div>
-    </>
+    </ScreenErrorBoundary>
   );
 }

@@ -149,13 +149,11 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     }
   }, [storageKey]);
 
-  const clearPresetSelection = () => {
-    if (selectedPresetId) {
-      setSelectedPresetId('');
-    }
-  };
+  const clearPresetSelection = useCallback(() => {
+    setSelectedPresetId('');
+  }, []);
 
-  const handleApplyPreset = (presetId: string) => {
+  const handleApplyPreset = useCallback((presetId: string) => {
     const preset = filterPresets.find(p => p.id === presetId);
     if (!preset) return;
 
@@ -166,9 +164,9 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     setFilterDateTo(preset.filters.filterDateTo);
     setFilterValueMin(preset.filters.filterValueMin);
     setFilterValueMax(preset.filters.filterValueMax);
-  };
+  }, [filterPresets]);
 
-  const handleSavePreset = () => {
+  const handleSavePreset = useCallback(() => {
     const name = presetName.trim();
     if (!name) return;
 
@@ -197,7 +195,165 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     } catch {
       // ignore storage errors
     }
-  };
+  }, [presetName, filterOverdue, filterAssignee, filterDateFrom, filterDateTo, filterValueMin, filterValueMax, filterPresets, storageKey]);
+
+  // ---- Pipeline management handlers ----
+  const handleOpenPipelineMgmt = useCallback(() => setPipelineMgmtOpen(true), []);
+  const handleClosePipelineMgmt = useCallback(() => setPipelineMgmtOpen(false), []);
+  const handleClosePresetDialog = useCallback(() => setPresetDialogOpen(false), []);
+
+  // ---- Export handler ----
+  const handleExportDeals = useCallback(async () => {
+    try {
+      const { exportDealsToExcel } = await import('@/lib/export/excel-export-zone');
+      await exportDealsToExcel({ deals: currentDeals });
+      toast.success(t('zones.deals.exportSuccess', 'Deals exported successfully'));
+    } catch (err: any) {
+      handleError(err, 'Export failed');
+    }
+  }, [currentDeals, t, handleError]);
+
+  // ---- Preset select handler ----
+  const handlePresetSelect = useCallback((v: string) => {
+    if (v === '__none__') {
+      setSelectedPresetId('');
+      return;
+    }
+    if (v === '__save__') {
+      setPresetName('');
+      setPresetDialogOpen(true);
+      return;
+    }
+    handleApplyPreset(v);
+  }, [handleApplyPreset]);
+
+  // ---- Filter handlers ----
+  const handleFilterAssigneeChange = useCallback((v: string) => {
+    clearPresetSelection();
+    setFilterAssignee(v === '__all__' ? '' : v);
+  }, [clearPresetSelection]);
+
+  const handleFilterDateFromChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    clearPresetSelection();
+    setFilterDateFrom(e.target.value);
+  }, [clearPresetSelection]);
+
+  const handleFilterDateToChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    clearPresetSelection();
+    setFilterDateTo(e.target.value);
+  }, [clearPresetSelection]);
+
+  const handleFilterValueMinChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    clearPresetSelection();
+    setFilterValueMin(e.target.value);
+  }, [clearPresetSelection]);
+
+  const handleFilterValueMaxChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    clearPresetSelection();
+    setFilterValueMax(e.target.value);
+  }, [clearPresetSelection]);
+
+  const handleClearFilters = useCallback(() => {
+    setFilterAssignee('');
+    setFilterDateFrom('');
+    setFilterDateTo('');
+    setFilterValueMin('');
+    setFilterValueMax('');
+    setFilterOverdue(false);
+    setSelectedPresetId('');
+    setFilterOpen(false);
+  }, []);
+
+  const handleToggleOverdue = useCallback(() => {
+    clearPresetSelection();
+    setFilterOverdue(prev => !prev);
+  }, [clearPresetSelection]);
+
+  // ---- Create deal handlers ----
+  const handleOpenCreate = useCallback(() => setCreateOpen(true), []);
+  const handleCloseCreate = useCallback(() => setCreateOpen(false), []);
+
+  const handleCreateDealTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewDeal(p => ({ ...p, title: e.target.value }));
+  }, []);
+
+  const handleCreateDealContactChange = useCallback((v: string) => {
+    setNewDeal(p => ({ ...p, contact_id: v }));
+  }, []);
+
+  const handleCreateDealValueChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewDeal(p => ({ ...p, value_amount: Number(e.target.value) }));
+  }, []);
+
+  const handleCreateDealNextStepChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewDeal(p => ({ ...p, next_step: e.target.value }));
+  }, []);
+
+  const handleCreateDealCustomFieldChange = useCallback((fieldId: string, type: string) => (e: any) => {
+    const value = type === 'number' ? Number(e.target.value) : type === 'boolean' ? !!e : e.target?.value ?? e;
+    setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [fieldId]: value } }));
+  }, []);
+
+  // ---- Bulk action handlers ----
+  const handleBulkDelete = useCallback(() => {
+    if (selectedDealIds.size === 0) return;
+    setDeleteConfirmOpen(true);
+  }, [selectedDealIds]);
+
+  const handleBulkDeleteConfirm = useCallback(async () => {
+    try {
+      await bulkDeleteDeals(Array.from(selectedDealIds));
+      setSelectedDealIds(new Set());
+      toast.success(t('zones.deals.bulkDeleted', 'Сделки удалены'));
+    } catch (err: any) {
+      handleError(err);
+    } finally {
+      setDeleteConfirmOpen(false);
+    }
+  }, [selectedDealIds, bulkDeleteDeals, t, handleError]);
+
+  const handleBulkMove = useCallback(async (stageId: string) => {
+    if (selectedDealIds.size === 0) return;
+    try {
+      await bulkMoveDealsToStage(Array.from(selectedDealIds), stageId);
+      setSelectedDealIds(new Set());
+      toast.success(t('zones.deals.bulkMoved', 'Сделки перемещены'));
+    } catch (err: any) {
+      handleError(err);
+    }
+  }, [selectedDealIds, bulkMoveDealsToStage, t, handleError]);
+
+  const handleDeselectAll = useCallback(() => setSelectedDealIds(new Set()), []);
+
+  // ---- Won/Lost handlers ----
+  const handleShowLostReason = useCallback(() => setShowLostReasonField(true), []);
+  const handleCancelLostReason = useCallback(() => setShowLostReasonField(false), []);
+
+  const handleCloseWonLostDialog = useCallback((open: boolean) => {
+    if (!open) {
+      setPendingWonLost(null);
+      setPendingLostReason('');
+      setShowLostReasonField(false);
+    }
+  }, []);
+
+  const handleCancelWonLost = useCallback(() => {
+    setPendingWonLost(null);
+    setPendingLostReason('');
+    setShowLostReasonField(false);
+  }, []);
+
+  const handleDealDetailClose = useCallback((open: boolean) => {
+    if (!open) setSelectedDeal(null);
+  }, []);
+
+  const handlePresetNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPresetName(e.target.value);
+  }, []);
+
+  const handleLostReasonChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setPendingLostReason(e.target.value);
+  }, []);
 
   // Group deals by stage (with all filters)
   const dealsByStage = useMemo(() => {
@@ -308,7 +464,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     setShowLostReasonField(false);
   }, [pendingWonLost, pendingLostReason, moveDealToStage, updateDeal, addActivity, t]);
 
-  const handleCreate = async () => {
+  const handleCreate = useCallback(async () => {
     if (!newDeal.title.trim()) return;
 
     const firstStageId = selectedPipelineId
@@ -336,35 +492,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     } catch (err: any) {
       handleError(err);
     }
-  };
-
-  const handleBulkDelete = () => {
-    if (selectedDealIds.size === 0) return;
-    setDeleteConfirmOpen(true);
-  };
-
-  const handleBulkDeleteConfirm = async () => {
-    try {
-      await bulkDeleteDeals(Array.from(selectedDealIds));
-      setSelectedDealIds(new Set());
-      toast.success(t('zones.deals.bulkDeleted', 'Сделки удалены'));
-    } catch (err: any) {
-      handleError(err);
-    } finally {
-      setDeleteConfirmOpen(false);
-    }
-  };
-
-  const handleBulkMove = async (stageId: string) => {
-    if (selectedDealIds.size === 0) return;
-    try {
-      await bulkMoveDealsToStage(Array.from(selectedDealIds), stageId);
-      setSelectedDealIds(new Set());
-      toast.success(t('zones.deals.bulkMoved', 'Сделки перемещены'));
-    } catch (err: any) {
-      handleError(err);
-    }
-  };
+  }, [newDeal, selectedPipelineId, stages, createDeal, t, handleError]);
 
   const currentSelectedDeal = useMemo(() => {
     if (!selectedDeal) return null;
@@ -407,22 +535,14 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
               variant="ghost"
               size="icon"
               className="h-9 w-9 rounded-lg"
-              onClick={() => setPipelineMgmtOpen(true)}
+              onClick={handleOpenPipelineMgmt}
               title={t('zones.deals.managePipelines', 'Управление воронками')}
             >
               <Settings2 className="h-4 w-4" />
             </Button>
           </div>
           <div className="flex gap-2 flex-wrap items-center">
-            <Button variant="outline" size="sm" onClick={async () => {
-              try {
-                const { exportDealsToExcel } = await import('@/lib/export/excel-export-zone');
-                await exportDealsToExcel({ deals: currentDeals });
-                toast.success(t('zones.deals.exportSuccess', 'Deals exported successfully'));
-              } catch (err: any) {
-                handleError(err, 'Export failed');
-              }
-            }}>
+            <Button variant="outline" size="sm" onClick={handleExportDeals}>
               <Download className="h-4 w-4 mr-1" />
               {t('zones.deals.export', 'Export')}
             </Button>
@@ -438,10 +558,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                   <Label className="text-xs text-muted-foreground">{t('zones.deals.assignee', 'Assignee')}</Label>
                   <Select
                     value={filterAssignee || '__all__'}
-                    onValueChange={(v: string) => {
-                      clearPresetSelection();
-                      setFilterAssignee(v === '__all__' ? '' : v);
-                    }}
+                    onValueChange={handleFilterAssigneeChange}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder={t('zones.deals.allAssignees', 'All')} />
@@ -461,10 +578,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                       <Input
                         type="date"
                         value={filterDateFrom}
-                        onChange={(e) => {
-                          clearPresetSelection();
-                          setFilterDateFrom(e.target.value);
-                        }}
+                        onChange={handleFilterDateFromChange}
                       />
                     </div>
                     <div>
@@ -472,10 +586,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                       <Input
                         type="date"
                         value={filterDateTo}
-                        onChange={(e) => {
-                          clearPresetSelection();
-                          setFilterDateTo(e.target.value);
-                        }}
+                        onChange={handleFilterDateToChange}
                       />
                     </div>
                   </div>
@@ -486,10 +597,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                         type="number"
                         placeholder="0"
                         value={filterValueMin}
-                        onChange={(e) => {
-                          clearPresetSelection();
-                          setFilterValueMin(e.target.value);
-                        }}
+                        onChange={handleFilterValueMinChange}
                       />
                     </div>
                     <div>
@@ -498,26 +606,14 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                         type="number"
                         placeholder="—"
                         value={filterValueMax}
-                        onChange={(e) => {
-                          clearPresetSelection();
-                          setFilterValueMax(e.target.value);
-                        }}
+                        onChange={handleFilterValueMaxChange}
                       />
                     </div>
                   </div>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => {
-                      setFilterAssignee('');
-                      setFilterDateFrom('');
-                      setFilterDateTo('');
-                      setFilterValueMin('');
-                      setFilterValueMax('');
-                      setFilterOverdue(false);
-                      setSelectedPresetId('');
-                      setFilterOpen(false);
-                    }}
+                    onClick={handleClearFilters}
                   >
                     {t('zones.deals.clearFilters', 'Clear filters')}
                   </Button>
@@ -527,28 +623,14 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             <Button
               variant={filterOverdue ? 'default' : 'outline'}
               size="sm"
-              onClick={() => {
-                clearPresetSelection();
-                setFilterOverdue(!filterOverdue);
-              }}
+              onClick={handleToggleOverdue}
             >
               <Filter className="h-4 w-4 mr-1" />
               {t('zones.deals.overdue', 'Overdue')}
             </Button>
             <Select
               value={selectedPresetId || '__none__'}
-              onValueChange={(v: string) => {
-                if (v === '__none__') {
-                  setSelectedPresetId('');
-                  return;
-                }
-                if (v === '__save__') {
-                  setPresetName('');
-                  setPresetDialogOpen(true);
-                  return;
-                }
-                handleApplyPreset(v);
-              }}
+              onValueChange={handlePresetSelect}
             >
               <SelectTrigger className="h-9 w-40 text-xs">
                 <SelectValue placeholder={t('zones.deals.presets.placeholder', 'Фильтры')} />
@@ -568,7 +650,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
               </SelectContent>
             </Select>
 
-            <Button onClick={() => setCreateOpen(true)} size="sm">
+            <Button onClick={handleOpenCreate} size="sm">
               <Plus className="h-4 w-4 mr-1" />
               {t('zones.deals.newDeal', 'New Deal')}
             </Button>
@@ -635,12 +717,12 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             </Label>
             <Input
               value={presetName}
-              onChange={(e) => setPresetName(e.target.value)}
+              onChange={handlePresetNameChange}
               placeholder={t('zones.deals.presets.namePlaceholder', 'Например: Большие сделки за месяц')}
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPresetDialogOpen(false)}>
+            <Button variant="outline" onClick={handleClosePresetDialog}>
               {t('common.cancel', 'Cancel')}
             </Button>
             <Button onClick={handleSavePreset} disabled={!presetName.trim()}>
@@ -662,11 +744,11 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           <div className="space-y-4 py-2">
             <div className="space-y-2">
               <Label>{t('zones.deals.dealTitle', 'Title')}</Label>
-              <Input value={newDeal.title} onChange={(e) => setNewDeal((p) => ({ ...p, title: e.target.value }))} />
+              <Input value={newDeal.title} onChange={handleCreateDealTitleChange} />
             </div>
             <div className="space-y-2">
               <Label>{t('zones.deals.contact', 'Contact')}</Label>
-              <Select value={newDeal.contact_id} onValueChange={(v: string) => setNewDeal((p) => ({ ...p, contact_id: v }))}>
+              <Select value={newDeal.contact_id} onValueChange={handleCreateDealContactChange}>
                 <SelectTrigger>
                   <SelectValue placeholder={t('zones.deals.selectContact', 'Select contact')} />
                 </SelectTrigger>
@@ -684,14 +766,14 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
               <Input
                 type="number"
                 value={newDeal.value_amount}
-                onChange={(e) => setNewDeal((p) => ({ ...p, value_amount: Number(e.target.value) }))}
+                onChange={handleCreateDealValueChange}
               />
             </div>
             <div className="space-y-2">
               <Label>{t('zones.deals.nextStep', 'Next step')}</Label>
               <Input
                 value={newDeal.next_step}
-                onChange={(e) => setNewDeal((p) => ({ ...p, next_step: e.target.value }))}
+                onChange={handleCreateDealNextStepChange}
                 placeholder={t('zones.deals.nextStepPlaceholder', 'Call back tomorrow')}
               />
             </div>
@@ -709,7 +791,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                     {field.type === 'text' && (
                       <Input
                         value={newDeal.custom_fields[field.id] || ''}
-                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: e.target.value } }))}
+                        onChange={handleCreateDealCustomFieldChange(field.id, 'text')}
                       />
                     )}
 
@@ -717,7 +799,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                       <Input
                         type="number"
                         value={newDeal.custom_fields[field.id] || ''}
-                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: Number(e.target.value) } }))}
+                        onChange={handleCreateDealCustomFieldChange(field.id, 'number')}
                       />
                     )}
 
@@ -725,7 +807,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                       <Input
                         type="date"
                         value={newDeal.custom_fields[field.id] || ''}
-                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: e.target.value } }))}
+                        onChange={handleCreateDealCustomFieldChange(field.id, 'date')}
                       />
                     )}
 
@@ -733,7 +815,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                       <div className="flex items-center space-x-2 h-10">
                         <Checkbox
                           checked={!!newDeal.custom_fields[field.id]}
-                          onCheckedChange={c => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.id]: !!c } }))}
+                          onCheckedChange={handleCreateDealCustomFieldChange(field.id, 'boolean')}
                         />
                         <span className="text-sm">{t('common.yes', 'Да')}</span>
                       </div>
@@ -744,7 +826,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateOpen(false)}>
+            <Button variant="outline" onClick={handleCloseCreate}>
               {t('common.cancel', 'Cancel')}
             </Button>
             <Button onClick={handleCreate} disabled={!newDeal.title.trim()}>
@@ -765,7 +847,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           </DialogHeader>
           <ZonePipelineSettings zoneId={zoneId} />
           <DialogFooter className="mt-4">
-            <Button variant="outline" onClick={() => setPipelineMgmtOpen(false)}>
+            <Button variant="outline" onClick={handleClosePipelineMgmt}>
               {t('common.close', 'Закрыть')}
             </Button>
           </DialogFooter>
@@ -777,16 +859,14 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
         deal={currentSelectedDeal}
         stages={currentStages}
         open={!!selectedDeal}
-        onOpenChange={(open) => !open && setSelectedDeal(null)}
+        onOpenChange={handleDealDetailClose}
         onMoveDealToStage={moveDealToStage}
         onUpdateDeal={updateDeal}
         onAddActivity={addActivity}
       />
 
       {/* Won/Lost dialog when dropping deal on last stage */}
-      <Dialog open={!!pendingWonLost} onOpenChange={(open) => {
-        if (!open) { setPendingWonLost(null); setPendingLostReason(''); setShowLostReasonField(false); }
-      }}>
+      <Dialog open={!!pendingWonLost} onOpenChange={handleCloseWonLostDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('zones.deals.markAsWonOrLost', 'Mark deal as Won or Lost?')}</DialogTitle>
@@ -799,7 +879,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
               <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white" onClick={handleConfirmWon}>
                 {t('zones.deals.win', 'Won')}
               </Button>
-              <Button variant="destructive" className="flex-1" onClick={() => setShowLostReasonField(true)}>
+              <Button variant="destructive" className="flex-1" onClick={handleShowLostReason}>
                 {t('zones.deals.lose', 'Lost')}
               </Button>
             </div>
@@ -808,7 +888,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                 <Label>{t('zones.deals.lostReason', 'Reason for losing')}</Label>
                 <Textarea
                   value={pendingLostReason}
-                  onChange={(e) => setPendingLostReason(e.target.value)}
+                  onChange={handleLostReasonChange}
                   placeholder={t('zones.deals.lostReasonPlaceholder', 'Price too high, competitor won...')}
                   rows={2}
                 />
@@ -816,7 +896,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                   <Button size="sm" variant="destructive" onClick={handleConfirmLost}>
                     {t('zones.deals.confirmLost', 'Confirm Lost')}
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => setShowLostReasonField(false)}>
+                  <Button size="sm" variant="outline" onClick={handleCancelLostReason}>
                     {t('common.cancel', 'Cancel')}
                   </Button>
                 </div>
@@ -824,7 +904,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setPendingWonLost(null); setPendingLostReason(''); setShowLostReasonField(false); }}>
+            <Button variant="outline" onClick={handleCancelWonLost}>
               {t('common.cancel', 'Cancel')}
             </Button>
           </DialogFooter>
@@ -850,7 +930,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             <span className="text-sm font-bold">{selectedDealIds.size} {t('zones.deals.selected', 'выбрано')}</span>
             <button 
               className="text-[10px] text-muted-foreground hover:text-primary transition-colors text-left"
-              onClick={() => setSelectedDealIds(new Set())}
+              onClick={handleDeselectAll}
             >
               {t('common.cancel', 'Отмена')}
             </button>

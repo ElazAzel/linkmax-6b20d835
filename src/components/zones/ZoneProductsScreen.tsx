@@ -1,7 +1,8 @@
 /**
  * ZoneProductsScreen - Product catalog management for Business Zone
  */
-import { memo, useState, useMemo } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
+import type { ChangeEvent, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useZoneProducts } from '@/hooks/zones/useZoneProducts';
 import { Button } from '@/components/ui/button';
@@ -50,13 +51,39 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
     return products.filter(p => p.name.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q));
   }, [products, search]);
 
-  const openCreate = () => {
-    setEditingProduct(null);
-    setForm(emptyForm);
-    setDialogOpen(true);
-  };
+  const handleSearchChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  }, []);
 
-  const openEdit = (p: ZoneProduct) => {
+  const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setForm(f => ({ ...f, name: e.target.value }));
+  }, []);
+
+  const handleDescriptionChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+    setForm(f => ({ ...f, description: e.target.value }));
+  }, []);
+
+  const handlePriceChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setForm(f => ({ ...f, unit_price: e.target.value }));
+  }, []);
+
+  const handleCurrencyChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setForm(f => ({ ...f, currency: e.target.value }));
+  }, []);
+
+  const handleUnitChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setForm(f => ({ ...f, unit: e.target.value }));
+  }, []);
+
+  const handleActiveChange = useCallback((v: boolean) => {
+    setForm(f => ({ ...f, is_active: v }));
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    setDialogOpen(false);
+  }, []);
+
+  const openEdit = useCallback((p: ZoneProduct) => {
     setEditingProduct(p);
     setForm({
       name: p.name,
@@ -67,7 +94,21 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
       is_active: p.is_active,
     });
     setDialogOpen(true);
-  };
+  }, []);
+
+  const openCreate = useCallback(() => {
+    setEditingProduct(null);
+    setForm(emptyForm);
+    setDialogOpen(true);
+  }, []);
+
+  const handleCardClick = useCallback((e: MouseEvent<HTMLElement>) => {
+    const productId = e.currentTarget.dataset.productId;
+    if (productId) {
+      const product = products.find(p => p.id === productId);
+      if (product) openEdit(product);
+    }
+  }, [products, openEdit]);
 
   const handleSave = async () => {
     if (!form.name.trim()) {
@@ -96,10 +137,16 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
     }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = useCallback((id: string) => {
     setPendingDeleteProductId(id);
     setDeleteConfirmOpen(true);
-  };
+  }, []);
+
+  const handleDeleteClick = useCallback((e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    const productId = e.currentTarget.dataset.productId;
+    if (productId) handleDelete(productId);
+  }, [handleDelete]);
 
   const handleDeleteConfirm = async () => {
     if (!pendingDeleteProductId) return;
@@ -131,7 +178,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
             <Input
               placeholder={t('common.search', 'Поиск...')}
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={handleSearchChange}
               className="pl-8 h-8 w-48 text-xs"
             />
           </div>
@@ -159,8 +206,9 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
             {filtered.map(product => (
               <Card
                 key={product.id}
+                data-product-id={product.id}
                 className="bg-background/40 backdrop-blur-sm border-border/40 hover:border-primary/20 transition-all cursor-pointer"
-                onClick={() => openEdit(product)}
+                onClick={handleCardClick}
               >
                 <CardContent className="p-3 flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -190,7 +238,8 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
                       size="icon"
                       variant="ghost"
                       className="h-7 w-7 text-destructive/60 hover:text-destructive"
-                      onClick={e => { e.stopPropagation(); handleDelete(product.id); }}
+                      data-product-id={product.id}
+                      onClick={handleDeleteClick}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
@@ -217,7 +266,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
               <Label className="text-xs">{t('zone.products.name', 'Название')}</Label>
               <Input
                 value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                onChange={handleNameChange}
                 placeholder={t('zone.products.namePlaceholder', 'Например: Консультация 1 час')}
                 className="mt-1"
               />
@@ -226,7 +275,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
               <Label className="text-xs">{t('zone.products.description', 'Описание')}</Label>
               <Textarea
                 value={form.description}
-                onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                onChange={handleDescriptionChange}
                 className="mt-1 min-h-[60px]"
               />
             </div>
@@ -236,7 +285,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
                 <Input
                   type="number"
                   value={form.unit_price}
-                  onChange={e => setForm(f => ({ ...f, unit_price: e.target.value }))}
+                  onChange={handlePriceChange}
                   className="mt-1"
                 />
               </div>
@@ -244,7 +293,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
                 <Label className="text-xs">{t('zone.products.currency', 'Валюта')}</Label>
                 <Input
                   value={form.currency}
-                  onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
+                  onChange={handleCurrencyChange}
                   className="mt-1"
                 />
               </div>
@@ -252,7 +301,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
                 <Label className="text-xs">{t('zone.products.unit', 'Единица')}</Label>
                 <Input
                   value={form.unit}
-                  onChange={e => setForm(f => ({ ...f, unit: e.target.value }))}
+                  onChange={handleUnitChange}
                   className="mt-1"
                 />
               </div>
@@ -260,13 +309,13 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
             <div className="flex items-center gap-2">
               <Switch
                 checked={form.is_active}
-                onCheckedChange={v => setForm(f => ({ ...f, is_active: v }))}
+                onCheckedChange={handleActiveChange}
               />
               <Label className="text-xs">{t('zone.products.active', 'Активен')}</Label>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+            <Button variant="outline" onClick={handleCloseDialog}>
               {t('common.cancel', 'Отмена')}
             </Button>
             <Button onClick={handleSave}>

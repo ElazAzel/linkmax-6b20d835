@@ -30,6 +30,7 @@ import { checkPremiumStatus } from '@/services/user';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import type { PageData, PageBackground, Block } from '@/types/page';
 import {
   Dialog,
@@ -302,6 +303,7 @@ export default function PublicPage() {
   const iconStyleClass = getIconStyleClass(pageData?.theme?.iconStyle);
 
   return (
+    <ScreenErrorBoundary screenName="PublicPage">
     <AnimatePresence mode="wait">
       {(loading || isTranslating) ? (
         <PublicPageSkeleton key="skeleton" />
@@ -491,5 +493,6 @@ export default function PublicPage() {
         </motion.div>
       )}
     </AnimatePresence>
+    </ScreenErrorBoundary>
   );
 }

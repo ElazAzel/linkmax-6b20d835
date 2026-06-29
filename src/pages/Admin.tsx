@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import Shield from 'lucide-react/dist/esm/icons/shield';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
@@ -107,7 +108,7 @@ export default function Admin() {
   ];
 
   return (
-    <>
+    <ScreenErrorBoundary screenName="Admin">
       <StaticSEOHead
         title={seoTitle}
         description={seoDescription}
@@ -239,6 +240,6 @@ export default function Admin() {
           </Tabs>
         </main>
       </div>
-    </>
+    </ScreenErrorBoundary>
   );
 }

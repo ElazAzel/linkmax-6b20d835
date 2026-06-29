@@ -6,6 +6,7 @@ import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 
 import { getAppDomain } from '@/lib/utils/url-helpers';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 // Critical above-fold components - load eagerly
 import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
@@ -68,7 +69,7 @@ export default function Index() {
   const pricingSectionRef = useSectionObserver<HTMLDivElement>('pricing', trackMarketingSection);
 
   return (
-    <>
+    <ScreenErrorBoundary screenName="Index">
       <SEOLandingHead currentLanguage={i18n.language} />
       <Suspense fallback={null}>
         <SEOMetaEnhancer
@@ -150,6 +151,6 @@ export default function Index() {
           <StickyMobileCTA />
         </Suspense>
       </div>
-    </>
+    </ScreenErrorBoundary>
   );
 }

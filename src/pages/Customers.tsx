@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/platform/supabase/client';
@@ -19,6 +19,7 @@ import Quote from 'lucide-react/dist/esm/icons/quote';
 import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 const PremiumFooter = lazy(() => import('@/components/landing/v2/PremiumFooter').then(m => ({ default: m.PremiumFooter })));
 
@@ -154,6 +155,16 @@ const CASE_STUDIES: CaseStudy[] = [
 ];
 
 function CaseStudyCard({ cs }: { cs: CaseStudy }) {
+  const metricElements = useMemo(() =>
+    cs.metrics.map((m) => (
+      <div key={m.label} className="rounded-2xl bg-primary/5 border border-primary/10 p-3 text-center">
+        <p className="text-base md:text-lg font-black tabular-nums text-primary">{m.value}</p>
+        <p className="text-[10px] text-muted-foreground mt-1 leading-tight">{m.label}</p>
+      </div>
+    )),
+    [cs.metrics]
+  );
+
   return (
     <Card className="p-6 md:p-7 rounded-3xl border-border/40 bg-card/50 flex flex-col gap-4">
       <div>
@@ -162,12 +173,7 @@ function CaseStudyCard({ cs }: { cs: CaseStudy }) {
         <p className="text-xs text-muted-foreground">{cs.city}</p>
       </div>
       <div className="grid grid-cols-3 gap-2">
-        {cs.metrics.map((m) => (
-          <div key={m.label} className="rounded-2xl bg-primary/5 border border-primary/10 p-3 text-center">
-            <p className="text-base md:text-lg font-black tabular-nums text-primary">{m.value}</p>
-            <p className="text-[10px] text-muted-foreground mt-1 leading-tight">{m.label}</p>
-          </div>
-        ))}
+        {metricElements}
       </div>
       <div className="space-y-2 text-sm">
         <p><span className="text-muted-foreground font-medium">Было:</span> {cs.before}</p>
@@ -216,8 +222,67 @@ export default function Customers() {
     } : undefined,
   };
 
+  const skeletonElements = useMemo(() =>
+    [1, 2, 3, 4].map(i => <Skeleton key={i} className="h-44 rounded-3xl" />),
+    []
+  );
+
+  const galleryElements = useMemo(() =>
+    (metrics?.gallery ?? []).map(item => (
+      <Link
+        key={item.id}
+        to={`/${item.slug}`}
+        className="group"
+      >
+        <Card className="p-5 rounded-3xl border-border/40 bg-card/50 hover:border-primary/40 hover:shadow-lg transition-all aspect-square flex flex-col items-center justify-center text-center">
+          <Avatar className="h-16 w-16 mb-3 border-2 border-border/40 group-hover:border-primary/40 transition-colors">
+            {item.avatar_url && <AvatarImage src={item.avatar_url} alt={item.title} />}
+            <AvatarFallback className="text-lg font-bold bg-gradient-to-br from-primary/20 to-violet-500/20">
+              {item.title.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <p className="font-semibold text-sm truncate w-full" title={item.title}>{item.title}</p>
+          {item.niche && (
+            <Badge variant="secondary" className="mt-2 text-[10px] font-bold uppercase tracking-wider">
+              {item.niche}
+            </Badge>
+          )}
+        </Card>
+      </Link>
+    )),
+    [metrics?.gallery]
+  );
+
+  const caseStudyElements = useMemo(() =>
+    CASE_STUDIES.map((cs) => (
+      <CaseStudyCard key={cs.brand} cs={cs} />
+    )),
+    []
+  );
+
+  const testimonialElements = useMemo(() =>
+    TESTIMONIALS.map((tst, idx) => (
+      <Card key={idx} className="p-6 md:p-8 rounded-3xl border-border/40 bg-card/50 relative">
+        <Quote className="absolute top-6 right-6 h-8 w-8 text-primary/15" />
+        <p className="text-sm md:text-base leading-relaxed mb-6">«{tst.quote}»</p>
+        <div className="flex items-center gap-3">
+          <Avatar className="h-10 w-10">
+            <AvatarFallback className="text-sm font-bold bg-gradient-to-br from-primary/20 to-violet-500/20">
+              {tst.name.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="font-bold text-sm">{tst.name}</p>
+            <p className="text-xs text-muted-foreground">{tst.role}</p>
+          </div>
+        </div>
+      </Card>
+    )),
+    []
+  );
+
   return (
-    <>
+    <ScreenErrorBoundary screenName="Customers">
       <StaticSEOHead
         title={t('customers.seo.title', 'Наши клиенты — LinkMAX в цифрах')}
         description={t('customers.seo.description', 'Реальные результаты сервисных бизнесов на платформе LinkMAX: страницы, заявки, бронирования и истории успеха.')}
@@ -288,7 +353,7 @@ export default function Customers() {
 
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-              {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-44 rounded-3xl" />)}
+              {skeletonElements}
             </div>
           ) : metrics ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
@@ -366,28 +431,7 @@ export default function Customers() {
               </p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-              {metrics.gallery.map(item => (
-                <Link
-                  key={item.id}
-                  to={`/${item.slug}`}
-                  className="group"
-                >
-                  <Card className="p-5 rounded-3xl border-border/40 bg-card/50 hover:border-primary/40 hover:shadow-lg transition-all aspect-square flex flex-col items-center justify-center text-center">
-                    <Avatar className="h-16 w-16 mb-3 border-2 border-border/40 group-hover:border-primary/40 transition-colors">
-                      {item.avatar_url && <AvatarImage src={item.avatar_url} alt={item.title} />}
-                      <AvatarFallback className="text-lg font-bold bg-gradient-to-br from-primary/20 to-violet-500/20">
-                        {item.title.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <p className="font-semibold text-sm truncate w-full" title={item.title}>{item.title}</p>
-                    {item.niche && (
-                      <Badge variant="secondary" className="mt-2 text-[10px] font-bold uppercase tracking-wider">
-                        {item.niche}
-                      </Badge>
-                    )}
-                  </Card>
-                </Link>
-              ))}
+              {galleryElements}
             </div>
             <div className="text-center mt-8">
               <Button asChild variant="outline" className="rounded-2xl">
@@ -414,9 +458,7 @@ export default function Customers() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl mx-auto">
-            {CASE_STUDIES.map((cs) => (
-              <CaseStudyCard key={cs.brand} cs={cs} />
-            ))}
+            {caseStudyElements}
           </div>
         </section>
 
@@ -431,23 +473,7 @@ export default function Customers() {
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-            {TESTIMONIALS.map((tst, idx) => (
-              <Card key={idx} className="p-6 md:p-8 rounded-3xl border-border/40 bg-card/50 relative">
-                <Quote className="absolute top-6 right-6 h-8 w-8 text-primary/15" />
-                <p className="text-sm md:text-base leading-relaxed mb-6">«{tst.quote}»</p>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="text-sm font-bold bg-gradient-to-br from-primary/20 to-violet-500/20">
-                      {tst.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-bold text-sm">{tst.name}</p>
-                    <p className="text-xs text-muted-foreground">{tst.role}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
+            {testimonialElements}
           </div>
         </section>
 
@@ -478,6 +504,6 @@ export default function Customers() {
           <PremiumFooter />
         </Suspense>
       </main>
-    </>
+    </ScreenErrorBoundary>
   );
 }

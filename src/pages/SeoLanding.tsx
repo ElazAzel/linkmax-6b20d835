@@ -5,6 +5,7 @@ import { AISearchOptimizer } from "@/components/seo/AISearchOptimizer";
 import { FAQSchema } from "@/components/seo/FAQSchema";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { getAppDomain } from "@/lib/utils/url-helpers";
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 const SeoLanding = () => {
     const navigate = useNavigate();
@@ -293,6 +294,7 @@ const SeoLanding = () => {
     };
 
     return (
+        <ScreenErrorBoundary screenName="SeoLanding">
         <div className="prose max-w-none p-8 font-sans">
             <Helmet>
                 <title>{getT('title')}</title>
@@ -405,6 +407,7 @@ const SeoLanding = () => {
                 </address>
             </footer>
         </div>
+        </ScreenErrorBoundary>
     );
 };
 
