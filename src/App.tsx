@@ -43,7 +43,7 @@ const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="flex flex-col items-center gap-4">
       <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-      <p className="text-sm text-muted-foreground animate-pulse">Loading…</p>
+      <p className="text-sm text-muted-foreground animate-pulse">Загрузка...</p>
     </div>
   </div>
 );
@@ -68,12 +68,12 @@ class RouteErrorBoundary extends React.Component<
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center space-y-4 p-6">
-            <p className="text-lg font-semibold text-foreground">Something went wrong</p>
+            <p className="text-lg font-semibold text-foreground">Что-то пошло не так</p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium"
             >
-              Reload page
+              Обновить страницу
             </button>
           </div>
         </div>
@@ -122,7 +122,7 @@ const App = () => {
     if (error) {
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        toast.error(`Authentication Error: ${errorDescription || error}`);
+        toast.error(`Ошибка входа: ${errorDescription || error}`);
       }, 500);
     }
   }, []);

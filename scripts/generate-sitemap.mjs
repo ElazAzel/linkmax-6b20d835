@@ -23,6 +23,45 @@ const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY
 
 const QUALITY_THRESHOLD = 25;
 const LANGS = ['ru', 'en', 'kk', 'uz'];
+const RESERVED_SLUGS = new Set([
+  'admin',
+  'auth',
+  'dashboard',
+  'dashboard-v2',
+  'editor',
+  'crm',
+  'settings',
+  'install',
+  'team',
+  'terms',
+  'privacy',
+  'payment-terms',
+  'pricing',
+  'gallery',
+  'experts',
+  'alternatives',
+  'customers',
+  'seo-landing',
+  'blog',
+  'for-masters',
+  'ru',
+  'en',
+  'kk',
+  'uz',
+  'index',
+]);
+const RESERVED_PREFIXES = [
+  'admin/',
+  'auth/',
+  'dashboard/',
+  'editor/',
+  'crm/',
+  'settings/',
+  'team/',
+  'invite/',
+  'join/',
+  'p/',
+];
 
 const STATIC_PAGES = [
   { loc: '/', changefreq: 'daily', priority: '1.0', hreflang: true },
@@ -42,6 +81,26 @@ const STATIC_PAGES = [
 
 const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];
 const NICHE_LANDINGS = ['photographer', 'coach', 'master', 'psychologist', 'fitness', 'designer'];
+
+function normalizeSlug(slug) {
+  return String(slug || '').trim().replace(/^\/+|\/+$/g, '').toLowerCase();
+}
+
+function isPublicProfileSlug(slug) {
+  const normalized = normalizeSlug(slug);
+  if (!normalized) return false;
+  if (RESERVED_SLUGS.has(normalized)) return false;
+  return !RESERVED_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+}
+
+function uniqueEntries(entries) {
+  const seen = new Set();
+  return entries.filter((entry) => {
+    if (seen.has(entry.loc)) return false;
+    seen.add(entry.loc);
+    return true;
+  });
+}
 
 function buildHreflang(loc) {
   return LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${BASE_URL}/${l}"/>`).join('\n')
@@ -71,7 +130,7 @@ async function fetchIndexablePages() {
       return [];
     }
     const rows = await res.json();
-    return rows.filter((r) => r.is_indexable !== false && r.slug);
+    return rows.filter((r) => r.is_indexable !== false && isPublicProfileSlug(r.slug));
   } catch (err) {
     console.warn('[sitemap] fetch error', err.message);
     return [];
@@ -82,17 +141,20 @@ async function main() {
   const today = new Date().toISOString().slice(0, 10);
   const pages = await fetchIndexablePages();
 
-  const entries = [
+  const entries = uniqueEntries([
     ...STATIC_PAGES.map((p) => ({ ...p, lastmod: p.lastmod || today })),
     ...KEYWORD_LANDINGS.map((s) => ({ loc: `/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.85' })),
     ...NICHE_LANDINGS.map((s) => ({ loc: `/dlya/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.75' })),
-    ...pages.map((p) => ({
-      loc: `/${p.slug}`,
-      lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
-      changefreq: 'weekly',
-      priority: '0.7',
-    })),
-  ];
+    ...pages.map((p) => {
+      const slug = normalizeSlug(p.slug);
+      return {
+        loc: `/${slug}`,
+        lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
+        changefreq: 'weekly',
+        priority: '0.7',
+      };
+    }),
+  ]);
 
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',

@@ -27,7 +27,7 @@ export const LogoTicker = () => {
         <div className="py-10 bg-transparent border-y border-white/5 backdrop-blur-sm overflow-hidden">
             <div className="container mx-auto px-4 mb-4 text-center">
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                    {t('landing.ticker.title_v2', 'Используют 1 200+ мастеров и команд в этих нишах')}
+                    {t('landing.ticker.title_v2', 'Подходит для этих ниш и форматов услуг')}
                 </p>
             </div>
             <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">

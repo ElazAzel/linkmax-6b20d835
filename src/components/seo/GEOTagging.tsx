@@ -55,10 +55,10 @@ export function GEOTagging({
                 '@context': 'https://schema.org',
                 '@type': 'LocalBusiness',
                 name: 'lnkmx',
-                description: t('seo.organization.description', 'AI-powered link in bio and mini-landing page builder'),
+                description: t('seo.organization.description', 'Конструктор страниц, онлайн-записи, оплаты и мини-CRM для бизнеса в услугах'),
                 url: getAppDomain(),
                 logo: `${getAppDomain()}/favicon.png`,
-                image: `${getAppDomain()}/favicon.jpg`,
+                image: `${getAppDomain()}/icon-512.png`,
                 telephone: '+77051097664',
                 email: 'admin@lnkmx.my',
                 address: {

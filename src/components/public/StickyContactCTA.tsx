@@ -7,6 +7,7 @@
  */
 import { memo, useMemo, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils/utils';
+import { session } from '@/lib/storage';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import Send from 'lucide-react/dist/esm/icons/send';
@@ -64,25 +65,18 @@ function extractContacts(blocks: Block[] | undefined): Contact[] {
 export const StickyContactCTA = memo(function StickyContactCTA({ blocks, pageId }: Props) {
   const contacts = useMemo(() => extractContacts(blocks), [blocks]);
   const [dismissed, setDismissed] = useState(false);
+  const dismissKey = `${DISMISS_KEY}:${pageId ?? 'global'}`;
 
   useEffect(() => {
-    try {
-      const v = sessionStorage.getItem(`${DISMISS_KEY}:${pageId ?? 'global'}`);
-      if (v === '1') setDismissed(true);
-    } catch {
-      // ignore (e.g. private mode)
-    }
-  }, [pageId]);
+    const value = session.get<string>(dismissKey);
+    if (value === '1') setDismissed(true);
+  }, [dismissKey]);
 
   if (!contacts.length || dismissed) return null;
 
   const handleDismiss = () => {
     setDismissed(true);
-    try {
-      sessionStorage.setItem(`${DISMISS_KEY}:${pageId ?? 'global'}`, '1');
-    } catch {
-      // ignore
-    }
+    session.set(dismissKey, '1');
   };
 
   return (

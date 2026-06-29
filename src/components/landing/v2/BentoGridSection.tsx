@@ -48,10 +48,10 @@ const AIBuilderVisual = () => {
       <div className="flex flex-col items-center gap-2 z-10">
         <Sparkles className="w-8 h-8 text-primary animate-pulse" />
         <div className={cn("text-xl font-bold text-primary transition-opacity duration-700", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiPowered', 'AI-Генерация')}
+          {t('landing.bento.aiPowered', 'Черновик страницы')}
         </div>
         <div className={cn("text-xs text-muted-foreground transition-opacity duration-700 delay-300", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiSub', 'Структура • Тексты • Дизайн')}
+          {t('landing.bento.aiSub', 'Структура / тексты / услуги')}
         </div>
       </div>
     </div>
@@ -191,7 +191,7 @@ export function BentoGridSection() {
   const items = [
     {
       title: t('landing.bento.leadsTitle_v2', 'Inbox заявок: ничего не теряется'),
-      description: t('landing.bento.leadsDesc_v2', 'Заявки из формы, мессенджеров и бронирования — в одной ленте с SLA-таймером. Среднее время первой реакции у клиентов — 4 минуты.'),
+      description: t('landing.bento.leadsDesc_v2', 'Заявки из формы, мессенджеров и бронирования попадают в одну ленту. Видно источник, статус и ответственного.'),
       header: <LeadsVisual />,
       icon: <Send className="h-5 w-5" />,
       className: "md:col-span-2 md:row-span-2"
@@ -211,8 +211,8 @@ export function BentoGridSection() {
       className: "md:col-span-1 md:row-span-2"
     },
     {
-      title: t('landing.bento.aiTitle_v2', 'AI собирает витрину за 2 минуты'),
-      description: t('landing.bento.aiDesc_v2', 'Опишите услугу — Gemini сделает структуру, описания и цены под вашу нишу.'),
+      title: t('landing.bento.aiTitle_v2', 'Черновик витрины за 2 минуты'),
+      description: t('landing.bento.aiDesc_v2', 'Опишите услугу - получите основу страницы: блоки, оффер, услуги и цены. Финальный текст остается под вашим контролем.'),
       header: <AIBuilderVisual />,
       icon: <Sparkles className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"

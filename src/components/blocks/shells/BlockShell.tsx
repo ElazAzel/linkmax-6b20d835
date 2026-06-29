@@ -1,4 +1,4 @@
-import { forwardRef, type CSSProperties, type ReactNode } from 'react';
+import { forwardRef, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 import { cn } from '@/lib/utils/utils';
 
 type Padding = 'none' | 'sm' | 'md' | 'lg';
@@ -60,6 +60,13 @@ export const BlockShell = forwardRef<HTMLElement, BlockShellProps>(function Bloc
     interactive && 'qb-card-hover cursor-pointer active:scale-[0.99] transition-transform',
     className,
   );
+  const handleDivKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!onClick) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onClick();
+    }
+  };
 
   if (as === 'a') {
     return (
@@ -91,14 +98,24 @@ export const BlockShell = forwardRef<HTMLElement, BlockShellProps>(function Bloc
       </button>
     );
   }
+  if (onClick) {
+    return (
+      <div
+        ref={ref as React.Ref<HTMLDivElement>}
+        onClick={onClick}
+        onKeyDown={handleDivKeyDown}
+        role="button"
+        tabIndex={0}
+        className={classes}
+        style={style}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </div>
+    );
+  }
   return (
-    <div
-      ref={ref as React.Ref<HTMLDivElement>}
-      onClick={onClick}
-      className={classes}
-      style={style}
-      aria-label={ariaLabel}
-    >
+    <div ref={ref as React.Ref<HTMLDivElement>} className={classes} style={style} aria-label={ariaLabel}>
       {children}
     </div>
   );
