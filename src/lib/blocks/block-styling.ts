@@ -152,13 +152,6 @@ export function getBlockStyles(blockStyle?: BlockStyle): BlockStyleResult {
     style.padding = PADDING_PX[blockStyle.padding];
   }
 
-  // Content vertical alignment — only meaningful for flex containers
-  if (blockStyle.contentAlignment) {
-    style.display = style.display || 'flex';
-    style.flexDirection = 'column';
-    style.justifyContent = ALIGN_FLEX[blockStyle.contentAlignment];
-  }
-
   // Hover effect → class
   if (blockStyle.hoverEffect && blockStyle.hoverEffect !== 'none') {
     classes.push(HOVER_CLASS[blockStyle.hoverEffect]);
