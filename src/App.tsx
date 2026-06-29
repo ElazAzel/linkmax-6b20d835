@@ -129,7 +129,10 @@ const App = () => {
     if (error) {
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        toast.error(`Authentication Error: ${errorDescription || error}`);
+        const lang = typeof document !== 'undefined' ? document.documentElement.lang : 'ru';
+        const isRu = !lang || lang.startsWith('ru');
+        const label = isRu ? 'Ошибка авторизации' : 'Authentication error';
+        toast.error(`${label}: ${errorDescription || error}`);
       }, 500);
     }
   }, []);
