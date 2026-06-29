@@ -73,7 +73,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {/* Bento grid */}
       {contentBlocks.length > 0 && (
         <motion.div
-          className="grid grid-cols-2 gap-4 grid-flow-row-dense auto-rows-min"
+          className="grid grid-cols-2 gap-4 grid-flow-row-dense auto-rows-min items-start"
           initial="hidden"
           animate="show"
           viewport={{ once: true }}
@@ -105,9 +105,6 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                   : 'items-center';
 
             const isTransparent = TRANSPARENT_BLOCKS.has(block.type);
-            const isSquare = dimensions.gridCols === 1 && dimensions.gridRows === 1;
-            const isTall = dimensions.gridCols === 1 && dimensions.gridRows === 2;
-
             // Translate BlockStyle into wrapper-level visuals so user customizations are visible
             const bs = block.blockStyle;
             const wrapperStyle: React.CSSProperties = {};
@@ -149,8 +146,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex transition-all duration-300',
-                  !isNaked && 'overflow-hidden min-h-[120px]',
+                  'group relative flex min-w-0 transition-all duration-300',
+                  !isNaked && 'min-h-[120px]',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
@@ -174,7 +171,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                     className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
                   />
                 )}
-                <div className="relative w-full h-full">
+                <div className="relative w-full min-w-0">
                   <BlockRenderer
                     block={block}
                     isPreview={isPreview}
