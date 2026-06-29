@@ -62,15 +62,19 @@ class RouteErrorBoundary extends React.Component<
   }
   render() {
     if (this.state.hasError) {
+      const lang = typeof document !== 'undefined' ? document.documentElement.lang : 'ru';
+      const isRu = !lang || lang.startsWith('ru');
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center space-y-4 p-6">
-            <p className="text-lg font-semibold text-foreground">Something went wrong</p>
+            <p className="text-lg font-semibold text-foreground">
+              {isRu ? 'Что-то пошло не так' : 'Something went wrong'}
+            </p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium"
+              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium min-h-[44px]"
             >
-              Reload page
+              {isRu ? 'Перезагрузить страницу' : 'Reload page'}
             </button>
           </div>
         </div>
