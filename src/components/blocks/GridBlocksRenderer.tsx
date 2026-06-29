@@ -73,7 +73,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {/* Bento grid */}
       {contentBlocks.length > 0 && (
         <motion.div
-          className="grid grid-cols-2 gap-4 grid-flow-row-dense auto-rows-min items-start"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 grid-flow-row-dense auto-rows-min items-start"
           initial="hidden"
           animate="show"
           viewport={{ once: true }}
@@ -94,7 +94,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 ? BLOCK_SIZE_DIMENSIONS['wide']
                 : BLOCK_SIZE_DIMENSIONS['small'];
 
-            const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
+            const colSpanClass = dimensions.gridCols === 2 ? 'col-span-1 sm:col-span-2' : 'col-span-1';
             // Drop row-span — variable content heights make fixed row tracks fight aspect-ratio media
             const rowSpanClass = '';
 
