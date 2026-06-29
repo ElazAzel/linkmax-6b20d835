@@ -29,7 +29,26 @@ serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body = await req.json();
 
-    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod, userId } = body;
+    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod } = body;
+
+    // Derive user_id strictly from the caller's verified JWT.
+    // NEVER trust a client-supplied userId — that allows spoofing bookings into other users' histories.
+    let trustedUserId: string | null = null;
+    const authHeader = req.headers.get('Authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+      try {
+        const anonClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') ?? supabaseServiceKey, {
+          global: { headers: { Authorization: authHeader } },
+        });
+        const token = authHeader.replace('Bearer ', '');
+        const { data: claimsData } = await anonClient.auth.getClaims(token);
+        if (claimsData?.claims?.sub && isValidUUID(claimsData.claims.sub)) {
+          trustedUserId = claimsData.claims.sub;
+        }
+      } catch (_e) {
+        trustedUserId = null;
+      }
+    }
 
     // Validate required fields
     if (!pageId || !isValidUUID(pageId)) throw new Error('Invalid pageId');
