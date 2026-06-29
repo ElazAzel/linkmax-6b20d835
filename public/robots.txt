@@ -68,4 +68,4 @@ Sitemap: https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap/
 Sitemap: https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap/sitemap-events.xml
 
 # Host
-Host: https://lnkmx.my
+Host: lnkmx.my

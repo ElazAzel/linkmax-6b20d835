@@ -74,8 +74,8 @@ export default function Index() {
       <Suspense fallback={null}>
         <SEOMetaEnhancer
           pageUrl={`${getAppDomain()}/`}
-          pageTitle={t('landing.v4.hero.title', 'LinkMAX - Ваша Бизнес-ОС')}
-          pageDescription={t('landing.v4.hero.subtitle', 'Замените 10 сервисов одним. Сайт, CRM и финансы для экспертов.')}
+          pageTitle={t('landing.v4.hero.title', 'LinkMAX - сайт, запись, оплата и CRM в одном месте')}
+          pageDescription={t('landing.v4.hero.subtitle', 'Конструктор страниц для услуг с онлайн-записью, оплатой, Telegram-заявками и мини-CRM для малого бизнеса.')}
           imageUrl={`${getAppDomain()}/og-image.png`}
           imageAlt="LinkMAX"
           type="website"
