@@ -50,10 +50,14 @@ self.addEventListener('fetch', (event) => {
   // 1. Skip non-GET requests
   if (request.method !== 'GET') return;
 
+  // Helper: return cached response or offline fallback
+  const matchOrFallback = (req) =>
+    caches.match(req).then((r) => r || new Response('', { status: 503, statusText: 'Offline' }));
+
   // 2. Navigation / HTML - Always Network-First
   if (request.mode === 'navigate' || request.destination === 'document') {
     event.respondWith(
-      fetch(request).catch(() => caches.match('/'))
+      fetch(request).catch(() => caches.match('/').then((r) => r || new Response('', { status: 503 })))
     );
     return;
   }
@@ -71,7 +75,6 @@ self.addEventListener('fetch', (event) => {
   }
 
   // 5. Supabase API / Data - Network-First with Cache Fallback
-  // We only cache GET requests that look like data fetches
   if (url.hostname.includes('supabase.co') && request.headers.get('apikey')) {
     event.respondWith(
       fetch(request.clone())
@@ -82,13 +85,13 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         })
-        .catch(() => caches.match(request))
+        .catch(() => matchOrFallback(request))
     );
     return;
   }
 
   // 6. Default - Network First
-  event.respondWith(fetch(request).catch(() => caches.match(request)));
+  event.respondWith(fetch(request).catch(() => matchOrFallback(request)));
 });
 
 /**
@@ -103,7 +106,7 @@ async function staleWhileRevalidate(request, cacheName) {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
-  }).catch(() => cachedResponse);
+  }).catch(() => cachedResponse || new Response('', { status: 503 }));
 
   return cachedResponse || networkPromise;
 }
