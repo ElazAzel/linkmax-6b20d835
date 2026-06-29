@@ -148,8 +148,8 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
       {/* Product Info */}
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-xl font-bold text-foreground leading-tight">{name}</h3>
-          <span className="text-xl font-bold text-primary whitespace-nowrap">
+          <h3 className="min-w-0 text-xl font-bold text-foreground leading-tight break-words hyphens-auto">{name}</h3>
+          <span className="text-xl font-bold text-primary break-words text-right">
             {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
           </span>
         </div>
@@ -238,11 +238,11 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
         {/* Content */}
         <div className="flex-1 min-w-0 flex flex-col justify-between">
           <div>
-            <h3 className="font-semibold text-foreground text-sm leading-tight line-clamp-2">
+            <h3 className="font-semibold text-foreground text-sm leading-tight break-words hyphens-auto">
               {name}
             </h3>
             {description && (
-              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed break-words hyphens-auto">
                 {description}
               </p>
             )}
@@ -250,7 +250,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
 
           {/* Price and action hint */}
           <div className="flex items-center justify-between gap-2 mt-2">
-            <span className="text-primary font-bold text-base whitespace-nowrap">
+            <span className="text-primary font-bold text-base break-words">
               {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
             </span>
 
