@@ -45,13 +45,13 @@ export function AchievementNotification({ achievement, onDismiss }: AchievementN
     }, 300);
   };
 
-  const getRarityGradient = () => {
+  const getRarityClasses = () => {
     switch (achievement.rarity) {
-      case 'common': return 'from-slate-500 to-slate-700';
-      case 'rare': return 'from-blue-500 to-blue-700';
-      case 'epic': return 'from-purple-500 to-purple-700';
-      case 'legendary': return 'from-amber-400 via-orange-500 to-red-500';
-      default: return 'from-slate-500 to-slate-700';
+      case 'common': return 'bg-muted text-foreground';
+      case 'rare': return 'bg-primary text-primary-foreground';
+      case 'epic': return 'bg-accent text-accent-foreground';
+      case 'legendary': return 'bg-warning text-warning-foreground';
+      default: return 'bg-muted text-foreground';
     }
   };
 
@@ -68,9 +68,8 @@ export function AchievementNotification({ achievement, onDismiss }: AchievementN
     >
       <div 
         className={cn(
-          "relative overflow-hidden rounded-2xl sm:rounded-xl p-4 shadow-2xl border border-white/20",
-          "bg-gradient-to-br text-white",
-          getRarityGradient()
+          "relative overflow-hidden rounded-2xl sm:rounded-xl p-4 shadow-lg border border-border/30",
+          getRarityClasses()
         )}
       >
         {/* Top row */}
