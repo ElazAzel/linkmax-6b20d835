@@ -381,8 +381,10 @@ export const Gallery = memo(function Gallery() {
             </div>
 
             {/* Grid */}
+            <h2 className="sr-only">{t('gallery.resultsHeading', 'Результаты')}</h2>
             <div className="px-4 pb-20">
               {loading ? (
+
                 <LoadingState skeleton={<SkeletonGalleryGrid />} />
               ) : filteredPages.length === 0 ? (
                 <EmptyState
