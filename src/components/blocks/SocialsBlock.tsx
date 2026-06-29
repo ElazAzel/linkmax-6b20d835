@@ -109,10 +109,6 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
     }, 10);
   };
 
-  const justifyClass = block.alignment === 'left' ? 'justify-start'
-    : block.alignment === 'right' ? 'justify-end'
-      : 'justify-center';
-
   // Safely filter and process platforms
   const validPlatforms = (block.platforms || []).filter(
     (platform): platform is NonNullable<typeof platform> =>
