@@ -12,6 +12,9 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const cronAuthError = requireCronAuth(req, corsHeaders);
+  if (cronAuthError) return cronAuthError;
+
   try {
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (!resendApiKey) {

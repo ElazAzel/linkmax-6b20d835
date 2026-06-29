@@ -65,6 +65,9 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const cronAuthError = requireCronAuth(req, corsHeaders);
+  if (cronAuthError) return cronAuthError;
+
   try {
     console.log("Starting CRM automation processing...");
     

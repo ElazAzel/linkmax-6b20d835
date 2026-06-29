@@ -14,6 +14,9 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const cronAuthError = requireCronAuth(req, corsHeaders);
+  if (cronAuthError) return cronAuthError;
+
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
