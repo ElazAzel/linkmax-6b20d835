@@ -49,11 +49,11 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
   }
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl">
+    <div className="w-full min-w-0 overflow-visible rounded-2xl">
 
       {title && (
-        <div className="p-4 sm:p-5 pb-0">
-          <h3 className="font-bold text-base sm:text-lg text-gradient break-words leading-snug">{title}</h3>
+        <div className="px-1 pb-3">
+          <h3 className="font-bold text-base sm:text-lg text-gradient break-words hyphens-auto leading-snug overflow-visible">{title}</h3>
         </div>
       )}
       <Carousel
@@ -90,8 +90,8 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
         </CarouselContent>
         {block.images.length > 1 && (
           <>
-            <CarouselPrevious className="left-4 h-10 w-10 glass-button shadow-soft border-hairline" />
-            <CarouselNext className="right-4 h-10 w-10 glass-button shadow-soft border-hairline" />
+            <CarouselPrevious className="left-3 h-9 w-9 glass-button shadow-soft border-hairline" />
+            <CarouselNext className="right-3 h-9 w-9 glass-button shadow-soft border-hairline" />
           </>
         )}
       </Carousel>
