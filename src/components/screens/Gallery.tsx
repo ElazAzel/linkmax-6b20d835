@@ -286,7 +286,9 @@ export const Gallery = memo(function Gallery() {
         {activeTab === 'gallery' && (
           <div className="max-w-6xl mx-auto">
             {/* Niche filter pills */}
+            <h2 className="sr-only">{t('gallery.filtersHeading', 'Фильтры галереи')}</h2>
             <div className="px-4 pt-4 pb-2 overflow-x-auto scrollbar-hide">
+
               <div className="flex gap-1.5 min-w-max">
                 <button
                   onClick={() => updateNiche(null)}
