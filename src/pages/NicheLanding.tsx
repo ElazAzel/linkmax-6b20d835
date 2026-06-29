@@ -109,23 +109,19 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     };
   }, [landing, pageUrl]);
 
-  if (!landing) {
-    return <Navigate to="/" replace />;
-  }
-
   const handleCtaClick = (location: string) => {
     trackMarketingEvent({
       eventType: 'niche_landing_cta_click',
-      metadata: { niche: landing.niche, landing: landing.key, location },
+      metadata: { niche: landing!.niche, landing: landing!.key, location },
     });
     trackMarketingEvent({
       eventType: 'signup_from_niche_landing',
-      metadata: { niche: landing.niche, landing: landing.key, location },
+      metadata: { niche: landing!.niche, landing: landing!.key, location },
     });
   };
 
   const statsElements = useMemo(() =>
-    landing.stats.map((stat) => (
+    (landing?.stats ?? []).map((stat) => (
       <div key={stat.label} className="rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-xl">
         <p className="text-lg font-black text-white">{stat.value}</p>
         <p className="mt-1 text-[11px] leading-tight text-white/70">{stat.label}</p>
@@ -154,7 +150,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   );
 
   const outcomeSummaryElements = useMemo(() =>
-    landing.outcomes.map((item) => (
+    (landing?.outcomes ?? []).map((item) => (
       <li key={item.title} className="flex items-start gap-2">
         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
         <span>{item.title}</span>
@@ -164,7 +160,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   );
 
   const outcomeCardElements = useMemo(() =>
-    landing.outcomes.map((item) => (
+    (landing?.outcomes ?? []).map((item) => (
       <Card key={item.title} className="rounded-2xl border-border/60 bg-card/70 p-5 shadow-sm backdrop-blur-xl">
         <CheckCircle2 className="h-6 w-6 text-emerald-500" />
         <h3 className="mt-4 text-lg font-black">{item.title}</h3>
@@ -175,7 +171,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   );
 
   const workflowElements = useMemo(() =>
-    landing.workflow.map((item, index) => (
+    (landing?.workflow ?? []).map((item, index) => (
       <div key={item.title} className="flex gap-4 rounded-2xl border border-border/60 bg-background/80 p-4">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-foreground text-sm font-black text-background">
           {index + 1}
@@ -197,7 +193,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
             {page.preview_url ? (
               <img
                 src={page.preview_url}
-                alt={page.title || landing.visualAlt}
+                alt={page.title || (landing?.visualAlt ?? '')}
                 className="h-full w-full object-cover"
                 loading="lazy"
               />
@@ -223,7 +219,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   );
 
   const faqElements = useMemo(() =>
-    landing.faq.map((item) => (
+    (landing?.faq ?? []).map((item) => (
       <Card key={item.question} className="rounded-2xl border-border/60 bg-card/70 p-5">
         <h3 className="font-black">{item.question}</h3>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.answer}</p>
@@ -231,6 +227,10 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     )),
     [landing]
   );
+
+  if (!landing) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <ScreenErrorBoundary screenName="NicheLanding">

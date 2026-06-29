@@ -6,6 +6,7 @@
  * dismisses it for the session.
  */
 import { memo, useMemo, useState, useEffect } from 'react';
+import { storage } from '@/lib/storage';
 import { cn } from '@/lib/utils/utils';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
@@ -66,23 +67,15 @@ export const StickyContactCTA = memo(function StickyContactCTA({ blocks, pageId 
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    try {
-      const v = sessionStorage.getItem(`${DISMISS_KEY}:${pageId ?? 'global'}`);
-      if (v === '1') setDismissed(true);
-    } catch {
-      // ignore (e.g. private mode)
-    }
+    const v = storage.session.get<string>(`${DISMISS_KEY}:${pageId ?? 'global'}`);
+    if (v === '1') setDismissed(true);
   }, [pageId]);
 
   if (!contacts.length || dismissed) return null;
 
   const handleDismiss = () => {
     setDismissed(true);
-    try {
-      sessionStorage.setItem(`${DISMISS_KEY}:${pageId ?? 'global'}`, '1');
-    } catch {
-      // ignore
-    }
+    storage.session.set(`${DISMISS_KEY}:${pageId ?? 'global'}`, '1');
   };
 
   return (

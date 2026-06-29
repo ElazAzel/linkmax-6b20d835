@@ -60,6 +60,9 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
     <div
       className="w-full overflow-hidden rounded-2xl"
       onClick={() => onClick?.()}
+      onKeyDown={() => onClick?.()}
+      role="button"
+      tabIndex={0}
     >
       {title && (
         <h3 className="text-base sm:text-lg font-semibold truncate mb-2">{title}</h3>

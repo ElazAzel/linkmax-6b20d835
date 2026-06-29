@@ -95,6 +95,9 @@ export const BlockShell = forwardRef<HTMLElement, BlockShellProps>(function Bloc
     <div
       ref={ref as React.Ref<HTMLDivElement>}
       onClick={onClick}
+      onKeyDown={onClick ? () => onClick() : undefined}
+      role="button"
+      tabIndex={onClick ? 0 : undefined}
       className={classes}
       style={style}
       aria-label={ariaLabel}
