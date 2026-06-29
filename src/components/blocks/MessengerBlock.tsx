@@ -88,7 +88,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
 
   return (
     <div
-      className="w-full rounded-[2rem] qb-card border border-hairline shadow-soft p-5 relative overflow-hidden group"
+      className="w-full min-w-0 rounded-[2rem] qb-card border border-hairline shadow-soft p-5 relative overflow-hidden group"
       style={{
         backgroundColor: block.blockStyle?.backgroundColor,
         backgroundImage: block.blockStyle?.backgroundGradient,
@@ -99,11 +99,11 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
 
       <div className="relative z-10">
         {title && (
-          <div className="flex items-center gap-3 mb-6 px-1">
+          <div className="flex min-w-0 items-center gap-3 mb-6 px-1">
             <div className="p-2 rounded-xl bg-primary/10 text-primary shadow-sm shadow-primary/20">
               <MessageCircle className="h-5 w-5" />
             </div>
-            <h3 className="font-bold text-lg text-gradient leading-tight">{title}</h3>
+            <h3 className="min-w-0 font-bold text-lg text-gradient leading-tight break-words hyphens-auto">{title}</h3>
           </div>
         )}
 
@@ -113,7 +113,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
               key={index}
               onClick={() => handleMessengerClick(messenger.platform, messenger.username, messenger.message)}
               className={cn(
-                "flex items-center gap-4 p-4 rounded-2xl",
+                "flex min-w-0 items-center gap-4 p-4 rounded-2xl",
                 "qb-card border-hairline shadow-soft",
                 "transition-all duration-300 hover:scale-[1.02] hover:shadow-lift active:scale-[0.98]",
                 "group/item overflow-hidden relative text-left w-full"
@@ -129,7 +129,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
                   {getPlatformName(messenger.platform)}
                 </div>
                 {messenger.username && (
-                  <div className="text-xs text-muted-foreground/60 truncate font-medium mt-0.5">
+                  <div className="text-xs text-muted-foreground/60 break-all font-medium mt-0.5">
                     {messenger.username}
                   </div>
                 )}
