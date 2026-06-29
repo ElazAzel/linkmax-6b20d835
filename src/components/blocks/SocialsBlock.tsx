@@ -124,13 +124,13 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0 overflow-visible">
       {title && (
-        <h3 className={`text-xs font-medium text-muted-foreground mb-3 ${block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'}`}>
+        <h3 className={`text-xs font-medium text-muted-foreground mb-3 break-words leading-snug ${block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'}`}>
           {title}
         </h3>
       )}
-      <div className={`flex items-center ${justifyClass} gap-2 flex-wrap`}>
+      <div className={`grid ${validPlatforms.length <= 3 ? 'grid-cols-3' : 'grid-cols-3 sm:grid-cols-4'} justify-items-center gap-3 overflow-visible`}>
         {validPlatforms.map((platform, index) => {
           // Support both 'icon' and 'platform' fields (AI generates 'platform', factory uses 'icon')
           const iconName = platform.icon || 'globe';
@@ -145,7 +145,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
               key={index}
               onClick={() => handleClick(url)}
               className={cn(
-                "group relative w-12 h-12 rounded-control flex items-center justify-center",
+                "group relative size-12 rounded-control flex items-center justify-center shrink-0",
                 "bg-surface-raised border border-hairline shadow-soft",
                 "transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5 active:scale-95"
               )}
