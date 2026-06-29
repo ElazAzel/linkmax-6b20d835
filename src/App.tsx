@@ -35,15 +35,21 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading fallback for pages
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-      <p className="text-sm text-muted-foreground animate-pulse">Loading…</p>
+// Loading fallback for pages — language detected from <html lang>
+const PageLoader = () => {
+  const lang = typeof document !== 'undefined' ? document.documentElement.lang : 'ru';
+  const isRu = !lang || lang.startsWith('ru');
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" aria-hidden />
+        <p className="text-sm text-muted-foreground animate-pulse">
+          {isRu ? 'Загрузка…' : 'Loading…'}
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Error boundary for lazy-loaded routes
 class RouteErrorBoundary extends React.Component<
@@ -123,7 +129,10 @@ const App = () => {
     if (error) {
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        toast.error(`Authentication Error: ${errorDescription || error}`);
+        const lang = typeof document !== 'undefined' ? document.documentElement.lang : 'ru';
+        const isRu = !lang || lang.startsWith('ru');
+        const label = isRu ? 'Ошибка авторизации' : 'Authentication error';
+        toast.error(`${label}: ${errorDescription || error}`);
       }, 500);
     }
   }, []);

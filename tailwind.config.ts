@@ -94,6 +94,21 @@ export default {
         '2xl': '40px',
         '3xl': '60px'
       },
+      // Motion design tokens — strict budget per audit (P1: motion policy).
+      // Use these instead of arbitrary duration-[xxxms] values so reduced-motion
+      // and decorative-vs-purposeful animation are governed in one place.
+      transitionDuration: {
+        instant: '80ms',
+        quick: '140ms',
+        base: '200ms',
+        slow: '320ms',
+        deliberate: '480ms',
+      },
+      transitionTimingFunction: {
+        'motion-standard': 'cubic-bezier(0.2, 0, 0, 1)',
+        'motion-emphasized': 'cubic-bezier(0.3, 0, 0, 1)',
+        'motion-exit': 'cubic-bezier(0.4, 0, 1, 1)',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0', opacity: '0' },
