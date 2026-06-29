@@ -614,6 +614,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    padding-block: 0.08em;
   }
 
   .text-gradient-blue {
@@ -621,6 +622,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    padding-block: 0.08em;
   }
 
   .text-gradient-purple {
@@ -628,6 +630,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    padding-block: 0.08em;
   }
 
   /* Liquid gradient backgrounds */
@@ -1092,8 +1095,8 @@
 
   /* Typewriter / Печатная машинка */
   .text-effect-typewriter {
-    overflow: hidden;
-    white-space: nowrap;
+    overflow: visible;
+    white-space: normal;
     border-right: 2px solid currentColor;
     animation: typewriter-cursor 0.7s step-end infinite;
   }
