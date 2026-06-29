@@ -53,11 +53,11 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
   const containerClass = isFullWidth ? 'w-full' : 'w-full max-w-md';
 
   return (
-    <div className={cn("w-full flex flex-col", alignmentClass)}>
+    <div className={cn("w-full min-w-0 flex flex-col overflow-visible", alignmentClass)}>
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when interactive */}
       <div
         className={cn(
-          "relative group",
+          "relative group min-w-0",
           containerClass,
           hasLink && 'cursor-pointer'
         )}
