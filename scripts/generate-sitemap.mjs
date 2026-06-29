@@ -43,7 +43,7 @@ const STATIC_PAGES = [
 const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn', 'linktree-alternative', 'crm-dlya-uslug', 'link-in-bio', 'linktree-alternative-en', 'crm-for-services'];
 // Existing /dlya/ landings + 50 audience-targeted SEO landings (2026-06).
 const NICHE_LANDINGS = [
-  'photographer', 'coach', 'master', 'psychologist', 'fitness', 'designer',
+  'designer',
   // 50 new programmatic landings
   'nutritionist', 'yoga-teacher', 'personal-trainer', 'nail-master', 'lash-master',
   'brow-master', 'hair-stylist', 'makeup-artist', 'cosmetologist', 'massage-therapist',
@@ -57,6 +57,12 @@ const NICHE_LANDINGS = [
   'cleaning-service', 'handyman', 'car-detailing', 'florist', 'catering', 'chef',
   'dog-trainer', 'interior-designer', 'tour-guide',
 ];
+
+const BLOG_POSTS = [
+  'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
+  'instagram-bio-ideas-for-photographers',
+];
+
 
 function buildHreflang(loc) {
   return LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${BASE_URL}/${l}"/>`).join('\n')
