@@ -126,7 +126,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
           {title}
         </h3>
       )}
-      <div className={`grid ${validPlatforms.length <= 3 ? 'grid-cols-3' : 'grid-cols-3 sm:grid-cols-4'} justify-items-center gap-3 overflow-visible`}>
+      <div className="flex flex-wrap items-center justify-center gap-3 overflow-visible">
         {validPlatforms.map((platform, index) => {
           // Support both 'icon' and 'platform' fields (AI generates 'platform', factory uses 'icon')
           const iconName = platform.icon || 'globe';
