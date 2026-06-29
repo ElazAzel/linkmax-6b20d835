@@ -67,15 +67,17 @@ export const OnboardingScopeChoice = memo(function OnboardingScopeChoice({
           <button
             type="button"
             onClick={onChooseSingle}
-            className="text-left rounded-2xl p-4 border border-border/60 bg-background hover:bg-muted/40 transition-all"
+            aria-label={t('onboardingScope.singleTitle', 'Одна страница')}
+            aria-describedby="scope-single-desc"
+            className="group text-left rounded-2xl p-4 border border-border/60 bg-background hover:bg-muted/40 transition-colors min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none"
           >
             <div className="w-9 h-9 rounded-xl bg-foreground/5 flex items-center justify-center mb-3">
-              <LinkIcon className="w-4 h-4" />
+              <LinkIcon className="w-4 h-4" aria-hidden />
             </div>
             <div className="text-sm font-medium">
               {t('onboardingScope.singleTitle', 'Одна страница')}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p id="scope-single-desc" className="text-xs text-muted-foreground mt-1">
               {t(
                 'onboardingScope.singleDesc',
                 'Классическая link-in-bio: блоки, контакты, мессенджеры. Быстрый старт.',
@@ -86,10 +88,12 @@ export const OnboardingScopeChoice = memo(function OnboardingScopeChoice({
           <button
             type="button"
             onClick={handleSite}
-            className="text-left rounded-2xl p-4 border border-foreground/30 bg-muted/40 hover:bg-muted/60 transition-all ring-1 ring-foreground/5"
+            aria-label={t('onboardingScope.siteTitle', 'Сайт из шаблона')}
+            aria-describedby="scope-site-desc"
+            className="group text-left rounded-2xl p-4 border border-foreground/30 bg-muted/40 hover:bg-muted/60 transition-colors ring-1 ring-foreground/5 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none"
           >
             <div className="w-9 h-9 rounded-xl bg-foreground text-background flex items-center justify-center mb-3">
-              <LayoutGrid className="w-4 h-4" />
+              <LayoutGrid className="w-4 h-4" aria-hidden />
             </div>
             <div className="text-sm font-medium flex items-center gap-1.5">
               {t('onboardingScope.siteTitle', 'Сайт из шаблона')}
@@ -97,7 +101,7 @@ export const OnboardingScopeChoice = memo(function OnboardingScopeChoice({
                 {t('onboardingScope.recommended', 'Рекомендуем')}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p id="scope-site-desc" className="text-xs text-muted-foreground mt-1">
               {t(
                 'onboardingScope.siteDesc',
                 'Несколько готовых страниц (Главная, Услуги, FAQ) с навигацией и футером.',
