@@ -107,18 +107,7 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
 </html>`;
   }, [block.html, block.css, block.javascript]);
 
-  // Create blob URL for iframe
-  const iframeSrc = useMemo(() => {
-    const blob = new Blob([iframeContent], { type: 'text/html' });
-    return URL.createObjectURL(blob);
-  }, [iframeContent]);
-
-  // Cleanup blob URL
-  useEffect(() => {
-    return () => {
-      URL.revokeObjectURL(iframeSrc);
-    };
-  }, [iframeSrc]);
+  // srcdoc is used directly on the iframe element
 
   // Auto-height calculation for 'auto' mode
   useEffect(() => {
@@ -150,7 +139,7 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
 
     iframe.addEventListener('load', handleLoad);
     return () => iframe.removeEventListener('load', handleLoad);
-  }, [block.height, iframeSrc]);
+  }, [block.height, iframeContent]);
 
   const showHeader = title && title.trim() !== '';
 
@@ -190,7 +179,8 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
         )}
         <iframe
           ref={iframeRef}
-          src={iframeSrc}
+          src="about:blank"
+          srcDoc={iframeContent}
           title={title || 'Custom Content'}
           className="w-full border-0 block"
           style={{

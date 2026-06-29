@@ -110,10 +110,7 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
 </html>`;
   }, [data.html, data.css, data.javascript]);
 
-  const previewSrc = useMemo(() => {
-    const blob = new Blob([previewContent], { type: 'text/html' });
-    return URL.createObjectURL(blob);
-  }, [previewContent]);
+  // srcDoc used directly on the iframe element
 
   return (
     <div className="space-y-4">
@@ -344,7 +341,8 @@ function startGame() {
         {showPreview && formData.html && (
           <div className="border rounded-lg overflow-hidden bg-background">
             <iframe
-              src={previewSrc}
+              src="about:blank"
+              srcDoc={previewContent}
               title="Preview"
               className="w-full border-0"
               style={{ height: '300px', minHeight: '100px' }}
