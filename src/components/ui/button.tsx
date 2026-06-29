@@ -24,7 +24,7 @@ const buttonVariants = cva(
         glass:
           "bg-card/70 backdrop-blur-2xl border border-border/40 text-foreground shadow-glass hover:bg-card/85 hover:shadow-glass-lg hover:border-border/60 hover:-translate-y-0.5 active:translate-y-0",
         premium:
-          "bg-gradient-to-r from-primary via-blue-500 to-violet-600 text-primary-foreground shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1 active:translate-y-0 animate-gradient-x bg-[length:200%_auto]",
+          "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
         success:
           "bg-success text-success-foreground shadow-lg shadow-success/25 hover:bg-success/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
         warning:
