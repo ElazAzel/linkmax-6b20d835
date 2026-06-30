@@ -6,6 +6,10 @@ import { CRMScreen } from './screens/CRMScreen';
 import { OnboardingScreen } from './screens/OnboardingScreen';
 import { BookingsScreen } from './screens/BookingsScreen';
 import { PageEditorScreen } from './screens/PageEditorScreen';
+import { LeadDetailScreen } from './screens/LeadDetailScreen';
+import { DealDetailScreen } from './screens/DealDetailScreen';
+import { PaymentsScreen } from './screens/PaymentsScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
 import type { TelegramScreen } from './types';
 
 // ---- Icons (inline SVG for zero-dep bottom nav) ----
@@ -263,15 +267,15 @@ export function TelegramRouter() {
         case 'bookings':
             return <BookingsScreen />;
         case 'payments':
-            return <StubScreen title={t('tma.nav_payments')} icon="💳" />;
+            return <PaymentsScreen />;
         case 'settings':
-            return <StubScreen title={t('tma.nav_more')} icon="⚙️" />;
+            return <SettingsScreen />;
         case 'onboarding':
             return <OnboardingScreen />;
         case 'lead_detail':
-            return <StubScreen title={`${t('tma.nav_crm')} ${route.entityId || ''}`} icon="👤" />;
+            return <LeadDetailScreen conversationId={route.entityId} />;
         case 'deal_detail':
-            return <StubScreen title={`${t('tma.nav_tasks')} ${route.entityId || ''}`} icon="💰" />;
+            return <DealDetailScreen dealId={route.entityId} />;
         default:
             return <HomeScreen />;
     }

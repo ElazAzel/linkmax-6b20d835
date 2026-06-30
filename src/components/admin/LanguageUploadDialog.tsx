@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +25,7 @@ interface LanguageUploadDialogProps {
 }
 
 export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: LanguageUploadDialogProps) {
+    const { t } = useTranslation();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [languageCode, setLanguageCode] = useState('');
     const [dragActive, setDragActive] = useState(false);
@@ -59,7 +61,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                     setLanguageCode(match[1].toLowerCase());
                 }
             } else {
-                toast.error('Пожалуйста, выберите JSON файл');
+                toast.error(t('pleaseSelectJsonFile'));
             }
         }
     }, []);
@@ -79,7 +81,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
 
     const handleValidate = useCallback(async () => {
         if (!selectedFile || !languageCode) {
-            toast.error('Выберите файл и укажите код языка');
+            toast.error(t('selectFileAndLanguageCode'));
             return;
         }
 
@@ -102,7 +104,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
 
     const handleApply = useCallback(async () => {
         if (!uploadedData || !languageCode) {
-            toast.error('Сначала выполните валидацию');
+            toast.error(t('validateFirst'));
             return;
         }
 
@@ -138,17 +140,17 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Upload className="h-5 w-5" />
-                        Загрузка языкового файла
+                        {t('uploadLanguageFile')}
                     </DialogTitle>
                     <DialogDescription>
-                        Загрузите JSON файл с переводами для добавления или обновления языка.
+                        {t('uploadJsonDescription')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4">
                     {/* Language Code Input */}
                     <div className="space-y-2">
-                        <Label>Код языка (2 буквы)</Label>
+                        <Label>{t('languageCode2Letters')}</Label>
                         <Input
                             value={languageCode}
                             onChange={(e) => setLanguageCode(e.target.value.toLowerCase().slice(0, 2))}
@@ -188,10 +190,10 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                 <FileJson className="h-12 w-12 text-muted-foreground" />
                                 <div className="text-center">
                                     <p className="text-sm font-medium">
-                                        Перетащите JSON файл или <span className="text-primary">выберите файл</span>
+                                        {t('dragJsonFile')} <span className="text-primary">{t('selectFile')}</span>
                                     </p>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        Максимальный размер: 5MB
+                                        {t('maxFileSize')}
                                     </p>
                                 </div>
                             </label>
@@ -210,7 +212,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                     onClick={() => setSelectedFile(null)}
                                     disabled={uploading}
                                 >
-                                    Удалить
+                                    {t('remove')}
                                 </Button>
                             </div>
                         )}
@@ -221,7 +223,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
                                 <Loader2 className="h-4 w-4 animate-spin" />
-                                <span className="text-sm">Валидация...</span>
+                                <span className="text-sm">{t('validation')}...</span>
                             </div>
                             <Progress value={undefined} className="w-full" />
                         </div>
@@ -234,7 +236,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                 <div className="flex items-center gap-2">
                                     {getValidationStatusIcon(validationResult)}
                                     <h3 className="font-semibold">
-                                        {validationResult.valid ? 'Валидация пройдена' : 'Валидация не пройдена'}
+                                        {validationResult.valid ? t('validationPassed') : t('validationFailed')}
                                     </h3>
                                 </div>
 
@@ -242,25 +244,25 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                                     <div className="text-center p-2 bg-muted rounded">
                                         <div className="text-2xl font-bold">{validationResult.stats.totalKeys}</div>
-                                        <div className="text-xs text-muted-foreground">Всего ключей</div>
+                                        <div className="text-xs text-muted-foreground">{t('totalKeys')}</div>
                                     </div>
                                     <div className="text-center p-2 bg-muted rounded">
                                         <div className={`text-2xl font-bold ${validationResult.stats.missingKeys > 0 ? 'text-yellow-500' : ''}`}>
                                             {validationResult.stats.missingKeys}
                                         </div>
-                                        <div className="text-xs text-muted-foreground">Отсутствует</div>
+                                        <div className="text-xs text-muted-foreground">{t('missing')}</div>
                                     </div>
                                     <div className="text-center p-2 bg-muted rounded">
                                         <div className={`text-2xl font-bold ${validationResult.stats.extraKeys > 0 ? 'text-blue-500' : ''}`}>
                                             {validationResult.stats.extraKeys}
                                         </div>
-                                        <div className="text-xs text-muted-foreground">Лишних</div>
+                                        <div className="text-xs text-muted-foreground">{t('extra')}</div>
                                     </div>
                                     <div className="text-center p-2 bg-muted rounded">
                                         <div className={`text-2xl font-bold ${validationResult.stats.emptyValues > 0 ? 'text-red-500' : ''}`}>
                                             {validationResult.stats.emptyValues}
                                         </div>
-                                        <div className="text-xs text-muted-foreground">Пустых</div>
+                                        <div className="text-xs text-muted-foreground">{t('empty')}</div>
                                     </div>
                                 </div>
 
@@ -270,7 +272,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                         {validationResult.errors.length > 0 && (
                                             <Alert variant="destructive">
                                                 <AlertDescription>
-                                                    <div className="font-semibold mb-1">Ошибки ({validationResult.errors.length}):</div>
+                                                    <div className="font-semibold mb-1">{t('errors')} ({validationResult.errors.length}):</div>
                                                     <ul className="text-sm space-y-1">
                                                         {validationResult.errors.slice(0, 10).map((err, i) => (
                                                             <li key={i}>
@@ -279,7 +281,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                                         ))}
                                                         {validationResult.errors.length > 10 && (
                                                             <li className="text-muted-foreground">
-                                                                ... и ещё {validationResult.errors.length - 10} ошибок
+                                                                {t('andMoreErrors', { count: validationResult.errors.length - 10 })}
                                                             </li>
                                                         )}
                                                     </ul>
@@ -290,7 +292,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                         {validationResult.warnings.length > 0 && validationResult.errors.length === 0 && (
                                             <Alert>
                                                 <AlertDescription>
-                                                    <div className="font-semibold mb-1">Предупреждения ({validationResult.warnings.length}):</div>
+                                                    <div className="font-semibold mb-1">{t('warnings')} ({validationResult.warnings.length}):</div>
                                                     <ul className="text-sm space-y-1">
                                                         {validationResult.warnings.slice(0, 10).map((warn, i) => (
                                                             <li key={i}>
@@ -299,7 +301,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                                         ))}
                                                         {validationResult.warnings.length > 10 && (
                                                             <li className="text-muted-foreground">
-                                                                ... и ещё {validationResult.warnings.length - 10} предупреждений
+                                                                {t('andMoreWarnings', { count: validationResult.warnings.length - 10 })}
                                                             </li>
                                                         )}
                                                     </ul>
@@ -315,7 +317,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
 
                 <DialogFooter>
                     <Button variant="outline" onClick={handleClose} disabled={uploading}>
-                        Отмена
+                        {t('cancel')}
                     </Button>
 
                     {!validationResult && (
@@ -323,10 +325,10 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                             {uploading ? (
                                 <>
                                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                    Проверка...
+                                    {t('checking')}...
                                 </>
                             ) : (
-                                'Проверить'
+                                t('check')
                             )}
                         </Button>
                     )}
@@ -335,13 +337,13 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                         <Button onClick={handleApply} disabled={uploading}>
                             {uploading ? (
                                 <>
-                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                    Применение...
-                                </>
-                            ) : (
-                                <>
-                                    <CheckCircle className="h-4 w-4 mr-2" />
-                                    Применить
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        {t('applying')}...
+                                    </>
+                                ) : (
+                                    <>
+                                        <CheckCircle className="h-4 w-4 mr-2" />
+                                        {t('apply')}
                                 </>
                             )}
                         </Button>
