@@ -110,6 +110,45 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     };
   }, [landing, pageUrl]);
 
+  const breadcrumbSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'LinkMAX', item: getAppDomain() },
+        { '@type': 'ListItem', position: 2, name: 'Решения', item: `${getAppDomain()}/gallery` },
+        { '@type': 'ListItem', position: 3, name: landing.schemaServiceName, item: pageUrl },
+      ],
+    };
+  }, [landing, pageUrl]);
+
+  const localBusinessSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      '@id': `${pageUrl}#business`,
+      name: `LinkMAX — ${landing.schemaServiceName}`,
+      description: landing.seoDescription,
+      url: pageUrl,
+      image: `${getAppDomain()}/og-image.png`,
+      areaServed: [
+        { '@type': 'Country', name: 'Kazakhstan' },
+        { '@type': 'Country', name: 'Russia' },
+        { '@type': 'Country', name: 'Uzbekistan' },
+      ],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Almaty',
+        addressCountry: 'KZ',
+      },
+      geo: { '@type': 'GeoCoordinates', latitude: 43.222, longitude: 76.8512 },
+      priceRange: 'Free — Pro',
+    };
+  }, [landing, pageUrl]);
+
+
   const handleCtaClick = (location: string) => {
     trackMarketingEvent({
       eventType: 'niche_landing_cta_click',
