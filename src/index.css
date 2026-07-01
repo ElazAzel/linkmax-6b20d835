@@ -344,11 +344,13 @@
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-overflow-scrolling: touch;
+    overflow-x: clip;
   }
 
   html {
     scroll-behavior: smooth;
     overflow-x: clip;
+    max-width: 100vw;
   }
 
   /* Accessibility reset: enforce minimum readable font size on mobile */
