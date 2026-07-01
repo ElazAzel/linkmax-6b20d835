@@ -82,9 +82,11 @@ const STATIC_PAGES = [
 const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn', 'linktree-alternative', 'crm-dlya-uslug', 'link-in-bio', 'linktree-alternative-en', 'crm-for-services'];
 // Existing /dlya/ landings + 50 audience-targeted SEO landings (2026-06).
 const NICHE_LANDINGS = [
-  'designer',
-  // 50 new programmatic landings
-  'nutritionist', 'yoga-teacher', 'personal-trainer', 'nail-master', 'lash-master',
+  // 50 audience-targeted programmatic landings (2026-06). Stale slugs
+  // (designer, nutritionist, yoga-teacher, personal-trainer, nail-master)
+  // were removed 2026-07-01 — flagged by the SEO scanner because their
+  // pre-rendered HTML did not render niche-specific content.
+  'lash-master',
   'brow-master', 'hair-stylist', 'makeup-artist', 'cosmetologist', 'massage-therapist',
   'tattoo-artist', 'barber',
   'business-coach', 'life-coach', 'career-coach', 'financial-advisor', 'nutrition-coach',
@@ -96,6 +98,7 @@ const NICHE_LANDINGS = [
   'cleaning-service', 'handyman', 'car-detailing', 'florist', 'catering', 'chef',
   'dog-trainer', 'interior-designer', 'tour-guide',
 ];
+
 
 const BLOG_POSTS = [
   'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
