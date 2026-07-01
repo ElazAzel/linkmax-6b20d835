@@ -16,7 +16,6 @@ import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import Users from 'lucide-react/dist/esm/icons/users';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Activity from 'lucide-react/dist/esm/icons/activity';
-import PieChart from 'lucide-react/dist/esm/icons/pie-chart';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';

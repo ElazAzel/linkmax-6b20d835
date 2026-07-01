@@ -223,34 +223,9 @@ function HomeScreen() {
     );
 }
 
-// ---- Stub Screens (P1: will be replaced with full implementations) ----
-
-function StubScreen({ title, icon }: { title: string; icon: string }) {
-    const { t } = useTranslation();
-    const { goBack } = useTelegram();
-
-    return (
-        <div className="tg-screen tg-fade-in" style={{ textAlign: 'center', paddingTop: 80 }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>{icon}</div>
-            <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{title}</h2>
-            <p className="tg-text-hint" style={{ fontSize: 15 }}>
-                {t('tma.stub_upcoming')}
-            </p>
-            <button
-                className="tg-button tg-button--secondary"
-                style={{ maxWidth: 200, margin: '24px auto 0' }}
-                onClick={goBack}
-            >
-                {t('tma.btn_back')}
-            </button>
-        </div>
-    );
-}
-
 // ---- Router ----
 
 export function TelegramRouter() {
-    const { t } = useTranslation();
     const { route, isLoading, error } = useTelegram();
     const { isLoading: zoneLoading } = useTelegramZone();
 

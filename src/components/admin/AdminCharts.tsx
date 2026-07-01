@@ -7,36 +7,7 @@ import {
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { useAdminStats } from '@/hooks/admin/useAdminData';
 
-interface DailyData {
-  date: string;
-  users: number;
-  pages: number;
-  views: number;
-  clicks: number;
-  shares: number;
-  blocks: number;
-  friendships: number;
-  collabs: number;
-}
 
-interface UserStatusData {
-  name: string;
-  value: number;
-  color: string;
-  [key: string]: string | number;
-}
-
-interface EventTypeData {
-  name: string;
-  count: number;
-  color: string;
-}
-
-interface SocialStatsData {
-  name: string;
-  total: number;
-  accepted: number;
-}
 
 const COLORS = {
   primary: 'hsl(var(--primary))',

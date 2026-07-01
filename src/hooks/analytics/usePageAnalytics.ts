@@ -244,12 +244,7 @@ export function usePageAnalytics(externalPageId?: string | null, initialPeriod: 
         return all;
       };
 
-      let currentEvents: AnalyticsEvent[] = [];
-      try {
-        currentEvents = await fetchAllAnalytics(startDate.toISOString());
-      } catch (err) {
-        throw err;
-      }
+      const currentEvents: AnalyticsEvent[] = await fetchAllAnalytics(startDate.toISOString());
 
       // Fetch previous period for comparison
       let previousEvents: AnalyticsEvent[] = [];

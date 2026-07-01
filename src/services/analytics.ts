@@ -8,7 +8,7 @@ import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
 import { session, storage } from '@/lib/storage';
-import { trackViewContent, trackClickLink } from '@/lib/analytics';
+// trackViewContent, trackClickLink available from @/lib/analytics
 
 // ============================================
 // Types
@@ -285,29 +285,6 @@ export function initSessionDurationTracking(pageId: string) {
     document.removeEventListener('visibilitychange', handleVisibilityChange);
     window.removeEventListener('pagehide', sendDuration);
   };
-}
-
-/**
- * Get visitor fingerprint for unique visitor tracking
- * Uses a combination of available browser data
- */
-function getVisitorFingerprint(): string {
-  const data = [
-    navigator.userAgent,
-    navigator.language,
-    screen.width,
-    screen.height,
-    new Date().getTimezoneOffset(),
-  ].join('|');
-
-  // Simple hash function
-  let hash = 0;
-  for (let i = 0; i < data.length; i++) {
-    const char = data.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash).toString(36);
 }
 
 /**
