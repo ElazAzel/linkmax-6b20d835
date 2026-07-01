@@ -38,7 +38,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   });
 
   const topPages = (pages || []).slice(0, 6);
-  const heroImage = topPages[0]?.preview_url || '/og-image.png';
+  const heroImage = topPages[0]?.preview_url || null;
+
 
   useEffect(() => {
     if (!landing) return;
@@ -108,6 +109,45 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
       },
     };
   }, [landing, pageUrl]);
+
+  const breadcrumbSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'LinkMAX', item: getAppDomain() },
+        { '@type': 'ListItem', position: 2, name: 'Решения', item: `${getAppDomain()}/gallery` },
+        { '@type': 'ListItem', position: 3, name: landing.schemaServiceName, item: pageUrl },
+      ],
+    };
+  }, [landing, pageUrl]);
+
+  const localBusinessSchema = useMemo(() => {
+    if (!landing) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      '@id': `${pageUrl}#business`,
+      name: `LinkMAX — ${landing.schemaServiceName}`,
+      description: landing.seoDescription,
+      url: pageUrl,
+      image: `${getAppDomain()}/og-image.png`,
+      areaServed: [
+        { '@type': 'Country', name: 'Kazakhstan' },
+        { '@type': 'Country', name: 'Russia' },
+        { '@type': 'Country', name: 'Uzbekistan' },
+      ],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Almaty',
+        addressCountry: 'KZ',
+      },
+      geo: { '@type': 'GeoCoordinates', latitude: 43.222, longitude: 76.8512 },
+      priceRange: 'Free — Pro',
+    };
+  }, [landing, pageUrl]);
+
 
   const handleCtaClick = (location: string) => {
     trackMarketingEvent({
@@ -246,6 +286,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
       {serviceSchema && <StructuredData id={`service-${landing.key}`} data={serviceSchema} />}
       {howToSchema && <StructuredData id={`howto-${landing.key}`} data={howToSchema} />}
       {speakableSchema && <StructuredData id={`speakable-${landing.key}`} data={speakableSchema} />}
+      {breadcrumbSchema && <StructuredData id={`breadcrumb-${landing.key}`} data={breadcrumbSchema} />}
+      {localBusinessSchema && <StructuredData id={`localbusiness-${landing.key}`} data={localBusinessSchema} />}
 
       <div className="min-h-screen bg-background text-foreground">
         <header className="absolute inset-x-0 top-0 z-20">
@@ -261,14 +303,19 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
         </header>
 
         <main>
-          <section className="relative min-h-[88svh] overflow-hidden">
-            <img
-              src={heroImage}
-              alt={landing.visualAlt}
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/50 to-background" />
+          <section className="relative min-h-[88svh] overflow-hidden bg-gradient-to-br from-primary via-primary/85 to-accent">
+            {heroImage ? (
+              <img
+                src={heroImage}
+                alt={landing.visualAlt}
+                className="absolute inset-0 h-full w-full object-cover opacity-60"
+                loading="eager"
+              />
+            ) : (
+              <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--primary-foreground)/0.15),transparent_55%),radial-gradient(circle_at_80%_70%,hsl(var(--accent)/0.35),transparent_60%)]" />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-background" />
+
             <div className="relative z-10 mx-auto flex min-h-[88svh] max-w-6xl flex-col justify-end px-4 pb-12 pt-24">
               <div className="max-w-3xl">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-xl">
