@@ -286,6 +286,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
       {serviceSchema && <StructuredData id={`service-${landing.key}`} data={serviceSchema} />}
       {howToSchema && <StructuredData id={`howto-${landing.key}`} data={howToSchema} />}
       {speakableSchema && <StructuredData id={`speakable-${landing.key}`} data={speakableSchema} />}
+      {breadcrumbSchema && <StructuredData id={`breadcrumb-${landing.key}`} data={breadcrumbSchema} />}
+      {localBusinessSchema && <StructuredData id={`localbusiness-${landing.key}`} data={localBusinessSchema} />}
 
       <div className="min-h-screen bg-background text-foreground">
         <header className="absolute inset-x-0 top-0 z-20">
