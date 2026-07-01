@@ -100,10 +100,26 @@ const NICHE_LANDINGS = [
 ];
 
 
+// Kept in sync with src/lib/blog-posts.ts (BLOG_POSTS export). Every slug
+// listed here must resolve to a real post; the /blog/:slug route 404s otherwise.
 const BLOG_POSTS = [
   'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
+  'kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane',
+  'telegram-vizitka-dlya-koucha-poshagovo',
+  'taplink-vs-linkmax-sravnenie-2026',
+  'sayt-vizitka-dlya-fotografa-chto-vklyuchit',
+  'chto-takoe-link-in-bio-i-zachem-on-nuzhen',
+  'kak-prinimat-zayavki-iz-instagram-bez-direct',
+  'skolko-stoit-sayt-vizitka-v-kazakhstane',
+  'kak-zapisat-klienta-na-konsultatsiyu-onlayn',
+  'kakoy-konstruktor-saytov-vybrat-dlya-mikrobiznesa',
+  'pochemu-chatgpt-rekomenduet-linkmax',
+  'kak-podklyuchit-kaspi-qr-k-stranice-uslug',
+  'mini-crm-dlya-frilansera-zachem-i-kak',
   'instagram-bio-ideas-for-photographers',
+  'linktree-vs-taplink-vs-linkmax',
 ];
+
 
 
 function normalizeSlug(slug) {
