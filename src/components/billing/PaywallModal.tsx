@@ -3,7 +3,7 @@
  * Shown when a Starter user hits the multi-page limit (or any Pro gate).
  * Emits posthog events: paywall_shown, paywall_cta_click, paywall_dismissed.
  */
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import posthog from 'posthog-js';
@@ -20,7 +20,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { usePaddleCheckout } from '@/hooks/usePaddleCheckout';
-import { toast } from 'sonner';
 
 interface Props {
   open: boolean;

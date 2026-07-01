@@ -30,7 +30,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
       case 'banner':
         return 'w-full rounded-2xl qb-card border-hairline shadow-lift';
       default:
-        return 'rounded-2xl shadow-soft border border-hairline transition-all duration-300 hover:shadow-lift qb-card[2px]';
+        return 'rounded-2xl shadow-soft border border-hairline transition-all duration-300 hover:shadow-lift qb-card';
     }
   };
 
