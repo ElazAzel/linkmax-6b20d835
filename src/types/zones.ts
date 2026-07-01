@@ -131,7 +131,7 @@ export interface ZoneContact {
   address: string | null;
   source: string | null;
   notes: string | null;
-  custom_fields?: Record<string, any>;
+  custom_fields?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -209,7 +209,7 @@ export interface ZoneDeal {
   status: DealStatus;
   lost_reason: string | null;
   source: string | null;
-  custom_fields: Record<string, any>;
+  custom_fields: Record<string, unknown>;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
