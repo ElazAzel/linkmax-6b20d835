@@ -262,14 +262,19 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
         </header>
 
         <main>
-          <section className="relative min-h-[88svh] overflow-hidden">
-            <img
-              src={heroImage}
-              alt={landing.visualAlt}
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/50 to-background" />
+          <section className="relative min-h-[88svh] overflow-hidden bg-gradient-to-br from-primary via-primary/85 to-accent">
+            {heroImage ? (
+              <img
+                src={heroImage}
+                alt={landing.visualAlt}
+                className="absolute inset-0 h-full w-full object-cover opacity-60"
+                loading="eager"
+              />
+            ) : (
+              <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--primary-foreground)/0.15),transparent_55%),radial-gradient(circle_at_80%_70%,hsl(var(--accent)/0.35),transparent_60%)]" />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-background" />
+
             <div className="relative z-10 mx-auto flex min-h-[88svh] max-w-6xl flex-col justify-end px-4 pb-12 pt-24">
               <div className="max-w-3xl">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-xl">
