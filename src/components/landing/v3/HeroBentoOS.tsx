@@ -80,7 +80,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
                 )}
               </p>
             </div>
-            <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-slate-50 rounded-tl-3xl border-t border-l border-slate-200 translate-y-4 translate-x-4 group-hover:translate-y-2 group-hover:translate-x-2 transition-transform">
+            <div className="hidden md:block absolute bottom-0 right-0 w-2/3 h-2/3 bg-slate-50 rounded-tl-3xl border-t border-l border-slate-200 translate-y-4 translate-x-4 group-hover:translate-y-2 group-hover:translate-x-2 transition-transform">
               <div className="p-4 flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <div>
@@ -108,6 +108,20 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
                   {t('landing.v5.bento.builder.cta', 'Записаться на свободное время')}
                 </div>
               </div>
+            </div>
+
+            {/* Mobile compact service chips (no clipping) */}
+            <div className="md:hidden mt-6 grid grid-cols-2 gap-2 relative z-10">
+              {[
+                t('landing.v5.bento.builder.service1', 'Консультация'),
+                t('landing.v5.bento.builder.service2', 'Диагностика'),
+                t('landing.v5.bento.builder.service3', 'Абонемент'),
+                t('landing.v5.bento.builder.service4', 'Разовый визит'),
+              ].map((service) => (
+                <div key={service} className="rounded-xl bg-slate-50 border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-800 text-center">
+                  {service}
+                </div>
+              ))}
             </div>
           </div>
 

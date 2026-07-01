@@ -29,7 +29,22 @@ export const ComparisonTable = () => {
                 className="mb-12"
             />
 
-            <div className="max-w-5xl mx-auto glass border-primary/20 rounded-[2rem] p-2 sm:p-4 overflow-x-auto shadow-glass-lg">
+            {/* Mobile: stacked cards */}
+            <div className="sm:hidden max-w-md mx-auto space-y-3 px-2">
+                {rows.map((row, i) => (
+                    <div key={i} className="glass border-primary/20 rounded-2xl p-4 shadow-glass-lg">
+                        <div className="text-sm font-semibold text-foreground/90 mb-3">{row.label}</div>
+                        <div className="grid grid-cols-3 gap-2 text-center">
+                            <MobileCell label="LinkMAX" value={row.linkmax} highlight />
+                            <MobileCell label="Linktree" value={row.linktree} />
+                            <MobileCell label="amoCRM" value={row.bitrix} />
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* ≥sm: full table (with fallback horizontal scroll) */}
+            <div className="hidden sm:block max-w-5xl mx-auto glass border-primary/20 rounded-[2rem] p-2 sm:p-4 overflow-x-auto shadow-glass-lg">
                 <table className="w-full text-sm min-w-[640px]">
                     <thead>
                         <tr className="text-left">
