@@ -91,3 +91,30 @@ function ComparisonCell({ value, highlight }: { value: Cell; highlight?: boolean
         </td>
     );
 }
+
+function MobileCell({ label, value, highlight }: { label: string; value: Cell; highlight?: boolean }) {
+    const renderValue = () => {
+        if (typeof value === 'boolean') {
+            return value ? (
+                <Check className={cn('inline w-4 h-4', highlight ? 'text-primary' : 'text-emerald-500/70')} />
+            ) : (
+                <X className="inline w-4 h-4 text-muted-foreground/40" />
+            );
+        }
+        return (
+            <span className={cn('text-xs font-bold break-words', highlight ? 'text-primary' : 'text-muted-foreground')}>
+                {value}
+            </span>
+        );
+    };
+    return (
+        <div className="flex flex-col items-center gap-1 min-w-0">
+            <span className={cn('text-[10px] font-bold uppercase tracking-wide truncate max-w-full', highlight ? 'text-primary/80' : 'text-muted-foreground/60')}>
+                {label}
+            </span>
+            <div className="flex items-center justify-center min-h-[24px]">
+                {renderValue()}
+            </div>
+        </div>
+    );
+}
