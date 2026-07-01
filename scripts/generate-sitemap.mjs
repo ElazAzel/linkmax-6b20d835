@@ -177,15 +177,16 @@ async function fetchIndexablePages() {
   }
 }
 
-// Pick the most recent of (updated_at, published_at), fall back to today.
+// Prefer updated_at, fall back to today.
 function pickLastmod(row, today) {
-  const candidates = [row.updated_at, row.published_at]
+  const candidates = [row.updated_at]
     .filter(Boolean)
     .map((d) => new Date(d).getTime())
     .filter((t) => Number.isFinite(t));
   if (!candidates.length) return today;
   return new Date(Math.max(...candidates)).toISOString().slice(0, 10);
 }
+
 
 async function main() {
   const today = new Date().toISOString().slice(0, 10);
