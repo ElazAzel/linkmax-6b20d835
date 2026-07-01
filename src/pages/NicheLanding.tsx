@@ -38,7 +38,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   });
 
   const topPages = (pages || []).slice(0, 6);
-  const heroImage = topPages[0]?.preview_url || '/og-image.png';
+  const heroImage = topPages[0]?.preview_url || null;
+
 
   useEffect(() => {
     if (!landing) return;
