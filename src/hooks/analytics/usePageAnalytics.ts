@@ -219,30 +219,37 @@ export function usePageAnalytics(externalPageId?: string | null, initialPeriod: 
         }
       }
 
-      // Fetch all analytics for current period
-      const { data: currentEvents, error } = await supabase
-        .from('analytics')
-        .select('*')
-        .eq('page_id', pageId)
-        .gte('created_at', startDate.toISOString())
-        .order('created_at', { ascending: true });
+      // Fetch all analytics for current period (paginate to bypass PostgREST 1000-row default cap)
+      const PAGE_SIZE = 1000;
+      const fetchAllAnalytics = async (fromISO: string, toISO?: string) => {
+        const all: AnalyticsEvent[] = [];
+        let offset = 0;
+        // Hard cap 100k rows to protect the browser
+        while (offset < 100_000) {
+          let q = supabase
+            .from('analytics')
+            .select('*')
+            .eq('page_id', pageId)
+            .gte('created_at', fromISO)
+            .order('created_at', { ascending: true })
+            .range(offset, offset + PAGE_SIZE - 1);
+          if (toISO) q = q.lt('created_at', toISO);
+          const { data, error: pageErr } = await q;
+          if (pageErr) throw pageErr;
+          const batch = (data as AnalyticsEvent[]) || [];
+          all.push(...batch);
+          if (batch.length < PAGE_SIZE) break;
+          offset += PAGE_SIZE;
+        }
+        return all;
+      };
 
-      // If user is a staff member, we also want to filter by their staff_id in metadata if possible
-      // But for events, we usually don't have staff_id yet unless we tracked it.
-      // However, we MUST filter bookings and conversions.
-
-      if (error) throw error;
+      const currentEvents: AnalyticsEvent[] = await fetchAllAnalytics(startDate.toISOString());
 
       // Fetch previous period for comparison
       let previousEvents: AnalyticsEvent[] = [];
       if (previousStartDate) {
-        const { data } = await supabase
-          .from('analytics')
-          .select('*')
-          .eq('page_id', pageId)
-          .gte('created_at', previousStartDate.toISOString())
-          .lt('created_at', startDate.toISOString());
-        previousEvents = (data as AnalyticsEvent[]) || [];
+        previousEvents = await fetchAllAnalytics(previousStartDate.toISOString(), startDate.toISOString());
       }
 
       // Fetch blocks for the page to get block info

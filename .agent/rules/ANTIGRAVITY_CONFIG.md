@@ -47,4 +47,17 @@ See `.agent/rules/` for detailed coding standards, including `general.md`, `curs
 See `.agent/rules/skills/` for specific workflow skills:
 - **React**: Component creation and modern React patterns (`.agent/rules/skills/react/SKILL.md`).
 - **Supabase**: Edge Function and Database workflows (`.agent/rules/skills/supabase/SKILL.md`).
+- **Core skills** (всегда активны):
+  - `business-zone`: CRM, лиды, конкуренты, домены
+  - `communications`: Telegram/Gmail уведомления, 3P-апдейты
+  - `content-creation`: AI-генерация контента страниц
+  - `devops`: CI/CD, миграции, деплой
+  - `payments`: Robokassa/Stripe, инвойсы, подписки
+- **Supporting skills** (по необходимости):
+  - `analytics`: PostHog-события, feature flags, A/B тесты
+  - `calendar`: Google Calendar, бронирования
+  - `design-brand`: Фирменный стиль, Living Canvas
+  - `testing`: Vitest (unit), Playwright (E2E)
+  - `changelog`: Генерация релиз-нот
+  - `file-management`: Организация файлов, поиск дубликатов
 </skills>

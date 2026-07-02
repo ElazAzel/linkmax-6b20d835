@@ -112,7 +112,7 @@ export function AdminAnalyticsDashboard() {
           <p className="text-muted-foreground">{t('admin.analyticsSubtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Select value={period} onValueChange={(v: any) => setPeriod(v)}>
+          <Select value={period} onValueChange={(v: string) => setPeriod(v as '7d' | '30d' | '90d' | 'all')}>
             <SelectTrigger className="w-[180px]">
               <Calendar className="mr-2 h-4 w-4" />
               <SelectValue placeholder={t('admin.selectPeriod')} />

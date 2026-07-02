@@ -59,12 +59,12 @@ export const BottomCTA = () => {
           <MagneticButton
             onClick={() => navigate('/auth')}
             size="lg"
-            className="h-14 sm:h-16 px-10 sm:px-14 rounded-2xl text-base sm:text-lg font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none"
+            className="h-14 sm:h-16 px-6 sm:px-14 rounded-2xl text-sm sm:text-lg font-black bg-primary text-white shadow-glass-hover hover:scale-[1.03] active:scale-95 transition-all group overflow-hidden relative border-none w-full max-w-md sm:max-w-none sm:w-auto whitespace-normal"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-            <span className="relative z-10 flex items-center gap-3 uppercase tracking-[0.1em]">
+            <span className="relative z-10 inline-flex items-center justify-center gap-2 sm:gap-3 sm:uppercase sm:tracking-[0.1em] text-center leading-tight">
               {t('landing.bottomCta.cta', 'Создать страницу бесплатно')}
-              <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-500" />
+              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 group-hover:translate-x-2 transition-transform duration-500" />
             </span>
           </MagneticButton>
 

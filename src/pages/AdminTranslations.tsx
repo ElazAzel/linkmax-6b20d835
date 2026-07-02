@@ -325,10 +325,10 @@ export const AdminTranslations = memo(function AdminTranslations() {
 
   const handleRemoveLanguage = useCallback((langCode: string) => {
     if (CORE_LANGUAGES.includes(langCode)) {
-      toast.error('Основные языки нельзя удалить');
+      toast.error(t('coreLanguagesCannotRemove'));
       return;
     }
-    toast.info('Функционал удаления языка из БД в разработке. Язык останется в списке.');
+    toast.info(t('removeLanguageFromDBWIP'));
   }, []);
 
   const handleRemoveLanguageClick = useCallback((e: React.MouseEvent, langCode: string) => {
@@ -349,11 +349,11 @@ export const AdminTranslations = memo(function AdminTranslations() {
   const handleAddKey = useCallback(async () => {
     const trimmedKey = newKeyName.trim();
     if (!trimmedKey) {
-      toast.error('Введите ключ');
+      toast.error(t('enterKey'));
       return;
     }
     if (allKeys.all.includes(trimmedKey)) {
-      toast.error('Такой ключ уже существует');
+      toast.error(t('keyAlreadyExists'));
       return;
     }
 
@@ -439,7 +439,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
     a.download = `${lang}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`Файл ${lang}.json скачан`);
+    toast.success(t('fileDownloaded', { lang }));
   }, [translations]);
 
   const downloadAllJSON = useCallback(() => {
@@ -456,9 +456,9 @@ export const AdminTranslations = memo(function AdminTranslations() {
     try {
       const json = JSON.stringify(translations[lang] || {}, null, 2);
       await navigator.clipboard.writeText(json);
-      toast.success(`JSON для ${lang.toUpperCase()} скопирован`);
+      toast.success(t('jsonCopied', { lang: lang.toUpperCase() }));
     } catch {
-      toast.error('Не удалось скопировать');
+      toast.error(t('copyFailed'));
     }
   }, [translations]);
 
@@ -481,7 +481,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
 
       await upsertFullTranslations([{ lang: selectedLang, data: mergedData }]);
     } catch (error) {
-      toast.error('Failed to import translations');
+      toast.error(t('failedToImportTranslations'));
       logger.error('Import error:', error);
     } finally {
       if (fileInputRef.current) {
@@ -493,13 +493,13 @@ export const AdminTranslations = memo(function AdminTranslations() {
   // --- Reset ---
 
   const resetToOriginal = useCallback(() => {
-    toast.info('Сброс к локальным файлам не рекомендуется при использовании БД-бэкэнда.');
+    toast.info(t('resetNotRecommended'));
   }, []);
 
   // --- Upload success ---
 
   const handleUploadSuccess = useCallback(() => {
-    toast.success('Язык успешно загружен и применён');
+    toast.success(t('languageUploadedAndApplied'));
   }, []);
 
   // Available languages to add
@@ -648,10 +648,10 @@ export const AdminTranslations = memo(function AdminTranslations() {
                         <div className="flex gap-2">
                           <Button size="sm" onClick={handleSaveEdit} disabled={isSavingThis}>
                             {isSavingThis ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Check className="h-3 w-3 mr-1" />}
-                            {isSavingThis ? 'Сохранение...' : 'Сохранить'}
+                            {isSavingThis ? t('saving') : t('save')}
                           </Button>
                           <Button size="sm" variant="outline" onClick={handleCancelEdit} disabled={isSavingThis}>
-                            Отмена
+                            {t('cancel')}
                           </Button>
                         </div>
                       </div>
@@ -663,7 +663,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                         role="button"
                         tabIndex={0}
                       >
-                        {value || <span className="text-muted-foreground italic">Нажмите чтобы добавить...</span>}
+                        {value || <span className="text-muted-foreground italic">{t('clickToAdd')}</span>}
                       </div>
                     )}
                   </div>
@@ -674,7 +674,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                         size="icon"
                         variant="ghost"
                         className="h-6 w-6"
-                        title="Скопировать с EN"
+                        title={t('copyFromEn')}
                         onClick={() => handleCopyFromEn(key, enVal)}
                       >
                         <Copy className="h-3 w-3" />
@@ -684,7 +684,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                       size="icon"
                       variant="ghost"
                       className="h-6 w-6 text-destructive"
-                      title="Удалить ключ"
+                      title={t('deleteKey')}
                       onClick={() => handleDeleteKeyConfirm(key)}
                     >
                       <Trash2 className="h-3 w-3" />
@@ -740,7 +740,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
               <Shield className="h-6 w-6 text-primary" />
               <h1 className="text-xl font-bold flex items-center gap-2">
                 <Languages className="h-5 w-5" />
-                Редактор переводов
+                {t('translationEditor')}
               </h1>
             </div>
             <div className="flex gap-2">
@@ -751,11 +751,11 @@ export const AdminTranslations = memo(function AdminTranslations() {
                 disabled={saving}
               >
                 {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Upload className="h-4 w-4 mr-1" />}
-                Синхронизировать с БД
+                {t('syncToDB')}
               </Button>
               <Button variant="outline" size="sm" onClick={resetToOriginal} disabled={saving}>
                 <RefreshCw className="h-4 w-4 mr-1" />
-                Сброс
+                {t('reset')}
               </Button>
             </div>
           </div>
@@ -767,9 +767,9 @@ export const AdminTranslations = memo(function AdminTranslations() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Активные языки ({activeLanguages.length})
+                {t('activeLanguages', { count: activeLanguages.length })}
               </CardTitle>
-              <CardDescription>Нажмите на язык для редактирования</CardDescription>
+              <CardDescription>{t('clickLanguageToEdit')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
@@ -780,14 +780,14 @@ export const AdminTranslations = memo(function AdminTranslations() {
                   <DialogTrigger asChild>
                     <Button variant="outline" className="h-auto py-2 px-3">
                       <Plus className="h-4 w-4 mr-1" />
-                      Добавить язык
+                      {t('addLanguage')}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh]">
                     <DialogHeader>
-                      <DialogTitle>Добавить язык</DialogTitle>
+                      <DialogTitle>{t('addLanguage')}</DialogTitle>
                       <DialogDescription>
-                        Выберите язык из списка для добавления в проект
+                        {t('selectLanguageFromList')}
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
@@ -796,7 +796,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                         <Input
                           value={languageSearch}
                           onChange={handleLanguageSearchChange}
-                          placeholder="Поиск языка..."
+                          placeholder={t('searchLanguage')}
                           className="pl-10"
                         />
                       </div>
@@ -828,7 +828,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                           })}
                           {availableToAdd.length === 0 && (
                             <div className="text-center py-8 text-muted-foreground">
-                              {languageSearch ? 'Языки не найдены' : 'Все языки добавлены'}
+                              {languageSearch ? t('languagesNotFound') : t('allLanguagesAdded')}
                             </div>
                           )}
                         </div>
@@ -845,19 +845,19 @@ export const AdminTranslations = memo(function AdminTranslations() {
             <Card>
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold">{allKeys.all.length}</div>
-                <p className="text-sm text-muted-foreground">Всего ключей</p>
+                <p className="text-sm text-muted-foreground">{t('totalKeys')}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold">{activeLanguages.length}</div>
-                <p className="text-sm text-muted-foreground">Языков</p>
+                <p className="text-sm text-muted-foreground">{t('languages')}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold">{Object.keys(groupedKeys).length}</div>
-                <p className="text-sm text-muted-foreground">Неймспейсов</p>
+                <p className="text-sm text-muted-foreground">{t('namespaces')}</p>
               </CardContent>
             </Card>
             <Card>
@@ -865,7 +865,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                 <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {activeLanguages.filter(l => (stats[l] || 0) === 0).length}
                 </div>
-                <p className="text-sm text-muted-foreground">Полных языков</p>
+                <p className="text-sm text-muted-foreground">{t('completeLanguages')}</p>
               </CardContent>
             </Card>
           </div>
@@ -877,7 +877,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Поиск по ключу или значению..."
+                    placeholder={t('searchByKeyOrValue')}
                     value={searchQuery}
                     onChange={handleSearchChange}
                     className="pl-10"
@@ -890,7 +890,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                     size="sm"
                     onClick={handleFilterAll}
                   >
-                    Все
+                    {t('all')}
                   </Button>
                   <Button
                     variant={filterMode === 'missing' ? 'default' : 'outline'}
@@ -898,7 +898,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                     onClick={handleFilterMissing}
                   >
                     <AlertTriangle className="h-4 w-4 mr-1" />
-                    Отсутствующие
+                    {t('missing')}
                   </Button>
                 </div>
               </div>
@@ -911,19 +911,19 @@ export const AdminTranslations = memo(function AdminTranslations() {
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
                   <Plus className="h-4 w-4 mr-1" />
-                  Добавить ключ
+                  {t('addKey')}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-lg">
                 <DialogHeader>
-                  <DialogTitle>Добавить новый ключ</DialogTitle>
+                  <DialogTitle>{t('addNewKey')}</DialogTitle>
                   <DialogDescription>
-                    Создайте новый ключ перевода и задайте значения для основных языков
+                    {t('createNewKeyDescription')}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label>Ключ (dot notation)</Label>
+                    <Label>{t('keyDotNotation')}</Label>
                     <Input
                       value={newKeyName}
                       onChange={handleNewKeyNameChange}
@@ -931,18 +931,18 @@ export const AdminTranslations = memo(function AdminTranslations() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Переводы</Label>
+                    <Label>{t('translations')}</Label>
                     {newKeyLanguageInputs}
                     {activeLanguages.length > 5 && (
                       <p className="text-xs text-muted-foreground">
-                        + ещё {activeLanguages.length - 5} языков (добавятся пустыми)
+                        {t('moreLanguagesWillBeEmpty', { count: activeLanguages.length - 5 })}
                       </p>
                     )}
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={handleCloseAddKey}>Отмена</Button>
-                  <Button onClick={handleAddKey}>Добавить</Button>
+                  <Button variant="outline" onClick={handleCloseAddKey}>{t('cancel')}</Button>
+                  <Button onClick={handleAddKey}>{t('add')}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -956,23 +956,23 @@ export const AdminTranslations = memo(function AdminTranslations() {
             />
             <Button variant="outline" size="sm" onClick={handleImportClick}>
               <Upload className="h-4 w-4 mr-1" />
-              Импорт JSON ({selectedLang})
+              {t('importJson', { lang: selectedLang })}
             </Button>
             <Button variant="outline" size="sm" onClick={handleOpenUploadDialog}>
               <Upload className="h-4 w-4 mr-1" />
-              Загрузить язык из файла
+              {t('uploadLanguageFromFile')}
             </Button>
             <Button variant="outline" size="sm" onClick={handleCopySelected}>
               <Copy className="h-4 w-4 mr-1" />
-              Копировать ({selectedLang})
+              {t('copy', { lang: selectedLang })}
             </Button>
             <Button variant="outline" size="sm" onClick={handleDownloadSelected}>
               <FileJson className="h-4 w-4 mr-1" />
-              Скачать ({selectedLang})
+              {t('download', { lang: selectedLang })}
             </Button>
             <Button variant="outline" size="sm" onClick={downloadAllJSON}>
               <Download className="h-4 w-4 mr-1" />
-              Скачать все
+              {t('downloadAll')}
             </Button>
           </div>
 
@@ -981,9 +981,9 @@ export const AdminTranslations = memo(function AdminTranslations() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  {getLangInfo(selectedLang).flag} Редактирование: {getLangInfo(selectedLang).name}
+                  {getLangInfo(selectedLang).flag} {t('editing')}: {getLangInfo(selectedLang).name}
                 </CardTitle>
-                <Badge variant="outline">{filteredKeys.length} ключей</Badge>
+                <Badge variant="outline">{t('keysCount', { count: filteredKeys.length })}</Badge>
               </div>
             </CardHeader>
             <CardContent className="p-0">
@@ -994,7 +994,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                   {filteredKeys.length === 0 && (
                     <div className="text-center py-12 text-muted-foreground">
                       <Languages className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>Ключи не найдены</p>
+                      <p>{t('keysNotFound')}</p>
                     </div>
                   )}
                 </div>
@@ -1005,16 +1005,16 @@ export const AdminTranslations = memo(function AdminTranslations() {
           {/* Instructions */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Инструкция</CardTitle>
+              <CardTitle className="text-lg">{t('instructions')}</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground space-y-2">
-              <p><strong>1. Добавьте языки:</strong> Кнопка "Добавить язык" → выберите из списка</p>
-              <p><strong>2. Выберите язык:</strong> Кликните на карточку языка для редактирования</p>
-              <p><strong>3. Редактируйте:</strong> Кликните на любой перевод для изменения. Он сохранится в БД автоматически.</p>
-              <p><strong>4. Синхронизация:</strong> Если в БД нет данных, используйте кнопку "Синхронизировать с БД" для загрузки локальных файлов в базу.</p>
+              <p>{t('instruction1')}</p>
+              <p>{t('instruction2')}</p>
+              <p>{t('instruction3')}</p>
+              <p>{t('instruction4')}</p>
               <p className="text-green-600 dark:text-green-400 pt-2 font-medium flex items-center gap-2">
                 <CheckCircle className="h-4 w-4" />
-                Изменения сохраняются в реальном времени в базу данных Supabase.
+                {t('changesSavedRealtime')}
               </p>
             </CardContent>
           </Card>

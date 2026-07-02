@@ -39,7 +39,7 @@ export function AdminBroadcastTab() {
           .eq('key', 'TELEGRAM_BOT_TOKEN')
           .single();
         if (data) setBotToken((data as any).value);
-      } catch (err) {
+      } catch {
         // config might not exist yet
       }
     };

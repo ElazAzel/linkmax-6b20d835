@@ -55,17 +55,6 @@ export interface PartnerFormData {
     is_active: boolean;
 }
 
-const COLORS = {
-    users: '#8b5cf6',
-    pages: '#10b981',
-    views: '#06b6d4',
-    clicks: '#f97316',
-    shares: '#ec4899',
-    premium: '#eab308',
-    trial: '#3b82f6',
-    free: '#6b7280'
-};
-
 export interface AdminDashboardAggregates {
     dailyGrowth: AdminDailyStats[];
     userDistribution: AdminUserStatus[];

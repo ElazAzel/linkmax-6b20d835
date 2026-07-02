@@ -10,7 +10,6 @@
 
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import type { BlockType } from '@/types/blocks/base';
-import type { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { isBlocksFreePromoActive } from '@/lib/promo/free-blocks-promo';
 

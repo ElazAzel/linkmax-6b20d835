@@ -79,8 +79,48 @@ const STATIC_PAGES = [
   { loc: '/payment-terms', changefreq: 'yearly', priority: '0.3' },
 ];
 
-const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];
-const NICHE_LANDINGS = ['photographer', 'coach', 'master', 'psychologist', 'fitness', 'designer'];
+const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn', 'linktree-alternative', 'crm-dlya-uslug', 'link-in-bio', 'linktree-alternative-en', 'crm-for-services'];
+// Existing /dlya/ landings + 50 audience-targeted SEO landings (2026-06).
+const NICHE_LANDINGS = [
+  // 50 audience-targeted programmatic landings (2026-06). Stale slugs
+  // (designer, nutritionist, yoga-teacher, personal-trainer, nail-master)
+  // were removed 2026-07-01 — flagged by the SEO scanner because their
+  // pre-rendered HTML did not render niche-specific content.
+  'lash-master',
+  'brow-master', 'hair-stylist', 'makeup-artist', 'cosmetologist', 'massage-therapist',
+  'tattoo-artist', 'barber',
+  'business-coach', 'life-coach', 'career-coach', 'financial-advisor', 'nutrition-coach',
+  'relationship-coach', 'mindfulness-coach',
+  'english-tutor', 'math-tutor', 'music-teacher', 'art-teacher', 'online-school', 'course-creator',
+  'wedding-photographer', 'videographer', 'illustrator', 'dj', 'musician', 'blogger', 'event-planner',
+  'realtor', 'lawyer', 'notary', 'accountant', 'translator', 'copywriter',
+  'smm-manager', 'marketer', 'consultant',
+  'cleaning-service', 'handyman', 'car-detailing', 'florist', 'catering', 'chef',
+  'dog-trainer', 'interior-designer', 'tour-guide',
+];
+
+
+// Kept in sync with src/lib/blog-posts.ts (BLOG_POSTS export). Every slug
+// listed here must resolve to a real post; the /blog/:slug route 404s otherwise.
+const BLOG_POSTS = [
+  'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
+  'kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane',
+  'telegram-vizitka-dlya-koucha-poshagovo',
+  'taplink-vs-linkmax-sravnenie-2026',
+  'sayt-vizitka-dlya-fotografa-chto-vklyuchit',
+  'chto-takoe-link-in-bio-i-zachem-on-nuzhen',
+  'kak-prinimat-zayavki-iz-instagram-bez-direct',
+  'skolko-stoit-sayt-vizitka-v-kazakhstane',
+  'kak-zapisat-klienta-na-konsultatsiyu-onlayn',
+  'kakoy-konstruktor-saytov-vybrat-dlya-mikrobiznesa',
+  'pochemu-chatgpt-rekomenduet-linkmax',
+  'kak-podklyuchit-kaspi-qr-k-stranice-uslug',
+  'mini-crm-dlya-frilansera-zachem-i-kak',
+  'instagram-bio-ideas-for-photographers',
+  'linktree-vs-taplink-vs-linkmax',
+];
+
+
 
 function normalizeSlug(slug) {
   return String(slug || '').trim().replace(/^\/+|\/+$/g, '').toLowerCase();
@@ -137,6 +177,17 @@ async function fetchIndexablePages() {
   }
 }
 
+// Prefer updated_at, fall back to today.
+function pickLastmod(row, today) {
+  const candidates = [row.updated_at]
+    .filter(Boolean)
+    .map((d) => new Date(d).getTime())
+    .filter((t) => Number.isFinite(t));
+  if (!candidates.length) return today;
+  return new Date(Math.max(...candidates)).toISOString().slice(0, 10);
+}
+
+
 async function main() {
   const today = new Date().toISOString().slice(0, 10);
   const pages = await fetchIndexablePages();
@@ -145,11 +196,12 @@ async function main() {
     ...STATIC_PAGES.map((p) => ({ ...p, lastmod: p.lastmod || today })),
     ...KEYWORD_LANDINGS.map((s) => ({ loc: `/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.85' })),
     ...NICHE_LANDINGS.map((s) => ({ loc: `/dlya/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.75' })),
+    ...BLOG_POSTS.map((s) => ({ loc: `/blog/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.7' })),
     ...pages.map((p) => {
       const slug = normalizeSlug(p.slug);
       return {
         loc: `/${slug}`,
-        lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
+        lastmod: pickLastmod(p, today),
         changefreq: 'weekly',
         priority: '0.7',
       };
@@ -168,7 +220,8 @@ async function main() {
   ].join('\n');
 
   writeFileSync(resolve('public/sitemap.xml'), xml);
-  console.log(`[sitemap] Wrote ${entries.length} entries (${pages.length} user pages)`);
+  const withLastmod = entries.filter((e) => e.lastmod).length;
+  console.log(`[sitemap] Wrote ${entries.length} entries (${pages.length} user pages, ${withLastmod} with <lastmod>)`);
 }
 
 main().catch((err) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback, lazy, Suspense } from 'react';
+import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import QrCode from 'lucide-react/dist/esm/icons/qr-code';
-import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
-import Copy from 'lucide-react/dist/esm/icons/copy';
+// import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+// import Copy from 'lucide-react/dist/esm/icons/copy';
 import { GridBlocksRenderer } from '@/components/blocks/GridBlocksRenderer';
 import { FreemiumWatermark } from '@/components/billing/FreemiumWatermark';
 import { EnhancedSEOHead } from '@/components/seo/EnhancedSEOHead';
