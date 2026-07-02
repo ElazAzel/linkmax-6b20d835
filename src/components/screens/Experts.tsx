@@ -284,12 +284,12 @@ export const Experts = memo(function Experts() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <h3
-                            className="font-semibold truncate group-hover:text-primary transition-colors"
+                          <h2
+                            className="font-semibold truncate group-hover:text-primary transition-colors text-base"
                             itemProp="name"
                           >
                             {expert.title || expert.slug}
-                          </h3>
+                          </h2>
                           <p
                             className="text-sm text-muted-foreground line-clamp-2 mt-1"
                             itemProp="description"
