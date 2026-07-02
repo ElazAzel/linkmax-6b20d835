@@ -15,7 +15,10 @@ import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMo
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
 import { PostHogProvider } from 'posthog-js/react';
-import { POSTHOG_KEY, POSTHOG_HOST } from "@/lib/posthog";
+import { initPostHog, POSTHOG_KEY, POSTHOG_HOST } from "@/lib/posthog";
+
+// Initialize PostHog before rendering
+initPostHog();
 
 // Lazy load non-critical shell components to reduce main bundle
 const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
@@ -35,21 +38,15 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading fallback for pages — language detected from <html lang>
-const PageLoader = () => {
-  const lang = typeof document !== 'undefined' ? document.documentElement.lang : 'ru';
-  const isRu = !lang || lang.startsWith('ru');
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" aria-hidden />
-        <p className="text-sm text-muted-foreground animate-pulse">
-          {isRu ? 'Загрузка…' : 'Loading…'}
-        </p>
-      </div>
+// Loading fallback for pages
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      <p className="text-sm text-muted-foreground animate-pulse">Загрузка...</p>
     </div>
-  );
-};
+  </div>
+);
 
 // Error boundary for lazy-loaded routes
 class RouteErrorBoundary extends React.Component<
@@ -68,19 +65,15 @@ class RouteErrorBoundary extends React.Component<
   }
   render() {
     if (this.state.hasError) {
-      const lang = typeof document !== 'undefined' ? document.documentElement.lang : 'ru';
-      const isRu = !lang || lang.startsWith('ru');
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center space-y-4 p-6">
-            <p className="text-lg font-semibold text-foreground">
-              {isRu ? 'Что-то пошло не так' : 'Something went wrong'}
-            </p>
+            <p className="text-lg font-semibold text-foreground">Что-то пошло не так</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium min-h-[44px]"
+              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium"
             >
-              {isRu ? 'Перезагрузить страницу' : 'Reload page'}
+              Обновить страницу
             </button>
           </div>
         </div>
@@ -129,10 +122,7 @@ const App = () => {
     if (error) {
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        const lang = typeof document !== 'undefined' ? document.documentElement.lang : 'ru';
-        const isRu = !lang || lang.startsWith('ru');
-        const label = isRu ? 'Ошибка авторизации' : 'Authentication error';
-        toast.error(`${label}: ${errorDescription || error}`);
+        toast.error(`Ошибка входа: ${errorDescription || error}`);
       }, 500);
     }
   }, []);

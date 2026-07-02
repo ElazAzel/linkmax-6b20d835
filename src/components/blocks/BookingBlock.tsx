@@ -805,19 +805,19 @@ export const BookingBlock = memo(function BookingBlockComponent({
   }
 
   return (
-    <div className="w-full min-w-0 rounded-2xl overflow-hidden qb-card border-hairline shadow-soft">
+    <div className="w-full rounded-2xl overflow-hidden qb-card border-hairline shadow-soft">
       {/* Header */}
       <div className="p-5 sm:p-6 pb-2">
-        <div className="flex min-w-0 items-center gap-3">
+        <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-primary/10 text-primary shadow-sm shadow-primary/20">
             <CalendarDays className="h-5 w-5" />
           </div>
-          <h3 className="min-w-0 font-bold text-lg text-gradient leading-snug break-words hyphens-auto">
+          <h3 className="font-bold text-lg text-gradient">
             {blockTitle || t('booking.title', 'Записаться')}
           </h3>
         </div>
         {blockDescription && (
-          <p className="text-sm text-muted-foreground/80 mt-2 leading-relaxed break-words hyphens-auto">{blockDescription}</p>
+          <p className="text-sm text-muted-foreground/80 mt-2 line-clamp-2">{blockDescription}</p>
         )}
         <div className="flex items-center gap-3 mt-3">
           <div className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/5 w-fit px-2 py-1 rounded-lg">
@@ -918,11 +918,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <p className="font-black text-sm leading-snug break-words hyphens-auto group-hover:text-primary transition-colors">{member.name}</p>
+                        <p className="font-black text-sm truncate group-hover:text-primary transition-colors">{member.name}</p>
                         <Search className="h-3 w-3 opacity-0 group-hover:opacity-40 transition-all text-primary" />
                       </div>
                       {member.bio && (
-                        <p className="text-xs text-muted-foreground leading-snug break-words hyphens-auto mt-0.5 font-medium">{member.bio}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5 font-medium">{member.bio}</p>
                       )}
                       {member.specialization && (
                         <div className="mt-1.5 inline-flex text-[9px] font-black uppercase tracking-tighter text-primary/60 bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10">
@@ -998,7 +998,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                   <div className="p-2 rounded-xl bg-primary/10 text-primary">
                     <CalendarDays className="h-4 w-4" />
                   </div>
-                  <span className="font-bold text-sm leading-snug break-words hyphens-auto">{getDateLabel(selectedDate)}</span>
+                  <span className="font-bold text-sm truncate">{getDateLabel(selectedDate)}</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-[10px] font-black px-2.5 py-1.5 rounded-xl bg-black/20 uppercase tracking-tight">
                   {availableCount > 0 ? (
@@ -1099,7 +1099,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                         </div>
                         <div className="min-w-0">
                           <p className="text-[9px] sm:text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1 sm:mb-1.5">{t('booking.selectedTime', 'Выбрано')}</p>
-                          <p className="text-sm sm:text-base font-black leading-snug break-words">
+                          <p className="text-sm sm:text-base font-black truncate leading-none">
                             {formatTime(selectedSlot.time)}
                             {selectedSlot.endTime && ` — ${formatTime(selectedSlot.endTime)}`}
                           </p>
@@ -1152,7 +1152,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
         <DialogContent className="sm:max-w-md qb-card border-hairline shadow-2xl p-0 overflow-hidden">
           <div className="p-6 pb-4 border-b border-hairline">
             <DialogHeader>
-                <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gradient leading-snug break-words hyphens-auto">
+              <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gradient">
                 <div className="p-2 rounded-xl bg-primary/10 text-primary">
                   <CheckCircle2 className="h-6 w-6" />
                 </div>
@@ -1164,7 +1164,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                     <div className="flex items-center gap-3 p-3 rounded-2xl bg-primary/5 border border-primary/10 shadow-inner">
                       <div className="flex items-center gap-2 min-w-0">
                         <CalendarDays className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-bold leading-snug break-words">
+                        <span className="text-sm font-bold truncate">
                           {format(selectedDate, 'd MMMM, EEEE', { locale })}
                         </span>
                       </div>

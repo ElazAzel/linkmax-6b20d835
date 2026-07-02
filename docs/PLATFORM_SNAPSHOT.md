@@ -1,14 +1,14 @@
-# LinkMAX — The Business OS for the Solo-Economy (Encyclopedia v2026.04 | Phase 44)
+# LinkMAX — AI Sales OS (Encyclopedia v2026.04 | Phase 44)
 
-> **Strategic Vision:** LinkMAX is the **"Anti-Bitrix/AmoCRM"** for solopreneurs. We are a comprehensive **Business Operating System** (Solo OS) that consolidates the fragmented tech stack into a single, mobile-first, AI-native platform.
+> **Strategic Vision:** LinkMAX — AI Sales OS, превращающая одну ссылку в био в полноценный бизнес. Сервис за минуту создает конвертящий мини-сайт с приемом платежей и календарем услуг, агрегирует заявки в легкой CRM с таск-трекером и Kanban, предоставляет глубокую аналитику и мгновенно отправляет уведомления о лидах в Telegram.
 >
-> **2026 Growth Pivot:** Our current focus is **"Narrowing the Noise"** — simplifying the interface and onboarding to provide the fastest "Time to Value" for specific niches, starting with **Experts and Consultants**.
+> *LinkMAX is the AI Sales OS that turns a single bio link into a fully functioning business. In under a minute, it creates a high-converting mini-site complete with booking calendars and integrated payments, aggregates leads into a lightweight CRM with task tracking and Kanban boards, delivers deep analytics, and sends real-time lead notifications directly to Telegram.*
 
 ---
 
 ## 1) What LinkMAX is
 
-**Positioning:** The Micro-Business Operating System — Page Builder + Mini-CRM + Analytics + Fintech Foundation.
+**Positioning:** AI Sales OS — Page Builder + Business Zone (CRM, Kanban, Tasks, Contacts) + Fintech Core + Advanced Analytics & Pixel Proxy.
 
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 

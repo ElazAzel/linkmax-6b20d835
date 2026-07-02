@@ -10,7 +10,7 @@ const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (
 
 import { StrictMode, lazy } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 const Index = lazy(() => import("./pages/Index"));
@@ -129,7 +129,6 @@ const Customers = lazy(() => import("./pages/Customers"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
-const SeoCheck = lazy(() => import("./pages/SeoCheck"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -179,10 +178,7 @@ const router = createBrowserRouter([
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
-      { path: "linkmax-vs-linktree", element: <Navigate to="/alternatives/linktree" replace /> },
-      { path: "blog/linktree-alternative", element: <Navigate to="/alternatives/linktree" replace /> },
       { path: "seo-landing", element: <SeoLanding /> },
-      { path: "seo-check", element: <SeoCheck /> },
       { path: "admin", element: <Admin /> },
       { path: "admin/language-algorithms", element: <AdminLanguageAlgorithms /> },
       { path: "admin/translations", element: <AdminTranslations /> },
@@ -206,12 +202,6 @@ const router = createBrowserRouter([
       { path: "multilink", element: <NicheLanding landingKey="multilink" /> },
       { path: "link-in-bio-ru", element: <NicheLanding landingKey="link-in-bio" /> },
       { path: "vizitka-onlayn", element: <NicheLanding landingKey="vizitka-onlayn" /> },
-      { path: "linktree-alternative", element: <NicheLanding landingKey="linktree-alternative" /> },
-      { path: "crm-dlya-uslug", element: <NicheLanding landingKey="crm-dlya-uslug" /> },
-      // English SEO landings
-      { path: "link-in-bio", element: <NicheLanding landingKey="link-in-bio-en" /> },
-      { path: "linktree-alternative-en", element: <NicheLanding landingKey="linktree-alternative-en" /> },
-      { path: "crm-for-services", element: <NicheLanding landingKey="crm-for-services-en" /> },
       // Programmatic niche pages /dlya/{niche}
       { path: "dlya/:landingSlug", element: <NicheLanding /> },
       // Blog
@@ -250,8 +240,7 @@ const router = createBrowserRouter([
 });
 
 import { PushService } from "@/lib/notifications/push-service";
-import { registerServiceWorker } from "@/pwa/registerSW";
-import { installKeyboardHandlers } from "@/platform/native/keyboard";
+import { logger } from "@/lib/utils/logger";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -262,9 +251,30 @@ createRoot(document.getElementById("root")!).render(
 // Initialize Push Notifications for native mobile
 PushService.init();
 
-// Smooth keyboard handling on iOS/Android (no-op on web)
-installKeyboardHandlers();
-
-// Guarded Service Worker registration (skips Lovable preview / dev / iframe)
-registerServiceWorker();
-
+// Re-enable Service Worker for PWA V2 offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      // Check for updates periodically
+      reg.onupdatefound = () => {
+        const installingWorker = reg.installing;
+        if (installingWorker) {
+          installingWorker.onstatechange = () => {
+            if (installingWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                // New update available - notify user or auto-reload
+                // In this case, we prefer a silent reload after user interaction or next start
+                logger.info('New content is available; please refresh.', { context: 'service-worker' });
+              } else {
+                // Content is cached for offline use
+                logger.info('Content is cached for offline use.', { context: 'service-worker' });
+              }
+            }
+          };
+        }
+      };
+    }).catch((error) => {
+      logger.error('SW registration failed', error, { context: 'service-worker' });
+    });
+  });
+}

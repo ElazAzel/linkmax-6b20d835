@@ -2,7 +2,7 @@
  * Sites service — CRUD for Site containers and helpers for sub-pages.
  * Sprint 1: Multi-Page Foundation.
  */
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import type { Site, SitePageSummary } from '@/types/site';
 import type { Block } from '@/types/blocks';
 
@@ -73,20 +73,18 @@ export async function loadSitePageByPath(
     .eq('slug', homeSlug)
     .eq('is_published', true)
     .maybeSingle();
-  const homeRow = home as unknown as { site_id: string } | null;
-  if (homeErr || !homeRow || !homeRow.site_id) return null;
+  if (homeErr || !home || !home.site_id) return null;
 
   // 2) Find the sub-page by site + path
   const { data: sub, error: subErr } = await supabase
     .from('pages')
     .select('id, site_id')
-    .eq('site_id', homeRow.site_id)
+    .eq('site_id', home.site_id)
     .eq('page_path', pagePath)
     .eq('is_published', true)
     .maybeSingle();
-  const subRow = sub as unknown as { id: string; site_id: string } | null;
-  if (subErr || !subRow) return null;
-  return subRow;
+  if (subErr || !sub) return null;
+  return sub as { id: string; site_id: string };
 }
 
 /** Update site header/footer/settings. */
@@ -150,9 +148,8 @@ export async function deleteSubPage(pageId: string): Promise<boolean> {
     .select('id, is_home')
     .eq('id', pageId)
     .maybeSingle();
-  const pageRow = page as unknown as { is_home: boolean } | null;
-  if (getErr || !pageRow) return false;
-  if (pageRow.is_home) return false;
+  if (getErr || !page) return false;
+  if ((page as { is_home: boolean }).is_home) return false;
 
   // Best-effort cleanup of related blocks (FK cascade may also handle this).
   await supabase.from('blocks').delete().eq('page_id', pageId);
@@ -183,9 +180,8 @@ export async function updateSubPage(
     .select('id, is_home, site_id, page_path')
     .eq('id', pageId)
     .maybeSingle();
-  const pageRow = page as unknown as { is_home: boolean; site_id: string; page_path: string } | null;
-  if (!pageRow) return { ok: false, error: 'not_found' };
-  const isHome = pageRow.is_home;
+  if (!page) return { ok: false, error: 'not_found' };
+  const isHome = (page as { is_home: boolean }).is_home;
 
   const update: Record<string, unknown> = {};
   if (typeof patch.title === 'string') update.title = patch.title.trim() || null;
@@ -193,7 +189,7 @@ export async function updateSubPage(
   if (typeof patch.pagePath === 'string' && !isHome) {
     const newPath = patch.pagePath;
     // Uniqueness within the site
-    const siteId = pageRow.site_id;
+    const siteId = (page as { site_id: string }).site_id;
     const { data: clash } = await supabase
       .from('pages')
       .select('id')

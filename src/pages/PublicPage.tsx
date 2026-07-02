@@ -30,7 +30,6 @@ import { checkPremiumStatus } from '@/services/user';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
-import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import type { PageData, PageBackground, Block } from '@/types/page';
 import {
   Dialog,
@@ -103,7 +102,7 @@ export default function PublicPage() {
         loadSitePageByPath(slug, pagePath).then((sub) => {
           if (cancelled) return;
           if (sub) {
-            import('@/platform/supabase/client').then(({ supabase }) =>
+            import('@/integrations/supabase/client').then(({ supabase }) =>
               supabase.from('pages').select('slug').eq('id', sub.id).maybeSingle().then(({ data }) => {
                 if (!cancelled && data?.slug) setResolvedSubSlug(data.slug);
               })
@@ -303,7 +302,6 @@ export default function PublicPage() {
   const iconStyleClass = getIconStyleClass(pageData?.theme?.iconStyle);
 
   return (
-    <ScreenErrorBoundary screenName="PublicPage">
     <AnimatePresence mode="wait">
       {(loading || isTranslating) ? (
         <PublicPageSkeleton key="skeleton" />
@@ -493,6 +491,5 @@ export default function PublicPage() {
         </motion.div>
       )}
     </AnimatePresence>
-    </ScreenErrorBoundary>
   );
 }

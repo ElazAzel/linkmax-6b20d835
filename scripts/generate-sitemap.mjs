@@ -79,29 +79,8 @@ const STATIC_PAGES = [
   { loc: '/payment-terms', changefreq: 'yearly', priority: '0.3' },
 ];
 
-const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn', 'linktree-alternative', 'crm-dlya-uslug', 'link-in-bio', 'linktree-alternative-en', 'crm-for-services'];
-// Existing /dlya/ landings + 50 audience-targeted SEO landings (2026-06).
-const NICHE_LANDINGS = [
-  'designer',
-  // 50 new programmatic landings
-  'nutritionist', 'yoga-teacher', 'personal-trainer', 'nail-master', 'lash-master',
-  'brow-master', 'hair-stylist', 'makeup-artist', 'cosmetologist', 'massage-therapist',
-  'tattoo-artist', 'barber',
-  'business-coach', 'life-coach', 'career-coach', 'financial-advisor', 'nutrition-coach',
-  'relationship-coach', 'mindfulness-coach',
-  'english-tutor', 'math-tutor', 'music-teacher', 'art-teacher', 'online-school', 'course-creator',
-  'wedding-photographer', 'videographer', 'illustrator', 'dj', 'musician', 'blogger', 'event-planner',
-  'realtor', 'lawyer', 'notary', 'accountant', 'translator', 'copywriter',
-  'smm-manager', 'marketer', 'consultant',
-  'cleaning-service', 'handyman', 'car-detailing', 'florist', 'catering', 'chef',
-  'dog-trainer', 'interior-designer', 'tour-guide',
-];
-
-const BLOG_POSTS = [
-  'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
-  'instagram-bio-ideas-for-photographers',
-];
-
+const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];
+const NICHE_LANDINGS = ['photographer', 'coach', 'master', 'psychologist', 'fitness', 'designer'];
 
 function normalizeSlug(slug) {
   return String(slug || '').trim().replace(/^\/+|\/+$/g, '').toLowerCase();
@@ -141,7 +120,7 @@ function buildUrlEntry({ loc, lastmod, changefreq, priority, hreflang }) {
 }
 
 async function fetchIndexablePages() {
-  const url = `${SUPABASE_URL}/rest/v1/pages?select=slug,updated_at,published_at,is_indexable,quality_score,is_published&is_published=eq.true&quality_score=gte.${QUALITY_THRESHOLD}&order=updated_at.desc.nullslast&limit=10000`;
+  const url = `${SUPABASE_URL}/rest/v1/pages?select=slug,updated_at,is_indexable,quality_score,is_published&is_published=eq.true&quality_score=gte.${QUALITY_THRESHOLD}&order=updated_at.desc.nullslast&limit=10000`;
   try {
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
@@ -158,16 +137,6 @@ async function fetchIndexablePages() {
   }
 }
 
-// Pick the most recent of (updated_at, published_at), fall back to today.
-function pickLastmod(row, today) {
-  const candidates = [row.updated_at, row.published_at]
-    .filter(Boolean)
-    .map((d) => new Date(d).getTime())
-    .filter((t) => Number.isFinite(t));
-  if (!candidates.length) return today;
-  return new Date(Math.max(...candidates)).toISOString().slice(0, 10);
-}
-
 async function main() {
   const today = new Date().toISOString().slice(0, 10);
   const pages = await fetchIndexablePages();
@@ -176,12 +145,11 @@ async function main() {
     ...STATIC_PAGES.map((p) => ({ ...p, lastmod: p.lastmod || today })),
     ...KEYWORD_LANDINGS.map((s) => ({ loc: `/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.85' })),
     ...NICHE_LANDINGS.map((s) => ({ loc: `/dlya/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.75' })),
-    ...BLOG_POSTS.map((s) => ({ loc: `/blog/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.7' })),
     ...pages.map((p) => {
       const slug = normalizeSlug(p.slug);
       return {
         loc: `/${slug}`,
-        lastmod: pickLastmod(p, today),
+        lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
         changefreq: 'weekly',
         priority: '0.7',
       };
@@ -200,8 +168,7 @@ async function main() {
   ].join('\n');
 
   writeFileSync(resolve('public/sitemap.xml'), xml);
-  const withLastmod = entries.filter((e) => e.lastmod).length;
-  console.log(`[sitemap] Wrote ${entries.length} entries (${pages.length} user pages, ${withLastmod} with <lastmod>)`);
+  console.log(`[sitemap] Wrote ${entries.length} entries (${pages.length} user pages)`);
 }
 
 main().catch((err) => {

@@ -28,11 +28,10 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
       case 'circle':
         return 'rounded-full aspect-square object-cover shadow-lift border-2 border-hairline';
       case 'banner':
-        return 'w-full rounded-2xl';
+        return 'w-full rounded-2xl qb-card border-hairline shadow-lift';
       default:
-        return 'rounded-2xl';
+        return 'rounded-2xl shadow-soft border border-hairline transition-all duration-300 hover:shadow-lift qb-card[2px]';
     }
-
   };
 
   const alignmentClass = block.alignment === 'left' ? 'items-start'
@@ -53,11 +52,11 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
   const containerClass = isFullWidth ? 'w-full' : 'w-full max-w-md';
 
   return (
-    <div className={cn("w-full min-w-0 flex flex-col overflow-visible", alignmentClass)}>
+    <div className={cn("w-full flex flex-col", alignmentClass)}>
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when interactive */}
       <div
         className={cn(
-          "relative group min-w-0",
+          "relative group",
           containerClass,
           hasLink && 'cursor-pointer'
         )}

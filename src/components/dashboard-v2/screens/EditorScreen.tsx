@@ -268,7 +268,8 @@ export const EditorScreen = memo(function EditorScreen({
         description: t('editor.onboarding.addBlockDesc', 'Начните с оффера, ссылки или формы — это первый шаг к лидам.'),
         ctaLabel: t('editor.onboarding.addBlockCta', 'Добавить блок'),
         onCta: () => {
-          window.dispatchEvent(new CustomEvent('editor:open-insert-sheet'));
+          const addBlockButton = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
+          addBlockButton?.click();
         },
       });
     }
@@ -336,7 +337,8 @@ export const EditorScreen = memo(function EditorScreen({
   // Trigger insert-sheet by clicking the hidden anchor placed inside the canvas.
   // Must be declared before any early return to satisfy rules-of-hooks.
   const triggerAddBlock = useCallback(() => {
-    window.dispatchEvent(new CustomEvent('editor:open-insert-sheet'));
+    const target = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
+    target?.click();
   }, []);
 
   // Sprint 2: append a section preset (group of blocks) to the end of the page.

@@ -109,6 +109,10 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
     }, 10);
   };
 
+  const justifyClass = block.alignment === 'left' ? 'justify-start'
+    : block.alignment === 'right' ? 'justify-end'
+      : 'justify-center';
+
   // Safely filter and process platforms
   const validPlatforms = (block.platforms || []).filter(
     (platform): platform is NonNullable<typeof platform> =>
@@ -120,13 +124,13 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
   }
 
   return (
-    <div className="w-full min-w-0 overflow-visible">
+    <div className="w-full">
       {title && (
-        <h3 className={`text-xs font-medium text-muted-foreground mb-3 break-words leading-snug ${block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'}`}>
+        <h3 className={`text-xs font-medium text-muted-foreground mb-3 ${block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'}`}>
           {title}
         </h3>
       )}
-      <div className="flex flex-wrap items-center justify-center gap-3 overflow-visible">
+      <div className={`flex items-center ${justifyClass} gap-2 flex-wrap`}>
         {validPlatforms.map((platform, index) => {
           // Support both 'icon' and 'platform' fields (AI generates 'platform', factory uses 'icon')
           const iconName = platform.icon || 'globe';
@@ -141,7 +145,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
               key={index}
               onClick={() => handleClick(url)}
               className={cn(
-                "group relative size-12 rounded-control flex items-center justify-center shrink-0",
+                "group relative w-12 h-12 rounded-control flex items-center justify-center",
                 "bg-surface-raised border border-hairline shadow-soft",
                 "transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5 active:scale-95"
               )}

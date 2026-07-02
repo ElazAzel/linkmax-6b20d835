@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
 import type { VideoBlock as VideoBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
@@ -57,25 +56,27 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   }
 
   return (
-    <div
-      className="w-full min-w-0 overflow-visible rounded-2xl"
+    <Card
+      className="overflow-hidden qb-card border-hairline shadow-soft rounded-2xl"
       onClick={() => onClick?.()}
-      onKeyDown={() => onClick?.()}
-      role="button"
-      tabIndex={0}
     >
       {title && (
-        <h3 className="text-base sm:text-lg font-semibold leading-snug mb-3 break-words hyphens-auto overflow-visible">{title}</h3>
+        <CardHeader className="p-4 sm:p-5 pb-2">
+          <CardTitle className="text-base sm:text-lg font-semibold truncate text-gradient">{title}</CardTitle>
+        </CardHeader>
       )}
-      <div className={cn("relative w-full bg-black/20 overflow-hidden rounded-2xl", aspectRatioClass)}>
-        <iframe
-          src={embedUrl}
-          className="absolute inset-0 w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
-          allowFullScreen
-          title={title || 'Video'}
-        />
-      </div>
-    </div>
+      <CardContent className="p-0">
+        <div className={cn("relative w-full bg-black/20", aspectRatioClass)}>
+          <iframe
+            src={embedUrl}
+            className="absolute inset-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
+
+            allowFullScreen
+            title={title || 'Video'}
+          />
+        </div>
+      </CardContent>
+    </Card>
   );
 });

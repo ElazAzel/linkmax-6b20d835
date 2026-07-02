@@ -35,12 +35,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   const profileBlock = validBlocks.find(b => b.type === 'profile');
   const contentBlocks = validBlocks.filter(b => b.type !== 'profile');
 
-  // Block types that render as ambient layers (no card chrome by default)
-  // Media blocks render naked — only show frame if user explicitly set styling
-  const TRANSPARENT_BLOCKS = new Set([
-    'separator', 'socials', 'spacer',
-    'video', 'image', 'carousel', 'gallery', 'embed', 'custom-code', 'map',
-  ]);
+  // Block types that render as ambient layers (no card chrome)
+  const TRANSPARENT_BLOCKS = new Set(['separator', 'socials', 'spacer']);
   // Block types that naturally need full width when size isn't explicitly set
   const NATURALLY_WIDE = new Set([
     'profile', 'heading', 'text', 'video', 'embed', 'faq',
@@ -73,7 +69,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {/* Bento grid */}
       {contentBlocks.length > 0 && (
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4 grid-flow-row-dense auto-rows-min items-start"
+          className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
           initial="hidden"
           animate="show"
           viewport={{ once: true }}
@@ -94,9 +90,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 ? BLOCK_SIZE_DIMENSIONS['wide']
                 : BLOCK_SIZE_DIMENSIONS['small'];
 
-            const colSpanClass = dimensions.gridCols === 2 ? 'col-span-1 sm:col-span-2' : 'col-span-1';
-            // Drop row-span — variable content heights make fixed row tracks fight aspect-ratio media
-            const rowSpanClass = '';
+            const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
+            const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
 
             const contentAlignment = block.blockStyle?.contentAlignment || 'center';
             const alignmentClass =
@@ -105,6 +100,9 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                   : 'items-center';
 
             const isTransparent = TRANSPARENT_BLOCKS.has(block.type);
+            const isSquare = dimensions.gridCols === 1 && dimensions.gridRows === 1;
+            const isTall = dimensions.gridCols === 1 && dimensions.gridRows === 2;
+
             // Translate BlockStyle into wrapper-level visuals so user customizations are visible
             const bs = block.blockStyle;
             const wrapperStyle: React.CSSProperties = {};
@@ -136,26 +134,24 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
               : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
               : '';
             const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
-            const hasCustomChrome = hasCustomBg
-              || (bs?.borderWidth && bs.borderWidth !== 'none')
-              || (bs?.shadow && bs.shadow !== 'none');
-            // Media blocks render naked unless user set chrome
-            const isNaked = isTransparent && !hasCustomChrome;
 
             return (
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex min-w-0 transition-all duration-300',
-                  !isNaked && 'min-h-[120px]',
+                  'group relative flex overflow-hidden transition-all duration-300',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
-                  !isNaked && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
-                  isNaked && 'bg-transparent',
+                  // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
+                  !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
+                  isTransparent && 'bg-transparent',
                   hoverClass,
+                  !isTransparent && isSquare && 'aspect-square',
+                  !isTransparent && isTall && 'min-h-[280px]',
+                  !isTransparent && !isSquare && !isTall && 'min-h-[120px]',
                 )}
-                style={!isNaked ? wrapperStyle : undefined}
+                style={!isTransparent ? wrapperStyle : undefined}
                 variants={{
                   hidden: { opacity: 0, y: 12, scale: 0.99 },
                   show: {
@@ -171,7 +167,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                     className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
                   />
                 )}
-                <div className="relative w-full min-w-0">
+                <div className="relative w-full h-full">
                   <BlockRenderer
                     block={block}
                     isPreview={isPreview}

@@ -66,13 +66,13 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
               role="button"
               tabIndex={0}
               className={cn(
-                'qb-card qb-card-hover flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 cursor-pointer active:scale-[0.99] transition-transform',
+                'qb-card qb-card-hover flex items-center justify-between gap-3 p-4 cursor-pointer active:scale-[0.99] transition-transform',
                 item.featured && 'ring-2 ring-primary/60'
               )}
             >
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h4 className="font-semibold text-sm leading-snug break-words hyphens-auto tracking-tight">{name}</h4>
+                <div className="flex items-center gap-2">
+                  <h4 className="font-semibold text-sm truncate tracking-tight">{name}</h4>
                   {item.featured && (
                     <Badge variant="default" className="text-[10px] h-5 px-2">
                       <Star className="h-2.5 w-2.5 mr-0.5 fill-current" />
@@ -81,11 +81,11 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
                   )}
                 </div>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed break-words hyphens-auto">{description}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{description}</p>
                 )}
               </div>
-              <div className="text-left sm:text-right flex-shrink-0">
-                <span className="text-base font-semibold text-primary break-words tracking-tight">
+              <div className="text-right flex-shrink-0">
+                <span className="text-base font-semibold text-primary whitespace-nowrap tracking-tight">
                   {formatPrice(item.price, item.currency || block.currency || 'KZT')}
                 </span>
                 {period && <p className="text-xs text-muted-foreground">{period}</p>}
