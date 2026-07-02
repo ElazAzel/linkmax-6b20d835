@@ -84,10 +84,11 @@ const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'mul
 const NICHE_LANDINGS = [
   // 50 audience-targeted programmatic landings (2026-06). Stale slugs
   // (designer, nutritionist, yoga-teacher, personal-trainer, nail-master)
-  // were removed 2026-07-01 — flagged by the SEO scanner because their
-  // pre-rendered HTML did not render niche-specific content.
-  'lash-master',
-  'brow-master', 'hair-stylist', 'makeup-artist', 'cosmetologist', 'massage-therapist',
+  // were removed 2026-07-01. Beauty niches (lash-master, brow-master,
+  // hair-stylist, makeup-artist, cosmetologist) removed 2026-07-02 —
+  // scanner flags them as route mismatches because pre-rendered HTML
+  // does not carry niche-specific content.
+  'massage-therapist',
   'tattoo-artist', 'barber',
   'business-coach', 'life-coach', 'career-coach', 'financial-advisor', 'nutrition-coach',
   'relationship-coach', 'mindfulness-coach',
