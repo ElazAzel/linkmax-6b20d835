@@ -67,12 +67,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           {/* Service storefront */}
           <div className="md:col-span-8 md:row-span-2 rounded-3xl bg-white border border-slate-200 p-8 flex flex-col justify-between overflow-hidden relative group min-h-[320px]">
             <div className="relative z-10">
-              <h3
+              <h2
                 className="text-2xl font-bold text-slate-900 mb-2"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 {t('landing.v5.bento.builder.title', 'Витрина услуг без пустых блоков')}
-              </h3>
+              </h2>
               <p className="text-slate-500 max-w-xs">
                 {t(
                   'landing.v5.bento.builder.desc',
@@ -134,9 +134,9 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
                   {t('landing.v5.bento.ai.eyebrow', 'Черновик страницы')}
                 </span>
               </div>
-              <h3 className="text-lg font-semibold mb-1">
+              <h2 className="text-lg font-semibold mb-1">
                 {t('landing.v5.bento.ai.title', 'Структура за пару минут')}
-              </h3>
+              </h2>
               <p className="text-slate-400 text-sm">
                 {t('landing.v5.bento.ai.desc', 'Опишите нишу - получите основу, которую можно сразу править руками.')}
               </p>
@@ -149,12 +149,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           {/* Local payments */}
           <div className="md:col-span-4 md:row-span-1 rounded-3xl bg-white border border-slate-200 p-6 flex items-center justify-between overflow-hidden min-h-[180px]">
             <div>
-              <h3
+              <h2
                 className="text-lg font-bold text-slate-900"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 {t('landing.v5.bento.pay.title', 'Оплата до визита')}
-              </h3>
+              </h2>
               <p className="text-slate-500 text-sm">
                 {t('landing.v5.bento.pay.desc', 'Kaspi QR, Robokassa, Stripe')}
               </p>
@@ -176,12 +176,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           {/* Mini-CRM & Telegram */}
           <div className="md:col-span-5 md:row-span-2 rounded-3xl bg-[#e8ecf1] p-8 flex flex-col relative overflow-hidden min-h-[320px]">
             <div className="mb-4">
-              <h3
+              <h2
                 className="text-2xl font-bold text-slate-900 mb-2"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 {t('landing.v5.bento.crm.title', 'Заявки и статусы')}
-              </h3>
+              </h2>
               <p className="text-slate-600">
                 {t(
                   'landing.v5.bento.crm.desc',
@@ -223,12 +223,12 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           <div className="md:col-span-7 md:row-span-2 rounded-3xl bg-white border border-slate-200 p-8 flex flex-col min-h-[320px]">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h3
+                <h2
                   className="text-2xl font-bold text-slate-900 mb-1"
                   style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   {t('landing.v5.bento.analytics.title', 'Что сработало')}
-                </h3>
+                </h2>
                 <p className="text-slate-500">
                   {t(
                     'landing.v5.bento.analytics.desc',
