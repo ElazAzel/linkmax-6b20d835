@@ -997,8 +997,12 @@ export type Database = {
           created_at: string
           http_status: number | null
           id: string
+          last_attempted_at: string | null
+          next_retry_at: string | null
           page_id: string | null
+          payload: Json | null
           provider: string
+          retry_count: number
           skip_reason: string | null
           submission_status: string
           target_url: string
@@ -1012,8 +1016,12 @@ export type Database = {
           created_at?: string
           http_status?: number | null
           id?: string
+          last_attempted_at?: string | null
+          next_retry_at?: string | null
           page_id?: string | null
+          payload?: Json | null
           provider: string
+          retry_count?: number
           skip_reason?: string | null
           submission_status?: string
           target_url: string
@@ -1027,8 +1035,12 @@ export type Database = {
           created_at?: string
           http_status?: number | null
           id?: string
+          last_attempted_at?: string | null
+          next_retry_at?: string | null
           page_id?: string | null
+          payload?: Json | null
           provider?: string
+          retry_count?: number
           skip_reason?: string | null
           submission_status?: string
           target_url?: string
@@ -1475,6 +1487,8 @@ export type Database = {
           updated_at: string | null
           user_id: string
           view_count: number | null
+          webhook_secret: string | null
+          webhook_url: string | null
         }
         Insert: {
           avatar_style?: Json | null
@@ -1522,6 +1536,8 @@ export type Database = {
           updated_at?: string | null
           user_id: string
           view_count?: number | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
         }
         Update: {
           avatar_style?: Json | null
@@ -1569,6 +1585,8 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           view_count?: number | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
         }
         Relationships: [
           {
@@ -1963,13 +1981,48 @@ export type Database = {
           },
         ]
       }
+      team_secrets: {
+        Row: {
+          created_at: string
+          invite_code: string
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          invite_code: string
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          invite_code?: string
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_secrets_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "public_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_secrets_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teams: {
         Row: {
           avatar_url: string | null
           created_at: string
           description: string | null
           id: string
-          invite_code: string | null
           is_public: boolean | null
           name: string
           niche: string | null
@@ -1982,7 +2035,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
-          invite_code?: string | null
           is_public?: boolean | null
           name: string
           niche?: string | null
@@ -1995,7 +2047,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
-          invite_code?: string | null
           is_public?: boolean | null
           name?: string
           niche?: string | null
@@ -3854,6 +3905,35 @@ export type Database = {
           },
         ]
       }
+      zone_secrets: {
+        Row: {
+          calendar_feed_token: string
+          created_at: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          calendar_feed_token: string
+          created_at?: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          calendar_feed_token?: string
+          created_at?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_secrets_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: true
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_subscriptions: {
         Row: {
           created_at: string
@@ -4069,7 +4149,6 @@ export type Database = {
       }
       zones: {
         Row: {
-          calendar_feed_token: string | null
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
@@ -4085,7 +4164,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -4101,7 +4179,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -4178,32 +4255,6 @@ export type Database = {
           owner_id: string | null
           slug: string | null
           updated_at: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          invite_code?: never
-          is_public?: boolean | null
-          name?: string | null
-          niche?: string | null
-          owner_id?: string | null
-          slug?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          invite_code?: never
-          is_public?: boolean | null
-          name?: string | null
-          niche?: string | null
-          owner_id?: string | null
-          slug?: string | null
-          updated_at?: string | null
         }
         Relationships: []
       }
@@ -4319,12 +4370,92 @@ export type Database = {
         Returns: Json
       }
       get_admin_platform_stats: { Args: never; Returns: Json }
+      get_admin_withdrawals: {
+        Args: { p_status?: string }
+        Returns: {
+          admin_notes: string | null
+          amount: number
+          created_at: string
+          id: string
+          payment_details: Json | null
+          payment_method: string | null
+          processed_at: string | null
+          processed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "token_withdrawals"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_auth_user_email: { Args: never; Returns: string }
       get_event_registration_count: {
         Args: { p_event_id: string }
         Returns: number
       }
       get_growth_metrics: { Args: { p_days?: number }; Returns: Json }
+      get_my_full_page: {
+        Args: { p_user_id?: string }
+        Returns: {
+          avatar_style: Json | null
+          avatar_url: string | null
+          city: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_whatsapp: string | null
+          country_code: string | null
+          created_at: string | null
+          custom_domain: string | null
+          description: string | null
+          editor_mode: string
+          entity_type: string | null
+          favicon_url: string | null
+          gallery_featured_at: string | null
+          gallery_likes: number | null
+          grid_config: Json | null
+          hide_branding: boolean | null
+          id: string
+          index_exclusion_reasons: string[] | null
+          integrations: Json | null
+          is_home: boolean
+          is_in_gallery: boolean | null
+          is_indexable: boolean | null
+          is_paid: boolean | null
+          is_primary_paid: boolean | null
+          is_published: boolean | null
+          last_indexnow_at: string | null
+          last_snapshot_at: string | null
+          niche: string | null
+          organization_id: string | null
+          page_path: string | null
+          page_type: string | null
+          preview_url: string | null
+          profession: string | null
+          quality_breakdown: Json | null
+          quality_score: number | null
+          seo_meta: Json | null
+          service_slugs: Json | null
+          site_id: string | null
+          slug: string
+          theme_settings: Json | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          view_count: number | null
+          webhook_secret: string | null
+          webhook_url: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "pages"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_page_search_diagnostics: {
         Args: { p_page_id: string }
         Returns: Json
@@ -4389,6 +4520,7 @@ export type Database = {
         Args: { p_zone_id: string }
         Returns: string
       }
+      get_zone_calendar_token: { Args: { _zone_id: string }; Returns: string }
       get_zone_invite_by_token: { Args: { p_token: string }; Returns: Json }
       get_zone_member_limit: { Args: { p_plan_code: string }; Returns: number }
       has_active_subscription: {
@@ -4533,6 +4665,8 @@ export type Database = {
           p_theme_settings: Json
           p_title: string
           p_user_id: string
+          p_webhook_secret?: string
+          p_webhook_url?: string
         }
         Returns: string
       }
