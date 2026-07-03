@@ -139,7 +139,7 @@ const App = () => {
     if (error) {
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        toast.error(`Ошибка входа: ${errorDescription || error}`);
+        toast.error(`${OAUTH_ERROR_COPY[getLang()]}: ${errorDescription || error}`);
       }, 500);
     }
   }, []);
