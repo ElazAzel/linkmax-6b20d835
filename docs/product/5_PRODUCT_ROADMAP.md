@@ -79,3 +79,19 @@
 
 - Детальный срез выполнения и сопоставление roadmap ↔ кодовая база: `docs/product/ROADMAP_EXECUTION_2026-04-19.md`.
 - На 19 апреля 2026 основные направления Q2-Q3 реализованы; в Q4 остаются расширения Digital Goods и AI Financial Advisor.
+
+---
+
+## 6. OSS Benchmark Overlay (P0 → P4, начиная с Q3 2026)
+
+На основе deep-research по open-source рынку roadmap дополнен слоями «Micro-Business OS». Подробно — в [`OSS_BENCHMARK_STRATEGY_2026.md`](OSS_BENCHMARK_STRATEGY_2026.md).
+
+| Фаза | Тема | Основные референсы | Ключевые результаты |
+| :--- | :--- | :--- | :--- |
+| **P0** | Платформенный каркас | Webstudio, GrapesJS, Plasmic, PostHog | Block schema с design tokens + data bindings, object graph (leads/bookings/orders/documents), единая event taxonomy, dual analytics. |
+| **P1** | Acquisition OS | Dub, Formbricks, Cal.com, Twenty | SmartLink с атрибуцией, dynamic CTA, form/survey qualification, booking с routing traces, приземление в CRM-граф. |
+| **P2** | Monetization & Fulfilment | Lago, Medusa, Saleor, Vendure, DocuSeal, Documenso | Product/Offer/Checkout, hybrid billing + metering, оффер→договор→счёт→акт→подпись без выхода из платформы. |
+| **P3** | Operator Tooling | Activepieces, Chatwoot, Appsmith | Recipe-based automation, support inbox, backoffice, explainable routing trace, experiments/flags. |
+| **P4** | Marketplace & Ecosystem | LinkStack themes, Saleor apps, Vendure plugins, Activepieces pieces | Marketplace блоков/шаблонов/recipes/connectors с manifest+versioning+permissions. |
+
+**Порядок:** builder schema + event model → smart links + forms + booking + CRM → billing + checkout + docs → automation/support/admin → marketplace.
