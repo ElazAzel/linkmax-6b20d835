@@ -177,6 +177,7 @@ i18n
       escapeValue: false,
     },
     debug: false,
+    showSupportNotice: false,
     ns: ['translation'],
     defaultNS: 'translation',
     detection: {

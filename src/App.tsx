@@ -14,8 +14,7 @@ import { RoutePrefetchManager } from "@/components/performance/RoutePrefetchMana
 import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
-import { PostHogProvider } from 'posthog-js/react';
-import { initPostHog, posthog } from "@/lib/posthog";
+import { initPostHog } from "@/lib/posthog";
 
 // Initialize PostHog before rendering
 initPostHog();
@@ -146,8 +145,7 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <PostHogProvider client={posthog}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>
               <LanguageProvider>
@@ -178,7 +176,6 @@ const App = () => {
             </AuthProvider>
           </TMAProvider>
         </QueryClientProvider>
-      </PostHogProvider>
     </HelmetProvider>
   );
 };
