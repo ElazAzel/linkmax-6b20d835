@@ -39,8 +39,8 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
-  const hasTitle = hasPrimitiveChild(children, DialogPrimitive.Title.displayName);
-  const hasDescription = hasPrimitiveChild(children, DialogPrimitive.Description.displayName);
+  const hasTitle = hasPrimitiveChild(children, DialogPrimitive.Title.displayName ?? 'DialogTitle');
+  const hasDescription = hasPrimitiveChild(children, DialogPrimitive.Description.displayName ?? 'DialogDescription');
 
   return (
     <DialogPortal>
