@@ -100,6 +100,21 @@ serve(async (req) => {
       );
     }
 
+    // Input size limit — prevents API quota drain from oversized payloads.
+    const MAX_TEXT_LEN = 8000;
+    if (typeof text !== 'string' || text.length > MAX_TEXT_LEN) {
+      return new Response(
+        JSON.stringify({ error: `Text exceeds max length of ${MAX_TEXT_LEN} characters` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    if (!Array.isArray(targetLanguages)) {
+      return new Response(
+        JSON.stringify({ error: "targetLanguages must be an array" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Limit to 10 languages per request to avoid timeout
     const limitedTargetLanguages = targetLanguages.slice(0, 10);
 
