@@ -76,7 +76,8 @@
 - ✅ **P1 SmartLink**: таблица `smart_links` (slug/target/UTM/goal_event/downstream_action, counters), RPC `increment_smart_link_click` (atomic), edge-функция `smartlink-redirect` (302 + UTM inject + canonical `link_click` в `analytics.metadata.event`), сервис `src/lib/growth/smart-links.ts` (CRUD). RLS: owner-only write, публичное чтение только активных ссылок.
 - ✅ **P2 Offers**: таблица `offers` (one_time / subscription / usage / hybrid / donation, price_cents, currency, billing_interval, usage_config) + сервис `src/lib/money/offers.ts`. Абстракция независима от чекаут-провайдера (Robokassa/Paddle) — orders остаются точкой интеграции.
 - ✅ **P2 Trust**: таблица `document_signatures` (pending/viewed/signed/declined/expired, signature_data, IP, UA) над `zone_documents` + сервис `src/lib/trust/document-signatures.ts`. Готово к embed-интеграции с DocuSeal/Documenso.
-- ⏳ Следующие шаги: (a) UI для SmartLinks в дашборде + маршрут `/s/:slug` → edge-функция, (b) чекаут-адаптер `offers → orders` для Robokassa/Paddle, (c) DocuSeal embed для реального PDF-подписания, (d) миграция существующих трекеров кликов на `trackCanonicalEvent({ event: 'link_click', sourceObject: { type: 'link', id } })`.
+- ✅ **P1 SmartLink UI + public route**: страница `/dashboard/smart-links` (CRUD, toggle активности, copy/open/delete, показатели clicks/conversions) и публичный маршрут `/s/:slug` → edge-функция `smartlink-redirect` (клиентский bridge через `window.location.replace`, чтобы работать на кастомном домене lnkmx.my без Cloudflare Worker).
+- ⏳ Следующие шаги: (a) чекаут-адаптер `offers → orders` для Robokassa/Paddle, (b) DocuSeal embed для реального PDF-подписания, (c) миграция существующих трекеров кликов на `trackCanonicalEvent({ event: 'link_click', sourceObject: { type: 'link', id } })`, (d) в `smart-links.ts` использовать `Database['public']['Tables']` вместо `as never` после регенерации типов.
 
 
 ### P1 — Acquisition OS
