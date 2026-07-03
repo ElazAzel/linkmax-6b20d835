@@ -79,7 +79,7 @@ const STATIC_PAGES = [
   { loc: '/payment-terms', changefreq: 'yearly', priority: '0.3' },
 ];
 
-const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn', 'linktree-alternative', 'crm-dlya-uslug', 'link-in-bio', 'linktree-alternative-en', 'crm-for-services'];
+const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];
 // Existing /dlya/ landings + 50 audience-targeted SEO landings (2026-06).
 const NICHE_LANDINGS = [
   // 50 audience-targeted programmatic landings (2026-06). Stale slugs
