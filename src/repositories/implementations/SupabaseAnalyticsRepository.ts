@@ -125,6 +125,11 @@ function getOrCreateSession(): Session {
 
 // ============= Implementation =============
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function toUuidOrNull(v?: string | null): string | null {
+  return v && UUID_RE.test(v) ? v : null;
+}
+
 export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
   async trackEvent(dto: TrackEventDTO): Promise<Result<void, Error>> {
     return tryCatchAsync(async () => {
@@ -134,9 +139,12 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
       const referrer = getReferrerInfo();
       const utmParams = getUtmParams();
 
+      const safeBlockId = toUuidOrNull(blockId);
       const enrichedMetadata = {
         ...metadata,
         ...utmParams,
+        // Preserve original identifier when it wasn't a valid UUID (legacy string IDs)
+        ...(blockId && !safeBlockId ? { rawBlockId: blockId } : {}),
         visitorId: session.visitorId,
         sessionId: session.id,
         device: getDeviceType(),
@@ -150,8 +158,8 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
       };
 
       await supabase.from('analytics').insert({
-        page_id: pageId,
-        block_id: blockId || null,
+        page_id: toUuidOrNull(pageId),
+        block_id: safeBlockId,
         event_type: eventType,
         metadata: enrichedMetadata as Json,
       });
