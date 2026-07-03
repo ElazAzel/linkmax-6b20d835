@@ -190,13 +190,16 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
     blockTitle?: string
   ): Promise<Result<void, Error>> {
     return tryCatchAsync(async () => {
-      await supabase.rpc('increment_block_clicks', { block_uuid: blockId });
+      const safeBlockId = toUuidOrNull(blockId);
+      if (safeBlockId) {
+        await supabase.rpc('increment_block_clicks', { block_uuid: safeBlockId });
+      }
 
       await this.trackEvent({
         pageId,
         eventType: 'click',
         blockId,
-        metadata: { blockType, blockTitle },
+        metadata: { blockType, blockTitle, ...(safeBlockId ? {} : { rawBlockId: blockId }) },
       });
     });
   }
