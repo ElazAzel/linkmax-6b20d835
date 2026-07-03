@@ -81,15 +81,16 @@ class RouteErrorBoundary extends React.Component<
   }
   render() {
     if (this.state.hasError) {
+      const c = ERROR_COPY[getLang()];
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center space-y-4 p-6">
-            <p className="text-lg font-semibold text-foreground">Что-то пошло не так</p>
+            <p className="text-lg font-semibold text-foreground">{c.title}</p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium"
             >
-              Обновить страницу
+              {c.reload}
             </button>
           </div>
         </div>
