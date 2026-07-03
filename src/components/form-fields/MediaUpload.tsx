@@ -51,7 +51,7 @@ export function MediaUpload({
 
   const isGifFile = (file: File) => file.type === 'image/gif' || file.name.toLowerCase().endsWith('.gif');
 
-  const MAX_SIZE_MB = 20;
+  const MAX_SIZE_MB = isPremium ? 30 : 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,9 +63,10 @@ export function MediaUpload({
       return;
     }
 
-    // 20MB limit (raised from 15MB to accommodate animated GIFs)
+    // Tiered limit: 10MB free / 30MB premium
     if (file.size > MAX_SIZE_BYTES) {
-      toast.error(t('upload.fileTooLarge', `File size must be less than ${MAX_SIZE_MB}MB`));
+      const upgradeHint = !isPremium ? ` ${t('upload.upgradeForMore', 'Upgrade to Pro for 30MB.')}` : '';
+      toast.error(`${t('upload.fileTooLarge', 'File is too large')} (max ${MAX_SIZE_MB}MB).${upgradeHint}`);
       return;
     }
 
