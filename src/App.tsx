@@ -15,7 +15,7 @@ import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMo
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
 import { PostHogProvider } from 'posthog-js/react';
-import { initPostHog, POSTHOG_KEY, POSTHOG_HOST } from "@/lib/posthog";
+import { initPostHog, posthog } from "@/lib/posthog";
 
 // Initialize PostHog before rendering
 initPostHog();
@@ -146,7 +146,7 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <PostHogProvider apiKey={POSTHOG_KEY} options={{ api_host: POSTHOG_HOST }}>
+      <PostHogProvider client={posthog}>
         <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>
