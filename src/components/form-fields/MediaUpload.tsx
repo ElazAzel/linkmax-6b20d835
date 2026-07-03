@@ -98,21 +98,36 @@ export function MediaUpload({
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('user-media')
-        .upload(filePath, processedFile, {
-          contentType,
-          cacheControl: '3600',
-          upsert: false,
+      let publicUrl: string;
+
+      if (processedFile.size > 5 * 1024 * 1024) {
+        const formData = new FormData();
+        formData.append('file', processedFile, fileName);
+        formData.append('path', filePath);
+        formData.append('contentType', contentType);
+
+        const { data, error } = await supabase.functions.invoke<{ publicUrl: string }>('upload-user-media', {
+          body: formData,
         });
+        if (error) throw error;
+        if (!data?.publicUrl) throw new Error('Upload function returned no URL');
+        publicUrl = data.publicUrl;
+      } else {
+        const { error: uploadError } = await supabase.storage
+          .from('user-media')
+          .upload(filePath, processedFile, {
+            contentType,
+            cacheControl: '3600',
+            upsert: false,
+          });
 
-      if (uploadError) {
-        throw uploadError;
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage
+          .from('user-media')
+          .getPublicUrl(filePath);
+        publicUrl = data.publicUrl;
       }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('user-media')
-        .getPublicUrl(filePath);
 
       onChange(publicUrl);
       toast.success(t('upload.success', 'File uploaded successfully'));

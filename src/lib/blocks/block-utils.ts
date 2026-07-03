@@ -127,13 +127,13 @@ export function createBlockClickHandler(
 
 /**
  * Generate a stable unique ID for a block
- * Uses crypto.randomUUID if available, falls back to timestamp + random
+ * Uses a pure UUID because analytics/blocks DB columns are uuid typed.
  */
-export function generateBlockId(type: string): string {
-  const random = typeof crypto !== 'undefined' && crypto.randomUUID
-    ? crypto.randomUUID().slice(0, 8)
-    : Math.random().toString(36).substring(2, 10);
-  return `${type}-${Date.now()}-${random}`;
+export function generateBlockId(_type: string): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c =>
+    (Number(c) ^ (Math.random() * 16 >> (Number(c) / 4))).toString(16)
+  );
 }
 
 /**
