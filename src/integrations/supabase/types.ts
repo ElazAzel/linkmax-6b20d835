@@ -600,6 +600,62 @@ export type Database = {
         }
         Relationships: []
       }
+      document_signatures: {
+        Row: {
+          created_at: string
+          document_id: string | null
+          id: string
+          ip_address: string | null
+          metadata: Json
+          signature_data: Json
+          signed_at: string | null
+          signer_email: string
+          signer_name: string | null
+          status: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          signature_data?: Json
+          signed_at?: string | null
+          signer_email: string
+          signer_name?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          signature_data?: Json
+          signed_at?: string | null
+          signer_email?: string
+          signer_name?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_signatures_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "zone_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_registrations: {
         Row: {
           answers_json: Json | null
@@ -1189,6 +1245,72 @@ export type Database = {
           },
           {
             foreignKeyName: "newsletter_subscriptions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          billing_interval: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          is_active: boolean
+          metadata: Json
+          name: string
+          offer_type: string
+          page_id: string | null
+          price_cents: number
+          updated_at: string
+          usage_config: Json
+          user_id: string
+        }
+        Insert: {
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json
+          name: string
+          offer_type?: string
+          page_id?: string | null
+          price_cents?: number
+          updated_at?: string
+          usage_config?: Json
+          user_id: string
+        }
+        Update: {
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json
+          name?: string
+          offer_type?: string
+          page_id?: string | null
+          price_cents?: number
+          updated_at?: string
+          usage_config?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offers_page_id_fkey"
             columns: ["page_id"]
             isOneToOne: false
             referencedRelation: "public_pages"
@@ -1888,6 +2010,93 @@ export type Database = {
           {
             foreignKeyName: "sites_primary_page_id_fkey"
             columns: ["primary_page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      smart_links: {
+        Row: {
+          block_id: string | null
+          campaign: string | null
+          click_count: number
+          conversion_count: number
+          created_at: string
+          downstream_action: Json
+          goal_event: string | null
+          id: string
+          is_active: boolean
+          last_click_at: string | null
+          metadata: Json
+          page_id: string | null
+          slug: string
+          target_url: string
+          updated_at: string
+          user_id: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          block_id?: string | null
+          campaign?: string | null
+          click_count?: number
+          conversion_count?: number
+          created_at?: string
+          downstream_action?: Json
+          goal_event?: string | null
+          id?: string
+          is_active?: boolean
+          last_click_at?: string | null
+          metadata?: Json
+          page_id?: string | null
+          slug: string
+          target_url: string
+          updated_at?: string
+          user_id: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          block_id?: string | null
+          campaign?: string | null
+          click_count?: number
+          conversion_count?: number
+          created_at?: string
+          downstream_action?: Json
+          goal_event?: string | null
+          id?: string
+          is_active?: boolean
+          last_click_at?: string | null
+          metadata?: Json
+          page_id?: string | null
+          slug?: string
+          target_url?: string
+          updated_at?: string
+          user_id?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_links_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "smart_links_page_id_fkey"
+            columns: ["page_id"]
             isOneToOne: false
             referencedRelation: "public_pages"
             referencedColumns: ["id"]
@@ -4569,6 +4778,16 @@ export type Database = {
       increment_challenge_progress: {
         Args: { p_challenge_key: string }
         Returns: undefined
+      }
+      increment_smart_link_click: {
+        Args: { _slug: string }
+        Returns: {
+          downstream_action: Json
+          id: string
+          page_id: string
+          target_url: string
+          user_id: string
+        }[]
       }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
       is_team_member: {
