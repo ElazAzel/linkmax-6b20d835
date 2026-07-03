@@ -71,8 +71,9 @@
 **Status (3 июля 2026):**
 - ✅ Storage tiering: bucket `user-media-large` (30MB) + edge function `upload-user-media` для файлов >5MB через service_role. Лимиты Free 10MB / Pro 30MB. GIF-анимация сохраняется (без canvas re-encode).
 - ✅ Analytics integrity: UUID-guard в `SupabaseAnalyticsRepository` (валидные UUID → колонки, legacy string → `metadata.rawBlockId`) — устраняет 400 на `analytics.insert` и `increment_block_clicks`.
-- ⏳ Единая event taxonomy (`page_view / link_click / cta_opened / form_* / booking_* / checkout_* / payment_succeeded / document_*`) — следующий шаг.
-- ⏳ Object graph consolidation: сейчас `leads` + zone-объекты (`zone_deals`, `zone_contacts`, ...) живут раздельно; нужен shared view + `source_object` reference.
+- ✅ Единая event taxonomy: `src/lib/analytics/event-taxonomy.ts` — 15 канонических событий (`page_view / link_click / cta_opened / form_started|submitted / survey_completed / booking_started|confirmed / deal_created / checkout_started / payment_succeeded / document_sent|signed / support_conversation_started / share`). Helper `trackCanonicalEvent()` пишет каноническое имя в `metadata.event` и сохраняет обратную совместимость с legacy колонкой `analytics.event_type`. Индексы `analytics_canonical_event_idx` и `analytics_source_object_id_idx` — для funnel-запросов.
+- ✅ Object graph consolidation: view `public.unified_pipeline_contacts` (security_invoker) объединяет `leads` (solo) и `zone_contacts` (B2B) с полями `source_object_type` / `source_object_id`. Один surface для аналитики и CRM; RLS исходных таблиц применяется автоматически.
+- ⏳ Следующий шаг P1: SmartLink как объект с атрибуцией + миграция существующих трекеров на `trackCanonicalEvent`.
 
 
 ### P1 — Acquisition OS
