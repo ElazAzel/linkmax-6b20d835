@@ -68,6 +68,13 @@
 - Единая event taxonomy + dual analytics (PostHog внутри, простой Creator Dashboard снаружи).
 - Референсы: Webstudio, GrapesJS, Plasmic, PostHog, Plausible, Umami.
 
+**Status (3 июля 2026):**
+- ✅ Storage tiering: bucket `user-media-large` (30MB) + edge function `upload-user-media` для файлов >5MB через service_role. Лимиты Free 10MB / Pro 30MB. GIF-анимация сохраняется (без canvas re-encode).
+- ✅ Analytics integrity: UUID-guard в `SupabaseAnalyticsRepository` (валидные UUID → колонки, legacy string → `metadata.rawBlockId`) — устраняет 400 на `analytics.insert` и `increment_block_clicks`.
+- ⏳ Единая event taxonomy (`page_view / link_click / cta_opened / form_* / booking_* / checkout_* / payment_succeeded / document_*`) — следующий шаг.
+- ⏳ Object graph consolidation: сейчас `leads` + zone-объекты (`zone_deals`, `zone_contacts`, ...) живут раздельно; нужен shared view + `source_object` reference.
+
+
 ### P1 — Acquisition OS
 - **SmartLink**: ссылка как объект с целью, атрибуцией, downstream-действием (Dub-модель).
 - Dynamic CTA logic на странице.
