@@ -4297,6 +4297,25 @@ export type Database = {
         }
         Relationships: []
       }
+      unified_pipeline_contacts: {
+        Row: {
+          company: string | null
+          created_at: string | null
+          email: string | null
+          id: string | null
+          metadata: Json | null
+          name: string | null
+          owner_user_id: string | null
+          phone: string | null
+          source: string | null
+          source_object_id: string | null
+          source_object_type: string | null
+          status: string | null
+          updated_at: string | null
+          zone_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accept_zone_invite: { Args: { p_token: string }; Returns: Json }
