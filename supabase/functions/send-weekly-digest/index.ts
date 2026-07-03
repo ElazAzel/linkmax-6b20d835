@@ -140,7 +140,15 @@ serve(async (req) => {
           continue;
         }
 
-        // Generate leads table HTML
+        // Escape lead-controlled fields to prevent HTML injection in the digest email.
+        const escapeHtml = (v: unknown): string =>
+          String(v ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+
         let leadsTableHtml = '';
         if (leads && leads.length > 0) {
           const sourceLabels: Record<string, string> = {
@@ -160,9 +168,9 @@ serve(async (req) => {
               </tr>
               ${leads.slice(0, 10).map(lead => `
                 <tr>
-                  <td style="padding: 12px; font-size: 14px; color: #18181b; border-bottom: 1px solid #e4e4e7;">${lead.name}</td>
-                  <td style="padding: 12px; font-size: 14px; color: #52525b; border-bottom: 1px solid #e4e4e7;">${lead.email || lead.phone || '-'}</td>
-                  <td style="padding: 12px; font-size: 14px; color: #52525b; border-bottom: 1px solid #e4e4e7;">${sourceLabels[lead.source] || lead.source}</td>
+                  <td style="padding: 12px; font-size: 14px; color: #18181b; border-bottom: 1px solid #e4e4e7;">${escapeHtml(lead.name)}</td>
+                  <td style="padding: 12px; font-size: 14px; color: #52525b; border-bottom: 1px solid #e4e4e7;">${escapeHtml(lead.email || lead.phone || '-')}</td>
+                  <td style="padding: 12px; font-size: 14px; color: #52525b; border-bottom: 1px solid #e4e4e7;">${escapeHtml(sourceLabels[lead.source] || lead.source)}</td>
                 </tr>
               `).join('')}
             </table>
