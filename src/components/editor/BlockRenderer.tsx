@@ -3,6 +3,8 @@ import type { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
+import { getBlockStyles } from '@/lib/blocks/block-styling';
+import { cn } from '@/lib/utils/utils';
 import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
@@ -81,13 +83,16 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   const { onBlockClick, onBlockView } = useAnalytics();
   const { i18n } = useTranslation();
 
-  // Track impression on mount (only for public pages)
+  // Track impression on mount (only for public pages).
+  // Previously this only fired for experiment blocks, which made regular
+  // block-level analytics (views/CTR) nearly empty.
   useEffect(() => {
-    if (!isPreview && !isEditorMode && block.experimentId) {
+    const isTrackable = BLOCK_MANIFEST[block.type as BlockType]?.renderMode === 'trackable';
+    if (!isPreview && !isEditorMode && isTrackable) {
       const title = getBlockTitle(block, i18n.language as SupportedLanguage);
       onBlockView(block.id, block.type, title, block.experimentId, block.variantLabel);
     }
-  }, [block.id, block.experimentId, block.variantLabel, isPreview, isEditorMode, onBlockView, i18n.language]);
+  }, [block.id, block.type, block.experimentId, block.variantLabel, isPreview, isEditorMode, onBlockView, i18n.language]);
 
   const handleClick = useCallback(() => {
     if (!isPreview) {
@@ -105,6 +110,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
 
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
+  const { style: bsStyle, className: bsClass } = getBlockStyles(block.blockStyle);
+  const wrapperStyle = { ...animationStyle, ...bsStyle };
+  const wrapperClass = cn(animationClass, bsClass);
   const RendererComponent = manifest.renderer;
 
   // Build props for the renderer
@@ -140,7 +148,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
         pageOwnerId={pageOwnerId}
         isPreview={isPreview}
       >
-        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
+        <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
           <BlockErrorBoundary>
             {inner}
           </BlockErrorBoundary>
@@ -152,7 +160,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   // Simple render mode
   return (
     <BlockErrorBoundary>
-      <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
+      <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
         {inner}
       </div>
     </BlockErrorBoundary>

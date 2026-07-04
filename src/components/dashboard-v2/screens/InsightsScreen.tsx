@@ -21,10 +21,14 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatCard } from '../common/StatCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { EmptyState } from '../common/EmptyState';
+import { SmartEmptyState } from '@/components/ui/smart-empty-state';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Edit3 from 'lucide-react/dist/esm/icons/edit-3';
 import { ErrorState } from '../common/ErrorState';
 import {
   AnalyticsChart,
@@ -41,6 +45,8 @@ import { cn } from '@/lib/utils/utils';
 import type { Block } from '@/types/page';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { useInsights } from '@/hooks/analytics/useInsights';
+
 
 interface InsightsScreenProps {
   pageId: string;
@@ -79,7 +85,8 @@ export const InsightsScreen = memo(function InsightsScreen({
   const [period, setPeriod] = useState<Period>('7d');
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const { analytics, loading, error, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics(
-    pageId || null
+    pageId || null,
+    '7d',
   );
 
   const handlePeriodChange = (p: Period) => {
@@ -128,99 +135,22 @@ export const InsightsScreen = memo(function InsightsScreen({
     [totalDevices, stats.devices]
   );
 
-  // AI Insights
-  const insights = useMemo(() => {
-    const hasPricing = blocks.some((b) => b.type === 'pricing');
-    const hasTestimonials = blocks.some((b) => b.type === 'testimonial');
-    const hasContactForm = blocks.some((b) => b.type === 'form');
+  // AI Insights (algorithmic heuristics)
+  const insights = useInsights(
+    {
+      blocks,
+      stats: {
+        ctr: stats.ctr,
+        views: stats.views,
+        bounceRate: stats.bounceRate,
+        conversions: stats.conversions,
+        topBlocks: stats.topBlocks,
+      },
+      devicePercentages,
+    },
+    onApplyInsight,
+  );
 
-    const suggestions = [];
-
-    // CTR-based insights
-    if (stats.ctr < 5 && stats.views > 10) {
-      suggestions.push({
-        id: 'low-ctr',
-        type: 'warning',
-        title: t('dashboard.insights.lowCtr', 'Низкий CTR'),
-        description: t('dashboard.insights.lowCtrDesc', `CTR всего ${stats.ctr.toFixed(1)}%. Добавьте яркие CTA-кнопки`),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'button' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    // Bounce rate insights
-    if (stats.bounceRate > 70 && stats.views > 10) {
-      suggestions.push({
-        id: 'high-bounce',
-        type: 'warning',
-        title: t('dashboard.insights.highBounce', 'Высокий показатель отказов'),
-        description: t('dashboard.insights.highBounceDesc', `${stats.bounceRate.toFixed(0)}% посетителей уходят без действий`),
-        action: () => onApplyInsight({ type: 'optimize', data: { action: 'improve_engagement' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    if (!hasPricing && blocks.length > 3) {
-      suggestions.push({
-        id: 'add-pricing',
-        type: 'add',
-        title: t('dashboard.insights.addPricing', 'Добавьте блок с ценами'),
-        description: t('dashboard.insights.addPricingDesc', 'Страницы с прайсом получают на 40% больше заявок'),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'pricing' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    if (!hasTestimonials && blocks.length > 5) {
-      suggestions.push({
-        id: 'add-testimonials',
-        type: 'add',
-        title: t('dashboard.insights.addTestimonials', 'Добавьте отзывы'),
-        description: t('dashboard.insights.addTestimonialsDesc', 'Отзывы увеличивают доверие и конверсию на 25%'),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'testimonial' } }),
-        impact: 'medium' as const,
-      });
-    }
-
-    if (!hasContactForm && stats.views > 50 && stats.conversions === 0) {
-      suggestions.push({
-        id: 'add-form',
-        type: 'add',
-        title: t('dashboard.insights.addForm', 'Добавьте форму захвата'),
-        description: t('dashboard.insights.addFormDesc', 'Есть трафик, но нет конверсий. Добавьте форму обратной связи'),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'contact_form' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    if (stats.topBlocks[0]?.ctr > 15) {
-      suggestions.push({
-        id: 'duplicate-top',
-        type: 'optimize',
-        title: t('dashboard.insights.duplicateTop', 'Продублируйте популярную ссылку'),
-        description: t(
-          'dashboard.insights.duplicateTopDesc',
-          `"${stats.topBlocks[0].blockTitle}" получает ${stats.topBlocks[0].ctr.toFixed(0)}% кликов`
-        ),
-        action: () => onApplyInsight({ type: 'duplicate', blockId: stats.topBlocks[0].blockId }),
-        impact: 'medium' as const,
-      });
-    }
-
-    // Mobile optimization
-    if (devicePercentages.mobile > 80) {
-      suggestions.push({
-        id: 'mobile-first',
-        type: 'info',
-        title: t('dashboard.insights.mobileFirst', 'Mobile-first аудитория'),
-        description: t('dashboard.insights.mobileFirstDesc', `${devicePercentages.mobile}% с мобильных. Оптимизируйте под телефоны`),
-        action: null,
-        impact: 'low' as const,
-      });
-    }
-
-    return suggestions.slice(0, 4);
-  }, [blocks, onApplyInsight, stats, devicePercentages, t]);
 
   if (loading || !pageId) {
     return (
@@ -296,43 +226,84 @@ export const InsightsScreen = memo(function InsightsScreen({
 
       <div className="px-[var(--space-page-px)] pb-24 space-y-7">
         {!hasData ? (
-          <EmptyState
+          <SmartEmptyState
             icon={Eye}
-            title={t('dashboard.insights.noData', 'Нет данных')}
-            description={t('dashboard.insights.noDataDesc', 'Опубликуйте страницу, чтобы начать собирать статистику')}
-            action={{
-              label: t('common.share', 'Поделиться'),
+            eyebrow={t('dashboard.insights.emptyEyebrow', 'Аналитика появится после первых визитов')}
+            title={t('dashboard.insights.noData', 'Пока нет данных')}
+            description={t('dashboard.insights.noDataDesc', 'Поделитесь ссылкой на страницу — каждый просмотр, клик и заявка будут отслеживаться в реальном времени.')}
+            checklist={[
+              {
+                label: t('dashboard.insights.checklist.publish', 'Страница опубликована'),
+                done: true,
+              },
+              {
+                label: t('dashboard.insights.checklist.share', 'Поделитесь ссылкой'),
+                hint: t('dashboard.insights.checklist.shareHint', 'Instagram bio, WhatsApp статус, визитка'),
+              },
+              {
+                label: t('dashboard.insights.checklist.wait', 'Дождитесь первых посетителей'),
+                hint: t('dashboard.insights.checklist.waitHint', 'Обычно первые данные появляются в течение часа'),
+              },
+            ]}
+            primaryCta={{
+              label: t('dashboard.insights.copyLink', 'Скопировать ссылку'),
               onClick: () => {
                 const url = window.location.origin + '/' + slug;
                 navigator.clipboard.writeText(url);
                 toast.success(t('common.copied', 'Ссылка скопирована'));
-              }
+              },
+              icon: Share2,
             }}
+            secondaryCta={{
+              label: t('dashboard.insights.editPage', 'Редактировать'),
+              onClick: () => window.open('/dashboard?tab=editor', '_self'),
+              icon: Edit3,
+            }}
+            footer={t('dashboard.insights.emptyFooter', '📊 Мы фиксируем просмотры, клики, источники, гео и устройства')}
           />
         ) : (
           <>
             {/* Tab Navigation */}
             <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
-              <TabsList className="flex overflow-x-auto scrollbar-hide w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1 items-center gap-1 shadow-inner glass-subtle">
-                <TabsTrigger value="overview" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <ChartBar className="h-3.5 w-3.5 mr-1 shrink-0" />
+              {/* Mobile: Select dropdown */}
+              <div className="md:hidden">
+                <Select value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)}>
+                  <SelectTrigger className="h-12 w-full rounded-2xl bg-white/5 border-white/10" aria-label={t('analytics.tabs.label', 'Раздел аналитики')}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="overview"><ChartBar className="h-4 w-4 inline mr-2" />{t('analytics.tabs.overview', 'Обзор')}</SelectItem>
+                    <SelectItem value="traffic"><Globe className="h-4 w-4 inline mr-2" />{t('analytics.tabs.traffic', 'Трафик')}</SelectItem>
+                    <SelectItem value="blocks"><Target className="h-4 w-4 inline mr-2" />{t('analytics.tabs.blocks', 'Блоки')}</SelectItem>
+                    <SelectItem value="funnel"><TrendingUp className="h-4 w-4 inline mr-2" />{t('analytics.tabs.funnel', 'Воронка')}</SelectItem>
+                    {isPremium && (
+                      <SelectItem value="experiments"><FlaskConical className="h-4 w-4 inline mr-2" />{t('analytics.tabs.experiments', 'Тесты')}</SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Desktop: TabsList */}
+              <TabsList className="hidden md:flex w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1 items-center gap-1 shadow-inner glass-subtle">
+                <TabsTrigger value="overview" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <ChartBar className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.overview', 'Обзор')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="traffic" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
+                <TabsTrigger value="traffic" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <Globe className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.traffic', 'Трафик')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="blocks" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <Target className="h-3.5 w-3.5 mr-1 shrink-0" />
+                <TabsTrigger value="blocks" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <Target className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.blocks', 'Блоки')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="funnel" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                  <TrendingUp className="h-3.5 w-3.5 mr-1 shrink-0" />
+                <TabsTrigger value="funnel" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <TrendingUp className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.funnel', 'Воронка')}</span>
                 </TabsTrigger>
                 {isPremium && (
-                  <TabsTrigger value="experiments" className="flex-1 min-w-[90px] h-10 text-xs font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
-                    <FlaskConical className="h-3.5 w-3.5 mr-1 shrink-0" />
+                  <TabsTrigger value="experiments" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                    <FlaskConical className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                     <span>{t('analytics.tabs.experiments', 'Тесты')}</span>
                   </TabsTrigger>
                 )}
@@ -415,7 +386,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                     <motion.div variants={itemVariants}>
                       <StatCard
                         icon={Target}
-                        value={`${stats.ctr.toFixed(1)}%`}
+                        value={`${(stats.ctr || 0).toFixed(1)}%`}
                         label={t('dashboard.insights.ctr', 'CTR')}
                         variant="glass"
                       />
@@ -434,10 +405,10 @@ export const InsightsScreen = memo(function InsightsScreen({
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         {[
-                          { key: 'visitor', label: t('analytics.dataQuality.visitor', 'Visitor ID'), value: analytics?.dataQuality.visitorCoverage ?? 0 },
-                          { key: 'session', label: t('analytics.dataQuality.session', 'Session ID'), value: analytics?.dataQuality.sessionCoverage ?? 0 },
-                          { key: 'device', label: t('analytics.dataQuality.device', 'Device'), value: analytics?.dataQuality.deviceCoverage ?? 0 },
-                          { key: 'source', label: t('analytics.dataQuality.source', 'Source'), value: analytics?.dataQuality.sourceCoverage ?? 0 },
+                          { key: 'visitor', label: t('analytics.dataQuality.visitor', 'Visitor ID'), value: analytics?.dataQuality?.visitorCoverage ?? 0 },
+                          { key: 'session', label: t('analytics.dataQuality.session', 'Session ID'), value: analytics?.dataQuality?.sessionCoverage ?? 0 },
+                          { key: 'device', label: t('analytics.dataQuality.device', 'Device'), value: analytics?.dataQuality?.deviceCoverage ?? 0 },
+                          { key: 'source', label: t('analytics.dataQuality.source', 'Source'), value: analytics?.dataQuality?.sourceCoverage ?? 0 },
                         ].map(item => (
                           <div key={item.key} className="rounded-lg bg-muted/30 p-3">
                             <p className="text-xs text-muted-foreground">{item.label}</p>
@@ -660,11 +631,11 @@ export const InsightsScreen = memo(function InsightsScreen({
                             <div className="flex-1 min-w-0">
                               <div className="font-medium truncate">{block.blockTitle}</div>
                               <div className="text-sm text-muted-foreground">
-                                {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {block.ctr.toFixed(1)}%
+                                {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {(block.ctr || 0).toFixed(1)}%
                               </div>
                             </div>
                             <div className="w-20">
-                              <Progress value={Math.min(100, block.ctr * 5)} className="h-2" />
+                              <Progress value={Math.min(100, (block.ctr || 0) * 5)} className="h-2" />
                             </div>
                           </motion.div>
                         ))}
@@ -697,7 +668,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                         <span className="text-sm text-muted-foreground">
                           {t('analytics.funnel.clickRate', 'Клики / Просмотры')}
                         </span>
-                        <span className="font-bold">{stats.ctr.toFixed(1)}%</span>
+                        <span className="font-bold">{(stats.ctr || 0).toFixed(1)}%</span>
                       </div>
                       <div className="flex items-center justify-between py-2 border-b border-border/50">
                         <span className="text-sm text-muted-foreground">

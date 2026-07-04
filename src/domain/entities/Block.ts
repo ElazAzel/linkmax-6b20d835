@@ -86,8 +86,11 @@ export function isBlockScheduledVisible(block: BaseBlock, now: Date = new Date()
 /**
  * Generate a unique block ID
  */
-export function generateBlockId(type: BlockType): string {
-  return `${type}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+export function generateBlockId(_type: BlockType): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c =>
+    (Number(c) ^ (Math.random() * 16 >> (Number(c) / 4))).toString(16)
+  );
 }
 
 /**

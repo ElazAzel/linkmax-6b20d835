@@ -4,6 +4,7 @@ import { logger } from '@/lib/utils/logger';
 import { useAuth } from '@/hooks/user/useAuth';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { trackLeadReplied, trackLeadStatusChanged } from '@/lib/activation-events';
 
 import type { AppDatabase } from '@/platform/supabase/extended-types';
 
@@ -12,6 +13,17 @@ export type LeadStatus = Lead['status'];
 export type LeadSource = Lead['source'];
 export type LeadInteraction = AppDatabase['public']['Tables']['lead_interactions']['Row'];
 export type InteractionType = LeadInteraction['type'];
+type LeadUpdate = AppDatabase['public']['Tables']['leads']['Update'];
+
+function getLeadPageId(lead: Lead | undefined): string | null {
+  const metadata = lead?.metadata;
+  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
+    return null;
+  }
+
+  const pageId = (metadata as Record<string, unknown>).page_id;
+  return typeof pageId === 'string' ? pageId : null;
+}
 
 export function useLeads() {
   const { user } = useAuth();
@@ -57,8 +69,8 @@ export function useLeads() {
           name: leadData.name || '',
           email: leadData.email || null,
           phone: leadData.phone || null,
-          source: (leadData.source as any) || 'manual',
-          status: (leadData.status as any) || 'new',
+          source: leadData.source ?? 'manual',
+          status: leadData.status ?? 'new',
           notes: leadData.notes || null,
           metadata: leadData.metadata || {},
         })
@@ -86,9 +98,10 @@ export function useLeads() {
 
     try {
       setSaving(true);
+      const previousLead = leads.find(lead => lead.id === id);
       const { error } = await supabase
         .from('leads')
-        .update(updates as any)
+        .update(updates as LeadUpdate)
         .eq('id', id)
         .eq('user_id', user.id);
 
@@ -97,6 +110,14 @@ export function useLeads() {
       setLeads(prev => prev.map(lead =>
         lead.id === id ? { ...lead, ...updates } : lead
       ));
+
+      if (updates.status && previousLead && previousLead.status !== updates.status) {
+        const pageId = getLeadPageId(previousLead);
+        if (pageId) {
+          trackLeadStatusChanged(pageId, id, String(previousLead.status), String(updates.status));
+        }
+      }
+
       toast.success(t('toasts.leads.updated'));
       return true;
     } catch (error) {
@@ -111,16 +132,33 @@ export function useLeads() {
   /** Quick reply: auto-set status to contacted (silent, no toast) */
   const quickReply = async (id: string) => {
     if (!user) return false;
+    const previousLead = leads.find(lead => lead.id === id);
+    const pageId = getLeadPageId(previousLead);
+
     try {
-      const { error } = await supabase
-        .from('leads')
-        .update({ status: 'contacted' })
-        .eq('id', id)
-        .eq('user_id', user.id);
-      if (error) throw error;
-      setLeads(prev => prev.map(lead =>
-        lead.id === id ? { ...lead, status: 'contacted' } : lead
-      ));
+      if (pageId) {
+        trackLeadReplied(pageId, id, 'quick_reply');
+      }
+
+      if (previousLead?.status === 'new') {
+        const { error } = await supabase
+          .from('leads')
+          .update({ status: 'contacted', updated_at: new Date().toISOString() })
+          .eq('id', id)
+          .eq('user_id', user.id)
+          .eq('status', 'new');
+
+        if (error) throw error;
+
+        setLeads(prev => prev.map(lead =>
+          lead.id === id ? { ...lead, status: 'contacted' } : lead
+        ));
+
+        if (pageId) {
+          trackLeadStatusChanged(pageId, id, 'new', 'contacted');
+        }
+      }
+
       return true;
     } catch (error) {
       logger.error('Error quick-replying lead', error, { context: 'useLeads', data: { leadId: id } });

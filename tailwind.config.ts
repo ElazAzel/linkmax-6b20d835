@@ -12,10 +12,15 @@ export default {
       padding: {
         DEFAULT: '1rem',
         sm: '1.5rem',
-        lg: '2rem',
+        md: '2rem',
+        lg: '2.5rem',
       },
       screens: {
-        '2xl': '1400px'
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1180px',
+        '2xl': '1180px'
       }
     },
     extend: {
@@ -63,7 +68,19 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
         },
-        kaspi: '#f14635'
+        kaspi: '#f14635',
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          foreground: 'hsl(var(--success-foreground))'
+        },
+        warning: {
+          DEFAULT: 'hsl(var(--warning))',
+          foreground: 'hsl(var(--warning-foreground))'
+        },
+        info: {
+          DEFAULT: 'hsl(var(--info))',
+          foreground: 'hsl(var(--info-foreground))'
+        },
       },
       borderRadius: {
         '2xl': 'calc(var(--radius) + 0.5rem)',
@@ -76,6 +93,21 @@ export default {
         xs: '2px',
         '2xl': '40px',
         '3xl': '60px'
+      },
+      // Motion design tokens — strict budget per audit (P1: motion policy).
+      // Use these instead of arbitrary duration-[xxxms] values so reduced-motion
+      // and decorative-vs-purposeful animation are governed in one place.
+      transitionDuration: {
+        instant: '80ms',
+        quick: '140ms',
+        base: '200ms',
+        slow: '320ms',
+        deliberate: '480ms',
+      },
+      transitionTimingFunction: {
+        'motion-standard': 'cubic-bezier(0.2, 0, 0, 1)',
+        'motion-emphasized': 'cubic-bezier(0.3, 0, 0, 1)',
+        'motion-exit': 'cubic-bezier(0.4, 0, 1, 1)',
       },
       keyframes: {
         'accordion-down': {
@@ -255,19 +287,19 @@ export default {
         ]
       },
       fontSize: {
-        'xs': ['0.75rem', { lineHeight: '1rem' }],
-        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
-        'base': ['1rem', { lineHeight: '1.5rem' }],
-        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
-        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
-        '2xl': ['1.5rem', { lineHeight: '2rem' }],
-        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
-        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
-        '5xl': ['3rem', { lineHeight: '1.16' }],
-        '6xl': ['3.75rem', { lineHeight: '1.1' }],
-        '7xl': ['4.5rem', { lineHeight: '1.05' }],
-        '8xl': ['6rem', { lineHeight: '1' }],
-        '9xl': ['8rem', { lineHeight: '1' }]
+        'xs': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.02em' }],
+        'sm': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }],
+        'base': ['1rem', { lineHeight: '1.5rem', letterSpacing: '0' }],
+        'lg': ['1.125rem', { lineHeight: '1.625rem', letterSpacing: '0' }],
+        'xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '-0.01em' }],
+        '2xl': ['1.5rem', { lineHeight: '1.8rem', letterSpacing: '-0.015em' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.02em' }],
+        '4xl': ['2.25rem', { lineHeight: '2.4rem', letterSpacing: '-0.025em' }],
+        '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
+        '6xl': ['3.5rem', { lineHeight: '1.05', letterSpacing: '-0.035em' }],
+        '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.04em' }],
+        '8xl': ['5.5rem', { lineHeight: '1', letterSpacing: '-0.045em' }],
+        '9xl': ['7rem', { lineHeight: '1', letterSpacing: '-0.05em' }]
       },
       letterSpacing: {
         'tighter': '-0.05em',
@@ -275,7 +307,9 @@ export default {
         'normal': '0',
         'wide': '0.025em',
         'wider': '0.05em',
-        'widest': '0.1em'
+        'widest': '0.1em',
+        'display': '-0.03em',
+        'caps': '0.08em',
       },
       boxShadow: {
         '2xs': 'var(--shadow-2xs)',
@@ -288,8 +322,18 @@ export default {
         '2xl': 'var(--shadow-2xl)',
         'glass': 'var(--shadow-glass)',
         'glass-lg': 'var(--shadow-glass-lg)',
-        'glass-xl': 'var(--shadow-glass-xl)'
-      }
+        'glass-xl': 'var(--shadow-glass-xl)',
+      },
+      screens: {
+        'xs': '375px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+        'tall': { 'raw': '(min-height: 800px)' },
+        'short': { 'raw': '(max-height: 600px)' },
+      },
     }
   },
   plugins: [animate],

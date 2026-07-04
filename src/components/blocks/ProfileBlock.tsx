@@ -165,7 +165,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   const IconComponent = getIconComponent();
 
   return (
-    <div className={`relative flex flex-col ${getPositionClass()}`}>
+    <div className={`relative flex min-w-0 flex-col overflow-visible ${getPositionClass()}`}>
       {block.coverImage && (
         <div className={`relative w-full ${getCoverHeight()} overflow-hidden`}>
           <img
@@ -179,7 +179,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
         </div>
       )}
 
-      <div className={`flex flex-col ${getPositionClass()} gap-4 p-6 ${block.coverImage ? '-mt-16' : ''}`}>
+      <div className={`flex min-w-0 flex-col ${getPositionClass()} gap-4 px-4 py-5 sm:p-6 ${block.coverImage ? '-mt-16' : ''}`}>
         {/* Outer container for positioning icon - no animation here */}
         <div className="relative">
           {/* Frame wrapper - animations and shadow apply here ONLY */}
@@ -233,11 +233,11 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           )}
         </div>
 
-        <div className="text-center space-y-2">
+        <div className="w-full min-w-0 text-center space-y-2 overflow-visible">
           <style>{NAME_ANIMATION_CSS}</style>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex min-w-0 items-center justify-center gap-2 overflow-visible">
             <h1 className={cn(
-              "text-2xl font-bold transition-all duration-300",
+              "max-w-full text-2xl font-bold leading-tight break-words hyphens-auto transition-all duration-300 overflow-visible",
               block.nameAnimation === 'none' && "hover:text-primary",
               (isPremiumUser || block.nameAnimation !== 'none') && "text-gradient bg-[length:200%_auto] animate-gradient-x",
               getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
@@ -247,7 +247,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           </div>
 
           {bio && (
-            <p className="text-muted-foreground max-w-md whitespace-pre-line">{parseRichText(bio)}</p>
+            <p className="text-muted-foreground max-w-md whitespace-pre-line break-words hyphens-auto leading-relaxed">{parseRichText(bio)}</p>
           )}
         </div>
 

@@ -22,6 +22,7 @@ import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts } from '@/lib/seo/key-facts';
 import { generateAutoFAQ, extractFAQContext, hasUserFAQ } from '@/lib/seo/auto-faq';
 import { extractEntityLinks } from '@/lib/seo/entity-linking';
+import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
 
 interface GEOEnhancedContentProps {
   blocks: Block[];
@@ -30,7 +31,8 @@ interface GEOEnhancedContentProps {
 
 export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
   const { i18n } = useTranslation();
-  const language = i18n.language as 'ru' | 'en' | 'kk';
+  const rawLang = (i18n.language || 'ru').split('-')[0];
+  const language = (['ru', 'en', 'kk'].includes(rawLang) ? rawLang : 'ru') as 'ru' | 'en' | 'kk';
 
   // Guard against undefined/null blocks
   const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
@@ -44,13 +46,15 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
   let pricingBlock: PricingBlock | undefined;
   let faqBlock: FAQBlock | undefined;
   let eventBlocks: EventBlock[] = [];
+  let aiCta: ReturnType<typeof extractAiCta> = { contacts: [], hasBooking: false };
 
   try {
     profile = extractProfileFromBlocks(validBlocks, language);
     answerBlock = generateAnswerBlock(validBlocks, slug, language);
     keyFacts = generateKeyFacts(validBlocks, answerBlock, profile.name, language);
     entityLinks = extractEntityLinks(validBlocks, language);
-    
+    aiCta = extractAiCta(validBlocks, slug, language);
+
     const shouldGenerateAutoFAQ = !hasUserFAQ(validBlocks);
     const faqContext = extractFAQContext(validBlocks, profile.name, answerBlock.niche, answerBlock.location, language);
     autoFAQItems = shouldGenerateAutoFAQ ? generateAutoFAQ(faqContext, language, 3) : [];
@@ -145,6 +149,47 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
               </div>
             ))}
           </dl>
+        </section>
+      )}
+
+      {/* AI-citable CTA: explicit contacts + price range. Critical for ChatGPT/Perplexity citations. */}
+      {(aiCta.contacts.length > 0 || aiCta.price) && (
+        <section id="geo-cta" data-geo="contact-cta" aria-label={AI_CTA_LABELS[language].contact}>
+          <h3>{AI_CTA_LABELS[language].contact}</h3>
+          <p data-ai-contact-intro="true">{AI_CTA_LABELS[language].contactIntro}</p>
+
+          {aiCta.contacts.length > 0 && (
+            <ul data-geo="contact-list">
+              {aiCta.contacts.slice(0, 8).map((c, i) => (
+                <li key={`${c.type}-${i}`} data-channel={c.type}>
+                  <a
+                    href={c.href}
+                    rel={c.type === 'web' ? 'noopener noreferrer' : 'noopener noreferrer me'}
+                    itemProp={c.type === 'email' || c.type === 'phone' ? 'contactPoint' : 'sameAs'}
+                  >
+                    <strong>{c.label}:</strong> {c.display}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {aiCta.price?.priceRange && (
+            <p data-geo="price-range">
+              <strong>{AI_CTA_LABELS[language].pricing}:</strong>{' '}
+              <span itemProp="priceRange">
+                {AI_CTA_LABELS[language].pricingFrom} {aiCta.price.priceRange}
+              </span>
+            </p>
+          )}
+
+          {aiCta.hasBooking && aiCta.bookingUrl && (
+            <p data-geo="booking-cta">
+              <a href={aiCta.bookingUrl} itemProp="potentialAction">
+                {AI_CTA_LABELS[language].bookingCta}
+              </a>
+            </p>
+          )}
         </section>
       )}
 

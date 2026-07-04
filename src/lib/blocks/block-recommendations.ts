@@ -5,7 +5,6 @@
 
 import type { BlockType } from '@/types/page';
 import type { Niche } from '@/lib/niches';
-import { BLOCK_METADATA } from '@/lib/blocks/block-registry';
 
 // ============= Niche Detection =============
 

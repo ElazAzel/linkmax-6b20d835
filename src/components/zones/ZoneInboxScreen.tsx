@@ -4,6 +4,7 @@
 import { memo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useZoneInbox } from '@/hooks/zones/useZoneInbox';
+import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,7 @@ import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import User from 'lucide-react/dist/esm/icons/user';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Archive from 'lucide-react/dist/esm/icons/archive';
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -39,8 +41,10 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
     updateConversation,
   } = useZoneInbox(zoneId);
 
+  const { createDeal } = useZoneDeals(zoneId);
   const [messageInput, setMessageInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [creatingDeal, setCreatingDeal] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -77,6 +81,31 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
     }
   };
 
+  const handleConvertToDeal = async () => {
+    if (!activeConversation) return;
+    setCreatingDeal(true);
+    try {
+      const title = activeConversation.title
+        || activeConversation.contact?.name
+        || t('zones.inbox.dealFrom', 'Сделка из диалога');
+      const deal = await createDeal({
+        title,
+        contact_id: activeConversation.contact_id || undefined,
+        source: `inbox:${activeConversation.channel}`,
+        currency: 'KZT',
+        value_amount: 0,
+      } as any);
+      if (deal) {
+        toast.success(t('zones.inbox.dealCreated', 'Сделка создана'));
+      }
+    } catch (err) {
+      console.error('Convert to deal error:', err);
+      toast.error(t('zones.inbox.dealError', 'Не удалось создать сделку'));
+    } finally {
+      setCreatingDeal(false);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -110,6 +139,17 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
           )}
         </div>
         <div className="flex gap-2">
+          {activeConversation && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleConvertToDeal}
+              disabled={creatingDeal}
+            >
+              <Briefcase className="h-3 w-3 mr-1" />
+              {creatingDeal ? t('common.loading', 'Создаём...') : t('zones.inbox.toDeal', 'В сделку')}
+            </Button>
+          )}
           {activeConversation && activeConversation.status === 'open' && (
             <Button
               variant="outline"

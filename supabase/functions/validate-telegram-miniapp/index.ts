@@ -177,8 +177,9 @@ serve(async (req: Request) => {
     try {
         const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
         const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+        const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
 
-        if (!isConfigured()) {
+        if (!isConfigured() || !botToken) {
             console.log("Telegram gateway not configured");
             return new Response(JSON.stringify({ error: "not_configured" }), {
                 status: 500,

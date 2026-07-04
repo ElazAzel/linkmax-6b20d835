@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useDeferredValue, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -35,7 +36,8 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
-import { useAdminTranslations, flattenObject, setNestedValue } from '@/hooks/admin/useAdminTranslations';
+import { useAdminTranslations, setNestedValue } from '@/hooks/admin/useAdminTranslations';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 
 // DB translations are used primarily via useAdminTranslations hook
@@ -155,7 +157,7 @@ function mergeDeep(target: TranslationData, source: TranslationData): Translatio
   return result;
 }
 
-export default function AdminTranslations() {
+export const AdminTranslations = memo(function AdminTranslations() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const canonical = `${getAppDomain()}/admin/translations`;
@@ -165,6 +167,7 @@ export default function AdminTranslations() {
 
   const {
     translations,
+    flattenedTranslations,
     activeLanguages,
     allKeys,
     saving,
@@ -177,9 +180,13 @@ export default function AdminTranslations() {
   // UI state
   const [selectedLang, setSelectedLang] = useState<string>('en');
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearch = useDeferredValue(searchQuery);
   const [filterMode, setFilterMode] = useState<'all' | 'missing'>('all');
   const [expandedNamespaces, setExpandedNamespaces] = useState<Set<string>>(new Set(['common', 'blocks']));
   const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [deleteConfirmKey, setDeleteConfirmKey] = useState<string | null>(null);
+  const [savingKey, setSavingKey] = useState<string | null>(null);
+  const [syncConfirmOpen, setSyncConfirmOpen] = useState(false);
   const [editValue, setEditValue] = useState('');
 
   // Dialogs
@@ -195,28 +202,23 @@ export default function AdminTranslations() {
   // Filter keys
   const filteredKeys = useMemo(() => {
     return allKeys.all.filter(key => {
-      // Search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
+      if (deferredSearch) {
+        const query = deferredSearch.toLowerCase();
         const matchesKey = key.toLowerCase().includes(query);
-        const matchesValue = activeLanguages.some(lang => {
-          const trans = translations[lang] || {};
-          const flatObj = flattenObject(trans);
-          return flatObj[key]?.toLowerCase().includes(query);
-        });
+        const matchesValue = activeLanguages.some(lang =>
+          (flattenedTranslations[lang]?.[key] || '').toLowerCase().includes(query)
+        );
         if (!matchesKey && !matchesValue) return false;
       }
 
-      // Missing filter
       if (filterMode === 'missing') {
-        const flat = flattenObject(translations[selectedLang] || {});
-        const hasMissing = activeLanguages.some(l => !flattenObject(translations[l] || {})[key]?.trim());
+        const hasMissing = activeLanguages.some(l => !flattenedTranslations[l]?.[key]?.trim());
         if (!hasMissing) return false;
       }
 
       return true;
     });
-  }, [allKeys.all, searchQuery, filterMode, translations, activeLanguages, selectedLang]);
+  }, [allKeys.all, deferredSearch, filterMode, flattenedTranslations, activeLanguages]);
 
   // Group filtered keys by namespace
   const groupedKeys = useMemo(() => groupKeysByNamespace(filteredKeys), [filteredKeys]);
@@ -225,59 +227,133 @@ export default function AdminTranslations() {
   const stats = useMemo(() => {
     const result: Record<string, number> = {};
     for (const lang of activeLanguages) {
-      const flat = flattenObject(translations[lang] || {});
       let missing = 0;
       for (const key of allKeys.all) {
-        if (!flat[key]?.trim()) missing++;
+        if (!flattenedTranslations[lang]?.[key]?.trim()) missing++;
       }
       result[lang] = missing;
     }
     return result;
-  }, [translations, activeLanguages, allKeys.all]);
+  }, [flattenedTranslations, activeLanguages, allKeys.all]);
 
-  // Get value for a key in a language
-  const getValue = (lang: string, key: string): string => {
-    const flat = flattenObject(translations[lang] || {});
-    return flat[key] || '';
-  };
+  // --- Navigation ---
 
-  // Save inline edit
-  const handleSaveEdit = async () => {
+  const handleNavigateBack = useCallback(() => {
+    navigate('/admin');
+  }, [navigate]);
+
+  // --- Dialog open/close ---
+
+  const handleOpenSyncConfirm = useCallback(() => {
+    setSyncConfirmOpen(true);
+  }, []);
+
+  const handleCloseAddKey = useCallback(() => {
+    setAddKeyOpen(false);
+  }, []);
+
+  const handleOpenUploadDialog = useCallback(() => {
+    setUploadDialogOpen(true);
+  }, []);
+
+  const handleCloseDeleteConfirm = useCallback(() => {
+    setDeleteConfirmKey(null);
+  }, []);
+
+  // --- Search/filter ---
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleLanguageSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setLanguageSearch(e.target.value);
+  }, []);
+
+  const handleFilterAll = useCallback(() => {
+    setFilterMode('all');
+  }, []);
+
+  const handleFilterMissing = useCallback(() => {
+    setFilterMode('missing');
+  }, []);
+
+  // --- Language/region selection ---
+
+  const handleLanguageSelect = useCallback((langCode: string) => {
+    setSelectedLang(langCode);
+  }, []);
+
+  const handleLanguageKeyDown = useCallback((event: React.KeyboardEvent<HTMLElement>, langCode: string) => {
+    handleKeyboardActivation(event, () => setSelectedLang(langCode));
+  }, []);
+
+  // --- CRUD: Save inline edit ---
+
+  const handleSaveEdit = useCallback(async () => {
     if (editingKey) {
+      setSavingKey(editingKey);
       await updateTranslation({ lang: selectedLang, key: editingKey, value: editValue });
+      setSavingKey(null);
       setEditingKey(null);
       setEditValue('');
     }
-  };
+  }, [editingKey, selectedLang, editValue, updateTranslation]);
 
-  // Add new language
-  const handleAddLanguage = async (langCode: string) => {
+  const handleEditValueChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditValue(e.target.value);
+  }, []);
+
+  const handleCancelEdit = useCallback(() => {
+    setEditingKey(null);
+  }, []);
+
+  // --- CRUD: Language management ---
+
+  const handleAddLanguage = useCallback(async (langCode: string) => {
     if (!activeLanguages.includes(langCode)) {
       const emptyLang = copyStructureEmpty(translations['en'] || {});
       await addLanguage(langCode, emptyLang);
     }
     setAddLanguageOpen(false);
     setLanguageSearch('');
-  };
+  }, [activeLanguages, translations, addLanguage]);
 
-  // Remove language
-  const handleRemoveLanguage = (langCode: string) => {
+  const handleAddLanguageFromList = useCallback((langCode: string) => {
+    handleAddLanguage(langCode);
+  }, [handleAddLanguage]);
+
+  const handleRemoveLanguage = useCallback((langCode: string) => {
     if (CORE_LANGUAGES.includes(langCode)) {
-      toast.error('Основные языки нельзя удалить');
+      toast.error(t('coreLanguagesCannotRemove'));
       return;
     }
-    toast.info('Функционал удаления языка из БД в разработке. Язык останется в списке.');
-  };
+    toast.info(t('removeLanguageFromDBWIP'));
+  }, []);
 
-  // Add new key
-  const handleAddKey = async () => {
+  const handleRemoveLanguageClick = useCallback((e: React.MouseEvent, langCode: string) => {
+    e.stopPropagation();
+    handleRemoveLanguage(langCode);
+  }, [handleRemoveLanguage]);
+
+  // --- CRUD: Key management ---
+
+  const handleNewKeyNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewKeyName(e.target.value);
+  }, []);
+
+  const handleNewKeyValueChange = useCallback((lang: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewKeyValues(prev => ({ ...prev, [lang]: e.target.value }));
+  }, []);
+
+  const handleAddKey = useCallback(async () => {
     const trimmedKey = newKeyName.trim();
     if (!trimmedKey) {
-      toast.error('Введите ключ');
+      toast.error(t('enterKey'));
       return;
     }
     if (allKeys.all.includes(trimmedKey)) {
-      toast.error('Такой ключ уже существует');
+      toast.error(t('keyAlreadyExists'));
       return;
     }
 
@@ -292,17 +368,69 @@ export default function AdminTranslations() {
     setNewKeyName('');
     setNewKeyValues({});
     setAddKeyOpen(false);
-  };
+  }, [newKeyName, allKeys.all, activeLanguages, translations, newKeyValues, upsertFullTranslations]);
 
-  // Delete key
-  const handleDeleteKey = async (key: string) => {
-    if (confirm(`Вы уверены, что хотите удалить ключ "${key}" изо всех языков?`)) {
-      await deleteKey(key);
+  // --- CRUD: Delete key ---
+
+  const handleDeleteKey = useCallback((key: string) => {
+    setDeleteConfirmKey(key);
+  }, []);
+
+  const handleDeleteKeyConfirm = useCallback((key: string) => {
+    handleDeleteKey(key);
+  }, [handleDeleteKey]);
+
+  const confirmDeleteKey = useCallback(() => {
+    if (deleteConfirmKey) {
+      deleteKey(deleteConfirmKey);
+      setDeleteConfirmKey(null);
     }
-  };
+  }, [deleteConfirmKey, deleteKey]);
 
-  // Export
-  const downloadJSON = (lang: string) => {
+  // --- CRUD: Sync ---
+
+  const syncAllToDB = useCallback(async () => {
+    const payload = activeLanguages.map(lang => ({
+      lang,
+      data: translations[lang]
+    }));
+    await upsertFullTranslations(payload);
+    setSyncConfirmOpen(false);
+  }, [activeLanguages, translations, upsertFullTranslations]);
+
+  // --- Editor helpers ---
+
+  const handleStartEdit = useCallback((key: string, value: string) => {
+    setEditingKey(key);
+    setEditValue(value);
+  }, []);
+
+  const handleStartEditKeyDown = useCallback((event: React.KeyboardEvent<HTMLElement>, key: string, value: string) => {
+    handleKeyboardActivation(event, () => {
+      setEditingKey(key);
+      setEditValue(value);
+    });
+  }, []);
+
+  const handleCopyFromEn = useCallback((key: string, enVal: string) => {
+    updateTranslation({ lang: selectedLang, key, value: enVal });
+  }, [selectedLang, updateTranslation]);
+
+  const handleToggleNamespace = useCallback((ns: string) => {
+    setExpandedNamespaces(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(ns)) {
+        newExpanded.delete(ns);
+      } else {
+        newExpanded.add(ns);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  // --- Export/import ---
+
+  const downloadJSON = useCallback((lang: string) => {
     const json = JSON.stringify(translations[lang] || {}, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -311,31 +439,38 @@ export default function AdminTranslations() {
     a.download = `${lang}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`Файл ${lang}.json скачан`);
-  };
+    toast.success(t('fileDownloaded', { lang }));
+  }, [translations]);
 
-  const downloadAllJSON = () => {
+  const downloadAllJSON = useCallback(() => {
     for (const lang of activeLanguages) {
       downloadJSON(lang);
     }
-  };
+  }, [activeLanguages, downloadJSON]);
 
-  const copyToClipboard = async (lang: string) => {
+  const handleDownloadSelected = useCallback(() => {
+    downloadJSON(selectedLang);
+  }, [downloadJSON, selectedLang]);
+
+  const copyToClipboard = useCallback(async (lang: string) => {
     try {
       const json = JSON.stringify(translations[lang] || {}, null, 2);
       await navigator.clipboard.writeText(json);
-      toast.success(`JSON для ${lang.toUpperCase()} скопирован`);
+      toast.success(t('jsonCopied', { lang: lang.toUpperCase() }));
     } catch {
-      toast.error('Не удалось скопировать');
+      toast.error(t('copyFailed'));
     }
-  };
+  }, [translations]);
 
-  // Import
-  const handleImportClick = () => {
+  const handleCopySelected = useCallback(() => {
+    copyToClipboard(selectedLang);
+  }, [copyToClipboard, selectedLang]);
+
+  const handleImportClick = useCallback(() => {
     fileInputRef.current?.click();
-  };
+  }, []);
 
-  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileImport = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -346,40 +481,26 @@ export default function AdminTranslations() {
 
       await upsertFullTranslations([{ lang: selectedLang, data: mergedData }]);
     } catch (error) {
-      toast.error('Failed to import translations');
+      toast.error(t('failedToImportTranslations'));
       logger.error('Import error:', error);
     } finally {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
     }
-  };
+  }, [selectedLang, translations, upsertFullTranslations]);
 
-  // Reset
-  const resetToOriginal = () => {
-    toast.info('Сброс к локальным файлам не рекомендуется при использовании БД-бэкэнда.');
-  };
+  // --- Reset ---
 
-  const syncAllToDB = async () => {
-    if (!confirm('Отправить все текущие переводы в базу данных? Существующие в БД данные будут перезаписаны.')) return;
+  const resetToOriginal = useCallback(() => {
+    toast.info(t('resetNotRecommended'));
+  }, []);
 
-    const payload = activeLanguages.map(lang => ({
-      lang,
-      data: translations[lang]
-    }));
-    await upsertFullTranslations(payload);
-  };
+  // --- Upload success ---
 
-  // Toggle namespace
-  const toggleNamespace = (ns: string) => {
-    const newExpanded = new Set(expandedNamespaces);
-    if (newExpanded.has(ns)) {
-      newExpanded.delete(ns);
-    } else {
-      newExpanded.add(ns);
-    }
-    setExpandedNamespaces(newExpanded);
-  };
+  const handleUploadSuccess = useCallback(() => {
+    toast.success(t('languageUploadedAndApplied'));
+  }, []);
 
   // Available languages to add
   const availableToAdd = useMemo(() => {
@@ -393,9 +514,193 @@ export default function AdminTranslations() {
   }, [activeLanguages, languageSearch]);
 
   // Get language info
-  const getLangInfo = (code: string) => {
+  const getLangInfo = useCallback((code: string) => {
     return ALL_LANGUAGES.find(l => l.code === code) || { code, name: code.toUpperCase(), flag: '🏳️', region: 'other' };
-  };
+  }, []);
+
+  // Memoized: language badge cards
+  const languageCards = useMemo(() =>
+    activeLanguages.map((langCode) => {
+      const lang = getLangInfo(langCode);
+      const missing = stats[langCode] || 0;
+      const isSelected = selectedLang === langCode;
+      const isCore = CORE_LANGUAGES.includes(langCode);
+
+      return (
+        <div
+          key={langCode}
+          className={`
+            relative group flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all
+            ${isSelected ? 'border-primary bg-primary/10 ring-2 ring-primary/50' : 'border-border hover:border-primary/50'}
+          `}
+          onClick={() => handleLanguageSelect(langCode)}
+          onKeyDown={(event) => handleLanguageKeyDown(event, langCode)}
+          role="button"
+          tabIndex={0}
+          aria-pressed={isSelected}
+        >
+          <span className="text-lg">{lang.flag}</span>
+          <div>
+            <div className="font-medium text-sm">{lang.name}</div>
+            <div className="text-xs text-muted-foreground">
+              {missing > 0 ? (
+                <span className="text-destructive">{missing} отсутствует</span>
+              ) : (
+                <span className="text-green-600 dark:text-green-400">✓ Полный</span>
+              )}
+            </div>
+          </div>
+          {!isCore && (
+            <button
+              className="absolute -top-1 -right-1 hidden group-hover:flex items-center justify-center w-5 h-5 rounded-full bg-destructive text-destructive-foreground"
+              onClick={(e) => handleRemoveLanguageClick(e, langCode)}
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
+          )}
+        </div>
+      );
+    }),
+    [activeLanguages, selectedLang, stats, getLangInfo, handleLanguageSelect, handleLanguageKeyDown, handleRemoveLanguageClick]
+  );
+
+  // Memoized: new-key language inputs
+  const newKeyLanguageInputs = useMemo(() =>
+    activeLanguages.slice(0, 5).map(lang => {
+      const info = getLangInfo(lang);
+      return (
+        <div key={lang} className="flex items-center gap-2">
+          <span className="w-8 text-center">{info.flag}</span>
+          <Input
+            value={newKeyValues[lang] || ''}
+            onChange={(e) => handleNewKeyValueChange(lang, e)}
+            placeholder={`${info.name}...`}
+          />
+        </div>
+      );
+    }),
+    [activeLanguages, newKeyValues, getLangInfo, handleNewKeyValueChange]
+  );
+
+  // Memoized: editor namespace sections
+  const namespaceSections = useMemo(() =>
+    Object.entries(groupedKeys).sort().map(([namespace, keys]) => {
+      const sortedKeys = [...keys].sort();
+      return (
+        <Collapsible
+          key={namespace}
+          open={expandedNamespaces.has(namespace)}
+          onOpenChange={() => handleToggleNamespace(namespace)}
+        >
+          <CollapsibleTrigger className="flex items-center gap-2 w-full p-2 rounded-lg hover:bg-muted/50">
+            {expandedNamespaces.has(namespace) ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+            <span className="font-medium">{namespace}</span>
+            <Badge variant="secondary" className="ml-auto">{keys.length}</Badge>
+          </CollapsibleTrigger>
+
+          <CollapsibleContent className="pl-6 space-y-1 mt-1">
+            {sortedKeys.map((key) => {
+              const shortKey = key.substring(namespace.length + 1);
+              const flat = flattenedTranslations[selectedLang] || {};
+              const value = flat[key] || '';
+              const enVal = (flattenedTranslations['en'] || {})[key] || '';
+              const isEmpty = !value.trim();
+              const isSavingThis = savingKey === key;
+
+              return (
+                <div
+                  key={key}
+                  className={`
+                    group flex items-start gap-3 p-2 rounded-lg border
+                    ${isEmpty ? 'border-destructive/30 bg-destructive/5' : 'border-transparent hover:bg-muted/30'}
+                    ${editingKey === key ? 'ring-2 ring-primary' : ''}
+                  `}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <code className="text-xs text-muted-foreground font-mono truncate">{shortKey}</code>
+                      {isSavingThis ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : isEmpty ? (
+                        <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0" />
+                      ) : (
+                        <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400 flex-shrink-0" />
+                      )}
+                    </div>
+
+                    {editingKey === key ? (
+                      <div className="space-y-2">
+                        {selectedLang !== 'en' && enVal && (
+                          <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+                            <span className="font-medium">🇬🇧 EN:</span> {enVal}
+                          </div>
+                        )}
+                        <Textarea
+                          value={editValue}
+                          onChange={handleEditValueChange}
+                          className="min-h-[60px] text-sm"
+                          autoFocus
+                        />
+                        <div className="flex gap-2">
+                          <Button size="sm" onClick={handleSaveEdit} disabled={isSavingThis}>
+                            {isSavingThis ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Check className="h-3 w-3 mr-1" />}
+                            {isSavingThis ? t('saving') : t('save')}
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={handleCancelEdit} disabled={isSavingThis}>
+                            {t('cancel')}
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className="text-sm cursor-pointer min-h-[24px]"
+                        onClick={() => handleStartEdit(key, value)}
+                        onKeyDown={(event) => handleStartEditKeyDown(event, key, value)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        {value || <span className="text-muted-foreground italic">{t('clickToAdd')}</span>}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {enVal && selectedLang !== 'en' && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-6 w-6"
+                        title={t('copyFromEn')}
+                        onClick={() => handleCopyFromEn(key, enVal)}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    )}
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-6 w-6 text-destructive"
+                      title={t('deleteKey')}
+                      onClick={() => handleDeleteKeyConfirm(key)}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </CollapsibleContent>
+        </Collapsible>
+      );
+    }),
+    [groupedKeys, expandedNamespaces, selectedLang, flattenedTranslations, savingKey, editingKey, editValue,
+     handleToggleNamespace, handleEditValueChange, handleSaveEdit, handleCancelEdit,
+     handleStartEdit, handleStartEditKeyDown, handleCopyFromEn, handleDeleteKeyConfirm]
+  );
 
   if (loading) {
     return (
@@ -429,28 +734,28 @@ export default function AdminTranslations() {
         <header className="border-b border-border bg-card/95 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')}>
+              <Button variant="ghost" size="icon" onClick={handleNavigateBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <Shield className="h-6 w-6 text-primary" />
               <h1 className="text-xl font-bold flex items-center gap-2">
                 <Languages className="h-5 w-5" />
-                Редактор переводов
+                {t('translationEditor')}
               </h1>
             </div>
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={syncAllToDB}
+                onClick={handleOpenSyncConfirm}
                 disabled={saving}
               >
                 {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Upload className="h-4 w-4 mr-1" />}
-                Синхронизировать с БД
+                {t('syncToDB')}
               </Button>
               <Button variant="outline" size="sm" onClick={resetToOriginal} disabled={saving}>
                 <RefreshCw className="h-4 w-4 mr-1" />
-                Сброс
+                {t('reset')}
               </Button>
             </div>
           </div>
@@ -462,66 +767,27 @@ export default function AdminTranslations() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Активные языки ({activeLanguages.length})
+                {t('activeLanguages', { count: activeLanguages.length })}
               </CardTitle>
-              <CardDescription>Нажмите на язык для редактирования</CardDescription>
+              <CardDescription>{t('clickLanguageToEdit')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {activeLanguages.map((langCode) => {
-                  const lang = getLangInfo(langCode);
-                  const missing = stats[langCode] || 0;
-                  const isSelected = selectedLang === langCode;
-                  const isCore = CORE_LANGUAGES.includes(langCode);
-
-                  return (
-                    <div
-                      key={langCode}
-                      className={`
-                        relative group flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all
-                        ${isSelected ? 'border-primary bg-primary/10 ring-2 ring-primary/50' : 'border-border hover:border-primary/50'}
-                      `}
-                      onClick={() => setSelectedLang(langCode)}
-                    >
-                      <span className="text-lg">{lang.flag}</span>
-                      <div>
-                        <div className="font-medium text-sm">{lang.name}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {missing > 0 ? (
-                            <span className="text-destructive">{missing} отсутствует</span>
-                          ) : (
-                            <span className="text-green-600 dark:text-green-400">✓ Полный</span>
-                          )}
-                        </div>
-                      </div>
-                      {!isCore && (
-                        <button
-                          className="absolute -top-1 -right-1 hidden group-hover:flex items-center justify-center w-5 h-5 rounded-full bg-destructive text-destructive-foreground"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveLanguage(langCode);
-                          }}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
+                {languageCards}
 
                 {/* Add Language Button */}
                 <Dialog open={addLanguageOpen} onOpenChange={setAddLanguageOpen}>
                   <DialogTrigger asChild>
                     <Button variant="outline" className="h-auto py-2 px-3">
                       <Plus className="h-4 w-4 mr-1" />
-                      Добавить язык
+                      {t('addLanguage')}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh]">
                     <DialogHeader>
-                      <DialogTitle>Добавить язык</DialogTitle>
+                      <DialogTitle>{t('addLanguage')}</DialogTitle>
                       <DialogDescription>
-                        Выберите язык из списка для добавления в проект
+                        {t('selectLanguageFromList')}
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
@@ -529,8 +795,8 @@ export default function AdminTranslations() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           value={languageSearch}
-                          onChange={(e) => setLanguageSearch(e.target.value)}
-                          placeholder="Поиск языка..."
+                          onChange={handleLanguageSearchChange}
+                          placeholder={t('searchLanguage')}
                           className="pl-10"
                         />
                       </div>
@@ -549,7 +815,7 @@ export default function AdminTranslations() {
                                       key={lang.code}
                                       variant="outline"
                                       className="justify-start h-auto py-2"
-                                      onClick={() => handleAddLanguage(lang.code)}
+                                      onClick={() => handleAddLanguageFromList(lang.code)}
                                     >
                                       <span className="mr-2">{lang.flag}</span>
                                       <span className="truncate">{lang.name}</span>
@@ -562,7 +828,7 @@ export default function AdminTranslations() {
                           })}
                           {availableToAdd.length === 0 && (
                             <div className="text-center py-8 text-muted-foreground">
-                              {languageSearch ? 'Языки не найдены' : 'Все языки добавлены'}
+                              {languageSearch ? t('languagesNotFound') : t('allLanguagesAdded')}
                             </div>
                           )}
                         </div>
@@ -579,19 +845,19 @@ export default function AdminTranslations() {
             <Card>
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold">{allKeys.all.length}</div>
-                <p className="text-sm text-muted-foreground">Всего ключей</p>
+                <p className="text-sm text-muted-foreground">{t('totalKeys')}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold">{activeLanguages.length}</div>
-                <p className="text-sm text-muted-foreground">Языков</p>
+                <p className="text-sm text-muted-foreground">{t('languages')}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold">{Object.keys(groupedKeys).length}</div>
-                <p className="text-sm text-muted-foreground">Неймспейсов</p>
+                <p className="text-sm text-muted-foreground">{t('namespaces')}</p>
               </CardContent>
             </Card>
             <Card>
@@ -599,7 +865,7 @@ export default function AdminTranslations() {
                 <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {activeLanguages.filter(l => (stats[l] || 0) === 0).length}
                 </div>
-                <p className="text-sm text-muted-foreground">Полных языков</p>
+                <p className="text-sm text-muted-foreground">{t('completeLanguages')}</p>
               </CardContent>
             </Card>
           </div>
@@ -611,9 +877,9 @@ export default function AdminTranslations() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Поиск по ключу или значению..."
+                    placeholder={t('searchByKeyOrValue')}
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleSearchChange}
                     className="pl-10"
                   />
                 </div>
@@ -622,17 +888,17 @@ export default function AdminTranslations() {
                   <Button
                     variant={filterMode === 'all' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setFilterMode('all')}
+                    onClick={handleFilterAll}
                   >
-                    Все
+                    {t('all')}
                   </Button>
                   <Button
                     variant={filterMode === 'missing' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setFilterMode('missing')}
+                    onClick={handleFilterMissing}
                   >
                     <AlertTriangle className="h-4 w-4 mr-1" />
-                    Отсутствующие
+                    {t('missing')}
                   </Button>
                 </div>
               </div>
@@ -645,50 +911,38 @@ export default function AdminTranslations() {
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
                   <Plus className="h-4 w-4 mr-1" />
-                  Добавить ключ
+                  {t('addKey')}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-lg">
                 <DialogHeader>
-                  <DialogTitle>Добавить новый ключ</DialogTitle>
+                  <DialogTitle>{t('addNewKey')}</DialogTitle>
                   <DialogDescription>
-                    Создайте новый ключ перевода и задайте значения для основных языков
+                    {t('createNewKeyDescription')}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label>Ключ (dot notation)</Label>
+                    <Label>{t('keyDotNotation')}</Label>
                     <Input
                       value={newKeyName}
-                      onChange={(e) => setNewKeyName(e.target.value)}
+                      onChange={handleNewKeyNameChange}
                       placeholder="e.g., common.newButton"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Переводы</Label>
-                    {activeLanguages.slice(0, 5).map(lang => {
-                      const info = getLangInfo(lang);
-                      return (
-                        <div key={lang} className="flex items-center gap-2">
-                          <span className="w-8 text-center">{info.flag}</span>
-                          <Input
-                            value={newKeyValues[lang] || ''}
-                            onChange={(e) => setNewKeyValues(prev => ({ ...prev, [lang]: e.target.value }))}
-                            placeholder={`${info.name}...`}
-                          />
-                        </div>
-                      );
-                    })}
+                    <Label>{t('translations')}</Label>
+                    {newKeyLanguageInputs}
                     {activeLanguages.length > 5 && (
                       <p className="text-xs text-muted-foreground">
-                        + ещё {activeLanguages.length - 5} языков (добавятся пустыми)
+                        {t('moreLanguagesWillBeEmpty', { count: activeLanguages.length - 5 })}
                       </p>
                     )}
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setAddKeyOpen(false)}>Отмена</Button>
-                  <Button onClick={handleAddKey}>Добавить</Button>
+                  <Button variant="outline" onClick={handleCloseAddKey}>{t('cancel')}</Button>
+                  <Button onClick={handleAddKey}>{t('add')}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -702,23 +956,23 @@ export default function AdminTranslations() {
             />
             <Button variant="outline" size="sm" onClick={handleImportClick}>
               <Upload className="h-4 w-4 mr-1" />
-              Импорт JSON ({selectedLang})
+              {t('importJson', { lang: selectedLang })}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setUploadDialogOpen(true)}>
+            <Button variant="outline" size="sm" onClick={handleOpenUploadDialog}>
               <Upload className="h-4 w-4 mr-1" />
-              Загрузить язык из файла
+              {t('uploadLanguageFromFile')}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => copyToClipboard(selectedLang)}>
+            <Button variant="outline" size="sm" onClick={handleCopySelected}>
               <Copy className="h-4 w-4 mr-1" />
-              Копировать ({selectedLang})
+              {t('copy', { lang: selectedLang })}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => downloadJSON(selectedLang)}>
+            <Button variant="outline" size="sm" onClick={handleDownloadSelected}>
               <FileJson className="h-4 w-4 mr-1" />
-              Скачать ({selectedLang})
+              {t('download', { lang: selectedLang })}
             </Button>
             <Button variant="outline" size="sm" onClick={downloadAllJSON}>
               <Download className="h-4 w-4 mr-1" />
-              Скачать все
+              {t('downloadAll')}
             </Button>
           </div>
 
@@ -727,127 +981,20 @@ export default function AdminTranslations() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  {getLangInfo(selectedLang).flag} Редактирование: {getLangInfo(selectedLang).name}
+                  {getLangInfo(selectedLang).flag} {t('editing')}: {getLangInfo(selectedLang).name}
                 </CardTitle>
-                <Badge variant="outline">{filteredKeys.length} ключей</Badge>
+                <Badge variant="outline">{t('keysCount', { count: filteredKeys.length })}</Badge>
               </div>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[600px]">
                 <div className="p-4 space-y-2">
-                  {Object.entries(groupedKeys).sort().map(([namespace, keys]) => (
-                    <Collapsible
-                      key={namespace}
-                      open={expandedNamespaces.has(namespace)}
-                      onOpenChange={() => toggleNamespace(namespace)}
-                    >
-                      <CollapsibleTrigger className="flex items-center gap-2 w-full p-2 rounded-lg hover:bg-muted/50">
-                        {expandedNamespaces.has(namespace) ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
-                        <span className="font-medium">{namespace}</span>
-                        <Badge variant="secondary" className="ml-auto">{keys.length}</Badge>
-                      </CollapsibleTrigger>
-
-                      <CollapsibleContent className="pl-6 space-y-1 mt-1">
-                        {keys.sort().map((key) => {
-                          const shortKey = key.substring(namespace.length + 1);
-                          const value = getValue(selectedLang, key);
-                          const enValue = getValue('en', key);
-                          const isEmpty = !value.trim();
-
-                          return (
-                            <div
-                              key={key}
-                              className={`
-                                group flex items-start gap-3 p-2 rounded-lg border
-                                ${isEmpty ? 'border-destructive/30 bg-destructive/5' : 'border-transparent hover:bg-muted/30'}
-                                ${editingKey === key ? 'ring-2 ring-primary' : ''}
-                              `}
-                            >
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <code className="text-xs text-muted-foreground font-mono truncate">{shortKey}</code>
-                                  {isEmpty ? (
-                                    <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0" />
-                                  ) : (
-                                    <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400 flex-shrink-0" />
-                                  )}
-                                </div>
-
-                                {editingKey === key ? (
-                                  <div className="space-y-2">
-                                    {selectedLang !== 'en' && enValue && (
-                                      <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
-                                        <span className="font-medium">🇬🇧 EN:</span> {enValue}
-                                      </div>
-                                    )}
-                                    <Textarea
-                                      value={editValue}
-                                      onChange={(e) => setEditValue(e.target.value)}
-                                      className="min-h-[60px] text-sm"
-                                      autoFocus
-                                    />
-                                    <div className="flex gap-2">
-                                      <Button size="sm" onClick={handleSaveEdit}>
-                                        <Check className="h-3 w-3 mr-1" />
-                                        Сохранить
-                                      </Button>
-                                      <Button size="sm" variant="outline" onClick={() => setEditingKey(null)}>
-                                        Отмена
-                                      </Button>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div
-                                    className="text-sm cursor-pointer min-h-[24px]"
-                                    onClick={() => {
-                                      setEditingKey(key);
-                                      setEditValue(value);
-                                    }}
-                                  >
-                                    {value || <span className="text-muted-foreground italic">Нажмите чтобы добавить...</span>}
-                                  </div>
-                                )}
-                              </div>
-
-                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                {enValue && selectedLang !== 'en' && (
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="h-6 w-6"
-                                    title="Скопировать с EN"
-                                    onClick={() => {
-                                      updateTranslation({ lang: selectedLang, key, value: enValue });
-                                    }}
-                                  >
-                                    <Copy className="h-3 w-3" />
-                                  </Button>
-                                )}
-                                <Button
-                                  size="icon"
-                                  variant="ghost"
-                                  className="h-6 w-6 text-destructive"
-                                  title="Удалить ключ"
-                                  onClick={() => handleDeleteKey(key)}
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </CollapsibleContent>
-                    </Collapsible>
-                  ))}
+                  {namespaceSections}
 
                   {filteredKeys.length === 0 && (
                     <div className="text-center py-12 text-muted-foreground">
                       <Languages className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>Ключи не найдены</p>
+                      <p>{t('keysNotFound')}</p>
                     </div>
                   )}
                 </div>
@@ -858,31 +1005,61 @@ export default function AdminTranslations() {
           {/* Instructions */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Инструкция</CardTitle>
+              <CardTitle className="text-lg">{t('instructions')}</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground space-y-2">
-              <p><strong>1. Добавьте языки:</strong> Кнопка "Добавить язык" → выберите из списка</p>
-              <p><strong>2. Выберите язык:</strong> Кликните на карточку языка для редактирования</p>
-              <p><strong>3. Редактируйте:</strong> Кликните на любой перевод для изменения. Он сохранится в БД автоматически.</p>
-              <p><strong>4. Синхронизация:</strong> Если в БД нет данных, используйте кнопку "Синхронизировать с БД" для загрузки локальных файлов в базу.</p>
+              <p>{t('instruction1')}</p>
+              <p>{t('instruction2')}</p>
+              <p>{t('instruction3')}</p>
+              <p>{t('instruction4')}</p>
               <p className="text-green-600 dark:text-green-400 pt-2 font-medium flex items-center gap-2">
                 <CheckCircle className="h-4 w-4" />
-                Изменения сохраняются в реальном времени в базу данных Supabase.
+                {t('changesSavedRealtime')}
               </p>
             </CardContent>
           </Card>
         </main>
 
+        {/* Sync to DB confirmation */}
+        <AlertDialog open={syncConfirmOpen} onOpenChange={setSyncConfirmOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Синхронизировать с БД?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Все текущие переводы будут отправлены в базу данных. Существующие в БД данные будут перезаписаны.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Отмена</AlertDialogCancel>
+              <AlertDialogAction onClick={syncAllToDB}>Отправить</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Delete key confirmation */}
+        <AlertDialog open={deleteConfirmKey !== null} onOpenChange={handleCloseDeleteConfirm}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Удалить ключ?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Вы уверены, что хотите удалить ключ "<strong>{deleteConfirmKey}</strong>" изо всех языков? Это действие нельзя отменить.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Отмена</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDeleteKey}>Удалить</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
         {/* Upload Dialog */}
         <LanguageUploadDialog
           open={uploadDialogOpen}
           onOpenChange={setUploadDialogOpen}
-          onSuccess={() => {
-            // Можно добавить логику для обновления переводов
-            toast.success('Язык успешно загружен и применён');
-          }}
+          onSuccess={handleUploadSuccess}
         />
       </div>
     </>
   );
-}
+});
+export default AdminTranslations;

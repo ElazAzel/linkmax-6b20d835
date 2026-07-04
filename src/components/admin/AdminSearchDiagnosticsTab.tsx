@@ -3,6 +3,7 @@
  * Shows quality scores, indexability, exclusion reasons, IndexNow submission logs
  */
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { Card } from '@/components/ui/card';
@@ -19,6 +20,7 @@ import FileX from 'lucide-react/dist/esm/icons/file-x';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import { cn } from '@/lib/utils/utils';
+import { ALMOST_READY_THRESHOLD, INDEXABLE_THRESHOLD } from '@/lib/seo/quality-score';
 
 interface ServiceSlugEntry {
   slug: string;
@@ -31,6 +33,7 @@ interface DiagnosticPage {
   slug: string;
   title: string | null;
   is_published: boolean;
+  is_indexable: boolean | null;
   quality_score: number | null;
   quality_breakdown: Record<string, { passed: boolean; points: number }> | null;
   index_exclusion_reasons: string[] | null;
@@ -79,7 +82,7 @@ const EXCLUSION_LABELS: Record<string, string> = {
 async function fetchDiagnosticPages(): Promise<DiagnosticPage[]> {
   const { data, error } = await supabase
     .from('pages')
-    .select('id, slug, title, is_published, quality_score, quality_breakdown, index_exclusion_reasons, last_indexnow_at, service_slugs, city, profession, niche, view_count, updated_at')
+    .select('id, slug, title, is_published, is_indexable, quality_score, quality_breakdown, index_exclusion_reasons, last_indexnow_at, service_slugs, city, profession, niche, view_count, updated_at')
     .order('updated_at', { ascending: false })
     .limit(200);
 
@@ -120,6 +123,7 @@ function parseChildEntities(serviceSlugs: Record<string, ServiceSlugEntry> | nul
 }
 
 function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string }) {
+  const { t } = useTranslation();
   const { data: submissions, isLoading } = useQuery({
     queryKey: ['admin', 'indexing-submissions', pageId],
     queryFn: () => fetchSubmissionsForPage(pageId),
@@ -131,17 +135,17 @@ function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string })
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
           <Eye className="h-3 w-3" />
-          Логи
+          {t('logs')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-mono text-sm">Indexing logs: /{slug}</DialogTitle>
+          <DialogTitle className="font-mono text-sm">{t('indexingLogs')}: /{slug}</DialogTitle>
         </DialogHeader>
         {isLoading ? (
           <Skeleton className="h-32" />
         ) : !submissions?.length ? (
-          <p className="text-sm text-muted-foreground py-4">Нет записей индексации</p>
+          <p className="text-sm text-muted-foreground py-4">{t('noIndexingRecords')}</p>
         ) : (
           <Table>
             <TableHeader>
@@ -194,6 +198,7 @@ function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string })
 }
 
 export function AdminSearchDiagnosticsTab() {
+  const { t } = useTranslation();
   const { data: pages, isLoading } = useQuery({
     queryKey: ['admin', 'search-diagnostics'],
     queryFn: fetchDiagnosticPages,
@@ -216,7 +221,7 @@ export function AdminSearchDiagnosticsTab() {
   const stats = useMemo(() => {
     if (!pages) return { total: 0, published: 0, indexable: 0, avgScore: 0, withIndexNow: 0 };
     const published = pages.filter(p => p.is_published);
-    const indexable = published.filter(p => (p.quality_score || 0) >= 40);
+    const indexable = published.filter(p => p.is_indexable !== false && (p.quality_score || 0) >= INDEXABLE_THRESHOLD);
     const avgScore = published.length > 0
       ? Math.round(published.reduce((s, p) => s + (p.quality_score || 0), 0) / published.length)
       : 0;
@@ -234,19 +239,19 @@ export function AdminSearchDiagnosticsTab() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card className="p-4 text-center">
           <div className="text-2xl font-bold">{stats.total}</div>
-          <div className="text-xs text-muted-foreground">Всего страниц</div>
+          <div className="text-xs text-muted-foreground">{t('totalPages')}</div>
         </Card>
         <Card className="p-4 text-center">
           <div className="text-2xl font-bold text-primary">{stats.published}</div>
-          <div className="text-xs text-muted-foreground">Опубликовано</div>
+          <div className="text-xs text-muted-foreground">{t('published')}</div>
         </Card>
         <Card className="p-4 text-center">
           <div className="text-2xl font-bold text-emerald-600">{stats.indexable}</div>
-          <div className="text-xs text-muted-foreground">Индексируемых</div>
+          <div className="text-xs text-muted-foreground">{t('indexablePages')}</div>
         </Card>
         <Card className="p-4 text-center">
           <div className="text-2xl font-bold">{stats.avgScore}</div>
-          <div className="text-xs text-muted-foreground">Ср. score</div>
+          <div className="text-xs text-muted-foreground">{t('avgScore')}</div>
         </Card>
         <Card className="p-4 text-center">
           <div className="text-2xl font-bold text-blue-600">{stats.withIndexNow}</div>
@@ -258,7 +263,7 @@ export function AdminSearchDiagnosticsTab() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Поиск по slug, title, city, profession..."
+          placeholder={t('searchBySlug')}
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="pl-10"
@@ -270,20 +275,20 @@ export function AdminSearchDiagnosticsTab() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Slug</TableHead>
-              <TableHead>Score</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Exclusions</TableHead>
-              <TableHead>Entity</TableHead>
-              <TableHead>Services</TableHead>
+              <TableHead>{t('slug')}</TableHead>
+              <TableHead>{t('score')}</TableHead>
+              <TableHead>{t('status')}</TableHead>
+              <TableHead>{t('exclusions')}</TableHead>
+              <TableHead>{t('entity')}</TableHead>
+              <TableHead>{t('services')}</TableHead>
               <TableHead>IndexNow</TableHead>
-              <TableHead>Logs</TableHead>
+              <TableHead>{t('logs')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filtered.map(page => {
               const score = page.quality_score || 0;
-              const isIndexable = page.is_published && score >= 40;
+              const isIndexable = page.is_published && page.is_indexable !== false && score >= INDEXABLE_THRESHOLD;
               const exclusions = page.index_exclusion_reasons || [];
               const children = parseChildEntities(page.service_slugs, page.slug, isIndexable);
               const activeChildren = children.filter(c => c.state !== 'removed');
@@ -312,7 +317,7 @@ export function AdminSearchDiagnosticsTab() {
                       <Progress value={score} className="h-1.5 w-16" />
                       <span className={cn(
                         'text-sm font-bold tabular-nums',
-                        score >= 40 ? 'text-emerald-600' : score >= 20 ? 'text-amber-600' : 'text-red-500'
+                        score >= INDEXABLE_THRESHOLD ? 'text-emerald-600' : score >= ALMOST_READY_THRESHOLD ? 'text-amber-600' : 'text-red-500'
                       )}>{score}</span>
                     </div>
                   </TableCell>
@@ -320,17 +325,17 @@ export function AdminSearchDiagnosticsTab() {
                     {isIndexable ? (
                       <Badge variant="outline" className="gap-1 text-xs border-emerald-500/30 text-emerald-600">
                         <Globe className="h-3 w-3" />
-                        Indexable
+                        {t('indexable')}
                       </Badge>
                     ) : page.is_published ? (
                       <Badge variant="outline" className="gap-1 text-xs border-amber-500/30 text-amber-600">
                         <AlertTriangle className="h-3 w-3" />
-                        NoIndex
+                        {t('noIndex')}
                       </Badge>
                     ) : (
                       <Badge variant="outline" className="gap-1 text-xs border-muted-foreground/30">
                         <FileX className="h-3 w-3" />
-                        Draft
+                        {t('draft')}
                       </Badge>
                     )}
                   </TableCell>
@@ -365,20 +370,20 @@ export function AdminSearchDiagnosticsTab() {
                             <span className="text-sm font-medium">{eligibleChildren.length}</span>
                             <span className="text-xs text-muted-foreground">/{activeChildren.length}</span>
                             {thinChildren.length > 0 && (
-                              <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">{thinChildren.length} thin</Badge>
+                              <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">{thinChildren.length} {t('thin')}</Badge>
                             )}
                           </button>
                         </DialogTrigger>
                         <DialogContent className="max-w-lg max-h-[70vh] overflow-y-auto">
                           <DialogHeader>
-                            <DialogTitle className="font-mono text-sm">Child URLs: /{page.slug}</DialogTitle>
+                            <DialogTitle className="font-mono text-sm">{t('childUrls')}: /{page.slug}</DialogTitle>
                           </DialogHeader>
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead className="text-xs">Услуга</TableHead>
-                                <TableHead className="text-xs">Slug</TableHead>
-                                <TableHead className="text-xs">Статус</TableHead>
+                                <TableHead className="text-xs">{t('service')}</TableHead>
+                                <TableHead className="text-xs">{t('slug')}</TableHead>
+                                <TableHead className="text-xs">{t('status')}</TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -389,7 +394,7 @@ export function AdminSearchDiagnosticsTab() {
                                     <TableCell className="text-xs max-w-[150px] truncate">
                                       {child.title}
                                       {child.id?.startsWith('legacy-') && (
-                                        <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">legacy</Badge>
+                                        <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">{t('legacy')}</Badge>
                                       )}
                                     </TableCell>
                                     <TableCell className="font-mono text-xs">{child.slug}</TableCell>

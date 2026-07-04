@@ -20,10 +20,9 @@ import { useEditorStore } from '@/store/useEditorStore';
 import type { EditorContext } from '@/lib/editor/editor-commands';
 
 // Zone context
-import { ZoneProvider, useZoneContext } from '@/contexts/ZoneContext';
+import { ZoneProvider } from '@/contexts/ZoneContext';
 
 // SEO
-import { supabase } from '@/platform/supabase/client';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
@@ -35,6 +34,7 @@ import {
 import { PublicationRitual } from '@/components/dashboard-v2/dialogs/PublicationRitual';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
@@ -94,9 +94,7 @@ const LoadingState = () => (
 // 2026 Living Canvas Background
 const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
-import { storage } from '@/lib/storage';
 import { prefetchRouteChunks } from '@/lib/routing/route-prefetch';
-import type { Block, PageData, PageTheme } from '@/types/page';
 
 // Lazy load heavy components for better bundle splitting
 const BlockEditorV2 = lazy(() => import('@/components/editor/BlockEditorV2').then(m => ({ default: m.BlockEditorV2 })));
@@ -105,9 +103,9 @@ const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarke
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
 const AIGenerator = lazy(() => import('@/components/editor/AIGenerator').then(m => ({ default: m.AIGenerator })));
 const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
+const OnboardingScopeChoice = lazy(() => import('@/components/onboarding/OnboardingScopeChoice').then(m => ({ default: m.OnboardingScopeChoice })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
 const InstallPromptDialog = lazy(() => import('@/components/pwa/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
-const ShareAfterPublishDialog = lazy(() => import('@/components/referral/ShareAfterPublishDialog').then(m => ({ default: m.ShareAfterPublishDialog })));
 const TokensPanel = lazy(() => import('@/components/tokens/TokensPanel').then(m => ({ default: m.TokensPanel })));
 const FriendsPanel = lazy(() => import('@/components/friends/FriendsPanel').then(m => ({ default: m.FriendsPanel })));
 const MyTemplatesPanel = lazy(() => import('@/components/templates/MyTemplatesPanel').then(m => ({ default: m.MyTemplatesPanel })));
@@ -118,6 +116,9 @@ const CreatePageDialogLazy = lazy(() => import('@/components/dashboard-v2/dialog
 const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.PageVersionsDialog })));
 
 import type { Niche } from '@/lib/niches';
+import type { Block, PageData, PageTheme } from '@/types/page';
+
+type PageSeo = PageData['seo'];
 
 type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'developers' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
 
@@ -152,7 +153,7 @@ function DashboardV2Inner() {
   const editorHistory = useEditorHistory(
     [],
     {
-      onStateChange: (blocks) => {
+      onStateChange: (_blocks) => {
         // Will be wired after dashboard is available
       },
     }
@@ -162,7 +163,7 @@ function DashboardV2Inner() {
   // Core state - with onPublish callback for automatic versioning + editorHistory
   const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
   const multiPage = useMultiPage();
-  const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
+  const { limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
 
   // P2: Editor store (must be before early returns)
@@ -189,7 +190,6 @@ function DashboardV2Inner() {
   }, [searchParams, location.pathname]);
 
   const activationAction = searchParams.get('action');
-  const welcomeAction = searchParams.get('welcome');
 
   // UI State
   const [migrationKey, setMigrationKey] = useState(0);
@@ -203,16 +203,32 @@ function DashboardV2Inner() {
   const [showCreatePage, setShowCreatePage] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
+  const [deletePageId, setDeletePageId] = useState<string | null>(null);
+
+  const confirmDeletePage = async () => {
+    if (!deletePageId) return;
+    const result = await multiPage.deletePage(deletePageId);
+    if (result.success) {
+      toast.success(t('dashboard.pages.deleted', 'Page deleted'));
+    } else {
+      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
+    }
+    setDeletePageId(null);
+  };
 
   // Page versions
-  const handleRestoreVersion = useCallback((blocks: Block[], theme?: PageTheme, seo?: object) => {
-    const restoredSeo = seo as Partial<PageData['seo']> | undefined;
+  const handleRestoreVersion = useCallback((blocks: Block[], theme?: PageTheme, seo?: Partial<PageSeo>) => {
+    const restoredSeo: PageSeo | undefined = seo ? {
+      title: dashboard.pageData?.seo.title ?? '',
+      description: dashboard.pageData?.seo.description ?? '',
+      keywords: dashboard.pageData?.seo.keywords ?? [],
+      ...seo,
+    } : dashboard.pageData?.seo;
+
     dashboard.updatePageDataPartial({
       blocks,
       theme: theme || dashboard.pageData?.theme,
-      seo: restoredSeo
-        ? { title: '', description: '', keywords: [], ...dashboard.pageData?.seo, ...restoredSeo }
-        : dashboard.pageData?.seo,
+      seo: restoredSeo,
     });
     setShowVersions(false);
   }, [dashboard]);
@@ -229,7 +245,7 @@ function DashboardV2Inner() {
   const seoTitle = t('dashboard.seo.title', 'LinkMAX Dashboard');
   const seoDescription = t('dashboard.seo.description', 'Manage your LinkMAX pages, leads, and analytics.');
 
-  // QuickStartFlow removed; Smart Builder handles onboarding via useDashboardOnboarding.
+  // QuickStartFlow removed — AIBuilderWizard handles all onboarding via useDashboardOnboarding
 
   useEffect(() => {
     // Prefetch only nearest probable next transitions by active dashboard tab
@@ -274,22 +290,6 @@ function DashboardV2Inner() {
       toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to create page'));
     }
     return { success: result.success, error: result.error };
-  }, [multiPage, t]);
-
-  const handleUpdateSlug = useCallback(async (pageId: string, newSlug: string) => {
-    const result = await multiPage.updatePageSlug(pageId, newSlug);
-    if (!result.success) {
-      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to update slug'));
-    }
-    return result;
-  }, [multiPage, t]);
-
-  const handleUpdateCustomDomain = useCallback(async (pageId: string, newDomain: string | null) => {
-    const result = await multiPage.updatePageCustomDomain(pageId, newDomain);
-    if (!result.success) {
-      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to update custom domain'));
-    }
-    return result;
   }, [multiPage, t]);
 
   // Handle edit page (navigate to editor)
@@ -379,15 +379,6 @@ function DashboardV2Inner() {
       setSearchParams(next, { replace: true });
     }
   }, [activationAction, currentTab, searchParams, setSearchParams, setCommandPaletteOpen]);
-
-  useEffect(() => {
-    if (welcomeAction !== '1' || currentTab !== 'editor') return;
-
-    dashboard.onboardingState.openAIBuilderFromSettings();
-    const next = new URLSearchParams(searchParams);
-    next.delete('welcome');
-    setSearchParams(next, { replace: true });
-  }, [welcomeAction, currentTab, dashboard.onboardingState, searchParams, setSearchParams]);
 
   // Loading state
   if (dashboard.loading || multiPage.loading) {
@@ -528,6 +519,7 @@ function DashboardV2Inner() {
                   onRedo={editorHistory.redo}
                   onOpenVersions={() => setShowVersions(true)}
                   deepLinkAction={activationAction}
+                  recentlyAddedBlockId={dashboard.blockEditor.recentlyAddedBlockId}
                 />
               </ScreenErrorBoundary>
             </div>
@@ -566,16 +558,8 @@ function DashboardV2Inner() {
                     multiPage.switchPage(id);
                     handleTabChange('settings');
                   }}
-                  onDeletePage={async (id) => {
-                    if (!confirm(t('dashboard.pages.deleteConfirm', 'Are you sure you want to delete this page? This cannot be undone.'))) return;
-                    const result = await multiPage.deletePage(id);
-                    if (result.success) {
-                      toast.success(t('dashboard.pages.deleted', 'Page deleted'));
-                    } else {
-                      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
-                    }
-                  }}
-                  onUpgradePage={(id) => {
+                  onDeletePage={(id) => setDeletePageId(id)}
+                  onUpgradePage={(_id) => {
                     navigate('/pricing');
                   }}
                   onUpgradePlan={() => navigate('/pricing')}
@@ -600,7 +584,7 @@ function DashboardV2Inner() {
                   slug={dashboard.pageData?.slug || ''}
                   blocks={dashboard.pageData?.blocks || []}
                   isPremium={dashboard.isPremium}
-                  onApplyInsight={(action) => {
+                  onApplyInsight={(_action) => {
                     handleTabChange('home');
                   }}
                 />
@@ -673,7 +657,7 @@ function DashboardV2Inner() {
                   // Page settings props
                   pageTitle={multiPage.activePage?.title}
                   pageSlug={multiPage.activePage?.slug}
-                  customDomain={multiPage.activePage?.custom_domain}
+                  customDomain={multiPage.activePage?.custom_domain ?? undefined}
                   isPaid={multiPage.activePage?.isPaid}
                   isPrimaryPaid={multiPage.activePage?.isPrimaryPaid}
                   seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}
@@ -694,13 +678,14 @@ function DashboardV2Inner() {
                     return result;
                   }}
                   onUpdateSeo={(seo) => {
-                    const nextSeo: PageData['seo'] = {
-                      title: '',
-                      description: '',
-                      keywords: [],
-                      ...dashboard.pageData?.seo,
-                      ...seo,
+                    const mergedSeo = { ...dashboard.pageData?.seo, ...seo };
+                    const nextSeo: PageSeo = {
+                      title: mergedSeo.title ?? '',
+                      description: mergedSeo.description ?? '',
+                      keywords: mergedSeo.keywords ?? [],
+                      image: mergedSeo.image,
                     };
+
                     dashboard.updatePageDataPartial({
                       seo: nextSeo,
                     });
@@ -864,13 +849,25 @@ function DashboardV2Inner() {
             />
           )}
 
-          {/* Smart Builder wizard (onboarding + settings) */}
+          {/* Scope chooser — first-time gate (single page vs full site) */}
+          {dashboard.onboardingState.showScopeChoice && (
+            <OnboardingScopeChoice
+              open={dashboard.onboardingState.showScopeChoice}
+              onChooseSingle={dashboard.onboardingState.handleChooseSingle}
+              onClose={dashboard.onboardingState.handleScopeClose}
+            />
+          )}
+
+          {/* AI Builder Wizard (onboarding + settings) */}
           {dashboard.onboardingState.showAIBuilderWizard && (
             <AIBuilderWizard
               open={dashboard.onboardingState.showAIBuilderWizard}
               onClose={dashboard.onboardingState.handleAIBuilderClose}
               onComplete={dashboard.onboardingState.handleAIBuilderComplete}
               isOnboarding={true}
+              initialNiche={dashboard.onboardingState.signupContext.initialNiche}
+              pageId={dashboard.pageData.id}
+              signupContext={dashboard.onboardingState.signupContext}
             />
           )}
 
@@ -935,7 +932,7 @@ function DashboardV2Inner() {
               onClose={() => setShowTheme(false)}
               currentTheme={dashboard.pageData?.theme || {}}
               onThemeChange={(theme) => {
-                if (!dashboard.pageData?.theme) return;
+                if (!dashboard.pageData) return;
                 dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData.theme, ...theme } });
               }}
               isPremium={dashboard.isPremium}
@@ -947,6 +944,21 @@ function DashboardV2Inner() {
         {/* P2: Command Palette + Keyboard Shortcuts */}
         <EditorCommandPalette context={editorContext} />
         <EditorKeyboardHandler context={editorContext} enabled={currentTab === 'editor'} />
+
+        <AlertDialog open={deletePageId !== null} onOpenChange={() => setDeletePageId(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('dashboard.pages.deleteTitle', 'Удалить страницу?')}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t('dashboard.pages.deleteConfirm', 'Вы уверены, что хотите удалить эту страницу? Это действие нельзя отменить.')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDeletePage}>{t('common.delete', 'Удалить')}</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </>
   );

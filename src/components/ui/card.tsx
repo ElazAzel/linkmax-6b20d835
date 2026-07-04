@@ -9,21 +9,23 @@ const cardVariants = cva(
     variants: {
       variant: {
         default:
-          "border border-border/50 bg-card/85 backdrop-blur-xl shadow-glass hover:shadow-glass-lg hover:border-border/70 hover:-translate-y-0.5",
+          "border border-border/50 bg-card/90 backdrop-blur-xl shadow-glass hover:shadow-glass-lg hover:border-border/70 hover:-translate-y-0.5",
         glass:
           "border border-border/30 bg-card/60 backdrop-blur-2xl shadow-glass hover:bg-card/75 hover:shadow-glass-lg hover:border-border/50",
         solid:
           "border border-border/40 bg-card shadow-lg hover:shadow-xl hover:-translate-y-1",
         outline:
-          "border-2 border-border/60 bg-transparent hover:bg-card/30 hover:border-primary/40",
+          "border-2 border-border/60 bg-transparent hover:bg-card/40 hover:border-primary/40",
         interactive:
-          "border border-border/50 bg-card/85 backdrop-blur-xl shadow-glass cursor-pointer hover:shadow-glass-lg hover:border-primary/40 hover:-translate-y-1 hover:scale-[1.01] active:scale-[0.99] active:translate-y-0",
+          "border border-border/50 bg-card/90 backdrop-blur-xl shadow-glass cursor-pointer hover:shadow-glass-lg hover:border-primary/40 hover:-translate-y-1 hover:scale-[1.01] active:scale-[0.99] active:translate-y-0",
         premium:
-          "border border-primary/20 bg-gradient-to-br from-card/90 via-card/80 to-primary/5 backdrop-blur-xl shadow-glass-lg hover:shadow-glass-xl hover:border-primary/40 hover:-translate-y-1",
+          "border border-primary/20 bg-gradient-to-br from-card/95 via-card/85 to-primary/5 backdrop-blur-xl shadow-glass-lg hover:shadow-glass-xl hover:border-primary/40 hover:-translate-y-1",
         borderless:
           "border-0 bg-transparent shadow-none",
         crisp:
           "border border-border/50 bg-card shadow-sm",
+        elevated:
+          "border border-border/40 bg-card shadow-xl hover:shadow-2xl hover:-translate-y-1.5 active:translate-y-0",
       },
     },
     defaultVariants: {
@@ -49,7 +51,7 @@ Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
+    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-4 sm:p-6", className)} {...props} />
   )
 );
 CardHeader.displayName = "CardHeader";
@@ -75,14 +77,14 @@ CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+    <div ref={ref} className={cn("p-4 sm:p-6 pt-0 sm:pt-0", className)} {...props} />
   )
 );
 CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
+    <div ref={ref} className={cn("flex flex-col sm:flex-row items-start sm:items-center gap-2 p-4 sm:p-6 pt-0 sm:pt-0", className)} {...props} />
   )
 );
 CardFooter.displayName = "CardFooter";

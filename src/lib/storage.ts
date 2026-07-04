@@ -177,6 +177,41 @@ export const storage = {
         // eslint-disable-next-line no-restricted-globals
         localStorage.setItem(getKey(key), value);
     },
+
+    /**
+     * Session-scoped storage (cleared when tab closes)
+     */
+    session: {
+        get<T = unknown>(key: string): T | null {
+            if (typeof window === 'undefined') return null;
+            try {
+                // eslint-disable-next-line no-restricted-globals
+                const item = sessionStorage.getItem(getKey(key));
+                if (item === null) return null;
+                return JSON.parse(item) as T;
+            } catch {
+                return null;
+            }
+        },
+        set<T = unknown>(key: string, value: T): void {
+            if (typeof window === 'undefined') return;
+            try {
+                // eslint-disable-next-line no-restricted-globals
+                sessionStorage.setItem(getKey(key), JSON.stringify(value));
+            } catch {
+                // ignore quota errors
+            }
+        },
+        remove(key: string): void {
+            if (typeof window === 'undefined') return;
+            try {
+                // eslint-disable-next-line no-restricted-globals
+                sessionStorage.removeItem(getKey(key));
+            } catch {
+                // ignore
+            }
+        },
+    },
 };
 
 /**

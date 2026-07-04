@@ -17,6 +17,14 @@ vi.mock('@/platform/supabase/client', () => ({
             single: vi.fn().mockReturnThis(),
             maybeSingle: vi.fn().mockReturnThis(),
         })),
+        rpc: vi.fn().mockResolvedValue({ data: {
+            dailyGrowth: [],
+            userDistribution: [],
+            eventDistribution: [],
+            cumulativeUsers: [],
+            socialStats: [],
+            blockTypeStats: [],
+        }, error: null }),
     },
 }));
 
@@ -67,11 +75,18 @@ describe('AdminService', () => {
 
     describe('Statistics', () => {
         it('should get user status distribution', async () => {
-            vi.mocked(supabase.from).mockReturnValue({
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                gt: vi.fn().mockResolvedValue({ count: 10, error: null }),
-            } as any);
+            vi.mocked(supabase.rpc).mockResolvedValue({ data: {
+                dailyGrowth: [],
+                userDistribution: [
+                    { status: 'active', user_count: 10 },
+                    { status: 'inactive', user_count: 5 },
+                    { status: 'banned', user_count: 1 },
+                ],
+                eventDistribution: [],
+                cumulativeUsers: [],
+                socialStats: [],
+                blockTypeStats: [],
+            }, error: null, count: null, status: 200, statusText: 'OK' } as any);
 
             const result = await AdminService.getUserStatusDistribution();
             expect(result).toHaveLength(3);
@@ -121,7 +136,7 @@ describe('AdminService', () => {
                 order: vi.fn().mockResolvedValue({ data: [{ created_at: new Date().toISOString() }], error: null }),
             } as any);
 
-            const result = await AdminService.getCumulativeUsers(1);
+            const result = await AdminService.getCumulativeUsers();
             expect(result).toBeDefined();
         });
     });

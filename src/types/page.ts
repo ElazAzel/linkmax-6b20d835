@@ -17,6 +17,8 @@ export interface PageTheme {
   textColor: string;
   buttonStyle: 'default' | 'rounded' | 'pill' | 'gradient';
   fontFamily: 'sans' | 'serif' | 'mono';
+  iconStyle?: 'rounded' | 'square' | 'duotone';
+  animationStyle?: 'none' | 'gentle' | 'energetic';
   darkMode?: boolean;
   // Custom page background (business only)
   customBackground?: PageBackground;

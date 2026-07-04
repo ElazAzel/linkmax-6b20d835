@@ -14,14 +14,17 @@ import { RoutePrefetchManager } from "@/components/performance/RoutePrefetchMana
 import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
-import { PostHogProvider } from 'posthog-js/react';
-import { POSTHOG_KEY, POSTHOG_HOST, POSTHOG_OPTIONS } from "@/lib/posthog";
+import { initPostHog } from "@/lib/posthog";
+
+// Initialize PostHog before rendering
+initPostHog();
 
 // Lazy load non-critical shell components to reduce main bundle
 const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
 const PWAUpdatePrompt = lazy(() => import("@/components/pwa/PWAUpdatePrompt").then(m => ({ default: m.PWAUpdatePrompt })));
 const CookieConsent = lazy(() => import("@/components/legal/CookieConsent").then(m => ({ default: m.CookieConsent })));
 const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalette").then(m => ({ default: m.CommandPalette })));
+const PaymentTestModeBanner = lazy(() => import("@/components/PaymentTestModeBanner").then(m => ({ default: m.PaymentTestModeBanner })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,11 +38,27 @@ const queryClient = new QueryClient({
 });
 
 // Loading fallback for pages
+const LOADER_COPY: Record<string, string> = {
+  ru: 'Загрузка...', en: 'Loading…', kk: 'Жүктелуде…', uz: 'Yuklanmoqda…',
+};
+const ERROR_COPY: Record<string, { title: string; reload: string }> = {
+  ru: { title: 'Что-то пошло не так', reload: 'Обновить страницу' },
+  en: { title: 'Something went wrong', reload: 'Reload page' },
+  kk: { title: 'Бірдеңе дұрыс болмады', reload: 'Бетті жаңарту' },
+  uz: { title: 'Nimadir noto‘g‘ri ketdi', reload: 'Sahifani yangilash' },
+};
+const OAUTH_ERROR_COPY: Record<string, string> = {
+  ru: 'Ошибка входа', en: 'Sign-in error', kk: 'Кіру қатесі', uz: 'Kirish xatosi',
+};
+const getLang = () => {
+  const l = (typeof document !== 'undefined' ? document.documentElement.lang : 'ru') || 'ru';
+  return (['ru','en','kk','uz'].includes(l) ? l : 'ru');
+};
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="flex flex-col items-center gap-4">
       <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-      <p className="text-sm text-muted-foreground animate-pulse">Loading…</p>
+      <p className="text-sm text-muted-foreground animate-pulse">{LOADER_COPY[getLang()]}</p>
     </div>
   </div>
 );
@@ -61,15 +80,16 @@ class RouteErrorBoundary extends React.Component<
   }
   render() {
     if (this.state.hasError) {
+      const c = ERROR_COPY[getLang()];
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center space-y-4 p-6">
-            <p className="text-lg font-semibold text-foreground">Something went wrong</p>
+            <p className="text-lg font-semibold text-foreground">{c.title}</p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium"
             >
-              Reload page
+              {c.reload}
             </button>
           </div>
         </div>
@@ -118,15 +138,14 @@ const App = () => {
     if (error) {
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        toast.error(`Authentication Error: ${errorDescription || error}`);
+        toast.error(`${OAUTH_ERROR_COPY[getLang()]}: ${errorDescription || error}`);
       }, 500);
     }
   }, []);
 
   return (
     <HelmetProvider>
-      <PostHogProvider apiKey={POSTHOG_KEY} options={{ api_host: POSTHOG_HOST, ...POSTHOG_OPTIONS }}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>
               <LanguageProvider>
@@ -140,6 +159,7 @@ const App = () => {
                   <RoutePrefetchManager />
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>
+                    <PaymentTestModeBanner />
                     <div id="main-content" className="outline-none" tabIndex={-1}>
                       <Suspense fallback={<PageLoader />}>
                         <Outlet />
@@ -156,7 +176,6 @@ const App = () => {
             </AuthProvider>
           </TMAProvider>
         </QueryClientProvider>
-      </PostHogProvider>
     </HelmetProvider>
   );
 };

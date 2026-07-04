@@ -335,21 +335,30 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         )}
 
         {isLocked && (
-          <div className="absolute top-2 right-2">
-            <Lock className="h-4 w-4 text-muted-foreground" />
-          </div>
+          <>
+            <div className="absolute top-2 right-2">
+              <Lock className="h-4 w-4 text-muted-foreground" aria-hidden />
+            </div>
+            <span className="absolute bottom-1 inset-x-2 text-[10px] font-semibold uppercase tracking-wide text-primary/80">
+              {t('pricing.availableOnPro', 'Доступно на Pro')}
+            </span>
+          </>
         )}
       </button>
     );
 
-    if (reasonTooltip && !isMobile) {
+    const proHint = isLocked
+      ? t('pricing.proHint', 'Откройте этот блок на тарифе Pro — без ограничений на типы блоков.')
+      : reasonTooltip;
+
+    if (proHint && !isMobile) {
       return (
         <Tooltip>
           <TooltipTrigger asChild>
             {blockButton}
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="max-w-[200px]">
-            <p className="text-xs">{reasonTooltip}</p>
+          <TooltipContent side="bottom" className="max-w-[220px]">
+            <p className="text-xs">{proHint}</p>
           </TooltipContent>
         </Tooltip>
       );
@@ -469,6 +478,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
                     <Input
                       data-testid="add-block-search"
+                      autoFocus
                       placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}

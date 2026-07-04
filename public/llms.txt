@@ -53,7 +53,22 @@ LinkMAX (pronounced "link-max") is the comprehensive **Business Operating System
 - Pricing: https://lnkmx.my/pricing
 - Gallery: https://lnkmx.my/gallery
 - Expert Directory: https://lnkmx.my/experts
+- Beauty Masters: https://lnkmx.my/для-бьюти-мастеров
+- Tutors: https://lnkmx.my/для-репетиторов
 - SEO-AEO Landing: https://lnkmx.my/seo-landing
+
+## Pages
+
+- [Homepage](/): AI page builder, mini-CRM, and analytics for micro-business.
+- [Pricing](/pricing): Free Identity, Starter (7% success fee), Pro plans.
+- [Gallery](/gallery): Showcase of pages built on LinkMAX.
+- [Expert Directory](/experts): Browse independent professionals on LinkMAX.
+- [For Beauty Masters](/для-бьюти-мастеров): Landing for beauty professionals.
+- [For Tutors](/для-репетиторов): Landing for tutors and educators.
+- [SEO / AEO Landing](/seo-landing): SEO, AEO, and GEO features overview.
+- [Alternatives](/alternatives): LinkMAX vs Linktree, Taplink, and others.
+- [Terms](/terms): Terms of service.
+- [Privacy](/privacy): Privacy policy.
 
 ## Data Freshness & Citability
 

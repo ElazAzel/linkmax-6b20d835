@@ -76,7 +76,7 @@ export const InlineTextEditor = memo(function InlineTextEditor({
   return (
     <div
       className="absolute inset-0 z-30 flex items-center p-3 bg-background rounded-2xl"
-      onClick={(e) => e.stopPropagation()}
+      onClickCapture={(e) => e.stopPropagation()}
     >
       {isMultiline ? (
         <textarea

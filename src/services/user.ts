@@ -287,7 +287,7 @@ export async function updateUsername(
     await supabase.from('pages').update({ slug: normalizedUsername }).eq('user_id', userId);
 
     return { success: true };
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error: 'Failed to update username' };
   }
 }
@@ -336,7 +336,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     }
 
     return { isPremium, tier, trialEndsAt: data.trial_ends_at || null, inTrial };
-  } catch (error) {
+  } catch (_error) {
     return { isPremium: false, tier: 'identity', trialEndsAt: null, inTrial: false };
   }
 }
@@ -375,6 +375,31 @@ export async function updateUserPremiumTier(
 
 export function activateStarterTier(userId: string): Promise<ApiResult<boolean>> {
   return updateUserPremiumTier(userId, 'starter');
+}
+
+export type StartProTrialResult =
+  | { ok: true; trialEndsAt: string }
+  | { ok: false; error: 'trial_already_used' | 'already_premium' | 'unauthenticated' | 'no_profile' | 'unknown' };
+
+/**
+ * Self-serve 7-day Pro trial (one-time per user).
+ * Calls SECURITY DEFINER RPC `start_pro_trial` which enforces eligibility.
+ */
+export async function startProTrial(): Promise<StartProTrialResult> {
+  try {
+    // Types regenerate async; cast until then.
+    const rpc = supabase.rpc as unknown as (name: string) => Promise<{ data: unknown; error: unknown }>;
+    const { data, error } = await rpc('start_pro_trial');
+    if (error) return { ok: false, error: 'unknown' };
+    const payload = data as { ok?: boolean; trial_ends_at?: string; error?: string } | null;
+    if (payload?.ok && payload.trial_ends_at) {
+      return { ok: true, trialEndsAt: payload.trial_ends_at };
+    }
+    const err = (payload?.error ?? 'unknown') as StartProTrialResult extends { ok: false; error: infer E } ? E : never;
+    return { ok: false, error: err };
+  } catch {
+    return { ok: false, error: 'unknown' };
+  }
 }
 
 /**

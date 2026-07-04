@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { memo, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useOrganizations } from '@/hooks/useOrganizations';
 import { organizationsService, OrganizationMember } from '@/services/organizations';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,17 +15,13 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import { UserPlus, Settings, Trash2, Mail } from 'lucide-react';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { toast } from 'sonner';
 
-export const TeamManagementScreen = function TeamManagementScreen() {
+export const TeamManagementScreen = memo(function TeamManagementScreen() {
+    const { t } = useTranslation();
     const { currentOrg } = useOrganizations();
     const [members, setMembers] = useState<OrganizationMember[]>([]);
     const [loading, setLoading] = useState(true);
@@ -40,9 +37,14 @@ export const TeamManagementScreen = function TeamManagementScreen() {
     async function loadMembers() {
         if (!currentOrg) return;
         setLoading(true);
-        const data = await organizationsService.getOrganizationMembers(currentOrg.id);
-        setMembers(data);
-        setLoading(false);
+        try {
+            const data = await organizationsService.getOrganizationMembers(currentOrg.id);
+            setMembers(data);
+        } catch {
+            toast.error(t('team.loadError', 'Ошибка загрузки участников'));
+        } finally {
+            setLoading(false);
+        }
     }
 
     async function handleInvite(e: React.FormEvent) {
@@ -54,11 +56,11 @@ export const TeamManagementScreen = function TeamManagementScreen() {
         setIsInviting(false);
 
         if (success) {
-            toast.success('Приглашение отправлено');
+            toast.success(t('team.inviteSuccess', 'Приглашение отправлено'));
             setInviteEmail('');
             loadMembers();
         } else {
-            toast.error(String(error) || 'Ошибка при отправке приглашения');
+            toast.error(String(error) || t('team.inviteError', 'Ошибка при отправке приглашения'));
         }
     }
 
@@ -66,7 +68,7 @@ export const TeamManagementScreen = function TeamManagementScreen() {
         return (
             <div className="flex flex-col items-center justify-center h-[60vh] space-y-4">
                 <Settings className="h-12 w-12 text-muted-foreground animate-pulse" />
-                <h2 className="text-xl font-medium">Выберите организацию для управления</h2>
+                <h2 className="text-xl font-medium">{t('team.noOrg', 'Выберите организацию для управления')}</h2>
             </div>
         );
     }
@@ -76,7 +78,7 @@ export const TeamManagementScreen = function TeamManagementScreen() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">{currentOrg.name}</h1>
-                    <p className="text-muted-foreground mt-1">Управление участниками и ролями вашей команды</p>
+                    <p className="text-muted-foreground mt-1">{t('team.manageSubtitle', 'Управление участниками и ролями вашей команды')}</p>
                 </div>
 
                 {currentOrg.name !== 'Personal Organization' && (
@@ -91,10 +93,10 @@ export const TeamManagementScreen = function TeamManagementScreen() {
                                     className="bg-white/5 border-white/10"
                                     required
                                 />
-                                <Button type="submit" disabled={isInviting} size="sm" className="shrink-0">
-                                    <UserPlus className="h-4 w-4 mr-2" />
-                                    Пригласить
-                                </Button>
+                                    <Button type="submit" disabled={isInviting} size="sm" className="shrink-0">
+                                        <UserPlus className="h-4 w-4 mr-2" />
+                                        {t('team.invite', 'Пригласить')}
+                                    </Button>
                             </form>
                         </CardContent>
                     </Card>
@@ -103,8 +105,8 @@ export const TeamManagementScreen = function TeamManagementScreen() {
 
             <Card className="glass-card border-white/10">
                 <CardHeader>
-                    <CardTitle className="text-lg">Участники команды</CardTitle>
-                    <CardDescription>Список всех активных участников и их права доступа</CardDescription>
+                    <CardTitle className="text-lg">{t('team.membersTitle', 'Участники команды')}</CardTitle>
+                    <CardDescription>{t('team.membersDesc', 'Список всех активных участников и их права доступа')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {loading ? (
@@ -117,10 +119,10 @@ export const TeamManagementScreen = function TeamManagementScreen() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="hover:bg-transparent border-white/5">
-                                    <TableHead>Пользователь</TableHead>
-                                    <TableHead>Роль</TableHead>
-                                    <TableHead>Дата вступления</TableHead>
-                                    <TableHead className="text-right">Действия</TableHead>
+                                    <TableHead>{t('team.user', 'Пользователь')}</TableHead>
+                                    <TableHead>{t('team.role', 'Роль')}</TableHead>
+                                    <TableHead>{t('team.joined', 'Дата вступления')}</TableHead>
+                                    <TableHead className="text-right">{t('team.actions', 'Действия')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -176,13 +178,13 @@ export const TeamManagementScreen = function TeamManagementScreen() {
                 <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex gap-4 items-start text-amber-500">
                     <Settings className="h-5 w-5 mt-0.5 shrink-0" />
                     <div className="space-y-1">
-                        <p className="font-medium">Личная организация</p>
+                        <p className="font-medium">{t('team.personalOrg', 'Личная организация')}</p>
                         <p className="text-sm opacity-90">
-                            В личную организацию нельзя приглашать участников. Для коллективной работы создайте новую команду через меню выбора организаций в боковой панели.
+                            {t('team.personalOrgDesc', 'В личную организацию нельзя приглашать участников. Для коллективной работы создайте новую команду через меню выбора организаций в боковой панели.')}
                         </p>
                     </div>
                 </div>
             )}
         </div>
     );
-}
+});

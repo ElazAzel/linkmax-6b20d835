@@ -133,6 +133,8 @@
     "steps": {
       "createPage": "Create your page",
       "addBlock": "Add your first block",
+      "addServices": "Add services with pricing",
+      "addContact": "Add a contact button",
       "publish": "Publish your page",
       "connectTelegram": "Connect Telegram",
       "firstLead": "Get your first lead",
@@ -143,6 +145,8 @@
     "cta": {
       "openEditor": "Open",
       "addBlock": "Add",
+      "addServices": "Add",
+      "addContact": "Add",
       "publish": "Publish",
       "connectTelegram": "Connect",
       "promotePage": "Promote"
@@ -7107,6 +7111,22 @@
       "publicPageV2": {
         "poweredBy": "Powered by"
       }
+    },
+    "detail": {
+      "ctaHeader": "Start free",
+      "badge": "Migration guide",
+      "bestForLabel": "Best fit for",
+      "comparePricing": "Compare pricing",
+      "migrationTitle": "1-day migration plan",
+      "advantagesTitle": "Why LinkMAX wins here",
+      "ctaTitle": "Ready to migrate from",
+      "ctaSubtitle": "Launch your page, CRM and booking in one app — and shorten the path to first sale.",
+      "ctaButton": "Create account",
+      "otherTitle": "Other comparisons",
+      "metaTail": "Compare and launch page + CRM + booking in one window.",
+      "table": {
+        "metric": "Metric"
+      }
     }
   },
   "landing": {
@@ -7126,10 +7146,10 @@
     "bento": {
       "sectionTitle": "Everything you need",
       "sectionDesc": "All the tools for your micro-business in one place",
-      "aiTitle": "AI Builder",
-      "aiDesc": "Create a page in 60 seconds using AI",
-      "aiPowered": "Powered by AI",
-      "aiSub": "AI generates content and structure",
+      "aiTitle": "Storefront draft",
+      "aiDesc": "Describe your service and get a page foundation: sections, offer, services and prices. Final edits stay under your control.",
+      "aiPowered": "Page draft",
+      "aiSub": "Structure / copy / services",
       "analyticsTitle": "Deep Analytics",
       "analyticsDesc": "Track clicks, conversions and traffic sources",
       "crmTitle": "Mini-CRM",
@@ -7239,7 +7259,9 @@
         "login": "Log in",
         "start": "Start",
         "startFree": "Start for free",
-        "getStarted": "Get Started"
+        "getStarted": "Get Started",
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu"
       },
       "pricing": {
         "billedYearly": "Оплата {{price}} в год"
@@ -7250,13 +7272,55 @@
         "badge": "🚀 Platform for experts",
         "titleStart": "Your business.",
         "titleEnd": "One platform.",
-        "subtitle": "Website, CRM, analytics and AI — everything an expert needs.",
+        "subtitle": "Page builder for service businesses with online booking, payments, Telegram leads and mini-CRM.",
         "cta": "Create page",
         "secondary": "See examples",
         "scroll": "Scroll down",
         "trust1": "No credit card required",
         "trust2": "Free plan available",
         "trust3": "Setup in 60 seconds"
+      }
+    },
+    "v5": {
+      "badge": "For services, experts and small teams",
+      "title1": "A site where clients book",
+      "title2": "pay and land in your CRM",
+      "subtitle": "LinkMAX brings service pages, forms, messengers, online booking, payments and analytics into one working flow.",
+      "cta_primary": "Create a page for free",
+      "cta_secondary": "Open examples",
+      "bento": {
+        "builder": {
+          "title": "Service storefront without empty sections",
+          "desc": "Show services, schedule, prices and a lead form the way clients need them before booking.",
+          "badge": "booking open",
+          "service1": "Consultation",
+          "service2": "Diagnostics",
+          "service3": "Subscription",
+          "service4": "Single visit",
+          "cta": "Book an available time"
+        },
+        "ai": {
+          "eyebrow": "Page draft",
+          "title": "Structure in a few minutes",
+          "desc": "Describe your niche and get a foundation you can edit by hand right away."
+        },
+        "pay": {
+          "title": "Payment before the visit",
+          "desc": "Kaspi QR, Robokassa, Stripe"
+        },
+        "crm": {
+          "title": "Leads and statuses",
+          "desc": "Forms, messengers and bookings land in one feed. Telegram tells you about new clients right away.",
+          "notify_title": "New lead",
+          "notify_desc": "Anna - booking at 2:00 PM",
+          "pipeline": "Pipeline: 12 leads",
+          "pipeline_desc": "New, in progress, paid"
+        },
+        "analytics": {
+          "title": "What worked",
+          "desc": "See which sections, sources and services bring leads.",
+          "week": "by day"
+        }
       }
     }
   },
@@ -7325,6 +7389,14 @@
     "aiGenerationsRemaining": "Осталось AI генераций: {{count}}",
     "upgradeToEdit": "Обновите до {{tier}} для редактирования",
     "viewOnlyHint": "Требуется {{tier}} для редактирования"
+  },
+  "upgradeBenefits": {
+    "b1Title": "All blocks & forms",
+    "b1Desc": "Leads, booking, payments",
+    "b2Title": "1% fee instead of 5%",
+    "b2Desc": "Pays off from $130 revenue",
+    "b3Title": "Custom domain · no branding",
+    "b3Desc": "Professional look"
   },
   "funnel": {
     "insightGoodConversion": "Хорошая конверсия {{rate}}%!",
@@ -7580,5 +7652,92 @@
   },
   "tma": {
     "home_greeting": "Hi, {{name}} 👋"
+  },
+  "siteTemplates": {
+    "trigger": "Site template",
+    "title": "Ready-made site templates",
+    "subtitle": "Pick a template — we'll create the pages and fill them with sections. Easy to edit later.",
+    "apply": "Apply template",
+    "applying": "Creating…",
+    "appliedToast": "Pages created: {{n}}",
+    "allSkipped": "All template pages already exist",
+    "applyError": "Couldn't apply the template",
+    "noSlots": "No free page slots. Remove some pages or upgrade to Pro.",
+    "trimmedHint": "On Starter we'll add the first {{n}} pages. Pro gets all.",
+    "services": {
+      "label": "Services",
+      "desc": "Perfect for agencies: home, services, pricing, contacts"
+    },
+    "expert": {
+      "label": "Expert",
+      "desc": "For coaches and mentors: about, programs, testimonials, booking"
+    },
+    "cafe": {
+      "label": "Café / Restaurant",
+      "desc": "Menu, table booking, location and contacts"
+    },
+    "school": {
+      "label": "School / Courses",
+      "desc": "Courses, teachers, schedule and inquiries"
+    },
+    "portfolio": {
+      "label": "Portfolio",
+      "desc": "For photographers and designers: works, about, services, contact"
+    },
+    "product": {
+      "label": "Product landing",
+      "desc": "Hero, benefits, pricing, FAQ and final CTA"
+    },
+    "pages": {
+      "about": "About",
+      "aboutMe": "About me",
+      "aboutSchool": "About school",
+      "services": "Services",
+      "contacts": "Contacts",
+      "contact": "Contact",
+      "programs": "Programs",
+      "faq": "FAQ",
+      "menu": "Menu",
+      "booking": "Booking",
+      "courses": "Courses",
+      "works": "Works",
+      "features": "Features",
+      "pricing": "Pricing"
+    }
+  },
+  "siteNav": {
+    "title": "Navigation & footer",
+    "subtitle": "Page order in the menu",
+    "hint": "The home page is always first. Hidden items do not appear in navigation.",
+    "empty": "No sub-pages yet — add them above to configure the menu.",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "hide": "Hide from menu",
+    "show": "Show in menu",
+    "savedToast": "Site menu updated",
+    "saveError": "Failed to save the menu"
+  },
+  "siteFooter": {
+    "title": "Site footer",
+    "hint": "Shown at the bottom of every site page.",
+    "textLabel": "Text / description",
+    "textPh": "Short description, mission, or contact line",
+    "linksLabel": "Links",
+    "linkLabelPh": "Label",
+    "addLink": "Add link",
+    "copyrightLabel": "Copyright",
+    "savedToast": "Footer saved",
+    "saveError": "Failed to save footer"
+  },
+  "onboardingScope": {
+    "eyebrow": "Let's start",
+    "title": "One page or a full site?",
+    "subtitle": "Start with a lightweight link-in-bio page, or assemble a full site from a ready-made template.",
+    "singleTitle": "Single page",
+    "singleDesc": "Classic link-in-bio: blocks, contacts, messengers. Fastest start.",
+    "siteTitle": "Site from template",
+    "recommended": "Recommended",
+    "siteDesc": "Several ready pages (Home, Services, FAQ) with navigation and footer.",
+    "later": "Later"
   }
 }

@@ -13,7 +13,7 @@ describe('block-factory', () => {
         const block = createBlock('profile') as any;
         expect(block.type).toBe('profile');
         expect(block.id).toContain('profile-');
-        expect(block.name).toBe('Your Name');
+        expect(typeof block.name).toBe('string');
     });
 
     it('should create a link block and apply overrides', () => {

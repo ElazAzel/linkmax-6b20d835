@@ -30,10 +30,10 @@ export const DownloadBlock = memo(function DownloadBlock({ block, onClick }: Dow
 
   return (
     <div className={cn(
-      "flex w-full",
+      "flex w-full min-w-0 overflow-visible",
       block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'
     )}>
-      <Card className="w-full max-w-md p-4 sm:p-5 bg-card border-border shadow-sm rounded-xl">
+      <Card className="w-full max-w-md p-4 sm:p-5 bg-card border-border shadow-sm rounded-xl overflow-visible">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -41,12 +41,12 @@ export const DownloadBlock = memo(function DownloadBlock({ block, onClick }: Dow
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-base sm:text-lg mb-0.5 sm:mb-1 line-clamp-2">{title}</h3>
+            <h3 className="font-semibold text-base sm:text-lg mb-0.5 sm:mb-1 leading-snug break-words hyphens-auto">{title}</h3>
             {description && (
-              <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 sm:mb-2 line-clamp-2">{description}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 sm:mb-2 leading-relaxed break-words hyphens-auto">{description}</p>
             )}
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-muted-foreground mb-2 sm:mb-3">
-              <span className="truncate max-w-[120px] sm:max-w-none">{block.fileName}</span>
+              <span className="break-all">{block.fileName}</span>
               {block.fileSize && (
                 <>
                   <span>•</span>

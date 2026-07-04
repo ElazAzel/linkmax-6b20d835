@@ -22,6 +22,8 @@ import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
+import { EditorTopBar } from '@/components/editor/v2/EditorTopBar';
+import { SmartActionDock } from '@/components/editor/v2/SmartActionDock';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
 import { storage } from '@/lib/storage';
@@ -39,6 +41,7 @@ import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m => ({ default: m.GridEditor })));
 const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
+const SectionPickerSheet = lazy(() => import('@/components/editor/sections/SectionPickerSheet').then(m => ({ default: m.SectionPickerSheet })));
 
 const EditorCanvasSkeleton = () => (
   <div className="space-y-4 p-4 animate-pulse">
@@ -74,6 +77,7 @@ interface EditorScreenProps {
   // Versions
   onOpenVersions?: () => void;
   deepLinkAction?: string | null;
+  recentlyAddedBlockId?: string | null;
 }
 
 export const EditorScreen = memo(function EditorScreen({
@@ -99,11 +103,13 @@ export const EditorScreen = memo(function EditorScreen({
   onRedo,
   onOpenVersions,
   deepLinkAction,
+  recentlyAddedBlockId,
 }: EditorScreenProps) {
   const { t } = useTranslation();
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
   const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
+  const [sectionPickerOpen, setSectionPickerOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
@@ -328,167 +334,68 @@ export const EditorScreen = memo(function EditorScreen({
     storage.set('editor_context_tips_disabled', next);
   }, [disabledTips]);
 
+  // Trigger insert-sheet by clicking the hidden anchor placed inside the canvas.
+  // Must be declared before any early return to satisfy rules-of-hooks.
+  const triggerAddBlock = useCallback(() => {
+    const target = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
+    target?.click();
+  }, []);
+
+  // Sprint 2: append a section preset (group of blocks) to the end of the page.
+  const handleInsertSection = useCallback((sectionBlocks: Block[], presetId: string) => {
+    if (!pageData || sectionBlocks.length === 0) return;
+    onReorderBlocks([...pageData.blocks, ...sectionBlocks]);
+    pushFrictionEvent('block_added', `section:${presetId}`);
+    trackEditorAction('section_inserted', { source: 'picker', preset: presetId });
+  }, [pageData, onReorderBlocks, pushFrictionEvent]);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
 
   return (
     <div className="min-h-screen safe-area-top">
-      {/* Header with actions */}
-      <div className="sticky top-0 z-40 bg-background border-b border-border/10">
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between gap-3">
-            {/* Left: Title */}
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-black text-gradient truncate">
-                {t('dashboard.editor.title', 'Редактор')}
-              </h1>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
-                  {blockCount} {t('dashboard.editor.blocks', 'блоков')}
-                </p>
-              </div>
-            </div>
-
-            {/* Center: Undo/Redo */}
+      <EditorTopBar
+        titleSlot={
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-base md:text-lg font-semibold tracking-tight text-foreground truncate">
+              {t('dashboard.editor.title', 'Редактор')}
+            </h1>
             <div className="flex items-center gap-1.5">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
-                onClick={handleUndoWithFriction}
-                disabled={!canUndo}
-              >
-                <Undo2 className="h-5 w-5 md:h-4 md:w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
-                onClick={handleRedoWithFriction}
-                disabled={!canRedo}
-              >
-                <Redo2 className="h-5 w-5 md:h-4 md:w-4" />
-              </Button>
-            </div>
-
-            {/* Right: Actions */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
-                onClick={onPreview}
-              >
-                <Eye className="h-5 w-5 md:h-4 md:w-4" />
-              </Button>
-              <Button
-                size="sm"
-                className={cn(
-                  "h-11 md:h-9 rounded-2xl md:rounded-xl font-black text-xs uppercase tracking-widest px-5 md:px-4",
-                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
-                )}
-                onClick={onShare}
-              >
-                <Share2 className="h-4 w-4 md:h-3.5 md:w-3.5 mr-2 md:mr-1.5" />
-                {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
-              </Button>
+              <div className={cn('h-1.5 w-1.5 rounded-full', isPublished ? 'bg-emerald-500' : 'bg-muted-foreground/40')} />
+              <p className="text-[11px] text-muted-foreground">
+                {blockCount} {t('dashboard.editor.blocks', 'блоков')}
+                {!isPublished && ` · ${t('editor.draft', 'черновик')}`}
+              </p>
             </div>
           </div>
-        </div>
-
-        {/* Quick tools bar */}
-        <div className="px-4 py-2.5 flex gap-2.5 overflow-x-auto scrollbar-hide border-t border-border/10 bg-card">
-          {/* Show templates only for pages without content */}
-          {!hasContent && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
-              onClick={onOpenTemplates}
-            >
-              <LayoutTemplate className="h-4 w-4" />
-              <span className="text-xs font-black uppercase tracking-widest">{t('editor.templates', 'Шаблоны')}</span>
-            </Button>
-          )}
-
-          {/* Show version history for pages with content */}
-          {hasContent && onOpenVersions && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
-              onClick={onOpenVersions}
-            >
-              <History className="h-4 w-4" />
-              <span className="text-xs font-black uppercase tracking-widest">{t('editor.versions', 'История')}</span>
-            </Button>
-          )}
-
-          {/* P5: Structure View button */}
-          {hasContent && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm border-border/10"
-              onClick={() => setStructureOpen(true)}
-            >
-              <Layers className="h-4 w-4" />
-              <span className="text-xs font-black uppercase tracking-widest">{t('editor.structure', 'Структура')}</span>
-            </Button>
-          )}
-
-          {/* P5: Review mode filter chips */}
-          {hasContent && (
-            <>
-              <Button
-                variant={reviewMode === 'problematic' ? 'default' : 'outline'}
-                size="sm"
-                className={cn(
-                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm transition-all",
-                  reviewMode === 'problematic' ? "bg-red-500 text-white border-none" : "border-border/20 bg-card"
-                )}
-                onClick={() => toggleReviewMode('problematic')}
-              >
-                <AlertCircle className="h-4 w-4" />
-                <span className="text-xs font-black uppercase tracking-widest">{t('editor.problematic', 'Проблемные')}</span>
-              </Button>
-              <Button
-                variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
-                size="sm"
-                className={cn(
-                  "h-11 rounded-xl shrink-0 gap-2 px-5 shadow-sm transition-all",
-                  reviewMode === 'cta_contact' ? "bg-emerald-500 text-white border-none" : "border-border/20 bg-card"
-                )}
-                onClick={() => toggleReviewMode('cta_contact')}
-              >
-                <MousePointerClick className="h-4 w-4" />
-                <span className="text-xs font-black uppercase tracking-widest">{t('editor.cta', 'CTA')}</span>
-              </Button>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Single priority banner — max 1 at a time */}
-      {(() => {
-        // Priority: Activation > Celebration > Friction > Intelligence > Tips > Onboarding
-        if (activation.isVisible) {
-          return (
-            <div className="mx-4 mt-4 animate-fade-in">
-              <ActivationChecklist
-                steps={activation.steps}
-                completedCount={activation.completedCount}
-                totalCount={activation.totalCount}
-                progress={activation.progress}
-                canDismiss={activation.canDismiss}
-                onDismiss={activation.dismiss}
-                onStepClick={activation.handleStepClick}
-              />
-            </div>
-          );
         }
+        health={{
+          steps: activation.steps,
+          completedCount: activation.completedCount,
+          totalCount: activation.totalCount,
+          progress: activation.progress,
+          isComplete: activation.steps.length > 0 && activation.completedCount === activation.totalCount,
+          onStepClick: activation.handleStepClick,
+        }}
+        isPublished={isPublished}
+        onPreview={onPreview}
+        onShare={onShare}
+        canUndo={canUndo}
+        canRedo={canRedo}
+        onUndo={handleUndoWithFriction}
+        onRedo={handleRedoWithFriction}
+        onOpenStructure={() => setStructureOpen(true)}
+        onOpenVersions={onOpenVersions}
+        onOpenTemplates={onOpenTemplates}
+        onOpenAI={onOpenAI}
+        reviewMode={reviewMode}
+        onToggleReviewMode={toggleReviewMode}
+        hasContent={hasContent}
+      />
+
+      {/* Quiet inline banner — celebration / friction / intelligence / tip / onboarding (max 1) */}
+      {(() => {
         if (activation.showCelebration) {
           return (
             <div className="mx-4 mt-4 animate-fade-in zoom-in-95 duration-500">
@@ -516,17 +423,17 @@ export const EditorScreen = memo(function EditorScreen({
           const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
           if (top) {
             return (
-              <div className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3.5 shadow-sm">
+              <div className="mx-4 mt-3 flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
                 <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <Lightbulb className="h-4.5 w-4.5 text-primary" />
+                  <Lightbulb className="h-4 w-4 text-primary" />
                 </div>
                 <span className="text-xs font-medium text-foreground/80 flex-1 leading-relaxed">
                   {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
                 </span>
-                <Badge variant="outline" className="text-xs font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
+                <Badge variant="outline" className="text-[10px] font-semibold uppercase tracking-wider shrink-0 border-primary/20 bg-primary/5 text-primary">
                   {top.priority}
                 </Badge>
-                <Button type="button" variant="ghost" size="icon" onClick={() => setDismissedHint(top.id)} className="h-10 w-10 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0">
+                <Button type="button" variant="ghost" size="icon" onClick={() => setDismissedHint(top.id)} className="h-8 w-8 rounded-lg hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0">
                   <X className="h-4 w-4" />
                 </Button>
               </div>
@@ -555,15 +462,15 @@ export const EditorScreen = memo(function EditorScreen({
           );
         }
         if (onboardingHints.length > 0) {
-          const hint = onboardingHints[0]; // Show only the first hint
+          const hint = onboardingHints[0];
           return (
             <div className="mx-4 mt-3 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
               <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-black uppercase tracking-wider">{hint.title}</p>
+                <p className="text-xs font-semibold">{hint.title}</p>
                 <p className="text-xs text-muted-foreground mt-1">{hint.description}</p>
               </div>
-              <Button size="sm" className="h-11 px-5 rounded-xl text-xs font-black uppercase tracking-wider" onClick={hint.onCta}>
+              <Button size="sm" className="h-9 px-4 rounded-xl text-xs font-semibold" onClick={hint.onCta}>
                 {hint.ctaLabel}
               </Button>
               <button className="p-1 rounded-lg hover:bg-white/10 text-muted-foreground" onClick={() => dismissOnboardingHint(hint.id)} aria-label={t('common.dismiss', 'Скрыть')}>
@@ -593,10 +500,37 @@ export const EditorScreen = memo(function EditorScreen({
             onReorderBlocks={onReorderBlocks}
             onDuplicateBlock={onDuplicateBlock}
             onInsertPreset={handleInsertPresetWithFriction}
+            recentlyAddedBlockId={recentlyAddedBlockId}
           />
         </Suspense>
       </RenderContextProvider>
       </div>
+
+      {/* Sprint 2: Section picker — append ready-made groups of blocks */}
+      <div className="mx-4 mt-3 mb-2 flex justify-center">
+        <button
+          type="button"
+          onClick={() => setSectionPickerOpen(true)}
+          className={cn(
+            'inline-flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-semibold',
+            'border border-dashed border-border/60 text-muted-foreground',
+            'hover:border-primary/50 hover:text-foreground hover:bg-accent transition-colors',
+          )}
+        >
+          <LayoutTemplate className="h-4 w-4" />
+          {t('editor.sections.picker.cta', '+ Секция (готовый шаблон)')}
+        </button>
+      </div>
+
+      {sectionPickerOpen && (
+        <Suspense fallback={null}>
+          <SectionPickerSheet
+            open={sectionPickerOpen}
+            onOpenChange={setSectionPickerOpen}
+            onInsert={handleInsertSection}
+          />
+        </Suspense>
+      )}
 
       {/* P5: Structure View 2.0 */}
       {structureOpen && (
@@ -626,6 +560,16 @@ export const EditorScreen = memo(function EditorScreen({
           />
         </Suspense>
       )}
+
+      {/* Smart Action Dock — primary action surface */}
+      <SmartActionDock
+        onAddBlock={triggerAddBlock}
+        onAIImprove={onOpenAI}
+        onPreview={onPreview}
+        onPublish={onShare}
+        isPublished={isPublished}
+        hasContent={hasContent}
+      />
     </div>
   );
 });

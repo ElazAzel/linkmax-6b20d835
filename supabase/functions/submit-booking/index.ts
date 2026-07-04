@@ -29,7 +29,26 @@ serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body = await req.json();
 
-    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod, userId } = body;
+    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod } = body;
+
+    // Derive user_id strictly from the caller's verified JWT.
+    // NEVER trust a client-supplied userId — that allows spoofing bookings into other users' histories.
+    let trustedUserId: string | null = null;
+    const authHeader = req.headers.get('Authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+      try {
+        const anonClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') ?? supabaseServiceKey, {
+          global: { headers: { Authorization: authHeader } },
+        });
+        const token = authHeader.replace('Bearer ', '');
+        const { data: claimsData } = await anonClient.auth.getClaims(token);
+        if (claimsData?.claims?.sub && isValidUUID(claimsData.claims.sub)) {
+          trustedUserId = claimsData.claims.sub;
+        }
+      } catch (_e) {
+        trustedUserId = null;
+      }
+    }
 
     // Validate required fields
     if (!pageId || !isValidUUID(pageId)) throw new Error('Invalid pageId');
@@ -178,7 +197,7 @@ serve(async (req: Request) => {
         page_id: pageId,
         block_id: blockId,
         owner_id: pageData.user_id,
-        user_id: userId || null,
+        user_id: trustedUserId,
         slot_date: sanitize(slotDate, 10),
         slot_time: sanitize(slotTime, 8),
         slot_end_time: slotEndTime ? sanitize(slotEndTime, 8) : null,
@@ -251,7 +270,7 @@ serve(async (req: Request) => {
   } catch (error: any) {
     console.error('Error processing booking:', error);
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
+      JSON.stringify({ success: false, error: 'Request could not be processed. Please try again.' }),
       { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

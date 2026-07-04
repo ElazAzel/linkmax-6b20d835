@@ -495,7 +495,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                                   <div className="space-y-0.5">
                                     <p className="text-xs text-muted-foreground leading-none">{f.name}</p>
                                     <p className="font-medium">
-                                      {f.type === 'boolean' ? (val ? 'Да' : 'Нет') : val}
+                                      {f.type === 'boolean' ? (val ? 'Да' : 'Нет') : String(val)}
                                     </p>
                                   </div>
                                 </div>

@@ -45,11 +45,11 @@ export async function initMonitoring(config: MonitoringConfig) {
 /**
  * Identify user in monitoring services after successful login
  */
-export async function identifyUser(userId: string, traits?: Record<string, any>) {
+export async function identifyUser(userId: string, traits?: Record<string, unknown>) {
   try {
     const Sentry = await import('@sentry/react');
     Sentry.setUser({ id: userId, ...traits });
-  } catch (err) {
+  } catch (_err) {
     // Silent fail
   }
 }

@@ -12,7 +12,10 @@ export type MarketingEventType =
   | 'faq_expand'
   | 'alternatives_view'
   | 'alternatives_cta_click'
+  | 'niche_landing_view'
+  | 'niche_landing_cta_click'
   | 'signup_from_landing'
+  | 'signup_from_niche_landing'
   | 'signup_from_alternatives';
 
 interface TrackMarketingEventOptions {
@@ -54,7 +57,7 @@ export function useMarketingAnalytics() {
 
     try {
       await supabase.from('analytics').insert({
-        page_id: null as any,
+        page_id: null,
         block_id: null,
         event_type: eventType,
         metadata: {

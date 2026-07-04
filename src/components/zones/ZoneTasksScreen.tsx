@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DndContext, DragOverlay, PointerSensor, TouchSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from '@dnd-kit/core';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import type { ZoneTask, TaskStatus, TaskPriority, TaskRecurrenceRule } from '@/types/zones';
+import { hapticLight, hapticSuccess, hapticError } from '@/platform/native/haptics';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneContext } from '@/contexts/ZoneContext';
@@ -104,6 +105,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveDragTask(event.active.data.current?.task ?? null);
+    hapticLight();
   }, []);
 
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
@@ -113,7 +115,13 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
     const task = active.data.current?.task as ZoneTask | undefined;
     const newStatus = over.data.current?.status as TaskStatus | undefined;
     if (!task || !newStatus || task.status === newStatus) return;
-    await updateTask(task.id, { status: newStatus });
+    try {
+      await updateTask(task.id, { status: newStatus });
+      hapticSuccess();
+    } catch (e) {
+      hapticError();
+      throw e;
+    }
   }, [updateTask]);
 
   const handleCreate = async () => {

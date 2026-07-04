@@ -48,10 +48,10 @@ const AIBuilderVisual = () => {
       <div className="flex flex-col items-center gap-2 z-10">
         <Sparkles className="w-8 h-8 text-primary animate-pulse" />
         <div className={cn("text-xl font-bold text-primary transition-opacity duration-700", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiPowered', 'AI-Генерация')}
+          {t('landing.bento.aiPowered', 'Черновик страницы')}
         </div>
         <div className={cn("text-xs text-muted-foreground transition-opacity duration-700 delay-300", typing ? "opacity-100" : "opacity-0")}>
-          {t('landing.bento.aiSub', 'Структура • Тексты • Дизайн')}
+          {t('landing.bento.aiSub', 'Структура / тексты / услуги')}
         </div>
       </div>
     </div>
@@ -190,45 +190,45 @@ export function BentoGridSection() {
 
   const items = [
     {
-      title: t('landing.bento.aiTitle', 'AI-конструктор страниц'),
-      description: t('landing.bento.aiDesc', 'Опишите бизнес — AI создаст структуру, тексты и дизайн за секунды.'),
-      header: <AIBuilderVisual />,
-      icon: <Sparkles className="h-5 w-5" />,
+      title: t('landing.bento.leadsTitle_v2', 'Inbox заявок: ничего не теряется'),
+      description: t('landing.bento.leadsDesc_v2', 'Заявки из формы, мессенджеров и бронирования попадают в одну ленту. Видно источник, статус и ответственного.'),
+      header: <LeadsVisual />,
+      icon: <Send className="h-5 w-5" />,
       className: "md:col-span-2 md:row-span-2"
     },
     {
-      title: t('landing.bento.analyticsTitle', 'Аналитика в реальном времени'),
-      description: t('landing.bento.analyticsDesc', 'Отслеживайте клики, просмотры и конверсии. Без сторонних сервисов.'),
-      header: <AnalyticsVisual />,
-      icon: <BarChart3 className="h-5 w-5" />,
-      className: "md:col-span-1 md:row-span-1"
-    },
-    {
-      title: t('landing.bento.leadsTitle', 'Заявки в Telegram'),
-      description: t('landing.bento.leadsDesc', 'Получайте лиды прямо в Telegram. Ни один клиент не потеряется.'),
-      header: <LeadsVisual />,
-      icon: <Send className="h-5 w-5" />,
-      className: "md:col-span-1 md:row-span-2"
-    },
-    {
-      title: t('landing.bento.mobileTitle', 'Mobile First'),
-      description: t('landing.bento.mobileDesc', 'Полноценный редактор с телефона. Создавайте и публикуйте на ходу.'),
-      header: <MobileVisual />,
-      icon: <Smartphone className="h-5 w-5" />,
-      className: "md:col-span-1 md:row-span-1"
-    },
-    {
-      title: t('landing.bento.crmTitle', 'Встроенная CRM'),
-      description: t('landing.bento.crmDesc', 'Управляйте заявками и клиентами в Kanban-доске. Без сторонних сервисов.'),
+      title: t('landing.bento.crmTitle_v2', 'Мини-CRM для команды'),
+      description: t('landing.bento.crmDesc_v2', 'Канбан со сделками, ответственный за каждую заявку, история переписки. Вместо amoCRM и Bitrix.'),
       header: <CRMVisual />,
       icon: <Kanban className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.bookingTitle', 'Онлайн-запись'),
-      description: t('landing.bento.bookingDesc', 'Клиенты записываются сами. Автокалендарь, без звонков.'),
+      title: t('landing.bento.bookingTitle_v2', 'Онлайн-запись и оплата'),
+      description: t('landing.bento.bookingDesc_v2', 'Клиент бронирует слот и платит сразу. Robokassa и Kaspi QR подключены из коробки.'),
       header: <BookingVisual />,
       icon: <Calendar className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-2"
+    },
+    {
+      title: t('landing.bento.aiTitle_v2', 'Черновик витрины за 2 минуты'),
+      description: t('landing.bento.aiDesc_v2', 'Опишите услугу - получите основу страницы: блоки, оффер, услуги и цены. Финальный текст остается под вашим контролем.'),
+      header: <AIBuilderVisual />,
+      icon: <Sparkles className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-1"
+    },
+    {
+      title: t('landing.bento.analyticsTitle_v2', 'Аналитика без GA4'),
+      description: t('landing.bento.analyticsDesc_v2', 'Откуда пришёл клиент, на какой блок кликнул, что купил — без cookie и сторонних сервисов.'),
+      header: <AnalyticsVisual />,
+      icon: <BarChart3 className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-1"
+    },
+    {
+      title: t('landing.bento.mobileTitle_v2', 'Бизнес в кармане'),
+      description: t('landing.bento.mobileDesc_v2', 'Полноценный редактор и CRM работают с телефона. PWA, iOS и Android.'),
+      header: <MobileVisual />,
+      icon: <Smartphone className="h-5 w-5" />,
       className: "md:col-span-1 md:row-span-1"
     },
   ];
@@ -241,8 +241,8 @@ export function BentoGridSection() {
 
       <Reveal>
         <SectionHeading
-          title={t('landing.bento.sectionTitle', 'Всё для роста в одном месте')}
-          subtitle={t('landing.bento.sectionDesc', 'Конструктор + CRM + аналитика. Одна платформа вместо десяти.')}
+          title={t('landing.bento.sectionTitle_v2', 'Шесть инструментов вместо десяти подписок')}
+          subtitle={t('landing.bento.sectionDesc_v2', 'Витрина, мессенджеры, inbox, бронирование, оплата и аналитика — без интеграций и Zapier.')}
           className="mb-16"
         />
       </Reveal>

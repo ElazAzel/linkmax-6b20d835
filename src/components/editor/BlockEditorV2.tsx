@@ -34,6 +34,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 import { cn } from '@/lib/utils/utils';
 import { BlockEditorShell } from '../block-editors/BlockEditorShell';
+import { BlockStyleEditor } from './BlockStyleEditor';
 import type { Block } from '@/types/page';
 import { BLOCK_MANIFEST, getBlockIcon } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
@@ -141,10 +142,14 @@ export function BlockEditorV2({
         };
     }, []);
 
-    // Ensure editor state is synchronized whenever the sheet/dialog is reopened.
+    // Reset editor state only when the dialog transitions from closed to open
+    // for a different block. Re-syncing on every `block` reference change would
+    // wipe in-flight style edits whenever the parent re-renders after autosave.
     useEffect(() => {
         if (!isOpen || !block) return;
+        if (block.id === currentBlockIdRef.current) return;
         setFormData({ ...block });
+        currentBlockIdRef.current = block.id;
         setHasUnsavedChanges(false);
         setLastSaved(null);
     }, [isOpen, block]);
@@ -229,7 +234,7 @@ export function BlockEditorV2({
                     <div className="p-4">
                         <Suspense fallback={<div className="h-20 bg-muted animate-pulse rounded-xl" />}>
                             <BlockRenderer
-                                block={deferredFormData}
+                                block={deferredFormData as Block}
                                 isPreview={true}
                             />
                         </Suspense>
@@ -238,6 +243,11 @@ export function BlockEditorV2({
             </div>
         </div>
     );
+
+    // Style tab — universal customization for any non-profile block
+    const styleTabContent = block.type !== 'profile' ? (
+        <BlockStyleEditor formData={formData} onChange={handleFormChange} />
+    ) : undefined;
 
     // Shell content
     const shellContent = (
@@ -249,19 +259,20 @@ export function BlockEditorV2({
                     <BlockIcon className="h-5 w-5 text-primary" />
                 </Suspense>
             }
-            useTabs={false}
+            useTabs={!!styleTabContent}
+            contentTab={styleTabContent ? renderEditor() : undefined}
+            styleTab={styleTabContent}
             isSaving={isSaving}
             lastSaved={lastSaved}
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
             onClose={handleCloseAttempt}
-            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates })}
+            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates } as Partial<Block>)}
             enablePreview={block.type !== 'profile'}
             previewComponent={previewComponent}
             onDelete={onDelete ? () => setShowDeleteDialog(true) : undefined}
         >
-
-            {renderEditor()}
+            {!styleTabContent && renderEditor()}
         </BlockEditorShell>
     );
 

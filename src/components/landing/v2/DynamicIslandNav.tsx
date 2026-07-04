@@ -153,7 +153,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                             <button
                                 onClick={() => setExpanded(true)}
                                 className="p-2 rounded-full hover:bg-white/10 text-white/70 transition-colors"
-                                aria-label="Open menu"
+                                aria-label={t('landing.v2.nav.openMenu', 'Открыть меню')}
                             >
                                 <Menu className="w-4 h-4" />
                             </button>
@@ -162,7 +162,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                         <button
                             onClick={() => setExpanded(false)}
                             className="p-2 rounded-full hover:bg-white/10 text-white/70 transition-colors z-20 animate-in fade-in spin-in-90 duration-200"
-                            aria-label="Close menu"
+                            aria-label={t('landing.v2.nav.closeMenu', 'Закрыть меню')}
                         >
                             <X className="w-4 h-4" />
                         </button>

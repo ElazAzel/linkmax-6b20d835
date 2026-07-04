@@ -37,7 +37,7 @@ import {
 } from '@/data/templates';
 import { buildSmartPage, inferSmartPageNiche } from '@/lib/onboarding/smart-page-builder';
 
-const CATEGORIES: TemplateCategoryKey[] = [...TEMPLATE_CATEGORY_KEYS];
+const CATEGORIES: TemplateCategoryKey[] = TEMPLATE_CATEGORY_KEYS.filter((c) => c !== 'all');
 
 interface TemplateGalleryProps {
   open: boolean;

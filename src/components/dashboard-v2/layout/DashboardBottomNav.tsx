@@ -16,7 +16,7 @@ import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
-import { motion } from 'framer-motion';
+
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 interface NavTab {
@@ -35,6 +35,13 @@ interface DashboardBottomNavProps {
 }
 
 const TABS: NavTab[] = [
+  {
+    id: 'home',
+    icon: Home,
+    labelKey: 'dashboard.nav.home',
+    defaultLabel: 'Главная',
+    path: '/dashboard/home',
+  },
   {
     id: 'editor',
     icon: PenTool,
@@ -56,17 +63,9 @@ const TABS: NavTab[] = [
     defaultLabel: 'Аналитика',
     path: '/dashboard/insights',
   },
-  {
-    id: 'settings',
-    icon: Settings,
-    labelKey: 'dashboard.nav.settings',
-    defaultLabel: 'Настройки',
-    path: '/dashboard/settings',
-  },
 ];
 
 const MORE_ITEMS: NavTab[] = [
-  { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор', path: '' },
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
   { id: 'zone-deals', icon: Contact, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-tasks', icon: Calendar, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи', path: '' },
@@ -101,40 +100,37 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden bg-gradient-to-t from-background via-background/80 to-transparent pt-6 pointer-events-none">
-        <div className="bg-card border border-border/10 rounded-2xl shadow-2xl shadow-black/10 overflow-hidden pointer-events-auto">
-          <div className="grid grid-cols-5 h-[4.5rem]">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pt-3 pointer-events-none">
+        <div className="qb-glass overflow-hidden pointer-events-auto rounded-card">
+          <div className="grid grid-cols-5 h-[4.25rem]">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.id;
               const Icon = tab.icon;
               const badge = tab.id === 'activity' ? activityBadge : undefined;
 
+              const label = t(tab.labelKey, tab.defaultLabel);
               return (
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab)}
+                  aria-label={label}
+                  aria-current={isActive ? 'page' : undefined}
                   className={cn(
-                    "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-300 active:scale-90 min-w-0 h-full",
-                    isActive ? "text-primary scale-110" : "text-muted-foreground/60"
+                    "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
+                    isActive ? "text-primary" : "text-muted-foreground"
                   )}
                   data-testid={`${tab.id}-tab`}
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="bottomNavIndicator"
-                      className="absolute -top-1 w-8 h-1 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
-                    />
-                  )}
                   <div className="relative">
-                    <Icon className={cn("h-5 w-5 shrink-0 transition-transform", isActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
+                    <Icon className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isActive && "scale-110")} />
                     {badge && badge > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-black border-2 border-background">
+                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-medium border-2 border-background">
                         {badge > 99 ? '99+' : badge}
                       </span>
                     )}
                   </div>
-                  <span className={cn("text-[10px] font-bold leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal text-center break-words", isActive ? "text-primary" : "text-muted-foreground/80")}>
-                    {t(tab.labelKey, tab.defaultLabel)}
+                  <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isActive ? "font-medium" : "font-normal")}>
+                    {label}
                   </span>
                 </button>
               );
@@ -143,20 +139,16 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
             {/* More button */}
             <button
               onClick={() => { haptic.lightTap(); setMoreOpen(true); }}
+              aria-label={t('dashboard.nav.menu', 'Меню')}
+              aria-expanded={moreOpen}
               className={cn(
-                "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-300 active:scale-90 min-w-0 h-full",
-                isMoreActive ? "text-primary scale-110" : "text-muted-foreground/60"
+                "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
+                isMoreActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              {isMoreActive && (
-                <motion.div
-                  layoutId="bottomNavIndicator"
-                  className="absolute -top-1 w-8 h-1 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
-                />
-              )}
-              <MoreHorizontal className={cn("h-5 w-5 shrink-0", isMoreActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
-              <span className={cn("text-[10px] font-bold leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal text-center break-words", isMoreActive ? "text-primary" : "text-muted-foreground/80")}>
-                {t('dashboard.nav.more', 'Ещё')}
+              <MoreHorizontal className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isMoreActive && "scale-110")} />
+              <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isMoreActive ? "font-medium" : "font-normal")}>
+                {t('dashboard.nav.menu', 'Меню')}
               </span>
             </button>
           </div>
@@ -167,7 +159,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
         <SheetContent side="bottom" className="rounded-t-2xl px-4 pb-8">
           <SheetHeader>
-            <SheetTitle className="text-left">{t('dashboard.nav.more', 'Ещё')}</SheetTitle>
+            <SheetTitle className="text-left">{t('dashboard.nav.menu', 'Меню')}</SheetTitle>
           </SheetHeader>
           <div className="grid grid-cols-3 gap-3 mt-4">
             {MORE_ITEMS.map(item => {

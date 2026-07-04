@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,18 +7,22 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useZoneContext } from '@/contexts/ZoneContext';
 import { Plus, Trash, Edit2, FileText, Check, X, Loader2, Info } from 'lucide-react';
 import { ZoneDocumentTemplate } from '@/types/zones';
 
 export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) => {
+    const { t } = useTranslation();
     const { currentZone } = useZoneContext();
     const zoneId = currentZone?.id || null;
     const { templates, createTemplate, updateTemplate, deleteTemplate, isTemplateLoading } = useZoneDocuments(zoneId);
 
     const [isEditing, setIsEditing] = useState(false);
     const [currentTemplate, setCurrentTemplate] = useState<Partial<ZoneDocumentTemplate> | null>(null);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [pendingDeleteTemplateId, setPendingDeleteTemplateId] = useState<string | null>(null);
 
     const handleSave = async () => {
         if (!currentTemplate?.name || !currentTemplate?.content_html) return;
@@ -51,12 +56,12 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <><Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[700px] h-[80vh] flex flex-col p-0 glass-card border-white/10 text-white overflow-hidden">
                 <DialogHeader className="p-6 pb-2">
                     <DialogTitle className="flex items-center gap-2">
                         <FileText className="w-5 h-5 text-primary" />
-                        Управление шаблонами
+                        {t('zoneDocs.templatesSettings.management')}
                     </DialogTitle>
                     <DialogDescription className="text-white/60">
                         Создавайте и редактируйте шаблоны документов с поддержкой переменных {'{{ contact_name }}'}, {'{{ deal_title }}'} и др.
@@ -72,7 +77,7 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                                         <CardContent className="p-4 flex items-center justify-between">
                                             <div className="min-w-0">
                                                 <h4 className="font-bold text-sm">{tpl.name}</h4>
-                                                <p className="text-xs text-white/50 truncate max-w-[400px]">{tpl.description || 'Нет описания'}</p>
+                                                <p className="text-xs text-white/50 truncate max-w-[400px]">{tpl.description || t('zoneDocs.templatesSettings.noDescription')}</p>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-white/60 hover:text-white" onClick={() => handleEdit(tpl)}>
@@ -83,7 +88,8 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                                                     size="icon"
                                                     className="h-8 w-8 text-white/60 hover:text-red-400"
                                                     onClick={() => {
-                                                        if (confirm('Удалить шаблон?')) deleteTemplate(tpl.id);
+                                                        setPendingDeleteTemplateId(tpl.id);
+                                                        setDeleteConfirmOpen(true);
                                                     }}
                                                 >
                                                     <Trash className="w-4 h-4" />
@@ -94,15 +100,15 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                                 ))}
                                 {templates?.length === 0 && (
                                     <div className="text-center py-12 text-white/50">
-                                        <p>У вас еще нет шаблонов</p>
+                                        <p>{t('zoneDocs.templatesSettings.noTemplates')}</p>
                                     </div>
                                 )}
                             </div>
                         </ScrollArea>
                         <DialogFooter className="p-6 pt-2 border-t border-white/5">
-                            <Button variant="ghost" onClick={() => onOpenChange(false)} className="text-white/70">Закрыть</Button>
+                            <Button variant="ghost" onClick={() => onOpenChange(false)} className="text-white/70">{t('zoneDocs.templatesSettings.close')}</Button>
                             <Button onClick={handleAddNew} className="bg-primary text-black">
-                                <Plus className="w-4 h-4 mr-2" /> Добавить шаблон
+                                <Plus className="w-4 h-4 mr-2" /> {t('zoneDocs.templatesSettings.newTemplate')}
                             </Button>
                         </DialogFooter>
                     </>
@@ -111,7 +117,7 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                         <ScrollArea className="flex-1 px-6">
                             <div className="space-y-4 py-4">
                                 <div className="space-y-2">
-                                    <Label>Название шаблона</Label>
+                                    <Label>{t('zoneDocs.templatesSettings.templateName')}</Label>
                                     <Input
                                         value={currentTemplate?.name || ''}
                                         onChange={e => setCurrentTemplate(p => ({ ...p, name: e.target.value }))}
@@ -120,7 +126,7 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Описание</Label>
+                                    <Label>{t('zoneDocs.templatesSettings.description')}</Label>
                                     <Input
                                         value={currentTemplate?.description || ''}
                                         onChange={e => setCurrentTemplate(p => ({ ...p, description: e.target.value }))}
@@ -130,7 +136,7 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <Label>Текст шаблона (HTML/Text)</Label>
+                                        <Label>{t('zoneDocs.templatesSettings.templateContent')}</Label>
                                         <div className="flex items-center gap-1 text-xs text-primary/70">
                                             <Info className="w-3 h-3" />
                                             Поддерживаются переменные: {'{{name}}'}, {'{{company}}'}, {'{{amount}}'}
@@ -146,15 +152,35 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                             </div>
                         </ScrollArea>
                         <DialogFooter className="p-6 pt-2 border-t border-white/5">
-                            <Button variant="ghost" onClick={() => setIsEditing(false)} className="text-white/70">Отмена</Button>
+                            <Button variant="ghost" onClick={() => setIsEditing(false)} className="text-white/70">{t('zoneDocs.templatesSettings.cancel')}</Button>
                             <Button onClick={handleSave} disabled={!currentTemplate?.name || !currentTemplate?.content_html || isTemplateLoading} className="bg-primary text-black">
                                 {isTemplateLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
-                                Сохранить
+                                {t('zoneDocs.templatesSettings.save')}
                             </Button>
                         </DialogFooter>
                     </>
                 )}
             </DialogContent>
         </Dialog>
+
+        <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>{t('zoneDocs.templatesSettings.deleteTitle')}</AlertDialogTitle>
+                    <AlertDialogDescription>{t('zoneDocs.templatesSettings.deleteDescription')}</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>{t('zoneDocs.templatesSettings.cancel')}</AlertDialogCancel>
+                    <AlertDialogAction onClick={async () => {
+                        if (pendingDeleteTemplateId) {
+                            await deleteTemplate(pendingDeleteTemplateId);
+                            setPendingDeleteTemplateId(null);
+                        }
+                        setDeleteConfirmOpen(false);
+                    }}>{t('zoneDocs.templatesSettings.delete')}</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        </>
     );
 };

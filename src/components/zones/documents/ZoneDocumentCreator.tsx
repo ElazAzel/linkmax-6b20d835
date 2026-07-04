@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -18,6 +19,7 @@ interface ZoneDocumentCreatorProps {
 }
 
 export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, defaultContactId }: ZoneDocumentCreatorProps) => {
+    const { t } = useTranslation();
     const { currentZone, isReadOnly } = useZoneContext();
     const zoneId = currentZone?.id || null;
 
@@ -68,7 +70,7 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <FileText className="w-5 h-5 text-primary" />
-                        Создать документ
+                        {t('zoneDocs.creator.createDocument')}
                     </DialogTitle>
                     <DialogDescription className="text-white/60">
                         Выберите шаблон и привяжите документ к сделке или контакту для автозаполнения переменных.
@@ -77,10 +79,10 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
 
                 <div className="space-y-4 py-4">
                     <div className="space-y-2">
-                        <Label htmlFor="template">Шаблон документа <span className="text-red-500">*</span></Label>
+                        <Label htmlFor="template">{t('zoneDocs.creator.documentTemplate')} <span className="text-red-500">*</span></Label>
                         <Select value={templateId} onValueChange={setTemplateId}>
                             <SelectTrigger id="template" className="bg-white/5 border-white/10 text-white">
-                                <SelectValue placeholder="Выберите шаблон..." />
+                                 <SelectValue placeholder={t('zoneDocs.creator.selectTemplate')} />
                             </SelectTrigger>
                             <SelectContent className="bg-background/95 backdrop-blur-xl border-white/10">
                                 {templates?.map((tpl) => (
@@ -89,14 +91,14 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
                                     </SelectItem>
                                 ))}
                                 {templates?.length === 0 && (
-                                    <div className="p-2 text-sm text-white/50 text-center">Нет активных шаблонов</div>
+                                    <div className="p-2 text-sm text-white/50 text-center">{t('zoneDocs.creator.noActiveTemplates')}</div>
                                 )}
                             </SelectContent>
                         </Select>
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="title">Название документа <span className="text-red-500">*</span></Label>
+                        <Label htmlFor="title">{t('zoneDocs.creator.documentTitle')} <span className="text-red-500">*</span></Label>
                         <Input
                             id="title"
                             value={title}
@@ -108,13 +110,13 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="deal">Привязать к сделке</Label>
+                            <Label htmlFor="deal">{t('zoneDocs.creator.linkToDeal')}</Label>
                             <Select value={dealId} onValueChange={setDealId}>
                                 <SelectTrigger id="deal" className="bg-white/5 border-white/10 text-white">
-                                    <SelectValue placeholder="Без сделки" />
+                                    <SelectValue placeholder={t('zoneDocs.creator.noDeal')} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-background/95 backdrop-blur-xl border-white/10">
-                                    <SelectItem value="none" className="text-white/50 focus:bg-white/10">Без сделки</SelectItem>
+                                    <SelectItem value="none" className="text-white/50 focus:bg-white/10">{t('zoneDocs.creator.noDeal')}</SelectItem>
                                     {deals?.map((deal) => (
                                         <SelectItem key={deal.id} value={deal.id} className="text-white focus:bg-white/10">
                                             {deal.title}
@@ -125,13 +127,13 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="contact">Привязать к контакту</Label>
+                            <Label htmlFor="contact">{t('zoneDocs.creator.linkToContact')}</Label>
                             <Select value={contactId} onValueChange={setContactId}>
                                 <SelectTrigger id="contact" className="bg-white/5 border-white/10 text-white">
-                                    <SelectValue placeholder="Без контакта" />
+                                    <SelectValue placeholder={t('zoneDocs.creator.noContact')} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-background/95 backdrop-blur-xl border-white/10">
-                                    <SelectItem value="none" className="text-white/50 focus:bg-white/10">Без контакта</SelectItem>
+                                    <SelectItem value="none" className="text-white/50 focus:bg-white/10">{t('zoneDocs.creator.noContact')}</SelectItem>
                                     {contacts?.map((contact) => (
                                         <SelectItem key={contact.id} value={contact.id} className="text-white focus:bg-white/10">
                                             {contact.name}
@@ -145,7 +147,7 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
 
                 <DialogFooter>
                     <Button variant="ghost" onClick={() => onOpenChange(false)} className="text-white/70 hover:text-white hover:bg-white/10">
-                        Отмена
+                        {t('zoneDocs.creator.cancel')}
                     </Button>
                     <Button
                         onClick={handleCreate}
@@ -153,7 +155,7 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
                         className="bg-primary text-black hover:bg-primary/90"
                     >
                         {isCreating ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                        Создать
+                        {isCreating ? t('zoneDocs.creator.creating') : t('zoneDocs.creator.create')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

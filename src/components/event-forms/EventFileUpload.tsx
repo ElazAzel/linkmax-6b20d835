@@ -20,6 +20,7 @@ import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface EventFileUploadProps {
   value: string;
@@ -251,6 +252,12 @@ export function EventFileUpload({
           onDragOver={handleDrag}
           onDrop={handleDrop}
           onClick={() => !disabled && !uploading && fileInputRef.current?.click()}
+          onKeyDown={(event) => handleKeyboardActivation(event, () => {
+            if (!disabled && !uploading) fileInputRef.current?.click();
+          })}
+          role="button"
+          tabIndex={disabled || uploading ? -1 : 0}
+          aria-disabled={disabled || uploading}
         >
           {uploading ? (
             <div className="space-y-3 text-center">

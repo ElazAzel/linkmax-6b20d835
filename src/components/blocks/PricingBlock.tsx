@@ -2,37 +2,24 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PricingBlock as PricingBlockType } from '@/types/page';
 import { Badge } from '@/components/ui/badge';
+import { BlockShell, SectionHeader } from '@/components/blocks/shells/BlockShell';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { getLocale } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/utils';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import Star from 'lucide-react/dist/esm/icons/star';
 import Tag from 'lucide-react/dist/esm/icons/tag';
+import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 
 interface PricingBlockProps {
   block: PricingBlockType;
 }
 
 const currencySymbols: Record<string, string> = {
-  KZT: '₸',
-  RUB: '₽',
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  BYN: 'Br',
-  AMD: '֏',
-  AZN: '₼',
-  KGS: 'с',
-  TJS: 'SM',
-  TMT: 'm',
-  UZS: 'сўм',
-  CNY: '¥',
-  JPY: '¥',
-  CHF: 'CHF',
-  CAD: 'C$',
-  AUD: 'A$',
+  KZT: '₸', RUB: '₽', USD: '$', EUR: '€', GBP: '£', BYN: 'Br',
+  AMD: '֏', AZN: '₼', KGS: 'с', TJS: 'SM', TMT: 'm', UZS: 'сўм',
+  CNY: '¥', JPY: '¥', CHF: 'CHF', CAD: 'C$', AUD: 'A$',
 };
-
-import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 
 export const PricingBlock = React.memo(function PricingBlock({ block }: PricingBlockProps) {
   const { t, i18n } = useTranslation();
@@ -48,9 +35,9 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
 
   if (!block.items || block.items.length === 0) {
     return (
-      <div className="w-full p-4 rounded-xl bg-card border border-border text-center text-muted-foreground text-sm">
+      <BlockShell variant="quiet" padding="md" className="text-center text-muted-foreground text-sm">
         {t('blocks.pricing.empty', 'Добавьте услуги')}
-      </div>
+      </BlockShell>
     );
   }
 
@@ -62,57 +49,46 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
     >
-      {title && (
-        <div className="flex items-center gap-2 px-1 mb-3">
-          <Tag className="h-4 w-4 text-primary" />
-          <h3 className="font-semibold text-sm">{title}</h3>
-        </div>
-      )}
+      {title && <SectionHeader icon={<Tag className="h-4 w-4" />} title={title} />}
 
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         {block.items.map((item) => {
           const name = getI18nText(item.name, currentLang);
-          const description = item.description
-            ? getI18nText(item.description, currentLang)
-            : '';
-          const period = item.period
-            ? getI18nText(item.period, currentLang)
-            : '';
+          const description = item.description ? getI18nText(item.description, currentLang) : '';
+          const period = item.period ? getI18nText(item.period, currentLang) : '';
+          const handle = () => onBlockClick(block.id, block.type, `${title} - ${name}`);
 
           return (
             <div
               key={item.id}
-              onClick={() => onBlockClick(block.id, block.type, `${title} - ${name}`)}
+              onClick={handle}
+              onKeyDown={(event) => handleKeyboardActivation(event, handle)}
+              role="button"
+              tabIndex={0}
               className={cn(
-                'flex items-center justify-between gap-3 p-4 rounded-2xl cursor-pointer',
-                'glass-card backdrop-blur-sm border-white/10 shadow-glass',
-                'transition-all duration-300 active:scale-[0.98] hover:shadow-glass-lg hover:border-white/20',
-                item.featured && 'ring-2 ring-primary bg-primary/10 shadow-primary/20'
+                'qb-card qb-card-hover flex items-center justify-between gap-3 p-4 cursor-pointer active:scale-[0.99] transition-transform',
+                item.featured && 'ring-2 ring-primary/60'
               )}
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h4 className="font-bold text-sm truncate">{name}</h4>
+                  <h4 className="font-semibold text-sm truncate tracking-tight">{name}</h4>
                   {item.featured && (
-                    <Badge variant="default" className="text-xs h-5 px-2 bg-primary animate-pulse shadow-lg shadow-primary/30">
+                    <Badge variant="default" className="text-[10px] h-5 px-2">
                       <Star className="h-2.5 w-2.5 mr-0.5 fill-current" />
                       {t('blocks.pricing.hit', 'Хит')}
                     </Badge>
                   )}
                 </div>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                    {description}
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{description}</p>
                 )}
               </div>
               <div className="text-right flex-shrink-0">
-                <span className="text-base font-black text-primary whitespace-nowrap">
+                <span className="text-base font-semibold text-primary whitespace-nowrap tracking-tight">
                   {formatPrice(item.price, item.currency || block.currency || 'KZT')}
                 </span>
-                {period && (
-                  <p className="text-xs text-muted-foreground font-medium">{period}</p>
-                )}
+                {period && <p className="text-xs text-muted-foreground">{period}</p>}
               </div>
             </div>
           );

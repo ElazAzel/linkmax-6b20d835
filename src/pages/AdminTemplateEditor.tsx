@@ -18,6 +18,7 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import type { Block } from '@/types/page';
 import { TEMPLATE_CATEGORY_KEYS, type TemplateCategoryKey, getTemplateCategoryLabel } from '@/lib/templateCategories';
 import { createBlock } from '@/lib/blocks/block-factory';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 interface TemplateData {
     id?: string;
@@ -180,6 +181,7 @@ export default function AdminTemplateEditor() {
     }
 
     return (
+        <ScreenErrorBoundary screenName="AdminTemplateEditor">
         <div className="min-h-screen bg-background pb-20">
             {/* Header */}
             <div className="sticky top-0 z-30 flex items-center justify-between border-b bg-background/95 px-6 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -239,7 +241,7 @@ export default function AdminTemplateEditor() {
                                 />
                                 {data.preview_image && (
                                     <div className="mt-2 aspect-video w-full overflow-hidden rounded-md border bg-muted">
-                                        <img src={data.preview_image} alt="Preview" className="h-full w-full object-cover" />
+                                        <img src={data.preview_image} alt={`Website template preview: ${data.name || 'template'}`} className="h-full w-full object-cover" />
                                     </div>
                                 )}
                             </div>
@@ -298,5 +300,6 @@ export default function AdminTemplateEditor() {
                 />
             )}
         </div>
+        </ScreenErrorBoundary>
     );
 }

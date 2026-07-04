@@ -1,0 +1,15 @@
+# RFC 8288 Link headers for agent discovery + correct MIME for well-known docs.
+
+/
+  Link: </.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </auth.md>; rel="authorization"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain", </sitemap.xml>; rel="sitemap"; type="application/xml"
+
+/index.html
+  Link: </.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </auth.md>; rel="authorization"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain", </sitemap.xml>; rel="sitemap"; type="application/xml"
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/auth.md
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=3600

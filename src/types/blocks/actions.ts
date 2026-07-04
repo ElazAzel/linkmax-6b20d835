@@ -10,6 +10,8 @@ export interface ButtonBlock {
         type: 'solid' | 'gradient' | 'image';
         value: string;
         gradientAngle?: number;
+        overlay?: 'none' | 'light' | 'dark' | 'custom';
+        overlayOpacity?: number;
     };
     hoverEffect?: 'glow' | 'scale' | 'shadow' | 'none';
     alignment?: 'left' | 'center' | 'right';

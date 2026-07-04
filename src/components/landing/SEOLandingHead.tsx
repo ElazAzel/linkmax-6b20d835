@@ -10,18 +10,20 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const isRussian = currentLanguage === 'ru';
-    const isKazakh = currentLanguage === 'kk';
+    const language = currentLanguage.split('-')[0];
+    const isRussian = language === 'ru';
+    const isKazakh = language === 'kk';
     const locale = isRussian ? 'ru_RU' : isKazakh ? 'kk_KZ' : 'en_US';
+    const domain = getAppDomain();
 
     // New positioning: Micro-Business OS - page builder + CRM + analytics
     const title = t(
       'seo.landing.title',
       isRussian
-        ? 'LinkMAX - операционная система для микробизнеса | Конструктор страниц + CRM'
+        ? 'LinkMAX — страницы, CRM и аналитика для микробизнеса'
         : isKazakh
-          ? 'LinkMAX - микробизнеске арналған операциялық жүйе | Бет конструкторы + CRM'
-          : 'LinkMAX - The Micro-Business OS | Page Builder + CRM + Analytics'
+          ? 'LinkMAX — беттер, CRM және аналитика микробизнеске'
+          : 'LinkMAX — Pages, CRM & Analytics for Micro-Business'
     );
     document.title = title;
 
@@ -56,10 +58,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const description = t(
       'seo.landing.description',
       isRussian
-        ? 'LinkMAX - операционная система для микробизнеса. Конструктор страниц, мини-CRM, аналитика и AI-генерация. Создайте сайт, принимайте заявки и управляйте клиентами в одном месте.'
+        ? 'Конструктор страниц для услуг: сайт-визитка, онлайн-запись, оплата, заявки в Telegram и мини-CRM. Запустите витрину и обработку клиентов в одном месте.'
         : isKazakh
-          ? 'LinkMAX - микробизнеске арналған операциялық жүйе. Бет конструкторы, мини-CRM, аналитика және AI. Сайт жасаңыз, өтінімдер алыңыз және клиенттерді бір жерде басқарыңыз.'
-          : 'LinkMAX - The Micro-Business OS. Page builder, mini-CRM, analytics, and AI generation. Build your site, capture leads, and manage clients in one place.'
+          ? 'Қызметтерге арналған бет конструкторы: сайт-визитка, онлайн жазылу, төлем, Telegram өтінімдері және мини-CRM.'
+          : 'Page builder for service businesses: business-card site, online booking, payments, Telegram leads, and mini-CRM in one place.'
     );
     setMetaTag('description', description);
 
@@ -67,10 +69,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const keywords = t(
       'seo.landing.keywords',
       isRussian
-        ? 'операционная система для бизнеса, конструктор страниц, мини-CRM, CRM для малого бизнеса, аналитика сайта, AI конструктор, link in bio, мини-сайт, linktree альтернатива, taplink альтернатива, сайт визитка'
+        ? 'конструктор сайта для услуг, сайт визитка, онлайн запись, мини-CRM, CRM для малого бизнеса, заявки в Telegram, прием оплаты онлайн, link in bio, мини-сайт, linktree альтернатива, taplink альтернатива'
         : isKazakh
-          ? 'бизнеске арналған ОЖ, бет конструкторы, мини-CRM, шағын бизнес CRM, сайт аналитикасы, AI конструктор, link in bio, мини-сайт, linktree баламасы'
-          : 'micro-business OS, page builder, mini-CRM, small business CRM, website analytics, AI builder, link in bio, mini-site, linktree alternative, taplink alternative, business card website'
+          ? 'қызметтерге сайт жасау, сайт-визитка, онлайн жазылу, мини-CRM, Telegram өтінімдері, онлайн төлем, link in bio, мини-сайт'
+          : 'website builder for services, business card website, online booking, mini-CRM, Telegram leads, online payments, link in bio, mini-site, linktree alternative, taplink alternative'
     );
     setMetaTag('keywords', keywords);
 
@@ -104,24 +106,30 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       document.head.appendChild(fontLink);
     }
 
-    // Canonical
-    setLinkTag('canonical', `${getAppDomain()}/`);
+    // Canonical: reflect the current language-prefixed route if present.
+    const pathLang = (typeof window !== 'undefined'
+      ? window.location.pathname.match(/^\/(ru|en|kk|uz)(\/|$)/)?.[1]
+      : null);
+    const canonicalPath = pathLang ? `/${pathLang}` : '/';
+    const canonicalUrl = `${domain}${canonicalPath}`;
+    setLinkTag('canonical', canonicalUrl);
 
-    // Hreflang tags for international SEO
-    setLinkTag('alternate', `${getAppDomain()}/?lang=ru`, 'ru');
-    setLinkTag('alternate', `${getAppDomain()}/?lang=en`, 'en');
-    setLinkTag('alternate', `${getAppDomain()}/?lang=kk`, 'kk');
-    setLinkTag('alternate', `${getAppDomain()}/`, 'x-default');
+    // Hreflang tags for international SEO — use clean path-based URLs
+    setLinkTag('alternate', `${domain}/ru`, 'ru');
+    setLinkTag('alternate', `${domain}/en`, 'en');
+    setLinkTag('alternate', `${domain}/kk`, 'kk');
+    setLinkTag('alternate', `${domain}/uz`, 'uz');
+    setLinkTag('alternate', `${domain}/`, 'x-default');
 
     // Update html lang attribute
-    document.documentElement.lang = currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : 'ru';
+    document.documentElement.lang = ['ru','en','kk','uz'].includes(language) ? language : 'ru';
 
     // OG Image
-    const ogImageUrl = `${getAppDomain()}/og-image.png`;
+    const ogImageUrl = `${domain}/og-image.png`;
 
     // Open Graph optimized for social sharing
     setMetaTag('og:type', 'website', true);
-    setMetaTag('og:url', `${getAppDomain()}/`, true);
+    setMetaTag('og:url', canonicalUrl, true);
     setMetaTag('og:title', title, true);
     setMetaTag('og:description', description, true);
     setMetaTag('og:site_name', 'LinkMAX', true);
@@ -145,6 +153,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     setMetaTag('twitter:title', title);
     setMetaTag('twitter:description', description);
     setMetaTag('twitter:image', ogImageUrl);
+    setMetaTag('twitter:url', canonicalUrl);
     setMetaTag('twitter:image:alt', isRussian
       ? 'LinkMAX - операционная система для микробизнеса'
       : isKazakh
@@ -162,13 +171,13 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const organizationSchema = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      '@id': `${getAppDomain()}/#organization`,
+      '@id': `${domain}/#organization`,
       name: 'LinkMAX',
       alternateName: ['LinkMAX.my', 'The Micro-Business OS'],
-      url: `${getAppDomain()}/`,
+      url: `${domain}/`,
       logo: {
         '@type': 'ImageObject',
-        url: `${getAppDomain()}/favicon.jpg`,
+        url: `${domain}/icon-512.png`,
         width: 512,
         height: 512,
       },
@@ -176,7 +185,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'customer support',
-        email: 'admin@LinkMAX.my',
+        email: 'admin@lnkmx.my',
         availableLanguage: ['ru', 'en', 'kk'],
       },
     };
@@ -184,20 +193,20 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const websiteSchema = {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      '@id': `${getAppDomain()}/#website`,
+      '@id': `${domain}/#website`,
       name: 'LinkMAX - The Micro-Business OS',
-      url: `${getAppDomain()}/`,
+      url: `${domain}/`,
       inLanguage: ['ru', 'en', 'kk'],
       potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: `${getAppDomain()}/{username}`,
+          urlTemplate: `${domain}/{username}`,
         },
         'query-input': 'required name=username',
       },
       publisher: {
-        '@id': `${getAppDomain()}/#organization`,
+        '@id': `${domain}/#organization`,
       },
     };
 
@@ -206,7 +215,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: 'LinkMAX - The Micro-Business OS',
-      url: `${getAppDomain()}/`,
+      url: `${domain}/`,
       applicationCategory: 'BusinessApplication',
       applicationSubCategory: [
         'Website Builder',
@@ -219,7 +228,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       description: description,
       featureList: isRussian
         ? [
-          'Конструктор страниц с AI',
+          'Конструктор страниц для услуг',
           'Мини-CRM для управления заявками',
           'Аналитика кликов и конверсий',
           'Онлайн-бронирование',
@@ -227,7 +236,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
           '25+ готовых блоков',
         ]
         : [
-          'AI-powered page builder',
+          'Page builder for service businesses',
           'Mini-CRM for lead management',
           'Click and conversion analytics',
           'Online booking system',
@@ -239,34 +248,34 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
           '@type': 'Offer',
           name: isRussian ? 'Бесплатный план' : isKazakh ? 'Тегін жоспар' : 'Free plan',
           price: '0',
-          priceCurrency: 'USD',
+          priceCurrency: 'KZT',
           availability: 'https://schema.org/InStock',
-          url: `${getAppDomain()}/pricing`,
+          url: `${domain}/pricing`,
         },
         {
           '@type': 'Offer',
           name: 'Pro',
-          price: '2.61',
-          priceCurrency: 'USD',
+          price: '3045',
+          priceCurrency: 'KZT',
           availability: 'https://schema.org/InStock',
-          url: `${getAppDomain()}/pricing`,
+          url: `${domain}/pricing`,
         },
       ],
       publisher: {
-        '@id': `${getAppDomain()}/#organization`,
+        '@id': `${domain}/#organization`,
       },
     };
 
     const webPageSchema = {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      '@id': `${getAppDomain()}/#homepage`,
+      '@id': `${domain}/#homepage`,
       name: title,
       description: description,
-      url: `${getAppDomain()}/`,
+      url: canonicalUrl,
       inLanguage: pageLanguage,
       isPartOf: {
-        '@id': `${getAppDomain()}/#website`,
+        '@id': `${domain}/#website`,
       },
       about: [
         {
@@ -283,7 +292,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
         },
       ],
       mainEntity: {
-        '@id': `${getAppDomain()}/#organization`,
+        '@id': `${domain}/#organization`,
       },
     };
 
@@ -300,11 +309,11 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
         isRussian ? 'Аналитическая платформа' : 'Analytics Platform',
       ],
       provider: {
-        '@id': `${getAppDomain()}/#organization`,
+        '@id': `${domain}/#organization`,
       },
       description: isRussian
-        ? 'Полноценная платформа для микробизнеса: конструктор страниц с AI, встроенная CRM для управления заявками, аналитика и автоматизация.'
-        : 'Complete platform for micro-businesses: AI page builder, built-in CRM for lead management, analytics, and automation.',
+        ? 'Платформа для бизнеса в услугах: конструктор страниц, встроенная CRM для заявок, онлайн-запись, оплата и аналитика.'
+        : 'Platform for service businesses: page builder, built-in CRM for leads, online booking, payments, and analytics.',
       areaServed: {
         '@type': 'Place',
         name: 'Worldwide',
@@ -328,7 +337,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
               '@type': 'Service',
               name: 'Pro',
             },
-            price: '2900',
+            price: '3045',
             priceCurrency: 'KZT',
           },
         ],
@@ -372,19 +381,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
           '@type': 'ListItem',
           position: 1,
           name: 'LinkMAX',
-          item: `${getAppDomain()}/`,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: isRussian ? 'Тарифы' : isKazakh ? 'Тарифтер' : 'Pricing',
-          item: `${getAppDomain()}/pricing`,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: isRussian ? 'Галерея' : isKazakh ? 'Галерея' : 'Gallery',
-          item: `${getAppDomain()}/gallery`,
+          item: `${domain}/`,
         },
       ],
     };

@@ -251,7 +251,7 @@ function getSettings(supabase: any, chatId: string) {
 
 // Language fallback removed — now fully DB-backed via telegram_bot_settings
 
-async function getUserProfile(supabase: any, chatId: string) {
+async function getUserProfile(supabase: any, chatId: string, telegramUserId?: number) {
   const { data, error } = await supabase
     .from('user_profiles')
     .select('id, telegram_language, is_premium')
@@ -262,11 +262,56 @@ async function getUserProfile(supabase: any, chatId: string) {
     console.error(`[DB Error] Fetching profile for ${chatId}:`, error);
   }
   
-  if (!data) {
-    console.log(`[Webhook] No profile found for ${chatId}`);
+  if (data) {
+    return data;
   }
-  
-  return data;
+
+  if (!telegramUserId) {
+    console.log(`[Webhook] No profile found for ${chatId}`);
+    return null;
+  }
+
+  // Fallback for Mini App-first users:
+  // if profile is linked through telegram_accounts (telegram_user_id) but telegram_chat_id is not yet set.
+  const { data: account, error: accountError } = await supabase
+    .from('telegram_accounts')
+    .select('id')
+    .eq('telegram_user_id', telegramUserId)
+    .maybeSingle();
+
+  if (accountError) {
+    console.error(`[DB Error] Fetching telegram account for user ${telegramUserId}:`, accountError);
+    return null;
+  }
+
+  if (!account?.id) {
+    console.log(`[Webhook] No linked telegram account found for chat ${chatId} and tg user ${telegramUserId}`);
+    return null;
+  }
+
+  const { data: profileByTelegramId, error: profileByTelegramIdError } = await supabase
+    .from('user_profiles')
+    .select('id, telegram_language, is_premium')
+    .eq('id', account.id)
+    .maybeSingle();
+
+  if (profileByTelegramIdError) {
+    console.error(`[DB Error] Fetching profile via telegram account for user ${telegramUserId}:`, profileByTelegramIdError);
+    return null;
+  }
+
+  // Self-heal: persist chat_id for future command lookups and notifications.
+  if (profileByTelegramId?.id) {
+    await supabase
+      .from('user_profiles')
+      .update({
+        telegram_chat_id: chatId,
+        telegram_notifications_enabled: true,
+      })
+      .eq('id', profileByTelegramId.id);
+  }
+
+  return profileByTelegramId || null;
 }
 // Pending action is now stored in telegram_bot_settings.pending_action (DB-backed)
 async function getPendingAction(supabase: any, chatId: string): Promise<string | null> {
@@ -422,13 +467,41 @@ serve(async (req: Request) => {
       return new Response(JSON.stringify({ error: 'Server configuration error' }), { status: 500, headers: corsHeaders });
     }
 
-    // Handle webhook registration
+    // Handle webhook registration — admin-only, registers with secret_token
     const reqUrl2 = new URL(req.url);
     if (reqUrl2.searchParams.get('action') === 'register') {
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader?.startsWith('Bearer ')) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      const supaAuth = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') ?? '', { global: { headers: { Authorization: authHeader } } });
+      const tok = authHeader.replace('Bearer ', '');
+      const { data: claims } = await supaAuth.auth.getClaims(tok);
+      const uid = claims?.claims?.sub as string | undefined;
+      const supaAdmin = createClient(supabaseUrl, supabaseServiceKey);
+      const isAdminCheck = uid ? (await supaAdmin.rpc('has_role', { _user_id: uid, _role: 'admin' })).data : false;
+      if (!isAdminCheck) {
+        return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
       const { callTelegram } = await import("../_shared/telegram.ts");
       const webhookUrl = `${supabaseUrl}/functions/v1/telegram-bot-webhook`;
-      const result = await callTelegram('setWebhook', { url: webhookUrl });
-      return new Response(JSON.stringify({ ok: true, webhook: webhookUrl, result }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      const secretToken = Deno.env.get('TELEGRAM_WEBHOOK_SECRET') || '';
+      const setWebhookPayload: Record<string, unknown> = { url: webhookUrl };
+      if (secretToken) setWebhookPayload.secret_token = secretToken;
+      const result = await callTelegram('setWebhook', setWebhookPayload);
+      return new Response(JSON.stringify({ ok: true, webhook: webhookUrl, secured: !!secretToken, result }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    // Verify Telegram secret token header to ensure caller is Telegram
+    const expectedSecret = Deno.env.get('TELEGRAM_WEBHOOK_SECRET');
+    if (expectedSecret) {
+      const incomingSecret = req.headers.get('X-Telegram-Bot-Api-Secret-Token');
+      if (incomingSecret !== expectedSecret) {
+        console.warn('[Webhook] Invalid or missing secret token');
+        return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    } else {
+      console.warn('[Webhook] TELEGRAM_WEBHOOK_SECRET not set — webhook is unauthenticated. Set it and re-register.');
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -440,6 +513,7 @@ serve(async (req: Request) => {
       const callbackQuery = update.callback_query;
       const chatId = callbackQuery.message?.chat?.id || callbackQuery.from.id;
       const chatIdStr = chatId.toString();
+      const telegramUserId = callbackQuery.from.id;
       const data = callbackQuery.data;
       const firstName = callbackQuery.from.first_name;
 
@@ -494,27 +568,34 @@ serve(async (req: Request) => {
         replyMarkup = getHelpKeyboard(lang);
       } else if (data?.startsWith('lead_status:')) {
         const [_, status, leadId] = data.split(':');
-        
-        // Update lead/deal status in DB
-        const { error: updateError } = await supabase
-          .from('leads')
-          .update({ status })
-          .eq('id', leadId);
 
-        if (updateError) {
-          console.error('Error updating lead status:', updateError);
-          responseText = m.lead_error;
+        // Ownership check: only the lead's owner (linked Telegram user) may update it
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
+        if (!profile) {
+          responseText = m.not_linked;
         } else {
-          // Map status code to display name
-          const statusNames: Record<string, string> = {
-            'contacted': lang === 'ru' ? 'В работе' : lang === 'kk' ? 'Жұмыста' : 'In Progress',
-            'won': lang === 'ru' ? 'Продано' : lang === 'kk' ? 'Сатылды' : 'Won'
-          };
-          responseText = m.lead_updated(statusNames[status] || status);
+          const { error: updateError, data: updated } = await supabase
+            .from('leads')
+            .update({ status })
+            .eq('id', leadId)
+            .eq('user_id', profile.id)
+            .select('id');
+
+          if (updateError || !updated || updated.length === 0) {
+            console.error('Error updating lead status:', updateError);
+            responseText = m.lead_error;
+          } else {
+            const statusNames: Record<string, string> = {
+              'contacted': lang === 'ru' ? 'В работе' : lang === 'kk' ? 'Жұмыста' : 'In Progress',
+              'won': lang === 'ru' ? 'Продано' : lang === 'kk' ? 'Сатылды' : 'Won'
+            };
+            responseText = m.lead_updated(statusNames[status] || status);
+          }
         }
+
       } else if (data?.startsWith('leads_page:')) {
         const page = parseInt(data.split(':')[1]);
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (profile) {
           const { data: leads, count } = await supabase
@@ -569,7 +650,7 @@ serve(async (req: Request) => {
       } else if (data === 'delete_link:') {
         // (Existing delete_link logic)
       } else if (data === 'pages') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
         if (profile) {
           const { data: pages } = await supabase
             .from('pages')
@@ -636,7 +717,7 @@ serve(async (req: Request) => {
         responseText = lang === 'ru' ? '✅ Уведомления включены' : '✅ Notifications enabled';
       } else if (data === 'stats') {
         // Trigger stats command logic
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
         if (profile) {
           const activePageId = await getActivePageId(supabase, chatIdStr);
           let pageIds: string[] = [];
@@ -699,6 +780,7 @@ serve(async (req: Request) => {
     if (update.message?.text) {
       const chatId = update.message.chat.id;
       const chatIdStr = chatId.toString();
+      const telegramUserId = update.message.from.id;
       const text = update.message.text.trim();
       const firstName = update.message.from.first_name || 'friend';
 
@@ -746,7 +828,7 @@ serve(async (req: Request) => {
         responseText = m.greeting_miniapp(firstName);
         replyMarkup = getMiniAppKeyboard(lang);
       } else if (text === '/page') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -809,7 +891,7 @@ serve(async (req: Request) => {
           ]
         };
       } else if (text === '/wallet' || text === '/balance') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -839,7 +921,7 @@ serve(async (req: Request) => {
         }
       } else if (text === '/zone' || text === '/deals' || text === '/tasks' || text === '/contacts') {
         // Zone commands — find user's zone through linked profile
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -949,7 +1031,7 @@ serve(async (req: Request) => {
           }
         }
       } else if (text === '/bookings') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -983,7 +1065,7 @@ serve(async (req: Request) => {
           }
         }
       } else if (text === '/pages') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -1011,7 +1093,7 @@ serve(async (req: Request) => {
         responseText = m.add_link_prompt;
         await setPendingAction(supabase, chatIdStr, 'add_link');
       } else if ((await getPendingAction(supabase, chatIdStr)) === 'edit_bio') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
         
         if (profile) {
           await supabase.from('user_profiles').update({ bio: text }).eq('id', profile.id);
@@ -1023,7 +1105,7 @@ serve(async (req: Request) => {
         if (parts.length >= 2) {
           const title = parts[0].trim();
           const url = parts[1].trim();
-          const profile = await getUserProfile(supabase, chatIdStr);
+          const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
           
           if (profile) {
             let pageId = await getActivePageId(supabase, chatIdStr);
@@ -1049,7 +1131,7 @@ serve(async (req: Request) => {
           responseText = m.add_link_prompt;
         }
       } else if (text === '/leads' || text === '/crm') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -1082,7 +1164,7 @@ serve(async (req: Request) => {
           }
         }
       } else if (text === '/stats') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
 
         if (!profile) {
           responseText = m.not_linked;
@@ -1179,7 +1261,7 @@ serve(async (req: Request) => {
           ]
         };
       } else if (text === '/admin_broadcast_crm') {
-        const profile = await getUserProfile(supabase, chatIdStr);
+        const profile = await getUserProfile(supabase, chatIdStr, telegramUserId);
         if (profile?.role === 'admin') {
           // This will be handled by a separate function, but here we can at least confirm
           responseText = "⚠️ Running broadcast via separate function is recommended. Use 'supabase functions invoke broadcast-update'";

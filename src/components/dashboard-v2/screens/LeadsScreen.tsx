@@ -16,6 +16,11 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SmartEmptyState } from '@/components/ui/smart-empty-state';
+import Inbox from 'lucide-react/dist/esm/icons/inbox';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Edit3 from 'lucide-react/dist/esm/icons/edit-3';
+import Filter from 'lucide-react/dist/esm/icons/filter';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -30,17 +35,55 @@ import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import type { Lead } from '@/hooks/crm/useLeads';
+import { trackLeadReplied, trackLeadStatusChanged } from '@/lib/activation-events';
 
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
+type ReplyChannel = 'whatsapp' | 'telegram' | 'call' | 'email';
+type StatusFilter = 'active' | 'all' | LeadStatus;
 
-const STATUS_FILTERS = ['all', 'new', 'contacted', 'qualified', 'converted', 'lost'] as const;
+const PRIMARY_FILTERS: { id: StatusFilter; labelKey: string; defaultLabel: string }[] = [
+    { id: 'active', labelKey: 'dashboard.leads.filterActive', defaultLabel: 'Активные' },
+    { id: 'all', labelKey: 'dashboard.leads.filterAll', defaultLabel: 'Все' },
+];
+const SECONDARY_STATUSES: LeadStatus[] = ['new', 'contacted', 'qualified', 'converted', 'lost'];
+
+function getLeadMetadata(lead: Lead | undefined): Record<string, unknown> | null {
+    const metadata = lead?.metadata;
+    if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
+        return null;
+    }
+
+    return metadata as Record<string, unknown>;
+}
+
+function getLeadPageId(lead: Lead | undefined): string | null {
+    const pageId = getLeadMetadata(lead)?.page_id;
+    return typeof pageId === 'string' ? pageId : null;
+}
+
+function getLeadTelegramHref(lead: Lead): string | null {
+    const metadata = getLeadMetadata(lead);
+    const rawHandle = metadata?.telegram_username ?? metadata?.telegram_handle ?? metadata?.telegram;
+    if (typeof rawHandle === 'string' && rawHandle.trim()) {
+        const handle = rawHandle
+            .trim()
+            .replace(/^https?:\/\/t\.me\//i, '')
+            .replace(/^@/, '');
+
+        if (handle) return `https://t.me/${encodeURIComponent(handle)}`;
+    }
+
+    const digits = lead.phone?.replace(/[^0-9]/g, '');
+    return digits ? `tg://resolve?phone=${digits}` : null;
+}
 
 export const LeadsScreen = memo(function LeadsScreen() {
     const { t } = useTranslation();
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<typeof STATUS_FILTERS[number]>('all');
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+    const [filterSheetOpen, setFilterSheetOpen] = useState(false);
     const [loadError, setLoadError] = useState(false);
 
     const fetchLeads = useCallback(async () => {
@@ -69,13 +112,26 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
     const updateLeadStatus = async (leadId: string, newStatus: LeadStatus) => {
         try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const previousLead = leads.find(lead => lead.id === leadId);
             const { error } = await supabase
                 .from('leads')
                 .update({ status: newStatus, updated_at: new Date().toISOString() })
-                .eq('id', leadId);
+                .eq('id', leadId)
+                .eq('user_id', user.id);
 
             if (error) throw error;
             setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status: newStatus } : l));
+
+            if (previousLead && previousLead.status !== newStatus) {
+                const pageId = getLeadPageId(previousLead);
+                if (pageId) {
+                    trackLeadStatusChanged(pageId, leadId, String(previousLead.status), newStatus);
+                }
+            }
+
             toast.success(t('crm.status.' + newStatus));
         } catch (e) {
             console.error('Status update error', e);
@@ -104,7 +160,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
     };
 
     const filteredLeads = leads.filter(lead => {
-        const matchesStatus = statusFilter === 'all' || lead.status === statusFilter;
+        const status = lead.status as LeadStatus;
+        const matchesStatus =
+            statusFilter === 'all'
+                ? true
+                : statusFilter === 'active'
+                    ? status === 'new' || status === 'contacted' || status === 'qualified'
+                    : status === statusFilter;
         const matchesSearch = !searchQuery ||
             lead.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             lead.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -114,12 +176,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
     const stats = {
         all: leads.length,
+        active: leads.filter(l => ['new','contacted','qualified'].includes(l.status as string)).length,
         new: leads.filter(l => l.status === 'new').length,
         contacted: leads.filter(l => l.status === 'contacted').length,
         qualified: leads.filter(l => l.status === 'qualified').length,
         converted: leads.filter(l => l.status === 'converted').length,
         lost: leads.filter(l => l.status === 'lost').length,
-    };
+    } as const;
 
     const statusConfig: Record<LeadStatus, { bg: string; text: string; icon: React.ComponentType<{className?: string}> }> = {
         new: { bg: 'bg-blue-500', text: 'text-white', icon: Sparkles },
@@ -147,20 +210,63 @@ export const LeadsScreen = memo(function LeadsScreen() {
         );
     };
 
-    const openWhatsApp = (phone: string) => {
-        window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}`, '_blank');
+    const markLeadContactedAfterReply = async (lead: Lead) => {
+        if (lead.status !== 'new') return;
+
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { error } = await supabase
+                .from('leads')
+                .update({ status: 'contacted', updated_at: new Date().toISOString() })
+                .eq('id', lead.id)
+                .eq('user_id', user.id)
+                .eq('status', 'new');
+
+            if (error) throw error;
+
+            setLeads(prev => prev.map(l => l.id === lead.id ? { ...l, status: 'contacted' } : l));
+
+            const pageId = getLeadPageId(lead);
+            if (pageId) {
+                trackLeadStatusChanged(pageId, lead.id, 'new', 'contacted');
+            }
+        } catch (e) {
+            console.error('Auto-contact lead error', e);
+        }
     };
 
-    const openTelegram = (phone: string) => {
-        window.open(`https://t.me/${phone.replace(/[^0-9]/g, '')}`, '_blank');
+    const trackReplyAction = (lead: Lead, channel: ReplyChannel) => {
+        const pageId = getLeadPageId(lead);
+        if (pageId) {
+            trackLeadReplied(pageId, lead.id, channel);
+        }
     };
 
-    const openCall = (phone: string) => {
-        window.open(`tel:${phone}`, '_self');
+    const handleReplyAction = (lead: Lead, channel: ReplyChannel, href: string, target: '_blank' | '_self') => {
+        trackReplyAction(lead, channel);
+        void markLeadContactedAfterReply(lead);
+        window.open(href, target);
     };
 
-    const openEmail = (email: string) => {
-        window.open(`mailto:${email}`, '_self');
+    const openWhatsApp = (lead: Lead) => {
+        if (!lead.phone) return;
+        handleReplyAction(lead, 'whatsapp', `https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}`, '_blank');
+    };
+
+    const openTelegram = (lead: Lead, href: string) => {
+        handleReplyAction(lead, 'telegram', href, href.startsWith('tg://') ? '_self' : '_blank');
+    };
+
+    const openCall = (lead: Lead) => {
+        if (!lead.phone) return;
+        handleReplyAction(lead, 'call', `tel:${lead.phone}`, '_self');
+    };
+
+    const openEmail = (lead: Lead) => {
+        if (!lead.email) return;
+        handleReplyAction(lead, 'email', `mailto:${lead.email}`, '_self');
     };
 
     return (
@@ -197,27 +303,25 @@ export const LeadsScreen = memo(function LeadsScreen() {
             />
 
             <div className="px-[var(--space-page-px)] py-4 space-y-4">
-                {/* Status Filter Pills */}
-                <div className="overflow-x-auto scrollbar-hide pb-2">
-                    <div className="flex gap-3 min-w-max px-0.5">
-                        {STATUS_FILTERS.map((status) => {
-                            const count = stats[status];
-                            const isActive = statusFilter === status;
+                {/* Status Filter — primary segments + filter sheet */}
+                <div className="flex items-center gap-2">
+                    <div className="flex gap-2 flex-1 min-w-0">
+                        {PRIMARY_FILTERS.map((f) => {
+                            const count = stats[f.id as 'active' | 'all'];
+                            const isActive = statusFilter === f.id;
                             return (
                                 <button
-                                    key={status}
-                                    onClick={() => setStatusFilter(status)}
+                                    key={f.id}
+                                    onClick={() => setStatusFilter(f.id)}
+                                    aria-pressed={isActive}
                                     className={cn(
-                                        "h-11 px-5 rounded-2xl text-xs uppercase font-black tracking-widest whitespace-nowrap transition-all flex items-center gap-2.5 shadow-glass-sm",
+                                        "h-11 px-4 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 flex-1 justify-center",
                                         isActive
-                                            ? "bg-primary text-primary-foreground shadow-lg scale-105"
-                                            : "bg-white/5 text-muted-foreground/60 hover:bg-white/10 border border-white/10"
+                                            ? "bg-primary text-primary-foreground"
+                                            : "bg-white/5 text-muted-foreground hover:bg-white/10 border border-white/10"
                                     )}
                                 >
-                                    {status === 'all'
-                                        ? t('dashboard.leads.filterAll', 'Все')
-                                        : t(`crm.status.${status}`)
-                                    }
+                                    {t(f.labelKey, f.defaultLabel)}
                                     <Badge variant="secondary" className={cn(
                                         "h-5 min-w-[20px] px-1 rounded-md text-xs border-none",
                                         isActive ? "bg-white/20 text-white" : "bg-white/10"
@@ -228,7 +332,62 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             );
                         })}
                     </div>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className={cn(
+                            "h-11 px-3 rounded-2xl shrink-0",
+                            !PRIMARY_FILTERS.some(f => f.id === statusFilter) && "bg-primary text-primary-foreground border-primary"
+                        )}
+                        onClick={() => setFilterSheetOpen(true)}
+                        aria-label={t('dashboard.leads.openFilters', 'Все статусы')}
+                    >
+                        <Filter className="h-4 w-4" />
+                        {!PRIMARY_FILTERS.some(f => f.id === statusFilter) && (
+                            <span className="ml-2 text-xs font-semibold">{t(`crm.status.${statusFilter}`)}</span>
+                        )}
+                    </Button>
                 </div>
+
+                {/* Filter Sheet — secondary statuses */}
+                {filterSheetOpen && (
+                    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- backdrop dismiss; Esc handled by sheet semantics
+                    <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={() => setFilterSheetOpen(false)}>
+                        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- inner panel only stops propagation */}
+                        <div className="bg-background w-full rounded-t-3xl p-5 space-y-3 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-base font-semibold">{t('dashboard.leads.filterByStatus', 'Фильтр по статусу')}</h3>
+                                <Button variant="ghost" size="sm" onClick={() => setFilterSheetOpen(false)}><X className="h-4 w-4" /></Button>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                {(['active','all',...SECONDARY_STATUSES] as StatusFilter[]).map((s) => {
+                                    const isActive = statusFilter === s;
+                                    const label = s === 'all'
+                                        ? t('dashboard.leads.filterAll', 'Все')
+                                        : s === 'active'
+                                            ? t('dashboard.leads.filterActive', 'Активные')
+                                            : t(`crm.status.${s}`);
+                                    const count = stats[s];
+                                    return (
+                                        <button
+                                            key={s}
+                                            onClick={() => { setStatusFilter(s); setFilterSheetOpen(false); }}
+                                            className={cn(
+                                                "h-12 px-4 rounded-2xl text-sm font-medium flex items-center justify-between transition-all",
+                                                isActive ? "bg-primary text-primary-foreground" : "bg-white/5 hover:bg-white/10 border border-white/10"
+                                            )}
+                                        >
+                                            <span>{label}</span>
+                                            <Badge variant="secondary" className={cn("h-5 min-w-[20px] px-1.5 rounded-md text-xs border-none", isActive ? "bg-white/20 text-white" : "bg-white/10")}>
+                                                {count}
+                                            </Badge>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Search */}
                 <div className="relative">
@@ -256,22 +415,58 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             }}
                         />
                     ) : filteredLeads.length === 0 ? (
-                        <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
-                            <EmptyState
-                                icon={Mail}
-                                title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
-                                description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов.')}
-                                action={{
-                                    label: t('dashboard.leads.emptyCta', 'Перейти в редактор'),
-                                    onClick: () => window.open('/dashboard?tab=editor', '_self')
+                        leads.length === 0 ? (
+                            // Zero-state: ни одного лида. Активационный гид.
+                            <SmartEmptyState
+                                icon={Inbox}
+                                eyebrow={t('dashboard.leads.emptyEyebrow', 'Готовы принимать заявки?')}
+                                title={t('dashboard.leads.emptyTitle', 'Здесь появятся ваши клиенты')}
+                                description={t('dashboard.leads.emptyDesc', 'Каждая заявка с формы, бронирования или сообщения попадёт сюда. Сделайте 3 шага, чтобы начать получать лиды.')}
+                                checklist={[
+                                    {
+                                        label: t('dashboard.leads.checklist.publish', 'Опубликуйте свою страницу'),
+                                        hint: t('dashboard.leads.checklist.publishHint', 'Без публикации страницу не увидят клиенты'),
+                                    },
+                                    {
+                                        label: t('dashboard.leads.checklist.form', 'Добавьте форму или кнопку связи'),
+                                        hint: t('dashboard.leads.checklist.formHint', 'WhatsApp, Telegram, форма заявки или бронирование'),
+                                    },
+                                    {
+                                        label: t('dashboard.leads.checklist.share', 'Поделитесь ссылкой в соцсетях'),
+                                        hint: t('dashboard.leads.checklist.shareHint', 'Instagram bio, Telegram, визитки — где видят ваши клиенты'),
+                                    },
+                                ]}
+                                primaryCta={{
+                                    label: t('dashboard.leads.emptyCta', 'Открыть редактор'),
+                                    onClick: () => window.open('/dashboard?tab=editor', '_self'),
+                                    icon: Edit3,
                                 }}
-                                className="py-12"
+                                secondaryCta={{
+                                    label: t('dashboard.leads.emptyShareCta', 'Поделиться страницей'),
+                                    onClick: () => window.open('/dashboard?tab=pages', '_self'),
+                                    icon: Share2,
+                                }}
+                                footer={t('dashboard.leads.emptyFooter', '💡 Совет: первая заявка обычно приходит в течение 48 часов после публикации')}
                             />
-                        </Card>
+                        ) : (
+                            // Filter-empty state: лиды есть, но фильтр не совпал
+                            <SmartEmptyState
+                                icon={Filter}
+                                title={t('dashboard.leads.filterEmptyTitle', 'Ничего не найдено')}
+                                description={t('dashboard.leads.filterEmptyDesc', 'Попробуйте изменить фильтр или поиск')}
+                                primaryCta={{
+                                    label: t('dashboard.leads.resetFilter', 'Сбросить фильтры'),
+                                    onClick: () => { setStatusFilter('all'); setSearchQuery(''); },
+                                    variant: 'outline',
+                                }}
+                                compact
+                            />
+                        )
                     ) : (
                         filteredLeads.map((lead) => {
                             const config = statusConfig[lead.status as LeadStatus] || statusConfig.new;
                             const StatusIcon = config.icon;
+                            const telegramHref = getLeadTelegramHref(lead);
 
                             return (
                                 <Card 
@@ -343,41 +538,43 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                     {/* Quick Actions */}
                                     <div className="flex items-center gap-2 pt-4 border-t border-white/5">
                                         {lead.phone && (
-                                            <>
-                                                <Button
-                                                    variant="secondary"
-                                                    size="sm"
-                                                    className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
-                                                    onClick={() => openWhatsApp(lead.phone!)}
-                                                >
-                                                    <MessageCircle className="h-4 w-4 mr-2" />
-                                                    WA
-                                                </Button>
-                                                <Button
-                                                    variant="secondary"
-                                                    size="sm"
-                                                    className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
-                                                    onClick={() => openTelegram(lead.phone!)}
-                                                >
-                                                    <Send className="h-4 w-4 mr-2" />
-                                                    TG
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
-                                                    onClick={() => openCall(lead.phone!)}
-                                                >
-                                                    <Phone className="h-5 w-5" />
-                                                </Button>
-                                            </>
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
+                                                onClick={() => openWhatsApp(lead)}
+                                            >
+                                                <MessageCircle className="h-4 w-4 mr-2" />
+                                                WA
+                                            </Button>
+                                        )}
+                                        {telegramHref && (
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
+                                                onClick={() => openTelegram(lead, telegramHref)}
+                                            >
+                                                <Send className="h-4 w-4 mr-2" />
+                                                TG
+                                            </Button>
+                                        )}
+                                        {lead.phone && (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
+                                                onClick={() => openCall(lead)}
+                                            >
+                                                <Phone className="h-5 w-5" />
+                                            </Button>
                                         )}
                                         {lead.email && (
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
-                                                onClick={() => openEmail(lead.email!)}
+                                                onClick={() => openEmail(lead)}
                                             >
                                                 <Mail className="h-5 w-5" />
                                             </Button>

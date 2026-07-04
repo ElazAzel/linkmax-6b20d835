@@ -2,7 +2,7 @@
  * EventScanner - Mobile-first QR code scanner for event check-in
  * Pro-only feature with camera access, torch toggle, recent scans
  */
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
@@ -33,6 +33,7 @@ import { ru, kk, enUS } from 'date-fns/locale';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { logger } from '@/lib/utils/logger';
 import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 interface ScanResult {
   ticketCode: string;
@@ -49,7 +50,7 @@ interface EventInfo {
   checkedIn: number;
 }
 
-export default function EventScanner() {
+export const EventScanner = memo(function EventScanner() {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -531,6 +532,7 @@ export default function EventScanner() {
   }
 
   return (
+    <ScreenErrorBoundary screenName="EventScanner">
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b safe-area-top">
@@ -716,6 +718,8 @@ export default function EventScanner() {
           </ScrollArea>
         </div>
       </div>
-    </div>
+      </div>
+    </ScreenErrorBoundary>
   );
-}
+});
+export default EventScanner;

@@ -59,15 +59,32 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
         const email = formData['email'] || formData['Email'] || formData['Почта'] || formData['почта'] || null;
         const phone = formData['phone'] || formData['Phone'] || formData['Телефон'] || formData['телефон'] || null;
 
-        // Capture UTM parameters and Referrer
+        // Capture UTM parameters, Referrer and AI-bot source
         const urlParams = new URLSearchParams(window.location.search);
+        const referrer = document.referrer || 'direct';
+        // Detect traffic from AI answer engines (ChatGPT, Perplexity, Claude, Gemini, Copilot, You.com)
+        const AI_REFERRER_RE = /chat(gpt|\.openai)|chatgpt\.com|perplexity\.ai|claude\.ai|anthropic|gemini\.google|bard\.google|copilot\.microsoft|bing\.com\/chat|you\.com|phind\.com|kagi\.com\/assistant/i;
+        const isAiTraffic = AI_REFERRER_RE.test(referrer);
+        let aiSource: string | null = null;
+        if (isAiTraffic) {
+          if (/chatgpt|openai/i.test(referrer)) aiSource = 'chatgpt';
+          else if (/perplexity/i.test(referrer)) aiSource = 'perplexity';
+          else if (/claude|anthropic/i.test(referrer)) aiSource = 'claude';
+          else if (/gemini|bard/i.test(referrer)) aiSource = 'gemini';
+          else if (/copilot|bing\.com\/chat/i.test(referrer)) aiSource = 'copilot';
+          else if (/you\.com/i.test(referrer)) aiSource = 'you';
+          else if (/phind/i.test(referrer)) aiSource = 'phind';
+          else aiSource = 'ai_other';
+        }
         const utmMetadata = {
-          utm_source: urlParams.get('utm_source'),
-          utm_medium: urlParams.get('utm_medium'),
+          utm_source: urlParams.get('utm_source') || (isAiTraffic ? aiSource : null),
+          utm_medium: urlParams.get('utm_medium') || (isAiTraffic ? 'ai_search' : null),
           utm_campaign: urlParams.get('utm_campaign'),
           utm_term: urlParams.get('utm_term'),
           utm_content: urlParams.get('utm_content'),
-          referrer: document.referrer || 'direct',
+          referrer,
+          ai_source: aiSource,
+          is_ai_traffic: isAiTraffic ? 'true' : 'false',
         };
 
         const { data: fnResponse, error } = await supabase.functions.invoke('submit-lead', {
@@ -156,7 +173,7 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
   return (
     <Card className="p-5 sm:p-6 bg-card border-border shadow-sm rounded-xl">
       <div className="flex items-center gap-2 mb-3 sm:mb-4">
-        <h3 className="font-semibold text-base sm:text-lg truncate">{title}</h3>
+        <h3 className="font-semibold text-base sm:text-lg break-words leading-snug">{title}</h3>
         <Crown className="h-4 w-4 text-primary flex-shrink-0" />
       </div>
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">

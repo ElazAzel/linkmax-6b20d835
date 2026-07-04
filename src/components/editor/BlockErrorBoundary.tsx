@@ -37,7 +37,7 @@ export class BlockErrorBoundary extends Component<Props, State> {
     public render() {
         if (this.state.hasError) {
             return this.props.fallback || (
-                <div className="w-full p-4 rounded-xl border border-destructive/20 bg-destructive/5 flex items-center gap-3 text-destructive">
+                <div className="w-full p-4 rounded-card border border-destructive/20 bg-destructive/5 flex items-center gap-3 text-destructive">
                     <AlertTriangle className="h-5 w-5 shrink-0" />
                     <div className="text-sm font-medium">
                         Error loading block

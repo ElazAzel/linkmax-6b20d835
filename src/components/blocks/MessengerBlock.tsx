@@ -88,7 +88,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
 
   return (
     <div
-      className="w-full rounded-[2rem] glass-card border border-white/10 shadow-glass p-5 relative overflow-hidden group"
+      className="w-full rounded-[2rem] qb-card border border-hairline shadow-soft p-5 relative overflow-hidden group"
       style={{
         backgroundColor: block.blockStyle?.backgroundColor,
         backgroundImage: block.blockStyle?.backgroundGradient,
@@ -114,8 +114,8 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
               onClick={() => handleMessengerClick(messenger.platform, messenger.username, messenger.message)}
               className={cn(
                 "flex items-center gap-4 p-4 rounded-2xl",
-                "glass-card backdrop-blur-md border-white/10 shadow-glass",
-                "transition-all duration-300 hover:scale-[1.02] hover:shadow-glass-lg active:scale-[0.98]",
+                "qb-card border-hairline shadow-soft",
+                "transition-all duration-300 hover:scale-[1.02] hover:shadow-lift active:scale-[0.98]",
                 "group/item overflow-hidden relative text-left w-full"
               )}
             >

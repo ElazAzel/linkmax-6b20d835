@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FlaskConical from 'lucide-react/dist/esm/icons/flask-conical';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
@@ -7,6 +7,7 @@ import Square from 'lucide-react/dist/esm/icons/square';
 import Trophy from 'lucide-react/dist/esm/icons/trophy';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -34,6 +35,10 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
     const { t } = useTranslation();
     const { handleError } = useAppError();
     const { experiments, loading, refresh } = useExperimentAnalytics(pageId);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [pendingDeleteExpId, setPendingDeleteExpId] = useState<string | null>(null);
+    const [winnerConfirmOpen, setWinnerConfirmOpen] = useState(false);
+    const [pendingWinner, setPendingWinner] = useState<{ expId: string; variantId: string } | null>(null);
 
     const handleStatusChange = async (expId: string, status: 'running' | 'ended' | 'paused') => {
         try {
@@ -46,27 +51,43 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
         }
     };
 
-    const handleDelete = async (expId: string) => {
-        if (!confirm(t('experiments.confirmDelete', 'Вы уверены, что хотите удалить этот эксперимент?'))) return;
+    const handleDelete = (expId: string) => {
+        setPendingDeleteExpId(expId);
+        setDeleteConfirmOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!pendingDeleteExpId) return;
         try {
-            const { error } = await deleteExperiment(expId);
+            const { error } = await deleteExperiment(pendingDeleteExpId);
             if (error) throw error;
             toast.success(t('experiments.deleteSuccess', 'Эксперимент удален'));
             refresh();
         } catch (error: any) {
             handleError(error);
+        } finally {
+            setDeleteConfirmOpen(false);
+            setPendingDeleteExpId(null);
         }
     };
 
-    const handleWinner = async (expId: string, variantId: string) => {
-        if (!confirm(t('experiments.confirmWinner', 'Версия будет применена ко всем пользователям. Продолжить?'))) return;
+    const handleWinner = (expId: string, variantId: string) => {
+        setPendingWinner({ expId, variantId });
+        setWinnerConfirmOpen(true);
+    };
+
+    const handleWinnerConfirm = async () => {
+        if (!pendingWinner) return;
         try {
-            const { error } = await setWinningVariant(expId, variantId, true);
+            const { error } = await setWinningVariant(pendingWinner.expId, pendingWinner.variantId, true);
             if (error) throw error;
             toast.success(t('experiments.winnerSet', 'Победитель выбран и применен'));
             refresh();
         } catch (error: any) {
             handleError(error);
+        } finally {
+            setWinnerConfirmOpen(false);
+            setPendingWinner(null);
         }
     };
 
@@ -242,6 +263,32 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                     </motion.div>
                 ))}
             </AnimatePresence>
+
+            <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t('experiments.confirmDelete', 'Вы уверены?')}</AlertDialogTitle>
+                        <AlertDialogDescription>{t('experiments.confirmDeleteDesc', 'Это действие нельзя отменить.')}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteConfirm}>{t('common.delete', 'Удалить')}</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog open={winnerConfirmOpen} onOpenChange={setWinnerConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t('experiments.confirmWinner', 'Версия будет применена ко всем пользователям. Продолжить?')}</AlertDialogTitle>
+                        <AlertDialogDescription>{t('experiments.confirmWinnerDesc', 'Выбранный вариант станет основным для всех посетителей.')}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleWinnerConfirm}>{t('common.continue', 'Продолжить')}</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 });

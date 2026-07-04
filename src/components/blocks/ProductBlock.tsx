@@ -29,6 +29,7 @@ import { useTokens } from '@/hooks/user/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
 import { trackPurchase } from '@/lib/analytics';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 interface ProductBlockProps {
   block: ProductBlockType;
@@ -147,8 +148,8 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
       {/* Product Info */}
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-xl font-bold text-foreground leading-tight">{name}</h3>
-          <span className="text-xl font-bold text-primary whitespace-nowrap">
+          <h3 className="min-w-0 text-xl font-bold text-foreground leading-tight break-words hyphens-auto">{name}</h3>
+          <span className="text-xl font-bold text-primary break-words text-right">
             {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
           </span>
         </div>
@@ -166,7 +167,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
           onClick={handleBuy}
           disabled={isPurchasing}
           className={cn(
-            "w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-glass hover:shadow-glass-lg transition-all",
+            "w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-soft hover:shadow-lift transition-all",
             !hasEnoughTokens && tokenPrice && "bg-primary shadow-primary/20",
             "active:scale-[0.98]"
           )}
@@ -199,22 +200,27 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
   );
 
   // Compact mobile-optimized card layout
+  const openProductDetail = () => {
+    if (onClick) onClick();
+    setIsDetailOpen(true);
+  };
+
   const ProductCard = () => (
     <div
       className={cn(
         "w-full rounded-2xl overflow-hidden cursor-pointer",
-        "glass-card backdrop-blur-md",
-        "shadow-glass hover:shadow-glass-lg border-white/10 transition-all duration-300",
+        "qb-card",
+        "shadow-soft hover:shadow-lift border-hairline transition-all duration-300",
         "active:scale-[0.98]"
       )}
       style={{
         backgroundColor: block.blockStyle?.backgroundColor,
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
-      onClick={() => {
-        if (onClick) onClick();
-        setIsDetailOpen(true);
-      }}
+      onClick={openProductDetail}
+      onKeyDown={(event) => handleKeyboardActivation(event, openProductDetail)}
+      role="button"
+      tabIndex={0}
     >
       <div className="flex gap-3 p-4">
         {/* Compact image */}
@@ -232,11 +238,11 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
         {/* Content */}
         <div className="flex-1 min-w-0 flex flex-col justify-between">
           <div>
-            <h3 className="font-semibold text-foreground text-sm leading-tight line-clamp-2">
+            <h3 className="font-semibold text-foreground text-sm leading-tight break-words hyphens-auto">
               {name}
             </h3>
             {description && (
-              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed break-words hyphens-auto">
                 {description}
               </p>
             )}
@@ -244,7 +250,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
 
           {/* Price and action hint */}
           <div className="flex items-center justify-between gap-2 mt-2">
-            <span className="text-primary font-bold text-base whitespace-nowrap">
+            <span className="text-primary font-bold text-base break-words">
               {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
             </span>
 

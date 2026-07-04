@@ -119,11 +119,11 @@ export function ShoutoutBlock({ block, userId: legacyUserId, message: legacyMess
           </Avatar>
           
           <div className="flex-1 min-w-0">
-            <p className="font-semibold truncate">
+            <p className="font-semibold leading-snug break-words hyphens-auto">
               {user.display_name || user.username}
             </p>
             {displayMessage && (
-              <p className="text-sm text-muted-foreground line-clamp-2">
+              <p className="text-sm text-muted-foreground leading-relaxed break-words hyphens-auto">
                 {displayMessage}
               </p>
             )}

@@ -15,11 +15,9 @@ interface ResetRequest {
 
 function generateToken(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let token = '';
-  for (let i = 0; i < 6; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return token;
+  const bytes = new Uint8Array(6);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes).map((b) => chars[b % chars.length]).join('');
 }
 
 async function sendTelegramMessage(chatId: string, text: string): Promise<boolean> {
@@ -60,8 +58,9 @@ Deno.serve(async (req) => {
 
       if (profileError || !profile) {
         console.log('Profile not found for chat_id:', telegram_chat_id);
+        // Uniform success response to prevent enumeration of linked Telegram accounts
         return new Response(
-          JSON.stringify({ success: false, error: 'telegram_not_found' }),
+          JSON.stringify({ success: true }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }

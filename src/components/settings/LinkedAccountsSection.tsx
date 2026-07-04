@@ -1,157 +1,112 @@
 /**
- * LinkedAccountsSection - Manage linked OAuth accounts
- * Allows users to link/unlink Google and Apple accounts
- * and connect Google Calendar integration via OAuth 2.0
+ * LinkedAccountsSection - manage OAuth login methods and calendar integrations.
  */
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { useAppError } from '@/hooks/useAppError';
+import { useGoogleCalendarIntegration } from '@/hooks/user/useGoogleCalendarIntegration';
+import { useLinkedAccounts } from '@/hooks/user/useLinkedAccounts';
+import type {
+  LinkedAccountProvider,
+  OAuthAccountProvider,
+} from '@/services/account-connections';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import Unlink from 'lucide-react/dist/esm/icons/unlink';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import CalendarSync from 'lucide-react/dist/esm/icons/calendar-sync';
-import { supabase } from '@/platform/supabase/client';
-
-
 import { cn } from '@/lib/utils/utils';
-
-interface LinkedAccount {
-  provider: 'email' | 'google' | 'apple';
-  email?: string;
-  linked: boolean;
-}
 
 interface LinkedAccountsSectionProps {
   userEmail?: string;
 }
 
+type LinkingProvider = OAuthAccountProvider | 'google_calendar' | null;
+
+function isOAuthProvider(provider: LinkedAccountProvider): provider is OAuthAccountProvider {
+  return provider === 'google' || provider === 'apple';
+}
+
+function cleanupUrlParams(params: string[]) {
+  const newUrl = new URL(window.location.href);
+  params.forEach((param) => newUrl.searchParams.delete(param));
+  window.history.replaceState(null, '', newUrl.toString());
+}
+
 export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps) {
   const { t } = useTranslation();
   const { handleError } = useAppError();
-  const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [linkingProvider, setLinkingProvider] = useState<string | null>(null);
+  const {
+    accounts: linkedAccounts,
+    isLoading,
+    linkAccount,
+    unlinkAccount,
+    refresh: refreshLinkedAccounts,
+  } = useLinkedAccounts();
+  const {
+    status: calendarStatus,
+    isLoading: gcalIsLoading,
+    connect: connectGoogleCalendar,
+    disconnect: disconnectGoogleCalendar,
+    refresh: refreshGoogleCalendar,
+    markConnectedNow,
+  } = useGoogleCalendarIntegration();
+  const [linkingProvider, setLinkingProvider] = useState<LinkingProvider>(null);
 
-  // Google Calendar Integration State
-  const [gcalIsLoading, setGcalIsLoading] = useState(true);
-  const [gcalIsConnected, setGcalIsConnected] = useState(false);
-  const [gcalLastSync, setGcalLastSync] = useState<string | null>(null);
-
-  useEffect(() => {
-    loadLinkedAccounts();
-    checkGcalIntegration();
-  }, []);
-
-  // Handle OAuth error params from Supabase auth redirect
   useEffect(() => {
     const searchParams = new URL(window.location.href).searchParams;
     const authError = searchParams.get('auth_error');
     const authErrorDescription = searchParams.get('auth_error_description');
 
-    if (authError) {
-      toast.error(t('settings.linkedAccounts.linkFailedReason', 'Failed to link account: {{reason}}', {
-        reason: authErrorDescription || authError
-      }));
-      cleanupUrlParams(['auth_error', 'auth_error_description']);
-    }
-  }, [t]);
+    if (!authError) return;
 
-  // Handle Google Calendar OAuth callback params
+    toast.error(t('settings.linkedAccounts.linkFailedReason', 'Failed to link account: {{reason}}', {
+      reason: authErrorDescription || authError,
+    }));
+    cleanupUrlParams(['auth_error', 'auth_error_description']);
+    refreshLinkedAccounts().catch((error) => {
+      handleError(error, t('settings.linkedAccounts.loadFailed', 'Failed to refresh login methods'));
+    });
+  }, [handleError, refreshLinkedAccounts, t]);
+
   useEffect(() => {
     const searchParams = new URL(window.location.href).searchParams;
     const gcalConnected = searchParams.get('gcal_connected');
     const gcalError = searchParams.get('gcal_error');
 
     if (gcalConnected === 'true') {
-      toast.success(t('settings.integrations.gcalConnected', 'Google Calendar успешно подключён!'));
-      setGcalIsConnected(true);
-      setGcalLastSync(new Date().toISOString());
+      toast.success(t('settings.integrations.gcalConnected', 'Google Calendar connected'));
+      markConnectedNow();
+      refreshGoogleCalendar().catch((error) => {
+        handleError(error, t('settings.integrations.gcalStatusFailed', 'Failed to refresh Google Calendar status'));
+      });
       cleanupUrlParams(['gcal_connected']);
     }
 
     if (gcalError) {
-      toast.error(t('settings.integrations.gcalFailed', 'Ошибка подключения Google Calendar: {{reason}}', {
-        reason: gcalError
+      toast.error(t('settings.integrations.gcalFailed', 'Google Calendar connection failed: {{reason}}', {
+        reason: gcalError,
       }));
       cleanupUrlParams(['gcal_error']);
     }
-  }, [t]);
+  }, [handleError, markConnectedNow, refreshGoogleCalendar, t]);
 
-  /** Remove specified query params from current URL without reload */
-  const cleanupUrlParams = (params: string[]) => {
-    const newUrl = new URL(window.location.href);
-    params.forEach(p => newUrl.searchParams.delete(p));
-    window.history.replaceState(null, '', newUrl.toString());
-  };
-
-  const loadLinkedAccounts = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const identities = user.identities || [];
-
-      const accounts: LinkedAccount[] = [
-        {
-          provider: 'email',
-          email: user.email,
-          linked: identities.some(i => i.provider === 'email') || !!user.email,
-        },
-        {
-          provider: 'google',
-          email: identities.find(i => i.provider === 'google')?.identity_data?.email,
-          linked: identities.some(i => i.provider === 'google'),
-        },
-        {
-          provider: 'apple',
-          email: identities.find(i => i.provider === 'apple')?.identity_data?.email,
-          linked: identities.some(i => i.provider === 'apple'),
-        },
-      ];
-
-      setLinkedAccounts(accounts);
-    } catch (error) {
-      console.error('Failed to load linked accounts:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleLinkAccount = async (provider: 'google' | 'apple') => {
+  const handleLinkAccount = async (provider: OAuthAccountProvider) => {
     setLinkingProvider(provider);
     try {
-      // Manual linking is disabled in this Supabase project.
-      // Use signInWithOAuth — Supabase auto-links identities when
-      // the OAuth email matches an existing account ("automatic linking").
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/dashboard/settings`,
-        },
-      });
-
-      if (error) {
-        console.error('Link account error:', error);
-        toast.error(t('settings.linkedAccounts.linkFailed', 'Не удалось привязать аккаунт'));
-        setLinkingProvider(null);
-        return;
-      }
-
-      // Browser will redirect to the OAuth provider → Supabase auto-links → redirects back
+      await linkAccount(provider);
     } catch (error) {
-      console.error('Link account exception:', error);
-      toast.error(t('settings.linkedAccounts.linkFailed', 'Не удалось привязать аккаунт'));
+      handleError(error, t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
       setLinkingProvider(null);
     }
   };
 
-  const handleUnlinkAccount = async (provider: 'google' | 'apple') => {
-    const linkedCount = linkedAccounts.filter(a => a.linked).length;
+  const handleUnlinkAccount = async (provider: OAuthAccountProvider) => {
+    const linkedCount = linkedAccounts.filter((account) => account.linked).length;
     if (linkedCount <= 1) {
       toast.error(t('settings.linkedAccounts.cannotUnlinkLast', 'You must have at least one login method'));
       return;
@@ -159,105 +114,28 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
 
     setLinkingProvider(provider);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const identity = user.identities?.find(i => i.provider === provider);
-      if (!identity) {
+      const result = await unlinkAccount(provider);
+      if (!result.identityFound) {
         toast.error(t('settings.linkedAccounts.identityNotFound', 'Identity not found or already unlinked'));
-        await loadLinkedAccounts();
-        setLinkingProvider(null);
         return;
       }
 
-      const { error } = await supabase.auth.unlinkIdentity(identity);
-
-      if (error) {
-        if (error.status === 404 || error.message?.includes('not found') || error.message?.includes('primary')) {
-          toast.error(t('settings.linkedAccounts.primaryIdentity', 'Основной метод входа отвязать нельзя. В настройках Supabase также должно быть включено Manual Linking.'));
-          await loadLinkedAccounts();
-        } else if (error.message?.includes('Manual linking is disabled') || error.status === 422) {
-          toast.error('Отвязка и ручная привязка отключены в вашем проекте Supabase. Включите "Manual Linking" в настройках Authentication -> Providers.', { duration: 6000 });
-        } else {
-          handleError(error, t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
-        }
-      } else {
-        toast.success(t('settings.linkedAccounts.unlinkSuccess', 'Account unlinked'));
-        await loadLinkedAccounts();
-      }
+      toast.success(t('settings.linkedAccounts.unlinkSuccess', 'Account unlinked'));
     } catch (error) {
-      toast.error(t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
+      handleError(error, t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
     } finally {
       setLinkingProvider(null);
-    }
-  };
-
-  // ─── Google Calendar Integration Functions ───
-
-  const checkGcalIntegration = async () => {
-    try {
-      setGcalIsLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('user_integrations_status' as any)
-        .select('is_connected, updated_at')
-        .eq('user_id', user.id)
-        .eq('provider', 'google_calendar')
-        .maybeSingle() as any;
-
-      if (error && error.code !== 'PGRST116') {
-        throw error;
-      }
-
-      setGcalIsConnected(!!data?.is_connected);
-      if (data?.updated_at) {
-        setGcalLastSync(data.updated_at);
-      }
-    } catch (error) {
-      console.error('Error checking gcal integration:', error);
-    } finally {
-      setGcalIsLoading(false);
     }
   };
 
   const handleConnectGcal = async () => {
     setLinkingProvider('google_calendar');
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('No active session');
-
-      const redirectUrl = `${window.location.origin}/dashboard/settings`;
-
-      // Call Edge Function to get the Google OAuth consent URL
-      const { data, error } = await supabase.functions.invoke('google-calendar-sync', {
-        body: {
-          action: 'get_auth_url',
-          payload: { redirect_url: redirectUrl },
-        },
-      });
-
-      if (error) {
-        console.error('get_auth_url error:', error);
-        toast.error(t('settings.integrations.gcalFailed', 'Ошибка подключения Google Calendar'));
-        setLinkingProvider(null);
-        return;
-      }
-
-      if (!data?.auth_url) {
-        toast.error(t('settings.integrations.gcalNotConfigured', 'Google Calendar не настроен на сервере'));
-        setLinkingProvider(null);
-        return;
-      }
-
-      toast.info(t('settings.integrations.gcalRedirecting', 'Перенаправление в Google...'));
-
-      // Redirect to Google OAuth Consent Screen
-      window.location.href = data.auth_url;
-    } catch (err) {
-      console.error(err);
-      toast.error(t('settings.integrations.gcalFailed', 'Ошибка подключения Google Calendar'));
+      const authUrl = await connectGoogleCalendar(`${window.location.origin}/dashboard/settings`);
+      toast.info(t('settings.integrations.gcalRedirecting', 'Redirecting to Google...'));
+      window.location.href = authUrl;
+    } catch (error) {
+      handleError(error, t('settings.integrations.gcalFailed', 'Google Calendar connection failed'));
       setLinkingProvider(null);
     }
   };
@@ -265,33 +143,16 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const handleDisconnectGcal = async () => {
     setLinkingProvider('google_calendar');
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('No active session');
-
-      const { error } = await supabase.functions.invoke('google-calendar-sync', {
-        body: {
-          action: 'disconnect',
-          payload: {},
-        },
-      });
-
-      if (error) {
-        console.error('disconnect error:', error);
-        toast.error(t('settings.integrations.gcalDisconnectFailed', 'Ошибка отключения Google Calendar'));
-      } else {
-        toast.success(t('settings.integrations.gcalDisconnected', 'Google Calendar отключен'));
-        setGcalIsConnected(false);
-        setGcalLastSync(null);
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error(t('settings.integrations.gcalDisconnectFailed', 'Ошибка отключения Google Calendar'));
+      await disconnectGoogleCalendar();
+      toast.success(t('settings.integrations.gcalDisconnected', 'Google Calendar disconnected'));
+    } catch (error) {
+      handleError(error, t('settings.integrations.gcalDisconnectFailed', 'Failed to disconnect Google Calendar'));
     } finally {
       setLinkingProvider(null);
     }
   };
 
-  const getProviderIcon = (provider: string) => {
+  const getProviderIcon = (provider: LinkedAccountProvider) => {
     switch (provider) {
       case 'google':
         return (
@@ -308,40 +169,40 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
             <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
           </svg>
         );
-      default:
+      case 'email':
         return <Mail className="h-5 w-5" />;
     }
   };
 
-  const getProviderName = (provider: string) => {
+  const getProviderName = (provider: LinkedAccountProvider) => {
     switch (provider) {
       case 'google':
         return 'Google';
       case 'apple':
         return 'Apple';
-      default:
+      case 'email':
         return t('settings.linkedAccounts.email', 'Email');
     }
   };
 
-  const getProviderBgColor = (provider: string) => {
+  const getProviderBgColor = (provider: LinkedAccountProvider) => {
     switch (provider) {
       case 'google':
         return 'bg-destructive/15';
       case 'apple':
         return 'bg-muted';
-      default:
+      case 'email':
         return 'bg-primary/15';
     }
   };
 
-  const getProviderIconColor = (provider: string) => {
+  const getProviderIconColor = (provider: LinkedAccountProvider) => {
     switch (provider) {
       case 'google':
         return 'text-destructive';
       case 'apple':
         return 'text-foreground';
-      default:
+      case 'email':
         return 'text-primary';
     }
   };
@@ -362,106 +223,64 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
         {t('settings.linkedAccounts.title', 'Login Methods')}
       </h3>
       <Card className="divide-y divide-border/50 overflow-hidden">
-        {linkedAccounts.map((account) => (
-          <div key={account.provider} className="flex items-center gap-4 p-4">
-            <div className={cn(
-              "h-11 w-11 rounded-2xl flex items-center justify-center shrink-0",
-              getProviderBgColor(account.provider)
-            )}>
-              <div className={getProviderIconColor(account.provider)}>
-                {getProviderIcon(account.provider)}
+        {linkedAccounts.map((account) => {
+          const accountEmail = account.provider === 'email' ? account.email || userEmail : account.email;
+          const oauthProvider = isOAuthProvider(account.provider) ? account.provider : null;
+
+          return (
+            <div key={account.provider} className="flex items-center gap-4 p-4">
+              <div className={cn(
+                'h-11 w-11 rounded-2xl flex items-center justify-center shrink-0',
+                getProviderBgColor(account.provider)
+              )}>
+                <div className={getProviderIconColor(account.provider)}>
+                  {getProviderIcon(account.provider)}
+                </div>
               </div>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="font-medium">{getProviderName(account.provider)}</span>
-                {account.linked && (
-                  <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/30">
-                    {t('settings.linkedAccounts.connected', 'Connected')}
-                  </Badge>
-                )}
-                {account.provider === 'apple' && !account.linked && (
-                  <Badge variant="secondary" className="text-xs h-4 px-1.5 uppercase tracking-wider font-bold opacity-70">
-                    {t('common.coming_soon', 'Скоро')}
-                  </Badge>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{getProviderName(account.provider)}</span>
+                  {account.linked && (
+                    <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/30">
+                      {t('settings.linkedAccounts.connected', 'Connected')}
+                    </Badge>
+                  )}
+                </div>
+                {accountEmail && (
+                  <p className="text-sm text-muted-foreground truncate">{accountEmail}</p>
                 )}
               </div>
-              {account.email && (
-                <p className="text-sm text-muted-foreground truncate">{account.email}</p>
+              {oauthProvider && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0 rounded-xl"
+                  disabled={linkingProvider !== null}
+                  onClick={() => account.linked ? handleUnlinkAccount(oauthProvider) : handleLinkAccount(oauthProvider)}
+                >
+                  {linkingProvider === account.provider ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : account.linked ? (
+                    <>
+                      <Unlink className="h-4 w-4 mr-1" />
+                      {t('settings.linkedAccounts.unlink', 'Unlink')}
+                    </>
+                  ) : (
+                    <>
+                      <Link2 className="h-4 w-4 mr-1" />
+                      {t('settings.linkedAccounts.link', 'Link')}
+                    </>
+                  )}
+                </Button>
               )}
             </div>
-            {account.provider !== 'email' && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="shrink-0 rounded-xl"
-                disabled={linkingProvider !== null || (account.provider === 'apple' && !account.linked)}
-                onClick={() => account.linked ? handleUnlinkAccount(account.provider as 'google' | 'apple') : handleLinkAccount(account.provider as 'google' | 'apple')}
-              >
-                {linkingProvider === account.provider ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : account.linked ? (
-                  <>
-                    <Unlink className="h-4 w-4 mr-1" />
-                    {t('settings.linkedAccounts.unlink', 'Unlink')}
-                  </>
-                ) : (
-                  <>
-                    <Link2 className="h-4 w-4 mr-1" />
-                    {t('settings.linkedAccounts.link', 'Link')}
-                  </>
-                )}
-              </Button>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </Card>
 
-      {/* Integrations Section */}
-      <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1 mt-8">
-        {t('settings.integrations.title', 'Интеграции')}
-      </h3>
-      <Card className="divide-y divide-border/50 overflow-hidden">
-        <div className="flex items-center gap-4 p-4">
-          <div className="h-11 w-11 rounded-2xl flex items-center justify-center shrink-0 bg-blue-500/15">
-            <CalendarSync className="h-5 w-5 text-blue-500" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Google Calendar</span>
-              {gcalIsConnected && (
-                <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
-                  {t('settings.integrations.active', 'Активно')}
-                </Badge>
-              )}
-            </div>
-            <p className="text-sm text-muted-foreground truncate">
-              {t('settings.integrations.gcalDesc', 'Синхронизация бронирований с календарем')}
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="shrink-0 rounded-xl"
-            disabled={linkingProvider === 'google_calendar' || gcalIsLoading}
-            onClick={() => gcalIsConnected ? handleDisconnectGcal() : handleConnectGcal()}
-          >
-            {linkingProvider === 'google_calendar' || gcalIsLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : gcalIsConnected ? (
-              <>
-                <Unlink className="h-4 w-4 mr-1" />
-                {t('settings.linkedAccounts.unlink', 'Unlink')}
-              </>
-            ) : (
-              <>
-                <Link2 className="h-4 w-4 mr-1" />
-                {t('settings.linkedAccounts.link', 'Link')}
-              </>
-            )}
-          </Button>
-        </div>
-      </Card>
+      {/* Google Calendar integration временно скрыта до конфигурации OAuth-секретов
+          (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET / GCAL_STATE_SECRET).
+          Раскомментировать после добавления секретов в Lovable Cloud. */}
     </div>
   );
 }

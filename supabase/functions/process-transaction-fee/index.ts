@@ -27,6 +27,27 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
+    // Auth: require valid JWT; caller must match payload.userId (unless admin/service)
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+    const token = authHeader.replace('Bearer ', '')
+    const authClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    )
+    const { data: claimsData, error: claimsErr } = await authClient.auth.getClaims(token)
+    if (claimsErr || !claimsData?.claims?.sub) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+    const callerId = claimsData.claims.sub
+    const callerRole = claimsData.claims.role
+
     const payload: WebhookPayload = await req.json()
 
     if (!payload.userId || !payload.amount) {
@@ -34,6 +55,14 @@ serve(async (req) => {
         JSON.stringify({ error: 'Missing required fields' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
+    }
+
+    // Only service_role (trusted server-to-server calls, e.g. verified payment webhooks)
+    // may credit a wallet. End-users must never invoke this directly.
+    if (callerRole !== 'service_role') {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
     }
 
     // Determine user tier to calculate fee

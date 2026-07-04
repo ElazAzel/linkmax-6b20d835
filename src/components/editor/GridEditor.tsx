@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useMemo, useId, useRef } from 'react';
+import { memo, useCallback, useState, useMemo, useId, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
@@ -55,9 +55,11 @@ import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { canCreateSection, createSection, getSections, type SectionMeta } from '@/lib/editor/section-engine';
 import { BlockContextToolbar } from './BlockContextToolbar';
+import { FloatingBlockToolbar } from './v2/FloatingBlockToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
@@ -120,6 +122,8 @@ interface GridEditorProps {
   onTransform?: (block: Block, toType: BlockType) => void;
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => void;
   pageNiche?: string;
+  /** Block ID that was just inserted — gets a one-time appear animation + ring */
+  recentlyAddedBlockId?: string | null;
 }
 
 interface SortableGridBlockItemProps {
@@ -145,6 +149,7 @@ interface SortableGridBlockItemProps {
   onMoveUp?: () => void;
   onMoveDown?: () => void;
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset) => void;
+  isRecentlyAdded?: boolean;
 }
 
 function SortableGridBlockItem({
@@ -168,6 +173,7 @@ function SortableGridBlockItem({
   isLast = false,
   onMoveUp,
   onMoveDown,
+  isRecentlyAdded = false,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const {
@@ -196,52 +202,70 @@ function SortableGridBlockItem({
 
   const selected = isSelected || isMultiSelected;
 
+  // Empty-hint detection (e.g. link without URL)
+  const emptyHint = useMemo(() => getBlockEmptyHint(block), [block]);
+
+  // Smooth scroll into view + ring highlight when this block was just inserted
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const setRefs = useCallback((node: HTMLDivElement | null) => {
+    wrapperRef.current = node;
+    setNodeRef(node);
+  }, [setNodeRef]);
+
+  useEffect(() => {
+    if (isRecentlyAdded && wrapperRef.current) {
+      requestAnimationFrame(() => {
+        wrapperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  }, [isRecentlyAdded]);
+
+  const [isHovered, setIsHovered] = useState(false);
+  // Quiet canvas: toolbar appears only on selection (kept hover for label/affordance hint)
+  const showToolbar = selected;
+
   return (
     <div
-      ref={setNodeRef}
+      ref={setRefs}
       style={style}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-all duration-300 rounded-2xl border-0',
+        'relative group transition-shadow duration-200 rounded-2xl border-0',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
-        isDragging && 'opacity-50 ring-4 ring-primary/30 scale-95 z-50',
+        // Quiet hover: 1px outline + soft lift, no background tint
+        !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
+        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
         // P4: Selection ring
         selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
         isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
+        // Recently-added: glowing ring + scale-in fade
+        isRecentlyAdded && !isDragging && 'ring-2 ring-primary/70 ring-offset-2 ring-offset-background animate-scale-in',
         // P5: Review mode dimming
         isDimmed && 'opacity-30 pointer-events-none',
       )}
     >
-      {/* Drag Handle */}
-      <div
-        className={cn(
-          "absolute top-2 left-2 z-40 touch-none",
-          isMobile
-            ? "opacity-100"
-            : "cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity",
-          isDragging && "opacity-0"
-        )}
-        {...attributes}
-        {...listeners}
-      >
-        <div className="bg-card p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
-          <GripVertical className="h-5 w-5 text-muted-foreground" />
-        </div>
-      </div>
-
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
         <div className="pointer-events-none w-full h-full isolate bg-card rounded-2xl overflow-hidden" data-editor-block>
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click Overlay */}
+        {/* Click + Drag Overlay — single layer: dnd-kit's PointerSensor
+            (activationConstraint distance:5) starts drag only on movement,
+            otherwise the click fires for selection. */}
         <button
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/20 active:bg-accent/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          {...attributes}
+          {...listeners}
+          className={cn(
+            'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
+            isDragging ? 'cursor-grabbing' : 'cursor-grab',
+          )}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -251,9 +275,6 @@ function SortableGridBlockItem({
             e.preventDefault();
             e.stopPropagation();
             onBlockDoubleClick?.(block);
-          }}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
           }}
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
@@ -272,74 +293,67 @@ function SortableGridBlockItem({
         />
       )}
 
-      {/* Block type label - bottom-left */}
-      <div className="absolute bottom-1.5 left-1.5 z-30 pointer-events-none">
-        <span className="inline-block px-1.5 py-px rounded-md bg-background text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
+      {/* Empty-hint chip — appears when block is missing required data */}
+      {emptyHint.isEmpty && !isDragging && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(block);
+          }}
+          className="absolute top-2 left-2 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/95 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
+          aria-label={t(emptyHint.hintKey, emptyHint.hintLabel)}
+        >
+          <Edit2 className="h-3 w-3" />
+          <span>{t(emptyHint.hintKey, emptyHint.hintLabel)}</span>
+        </button>
+      )}
+
+      {/* Always-visible quick-edit pencil — opens the block editor in one tap */}
+      {!isDragging && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onEdit(block);
+          }}
+          onTouchEnd={(e) => e.stopPropagation()}
+          className={cn(
+            'absolute top-2 right-2 z-40 inline-flex items-center justify-center rounded-full',
+            'bg-background/90 backdrop-blur-md border border-border/20 text-foreground/80',
+            'shadow-[0_4px_12px_-4px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:scale-105',
+            'transition-all active:scale-95',
+            isMobile ? 'h-8 w-8 opacity-90' : 'h-7 w-7 opacity-0 group-hover:opacity-100 focus:opacity-100',
+            selected && 'opacity-0',
+          )}
+          aria-label={t('editor.blockToolbar.edit', 'Редактировать')}
+          title={t('editor.blockToolbar.edit', 'Редактировать')}
+        >
+          <Edit2 className="h-3.5 w-3.5" />
+        </button>
+      )}
+
+      {/* Block type label — only on hover/select to keep canvas quiet */}
+      <div
+        className={cn(
+          'absolute bottom-2 left-2 z-30 pointer-events-none transition-opacity duration-200',
+          (isHovered || selected) && !isDragging ? 'opacity-100' : 'opacity-0',
+        )}
+      >
+        <span className="inline-block px-1.5 py-px rounded-md bg-background/90 backdrop-blur text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
           {typeLabel}
         </span>
       </div>
 
-      {/* Controls - top-right */}
-      <div className={cn(
-        "absolute top-1.5 right-1.5 flex gap-1 z-30 transition-opacity",
-        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-      )}>
-        <Button
-          size="sm"
-          variant="secondary"
-          className="h-7 w-7 p-0 rounded-lg shadow-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEdit(block);
-          }}
-          onTouchEnd={(e) => { e.stopPropagation(); }}
-        >
-          <Edit2 className="h-3.5 w-3.5" />
-        </Button>
-        {block.type !== 'profile' && (
-          <Button
-            size="sm"
-            variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm hidden sm:flex"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onDuplicate?.(block.id);
-            }}
-            onTouchEnd={(e) => { e.stopPropagation(); }}
-          >
-            <Copy className="h-3.5 w-3.5" />
-          </Button>
-        )}
-        {isPremium && block.type !== 'profile' && (
-          <Button
-            size="sm"
-            variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm border-primary/20 hover:border-primary/50 hidden sm:flex"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onStartExperiment?.(block);
-            }}
-          >
-            <FlaskConical className="h-3.5 w-3.5 text-primary" />
-          </Button>
-        )}
-        <Button
-          size="sm"
-          variant="destructive"
-          className="h-7 w-7 p-0 rounded-lg shadow-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onDelete(block.id);
-          }}
-          onTouchEnd={(e) => { e.stopPropagation(); }}
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
-      </div>
+      {/* Floating toolbar — appears on hover/select. On mobile показываем при выделении */}
+      <FloatingBlockToolbar
+        visible={showToolbar && !isDragging && !isMultiSelected}
+        isProfile={block.type === 'profile'}
+        onEdit={() => onEdit(block)}
+        onDuplicate={onDuplicate ? () => onDuplicate(block.id) : undefined}
+        onDelete={() => onDelete(block.id)}
+      />
 
       {/* P5: Context toolbar for single-selected block */}
       {isSelected && !isMultiSelected && !isDragging && (
@@ -429,6 +443,7 @@ export const GridEditor = memo(function GridEditor({
   onTransform,
   onInsertPreset,
   pageNiche,
+  recentlyAddedBlockId,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -527,6 +542,17 @@ export const GridEditor = memo(function GridEditor({
     setInsertPosition(position);
     setInsertSheetOpen(true);
   }, []);
+
+  // Listen for global "open insert sheet" event (e.g. from SmartActionDock).
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ position?: number }>).detail;
+      const pos = typeof detail?.position === 'number' ? detail.position : blocks.length;
+      openInsertSheet(pos);
+    };
+    window.addEventListener('editor:open-insert-sheet', handler as EventListener);
+    return () => window.removeEventListener('editor:open-insert-sheet', handler as EventListener);
+  }, [openInsertSheet, blocks.length]);
 
   const handleInsertSheetOpenChange = useCallback((open: boolean) => {
     if (!open) {
@@ -726,18 +752,19 @@ export const GridEditor = memo(function GridEditor({
             const reordered = arrayMove(contentBlocks, index, index + 1);
             onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
           } : undefined}
+          isRecentlyAdded={recentlyAddedBlockId === block.id}
         />
       );
     });
 
     return items;
-  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks]);
+  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId]);
 
   return (
-    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-2 pb-32 md:pb-24">
+    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-5 pb-32 md:pb-24 bg-surface-quiet rounded-card">
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
-        <div className="relative isolate bg-card rounded-2xl overflow-hidden" data-onboarding="profile-block" data-editor-block>
+        <div className="relative isolate qb-card overflow-hidden" data-onboarding="profile-block" data-editor-block>
           <InlineProfileEditor
             block={profileBlock}
             onUpdate={(updates) => onUpdateBlock(profileBlock.id, updates)}
@@ -757,7 +784,7 @@ export const GridEditor = memo(function GridEditor({
           items={contentBlocks.map(b => b.id)}
           strategy={verticalListSortingStrategy}
         >
-          <div className="grid grid-cols-2 xs:grid-cols-2 gap-2 sm:gap-3 grid-flow-row-dense">
+          <div className="grid grid-cols-2 xs:grid-cols-2 gap-2.5 sm:gap-3.5 grid-flow-row-dense auto-rows-[minmax(0,auto)]">
             {gridItems}
           </div>
         </SortableContext>
@@ -769,64 +796,49 @@ export const GridEditor = memo(function GridEditor({
         </DragOverlay>
       </DndContext>
 
-      {/* Bottom Add Button */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <motion.div
-          className="col-span-1 md:col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8"
-          initial={{ opacity: 0, y: 20 }}
+      {/* Subtle bottom add — quiet hint, not a duplicate CTA. Primary action lives in SmartActionDock. */}
+      {contentBlocks.length > 0 && (
+        <motion.button
+          type="button"
+          onClick={() => openInsertSheet(blocks.length)}
+          className="w-full mt-4 h-14 rounded-2xl border border-dashed border-border/40 bg-transparent hover:bg-accent/30 hover:border-border transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.15, duration: 0.25 }}
         >
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            pageNiche={pageNiche}
-            existingBlocks={blocks.map(b => b.type as BlockType)}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
-        </motion.div>
-      </div>
-
-      {/* Empty state */}
-      {contentBlocks.length === 0 && (
-        <div className="text-center py-12 border-2 border-dashed border-border rounded-2xl mx-2 bg-card">
-          <p className="text-base text-muted-foreground mb-4 px-6">
-            {t('dashboard.addFirstBlock', 'Нажмите + чтобы добавить первый блок')}
-          </p>
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            existingBlocks={blocks.map(b => b.type as BlockType)}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
-        </div>
+          <Plus className="h-4 w-4" />
+          <span className="text-sm font-medium">
+            {t('editor.insert.addBelow', 'Добавить блок ниже')}
+          </span>
+        </motion.button>
       )}
 
-      {/* Fixed FAB on mobile */}
-      {isMobile && (
+      {/* Empty state — single, generous, friendly */}
+      {contentBlocks.length === 0 && (
         <motion.div
-          className="fixed bottom-24 right-4 z-40"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="text-center py-16 px-6 mt-2 rounded-3xl bg-gradient-to-br from-primary/5 via-card to-card border border-border/10"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <BlockInsertButton
-            onInsert={handleSharedInsert}
-            onInsertPreset={handleSharedInsertPreset}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            currentBlockCount={blocks.length}
-            renderSheet={false}
-            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
-          />
+          <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <Plus className="h-7 w-7 text-primary" strokeWidth={2.5} />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-1">
+            {t('dashboard.empty.title', 'Соберите страницу за минуту')}
+          </h3>
+          <p className="text-sm text-muted-foreground mb-5 max-w-sm mx-auto">
+            {t('dashboard.empty.desc', 'Начните с оффера, кнопки или мессенджера — всё, чтобы получить первого клиента.')}
+          </p>
+          <button
+            type="button"
+            onClick={() => openInsertSheet(blocks.length)}
+            data-onboarding="add-block"
+            className="inline-flex items-center gap-2 h-11 rounded-xl px-5 bg-primary text-primary-foreground font-semibold text-sm shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.4)] hover:bg-primary/90 active:scale-[0.98] transition-all"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2.5} />
+            {t('dashboard.empty.cta', 'Добавить первый блок')}
+          </button>
         </motion.div>
       )}
 

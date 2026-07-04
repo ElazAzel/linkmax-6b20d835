@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
  * Shows all user events with stats, registrations access, and quick actions
  */
 import { memo, useState, useEffect } from 'react';
+import { supabase } from '@/platform/supabase/client';
 
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
-import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { Button } from '@/components/ui/button';
@@ -106,17 +106,18 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
         if (error) throw error;
 
         const eventsWithStats: EventData[] = await Promise.all(
-          (eventsData || []).map(async (event) => {
+          (eventsData || []).map(async (event: any) => {
             const { data: regs } = await supabase
               .from('event_registrations')
               .select('id, status, event_tickets(status)')
               .eq('event_id', event.id);
 
-            const total = regs?.filter(r => r.status !== 'cancelled').length || 0;
-            const checkedIn = regs?.filter(r =>
+            const allRegs = (regs || []) as Array<{ id: string; status: string; event_tickets?: Array<{ status: string }> }>;
+            const total = allRegs.filter(r => r.status !== 'cancelled').length;
+            const checkedIn = allRegs.filter(r =>
               r.event_tickets?.some((t: { status: string }) => t.status === 'used')
-            ).length || 0;
-            const pending = regs?.filter(r => r.status === 'pending').length || 0;
+            ).length;
+            const pending = allRegs.filter(r => r.status === 'pending').length;
 
             return {
               id: event.id,
@@ -191,7 +192,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       if (error) throw error;
 
       const headers = [t('events.csvName', 'Имя'), 'Email', t('events.csvPhone', 'Телефон'), t('events.csvStatus', 'Статус'), t('events.csvDate', 'Дата регистрации')];
-      const rows = (data || []).map(r => [
+      const rows = ((data || []) as Array<{ attendee_name: string; attendee_email: string; attendee_phone: string | null; status: string; created_at: string }>).map(r => [
         r.attendee_name,
         r.attendee_email,
         r.attendee_phone || '',

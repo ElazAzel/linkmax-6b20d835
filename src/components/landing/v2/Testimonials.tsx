@@ -1,5 +1,9 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import Star from 'lucide-react/dist/esm/icons/star';
+import BriefcaseBusiness from 'lucide-react/dist/esm/icons/briefcase-business';
+import CakeSlice from 'lucide-react/dist/esm/icons/cake-slice';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Wrench from 'lucide-react/dist/esm/icons/wrench';
 import { useTranslation } from "react-i18next";
 import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils/utils";
@@ -25,31 +29,49 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 export const Testimonials = () => {
     const { t } = useTranslation();
 
-    const testimonials = [
+    const scenarios = [
         {
-            name: 'Entrepreneurship Almau',
-            role: t('landing.testimonials.role1', '709 просмотров · Образование'),
-            content: t('landing.testimonials.review1', "Создали страницу за 5 минут с AI. 360+ заявок через WhatsApp за первый месяц — все уведомления приходят в Telegram."),
-            avatar: "🎓"
+            title: t('landing.testimonials.name1_v2', 'Бьюти-студия на два мастера'),
+            context: t('landing.testimonials.role1_v2', 'Алматы · запись и предоплата'),
+            signal: t('landing.testimonials.metric1_v2', 'Свободные окна'),
+            content: t('landing.testimonials.review1_v2', 'Клиент видит услуги, выбирает удобное время и оставляет предоплату. Администратор получает заявку в Telegram и сразу понимает, кто отвечает.'),
+            Icon: Scissors,
         },
         {
-            name: 'Elazart Studio',
-            role: t('landing.testimonials.role2', '641 просмотр · Бизнес, Алматы'),
-            content: t('landing.testimonials.review2', "Перенесли портфолио из Instagram на свою страницу. Клиенты сразу видят прайс и пишут в WhatsApp — конверсия выросла."),
-            avatar: "🎨"
+            title: t('landing.testimonials.name2_v2', 'Репетитор с набором групп'),
+            context: t('landing.testimonials.role2_v2', 'Астана · формы и мессенджеры'),
+            signal: t('landing.testimonials.metric2_v2', 'Единый inbox'),
+            content: t('landing.testimonials.review2_v2', 'Заявки с лендинга, Instagram и WhatsApp собираются в одну ленту. Родители получают понятный следующий шаг вместо ожидания ответа в директе.'),
+            Icon: GraduationCap,
         },
         {
-            name: t('landing.testimonials.name3', 'Home Cakes Asel'),
-            role: t('landing.testimonials.role3', '55 просмотров · Кулинария'),
-            content: t('landing.testimonials.review3', "Торты на заказ — нужен прайс и фото. Собрала страницу за 3 минуты, теперь клиенты не спрашивают цены в директе."),
-            avatar: "🧁"
+            title: t('landing.testimonials.name3_v2', 'Творческая студия'),
+            context: t('landing.testimonials.role3_v2', 'Караганда · команда 4 человека'),
+            signal: t('landing.testimonials.metric3_v2', 'Канбан заявок'),
+            content: t('landing.testimonials.review3_v2', 'Команда работает с телефона: видно, кто взял заявку, когда ответил и в каком статусе находится клиент. Новые обращения не растворяются в чатах.'),
+            Icon: Users,
         },
         {
-            name: t('landing.testimonials.name4', 'Coach Arman'),
-            role: t('landing.testimonials.role4', '49 просмотров · Фитнес'),
-            content: t('landing.testimonials.review4', "Расписание, прайс и кнопка записи — всё на одной странице. Уведомления о записях прямо в Telegram."),
-            avatar: "💪"
-        }
+            title: t('landing.testimonials.name4_v2', 'Онлайн-консультант'),
+            context: t('landing.testimonials.role4_v2', 'онлайн · календарь и оплата'),
+            signal: t('landing.testimonials.metric4_v2', 'Слот + платеж'),
+            content: t('landing.testimonials.review4_v2', 'Витрина, расписание и оплата находятся на одной странице. Клиент не прыгает между ссылками, а сразу выбирает формат консультации.'),
+            Icon: BriefcaseBusiness,
+        },
+        {
+            title: t('landing.testimonials.name5_v2', 'Домашняя кондитерская'),
+            context: t('landing.testimonials.role5_v2', 'Алматы · каталог и заказ'),
+            signal: t('landing.testimonials.metric5_v2', 'Заказ без переписки'),
+            content: t('landing.testimonials.review5_v2', 'Позиции, сроки, варианты начинки и форма заказа собраны в одном месте. В переписку попадают уже уточнения, а не базовые вопросы.'),
+            Icon: CakeSlice,
+        },
+        {
+            title: t('landing.testimonials.name6_v2', 'Сервисная команда'),
+            context: t('landing.testimonials.role6_v2', 'Шымкент · выездные услуги'),
+            signal: t('landing.testimonials.metric6_v2', 'Статус работы'),
+            content: t('landing.testimonials.review6_v2', 'Заявка проходит понятные этапы: новая, в работе, оплачено, закрыто. Клиенту проще объяснить следующий шаг, а менеджеру - не потерять задачу.'),
+            Icon: Wrench,
+        },
     ];
 
     return (
@@ -60,39 +82,39 @@ export const Testimonials = () => {
             <div className="container px-4 mx-auto relative">
                 <Reveal>
                     <h2 className="text-section-title text-center mb-4">
-                        {t('landing.testimonials.title', 'Реальные результаты')}{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight', 'наших пользователей')}</span>
+                        {t('landing.testimonials.title_v2', 'Рабочие сценарии')}{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.highlight_v2', 'для услуг')}</span>
                     </h2>
                 </Reveal>
                 <Reveal delay={100}>
                     <p className="text-center text-muted-foreground mb-12 max-w-lg mx-auto">
-                        {t('landing.testimonials.subtitle', 'Experts, coaches, and small businesses trust LinkMAX to grow.')}
+                        {t('landing.testimonials.subtitle_v2', 'Показываем, какие задачи закрывает LinkMAX до того, как вам понадобится тяжелая CRM или набор разрозненных сервисов.')}
                     </p>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 relative z-10">
-                    {testimonials.map((testimonial, i) => (
-                        <Reveal key={i} delay={i * 100}>
-                            <div className="glass border-white/10 rounded-2xl sm:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-6 transition-all duration-700 hover:-translate-y-3 hover:bg-white/10 shadow-glass-lg group h-full relative overflow-hidden">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 relative z-10">
+                    {scenarios.map((scenario, i) => (
+                        <Reveal key={i} delay={i * 80}>
+                            <div className="glass border-white/10 rounded-2xl sm:rounded-[2rem] p-6 sm:p-7 flex flex-col gap-4 transition-all duration-700 hover:-translate-y-2 hover:bg-white/10 shadow-glass-lg group h-full relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                                
-                                <div className="flex gap-1.5 text-primary relative">
-                                    {[...Array(5)].map((_, j) => (
-                                        <Star key={j} className="w-4 h-4 fill-current drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)] group-hover:scale-125 transition-transform duration-500" style={{ transitionDelay: `${j * 50}ms` }} />
-                                    ))}
-                                </div>
-                                
-                                <p className="text-base md:text-lg leading-relaxed text-foreground/80 font-medium italic relative">
-                                    "{testimonial.content}"
-                                </p>
-                                
-                                <div className="flex items-center gap-4 mt-auto relative pt-4 border-t border-white/5">
-                                    <div className="h-12 w-12 border-2 border-white/20 rounded-2xl shadow-glass flex items-center justify-center bg-primary/10 text-xl">
-                                        {testimonial.avatar}
+
+                                <div className="flex items-start justify-between gap-3 relative">
+                                    <div className="h-11 w-11 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center text-primary">
+                                        <scenario.Icon className="h-5 w-5" />
                                     </div>
+                                    <span className="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary/80">
+                                        {scenario.signal}
+                                    </span>
+                                </div>
+
+                                <p className="text-sm md:text-base leading-relaxed text-foreground/85 font-medium relative">
+                                    {scenario.content}
+                                </p>
+
+                                <div className="flex items-center gap-3 mt-auto relative pt-4 border-t border-white/5">
                                     <div>
-                                        <div className="text-sm font-black tracking-tight text-foreground">{testimonial.name}</div>
-                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">{testimonial.role}</div>
+                                        <div className="text-sm font-bold tracking-tight text-foreground">{scenario.title}</div>
+                                        <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary/70">{scenario.context}</div>
                                     </div>
                                 </div>
                             </div>

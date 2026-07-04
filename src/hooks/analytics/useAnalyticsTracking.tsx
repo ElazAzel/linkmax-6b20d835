@@ -5,7 +5,6 @@
  */
 
 import { useEffect, useCallback, useRef } from 'react';
-import { session } from '@/lib/storage';
 import {
   trackPageView,
   trackBlockClick,
@@ -22,6 +21,7 @@ interface UseAnalyticsTrackingOptions {
 
 export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTrackingOptions) {
   const hasTrackedView = useRef(false);
+  const trackedPageId = useRef<string | undefined>(undefined);
 
   // Disable tracking inside dashboard to prevent 403 errors on unpublished pages
   const isInsideDashboard = typeof window !== 'undefined' && window.location.pathname.includes('/dashboard');
@@ -29,15 +29,15 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
 
   // Track page view on mount (only once per session per page)
   useEffect(() => {
-    if (!pageId || !trackingEnabled || hasTrackedView.current) return;
+    if (!pageId || !trackingEnabled) return;
 
-    // Check if we've already tracked this page in this session
-    const sessionKey = `linkmax_viewed_${pageId}`;
-    const alreadyViewed = session.get(sessionKey);
+    if (trackedPageId.current !== pageId) {
+      hasTrackedView.current = false;
+      trackedPageId.current = pageId;
+    }
 
-    if (!alreadyViewed) {
+    if (!hasTrackedView.current) {
       trackPageView(pageId);
-      session.set(sessionKey, 'true');
       hasTrackedView.current = true;
       // Start tracking session duration for this page visit
       initSessionDurationTracking(pageId);
@@ -49,7 +49,7 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
     (blockId: string, blockType?: string, blockTitle?: string, experimentId?: string, variantLabel?: string) => {
       if (!pageId || !trackingEnabled) return;
       trackBlockClick(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
-      trackClickLink(blockTitle, blockType);
+      trackClickLink(blockTitle);
     },
     [pageId, trackingEnabled]
   );

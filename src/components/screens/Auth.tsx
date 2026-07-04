@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,9 @@ import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import UserIcon from 'lucide-react/dist/esm/icons/user';
 import { trackAuthEvent } from '@/services/authFunnel';
 import { session } from '@/lib/storage';
 import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
@@ -54,7 +57,18 @@ const createAuthSchema = (t: (key: string, fallback: string) => string) =>
 type AuthMode = 'signin' | 'signup' | 'reset' | 'reset-telegram' | 'update-password';
 type TelegramResetStep = 'request' | 'verify';
 
-export default function Auth() {
+function normalizeDesiredSlug(value: string | null): string | null {
+  if (!value) return null;
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .replace(/^@/, '')
+    .replace(/[^a-z0-9._-]/g, '')
+    .slice(0, 32);
+  return normalized.length >= 3 ? normalized : null;
+}
+
+export const Auth = memo(function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
@@ -65,7 +79,7 @@ export default function Auth() {
     'auth.seo.description',
     'Access your LinkMAX dashboard to build and publish your link in bio page.'
   );
-  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram } = useAuth();
+  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, signOut } = useAuth();
   const { handleError } = useAppError();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
@@ -74,9 +88,12 @@ export default function Auth() {
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [signupEmailSent, setSignupEmailSent] = useState(false);
   const [passwordUpdated, setPasswordUpdated] = useState(false);
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(() => searchParams.get('method') === 'email');
   const [showMoreOptions, setShowMoreOptions] = useState(false);
-  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signup');
+  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>(() =>
+    searchParams.get('mode') === 'signin' ? 'signin' : 'signup'
+  );
+  const fieldFocusRef = useRef<Set<string>>(new Set());
 
   // Telegram password reset state
   const [telegramResetStep, setTelegramResetStep] = useState<TelegramResetStep>('request');
@@ -94,13 +111,33 @@ export default function Auth() {
   const fromSource = searchParams.get('from');
   const nicheParam = searchParams.get('niche');
   const refSlug = searchParams.get('ref_slug');
+  const desiredSlug = normalizeDesiredSlug(searchParams.get('username') || searchParams.get('slug'));
+  const previewSlug = desiredSlug || normalizeDesiredSlug(refSlug);
+  const hasSignupContext = Boolean(fromSource || nicheParam || previewSlug);
+
+  const nicheContextLabel =
+    nicheParam === 'beauty'
+      ? t('auth.context.beauty', 'для записи клиентов')
+      : nicheParam === 'education'
+        ? t('auth.context.education', 'для занятий и учеников')
+        : nicheParam
+          ? t('auth.context.generic', 'под вашу сферу')
+          : null;
+
+  const trackFieldFocus = (field: string, mode: 'signin' | 'signup' | 'reset' = activeTab) => {
+    const key = `${mode}:${field}`;
+    if (fieldFocusRef.current.has(key)) return;
+    fieldFocusRef.current.add(key);
+    trackAuthEvent('auth_field_focus', { field, mode });
+  };
 
   // Store growth source params in window.sessionStorage for post-auth use
   useEffect(() => {
     if (fromSource) window.sessionStorage.setItem('lnkmx_signup_from', fromSource);
     if (nicheParam) window.sessionStorage.setItem('lnkmx_signup_niche', nicheParam);
     if (refSlug) window.sessionStorage.setItem('lnkmx_signup_ref_slug', refSlug);
-  }, [fromSource, nicheParam, refSlug]);
+    if (desiredSlug) window.sessionStorage.setItem('lnkmx_signup_desired_slug', desiredSlug);
+  }, [fromSource, nicheParam, refSlug, desiredSlug]);
 
   // Persistence for deep-linking
   const hashParams = new URL(window.location.href).hash.substring(1);
@@ -114,6 +151,11 @@ export default function Auth() {
 
   useEffect(() => {
     if (authError) {
+      trackAuthEvent('auth_error', {
+        method: 'oauth_redirect',
+        stage: 'redirect',
+        error: authErrorDescription || authError,
+      });
       toast.error(t('auth.oauthError', 'Authentication Error: {{error}}', { error: authErrorDescription || authError }));
       // Clean up URL without triggering re-renders
       const newUrl = new URL(window.location.href);
@@ -147,24 +189,41 @@ export default function Auth() {
     }
   }, [urlMode]);
 
-  // Redirect if already logged in (but not during password update)
+  // Apply referral once when an authenticated user lands on /auth
+  const referralAppliedRef = useRef(false);
+  useEffect(() => {
+    if (user && refCode && !referralAppliedRef.current) {
+      referralAppliedRef.current = true;
+      applyReferralCode(refCode, user.id).then((result) => {
+        if (result.success) {
+          toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
+        }
+      });
+    }
+  }, [user, refCode, t]);
+
+  // Auto-redirect only when there's an explicit return target or signup builder intent.
+  // Otherwise show the "already signed in" card so the user can choose.
   useEffect(() => {
     if (user && authMode !== 'update-password') {
-      // Apply referral code if present
-      if (refCode) {
-        applyReferralCode(refCode, user.id).then((result) => {
-          if (result.success) {
-            toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
-          }
-        });
-      }
       const shouldOpenBuilder = session.get<boolean>(NEW_USER_BUILDER_SESSION_KEY);
       if (shouldOpenBuilder) {
         session.remove(NEW_USER_BUILDER_SESSION_KEY);
+        navigate(safeReturnTo || NEW_USER_BUILDER_ROUTE);
+        return;
       }
-      navigate(safeReturnTo || (shouldOpenBuilder ? NEW_USER_BUILDER_ROUTE : '/dashboard'));
+
+      if (safeReturnTo) {
+        navigate(safeReturnTo);
+      }
     }
-  }, [user, navigate, refCode, authMode, safeReturnTo]);
+  }, [user, navigate, authMode, safeReturnTo]);
+
+  const handleSignOutAndStay = async () => {
+    trackAuthEvent('auth_tab_switch', { tab: 'signout' });
+    await signOut();
+    toast.success(t('auth.signedOut', 'Signed out'));
+  };
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -395,7 +454,7 @@ export default function Auth() {
   };
 
   const handleGoogleSignIn = async () => {
-    trackAuthEvent('auth_oauth_click', { provider: 'google' });
+    trackAuthEvent('auth_oauth_click', { provider: 'google', intent: activeTab });
     setIsOAuthLoading('google');
     const { error } = await signInWithGoogle(safeReturnTo);
     if (error) {
@@ -407,7 +466,7 @@ export default function Auth() {
   };
 
   const handleAppleSignIn = async () => {
-    trackAuthEvent('auth_oauth_click', { provider: 'apple' });
+    trackAuthEvent('auth_oauth_click', { provider: 'apple', intent: activeTab });
     setIsOAuthLoading('apple');
     const { error } = await signInWithApple(safeReturnTo);
     if (error) {
@@ -419,7 +478,7 @@ export default function Auth() {
   };
 
   const handleTelegramAuth = async (telegramData: TelegramAuthPayload) => {
-    trackAuthEvent('auth_oauth_click', { provider: 'telegram' });
+    trackAuthEvent('auth_oauth_click', { provider: 'telegram', intent: activeTab });
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);
     if (error) {
@@ -477,7 +536,7 @@ export default function Auth() {
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
               <div className="h-16 w-16 rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/30 shadow-glass-lg flex items-center justify-center animate-scale-in">
-                <img src="/favicon.png" alt="LinkMAX" className="h-10 w-10 object-contain" />
+                <img src="/favicon.png" alt="LinkMAX — business OS for experts and small businesses" className="h-10 w-10 object-contain" />
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
@@ -491,8 +550,46 @@ export default function Auth() {
             </div>
           </div>
 
-          {/* Password Update Card */}
-          {authMode === 'update-password' ? (
+          {/* Already signed-in panel — quick actions instead of full auth form */}
+          {user && authMode !== 'update-password' ? (
+            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
+                    <UserIcon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <CardTitle className="text-lg truncate">
+                      {t('auth.alreadySignedIn', 'Вы уже вошли')}
+                    </CardTitle>
+                    <CardDescription className="truncate">{user.email}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button
+                  className="w-full h-12 rounded-2xl shadow-glass-lg gap-2 transition-all duration-300 hover:scale-[1.01]"
+                  onClick={() => navigate(safeReturnTo || '/dashboard')}
+                  data-testid="continue-to-dashboard"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  {t('auth.continueToDashboard', 'Продолжить в дашборд')}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 rounded-2xl gap-2"
+                  onClick={handleSignOutAndStay}
+                  data-testid="signout-switch-account"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {t('auth.useAnotherAccount', 'Войти под другим аккаунтом')}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center pt-1">
+                  {t('auth.alreadySignedInHint', 'Можно сменить аккаунт — текущая сессия будет завершена.')}
+                </p>
+              </CardContent>
+            </Card>
+          ) : authMode === 'update-password' ? (
             <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
@@ -575,6 +672,21 @@ export default function Auth() {
                 <CardDescription className="text-sm">
                   {t('auth.heroSubtitle', 'AI соберёт сайт за 2 минуты. Бесплатно навсегда.')}
                 </CardDescription>
+                {hasSignupContext && (
+                  <div className="mt-3 rounded-2xl border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-semibold text-primary">
+                        {t('auth.context.title', 'Продолжим настройку')}
+                      </span>
+                      {nicheContextLabel && <span>{nicheContextLabel}</span>}
+                      {previewSlug && (
+                        <span className="rounded-full bg-background/70 px-2 py-0.5 font-mono text-[11px] text-foreground">
+                          lnkmx.my/{previewSlug}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* PRIMARY: Google OAuth — biggest, fastest path */}
@@ -595,7 +707,9 @@ export default function Auth() {
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                   )}
-                  {t('auth.continueWithGoogle', 'Продолжить с Google')}
+                  {activeTab === 'signin'
+                    ? t('auth.continueWithGoogle', 'Продолжить с Google')
+                    : t('auth.createWithGoogle', 'Создать через Google')}
                 </Button>
 
                 {/* SECONDARY: Email expand toggle */}
@@ -666,6 +780,7 @@ export default function Auth() {
                               type="email"
                               placeholder="your@email.com"
                               required
+                              onFocus={() => trackFieldFocus('email', 'reset')}
                               className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                             />
                           </div>
@@ -763,6 +878,7 @@ export default function Auth() {
                             data-testid="signin-email-input"
                             placeholder="your@email.com"
                             required
+                            onFocus={() => trackFieldFocus('email', 'signin')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                         </div>
@@ -784,6 +900,7 @@ export default function Auth() {
                             data-testid="signin-password-input"
                             placeholder="••••••••"
                             required
+                            onFocus={() => trackFieldFocus('password', 'signin')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                         </div>
@@ -828,6 +945,7 @@ export default function Auth() {
                             data-testid="signup-email-input"
                             placeholder="your@email.com"
                             required
+                            onFocus={() => trackFieldFocus('email', 'signup')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                         </div>
@@ -840,6 +958,7 @@ export default function Auth() {
                             data-testid="signup-password-input"
                             placeholder="••••••••"
                             required
+                            onFocus={() => trackFieldFocus('password', 'signup')}
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                           />
                           <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
@@ -847,7 +966,13 @@ export default function Auth() {
                           </p>
                         </div>
                         <div className="flex items-start space-x-2">
-                          <Checkbox id="terms" data-testid="terms-checkbox" required className="mt-0.5" />
+                          <Checkbox
+                            id="terms"
+                            data-testid="terms-checkbox"
+                            required
+                            className="mt-0.5"
+                            onFocus={() => trackFieldFocus('terms', 'signup')}
+                          />
                           <label htmlFor="terms" className="text-sm text-muted-foreground leading-tight">
                             {t('legal.agreeToTerms')}{' '}
                             <TermsLink className="text-primary hover:underline">
@@ -873,7 +998,10 @@ export default function Auth() {
                 {!showMoreOptions ? (
                   <button
                     type="button"
-                    onClick={() => setShowMoreOptions(true)}
+                    onClick={() => {
+                      setShowMoreOptions(true);
+                      trackAuthEvent('auth_more_options_expand');
+                    }}
                     className="w-full text-xs text-muted-foreground/70 hover:text-muted-foreground transition-colors py-1"
                     data-testid="show-more-providers"
                   >
@@ -921,4 +1049,5 @@ export default function Auth() {
       </div>
     </>
   );
-}
+});
+export default Auth;

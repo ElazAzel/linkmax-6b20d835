@@ -122,8 +122,15 @@ const EventScanner = lazy(() => import("./pages/EventScanner"));
 const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 const ForMasters = lazy(() => import("./pages/ForMasters"));
+const NicheLanding = lazy(() => import("./pages/NicheLanding"));
 const FromPage = lazy(() => import("./pages/FromPage"));
 const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
+const Customers = lazy(() => import("./pages/Customers"));
+const BlogIndex = lazy(() => import("./pages/BlogIndex"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const SmartLinkRedirect = lazy(() => import("./pages/SmartLinkRedirect"));
+const SmartLinks = lazy(() => import("./pages/SmartLinks"));
+const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -133,6 +140,11 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Index /> },
       { path: "index", element: <Index /> },
+      // Language-prefixed homepage for international SEO (/ru, /en, /kk, /uz)
+      { path: "ru", element: <LocaleIndex /> },
+      { path: "en", element: <LocaleIndex /> },
+      { path: "kk", element: <LocaleIndex /> },
+      { path: "uz", element: <LocaleIndex /> },
       { path: "auth", element: <Auth /> },
       { path: "auth/callback", element: <AuthCallback /> },
       { path: "dashboard", element: <Dashboard /> },
@@ -162,8 +174,11 @@ const router = createBrowserRouter([
       { path: "dashboard/zone-documents", element: <Dashboard /> },
       { path: "dashboard/zone-settings", element: <Dashboard /> },
       { path: "dashboard/team", element: <Dashboard /> },
+      { path: "dashboard/smart-links", element: <SmartLinks /> },
+      { path: "s/:slug", element: <SmartLinkRedirect /> },
       { path: "install", element: <Install /> },
       { path: "gallery", element: <Gallery /> },
+      { path: "customers", element: <Customers /> },
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
@@ -181,12 +196,28 @@ const router = createBrowserRouter([
       { path: "payment-terms", element: <PaymentTerms /> },
       { path: "experts", element: <Experts /> },
       { path: "experts/:tag", element: <Experts /> },
+      { path: "для-репетиторов", element: <NicheLanding landingKey="tutors" /> },
+      { path: "для-бьюти-мастеров", element: <NicheLanding landingKey="beauty-masters" /> },
       { path: "for-masters", element: <ForMasters /> },
+      { path: "for/:landingSlug", element: <NicheLanding /> },
+      // SEO keyword landings (2026-05 sprint)
+      { path: "taplink-alternative", element: <NicheLanding landingKey="taplink-alternative" /> },
+      { path: "sayt-vizitka-dlya-uslug", element: <NicheLanding landingKey="sayt-vizitka" /> },
+      { path: "multilink", element: <NicheLanding landingKey="multilink" /> },
+      { path: "link-in-bio-ru", element: <NicheLanding landingKey="link-in-bio" /> },
+      { path: "vizitka-onlayn", element: <NicheLanding landingKey="vizitka-onlayn" /> },
+      // Programmatic niche pages /dlya/{niche}
+      { path: "dlya/:landingSlug", element: <NicheLanding /> },
+      // Blog
+      { path: "blog", element: <BlogIndex /> },
+      { path: "blog/:slug", element: <BlogPost /> },
       { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
       { path: ":slug/services/:serviceSlug", element: <PublicServicePage /> },
       { path: ":slug/events/:eventId", element: <PublicEventPage /> },
+      // Sprint 1: Multi-Page sub-pages (e.g. /username/p/about, /username/p/pricing)
+      { path: ":slug/p/:pagePath", element: <PublicPage /> },
       { path: ":slug", element: <PublicPage /> },
       {
         path: "*",

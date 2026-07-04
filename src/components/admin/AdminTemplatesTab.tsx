@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -25,6 +26,8 @@ export function AdminTemplatesTab() {
     const navigate = useNavigate();
     const { data: templates, isLoading, isFetching, refetch, deleteTemplate, updateTemplateStatus } = useAdminTemplates();
     const [searchQuery, setSearchQuery] = useState('');
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null);
 
     const getDateLocale = () => {
         switch (i18n.language) {
@@ -42,16 +45,23 @@ export function AdminTemplatesTab() {
         );
     }, [templates, searchQuery]);
 
-    const handleDelete = async (id: string, name: string) => {
-        if (confirm(t('admin.confirmDeleteTemplate', 'Are you sure you want to delete template "{{name}}"?', { name }))) {
-            try {
-                await deleteTemplate.mutateAsync(id);
-                toast.success(t('admin.templateDeleted', 'Template deleted'));
-            } catch (error) {
-                toast.error(t('admin.errorDeletingTemplate', 'Error deleting template'));
-                console.error(error);
-            }
+    const handleDelete = (id: string, name: string) => {
+        setPendingDelete({ id, name });
+        setDeleteConfirmOpen(true);
+    };
+
+    const handleDeleteConfirmed = async () => {
+        if (!pendingDelete) return;
+        const { id } = pendingDelete;
+        setDeleteConfirmOpen(false);
+        try {
+            await deleteTemplate.mutateAsync(id);
+            toast.success(t('admin.templateDeleted', 'Template deleted'));
+        } catch (error) {
+            toast.error(t('admin.errorDeletingTemplate', 'Error deleting template'));
+            console.error(error);
         }
+        setPendingDelete(null);
     };
 
     const handleTogglePublic = async (id: string, currentStatus: boolean) => {
@@ -188,6 +198,20 @@ export function AdminTemplatesTab() {
                     </Table>
                 </div>
             </Card>
+            <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t('admin.confirmDeleteTemplateTitle', 'Delete template')}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {pendingDelete ? t('admin.confirmDeleteTemplate', 'Are you sure you want to delete template "{{name}}"?', { name: pendingDelete.name }) : ''}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteConfirmed}>{t('common.delete', 'Delete')}</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

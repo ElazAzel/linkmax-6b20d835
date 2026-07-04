@@ -42,6 +42,7 @@ export type EditorAnalyticsAction =
   | 'section_duplicated'
   | 'section_deleted'
   | 'section_merged'
+  | 'section_inserted'
   // P5: Review modes
   | 'review_mode_entered'
   | 'review_mode_exited'
@@ -60,7 +61,7 @@ export interface EditorAnalyticsMeta {
   blockType?: string;
   blockId?: string;
   position?: number;
-  source?: 'grid' | 'structure' | 'palette' | 'preset' | 'keyboard' | 'toolbar';
+  source?: 'grid' | 'structure' | 'palette' | 'preset' | 'keyboard' | 'toolbar' | 'picker';
   presetId?: string;
   commandId?: string;
   searchQuery?: string;
@@ -96,14 +97,13 @@ export function trackEditorAction(
 
     // Insert into analytics table async
     import('@/platform/supabase/client').then(({ supabase }) => {
-      const metadata = meta ? (JSON.parse(JSON.stringify(meta)) as Json) : null;
       supabase
         .from('analytics')
         .insert([{
           event_type: `editor:${action}`,
-          metadata,
-          page_id: null,
-          block_id: null,
+          metadata: meta ? (JSON.parse(JSON.stringify(meta)) as Json) : null,
+          page_id: null as unknown as string,
+          block_id: meta?.blockId ?? null,
         }])
         .then(() => {});
     });

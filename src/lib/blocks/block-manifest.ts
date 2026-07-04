@@ -10,8 +10,8 @@
 
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import type { BlockType } from '@/types/blocks/base';
-import type { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
+import { isBlocksFreePromoActive } from '@/lib/promo/free-blocks-promo';
 
 // ============= Manifest Types =============
 
@@ -368,6 +368,8 @@ export function getManifestEntry(type: BlockType): BlockManifestEntry | undefine
 
 /** Check if a block type is premium */
 export function isBlockPremium(type: BlockType): boolean {
+  // Promo: all blocks are free until end of 2026
+  if (isBlocksFreePromoActive()) return false;
   return BLOCK_MANIFEST[type]?.isPremium ?? false;
 }
 

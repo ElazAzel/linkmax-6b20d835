@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 // Tables not in generated types - using any
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,6 +33,7 @@ type PayoutRequestWithProfile = {
 };
 
 export const AdminFintechTab = () => {
+    const { t } = useTranslation();
     const [requests, setRequests] = useState<PayoutRequestWithProfile[]>([]);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -39,10 +41,9 @@ export const AdminFintechTab = () => {
     const fetchRequests = async () => {
         try {
             setLoading(true);
-            const { data, error } = await (supabase as any)
-                .from('token_withdrawals')
-                .select('*')
-                .order('created_at', { ascending: false });
+            // payment_details is no longer directly SELECT-able from `authenticated`.
+            // Admins must read withdrawals through the SECURITY DEFINER RPC.
+            const { data, error } = await (supabase.rpc as any)('get_admin_withdrawals', { p_status: null });
 
             if (error) throw error;
 
@@ -59,7 +60,7 @@ export const AdminFintechTab = () => {
             }));
             setRequests(enriched);
         } catch (err: any) {
-            toast.error("Failed to fetch requests: " + err.message);
+            toast.error(t('failedToFetchRequests', { error: err.message }));
         } finally {
             setLoading(false);
         }
@@ -82,10 +83,10 @@ export const AdminFintechTab = () => {
 
             if (error) throw error;
 
-            toast.success(`Request marked as ${status}`);
+            toast.success(t('requestMarkedAs', { status }));
             fetchRequests();
         } catch (err: any) {
-            toast.error("Action failed: " + err.message);
+            toast.error(t('actionFailed', { error: err.message }));
         } finally {
             setActionLoading(null);
         }
@@ -95,29 +96,29 @@ export const AdminFintechTab = () => {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight">Управление выплатами</h2>
-                    <p className="text-muted-foreground">Обработка запросов пользователей на вывод средств</p>
+                    <h2 className="text-2xl font-bold tracking-tight">{t('payoutManagement')}</h2>
+                    <p className="text-muted-foreground">{t('payoutManagementDesc')}</p>
                 </div>
                 <Button onClick={fetchRequests} variant="outline" size="sm">
                     <Clock className="mr-2 h-4 w-4" />
-                    Обновить
+                    {t('update')}
                 </Button>
             </div>
 
             <Card className="glass-card border-white/10">
                 <CardHeader>
-                    <CardTitle>Запросы на вывод ({requests.length})</CardTitle>
+                    <CardTitle>{t('withdrawalRequests', { count: requests.length })}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Пользователь</TableHead>
-                                <TableHead>Сумма</TableHead>
-                                <TableHead>Метод</TableHead>
-                                <TableHead>Дата</TableHead>
-                                <TableHead>Статус</TableHead>
-                                <TableHead className="text-right">Действия</TableHead>
+                                <TableHead>{t('user')}</TableHead>
+                                <TableHead>{t('amount')}</TableHead>
+                                <TableHead>{t('method')}</TableHead>
+                                <TableHead>{t('date')}</TableHead>
+                                <TableHead>{t('status')}</TableHead>
+                                <TableHead className="text-right">{t('actions')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -130,7 +131,7 @@ export const AdminFintechTab = () => {
                             ) : requests.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
-                                        Запросов пока нет
+                                        {t('noRequestsYet')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -147,7 +148,7 @@ export const AdminFintechTab = () => {
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant="outline" className="bg-primary/5">
-                                                {req.payment_method || 'Другое'}
+                                                {req.payment_method || t('other')}
                                             </Badge>
                                             <p className="text-xs mt-1 text-muted-foreground truncate max-w-[150px]">
                                                 {req.payment_details?.notes || ''}

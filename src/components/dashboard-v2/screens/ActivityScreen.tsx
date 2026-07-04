@@ -45,7 +45,7 @@ import { cn } from '@/lib/utils/utils';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '@/platform/supabase/client';
+import { useMonthlyInboundCount } from '@/hooks/dashboard/useMonthlyInboundCount';
 import { useAuth } from '@/hooks/user/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -103,50 +103,10 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [activeTab, setActiveTab] = useState<'leads' | 'bookings'>('leads');
-  const [monthlyLeadCount, setMonthlyLeadCount] = useState<number | null>(null);
 
   const stats = getLeadStats();
+  const monthlyLeadCount = useMonthlyInboundCount(user?.id, isPremium, [leads.length]);
 
-  // Fetch unified monthly inbound count (leads + bookings + registrations) for limit banner
-  useEffect(() => {
-    if (isPremium || !user?.id) return;
-    const monthStart = new Date();
-    monthStart.setUTCDate(1);
-    monthStart.setUTCHours(0, 0, 0, 0);
-    const monthStartISO = monthStart.toISOString();
-    (async () => {
-      // Get all page IDs for this user
-      const { data: pages } = await supabase.from('pages').select('id').eq('user_id', user.id);
-      const pageIds = (pages || []).map((p: any) => p.id);
-
-      // Count leads
-      const { count: leadsC } = await supabase
-        .from('leads')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .gte('created_at', monthStartISO);
-
-      let bookingsC = 0;
-      let regsC = 0;
-      if (pageIds.length > 0) {
-        const { count: bC } = await supabase
-          .from('bookings')
-          .select('*', { count: 'exact', head: true })
-          .in('page_id', pageIds)
-          .gte('created_at', monthStartISO);
-        bookingsC = bC || 0;
-
-        const { count: rC } = await supabase
-          .from('event_registrations')
-          .select('*', { count: 'exact', head: true })
-          .in('page_id', pageIds)
-          .gte('created_at', monthStartISO);
-        regsC = rC || 0;
-      }
-
-      setMonthlyLeadCount((leadsC || 0) + bookingsC + regsC);
-    })();
-  }, [isPremium, user?.id, leads.length]);
 
   // CRM is now available to all users (basic CRM free, premium for export/automation)
 
@@ -557,6 +517,7 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
 
             {/* Quick actions for new leads */}
             {lead.status === 'new' && lead.phone ? (
+              // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- pure event-stop wrapper; inner buttons handle interaction
               <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={handleWhatsAppReply}

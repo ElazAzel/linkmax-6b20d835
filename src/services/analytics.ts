@@ -7,8 +7,8 @@
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
-import { session } from '@/lib/storage';
-import { trackViewContent, trackClickLink } from '@/lib/analytics';
+import { session, storage } from '@/lib/storage';
+// trackViewContent, trackClickLink available from @/lib/analytics
 
 // ============================================
 // Types
@@ -208,6 +208,9 @@ async function getGeoInfo(): Promise<GeoInfo | null> {
 
 let _pageLoadTime = Date.now();
 let _sessionDurationTrackedPageId: string | null = null;
+let _sessionDurationTrackingKey: string | null = null;
+let _sessionDurationCleanup: (() => void) | null = null;
+let _sessionDurationSentKey: string | null = null;
 
 /**
  * Get time spent on page in seconds
@@ -220,66 +223,68 @@ function getTimeOnPage(): number {
  * Initialize session duration tracking — sends duration on page hide/unload
  */
 export function initSessionDurationTracking(pageId: string) {
-  if (_sessionDurationTrackedPageId === pageId) return;
+  const analyticsSession = getOrCreateSession();
+  const trackingKey = `${pageId}:${analyticsSession.id}`;
+
+  if (_sessionDurationTrackedPageId === pageId && _sessionDurationTrackingKey === trackingKey) return;
+
+  _sessionDurationCleanup?.();
   _sessionDurationTrackedPageId = pageId;
+  _sessionDurationTrackingKey = trackingKey;
+  _sessionDurationSentKey = null;
   _pageLoadTime = Date.now();
 
   const sendDuration = () => {
     const duration = getTimeOnPage();
     if (duration < 2) return; // Skip very short visits
+    if (_sessionDurationSentKey === trackingKey) return;
+    _sessionDurationSentKey = trackingKey;
 
-    const session = getOrCreateSession();
     const payload = JSON.stringify({
       page_id: pageId,
       event_type: 'session_end',
       metadata: {
         sessionDuration: duration,
-        visitorId: session.visitorId,
-        sessionId: session.id,
+        visitorId: analyticsSession.visitorId,
+        sessionId: analyticsSession.id,
       },
     });
 
-    // Use sendBeacon for reliable delivery on page unload
+    const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`;
+
     if (navigator.sendBeacon) {
-      const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
-      const blob = new Blob([payload], {
-        type: 'application/json',
-      });
-      navigator.sendBeacon(url, blob);
+      const accepted = navigator.sendBeacon(`${url}?apikey=${apiKey}`, new Blob([payload], { type: 'application/json' }));
+      if (accepted) return;
+    }
+
+    if (typeof fetch === 'function') {
+      void fetch(url, {
+        method: 'POST',
+        body: payload,
+        keepalive: true,
+        headers: {
+          apikey: apiKey,
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+      }).catch(() => undefined);
     }
   };
 
-  document.addEventListener('visibilitychange', () => {
+  const handleVisibilityChange = () => {
     if (document.visibilityState === 'hidden') {
       sendDuration();
     }
-  });
+  };
 
+  document.addEventListener('visibilitychange', handleVisibilityChange);
   window.addEventListener('pagehide', sendDuration);
-}
-
-/**
- * Get visitor fingerprint for unique visitor tracking
- * Uses a combination of available browser data
- */
-function getVisitorFingerprint(): string {
-  const data = [
-    navigator.userAgent,
-    navigator.language,
-    screen.width,
-    screen.height,
-    new Date().getTimezoneOffset(),
-  ].join('|');
-
-  // Simple hash function
-  let hash = 0;
-  for (let i = 0; i < data.length; i++) {
-    const char = data.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash).toString(36);
+  _sessionDurationCleanup = () => {
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('pagehide', sendDuration);
+  };
 }
 
 /**
@@ -310,6 +315,16 @@ function getReferrerInfo(): { source: string; medium: string } {
     if (hostname.includes('google')) return { source: 'google', medium: 'organic' };
     if (hostname.includes('yandex')) return { source: 'yandex', medium: 'organic' };
     if (hostname.includes('bing')) return { source: 'bing', medium: 'organic' };
+    if (hostname.includes('duckduckgo')) return { source: 'duckduckgo', medium: 'organic' };
+    if (hostname.includes('mail.ru') || hostname.includes('go.mail.ru')) return { source: 'mailru', medium: 'organic' };
+
+    // AI assistants (ChatGPT, Perplexity, Claude, Gemini, Copilot)
+    if (hostname.includes('chatgpt.com') || hostname.includes('chat.openai.com')) return { source: 'chatgpt', medium: 'ai' };
+    if (hostname.includes('perplexity')) return { source: 'perplexity', medium: 'ai' };
+    if (hostname.includes('claude.ai') || hostname.includes('anthropic')) return { source: 'claude', medium: 'ai' };
+    if (hostname.includes('gemini.google') || hostname.includes('bard.google')) return { source: 'gemini', medium: 'ai' };
+    if (hostname.includes('copilot.microsoft') || hostname.includes('bing.com/chat')) return { source: 'copilot', medium: 'ai' };
+    if (hostname.includes('you.com')) return { source: 'you', medium: 'ai' };
 
     return { source: hostname, medium: 'referral' };
   } catch {
@@ -350,6 +365,7 @@ function getUtmParams(): Record<string, string> {
 // Session Management
 // ============================================
 
+const VISITOR_KEY = 'linkmax_analytics_visitor';
 const SESSION_KEY = 'linkmax_analytics_session';
 const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
 
@@ -360,7 +376,20 @@ interface Session {
 }
 
 export function getVisitorId(): string {
-  return getOrCreateSession().visitorId;
+  try {
+    const stored = storage.get<string>(VISITOR_KEY);
+    if (stored) return stored;
+  } catch {
+    // Ignore storage errors
+  }
+
+  const visitorId = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  try {
+    storage.set(VISITOR_KEY, visitorId);
+  } catch {
+    // Ignore storage errors
+  }
+  return visitorId;
 }
 
 function getOrCreateSession(): Session {
@@ -380,7 +409,7 @@ function getOrCreateSession(): Session {
   const sessionData: Session = {
     id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2),
     startedAt: Date.now(),
-    visitorId: getVisitorFingerprint(),
+    visitorId: getVisitorId(),
   };
 
   try {
@@ -400,6 +429,10 @@ function getOrCreateSession(): Session {
  * Track an analytics event
  * This is the main tracking function used throughout the app
  */
+function isValidUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
 export async function trackEvent({
   pageId,
   eventType,
@@ -411,6 +444,11 @@ export async function trackEvent({
   if (!ANALYTICS_ENABLED) {
     return;
   }
+
+  // Validate UUIDs before sending to avoid 400 errors
+  const safePageId = pageId && isValidUuid(pageId) ? pageId : null;
+  const safeBlockId = blockId && isValidUuid(blockId) ? blockId : null;
+
   try {
     const session = getOrCreateSession();
     const referrer = getReferrerInfo();
@@ -442,26 +480,15 @@ export async function trackEvent({
     };
 
     await supabase.from('analytics').insert({
-      page_id: pageId,
-      block_id: blockId || null,
+      page_id: safePageId,
+      block_id: safeBlockId,
       event_type: eventType,
       metadata: enrichedMetadata as Json,
     });
 
-    // Send to Pixel Proxy if enabled
-    if (eventType === 'view' || eventType === 'click') {
-      try {
-        await supabase.functions.invoke('pixel-proxy', {
-          body: {
-            pageId,
-            eventType,
-            metadata: enrichedMetadata
-          }
-        });
-      } catch (e) {
-        // Silent fail for proxy
-      }
-    }
+    // Note: third-party pixel forwarding is handled client-side via
+    // `src/lib/analytics.ts` (sendBeacon → pixel-proxy with the proper
+    // { pageId, event, eventData } payload). Avoid duplicating it here.
   } catch (error) {
     // Silent fail for analytics - don't break user experience
     logger.debug('Analytics tracking failed', { data: error });
@@ -547,17 +574,17 @@ export async function trackBlockClick(
   // We need to look up the real DB UUID to increment clicks.
   if (blockId && pageId) {
     try {
-      // Find the actual DB block by matching content->>'id' or content->>'type'
-      const { data: blockRow } = await supabase
+      // Find the actual DB block by matching stable content id.
+      // Fallback by type was producing incorrect attribution when multiple blocks shared a type.
+      const { data: blockRows } = await supabase
         .from('blocks')
         .select('id')
         .eq('page_id', pageId)
-        .or(`content->>id.eq.${blockId},content->>type.eq.${blockType}`)
-        .limit(1)
-        .maybeSingle();
+        .eq('content->>id', blockId)
+        .limit(2);
 
-      if (blockRow?.id) {
-        await supabase.rpc('increment_block_clicks', { block_uuid: blockRow.id });
+      if (blockRows && blockRows.length === 1) {
+        await supabase.rpc('increment_block_clicks', { block_uuid: blockRows[0].id });
       }
     } catch {
       // Silent fail

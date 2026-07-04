@@ -11,6 +11,7 @@ import type { ZoneTask, TaskPriority } from '@/types/zones';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
+import { handleKeyboardActivation } from '@/lib/utils/a11y';
 
 const PRIORITY_CONFIG: Record<TaskPriority, { labelKey: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
   low: { labelKey: 'tasks.priority.low', variant: 'outline' },
@@ -49,13 +50,16 @@ export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, i
         isDragOverlay && "shadow-2xl rotate-1 scale-105 border-primary/50 bg-background/80"
       )}
       onClick={onClick}
+      onKeyDown={(event) => handleKeyboardActivation(event, onClick)}
+      role="button"
+      tabIndex={0}
     >
       <div className="flex items-start gap-2">
         <div
           {...attributes}
           {...listeners}
           className="mt-1 cursor-grab opacity-40 group-hover:opacity-60 hover:!opacity-100 shrink-0 transition-opacity touch-none"
-          onClick={(e) => e.stopPropagation()}
+          onClickCapture={(e) => e.stopPropagation()}
         >
           <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
         </div>

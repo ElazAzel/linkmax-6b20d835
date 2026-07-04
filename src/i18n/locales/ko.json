@@ -7580,5 +7580,9 @@
     "pricing": {
       "billedYearly": "Оплата {{price}} в год"
     }
+  },
+  "siteTemplates": {
+    "appliedToast": "Создано страниц: {{n}}",
+    "trimmedHint": "На Starter добавим первые {{n}} страниц. На Pro — все."
   }
 }

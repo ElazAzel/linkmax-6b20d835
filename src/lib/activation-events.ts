@@ -94,14 +94,10 @@ export async function trackActivationEvent(
       }]);
 
     if (error) {
-      if (error.code === '42501') {
-        logger.debug('Activation event skipped by analytics RLS', {
-          context: 'activation-events',
-          data: { pageId, eventType },
-        });
-      } else {
-        logger.error('Failed to track activation event', error, { context: 'activation-events' });
-      }
+      // RLS denies inserts for unpublished pages — это ожидаемо, тихо игнорируем
+      const code = (error as { code?: string }).code;
+      if (code === '42501' || code === 'PGRST301' || code === '403') return;
+      logger.error('Failed to track activation event', error, { context: 'activation-events' });
     }
   } catch (err) {
     // Fire-and-forget: never block UI for analytics

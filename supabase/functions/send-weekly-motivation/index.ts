@@ -1,4 +1,5 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { requireCronAuth } from "../_shared/cron-auth.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { sendMessage, isConfigured } from "../_shared/telegram.ts";
@@ -42,6 +43,9 @@ const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const cronAuthError = requireCronAuth(req, corsHeaders);
+  if (cronAuthError) return cronAuthError;
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;

@@ -45,7 +45,7 @@ export function MapBlock({ block }: MapBlockProps) {
       style={getAnimationStyle(block.blockStyle)}
     >
       <div className="w-full space-y-3">
-        <div className="w-full h-56 rounded-2xl overflow-hidden shadow-glass border border-white/10 glass-card">
+        <div className="w-full h-56 rounded-2xl overflow-hidden shadow-soft border border-hairline qb-card">
           {embedUrl ? (
             <iframe
               width="100%"
@@ -61,7 +61,7 @@ export function MapBlock({ block }: MapBlockProps) {
               allow="geolocation; fullscreen; clipboard-write"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-white/5 backdrop-blur-sm text-sm text-muted-foreground font-medium italic">
+            <div className="w-full h-full flex items-center justify-center bg-white/5  text-sm text-muted-foreground font-medium italic">
               {t('blocks.map.noAddress', 'Укажите адрес')}
             </div>
           )}

@@ -9,13 +9,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import Shield from 'lucide-react/dist/esm/icons/shield';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import Users from 'lucide-react/dist/esm/icons/users';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Activity from 'lucide-react/dist/esm/icons/activity';
-import PieChart from 'lucide-react/dist/esm/icons/pie-chart';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
@@ -41,6 +41,7 @@ const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTa
 const AdminFintechTab = lazy(() => import('@/components/admin/AdminFintechTab').then(m => ({ default: m.AdminFintechTab })));
 const AdminSearchDiagnosticsTab = lazy(() => import('@/components/admin/AdminSearchDiagnosticsTab').then(m => ({ default: m.AdminSearchDiagnosticsTab })));
 const AdminBroadcastTab = lazy(() => import('@/components/admin/AdminBroadcastTab').then(m => ({ default: m.AdminBroadcastTab })));
+const AdminGrowthTab = lazy(() => import('@/components/admin/AdminGrowthTab').then(m => ({ default: m.AdminGrowthTab })));
 
 function TabLoader() {
   return (
@@ -90,6 +91,7 @@ export default function Admin() {
 
   const tabs = [
     { value: 'overview', label: t('admin.overview'), icon: BarChart3 },
+    { value: 'growth', label: t('admin.growth', 'Growth'), icon: TrendingUp },
     { value: 'users', label: t('admin.users'), icon: Users },
     { value: 'pages', label: t('admin.pages'), icon: FileText },
     { value: 'tokens', label: t('admin.tokens', 'Токены'), icon: Coins },
@@ -105,7 +107,7 @@ export default function Admin() {
   ];
 
   return (
-    <>
+    <ScreenErrorBoundary screenName="Admin">
       <StaticSEOHead
         title={seoTitle}
         description={seoDescription}
@@ -181,6 +183,10 @@ export default function Admin() {
                 <AdminOverviewTab />
               </TabsContent>
 
+              <TabsContent value="growth">
+                <AdminGrowthTab />
+              </TabsContent>
+
               <TabsContent value="users">
                 <AdminUsersTab />
               </TabsContent>
@@ -233,6 +239,6 @@ export default function Admin() {
           </Tabs>
         </main>
       </div>
-    </>
+    </ScreenErrorBoundary>
   );
 }

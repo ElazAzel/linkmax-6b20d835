@@ -153,12 +153,41 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         )}
 
         {data.background?.type === 'image' && (
-          <MediaUpload
-            label={t('fields.backgroundImage', 'Background Image')}
-            value={data.background?.value || ''}
-            onChange={(value) => handleChange({ ...data, background: { ...data.background, value } })}
-            accept="image/*"
-          />
+          <>
+            <MediaUpload
+              label={t('fields.backgroundImage', 'Background Image')}
+              value={data.background?.value || ''}
+              onChange={(value) => handleChange({ ...data, background: { ...data.background, value } })}
+              accept="image/*"
+            />
+
+            <EditorField label={t('fields.overlay', 'Overlay')}>
+              <Select
+                value={data.background?.overlay || 'dark'}
+                onValueChange={(value: string) => handleChange({ ...data, background: { ...data.background, overlay: value } })}
+              >
+                <SelectTrigger className="h-12 rounded-xl"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">{t('fields.overlayNone', 'Без затемнения')}</SelectItem>
+                  <SelectItem value="light">{t('fields.overlayLight', 'Светлое (20%)')}</SelectItem>
+                  <SelectItem value="dark">{t('fields.overlayDark', 'Тёмное (30%)')}</SelectItem>
+                  <SelectItem value="custom">{t('fields.overlayCustom', 'Своё значение')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </EditorField>
+
+            {data.background?.overlay === 'custom' && (
+              <EditorField label={`${t('fields.overlayOpacity', 'Прозрачность')} (${data.background?.overlayOpacity ?? 30}%)`}>
+                <Input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={data.background?.overlayOpacity ?? 30}
+                  onChange={(e) => handleChange({ ...data, background: { ...data.background, overlayOpacity: Number(e.target.value) } })}
+                />
+              </EditorField>
+            )}
+          </>
         )}
 
         <EditorDivider />

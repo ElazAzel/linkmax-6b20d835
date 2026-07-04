@@ -30,6 +30,15 @@ beforeEach(() => {
     vi.mocked(supabase.from).mockReset();
     vi.mocked(supabase.rpc).mockReset();
 
+    // Mock Intl.DateTimeFormat timezone to US/Eastern so geo resolves to US
+    vi.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => ({
+        resolvedOptions: () => ({ timeZone: 'America/New_York', locale: 'en-US', calendar: 'gregory', numberingSystem: 'latn' }),
+        format: () => '',
+        formatToParts: () => [],
+        formatRange: () => '',
+        formatRangeToParts: () => [],
+    }));
+
     // Setup global mocks
     Object.defineProperty(global, 'navigator', {
         value: {
@@ -76,8 +85,9 @@ describe('analyticsService', () => {
                 insert: vi.fn().mockResolvedValue({ data: null, error: null })
             } as any);
 
+            const validUuid = '123e4567-e89b-12d3-a456-426614174000';
             await analyticsService.trackEvent({
-                pageId: 'page-123',
+                pageId: validUuid,
                 eventType: 'view',
                 metadata: { customField: 'test' }
             });
@@ -86,7 +96,7 @@ describe('analyticsService', () => {
             const insertCall = vi.mocked(mockFrom).mock.results[0].value.insert;
             expect(insertCall).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    page_id: 'page-123',
+                    page_id: validUuid,
                     event_type: 'view',
                     metadata: expect.objectContaining({
                         customField: 'test',

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -33,12 +34,32 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [generatingCode, setGeneratingCode] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [name, setName] = useState(team.name);
   const [description, setDescription] = useState(team.description || '');
   const [avatarUrl, setAvatarUrl] = useState(team.avatar_url || '');
   const [niche, setNiche] = useState(team.niche || 'other');
   const [isPublic, setIsPublic] = useState(team.is_public);
-  const [inviteCode, setInviteCode] = useState(team.invite_code || '');
+  const [inviteCode, setInviteCode] = useState<string>('');
+
+  // Invite code is sensitive — fetched via secure RPC, not from public team row.
+  useEffect(() => {
+    let cancelled = false;
+    if (!isOwner) {
+      setInviteCode('');
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .rpc('get_team_invite_code' as never, { p_team_id: team.id } as never);
+      if (!cancelled && typeof data === 'string') {
+        setInviteCode(data);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [team.id, isOwner]);
 
   const inviteUrl = inviteCode ? `${window.location.origin}/join/${inviteCode}` : '';
 
@@ -70,7 +91,6 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
         ...team,
         ...data,
         is_public: data.is_public ?? false,
-        invite_code: inviteCode
       });
       toast.success(t('teams.updated', 'Команда обновлена'));
     } catch (error) {
@@ -81,9 +101,12 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm(t('teams.deleteConfirm', 'Вы уверены, что хотите удалить команду?'))) return;
+  const handleDelete = () => {
+    setDeleteConfirmOpen(true);
+  };
 
+  const handleDeleteConfirmed = async () => {
+    setDeleteConfirmOpen(false);
     setDeleting(true);
     try {
       const { error } = await supabase
@@ -300,6 +323,20 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
           )}
         </CardContent>
       </Card>
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('teams.deleteConfirmTitle', 'Delete team')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('teams.deleteConfirm', 'Вы уверены, что хотите удалить команду?')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirmed}>{t('common.delete', 'Delete')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

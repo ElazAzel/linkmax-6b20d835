@@ -173,7 +173,7 @@ export function generateAutoFAQ(
   language: 'ru' | 'en' | 'kk' = 'ru',
   maxItems: number = 5
 ): AutoFAQItem[] {
-  const templates = FAQ_TEMPLATES[language];
+  const templates = FAQ_TEMPLATES[language] ?? FAQ_TEMPLATES.ru;
   const faqs: AutoFAQItem[] = [];
 
   const replacePlaceholders = (text: string): string => {

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { subDays, isAfter, format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+
 import { formatRelativeTime } from '@/lib/utils/format';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
@@ -20,6 +20,7 @@ import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
 import Target from 'lucide-react/dist/esm/icons/target';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import History from 'lucide-react/dist/esm/icons/history';
+import { LoadingSkeleton } from '@/components/dashboard-v2/common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
 
 interface Props {
@@ -38,14 +39,15 @@ const getPeriodOptions = (t: any): { value: Period; label: string }[] => [
 const FUNNEL_COLORS = ['hsl(var(--primary))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))'];
 
 export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
-  const { t } = useTranslation();
-  const { deals, stages, activities } = useZoneDeals(zoneId);
-  const { tasks } = useZoneTasks(zoneId);
-  const { contacts } = useZoneContacts(zoneId);
-  const { invoices } = useZoneInvoices(zoneId);
+  const { t, i18n } = useTranslation();
+  const { deals, stages, activities, loading: dealsLoading } = useZoneDeals(zoneId);
+  const { tasks, loading: tasksLoading } = useZoneTasks(zoneId);
+  const { contacts, loading: contactsLoading } = useZoneContacts(zoneId);
+  const { invoices, loading: invoicesLoading } = useZoneInvoices(zoneId);
   const [period, setPeriod] = useState<Period>('30d');
 
   const periodOptions = useMemo(() => getPeriodOptions(t), [t]);
+  const isLoading = dealsLoading || tasksLoading || contactsLoading || invoicesLoading;
 
   const cutoffDate = useMemo(() => {
     if (period === 'all') return null;
@@ -123,6 +125,24 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
       return { name: stage.name, count: stageDeals.length, value, color: stage.color };
     });
   }, [stages, filteredDeals]);
+
+    if (isLoading) {
+    return (
+      <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-64px)] overflow-y-auto bg-background/5">
+        <div className="flex items-center justify-between p-4 border-b border-border/30 sticky top-0 bg-background/80 backdrop-blur-md z-10 flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-primary/10">
+              <BarChart3 className="h-4 w-4 text-primary" />
+            </div>
+            <h1 className="text-lg font-bold">{t('zones.dashboard.title', 'Аналитика Бизнеса')}</h1>
+          </div>
+        </div>
+        <div className="p-4">
+          <LoadingSkeleton variant="stats" />
+        </div>
+      </div>
+    );
+  }
 
   const formatCurrencyValue = (val: number) => {
     if (val >= 1000000) return `${(val / 1000000).toFixed(1)}M`;
@@ -276,7 +296,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-black text-warning mb-1">
-                    {new Intl.NumberFormat('ru-KZ', { style: 'currency', currency: 'KZT', maximumFractionDigits: 0 }).format(metrics.pendingAmount)}
+                    {new Intl.NumberFormat(i18n.language?.split('-')[0] ?? 'en', { style: 'currency', currency: 'KZT', maximumFractionDigits: 0 }).format(metrics.pendingAmount)}
                   </div>
                   <p className="text-xs text-muted-foreground">{t('zones.dashboard.pendingPaymentsDesc', 'Сумма всех активных инвойсов')}</p>
                 </CardContent>
@@ -320,7 +340,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                           <div className="space-y-1">
                             <p className="text-xs font-bold group-hover:text-primary transition-colors line-clamp-2">{act.summary}</p>
                             <p className="text-xs text-muted-foreground">
-                              {formatRelativeTime(act.happened_at, 'ru')}
+                              {formatRelativeTime(act.happened_at, i18n.language?.split('-')[0] ?? 'en')}
                             </p>
                           </div>
                         </div>

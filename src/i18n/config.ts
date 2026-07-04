@@ -12,13 +12,35 @@ import en from './locales/en.json';
 import kk from './locales/kk.json';
 
 // Merge all top-level keys into translation namespace
-const mergeNamespaces = (json: Record<string, unknown>) => {
-  const { translation, ...rest } = json as { translation: Record<string, unknown>, [key: string]: unknown };
-  return {
-    translation: {
-      ...translation,
-      ...rest
+// Deep-merge helper: combines values from both sources; for overlapping object
+// branches it recurses, so neither side wipes out nested subtrees from the other.
+const isPlainObject = (v: unknown): v is Record<string, unknown> =>
+  typeof v === 'object' && v !== null && !Array.isArray(v);
+
+const deepMerge = (
+  base: Record<string, unknown>,
+  override: Record<string, unknown>
+): Record<string, unknown> => {
+  const out: Record<string, unknown> = { ...base };
+  for (const [key, value] of Object.entries(override)) {
+    const baseVal = out[key];
+    if (isPlainObject(baseVal) && isPlainObject(value)) {
+      out[key] = deepMerge(baseVal, value);
+    } else {
+      out[key] = value;
     }
+  }
+  return out;
+};
+
+const mergeNamespaces = (json: Record<string, unknown>) => {
+  const { translation, ...rest } = json as { translation?: Record<string, unknown>, [key: string]: unknown };
+  // Deep-merge top-level keys with the legacy `translation` wrapper so that
+  // partial top-level entries (e.g. only a couple `templates.*` keys) do not
+  // wipe out the richer nested namespace defined under `translation.*`.
+  const base = (translation && isPlainObject(translation)) ? translation : {};
+  return {
+    translation: deepMerge(base, rest as Record<string, unknown>),
   };
 };
 
@@ -155,6 +177,7 @@ i18n
       escapeValue: false,
     },
     debug: false,
+    showSupportNotice: false,
     ns: ['translation'],
     defaultNS: 'translation',
     detection: {

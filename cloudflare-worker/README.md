@@ -1,6 +1,6 @@
 # Cloudflare Worker для SSR публичных страниц
 
-Этот воркер перенаправляет запросы от поисковых ботов и AI-краулеров на Edge Functions `generate-sitemap` (для карты сайта) и `seo-ssr` (для серверного рендеринга) для получения серверно-отрендеренного HTML.
+Этот воркер отдает публичным маршрутам серверно-отрендеренный HTML через Edge Function `generate-sitemap`; sitemap и SSR живут в одном контуре, чтобы robots/canonical/schema-сигналы не расходились.
 
 ## Архитектура
 
@@ -126,13 +126,14 @@ curl -I -H "User-Agent: Googlebot" https://lnkmx.my/elazart
 SSR контент генерируется через Edge Function:
 
 ```text
-GET https://<project-ref>.supabase.co/functions/v1/seo-ssr?slug={slug}&lang={lang}
+GET https://<project-ref>.supabase.co/functions/v1/generate-sitemap/ssr/{target}?lang={lang}
 GET https://<project-ref>.supabase.co/functions/v1/generate-sitemap
+POST https://<project-ref>.supabase.co/functions/v1/resolve-domain
 ```
 
 Параметры:
 
-- `slug` - slug страницы (обязательно)
+- `target` - `landing`, `gallery`, `experts/{tag}`, `{slug}`, `{slug}/services/{serviceSlug}` или `{slug}/events/{eventId}`
 - `lang` - язык (ru, en, kk), по умолчанию "ru"
 
 Возвращает:
@@ -145,7 +146,7 @@ GET https://<project-ref>.supabase.co/functions/v1/generate-sitemap
 1. **Meta Tags**
    - `<title>` с именем и ролью
    - `<meta name="description">` из био
-   - `<meta name="robots">` - index, follow
+   - `<meta name="robots">` - `index, follow` или `noindex, follow` по quality gate и `is_indexable`
    - Canonical URL
    - Hreflang (ru, en, kk, x-default)
 

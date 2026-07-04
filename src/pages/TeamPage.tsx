@@ -30,7 +30,7 @@ interface TeamWithMembers extends Team {
 async function fetchTeamBySlug(slug: string): Promise<TeamWithMembers | null> {
   const { data: team, error } = await supabase
     .from('teams')
-    .select('*')
+    .select('id, name, description, avatar_url, slug, owner_id, niche, is_public, created_at, updated_at')
     .eq('slug', slug)
     .eq('is_public', true)
     .maybeSingle();

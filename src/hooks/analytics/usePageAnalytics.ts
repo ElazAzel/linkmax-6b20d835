@@ -97,8 +97,20 @@ function getMetaString(metadata: Record<string, unknown> | null | undefined, ...
   return undefined;
 }
 
+function getMetaBoolean(metadata: Record<string, unknown> | null | undefined, key: string): boolean {
+  return metadata?.[key] === true || metadata?.[key] === 'true';
+}
+
+function isPageViewEvent(event: AnalyticsEvent): boolean {
+  return event.event_type === 'view' && !getMetaBoolean(event.metadata, 'isBlockImpression');
+}
+
+function isBlockImpressionEvent(event: AnalyticsEvent): boolean {
+  return event.event_type === 'view' && getMetaBoolean(event.metadata, 'isBlockImpression');
+}
+
 /** Pass `null` when the dashboard page is not ready yet — avoids resolving the wrong page via `limit(1)`. Omit the argument for legacy “first page of user” behaviour. */
-export function usePageAnalytics(externalPageId?: string | null) {
+export function usePageAnalytics(externalPageId?: string | null, initialPeriod: TimePeriod = '30d') {
   const { user } = useAuth();
   const { i18n } = useTranslation();
   const [pageId, setPageId] = useState<string | null>(
@@ -107,7 +119,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
   const [loading, setLoading] = useState(() => (externalPageId !== undefined ? !!externalPageId : true));
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [period, setPeriod] = useState<TimePeriod>('30d');
+  const [period, setPeriod] = useState<TimePeriod>(initialPeriod);
   const [isStaffMember, setIsStaffMember] = useState(false);
   const [currentStaffId, setCurrentStaffId] = useState<string | null>(null);
   const [staffMemberName, setStaffMemberName] = useState<string | null>(null);
@@ -207,30 +219,37 @@ export function usePageAnalytics(externalPageId?: string | null) {
         }
       }
 
-      // Fetch all analytics for current period
-      const { data: currentEvents, error } = await supabase
-        .from('analytics')
-        .select('*')
-        .eq('page_id', pageId)
-        .gte('created_at', startDate.toISOString())
-        .order('created_at', { ascending: true });
+      // Fetch all analytics for current period (paginate to bypass PostgREST 1000-row default cap)
+      const PAGE_SIZE = 1000;
+      const fetchAllAnalytics = async (fromISO: string, toISO?: string) => {
+        const all: AnalyticsEvent[] = [];
+        let offset = 0;
+        // Hard cap 100k rows to protect the browser
+        while (offset < 100_000) {
+          let q = supabase
+            .from('analytics')
+            .select('*')
+            .eq('page_id', pageId)
+            .gte('created_at', fromISO)
+            .order('created_at', { ascending: true })
+            .range(offset, offset + PAGE_SIZE - 1);
+          if (toISO) q = q.lt('created_at', toISO);
+          const { data, error: pageErr } = await q;
+          if (pageErr) throw pageErr;
+          const batch = (data as AnalyticsEvent[]) || [];
+          all.push(...batch);
+          if (batch.length < PAGE_SIZE) break;
+          offset += PAGE_SIZE;
+        }
+        return all;
+      };
 
-      // If user is a staff member, we also want to filter by their staff_id in metadata if possible
-      // But for events, we usually don't have staff_id yet unless we tracked it.
-      // However, we MUST filter bookings and conversions.
-
-      if (error) throw error;
+      const currentEvents: AnalyticsEvent[] = await fetchAllAnalytics(startDate.toISOString());
 
       // Fetch previous period for comparison
       let previousEvents: AnalyticsEvent[] = [];
       if (previousStartDate) {
-        const { data } = await supabase
-          .from('analytics')
-          .select('*')
-          .eq('page_id', pageId)
-          .gte('created_at', previousStartDate.toISOString())
-          .lt('created_at', startDate.toISOString());
-        previousEvents = (data as AnalyticsEvent[]) || [];
+        previousEvents = await fetchAllAnalytics(previousStartDate.toISOString(), startDate.toISOString());
       }
 
       // Fetch blocks for the page to get block info
@@ -241,14 +260,16 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       const events = (currentEvents as AnalyticsEvent[]) || [];
       const prevEvents = previousEvents;
+      const pageViewEvents = events.filter(isPageViewEvent);
+      const previousPageViewEvents = prevEvents.filter(isPageViewEvent);
 
       // Calculate totals
-      const totalViews = events.filter(e => e.event_type === 'view').length;
+      const totalViews = pageViewEvents.length;
       const totalClicks = events.filter(e => e.event_type === 'click').length;
       const totalShares = events.filter(e => e.event_type === 'share').length;
 
       // Previous period totals
-      const prevViews = prevEvents.filter(e => e.event_type === 'view').length;
+      const prevViews = previousPageViewEvents.length;
       const prevClicks = prevEvents.filter(e => e.event_type === 'click').length;
 
       // Calculate changes
@@ -261,8 +282,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
         : (totalClicks > 0 ? 100 : 0);
 
       // Unique visitors by visitorId from metadata
-      const uniqueVisitorIds = new Set(events
-        .filter(e => e.event_type === 'view')
+      const uniqueVisitorIds = new Set(pageViewEvents
         .map(e => getMetaString(e.metadata, 'visitorId', 'visitor_id'))
         .filter((value): value is string => !!value));
       const uniqueVisitors = uniqueVisitorIds.size;
@@ -309,7 +329,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // so also check metadata.blockId for the content-level ID
       events.filter(e => e.event_type === 'click').forEach(e => {
         const blockRef = e.block_id
-          || getMetaString(e.metadata, 'blockId', 'block_id', 'blockType', 'block_type');
+          || getMetaString(e.metadata, 'blockId', 'block_id');
         if (!blockRef) return;
         const stats = blockStatsMap.get(blockRef);
         if (stats) {
@@ -317,8 +337,8 @@ export function usePageAnalytics(externalPageId?: string | null) {
         }
       });
 
-      // Count views per block (page-level views often have null block_id — those are not attributed)
-      events.filter(e => e.event_type === 'view').forEach(e => {
+      // Count block impressions separately from page views.
+      events.filter(isBlockImpressionEvent).forEach(e => {
         const blockRef =
           e.block_id
           || getMetaString(e.metadata, 'blockId', 'block_id');
@@ -349,7 +369,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       // Calculate traffic sources
       const sourceMap = new Map<string, number>();
-      events.filter(e => e.event_type === 'view').forEach(e => {
+      pageViewEvents.forEach(e => {
         const source = getMetaString(e.metadata, 'source', 'referrer_source') || 'direct';
         sourceMap.set(source, (sourceMap.get(source) || 0) + 1);
       });
@@ -364,7 +384,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       // Calculate device breakdown
       const deviceCounts = { mobile: 0, tablet: 0, desktop: 0 };
-      events.filter(e => e.event_type === 'view').forEach(e => {
+      pageViewEvents.forEach(e => {
         const deviceRaw = getMetaString(e.metadata, 'device', 'device_type');
         const device = deviceRaw as 'mobile' | 'tablet' | 'desktop' | undefined;
         if (device && device in deviceCounts) {
@@ -377,7 +397,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       // Calculate geography breakdown
       const geoMap = new Map<string, { country: string; countryCode: string; count: number }>();
-      events.filter(e => e.event_type === 'view').forEach(e => {
+      pageViewEvents.forEach(e => {
         const countryCode = getMetaString(e.metadata, 'country', 'country_code') || 'unknown';
         const country = getMetaString(e.metadata, 'countryName', 'country_name') || countryCode;
         const existing = geoMap.get(countryCode);
@@ -397,6 +417,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
       // Calculate bounce rate based on sessions (a bounce = session with view but no click)
       const sessionEvents = new Map<string, Set<string>>();
       events.forEach(e => {
+        if (isBlockImpressionEvent(e)) return;
         const sid = getMetaString(e.metadata, 'sessionId', 'session_id') || e.id;
         if (!sessionEvents.has(sid)) sessionEvents.set(sid, new Set());
         sessionEvents.get(sid)!.add(e.event_type);
@@ -443,7 +464,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       // Calculate returning visitors — visitorId with >1 unique sessionId
       const visitorSessions = new Map<string, Set<string>>();
-      events.filter(e => e.event_type === 'view').forEach(e => {
+      pageViewEvents.forEach(e => {
         const vid = getMetaString(e.metadata, 'visitorId', 'visitor_id');
         if (!vid) return;
         const sid = getMetaString(e.metadata, 'sessionId', 'session_id') || e.id;
@@ -477,7 +498,7 @@ export function usePageAnalytics(externalPageId?: string | null) {
 
       const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);
 
-      const viewEvents = events.filter(e => e.event_type === 'view');
+      const viewEvents = pageViewEvents;
       const visitorCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'visitorId', 'visitor_id')).length;
       const sessionCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'sessionId', 'session_id')).length;
       const deviceCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'device', 'device_type')).length;
@@ -612,7 +633,7 @@ function generateDailyData(events: AnalyticsEvent[], start: Date, end: Date): Ti
 
     return {
       date: format(day, 'dd MMM'),
-      views: dayEvents.filter(e => e.event_type === 'view').length,
+      views: dayEvents.filter(isPageViewEvent).length,
       clicks: dayEvents.filter(e => e.event_type === 'click').length,
       shares: dayEvents.filter(e => e.event_type === 'share').length,
     };
@@ -634,7 +655,7 @@ function generateWeeklyData(events: AnalyticsEvent[], start: Date, end: Date): T
 
     return {
       date: format(weekStart, 'dd MMM'),
-      views: weekEvents.filter(e => e.event_type === 'view').length,
+      views: weekEvents.filter(isPageViewEvent).length,
       clicks: weekEvents.filter(e => e.event_type === 'click').length,
       shares: weekEvents.filter(e => e.event_type === 'share').length,
     };
@@ -657,7 +678,7 @@ function generateMonthlyData(events: AnalyticsEvent[], start: Date, end: Date): 
 
     return {
       date: format(monthStart, 'MMM yyyy'),
-      views: monthEvents.filter(e => e.event_type === 'view').length,
+      views: monthEvents.filter(isPageViewEvent).length,
       clicks: monthEvents.filter(e => e.event_type === 'click').length,
       shares: monthEvents.filter(e => e.event_type === 'share').length,
     };

@@ -9,10 +9,16 @@ import { logger } from '@/lib/utils/logger';
 export type ButtonStyle = 'default' | 'rounded' | 'pill';
 export type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
 
+export type ImageOverlay = 'none' | 'light' | 'dark' | 'custom';
+
 export interface BackgroundConfig {
   type: 'solid' | 'gradient' | 'image';
   value: string;
   gradientAngle?: number;
+  /** Overlay over background image (buttons). Default 'dark' for legacy compatibility. */
+  overlay?: ImageOverlay;
+  /** Custom overlay opacity 0-100 when overlay === 'custom'. */
+  overlayOpacity?: number;
 }
 
 // ============= Styling Utilities =============
@@ -121,13 +127,13 @@ export function createBlockClickHandler(
 
 /**
  * Generate a stable unique ID for a block
- * Uses crypto.randomUUID if available, falls back to timestamp + random
+ * Uses a pure UUID because analytics/blocks DB columns are uuid typed.
  */
-export function generateBlockId(type: string): string {
-  const random = typeof crypto !== 'undefined' && crypto.randomUUID
-    ? crypto.randomUUID().slice(0, 8)
-    : Math.random().toString(36).substring(2, 10);
-  return `${type}-${Date.now()}-${random}`;
+export function generateBlockId(_type: string): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c =>
+    (Number(c) ^ (Math.random() * 16 >> (Number(c) / 4))).toString(16)
+  );
 }
 
 /**
@@ -235,4 +241,72 @@ export function blocksOrderChanged(oldBlocks: Block[], newBlocks: Block[]): bool
   }
 
   return false;
+}
+
+// ============= Empty Block Hints =============
+
+/**
+ * Block types that are meaningless until the user fills required fields.
+ * These should auto-open the editor right after insertion.
+ */
+export const INCOMPLETE_BY_DEFAULT_TYPES = new Set<string>([
+  'link',
+  'button',
+  'video',
+  'map',
+  'download',
+  'custom_code',
+  'community',
+  'shoutout',
+]);
+
+/**
+ * Determine whether a freshly-inserted block still needs the user to fill
+ * something in. Returns a hint key + label that the editor surface can show
+ * as an inline chip ("Tap ✏️ to set the link").
+ */
+export function getBlockEmptyHint(block: any): { isEmpty: boolean; hintKey: string; hintLabel: string } {
+  if (!block || typeof block !== 'object') {
+    return { isEmpty: false, hintKey: '', hintLabel: '' };
+  }
+
+  const empty = (v: unknown) => v == null || (typeof v === 'string' && v.trim() === '');
+
+  switch (block.type) {
+    case 'link':
+      if (empty(block.url)) return { isEmpty: true, hintKey: 'blocks.hints.addUrl', hintLabel: 'Добавьте ссылку' };
+      break;
+    case 'button':
+      if (empty(block.url)) return { isEmpty: true, hintKey: 'blocks.hints.addUrl', hintLabel: 'Добавьте ссылку' };
+      break;
+    case 'video':
+      if (empty(block.url)) return { isEmpty: true, hintKey: 'blocks.hints.addVideo', hintLabel: 'Добавьте URL видео' };
+      break;
+    case 'map':
+      if (empty(block.address)) return { isEmpty: true, hintKey: 'blocks.hints.addAddress', hintLabel: 'Укажите адрес' };
+      break;
+    case 'download':
+      if (empty(block.fileUrl)) return { isEmpty: true, hintKey: 'blocks.hints.addFile', hintLabel: 'Загрузите файл' };
+      break;
+    case 'community':
+      if (empty(block.telegramLink)) return { isEmpty: true, hintKey: 'blocks.hints.addTelegram', hintLabel: 'Добавьте ссылку на чат' };
+      break;
+    case 'messenger': {
+      const messengers = Array.isArray(block.messengers) ? block.messengers : [];
+      const hasFilled = messengers.some((m: any) => m && !empty(m.username));
+      if (!hasFilled) return { isEmpty: true, hintKey: 'blocks.hints.addContact', hintLabel: 'Добавьте контакт' };
+      break;
+    }
+    case 'socials': {
+      const platforms = Array.isArray(block.platforms) ? block.platforms : [];
+      const hasFilled = platforms.some((p: any) => p && !empty(p.url));
+      if (!hasFilled) return { isEmpty: true, hintKey: 'blocks.hints.addSocial', hintLabel: 'Добавьте соцсеть' };
+      break;
+    }
+    case 'shoutout':
+      if (empty(block.userId)) return { isEmpty: true, hintKey: 'blocks.hints.pickUser', hintLabel: 'Выберите пользователя' };
+      break;
+  }
+
+  return { isEmpty: false, hintKey: '', hintLabel: '' };
 }

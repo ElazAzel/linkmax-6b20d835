@@ -64,7 +64,7 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
   };
 
   return (
-    <Card className={cn('w-full transition-all shadow-sm hover:shadow-md', styles.card)}>
+    <Card className={cn('w-full min-w-0 overflow-visible transition-all shadow-sm hover:shadow-md', styles.card)}>
       <CardContent className="p-5 sm:p-6">
         <div className="flex items-start gap-4">
           {/* Icon */}
@@ -80,7 +80,7 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold text-lg">{title}</h3>
+              <h3 className="font-semibold text-lg leading-snug break-words hyphens-auto">{title}</h3>
               {style === 'premium' && (
                 <Badge className={styles.badge}>
                   <Crown className="w-3 h-3 mr-1" />
@@ -96,7 +96,7 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
             </div>
 
             {description && (
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+              <p className="text-sm text-muted-foreground mt-1 leading-relaxed break-words hyphens-auto">
                 {description}
               </p>
             )}

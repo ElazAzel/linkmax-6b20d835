@@ -39,7 +39,7 @@ exports[`UI state components visual snapshots > renders empty state with CTA > e
   </p>
   <button
     aria-busy="false"
-    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] active:shadow-md h-12 min-h-[44px] px-6 py-3 mt-5"
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none active:scale-[0.98] bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 h-10 min-h-[44px] px-5 py-2.5 text-sm mt-5"
   >
     Create lead
   </button>
@@ -96,7 +96,7 @@ exports[`UI state components visual snapshots > renders error state with retry C
   </p>
   <button
     aria-busy="false"
-    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none border-2 border-border/60 bg-background/60 backdrop-blur-sm hover:bg-accent/60 hover:text-accent-foreground hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] h-12 min-h-[44px] px-6 py-3 mt-5"
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none active:scale-[0.98] border-2 border-border/60 bg-background/60 backdrop-blur-sm hover:bg-accent/60 hover:text-accent-foreground hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 h-10 min-h-[44px] px-5 py-2.5 text-sm mt-5"
   >
     <svg
       class="lucide lucide-refresh-cw mr-2 h-4 w-4"
