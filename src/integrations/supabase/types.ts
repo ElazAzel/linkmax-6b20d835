@@ -238,6 +238,7 @@ export type Database = {
           owner_id: string
           page_id: string
           specific_date: string | null
+          staff_id: string | null
           start_time: string
         }
         Insert: {
@@ -250,6 +251,7 @@ export type Database = {
           owner_id: string
           page_id: string
           specific_date?: string | null
+          staff_id?: string | null
           start_time: string
         }
         Update: {
@@ -262,6 +264,7 @@ export type Database = {
           owner_id?: string
           page_id?: string
           specific_date?: string | null
+          staff_id?: string | null
           start_time?: string
         }
         Relationships: [
