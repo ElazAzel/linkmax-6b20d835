@@ -123,6 +123,100 @@ serve(async (req: Request) => {
                 console.error("Failed to upgrade zone", zoneError);
                 return new Response("DB ERROR", { status: 500 });
             }
+        } else if (shp_type === 'offer_purchase' && shp_seller) {
+            // Credit the seller's wallet with net (fee applied) amount
+            const gross = parseFloat(outSum);
+            const { data: sellerProfile } = await supabase
+                .from('user_profiles')
+                .select('is_premium, premium_tier, telegram_chat_id, telegram_notifications_enabled, telegram_language')
+                .eq('id', shp_seller)
+                .maybeSingle();
+
+            const { grossAmount, feeAmount, netAmount, rate: feeRate } = calculateFintechFee({
+                amount: gross,
+                isPremium: !!sellerProfile?.is_premium,
+                tier: (sellerProfile?.premium_tier as string) || undefined,
+            });
+
+            let { data: wallet } = await supabase
+                .from('user_wallets')
+                .select('id, balance')
+                .eq('user_id', shp_seller)
+                .maybeSingle();
+
+            if (!wallet) {
+                const { data: created } = await supabase
+                    .from('user_wallets')
+                    .insert({ user_id: shp_seller, balance: 0, currency: 'KZT' } as any)
+                    .select('id, balance')
+                    .single();
+                wallet = created;
+            }
+
+            if (wallet) {
+                const { error: txError } = await supabase
+                    .from('wallet_transactions')
+                    .insert({
+                        wallet_id: wallet.id,
+                        user_id: shp_seller,
+                        gross_amount: grossAmount,
+                        fee_amount: feeAmount,
+                        net_amount: netAmount,
+                        type: 'payment',
+                        status: 'completed',
+                        description: `Offer purchase (InvId: ${invId})`,
+                        related_entity_id: shp_offer || null,
+                        related_entity_type: 'offer',
+                        metadata: {
+                            internal_ref: invId,
+                            fee_rate: feeRate,
+                            gateway: 'robokassa',
+                            kind: 'offer_purchase',
+                            offer_id: shp_offer,
+                        },
+                        completed_at: new Date().toISOString(),
+                    });
+
+                if (txError) {
+                    console.error("Failed to record offer_purchase tx", txError);
+                    return new Response("TX ERROR", { status: 500 });
+                }
+
+                await supabase
+                    .from('user_wallets')
+                    .update({
+                        balance: Number(wallet.balance) + netAmount,
+                        updated_at: new Date().toISOString(),
+                    })
+                    .eq('id', wallet.id);
+
+                try {
+                    if (sellerProfile?.telegram_chat_id && sellerProfile?.telegram_notifications_enabled) {
+                        const lang = (sellerProfile as any).telegram_language || 'ru';
+                        const netTxt = netAmount.toLocaleString('ru-RU');
+                        const feeTxt = feeAmount.toLocaleString('ru-RU');
+                        const text = lang === 'en'
+                            ? `💰 <b>Offer sold!</b>\n\nProfit: <b>${netTxt} KZT</b>\nFee: ${feeTxt} KZT\nRef: ${invId}`
+                            : `💰 <b>Продан оффер!</b>\n\nПрибыль: <b>${netTxt} KZT</b>\nКомиссия: ${feeTxt} KZT\nID: ${invId}`;
+                        await supabase.from('notification_queue').insert({
+                            user_id: shp_seller,
+                            event_type: 'payment_success',
+                            payload: {
+                                channel: 'telegram',
+                                telegram: {
+                                    chat_id: sellerProfile.telegram_chat_id,
+                                    text,
+                                    parse_mode: 'HTML',
+                                },
+                            },
+                            status: 'pending',
+                            idempotency_key: `offer_success_${invId}`,
+                        });
+                    }
+                } catch (notifyErr) {
+                    console.error("Failed to queue offer success notification", notifyErr);
+                }
+            }
         } else if (shp_type === 'payment') {
             const amount = parseFloat(outSum);
 
