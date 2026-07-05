@@ -13,12 +13,23 @@ serve(async (req: Request) => {
         const outSum = formData.get("OutSum") as string;
         const invId = formData.get("InvId") as string;
         const signatureValue = formData.get("SignatureValue") as string;
-        const shp_user = formData.get("shp_user") as string;
-        const shp_type = formData.get("shp_type") as string;
-        const shp_plan = formData.get("shp_plan") as string;
-        const shp_period = formData.get("shp_period") as string;
-        const shp_zone = formData.get("shp_zone") as string;
-        const shp_related_id = formData.get("shp_related_id") as string;
+
+        // Dynamically collect ALL shp_* custom params so signature matches
+        // whichever sender (subscription / zone_upgrade / payment / offer_purchase) built the URL.
+        const shpParams: Record<string, string> = {};
+        for (const [key, value] of formData.entries()) {
+            if (key.startsWith("shp_") && typeof value === "string" && value.length > 0) {
+                shpParams[key] = value;
+            }
+        }
+        const shp_user = shpParams.shp_user;
+        const shp_type = shpParams.shp_type;
+        const shp_plan = shpParams.shp_plan;
+        const shp_period = shpParams.shp_period;
+        const shp_zone = shpParams.shp_zone;
+        const shp_related_id = shpParams.shp_related_id;
+        const shp_offer = shpParams.shp_offer;
+        const shp_seller = shpParams.shp_seller;
 
         if (!outSum || !invId || !signatureValue || !shp_user) {
             throw new Error("Missing parameters");
@@ -30,19 +41,7 @@ serve(async (req: Request) => {
             throw new Error("Server configuration error");
         }
 
-        // Signature: outSum:invId:pass2:shp_... sorted alphabetically
-        const shpParams: Record<string, string> = {
-            shp_plan,
-            shp_period,
-            shp_type,
-            shp_user
-        };
-
-        if (shp_zone) shpParams.shp_zone = shp_zone;
-        if (shp_related_id) shpParams.shp_related_id = shp_related_id;
-
         const shpSorted = Object.entries(shpParams)
-            .filter(([_, v]) => v !== null && v !== undefined)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([key, value]) => `${key}=${value}`);
 
