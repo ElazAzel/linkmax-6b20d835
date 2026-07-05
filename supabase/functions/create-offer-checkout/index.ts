@@ -111,6 +111,7 @@ serve(async (req) => {
       shp_offer: o.id,
       shp_seller: o.user_id,
       shp_type: "offer_purchase",
+      shp_user: o.user_id,
     } as const;
     const shpString = Object.keys(shp)
       .sort()
