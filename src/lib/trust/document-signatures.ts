@@ -58,7 +58,7 @@ export async function requestSignature(input: RequestSignatureInput): Promise<Do
   };
   const { data, error } = await supabase
     .from('document_signatures')
-    .insert(payload)
+    .insert(payload as DocumentSignatureInsert)
     .select()
     .single();
   if (error) throw error;
@@ -76,7 +76,7 @@ export async function markSignatureStatus(
 
   const { data, error } = await supabase
     .from('document_signatures')
-    .update(patch)
+    .update(patch as DocumentSignatureUpdate)
     .eq('id', id)
     .select()
     .single();
