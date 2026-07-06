@@ -88,7 +88,7 @@ export async function createOffer(userId: string, input: CreateOfferInput): Prom
   };
   const { data, error } = await supabase
     .from('offers')
-    .insert(payload)
+    .insert(payload as OfferInsert)
     .select()
     .single();
   if (error) throw error;
@@ -98,7 +98,7 @@ export async function createOffer(userId: string, input: CreateOfferInput): Prom
 export async function updateOffer(id: string, patch: Partial<CreateOfferInput> & { is_active?: boolean }): Promise<Offer> {
   const { data, error } = await supabase
     .from('offers')
-    .update(patch)
+    .update(patch as OfferUpdate)
     .eq('id', id)
     .select()
     .single();
