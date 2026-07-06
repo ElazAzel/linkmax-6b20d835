@@ -7,7 +7,11 @@
  * здесь — доменная модель и статусы, чтобы фронт мог отображать pipeline.
  */
 
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
+import type { Database } from '@/integrations/supabase/types';
+
+type DocumentSignatureInsert = Database['public']['Tables']['document_signatures']['Insert'];
+type DocumentSignatureUpdate = Database['public']['Tables']['document_signatures']['Update'];
 
 export type SignatureStatus = 'pending' | 'viewed' | 'signed' | 'declined' | 'expired';
 
@@ -36,7 +40,7 @@ export interface RequestSignatureInput {
 
 export async function listDocumentSignatures(documentId: string): Promise<DocumentSignature[]> {
   const { data, error } = await supabase
-    .from('document_signatures' as never)
+    .from('document_signatures')
     .select('*')
     .eq('document_id', documentId)
     .order('created_at', { ascending: false });
@@ -53,8 +57,8 @@ export async function requestSignature(input: RequestSignatureInput): Promise<Do
     metadata: input.metadata ?? {},
   };
   const { data, error } = await supabase
-    .from('document_signatures' as never)
-    .insert(payload as never)
+    .from('document_signatures')
+    .insert(payload as DocumentSignatureInsert)
     .select()
     .single();
   if (error) throw error;
@@ -71,8 +75,8 @@ export async function markSignatureStatus(
   if (signatureData) patch.signature_data = signatureData;
 
   const { data, error } = await supabase
-    .from('document_signatures' as never)
-    .update(patch as never)
+    .from('document_signatures')
+    .update(patch as DocumentSignatureUpdate)
     .eq('id', id)
     .select()
     .single();

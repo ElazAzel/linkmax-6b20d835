@@ -10,7 +10,7 @@
  * и возвращает target_url. Здесь только CRUD/QoL-хелперы для дашборда.
  */
 
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 
 export type SmartLinkDownstreamAction =
   | { type: 'none' }
@@ -71,7 +71,7 @@ export function buildSmartLinkUrl(slug: string, origin?: string): string {
 
 export async function listMySmartLinks(userId: string): Promise<SmartLink[]> {
   const { data, error } = await supabase
-    .from('smart_links' as never)
+    .from('smart_links')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
@@ -99,8 +99,8 @@ export async function createSmartLink(userId: string, input: CreateSmartLinkInpu
     downstream_action: input.downstream_action ?? { type: 'none' },
   };
   const { data, error } = await supabase
-    .from('smart_links' as never)
-    .insert(payload as never)
+    .from('smart_links')
+    .insert(payload)
     .select()
     .single();
   if (error) throw error;
@@ -109,8 +109,8 @@ export async function createSmartLink(userId: string, input: CreateSmartLinkInpu
 
 export async function updateSmartLink(id: string, patch: Partial<CreateSmartLinkInput> & { is_active?: boolean }): Promise<SmartLink> {
   const { data, error } = await supabase
-    .from('smart_links' as never)
-    .update(patch as never)
+    .from('smart_links')
+    .update(patch)
     .eq('id', id)
     .select()
     .single();
@@ -119,6 +119,6 @@ export async function updateSmartLink(id: string, patch: Partial<CreateSmartLink
 }
 
 export async function deleteSmartLink(id: string): Promise<void> {
-  const { error } = await supabase.from('smart_links' as never).delete().eq('id', id);
+  const { error } = await supabase.from('smart_links').delete().eq('id', id);
   if (error) throw error;
 }
