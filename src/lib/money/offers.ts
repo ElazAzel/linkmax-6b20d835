@@ -8,6 +8,10 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import type { Database } from '@/integrations/supabase/types';
+
+type OfferInsert = Database['public']['Tables']['offers']['Insert'];
+type OfferUpdate = Database['public']['Tables']['offers']['Update'];
 
 export type OfferType = 'one_time' | 'subscription' | 'usage' | 'hybrid' | 'donation';
 export type BillingInterval = 'day' | 'week' | 'month' | 'year';
