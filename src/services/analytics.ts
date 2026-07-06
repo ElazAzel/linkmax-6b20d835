@@ -555,6 +555,14 @@ export async function trackPageView(pageId: string): Promise<void> {
   return trackEvent({
     pageId,
     eventType: 'view',
+    metadata: {
+      // Canonical taxonomy (OSS Benchmark 2026 P0)
+      event: 'page_view',
+      taxonomy_version: 1,
+      source_object_type: 'page',
+      source_object_id: pageId,
+      source_object: { type: 'page', id: pageId },
+    },
   });
 }
 
@@ -602,6 +610,12 @@ export async function trackBlockClick(
       blockId,
       blockType,
       blockTitle,
+      // Canonical taxonomy — legacy 'click' remains for backward compat.
+      event: 'link_click',
+      taxonomy_version: 1,
+      source_object_type: 'block',
+      source_object_id: blockId,
+      source_object: { type: 'block', id: blockId },
     },
   });
 }
@@ -630,6 +644,13 @@ export async function trackBlockView(
       blockType,
       blockTitle,
       isBlockImpression: true,
+      // Canonical taxonomy — page-level view is 'page_view'; block impressions
+      // are attribution helpers, tagged as link_click precursors for funnel joins.
+      event: 'page_view',
+      taxonomy_version: 1,
+      source_object_type: 'block',
+      source_object_id: blockId,
+      source_object: { type: 'block', id: blockId },
     },
   });
 }
@@ -643,6 +664,12 @@ export async function trackShare(pageId: string, method?: string): Promise<void>
     eventType: 'share',
     metadata: {
       method: method || 'unknown',
+      // Canonical taxonomy
+      event: 'share',
+      taxonomy_version: 1,
+      source_object_type: 'page',
+      source_object_id: pageId,
+      source_object: { type: 'page', id: pageId },
     },
   });
 }
