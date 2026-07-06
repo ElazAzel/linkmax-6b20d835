@@ -50,7 +50,7 @@ export function formatOfferPrice(offer: Pick<Offer, 'price_cents' | 'currency' |
 
 export async function listMyOffers(userId: string): Promise<Offer[]> {
   const { data, error } = await supabase
-    .from('offers' as never)
+    .from('offers')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
@@ -60,7 +60,7 @@ export async function listMyOffers(userId: string): Promise<Offer[]> {
 
 export async function listActiveOffersForPage(pageId: string): Promise<Offer[]> {
   const { data, error } = await supabase
-    .from('offers' as never)
+    .from('offers')
     .select('*')
     .eq('page_id', pageId)
     .eq('is_active', true)
@@ -83,8 +83,8 @@ export async function createOffer(userId: string, input: CreateOfferInput): Prom
     metadata: input.metadata ?? {},
   };
   const { data, error } = await supabase
-    .from('offers' as never)
-    .insert(payload as never)
+    .from('offers')
+    .insert(payload)
     .select()
     .single();
   if (error) throw error;
@@ -93,8 +93,8 @@ export async function createOffer(userId: string, input: CreateOfferInput): Prom
 
 export async function updateOffer(id: string, patch: Partial<CreateOfferInput> & { is_active?: boolean }): Promise<Offer> {
   const { data, error } = await supabase
-    .from('offers' as never)
-    .update(patch as never)
+    .from('offers')
+    .update(patch)
     .eq('id', id)
     .select()
     .single();
@@ -103,6 +103,6 @@ export async function updateOffer(id: string, patch: Partial<CreateOfferInput> &
 }
 
 export async function deleteOffer(id: string): Promise<void> {
-  const { error } = await supabase.from('offers' as never).delete().eq('id', id);
+  const { error } = await supabase.from('offers').delete().eq('id', id);
   if (error) throw error;
 }
