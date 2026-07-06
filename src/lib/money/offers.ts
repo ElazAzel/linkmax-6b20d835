@@ -7,7 +7,7 @@
  * подключается через отдельный слой (см. `orders`, edge-функции).
  */
 
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 
 export type OfferType = 'one_time' | 'subscription' | 'usage' | 'hybrid' | 'donation';
 export type BillingInterval = 'day' | 'week' | 'month' | 'year';

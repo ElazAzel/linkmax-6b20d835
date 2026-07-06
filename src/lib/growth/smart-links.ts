@@ -10,7 +10,7 @@
  * и возвращает target_url. Здесь только CRUD/QoL-хелперы для дашборда.
  */
 
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 
 export type SmartLinkDownstreamAction =
   | { type: 'none' }

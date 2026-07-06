@@ -7,7 +7,7 @@
  * здесь — доменная модель и статусы, чтобы фронт мог отображать pipeline.
  */
 
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 
 export type SignatureStatus = 'pending' | 'viewed' | 'signed' | 'declined' | 'expired';
 
