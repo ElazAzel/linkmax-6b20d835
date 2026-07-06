@@ -8,6 +8,10 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import type { Database } from '@/integrations/supabase/types';
+
+type DocumentSignatureInsert = Database['public']['Tables']['document_signatures']['Insert'];
+type DocumentSignatureUpdate = Database['public']['Tables']['document_signatures']['Update'];
 
 export type SignatureStatus = 'pending' | 'viewed' | 'signed' | 'declined' | 'expired';
 
