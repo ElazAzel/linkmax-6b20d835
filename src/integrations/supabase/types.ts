@@ -1255,6 +1255,81 @@ export type Database = {
           },
         ]
       }
+      offer_subscriptions: {
+        Row: {
+          billing_interval: string
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          customer_email: string | null
+          customer_user_id: string | null
+          id: string
+          metadata: Json
+          offer_id: string
+          provider: string
+          provider_subscription_id: string | null
+          seller_user_id: string
+          status: string
+          updated_at: string
+          zone_id: string | null
+        }
+        Insert: {
+          billing_interval?: string
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end: string
+          current_period_start?: string
+          customer_email?: string | null
+          customer_user_id?: string | null
+          id?: string
+          metadata?: Json
+          offer_id: string
+          provider?: string
+          provider_subscription_id?: string | null
+          seller_user_id: string
+          status?: string
+          updated_at?: string
+          zone_id?: string | null
+        }
+        Update: {
+          billing_interval?: string
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          customer_email?: string | null
+          customer_user_id?: string | null
+          id?: string
+          metadata?: Json
+          offer_id?: string
+          provider?: string
+          provider_subscription_id?: string | null
+          seller_user_id?: string
+          status?: string
+          updated_at?: string
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offer_subscriptions_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offer_subscriptions_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       offers: {
         Row: {
           billing_interval: string | null
@@ -2514,6 +2589,69 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      usage_events: {
+        Row: {
+          created_at: string
+          currency: string
+          customer_user_id: string | null
+          external_id: string | null
+          id: string
+          metadata: Json
+          metric_code: string
+          occurred_at: string
+          offer_id: string | null
+          quantity: number
+          seller_user_id: string
+          subscription_id: string | null
+          unit_amount_cents: number | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          customer_user_id?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json
+          metric_code: string
+          occurred_at?: string
+          offer_id?: string | null
+          quantity?: number
+          seller_user_id: string
+          subscription_id?: string | null
+          unit_amount_cents?: number | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          customer_user_id?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json
+          metric_code?: string
+          occurred_at?: string
+          offer_id?: string | null
+          quantity?: number
+          seller_user_id?: string
+          subscription_id?: string | null
+          unit_amount_cents?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_events_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "usage_events_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "offer_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_achievements: {
         Row: {
@@ -4539,6 +4677,15 @@ export type Database = {
           p_user_id: string
         }
         Returns: Json
+      }
+      aggregate_usage: {
+        Args: {
+          _metric_code: string
+          _period_end: string
+          _period_start: string
+          _subscription_id: string
+        }
+        Returns: number
       }
       apply_referral: {
         Args: { p_code: string; p_referred_user_id: string }
