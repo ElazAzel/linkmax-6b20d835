@@ -105,8 +105,6 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [activeTab, setActiveTab] = useState<'leads' | 'bookings' | 'reviews'>('leads');
-  const [monthlyLeadCount, setMonthlyLeadCount] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<'leads' | 'bookings'>('leads');
 
   const stats = getLeadStats();
   const monthlyLeadCount = useMonthlyInboundCount(user?.id, isPremium, [leads.length]);
