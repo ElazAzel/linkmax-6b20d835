@@ -63,6 +63,586 @@ export type Database = {
           },
         ]
       }
+      creator_activation_state: {
+        Row: {
+          conversion_block_added_at: string | null
+          created_at: string
+          dashboard_returned_at: string | null
+          first_booking_created_at: string | null
+          first_edit_at: string | null
+          first_invoice_created_at: string | null
+          first_lead_processed_at: string | null
+          first_lead_received_at: string | null
+          first_payment_completed_at: string | null
+          onboarding_completed_at: string | null
+          onboarding_started_at: string | null
+          page_generated_at: string | null
+          page_published_at: string | null
+          primary_page_id: string | null
+          signup_completed_at: string | null
+          telegram_connected_at: string | null
+          updated_at: string
+          upgrade_clicked_at: string | null
+          upgrade_completed_at: string | null
+          user_id: string
+        }
+        Insert: {
+          conversion_block_added_at?: string | null
+          created_at?: string
+          dashboard_returned_at?: string | null
+          first_booking_created_at?: string | null
+          first_edit_at?: string | null
+          first_invoice_created_at?: string | null
+          first_lead_processed_at?: string | null
+          first_lead_received_at?: string | null
+          first_payment_completed_at?: string | null
+          onboarding_completed_at?: string | null
+          onboarding_started_at?: string | null
+          page_generated_at?: string | null
+          page_published_at?: string | null
+          primary_page_id?: string | null
+          signup_completed_at?: string | null
+          telegram_connected_at?: string | null
+          updated_at?: string
+          upgrade_clicked_at?: string | null
+          upgrade_completed_at?: string | null
+          user_id: string
+        }
+        Update: {
+          conversion_block_added_at?: string | null
+          created_at?: string
+          dashboard_returned_at?: string | null
+          first_booking_created_at?: string | null
+          first_edit_at?: string | null
+          first_invoice_created_at?: string | null
+          first_lead_processed_at?: string | null
+          first_lead_received_at?: string | null
+          first_payment_completed_at?: string | null
+          onboarding_completed_at?: string | null
+          onboarding_started_at?: string | null
+          page_generated_at?: string | null
+          page_published_at?: string | null
+          primary_page_id?: string | null
+          signup_completed_at?: string | null
+          telegram_connected_at?: string | null
+          updated_at?: string
+          upgrade_clicked_at?: string | null
+          upgrade_completed_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_activation_state_primary_page_id_fkey"
+            columns: ["primary_page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creator_activation_state_primary_page_id_fkey"
+            columns: ["primary_page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creator_health_scores: {
+        Row: {
+          calculated_at: string
+          conversion_block_points: number
+          dashboard_return_points: number
+          first_lead_points: number
+          lead_processed_points: number
+          page_published_points: number
+          reasons: Json
+          score: number
+          telegram_points: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calculated_at?: string
+          conversion_block_points?: number
+          dashboard_return_points?: number
+          first_lead_points?: number
+          lead_processed_points?: number
+          page_published_points?: number
+          reasons?: Json
+          score?: number
+          telegram_points?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calculated_at?: string
+          conversion_block_points?: number
+          dashboard_return_points?: number
+          first_lead_points?: number
+          lead_processed_points?: number
+          page_published_points?: number
+          reasons?: Json
+          score?: number
+          telegram_points?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      product_events: {
+        Row: {
+          created_at: string
+          event_name: string
+          id: string
+          metadata: Json
+          occurred_at: string
+          page_id: string | null
+          source: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_name: string
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          page_id?: string | null
+          source?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_name?: string
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          page_id?: string | null
+          source?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_events_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_events_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feature_flags: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          default_enabled: boolean
+          description: string | null
+          ends_at: string | null
+          id: string
+          is_enabled: boolean
+          key: string
+          metadata: Json
+          name: string
+          rollout_percentage: number
+          starts_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          default_enabled?: boolean
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          is_enabled?: boolean
+          key: string
+          metadata?: Json
+          name: string
+          rollout_percentage?: number
+          starts_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          default_enabled?: boolean
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          is_enabled?: boolean
+          key?: string
+          metadata?: Json
+          name?: string
+          rollout_percentage?: number
+          starts_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      feature_flag_rules: {
+        Row: {
+          created_at: string
+          flag_id: string
+          id: string
+          is_enabled: boolean
+          operator: string
+          priority: number
+          rollout_percentage: number | null
+          rule_type: string
+          updated_at: string
+          values: Json
+        }
+        Insert: {
+          created_at?: string
+          flag_id: string
+          id?: string
+          is_enabled?: boolean
+          operator?: string
+          priority?: number
+          rollout_percentage?: number | null
+          rule_type: string
+          updated_at?: string
+          values?: Json
+        }
+        Update: {
+          created_at?: string
+          flag_id?: string
+          id?: string
+          is_enabled?: boolean
+          operator?: string
+          priority?: number
+          rollout_percentage?: number | null
+          rule_type?: string
+          updated_at?: string
+          values?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_flag_rules_flag_id_fkey"
+            columns: ["flag_id"]
+            isOneToOne: false
+            referencedRelation: "feature_flags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feature_flag_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          flag_id: string | null
+          id: string
+          next_value: Json | null
+          previous_value: Json | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          flag_id?: string | null
+          id?: string
+          next_value?: Json | null
+          previous_value?: Json | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          flag_id?: string | null
+          id?: string
+          next_value?: Json | null
+          previous_value?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_flag_audit_log_flag_id_fkey"
+            columns: ["flag_id"]
+            isOneToOne: false
+            referencedRelation: "feature_flags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_keys: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          key_hash: string
+          key_hint: string | null
+          key_prefix: string
+          last_used_at: string | null
+          metadata: Json
+          name: string
+          rate_limit_per_minute: number
+          revoked_at: string | null
+          scopes: string[]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_hash: string
+          key_hint?: string | null
+          key_prefix: string
+          last_used_at?: string | null
+          metadata?: Json
+          name: string
+          rate_limit_per_minute?: number
+          revoked_at?: string | null
+          scopes?: string[]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_hash?: string
+          key_hint?: string | null
+          key_prefix?: string
+          last_used_at?: string | null
+          metadata?: Json
+          name?: string
+          rate_limit_per_minute?: number
+          revoked_at?: string | null
+          scopes?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      webhook_endpoints: {
+        Row: {
+          created_at: string
+          disabled_at: string | null
+          disabled_reason: string | null
+          event_types: string[]
+          failure_count: number
+          id: string
+          is_active: boolean
+          last_failure_at: string | null
+          last_success_at: string | null
+          name: string
+          status: string
+          target_url: string
+          updated_at: string
+          user_id: string
+          zone_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          disabled_at?: string | null
+          disabled_reason?: string | null
+          event_types: string[]
+          failure_count?: number
+          id?: string
+          is_active?: boolean
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          name: string
+          status?: string
+          target_url: string
+          updated_at?: string
+          user_id: string
+          zone_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          disabled_at?: string | null
+          disabled_reason?: string | null
+          event_types?: string[]
+          failure_count?: number
+          id?: string
+          is_active?: boolean
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          name?: string
+          status?: string
+          target_url?: string
+          updated_at?: string
+          user_id?: string
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_endpoints_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      webhook_secrets: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          endpoint_id: string
+          expires_at: string | null
+          id: string
+          secret: string
+          secret_hint: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          endpoint_id: string
+          expires_at?: string | null
+          id?: string
+          secret: string
+          secret_hint: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          endpoint_id?: string
+          expires_at?: string | null
+          id?: string
+          secret?: string
+          secret_hint?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_secrets_endpoint_id_fkey"
+            columns: ["endpoint_id"]
+            isOneToOne: false
+            referencedRelation: "webhook_endpoints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      webhook_event_queue: {
+        Row: {
+          attempts: number
+          created_at: string
+          event_type: string
+          id: string
+          idempotency_key: string
+          last_error: string | null
+          next_attempt_at: string
+          payload: Json
+          source_id: string | null
+          source_table: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          zone_id: string | null
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          event_type: string
+          id?: string
+          idempotency_key: string
+          last_error?: string | null
+          next_attempt_at?: string
+          payload?: Json
+          source_id?: string | null
+          source_table?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          zone_id?: string | null
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          event_type?: string
+          id?: string
+          idempotency_key?: string
+          last_error?: string | null
+          next_attempt_at?: string
+          payload?: Json
+          source_id?: string | null
+          source_table?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_event_queue_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      webhook_deliveries: {
+        Row: {
+          attempt_number: number
+          created_at: string
+          duration_ms: number | null
+          endpoint_id: string
+          error_message: string | null
+          event_queue_id: string
+          id: string
+          next_retry_at: string | null
+          request_headers: Json
+          response_body_preview: string | null
+          response_status: number | null
+          status: string
+        }
+        Insert: {
+          attempt_number: number
+          created_at?: string
+          duration_ms?: number | null
+          endpoint_id: string
+          error_message?: string | null
+          event_queue_id: string
+          id?: string
+          next_retry_at?: string | null
+          request_headers?: Json
+          response_body_preview?: string | null
+          response_status?: number | null
+          status?: string
+        }
+        Update: {
+          attempt_number?: number
+          created_at?: string
+          duration_ms?: number | null
+          endpoint_id?: string
+          error_message?: string | null
+          event_queue_id?: string
+          id?: string
+          next_retry_at?: string | null
+          request_headers?: Json
+          response_body_preview?: string | null
+          response_status?: number | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_deliveries_endpoint_id_fkey"
+            columns: ["endpoint_id"]
+            isOneToOne: false
+            referencedRelation: "webhook_endpoints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "webhook_deliveries_event_queue_id_fkey"
+            columns: ["event_queue_id"]
+            isOneToOne: false
+            referencedRelation: "webhook_event_queue"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       app_settings: {
         Row: {
           key: string
@@ -84,28 +664,31 @@ export type Database = {
       automation_logs: {
         Row: {
           automation_id: string
+          booking_id: string | null
           created_at: string
           error_message: string | null
           id: string
-          lead_id: string
+          lead_id: string | null
           sent_at: string | null
           status: string
         }
         Insert: {
           automation_id: string
+          booking_id?: string | null
           created_at?: string
           error_message?: string | null
           id?: string
-          lead_id: string
+          lead_id?: string | null
           sent_at?: string | null
           status: string
         }
         Update: {
           automation_id?: string
+          booking_id?: string | null
           created_at?: string
           error_message?: string | null
           id?: string
-          lead_id?: string
+          lead_id?: string | null
           sent_at?: string | null
           status?: string
         }
@@ -115,6 +698,13 @@ export type Database = {
             columns: ["automation_id"]
             isOneToOne: false
             referencedRelation: "crm_automations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_logs_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
             referencedColumns: ["id"]
           },
           {
@@ -1535,6 +2125,312 @@ export type Database = {
           view_count?: number | null
         }
         Relationships: []
+      }
+      page_review_summaries: {
+        Row: {
+          average_rating: number | null
+          last_review_at: string | null
+          organization_id: string | null
+          owner_id: string
+          page_id: string
+          published_count: number
+          rating_breakdown: Json
+          updated_at: string
+          zone_id: string | null
+        }
+        Insert: {
+          average_rating?: number | null
+          last_review_at?: string | null
+          organization_id?: string | null
+          owner_id: string
+          page_id: string
+          published_count?: number
+          rating_breakdown?: Json
+          updated_at?: string
+          zone_id?: string | null
+        }
+        Update: {
+          average_rating?: number | null
+          last_review_at?: string | null
+          organization_id?: string | null
+          owner_id?: string
+          page_id?: string
+          published_count?: number
+          rating_breakdown?: Json
+          updated_at?: string
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_review_summaries_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_review_summaries_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: true
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_review_summaries_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: true
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_review_summaries_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          body: string | null
+          booking_id: string | null
+          created_at: string
+          hidden_at: string | null
+          id: string
+          is_featured: boolean
+          metadata: Json
+          moderation_reason: string | null
+          order_id: string | null
+          organization_id: string | null
+          owner_id: string
+          page_id: string
+          published_at: string | null
+          rating: number
+          reviewer_contact_hash: string | null
+          reviewer_display_name: string
+          source: string
+          staff_id: string | null
+          status: string
+          title: string | null
+          updated_at: string
+          verification_status: string
+          zone_id: string | null
+        }
+        Insert: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string
+          hidden_at?: string | null
+          id?: string
+          is_featured?: boolean
+          metadata?: Json
+          moderation_reason?: string | null
+          order_id?: string | null
+          organization_id?: string | null
+          owner_id: string
+          page_id: string
+          published_at?: string | null
+          rating: number
+          reviewer_contact_hash?: string | null
+          reviewer_display_name: string
+          source?: string
+          staff_id?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          verification_status?: string
+          zone_id?: string | null
+        }
+        Update: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string
+          hidden_at?: string | null
+          id?: string
+          is_featured?: boolean
+          metadata?: Json
+          moderation_reason?: string | null
+          order_id?: string | null
+          organization_id?: string | null
+          owner_id?: string
+          page_id?: string
+          published_at?: string | null
+          rating?: number
+          reviewer_contact_hash?: string | null
+          reviewer_display_name?: string
+          source?: string
+          staff_id?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          verification_status?: string
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "zone_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_requests: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          metadata: Json
+          order_id: string | null
+          organization_id: string | null
+          owner_id: string
+          page_id: string
+          recipient_contact_hash: string | null
+          request_token_hash: string
+          review_id: string | null
+          revoked_at: string | null
+          sent_at: string | null
+          status: string
+          updated_at: string
+          used_at: string | null
+          zone_id: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          metadata?: Json
+          order_id?: string | null
+          organization_id?: string | null
+          owner_id: string
+          page_id: string
+          recipient_contact_hash?: string | null
+          request_token_hash: string
+          review_id?: string | null
+          revoked_at?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+          used_at?: string | null
+          zone_id?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          metadata?: Json
+          order_id?: string | null
+          organization_id?: string | null
+          owner_id?: string
+          page_id?: string
+          recipient_contact_hash?: string | null
+          request_token_hash?: string
+          review_id?: string | null
+          revoked_at?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+          used_at?: string | null
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_requests_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_requests_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_requests_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_requests_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_requests_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_requests_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       partners: {
         Row: {
@@ -3845,6 +4741,26 @@ export type Database = {
         }
         Returns: string
       }
+      create_review_for_booking: {
+        Args: {
+          p_body?: string | null
+          p_booking_id: string
+          p_metadata?: Json
+          p_rating: number
+          p_reviewer_contact?: string | null
+          p_reviewer_display_name?: string | null
+          p_title?: string | null
+        }
+        Returns: Json
+      }
+      create_booking_review_request: {
+        Args: {
+          p_booking_id: string
+          p_expires_in?: string
+          p_metadata?: Json
+        }
+        Returns: Json
+      }
       generate_referral_code: { Args: { p_user_id: string }; Returns: string }
       generate_unique_slug: { Args: { base_slug: string }; Returns: string }
       get_auth_user_email: { Args: never; Returns: string }
@@ -3867,6 +4783,10 @@ export type Database = {
           theme_json: Json
           version_id: string
         }[]
+      }
+      get_review_request_by_token: {
+        Args: { p_token: string }
+        Returns: Json
       }
       get_team_by_invite_code: {
         Args: { p_code: string }
@@ -3911,6 +4831,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      hash_review_request_token: {
+        Args: { p_token: string }
+        Returns: string | null
+      }
       increment_block_clicks:
         | {
             Args: { block_uuid: string }
@@ -3934,6 +4858,10 @@ export type Database = {
         Returns: boolean
       }
       is_team_public: { Args: { p_team_id: string }; Returns: boolean }
+      is_allowed_review_request_status: {
+        Args: { p_status: string }
+        Returns: boolean
+      }
       is_zone_admin: {
         Args: { p_user_id: string; p_zone_id: string }
         Returns: boolean
@@ -3945,6 +4873,18 @@ export type Database = {
       leave_zone: { Args: { p_zone_id: string }; Returns: Json }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       like_template: { Args: { p_template_id: string }; Returns: undefined }
+      moderate_review: {
+        Args: {
+          p_reason?: string | null
+          p_review_id: string
+          p_status: string
+        }
+        Returns: Json
+      }
+      can_manage_page_review_requests: {
+        Args: { p_page_id: string; p_user_id: string }
+        Returns: boolean
+      }
       process_marketplace_purchase:
         | {
             Args: {
@@ -3987,6 +4927,18 @@ export type Database = {
           p_description?: string
           p_source: string
           p_user_id: string
+        }
+        Returns: Json
+      }
+      submit_review_request: {
+        Args: {
+          p_body?: string | null
+          p_metadata?: Json
+          p_rating: number
+          p_reviewer_contact?: string | null
+          p_reviewer_display_name?: string | null
+          p_title?: string | null
+          p_token: string
         }
         Returns: Json
       }

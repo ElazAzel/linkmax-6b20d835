@@ -46,6 +46,7 @@ import {
   trackWizardNicheSelected,
   trackWizardStarted,
 } from '@/lib/activation-events';
+import { trackCurrentUserProductEvent } from '@/services/product-analytics';
 
 // Whitelist of block types supported by the editor (must match block-factory.ts)
 const KNOWN_BLOCK_TYPES = new Set([
@@ -367,8 +368,20 @@ export function AIBuilderWizard({
 
     setGeneratedBlocks(finalBlocks);
     setUsedAI(aiSucceeded);
+    if (pageId) {
+      void trackCurrentUserProductEvent('ai_page_generated', {
+        pageId,
+        metadata: {
+          niche: selectedNiche,
+          goal: selectedGoal ?? undefined,
+          blocksCount: finalBlocks.length,
+          usedAI: aiSucceeded,
+          templateId: selectedTemplate.id,
+        },
+      });
+    }
     setStep('complete');
-  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, incrementAIPageGeneration]);
+  }, [selectedNiche, selectedTemplate, userInfo, selectedGoal, incrementAIPageGeneration, pageId]);
 
   const handleGenerate = useCallback(async () => {
     if (!selectedNiche || !selectedTemplate) {

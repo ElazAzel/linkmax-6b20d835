@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as pagesService from '../pages';
+import type { ExpertDirectoryProfile } from '../pages';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 
@@ -78,6 +79,53 @@ describe('pagesService', () => {
             it('should return true if profile block is present', () => {
                 const result = pagesService.canPublishPage([{ id: '1', type: 'profile' } as any]);
                 expect(result.canPublish).toBe(true);
+            });
+        });
+
+        describe('expert directory helpers', () => {
+            const expertProfile = (
+                id: string,
+                averageRating: number | null,
+                publishedCount: number,
+                viewCount: number
+            ): ExpertDirectoryProfile => ({
+                id,
+                slug: id,
+                title: id,
+                description: null,
+                avatar_url: null,
+                niche: null,
+                city: null,
+                profession: null,
+                entity_type: 'person',
+                view_count: viewCount,
+                reviewSummary: {
+                    averageRating,
+                    publishedCount,
+                    lastReviewAt: null,
+                },
+            });
+
+            it('normalizes expert directory filters for URL state', () => {
+                expect(pagesService.normalizeExpertDirectoryFilter('  Almaty\ncenter  ')).toBe('Almaty center');
+                expect(pagesService.normalizeExpertDirectoryFilter('   ')).toBeNull();
+                expect(pagesService.normalizeExpertDirectoryFilter('abcdef', 3)).toBe('abc');
+            });
+
+            it('sorts verified expert profiles before view-only profiles', () => {
+                const sorted = pagesService.sortExpertDirectoryProfiles([
+                    expertProfile('popular-without-reviews', null, 0, 5000),
+                    expertProfile('highest-rating', 4.9, 2, 100),
+                    expertProfile('same-rating-more-reviews', 4.8, 10, 90),
+                    expertProfile('same-rating-fewer-reviews', 4.8, 3, 1000),
+                ]);
+
+                expect(sorted.map((profile) => profile.id)).toEqual([
+                    'highest-rating',
+                    'same-rating-more-reviews',
+                    'same-rating-fewer-reviews',
+                    'popular-without-reviews',
+                ]);
             });
         });
     });

@@ -1,11 +1,11 @@
 # Runbook: Local Development Setup
 
-> **Goal:** Get a developer from zero to running `inkmax` locally.
+> **Goal:** Get a developer from zero to running LinkMAX locally.
 
 ## Prerequisites
 
-- Node.js (v18 or later)
-- npm (v9 or later)
+- Node.js (v20 or later recommended)
+- npm (v10 or later recommended)
 - Git
 - Supabase CLI (optional, for edge function testing)
 
@@ -13,8 +13,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone <repo-url>
-   cd inkmax
+   git clone https://github.com/ElazAzel/linkmax-6b20d835.git linkmax
+   cd linkmax
    ```
 
 2. **Install dependencies**
@@ -31,7 +31,7 @@
      - `VITE_SUPABASE_URL`: Your Supabase project URL
      - `VITE_SUPABASE_PUBLISHABLE_KEY`: Your Supabase anon key
 
-   > **Note**: `next.config.mjs` maps `VITE_*` vars to `NEXT_PUBLIC_*` automatically.
+   > **Note**: LinkMAX is a Vite React SPA. Client-facing variables use the `VITE_*` prefix.
 
 ## Running the App
 
@@ -39,7 +39,7 @@
    ```bash
    npm run dev
    ```
-   - The app should be running at `http://localhost:3000`.
+   - The app should be running at `http://localhost:8080`.
 
 ## Edge Functions (Local)
 

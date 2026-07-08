@@ -15,7 +15,6 @@ import { useEffect, useMemo, memo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/platform/supabase/client';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -26,8 +25,16 @@ import Users from 'lucide-react/dist/esm/icons/users';
 import Search from 'lucide-react/dist/esm/icons/search';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
+import Star from 'lucide-react/dist/esm/icons/star';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
+import {
+  fetchExpertDirectoryProfiles,
+  normalizeExpertDirectoryFilter,
+  type ExpertDirectoryProfile,
+} from '@/services/pages';
 
 // Normalized niche tags with i18n
 const NICHE_TAGS = [
@@ -45,6 +52,7 @@ const NICHE_TAGS = [
   { slug: 'other', label: { ru: 'Другое', en: 'Other', kk: 'Басқа' } },
 ];
 
+export default function Experts() {
 interface ExpertProfile {
   id: string;
   slug: string;
@@ -58,32 +66,61 @@ interface ExpertProfile {
 export const Experts = memo(function Experts() {
   const params = useParams();
   const tag = params?.tag as string;
-  const searchParams = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
   const language = i18n.language as 'ru' | 'en' | 'kk';
+  const searchTerm = searchParams.get('q') ?? '';
+  const cityFilter = searchParams.get('city') ?? '';
+  const verifiedOnly = searchParams.get('verified') === '1';
+  const normalizedSearchTerm = normalizeExpertDirectoryFilter(searchTerm)?.toLocaleLowerCase(language) ?? '';
 
-  // Fetch experts from database
-  const { data: experts, isLoading } = useQuery({
-    queryKey: ['experts', tag],
-    queryFn: async () => {
-      let query = (supabase as any)
-        .from('pages')
-        .select('id, slug, title, description, avatar_url, niche, view_count')
-        .eq('is_published', true)
-        .eq('is_indexable', true)
-        .order('view_count', { ascending: false })
-        .limit(100);
-
-      if (tag) {
-        query = query.eq('niche', tag);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-      return data as ExpertProfile[];
-    },
+  const { data: experts = [], isLoading } = useQuery({
+    queryKey: ['experts', tag, cityFilter, verifiedOnly],
+    queryFn: () => fetchExpertDirectoryProfiles({
+      tag,
+      city: cityFilter,
+      verifiedOnly,
+      limit: 100,
+    }),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
+
+  const visibleExperts = useMemo(() => {
+    if (!normalizedSearchTerm) return experts;
+
+    return experts.filter((expert) => [
+      expert.title,
+      expert.slug,
+      expert.description,
+      expert.niche,
+      expert.city,
+      expert.profession,
+    ].some((value) => value?.toLocaleLowerCase(language).includes(normalizedSearchTerm)));
+  }, [experts, language, normalizedSearchTerm]);
+
+  const ratingFormatter = useMemo(() => new Intl.NumberFormat(language, {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1,
+  }), [language]);
+
+  const numberFormatter = useMemo(() => new Intl.NumberFormat(language), [language]);
+
+  const updateDirectoryFilter = (key: 'q' | 'city' | 'verified', value: string | null) => {
+    const next = new URLSearchParams(searchParams);
+
+    if (value) {
+      next.set(key, value);
+    } else {
+      next.delete(key);
+    }
+
+    setSearchParams(next, { replace: true });
+  };
+
+  const buildExpertsPath = (nextTag?: string) => {
+    const query = searchParams.toString();
+    return `${nextTag ? `/experts/${nextTag}` : '/experts'}${query ? `?${query}` : ''}`;
+  };
 
   // Page meta
   const currentTag = NICHE_TAGS.find(t => t.slug === tag);
@@ -109,14 +146,28 @@ export const Experts = memo(function Experts() {
       url: canonical,
       mainEntity: {
         '@type': 'ItemList',
-        itemListElement: (experts || []).slice(0, 20).map((expert, index) => ({
+        itemListElement: visibleExperts.slice(0, 20).map((expert, index) => ({
           '@type': 'ListItem',
           position: index + 1,
           item: {
-            '@type': 'Person',
+            '@type': expert.entity_type === 'organization' ? 'Organization' : 'Person',
             name: expert.title || expert.slug,
             url: getPublicPageUrl(expert.slug),
             image: expert.avatar_url,
+            jobTitle: expert.profession || undefined,
+            address: expert.city ? {
+              '@type': 'PostalAddress',
+              addressLocality: expert.city,
+            } : undefined,
+            aggregateRating: expert.reviewSummary.publishedCount > 0 && expert.reviewSummary.averageRating
+              ? {
+                  '@type': 'AggregateRating',
+                  ratingValue: expert.reviewSummary.averageRating,
+                  reviewCount: expert.reviewSummary.publishedCount,
+                  bestRating: 5,
+                  worstRating: 1,
+                }
+              : undefined,
           },
         })),
       },
@@ -139,7 +190,7 @@ export const Experts = memo(function Experts() {
     return () => {
       script?.remove();
     };
-  }, [experts, canonical, pageTitle, pageDescription]);
+  }, [visibleExperts, canonical, pageTitle, pageDescription]);
 
   return (
     <>
@@ -180,7 +231,7 @@ export const Experts = memo(function Experts() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
               <Users className="h-4 w-4 text-primary" />
               <span className="text-sm text-primary font-medium">
-                {experts?.length || 0}+ {t('experts.profiles', 'профилей')}
+                {visibleExperts.length}+ {t('experts.profiles', 'профилей')}
               </span>
             </div>
 
@@ -199,16 +250,35 @@ export const Experts = memo(function Experts() {
               {t('experts.subtitle', 'Мини-сайты экспертов, фрилансеров и малого бизнеса')}
             </p>
 
-            {/* Search (placeholder for future) */}
-            <div className="max-w-md mx-auto">
+            <div className="max-w-3xl mx-auto grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_220px_auto]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder={t('experts.searchPlaceholder', 'Поиск по имени или нише...')}
+                  aria-label={t('experts.searchLabel', 'Search by name or niche')}
                   className="pl-10"
-                  disabled
+                  value={searchTerm}
+                  onChange={(event) => updateDirectoryFilter('q', event.target.value.trimStart())}
                 />
               </div>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  aria-label={t('experts.cityFilter', 'City')}
+                  className="pl-10"
+                  value={cityFilter}
+                  onChange={(event) => updateDirectoryFilter('city', event.target.value.trimStart())}
+                />
+              </div>
+              <Button
+                type="button"
+                variant={verifiedOnly ? 'default' : 'outline'}
+                className="gap-2"
+                aria-pressed={verifiedOnly}
+                onClick={() => updateDirectoryFilter('verified', verifiedOnly ? null : '1')}
+              >
+                <ShieldCheck className="h-4 w-4" />
+                {t('experts.verifiedOnly', 'Verified')}
+              </Button>
             </div>
           </div>
         </section>
@@ -217,7 +287,7 @@ export const Experts = memo(function Experts() {
         <section className="py-6 border-b">
           <div className="container max-w-6xl mx-auto px-4">
             <div className="flex flex-wrap gap-2 justify-center">
-              <Link to="/experts">
+              <Link to={buildExpertsPath()}>
                 <Badge
                   variant={!tag ? 'default' : 'outline'}
                   className="cursor-pointer hover:bg-primary/80"
@@ -226,7 +296,7 @@ export const Experts = memo(function Experts() {
                 </Badge>
               </Link>
               {NICHE_TAGS.map(niche => (
-                <Link key={niche.slug} to={`/experts/${niche.slug}`}>
+                <Link key={niche.slug} to={buildExpertsPath(niche.slug)}>
                   <Badge
                     variant={tag === niche.slug ? 'default' : 'outline'}
                     className="cursor-pointer hover:bg-primary/80"
@@ -248,7 +318,7 @@ export const Experts = memo(function Experts() {
                   <Skeleton key={i} className="h-48 rounded-xl" />
                 ))}
               </div>
-            ) : experts?.length === 0 ? (
+            ) : visibleExperts.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-muted-foreground mb-4">
                   {t('experts.noResults', 'Пока нет профилей в этой категории')}
@@ -262,7 +332,7 @@ export const Experts = memo(function Experts() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {experts?.map(expert => (
+                {visibleExperts.map((expert: ExpertDirectoryProfile) => (
                   <Link
                     key={expert.id}
                     to={`/${expert.slug}`}
@@ -270,11 +340,13 @@ export const Experts = memo(function Experts() {
                   >
                     <article
                       className={cn(
-                        "p-6 rounded-xl border bg-card hover:border-primary/50 transition-all",
+                        "h-full p-6 rounded-xl border bg-card hover:border-primary/50 transition-all",
                         "hover:shadow-lg hover:-translate-y-1"
                       )}
                       itemScope
-                      itemType="https://schema.org/Person"
+                      itemType={expert.entity_type === 'organization'
+                        ? 'https://schema.org/Organization'
+                        : 'https://schema.org/Person'}
                     >
                       <div className="flex items-start gap-4">
                         <Avatar className="h-14 w-14 ring-2 ring-background">
@@ -301,18 +373,51 @@ export const Experts = memo(function Experts() {
                         <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
 
-                      {expert.niche && (
-                        <div className="mt-4 flex items-center gap-2">
+                      {expert.reviewSummary.publishedCount > 0 && expert.reviewSummary.averageRating !== null && (
+                        <div
+                          className="mt-4 flex items-center justify-between gap-3 rounded-lg bg-primary/5 px-3 py-2"
+                          itemProp="aggregateRating"
+                          itemScope
+                          itemType="https://schema.org/AggregateRating"
+                        >
+                          <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                            <Star className="h-4 w-4 fill-primary text-primary" />
+                            <span itemProp="ratingValue">
+                              {ratingFormatter.format(expert.reviewSummary.averageRating)}
+                            </span>
+                            <meta itemProp="bestRating" content="5" />
+                            <meta itemProp="worstRating" content="1" />
+                          </div>
+                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                            <span>
+                              {t('experts.verifiedReviewCount', '{{count}} verified', {
+                                count: expert.reviewSummary.publishedCount,
+                              })}
+                            </span>
+                            <meta itemProp="reviewCount" content={String(expert.reviewSummary.publishedCount)} />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                        {expert.niche && (
                           <Badge variant="secondary" className="text-xs">
                             {NICHE_TAGS.find(n => n.slug === expert.niche)?.label[language] || expert.niche}
                           </Badge>
-                          {expert.view_count && expert.view_count > 100 && (
+                        )}
+                        {expert.city && (
+                          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <MapPin className="h-3 w-3" />
+                            {expert.city}
+                          </span>
+                        )}
+                        {expert.view_count && expert.view_count > 100 && (
                             <span className="text-xs text-muted-foreground">
-                              {expert.view_count.toLocaleString()} {t('experts.views', 'просмотров')}
+                              {numberFormatter.format(expert.view_count)} {t('experts.views', 'просмотров')}
                             </span>
                           )}
-                        </div>
-                      )}
+                      </div>
                     </article>
                   </Link>
                 ))}

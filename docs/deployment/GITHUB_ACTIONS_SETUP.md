@@ -6,7 +6,7 @@
 
 Follow these steps to add the Cloudflare API token to your GitHub repository:
 
-1. Go to your GitHub repository: https://github.com/ElazAzel/inkmax
+1. Go to your GitHub repository: https://github.com/ElazAzel/linkmax-6b20d835
 2. Click **Settings** (top menu)
 3. In the left sidebar, click **Secrets and variables** → **Actions**
 4. Click **New repository secret**

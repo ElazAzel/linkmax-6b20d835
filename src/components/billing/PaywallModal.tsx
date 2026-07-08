@@ -3,7 +3,7 @@
  * Shown when a Starter user hits the multi-page limit (or any Pro gate).
  * Emits posthog events: paywall_shown, paywall_cta_click, paywall_dismissed.
  */
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import posthog from 'posthog-js';
@@ -53,6 +53,10 @@ export const PaywallModal = memo(function PaywallModal({
   const { inTrial } = usePremiumStatus();
   const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
   const trialEligible = !inTrial;
+  const checkoutPromoCode = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('promo') ?? params.get('coupon');
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -61,8 +65,8 @@ export const PaywallModal = memo(function PaywallModal({
   }, [open, source, trialEligible]);
 
   const handleStartTrial = async () => {
-    safeCapture('paywall_cta_click', { source, target: 'trial' });
-    await openCheckout({ priceId: 'pro_monthly' });
+    safeCapture('paywall_cta_click', { source, target: 'trial', promo_code_present: Boolean(checkoutPromoCode) });
+    await openCheckout({ priceId: 'pro_monthly', discountCode: checkoutPromoCode });
   };
 
   const handleUpgrade = () => {

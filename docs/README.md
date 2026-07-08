@@ -1,15 +1,15 @@
 # 📚 Индекс документации LinkMAX (ex-lnkmx)
 
 **Версия:** 3.1.0
-**Дата обновления:** 18 апреля 2026
-**Статус:** Production Ready (Phase 40: Zenith) ✅
+**Дата обновления:** 1 июля 2026
+**Статус:** Production Ready (Phase 46: OSS Strategy & Repo Hygiene) ✅
 
 Добро пожаловать в портал документации **LinkMAX**.
  Это единая точка входа для всех технических, архитектурных и продуктовых руководств.
 Вместо множества разрозненных индексов (INDEX.md, DOCUMENTATION-INDEX-FULL.md), все ключевые ссылки теперь агрегированы здесь.
 
 > [!IMPORTANT]
-> **Текущая стратегия (Q1-Q2 2026):** Переход на модель **"Step-by-Growth"** (транзакционная монетизация) и позиционирование как **"Business OS"** для экспертов и микро-бизнеса. Внедрена **Phase 40: Zenith**, включающая Developer Portal (API & Webhooks) для глубоких интеграций.
+> **Текущая стратегия:** развивать LinkMAX как **Business OS** для экспертов и микро-бизнеса: нативный пользовательский UX, Step-by-Growth монетизация и аккуратное заимствование OSS-паттернов без встраивания тяжёлых внешних систем целиком.
 
 ---
 
@@ -24,6 +24,7 @@
 4. **[GLOSSARY.md](GLOSSARY.md)** — Глоссарий терминов проекта.
 5. **[README.md](../README.md)** — Корневой README проекта (обзор платформы).
 6. **[DOCS_FRESHNESS_AUDIT_2026_04_18.md](audits/DOCS_FRESHNESS_AUDIT_2026_04_18.md)** — проверка актуальности всей документации (порог 60 дней).
+7. **[OSS_INTEGRATION_STRATEGY.md](roadmap/OSS_INTEGRATION_STRATEGY.md)** — стратегия развития Business OS через OSS-референсы: что строить нативно, что подключать позже и что не тащить в продукт.
 
 ### Для разработчиков
 
@@ -47,6 +48,7 @@
 2. **[2_BUSINESS_FINANCIAL_MODEL.md](product/2_BUSINESS_FINANCIAL_MODEL.md)** — Финмодель (Step-by-Growth, транзакции).
 3. **[STRATEGIC_PLAN_2026.md](product/STRATEGIC_PLAN_2026.md)** — План развития на 2026 год.
 4. **[COMPETITIVE_NOTES.md](product/COMPETITIVE_NOTES.md)** — Анализ рынка и конкурентов.
+5. **[OSS_INTEGRATION_STRATEGY.md](roadmap/OSS_INTEGRATION_STRATEGY.md)** — приоритетная матрица Product Analytics, Webhooks V2, Automations, Booking V2, Forms, Billing и Commerce.
 
 ---
 
@@ -63,6 +65,7 @@
 | **`features/`** | Работа фич, UI-компоненты, структура блоков. |
 | **`implementation/`** | API доки, схема БД, процессы перевода (i18n), демо-аккаунты. |
 | **`product/`** | Видение 6 Pillars, маркетинг, бизнес-модель, roadmap, презентации. |
+| **`roadmap/`** | Актуальные стратегические карты внедрения и приоритетные матрицы. |
 | **`testing/`** | Стратегия QA. |
 | **`operations/`** | Операционное руководство, tech debt, a11y, инструкции для AI агентов. |
 | **`ADR/`** | Architecture Decision Records (Фиксация архитектурных изменений). |

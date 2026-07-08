@@ -24,4 +24,4 @@
 
 - **graphs/** — диаграммы (например, dependency-graph.mmd).
 
-Актуальный технический снимок платформы: [../audits/PLATFORM_SNAPSHOT.md](../audits/PLATFORM_SNAPSHOT.md).
+Актуальный технический снимок платформы: [../PLATFORM_SNAPSHOT.md](../PLATFORM_SNAPSHOT.md).
