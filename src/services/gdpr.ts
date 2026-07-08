@@ -18,10 +18,15 @@ export const gdprService = {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return { success: false, error: 'Not authenticated' };
 
-      // Gather user data from accessible tables
+      // Use the owner-only RPC so the export includes sensitive page columns
+      // (contact_*, webhook_*, diagnostics) that are no longer directly SELECTable
+      // by the authenticated role.
       const [profiles, pages, leads] = await Promise.all([
         supabase.from('user_profiles').select('*').eq('id', user.id).single(),
-        supabase.from('pages').select('*').eq('user_id', user.id),
+        (supabase.rpc as unknown as (
+          fn: string,
+          args?: Record<string, unknown>,
+        ) => Promise<{ data: unknown; error: unknown }>)('get_my_full_page', { p_user_id: user.id }),
         supabase.from('leads').select('*').eq('user_id', user.id),
       ]);
 

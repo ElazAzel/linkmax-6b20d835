@@ -14,8 +14,7 @@ import { RoutePrefetchManager } from "@/components/performance/RoutePrefetchMana
 import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
-import { PostHogProvider } from 'posthog-js/react';
-import { initPostHog, POSTHOG_KEY, POSTHOG_HOST } from "@/lib/posthog";
+import { initPostHog } from "@/lib/posthog";
 
 // Initialize PostHog before rendering
 initPostHog();
@@ -39,11 +38,27 @@ const queryClient = new QueryClient({
 });
 
 // Loading fallback for pages
+const LOADER_COPY: Record<string, string> = {
+  ru: 'Загрузка...', en: 'Loading…', kk: 'Жүктелуде…', uz: 'Yuklanmoqda…',
+};
+const ERROR_COPY: Record<string, { title: string; reload: string }> = {
+  ru: { title: 'Что-то пошло не так', reload: 'Обновить страницу' },
+  en: { title: 'Something went wrong', reload: 'Reload page' },
+  kk: { title: 'Бірдеңе дұрыс болмады', reload: 'Бетті жаңарту' },
+  uz: { title: 'Nimadir noto‘g‘ri ketdi', reload: 'Sahifani yangilash' },
+};
+const OAUTH_ERROR_COPY: Record<string, string> = {
+  ru: 'Ошибка входа', en: 'Sign-in error', kk: 'Кіру қатесі', uz: 'Kirish xatosi',
+};
+const getLang = () => {
+  const l = (typeof document !== 'undefined' ? document.documentElement.lang : 'ru') || 'ru';
+  return (['ru','en','kk','uz'].includes(l) ? l : 'ru');
+};
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="flex flex-col items-center gap-4">
       <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-      <p className="text-sm text-muted-foreground animate-pulse">Загрузка...</p>
+      <p className="text-sm text-muted-foreground animate-pulse">{LOADER_COPY[getLang()]}</p>
     </div>
   </div>
 );
@@ -65,15 +80,16 @@ class RouteErrorBoundary extends React.Component<
   }
   render() {
     if (this.state.hasError) {
+      const c = ERROR_COPY[getLang()];
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center space-y-4 p-6">
-            <p className="text-lg font-semibold text-foreground">Что-то пошло не так</p>
+            <p className="text-lg font-semibold text-foreground">{c.title}</p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium"
             >
-              Обновить страницу
+              {c.reload}
             </button>
           </div>
         </div>
@@ -122,15 +138,14 @@ const App = () => {
     if (error) {
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        toast.error(`Ошибка входа: ${errorDescription || error}`);
+        toast.error(`${OAUTH_ERROR_COPY[getLang()]}: ${errorDescription || error}`);
       }, 500);
     }
   }, []);
 
   return (
     <HelmetProvider>
-      <PostHogProvider apiKey={POSTHOG_KEY} options={{ api_host: POSTHOG_HOST }}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>
               <LanguageProvider>
@@ -161,7 +176,6 @@ const App = () => {
             </AuthProvider>
           </TMAProvider>
         </QueryClientProvider>
-      </PostHogProvider>
     </HelmetProvider>
   );
 };

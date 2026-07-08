@@ -1,9 +1,9 @@
 # План будущих улучшений и оптимизаций LinkMAX по кайдзен-системе
 
-> **Статус:** Draft  
-> **Дата:** 24 апреля 2026  
-> **Горизонт:** 18 недель  
-> **Источник правил:** `docs/operations/KAIZEN_SYSTEM_PROJECT_DESCRIPTION.md`  
+> **Статус:** Draft
+> **Дата:** 24 апреля 2026
+> **Горизонт:** 18 недель
+> **Источник правил:** `docs/operations/KAIZEN_SYSTEM_PROJECT_DESCRIPTION.md`
 > **Текущая доска реализации:** `docs/operations/KAIZEN_ACTIVE_REGISTER.md`
 > **Фокус:** эксперты и консультанты, mobile-first запуск бизнеса, Time to Value, лиды, бронирования, платежи, надежность
 

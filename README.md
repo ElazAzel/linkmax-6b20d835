@@ -6,7 +6,7 @@
 ![Status](https://img.shields.io/badge/status-Active-success.svg)
 
 > **LinkMAX — AI Sales OS, превращающая одну ссылку в био в полноценный бизнес. Сервис за минуту создает конвертящий мини-сайт с приемом платежей и календарем услуг, агрегирует заявки в легкой CRM с таск-трекером и Kanban, предоставляет глубокую аналитику и мгновенно отправляет уведомления о лидах в Telegram.**
-> 
+>
 > *LinkMAX is the AI Sales OS that turns a single bio link into a fully functioning business. In under a minute, it creates a high-converting mini-site complete with booking calendars and integrated payments, aggregates leads into a lightweight CRM with task tracking and Kanban boards, delivers deep analytics, and sends real-time lead notifications directly to Telegram.*
 
 **LinkMAX** is a comprehensive SaaS platform built for creators, freelancers, and small businesses in the CIS region. It combines a powerful page builder (28+ blocks), a **Business Zone** (mini-CRM, Kanban, Tasks, Contacts), and advanced analytics into one unified, mobile-first system.

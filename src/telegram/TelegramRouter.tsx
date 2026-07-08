@@ -6,6 +6,10 @@ import { CRMScreen } from './screens/CRMScreen';
 import { OnboardingScreen } from './screens/OnboardingScreen';
 import { BookingsScreen } from './screens/BookingsScreen';
 import { PageEditorScreen } from './screens/PageEditorScreen';
+import { LeadDetailScreen } from './screens/LeadDetailScreen';
+import { DealDetailScreen } from './screens/DealDetailScreen';
+import { PaymentsScreen } from './screens/PaymentsScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
 import type { TelegramScreen } from './types';
 
 // ---- Icons (inline SVG for zero-dep bottom nav) ----
@@ -219,34 +223,9 @@ function HomeScreen() {
     );
 }
 
-// ---- Stub Screens (P1: will be replaced with full implementations) ----
-
-function StubScreen({ title, icon }: { title: string; icon: string }) {
-    const { t } = useTranslation();
-    const { goBack } = useTelegram();
-
-    return (
-        <div className="tg-screen tg-fade-in" style={{ textAlign: 'center', paddingTop: 80 }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>{icon}</div>
-            <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{title}</h2>
-            <p className="tg-text-hint" style={{ fontSize: 15 }}>
-                {t('tma.stub_upcoming')}
-            </p>
-            <button
-                className="tg-button tg-button--secondary"
-                style={{ maxWidth: 200, margin: '24px auto 0' }}
-                onClick={goBack}
-            >
-                {t('tma.btn_back')}
-            </button>
-        </div>
-    );
-}
-
 // ---- Router ----
 
 export function TelegramRouter() {
-    const { t } = useTranslation();
     const { route, isLoading, error } = useTelegram();
     const { isLoading: zoneLoading } = useTelegramZone();
 
@@ -263,15 +242,15 @@ export function TelegramRouter() {
         case 'bookings':
             return <BookingsScreen />;
         case 'payments':
-            return <StubScreen title={t('tma.nav_payments')} icon="💳" />;
+            return <PaymentsScreen />;
         case 'settings':
-            return <StubScreen title={t('tma.nav_more')} icon="⚙️" />;
+            return <SettingsScreen />;
         case 'onboarding':
             return <OnboardingScreen />;
         case 'lead_detail':
-            return <StubScreen title={`${t('tma.nav_crm')} ${route.entityId || ''}`} icon="👤" />;
+            return <LeadDetailScreen conversationId={route.entityId} />;
         case 'deal_detail':
-            return <StubScreen title={`${t('tma.nav_tasks')} ${route.entityId || ''}`} icon="💰" />;
+            return <DealDetailScreen dealId={route.entityId} />;
         default:
             return <HomeScreen />;
     }

@@ -10,7 +10,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 
 
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, memo } from 'react';
 
 
 import { useTranslation } from 'react-i18next';
@@ -53,6 +53,17 @@ const NICHE_TAGS = [
 ];
 
 export default function Experts() {
+interface ExpertProfile {
+  id: string;
+  slug: string;
+  title: string | null;
+  description: string | null;
+  avatar_url: string | null;
+  niche: string | null;
+  view_count: number | null;
+}
+
+export const Experts = memo(function Experts() {
   const params = useParams();
   const tag = params?.tag as string;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -345,12 +356,12 @@ export default function Experts() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <h3
-                            className="font-semibold truncate group-hover:text-primary transition-colors"
+                          <h2
+                            className="font-semibold truncate group-hover:text-primary transition-colors text-base"
                             itemProp="name"
                           >
                             {expert.title || expert.slug}
-                          </h3>
+                          </h2>
                           <p
                             className="text-sm text-muted-foreground line-clamp-2 mt-1"
                             itemProp="description"
@@ -442,4 +453,5 @@ export default function Experts() {
       </div>
     </>
   );
-}
+});
+export default Experts;

@@ -40,10 +40,10 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
     if (!unlocked) return 'bg-muted/50';
     
     switch (rarity) {
-      case 'common': return 'bg-gradient-to-br from-slate-400 to-slate-600';
-      case 'rare': return 'bg-gradient-to-br from-blue-400 to-blue-600';
-      case 'epic': return 'bg-gradient-to-br from-purple-400 to-purple-600';
-      case 'legendary': return 'bg-gradient-to-br from-amber-400 via-orange-500 to-red-500';
+      case 'common': return 'bg-muted-foreground/70';
+      case 'rare': return 'bg-primary';
+      case 'epic': return 'bg-accent-foreground';
+      case 'legendary': return 'bg-warning';
       default: return 'bg-muted';
     }
   };
@@ -54,8 +54,8 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
       <div className="flex-shrink-0 border-b border-border/50 bg-background/80 backdrop-blur-sm">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/25">
-              <Trophy className="h-5 w-5 text-white" />
+            <div className="h-10 w-10 rounded-2xl bg-warning flex items-center justify-center shadow-sm">
+              <Trophy className="h-5 w-5 text-warning-foreground" />
             </div>
             <div>
               <h2 className="text-lg font-bold">{t('achievements.title', 'Достижения')}</h2>

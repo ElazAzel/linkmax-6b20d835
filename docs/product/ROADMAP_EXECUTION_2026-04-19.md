@@ -29,4 +29,3 @@
 ## UX debt remediation pass (from roadmap)
 
 - ✅ Для CRM-лидов поднят минимум размера текста в статус-плашках до `text-xs` (12px+) вместо `text-[10px]`.
-

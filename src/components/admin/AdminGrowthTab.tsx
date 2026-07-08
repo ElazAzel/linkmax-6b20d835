@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -65,6 +66,7 @@ function StatCard({
 }
 
 export function AdminGrowthTab() {
+  const { t } = useTranslation();
   const [days, setDays] = useState<number>(30);
   const [data, setData] = useState<Metrics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -101,8 +103,8 @@ export function AdminGrowthTab() {
     return (
       <Card>
         <CardContent className="pt-6">
-          <p className="text-destructive">Error: {error}</p>
-          <Button onClick={() => load(days)} className="mt-4"><RefreshCw className="h-4 w-4 mr-2" />Retry</Button>
+          <p className="text-destructive">{t('error')}: {error}</p>
+          <Button onClick={() => load(days)} className="mt-4"><RefreshCw className="h-4 w-4 mr-2" />{t('retry')}</Button>
         </CardContent>
       </Card>
     );
@@ -129,8 +131,8 @@ export function AdminGrowthTab() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Growth Metrics</h2>
-          <p className="text-sm text-muted-foreground">Investor-grade KPIs · last {days} days</p>
+          <h2 className="text-2xl font-bold">{t('growthMetrics')}</h2>
+          <p className="text-sm text-muted-foreground">{t('investorKpiDescription', 'Investor-grade KPIs · last {{days}} days', { days })}</p>
         </div>
         <div className="flex gap-2 items-center">
           {PERIODS.map(p => (
@@ -152,28 +154,28 @@ export function AdminGrowthTab() {
       {/* Top KPIs — North-star metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
-          title="GMV (period)"
+          title={t('gmvPeriod')}
           value={`${Number(data.revenue.gmv_period).toLocaleString('ru')} ₸`}
-          subtitle={`${data.revenue.paid_orders} paid orders · ARPU ${Number(data.revenue.arpu).toLocaleString('ru')} ₸`}
+          subtitle={t('paidOrdersArpu', { paidOrders: data.revenue.paid_orders, arpu: Number(data.revenue.arpu).toLocaleString('ru') })}
           icon={DollarSign}
           delta={gmvDelta}
         />
         <StatCard
-          title="Est. MRR"
+          title={t('estMrr')}
           value={`${Math.round(estimatedMRR).toLocaleString('ru')} ₸`}
-          subtitle={`${data.users.paid} paid subscribers`}
+          subtitle={t('paidSubscribers', { count: data.users.paid })}
           icon={TrendingUp}
         />
         <StatCard
-          title="MAU / DAU"
+          title={t('mauDau')}
           value={`${data.users.mau} / ${data.users.dau}`}
-          subtitle={`Stickiness: ${data.users.mau > 0 ? ((data.users.dau / data.users.mau) * 100).toFixed(1) : '0'}%`}
+          subtitle={t('stickiness', { pct: data.users.mau > 0 ? ((data.users.dau / data.users.mau) * 100).toFixed(1) : '0' })}
           icon={Activity}
         />
         <StatCard
-          title="Free → Paid"
+          title={t('freeToPaid')}
           value={`${data.users.conversion_rate.toFixed(2)}%`}
-          subtitle={`${data.users.paid} of ${data.users.total} users`}
+          subtitle={t('ofUsers', { paid: data.users.paid, total: data.users.total })}
           icon={Target}
         />
       </div>
@@ -181,29 +183,29 @@ export function AdminGrowthTab() {
       {/* Secondary KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
-          title="New users"
+          title={t('newUsers')}
           value={data.users.new_period}
-          subtitle={`Total: ${data.users.total}`}
+          subtitle={t('total', { count: data.users.total })}
           icon={Users}
           delta={userDelta}
         />
         <StatCard
-          title="Leads (period)"
+          title={t('leadsPeriod')}
           value={data.leads.period}
-          subtitle={`Total: ${data.leads.total}`}
+          subtitle={t('total', { count: data.leads.total })}
           icon={Inbox}
           delta={leadDelta}
         />
         <StatCard
-          title="Pages published"
+          title={t('pagesPublished')}
           value={data.pages.published}
-          subtitle={`Total: ${data.pages.total} · Activation: ${data.pages.total > 0 ? ((data.pages.published / data.pages.total) * 100).toFixed(0) : 0}%`}
+          subtitle={t('totalActivation', { total: data.pages.total, pct: data.pages.total > 0 ? ((data.pages.published / data.pages.total) * 100).toFixed(0) : 0 })}
           icon={FileText}
         />
         <StatCard
-          title="Bookings (period)"
+          title={t('bookingsPeriod')}
           value={data.bookings.period}
-          subtitle={`Total: ${data.bookings.total}`}
+          subtitle={t('total', { count: data.bookings.total })}
           icon={Activity}
         />
       </div>
@@ -211,7 +213,7 @@ export function AdminGrowthTab() {
       {/* Trend Chart */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Daily trend — Users & Leads</CardTitle>
+          <CardTitle className="text-base">{t('dailyTrendUsersLeads')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-64">
@@ -233,7 +235,7 @@ export function AdminGrowthTab() {
       {/* GMV Chart */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Daily revenue (GMV, ₸)</CardTitle>
+          <CardTitle className="text-base">{t('dailyRevenue')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-56">
@@ -251,7 +253,7 @@ export function AdminGrowthTab() {
       </Card>
 
       <p className="text-xs text-muted-foreground text-center">
-        Generated: {new Date(data.generated_at).toLocaleString('ru')}
+        {t('generatedAt')}: {new Date(data.generated_at).toLocaleString('ru')}
       </p>
     </div>
   );

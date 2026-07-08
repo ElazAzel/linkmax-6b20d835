@@ -19,6 +19,7 @@ import Rocket from 'lucide-react/dist/esm/icons/rocket';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { hapticLight, hapticSelection, hapticSuccess } from '@/platform/native/haptics';
 
 export interface SmartActionDockProps {
   onAddBlock: () => void;
@@ -65,7 +66,7 @@ export const SmartActionDock = memo(function SmartActionDock({
         {/* Primary: Add block */}
         <button
           type="button"
-          onClick={onAddBlock}
+          onClick={() => { hapticLight(); onAddBlock(); }}
           aria-label={t('editor.dock.add', 'Добавить блок')}
           data-onboarding="add-block"
           className={cn(
@@ -84,7 +85,7 @@ export const SmartActionDock = memo(function SmartActionDock({
         {onAIImprove && hasContent && (
           <button
             type="button"
-            onClick={onAIImprove}
+            onClick={() => { hapticSelection(); onAIImprove(); }}
             aria-label={t('editor.dock.ai', 'AI-улучшение')}
             className={cn(
               'flex items-center justify-center h-12 w-12 rounded-xl transition-colors',
@@ -99,7 +100,7 @@ export const SmartActionDock = memo(function SmartActionDock({
         {/* Preview */}
         <button
           type="button"
-          onClick={onPreview}
+          onClick={() => { hapticSelection(); onPreview(); }}
           aria-label={t('editor.dock.preview', 'Превью')}
           className={cn(
             'flex items-center justify-center h-12 w-12 rounded-xl transition-colors',
@@ -113,7 +114,7 @@ export const SmartActionDock = memo(function SmartActionDock({
         {/* Publish / Share */}
         <button
           type="button"
-          onClick={onPublish}
+          onClick={() => { hapticSuccess(); onPublish(); }}
           aria-label={isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
           className={cn(
             'flex items-center gap-2 h-12 rounded-xl px-4 transition-all active:scale-[0.97]',

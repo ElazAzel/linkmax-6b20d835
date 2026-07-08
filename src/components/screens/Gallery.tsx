@@ -3,7 +3,7 @@
  */
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
@@ -35,7 +35,7 @@ import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 type SortMode = 'popular' | 'recent' | 'views';
 
-export default function Gallery() {
+export const Gallery = memo(function Gallery() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -202,7 +202,7 @@ export default function Gallery() {
           <div className="max-w-6xl mx-auto px-4 py-3">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full shrink-0" asChild>
-                <Link to="/">
+                <Link to="/" aria-label={t('common.back', 'Go back')}>
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
               </Button>
@@ -219,6 +219,7 @@ export default function Gallery() {
                   />
                   <button
                     onClick={() => { setShowSearch(false); setSearchQuery(''); }}
+                    aria-label={t('gallery.closeSearch', 'Закрыть поиск')}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     <X className="h-4 w-4" />
@@ -236,6 +237,7 @@ export default function Gallery() {
                     size="icon"
                     className="h-9 w-9 rounded-full shrink-0"
                     onClick={() => setShowSearch(true)}
+                    aria-label={t('common.search', 'Search')}
                   >
                     <Search className="h-4 w-4" />
                   </Button>
@@ -284,7 +286,9 @@ export default function Gallery() {
         {activeTab === 'gallery' && (
           <div className="max-w-6xl mx-auto">
             {/* Niche filter pills */}
+            <h2 className="sr-only">{t('gallery.filtersHeading', 'Фильтры галереи')}</h2>
             <div className="px-4 pt-4 pb-2 overflow-x-auto scrollbar-hide">
+
               <div className="flex gap-1.5 min-w-max">
                 <button
                   onClick={() => updateNiche(null)}
@@ -377,8 +381,10 @@ export default function Gallery() {
             </div>
 
             {/* Grid */}
+            <h2 className="sr-only">{t('gallery.resultsHeading', 'Результаты')}</h2>
             <div className="px-4 pb-20">
               {loading ? (
+
                 <LoadingState skeleton={<SkeletonGalleryGrid />} />
               ) : filteredPages.length === 0 ? (
                 <EmptyState
@@ -432,4 +438,5 @@ export default function Gallery() {
       </main>
     </>
   );
-}
+});
+export default Gallery;

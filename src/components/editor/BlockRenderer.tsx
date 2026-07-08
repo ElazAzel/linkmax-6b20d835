@@ -3,6 +3,8 @@ import type { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
+import { getBlockStyles } from '@/lib/blocks/block-styling';
+import { cn } from '@/lib/utils/utils';
 import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
@@ -108,6 +110,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
 
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
+  const { style: bsStyle, className: bsClass } = getBlockStyles(block.blockStyle);
+  const wrapperStyle = { ...animationStyle, ...bsStyle };
+  const wrapperClass = cn(animationClass, bsClass);
   const RendererComponent = manifest.renderer;
 
   // Build props for the renderer
@@ -143,7 +148,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
         pageOwnerId={pageOwnerId}
         isPreview={isPreview}
       >
-        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
+        <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
           <BlockErrorBoundary>
             {inner}
           </BlockErrorBoundary>
@@ -155,7 +160,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   // Simple render mode
   return (
     <BlockErrorBoundary>
-      <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
+      <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
         {inner}
       </div>
     </BlockErrorBoundary>

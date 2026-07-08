@@ -9,9 +9,9 @@ export const LEGAL_EFFECTIVE_DATE = '20.04.2026';
 export const LEGAL_VERSION = '2.0';
 
 export const COMPANY_DETAILS = {
-  name: 'ИП BEEGIN',
-  nameEn: 'BEEGIN Individual Entrepreneur',
-  nameKk: 'BEEGIN ЖК',
+  name: 'ИП LinkMax',
+  nameEn: 'LinkMax Individual Entrepreneur',
+  nameKk: 'LinkMax ЖК',
   bin: '971207300019',
   address: 'г. Алматы, ул. Шолохова, д. 20/7',
   addressEn: 'Almaty, Sholokhov Street, 20/7',

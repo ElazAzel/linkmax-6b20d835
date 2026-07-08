@@ -221,8 +221,8 @@ export interface TelegramWebApp {
     sendData: (data: string) => void;
 
     // Events
-    onEvent: (eventType: string, callback: (...args: any[]) => void) => void;
-    offEvent: (eventType: string, callback: (...args: any[]) => void) => void;
+    onEvent: (eventType: string, callback: (...args: unknown[]) => void) => void;
+    offEvent: (eventType: string, callback: (...args: unknown[]) => void) => void;
 }
 
 // ---- Window augmentation ----

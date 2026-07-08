@@ -1,7 +1,7 @@
 # RLS и Public Flow Checklist
 
-> **Статус:** Active  
-> **Связано с кайдзен:** KZN-018  
+> **Статус:** Active
+> **Связано с кайдзен:** KZN-018
 > **Когда использовать:** любые изменения в leads, bookings, analytics, events, payments, invoices, public pages, workspace data или auth/roles
 
 ---

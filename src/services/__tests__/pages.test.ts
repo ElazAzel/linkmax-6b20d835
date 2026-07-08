@@ -153,12 +153,8 @@ describe('pagesService', () => {
             // savePage -> save_page_blocks
             mockRpc.mockResolvedValueOnce({ data: null, error: null } as any);
             
-            // savePage -> fetch final page
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                single: vi.fn().mockResolvedValue({ data: mockPageData, error: null })
-            } as any);
+            // savePage -> fetch final page via get_my_full_page RPC
+            mockRpc.mockResolvedValueOnce({ data: [mockPageData], error: null } as any);
 
             const pageInput = { blocks: [], theme: 'light' } as any;
             const result = await pagesService.savePage(pageInput, 'test-user-id');
@@ -196,20 +192,28 @@ describe('pagesService', () => {
         it('should fetch a page for the current user', async () => {
             const mockPageData = { id: 'page-123', slug: 'test-page', blocks: [] };
             const mockFrom = vi.mocked(supabase.from);
-            
+            const mockRpc = vi.mocked(supabase.rpc);
+
+            // get_my_full_page RPC
+            mockRpc.mockResolvedValueOnce({ data: [mockPageData], error: null } as any);
+
+            // blocks fetch
             mockFrom.mockReturnValueOnce({
                 select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: mockPageData, error: null })
+                eq: vi.fn().mockResolvedValue({ data: [], error: null })
+            } as any);
+
+            // private_page_data fetch
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockResolvedValue({ data: null, error: null })
             } as any);
 
             const result = await pagesService.loadUserPage('test-user-id');
 
             expect(result.error).toBeNull();
             expect(result.data?.id).toEqual('page-123');
-            
-            const eqCall = vi.mocked(mockFrom).mock.results[0].value.eq;
-            expect(eqCall).toHaveBeenCalledWith('user_id', 'test-user-id');
+            expect(mockRpc).toHaveBeenCalledWith('get_my_full_page', { p_user_id: 'test-user-id' });
         });
     });
     describe('publishPage', () => {

@@ -13,12 +13,23 @@ serve(async (req: Request) => {
         const outSum = formData.get("OutSum") as string;
         const invId = formData.get("InvId") as string;
         const signatureValue = formData.get("SignatureValue") as string;
-        const shp_user = formData.get("shp_user") as string;
-        const shp_type = formData.get("shp_type") as string;
-        const shp_plan = formData.get("shp_plan") as string;
-        const shp_period = formData.get("shp_period") as string;
-        const shp_zone = formData.get("shp_zone") as string;
-        const shp_related_id = formData.get("shp_related_id") as string;
+
+        // Dynamically collect ALL shp_* custom params so signature matches
+        // whichever sender (subscription / zone_upgrade / payment / offer_purchase) built the URL.
+        const shpParams: Record<string, string> = {};
+        for (const [key, value] of formData.entries()) {
+            if (key.startsWith("shp_") && typeof value === "string" && value.length > 0) {
+                shpParams[key] = value;
+            }
+        }
+        const shp_user = shpParams.shp_user;
+        const shp_type = shpParams.shp_type;
+        const shp_plan = shpParams.shp_plan;
+        const shp_period = shpParams.shp_period;
+        const shp_zone = shpParams.shp_zone;
+        const shp_related_id = shpParams.shp_related_id;
+        const shp_offer = shpParams.shp_offer;
+        const shp_seller = shpParams.shp_seller;
 
         if (!outSum || !invId || !signatureValue || !shp_user) {
             throw new Error("Missing parameters");
@@ -30,19 +41,7 @@ serve(async (req: Request) => {
             throw new Error("Server configuration error");
         }
 
-        // Signature: outSum:invId:pass2:shp_... sorted alphabetically
-        const shpParams: Record<string, string> = {
-            shp_plan,
-            shp_period,
-            shp_type,
-            shp_user
-        };
-
-        if (shp_zone) shpParams.shp_zone = shp_zone;
-        if (shp_related_id) shpParams.shp_related_id = shp_related_id;
-
         const shpSorted = Object.entries(shpParams)
-            .filter(([_, v]) => v !== null && v !== undefined)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([key, value]) => `${key}=${value}`);
 
@@ -123,6 +122,100 @@ serve(async (req: Request) => {
             if (zoneError) {
                 console.error("Failed to upgrade zone", zoneError);
                 return new Response("DB ERROR", { status: 500 });
+            }
+        } else if (shp_type === 'offer_purchase' && shp_seller) {
+            // Credit the seller's wallet with net (fee applied) amount
+            const gross = parseFloat(outSum);
+            const { data: sellerProfile } = await supabase
+                .from('user_profiles')
+                .select('is_premium, premium_tier, telegram_chat_id, telegram_notifications_enabled, telegram_language')
+                .eq('id', shp_seller)
+                .maybeSingle();
+
+            const { grossAmount, feeAmount, netAmount, rate: feeRate } = calculateFintechFee({
+                amount: gross,
+                isPremium: !!sellerProfile?.is_premium,
+                tier: (sellerProfile?.premium_tier as string) || undefined,
+            });
+
+            let { data: wallet } = await supabase
+                .from('user_wallets')
+                .select('id, balance')
+                .eq('user_id', shp_seller)
+                .maybeSingle();
+
+            if (!wallet) {
+                const { data: created } = await supabase
+                    .from('user_wallets')
+                    .insert({ user_id: shp_seller, balance: 0, currency: 'KZT' } as any)
+                    .select('id, balance')
+                    .single();
+                wallet = created;
+            }
+
+            if (wallet) {
+                const { error: txError } = await supabase
+                    .from('wallet_transactions')
+                    .insert({
+                        wallet_id: wallet.id,
+                        user_id: shp_seller,
+                        gross_amount: grossAmount,
+                        fee_amount: feeAmount,
+                        net_amount: netAmount,
+                        type: 'payment',
+                        status: 'completed',
+                        description: `Offer purchase (InvId: ${invId})`,
+                        related_entity_id: shp_offer || null,
+                        related_entity_type: 'offer',
+                        metadata: {
+                            internal_ref: invId,
+                            fee_rate: feeRate,
+                            gateway: 'robokassa',
+                            kind: 'offer_purchase',
+                            offer_id: shp_offer,
+                        },
+                        completed_at: new Date().toISOString(),
+                    });
+
+                if (txError) {
+                    console.error("Failed to record offer_purchase tx", txError);
+                    return new Response("TX ERROR", { status: 500 });
+                }
+
+                await supabase
+                    .from('user_wallets')
+                    .update({
+                        balance: Number(wallet.balance) + netAmount,
+                        updated_at: new Date().toISOString(),
+                    })
+                    .eq('id', wallet.id);
+
+                try {
+                    if (sellerProfile?.telegram_chat_id && sellerProfile?.telegram_notifications_enabled) {
+                        const lang = (sellerProfile as any).telegram_language || 'ru';
+                        const netTxt = netAmount.toLocaleString('ru-RU');
+                        const feeTxt = feeAmount.toLocaleString('ru-RU');
+                        const text = lang === 'en'
+                            ? `💰 <b>Offer sold!</b>\n\nProfit: <b>${netTxt} KZT</b>\nFee: ${feeTxt} KZT\nRef: ${invId}`
+                            : `💰 <b>Продан оффер!</b>\n\nПрибыль: <b>${netTxt} KZT</b>\nКомиссия: ${feeTxt} KZT\nID: ${invId}`;
+                        await supabase.from('notification_queue').insert({
+                            user_id: shp_seller,
+                            event_type: 'payment_success',
+                            payload: {
+                                channel: 'telegram',
+                                telegram: {
+                                    chat_id: sellerProfile.telegram_chat_id,
+                                    text,
+                                    parse_mode: 'HTML',
+                                },
+                            },
+                            status: 'pending',
+                            idempotency_key: `offer_success_${invId}`,
+                        });
+                    }
+                } catch (notifyErr) {
+                    console.error("Failed to queue offer success notification", notifyErr);
+                }
             }
         } else if (shp_type === 'payment') {
             const amount = parseFloat(outSum);

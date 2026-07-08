@@ -43,16 +43,16 @@ export function MediaUpload({
   const [activeTab, setActiveTab] = useState<string>(value ? 'url' : 'upload');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Determine accepted file types based on GIF support and premium status
+  // Always allow GIF — accept includes gif explicitly so the picker doesn't filter it out on iOS/Safari
   const getAcceptedTypes = () => {
-    if (allowGif && isPremium) {
-      return accept.includes('image') ? 'image/*,.gif' : accept;
-    }
+    if (accept.includes('image')) return 'image/*,image/gif,.gif';
     return accept;
   };
 
-  const isGifFile = (file: File) => file.type === 'image/gif';
-  const isGifUrl = (url: string) => url.toLowerCase().endsWith('.gif');
+  const isGifFile = (file: File) => file.type === 'image/gif' || file.name.toLowerCase().endsWith('.gif');
+
+  const MAX_SIZE_MB = isPremium ? 30 : 10;
+  const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -63,15 +63,10 @@ export function MediaUpload({
       return;
     }
 
-    // Validate file size (15MB limit before compression)
-    if (file.size > 15 * 1024 * 1024) {
-      toast.error(t('upload.fileTooLarge', 'File size must be less than 15MB'));
-      return;
-    }
-
-    // Check if GIF is allowed for non-premium users
-    if (isGifFile(file) && allowGif && !isPremium) {
-      toast.error(t('upload.gifPremiumOnly', 'GIF uploads are available for Premium users only'));
+    // Tiered limit: 10MB free / 30MB premium
+    if (file.size > MAX_SIZE_BYTES) {
+      const upgradeHint = !isPremium ? ` ${t('upload.upgradeForMore', 'Upgrade to Pro for 30MB.')}` : '';
+      toast.error(`${t('upload.fileTooLarge', 'File is too large')} (max ${MAX_SIZE_MB}MB).${upgradeHint}`);
       return;
     }
 
@@ -79,38 +74,60 @@ export function MediaUpload({
     setCompressionInfo(null);
 
     try {
-      // Compress image if it's an image file (skip GIFs to preserve animation)
-      let processedFile = file;
-      if (file.type.startsWith('image/') && !isGifFile(file)) {
+      // Compress static images only — never touch GIF (canvas re-encode kills animation)
+      let processedFile: File = file;
+      const gif = isGifFile(file);
+      if (file.type.startsWith('image/') && !gif) {
         const originalSize = file.size;
         processedFile = await compressImage(file);
-        
+
         if (processedFile.size < originalSize) {
           const stats = getCompressionStats(originalSize, processedFile.size);
           setCompressionInfo(`${stats.percentage}% ${t('upload.compressed', 'compressed')}`);
         }
-      } else if (isGifFile(file)) {
+      } else if (gif) {
         setCompressionInfo(t('upload.gifPreserved', 'GIF animation preserved'));
       }
 
       setCompressing(false);
       setUploading(true);
 
-      const fileExt = processedFile.name.split('.').pop();
+      // Force .gif extension + image/gif contentType so Storage serves it as animated GIF
+      const fileExt = gif ? 'gif' : (processedFile.name.split('.').pop() || 'bin');
+      const contentType = gif ? 'image/gif' : (processedFile.type || 'application/octet-stream');
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('user-media')
-        .upload(filePath, processedFile);
+      let publicUrl: string;
 
-      if (uploadError) {
-        throw uploadError;
+      if (processedFile.size > 5 * 1024 * 1024) {
+        const formData = new FormData();
+        formData.append('file', processedFile, fileName);
+        formData.append('path', filePath);
+        formData.append('contentType', contentType);
+
+        const { data, error } = await supabase.functions.invoke<{ publicUrl: string }>('upload-user-media', {
+          body: formData,
+        });
+        if (error) throw error;
+        if (!data?.publicUrl) throw new Error('Upload function returned no URL');
+        publicUrl = data.publicUrl;
+      } else {
+        const { error: uploadError } = await supabase.storage
+          .from('user-media')
+          .upload(filePath, processedFile, {
+            contentType,
+            cacheControl: '3600',
+            upsert: false,
+          });
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage
+          .from('user-media')
+          .getPublicUrl(filePath);
+        publicUrl = data.publicUrl;
       }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('user-media')
-        .getPublicUrl(filePath);
 
       onChange(publicUrl);
       toast.success(t('upload.success', 'File uploaded successfully'));
@@ -126,6 +143,7 @@ export function MediaUpload({
       }
     }
   };
+
 
   const handleRemove = () => {
     onChange('');
@@ -207,20 +225,13 @@ export function MediaUpload({
                   <Upload className="h-6 w-6" />
                   <span>{t('upload.click', 'Click to upload')}</span>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>{t('upload.autoCompress', 'Auto-compressed, max 15MB')}</span>
-                    {allowGif && isPremium && (
-                      <Badge variant="secondary" className="gap-1 text-xs">
-                        <Sparkles className="h-3 w-3" />
-                        GIF
-                      </Badge>
-                    )}
+                    <span>{isPremium ? t('upload.autoCompressPro', 'Auto-compressed, max 30MB (GIF supported)') : t('upload.autoCompressFree', 'Auto-compressed, max 10MB (GIF supported)')}</span>
+                    <Badge variant="secondary" className="gap-1 text-xs">
+                      <Sparkles className="h-3 w-3" />
+                      GIF
+                    </Badge>
                   </div>
-                  {allowGif && !isPremium && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Crown className="h-3 w-3 text-primary" />
-                      <span>{t('upload.gifPremium', 'GIF available with Premium')}</span>
-                    </div>
-                  )}
+
                 </>
               )}
             </Button>

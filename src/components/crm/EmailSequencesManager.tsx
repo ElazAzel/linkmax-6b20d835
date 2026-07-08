@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,6 +26,8 @@ export function EmailSequencesManager() {
   const [loading, setLoading] = useState(true);
   const [selectedSequence, setSelectedSequence] = useState<(EmailSequence & { steps: any[] }) | null>(null);
   const [isAddingStep, setIsAddingStep] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [newStep, setNewStep] = useState({ template_id: '', delay_hours: 24 });
 
   useEffect(() => {
@@ -86,14 +89,21 @@ export function EmailSequencesManager() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm(t('sequences.confirmDelete', 'Delete this sequence?'))) return;
-    const { error } = await emailSequencesService.deleteSequence(id);
+  const handleDelete = (id: string) => {
+    setPendingDeleteId(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    if (!pendingDeleteId) return;
+    setDeleteConfirmOpen(false);
+    const { error } = await emailSequencesService.deleteSequence(pendingDeleteId);
     if (!error) {
-      setSequences(prev => prev.filter(s => s.id !== id));
-      if (selectedSequence?.id === id) setSelectedSequence(null);
+      setSequences(prev => prev.filter(s => s.id !== pendingDeleteId));
+      if (selectedSequence?.id === pendingDeleteId) setSelectedSequence(null);
       toast.success(t('sequences.deleted', 'Sequence deleted'));
     }
+    setPendingDeleteId(null);
   };
 
   if (loading) return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div>;
@@ -218,6 +228,20 @@ export function EmailSequencesManager() {
           <p className="text-xs text-center py-6 text-muted-foreground">{t('sequences.empty', 'Create your first automated sequence')}</p>
         )}
       </div>
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('sequences.confirmDeleteTitle', 'Delete sequence')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('sequences.confirmDelete', 'Delete this sequence?')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirmed}>{t('common.delete', 'Delete')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

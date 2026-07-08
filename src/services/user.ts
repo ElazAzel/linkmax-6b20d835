@@ -287,7 +287,7 @@ export async function updateUsername(
     await supabase.from('pages').update({ slug: normalizedUsername }).eq('user_id', userId);
 
     return { success: true };
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error: 'Failed to update username' };
   }
 }
@@ -336,7 +336,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     }
 
     return { isPremium, tier, trialEndsAt: data.trial_ends_at || null, inTrial };
-  } catch (error) {
+  } catch (_error) {
     return { isPremium: false, tier: 'identity', trialEndsAt: null, inTrial: false };
   }
 }

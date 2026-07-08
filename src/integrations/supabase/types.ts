@@ -248,6 +248,7 @@ export type Database = {
           owner_id: string
           page_id: string
           specific_date: string | null
+          staff_id: string | null
           start_time: string
         }
         Insert: {
@@ -260,6 +261,7 @@ export type Database = {
           owner_id: string
           page_id: string
           specific_date?: string | null
+          staff_id?: string | null
           start_time: string
         }
         Update: {
@@ -272,6 +274,7 @@ export type Database = {
           owner_id?: string
           page_id?: string
           specific_date?: string | null
+          staff_id?: string | null
           start_time?: string
         }
         Relationships: [
@@ -609,6 +612,62 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      document_signatures: {
+        Row: {
+          created_at: string
+          document_id: string | null
+          id: string
+          ip_address: string | null
+          metadata: Json
+          signature_data: Json
+          signed_at: string | null
+          signer_email: string
+          signer_name: string | null
+          status: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          signature_data?: Json
+          signed_at?: string | null
+          signer_email: string
+          signer_name?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          signature_data?: Json
+          signed_at?: string | null
+          signer_email?: string
+          signer_name?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_signatures_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "zone_documents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       event_registrations: {
         Row: {
@@ -1007,8 +1066,12 @@ export type Database = {
           created_at: string
           http_status: number | null
           id: string
+          last_attempted_at: string | null
+          next_retry_at: string | null
           page_id: string | null
+          payload: Json | null
           provider: string
+          retry_count: number
           skip_reason: string | null
           submission_status: string
           target_url: string
@@ -1022,8 +1085,12 @@ export type Database = {
           created_at?: string
           http_status?: number | null
           id?: string
+          last_attempted_at?: string | null
+          next_retry_at?: string | null
           page_id?: string | null
+          payload?: Json | null
           provider: string
+          retry_count?: number
           skip_reason?: string | null
           submission_status?: string
           target_url: string
@@ -1037,8 +1104,12 @@ export type Database = {
           created_at?: string
           http_status?: number | null
           id?: string
+          last_attempted_at?: string | null
+          next_retry_at?: string | null
           page_id?: string | null
+          payload?: Json | null
           provider?: string
+          retry_count?: number
           skip_reason?: string | null
           submission_status?: string
           target_url?: string
@@ -1187,6 +1258,147 @@ export type Database = {
           },
           {
             foreignKeyName: "newsletter_subscriptions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offer_subscriptions: {
+        Row: {
+          billing_interval: string
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          customer_email: string | null
+          customer_user_id: string | null
+          id: string
+          metadata: Json
+          offer_id: string
+          provider: string
+          provider_subscription_id: string | null
+          seller_user_id: string
+          status: string
+          updated_at: string
+          zone_id: string | null
+        }
+        Insert: {
+          billing_interval?: string
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end: string
+          current_period_start?: string
+          customer_email?: string | null
+          customer_user_id?: string | null
+          id?: string
+          metadata?: Json
+          offer_id: string
+          provider?: string
+          provider_subscription_id?: string | null
+          seller_user_id: string
+          status?: string
+          updated_at?: string
+          zone_id?: string | null
+        }
+        Update: {
+          billing_interval?: string
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          customer_email?: string | null
+          customer_user_id?: string | null
+          id?: string
+          metadata?: Json
+          offer_id?: string
+          provider?: string
+          provider_subscription_id?: string | null
+          seller_user_id?: string
+          status?: string
+          updated_at?: string
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offer_subscriptions_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offer_subscriptions_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          billing_interval: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          is_active: boolean
+          metadata: Json
+          name: string
+          offer_type: string
+          page_id: string | null
+          price_cents: number
+          updated_at: string
+          usage_config: Json
+          user_id: string
+        }
+        Insert: {
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json
+          name: string
+          offer_type?: string
+          page_id?: string | null
+          price_cents?: number
+          updated_at?: string
+          usage_config?: Json
+          user_id: string
+        }
+        Update: {
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json
+          name?: string
+          offer_type?: string
+          page_id?: string | null
+          price_cents?: number
+          updated_at?: string
+          usage_config?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offers_page_id_fkey"
             columns: ["page_id"]
             isOneToOne: false
             referencedRelation: "public_pages"
@@ -1485,6 +1697,8 @@ export type Database = {
           updated_at: string | null
           user_id: string
           view_count: number | null
+          webhook_secret: string | null
+          webhook_url: string | null
         }
         Insert: {
           avatar_style?: Json | null
@@ -1532,6 +1746,8 @@ export type Database = {
           updated_at?: string | null
           user_id: string
           view_count?: number | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
         }
         Update: {
           avatar_style?: Json | null
@@ -1579,6 +1795,8 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           view_count?: number | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
         }
         Relationships: [
           {
@@ -1886,6 +2104,93 @@ export type Database = {
           },
         ]
       }
+      smart_links: {
+        Row: {
+          block_id: string | null
+          campaign: string | null
+          click_count: number
+          conversion_count: number
+          created_at: string
+          downstream_action: Json
+          goal_event: string | null
+          id: string
+          is_active: boolean
+          last_click_at: string | null
+          metadata: Json
+          page_id: string | null
+          slug: string
+          target_url: string
+          updated_at: string
+          user_id: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          block_id?: string | null
+          campaign?: string | null
+          click_count?: number
+          conversion_count?: number
+          created_at?: string
+          downstream_action?: Json
+          goal_event?: string | null
+          id?: string
+          is_active?: boolean
+          last_click_at?: string | null
+          metadata?: Json
+          page_id?: string | null
+          slug: string
+          target_url: string
+          updated_at?: string
+          user_id: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          block_id?: string | null
+          campaign?: string | null
+          click_count?: number
+          conversion_count?: number
+          created_at?: string
+          downstream_action?: Json
+          goal_event?: string | null
+          id?: string
+          is_active?: boolean
+          last_click_at?: string | null
+          metadata?: Json
+          page_id?: string | null
+          slug?: string
+          target_url?: string
+          updated_at?: string
+          user_id?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_links_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "smart_links_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -1973,13 +2278,48 @@ export type Database = {
           },
         ]
       }
+      team_secrets: {
+        Row: {
+          created_at: string
+          invite_code: string
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          invite_code: string
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          invite_code?: string
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_secrets_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "public_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_secrets_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teams: {
         Row: {
           avatar_url: string | null
           created_at: string
           description: string | null
           id: string
-          invite_code: string | null
           is_public: boolean | null
           name: string
           niche: string | null
@@ -1992,7 +2332,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
-          invite_code?: string | null
           is_public?: boolean | null
           name: string
           niche?: string | null
@@ -2005,7 +2344,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
-          invite_code?: string | null
           is_public?: boolean | null
           name?: string
           niche?: string | null
@@ -2261,6 +2599,69 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      usage_events: {
+        Row: {
+          created_at: string
+          currency: string
+          customer_user_id: string | null
+          external_id: string | null
+          id: string
+          metadata: Json
+          metric_code: string
+          occurred_at: string
+          offer_id: string | null
+          quantity: number
+          seller_user_id: string
+          subscription_id: string | null
+          unit_amount_cents: number | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          customer_user_id?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json
+          metric_code: string
+          occurred_at?: string
+          offer_id?: string | null
+          quantity?: number
+          seller_user_id: string
+          subscription_id?: string | null
+          unit_amount_cents?: number | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          customer_user_id?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json
+          metric_code?: string
+          occurred_at?: string
+          offer_id?: string | null
+          quantity?: number
+          seller_user_id?: string
+          subscription_id?: string | null
+          unit_amount_cents?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_events_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "usage_events_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "offer_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_achievements: {
         Row: {
@@ -3864,6 +4265,35 @@ export type Database = {
           },
         ]
       }
+      zone_secrets: {
+        Row: {
+          calendar_feed_token: string
+          created_at: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          calendar_feed_token: string
+          created_at?: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          calendar_feed_token?: string
+          created_at?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_secrets_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: true
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_subscriptions: {
         Row: {
           created_at: string
@@ -4079,7 +4509,6 @@ export type Database = {
       }
       zones: {
         Row: {
-          calendar_feed_token: string | null
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
@@ -4095,7 +4524,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -4111,7 +4539,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -4189,32 +4616,6 @@ export type Database = {
           slug: string | null
           updated_at: string | null
         }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          invite_code?: never
-          is_public?: boolean | null
-          name?: string | null
-          niche?: string | null
-          owner_id?: string | null
-          slug?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string | null
-          invite_code?: never
-          is_public?: boolean | null
-          name?: string | null
-          niche?: string | null
-          owner_id?: string | null
-          slug?: string | null
-          updated_at?: string | null
-        }
         Relationships: []
       }
       public_user_profiles: {
@@ -4256,6 +4657,25 @@ export type Database = {
         }
         Relationships: []
       }
+      unified_pipeline_contacts: {
+        Row: {
+          company: string | null
+          created_at: string | null
+          email: string | null
+          id: string | null
+          metadata: Json | null
+          name: string | null
+          owner_user_id: string | null
+          phone: string | null
+          source: string | null
+          source_object_id: string | null
+          source_object_type: string | null
+          status: string | null
+          updated_at: string | null
+          zone_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accept_zone_invite: { Args: { p_token: string }; Returns: Json }
@@ -4267,6 +4687,15 @@ export type Database = {
           p_user_id: string
         }
         Returns: Json
+      }
+      aggregate_usage: {
+        Args: {
+          _metric_code: string
+          _period_end: string
+          _period_start: string
+          _subscription_id: string
+        }
+        Returns: number
       }
       apply_referral: {
         Args: { p_code: string; p_referred_user_id: string }
@@ -4329,12 +4758,92 @@ export type Database = {
         Returns: Json
       }
       get_admin_platform_stats: { Args: never; Returns: Json }
+      get_admin_withdrawals: {
+        Args: { p_status?: string }
+        Returns: {
+          admin_notes: string | null
+          amount: number
+          created_at: string
+          id: string
+          payment_details: Json | null
+          payment_method: string | null
+          processed_at: string | null
+          processed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "token_withdrawals"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_auth_user_email: { Args: never; Returns: string }
       get_event_registration_count: {
         Args: { p_event_id: string }
         Returns: number
       }
       get_growth_metrics: { Args: { p_days?: number }; Returns: Json }
+      get_my_full_page: {
+        Args: { p_user_id?: string }
+        Returns: {
+          avatar_style: Json | null
+          avatar_url: string | null
+          city: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_whatsapp: string | null
+          country_code: string | null
+          created_at: string | null
+          custom_domain: string | null
+          description: string | null
+          editor_mode: string
+          entity_type: string | null
+          favicon_url: string | null
+          gallery_featured_at: string | null
+          gallery_likes: number | null
+          grid_config: Json | null
+          hide_branding: boolean | null
+          id: string
+          index_exclusion_reasons: string[] | null
+          integrations: Json | null
+          is_home: boolean
+          is_in_gallery: boolean | null
+          is_indexable: boolean | null
+          is_paid: boolean | null
+          is_primary_paid: boolean | null
+          is_published: boolean | null
+          last_indexnow_at: string | null
+          last_snapshot_at: string | null
+          niche: string | null
+          organization_id: string | null
+          page_path: string | null
+          page_type: string | null
+          preview_url: string | null
+          profession: string | null
+          quality_breakdown: Json | null
+          quality_score: number | null
+          seo_meta: Json | null
+          service_slugs: Json | null
+          site_id: string | null
+          slug: string
+          theme_settings: Json | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          view_count: number | null
+          webhook_secret: string | null
+          webhook_url: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "pages"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_page_search_diagnostics: {
         Args: { p_page_id: string }
         Returns: Json
@@ -4399,6 +4908,7 @@ export type Database = {
         Args: { p_zone_id: string }
         Returns: string
       }
+      get_zone_calendar_token: { Args: { _zone_id: string }; Returns: string }
       get_zone_invite_by_token: { Args: { p_token: string }; Returns: Json }
       get_zone_member_limit: { Args: { p_plan_code: string }; Returns: number }
       has_active_subscription: {
@@ -4428,6 +4938,16 @@ export type Database = {
       increment_challenge_progress: {
         Args: { p_challenge_key: string }
         Returns: undefined
+      }
+      increment_smart_link_click: {
+        Args: { _slug: string }
+        Returns: {
+          downstream_action: Json
+          id: string
+          page_id: string
+          target_url: string
+          user_id: string
+        }[]
       }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
       is_team_member: {
@@ -4543,6 +5063,8 @@ export type Database = {
           p_theme_settings: Json
           p_title: string
           p_user_id: string
+          p_webhook_secret?: string
+          p_webhook_url?: string
         }
         Returns: string
       }

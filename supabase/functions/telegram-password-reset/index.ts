@@ -58,8 +58,9 @@ Deno.serve(async (req) => {
 
       if (profileError || !profile) {
         console.log('Profile not found for chat_id:', telegram_chat_id);
+        // Uniform success response to prevent enumeration of linked Telegram accounts
         return new Response(
-          JSON.stringify({ success: false, error: 'telegram_not_found' }),
+          JSON.stringify({ success: true }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }

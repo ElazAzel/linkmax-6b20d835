@@ -30,7 +30,8 @@ interface CrawlerFriendlyContentProps {
 
 export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFriendlyContentProps) {
   const { i18n } = useTranslation();
-  const language = i18n.language as 'ru' | 'en' | 'kk';
+  const rawLang = (i18n.language || 'ru').split('-')[0];
+  const language = (['ru', 'en', 'kk'].includes(rawLang) ? rawLang : 'ru') as 'ru' | 'en' | 'kk';
 
   // Guard against undefined/null blocks
   const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);

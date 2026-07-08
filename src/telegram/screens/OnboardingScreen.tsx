@@ -6,7 +6,7 @@ import { useZones } from '@/hooks/zones/useZones';
 export function OnboardingScreen() {
     const { t } = useTranslation();
     const { haptic, setScreen } = useTelegram();
-    const { createZone, loading: zonesLoading } = useZones();
+    const { createZone } = useZones();
 
     const [step, setStep] = useState(1);
     const [name, setName] = useState('');

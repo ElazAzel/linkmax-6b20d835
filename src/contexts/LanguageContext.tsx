@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { isI18nText, isMultilingualString } from '@/lib/i18n-helpers';
 import { storage } from '@/lib/storage';
 import { TranslatedBlock } from '@/types/language-context';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 
 // Extended language names for translation
 const LANGUAGE_NAMES: Record<string, string> = {
@@ -69,6 +70,7 @@ export { LanguageContext };
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const { i18n, t } = useTranslation();
+  const { isPremium } = usePremiumStatus();
 
   // Detect browser language on mount
   const [browserLanguage] = useState<LocaleCode>(() => detectBrowserLanguage());
@@ -282,6 +284,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     targetLanguages: LocaleCode[]
   ): Promise<TranslatedBlock[]> => {
     if (!blocks?.length || targetLanguages.length === 0) return blocks;
+
+    // Auto-translation of blocks is a paid feature.
+    if (!isPremium) {
+      return blocks;
+    }
+
 
     setIsTranslating(true);
 

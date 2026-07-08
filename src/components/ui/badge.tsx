@@ -11,7 +11,13 @@ const badgeVariants = cva(
         default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
         secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        success: "border-transparent bg-success text-success-foreground hover:bg-success/80",
+        warning: "border-transparent bg-warning text-warning-foreground hover:bg-warning/80",
+        info: "border-transparent bg-info text-info-foreground hover:bg-info/80",
         outline: "text-foreground",
+        premium: "border-transparent bg-gradient-to-r from-primary to-violet-600 text-primary-foreground shadow-sm",
+        subtle: "border-transparent bg-primary/10 text-primary hover:bg-primary/15",
+        glass: "border-border/40 bg-card/60 backdrop-blur-sm text-foreground shadow-sm",
       },
     },
     defaultVariants: {
@@ -22,7 +28,7 @@ const badgeVariants = cva(
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
-  variant?: "default" | "secondary" | "destructive" | "outline" | null | undefined;
+  variant?: "default" | "secondary" | "destructive" | "success" | "warning" | "info" | "outline" | "premium" | "subtle" | "glass" | null | undefined;
   className?: string;
 }
 

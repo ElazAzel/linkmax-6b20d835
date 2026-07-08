@@ -235,8 +235,11 @@ export function isBlockScheduledVisible(schedule?: BlockSchedule, now: Date = ne
 /**
  * Generate a unique block ID (moved from Block entity)
  */
-export function generateBlockId(type: string): string {
-  return `${type}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+export function generateBlockId(_type: string): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c =>
+    (Number(c) ^ (Math.random() * 16 >> (Number(c) / 4))).toString(16)
+  );
 }
 
 /**
@@ -549,18 +552,21 @@ export async function savePage(
       );
     }
 
-    // Fetch and return the saved page
-    const { data: page, error: fetchError } = await supabase
-      .from('pages')
-      .select('*')
-      .eq('id', pageId as string)
-      .single();
+    // Fetch and return the saved page via SECURITY DEFINER RPC so the owner
+    // gets back sensitive columns (webhook_*, contact_*) that are revoked
+    // from direct SELECT for the authenticated role.
+    const { data: pageRows, error: fetchError } = await (supabase
+      .rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>)('get_my_full_page', { p_user_id: userId });
 
     if (fetchError) {
       return { data: null, error: wrapError(fetchError) };
     }
 
-    return { data: page as unknown as DbPage, error: null };
+    const page = Array.isArray(pageRows)
+      ? (pageRows as unknown as DbPage[]).find((p) => p.id === pageId) ?? (pageRows as unknown as DbPage[])[0]
+      : (pageRows as unknown as DbPage);
+
+    return { data: (page ?? null) as unknown as DbPage, error: null };
   } catch (error) {
     logger.error('Error saving page', error, { context: 'pages', data: { userId } });
     return { data: null, error: wrapError(error) };
@@ -581,7 +587,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
         niche, preview_url, quality_score, is_indexable, last_snapshot_at,
         is_paid, is_primary_paid, page_type, integrations, favicon_url,
         hide_branding, organization_id, custom_domain, city, country_code,
-        profession, entity_type, contact_email, contact_phone, contact_whatsapp,
+        profession, entity_type,
         blocks(*)
       `)
       .eq('slug', slug)
@@ -627,9 +633,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       city: pg.city || undefined,
       profession: pg.profession || undefined,
       entity_type: pg.entity_type === 'organization' ? 'organization' : 'person',
-      contact_email: pg.contact_email || undefined,
-      contact_phone: pg.contact_phone || undefined,
-      contact_whatsapp: pg.contact_whatsapp || undefined,
+      // contact_* are owner PII — not exposed to anonymous viewers
       quality_score: pg.quality_score ?? undefined,
       experiments
     };
@@ -654,7 +658,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
         niche, preview_url, quality_score, is_indexable, last_snapshot_at,
         is_paid, is_primary_paid, page_type, integrations, favicon_url,
         hide_branding, organization_id, custom_domain, city, country_code,
-        profession, entity_type, contact_email, contact_phone, contact_whatsapp,
+        profession, entity_type,
         blocks(*), private_page_data(*)
       `)
       .eq('custom_domain', domain)
@@ -696,9 +700,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       city: pg.city || undefined,
       profession: pg.profession || undefined,
       entity_type: pg.entity_type === 'organization' ? 'organization' : 'person',
-      contact_email: pg.contact_email || undefined,
-      contact_phone: pg.contact_phone || undefined,
-      contact_whatsapp: pg.contact_whatsapp || undefined,
+      // contact_* are owner PII — not exposed to anonymous viewers
       quality_score: pg.quality_score ?? undefined,
       experiments
     };
@@ -714,30 +716,44 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
  */
 export async function loadUserPage(userId: string): Promise<LoadUserPageResult> {
   try {
-    const { data: page, error: pageError } = await supabase
-      .from('pages')
-      .select('*, blocks(*), private_page_data(*)')
-      .eq('user_id', userId)
-      .maybeSingle();
+    // Fetch the owner's full row (including sensitive columns) via SECURITY DEFINER RPC.
+    // Direct SELECT on contact_email / contact_phone / contact_whatsapp / webhook_url /
+    // webhook_secret / quality_breakdown / index_exclusion_reasons is no longer granted
+    // to the `authenticated` role; the RPC is the owner-only access path.
+    const { data: rpcRows, error: rpcError } = await (supabase.rpc as unknown as (
+      fn: string,
+      args?: Record<string, unknown>,
+    ) => Promise<{ data: unknown; error: { code?: string; message?: string } | null }>)(
+      'get_my_full_page',
+      { p_user_id: userId },
+    );
 
-    if (pageError) {
-      if (pageError.code === 'PGRST116') {
-        return {
-          data: createDefaultPageData(userId),
-          chatbotContext: null,
-          error: null,
-        };
-      }
-      return { data: null, chatbotContext: null, error: wrapError(pageError) };
+    if (rpcError) {
+      return { data: null, chatbotContext: null, error: wrapError(rpcError) };
     }
 
-    if (!page) {
+    const ownerRow = Array.isArray(rpcRows) ? (rpcRows[0] as Record<string, unknown> | undefined) : null;
+
+    if (!ownerRow) {
       return {
         data: createDefaultPageData(userId),
         chatbotContext: null,
         error: null,
       };
     }
+
+    // Fetch blocks + private_page_data separately (these tables have their own RLS).
+    const [{ data: blocksData }, { data: privateRows }] = await Promise.all([
+      supabase.from('blocks').select('*').eq('page_id', ownerRow.id as string),
+      supabase.from('private_page_data').select('*').eq('page_id', ownerRow.id as string),
+    ]);
+
+    const page = {
+      ...ownerRow,
+      blocks: blocksData ?? [],
+      private_page_data: privateRows ?? [],
+    };
+
     const pg = page as unknown as DbPage;
     const activeBlocks = (pg.blocks as unknown as DbBlock[] || []).filter(b => !b.deleted_at);
 

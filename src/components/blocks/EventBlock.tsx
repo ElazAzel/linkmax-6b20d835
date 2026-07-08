@@ -427,9 +427,9 @@ export const EventBlock = memo(function EventBlock({
         )}
         <div className="p-4 space-y-3">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <h3 className="text-lg font-semibold">{title}</h3>
-              {description && <p className="text-sm text-muted-foreground">{description}</p>}
+            <div className="min-w-0">
+              <h3 className="text-lg font-semibold leading-snug break-words hyphens-auto">{title}</h3>
+              {description && <p className="text-sm text-muted-foreground leading-relaxed break-words hyphens-auto">{description}</p>}
             </div>
             <Badge variant="secondary" className="shrink-0">
               {block.isPaid && isOwnerPremium && block.price
@@ -442,7 +442,7 @@ export const EventBlock = memo(function EventBlock({
             {block.startAt && (
               <div className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4" />
-                <span>
+                <span className="break-words">
                   {format(new Date(block.startAt), 'dd MMMM yyyy, HH:mm', { locale })}
                 </span>
               </div>
@@ -450,7 +450,7 @@ export const EventBlock = memo(function EventBlock({
             {block.locationValue && (
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
-                <span>{block.locationValue}</span>
+                <span className="break-words">{block.locationValue}</span>
               </div>
             )}
             {block.capacity && (

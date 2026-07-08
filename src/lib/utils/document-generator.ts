@@ -3,9 +3,24 @@
  */
 // import jsPDF from 'jspdf'; // Removed static import for bundle optimization
 // import html2canvas from 'html2canvas'; // Removed static import for bundle optimization
+import DOMPurify from 'dompurify';
 import { ZoneContact, ZoneDeal, ZoneDocumentTemplate } from '@/types/zones';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+
+/**
+ * 🛡️ Sanitize rendered template HTML to remove script/event-handler vectors before
+ * it is injected via innerHTML / dangerouslySetInnerHTML / html2canvas. Zone admins
+ * control raw template HTML, so an admin could otherwise XSS other zone members.
+ */
+function sanitizeTemplateHtml(html: string): string {
+  return DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+    FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form'],
+    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit'],
+  });
+}
+
 
 // =============== Variable Definitions ===============
 
@@ -174,7 +189,7 @@ export async function generatePDFFromHTML(
   
   // Create temporary container for rendering
   const container = document.createElement('div');
-  container.innerHTML = htmlContent;
+  container.innerHTML = sanitizeTemplateHtml(htmlContent);
   container.style.cssText = `
     position: fixed;
     left: -9999px;
@@ -291,7 +306,7 @@ export function generatePreviewHTML(
   highlightUnreplaced = true
 ): string {
   let preview = renderTemplate(template, variables);
-  
+
   if (highlightUnreplaced) {
     // Highlight unreplaced variables
     preview = preview.replace(
@@ -299,6 +314,6 @@ export function generatePreviewHTML(
       '<span style="background-color: #fef3c7; color: #92400e; padding: 2px 4px; border-radius: 3px;">{{$1}}</span>'
     );
   }
-  
-  return preview;
+
+  return sanitizeTemplateHtml(preview);
 }

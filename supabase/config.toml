@@ -94,6 +94,15 @@ verify_jwt = false
 [functions.seo-ssr]
 verify_jwt = false
 
+[functions.notify-indexnow]
+verify_jwt = false # Public: called by DB trigger on page publish; host-validates URLs internally
+
+[functions.retry-failed-indexing]
+verify_jwt = false # Called by pg_cron via anon apikey
+
+[functions.google-search-console-submit]
+verify_jwt = false # Called by notify-indexnow (internal); short-circuits if connector not linked
+
 [functions.pixel-proxy]
 verify_jwt = false # Public: tracking pixel
 

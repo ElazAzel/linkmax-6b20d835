@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,13 @@ import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import UserIcon from 'lucide-react/dist/esm/icons/user';
 import { trackAuthEvent } from '@/services/authFunnel';
+import { session } from '@/lib/storage';
+import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
+import type { TelegramAuthPayload } from '@/types/telegram-auth';
 
 // Zod schema is created inside the component to access t()
 // We define a factory function here
@@ -62,7 +68,7 @@ function normalizeDesiredSlug(value: string | null): string | null {
   return normalized.length >= 3 ? normalized : null;
 }
 
-export default function Auth() {
+export const Auth = memo(function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
@@ -73,7 +79,7 @@ export default function Auth() {
     'auth.seo.description',
     'Access your LinkMAX dashboard to build and publish your link in bio page.'
   );
-  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram } = useAuth();
+  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, signOut } = useAuth();
   const { handleError } = useAppError();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
@@ -183,20 +189,41 @@ export default function Auth() {
     }
   }, [urlMode]);
 
-  // Redirect if already logged in (but not during password update)
+  // Apply referral once when an authenticated user lands on /auth
+  const referralAppliedRef = useRef(false);
+  useEffect(() => {
+    if (user && refCode && !referralAppliedRef.current) {
+      referralAppliedRef.current = true;
+      applyReferralCode(refCode, user.id).then((result) => {
+        if (result.success) {
+          toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
+        }
+      });
+    }
+  }, [user, refCode, t]);
+
+  // Auto-redirect only when there's an explicit return target or signup builder intent.
+  // Otherwise show the "already signed in" card so the user can choose.
   useEffect(() => {
     if (user && authMode !== 'update-password') {
-      // Apply referral code if present
-      if (refCode) {
-        applyReferralCode(refCode, user.id).then((result) => {
-          if (result.success) {
-            toast.success(t('auth.referral.success', '🎉 +{{days}} days Premium for referral code!', { days: result.bonusDays }));
-          }
-        });
+      const shouldOpenBuilder = session.get<boolean>(NEW_USER_BUILDER_SESSION_KEY);
+      if (shouldOpenBuilder) {
+        session.remove(NEW_USER_BUILDER_SESSION_KEY);
+        navigate(safeReturnTo || NEW_USER_BUILDER_ROUTE);
+        return;
       }
-      navigate(safeReturnTo || '/dashboard');
+
+      if (safeReturnTo) {
+        navigate(safeReturnTo);
+      }
     }
-  }, [user, navigate, refCode, authMode, safeReturnTo]);
+  }, [user, navigate, authMode, safeReturnTo]);
+
+  const handleSignOutAndStay = async () => {
+    trackAuthEvent('auth_tab_switch', { tab: 'signout' });
+    await signOut();
+    toast.success(t('auth.signedOut', 'Signed out'));
+  };
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -220,9 +247,11 @@ export default function Auth() {
       return;
     }
 
+    session.set(NEW_USER_BUILDER_SESSION_KEY, true);
     const { data, error } = await signUp(validation.data.email, validation.data.password);
 
     if (error) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
       logger.error('Signup error:', error, { context: 'Auth' });
       handleError(error, t('messages.failedToSignUp'));
       playError();
@@ -448,7 +477,7 @@ export default function Auth() {
     setIsOAuthLoading(null);
   };
 
-  const handleTelegramAuth = async (telegramData: Record<string, unknown>) => {
+  const handleTelegramAuth = async (telegramData: TelegramAuthPayload) => {
     trackAuthEvent('auth_oauth_click', { provider: 'telegram', intent: activeTab });
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);
@@ -507,7 +536,7 @@ export default function Auth() {
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
               <div className="h-16 w-16 rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/30 shadow-glass-lg flex items-center justify-center animate-scale-in">
-                <img src="/favicon.png" alt="LinkMAX" className="h-10 w-10 object-contain" />
+                <img src="/favicon.png" alt="LinkMAX — business OS for experts and small businesses" className="h-10 w-10 object-contain" />
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
@@ -521,8 +550,46 @@ export default function Auth() {
             </div>
           </div>
 
-          {/* Password Update Card */}
-          {authMode === 'update-password' ? (
+          {/* Already signed-in panel — quick actions instead of full auth form */}
+          {user && authMode !== 'update-password' ? (
+            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
+                    <UserIcon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <CardTitle className="text-lg truncate">
+                      {t('auth.alreadySignedIn', 'Вы уже вошли')}
+                    </CardTitle>
+                    <CardDescription className="truncate">{user.email}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button
+                  className="w-full h-12 rounded-2xl shadow-glass-lg gap-2 transition-all duration-300 hover:scale-[1.01]"
+                  onClick={() => navigate(safeReturnTo || '/dashboard')}
+                  data-testid="continue-to-dashboard"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  {t('auth.continueToDashboard', 'Продолжить в дашборд')}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 rounded-2xl gap-2"
+                  onClick={handleSignOutAndStay}
+                  data-testid="signout-switch-account"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {t('auth.useAnotherAccount', 'Войти под другим аккаунтом')}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center pt-1">
+                  {t('auth.alreadySignedInHint', 'Можно сменить аккаунт — текущая сессия будет завершена.')}
+                </p>
+              </CardContent>
+            </Card>
+          ) : authMode === 'update-password' ? (
             <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
@@ -982,4 +1049,5 @@ export default function Auth() {
       </div>
     </>
   );
-}
+});
+export default Auth;

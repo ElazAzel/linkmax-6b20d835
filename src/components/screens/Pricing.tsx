@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ import { activateStarterTier } from '@/services/user';
 
 type BillingPeriod = 3 | 6 | 12;
 
-export default function Pricing() {
+export const Pricing = memo(function Pricing() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { tier, isLoading, refresh: refreshPremiumStatus } = usePremiumStatus();
@@ -134,7 +134,7 @@ export default function Pricing() {
           <div className="mx-4 mt-3">
             <div className="backdrop-blur-2xl bg-card/50 border border-border/30 rounded-2xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')}>
+                <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} aria-label={t('common.back', 'Назад')}>
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <h1 className="text-xl font-bold text-primary">{t('pricing.title', 'Тарифы')}</h1>
@@ -216,4 +216,5 @@ export default function Pricing() {
       </div>
     </>
   );
-}
+});
+export default Pricing;

@@ -112,18 +112,18 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
           </div>
         )}
         <CardContent className={cn('p-4', isGrid && 'p-3')}>
-          <div className="flex justify-between items-start gap-2">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
             <div className="flex-1 min-w-0">
               <h4 className={cn(
-                'font-medium truncate',
+                'font-medium leading-snug break-words hyphens-auto',
                 isGrid ? 'text-sm' : 'text-base'
               )}>
                 {itemName}
               </h4>
               {itemDescription && (
                 <p className={cn(
-                  'text-muted-foreground mt-1',
-                  isGrid ? 'text-xs line-clamp-2' : 'text-sm line-clamp-3'
+                  'text-muted-foreground mt-1 leading-relaxed break-words hyphens-auto',
+                  isGrid ? 'text-xs' : 'text-sm'
                 )}>
                   {itemDescription}
                 </p>
@@ -131,7 +131,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
             </div>
             {block.showPrices !== false && item.price !== undefined && item.price > 0 && (
               <span className={cn(
-                'font-semibold text-primary whitespace-nowrap',
+                'font-semibold text-primary break-words',
                 isGrid ? 'text-sm' : 'text-base'
               )}>
                 {formatPrice(item.price, item.currency || block.currency || 'KZT')}

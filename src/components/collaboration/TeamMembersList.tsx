@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import UserX from 'lucide-react/dist/esm/icons/user-x';
@@ -28,10 +29,18 @@ export function TeamMembersList({
 }: TeamMembersListProps) {
   const { t } = useTranslation();
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pendingMember, setPendingMember] = useState<{ id: string; name: string } | null>(null);
 
-  const handleRemoveMember = async (memberId: string, memberName: string) => {
-    if (!confirm(t('toasts.team.confirmRemove', { name: memberName }))) return;
+  const handleRemoveMember = (memberId: string, memberName: string) => {
+    setPendingMember({ id: memberId, name: memberName });
+    setDeleteConfirmOpen(true);
+  };
 
+  const handleRemoveMemberConfirmed = async () => {
+    if (!pendingMember) return;
+    const { id: memberId } = pendingMember;
+    setDeleteConfirmOpen(false);
     setRemovingId(memberId);
     try {
       const result = await removeMemberFromTeam(teamId, memberId);
@@ -46,6 +55,7 @@ export function TeamMembersList({
       toast.error(t('toasts.team.removeError'));
     } finally {
       setRemovingId(null);
+      setPendingMember(null);
     }
   };
 
@@ -124,6 +134,20 @@ export function TeamMembersList({
           );
         })}
       </CardContent>
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('toasts.team.confirmRemoveTitle', 'Remove member')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {pendingMember ? t('toasts.team.confirmRemove', { name: pendingMember.name }) : ''}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleRemoveMemberConfirmed}>{t('common.remove', 'Remove')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }

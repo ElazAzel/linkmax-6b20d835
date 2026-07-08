@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
@@ -69,6 +70,8 @@ export const ZonePipelineStageSettings = memo(function ZonePipelineStageSettings
   const [isCreating, setIsCreating] = useState(false);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -126,18 +129,25 @@ export const ZonePipelineStageSettings = memo(function ZonePipelineStageSettings
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     if (stages.length <= 1) {
       toast.error(t('zones.settings.stages.cannotDeleteLast', 'Нельзя удалить последний этап'));
       return;
     }
-    if (!confirm(t('zones.settings.stages.confirmDelete', 'Вы уверены? Сделки на этом этапе могут быть потеряны или потребуют перемещения.'))) return;
-    
+    setPendingDeleteId(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!pendingDeleteId) return;
     try {
-      await deleteStage(id);
+      await deleteStage(pendingDeleteId);
       toast.success(t('zones.settings.stages.deleted', 'Этап удален'));
     } catch (err: any) {
       toast.error(err.message);
+    } finally {
+      setDeleteConfirmOpen(false);
+      setPendingDeleteId(null);
     }
   };
 
@@ -194,6 +204,21 @@ export const ZonePipelineStageSettings = memo(function ZonePipelineStageSettings
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('zones.settings.stages.confirmDelete', 'Вы уверены?')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('zones.settings.stages.confirmDeleteDesc', 'Сделки на этом этапе могут быть потеряны или потребуют перемещения.')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm}>{t('common.delete', 'Удалить')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });

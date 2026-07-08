@@ -267,11 +267,14 @@ export async function requestWithdrawal(
   return { success: true };
 }
 
-// Get user's withdrawal history
+// Get user's withdrawal history.
+// `payment_details` is intentionally NOT selected — direct SELECT on that column
+// is revoked from the `authenticated` role. The full record (with bank/wallet info)
+// is available only to admins via the `get_admin_withdrawals` RPC.
 export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[]> {
   const { data, error } = await supabase
     .from('token_withdrawals')
-    .select('*')
+    .select('id, user_id, amount, status, payment_method, processed_at, created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -280,19 +283,21 @@ export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[
     return [];
   }
 
-  return (data || []).map(w => ({
+  return (data || []).map((w) => ({
     id: w.id,
     userId: w.user_id,
     amount: w.amount,
     status: w.status as 'pending' | 'approved' | 'rejected' | 'completed',
     paymentMethod: w.payment_method || undefined,
-    paymentDetails: w.payment_details as Record<string, unknown> || undefined,
-    adminNotes: (w as any).admin_notes || undefined,
-    processedBy: (w as any).processed_by || undefined,
+    paymentDetails: undefined,
+    adminNotes: undefined,
+    processedBy: undefined,
     processedAt: w.processed_at || undefined,
     createdAt: w.created_at,
   }));
 }
+
+
 
 // Admin: Get token analytics
 export async function getTokenAnalytics(startDate?: string, endDate?: string): Promise<Record<string, unknown> | null> {
@@ -309,37 +314,40 @@ export async function getTokenAnalytics(startDate?: string, endDate?: string): P
   return data as Record<string, unknown>;
 }
 
-// Admin: Get all pending withdrawals
+// Admin: Get all withdrawals (full data incl. payment_details) via SECURITY DEFINER RPC.
+// Direct SELECT on payment_details is revoked from the authenticated role; only this
+// RPC (after has_role admin check) returns the sensitive bank/wallet info.
 export async function getAllWithdrawals(status?: string): Promise<WithdrawalRequest[]> {
-  let query = supabase
-    .from('token_withdrawals')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (status) {
-    query = query.eq('status', status as any);
-  }
-
-  const { data, error } = await query;
+  const { data, error } = await (supabase.rpc as unknown as (
+    fn: string,
+    args?: Record<string, unknown>,
+  ) => Promise<{ data: unknown; error: { message?: string } | null }>)(
+    'get_admin_withdrawals',
+    { p_status: status ?? null },
+  );
 
   if (error) {
     logger.error('Error getting withdrawals', error, { context: 'tokens' });
     return [];
   }
 
-  return (data || []).map(w => ({
-    id: w.id,
-    userId: w.user_id,
-    amount: w.amount,
+  const rows = Array.isArray(data) ? (data as Array<Record<string, unknown>>) : [];
+
+
+  return rows.map((w) => ({
+    id: w.id as string,
+    userId: w.user_id as string,
+    amount: w.amount as number,
     status: w.status as 'pending' | 'approved' | 'rejected' | 'completed',
-    paymentMethod: w.payment_method || undefined,
-    paymentDetails: w.payment_details as Record<string, unknown> || undefined,
-    adminNotes: (w as any).admin_notes || undefined,
-    processedBy: (w as any).processed_by || undefined,
-    processedAt: w.processed_at || undefined,
-    createdAt: w.created_at,
+    paymentMethod: (w.payment_method as string | null) || undefined,
+    paymentDetails: (w.payment_details as Record<string, unknown> | null) || undefined,
+    adminNotes: (w.admin_notes as string | null) || undefined,
+    processedBy: (w.processed_by as string | null) || undefined,
+    processedAt: (w.processed_at as string | null) || undefined,
+    createdAt: w.created_at as string,
   }));
 }
+
 
 // Admin: Process withdrawal
 export async function processWithdrawal(

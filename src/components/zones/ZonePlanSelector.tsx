@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Check, Loader2 } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { ZONE_PLANS, Zone } from '@/types/zones';
 import { PaymentService } from '@/services/payment-service';
 import { toast } from 'sonner';
@@ -15,7 +16,7 @@ interface ZonePlanSelectorProps {
     onRefetch?: () => void;
 }
 
-export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
+export const ZonePlanSelector = memo(function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
     const { t } = useTranslation();
     const { handleError } = useAppError();
     const [cycle, setCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -81,21 +82,21 @@ export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
                         >
                             {isActive && (
                                 <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold uppercase tracking-wider">
-                                    Current
+                                    {t('zones.plans.current', 'Current')}
                                 </div>
                             )}
 
                             <CardHeader className="pb-4">
                                 <CardTitle className="text-xl flex items-center justify-between">
-                                    {plan.code.replace('business_', 'Business ')}
+                                    {plan.code.replace('business_', t('zones.plans.businessPrefix', 'Business '))}
                                     {plan.memberLimit === 999999 ? (
-                                        <span className="text-sm font-normal text-muted-foreground italic">Unlimited</span>
+                                        <span className="text-sm font-normal text-muted-foreground italic">{t('zones.plans.unlimited', 'Unlimited')}</span>
                                     ) : (
-                                        <span className="text-sm font-normal text-muted-foreground">{plan.memberLimit} members</span>
+                                        <span className="text-sm font-normal text-muted-foreground">{t('zones.plans.members', '{{count}} members', { count: plan.memberLimit })}</span>
                                     )}
                                 </CardTitle>
                                 <CardDescription>
-                                    Full feature suite for growing teams and agencies.
+                                    {t('zones.plans.description', 'Full feature suite for growing teams and agencies.')}
                                 </CardDescription>
                             </CardHeader>
 
@@ -111,15 +112,15 @@ export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
                                 <ul className="mt-6 space-y-3 text-sm">
                                     <li className="flex items-center gap-2">
                                         <Check className="h-4 w-4 text-green-500" />
-                                        <span>All Business Features</span>
+                                        <span>{t('zones.plans.featureAll', 'All Business Features')}</span>
                                     </li>
                                     <li className="flex items-center gap-2">
                                         <Check className="h-4 w-4 text-green-500" />
-                                        <span>CRM & Pipeline Management</span>
+                                        <span>{t('zones.plans.featureCrm', 'CRM & Pipeline Management')}</span>
                                     </li>
                                     <li className="flex items-center gap-2">
                                         <Check className="h-4 w-4 text-green-500" />
-                                        <span>Shared Team Inbox</span>
+                                        <span>{t('zones.plans.featureInbox', 'Shared Team Inbox')}</span>
                                     </li>
                                 </ul>
                             </CardContent>
@@ -134,9 +135,9 @@ export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
                                     {loading === plan.code ? (
                                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
                                     ) : isActive ? (
-                                        'Current Plan'
+                                        t('zones.plans.current', 'Current Plan')
                                     ) : (
-                                        'Upgrade Now'
+                                        t('zones.plans.upgrade', 'Upgrade Now')
                                     )}
                                 </Button>
                             </CardFooter>
@@ -146,4 +147,4 @@ export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
             </div>
         </div>
     );
-}
+});

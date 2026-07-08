@@ -221,7 +221,8 @@ function SortableGridBlockItem({
   }, [isRecentlyAdded]);
 
   const [isHovered, setIsHovered] = useState(false);
-  const showToolbar = isHovered || selected;
+  // Quiet canvas: toolbar appears only on selection (kept hover for label/affordance hint)
+  const showToolbar = selected;
 
   return (
     <div
@@ -230,10 +231,12 @@ function SortableGridBlockItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-all duration-200 rounded-2xl border-0',
+        'relative group transition-shadow duration-200 rounded-2xl border-0',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
+        // Quiet hover: 1px outline + soft lift, no background tint
+        !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
         isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
@@ -246,27 +249,23 @@ function SortableGridBlockItem({
         isDimmed && 'opacity-30 pointer-events-none',
       )}
     >
-      {/* Hold-anywhere drag handle (covers full block, low priority) */}
-      <div
-        className={cn(
-          'absolute inset-0 z-10 touch-none',
-          isDragging ? 'cursor-grabbing' : 'cursor-grab',
-        )}
-        {...attributes}
-        {...listeners}
-        aria-hidden="true"
-      />
-
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
         <div className="pointer-events-none w-full h-full isolate bg-card rounded-2xl overflow-hidden" data-editor-block>
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click Overlay — sits above hold-drag, captures click/dblclick */}
+        {/* Click + Drag Overlay — single layer: dnd-kit's PointerSensor
+            (activationConstraint distance:5) starts drag only on movement,
+            otherwise the click fires for selection. */}
         <button
           type="button"
-          className="absolute inset-0 z-20 h-auto min-h-0 cursor-pointer rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors hover:bg-accent/10 active:bg-accent/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          {...attributes}
+          {...listeners}
+          className={cn(
+            'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
+            isDragging ? 'cursor-grabbing' : 'cursor-grab',
+          )}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -276,9 +275,6 @@ function SortableGridBlockItem({
             e.preventDefault();
             e.stopPropagation();
             onBlockDoubleClick?.(block);
-          }}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
           }}
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
@@ -313,11 +309,36 @@ function SortableGridBlockItem({
         </button>
       )}
 
+      {/* Always-visible quick-edit pencil — opens the block editor in one tap */}
+      {!isDragging && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onEdit(block);
+          }}
+          onTouchEnd={(e) => e.stopPropagation()}
+          className={cn(
+            'absolute top-2 right-2 z-40 inline-flex items-center justify-center rounded-full',
+            'bg-background/90 backdrop-blur-md border border-border/20 text-foreground/80',
+            'shadow-[0_4px_12px_-4px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:scale-105',
+            'transition-all active:scale-95',
+            isMobile ? 'h-8 w-8 opacity-90' : 'h-7 w-7 opacity-0 group-hover:opacity-100 focus:opacity-100',
+            selected && 'opacity-0',
+          )}
+          aria-label={t('editor.blockToolbar.edit', 'Редактировать')}
+          title={t('editor.blockToolbar.edit', 'Редактировать')}
+        >
+          <Edit2 className="h-3.5 w-3.5" />
+        </button>
+      )}
+
       {/* Block type label — only on hover/select to keep canvas quiet */}
       <div
         className={cn(
           'absolute bottom-2 left-2 z-30 pointer-events-none transition-opacity duration-200',
-          showToolbar && !isDragging ? 'opacity-100' : 'opacity-0',
+          (isHovered || selected) && !isDragging ? 'opacity-100' : 'opacity-0',
         )}
       >
         <span className="inline-block px-1.5 py-px rounded-md bg-background/90 backdrop-blur text-[10px] font-medium text-muted-foreground uppercase tracking-wide border border-border/10">
@@ -521,6 +542,17 @@ export const GridEditor = memo(function GridEditor({
     setInsertPosition(position);
     setInsertSheetOpen(true);
   }, []);
+
+  // Listen for global "open insert sheet" event (e.g. from SmartActionDock).
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ position?: number }>).detail;
+      const pos = typeof detail?.position === 'number' ? detail.position : blocks.length;
+      openInsertSheet(pos);
+    };
+    window.addEventListener('editor:open-insert-sheet', handler as EventListener);
+    return () => window.removeEventListener('editor:open-insert-sheet', handler as EventListener);
+  }, [openInsertSheet, blocks.length]);
 
   const handleInsertSheetOpenChange = useCallback((open: boolean) => {
     if (!open) {

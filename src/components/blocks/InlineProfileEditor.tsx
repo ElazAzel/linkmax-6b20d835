@@ -177,7 +177,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 20 * 1024 * 1024) {
       toast.error(t('upload.fileTooLarge', 'File size must be less than 10MB'));
       return;
     }
@@ -211,7 +211,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 20 * 1024 * 1024) {
       toast.error(t('upload.fileTooLarge', 'File size must be less than 10MB'));
       return;
     }

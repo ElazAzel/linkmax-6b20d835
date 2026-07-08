@@ -159,4 +159,3 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
     </div>
   );
 });
-

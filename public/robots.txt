@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 Disallow: /dashboard/
 Disallow: /dashboard-v2/
 Disallow: /admin/
@@ -17,6 +18,8 @@ Allow: /для-бьюти-мастеров
 Allow: /для-репетиторов
 Allow: /for/
 Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /llms-en.txt
 Allow: /sitemap.xml
 
 # AI Crawlers - welcome

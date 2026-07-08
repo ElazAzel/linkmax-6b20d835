@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import { useZoneContext } from '@/contexts/ZoneContext';
 import { ZoneDocumentTemplatesSettings } from './ZoneDocumentTemplatesSettings';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 
 type StatusFilter = 'all' | DocumentStatus;
 
@@ -26,7 +27,7 @@ const STATUS_KEYS: Record<string, { labelKey: string; defaultLabel: string; colo
     archived: { labelKey: 'zones.documents.status.archived', defaultLabel: 'Archived', color: 'bg-muted/30 text-muted-foreground/70 border-border/50', dotColor: 'bg-muted-foreground/50' },
 };
 
-export const ZoneDocumentsScreen = () => {
+export const ZoneDocumentsScreen = memo(function ZoneDocumentsScreen() {
     const { t } = useTranslation();
     const { currentZone, isReadOnly } = useZoneContext();
     const zoneId = currentZone?.id || null;
@@ -37,6 +38,8 @@ export const ZoneDocumentsScreen = () => {
     const [selectedDocument, setSelectedDocument] = useState<ZoneDocument | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [pendingDeleteDocId, setPendingDeleteDocId] = useState<string | null>(null);
 
     const FILTER_TABS: { value: StatusFilter; labelKey: string; defaultLabel: string }[] = [
         { value: 'all', labelKey: 'zones.documents.filter.all', defaultLabel: 'All' },
@@ -73,6 +76,46 @@ export const ZoneDocumentsScreen = () => {
         return { ...cfg, label: t(cfg.labelKey, cfg.defaultLabel) };
     };
 
+    const handleTemplatesOpen = useCallback(() => setIsTemplatesOpen(true), []);
+    const handleCreatorOpen = useCallback(() => setIsCreatorOpen(true), []);
+    const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    }, []);
+    const handleFilterClick = useCallback((value: StatusFilter) => {
+        setStatusFilter(value);
+    }, []);
+    const handleResetFilters = useCallback(() => {
+        setSearchQuery('');
+        setStatusFilter('all');
+    }, []);
+    const handleGenerate = useCallback((doc: ZoneDocument) => {
+        setSelectedDocument(doc);
+        setIsGeneratorOpen(true);
+    }, []);
+    const handleViewDocument = useCallback((url: string, features?: string) => {
+        window.open(url, '_blank', features);
+    }, []);
+    const handleDownload = useCallback((doc: ZoneDocument) => {
+        const link = document.createElement('a');
+        link.href = doc.file_url!;
+        link.download = doc.title || 'document';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, []);
+    const handleDeleteInit = useCallback((id: string) => {
+        setPendingDeleteDocId(id);
+        setDeleteConfirmOpen(true);
+    }, []);
+    const handleConfirmDelete = useCallback(() => {
+        if (pendingDeleteDocId) {
+            deleteDocument(pendingDeleteDocId);
+            setPendingDeleteDocId(null);
+        }
+        setDeleteConfirmOpen(false);
+    }, [pendingDeleteDocId, deleteDocument]);
+    const handleGenerated = useCallback(() => setSelectedDocument(null), []);
+
     return (
         <TooltipProvider>
             <div className="space-y-6">
@@ -95,7 +138,7 @@ export const ZoneDocumentsScreen = () => {
                             variant="outline"
                             size="sm"
                             className="border-border bg-card hover:bg-accent text-foreground"
-                            onClick={() => setIsTemplatesOpen(true)}
+                            onClick={handleTemplatesOpen}
                         >
                             <Settings className="w-4 h-4 mr-2" />
                             {t('zones.documents.templates', 'Templates')}
@@ -103,7 +146,7 @@ export const ZoneDocumentsScreen = () => {
                         {!isReadOnly && (
                             <Button
                                 size="sm"
-                                onClick={() => setIsCreatorOpen(true)}
+                                onClick={handleCreatorOpen}
                                 className="bg-primary text-primary-foreground hover:bg-primary/90"
                             >
                                 <Plus className="w-4 h-4 mr-2" />
@@ -120,7 +163,7 @@ export const ZoneDocumentsScreen = () => {
                         <Input
                             placeholder={t('zones.documents.searchPlaceholder', 'Search by title, number, contact or deal...')}
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={handleSearchChange}
                             className="pl-10 bg-card border-border text-foreground placeholder:text-muted-foreground"
                         />
                     </div>
@@ -132,7 +175,7 @@ export const ZoneDocumentsScreen = () => {
                             return (
                                 <button
                                     key={tab.value}
-                                    onClick={() => setStatusFilter(tab.value)}
+                                    onClick={() => handleFilterClick(tab.value)}
                                     className={`
                                         inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap
                                         ${isActive
@@ -185,7 +228,7 @@ export const ZoneDocumentsScreen = () => {
                                         {t('zones.documents.empty.description', 'Create your first document from a template. Link it to a deal or contact for autofill.')}
                                     </p>
                                     {!isReadOnly && (
-                                        <Button onClick={() => setIsCreatorOpen(true)} className="bg-primary text-primary-foreground">
+                                        <Button onClick={handleCreatorOpen} className="bg-primary text-primary-foreground">
                                             <Plus className="w-4 h-4 mr-2" />
                                             {t('zones.documents.createDocument', 'Create document')}
                                         </Button>
@@ -199,7 +242,7 @@ export const ZoneDocumentsScreen = () => {
                                     <p className="text-muted-foreground text-sm max-w-sm mb-4">
                                         {t('zones.documents.notFound.description', 'Try adjusting your search or filter parameters.')}
                                     </p>
-                                    <Button variant="outline" onClick={() => { setSearchQuery(''); setStatusFilter('all'); }}>
+                                    <Button variant="outline" onClick={handleResetFilters}>
                                         {t('zones.documents.resetFilters', 'Reset filters')}
                                     </Button>
                                 </>
@@ -268,10 +311,7 @@ export const ZoneDocumentsScreen = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="h-8 w-8 text-muted-foreground hover:text-primary"
-                                                                onClick={() => {
-                                                                    setSelectedDocument(doc);
-                                                                    setIsGeneratorOpen(true);
-                                                                }}
+                                                                onClick={() => handleGenerate(doc)}
                                                             >
                                                                 <Sparkles className="w-3.5 h-3.5" />
                                                             </Button>
@@ -287,7 +327,7 @@ export const ZoneDocumentsScreen = () => {
                                                                     variant="ghost"
                                                                     size="icon"
                                                                     className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                                                                    onClick={() => window.open(doc.file_url!, '_blank', 'noopener,noreferrer')}
+                                                                    onClick={() => handleViewDocument(doc.file_url!, 'noopener,noreferrer')}
                                                                 >
                                                                     <Eye className="w-3.5 h-3.5" />
                                                                 </Button>
@@ -300,14 +340,7 @@ export const ZoneDocumentsScreen = () => {
                                                                     variant="ghost"
                                                                     size="icon"
                                                                     className="h-8 w-8 text-muted-foreground hover:text-primary"
-                                                                    onClick={() => {
-                                                                        const link = document.createElement('a');
-                                                                        link.href = doc.file_url!;
-                                                                        link.download = doc.title || 'document';
-                                                                        document.body.appendChild(link);
-                                                                        link.click();
-                                                                        document.body.removeChild(link);
-                                                                    }}
+                                                                    onClick={() => handleDownload(doc)}
                                                                 >
                                                                     <Download className="w-3.5 h-3.5" />
                                                                 </Button>
@@ -323,11 +356,7 @@ export const ZoneDocumentsScreen = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                                                onClick={() => {
-                                                                    if (confirm(t('zones.documents.confirmDelete', 'Are you sure you want to delete this document?'))) {
-                                                                        deleteDocument(doc.id);
-                                                                    }
-                                                                }}
+                                                onClick={() => handleDeleteInit(doc.id)}
                                                                 disabled={isDeleting}
                                                             >
                                                                 <Trash className="w-3.5 h-3.5" />
@@ -349,10 +378,7 @@ export const ZoneDocumentsScreen = () => {
                                                     <DropdownMenuContent align="end" className="bg-popover border-border">
                                                         {doc.template_id && (
                                                             <>
-                                                                <DropdownMenuItem onClick={() => {
-                                                                    setSelectedDocument(doc);
-                                                                    setIsGeneratorOpen(true);
-                                                                }}>
+                                                                <DropdownMenuItem onClick={() => handleGenerate(doc)}>
                                                                     <Sparkles className="w-4 h-4 mr-2" /> {t('zones.documents.actions.generate', 'Generate PDF')}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuSeparator />
@@ -360,17 +386,10 @@ export const ZoneDocumentsScreen = () => {
                                                         )}
                                                         {doc.file_url && (
                                                             <>
-                                                                <DropdownMenuItem onClick={() => window.open(doc.file_url!, '_blank')}>
+                                                                <DropdownMenuItem onClick={() => handleViewDocument(doc.file_url!)}>
                                                                     <Eye className="w-4 h-4 mr-2" /> {t('zones.documents.actions.view', 'View')}
                                                                 </DropdownMenuItem>
-                                                                <DropdownMenuItem onClick={() => {
-                                                                    const link = document.createElement('a');
-                                                                    link.href = doc.file_url!;
-                                                                    link.download = doc.title || 'document';
-                                                                    document.body.appendChild(link);
-                                                                    link.click();
-                                                                    document.body.removeChild(link);
-                                                                }}>
+                                                                <DropdownMenuItem onClick={() => handleDownload(doc)}>
                                                                     <Download className="w-4 h-4 mr-2" /> {t('zones.documents.actions.download', 'Download')}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuSeparator />
@@ -379,9 +398,7 @@ export const ZoneDocumentsScreen = () => {
                                                         {!isReadOnly && (
                                                             <DropdownMenuItem
                                                                 className="text-destructive focus:text-destructive"
-                                                                onClick={() => {
-                                                                    if (confirm(t('zones.documents.confirmDelete', 'Are you sure you want to delete this document?'))) deleteDocument(doc.id);
-                                                                }}
+                                                            onClick={() => handleDeleteInit(doc.id)}
                                                             >
                                                                 <Trash className="w-4 h-4 mr-2" /> {t('zones.documents.actions.delete', 'Delete')}
                                                             </DropdownMenuItem>
@@ -415,9 +432,24 @@ export const ZoneDocumentsScreen = () => {
                     open={isGeneratorOpen} 
                     onOpenChange={setIsGeneratorOpen} 
                     document={selectedDocument}
-                    onGenerated={() => setSelectedDocument(null)}
+                    onGenerated={handleGenerated}
                 />
+
+                <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t('zones.documents.confirmDelete', 'Are you sure?')}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {t('zones.documents.confirmDeleteDesc', 'This action cannot be undone.')}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleConfirmDelete}>{t('common.delete', 'Delete')}</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </TooltipProvider>
     );
-};
+});

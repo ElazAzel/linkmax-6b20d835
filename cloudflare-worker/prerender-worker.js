@@ -267,6 +267,17 @@ async function handleRequest(request, env) {
     responseHeaders.set('X-SSR-Target', ssrTarget);
     if (isBot(userAgent)) responseHeaders.set('X-Bot-Request', 'true');
     responseHeaders.delete('set-cookie');
+    // RFC 8288 Link headers for agent discovery
+    responseHeaders.set(
+      'Link',
+      [
+        '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
+        '</.well-known/oauth-protected-resource>; rel="http://openid.net/specs/connect/1.0/issuer"',
+        '</auth.md>; rel="authorization"; type="text/markdown"',
+        '</llms.txt>; rel="describedby"; type="text/plain"',
+        '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+      ].join(', ')
+    );
 
     return new Response(ssrResponse.body, {
       status: ssrResponse.status,

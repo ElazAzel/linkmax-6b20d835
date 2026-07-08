@@ -14,10 +14,13 @@ import {
 
 describe('Block Entity', () => {
   describe('isPremiumBlockType (delegated to manifest)', () => {
-    it('should return true for premium block types', () => {
+    // NOTE: Until 2027-01-01 a promo is active that makes all blocks free
+    // (see src/lib/promo/free-blocks-promo.ts). During that window
+    // isPremiumBlockType returns false for every type.
+    it('should return false for premium block types during free-blocks promo', () => {
       const premiumTypes: BlockType[] = ['video', 'carousel', 'custom_code', 'newsletter'];
       premiumTypes.forEach((type) => {
-        expect(isPremiumBlockType(type)).toBe(true);
+        expect(isPremiumBlockType(type)).toBe(false);
       });
     });
 

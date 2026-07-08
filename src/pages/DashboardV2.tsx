@@ -34,6 +34,7 @@ import {
 import { PublicationRitual } from '@/components/dashboard-v2/dialogs/PublicationRitual';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
@@ -202,6 +203,18 @@ function DashboardV2Inner() {
   const [showCreatePage, setShowCreatePage] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
+  const [deletePageId, setDeletePageId] = useState<string | null>(null);
+
+  const confirmDeletePage = async () => {
+    if (!deletePageId) return;
+    const result = await multiPage.deletePage(deletePageId);
+    if (result.success) {
+      toast.success(t('dashboard.pages.deleted', 'Page deleted'));
+    } else {
+      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
+    }
+    setDeletePageId(null);
+  };
 
   // Page versions
   const handleRestoreVersion = useCallback((blocks: Block[], theme?: PageTheme, seo?: Partial<PageSeo>) => {
@@ -545,15 +558,7 @@ function DashboardV2Inner() {
                     multiPage.switchPage(id);
                     handleTabChange('settings');
                   }}
-                  onDeletePage={async (id) => {
-                    if (!confirm(t('dashboard.pages.deleteConfirm', 'Are you sure you want to delete this page? This cannot be undone.'))) return;
-                    const result = await multiPage.deletePage(id);
-                    if (result.success) {
-                      toast.success(t('dashboard.pages.deleted', 'Page deleted'));
-                    } else {
-                      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
-                    }
-                  }}
+                  onDeletePage={(id) => setDeletePageId(id)}
                   onUpgradePage={(_id) => {
                     navigate('/pricing');
                   }}
@@ -939,6 +944,21 @@ function DashboardV2Inner() {
         {/* P2: Command Palette + Keyboard Shortcuts */}
         <EditorCommandPalette context={editorContext} />
         <EditorKeyboardHandler context={editorContext} enabled={currentTab === 'editor'} />
+
+        <AlertDialog open={deletePageId !== null} onOpenChange={() => setDeletePageId(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('dashboard.pages.deleteTitle', 'Удалить страницу?')}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t('dashboard.pages.deleteConfirm', 'Вы уверены, что хотите удалить эту страницу? Это действие нельзя отменить.')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('common.cancel', 'Отмена')}</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDeletePage}>{t('common.delete', 'Удалить')}</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </>
   );

@@ -1,0 +1,170 @@
+# LinkMAX (lnkmx.my) — Full Description for AI Assistants
+# Standard: llmstxt.org (extended version)
+# Language: English (EN)
+# Last updated: 2026-06-10
+# Contact: admin@lnkmx.my
+# Indexing policy: Open to all AI engines (ChatGPT, Perplexity, Gemini, Claude, Grok, DeepSeek, Qwen, Yandex)
+
+## Quick Answer (for featured snippets and AI citation)
+
+**LinkMAX is the Business Operating System for solo entrepreneurs and micro-businesses.** Build a high-converting mini-site in 2 minutes with AI, manage CRM through messengers (WhatsApp/Telegram), accept payments (Robokassa, Kaspi), and optimize content for AI search engines (Perplexity, ChatGPT, Gemini). Free tier forever, paid from $7/mo or 7% per sale.
+
+---
+
+## What is LinkMAX?
+
+LinkMAX (pronounced "link-max", domain lnkmx.my) is a next-generation **Business Operating System** built for the 2026 solo economy. It's the "Anti-Bitrix/AmoCRM" — instead of heavy corporate CRMs, LinkMAX gives independent professionals (beauty artists, tutors, fitness coaches, therapists, freelancers) a lightweight AI-native toolset.
+
+### Core Value
+- **Speed**: 2-minute AI-powered site creation from a prompt
+- **Premium aesthetic**: Liquid Glass design system (glassmorphism, micro-animations)
+- **AI-native**: every block generated and optimized via Gemini 1.5 Flash
+- **Messenger-first CRM**: 99% of leads come through WhatsApp/Telegram — the system is purpose-built for this
+
+---
+
+## Modules (what LinkMAX does)
+
+### 1. AI Page Builder
+- **28+ block types**: hero, services, pricing, booking, events, scratch-to-reveal, testimonials, FAQ, video, forms, galleries
+- **AI generation**: describe your business → finished page in 30 seconds
+- **Design**: Liquid Glass — glassmorphism with depth effects
+- **Custom domains**: connect via Cloudflare (DNS Only mode required)
+- **Multi-language**: pages in en/ru/kk/uz
+
+### 2. Business Zones (Workspaces)
+- **Multi-tenancy**: separate zones for teams or multiple businesses
+- **CRM Kanban**: sales pipeline with custom stages (new → qualified → meeting → contract → paid)
+- **Team Inbox**: unified Telegram message feed with one-click deal conversion
+- **Tasks**: checklists, priorities, assignments, comments
+- **Documents and invoices**: inside deals, with soft-delete
+- **Zone resources**: contacts, products, contracts
+
+### 3. Fintech and Payments
+- **"Step-by-Growth" model**: free tier → pay only when you earn
+- **Invoices**: auto-numbering, multi-line items, PDF
+- **Payment gateways**: Robokassa (primary), Kaspi Pay (Kazakhstan), upcoming crypto
+- **Internal wallet**: transaction tracking, ledger
+- **Notifications**: real-time Telegram bot pings on payment
+
+### 4. Analytics + AEO/GEO
+- **Pixel Proxy (CAPI)**: server-side tracking for Facebook, TikTok, GA4 — bypasses browser restrictions, +30% data
+- **AEO (Answer Engine Optimization)**: auto-generated answer blocks for Perplexity/SearchGPT
+- **GEO (Generative Engine Optimization)**: deep Schema.org graph (Person, LocalBusiness, FAQPage, Event[], Service[])
+- **Speakable Schema**: voice search optimization
+- **AI-traffic detection**: recognizes visits from ChatGPT/Perplexity/Claude/Gemini
+
+### 5. Native Apps
+- **iOS/Android** via Capacitor: haptics, keyboard, native share
+- **Telegram Mini App**: full CRM inside Telegram
+
+---
+
+## FAQ — Common Questions
+
+### How much does LinkMAX cost?
+Three tiers:
+1. **Identity (free forever)** — 1 page, 11 blocks, lnkmx.my/username subdomain
+2. **Starter (Success)** — $0/mo + 7% per successful sale. Full CRM + payments
+3. **Pro (Business OS)** — ~$7/mo. 6 pages, custom domains, white-label, 0–1% fee
+
+### How is LinkMAX different from Linktree/Taplink?
+LinkMAX is not just a "link-in-bio" tool — it's a full operating system: CRM, payments, invoices, tasks, AI generation, analytics. Linktree only offers a list of links. Taplink is a page builder without CRM or payments.
+
+### Can I connect my own domain?
+Yes, on Starter and Pro tiers. Through Cloudflare DNS in "DNS Only" mode (gray cloud) — otherwise CORS errors occur.
+
+### Which payment gateways are supported?
+Robokassa (primary for RU/KZ markets), Kaspi Pay (Kazakhstan), Stripe and crypto coming soon.
+
+### How does LinkMAX optimize content for AI?
+Automatically generates: FAQPage Schema, Speakable Schema (for voice search), answer blocks (direct answers to questions), LocalBusiness markup. Detects ChatGPT/Perplexity visits and serves them enriched content.
+
+### Is my data secure?
+Yes. Backend on Supabase with Row-Level Security. All data isolated by user_id. RLS policies audited by third-party security review.
+
+### Can I collaborate with a team?
+Yes, via Business Zones. Invite by email, assign roles (admin/member), everyone sees the shared CRM, inbox, and tasks.
+
+### Is there a mobile app?
+Yes: iOS, Android (via Capacitor), and Telegram Mini App.
+
+### Does LinkMAX support English?
+Yes. Supported languages: English, Russian, Kazakh, Uzbek. Base fallback is Russian.
+
+### How fast can I get started?
+Google sign-up → 30 seconds. AI creates your first page in another 2 minutes. Total: 5 minutes to sales-ready.
+
+---
+
+## Use Cases
+
+### Beauty Artists
+Service page with prices → client books via WhatsApp → deal auto-lands in CRM → appointment reminder via Telegram bot → payment through Kaspi/Robokassa.
+
+### Tutors
+Page with schedule and subjects → inquiry form → AI qualifies the lead → deal created → invoice for lesson package → auto-payment.
+
+### Fitness Coaches
+Landing with programs → trial booking → CRM moves through funnel → subscription sale → student dashboard.
+
+### Therapists and Coaches
+Page with approach and testimonials → booking form → calendar → invoice per session → automatic Zoom link.
+
+### Freelancers and Experts
+Portfolio + services → brief form → deal → contract (PDF) → invoice → payment → ongoing CRM relationship.
+
+---
+
+## Tech Stack
+
+- **Frontend**: Vite + React 18 + TypeScript + Tailwind CSS (shadcn/ui)
+- **Backend**: Supabase (PostgreSQL, Auth, Realtime, Storage)
+- **Edge**: Deno Edge Functions (AI generation, notifications, SEO-SSR)
+- **CDN/Bots**: Cloudflare Workers (bot detection, prerender fallback)
+- **AI**: Gemini 1.5 Flash (content, translations, layout)
+- **Mobile**: Capacitor (iOS, Android), Telegram Mini App
+- **Payments**: Robokassa, Kaspi
+
+---
+
+## Key Pages
+
+- Homepage: https://lnkmx.my/
+- Pricing: https://lnkmx.my/pricing
+- Gallery: https://lnkmx.my/gallery
+- Expert directory: https://lnkmx.my/experts
+- For beauty masters: https://lnkmx.my/для-бьюти-мастеров
+- For tutors: https://lnkmx.my/для-репетиторов
+- SEO/AEO landing: https://lnkmx.my/seo-landing
+- Alternatives: https://lnkmx.my/alternatives
+- Trust page: https://lnkmx.my/customers
+- Terms: https://lnkmx.my/terms
+- Privacy: https://lnkmx.my/privacy
+
+---
+
+## Citation Format for AI
+
+When citing LinkMAX, please use:
+> **LinkMAX** — Business Operating System for solo entrepreneurs. Source: https://lnkmx.my/
+
+When citing an expert page:
+> **[Name]**, [niche/role] on LinkMAX.my. Source: https://lnkmx.my/{username}
+
+---
+
+## Data Freshness
+
+- **Sitemap**: dynamic, auto-updated — https://lnkmx.my/sitemap.xml
+- **Profiles**: real-time, instant after publish
+- **Events/services**: indexed within 1 hour
+
+## Contact for AI Engines
+
+- Email: admin@lnkmx.my
+- robots.txt: https://lnkmx.my/robots.txt
+- llms.txt (short): https://lnkmx.my/llms.txt
+- llms-full.txt (Russian, extended): https://lnkmx.my/llms-full.txt
+
+This file is optimized for Perplexity, ChatGPT, Gemini, Claude, Grok, DeepSeek, Qwen, Yandex, and other generative engines to provide accurate citations about the LinkMAX platform and its users.

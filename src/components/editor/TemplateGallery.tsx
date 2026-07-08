@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
 import { TemplatePersonalization } from './TemplatePersonalization';
 import { TemplateMarketplace } from './TemplateMarketplace';
-import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -36,6 +35,7 @@ import {
   type Template,
   createTemplateBlock
 } from '@/data/templates';
+import { buildSmartPage, inferSmartPageNiche } from '@/lib/onboarding/smart-page-builder';
 
 const CATEGORIES: TemplateCategoryKey[] = TEMPLATE_CATEGORY_KEYS.filter((c) => c !== 'all');
 
@@ -82,22 +82,20 @@ export const TemplateGallery = memo(function TemplateGallery({
 
       const template = templates.find(t => t.id === bestTemplateId) || templates[0];
 
-      // 2. Call AI to fill content
-      const { data, error } = await supabase.functions.invoke('ai-content-generator', {
-        body: {
-          type: 'template-filler',
-          input: {
-            prompt: smartPrompt,
-            templateBlocks: template.blocks
-          }
-        }
+      const result = buildSmartPage({
+        niche: inferSmartPageNiche(`${smartPrompt} ${template.category}`),
+        goal: 'leads',
+        userInfo: {
+          name: smartPrompt.split(/[,.:\n]/)[0]?.slice(0, 60) || template.name,
+          bio: smartPrompt,
+          goal: 'leads',
+          contacts: smartPrompt,
+          services: smartPrompt,
+          socials: smartPrompt,
+          mediaLinks: smartPrompt,
+        },
       });
-
-      if (error) throw error;
-
-      // 3. Apply overrides
-      const aiBlocks = data.result.blocks || data.result;
-      const finalBlocks = aiBlocks.map((b: any) => createTemplateBlock(b.type, b.overrides));
+      const finalBlocks = result.blocks;
 
       onSelect(finalBlocks);
       onClose();
@@ -145,7 +143,7 @@ export const TemplateGallery = memo(function TemplateGallery({
               <span className="truncate">{t('templates.title', 'Галерея шаблонов')}</span>
             </DialogTitle>
             <DialogDescription className="sr-only">
-              {t('templates.description', 'Выберите шаблон для вашей страницы — AI персонализирует под ваш бизнес')}
+              Выберите шаблон или соберите страницу детерминированным алгоритмом LinkMAX.
             </DialogDescription>
             <Button
               variant="outline"
@@ -164,7 +162,7 @@ export const TemplateGallery = memo(function TemplateGallery({
           <div className="space-y-1.5">
             <Label htmlFor="smart-prompt" className="text-sm font-medium flex items-center gap-1.5">
               <Wand2 className="h-3.5 w-3.5 text-primary" />
-              {t('templates.smartMatch.title', 'AI Smart Auto-Fill')}
+              Умная автосборка
             </Label>
             <div className="flex gap-2">
               <Input
@@ -195,7 +193,7 @@ export const TemplateGallery = memo(function TemplateGallery({
               </Button>
             </div>
             <p className="text-xs sm:text-xs text-muted-foreground">
-              {t('templates.smartMatch.hint', 'Describe who you are, and AI will pick the best template and fill it with content.')}
+              Опишите бизнес, а LinkMAX подберёт структуру, CTA, услуги и контакты без внешней генерации.
             </p>
           </div>
         </div>
@@ -283,7 +281,10 @@ export const TemplateGallery = memo(function TemplateGallery({
           <TemplatePersonalization
             open={personalizationOpen}
             onClose={() => setPersonalizationOpen(false)}
-            templateBlocks={selectedTemplate.blocks?.map((b: any) => ({ type: b.type, overrides: b })) || []}
+            templateBlocks={selectedTemplate.blocks?.map((block) => ({
+              type: block.type,
+              overrides: block.overrides ?? {},
+            })) || []}
             templateName={selectedTemplate.name || ''}
             onApply={(blocks) => {
               onSelect(blocks);

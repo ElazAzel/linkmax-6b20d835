@@ -67,21 +67,21 @@ export function CookieConsent() {
 
     return (
         <div
-            className="fixed bottom-0 left-0 right-0 z-[9999] p-4 bg-card/95 backdrop-blur-sm border-t border-border shadow-lg"
+            className="fixed bottom-2 left-2 right-2 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-[60] p-3 rounded-2xl bg-card/95 backdrop-blur-sm border border-border shadow-lg pb-[max(0.75rem,env(safe-area-inset-bottom))]"
             role="dialog"
             aria-label={t('cookies.title', 'Cookie consent')}
         >
-            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center gap-4">
-                <p className="text-sm text-muted-foreground flex-1">
+            <div className="flex flex-col gap-3">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                     {t('cookies.message')}
                     {' '}
                     <a href="/privacy" className="underline text-primary hover:text-primary/80">
                         {t('cookies.privacy', 'Политика конфиденциальности')}
                     </a>
                 </p>
-                <div className="flex gap-2 shrink-0">
+                <div className="flex gap-2 justify-end">
                     <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         onClick={handleReject}
                     >

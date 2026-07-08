@@ -142,10 +142,14 @@ export function BlockEditorV2({
         };
     }, []);
 
-    // Ensure editor state is synchronized whenever the sheet/dialog is reopened.
+    // Reset editor state only when the dialog transitions from closed to open
+    // for a different block. Re-syncing on every `block` reference change would
+    // wipe in-flight style edits whenever the parent re-renders after autosave.
     useEffect(() => {
         if (!isOpen || !block) return;
+        if (block.id === currentBlockIdRef.current) return;
         setFormData({ ...block });
+        currentBlockIdRef.current = block.id;
         setHasUnsavedChanges(false);
         setLastSaved(null);
     }, [isOpen, block]);

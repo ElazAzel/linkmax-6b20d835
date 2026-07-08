@@ -22,14 +22,54 @@ serve(async (req: Request) => {
     try {
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
         const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+        const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
 
-        if (!isConfigured() || !supabaseUrl || !supabaseServiceKey) {
+        if (!isConfigured() || !supabaseUrl || !supabaseServiceKey || !supabaseAnonKey) {
             return new Response('Configuration missing', { status: 500, headers: corsHeaders });
         }
+
+        // Verify caller identity via JWT.
+        const authHeader = req.headers.get('Authorization');
+        if (!authHeader?.startsWith('Bearer ')) {
+            return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+                status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        }
+        const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+            global: { headers: { Authorization: authHeader } },
+        });
+        const token = authHeader.replace('Bearer ', '');
+        const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+        if (claimsError || !claimsData?.claims?.sub) {
+            return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+                status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        }
+        const callerId = claimsData.claims.sub as string;
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
         const payload: NotificationPayload = await req.json();
         const { type, zone_id, data } = payload;
+
+        if (!zone_id || typeof zone_id !== 'string') {
+            return new Response(JSON.stringify({ error: 'Invalid zone_id' }), {
+                status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        }
+
+        // Authorization: caller must be a member of the target zone.
+        const { data: membership } = await supabase
+            .from('zone_members')
+            .select('user_id')
+            .eq('zone_id', zone_id)
+            .eq('user_id', callerId)
+            .maybeSingle();
+        if (!membership) {
+            return new Response(JSON.stringify({ error: 'Forbidden' }), {
+                status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        }
+
 
         // Get zone name
         const { data: zone } = await supabase

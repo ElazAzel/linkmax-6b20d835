@@ -46,7 +46,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
 
     return (
         <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden py-24 px-4 sm:px-6 lg:px-8">
-            
+
             {/* Ambient Background */}
             <div className="absolute inset-0 bg-background/80 pointer-events-none" />
             <div className="absolute top-1/4 left-0 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
@@ -54,15 +54,15 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
 
             <div className="container relative z-10 mx-auto max-w-7xl">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-                    
+
                     {/* Left Column: Copywriting */}
                     <div className="flex flex-col items-start text-left max-w-2xl">
-                        
+
                         <Badge variant="outline" className="mb-6 h-9 px-4 text-xs font-semibold glass backdrop-blur-md border-primary/20 text-primary gap-2 shadow-sm rounded-full">
                             <ShieldCheck className="w-3.5 h-3.5" />
                             {t('landing.expert.badge_v2', 'Sales OS для бизнеса на услугах')}
                         </Badge>
-                        
+
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">
                             <span className="block text-foreground mb-2">{t('landing.expert.title1_v2', 'Превращайте трафик')}</span>
                             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-primary animate-[gradient-shift_8s_ease_infinite] bg-[length:200%_auto]">
@@ -83,7 +83,7 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                 {t('landing.expert.ctaPrimary_v2', 'Запустить за 15 минут')}
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </MagneticButton>
-                            
+
                             <button
                                 onClick={onExamples}
                                 className="h-14 px-8 rounded-2xl text-base font-semibold bg-secondary/50 hover:bg-secondary border border-border/50 transition-all flex items-center justify-center gap-2"
@@ -92,15 +92,15 @@ export const HeroSectionExpert = ({ onStart, onExamples }: HeroProp) => {
                                 {t('landing.expert.ctaSecondary_v2', 'Смотреть кейсы')}
                             </button>
                         </div>
-                        
+
                         <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-medium text-muted-foreground">
                             <div className="flex items-center gap-3">
                                 <div className="flex -space-x-2">
                                     {[1,2,3,4].map((i) => (
                                         <div key={i} className="w-8 h-8 rounded-full border-2 border-background bg-muted overflow-hidden">
-                                            <img 
-                                                src={`https://i.pravatar.cc/100?img=${i + 10}`} 
-                                                alt="User" 
+                                            <img
+                                                src={`https://i.pravatar.cc/100?img=${i + 10}`}
+                                                alt="User"
                                                 {...(i === 1 ? { fetchPriority: "high" } as any : {})}
                                             />
                                         </div>

@@ -45,6 +45,8 @@ import { cn } from '@/lib/utils/utils';
 import type { Block } from '@/types/page';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { useInsights } from '@/hooks/analytics/useInsights';
+
 
 interface InsightsScreenProps {
   pageId: string;
@@ -83,7 +85,8 @@ export const InsightsScreen = memo(function InsightsScreen({
   const [period, setPeriod] = useState<Period>('7d');
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const { analytics, loading, error, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics(
-    pageId || null
+    pageId || null,
+    '7d',
   );
 
   const handlePeriodChange = (p: Period) => {
@@ -132,99 +135,22 @@ export const InsightsScreen = memo(function InsightsScreen({
     [totalDevices, stats.devices]
   );
 
-  // AI Insights
-  const insights = useMemo(() => {
-    const hasPricing = blocks.some((b) => b.type === 'pricing');
-    const hasTestimonials = blocks.some((b) => b.type === 'testimonial');
-    const hasContactForm = blocks.some((b) => b.type === 'form');
+  // AI Insights (algorithmic heuristics)
+  const insights = useInsights(
+    {
+      blocks,
+      stats: {
+        ctr: stats.ctr,
+        views: stats.views,
+        bounceRate: stats.bounceRate,
+        conversions: stats.conversions,
+        topBlocks: stats.topBlocks,
+      },
+      devicePercentages,
+    },
+    onApplyInsight,
+  );
 
-    const suggestions = [];
-
-    // CTR-based insights
-    if (stats.ctr < 5 && stats.views > 10) {
-      suggestions.push({
-        id: 'low-ctr',
-        type: 'warning',
-        title: t('dashboard.insights.lowCtr', 'Низкий CTR'),
-        description: t('dashboard.insights.lowCtrDesc', `CTR всего ${stats.ctr.toFixed(1)}%. Добавьте яркие CTA-кнопки`),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'button' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    // Bounce rate insights
-    if (stats.bounceRate > 70 && stats.views > 10) {
-      suggestions.push({
-        id: 'high-bounce',
-        type: 'warning',
-        title: t('dashboard.insights.highBounce', 'Высокий показатель отказов'),
-        description: t('dashboard.insights.highBounceDesc', `${stats.bounceRate.toFixed(0)}% посетителей уходят без действий`),
-        action: () => onApplyInsight({ type: 'optimize', data: { action: 'improve_engagement' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    if (!hasPricing && blocks.length > 3) {
-      suggestions.push({
-        id: 'add-pricing',
-        type: 'add',
-        title: t('dashboard.insights.addPricing', 'Добавьте блок с ценами'),
-        description: t('dashboard.insights.addPricingDesc', 'Страницы с прайсом получают на 40% больше заявок'),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'pricing' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    if (!hasTestimonials && blocks.length > 5) {
-      suggestions.push({
-        id: 'add-testimonials',
-        type: 'add',
-        title: t('dashboard.insights.addTestimonials', 'Добавьте отзывы'),
-        description: t('dashboard.insights.addTestimonialsDesc', 'Отзывы увеличивают доверие и конверсию на 25%'),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'testimonial' } }),
-        impact: 'medium' as const,
-      });
-    }
-
-    if (!hasContactForm && stats.views > 50 && stats.conversions === 0) {
-      suggestions.push({
-        id: 'add-form',
-        type: 'add',
-        title: t('dashboard.insights.addForm', 'Добавьте форму захвата'),
-        description: t('dashboard.insights.addFormDesc', 'Есть трафик, но нет конверсий. Добавьте форму обратной связи'),
-        action: () => onApplyInsight({ type: 'add', data: { blockType: 'contact_form' } }),
-        impact: 'high' as const,
-      });
-    }
-
-    if (stats.topBlocks[0]?.ctr > 15) {
-      suggestions.push({
-        id: 'duplicate-top',
-        type: 'optimize',
-        title: t('dashboard.insights.duplicateTop', 'Продублируйте популярную ссылку'),
-        description: t(
-          'dashboard.insights.duplicateTopDesc',
-          `"${stats.topBlocks[0].blockTitle}" получает ${stats.topBlocks[0].ctr.toFixed(0)}% кликов`
-        ),
-        action: () => onApplyInsight({ type: 'duplicate', blockId: stats.topBlocks[0].blockId }),
-        impact: 'medium' as const,
-      });
-    }
-
-    // Mobile optimization
-    if (devicePercentages.mobile > 80) {
-      suggestions.push({
-        id: 'mobile-first',
-        type: 'info',
-        title: t('dashboard.insights.mobileFirst', 'Mobile-first аудитория'),
-        description: t('dashboard.insights.mobileFirstDesc', `${devicePercentages.mobile}% с мобильных. Оптимизируйте под телефоны`),
-        action: null,
-        impact: 'low' as const,
-      });
-    }
-
-    return suggestions.slice(0, 4);
-  }, [blocks, onApplyInsight, stats, devicePercentages, t]);
 
   if (loading || !pageId) {
     return (
@@ -460,7 +386,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                     <motion.div variants={itemVariants}>
                       <StatCard
                         icon={Target}
-                        value={`${stats.ctr.toFixed(1)}%`}
+                        value={`${(stats.ctr || 0).toFixed(1)}%`}
                         label={t('dashboard.insights.ctr', 'CTR')}
                         variant="glass"
                       />
@@ -479,10 +405,10 @@ export const InsightsScreen = memo(function InsightsScreen({
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         {[
-                          { key: 'visitor', label: t('analytics.dataQuality.visitor', 'Visitor ID'), value: analytics?.dataQuality.visitorCoverage ?? 0 },
-                          { key: 'session', label: t('analytics.dataQuality.session', 'Session ID'), value: analytics?.dataQuality.sessionCoverage ?? 0 },
-                          { key: 'device', label: t('analytics.dataQuality.device', 'Device'), value: analytics?.dataQuality.deviceCoverage ?? 0 },
-                          { key: 'source', label: t('analytics.dataQuality.source', 'Source'), value: analytics?.dataQuality.sourceCoverage ?? 0 },
+                          { key: 'visitor', label: t('analytics.dataQuality.visitor', 'Visitor ID'), value: analytics?.dataQuality?.visitorCoverage ?? 0 },
+                          { key: 'session', label: t('analytics.dataQuality.session', 'Session ID'), value: analytics?.dataQuality?.sessionCoverage ?? 0 },
+                          { key: 'device', label: t('analytics.dataQuality.device', 'Device'), value: analytics?.dataQuality?.deviceCoverage ?? 0 },
+                          { key: 'source', label: t('analytics.dataQuality.source', 'Source'), value: analytics?.dataQuality?.sourceCoverage ?? 0 },
                         ].map(item => (
                           <div key={item.key} className="rounded-lg bg-muted/30 p-3">
                             <p className="text-xs text-muted-foreground">{item.label}</p>
@@ -705,11 +631,11 @@ export const InsightsScreen = memo(function InsightsScreen({
                             <div className="flex-1 min-w-0">
                               <div className="font-medium truncate">{block.blockTitle}</div>
                               <div className="text-sm text-muted-foreground">
-                                {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {block.ctr.toFixed(1)}%
+                                {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {(block.ctr || 0).toFixed(1)}%
                               </div>
                             </div>
                             <div className="w-20">
-                              <Progress value={Math.min(100, block.ctr * 5)} className="h-2" />
+                              <Progress value={Math.min(100, (block.ctr || 0) * 5)} className="h-2" />
                             </div>
                           </motion.div>
                         ))}
@@ -742,7 +668,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                         <span className="text-sm text-muted-foreground">
                           {t('analytics.funnel.clickRate', 'Клики / Просмотры')}
                         </span>
-                        <span className="font-bold">{stats.ctr.toFixed(1)}%</span>
+                        <span className="font-bold">{(stats.ctr || 0).toFixed(1)}%</span>
                       </div>
                       <div className="flex items-center justify-between py-2 border-b border-border/50">
                         <span className="text-sm text-muted-foreground">

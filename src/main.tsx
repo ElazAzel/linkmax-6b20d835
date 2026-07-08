@@ -129,6 +129,8 @@ const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
 const Customers = lazy(() => import("./pages/Customers"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const SmartLinkRedirect = lazy(() => import("./pages/SmartLinkRedirect"));
+const SmartLinks = lazy(() => import("./pages/SmartLinks"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 
 // Create router with optimized code splitting
@@ -173,6 +175,8 @@ const router = createBrowserRouter([
       { path: "dashboard/zone-documents", element: <Dashboard /> },
       { path: "dashboard/zone-settings", element: <Dashboard /> },
       { path: "dashboard/team", element: <Dashboard /> },
+      { path: "dashboard/smart-links", element: <SmartLinks /> },
+      { path: "s/:slug", element: <SmartLinkRedirect /> },
       { path: "install", element: <Install /> },
       { path: "gallery", element: <Gallery /> },
       { path: "customers", element: <Customers /> },

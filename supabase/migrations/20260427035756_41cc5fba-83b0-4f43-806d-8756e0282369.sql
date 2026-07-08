@@ -9,7 +9,7 @@ DECLARE
   v_start timestamptz := v_now - (p_days || ' days')::interval;
   v_prev_start timestamptz := v_now - (p_days * 2 || ' days')::interval;
   v_prev_end timestamptz := v_start;
-  
+
   v_total_users integer;
   v_new_users integer;
   v_prev_new_users integer;
@@ -67,7 +67,7 @@ BEGIN
 
   -- ARPU = GMV / paid_orders
   v_arpu := CASE WHEN v_paid_orders > 0 THEN v_gmv / v_paid_orders ELSE 0 END;
-  
+
   -- Conversion: paid users / total users
   v_conversion_rate := CASE WHEN v_total_users > 0 THEN (v_paid_users::numeric / v_total_users::numeric) * 100 ELSE 0 END;
 

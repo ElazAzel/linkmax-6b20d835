@@ -2,12 +2,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import XCircle from 'lucide-react/dist/esm/icons/x-circle';
-import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
-import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import { XCircle, ArrowLeft, MessageCircle } from 'lucide-react';
 
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-export default function PaymentFail() {
+export const PaymentFail = memo(function PaymentFail() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     return (
@@ -19,10 +20,10 @@ export default function PaymentFail() {
 
                 <div className="space-y-2">
                     <h1 className="text-2xl font-bold text-destructive">
-                        Ошибка оплаты
+                        {t('paymentFail.title', 'Ошибка оплаты')}
                     </h1>
                     <p className="text-muted-foreground">
-                        К сожалению, платеж не был завершен. Попробуйте еще раз или свяжитесь с поддержкой.
+                        {t('paymentFail.description', 'К сожалению, платеж не был завершен. Попробуйте еще раз или свяжитесь с поддержкой.')}
                     </p>
                 </div>
 
@@ -33,7 +34,7 @@ export default function PaymentFail() {
                         onClick={() => navigate('/pricing')}
                     >
                         <ArrowLeft className="mr-2 w-4 h-4" />
-                        Попробовать снова
+                        {t('paymentFail.tryAgain', 'Попробовать снова')}
                     </Button>
 
                     <Button
@@ -42,10 +43,10 @@ export default function PaymentFail() {
                         onClick={() => window.open('https://t.me/LinkMAX_support', '_blank')}
                     >
                         <MessageCircle className="mr-2 w-4 h-4" />
-                        Написать в поддержку
+                        {t('paymentFail.contactSupport', 'Написать в поддержку')}
                     </Button>
                 </div>
             </Card>
         </div>
     );
-}
+});

@@ -78,6 +78,18 @@ export function useAdminTranslations(isAdmin: boolean) {
         return Array.from(new Set([...baseLangs, ...dbLangs]));
     }, [dbTranslations]);
 
+    const flattenedTranslations = useMemo(() => {
+        const result: Record<string, Record<string, string>> = {};
+        for (const lang of activeLanguages) {
+            if (translations[lang]) {
+                result[lang] = flattenObject(translations[lang]);
+            } else {
+                result[lang] = {};
+            }
+        }
+        return result;
+    }, [translations, activeLanguages]);
+
     const updateMutation = useMutation({
         mutationFn: async ({ lang, key, value }: { lang: string; key: string; value: string }) => {
             const updatedLangData = JSON.parse(JSON.stringify(translations[lang] || {}));
@@ -143,9 +155,7 @@ export function useAdminTranslations(isAdmin: boolean) {
     const allKeys = useMemo(() => {
         const keySet = new Set<string>();
         activeLanguages.forEach(lang => {
-            if (translations[lang]) {
-                Object.keys(flattenObject(translations[lang])).forEach(k => keySet.add(k));
-            }
+            Object.keys(flattenedTranslations[lang] || {}).forEach(k => keySet.add(k));
         });
 
         const sortedKeys = Array.from(keySet).sort();
@@ -154,18 +164,18 @@ export function useAdminTranslations(isAdmin: boolean) {
 
         sortedKeys.forEach(key => {
             const isMissingSomewhere = activeLanguages.some(lang => {
-                const flat = flattenObject(translations[lang] || {});
-                return !flat[key]?.trim();
+                return !flattenedTranslations[lang]?.[key]?.trim();
             });
             if (isMissingSomewhere) missingKeys.push(key);
             else fullKeys.push(key);
         });
 
         return { all: [...missingKeys, ...fullKeys], missingCount: missingKeys.length };
-    }, [translations, activeLanguages]);
+    }, [flattenedTranslations, activeLanguages]);
 
     return {
         translations,
+        flattenedTranslations,
         activeLanguages,
         allKeys,
         loading,
