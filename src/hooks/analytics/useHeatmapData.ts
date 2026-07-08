@@ -2,8 +2,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
-import { subDays, startOfYear, endOfYear, eachDayOfInterval, format, parseISO, isSameDay } from 'date-fns';
+import { subDays } from 'date-fns';
 import { logger } from '@/lib/utils/logger';
+import {
+  aggregateFrictionZones,
+  readRageClickClusters,
+  type FrictionZone,
+} from './heatmap-model';
 
 export interface ClickPoint {
   x: number;
@@ -22,7 +27,9 @@ export interface ScrollDepthData {
 export interface HeatmapData {
   clicks: ClickPoint[];
   scrollDepths: ScrollDepthData[];
+  frictionZones: FrictionZone[];
   totalSessions: number;
+  totalRageClicks: number;
   avgScrollDepth: number;
   maxScrollDepth: number;
 }
@@ -73,6 +80,13 @@ export function useHeatmapData(days: number = 30) {
         .select('metadata')
         .eq('page_id', pageId)
         .eq('event_type', 'heatmap_scroll')
+        .gte('created_at', startDate.toISOString());
+
+      const { data: rageClickEvents } = await supabase
+        .from('analytics')
+        .select('metadata')
+        .eq('page_id', pageId)
+        .eq('event_type', 'heatmap_rage_clicks')
         .gte('created_at', startDate.toISOString());
 
       // Process click data - aggregate by grid cells
@@ -142,13 +156,18 @@ export function useHeatmapData(days: number = 30) {
           count: reachedCount,
           percentage: totalScrollSessions > 0
             ? Math.round((reachedCount / totalScrollSessions) * 100)
-            : 0,
+          : 0,
         });
       }
+
+      const rageClickClusters = (rageClickEvents || [])
+        .flatMap(event => readRageClickClusters(event.metadata));
 
       setData({
         clicks: Array.from(clickGrid.values()).sort((a, b) => b.count - a.count),
         scrollDepths,
+        frictionZones: aggregateFrictionZones(rageClickClusters),
+        totalRageClicks: rageClickClusters.reduce((total, cluster) => total + cluster.count, 0),
         totalSessions: totalScrollSessions,
         avgScrollDepth: totalScrollSessions > 0
           ? Math.round(totalScrollDepth / totalScrollSessions)

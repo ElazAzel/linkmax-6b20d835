@@ -52,17 +52,6 @@ const NICHE_TAGS = [
   { slug: 'other', label: { ru: 'Другое', en: 'Other', kk: 'Басқа' } },
 ];
 
-export default function Experts() {
-interface ExpertProfile {
-  id: string;
-  slug: string;
-  title: string | null;
-  description: string | null;
-  avatar_url: string | null;
-  niche: string | null;
-  view_count: number | null;
-}
-
 export const Experts = memo(function Experts() {
   const params = useParams();
   const tag = params?.tag as string;

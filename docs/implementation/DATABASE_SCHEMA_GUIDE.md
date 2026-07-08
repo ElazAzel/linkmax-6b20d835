@@ -220,9 +220,15 @@ This table is maintained by database triggers from `reviews` and gives public pa
 
 - `id` (uuid, PK)
 - `page_id` (uuid, FK)
-- `event_type` (text) - `view`, `click`, `share`, `activation:*`, `editor:*`, `auth:*`
+- `event_type` (text) - `view`, `click`, `share`, `heatmap_clicks`, `heatmap_scroll`, `heatmap_rage_clicks`, `activation:*`, `editor:*`, `auth:*`
 - `block_id` (uuid, optional)
 - `metadata` (jsonb) - Geo, Device, Referral
+
+Heatmap metadata:
+
+- `heatmap_clicks` stores aggregated click coordinates and relative page positions.
+- `heatmap_scroll` stores max scroll depth and viewport/page dimensions.
+- `heatmap_rage_clicks` stores coordinate-only repeated-click clusters with count, detection window, and normalized position. It intentionally excludes DOM text, selectors, screenshots, recordings, and form values.
 
 ### `product_events`
 

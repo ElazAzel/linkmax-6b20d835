@@ -167,6 +167,18 @@ Product Analytics events: `billing_payment_failed`, `billing_recovery_scheduled`
 
 Webhooks V2 events: `billing.payment_failed`, `billing.recovery_scheduled`, `billing.recovered`, `billing.recovery_exhausted`, `promo.applied`.
 
+### Website Analytics Events
+
+Public page analytics uses the existing guarded `analytics` insert path. Phase 25 adds one qualitative signal without adding a session replay API:
+
+| Event | Source | Metadata |
+| :--- | :--- | :--- |
+| `heatmap_clicks` | Public page heatmap tracker | Aggregated click positions and relative page coordinates |
+| `heatmap_scroll` | Public page heatmap tracker | Max scroll depth plus viewport/page dimensions |
+| `heatmap_rage_clicks` | Public page heatmap tracker | Repeated-click clusters with normalized coordinates, click count, detection window, and timestamp |
+
+`heatmap_rage_clicks` is coordinate-only. It does not store DOM text, selectors, screenshots, recordings, or submitted field values.
+
 ---
 
 ## 3. Row Level Security (RLS)

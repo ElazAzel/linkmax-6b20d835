@@ -66,6 +66,7 @@
 | Server-side pixel proxy | Implemented | FB CAPI, TikTok Events API, GA4 MP (bypasses ad-blockers) |
 | Cookie consent gating | Implemented | Analytics requires explicit consent |
 | Funnel analytics | In progress | V2 product analytics now has `product_events`, activation state, creator health score, and the initial activation-event bridge. Dashboard/reporting surfaces remain roadmap work. |
+| Heatmap friction signals | In progress | Phase 25 foundation adds `heatmap_rage_clicks`, privacy-safe repeated-click detection, friction-zone aggregation, and owner heatmap surfacing. |
 
 ## Business Zones (Business OS)
 
@@ -157,4 +158,4 @@
 
 ---
 
-*Last updated: July 4, 2026 (Phase 48 Billing Recovery Foundation)*
+*Last updated: July 5, 2026 (Phase 49 Friction Analytics Foundation)*
