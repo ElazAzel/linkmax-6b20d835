@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Shield from 'lucide-react/dist/esm/icons/shield';
 import Zap from 'lucide-react/dist/esm/icons/zap';
-import Heart from 'lucide-react/dist/esm/icons/heart';
-import { MagneticButton } from './MagneticButton';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import { Button } from '@/components/ui/button';
 import { SectionWrapper } from '@/components/shared/SectionWrapper';
 
 export const BottomCTA = () => {
@@ -15,7 +15,7 @@ export const BottomCTA = () => {
     {
       icon: Zap,
       title: t('landing.bottomCta.g1Title', '15 минут до запуска'),
-      desc: t('landing.bottomCta.g1Desc', 'AI создаст всё за вас'),
+      desc: t('landing.bottomCta.g1Desc', 'AI создаст все за вас'),
     },
     {
       icon: Shield,
@@ -23,73 +23,55 @@ export const BottomCTA = () => {
       desc: t('landing.bottomCta.g2Desc', 'Старт абсолютно бесплатный'),
     },
     {
-      icon: Heart,
+      icon: CheckCircle2,
       title: t('landing.bottomCta.g3Title', 'Поддержка 24/7'),
       desc: t('landing.bottomCta.g3Desc', 'Telegram-чат с командой'),
     },
   ];
 
   return (
-    <SectionWrapper className="overflow-hidden z-10 bg-transparent">
-      <div className="container px-4 mx-auto text-center relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="relative z-10 max-w-3xl mx-auto space-y-8">
-          {/* Live activity badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/15 backdrop-blur-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-            </span>
-            <span className="text-xs font-bold text-foreground/80 uppercase tracking-wider">
+    <SectionWrapper className="bg-[#f6f7f9] py-20 md:py-24">
+      <div className="mx-auto max-w-[1200px] overflow-hidden rounded-[18px] bg-[#2563eb] p-6 text-white sm:p-10 lg:p-12">
+        <div className="grid gap-8 lg:grid-cols-[1fr_0.75fr] lg:items-end">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em]">
+              <span className="h-2 w-2 rounded-full bg-emerald-300" />
               {t('landing.bottomCta.live', 'Сегодня запустили: 47 страниц')}
-            </span>
+            </div>
+            <h2 className="mt-6 max-w-3xl text-3xl font-semibold tracking-tight sm:text-5xl sm:leading-[1.08]">
+              {t('landing.bottomCta.title', 'Готовы получать клиентов?')}
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-white/78">
+              {t(
+                'landing.bottomCta.subtitle',
+                'AI-страница за 15 минут. Заявки в Telegram. Первые клиенты - уже сегодня.'
+              )}
+            </p>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-[-0.03em] leading-[1.05]">
-            {t('landing.bottomCta.title', 'Готовы получать клиентов?')}
-          </h2>
-          <p className="text-base sm:text-lg text-muted-foreground/80 max-w-md mx-auto font-semibold">
-            {t(
-              'landing.bottomCta.subtitle',
-              'AI-страница за 15 минут. Заявки в Telegram. Первые клиенты — уже сегодня.'
-            )}
-          </p>
-
-          <MagneticButton
-            onClick={() => navigate('/auth')}
-            size="lg"
-            className="h-14 sm:h-16 px-6 sm:px-14 rounded-2xl text-sm sm:text-lg font-black bg-primary text-white shadow-glass-hover hover:scale-[1.03] active:scale-95 transition-all group overflow-hidden relative border-none w-full max-w-md sm:max-w-none sm:w-auto whitespace-normal"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-            <span className="relative z-10 inline-flex items-center justify-center gap-2 sm:gap-3 sm:uppercase sm:tracking-[0.1em] text-center leading-tight">
+          <div className="lg:text-right">
+            <Button
+              onClick={() => navigate('/auth')}
+              size="lg"
+              className="h-12 w-full rounded-[12px] bg-white px-6 text-base font-semibold text-[#172033] hover:bg-[#eef4ff] sm:w-auto"
+            >
               {t('landing.bottomCta.cta', 'Создать страницу бесплатно')}
-              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 group-hover:translate-x-2 transition-transform duration-500" />
-            </span>
-          </MagneticButton>
-
-          <p className="text-xs text-muted-foreground/60 font-semibold">
-            {t('landing.bottomCta.note', 'Бесплатно · Без кода · Без банковской карты')}
-          </p>
-
-          {/* Guarantees grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 max-w-2xl mx-auto">
-            {guarantees.map((g, i) => {
-              const Icon = g.icon;
-              return (
-                <div
-                  key={i}
-                  className="glass rounded-2xl p-5 border border-border/20 hover:border-primary/30 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-3">
-                    <Icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <h3 className="text-sm font-black mb-1">{g.title}</h3>
-                  <p className="text-xs text-muted-foreground">{g.desc}</p>
-                </div>
-              );
-            })}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            <p className="mt-3 text-xs font-medium text-white/70">
+              {t('landing.bottomCta.note', 'Бесплатно · Без кода · Без банковской карты')}
+            </p>
           </div>
+        </div>
+
+        <div className="mt-10 grid gap-3 sm:grid-cols-3">
+          {guarantees.map((item) => (
+            <div key={item.title} className="rounded-[18px] border border-white/16 bg-white/10 p-4">
+              <item.icon className="h-5 w-5 text-white" />
+              <h3 className="mt-4 text-sm font-semibold">{item.title}</h3>
+              <p className="mt-1 text-sm leading-5 text-white/72">{item.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </SectionWrapper>

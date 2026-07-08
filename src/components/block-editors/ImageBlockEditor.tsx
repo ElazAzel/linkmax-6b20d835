@@ -39,6 +39,7 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           value={formData.url || ''}
           onChange={(url) => onChange({ ...formData, url })}
           accept="image/*"
+          allowGif
         />
 
         <EditorField

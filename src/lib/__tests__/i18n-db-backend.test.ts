@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { fetchTranslationsFromDB, upsertToDB, syncI18nWithDB } from '../i18n-db-backend';
+import {
+    applyTranslationsToI18n,
+    fetchTranslationsFromDB,
+    normalizeTranslationPayload,
+    syncI18nWithDB,
+    upsertToDB,
+} from '../i18n-db-backend';
 import { supabase } from '@/platform/supabase/client';
 import i18next from 'i18next';
 
@@ -84,6 +90,36 @@ describe('i18n-db-backend', () => {
             await syncI18nWithDB(i18next as any, 'ru');
 
             expect(i18next.addResourceBundle).toHaveBeenCalledWith('ru', 'translation', mockData, true, true);
+            expect(i18next.changeLanguage).toHaveBeenCalledWith('ru');
+        });
+    });
+
+    describe('normalizeTranslationPayload', () => {
+        it('should merge legacy translation namespace with top-level keys', () => {
+            const result = normalizeTranslationPayload({
+                translation: { common: { save: 'Save' }, oldOnly: 'old' },
+                common: { cancel: 'Cancel' },
+            });
+
+            expect(result).toEqual({
+                common: { save: 'Save', cancel: 'Cancel' },
+                oldOnly: 'old',
+            });
+        });
+    });
+
+    describe('applyTranslationsToI18n', () => {
+        it('should refresh the active language after applying admin changes', async () => {
+            await applyTranslationsToI18n(i18next as any, 'ru', { common: { save: 'Сохранить' } });
+
+            expect(i18next.addResourceBundle).toHaveBeenCalledWith(
+                'ru',
+                'translation',
+                { common: { save: 'Сохранить' } },
+                true,
+                true
+            );
+            expect(i18next.changeLanguage).toHaveBeenCalledWith('ru');
         });
     });
 });

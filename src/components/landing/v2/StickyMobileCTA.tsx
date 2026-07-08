@@ -36,12 +36,12 @@ export const StickyMobileCTA = () => {
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.75rem)' }}
       aria-hidden={!visible}
     >
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-transparent pointer-events-none" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#f6f7f9] via-[#f6f7f9]/92 to-transparent" />
       <button
         type="button"
         onClick={() => navigate('/auth')}
         aria-label={t('landing.stickyCta.label', 'Создать страницу — бесплатно')}
-        className="relative pointer-events-auto w-full h-14 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
+        className="relative flex h-14 w-full pointer-events-auto items-center justify-center gap-2 rounded-[14px] bg-[#2563eb] text-sm font-semibold text-white shadow-[0_16px_40px_rgba(37,99,235,0.28)] transition-transform active:scale-[0.98]"
       >
         <span>
           {t('landing.stickyCta.label', 'Создать страницу — бесплатно')}

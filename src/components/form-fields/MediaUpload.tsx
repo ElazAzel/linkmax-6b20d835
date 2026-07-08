@@ -23,7 +23,17 @@ interface MediaUploadProps {
   accept?: string;
   label?: string;
   placeholder?: string;
-  allowGif?: boolean; // Enable GIF support for this field
+  allowGif?: boolean;
+}
+
+export function isGifUpload(file: Pick<File, 'type' | 'name'>) {
+  return file.type === 'image/gif' || file.name.toLowerCase().endsWith('.gif');
+}
+
+export function getAcceptedMediaTypes(accept = 'image/*', allowGif = true) {
+  if (!allowGif || !accept.includes('image')) return accept;
+  if (/(^|,)\s*(image\/gif|\.gif)(\s*,|$)/i.test(accept)) return accept;
+  return `${accept},image/gif,.gif`;
 }
 
 export function MediaUpload({ 
@@ -32,7 +42,7 @@ export function MediaUpload({
   accept = 'image/*',
   label,
   placeholder = 'https://example.com/image.jpg',
-  allowGif = false
+  allowGif = true
 }: MediaUploadProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -42,14 +52,6 @@ export function MediaUpload({
   const [compressionInfo, setCompressionInfo] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>(value ? 'url' : 'upload');
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Always allow GIF — accept includes gif explicitly so the picker doesn't filter it out on iOS/Safari
-  const getAcceptedTypes = () => {
-    if (accept.includes('image')) return 'image/*,image/gif,.gif';
-    return accept;
-  };
-
-  const isGifFile = (file: File) => file.type === 'image/gif' || file.name.toLowerCase().endsWith('.gif');
 
   const MAX_SIZE_MB = isPremium ? 30 : 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
@@ -76,7 +78,7 @@ export function MediaUpload({
     try {
       // Compress static images only — never touch GIF (canvas re-encode kills animation)
       let processedFile: File = file;
-      const gif = isGifFile(file);
+      const gif = isGifUpload(file);
       if (file.type.startsWith('image/') && !gif) {
         const originalSize = file.size;
         processedFile = await compressImage(file);
@@ -166,7 +168,7 @@ export function MediaUpload({
           <input
             ref={fileInputRef}
             type="file"
-            accept={getAcceptedTypes()}
+            accept={getAcceptedMediaTypes(accept, allowGif)}
             onChange={handleFileSelect}
             className="hidden"
           />

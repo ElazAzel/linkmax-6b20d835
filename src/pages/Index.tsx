@@ -31,7 +31,7 @@ const StickyMobileCTA = lazy(() => import('@/components/landing/v2/StickyMobileC
 
 /**
  * Landing Page Index
- * Premium "Living Canvas" aesthetic refresh.
+ * Product OS landing built from the existing marketing section pipeline.
  */
 export default function Index() {
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ export default function Index() {
         <AISearchOptimizer pageType="homepage" entityName="LinkMAX" entityCategory="SaaS" />
       </Suspense>
 
-      <div className="bg-[#fafbfc] min-h-screen text-foreground selection:bg-blue-100 selection:text-blue-600 relative overflow-x-hidden">
+      <div className="min-h-screen overflow-x-hidden bg-[#f6f7f9] text-[#172033] selection:bg-blue-100 selection:text-blue-700">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}

@@ -7282,12 +7282,21 @@
       }
     },
     "v5": {
-      "badge": "For services, experts and small teams",
-      "title1": "A site where clients book",
+      "badge": "An operating flow for services, experts and small teams",
+      "title1": "A page where clients book,",
       "title2": "pay and land in your CRM",
-      "subtitle": "LinkMAX brings service pages, forms, messengers, online booking, payments and analytics into one working flow.",
+      "subtitle": "LinkMAX connects your service storefront, messengers, online booking, payments and analytics so the owner sees the full client path in one place.",
       "cta_primary": "Create a page for free",
       "cta_secondary": "Open examples",
+      "metric1": "minutes to launch",
+      "metric2": "Starter fee",
+      "metric3": "lead feed",
+      "preview": {
+        "eyebrow": "live flow",
+        "title": "Page, CRM and payments together",
+        "status": "online",
+        "booking": "Today"
+      },
       "bento": {
         "builder": {
           "title": "Service storefront without empty sections",
