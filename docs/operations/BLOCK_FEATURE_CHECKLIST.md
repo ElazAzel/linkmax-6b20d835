@@ -1,7 +1,7 @@
 # Block Feature Checklist
 
-> **Статус:** Active  
-> **Связано с кайдзен:** KZN-007  
+> **Статус:** Active
+> **Связано с кайдзен:** KZN-007
 > **Когда использовать:** любое добавление или изменение блока редактора, renderer, block settings, gating или analytics
 
 ---

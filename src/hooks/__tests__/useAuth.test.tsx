@@ -129,7 +129,7 @@ describe('useAuth', () => {
                 email: 'test@example.com',
                 password: 'password123',
                 options: expect.objectContaining({
-                    emailRedirectTo: expect.stringContaining('/dashboard'),
+                    emailRedirectTo: expect.stringContaining('/auth/callback'),
                 }),
             });
         });

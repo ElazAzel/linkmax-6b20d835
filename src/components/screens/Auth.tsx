@@ -33,6 +33,9 @@ import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import UserIcon from 'lucide-react/dist/esm/icons/user';
 import { trackAuthEvent } from '@/services/authFunnel';
+import { session } from '@/lib/storage';
+import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
+import type { TelegramAuthPayload } from '@/types/telegram-auth';
 
 // Zod schema is created inside the component to access t()
 // We define a factory function here
@@ -199,11 +202,20 @@ export const Auth = memo(function Auth() {
     }
   }, [user, refCode, t]);
 
-  // Auto-redirect only when there's an explicit return target or post-auth password update.
+  // Auto-redirect only when there's an explicit return target or signup builder intent.
   // Otherwise show the "already signed in" card so the user can choose.
   useEffect(() => {
-    if (user && authMode !== 'update-password' && safeReturnTo) {
-      navigate(safeReturnTo);
+    if (user && authMode !== 'update-password') {
+      const shouldOpenBuilder = session.get<boolean>(NEW_USER_BUILDER_SESSION_KEY);
+      if (shouldOpenBuilder) {
+        session.remove(NEW_USER_BUILDER_SESSION_KEY);
+        navigate(safeReturnTo || NEW_USER_BUILDER_ROUTE);
+        return;
+      }
+
+      if (safeReturnTo) {
+        navigate(safeReturnTo);
+      }
     }
   }, [user, navigate, authMode, safeReturnTo]);
 
@@ -235,9 +247,11 @@ export const Auth = memo(function Auth() {
       return;
     }
 
+    session.set(NEW_USER_BUILDER_SESSION_KEY, true);
     const { data, error } = await signUp(validation.data.email, validation.data.password);
 
     if (error) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
       logger.error('Signup error:', error, { context: 'Auth' });
       handleError(error, t('messages.failedToSignUp'));
       playError();
@@ -463,7 +477,7 @@ export const Auth = memo(function Auth() {
     setIsOAuthLoading(null);
   };
 
-  const handleTelegramAuth = async (telegramData: Record<string, unknown>) => {
+  const handleTelegramAuth = async (telegramData: TelegramAuthPayload) => {
     trackAuthEvent('auth_oauth_click', { provider: 'telegram', intent: activeTab });
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);

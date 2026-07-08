@@ -5,6 +5,9 @@ import { NICHES, type Niche } from '@/lib/niches';
 import { storage } from '@/lib/storage';
 
 const STORAGE_KEYS = {
+  AI_BUILDER_USED: 'ai_builder_used',
+  SMART_BUILDER_USED: 'smart_builder_used',
+  NICHE_COMPLETED: 'niche_onboarding_completed',
   ONBOARDING_COMPLETED: 'onboarding_completed',
   ONBOARDING_DISMISSED_AT: 'onboarding_dismissed_at',
   // Legacy keys read for backwards compatibility (existing users)
@@ -39,9 +42,33 @@ interface SignupOnboardingContext {
 interface UseDashboardOnboardingOptions {
   isUserReady: boolean;
   isPageReady: boolean;
+  userId?: string | null;
   /** Current block count on the page */
   blockCount: number;
   onNicheComplete: (profile: OnboardingProfile, blocks: Block[], niche: Niche) => void;
+}
+
+function getScopedKey(userId: string | null | undefined, key: string): string {
+  return userId ? `user:${userId}:${key}` : key;
+}
+
+function getScopedValue<T = string>(userId: string | null | undefined, key: string): T | null {
+  return storage.get<T>(getScopedKey(userId, key));
+}
+
+function getScopedOrLegacyValue<T = string>(
+  userId: string | null | undefined,
+  key: string
+): T | null {
+  return getScopedValue<T>(userId, key) ?? storage.get<T>(key);
+}
+
+function setScopedValue<T = string>(
+  userId: string | null | undefined,
+  key: string,
+  value: T
+): void {
+  storage.set(getScopedKey(userId, key), value);
 }
 
 function isNiche(value: string | null): value is Niche {
@@ -79,6 +106,7 @@ function readSignupContext(): SignupOnboardingContext {
 export function useDashboardOnboarding({
   isUserReady,
   isPageReady,
+  userId,
   blockCount,
   onNicheComplete,
 }: UseDashboardOnboardingOptions) {
@@ -94,18 +122,18 @@ export function useDashboardOnboarding({
     setSignupContext(nextSignupContext);
 
     const completed =
-      storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED) ||
-      storage.get<string>(STORAGE_KEYS.LEGACY_AI_BUILDER_USED) ||
-      storage.get<string>(STORAGE_KEYS.LEGACY_NICHE_COMPLETED) ||
-      storage.get<string>(STORAGE_KEYS.LEGACY_LINKMAX_COMPLETED);
-    const dismissedAt = storage.get<number>(STORAGE_KEYS.ONBOARDING_DISMISSED_AT);
+      getScopedOrLegacyValue<string>(userId, STORAGE_KEYS.ONBOARDING_COMPLETED) ||
+      getScopedOrLegacyValue<string>(userId, STORAGE_KEYS.LEGACY_AI_BUILDER_USED) ||
+      getScopedOrLegacyValue<string>(userId, STORAGE_KEYS.LEGACY_NICHE_COMPLETED) ||
+      getScopedOrLegacyValue<string>(userId, STORAGE_KEYS.LEGACY_LINKMAX_COMPLETED);
+    const dismissedAt = getScopedOrLegacyValue<number>(userId, STORAGE_KEYS.ONBOARDING_DISMISSED_AT);
     const dismissedRecently = dismissedAt ? Date.now() - dismissedAt < DISMISS_SNOOZE_MS : false;
 
     const hasExistingContent = blockCount > MIN_BLOCKS_TO_SKIP_ONBOARDING;
 
     if (hasExistingContent || completed) {
-      if (!storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED)) {
-        storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+      if (!getScopedValue<string>(userId, STORAGE_KEYS.ONBOARDING_COMPLETED)) {
+        setScopedValue(userId, STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
       }
       return;
     }
@@ -115,12 +143,12 @@ export function useDashboardOnboarding({
     // New user with no content — show scope chooser first.
     const timer = window.setTimeout(() => setShowScopeChoice(true), 500);
     return () => window.clearTimeout(timer);
-  }, [isUserReady, isPageReady, blockCount]);
+  }, [isUserReady, isPageReady, userId, blockCount]);
 
   const handleScopeClose = useCallback(() => {
-    storage.set(STORAGE_KEYS.ONBOARDING_DISMISSED_AT, Date.now());
+    setScopedValue(userId, STORAGE_KEYS.ONBOARDING_DISMISSED_AT, Date.now());
     setShowScopeChoice(false);
-  }, []);
+  }, [userId]);
 
   const handleChooseSingle = useCallback(() => {
     setShowScopeChoice(false);
@@ -128,19 +156,22 @@ export function useDashboardOnboarding({
   }, []);
 
   const handleAIBuilderClose = useCallback(() => {
-    storage.set(STORAGE_KEYS.ONBOARDING_DISMISSED_AT, Date.now());
+    setScopedValue(userId, STORAGE_KEYS.ONBOARDING_DISMISSED_AT, Date.now());
     setShowAIBuilderWizard(false);
-  }, []);
+  }, [userId]);
 
   const handleAIBuilderComplete = useCallback(
     (profile: OnboardingProfile, blocks: Block[], niche: Niche) => {
       onNicheComplete(profile, blocks, niche);
-      storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
-      storage.remove(STORAGE_KEYS.ONBOARDING_DISMISSED_AT);
+      setScopedValue(userId, STORAGE_KEYS.SMART_BUILDER_USED, 'true');
+      setScopedValue(userId, STORAGE_KEYS.AI_BUILDER_USED, 'true');
+      setScopedValue(userId, STORAGE_KEYS.NICHE_COMPLETED, 'true');
+      setScopedValue(userId, STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+      storage.remove(getScopedKey(userId, STORAGE_KEYS.ONBOARDING_DISMISSED_AT));
       clearSignupContext();
       setShowAIBuilderWizard(false);
     },
-    [onNicheComplete]
+    [onNicheComplete, userId]
   );
 
   const openAIBuilderFromSettings = useCallback(() => {

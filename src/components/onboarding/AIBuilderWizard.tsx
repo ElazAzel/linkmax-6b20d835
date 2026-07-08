@@ -393,7 +393,6 @@ export function AIBuilderWizard({
 
   const finishWizard = (options?: { publish?: boolean; nextAction?: 'connect_telegram' }) => {
     if (!selectedNiche) return;
-    storage.set('onboarding_completed', 'true');
     if (options?.publish) storage.set('wizard_wants_publish', 'true');
     if (options?.nextAction) storage.set('wizard_next_action', options.nextAction);
     if (pageId) trackWizardCompleted(pageId, selectedNiche);

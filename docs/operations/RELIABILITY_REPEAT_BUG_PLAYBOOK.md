@@ -1,7 +1,7 @@
 # Reliability Repeat Bug Playbook
 
-> **Статус:** Active  
-> **Связано с кайдзен:** KZN-017  
+> **Статус:** Active
+> **Связано с кайдзен:** KZN-017
 > **Когда использовать:** bug, Sentry issue, regression или support case повторился второй раз
 
 ---

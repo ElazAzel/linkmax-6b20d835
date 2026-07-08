@@ -14,10 +14,10 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import type { Block } from '@/types/page';
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
+import { buildSmartPage, inferSmartPageNiche } from '@/lib/onboarding/smart-page-builder';
 
 interface TemplatePersonalizationProps {
   open: boolean;
@@ -39,7 +39,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
   const [businessDescription, setBusinessDescription] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleGenerateWithAI = async () => {
+  const handleGenerateSmart = async () => {
     if (!businessName.trim()) {
       toast.error(t('templates.enterBusinessName', 'Введите название бизнеса'));
       return;
@@ -47,39 +47,29 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
 
     setIsGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke('ai-content-generator', {
-        body: {
-          type: 'personalize-template',
-          input: {
-            businessName: businessName.trim(),
-            businessDescription: businessDescription.trim(),
-            templateName,
-            templateBlocks: templateBlocks.map(b => ({
-              type: b.type,
-              overrides: b.overrides
-            }))
-          }
-        }
+      const description = businessDescription.trim();
+      const prompt = `${businessName} ${description} ${templateName}`;
+      const result = buildSmartPage({
+        niche: inferSmartPageNiche(prompt),
+        goal: 'leads',
+        userInfo: {
+          name: businessName.trim(),
+          bio: description || templateName,
+          goal: 'leads',
+          contacts: description,
+          services: description,
+          socials: description,
+          mediaLinks: description,
+        },
       });
 
-      if (error) throw error;
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      if (data?.result) {
-        const personalizedBlocks: Block[] = data.result.blocks.map((blockData: any, index: number) => {
-          const baseBlock = createBaseBlock(blockData.type);
-          return {
-            ...baseBlock,
-            ...blockData,
-            id: `${blockData.type}-${Date.now()}-${index}`,
-          } as Block;
-        });
-
-        onApply(personalizedBlocks, data.result.profile);
-        toast.success(t('templates.personalized', 'Шаблон персонализирован!'));
-        onClose();
-      }
+      onApply(result.blocks, result.profile);
+      toast.success(t('templates.personalized', 'Шаблон персонализирован!'));
+      onClose();
     } catch (error) {
-      console.error('AI personalization error:', error);
+      console.error('Template personalization error:', error);
       toast.error(t('templates.personalizationError', 'Ошибка персонализации'));
     } finally {
       setIsGenerating(false);
@@ -108,7 +98,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
             {t('templates.personalize', 'Персонализация шаблона')}
           </DialogTitle>
           <DialogDescription>
-            {t('templates.personalizeDesc', 'AI адаптирует шаблон под ваш бизнес')}
+            {t('templates.personalizeSmartDesc', 'Алгоритм адаптирует структуру, CTA, услуги и контакты под ваш бизнес')}
           </DialogDescription>
         </DialogHeader>
 
@@ -141,7 +131,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
 
         <div className="flex flex-col gap-2">
           <Button
-            onClick={handleGenerateWithAI}
+            onClick={handleGenerateSmart}
             disabled={isGenerating || !businessName.trim()}
             className="w-full"
           >
@@ -153,7 +143,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
             ) : (
               <>
                 <Sparkles className="mr-2 h-4 w-4" />
-                {t('templates.generateWithAI', 'Сгенерировать с AI')}
+                {t('templates.generateSmart', 'Собрать автоматически')}
               </>
             )}
           </Button>

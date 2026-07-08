@@ -1,9 +1,9 @@
 # Активный реестр кайдзен-улучшений LinkMAX
 
-> **Статус:** Active Draft  
-> **Старт цикла:** 24 апреля 2026  
-> **Цикл:** KZN Cycle 01 / первые 2 недели  
-> **Основа:** `KAIZEN_SYSTEM_PROJECT_DESCRIPTION.md` и `KAIZEN_IMPROVEMENT_ROADMAP.md`  
+> **Статус:** Active Draft
+> **Старт цикла:** 24 апреля 2026
+> **Цикл:** KZN Cycle 01 / первые 2 недели
+> **Основа:** `KAIZEN_SYSTEM_PROJECT_DESCRIPTION.md` и `KAIZEN_IMPROVEMENT_ROADMAP.md`
 > **Фокус цикла:** запустить систему управления улучшениями, назначить ownership, снять baseline по основному пути пользователя
 
 ---

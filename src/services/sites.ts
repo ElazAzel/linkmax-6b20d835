@@ -495,5 +495,3 @@ export async function loadSiteRedirectsByHomeSlug(
   const settings = ((row as { settings?: Record<string, unknown> } | null)?.settings ?? {}) as Record<string, unknown>;
   return readSiteRedirects(settings);
 }
-
-

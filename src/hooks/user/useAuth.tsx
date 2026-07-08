@@ -4,9 +4,9 @@ import { supabase } from '@/platform/supabase/client';
 import { storage } from '@/lib/storage';
 import { logger } from '@/lib/utils/logger';
 import { posthog } from '@/lib/posthog';
+import { NEW_USER_BUILDER_ROUTE } from '@/lib/onboarding/routes';
 import { buildAuthCallbackRedirect } from '@/services/auth-redirects';
-
-type TelegramAuthPayload = Record<string, unknown>;
+import type { TelegramAuthPayload } from '@/types/telegram-auth';
 
 interface AuthContextType {
   user: User | null;
@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/dashboard`;
+    const redirectUrl = buildAuthCallbackRedirect(window.location.origin, NEW_USER_BUILDER_ROUTE);
 
     const { data, error } = await supabase.auth.signUp({
       email,

@@ -186,7 +186,7 @@ export const MonetizeScreen = memo(function MonetizeScreen({
                     "w-6 h-6",
                     tier !== 'identity' ? "text-primary" : "text-muted-foreground"
                   )} />
-                  <Badge 
+                  <Badge
                     variant={currentTierConfig.badge}
                     className={cn(
                       "rounded-lg font-bold",
@@ -214,8 +214,8 @@ export const MonetizeScreen = memo(function MonetizeScreen({
                 )}
               </div>
               {tier !== 'identity' && (
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   className="rounded-xl"
                   onClick={onManageBilling}
@@ -244,8 +244,8 @@ export const MonetizeScreen = memo(function MonetizeScreen({
                   {defaultLimits.pagesUsed} / {defaultLimits.pagesLimit}
                 </span>
               </div>
-              <Progress 
-                value={(defaultLimits.pagesUsed / defaultLimits.pagesLimit) * 100} 
+              <Progress
+                value={(defaultLimits.pagesUsed / defaultLimits.pagesLimit) * 100}
                 className="h-2"
               />
               {(tier === 'pro' || tier === 'business') && (
@@ -254,7 +254,7 @@ export const MonetizeScreen = memo(function MonetizeScreen({
                 </p>
               )}
             </div>
-            
+
             {/* Blocks */}
             <div>
               <div className="flex justify-between text-sm mb-1">
@@ -263,12 +263,12 @@ export const MonetizeScreen = memo(function MonetizeScreen({
                   {defaultLimits.blocksUsed} / {defaultLimits.blocksLimit == null ? '∞' : defaultLimits.blocksLimit}
                 </span>
               </div>
-              <Progress 
-                value={defaultLimits.blocksLimit == null ? 10 : (defaultLimits.blocksUsed / defaultLimits.blocksLimit) * 100} 
+              <Progress
+                value={defaultLimits.blocksLimit == null ? 10 : (defaultLimits.blocksUsed / defaultLimits.blocksLimit) * 100}
                 className="h-2"
               />
             </div>
-            
+
             {/* AI Generations */}
             <div>
               <div className="flex justify-between text-sm mb-1">
@@ -277,8 +277,8 @@ export const MonetizeScreen = memo(function MonetizeScreen({
                   {defaultLimits.aiGenerationsUsed} / {defaultLimits.aiGenerationsLimit == null ? '∞' : defaultLimits.aiGenerationsLimit}
                 </span>
               </div>
-              <Progress 
-                value={defaultLimits.aiGenerationsLimit == null ? 10 : (defaultLimits.aiGenerationsUsed / defaultLimits.aiGenerationsLimit) * 100} 
+              <Progress
+                value={defaultLimits.aiGenerationsLimit == null ? 10 : (defaultLimits.aiGenerationsUsed / defaultLimits.aiGenerationsLimit) * 100}
                 className="h-2"
               />
             </div>
@@ -292,7 +292,7 @@ export const MonetizeScreen = memo(function MonetizeScreen({
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-5 h-5 text-primary" />
                 <span className="font-bold text-primary">
-                  {tier === 'identity' 
+                  {tier === 'identity'
                     ? t('dashboard.monetize.upgradeToStarter', 'Upgrade to Starter — FREE')
                     : t('dashboard.monetize.upgradeToPro', 'Upgrade to Pro')
                   }
@@ -320,7 +320,7 @@ export const MonetizeScreen = memo(function MonetizeScreen({
                 ))}
               </ul>
 
-              <Button 
+              <Button
                 onClick={onUpgrade}
                 className="w-full h-14 rounded-2xl font-bold text-lg"
               >
@@ -371,7 +371,7 @@ export const MonetizeScreen = memo(function MonetizeScreen({
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <TrendingUp className="w-4 h-4" />
             <span>
-              {tier === 'business' 
+              {tier === 'business'
                 ? t('dashboard.monetize.noCommission', '0% commission')
                 : tier === 'pro'
                   ? t('dashboard.monetize.lowCommission', '1% commission')
