@@ -1,5 +1,16 @@
 # Changelog
 
+## [Phase 49] - 2026-07-05
+
+### Friction Analytics Foundation
+- **Architecture Decision**: Added ADR 0033 for Phase 25 qualitative analytics, extending the existing `analytics` heatmap stream instead of adding a second session replay system.
+- **Privacy-Safe Rage Clicks**: Added `heatmap_rage_clicks` as an allowed analytics event with coordinate-only clusters, click counts, and detection windows.
+- **Typed Heatmap Model**: Added pure detection and aggregation helpers for repeated nearby clicks, recent-click pruning, payload parsing, and friction-zone ranking.
+- **CRM Heatmap UX**: Extended the owner heatmap screen with friction-zone summary cards and ranked repeated-click zones beside existing click and scroll metrics.
+- **Focused Tests**: Added Vitest coverage for rage-click detection, stale click pruning, payload parsing, and friction-zone aggregation.
+
+---
+
 ## [Phase 48] - 2026-07-04
 
 ### Billing Recovery Foundation

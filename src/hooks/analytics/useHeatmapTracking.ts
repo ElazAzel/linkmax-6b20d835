@@ -2,12 +2,19 @@ import { useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
+import {
+  detectRageClickCluster,
+  pruneRecentClicks,
+  type HeatmapClickSample,
+  type RageClickCluster,
+} from './heatmap-model';
 
 interface HeatmapEvent {
-  type: 'click' | 'scroll';
+  type: 'click' | 'scroll' | 'rage_click';
   x?: number;
   y?: number;
   scrollDepth?: number;
+  rageCluster?: RageClickCluster;
   viewportWidth: number;
   viewportHeight: number;
   pageHeight: number;
@@ -17,9 +24,13 @@ interface HeatmapEvent {
 const BATCH_INTERVAL = 5000; // Send batch every 5 seconds
 const MAX_BATCH_SIZE = 50;
 const HEATMAP_ENABLED = !import.meta.env.DEV;
+const RAGE_CLICK_SUPPRESSION_MS = 2200;
+const RAGE_CLICK_SUPPRESSION_RADIUS_PX = 48;
 
 export function useHeatmapTracking(pageId: string | undefined, enabled: boolean = true) {
   const eventsBuffer = useRef<HeatmapEvent[]>([]);
+  const recentClicks = useRef<HeatmapClickSample[]>([]);
+  const lastRageCluster = useRef<RageClickCluster | null>(null);
   const lastScrollDepth = useRef<number>(0);
   const scrollSampleInterval = useRef<number>(0);
 
@@ -33,6 +44,7 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
     try {
       // Group events by type for efficient storage
       const clicks = events.filter(e => e.type === 'click');
+      const rageClicks = events.flatMap(e => e.type === 'rage_click' && e.rageCluster ? [e.rageCluster] : []);
       const maxScrollDepth = Math.max(...events.filter(e => e.type === 'scroll').map(e => e.scrollDepth || 0), 0);
 
       // Store click positions
@@ -67,6 +79,27 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
           } as Json,
         });
       }
+
+      if (rageClicks.length > 0) {
+        await supabase.from('analytics').insert({
+          page_id: pageId,
+          event_type: 'heatmap_rage_clicks',
+          metadata: {
+            clusters: rageClicks.map(cluster => ({
+              x: cluster.x,
+              y: cluster.y,
+              relX: cluster.relX,
+              relY: cluster.relY,
+              count: cluster.count,
+              windowMs: cluster.windowMs,
+              timestamp: cluster.timestamp,
+            })),
+            viewportWidth: events[0]?.viewportWidth,
+            viewportHeight: events[0]?.viewportHeight,
+            pageHeight: events[0]?.pageHeight,
+          } as Json,
+        });
+      }
     } catch (error) {
       // Silently fail for analytics
       logger.debug('Heatmap tracking error:', { context: 'useHeatmapTracking', data: { error } });
@@ -80,16 +113,48 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
       document.body.scrollHeight,
       document.documentElement.scrollHeight
     );
-
-    eventsBuffer.current.push({
-      type: 'click',
+    const timestamp = Date.now();
+    const clickSample: HeatmapClickSample = {
       x: e.clientX,
-      y: e.clientY + scrollY, // Position relative to page top
+      y: e.clientY + scrollY,
       viewportWidth: window.innerWidth,
       viewportHeight: window.innerHeight,
       pageHeight,
-      timestamp: Date.now(),
+      timestamp,
+    };
+
+    eventsBuffer.current.push({
+      type: 'click',
+      x: clickSample.x,
+      y: clickSample.y, // Position relative to page top
+      viewportWidth: clickSample.viewportWidth,
+      viewportHeight: clickSample.viewportHeight,
+      pageHeight,
+      timestamp,
     });
+
+    const rageCluster = detectRageClickCluster(recentClicks.current, clickSample);
+    recentClicks.current = pruneRecentClicks([...recentClicks.current, clickSample], timestamp);
+
+    const previousRageCluster = lastRageCluster.current;
+    const sameBurst = Boolean(
+      rageCluster &&
+      previousRageCluster &&
+      timestamp - previousRageCluster.timestamp <= RAGE_CLICK_SUPPRESSION_MS &&
+      Math.hypot(previousRageCluster.x - rageCluster.x, previousRageCluster.y - rageCluster.y) <= RAGE_CLICK_SUPPRESSION_RADIUS_PX
+    );
+
+    if (rageCluster && !sameBurst) {
+      lastRageCluster.current = rageCluster;
+      eventsBuffer.current.push({
+        type: 'rage_click',
+        rageCluster,
+        viewportWidth: clickSample.viewportWidth,
+        viewportHeight: clickSample.viewportHeight,
+        pageHeight,
+        timestamp,
+      });
+    }
 
     if (eventsBuffer.current.length >= MAX_BATCH_SIZE) {
       flushEvents();

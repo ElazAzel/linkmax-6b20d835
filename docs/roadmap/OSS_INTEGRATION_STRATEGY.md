@@ -1,7 +1,7 @@
 # LinkMAX OSS Integration Strategy
 
 > **Status:** Active
-> **Last updated:** July 4, 2026
+> **Last updated:** July 5, 2026
 > **Source of truth relationship:** This document extends `docs/PLATFORM_SNAPSHOT.md`. If implementation facts conflict, `PLATFORM_SNAPSHOT.md` and the codebase win.
 
 ## Position
@@ -21,7 +21,7 @@ The OSS ecosystem should be used as a map of proven SaaS categories, not as a sh
 
 | Area | Current V1 reality | V2 direction |
 | --- | --- | --- |
-| Product analytics | Visitor analytics, PostHog dependency, Web Vitals, dashboard analytics, Phase 46 `product_events`, activation state, creator health score, and initial AI/activation bridge | Complete activation funnel reporting, richer event coverage, and dashboard recommendations |
+| Product analytics | Visitor analytics, PostHog dependency, Web Vitals, dashboard analytics, Phase 46 `product_events`, activation state, creator health score, initial AI/activation bridge, and Phase 49 heatmap friction signals | Complete activation funnel reporting, richer event coverage, and dashboard recommendations |
 | Feature flags & rollout | Block-level A/B tests plus Phase 46 native `feature_flags`, targeting rules, audit log, and typed evaluation service | Admin rollout UI, module-level flag checks, and release governance for V2 surfaces |
 | Developer Portal & Webhooks | API keys, outgoing webhooks, developer settings UI, Phase 46 V2 endpoint/secret/queue/delivery schema, scoped key RPCs, and typed event/retry/signature contract | Dispatcher edge functions, producer enqueueing, delivery timeline UI, test event, manual retry, HMAC verification UX |
 | Trust & verified reviews | Static testimonial blocks, expert directory with rating summaries and filters, public experts dataset, and Phase 47 `reviews` / `page_review_summaries` / `review_requests` foundations with booking-backed creation, hashed request tokens, customer-facing request route, CRM copy action, CRM automation wiring, public page verified review display, owner moderation UI, analytics, and webhook events | Owner review analytics UI, GEO/AEO aggregate rating payloads, business verification badge, and dispatcher hardening |
@@ -31,7 +31,7 @@ The OSS ecosystem should be used as a map of proven SaaS categories, not as a sh
 | Billing & Commerce | Orders, wallet/ledger foundations, Robokassa/Kaspi flow, Paddle subscriptions, and Phase 48 billing recovery foundation | Usage metering, commission rules, idempotent ledger, recovery runner, protected digital delivery |
 | Search | Cmd+K global/zone search | Postgres full-text/trigram index hardening, semantic search later |
 | EDO/Documents | Document generation and PDF export | Simple signature lifecycle, audit trail, KZ-specific ECP later |
-| Website analytics | Page views, clicks, block performance, pixel proxy | Micro-business language: who came, source, button conversion, lead quality |
+| Website analytics | Page views, clicks, block performance, pixel proxy, scroll heatmap, click heatmap, and repeated-click friction zones | Micro-business language: who came, source, button conversion, lead quality, and where visitors get stuck |
 
 ## OSS Reference Map
 
@@ -65,6 +65,7 @@ The OSS ecosystem should be used as a map of proven SaaS categories, not as a sh
 | P1 | Booking V2 | High-value for beauty, experts, services, education |
 | P1 | Form Builder V2 | Improves lead quality, not just lead volume |
 | P1 | Billing/commission engine | Required for Step-by-Growth economics |
+| P1 | Friction analytics | Phase 25 foundation now surfaces repeated-click friction zones; micro-surveys remain next |
 | P2 | Commerce/digital products | GMV and take-rate expansion |
 | P2 | Search/Cmd+K hardening | Keeps UX scalable as entities grow |
 | P2 | EDO signature | B2B trust and operational maturity |
@@ -91,6 +92,7 @@ The OSS ecosystem should be used as a map of proven SaaS categories, not as a sh
 - Show a next-best-action module on the dashboard Home screen.
 - Segment onboarding recommendations for expert, beauty, and freelancer users.
 - Add owner review analytics, GEO/AEO aggregate rating payloads, and business verification on top of the shipped page and `/experts` trust surfaces.
+- Add privacy-safe friction analytics on top of heatmaps. Status: foundation added in Phase 49 with `heatmap_rage_clicks` and owner-visible friction zones.
 
 ### Days 31-50: Webhooks & Automations Sprint
 

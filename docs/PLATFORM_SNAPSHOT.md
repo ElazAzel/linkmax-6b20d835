@@ -693,6 +693,8 @@ LinkMAX использует гибридную модель, направлен
 
 Phase 48 adds Pro billing recovery on top of Paddle `subscriptions`: failed or past-due provider events update recovery state, write idempotent `billing_history` records, queue owner email/Telegram notices, and emit Product Analytics/Webhooks V2 events.
 
+Phase 49 adds privacy-safe friction analytics on top of the existing public heatmap tracker: repeated nearby clicks are stored as `heatmap_rage_clicks` coordinate clusters in `analytics` and surfaced to owners as ranked friction zones.
+
 ### Plan Checking
 
 #### Frontend hooks
@@ -735,7 +737,7 @@ Phase 48 adds Pro billing recovery on top of Paddle `subscriptions`: failed or p
 | `review_requests` | Tokenized post-booking/order review collection links | Owner/workspace read, RPC-only token flows |
 | `events` | Event definitions | Owner only |
 | `event_registrations` | Attendees | Owner + public insert |
-| `analytics` | Event tracking | Public insert, owner read |
+| `analytics` | Event tracking, heatmaps, and repeated-click friction signals | Public insert, owner read |
 | `product_events` | Creator product analytics events | Authenticated owner insert/read |
 | `creator_activation_state` | Current creator activation milestones | Authenticated owner manage |
 | `creator_health_scores` | Materialized creator health score | Authenticated owner manage |
@@ -1261,10 +1263,11 @@ Based on codebase analysis, these are logical next improvements:
 - [x] Owner review moderation UI: Activity inbox reads owner-visible `reviews` and publishes/hides/rejects through the existing `moderate_review` RPC.
 - [x] Expert trust enrichment: `/experts` reads `page_review_summaries` for rating badges, city/search/verified filters, trust-aware ranking, and `AggregateRating` JSON-LD.
 - [x] Billing recovery foundation: ADR 0032, `subscriptions.recovery_*`, provider-event idempotency in `billing_history`, Paddle failed-payment handling, owner recovery notifications, promo-code checkout handoff, and billing analytics/webhook event names.
+- [x] Friction analytics foundation: ADR 0033, `heatmap_rage_clicks`, repeated-click detection, friction-zone aggregation, and owner heatmap surfacing.
 - [ ] Business verification badge and GEO/AEO aggregate rating payloads.
 
 ---
 
-*Last updated: July 4, 2026*
-*Current Platform Health Score: **10/10** (Status: Production Ready v3.1.0 | Phase 48 Billing Recovery Foundation).*
+*Last updated: July 5, 2026*
+*Current Platform Health Score: **10/10** (Status: Production Ready v3.1.0 | Phase 49 Friction Analytics Foundation).*
 *Maintained by: Antigravity (Principal Engineer)*
