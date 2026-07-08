@@ -48,9 +48,9 @@ const DEFAULT_TEMPLATES = {
     kk: 'Сәлеметсіз бе, {lead_name}! Сізге қай уақыт ыңғайлы? Осы аптада бос орындар бар.'
   },
   review_request: {
-    ru: 'Здравствуйте, {lead_name}! Спасибо, что были у меня! Буду благодарна за короткий отзыв — это очень помогает! ⭐',
-    en: 'Hi {lead_name}! Thanks for visiting! A quick review would mean a lot to me! ⭐',
-    kk: 'Сәлеметсіз бе, {lead_name}! Маған келгеніңізге рахмет! Қысқа пікір қалдырсаңыз өте ризамын! ⭐'
+    ru: 'Здравствуйте, {lead_name}! Спасибо за визит {booking_date} в {booking_time}. Оставьте короткий отзыв: {review_request_url}',
+    en: 'Hi {lead_name}! Thanks for visiting on {booking_date} at {booking_time}. Please leave a quick review: {review_request_url}',
+    kk: 'Сәлеметсіз бе, {lead_name}! {booking_date} {booking_time} уақытындағы келуіңізге рахмет. Қысқа пікір қалдырыңыз: {review_request_url}'
   }
 };
 
@@ -156,6 +156,20 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
     setAutomations(prev => prev.map(a =>
       a.automation_type === type ? { ...a, ...updates } : a
     ));
+  };
+
+  const getVariableHint = (type: Automation['automation_type']) => {
+    if (type === 'review_request') {
+      return t(
+        'automations.variables.reviewRequest',
+        'Use {lead_name}, {owner_name}, {booking_date}, {booking_time}, {review_request_url} for personalization'
+      );
+    }
+
+    return t(
+      'automations.variables.lead',
+      'Use {lead_name}, {owner_name}, {lead_email}, {lead_phone} for personalization'
+    );
   };
 
   const getAutomationConfig = (type: Automation['automation_type']) => {
@@ -312,7 +326,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
                       <div className="flex items-start gap-1.5 mt-1.5">
                         <Info className="h-3 w-3 text-muted-foreground mt-0.5 shrink-0" />
                         <p className="text-xs text-muted-foreground">
-                          {t('automations.variables', 'Use {lead_name}, {owner_name} for personalization')}
+                          {getVariableHint(automation.automation_type)}
                         </p>
                       </div>
                     </div>

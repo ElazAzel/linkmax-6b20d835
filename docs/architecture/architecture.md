@@ -86,4 +86,4 @@ Stateless server-side logic running on **Deno**.
 ---
 
 *Last updated: 2026-02-23*
-*Reference: See [PLATFORM_SNAPSHOT.md](../audits/PLATFORM_SNAPSHOT.md) for the technical source of truth.*
+*Reference: See [PLATFORM_SNAPSHOT.md](../PLATFORM_SNAPSHOT.md) for the technical source of truth.*

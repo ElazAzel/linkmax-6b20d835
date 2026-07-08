@@ -1,6 +1,6 @@
 # Developer Quickstart
 
-> **Last Updated:** April 4, 2026 (Phase 40 Sync)
+> **Last Updated:** July 1, 2026 (Phase 46 Docs Sync)
 
 
 ## Prerequisites
@@ -15,8 +15,8 @@
 1. **Clone the repository**:
 
     ```bash
-    git clone https://github.com/ElazAzel/inkmax.git
-    cd inkmax
+    git clone https://github.com/ElazAzel/linkmax-6b20d835.git linkmax
+    cd linkmax
     ```
 
 2. **Install dependencies**:

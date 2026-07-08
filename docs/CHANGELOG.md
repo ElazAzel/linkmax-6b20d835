@@ -1,5 +1,67 @@
 # Changelog
 
+## [Phase 48] - 2026-07-04
+
+### Billing Recovery Foundation
+- **Architecture Decision**: Added ADR 0032 for Phase 26 billing resilience, keeping Pro recovery on existing Paddle `subscriptions`, `billing_history`, `notification_queue`, Product Analytics, and Webhooks V2.
+- **Recovery Schema**: Extended `subscriptions` with recovery status, attempt count, next action, notification, and failure-detail fields; extended `billing_history` with subscription/provider event linkage and idempotency.
+- **Paddle Failure Handling**: Extended `payments-webhook` to process `subscription.past_due`, `transaction.payment_failed`, and `transaction.past_due`, record billing facts once, update recovery state, queue owner email/Telegram notices, and emit billing product/webhook events.
+- **Recovery Success Handling**: Extended Paddle success events to clear active recovery state and emit `billing_recovered` / `billing.recovered` when a previously failed subscription recovers.
+- **Promo Checkout Handoff**: Extended Paddle checkout options with safe promo-code normalization and Paywall URL support for `?promo=` / `?coupon=` campaign links.
+- **Typed Billing Contract**: Added `src/domain/billing/recovery.ts` with retry-window calculation, promo-code normalization, notification copy generation, and focused tests.
+
+---
+
+## [Phase 47] - 2026-07-02
+
+### Verified Reviews Foundation
+- **Architecture Decision**: Added ADR 0030 for the P0 human-trust gap: verified reviews remain separate from owner-authored `testimonial` blocks and are anchored to real booking/order facts.
+- **Durable Reviews Schema**: Added `reviews` and `page_review_summaries` with public-only published visibility, owner/workspace read access, one-review-per-booking/order guards, and trigger-maintained rating aggregates.
+- **Review RPC Contract**: Added `create_review_for_booking` for completed bookings and `moderate_review` for owner/workspace-controlled publication, hiding, rejection, and flagging.
+- **Event Integration**: Extended product analytics and Webhooks V2 catalogs with `review_created` / `review_published` and `review.created` / `review.published`.
+- **Typed Service Contract**: Added `src/services/reviews.ts` with review lifecycle catalogs, text normalization, publication transition helpers, public summary calculation, RPC wrappers, and focused tests.
+
+### Review Request Links Foundation
+- **Architecture Decision**: Added ADR 0031 for tokenized post-booking review request links that extend Booking, Reviews, Product Analytics, and Webhooks V2 without creating parallel trust systems.
+- **Durable Request Schema**: Added `review_requests` with hashed raw tokens, one request per booking/order, expiry lifecycle, owner/workspace visibility, and RPC-only public token flows.
+- **Request RPC Contract**: Added `create_booking_review_request`, `get_review_request_by_token`, and `submit_review_request` to create, inspect, and consume secure review links.
+- **Request Event Integration**: Extended product analytics and Webhooks V2 catalogs with `review_request_created` / `review_request_used` and `review_request.created` / `review_request.used`.
+- **Typed Service Contract**: Extended `src/services/reviews.ts` with request lifecycle catalogs, token/path helpers, actionable-state checks, RPC result parsing, and wrappers for the request RPCs.
+- **Customer Review Route**: Added `/review/request/:token` with public-safe booking/page context, noindex metadata, accessible rating controls, local validation, expired/used/revoked states, and verified review submission through the existing request RPC.
+- **CRM Booking Action**: Extended `BookingsPanel` so owners can create and copy a secure review request link from an existing completed booking without adding a parallel notification or booking flow.
+- **CRM Automation Wiring**: Extended `process-crm-automations` so existing `review_request` rules scan completed bookings, create secure request links through the existing RPC, notify the owner in Telegram, cap failed delivery retries, and log outcomes against `automation_logs.booking_id`.
+- **Public Verified Reviews**: Added a public-page verified review section backed by `reviews` and `page_review_summaries`, keeping editable `TestimonialBlock` content separate from verified post-service trust signals.
+- **Owner Review Moderation**: Added an Activity inbox reviews tab that reads owner-visible `reviews`, shows pending/published/closed states, and publishes, hides, or rejects through the existing `moderate_review` RPC.
+- **Expert Directory Trust**: Enriched `/experts` with `page_review_summaries`, verified rating badges, city/search/verified filters, trust-aware ranking, and `AggregateRating` JSON-LD without replacing the existing `public-experts` GEO/AEO API.
+
+---
+
+## [Phase 46] - 2026-07-01
+
+### Documentation & OSS Strategy Alignment
+- **Canonical Repository Link**: Updated active onboarding docs to clone from `ElazAzel/linkmax-6b20d835` instead of the legacy `ElazAzel/inkmax` repository path.
+- **OSS Integration Strategy**: Added `docs/roadmap/OSS_INTEGRATION_STRATEGY.md` to turn OSS/SaaS category research into a LinkMAX-native implementation roadmap.
+- **V1 vs V2 Clarity**: Clarified that shipped foundations such as Booking, Webhooks, Developer Portal, Cmd+K, EDO, Analytics, and Commerce should be hardened as V2 product layers rather than replaced by full external systems.
+- **Local Development Docs**: Corrected the Vite local development runbook to use `VITE_*` variables and port `8080`.
+
+### Product Analytics Foundation
+- **Product Analytics Layer**: Added `product_events`, `creator_activation_state`, and `creator_health_scores` tables with authenticated owner-only RLS.
+- **Creator Health Score**: Added typed `src/services/product-analytics.ts` with canonical event names, activation-event bridging, and health-score calculation.
+- **AI Onboarding Tracking**: Wired successful AI Builder generation to `ai_page_generated` product analytics events while preserving existing `activation:*` analytics rows.
+
+### Feature Flags Foundation
+- **Native Rollout Tables**: Added `feature_flags`, `feature_flag_rules`, and `feature_flag_audit_log` with admin-owned write access and authenticated read access for evaluation.
+- **Segmented Evaluation Service**: Added `src/services/feature-flags.ts` with canonical LinkMAX rollout keys and deterministic evaluation by tier, role, niche, country, language, beta list, user ID, and percentage rollout.
+- **Controlled Rollout Tests**: Added focused Vitest coverage for master switches, default state, segment rules, rollout windows, percentage rules, DB-backed fetches, and current-user context assembly.
+
+### Webhooks V2 Foundation
+- **Architecture Decision**: Added ADR 0029 to capture repository intelligence, gap analysis, V2 design, security model, and iteration plan for Developer Portal/Webhooks hardening.
+- **Durable Webhook Schema**: Added `webhook_endpoints`, `webhook_secrets`, `webhook_event_queue`, and `webhook_deliveries` with owner/zone-admin visibility, service-managed delivery state, and endpoint-secret rotation RPCs.
+- **API Key Contract**: Hardened `api_keys` as the V2 source for `lk_live_` keys with scopes, hash verification RPC, expiry/revocation metadata, and rate-limit metadata while preserving legacy compatibility.
+- **Typed Webhook Contract**: Added `src/services/webhooks.ts` with canonical event names, API scopes, HTTPS/private-network URL validation, retry schedule, HMAC signing, header generation, and focused tests.
+
+---
+
 ## [Phase 45] - 2026-04-18
 
 ### Documentation Governance & Freshness Audit

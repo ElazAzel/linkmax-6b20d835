@@ -84,28 +84,31 @@ export type Database = {
       automation_logs: {
         Row: {
           automation_id: string
+          booking_id: string | null
           created_at: string
           error_message: string | null
           id: string
-          lead_id: string
+          lead_id: string | null
           sent_at: string | null
           status: string
         }
         Insert: {
           automation_id: string
+          booking_id?: string | null
           created_at?: string
           error_message?: string | null
           id?: string
-          lead_id: string
+          lead_id?: string | null
           sent_at?: string | null
           status: string
         }
         Update: {
           automation_id?: string
+          booking_id?: string | null
           created_at?: string
           error_message?: string | null
           id?: string
-          lead_id?: string
+          lead_id?: string | null
           sent_at?: string | null
           status?: string
         }
@@ -115,6 +118,13 @@ export type Database = {
             columns: ["automation_id"]
             isOneToOne: false
             referencedRelation: "crm_automations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_logs_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
             referencedColumns: ["id"]
           },
           {

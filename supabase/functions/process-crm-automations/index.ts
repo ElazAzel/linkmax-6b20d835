@@ -27,11 +27,42 @@ interface Lead {
   automation_sent_count: number;
 }
 
+interface Booking {
+  id: string;
+  client_name: string;
+  client_email: string | null;
+  client_phone: string | null;
+  owner_id: string;
+  page_id: string;
+  slot_date: string;
+  slot_time: string;
+  completed_at: string | null;
+}
+
 interface UserProfile {
   telegram_chat_id: string | null;
   telegram_notifications_enabled: boolean;
   display_name: string | null;
   username: string | null;
+}
+
+interface ReviewRequestRpcResult {
+  success: boolean;
+  error?: string;
+  review_request?: {
+    id?: string;
+    status?: string;
+    booking_id?: string;
+    expires_at?: string;
+    token?: string;
+    path?: string;
+  };
+}
+
+interface ExistingReviewRequest {
+  id: string;
+  status: string;
+  metadata: Record<string, unknown> | null;
 }
 
 // Send Telegram message
@@ -57,6 +88,210 @@ function processTemplate(template: string, lead: Lead, profile: UserProfile): st
     .replace(/\{owner_name\}/g, profile.display_name || profile.username || 'Мастер')
     .replace(/\{lead_email\}/g, lead.email || '')
     .replace(/\{lead_phone\}/g, lead.phone || '');
+}
+
+function getAppOrigin(): string {
+  return (
+    Deno.env.get("PUBLIC_SITE_URL") ||
+    Deno.env.get("SITE_URL") ||
+    Deno.env.get("APP_URL") ||
+    "https://lnkmx.my"
+  ).replace(/\/+$/, "");
+}
+
+function buildReviewRequestUrl(pathOrToken: string): string {
+  const path = pathOrToken.startsWith("/")
+    ? pathOrToken
+    : `/review/request/${encodeURIComponent(pathOrToken)}`;
+
+  return `${getAppOrigin()}${path}`;
+}
+
+function processBookingTemplate(
+  template: string,
+  booking: Booking,
+  profile: UserProfile,
+  reviewRequestUrl: string
+): string {
+  return template
+    .replace(/\{lead_name\}/g, booking.client_name)
+    .replace(/\{owner_name\}/g, profile.display_name || profile.username || 'Мастер')
+    .replace(/\{lead_email\}/g, booking.client_email || '')
+    .replace(/\{lead_phone\}/g, booking.client_phone || '')
+    .replace(/\{booking_date\}/g, booking.slot_date)
+    .replace(/\{booking_time\}/g, booking.slot_time.slice(0, 5))
+    .replace(/\{review_request_url\}/g, reviewRequestUrl);
+}
+
+async function insertBookingAutomationLog(
+  supabase: ReturnType<typeof createClient>,
+  automationId: string,
+  bookingId: string,
+  status: 'sent' | 'failed' | 'skipped',
+  errorMessage: string | null = null
+): Promise<void> {
+  await supabase.from('automation_logs').insert({
+    automation_id: automationId,
+    booking_id: bookingId,
+    lead_id: null,
+    status,
+    sent_at: status === 'sent' ? new Date().toISOString() : null,
+    error_message: errorMessage,
+  });
+}
+
+async function processReviewRequestAutomation(
+  supabase: ReturnType<typeof createClient>,
+  automation: Automation,
+  profile: UserProfile,
+  cutoffTime: Date
+): Promise<{ processed: number; sent: number }> {
+  const { data: bookings, error: bookingsError } = await supabase
+    .from('bookings')
+    .select('id, client_name, client_email, client_phone, owner_id, page_id, slot_date, slot_time, completed_at')
+    .eq('owner_id', automation.user_id)
+    .eq('status', 'completed')
+    .not('completed_at', 'is', null)
+    .lt('completed_at', cutoffTime.toISOString())
+    .order('completed_at', { ascending: true })
+    .limit(10);
+
+  if (bookingsError) {
+    console.error(`Error fetching completed bookings for automation ${automation.id}:`, bookingsError);
+    return { processed: 0, sent: 0 };
+  }
+
+  if (!bookings || bookings.length === 0) {
+    return { processed: 0, sent: 0 };
+  }
+
+  let processed = 0;
+  let sent = 0;
+
+  for (const booking of bookings as Booking[]) {
+    const { data: existingLogs } = await supabase
+      .from('automation_logs')
+      .select('id')
+      .eq('automation_id', automation.id)
+      .eq('booking_id', booking.id)
+      .in('status', ['sent', 'skipped'])
+      .limit(1);
+
+    if (existingLogs && existingLogs.length > 0) {
+      continue;
+    }
+
+    const { count: failedAttempts } = await supabase
+      .from('automation_logs')
+      .select('id', { count: 'exact', head: true })
+      .eq('automation_id', automation.id)
+      .eq('booking_id', booking.id)
+      .eq('status', 'failed');
+
+    if ((failedAttempts || 0) >= 3) {
+      await insertBookingAutomationLog(supabase, automation.id, booking.id, 'skipped', 'max_attempts_reached');
+      continue;
+    }
+
+    const { data: existingReviews } = await supabase
+      .from('reviews')
+      .select('id')
+      .eq('booking_id', booking.id)
+      .limit(1);
+
+    if (existingReviews && existingReviews.length > 0) {
+      await insertBookingAutomationLog(supabase, automation.id, booking.id, 'skipped', 'review_already_exists');
+      continue;
+    }
+
+    const { data: existingRequest } = await supabase
+      .from('review_requests')
+      .select('id, status, metadata')
+      .eq('booking_id', booking.id)
+      .in('status', ['pending', 'used'])
+      .maybeSingle();
+
+    const currentRequest = existingRequest as ExistingReviewRequest | null;
+    if (currentRequest?.status === 'used') {
+      await insertBookingAutomationLog(supabase, automation.id, booking.id, 'skipped', 'review_request_already_exists');
+      continue;
+    }
+
+    if (
+      currentRequest?.status === 'pending' &&
+      (
+        currentRequest.metadata?.source !== 'crm_automation' ||
+        currentRequest.metadata?.automation_id !== automation.id
+      )
+    ) {
+      await insertBookingAutomationLog(supabase, automation.id, booking.id, 'skipped', 'review_request_already_exists');
+      continue;
+    }
+
+    processed++;
+
+    const { data: requestResult, error: requestError } = await supabase.rpc('create_booking_review_request', {
+      p_booking_id: booking.id,
+      p_expires_in: '14 days',
+      p_metadata: {
+        source: 'crm_automation',
+        automation_id: automation.id,
+        booking_id: booking.id,
+      },
+    });
+
+    if (requestError) {
+      console.error(`Error creating review request for booking ${booking.id}:`, requestError);
+      await insertBookingAutomationLog(supabase, automation.id, booking.id, 'failed', 'review_request_create_failed');
+      continue;
+    }
+
+    const result = requestResult as ReviewRequestRpcResult;
+    if (!result.success || !result.review_request?.path) {
+      await insertBookingAutomationLog(
+        supabase,
+        automation.id,
+        booking.id,
+        'failed',
+        result.error || 'review_request_create_failed'
+      );
+      continue;
+    }
+
+    const reviewRequestUrl = buildReviewRequestUrl(result.review_request.path);
+    const templateMessage = processBookingTemplate(
+      automation.template_message,
+      booking,
+      profile,
+      reviewRequestUrl
+    );
+
+    let ownerMessage = `⭐ *Запрос отзыва готов*\n\n`;
+    ownerMessage += `Клиент: ${booking.client_name}\n`;
+    ownerMessage += `Запись: ${booking.slot_date} ${booking.slot_time.slice(0, 5)}\n`;
+    if (booking.client_phone) ownerMessage += `Телефон: ${booking.client_phone}\n`;
+    if (booking.client_email) ownerMessage += `Email: ${booking.client_email}\n`;
+    ownerMessage += `\n_${templateMessage}_`;
+
+    if (!templateMessage.includes(reviewRequestUrl)) {
+      ownerMessage += `\n\n${reviewRequestUrl}`;
+    }
+
+    const delivered = await sendTelegramMessage(profile.telegram_chat_id!, ownerMessage);
+    await insertBookingAutomationLog(
+      supabase,
+      automation.id,
+      booking.id,
+      delivered ? 'sent' : 'failed',
+      delivered ? null : 'Failed to send Telegram message'
+    );
+
+    if (delivered) {
+      sent++;
+    }
+  }
+
+  return { processed, sent };
 }
 
 serve(async (req) => {
@@ -112,6 +347,18 @@ serve(async (req) => {
       const cutoffTime = new Date();
       cutoffTime.setHours(cutoffTime.getHours() - automation.trigger_hours);
 
+      if (automation.automation_type === 'review_request') {
+        const result = await processReviewRequestAutomation(
+          supabase,
+          automation,
+          profile,
+          cutoffTime
+        );
+        processedCount += result.processed;
+        sentCount += result.sent;
+        continue;
+      }
+
       // Find leads that match automation criteria
       let query = supabase
         .from('leads')
@@ -127,9 +374,6 @@ serve(async (req) => {
           break;
         case 'time_clarification':
           query = query.in('status', ['new', 'contacted']);
-          break;
-        case 'review_request':
-          query = query.eq('status', 'converted');
           break;
       }
 
@@ -170,10 +414,6 @@ serve(async (req) => {
           case 'time_clarification':
             ownerMessage = `📅 *Уточните время*\n\n👤 ${lead.name} интересуется услугой\n`;
             if (lead.phone) ownerMessage += `📱 ${lead.phone}\n`;
-            ownerMessage += `\n💡 _${message}_`;
-            break;
-          case 'review_request':
-            ownerMessage = `⭐ *Запрос отзыва*\n\n👤 ${lead.name} завершил сделку\n`;
             ownerMessage += `\n💡 _${message}_`;
             break;
         }

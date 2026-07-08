@@ -6,6 +6,7 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
+import { trackProductEventFromActivation } from '@/services/product-analytics';
 
 export type ActivationEventType =
   | 'activation_checklist_step_clicked'
@@ -98,6 +99,8 @@ export async function trackActivationEvent(
       const code = (error as { code?: string }).code;
       if (code === '42501' || code === 'PGRST301' || code === '403') return;
       logger.error('Failed to track activation event', error, { context: 'activation-events' });
+    } else {
+      void trackProductEventFromActivation(pageId, eventType, metadata ?? {});
     }
   } catch (err) {
     // Fire-and-forget: never block UI for analytics

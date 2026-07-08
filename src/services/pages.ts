@@ -72,6 +72,33 @@ export interface PublishPageResult {
   error: Error | null;
 }
 
+export interface ExpertDirectoryReviewSummary {
+  publishedCount: number;
+  averageRating: number | null;
+  lastReviewAt: string | null;
+}
+
+export interface ExpertDirectoryProfile {
+  id: string;
+  slug: string;
+  title: string | null;
+  description: string | null;
+  avatar_url: string | null;
+  niche: string | null;
+  city: string | null;
+  profession: string | null;
+  entity_type: string | null;
+  view_count: number | null;
+  reviewSummary: ExpertDirectoryReviewSummary;
+}
+
+export interface FetchExpertDirectoryInput {
+  tag?: string | null;
+  city?: string | null;
+  verifiedOnly?: boolean;
+  limit?: number;
+}
+
 // ============= Helpers =============
 
 /**
@@ -246,6 +273,37 @@ export function canPublishPage(blocks: Block[]): { canPublish: boolean; reason?:
   return { canPublish: true };
 }
 
+export function normalizeExpertDirectoryFilter(value: string | null | undefined, maxLength = 80): string | null {
+  const normalized = (value ?? '').replace(/\s+/g, ' ').trim();
+  if (!normalized) return null;
+  return normalized.slice(0, maxLength);
+}
+
+export function sortExpertDirectoryProfiles(
+  profiles: ExpertDirectoryProfile[]
+): ExpertDirectoryProfile[] {
+  return [...profiles].sort((left, right) => {
+    const leftReviewCount = left.reviewSummary.publishedCount;
+    const rightReviewCount = right.reviewSummary.publishedCount;
+    const leftHasReviews = leftReviewCount > 0;
+    const rightHasReviews = rightReviewCount > 0;
+
+    if (leftHasReviews !== rightHasReviews) {
+      return leftHasReviews ? -1 : 1;
+    }
+
+    if (leftHasReviews && rightHasReviews) {
+      const ratingDelta = (right.reviewSummary.averageRating ?? 0) - (left.reviewSummary.averageRating ?? 0);
+      if (ratingDelta !== 0) return ratingDelta;
+
+      const countDelta = rightReviewCount - leftReviewCount;
+      if (countDelta !== 0) return countDelta;
+    }
+
+    return (right.view_count ?? 0) - (left.view_count ?? 0);
+  });
+}
+
 /**
  * Reorder blocks array by moving a block from one index to another
  */
@@ -262,6 +320,114 @@ export function reorderBlocks(blocks: Block[], fromIndex: number, toIndex: numbe
 }
 
 // ============= API Functions =============
+
+type ExpertDirectoryPageRow = Pick<
+  AppDatabase['public']['Tables']['pages']['Row'],
+  | 'id'
+  | 'slug'
+  | 'title'
+  | 'description'
+  | 'avatar_url'
+  | 'niche'
+  | 'city'
+  | 'profession'
+  | 'entity_type'
+  | 'view_count'
+>;
+
+type ExpertDirectorySummaryRow = Pick<
+  AppDatabase['public']['Tables']['page_review_summaries']['Row'],
+  'page_id' | 'published_count' | 'average_rating' | 'last_review_at'
+>;
+
+const EXPERT_DIRECTORY_PAGE_SELECT = [
+  'id',
+  'slug',
+  'title',
+  'description',
+  'avatar_url',
+  'niche',
+  'city',
+  'profession',
+  'entity_type',
+  'view_count',
+].join(', ');
+
+function mapExpertDirectoryProfile(
+  page: ExpertDirectoryPageRow,
+  summariesByPageId: Map<string, ExpertDirectorySummaryRow>
+): ExpertDirectoryProfile {
+  const summary = summariesByPageId.get(page.id);
+
+  return {
+    id: page.id,
+    slug: page.slug,
+    title: page.title,
+    description: page.description,
+    avatar_url: page.avatar_url,
+    niche: page.niche,
+    city: page.city,
+    profession: page.profession,
+    entity_type: page.entity_type,
+    view_count: page.view_count,
+    reviewSummary: {
+      publishedCount: summary?.published_count ?? 0,
+      averageRating: summary?.average_rating ?? null,
+      lastReviewAt: summary?.last_review_at ?? null,
+    },
+  };
+}
+
+export async function fetchExpertDirectoryProfiles(
+  input: FetchExpertDirectoryInput = {}
+): Promise<ExpertDirectoryProfile[]> {
+  const safeLimit = Math.min(Math.max(Math.floor(input.limit ?? 100), 1), 100);
+  const tag = normalizeExpertDirectoryFilter(input.tag, 80);
+  const city = normalizeExpertDirectoryFilter(input.city, 80);
+
+  let query = supabase
+    .from('pages')
+    .select(EXPERT_DIRECTORY_PAGE_SELECT)
+    .eq('is_published', true)
+    .eq('is_indexable', true);
+
+  if (tag) {
+    query = query.eq('niche', tag);
+  }
+
+  if (city) {
+    query = query.ilike('city', `%${city}%`);
+  }
+
+  const { data: pageRows, error: pageError } = await query
+    .order('view_count', { ascending: false })
+    .limit(safeLimit);
+
+  if (pageError) throw wrapError(pageError);
+
+  const pages = (pageRows || []) as unknown as ExpertDirectoryPageRow[];
+  const pageIds = pages.map((page) => page.id);
+  const summariesByPageId = new Map<string, ExpertDirectorySummaryRow>();
+
+  if (pageIds.length > 0) {
+    const { data: summaryRows, error: summaryError } = await supabase
+      .from('page_review_summaries')
+      .select('page_id, published_count, average_rating, last_review_at')
+      .in('page_id', pageIds);
+
+    if (summaryError) throw wrapError(summaryError);
+
+    for (const summary of (summaryRows || []) as unknown as ExpertDirectorySummaryRow[]) {
+      summariesByPageId.set(summary.page_id, summary);
+    }
+  }
+
+  const profiles = pages
+    .map((page) => mapExpertDirectoryProfile(page, summariesByPageId))
+    .filter((profile) => !input.verifiedOnly || profile.reviewSummary.publishedCount > 0);
+
+  return sortExpertDirectoryProfiles(profiles);
+}
 
 /**
  * Save page to database with atomic operations

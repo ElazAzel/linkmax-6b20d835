@@ -2,6 +2,8 @@
 
 > **Purpose:** Gap analysis of the current tech stack against the roadmap and industry best practices.
 > Each section explains **why** the tool is needed, **when** (roadmap alignment), and links to docs.
+>
+> **2026-07-01 status note:** This file is a historical planning artifact. Before treating any item as a new dependency, verify current implementation in `docs/PLATFORM_SNAPSHOT.md`, `docs/features/Features.md`, and `docs/roadmap/OSS_INTEGRATION_STRATEGY.md`. Several former gaps are already shipped in V1 form (Sentry, Web Vitals, Capacitor, Robokassa, Developer Portal, webhooks, Cmd+K) and now require V2 hardening rather than a fresh install.
 
 ---
 

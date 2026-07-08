@@ -20,6 +20,7 @@ import { PublicPageError } from '@/components/public/PublicPageError';
 import { SiteHeaderNav } from '@/components/public/SiteHeaderNav';
 import { SiteFooter } from '@/components/public/SiteFooter';
 import { StickyContactCTA } from '@/components/public/StickyContactCTA';
+import { VerifiedReviewsSection } from '@/components/public/VerifiedReviewsSection';
 import { decompressPageData } from '@/lib/utils/compression';
 import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
 import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
@@ -399,6 +400,8 @@ export default function PublicPage() {
                   ownerTier={ownerTier}
                   isPreview={false}
                 />
+
+                <VerifiedReviewsSection pageId={pageData?.id} />
 
                 {/* Share Section - Mobile Optimized. Force readable contrast independent of page theme textColor. */}
                 <div className="mt-6 sm:mt-8 space-y-3 [color:hsl(var(--foreground))]">

@@ -121,6 +121,7 @@ const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
 const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
+const ReviewRequest = lazy(() => import("./pages/ReviewRequest"));
 const ForMasters = lazy(() => import("./pages/ForMasters"));
 const NicheLanding = lazy(() => import("./pages/NicheLanding"));
 const FromPage = lazy(() => import("./pages/FromPage"));
@@ -209,6 +210,7 @@ const router = createBrowserRouter([
       { path: "blog/:slug", element: <BlogPost /> },
       { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
+      { path: "review/request/:token", element: <ReviewRequest /> },
       { path: "p/:compressed", element: <PublicPage /> },
       { path: ":slug/services/:serviceSlug", element: <PublicServicePage /> },
       { path: ":slug/events/:eventId", element: <PublicEventPage /> },

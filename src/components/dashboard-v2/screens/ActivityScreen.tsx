@@ -23,6 +23,7 @@ import Send from 'lucide-react/dist/esm/icons/send';
 import CheckCheck from 'lucide-react/dist/esm/icons/check-check';
 import X from 'lucide-react/dist/esm/icons/x';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Star from 'lucide-react/dist/esm/icons/star';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import { Button } from '@/components/ui/button';
@@ -38,6 +39,7 @@ import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { AddLeadDialog } from '@/components/crm/AddLeadDialog';
 import { LeadDetails } from '@/components/crm/LeadDetails';
 import { BookingsPanel } from '@/components/crm/BookingsPanel';
+import { ReviewsPanel } from '@/components/crm/ReviewsPanel';
 import { WalletWidget } from '@/components/crm/WalletWidget';
 import { CrmStatsWidget } from '@/components/crm/CrmStatsWidget';
 import { useCrmMetrics } from '@/hooks/crm/useCrmMetrics';
@@ -102,7 +104,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [activeTab, setActiveTab] = useState<'leads' | 'bookings'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'bookings' | 'reviews'>('leads');
   const [monthlyLeadCount, setMonthlyLeadCount] = useState<number | null>(null);
 
   const stats = getLeadStats();
@@ -234,8 +236,8 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
 
       {/* Tabs */}
       <div className="px-5 pb-4">
-        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'leads' | 'bookings')} className="w-full">
-          <TabsList className="grid grid-cols-2 h-12 bg-white/5 backdrop-blur-xl p-1 gap-1 border border-white/10 shadow-glass rounded-2xl">
+        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'leads' | 'bookings' | 'reviews')} className="w-full">
+          <TabsList className="grid grid-cols-3 h-12 bg-white/5 backdrop-blur-xl p-1 gap-1 border border-white/10 shadow-glass rounded-2xl">
             <TabsTrigger
               value="leads"
               className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-xs uppercase tracking-widest transition-all duration-300"
@@ -254,6 +256,13 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
             >
               <Calendar className="h-4 w-4 mr-2" />
               {t('dashboard.activity.tabs.bookings', 'Записи')}
+            </TabsTrigger>
+            <TabsTrigger
+              value="reviews"
+              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-xs uppercase tracking-widest transition-all duration-300"
+            >
+              <Star className="h-4 w-4 mr-2" />
+              {t('dashboard.activity.tabs.reviews', 'Reviews')}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -405,6 +414,18 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
             transition={{ duration: 0.2 }}
           >
             <BookingsPanel />
+          </motion.div>
+        )}
+
+        {activeTab === 'reviews' && (
+          <motion.div
+            key="reviews-tab"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ReviewsPanel />
           </motion.div>
         )}
       </AnimatePresence>

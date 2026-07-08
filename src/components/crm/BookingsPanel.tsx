@@ -4,6 +4,7 @@ import { supabase } from '@/platform/supabase/client';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import { useAuth } from '@/hooks/user/useAuth';
+import { buildReviewRequestUrl, createBookingReviewRequest } from '@/services/reviews';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,6 +33,7 @@ import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import Download from 'lucide-react/dist/esm/icons/download';
 import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
+import Star from 'lucide-react/dist/esm/icons/star';
 import { toast } from 'sonner';
 import { format, isToday, isTomorrow, isPast, parseISO } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
@@ -50,6 +52,23 @@ interface Booking {
   block_id: string;
 }
 
+async function copyText(value: string): Promise<void> {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(value);
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = value;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
+
 const statusColors: Record<string, string> = {
   confirmed: 'bg-green-500/20 text-green-500 border-green-500/30',
   pending: 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30',
@@ -66,6 +85,7 @@ export function BookingsPanel() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming');
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [reviewRequestBookingId, setReviewRequestBookingId] = useState<string | null>(null);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
 
@@ -143,6 +163,56 @@ export function BookingsPanel() {
     } else {
       toast.success(t('bookings.completeSuccess', 'Booking marked as completed'));
       fetchBookings();
+    }
+  };
+
+  const getReviewRequestError = (error?: string) => {
+    if (error === 'booking_not_completed') {
+      return t('bookings.reviewRequestBookingNotCompleted', 'Сначала завершите запись');
+    }
+    if (error === 'review_already_exists' || error === 'review_request_already_used') {
+      return t('bookings.reviewRequestAlreadyUsed', 'Отзыв по этой записи уже получен');
+    }
+    if (error === 'not_allowed') {
+      return t('bookings.reviewRequestNotAllowed', 'Нет доступа к этой записи');
+    }
+    return t('bookings.reviewRequestCreateError', 'Не удалось создать ссылку для отзыва');
+  };
+
+  const handleCreateReviewRequest = async (booking: Booking) => {
+    setReviewRequestBookingId(booking.id);
+
+    try {
+      const result = await createBookingReviewRequest({
+        bookingId: booking.id,
+        metadata: {
+          source: 'crm_bookings_panel',
+          action: 'owner_copy_review_request_link',
+        },
+      });
+
+      if (!result.success) {
+        toast.error(getReviewRequestError(result.error));
+        return;
+      }
+
+      const reviewRequestUrl = buildReviewRequestUrl(
+        window.location.origin,
+        result.review_request
+      );
+
+      if (!reviewRequestUrl) {
+        toast.error(t('bookings.reviewRequestLinkMissing', 'Ссылка для отзыва не сформирована'));
+        return;
+      }
+
+      await copyText(reviewRequestUrl);
+      toast.success(t('bookings.reviewRequestCopied', 'Ссылка для отзыва скопирована'));
+    } catch (error) {
+      console.error('Error creating review request:', error);
+      toast.error(t('bookings.reviewRequestCreateError', 'Не удалось создать ссылку для отзыва'));
+    } finally {
+      setReviewRequestBookingId(null);
     }
   };
 
@@ -413,6 +483,26 @@ END:VCALENDAR`;
                           <X className="h-4 w-4" />
                         </Button>
                       </div>
+                    )}
+
+                    {booking.status === 'completed' && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-xs border-blue-500/20 text-blue-600 hover:bg-blue-500/10"
+                        onClick={() => handleCreateReviewRequest(booking)}
+                        disabled={reviewRequestBookingId === booking.id}
+                        title={t('bookings.requestReviewTitle', 'Скопировать ссылку для отзыва')}
+                      >
+                        {reviewRequestBookingId === booking.id ? (
+                          <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <Star className="h-3.5 w-3.5" />
+                        )}
+                        <span className="ml-1 hidden sm:inline">
+                          {t('bookings.requestReview', 'Отзыв')}
+                        </span>
+                      </Button>
                     )}
                   </div>
                 </div>

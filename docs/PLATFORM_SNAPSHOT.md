@@ -691,6 +691,8 @@ LinkMAX использует гибридную модель, направлен
 | **Starter (Transaction)** | 0 + 7% комиссия | Доступ к CRM и Payments без абонплаты. Интеграция с Kaspi QR и Robokassa. Удержание 7% комиссии. |
 | **Pro (Business)** | ~3,045 (annual) | White-label, 6 страниц, полная CRM, комиссия 1%. |
 
+Phase 48 adds Pro billing recovery on top of Paddle `subscriptions`: failed or past-due provider events update recovery state, write idempotent `billing_history` records, queue owner email/Telegram notices, and emit Product Analytics/Webhooks V2 events.
+
 ### Plan Checking
 
 #### Frontend hooks
@@ -728,9 +730,23 @@ LinkMAX использует гибридную модель, направлен
 | `user_profiles` | User data, premium status | Owner only |
 | `leads` | Form submissions | Owner + public insert |
 | `bookings` | Appointment requests | Owner + public insert |
+| `reviews` | Verified post-service reviews tied to bookings/orders | Public published read, owner/workspace read, RPC create/moderate |
+| `page_review_summaries` | Public-safe aggregate ratings per page | Public published read, owner/workspace read |
+| `review_requests` | Tokenized post-booking/order review collection links | Owner/workspace read, RPC-only token flows |
 | `events` | Event definitions | Owner only |
 | `event_registrations` | Attendees | Owner + public insert |
 | `analytics` | Event tracking | Public insert, owner read |
+| `product_events` | Creator product analytics events | Authenticated owner insert/read |
+| `creator_activation_state` | Current creator activation milestones | Authenticated owner manage |
+| `creator_health_scores` | Materialized creator health score | Authenticated owner manage |
+| `feature_flags` | Native product rollout switches | Authenticated read, admin manage |
+| `feature_flag_rules` | Segment targeting for rollout switches | Authenticated read, admin manage |
+| `feature_flag_audit_log` | Audit trail for rollout changes | Admin insert/read |
+| `api_keys` | V2 `lk_live_` API key hashes, scopes, and usage metadata | Owner read/delete, RPC create/verify |
+| `webhook_endpoints` | Webhooks V2 endpoint registry | Owner/zone-admin manage |
+| `webhook_secrets` | Service-managed HMAC signing secrets | RPC/service managed |
+| `webhook_event_queue` | Durable outgoing webhook event outbox | Owner/zone-admin read, service manage |
+| `webhook_deliveries` | Per-attempt webhook delivery logs | Owner/zone-admin read, service manage |
 | `user_tokens` | Linkkon balance | Owner only |
 | `page_snapshots` | Version history | Owner only |
 | `languages` | Translations | Admin management, public read |
@@ -738,6 +754,8 @@ LinkMAX использует гибридную модель, направлен
 | `i18n_translations` | JSONB store for DB-driven translations | Admin only |
 | `widget_templates` | Reusable block/widget templates | id (PK), name, description, category, thumbnail_url, components (JSONB), is_active |
 | `orders` | Payment transactions tracking | id (PK), user_id, amount, currency, status, provider, description, metadata |
+| `billing_history` | Human-readable billing journal with provider event idempotency | Owner read, service managed |
+| `subscriptions` | Paddle Pro subscription state with billing recovery fields | Owner read, service managed |
 | `custom_domains` | Mapping of domains to pages | Owner + Admins |
 | `zone_document_templates` | Templates for document generation | Zone Member access |
 | `zone_documents` | Generated documents with status | Zone Member access |
@@ -753,7 +771,7 @@ LinkMAX использует гибридную модель, направлен
 - `pages`: public page metadata, SEO settings, theme.
 - `blocks`: structured blocks for each page (28 types).
 - `user_profiles`: plan, limits, and profile data.
-- `subscriptions`: plan status and billing metadata.
+- `subscriptions`: plan status, Paddle metadata, and billing recovery state.
 
 - **Fluid Design System**
   - All UI components are built with a responsive, fluid spacing system.
@@ -1225,8 +1243,28 @@ Based on codebase analysis, these are logical next improvements:
 - [ ] Legacy layer removal (`src/domain`, `src/repositories`, `src/use-cases`)
 - [ ] PostHog Product Analytics integration
 
+### Strategic Continuation (July 2026)
+
+- [ ] Use `docs/roadmap/OSS_INTEGRATION_STRATEGY.md` as the next product roadmap layer for Business OS expansion.
+- [ ] Treat shipped CRM, Booking, Webhooks, Developer Portal, Search, EDO, Analytics, and Commerce foundations as V1 implementations; the next work is V2 operational hardening, not wholesale replacement by external OSS products.
+- [ ] Prioritize P0/P1 work in this order: repo/docs hygiene, product analytics instrumentation, Webhooks V2 reliability, automation templates, Booking V2, Form Builder V2, and billing/commission hardening.
+- [x] Product analytics foundation: `product_events`, `creator_activation_state`, `creator_health_scores`, typed service, activation-event bridge, and AI page generation tracking.
+- [x] Feature flags foundation: `feature_flags`, `feature_flag_rules`, `feature_flag_audit_log`, canonical rollout keys, typed evaluation service, and focused tests.
+- [x] Webhooks V2 foundation: ADR 0029, scoped `api_keys` contract, endpoint registry, signing secrets, durable event queue, delivery log, typed event/scope/retry/signature service, and focused tests.
+- [ ] Webhooks V2 dispatcher: `dispatch-webhook`, retry runner, producer event enqueueing, manual retry, and Developer Settings delivery timeline.
+- [x] Verified reviews foundation: ADR 0030, `reviews`, `page_review_summaries`, booking-backed creation RPC, moderation RPC, review analytics/webhook event names, typed service, and focused tests.
+- [x] Review request links foundation: ADR 0031, `review_requests`, hashed token RPCs, request lifecycle service helpers, and review request analytics/webhook event names.
+- [x] Customer-facing review request route: `/review/request/:token`, public-safe context lookup, rating form, local validation, noindex metadata, expired/used/revoked states, and verified submission through `submit_review_request`.
+- [x] Completed booking review request action: CRM `BookingsPanel` can create/copy secure request links through the existing review request service.
+- [x] CRM review-request automation wiring: existing `process-crm-automations` can create booking-backed request links, notify owners in Telegram, and log outcomes against `automation_logs.booking_id`.
+- [x] Public verified review display: public pages render `page_review_summaries` and published `reviews` after owner-authored blocks without replacing testimonial content.
+- [x] Owner review moderation UI: Activity inbox reads owner-visible `reviews` and publishes/hides/rejects through the existing `moderate_review` RPC.
+- [x] Expert trust enrichment: `/experts` reads `page_review_summaries` for rating badges, city/search/verified filters, trust-aware ranking, and `AggregateRating` JSON-LD.
+- [x] Billing recovery foundation: ADR 0032, `subscriptions.recovery_*`, provider-event idempotency in `billing_history`, Paddle failed-payment handling, owner recovery notifications, promo-code checkout handoff, and billing analytics/webhook event names.
+- [ ] Business verification badge and GEO/AEO aggregate rating payloads.
+
 ---
 
-*Last updated: April 17, 2026*
-*Current Platform Health Score: **10/10** (Status: Production Ready v3.1.0 | Phase 44 Active).*
+*Last updated: July 4, 2026*
+*Current Platform Health Score: **10/10** (Status: Production Ready v3.1.0 | Phase 48 Billing Recovery Foundation).*
 *Maintained by: Antigravity (Principal Engineer)*
