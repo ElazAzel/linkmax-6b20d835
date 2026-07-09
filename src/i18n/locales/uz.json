@@ -7282,12 +7282,21 @@
       }
     },
     "v5": {
-      "badge": "Xizmatlar, ekspertlar va kichik jamoalar uchun",
-      "title1": "Mijoz yoziladigan sayt",
+      "badge": "Xizmatlar, ekspertlar va kichik jamoalar uchun ish konturi",
+      "title1": "Mijoz yoziladigan sahifa,",
       "title2": "to‘laydi va CRM-ga tushadi",
-      "subtitle": "LinkMAX xizmat sahifalari, formalar, messenjerlar, onlayn yozilish, to‘lov va analitikani bitta ish oqimiga yig‘adi.",
+      "subtitle": "LinkMAX xizmat vitrini, messenjerlar, onlayn yozilish, to‘lov va analitikani birlashtirib, mijoz yo‘lini bir joyda ko‘rsatadi.",
       "cta_primary": "Sahifani bepul yaratish",
       "cta_secondary": "Misollarni ochish",
+      "metric1": "daqiqada ishga tushirish",
+      "metric2": "Starter komissiyasi",
+      "metric3": "arizalar lentasi",
+      "preview": {
+        "eyebrow": "jonli kontur",
+        "title": "Sahifa, CRM va to‘lov birga",
+        "status": "onlayn",
+        "booking": "Bugun"
+      },
       "bento": {
         "builder": {
           "title": "Bo‘sh bloklarsiz xizmat vitrini",

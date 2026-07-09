@@ -1,9 +1,8 @@
 'use client';
+
 import { useNavigate } from 'react-router-dom';
-
 import { useTranslation } from 'react-i18next';
-
-import Heart from 'lucide-react/dist/esm/icons/heart';
+import type { ReactNode } from 'react';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
@@ -11,96 +10,80 @@ import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 
 export const PremiumFooter = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
-    const currentYear = new Date().getFullYear();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const currentYear = new Date().getFullYear();
 
-    return (
-        <footer className="border-t border-white/5 py-24 pb-32 px-6 bg-transparent relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
-            
-            <div className="max-w-7xl mx-auto relative z-10">
-                {/* Logo and description */}
-                <div className="text-center mb-12 sm:mb-24 flex flex-col items-center">
-                    <span className="text-3xl sm:text-5xl font-black tracking-[-0.05em] mb-4 sm:mb-6 drop-shadow-sm">
-                        lnk<span className="text-primary italic">mx.</span>
-                    </span>
-                    <p className="text-sm sm:text-lg text-muted-foreground/40 max-w-md mx-auto font-semibold leading-relaxed tracking-tight px-4">
-                        {t('landingV5.footer.description', 'Платформа для мастеров и малого бизнеса. Страница + CRM + уведомления.')}
-                    </p>
-                </div>
+  return (
+    <footer className="border-t border-[#d8dee8] bg-white px-4 pb-28 pt-14 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr]">
+          <div>
+            <span className="text-3xl font-semibold tracking-[-0.03em] text-[#172033]">
+              lnk<span className="text-[#2563eb]">mx</span>
+            </span>
+            <p className="mt-4 max-w-md text-sm leading-6 text-[#6b7689]">
+              {t('landingV5.footer.description', 'Платформа для мастеров и малого бизнеса. Страница + CRM + уведомления.')}
+            </p>
+          </div>
 
-                {/* Links Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-16 mb-12 sm:mb-24">
-                    {/* Brand */}
-                    <div className="hidden md:flex flex-col gap-6">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">{t('footer.brand', 'Platform')}</h4>
-                        <div className="flex flex-col gap-4">
-                            <button onClick={() => navigate('/')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.home', 'Home')}</button>
-                            <button onClick={() => navigate('/auth')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.dashboard', 'Dashboard')}</button>
-                            <button onClick={() => navigate('/for-masters')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.forMasters', 'For Masters')}</button>
-                        </div>
-                    </div>
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+            <FooterColumn title={t('footer.product', 'Product')}>
+              <FooterButton onClick={() => navigate('/gallery')}>{t('landingV5.footer.examples', 'Examples')}</FooterButton>
+              <FooterButton onClick={() => navigate('/customers')}>{t('footer.customers', 'Customers')}</FooterButton>
+              <FooterButton onClick={() => navigate('/pricing')}>{t('landingV5.footer.pricing', 'Pricing')}</FooterButton>
+              <FooterButton onClick={() => navigate('/alternatives')}>{t('footer.alternatives', 'Alternatives')}</FooterButton>
+            </FooterColumn>
 
-                    {/* Product */}
-                    <div className="flex flex-col gap-6">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">{t('footer.product', 'Product')}</h4>
-                        <div className="flex flex-col gap-4">
-                            <button onClick={() => navigate('/gallery')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('landingV5.footer.examples', 'Examples')}</button>
-                            <button onClick={() => navigate('/customers')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.customers', 'Customers')}</button>
-                            <button onClick={() => navigate('/pricing')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('landingV5.footer.pricing', 'Pricing')}</button>
-                            <button onClick={() => navigate('/alternatives')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.alternatives', 'Alternatives')}</button>
-                        </div>
-                    </div>
+            <FooterColumn title={t('footer.legal', 'Legal')}>
+              <TermsLink className="text-left text-sm font-medium text-[#6b7689] transition-colors hover:text-[#2563eb]">
+                {t('landingV5.footer.terms', 'Terms')}
+              </TermsLink>
+              <PrivacyLink className="text-left text-sm font-medium text-[#6b7689] transition-colors hover:text-[#2563eb]">
+                {t('landingV5.footer.privacy', 'Privacy')}
+              </PrivacyLink>
+              <FooterButton onClick={() => navigate('/payment-terms')}>{t('footer.paymentTerms', 'Billing')}</FooterButton>
+            </FooterColumn>
 
-                    {/* Legal */}
-                    <div className="flex flex-col gap-6">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">{t('footer.legal', 'Legal')}</h4>
-                        <div className="flex flex-col gap-4">
-                            <TermsLink className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('landingV5.footer.terms', 'Terms')}</TermsLink>
-                            <PrivacyLink className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('landingV5.footer.privacy', 'Privacy')}</PrivacyLink>
-                            <button onClick={() => navigate('/payment-terms')} className="text-sm font-black text-muted-foreground/60 hover:text-primary transition-all text-left uppercase tracking-widest">{t('footer.paymentTerms', 'Billing')}</button>
-                        </div>
-                    </div>
+            <FooterColumn title={t('footer.contacts', 'Support')} className="col-span-2 sm:col-span-1">
+              <a href="mailto:support@lnkmx.my" className="flex items-center gap-2 text-sm font-medium text-[#6b7689] transition-colors hover:text-[#2563eb]">
+                <Mail className="h-4 w-4" />
+                support@lnkmx.my
+              </a>
+              <span className="flex items-center gap-2 text-sm font-medium text-[#6b7689]">
+                <MapPin className="h-4 w-4" />
+                {t('footer.companyInfo', 'ARchitecKZ / Almaty')}
+              </span>
+            </FooterColumn>
+          </div>
+        </div>
 
-                    {/* Contacts */}
-                    <div className="flex flex-col gap-6 col-span-2 md:col-span-1">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">{t('footer.contacts', 'Support')}</h4>
-                        <div className="flex flex-col gap-5">
-                            <div className="flex items-center gap-4 text-muted-foreground/60 group cursor-pointer">
-                                <div className="w-10 h-10 rounded-xl glass border-white/5 flex items-center justify-center group-hover:border-primary/30 transition-all">
-                                    <Mail className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:text-primary transition-all" />
-                                </div>
-                                <a href="mailto:support@lnkmx.my" className="text-sm font-black group-hover:text-primary transition-all tracking-tight">support@lnkmx.my</a>
-                            </div>
-                            <div className="flex items-center gap-4 text-muted-foreground/60">
-                                <div className="w-10 h-10 rounded-xl glass border-white/5 flex items-center justify-center">
-                                    <MapPin className="w-4 h-4 opacity-50" />
-                                </div>
-                                <span className="text-[10px] font-black uppercase tracking-widest leading-relaxed">
-                                    {t('footer.companyInfo', 'ARchitecKZ / Almaty')}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bottom Bar */}
-                <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-10">
-                    <div className="flex flex-col md:flex-row items-center gap-10">
-                        <div className="glass px-4 py-2 rounded-xl border-white/5 shadow-glass-sm scale-90">
-                            <LanguageSwitcher />
-                        </div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/30">
-                            {t('landingV5.footer.copyright', { year: currentYear, defaultValue: `© ${currentYear} Inkmax` })}
-                        </p>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/20">
-                        Built with <Heart className="h-4 w-4 text-primary opacity-50 animate-pulse" /> in Almaty
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
+        <div className="mt-12 flex flex-col gap-6 border-t border-[#edf1f6] pt-8 md:flex-row md:items-center md:justify-between">
+          <div className="w-fit rounded-[12px] border border-[#d8dee8] bg-[#f6f7f9] px-3 py-2">
+            <LanguageSwitcher />
+          </div>
+          <p className="text-xs font-medium text-[#6b7689]">
+            {t('landingV5.footer.copyright', { year: currentYear, defaultValue: `© ${currentYear} Inkmax` })}
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
 };
+
+function FooterColumn({ title, children, className }: { title: string; children: ReactNode; className?: string }) {
+  return (
+    <div className={className}>
+      <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#3b4658]">{title}</h4>
+      <div className="flex flex-col gap-3">{children}</div>
+    </div>
+  );
+}
+
+function FooterButton({ children, onClick }: { children: ReactNode; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} className="text-left text-sm font-medium text-[#6b7689] transition-colors hover:text-[#2563eb]">
+      {children}
+    </button>
+  );
+}

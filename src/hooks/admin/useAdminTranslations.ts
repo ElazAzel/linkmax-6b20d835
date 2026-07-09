@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import { upsertToDB } from '@/lib/i18n-db-backend';
+import i18n from '@/i18n/config';
+import { applyTranslationsToI18n, upsertToDB } from '@/lib/i18n-db-backend';
 import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 
@@ -95,8 +96,10 @@ export function useAdminTranslations(isAdmin: boolean) {
             const updatedLangData = JSON.parse(JSON.stringify(translations[lang] || {}));
             setNestedValue(updatedLangData, key, value);
             await upsertToDB(lang, updatedLangData);
+            return { lang, data: updatedLangData };
         },
-        onSuccess: () => {
+        onSuccess: async ({ lang, data }) => {
+            await applyTranslationsToI18n(i18n, lang, data);
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
             toast.success('Сохранено в БД');
         },
@@ -111,8 +114,10 @@ export function useAdminTranslations(isAdmin: boolean) {
             for (const item of payload) {
                 await upsertToDB(item.lang, item.data);
             }
+            return payload;
         },
-        onSuccess: () => {
+        onSuccess: async (payload) => {
+            await Promise.all(payload.map((item) => applyTranslationsToI18n(i18n, item.lang, item.data)));
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
             toast.success('Данные успешно синхронизированы');
         },
@@ -124,6 +129,7 @@ export function useAdminTranslations(isAdmin: boolean) {
 
     const deleteKeyMutation = useMutation({
         mutationFn: async (key: string) => {
+            const updatedPayload: { lang: string; data: TranslationData }[] = [];
             const parts = key.split('.');
             for (const lang of activeLanguages) {
                 const langObj = JSON.parse(JSON.stringify(translations[lang] || {}));
@@ -139,10 +145,13 @@ export function useAdminTranslations(isAdmin: boolean) {
                 if (found && current[parts[parts.length - 1]] !== undefined) {
                     delete current[parts[parts.length - 1]];
                     await upsertToDB(lang, langObj);
+                    updatedPayload.push({ lang, data: langObj });
                 }
             }
+            return updatedPayload;
         },
-        onSuccess: () => {
+        onSuccess: async (payload) => {
+            await Promise.all(payload.map((item) => applyTranslationsToI18n(i18n, item.lang, item.data)));
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
             toast.success('Ключ удалён отовсюду');
         },
