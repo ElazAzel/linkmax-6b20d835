@@ -9,7 +9,7 @@
 >
 > *LinkMAX is the AI Sales OS that turns a single bio link into a fully functioning business. In under a minute, it creates a high-converting mini-site complete with booking calendars and integrated payments, aggregates leads into a lightweight CRM with task tracking and Kanban boards, delivers deep analytics, and sends real-time lead notifications directly to Telegram.*
 
-**LinkMAX** is a comprehensive SaaS platform built for creators, freelancers, and small businesses in the CIS region. It combines a powerful page builder (28+ blocks), a **Business Zone** (mini-CRM, Kanban, Tasks, Contacts), and advanced analytics into one unified, mobile-first system.
+**LinkMAX** is a comprehensive SaaS platform built for creators, freelancers, and small businesses in the CIS region. It combines a powerful page builder (28+ blocks), a **Business Zone** command center (mini-CRM, Kanban, Tasks, Contacts, Invoices, Automations), and advanced analytics into one unified, mobile-first system.
 
 **[Live Demo](https://lnkmx.my)**
 
@@ -31,6 +31,7 @@
 
 - **Mini-CRM**: Leads with status pipeline (New → Contacted → Won/Lost), notes, and history.
 
+- **Command Center**: Daily health score, next actions, work queue, and activation map across deals, tasks, contacts, invoices, and automations.
 - **Kanban**: Deals pipeline with drag-and-drop stages.
 - **Tasks**: Task board with priorities, assignees, due dates, linked contacts and deals.
 - **Contacts**: Unified contact list linked to leads and deals.
