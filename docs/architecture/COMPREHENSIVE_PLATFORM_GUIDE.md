@@ -1,7 +1,7 @@
-# LinkMAX — Ультимативный гид по платформе (Encyclopedia v2026.04)
+# LinkMAX — Ультимативный гид по платформе (Encyclopedia v2026.07)
 
 
-> **Last Updated:** April 4, 2026 (Phase 40 Sync)
+> **Last Updated:** July 9, 2026 (Phase 50 Business Zone Command Center)
   
 > **Maintained by:** Product & Engineering
 
@@ -45,11 +45,29 @@
 - **Multilingual**: 4 синхронизированных языка (RU, EN, KK, UZ). Еще 12 языков (DE, UK, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR — lazy). Все строковые поля блоков поддерживают мультиязычность.
 
 - **Leads**: Система статусов `new -> contacted -> qualified -> won/lost`. Единый инбокс для лидов, бронирований и регистраций на события.
-- **Business Zone (Zones)**: Рабочие пространства с изоляцией по `zone_id`. **Kanban** сделок, **Tasks** (доска с приоритетами, сроками, ответственными, чеклистами), **Contacts**, **Invoices** (счета с автоматической нумерацией), **EDO** (генерация актов и договоров по шаблонам). RBAC через БД.
+- **Business Zone (Zones)**: Рабочие пространства с изоляцией по `zone_id`. **Command Center** на главном экране собирает health score, фокус дня, очередь работ, карту активации и next actions из существующих сделок, задач, контактов, инвойсов и активностей. **Kanban** сделок, **Tasks** (доска с приоритетами, сроками, ответственными, чеклистами), **Contacts**, **Invoices** (счета с автоматической нумерацией), **EDO** (генерация актов и договоров по шаблонам). RBAC через БД.
 - **CRM Hardening**: Реализация мягкого удаления (`deleted_at`) для сделок и задач для предотвращения потери данных.
 - **Developer Portal (Zenith)**: Полноценный API (`lk_live_` токены) и Webhooks для автоматизации внешних систем пользователями тарифа Pro.
 
 - **Notifications**: Edge-функции отправляют PUSH в Telegram-бот при новом лиде/бронировании.
+
+### 2.2 Business Zone Command Center
+
+**Product Design**: Главный экран зоны должен отвечать не “сколько данных есть”, а “что владельцу делать сейчас”. Phase 50 переводит Business Zone из набора CRM-разделов в ежедневный операционный центр для микро-бизнеса.
+
+**UX Flow**: Пользователь открывает `/dashboard/zone-dashboard`, видит health score, риски дня, деньги в работе, сделки без следующего шага, очередь работ и карту активации. Любое действие ведет в уже существующий рабочий экран: Deals, Tasks, Contacts, Invoices или Automations.
+
+**Database Design**: Новые таблицы не добавлены. Командный слой строится на текущих сущностях `zone_deals`, `zone_tasks`, `zone_contacts`, `zone_invoices`, `zone_deal_activities` и их существующей изоляции по `zone_id`.
+
+**Backend & API**: Edge Functions и Public API не расширялись в этой итерации. Событийная модель остается прежней: изменения в сделках и контактах уже могут запускать `run-zone-automations`, а платежные события остаются в finance/invoice контуре.
+
+**Frontend**: Расширен только `src/components/zones/ZoneDashboard.tsx`; используются существующие React Query hooks `useZoneDeals`, `useZoneTasks`, `useZoneContacts`, `useZoneInvoices` и текущие dashboard routes.
+
+**Security**: RBAC/RLS не менялись. Компонент читает те же данные, которые пользователь уже может видеть в отдельных разделах зоны.
+
+**Performance**: Все агрегаты считаются локально через `useMemo` поверх уже загруженных query results. При росте зоны следующий шаг — серверные summary views/RPC, но только как расширение текущей схемы `zone_id`.
+
+**Backward Compatibility**: Существующие URL, хуки, таблицы, автоматизации и жизненный цикл инвойсов сохраняют совместимость; command center добавлен как расширение UI.
 
 ### 2.3 Advanced Analytics (Pixel Proxy)
 

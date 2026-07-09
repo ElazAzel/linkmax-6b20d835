@@ -1,4 +1,4 @@
-# LinkMAX — AI Sales OS (Encyclopedia v2026.04 | Phase 44)
+# LinkMAX — AI Sales OS (Encyclopedia v2026.07 | Phase 50)
 
 > **Strategic Vision:** LinkMAX — AI Sales OS, превращающая одну ссылку в био в полноценный бизнес. Сервис за минуту создает конвертящий мини-сайт с приемом платежей и календарем услуг, агрегирует заявки в легкой CRM с таск-трекером и Kanban, предоставляет глубокую аналитику и мгновенно отправляет уведомления о лидах в Telegram.
 >
@@ -8,14 +8,14 @@
 
 ## 1) What LinkMAX is
 
-**Positioning:** AI Sales OS — Page Builder + Business Zone (CRM, Kanban, Tasks, Contacts) + Fintech Core + Advanced Analytics & Pixel Proxy.
+**Positioning:** AI Sales OS — Page Builder + Business Zone Command Center (CRM, Kanban, Tasks, Contacts, Invoices, Automations) + Fintech Core + Advanced Analytics & Pixel Proxy.
 
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
 1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic. **Expert-optimized presets** ensure a professional page is ready in minutes.
 2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a simplified **"Expert Cockpit"** for high-clarity lead tracking.
 3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) and full funnel activation telemetry.
-4. **Team Collaboration & Business Zones** — RBAC-based organization management. Advanced features are progressively disclosed as the user business grows.
+4. **Team Collaboration & Business Zones** — RBAC-based organization management with an operational command center: health score, daily focus, work queue, and next-action routing across CRM, tasks, invoices, and automations.
 5. **Fintech Core & Auth** — Telegram Mini App integration, Kaspi QR Sandbox, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
 6. **Telegram Operational HQ** — Deterministic bot for remote business control. Interactive lead notifications, status management, and instant wallet access via commands.
 
@@ -807,6 +807,7 @@ Phase 49 adds privacy-safe friction analytics on top of the existing public heat
 - `zone_members`: RBAC membership (owner/admin/member/viewer).
 - `zone_subscriptions`: plan billing cycles and status.
 - `process-lead`, `api-leads` (Public API).
+- **Command Center (Phase 50)**: `ZoneDashboard` now acts as the default operational workspace, not a passive analytics page. It derives a zone health score, daily focus, next actions, work queue, and activation map from existing deals, tasks, contacts, invoices, and activities. It routes users into the existing `zone-deals`, `zone-tasks`, `zone-contacts`, `zone-invoices`, and `zone-automations` screens without adding a parallel CRM or new database surface.
 
 - **Deals & Pipelines (CRM)**
   - Multiple sales pipelines support.
@@ -830,6 +831,7 @@ Phase 49 adds privacy-safe friction analytics on top of the existing public heat
 - `zone_automations`: advanced rule-based CRM engine (triggers: invoice paid, stage change, etc.).
 - `zone_document_templates`: customizable HTML templates for Acts/Invoices/Contracts generation.
 - `zone_documents`: actual generated documents attached to deals and contacts supporting status tracking.
+- **UX Contract**: Business Zone entry point must answer four questions in the first viewport: what is risky today, what money is in motion, which deals need a next step, and which setup step increases activation next.
 
 ### Social Features
 
@@ -1264,10 +1266,11 @@ Based on codebase analysis, these are logical next improvements:
 - [x] Expert trust enrichment: `/experts` reads `page_review_summaries` for rating badges, city/search/verified filters, trust-aware ranking, and `AggregateRating` JSON-LD.
 - [x] Billing recovery foundation: ADR 0032, `subscriptions.recovery_*`, provider-event idempotency in `billing_history`, Paddle failed-payment handling, owner recovery notifications, promo-code checkout handoff, and billing analytics/webhook event names.
 - [x] Friction analytics foundation: ADR 0033, `heatmap_rage_clicks`, repeated-click detection, friction-zone aggregation, and owner heatmap surfacing.
+- [x] Business Zone command center: operational health score, daily focus, next actions, work queue, and activation map built on existing zone CRM hooks and dashboard routes.
 - [ ] Business verification badge and GEO/AEO aggregate rating payloads.
 
 ---
 
-*Last updated: July 5, 2026*
-*Current Platform Health Score: **10/10** (Status: Production Ready v3.1.0 | Phase 49 Friction Analytics Foundation).*
+*Last updated: July 9, 2026*
+*Current Platform Health Score: **10/10** (Status: Production Ready v3.1.0 | Phase 50 Business Zone Command Center).*
 *Maintained by: Antigravity (Principal Engineer)*
