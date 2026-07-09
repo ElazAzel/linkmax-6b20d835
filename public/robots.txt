@@ -10,6 +10,7 @@ Disallow: /crm/
 Disallow: /settings/
 Disallow: /install/
 Disallow: /team/
+Disallow: /review/request/
 
 # Explicitly allow discovery pathways
 Allow: /experts
