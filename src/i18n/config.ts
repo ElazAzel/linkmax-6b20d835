@@ -82,6 +82,20 @@ const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>
 
 // Track which lazy locales have been loaded
 const loadedLazyLocales = new Set<string>();
+const syncedDbLocales = new Set<string>();
+
+function syncDbLocale(lang: string): void {
+  const normalized = normalizeLanguage(lang);
+  if (syncedDbLocales.has(normalized)) return;
+  syncedDbLocales.add(normalized);
+
+  import('@/lib/i18n-db-backend')
+    .then(({ syncI18nWithDB }) => syncI18nWithDB(i18n, normalized))
+    .catch((error) => {
+      console.warn(`[i18n] Failed to sync DB locale: ${normalized}`, error);
+      syncedDbLocales.delete(normalized);
+    });
+}
 
 /**
  * Load a lazy locale on demand and add it to i18n
@@ -214,6 +228,7 @@ const detectedLang = i18n.language;
 if (LAZY_LANGUAGES.includes(detectedLang as any)) {
   loadLazyLocale(detectedLang);
 }
+syncDbLocale(detectedLang || 'ru');
 
 // Development diagnostics (lazy-loaded)
 if (process.env.NODE_ENV === 'development') {
@@ -241,6 +256,7 @@ i18n.on('languageChanged', (lng) => {
   if (LAZY_LANGUAGES.includes(normalized as any)) {
     loadLazyLocale(normalized);
   }
+  syncDbLocale(normalized);
 
   if (process.env.NODE_ENV === 'development') {
     import('@/lib/utils/logger').then(({ logger }) => {

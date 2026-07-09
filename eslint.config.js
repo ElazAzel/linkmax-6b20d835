@@ -61,6 +61,8 @@ export default tseslint.config(
               "className",
               // Часто дублируют label или подсказку формата; предпочтительно t(), но не блокируем линтер
               "placeholder",
+              "variant",
+              "size",
               "data-testid",
               "data-qa",
               "data-cy",

@@ -7256,7 +7256,7 @@
         "features": "Функции",
         "howItWorks": "Как это работает",
         "pricing": "Цены",
-        "login": "Войти",
+        "login": "Kirish",
         "start": "Старт",
         "startFree": "Начни бесплатно",
         "getStarted": "Начать",
@@ -7331,6 +7331,100 @@
           "week": "kunlar bo‘yicha"
         }
       }
+    },
+    "short": {
+      "brandPrefix": "lnk",
+      "brandAccent": "mx",
+      "nav": {
+        "what": "Bu nima",
+        "how": "Qanday ishlaydi",
+        "faq": "FAQ",
+        "create": "Yaratish",
+        "createFree": "Bepul yaratish"
+      },
+      "seo": {
+        "title": "LinkMAX - mijozlar sahifasini bir necha daqiqada yarating",
+        "description": "Xizmatlar, bron, to?lovlar, arizalar va mini CRM uchun bitta havola. Kod yozmasdan bepul boshlang.",
+        "imageAlt": "LinkMAX"
+      },
+      "eyebrow": "Sahifa, arizalar va to?lovlar",
+      "title": "Mijozlar uchun sahifani bir necha daqiqada yarating",
+      "subtitle": "LinkMAX xizmatlar, havolalar, bron, to?lov va arizalarni bitta sahifaga jamlaydi. Kod va uzoq sozlashsiz.",
+      "slugPrefix": "lnkmx.my/",
+      "slugHint": "yourname",
+      "slugAria": "Sahifaning qisqa manzili",
+      "create": "Sahifa yaratish",
+      "free": "Bepul start",
+      "noCode": "kodsiz",
+      "examples": "misollarni ko?rish",
+      "useCase1": "vizitka",
+      "useCase2": "xizmatlar",
+      "useCase3": "bron",
+      "useCase4": "to?lov",
+      "useCase5": "arizalar",
+      "preview": {
+        "initials": "LM",
+        "name": "Amina Studio",
+        "slug": "lnkmx.my/amina",
+        "live": "online",
+        "headline": "Manikyur, bron va to?lov bir joyda",
+        "bookingTitle": "Bron",
+        "bookingBody": "Bugun 3 ta bo?sh vaqt bor",
+        "leadTitle": "Ariza",
+        "leadBody": "Mijoz WhatsApp qoldirdi",
+        "payTitle": "To?lov",
+        "payBody": "Invoys yuborishga tayyor",
+        "cta": "Bugunga yozilish",
+        "aiLabel": "AI yig?di",
+        "aiBody": "bloklar: xizmatlar, narxlar, bron, sharhlar, kontaktlar",
+        "inboxLabel": "Yangi ariza",
+        "inboxName": "Ayzhan maslahat olmoqchi",
+        "inboxStatus": "CRM ichida",
+        "inboxTime": "2 daq"
+      },
+      "features": {
+        "badge": "LinkMAX OS",
+        "title": "Bu nima?",
+        "subtitle": "Kichik biznes uchun bitta ochiq havola: taklifni ko?rsatish, ariza olish va mijoz bilan ishni davom ettirish.",
+        "pageTitle": "Sahifa",
+        "pageBody": "Xizmatlar, havolalar, portfolio, sharhlar va aloqa tugmalari bitta qisqa profilda.",
+        "leadsTitle": "Arizalar",
+        "leadsBody": "Formalar, messenjerlar va bronlar chatlarda yo?qolmay, bitta oqimga tushadi.",
+        "moneyTitle": "To?lov",
+        "moneyBody": "Invoyslar, to?lovlar va asosiy CRM sahifa yonida."
+      },
+      "steps": {
+        "title": "Qanday ishga tushadi",
+        "subtitle": "Konstruktorni noldan sozlash shart emas: avval tayyor asosni olasiz, keyin detallarni o?zgartirasiz.",
+        "one": "Sahifaning qisqa manzilini kiriting.",
+        "two": "Biznes haqida bir nechta savolga javob bering.",
+        "three": "AI tuzilma, matnlar va birinchi bloklarni yig?adi.",
+        "cta": "Sahifa yaratish"
+      },
+      "final": {
+        "eyebrow": "Boshlashga tayyor",
+        "title": "Sahifa bugunoq tayyor bo?lishi mumkin",
+        "subtitle": "Bepul boshlang: avval sahifani yig?ing, keyin o?sishga qarab bron, to?lov va CRM ulang.",
+        "cta": "Sahifa yaratish"
+      },
+      "footer": {
+        "copyright": "? {{year}} LinkMAX",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "payments": "Payments"
+      }
+    },
+    "faq": {
+      "title": "Boshlashdan oldin qisqacha",
+      "subtitle": "Uzun taqdimotsiz: sahifa yaratishdan oldin bilish kerak bo?lgan narsalar.",
+      "q1": "Bu bepulmi?",
+      "a1": "Ha, sahifani bepul yaratish mumkin. Pulli imkoniyatlar ko?proq sahifa, domen, kengaytirilgan analitika yoki pastroq komissiya kerak bo?lganda kerak bo?ladi.",
+      "q2": "Sayt qilishni bilish kerakmi?",
+      "a2": "Yo?q. Qisqa manzilni kiritasiz, bir nechta savolga javob berasiz, AI esa sahifa asosini yig?adi. Matn va bloklarni qo?lda o?zgartirish mumkin.",
+      "q3": "Bu Linktree yoki Taplinkdan nimasi bilan farq qiladi?",
+      "a3": "LinkMAX faqat havolalar ro?yxati emas. Ichida arizalar, bron, invoyslar, mini CRM, analitika va biznes uchun ish zonasi bor.",
+      "q4": "Ro?yxatdan o?tgandan keyin nima bo?ladi?",
+      "a4": "Sahifa yaratish ustasiga o?tasiz. Agar landingda qisqa manzil ko?rsatilgan bo?lsa, u signup flow ichiga uzatiladi."
     }
   },
   "analytics": {

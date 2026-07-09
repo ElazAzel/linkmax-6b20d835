@@ -7239,7 +7239,9 @@
         "login": "Log in",
         "start": "Start",
         "startFree": "Start for Free",
-        "getStarted": "Get Started"
+        "getStarted": "Get Started",
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu"
       },
       "pricing": {
         "billedYearly": "Оплата {{price}} в год"
@@ -7258,6 +7260,100 @@
         "trust2": "Мини-CRM",
         "trust3": "Аналітика"
       }
+    },
+    "short": {
+      "brandPrefix": "lnk",
+      "brandAccent": "mx",
+      "nav": {
+        "what": "What is it",
+        "how": "How it works",
+        "faq": "FAQ",
+        "create": "Create",
+        "createFree": "Create for free"
+      },
+      "seo": {
+        "title": "LinkMAX - create a client page in minutes",
+        "description": "One link for services, bookings, payments, leads, and a mini CRM. Start free with no code.",
+        "imageAlt": "LinkMAX"
+      },
+      "eyebrow": "Page, leads, and payments",
+      "title": "Create a client page in minutes",
+      "subtitle": "LinkMAX brings services, links, bookings, payments, and leads into one page. No code and no long setup.",
+      "slugPrefix": "lnkmx.my/",
+      "slugHint": "yourname",
+      "slugAria": "Short page address",
+      "create": "Create page",
+      "free": "Free start",
+      "noCode": "no code",
+      "examples": "see examples",
+      "useCase1": "bio page",
+      "useCase2": "services",
+      "useCase3": "booking",
+      "useCase4": "payment",
+      "useCase5": "leads",
+      "preview": {
+        "initials": "LM",
+        "name": "Amina Studio",
+        "slug": "lnkmx.my/amina",
+        "live": "online",
+        "headline": "Manicure, booking, and payment in one place",
+        "bookingTitle": "Booking",
+        "bookingBody": "3 open slots today",
+        "leadTitle": "Lead",
+        "leadBody": "Client left WhatsApp",
+        "payTitle": "Payment",
+        "payBody": "Invoice is ready to send",
+        "cta": "Book for today",
+        "aiLabel": "AI built",
+        "aiBody": "blocks: services, prices, booking, reviews, contacts",
+        "inboxLabel": "New lead",
+        "inboxName": "Aizhan wants a consultation",
+        "inboxStatus": "in CRM",
+        "inboxTime": "2 min"
+      },
+      "features": {
+        "badge": "LinkMAX OS",
+        "title": "What is it?",
+        "subtitle": "One public link for small business: show your offer, accept a request, and continue work with the client.",
+        "pageTitle": "Page",
+        "pageBody": "Services, links, portfolio, reviews, and contact buttons in one short profile.",
+        "leadsTitle": "Leads",
+        "leadsBody": "Forms, messengers, and bookings land in one stream instead of getting lost in chats.",
+        "moneyTitle": "Payment",
+        "moneyBody": "Invoices, payments, and basic CRM stay next to the page."
+      },
+      "steps": {
+        "title": "How to launch",
+        "subtitle": "No building from scratch: first get a ready base, then edit the details.",
+        "one": "Enter a short page address.",
+        "two": "Answer a few business questions.",
+        "three": "AI builds the structure, copy, and first blocks.",
+        "cta": "Create page"
+      },
+      "final": {
+        "eyebrow": "Ready to start",
+        "title": "Your page can be ready today",
+        "subtitle": "Start free: build the page first, then connect booking, payment, and CRM as you grow.",
+        "cta": "Create page"
+      },
+      "footer": {
+        "copyright": "? {{year}} LinkMAX",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "payments": "Payments"
+      }
+    },
+    "faq": {
+      "title": "Quick answers before you start",
+      "subtitle": "No long presentation: only what you need to know before creating a page.",
+      "q1": "Is it free?",
+      "a1": "Yes, you can create a page for free. Paid features matter when you add more pages, a domain, advanced analytics, or lower commissions.",
+      "q2": "Do I need website skills?",
+      "a2": "No. You enter a short address, answer a few questions, and AI builds the page base. You can edit copy and blocks manually.",
+      "q3": "How is this different from Linktree or Taplink?",
+      "a3": "LinkMAX is not limited to a list of links. It includes leads, bookings, invoices, mini CRM, analytics, and a business workspace.",
+      "q4": "What happens after sign-up?",
+      "a4": "You enter the page creation wizard. If you entered a short address on the landing page, it is passed into the signup flow."
     }
   },
   "analytics": {
