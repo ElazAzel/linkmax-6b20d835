@@ -1,219 +1,194 @@
+import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { sanitizeSlug } from '@/lib/utils/slug';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import CalendarCheck2 from 'lucide-react/dist/esm/icons/calendar-check-2';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
-import KanbanSquare from 'lucide-react/dist/esm/icons/kanban-square';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
-import Send from 'lucide-react/dist/esm/icons/send';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 
 interface HeroBentoOSProps {
-  onStart: () => void;
+  onStart: (desiredSlug?: string) => void;
   onExamples: () => void;
 }
 
 export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
   const { t } = useTranslation();
+  const [slug, setSlug] = useState('');
 
-  const metrics = [
-    { value: '15', label: t('landing.v5.metric1', 'минут до запуска') },
-    { value: '7%', label: t('landing.v5.metric2', 'комиссия Starter') },
-    { value: '1', label: t('landing.v5.metric3', 'лента заявок') },
+  const cleanSlug = sanitizeSlug(slug);
+
+  const handleSlugChange = (value: string) => {
+    setSlug(sanitizeSlug(value));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onStart(cleanSlug || undefined);
+  };
+
+  const useCases = [
+    t('landing.short.useCase1', 'визитка'),
+    t('landing.short.useCase2', 'услуги'),
+    t('landing.short.useCase3', 'запись'),
+    t('landing.short.useCase4', 'оплата'),
+    t('landing.short.useCase5', 'заявки'),
   ];
 
-  const capabilities = [
+  const previewBlocks = [
     {
       icon: CalendarCheck2,
-      title: t('landing.v5.bento.builder.badge', 'запись открыта'),
-      body: t('landing.v5.bento.builder.cta', 'Записаться на свободное время'),
+      title: t('landing.short.preview.bookingTitle', 'Запись'),
+      body: t('landing.short.preview.bookingBody', '3 свободных окна сегодня'),
     },
     {
-      icon: Send,
-      title: t('landing.v5.bento.crm.notify_title', 'Новая заявка'),
-      body: t('landing.v5.bento.crm.notify_desc', 'Анна - запись на 14:00'),
+      icon: MessageCircle,
+      title: t('landing.short.preview.leadTitle', 'Заявка'),
+      body: t('landing.short.preview.leadBody', 'Клиент оставил WhatsApp'),
     },
     {
       icon: CreditCard,
-      title: t('landing.v5.bento.pay.title', 'Оплата до визита'),
-      body: t('landing.v5.bento.pay.desc', 'Kaspi QR, Robokassa, Stripe'),
+      title: t('landing.short.preview.payTitle', 'Оплата'),
+      body: t('landing.short.preview.payBody', 'Инвойс готов к отправке'),
     },
   ];
 
   return (
-    <section className="relative overflow-hidden px-4 pb-16 pt-32 sm:px-6 lg:px-8 lg:pb-24">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(238,244,255,0.72),rgba(246,247,249,0)_42%)]" />
-      <div className="relative mx-auto max-w-[1200px]">
-        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div>
-            <h1 className="max-w-3xl text-4xl font-semibold tracking-[-0.015em] text-[#172033] sm:text-5xl lg:text-[58px] lg:leading-[1.06]">
-              LinkMAX - {t('landing.v5.title1', 'Страница, где клиент записывается,')}{' '}
-              <span className="text-[#2563eb]">{t('landing.v5.title2', 'платит и попадает в CRM')}</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#3b4658]">
-              {t(
-                'landing.v5.subtitle',
-                'LinkMAX соединяет витрину услуг, мессенджеры, онлайн-запись, оплату и аналитику так, чтобы владелец видел весь путь клиента в одном месте.'
-              )}
-            </p>
+    <section className="relative overflow-hidden bg-[#101318] px-4 pb-12 pt-24 text-white sm:px-6 sm:pt-28 lg:px-8 lg:pb-16">
+      <div className="pointer-events-none absolute inset-0 opacity-80">
+        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#ff5701]/[0.18] blur-3xl" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
+      </div>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+      <div className="relative mx-auto grid min-w-0 max-w-[1120px] gap-8 lg:grid-cols-[0.94fr_1.06fr] lg:items-center">
+        <div className="min-w-0 max-w-2xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-white/[0.76]">
+            <span className="h-2 w-2 rounded-full bg-[#ff5701]" />
+            {t('landing.short.eyebrow', 'Страница, заявки и оплата')}
+          </div>
+
+          <h1 className="mt-6 max-w-[10ch] break-words text-[40px] font-semibold leading-[0.96] tracking-[-0.04em] text-white sm:max-w-2xl sm:text-6xl lg:text-[78px] lg:leading-[0.9]">
+            {t('landing.short.title', 'Создайте страницу для клиентов за пару минут')}
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-7 text-white/[0.72] sm:text-lg">
+            {t(
+              'landing.short.subtitle',
+              'LinkMAX собирает услуги, ссылки, запись, оплату и заявки в одну страницу. Без кода и длинной настройки.'
+            )}
+          </p>
+
+          <form onSubmit={handleSubmit} className="mt-8 w-full max-w-[360px] sm:max-w-2xl">
+            <div className="flex flex-col gap-2 rounded-[22px] border border-white/[0.12] bg-white p-2 shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:flex-row">
+              <div className="flex h-[52px] min-w-0 flex-1 items-center rounded-[16px] bg-[#f6f6f1] px-4 text-left">
+                <span className="shrink-0 text-sm font-semibold text-[#6f746d]">lnkmx.my/</span>
+                {!slug && (
+                  <span className="pointer-events-none ml-1 text-base font-semibold text-[#a0a59d]" aria-hidden="true">
+                    yourname
+                  </span>
+                )}
+                <input
+                  value={slug}
+                  onChange={(event) => handleSlugChange(event.target.value)}
+                  className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[#101318] outline-none"
+                  aria-label={t('landing.short.slugAria', 'Короткий адрес страницы')}
+                  maxLength={30}
+                />
+              </div>
               <Button
-                onClick={onStart}
-                className="h-12 rounded-[12px] bg-[#2563eb] px-6 text-base font-semibold text-white hover:bg-[#1d4ed8]"
+                type="submit"
+                className="h-[52px] rounded-[16px] bg-[#ff5701] px-6 text-base font-semibold text-white shadow-[0_10px_24px_rgba(255,87,1,0.28)] transition-transform hover:-translate-y-0.5 hover:bg-[#e64e00]"
               >
-                {t('landing.v5.cta_primary', 'Создать страницу бесплатно')}
+                {t('landing.short.create', 'Создать страницу')}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button
-                onClick={onExamples}
-                variant="outline"
-                className="h-12 rounded-[12px] border-[#d8dee8] bg-white px-6 text-base font-semibold text-[#172033] hover:bg-[#edf1f6]"
-              >
-                {t('landing.v5.cta_secondary', 'Открыть примеры')}
-              </Button>
             </div>
-
-            <div className="mt-8 grid max-w-xl grid-cols-3 gap-3">
-              {metrics.map((metric) => (
-                <div key={metric.label} className="rounded-[18px] border border-[#d8dee8] bg-white p-4">
-                  <div className="text-2xl font-semibold tracking-tight text-[#172033]">{metric.value}</div>
-                  <div className="mt-1 text-xs font-medium leading-4 text-[#6b7689]">{metric.label}</div>
-                </div>
-              ))}
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-white/[0.66]">
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#ff5701]" />
+                {t('landing.short.free', 'Бесплатный старт')}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#ff5701]" />
+                {t('landing.short.noCode', 'без кода')}
+              </span>
+              <button type="button" onClick={onExamples} className="font-semibold text-white underline-offset-4 hover:underline">
+                {t('landing.short.examples', 'посмотреть примеры')}
+              </button>
             </div>
-          </div>
+          </form>
+        </div>
 
-          <div className="rounded-[18px] border border-[#d8dee8] bg-white p-3 shadow-[0_16px_40px_rgba(23,32,51,0.10)]">
-            <div className="rounded-[14px] border border-[#edf1f6] bg-[#f6f7f9] p-4 sm:p-5">
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="relative min-h-[430px] lg:min-h-[560px]" aria-hidden="true">
+          <div className="absolute right-0 top-2 w-[78%] rounded-[34px] border border-white/[0.12] bg-[#f6f6f1] p-4 text-[#101318] shadow-[0_30px_100px_rgba(0,0,0,0.42)] sm:p-5 lg:right-4 lg:top-8">
+            <div className="flex items-center justify-between border-b border-[#d9d7cc] pb-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#101318] text-sm font-black text-white">LM</div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#2563eb]">
-                    {t('landing.v5.preview.eyebrow', 'живой контур')}
-                  </p>
-                  <h2 className="mt-1 text-xl font-semibold tracking-tight text-[#172033]">
-                    {t('landing.v5.preview.title', 'Страница, CRM и оплата вместе')}
-                  </h2>
+                  <div className="text-sm font-bold">{t('landing.short.preview.name', 'Amina Studio')}</div>
+                  <div className="text-xs font-medium text-[#6f746d]">lnkmx.my/amina</div>
                 </div>
-                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  {t('landing.v5.preview.status', 'онлайн')}
-                </span>
               </div>
+              <div className="rounded-full bg-[#ff5701] px-3 py-1 text-xs font-bold text-white">
+                {t('landing.short.preview.live', 'online')}
+              </div>
+            </div>
 
-              <div className="grid gap-4 lg:grid-cols-[210px_1fr]">
-                <div className="rounded-[18px] bg-[#172033] p-4 text-white">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-white/70">master.linkmax</span>
-                    <Sparkles className="h-4 w-4 text-blue-200" />
-                  </div>
-                  <div className="mt-5 rounded-[14px] bg-white/10 p-3">
-                    <div className="h-24 rounded-[12px] bg-gradient-to-br from-blue-200 to-emerald-200" />
-                    <div className="mt-3 h-2 w-28 rounded-full bg-white/40" />
-                    <div className="mt-2 h-2 w-20 rounded-full bg-white/20" />
-                  </div>
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    {[
-                      t('landing.v5.bento.builder.service1', 'Консультация'),
-                      t('landing.v5.bento.builder.service4', 'Разовый визит'),
-                    ].map((service) => (
-                      <div key={service} className="rounded-[12px] bg-white/10 p-2 text-xs font-semibold">
-                        {service}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 rounded-[12px] bg-white px-3 py-2 text-center text-xs font-semibold text-[#172033]">
-                    {t('landing.v5.bento.builder.cta', 'Записаться на свободное время')}
-                  </div>
-                </div>
-
-                <div className="grid gap-3">
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    {capabilities.map((item) => (
-                      <div key={item.title} className="rounded-[18px] border border-[#d8dee8] bg-white p-4">
-                        <item.icon className="h-5 w-5 text-[#2563eb]" />
-                        <div className="mt-3 text-sm font-semibold text-[#172033]">{item.title}</div>
-                        <div className="mt-1 text-xs leading-5 text-[#6b7689]">{item.body}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-[1fr_0.85fr]">
-                    <div className="rounded-[18px] border border-[#d8dee8] bg-white p-4">
-                      <div className="mb-4 flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm font-semibold text-[#172033]">
-                          <KanbanSquare className="h-4 w-4 text-[#2563eb]" />
-                          {t('landing.v5.bento.crm.pipeline', 'Воронка: 12 заявок')}
-                        </div>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        {['5', '3', '4'].map((count, index) => (
-                          <div key={count} className="rounded-[12px] bg-[#f6f7f9] p-3 text-center">
-                            <div className="text-lg font-semibold text-[#172033]">{count}</div>
-                            <div className="mt-1 h-1.5 rounded-full bg-[#2563eb]" style={{ opacity: 0.35 + index * 0.22 }} />
-                          </div>
-                        ))}
-                      </div>
+            <div className="py-5">
+              <div className="text-2xl font-semibold tracking-[-0.03em]">
+                {t('landing.short.preview.headline', 'Маникюр, запись и оплата в одном месте')}
+              </div>
+              <div className="mt-3 grid gap-2">
+                {previewBlocks.map((item) => (
+                  <div key={item.title} className="flex items-center gap-3 rounded-2xl bg-white px-3 py-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#101318] text-white">
+                      <item.icon className="h-4 w-4" />
                     </div>
-
-                    <div className="rounded-[18px] border border-[#d8dee8] bg-white p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs font-medium text-[#6b7689]">
-                            {t('landing.v5.bento.analytics.title', 'Что сработало')}
-                          </p>
-                          <p className="mt-1 text-2xl font-semibold text-[#172033]">+38%</p>
-                        </div>
-                        <BarChart3 className="h-6 w-6 text-emerald-600" />
-                      </div>
-                      <div className="mt-4 flex h-20 items-end gap-1.5">
-                        {[42, 58, 46, 74, 62, 90].map((height, index) => (
-                          <div
-                            key={height}
-                            className={index === 5 ? 'w-full rounded-t-md bg-[#2563eb]' : 'w-full rounded-t-md bg-[#d8dee8]'}
-                            style={{ height: `${height}%` }}
-                          />
-                        ))}
-                      </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-bold">{item.title}</div>
+                      <div className="truncate text-xs font-medium text-[#6f746d]">{item.body}</div>
                     </div>
+                    <ArrowRight className="h-4 w-4 text-[#101318]/40" />
                   </div>
-
-                  <div className="rounded-[18px] border border-[#d8dee8] bg-white p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50">
-                        <MessageCircle className="h-5 w-5 text-[#2563eb]" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-[#172033]">{t('landing.v5.bento.crm.notify_title', 'Новая заявка')}</p>
-                        <p className="text-xs text-[#6b7689]">{t('landing.v5.bento.crm.pipeline_desc', 'Новые, в работе, оплачено')}</p>
-                      </div>
-                      <span className="ml-auto rounded-full bg-[#eef4ff] px-3 py-1 text-xs font-semibold text-[#2563eb]">
-                        3-5 sec
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                ))}
+              </div>
+              <div className="mt-4 rounded-2xl bg-[#ff5701] px-4 py-3 text-center text-sm font-bold text-white">
+                {t('landing.short.preview.cta', 'Записаться на сегодня')}
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-8 grid gap-3 md:grid-cols-3">
-          {capabilities.map((item) => (
-            <div key={item.title} className="flex items-start gap-3 rounded-[18px] border border-[#d8dee8] bg-white p-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-[#eef4ff]">
-                <item.icon className="h-5 w-5 text-[#2563eb]" />
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-[#172033]">{item.title}</div>
-                <div className="mt-1 text-sm leading-5 text-[#6b7689]">{item.body}</div>
-              </div>
+          <div className="absolute left-0 top-14 w-[54%] rounded-[26px] border border-white/[0.12] bg-white/[0.92] p-4 text-[#101318] shadow-[0_20px_70px_rgba(0,0,0,0.30)] backdrop-blur lg:top-24">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[#6f746d]">
+              <Sparkles className="h-4 w-4 text-[#ff5701]" />
+              {t('landing.short.preview.aiLabel', 'AI собрал')}
             </div>
-          ))}
+            <div className="mt-3 text-4xl font-semibold tracking-[-0.06em]">7</div>
+            <div className="mt-1 text-sm font-medium leading-5 text-[#4f554e]">
+              {t('landing.short.preview.aiBody', 'блоков: услуги, цены, запись, отзывы, контакты')}
+            </div>
+          </div>
+
+          <div className="absolute bottom-8 left-4 w-[64%] rounded-[26px] border border-white/[0.12] bg-[#101318]/[0.88] p-4 text-white shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur lg:bottom-14">
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/[0.54]">
+              {t('landing.short.preview.inboxLabel', 'Новая заявка')}
+            </div>
+            <div className="mt-3 text-base font-semibold">{t('landing.short.preview.inboxName', 'Айжан хочет консультацию')}</div>
+            <div className="mt-3 flex items-center justify-between rounded-2xl bg-white/10 px-3 py-2 text-sm font-semibold">
+              <span>{t('landing.short.preview.inboxStatus', 'в CRM')}</span>
+              <span className="text-[#ff5701]">{t('landing.short.preview.inboxTime', '2 мин')}</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="relative mx-auto mt-8 flex max-w-[1120px] flex-wrap gap-2">
+        {useCases.map((item) => (
+          <span key={item} className="rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-sm font-semibold text-white/[0.72]">
+            {item}
+          </span>
+        ))}
       </div>
     </section>
   );
