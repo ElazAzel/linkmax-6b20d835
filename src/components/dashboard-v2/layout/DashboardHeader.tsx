@@ -73,7 +73,7 @@ export const DashboardHeader = memo(function DashboardHeader({
       variant="ghost"
       size="icon"
       aria-label={t('common.back', 'Назад')}
-      className="h-10 w-10 rounded-xl hover:bg-white/10 transition-colors active:scale-95 shrink-0"
+      className="h-10 w-10 rounded-control hover:bg-accent transition-colors active:scale-95 shrink-0"
       onClick={onBack}
     >
       <ArrowLeft className="h-5 w-5" />
@@ -83,7 +83,7 @@ export const DashboardHeader = memo(function DashboardHeader({
       variant="ghost"
       size="icon"
       aria-label={t('common.menu', 'Меню')}
-      className="md:hidden h-10 w-10 rounded-xl hover:bg-white/10 transition-colors active:scale-95 shrink-0"
+      className="md:hidden h-10 w-10 rounded-control hover:bg-accent transition-colors active:scale-95 shrink-0"
       onClick={onMenuClick}
     >
       <Menu className="h-5 w-5" />
@@ -93,7 +93,7 @@ export const DashboardHeader = memo(function DashboardHeader({
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border/10 pt-[env(safe-area-inset-top)] translate-z-0",
+        "sticky top-0 z-40 bg-card/95 backdrop-blur-xl border-b border-border/70 pt-[env(safe-area-inset-top)] shadow-soft translate-z-0 md:rounded-card md:border",
         className,
       )}
     >
@@ -102,7 +102,7 @@ export const DashboardHeader = memo(function DashboardHeader({
           {leading ?? defaultLeading}
           <div className="flex flex-col min-w-0">
             {title && (
-              <h1 className="text-base md:text-lg font-semibold tracking-tight text-foreground flex items-center gap-2 truncate">
+              <h1 className="text-base md:text-lg font-bold font-[var(--font-heading)] text-foreground flex items-center gap-2 truncate">
                 <span className="truncate">{title}</span>
                 {activeTab && (
                   <span className="opacity-40 text-xs md:text-sm font-normal shrink-0">
@@ -127,7 +127,7 @@ export const DashboardHeader = memo(function DashboardHeader({
           {actions}
           {trailing}
           {!hideLivePill && (
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border/10">
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary border border-border/60">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
               <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/70">
                 {t('dashboard.header.live', 'Live')}
@@ -138,7 +138,7 @@ export const DashboardHeader = memo(function DashboardHeader({
       </div>
 
       {bottomSlot && (
-        <div className="border-t border-border/10 bg-card/50">{bottomSlot}</div>
+        <div className="border-t border-border/60 bg-secondary/55">{bottomSlot}</div>
       )}
     </header>
   );

@@ -126,14 +126,17 @@ function ShortFeatureSection() {
   const { t } = useTranslation();
   const items = [
     {
+      id: 'page',
       title: t('landing.short.features.pageTitle', 'Страница'),
       body: t('landing.short.features.pageBody', 'Услуги, ссылки, портфолио, отзывы и кнопки связи в одном коротком профиле.'),
     },
     {
+      id: 'leads',
       title: t('landing.short.features.leadsTitle', 'Заявки'),
       body: t('landing.short.features.leadsBody', 'Формы, мессенджеры и записи складываются в единый поток, а не теряются в переписках.'),
     },
     {
+      id: 'money',
       title: t('landing.short.features.moneyTitle', 'Оплата'),
       body: t('landing.short.features.moneyBody', 'Инвойсы, платежи и базовая CRM уже рядом со страницей.'),
     },
@@ -157,7 +160,7 @@ function ShortFeatureSection() {
 
           <div className="grid gap-3">
             {items.map((item, index) => (
-              <div key={item.title} className="group grid gap-4 rounded-[24px] bg-white p-5 shadow-[0_12px_34px_rgba(16,19,24,0.06)] transition-transform hover:-translate-y-0.5 sm:grid-cols-[64px_1fr]">
+              <div key={item.id} className="group grid gap-4 rounded-[24px] bg-white p-5 shadow-[0_12px_34px_rgba(16,19,24,0.06)] transition-transform hover:-translate-y-0.5 sm:grid-cols-[64px_1fr]">
                 <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#f6f6f1] text-lg font-black text-[#101318]">
                   0{index + 1}
                 </div>

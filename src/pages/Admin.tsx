@@ -121,13 +121,13 @@ export default function Admin() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <div className="min-h-screen bg-background">
+      <div className="app-canvas min-h-screen">
         {/* Header */}
-        <header className="border-b border-border bg-card/95 backdrop-blur-sm sticky top-0 z-50">
+        <header className="border-b border-border/70 bg-card/95 backdrop-blur-xl shadow-soft sticky top-0 z-50">
           <div className="container mx-auto px-3 md:px-4 py-2 md:py-3 flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
               <Shield className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-              <h1 className="text-lg md:text-xl font-bold">{t('admin.title')}</h1>
+              <h1 className="text-lg md:text-xl font-bold font-[var(--font-heading)]">{t('admin.title')}</h1>
             </div>
             <div className="flex items-center gap-2 md:gap-4">
               <Button

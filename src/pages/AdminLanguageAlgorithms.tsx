@@ -50,7 +50,7 @@ export default function AdminLanguageAlgorithms() {
         currentLanguage={i18n.language}
         indexable={false}
       />
-      <div className="min-h-screen bg-background">
+      <div className="app-canvas min-h-screen">
         <main className="container mx-auto px-4 py-6 space-y-6">
           <div className="flex items-center justify-between gap-3">
             <div className="space-y-1">

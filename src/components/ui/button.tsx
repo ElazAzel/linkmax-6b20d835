@@ -6,25 +6,25 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { cn } from "@/lib/utils/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-control text-sm font-semibold ring-offset-background transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0",
+          "bg-primary text-primary-foreground shadow-[0_12px_26px_-14px_hsl(var(--primary)/0.8)] hover:bg-primary/90 hover:shadow-[0_16px_30px_-14px_hsl(var(--primary)/0.72)] hover:-translate-y-0.5 active:translate-y-0",
         destructive:
           "bg-destructive text-destructive-foreground shadow-lg shadow-destructive/25 hover:bg-destructive/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
         outline:
-          "border-2 border-border/60 bg-background/60 backdrop-blur-sm hover:bg-accent/60 hover:text-accent-foreground hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0",
+          "border border-border bg-card/80 hover:bg-accent/70 hover:text-accent-foreground hover:border-primary/45 hover:shadow-soft hover:-translate-y-0.5 active:translate-y-0",
         secondary:
-          "bg-secondary/90 text-secondary-foreground backdrop-blur-sm shadow-sm hover:bg-secondary hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0",
+          "bg-secondary text-secondary-foreground border border-border/60 shadow-sm hover:bg-secondary/80 hover:border-primary/25 hover:-translate-y-0.5 active:translate-y-0",
         ghost:
           "hover:bg-accent/60 hover:text-accent-foreground backdrop-blur-sm active:bg-accent/80",
         link: "text-primary underline-offset-4 hover:underline focus-visible:ring-0 focus-visible:ring-offset-0",
         glass:
-          "bg-card/70 backdrop-blur-2xl border border-border/40 text-foreground shadow-glass hover:bg-card/85 hover:shadow-glass-lg hover:border-border/60 hover:-translate-y-0.5 active:translate-y-0",
+          "bg-card/82 backdrop-blur-xl border border-border/70 text-foreground shadow-soft hover:bg-card hover:shadow-lift hover:border-primary/25 hover:-translate-y-0.5 active:translate-y-0",
         premium:
-          "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
+          "bg-foreground text-background border border-foreground shadow-soft hover:bg-foreground/90 hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0",
         success:
           "bg-success text-success-foreground shadow-lg shadow-success/25 hover:bg-success/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
         warning:

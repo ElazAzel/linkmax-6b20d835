@@ -1,5 +1,18 @@
 # Changelog
 
+## [Phase 51] - 2026-07-10
+
+### Unified LinkMAX Visual System
+- **One Product Identity**: Extended the landing's charcoal, warm-paper, and orange visual language across authenticated product and admin surfaces.
+- **Shared Foundations**: Updated the existing semantic tokens and shadcn/ui primitives instead of adding a parallel component library or per-screen theme.
+- **Product Shell**: Aligned desktop sidebar, mobile navigation, dashboard headers, authentication, and administration with the same LinkMAX composition.
+- **Operational Clarity**: Reduced oversized radii, indiscriminate glass effects, and decorative color mixing while preserving semantic statuses and chart differentiation.
+- **Architecture Record**: Added ADR 0034 and the canonical visual-system guide with implementation, exception, verification, and rollback rules.
+- **Runtime Translation Repair**: Restored canonical namespaces across all 16 locales, repaired Russian and Kazakh landing copy, rejected corrupted DB overrides, and added an automated structure gate.
+- **Visual QA**: Verified Russian landing, auth, gallery, desktop, mobile, overflow, and browser console states; recorded evidence in `design-qa.md`.
+
+---
+
 ## [Phase 50] - 2026-07-09
 
 ### Business Zone Command Center

@@ -12,6 +12,7 @@ import Heart from 'lucide-react/dist/esm/icons/heart';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,7 +24,7 @@ import { TopReferrers } from '@/components/gallery/TopReferrers';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useGallery } from '@/hooks/social/useGallery';
 import { GalleryPageCard } from '@/components/gallery/GalleryPageCard';
-import { NICHES, NICHE_ICONS } from '@/lib/niches';
+import { NICHES } from '@/lib/niches';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
@@ -34,6 +35,8 @@ import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 type SortMode = 'popular' | 'recent' | 'views';
+
+const stripDecorativeEmoji = (label: string) => label.replace(/^[^\p{L}\p{N}]+/u, '');
 
 export const Gallery = memo(function Gallery() {
   const { t, i18n } = useTranslation();
@@ -306,14 +309,13 @@ export const Gallery = memo(function Gallery() {
                     key={niche}
                     onClick={() => updateNiche(selectedNiche === niche ? null : niche)}
                     className={cn(
-                      "h-8 px-3.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1",
+                      "h-8 px-3.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all",
                       selectedNiche === niche
                         ? "bg-primary text-primary-foreground shadow-sm"
                         : "bg-muted/50 text-muted-foreground hover:bg-muted"
                     )}
                   >
-                    <span className="text-sm">{NICHE_ICONS[niche]}</span>
-                    {t(`niches.${niche}`, niche)}
+                    {stripDecorativeEmoji(t(`niches.${niche}`, niche))}
                   </button>
                 ))}
               </div>
@@ -332,7 +334,10 @@ export const Gallery = memo(function Gallery() {
                         : "bg-muted/30 text-muted-foreground hover:bg-muted"
                     )}
                   >
-                    📍 {t('gallery.allCities', 'Все города')}
+                    <span className="inline-flex items-center gap-1.5">
+                      <MapPin className="h-3 w-3" />
+                      {stripDecorativeEmoji(t('gallery.allCities', 'Все города'))}
+                    </span>
                   </button>
                   {(cities ?? []).slice(0, 15).map((c) => (
                     <button

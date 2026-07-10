@@ -4,28 +4,28 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils/utils";
 
 const cardVariants = cva(
-  "rounded-2xl text-card-foreground transition-all duration-400 ease-out",
+  "rounded-card text-card-foreground transition-all duration-200 ease-out",
   {
     variants: {
       variant: {
         default:
-          "border border-border/50 bg-card/90 backdrop-blur-xl shadow-glass hover:shadow-glass-lg hover:border-border/70 hover:-translate-y-0.5",
+          "border border-border/75 bg-card shadow-soft hover:border-border",
         glass:
-          "border border-border/30 bg-card/60 backdrop-blur-2xl shadow-glass hover:bg-card/75 hover:shadow-glass-lg hover:border-border/50",
+          "border border-border/65 bg-card/82 backdrop-blur-xl shadow-soft hover:bg-card/94 hover:shadow-lift hover:border-primary/20",
         solid:
-          "border border-border/40 bg-card shadow-lg hover:shadow-xl hover:-translate-y-1",
+          "border border-border/70 bg-card shadow-soft hover:shadow-lift",
         outline:
           "border-2 border-border/60 bg-transparent hover:bg-card/40 hover:border-primary/40",
         interactive:
-          "border border-border/50 bg-card/90 backdrop-blur-xl shadow-glass cursor-pointer hover:shadow-glass-lg hover:border-primary/40 hover:-translate-y-1 hover:scale-[1.01] active:scale-[0.99] active:translate-y-0",
+          "border border-border/75 bg-card shadow-soft cursor-pointer hover:shadow-lift hover:border-primary/45 hover:-translate-y-0.5 active:scale-[0.99] active:translate-y-0",
         premium:
-          "border border-primary/20 bg-gradient-to-br from-card/95 via-card/85 to-primary/5 backdrop-blur-xl shadow-glass-lg hover:shadow-glass-xl hover:border-primary/40 hover:-translate-y-1",
+          "border border-primary/30 bg-card shadow-lift hover:border-primary/55 hover:-translate-y-0.5",
         borderless:
           "border-0 bg-transparent shadow-none",
         crisp:
           "border border-border/50 bg-card shadow-sm",
         elevated:
-          "border border-border/40 bg-card shadow-xl hover:shadow-2xl hover:-translate-y-1.5 active:translate-y-0",
+          "border border-border/70 bg-card shadow-lift hover:border-primary/25 hover:-translate-y-0.5 active:translate-y-0",
       },
     },
     defaultVariants: {
@@ -60,7 +60,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn("text-xl font-semibold leading-none tracking-tight", className)}
+      className={cn("text-xl font-semibold leading-tight", className)}
       {...props}
     />
   )

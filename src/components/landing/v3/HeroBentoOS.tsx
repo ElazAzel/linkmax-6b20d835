@@ -33,25 +33,28 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
   const slugHint = t('landing.short.slugHint', 'yourname');
 
   const useCases = [
-    t('landing.short.useCase1', 'визитка'),
-    t('landing.short.useCase2', 'услуги'),
-    t('landing.short.useCase3', 'запись'),
-    t('landing.short.useCase4', 'оплата'),
-    t('landing.short.useCase5', 'заявки'),
+    { id: 'profile', label: t('landing.short.useCase1', 'визитка') },
+    { id: 'services', label: t('landing.short.useCase2', 'услуги') },
+    { id: 'booking', label: t('landing.short.useCase3', 'запись') },
+    { id: 'payments', label: t('landing.short.useCase4', 'оплата') },
+    { id: 'leads', label: t('landing.short.useCase5', 'заявки') },
   ];
 
   const previewBlocks = [
     {
+      id: 'booking',
       icon: CalendarCheck2,
       title: t('landing.short.preview.bookingTitle', 'Запись'),
       body: t('landing.short.preview.bookingBody', '3 свободных окна сегодня'),
     },
     {
+      id: 'lead',
       icon: MessageCircle,
       title: t('landing.short.preview.leadTitle', 'Заявка'),
       body: t('landing.short.preview.leadBody', 'Клиент оставил WhatsApp'),
     },
     {
+      id: 'payment',
       icon: CreditCard,
       title: t('landing.short.preview.payTitle', 'Оплата'),
       body: t('landing.short.preview.payBody', 'Инвойс готов к отправке'),
@@ -146,7 +149,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
               </div>
               <div className="mt-3 grid gap-2">
                 {previewBlocks.map((item) => (
-                  <div key={item.title} className="flex items-center gap-3 rounded-2xl bg-white px-3 py-3">
+                  <div key={item.id} className="flex items-center gap-3 rounded-2xl bg-white px-3 py-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#101318] text-white">
                       <item.icon className="h-4 w-4" />
                     </div>
@@ -190,8 +193,8 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
 
       <div className="relative mx-auto mt-8 flex max-w-[1120px] flex-wrap gap-2">
         {useCases.map((item) => (
-          <span key={item} className="rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-sm font-semibold text-white/[0.72]">
-            {item}
+          <span key={item.id} className="rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-sm font-semibold text-white/[0.72]">
+            {item.label}
           </span>
         ))}
       </div>

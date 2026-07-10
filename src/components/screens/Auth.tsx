@@ -506,21 +506,16 @@ export const Auth = memo(function Auth() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <div className="min-h-screen bg-gradient-to-b from-background to-background/80 flex items-center justify-center p-4 relative overflow-x-hidden pb-safe">
-        {/* Background Effects */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-          <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gradient-to-bl from-primary/20 via-violet-500/10 to-transparent rounded-full blur-[150px] animate-morph will-change-transform" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/15 via-cyan-500/10 to-transparent rounded-full blur-[120px] animate-morph will-change-transform" style={{ animationDelay: '-7s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-purple-500/10 via-pink-500/5 to-transparent rounded-full blur-[100px] animate-float-slow will-change-transform" />
-        </div>
+      <div className="min-h-screen bg-[hsl(var(--brand-ink))] flex items-center justify-center p-4 relative overflow-x-hidden pb-safe">
+        <div className="absolute inset-x-0 top-0 h-1 bg-[hsl(var(--brand-orange))]" aria-hidden="true" />
 
         <div className="w-full max-w-md space-y-6">
           {/* Referral Banner */}
           {refCode && (
-            <Card className="bg-gradient-to-r from-violet-500/20 to-purple-500/20 backdrop-blur-xl border-violet-500/30 rounded-2xl p-4 animate-fade-in">
+            <Card className="border-border bg-card p-4 shadow-lift animate-fade-in">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-violet-500/30 flex items-center justify-center">
-                  <Gift className="h-5 w-5 text-violet-400" />
+                <div className="h-10 w-10 rounded-control bg-primary/12 flex items-center justify-center">
+                  <Gift className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="font-medium text-sm">{t('auth.referral.invited', 'You have been invited!')}</p>
@@ -535,24 +530,26 @@ export const Auth = memo(function Auth() {
           {/* Logo */}
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
-              <div className="h-16 w-16 rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/30 shadow-glass-lg flex items-center justify-center animate-scale-in">
+              <div className="h-16 w-16 rounded-card bg-card border border-white/15 shadow-lift flex items-center justify-center animate-scale-in">
                 <img src="/favicon.png" alt="LinkMAX — business OS for experts and small businesses" className="h-10 w-10 object-contain" />
               </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-2xl sm:text-3xl font-bold font-[var(--font-heading)] text-white animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
               {t('auth.title', 'Добро пожаловать в LinkMAX')}
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
+            <p className="text-sm sm:text-base text-white/60 mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
               {t('auth.subtitle', 'AI-страница для бизнеса за 2 минуты')}
             </p>
             <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <LanguageSwitcher />
+              <div className="app-sidebar inline-flex rounded-full">
+                <LanguageSwitcher />
+              </div>
             </div>
           </div>
 
           {/* Already signed-in panel — quick actions instead of full auth form */}
           {user && authMode !== 'update-password' ? (
-            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-3">
                   <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
@@ -590,7 +587,7 @@ export const Auth = memo(function Auth() {
               </CardContent>
             </Card>
           ) : authMode === 'update-password' ? (
-            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
                 <CardDescription>
@@ -659,7 +656,7 @@ export const Auth = memo(function Auth() {
             </Card>
           ) : (
             /* Auth Card - Liquid Glass — Optimized for conversion */
-            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center">
