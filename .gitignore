@@ -16,6 +16,7 @@ dist-ssr
 tmp/
 output/
 coverage/
+.codex-artifacts/
 
 # Temporary lint/report artifacts
 lint_errors*.txt

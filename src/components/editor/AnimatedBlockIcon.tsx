@@ -171,7 +171,7 @@ export const AnimatedBlockIcon = ({
           <motion.div
             className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"
             animate={{ opacity: [1, 0, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'steps(1)', delay: stableDelay }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear', delay: stableDelay }}
           />
         </div>
       );

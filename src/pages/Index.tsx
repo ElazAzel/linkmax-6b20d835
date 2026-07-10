@@ -20,6 +20,11 @@ const GEOTagging = lazy(() => import('@/components/seo/GEOTagging').then(m => ({
 const AEOOptimizer = lazy(() => import('@/components/seo/AEOOptimizer').then(m => ({ default: m.AEOOptimizer })));
 const AISearchOptimizer = lazy(() => import('@/components/seo/AISearchOptimizer').then(m => ({ default: m.AISearchOptimizer })));
 
+const LANDING_SCREEN_NAME = 'Index';
+const LANDING_AEO_TYPE = 'howto';
+const LANDING_PAGE_TYPE = 'homepage';
+const LANDING_ENTITY_CATEGORY = 'SaaS';
+
 /**
  * Landing Page Index
  * Product OS landing built from the existing marketing section pipeline.
@@ -27,6 +32,7 @@ const AISearchOptimizer = lazy(() => import('@/components/seo/AISearchOptimizer'
 export default function Index() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const seoImageAlt = t('landing.short.seo.imageAlt', 'LinkMAX');
 
   const { trackSectionView, trackCtaClick } = useLandingAnalytics();
   const { trackMarketingEvent, trackOnce } = useMarketingAnalytics();
@@ -65,7 +71,7 @@ export default function Index() {
   const faqSectionRef = useSectionObserver<HTMLDivElement>('faq', trackMarketingSection);
 
   return (
-    <ScreenErrorBoundary screenName="Index">
+    <ScreenErrorBoundary screenName={LANDING_SCREEN_NAME}>
       <SEOLandingHead currentLanguage={i18n.language} />
       <Suspense fallback={null}>
         <SEOMetaEnhancer
@@ -73,12 +79,12 @@ export default function Index() {
           pageTitle={t('landing.short.seo.title', 'LinkMAX - создайте страницу для клиентов за пару минут')}
           pageDescription={t('landing.short.seo.description', 'Одна ссылка для услуг, записи, оплаты, заявок и мини-CRM. Бесплатный старт без кода.')}
           imageUrl={`${getAppDomain()}/og-image.png`}
-          imageAlt="LinkMAX"
+          imageAlt={seoImageAlt}
           type="website"
         />
         <GEOTagging includeOrganization={true} />
-        <AEOOptimizer pageUrl={`${getAppDomain()}/`} type="howto" />
-        <AISearchOptimizer pageType="homepage" entityName="LinkMAX" entityCategory="SaaS" />
+        <AEOOptimizer pageUrl={`${getAppDomain()}/`} type={LANDING_AEO_TYPE} />
+        <AISearchOptimizer pageType={LANDING_PAGE_TYPE} entityName={seoImageAlt} entityCategory={LANDING_ENTITY_CATEGORY} />
       </Suspense>
 
       <div className="min-h-screen overflow-x-hidden bg-[#f6f6f1] text-[#101318] selection:bg-[#ffdfcf] selection:text-[#101318]">
@@ -120,14 +126,17 @@ function ShortFeatureSection() {
   const { t } = useTranslation();
   const items = [
     {
+      id: 'page',
       title: t('landing.short.features.pageTitle', 'Страница'),
       body: t('landing.short.features.pageBody', 'Услуги, ссылки, портфолио, отзывы и кнопки связи в одном коротком профиле.'),
     },
     {
+      id: 'leads',
       title: t('landing.short.features.leadsTitle', 'Заявки'),
       body: t('landing.short.features.leadsBody', 'Формы, мессенджеры и записи складываются в единый поток, а не теряются в переписках.'),
     },
     {
+      id: 'money',
       title: t('landing.short.features.moneyTitle', 'Оплата'),
       body: t('landing.short.features.moneyBody', 'Инвойсы, платежи и базовая CRM уже рядом со страницей.'),
     },
@@ -139,7 +148,7 @@ function ShortFeatureSection() {
         <div className="grid gap-8 border-y border-[#ded9c9] py-10 md:grid-cols-[0.8fr_1.2fr] md:items-center">
           <div>
             <div className="mb-4 inline-flex rounded-full bg-[#101318] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-white">
-              LinkMAX OS
+              {t('landing.short.features.badge', 'LinkMAX OS')}
             </div>
             <h2 className="text-4xl font-semibold tracking-[-0.04em] text-[#101318] md:text-[56px] md:leading-[0.94]">
               {t('landing.short.features.title', 'Что это?')}
@@ -151,7 +160,7 @@ function ShortFeatureSection() {
 
           <div className="grid gap-3">
             {items.map((item, index) => (
-              <div key={item.title} className="group grid gap-4 rounded-[24px] bg-white p-5 shadow-[0_12px_34px_rgba(16,19,24,0.06)] transition-transform hover:-translate-y-0.5 sm:grid-cols-[64px_1fr]">
+              <div key={item.id} className="group grid gap-4 rounded-[24px] bg-white p-5 shadow-[0_12px_34px_rgba(16,19,24,0.06)] transition-transform hover:-translate-y-0.5 sm:grid-cols-[64px_1fr]">
                 <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#f6f6f1] text-lg font-black text-[#101318]">
                   0{index + 1}
                 </div>
@@ -239,13 +248,16 @@ function ShortFinalCTA({ onStart }: { onStart: () => void }) {
 }
 
 function SimpleFooter() {
+  const { t } = useTranslation();
+  const year = new Date().getFullYear();
+
   return (
     <footer className="px-4 pb-8 pt-4 text-center text-xs text-[#62675f] sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-[#ded9c9] pt-5">
-        <span>© {new Date().getFullYear()} LinkMAX</span>
-        <a href="/privacy" className="hover:text-[#101318]">Privacy</a>
-        <a href="/terms" className="hover:text-[#101318]">Terms</a>
-        <a href="/payment-terms" className="hover:text-[#101318]">Payments</a>
+        <span>{t('landing.short.footer.copyright', '© {{year}} LinkMAX', { year })}</span>
+        <a href="/privacy" className="hover:text-[#101318]">{t('landing.short.footer.privacy', 'Privacy')}</a>
+        <a href="/terms" className="hover:text-[#101318]">{t('landing.short.footer.terms', 'Terms')}</a>
+        <a href="/payment-terms" className="hover:text-[#101318]">{t('landing.short.footer.payments', 'Payments')}</a>
       </div>
     </footer>
   );

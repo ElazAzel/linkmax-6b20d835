@@ -114,12 +114,6 @@ const App = () => {
         import('@/lib/storage').then(({ storage }) => {
           storage.clearOldVersions();
         });
-        // Sync translations from DB
-        import('./i18n/config').then(({ default: i18n }) => {
-          import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
-            syncI18nWithDB(i18n);
-          });
-        });
       });
     };
     ['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>

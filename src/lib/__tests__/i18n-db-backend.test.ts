@@ -106,6 +106,24 @@ describe('i18n-db-backend', () => {
                 oldOnly: 'old',
             });
         });
+
+        it('should ignore corrupted database strings and preserve valid siblings', () => {
+            const result = normalizeTranslationPayload({
+                landing: {
+                    title: '???????? ????????',
+                    subtitle: 'Valid subtitle',
+                },
+                common: {
+                    save: '\uFFFD\uFFFD\uFFFD',
+                    cancel: 'Cancel',
+                },
+            });
+
+            expect(result).toEqual({
+                landing: { subtitle: 'Valid subtitle' },
+                common: { cancel: 'Cancel' },
+            });
+        });
     });
 
     describe('applyTranslationsToI18n', () => {

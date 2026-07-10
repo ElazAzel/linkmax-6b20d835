@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
@@ -56,6 +56,8 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
     const hidden = useScrollHide(expanded);
+    const brandPrefix = t('landing.short.brandPrefix', 'lnk');
+    const brandAccent = t('landing.short.brandAccent', 'mx');
 
     // Desktop: inline nav, no expandable menu
     if (!isMobile) {
@@ -68,7 +70,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
             >
                 <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-[#ded9c9] bg-white/[0.92] px-2 py-1.5 shadow-[0_16px_40px_rgba(16,19,24,0.12)] backdrop-blur-xl">
                     <span className="cursor-default px-4 font-bold tracking-tight text-[#101318]">
-                        lnk<span className="text-[#ff5701]">mx</span>
+                        {brandPrefix}<span className="text-[#ff5701]">{brandAccent}</span>
                     </span>
 
                     <nav className="flex items-center gap-1">
@@ -130,7 +132,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                 {/* Compact bar */}
                 <div className="flex items-center justify-between w-full h-12 px-2 pl-4 gap-2 shrink-0">
                     <span className="cursor-default text-sm font-bold tracking-tight text-[#101318]">
-                        lnk<span className="text-[#ff5701]">mx</span>
+                        {brandPrefix}<span className="text-[#ff5701]">{brandAccent}</span>
                     </span>
 
                     {!expanded ? (

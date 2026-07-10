@@ -729,16 +729,16 @@ export const AdminTranslations = memo(function AdminTranslations() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <div className="min-h-screen bg-background">
+      <div className="app-canvas min-h-screen">
         {/* Header */}
-        <header className="border-b border-border bg-card/95 backdrop-blur-sm sticky top-0 z-50">
+        <header className="border-b border-border/70 bg-card/95 backdrop-blur-xl shadow-soft sticky top-0 z-50">
           <div className="container mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="icon" onClick={handleNavigateBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <Shield className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-bold flex items-center gap-2">
+              <h1 className="text-xl font-bold font-[var(--font-heading)] flex items-center gap-2">
                 <Languages className="h-5 w-5" />
                 {t('translationEditor')}
               </h1>

@@ -4,14 +4,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils/utils";
 
 const inputVariants = cva(
-  "flex w-full rounded-xl border bg-background/60 backdrop-blur-sm px-4 py-2 text-base ring-offset-background transition-all duration-300 ease-out file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground/70 disabled:cursor-not-allowed disabled:opacity-50",
+  "flex w-full rounded-control border bg-card px-4 py-2 text-base ring-offset-background transition-all duration-200 ease-out file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground/70 disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "border-border/50 hover:border-border/80 hover:bg-background/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-0 focus-visible:border-primary/60 focus-visible:bg-background/90 focus-visible:shadow-lg focus-visible:shadow-primary/10",
+          "border-border hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25 focus-visible:ring-offset-0 focus-visible:border-primary/70 focus-visible:shadow-soft",
         glass:
-          "border-border/30 bg-card/50 backdrop-blur-xl hover:bg-card/70 hover:border-border/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/50 focus-visible:bg-card/80",
+          "border-border/70 bg-card/82 backdrop-blur-xl hover:bg-card hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:border-primary/60",
         minimal:
           "border-transparent bg-transparent hover:bg-muted/30 focus-visible:outline-none focus-visible:bg-muted/50 focus-visible:ring-0",
       },

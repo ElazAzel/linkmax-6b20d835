@@ -20,6 +20,40 @@ function deepMerge(base: TranslationPayload, override: TranslationPayload): Tran
     return out;
 }
 
+function hasCorruptedTranslationText(value: string): boolean {
+    if (value.includes('\uFFFD')) return true;
+
+    const questionMarks = (value.match(/\?/g) || []).length;
+    if (questionMarks < 3) return false;
+
+    const lettersAndNumbers = (value.match(/[\p{L}\p{N}]/gu) || []).length;
+    return questionMarks >= lettersAndNumbers;
+}
+
+function sanitizeTranslationPayload(value: unknown): unknown {
+    if (typeof value === 'string') {
+        const normalized = value.trim();
+        if (!normalized || hasCorruptedTranslationText(normalized)) return undefined;
+        return value;
+    }
+
+    if (Array.isArray(value)) {
+        const items = value
+            .map(sanitizeTranslationPayload)
+            .filter((item) => item !== undefined);
+        return items.length > 0 ? items : undefined;
+    }
+
+    if (!isPlainObject(value)) return value;
+
+    const result: TranslationPayload = {};
+    for (const [key, nestedValue] of Object.entries(value)) {
+        const sanitized = sanitizeTranslationPayload(nestedValue);
+        if (sanitized !== undefined) result[key] = sanitized;
+    }
+    return Object.keys(result).length > 0 ? result : undefined;
+}
+
 export function normalizeTranslationPayload(payload: unknown): TranslationPayload | null {
     if (!isPlainObject(payload)) return null;
 
@@ -27,11 +61,11 @@ export function normalizeTranslationPayload(payload: unknown): TranslationPayloa
         translation?: unknown;
     };
 
-    if (isPlainObject(translation)) {
-        return deepMerge(translation, rest);
-    }
-
-    return rest;
+    const merged = isPlainObject(translation)
+        ? deepMerge(translation, rest)
+        : rest;
+    const sanitized = sanitizeTranslationPayload(merged);
+    return isPlainObject(sanitized) ? sanitized : null;
 }
 
 export async function applyTranslationsToI18n(

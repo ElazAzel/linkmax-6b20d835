@@ -4,30 +4,30 @@
    ============================================================ */
 
 :root {
-  --surface-quiet: 220 20% 98%;
-  --surface-raised: 0 0% 100%;
-  --surface-sunk: 220 14% 96%;
-  --surface-glass: 0 0% 100% / 0.72;
+  --surface-quiet: var(--brand-paper);
+  --surface-raised: 40 33% 99%;
+  --surface-sunk: 55 12% 91%;
+  --surface-glass: 40 33% 99% / 0.82;
 
-  --radius-card: 1.75rem;
+  --radius-card: 1.25rem;
   --radius-control: 0.875rem;
   --radius-chip: 999px;
 
   --shadow-soft:
-    0 1px 2px hsl(220 14% 10% / 0.04),
-    0 4px 16px -4px hsl(220 14% 10% / 0.06);
+    0 1px 2px hsl(var(--brand-ink) / 0.06),
+    0 8px 24px -16px hsl(var(--brand-ink) / 0.28);
   --shadow-lift:
-    0 2px 4px hsl(220 14% 10% / 0.05),
-    0 12px 32px -8px hsl(220 14% 10% / 0.12);
+    0 2px 4px hsl(var(--brand-ink) / 0.07),
+    0 18px 44px -18px hsl(var(--brand-ink) / 0.32);
 
-  --hairline: 220 13% 91%;
+  --hairline: 52 14% 81%;
 }
 
 .dark {
-  --surface-quiet: 220 18% 8%;
-  --surface-raised: 220 16% 12%;
-  --surface-sunk: 220 16% 10%;
-  --surface-glass: 220 16% 12% / 0.72;
+  --surface-quiet: var(--brand-ink);
+  --surface-raised: 216 16% 12%;
+  --surface-sunk: 216 16% 10%;
+  --surface-glass: 216 16% 12% / 0.78;
 
   --shadow-soft:
     0 1px 2px hsl(0 0% 0% / 0.4),
@@ -36,7 +36,7 @@
     0 2px 4px hsl(0 0% 0% / 0.5),
     0 12px 32px -8px hsl(0 0% 0% / 0.5);
 
-  --hairline: 220 14% 18%;
+  --hairline: 0 0% 100% / 0.13;
 }
 
 /* Плотная карточка — без blur */
@@ -112,3 +112,48 @@
 .bg-surface-raised { background-color: hsl(var(--surface-raised)); }
 .bg-surface-sunk { background-color: hsl(var(--surface-sunk)); }
 .border-hairline { border-color: hsl(var(--hairline)); }
+
+/* Product shell. Semantic values are scoped so nested shared controls stay legible. */
+.app-canvas {
+  background-color: hsl(var(--brand-paper));
+  color: hsl(var(--brand-ink));
+}
+
+.dark .app-canvas {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.app-sidebar,
+.app-bottom-nav {
+  --background: var(--brand-ink);
+  --foreground: 60 22% 95%;
+  --card: 216 16% 12%;
+  --card-foreground: 60 22% 95%;
+  --popover: 216 16% 12%;
+  --popover-foreground: 60 22% 95%;
+  --primary: var(--brand-orange);
+  --primary-foreground: var(--brand-ink);
+  --secondary: 216 14% 17%;
+  --secondary-foreground: 60 18% 92%;
+  --muted: 216 14% 15%;
+  --muted-foreground: 60 5% 66%;
+  --accent: 0 0% 100% / 0.08;
+  --accent-foreground: 0 0% 100%;
+  --border: 0 0% 100% / 0.13;
+  --input: 0 0% 100% / 0.16;
+  --ring: var(--brand-orange);
+  background-color: hsl(var(--brand-ink));
+  color: hsl(60 22% 95%);
+}
+
+.brand-wordmark {
+  color: hsl(60 22% 95%);
+  font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.brand-wordmark-accent {
+  color: hsl(var(--brand-orange));
+}

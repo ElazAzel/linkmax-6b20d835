@@ -101,7 +101,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
   return (
     <>
       <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pt-3 pointer-events-none">
-        <div className="qb-glass overflow-hidden pointer-events-auto rounded-card">
+        <div className="app-bottom-nav overflow-hidden pointer-events-auto rounded-[20px] border border-white/10 shadow-[0_18px_44px_-18px_rgba(0,0,0,0.72)]">
           <div className="grid grid-cols-5 h-[4.25rem]">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -117,7 +117,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                   aria-current={isActive ? 'page' : undefined}
                   className={cn(
                     "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
-                    isActive ? "text-primary" : "text-muted-foreground"
+                    isActive ? "text-primary" : "text-white/55"
                   )}
                   data-testid={`${tab.id}-tab`}
                 >
@@ -143,7 +143,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
               aria-expanded={moreOpen}
               className={cn(
                 "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
-                isMoreActive ? "text-primary" : "text-muted-foreground"
+                isMoreActive ? "text-primary" : "text-white/55"
               )}
             >
               <MoreHorizontal className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isMoreActive && "scale-110")} />

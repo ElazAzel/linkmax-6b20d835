@@ -6,7 +6,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // Mock backend
 vi.mock('@/lib/i18n-db-backend', () => ({
-    upsertToDB: vi.fn()
+    upsertToDB: vi.fn(),
+    applyTranslationsToI18n: async () => undefined,
+    syncI18nWithDB: async () => undefined,
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -17,6 +19,7 @@ vi.mock('@tanstack/react-query', () => ({
 
 const mockT = (key: string) => key;
 vi.mock('react-i18next', () => ({
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
     useTranslation: () => ({
         t: mockT,
         i18n: { language: 'ru', changeLanguage: vi.fn() }
