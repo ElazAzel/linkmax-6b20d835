@@ -70,10 +70,10 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
   const handleOpenEdit = (a: ZoneAutomation) => {
     setEditingId(a.id);
     setForm({
-      name: a.name,
+      name: a.name ?? '',
       trigger_type: a.trigger_type,
       action_type: a.action_type,
-      config: { ...a.config }
+      config: { ...(a.config ?? {}) }
     });
     setShowCreate(true);
   };

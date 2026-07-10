@@ -52,8 +52,8 @@ description: Фирменный стиль и дизайн страниц LinkMA
 
 Набор 10 готовых тем для страниц (см. `docs/design-system-audit.md`):
 ```typescript
-type Theme = 'minimal' | 'bold' | 'elegant' | 'playful' |
-             'dark' | 'nature' | 'tech' | 'luxury' |
+type Theme = 'minimal' | 'bold' | 'elegant' | 'playful' | 
+             'dark' | 'nature' | 'tech' | 'luxury' | 
              'retro' | 'custom';
 ```
 
