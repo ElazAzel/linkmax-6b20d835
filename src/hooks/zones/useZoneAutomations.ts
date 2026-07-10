@@ -9,12 +9,18 @@ export interface ZoneAutomation {
   zone_id: string;
   trigger_type: string;
   action_type: string;
-  config: Record<string, unknown>;
+  config?: Record<string, unknown>;
   is_active: boolean;
-  name: string;
+  name?: string;
   created_at: string;
   updated_at: string;
 }
+
+// Columns readable by authenticated members (see migration 20260619052025).
+// `name`, `config`, `template_message` are admin-only and must be fetched via a
+// dedicated admin RPC/view — not selected here.
+const AUTOMATION_MEMBER_COLUMNS =
+  'id, zone_id, trigger_type, action_type, is_active, created_at, updated_at';
 
 // ─── Query Keys ───
 export const zoneAutomationsKeys = {
@@ -25,7 +31,7 @@ export const zoneAutomationsKeys = {
 async function fetchAutomations(zoneId: string): Promise<ZoneAutomation[]> {
   const { data, error } = await supabase
     .from('zone_automations')
-    .select('*')
+    .select(AUTOMATION_MEMBER_COLUMNS)
     .eq('zone_id', zoneId)
     .order('created_at', { ascending: false });
   if (error) throw error;
