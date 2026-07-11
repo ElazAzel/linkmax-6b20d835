@@ -19,6 +19,10 @@ export interface ZoneAutomation {
 // Columns readable by authenticated members (see migration 20260619052025).
 // `name`, `config`, `template_message` are admin-only and must be fetched via a
 // dedicated admin RPC/view — not selected here.
+// Admins fetch the full row (including name/config) via a SECURITY DEFINER
+// RPC that checks is_zone_admin. Non-admin members can only see the columns
+// granted at the table level (id, zone_id, trigger_type, action_type,
+// is_active, created_at, updated_at) via the fallback SELECT.
 const AUTOMATION_MEMBER_COLUMNS =
   'id, zone_id, trigger_type, action_type, is_active, created_at, updated_at';
 
@@ -29,6 +33,12 @@ export const zoneAutomationsKeys = {
 
 // ─── Fetch ───
 async function fetchAutomations(zoneId: string): Promise<ZoneAutomation[]> {
+  // Try admin RPC first — returns full rows for zone admins.
+  const rpc = await (supabase as any).rpc('get_zone_automations_admin', { p_zone_id: zoneId });
+  if (!rpc.error && Array.isArray(rpc.data)) {
+    return rpc.data as ZoneAutomation[];
+  }
+  // Fallback: non-admin member — only granted columns.
   const { data, error } = await supabase
     .from('zone_automations')
     .select(AUTOMATION_MEMBER_COLUMNS)
