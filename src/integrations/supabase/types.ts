@@ -4894,6 +4894,20 @@ export type Database = {
       }
       get_user_pages: { Args: { p_user_id: string }; Returns: Json }
       get_user_zone_ids: { Args: { p_user_id: string }; Returns: string[] }
+      get_zone_automations_admin: {
+        Args: { p_zone_id: string }
+        Returns: {
+          action_type: string
+          config: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          trigger_type: string
+          updated_at: string
+          zone_id: string
+        }[]
+      }
       get_zone_calendar_feed_token: {
         Args: { p_zone_id: string }
         Returns: string
