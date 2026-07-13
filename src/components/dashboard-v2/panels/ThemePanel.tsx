@@ -147,14 +147,14 @@ export const ThemePanel = memo(function ThemePanel({
               ))}
             </div>
 
-            {!isPremium && <UpgradeCard t={t} onUpgrade={onUpgrade} title={t('themes.unlockPremium', 'Все Premium темы')} desc={t('themes.unlockPremiumDesc', 'Больше вариантов, эффектов и анимаций')} />}
+            {!isPremium && <UpgradeCard onUpgrade={onUpgrade} title={t('themes.unlockPremium', 'Все Premium темы')} desc={t('themes.unlockPremiumDesc', 'Больше вариантов, эффектов и анимаций')} />}
           </TabsContent>
 
           {/* ============ Background tab ============ */}
           <TabsContent value="background" className="p-5 pt-0 space-y-6">
             <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">{t('settings.backgroundType', 'Тип фона')}</Label>
-              <Select value={currentBgType} onValueChange={(v) => handleBackgroundTypeChange(v as 'none' | 'solid' | 'gradient' | 'image' | 'pattern')}>
+              <Select value={currentBgType} onValueChange={(v: string) => handleBackgroundTypeChange(v as 'none' | 'solid' | 'gradient' | 'image' | 'pattern')}>
                 <SelectTrigger className="bg-background/50"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">{t('common.none', 'Нет')}</SelectItem>
@@ -262,7 +262,7 @@ export const ThemePanel = memo(function ThemePanel({
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">{t('settings.behavior', 'Поведение')}</Label>
-                  <Select value={customBackground?.behavior ?? 'scroll'} onValueChange={(v) => patchBg({ behavior: v as 'scroll' | 'fixed' })}>
+                  <Select value={customBackground?.behavior ?? 'scroll'} onValueChange={(v: string) => patchBg({ behavior: v as 'scroll' | 'fixed' })}>
                     <SelectTrigger className="bg-background/50"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="scroll">{t('settings.behaviorScroll', 'Прокручивается')}</SelectItem>
@@ -326,7 +326,7 @@ export const ThemePanel = memo(function ThemePanel({
 
             <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">{t('themes.animationStyle', 'Анимации')}</Label>
-              <Select value={currentTheme.animationStyle ?? 'gentle'} onValueChange={(v) => setBlockField('animationStyle', v as 'none' | 'gentle' | 'energetic')}>
+              <Select value={currentTheme.animationStyle ?? 'gentle'} onValueChange={(v: string) => setBlockField('animationStyle', v as 'none' | 'gentle' | 'energetic')}>
                 <SelectTrigger className="bg-background/50"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">{t('themes.animationNone', 'Без анимации')}</SelectItem>
