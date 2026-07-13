@@ -477,7 +477,8 @@ function PresetGrid<T extends { id: string; name: string; isPremium: boolean }>(
   );
 }
 
-function UpgradeCard({ t, onUpgrade, title, desc }: { t: (k: string, d?: string) => string; onUpgrade?: () => void; title: string; desc: string }) {
+function UpgradeCard({ onUpgrade, title, desc }: { onUpgrade?: () => void; title: string; desc: string }) {
+  const { t } = useTranslation();
   return (
     <Card className="p-4 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20">
       <div className="flex items-center gap-3 mb-3">
