@@ -66,7 +66,8 @@ function getButtonStyleClass(buttonStyle?: PageData['theme']['buttonStyle']) {
     case 'default':
       return 'rounded-md';
     default:
-      return 'rounded-xl';
+      // Use the CSS var driven radius when a theme preset is active; fallback to rounded-xl.
+      return 'rounded-xl [border-radius:var(--lm-block-radius,theme(borderRadius.xl))]';
   }
 }
 
