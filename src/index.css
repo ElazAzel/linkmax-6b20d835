@@ -1,5 +1,6 @@
 /* Font is loaded via HTML preload for better FCP */
 @import './styles/quiet-bento.css';
+@import './styles/public-appearance.css';
 
 @tailwind base;
 @tailwind components;
