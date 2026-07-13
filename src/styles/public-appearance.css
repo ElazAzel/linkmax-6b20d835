@@ -1,0 +1,138 @@
+/*
+ * Public page appearance v2.
+ * Patterns, block-shape variables, hover behaviors, dividers.
+ * Consumed by PublicPage via CSS classes/vars — no JS runtime.
+ */
+
+/* ============ Pattern backgrounds ============ */
+/* All use CSS variables --lm-pattern-color and --lm-pattern-scale (fallback 1). */
+
+.lm-pattern-dots {
+  --lm-pattern-color: rgba(16, 19, 24, 0.14);
+  background-image: radial-gradient(var(--lm-pattern-color) 1.2px, transparent 1.2px);
+  background-size: calc(18px * var(--lm-pattern-scale, 1)) calc(18px * var(--lm-pattern-scale, 1));
+}
+
+.lm-pattern-grid {
+  --lm-pattern-color: rgba(16, 19, 24, 0.08);
+  background-image:
+    linear-gradient(to right, var(--lm-pattern-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--lm-pattern-color) 1px, transparent 1px);
+  background-size: calc(32px * var(--lm-pattern-scale, 1)) calc(32px * var(--lm-pattern-scale, 1));
+}
+
+.lm-pattern-waves {
+  --lm-pattern-color: rgba(16, 19, 24, 0.10);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='30' viewBox='0 0 60 30'><path d='M0 15 Q15 0 30 15 T60 15' stroke='%23101318' stroke-opacity='0.25' fill='none' stroke-width='1'/></svg>");
+  background-size: calc(60px * var(--lm-pattern-scale, 1)) calc(30px * var(--lm-pattern-scale, 1));
+}
+
+.lm-pattern-noise {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.lm-pattern-topo {
+  --lm-pattern-color: rgba(16, 19, 24, 0.10);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%23101318' stroke-opacity='0.15'><circle cx='40' cy='40' r='36'/><circle cx='40' cy='40' r='26'/><circle cx='40' cy='40' r='16'/><circle cx='40' cy='40' r='6'/></g></svg>");
+  background-size: calc(80px * var(--lm-pattern-scale, 1)) calc(80px * var(--lm-pattern-scale, 1));
+}
+
+.lm-pattern-mesh {
+  background-image:
+    radial-gradient(at 20% 20%, rgba(255, 87, 1, 0.18) 0px, transparent 45%),
+    radial-gradient(at 80% 30%, rgba(129, 140, 248, 0.18) 0px, transparent 45%),
+    radial-gradient(at 40% 80%, rgba(45, 212, 168, 0.18) 0px, transparent 45%);
+}
+
+/* ============ Block wrapper vars (opt-in) ============ */
+/* Blocks that want to follow the global shape/shadow can use these vars:
+   border-radius: var(--lm-block-radius);
+   box-shadow: var(--lm-block-shadow);
+*/
+
+/* Font pair application: headings + body */
+.lm-typography h1,
+.lm-typography h2,
+.lm-typography h3,
+.lm-typography h4 {
+  font-family: var(--lm-heading-font, inherit);
+}
+.lm-typography {
+  font-family: var(--lm-body-font, inherit);
+}
+
+/* ============ Hover behaviors on links inside .lm-hover-* roots ============ */
+.lm-hover-lift a[class*="rounded"],
+.lm-hover-lift .block-card {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.lm-hover-lift a[class*="rounded"]:hover,
+.lm-hover-lift .block-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.18);
+}
+
+.lm-hover-scale a[class*="rounded"],
+.lm-hover-scale .block-card {
+  transition: transform 200ms ease;
+}
+.lm-hover-scale a[class*="rounded"]:hover,
+.lm-hover-scale .block-card:hover {
+  transform: scale(1.02);
+}
+
+.lm-hover-glow a[class*="rounded"]:hover,
+.lm-hover-glow .block-card:hover {
+  box-shadow: 0 0 24px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.15);
+}
+
+.lm-hover-underline a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lm-hover-none * {
+  /* no additional hover */
+}
+
+/* ============ Dividers between top-level blocks ============ */
+.lm-divider-hairline > * + * {
+  border-top: 1px solid rgba(16, 19, 24, 0.08);
+  padding-top: 12px;
+}
+.lm-divider-dotted > * + * {
+  border-top: 1px dotted rgba(16, 19, 24, 0.28);
+  padding-top: 12px;
+}
+.lm-divider-gradient > * + * {
+  position: relative;
+  padding-top: 16px;
+}
+.lm-divider-gradient > * + *::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, hsl(var(--primary) / 0.5), transparent);
+}
+.lm-divider-ornament > * + * {
+  position: relative;
+  padding-top: 24px;
+  text-align: inherit;
+}
+.lm-divider-ornament > * + *::before {
+  content: '✦';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--lm-accent, hsl(var(--primary)));
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* Accent color: expose to any child using bg-primary/text-primary via a light bridge */
+[style*="--lm-accent"] .lm-accent-bg { background-color: var(--lm-accent); color: #fff; }
+[style*="--lm-accent"] .lm-accent-text { color: var(--lm-accent); }

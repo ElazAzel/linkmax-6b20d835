@@ -6,10 +6,21 @@ import type { Block, EditorMode } from './blocks';
 
 // Page background configuration
 export interface PageBackground {
-  type: 'solid' | 'gradient' | 'image';
-  value: string; // color hex, gradient css, or image url
+  type: 'solid' | 'gradient' | 'image' | 'pattern';
+  value: string; // color hex, gradient css, image url, or pattern id
   gradientAngle?: number;
+  overlay?: string; // optional overlay color (rgba/hex)
+  overlayOpacity?: number; // 0-100
+  patternColor?: string; // pattern foreground color
+  patternScale?: number; // 0.5 - 3
+  blur?: number; // 0-20 px
+  behavior?: 'scroll' | 'fixed';
 }
+
+export type BlockShape = 'sharp' | 'soft' | 'rounded' | 'pill' | 'ticket' | 'squircle';
+export type BlockShadow = 'none' | 'sm' | 'md' | 'lg' | 'glow' | 'inner';
+export type BlockHover = 'none' | 'lift' | 'scale' | 'glow' | 'underline';
+export type DividerStyle = 'none' | 'hairline' | 'dotted' | 'gradient' | 'ornament';
 
 export interface PageTheme {
   backgroundColor: string;
@@ -20,8 +31,15 @@ export interface PageTheme {
   iconStyle?: 'rounded' | 'square' | 'duotone';
   animationStyle?: 'none' | 'gentle' | 'energetic';
   darkMode?: boolean;
-  // Custom page background (business only)
   customBackground?: PageBackground;
+  // Extended appearance v2 (all optional / backward compatible)
+  fontPair?: string;
+  accentColor?: string;
+  blockShape?: BlockShape;
+  blockShadow?: BlockShadow;
+  blockHover?: BlockHover;
+  divider?: DividerStyle;
+  themePreset?: string;
 }
 
 export interface PageMetrics {
