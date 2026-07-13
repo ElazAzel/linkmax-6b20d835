@@ -273,36 +273,14 @@ export default function PublicPage() {
     }
   };
 
-  const getPageBackgroundStyle = (background?: PageBackground): React.CSSProperties => {
-    if (!background) return {};
-
-    switch (background.type) {
-      case 'solid':
-        return { backgroundColor: background.value };
-      case 'gradient': {
-        const colors = background.value.split(',').map(c => c.trim());
-        return {
-          background: `linear-gradient(${background.gradientAngle || 135}deg, ${colors.join(', ')})`
-        };
-      }
-      case 'image':
-        return {
-          backgroundImage: `url(${background.value})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-        };
-      default:
-        return {};
-    }
-  };
-
   const customBackground = pageData?.theme?.customBackground;
-  const backgroundStyle = getPageBackgroundStyle(customBackground);
+  const bgResult = getBackgroundStyle(customBackground);
   const pageFontFamily = pageData?.theme?.fontFamily || 'sans';
   const pageAnimation = getAnimationConfig(pageData?.theme?.animationStyle);
   const buttonStyleClass = getButtonStyleClass(pageData?.theme?.buttonStyle);
   const iconStyleClass = getIconStyleClass(pageData?.theme?.iconStyle);
+  const appearanceVars = getPublicPageCssVars(pageData?.theme);
+  const appearanceRootClass = getAppearanceRootClass(pageData?.theme);
 
   return (
     <AnimatePresence mode="wait">
@@ -313,9 +291,14 @@ export default function PublicPage() {
       ) : (
         <motion.div
           key="content"
-          className="min-h-screen bg-background"
+          className={cn(
+            'min-h-screen bg-background lm-typography relative',
+            bgResult.className,
+            appearanceRootClass,
+          )}
           style={{
-            ...backgroundStyle,
+            ...appearanceVars,
+            ...bgResult.style,
             color: pageData?.theme?.textColor || 'inherit',
             fontFamily: FONT_FAMILY_MAP[pageFontFamily],
           }}
