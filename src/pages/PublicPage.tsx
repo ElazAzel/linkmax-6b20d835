@@ -32,7 +32,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { getBackgroundStyle, getPublicPageCssVars, getAppearanceRootClass } from '@/lib/appearance/style-utils';
-import type { PageData, PageBackground, Block } from '@/types/page';
+import type { PageData, Block } from '@/types/page';
 import {
   Dialog,
   DialogContent,
