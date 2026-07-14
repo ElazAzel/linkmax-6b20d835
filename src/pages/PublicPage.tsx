@@ -484,6 +484,7 @@ export default function PublicPage() {
               )}
             </div>
           </AnalyticsProvider>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
