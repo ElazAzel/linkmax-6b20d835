@@ -293,12 +293,10 @@ export default function PublicPage() {
           key="content"
           className={cn(
             'min-h-screen bg-background lm-typography relative',
-            bgResult.className,
             appearanceRootClass,
           )}
           style={{
             ...appearanceVars,
-            ...bgResult.style,
             color: pageData?.theme?.textColor || 'inherit',
             fontFamily: FONT_FAMILY_MAP[pageFontFamily],
           }}
@@ -307,6 +305,16 @@ export default function PublicPage() {
           exit={{ opacity: 0 }}
           transition={{ duration: pageAnimation.duration }}
         >
+          {/* Background layer — isolated so filter/blur doesn't affect content */}
+          <div
+            aria-hidden
+            className={cn('pointer-events-none fixed inset-0 z-0', bgResult.className)}
+            style={bgResult.style}
+          />
+          {bgResult.overlay && (
+            <div aria-hidden style={{ ...bgResult.overlay, position: 'fixed' }} />
+          )}
+          <div className="relative z-[1]">
           {/* Enhanced Auto-SEO with Schema.org and Quality Gate */}
           <EnhancedSEOHead
             pageData={pageData}
