@@ -392,6 +392,7 @@ export default function PublicPage() {
                   isOwnerPremium={isOwnerPremium}
                   ownerTier={ownerTier}
                   isPreview={false}
+                  className={appearanceRootClass}
                 />
 
                 <VerifiedReviewsSection pageId={pageData?.id} />
