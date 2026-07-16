@@ -545,6 +545,62 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                 </div>
               </div>
 
+              {/* Avatar Shape */}
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">{t('profile.avatarShape', 'Форма аватара')}</Label>
+                <div className="grid grid-cols-5 gap-2">
+                  {AVATAR_SHAPES.map((s) => {
+                    const locked = s.isPro && !canUsePremiumFrames();
+                    const active = (formData.avatarShape || 'circle') === s.value;
+                    return (
+                      <button
+                        key={s.value}
+                        type="button"
+                        disabled={locked}
+                        onClick={() => {
+                          if (locked) { navigate('/pricing'); return; }
+                          setFormData(prev => ({ ...prev, avatarShape: s.value as AvatarShape }));
+                        }}
+                        className={cn(
+                          "relative flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all",
+                          active ? "border-primary bg-primary/5" : "border-border/20 hover:border-border/50",
+                          locked && "opacity-60"
+                        )}
+                      >
+                        <div className="h-8 w-8 bg-gradient-to-br from-primary to-primary/50" style={getAvatarShapeStyle(s.value)} />
+                        <span className="text-[10px] font-medium">{s.label}</span>
+                        {locked && <Lock className="absolute top-1 right-1 h-3 w-3" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Status Ring */}
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">{t('profile.statusRing', 'Статус (кольцо)')}</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {STATUS_RINGS.map((s) => {
+                    const active = (formData.statusRing || 'none') === s.value;
+                    return (
+                      <button
+                        key={s.value}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, statusRing: s.value as StatusRing }))}
+                        className={cn(
+                          "flex items-center gap-2 py-2 px-2 rounded-xl border-2 text-xs font-medium transition-all",
+                          active ? "border-primary bg-primary/5" : "border-border/20 hover:border-border/50"
+                        )}
+                      >
+                        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: s.color === 'transparent' ? 'hsl(var(--muted))' : s.color }} />
+                        {s.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+
               {/* Avatar Frame - Using FrameSelector for full options with freemium */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">{t('profile.avatarFrame', 'Рамка')}</Label>
