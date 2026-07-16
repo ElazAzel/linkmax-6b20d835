@@ -162,37 +162,101 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
 
   const IconComponent = getIconComponent();
 
+  // Cover parallax (Premium: block.coverParallax)
+  const coverRef = useRef<HTMLDivElement | null>(null);
+  const [parallaxY, setParallaxY] = useState(0);
+  useEffect(() => {
+    if (!block.coverParallax || !coverRef.current) return;
+    const el = coverRef.current;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
+        // -20px..+20px based on element position vs viewport
+        const pct = Math.max(-1, Math.min(1, (rect.top + rect.height / 2 - vh / 2) / vh));
+        setParallaxY(-pct * 24);
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [block.coverParallax]);
+
+  const avatarShapeStyle = getAvatarShapeStyle(block.avatarShape || 'circle');
+  const statusRing = getStatusRingConfig(block.statusRing);
+  const showStatusRing = statusRing.value !== 'none';
+  const patternStyle = getCoverPatternStyle(block.coverPattern);
+  const hasCoverMedia = !!(block.coverImage || block.coverVideo);
+
   return (
     <div className={`relative flex min-w-0 flex-col overflow-visible ${getPositionClass()}`}>
-      {block.coverImage && (
-        <div className={`relative w-full ${getCoverHeight()} overflow-hidden`}>
-          <img
-            src={block.coverImage}
-            alt="Cover"
-            className="w-full h-full object-cover"
-          />
-          {block.coverGradient !== 'none' && (
+      {hasCoverMedia && (
+        <div ref={coverRef} className={`relative w-full ${getCoverHeight()} overflow-hidden`}>
+          {block.coverVideo ? (
+            <video
+              src={block.coverVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
+            />
+          ) : (
+            <img
+              src={block.coverImage}
+              alt="Cover"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
+            />
+          )}
+          {block.coverGradient && block.coverGradient !== 'none' && (
             <div className={`absolute inset-0 ${getCoverGradient()}`} />
+          )}
+          {block.coverPattern && block.coverPattern !== 'none' && (
+            <div className="absolute inset-0 pointer-events-none" style={patternStyle} />
           )}
         </div>
       )}
 
-      <div className={`flex min-w-0 flex-col ${getPositionClass()} gap-4 px-4 py-5 sm:p-6 ${block.coverImage ? '-mt-16' : ''}`}>
+      <div className={`flex min-w-0 flex-col ${getPositionClass()} gap-4 px-4 py-5 sm:p-6 ${hasCoverMedia ? '-mt-16' : ''}`}>
         {/* Outer container for positioning icon - no animation here */}
         <div className="relative">
+          {/* Status ring - outer glow */}
+          {showStatusRing && (
+            <span
+              aria-hidden
+              className={cn(
+                'pointer-events-none absolute -inset-1.5 rounded-full',
+                statusRing.pulse && 'animate-pulse'
+              )}
+              style={{
+                boxShadow: `0 0 0 3px ${statusRing.color}, 0 0 18px ${statusRing.color}66`,
+                borderRadius: (avatarShapeStyle.borderRadius as string) || '9999px',
+              }}
+            />
+          )}
+
           {/* Frame wrapper - animations and shadow apply here ONLY */}
           <div
             className={cn(
-              "flex items-center justify-center rounded-full",
+              "flex items-center justify-center",
               getFrameSize(),
             )}
             style={{
               ...getShadowStyles(block.shadowStyle || 'glass'),
               ...getFrameStyles(frameStyle),
+              ...avatarShapeStyle,
             }}
           >
             {/* Avatar - NO animation, NO shadow - completely static */}
-            <Avatar className={cn(getAvatarSize(), "bg-background")}>
+            <Avatar className={cn(getAvatarSize(), 'bg-background')} style={avatarShapeStyle}>
               <AvatarImage src={block.avatar} alt={name} className="object-cover" />
               <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
                 {initials}
@@ -206,6 +270,17 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
               <Suspense fallback={<div className="h-4 w-4 bg-primary-foreground/20 rounded-full" />}>
                 <IconComponent className="h-4 w-4" />
               </Suspense>
+            </div>
+          )}
+
+          {/* Status label chip */}
+          {showStatusRing && statusRing.value !== 'none' && (
+            <div
+              className="absolute -bottom-1 left-1/2 -translate-x-1/2 translate-y-full mt-1 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium text-white shadow"
+              style={{ backgroundColor: statusRing.color }}
+            >
+              <span className={cn('w-1.5 h-1.5 rounded-full bg-white/90', statusRing.pulse && 'animate-pulse')} />
+              {statusRing.label}
             </div>
           )}
 
@@ -237,7 +312,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
             <h1 className={cn(
               "max-w-full text-2xl font-bold leading-tight break-words hyphens-auto transition-all duration-300 overflow-visible",
               block.nameAnimation === 'none' && "hover:text-primary",
-              (isPremiumUser || block.nameAnimation !== 'none') && "text-gradient bg-[length:200%_auto] animate-gradient-x",
+              (isPremiumUser || (block.nameAnimation && block.nameAnimation !== 'none' && block.nameAnimation !== 'shine' && block.nameAnimation !== 'ticker')) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
               getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
             )}>
               {name}
@@ -246,6 +321,30 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
 
           {bio && (
             <p className="text-muted-foreground max-w-md whitespace-pre-line break-words hyphens-auto leading-relaxed">{parseRichText(bio)}</p>
+          )}
+
+          {/* Profile badge row (city / status / emoji / custom) */}
+          {block.badges && block.badges.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+              {block.badges.map((b) => {
+                const Icon = b.icon ? getLucideIcon(b.icon) : null;
+                return (
+                  <span
+                    key={b.id}
+                    className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/60 px-2.5 py-1 text-xs font-medium text-foreground/90 backdrop-blur-sm"
+                    style={b.color ? { borderColor: b.color, color: b.color } : undefined}
+                  >
+                    {b.emoji && <span aria-hidden>{b.emoji}</span>}
+                    {Icon && Icon !== CheckCircle2 && (
+                      <Suspense fallback={null}>
+                        <Icon className="h-3.5 w-3.5" />
+                      </Suspense>
+                    )}
+                    <span className="truncate max-w-[140px]">{b.label}</span>
+                  </span>
+                );
+              })}
+            </div>
           )}
         </div>
 
