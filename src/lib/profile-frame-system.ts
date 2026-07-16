@@ -2,17 +2,22 @@ import type { ProfileFrameStyle } from '@/types/page';
 
 // ============= Frame Categories & Tiers =============
 
-export type NameAnimationType = 
-  | 'none' 
-  | 'typing' 
-  | 'wave' 
-  | 'bounce' 
-  | 'glow' 
-  | 'gradient' 
-  | 'shake' 
+export type NameAnimationType =
+  | 'none'
+  | 'typing'
+  | 'wave'
+  | 'bounce'
+  | 'glow'
+  | 'gradient'
+  | 'shake'
   | 'pulse'
   | 'rainbow'
-  | 'neon';
+  | 'neon'
+  | 'shine'
+  | 'ticker'
+  | 'underline-draw'
+  | 'glitch'
+  | 'rainbow-slow';
 
 export interface FrameOption {
   value: ProfileFrameStyle;
@@ -108,6 +113,11 @@ export const NAME_ANIMATION_OPTIONS: NameAnimationOption[] = [
   { value: 'pulse', label: 'Пульсация', labelKey: 'nameAnimation.pulse', isPro: true },
   { value: 'rainbow', label: 'Радуга', labelKey: 'nameAnimation.rainbow', isPro: true },
   { value: 'neon', label: 'Неон', labelKey: 'nameAnimation.neon', isPro: true },
+  { value: 'shine', label: 'Блик', labelKey: 'nameAnimation.shine', isPro: true },
+  { value: 'ticker', label: 'Бегущая строка', labelKey: 'nameAnimation.ticker', isPro: true },
+  { value: 'underline-draw', label: 'Подчёркивание', labelKey: 'nameAnimation.underlineDraw', isPro: true },
+  { value: 'glitch', label: 'Глитч', labelKey: 'nameAnimation.glitch', isPro: true },
+  { value: 'rainbow-slow', label: 'Радуга (плавно)', labelKey: 'nameAnimation.rainbowSlow', isPro: true },
 ];
 
 // ============= Helper Functions =============
@@ -248,6 +258,59 @@ export const NAME_ANIMATION_CSS = `
   
   .name-animation-neon {
     animation: name-neon 2s ease-in-out infinite;
+  }
+
+  @keyframes name-shine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .name-animation-shine {
+    background: linear-gradient(90deg, currentColor 0%, currentColor 40%, #fff 50%, currentColor 60%, currentColor 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: name-shine 2.4s linear infinite;
+  }
+
+  @keyframes name-ticker {
+    0% { transform: translateX(20%); }
+    100% { transform: translateX(-100%); }
+  }
+  .name-animation-ticker {
+    display: inline-block;
+    white-space: nowrap;
+    animation: name-ticker 8s linear infinite;
+  }
+
+  @keyframes name-underline-draw {
+    0% { background-size: 0% 2px; }
+    60%, 100% { background-size: 100% 2px; }
+  }
+  .name-animation-underline-draw {
+    background-image: linear-gradient(hsl(var(--primary)), hsl(var(--primary)));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 2px;
+    animation: name-underline-draw 1.6s ease-out infinite alternate;
+    padding-bottom: 4px;
+  }
+
+  @keyframes name-glitch-a {
+    0%,100% { transform: translate(0,0); }
+    20% { transform: translate(-2px,1px); }
+    40% { transform: translate(2px,-1px); }
+    60% { transform: translate(-1px,-2px); }
+    80% { transform: translate(1px,2px); }
+  }
+  .name-animation-glitch {
+    position: relative;
+    animation: name-glitch-a 0.9s steps(2, end) infinite;
+    text-shadow: 1px 0 #ff00c8, -1px 0 #00e5ff;
+  }
+
+  .name-animation-rainbow-slow {
+    animation: name-rainbow 12s linear infinite;
   }
 `;
 
