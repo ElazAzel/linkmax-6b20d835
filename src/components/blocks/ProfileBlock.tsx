@@ -1,4 +1,4 @@
-import { memo, useMemo, Suspense } from 'react';
+import { memo, useMemo, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
@@ -8,6 +8,12 @@ import { getLucideIcon, CheckCircle2 } from '@/lib/utils/icon-utils';
 import { cn } from '@/lib/utils/utils';
 import { VerifiedBadge } from './VerifiedBadge';
 import { NAME_ANIMATION_CSS, getNameAnimationClass, type NameAnimationType } from '@/lib/profile-frame-system';
+import {
+  getAvatarShapeStyle,
+  getStatusRingConfig,
+  getCoverPatternStyle,
+  coverHeightClass,
+} from '@/lib/profile-shapes';
 import type { ProfileBlock as ProfileBlockType, ProfileFrameStyle, VerificationIconType } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
