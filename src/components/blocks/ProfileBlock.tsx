@@ -148,15 +148,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
     }
   };
 
-  const getCoverHeight = () => {
-    const height = block.coverHeight || 'medium';
-    switch (height) {
-      case 'small': return 'h-[120px]';
-      case 'medium': return 'h-[200px]';
-      case 'large': return 'h-[320px]';
-      default: return 'h-[200px]';
-    }
-  };
+  const getCoverHeight = () => coverHeightClass(block.coverHeight);
 
   const frameStyle: ProfileFrameStyle = block.avatarFrame || 'default';
   const hasGradientFrame = isGradientFrame(frameStyle);
