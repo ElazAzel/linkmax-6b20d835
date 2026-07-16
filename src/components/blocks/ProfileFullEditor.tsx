@@ -369,27 +369,98 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
               {/* Cover Height */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">{t('profile.coverHeight', 'Высота')}</Label>
-                <div className="grid grid-cols-3 gap-2">
-                  {COVER_HEIGHTS.map((height) => (
+                <div className="grid grid-cols-4 gap-2">
+                  {COVER_HEIGHTS.map((height) => {
+                    const isProOpt = (height as { isPro?: boolean }).isPro;
+                    const locked = isProOpt && !canUsePremiumFrames();
+                    return (
+                      <button
+                        key={height.value}
+                        type="button"
+                        disabled={locked}
+                        onClick={() => {
+                          if (locked) { navigate('/pricing'); return; }
+                          setFormData(prev => ({ ...prev, coverHeight: height.value as CoverHeight }));
+                        }}
+                        className={cn(
+                          "relative py-3 rounded-xl border-2 text-sm font-medium transition-all",
+                          formData.coverHeight === height.value
+                            ? "border-primary bg-primary/5"
+                            : "border-border/20 hover:border-border/50",
+                          locked && "opacity-60"
+                        )}
+                      >
+                        {t(height.label)}
+                        {locked && <Lock className="absolute top-1 right-1 h-3 w-3" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Cover Video (Premium) */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm font-medium flex items-center gap-1.5">
+                    <Film className="h-3.5 w-3.5" />
+                    {t('profile.coverVideo', 'Видео-обложка')}
+                  </Label>
+                  {!canUsePremiumFrames() && <Lock className="h-3 w-3 text-muted-foreground" />}
+                </div>
+                <input
+                  type="url"
+                  placeholder="https://…/loop.mp4"
+                  value={formData.coverVideo || ''}
+                  disabled={!canUsePremiumFrames()}
+                  onChange={(e) => setFormData(prev => ({ ...prev, coverVideo: e.target.value || undefined }))}
+                  className="w-full h-11 px-3 rounded-xl border border-border/40 bg-background text-sm disabled:opacity-60"
+                />
+                {!canUsePremiumFrames() && (
+                  <button type="button" onClick={() => navigate('/pricing')} className="text-xs text-primary hover:underline">
+                    {t('common.upgrade', 'Открыть в Premium')}
+                  </button>
+                )}
+              </div>
+
+              {/* Parallax (Premium) */}
+              <label className={cn("flex items-center justify-between rounded-xl border border-border/30 p-3", !canUsePremiumFrames() && "opacity-60")}>
+                <span className="text-sm font-medium flex items-center gap-2">
+                  {t('profile.coverParallax', 'Parallax при скролле')}
+                  {!canUsePremiumFrames() && <Lock className="h-3 w-3" />}
+                </span>
+                <input
+                  type="checkbox"
+                  disabled={!canUsePremiumFrames()}
+                  checked={!!formData.coverParallax}
+                  onChange={(e) => setFormData(prev => ({ ...prev, coverParallax: e.target.checked }))}
+                  className="h-5 w-5 accent-primary"
+                />
+              </label>
+
+              {/* Cover Pattern */}
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">{t('profile.coverPattern', 'Паттерн')}</Label>
+                <div className="grid grid-cols-4 gap-2">
+                  {COVER_PATTERNS.map((p) => (
                     <button
-                      key={height.value}
+                      key={p.value}
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, coverHeight: height.value as CoverHeight }))}
+                      onClick={() => setFormData(prev => ({ ...prev, coverPattern: p.value as CoverPattern }))}
                       className={cn(
-                        "py-3 rounded-xl border-2 text-sm font-medium transition-all",
-                        formData.coverHeight === height.value
-                          ? "border-primary bg-primary/5"
-                          : "border-border/20 hover:border-border/50"
+                        "aspect-square rounded-xl border-2 bg-muted/40 text-[10px] font-medium transition-all overflow-hidden",
+                        formData.coverPattern === p.value ? "border-primary ring-2 ring-primary/30" : "border-border/20 hover:border-border/50"
                       )}
+                      style={p.svg ? { ...getCoverPatternStyle(p.value), backgroundColor: 'hsl(var(--primary) / 0.35)' } : undefined}
+                      title={p.label}
                     >
-                      {t(height.label)}
+                      {!p.svg && p.label}
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Cover Gradient */}
-              {formData.coverImage && (
+              {(formData.coverImage || formData.coverVideo) && (
                 <div className="space-y-3">
                   <Label className="text-sm font-medium">{t('profile.coverGradient', 'Градиент')}</Label>
                   <div className="grid grid-cols-4 gap-2">
