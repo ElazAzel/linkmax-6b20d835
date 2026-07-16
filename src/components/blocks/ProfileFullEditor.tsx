@@ -53,6 +53,21 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { FrameSelector } from '@/components/profile/FrameSelector';
 import { NameAnimationSelector } from '@/components/profile/NameAnimationSelector';
 import { NAME_ANIMATION_CSS, getNameAnimationClass } from '@/lib/profile-frame-system';
+import {
+  AVATAR_SHAPES,
+  STATUS_RINGS,
+  COVER_PATTERNS,
+  getAvatarShapeStyle,
+  getCoverPatternStyle,
+  type AvatarShape,
+  type StatusRing,
+  type CoverPattern,
+  type ProfileBadge,
+} from '@/lib/profile-shapes';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Film from 'lucide-react/dist/esm/icons/film';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import type { ProfileBlock as ProfileBlockType, NameAnimationType } from '@/types/page';
 
 interface ProfileFullEditorProps {
@@ -76,6 +91,7 @@ const COVER_HEIGHTS = [
   { value: 'small', label: 'profile.small' },
   { value: 'medium', label: 'profile.medium' },
   { value: 'large', label: 'profile.large' },
+  { value: 'xl', label: 'XL', isPro: true },
 ];
 
 const AVATAR_SIZES = [
@@ -353,27 +369,98 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
               {/* Cover Height */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">{t('profile.coverHeight', 'Высота')}</Label>
-                <div className="grid grid-cols-3 gap-2">
-                  {COVER_HEIGHTS.map((height) => (
+                <div className="grid grid-cols-4 gap-2">
+                  {COVER_HEIGHTS.map((height) => {
+                    const isProOpt = (height as { isPro?: boolean }).isPro;
+                    const locked = isProOpt && !canUsePremiumFrames();
+                    return (
+                      <button
+                        key={height.value}
+                        type="button"
+                        disabled={locked}
+                        onClick={() => {
+                          if (locked) { navigate('/pricing'); return; }
+                          setFormData(prev => ({ ...prev, coverHeight: height.value as CoverHeight }));
+                        }}
+                        className={cn(
+                          "relative py-3 rounded-xl border-2 text-sm font-medium transition-all",
+                          formData.coverHeight === height.value
+                            ? "border-primary bg-primary/5"
+                            : "border-border/20 hover:border-border/50",
+                          locked && "opacity-60"
+                        )}
+                      >
+                        {t(height.label)}
+                        {locked && <Lock className="absolute top-1 right-1 h-3 w-3" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Cover Video (Premium) */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm font-medium flex items-center gap-1.5">
+                    <Film className="h-3.5 w-3.5" />
+                    {t('profile.coverVideo', 'Видео-обложка')}
+                  </Label>
+                  {!canUsePremiumFrames() && <Lock className="h-3 w-3 text-muted-foreground" />}
+                </div>
+                <input
+                  type="url"
+                  placeholder="https://…/loop.mp4"
+                  value={formData.coverVideo || ''}
+                  disabled={!canUsePremiumFrames()}
+                  onChange={(e) => setFormData(prev => ({ ...prev, coverVideo: e.target.value || undefined }))}
+                  className="w-full h-11 px-3 rounded-xl border border-border/40 bg-background text-sm disabled:opacity-60"
+                />
+                {!canUsePremiumFrames() && (
+                  <button type="button" onClick={() => navigate('/pricing')} className="text-xs text-primary hover:underline">
+                    {t('common.upgrade', 'Открыть в Premium')}
+                  </button>
+                )}
+              </div>
+
+              {/* Parallax (Premium) */}
+              <label className={cn("flex items-center justify-between rounded-xl border border-border/30 p-3", !canUsePremiumFrames() && "opacity-60")}>
+                <span className="text-sm font-medium flex items-center gap-2">
+                  {t('profile.coverParallax', 'Parallax при скролле')}
+                  {!canUsePremiumFrames() && <Lock className="h-3 w-3" />}
+                </span>
+                <input
+                  type="checkbox"
+                  disabled={!canUsePremiumFrames()}
+                  checked={!!formData.coverParallax}
+                  onChange={(e) => setFormData(prev => ({ ...prev, coverParallax: e.target.checked }))}
+                  className="h-5 w-5 accent-primary"
+                />
+              </label>
+
+              {/* Cover Pattern */}
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">{t('profile.coverPattern', 'Паттерн')}</Label>
+                <div className="grid grid-cols-4 gap-2">
+                  {COVER_PATTERNS.map((p) => (
                     <button
-                      key={height.value}
+                      key={p.value}
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, coverHeight: height.value as CoverHeight }))}
+                      onClick={() => setFormData(prev => ({ ...prev, coverPattern: p.value as CoverPattern }))}
                       className={cn(
-                        "py-3 rounded-xl border-2 text-sm font-medium transition-all",
-                        formData.coverHeight === height.value
-                          ? "border-primary bg-primary/5"
-                          : "border-border/20 hover:border-border/50"
+                        "aspect-square rounded-xl border-2 bg-muted/40 text-[10px] font-medium transition-all overflow-hidden",
+                        formData.coverPattern === p.value ? "border-primary ring-2 ring-primary/30" : "border-border/20 hover:border-border/50"
                       )}
+                      style={p.svg ? { ...getCoverPatternStyle(p.value), backgroundColor: 'hsl(var(--primary) / 0.35)' } : undefined}
+                      title={p.label}
                     >
-                      {t(height.label)}
+                      {!p.svg && p.label}
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Cover Gradient */}
-              {formData.coverImage && (
+              {(formData.coverImage || formData.coverVideo) && (
                 <div className="space-y-3">
                   <Label className="text-sm font-medium">{t('profile.coverGradient', 'Градиент')}</Label>
                   <div className="grid grid-cols-4 gap-2">
@@ -458,6 +545,62 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                 </div>
               </div>
 
+              {/* Avatar Shape */}
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">{t('profile.avatarShape', 'Форма аватара')}</Label>
+                <div className="grid grid-cols-5 gap-2">
+                  {AVATAR_SHAPES.map((s) => {
+                    const locked = s.isPro && !canUsePremiumFrames();
+                    const active = (formData.avatarShape || 'circle') === s.value;
+                    return (
+                      <button
+                        key={s.value}
+                        type="button"
+                        disabled={locked}
+                        onClick={() => {
+                          if (locked) { navigate('/pricing'); return; }
+                          setFormData(prev => ({ ...prev, avatarShape: s.value as AvatarShape }));
+                        }}
+                        className={cn(
+                          "relative flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all",
+                          active ? "border-primary bg-primary/5" : "border-border/20 hover:border-border/50",
+                          locked && "opacity-60"
+                        )}
+                      >
+                        <div className="h-8 w-8 bg-gradient-to-br from-primary to-primary/50" style={getAvatarShapeStyle(s.value)} />
+                        <span className="text-[10px] font-medium">{s.label}</span>
+                        {locked && <Lock className="absolute top-1 right-1 h-3 w-3" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Status Ring */}
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">{t('profile.statusRing', 'Статус (кольцо)')}</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {STATUS_RINGS.map((s) => {
+                    const active = (formData.statusRing || 'none') === s.value;
+                    return (
+                      <button
+                        key={s.value}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, statusRing: s.value as StatusRing }))}
+                        className={cn(
+                          "flex items-center gap-2 py-2 px-2 rounded-xl border-2 text-xs font-medium transition-all",
+                          active ? "border-primary bg-primary/5" : "border-border/20 hover:border-border/50"
+                        )}
+                      >
+                        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: s.color === 'transparent' ? 'hsl(var(--muted))' : s.color }} />
+                        {s.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+
               {/* Avatar Frame - Using FrameSelector for full options with freemium */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">{t('profile.avatarFrame', 'Рамка')}</Label>
@@ -537,7 +680,78 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                 enableRichText={true}
                 error={errors.bio}
               />
+
+              {/* Profile Badges (city / status / emoji) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-medium">{t('profile.badges', 'Бейджи под именем')}</Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-8 rounded-lg"
+                    onClick={() => {
+                      const next = [...(formData.badges || []), {
+                        id: `b_${Date.now()}`,
+                        kind: 'custom' as const,
+                        label: '',
+                      }];
+                      if (next.length > 4) return;
+                      setFormData(prev => ({ ...prev, badges: next }));
+                    }}
+                  >
+                    <Plus className="h-3.5 w-3.5 mr-1" />
+                    {t('profile.addBadge', 'Добавить')}
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {t('profile.badgesHint', 'До 4 бейджей: город, статус, эмодзи или свой текст')}
+                </p>
+                <div className="space-y-2">
+                  {(formData.badges || []).map((b, idx) => (
+                    <div key={b.id} className="flex items-center gap-2 rounded-xl border border-border/30 p-2">
+                      <input
+                        type="text"
+                        placeholder="🎯"
+                        value={b.emoji || ''}
+                        maxLength={2}
+                        onChange={(e) => {
+                          const badges = [...(formData.badges || [])];
+                          badges[idx] = { ...badges[idx], emoji: e.target.value || undefined };
+                          setFormData(prev => ({ ...prev, badges }));
+                        }}
+                        className="h-9 w-12 text-center rounded-lg border border-border/40 bg-background text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder={t('profile.badgeLabelPlaceholder', 'Москва / Открыт для работы')}
+                        value={b.label}
+                        maxLength={40}
+                        onChange={(e) => {
+                          const badges = [...(formData.badges || [])];
+                          badges[idx] = { ...badges[idx], label: e.target.value };
+                          setFormData(prev => ({ ...prev, badges }));
+                        }}
+                        className="flex-1 h-9 px-3 rounded-lg border border-border/40 bg-background text-sm"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => {
+                          const badges = (formData.badges || []).filter((_, i) => i !== idx);
+                          setFormData(prev => ({ ...prev, badges: badges.length ? badges : undefined }));
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </TabsContent>
+
 
             {/* Style Tab */}
             <TabsContent value="style" className="mt-0 space-y-5">
