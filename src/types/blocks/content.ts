@@ -3,7 +3,20 @@ import type { BlockSchedule, BlockStyle } from './base';
 
 export type ProfileFrameStyle = 'default' | 'none' | 'solid' | 'gradient' | 'gradient-sunset' | 'gradient-ocean' | 'gradient-purple' | 'neon-blue' | 'neon-pink' | 'neon-green' | 'rainbow' | 'rainbow-spin' | 'double' | 'dashed' | 'dotted' | 'glow-pulse' | 'fire' | 'electric' | 'wave' | 'heartbeat' | 'sparkle' | 'glitch';
 
-export type NameAnimationType = 'none' | 'typing' | 'wave' | 'bounce' | 'glow' | 'gradient' | 'shake' | 'pulse' | 'rainbow' | 'neon';
+export type NameAnimationType = 'none' | 'typing' | 'wave' | 'bounce' | 'glow' | 'gradient' | 'shake' | 'pulse' | 'rainbow' | 'neon' | 'shine' | 'ticker' | 'underline-draw' | 'glitch' | 'rainbow-slow';
+
+export type AvatarShapeType = 'circle' | 'squircle' | 'hexagon' | 'blob' | 'sticker';
+export type StatusRingType = 'none' | 'online' | 'busy' | 'away' | 'offline' | 'live';
+export type CoverPatternType = 'none' | 'dots' | 'grid' | 'waves' | 'noise' | 'topo' | 'mesh';
+
+export interface ProfileBadgeItem {
+  id: string;
+  kind?: 'city' | 'status' | 'emoji' | 'custom';
+  icon?: string;
+  emoji?: string;
+  label: string;
+  color?: string;
+}
 
 export type VerificationIconColor = 'blue' | 'green' | 'gold' | 'purple' | 'pink' | 'red' | 'white';
 export type VerificationIconPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
@@ -25,8 +38,14 @@ export interface ProfileBlock {
     avatarIcon?: string; // Lucide icon name
     nameAnimation?: NameAnimationType; // Name text animation
     coverImage?: string;
+    coverVideo?: string; // Premium: mp4/webm loop URL
+    coverParallax?: boolean; // Premium: parallax scroll
+    coverPattern?: CoverPatternType; // decorative SVG overlay pattern
     coverGradient?: 'none' | 'dark' | 'light' | 'primary' | 'sunset' | 'ocean' | 'purple';
-    coverHeight?: 'small' | 'medium' | 'large';
+    coverHeight?: 'small' | 'medium' | 'large' | 'xl';
+    avatarShape?: AvatarShapeType;
+    statusRing?: StatusRingType;
+    badges?: ProfileBadgeItem[];
     avatarSize?: 'small' | 'medium' | 'large' | 'xlarge';
     avatarPosition?: 'left' | 'center' | 'right';
     shadowStyle?: 'none' | 'soft' | 'medium' | 'strong' | 'glow';
