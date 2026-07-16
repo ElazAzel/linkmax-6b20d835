@@ -53,6 +53,21 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { FrameSelector } from '@/components/profile/FrameSelector';
 import { NameAnimationSelector } from '@/components/profile/NameAnimationSelector';
 import { NAME_ANIMATION_CSS, getNameAnimationClass } from '@/lib/profile-frame-system';
+import {
+  AVATAR_SHAPES,
+  STATUS_RINGS,
+  COVER_PATTERNS,
+  getAvatarShapeStyle,
+  getCoverPatternStyle,
+  type AvatarShape,
+  type StatusRing,
+  type CoverPattern,
+  type ProfileBadge,
+} from '@/lib/profile-shapes';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Film from 'lucide-react/dist/esm/icons/film';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import type { ProfileBlock as ProfileBlockType, NameAnimationType } from '@/types/page';
 
 interface ProfileFullEditorProps {
@@ -76,6 +91,7 @@ const COVER_HEIGHTS = [
   { value: 'small', label: 'profile.small' },
   { value: 'medium', label: 'profile.medium' },
   { value: 'large', label: 'profile.large' },
+  { value: 'xl', label: 'XL', isPro: true },
 ];
 
 const AVATAR_SIZES = [
