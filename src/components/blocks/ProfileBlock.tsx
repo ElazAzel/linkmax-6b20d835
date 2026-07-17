@@ -308,11 +308,14 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
 
         <div className="w-full min-w-0 text-center space-y-2 overflow-visible">
           <style>{NAME_ANIMATION_CSS}</style>
-          <div className="flex min-w-0 items-center justify-center gap-2 overflow-visible">
+          <div className={cn(
+            "flex min-w-0 items-center justify-center gap-2",
+            block.nameAnimation === 'ticker' ? "overflow-hidden w-full" : "overflow-visible"
+          )}>
             <h1 className={cn(
               "max-w-full text-2xl font-bold leading-tight break-words hyphens-auto transition-all duration-300 overflow-visible",
               block.nameAnimation === 'none' && "hover:text-primary",
-              (isPremiumUser || (block.nameAnimation && block.nameAnimation !== 'none' && block.nameAnimation !== 'shine' && block.nameAnimation !== 'ticker')) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
+              (isPremiumUser || (block.nameAnimation && block.nameAnimation !== 'none' && !['shine','ticker','underline-draw','glitch','rainbow-slow'].includes(block.nameAnimation))) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
               getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
             )}>
               {name}
