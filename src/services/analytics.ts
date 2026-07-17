@@ -251,18 +251,14 @@ export function initSessionDurationTracking(pageId: string) {
     });
 
     const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`;
-
-    if (navigator.sendBeacon) {
-      const accepted = navigator.sendBeacon(`${url}?apikey=${apiKey}`, new Blob([payload], { type: 'application/json' }));
-      if (accepted) return;
-    }
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
 
     if (typeof fetch === 'function') {
       void fetch(url, {
         method: 'POST',
         body: payload,
         keepalive: true,
+        credentials: 'omit',
         headers: {
           apikey: apiKey,
           Authorization: `Bearer ${apiKey}`,
