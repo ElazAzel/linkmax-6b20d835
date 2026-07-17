@@ -329,16 +329,27 @@ export const EventBlock = memo(function EventBlock({
         return;
       }
 
-      // Wait a moment for the trigger to create the ticket
-      await new Promise(r => setTimeout(r, 500));
+      let registrationId: string | null = null;
+      let ticketCodeVal: string | null = null;
 
-      const { data: ticket } = await supabase
-        .from('event_tickets')
-        .select('ticket_code')
-        .eq('registration_id', registration.id)
-        .maybeSingle();
+      if (registration) {
+        registrationId = registration.id;
+      }
 
-      setTicketCode(ticket?.ticket_code || null);
+      if (registrationId) {
+        // Wait a moment for the trigger to create the ticket
+        await new Promise(r => setTimeout(r, 500));
+
+        const { data: ticket } = await supabase
+          .from('event_tickets')
+          .select('ticket_code')
+          .eq('registration_id', registrationId)
+          .maybeSingle();
+
+        ticketCodeVal = ticket?.ticket_code || null;
+      }
+
+      setTicketCode(ticketCodeVal);
       setRegistrationCount(prev => prev + 1);
       toast.success(
         block.settings?.requireApproval
@@ -354,10 +365,10 @@ export const EventBlock = memo(function EventBlock({
       }
 
       // Send notification to organizer (Pro feature, non-blocking)
-      if (isOwnerPremium && registration?.id && block.eventId && pageOwnerId) {
+      if (isOwnerPremium && registrationId && block.eventId && pageOwnerId) {
         supabase.functions.invoke('send-event-confirmation', {
           body: {
-            registrationId: registration.id,
+            registrationId,
             eventId: block.eventId,
             ownerId: pageOwnerId,
           },
