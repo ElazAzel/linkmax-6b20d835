@@ -21,6 +21,7 @@ import {
   normalizeReviewText,
   parseReviewRequestRpcResult,
   shouldExposeReview,
+  isMissingTableError,
 } from '../reviews';
 import type { Json } from '@/platform/supabase/types';
 
@@ -212,5 +213,16 @@ describe('reviews service contract', () => {
       success: false,
       error: 'invalid_response',
     });
+  });
+
+  it('detects missing table errors accurately', () => {
+    expect(isMissingTableError({ code: '42P01' })).toBe(true);
+    expect(isMissingTableError({ code: 'PGRST204' })).toBe(true);
+    expect(isMissingTableError({ message: 'relation "public.reviews" does not exist' })).toBe(true);
+    expect(isMissingTableError({ hint: 'the relation was not found' })).toBe(true);
+
+    expect(isMissingTableError(null)).toBe(false);
+    expect(isMissingTableError({ code: 'PGRST116' })).toBe(false);
+    expect(isMissingTableError({ message: 'Internal Server Error' })).toBe(false);
   });
 });

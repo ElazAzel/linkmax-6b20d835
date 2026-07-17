@@ -34,16 +34,15 @@ function sendServerEvent(
         eventId: id,
     });
 
-    // Use sendBeacon for reliable delivery (survives page navigation)
-    if (navigator.sendBeacon) {
-        const blob = new Blob([payload], { type: 'application/json' });
-        navigator.sendBeacon(PIXEL_PROXY_URL, blob);
-    } else {
+    // Use fetch with keepalive and credentials: 'omit' to ensure reliable delivery
+    // on page unload/navigation without triggering CORS credentials errors (since Supabase utilizes a wildcard origin)
+    if (typeof fetch === 'function') {
         fetch(PIXEL_PROXY_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: payload,
             keepalive: true,
+            credentials: 'omit',
         }).catch(() => { }); // fire-and-forget
     }
 

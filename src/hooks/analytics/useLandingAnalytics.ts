@@ -252,29 +252,37 @@ export function useLandingAnalytics() {
 
     const handleBeforeUnload = () => {
       const session = getOrCreateSession();
-      // Use sendBeacon for reliable exit tracking
-      const data = {
-        eventType: 'landing_exit',
-        metadata: {
-          sessionId: session.id,
-          duration: Date.now() - session.startedAt,
-          maxScrollDepth: session.maxScrollDepth,
-          sectionsViewed: session.sectionsViewed,
-          ctaClicks: session.ctaClicks,
-        }
+      const metadata = {
+        sessionId: session.id,
+        duration: Date.now() - session.startedAt,
+        maxScrollDepth: session.maxScrollDepth,
+        sectionsViewed: session.sectionsViewed,
+        ctaClicks: session.ctaClicks,
       };
 
-      const blob = new Blob([JSON.stringify({
+      const payload = JSON.stringify({
         page_id: null,
         block_id: null,
         event_type: 'landing_exit',
-        metadata: data.metadata,
-      })], { type: 'application/json' });
+        metadata,
+      });
 
-      navigator.sendBeacon?.(
-        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        blob
-      );
+      // Use fetch with keepalive and credentials: 'omit' to ensure reliable delivery
+      // on page unload without triggering CORS credentials errors (since Supabase utilizes a wildcard origin)
+      if (typeof fetch === 'function') {
+        const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
+        void fetch(url, {
+          method: 'POST',
+          body: payload,
+          keepalive: true,
+          credentials: 'omit',
+          headers: {
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+          },
+        }).catch(() => undefined);
+      }
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

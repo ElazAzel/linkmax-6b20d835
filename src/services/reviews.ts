@@ -596,6 +596,21 @@ export async function moderateReview(input: ModerateReviewInput): Promise<Review
   return parseReviewRpcResult(data);
 }
 
+export function isMissingTableError(err: any): boolean {
+  if (!err) return false;
+  const code = String(err.code || '');
+  const message = String(err.message || '').toLowerCase();
+  const hint = String(err.hint || '').toLowerCase();
+  return (
+    code === '42P01' || // relation does not exist
+    code === 'PGRST204' || // PostgREST table/view not found
+    message.includes('does not exist') ||
+    hint.includes('does not exist') ||
+    message.includes('not found') ||
+    hint.includes('not found')
+  );
+}
+
 export async function fetchOwnerReviews(input: FetchOwnerReviewsInput): Promise<OwnerReviewRecord[]> {
   const safeLimit = Math.min(Math.max(Math.floor(input.limit ?? 60), 1), 100);
   const statuses = (input.statuses || []).filter(isReviewStatus);
@@ -611,8 +626,24 @@ export async function fetchOwnerReviews(input: FetchOwnerReviewsInput): Promise<
     query = query.in('status', statuses);
   }
 
-  const { data: reviewRows, error: reviewError } = await query;
-  if (reviewError) throw reviewError;
+  let reviewRows = null;
+  let reviewError = null;
+
+  try {
+    const result = await query;
+    reviewRows = result.data;
+    reviewError = result.error;
+  } catch (err) {
+    reviewError = err;
+  }
+
+  if (reviewError) {
+    if (isMissingTableError(reviewError)) {
+      console.warn('reviews table not found. Falling back to empty review list.');
+      return [];
+    }
+    throw reviewError;
+  }
 
   const reviews = (reviewRows || []) as ReviewRow[];
   const pageIds = Array.from(new Set(reviews.map((review) => review.page_id)));
@@ -642,24 +673,53 @@ export async function fetchPublicPageReviewSnapshot(
 ): Promise<PublicPageReviewSnapshot> {
   const safeLimit = Math.min(Math.max(Math.floor(limit), 1), 12);
 
+  const fetchSummary = async () => {
+    try {
+      return await supabase
+        .from('page_review_summaries')
+        .select('published_count, average_rating, rating_breakdown, last_review_at')
+        .eq('page_id', pageId)
+        .maybeSingle();
+    } catch (err) {
+      return { data: null, error: err };
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      return await supabase
+        .from('reviews')
+        .select('id, rating, title, body, reviewer_display_name, verification_status, published_at, is_featured')
+        .eq('page_id', pageId)
+        .eq('status', 'published')
+        .order('is_featured', { ascending: false })
+        .order('published_at', { ascending: false })
+        .limit(safeLimit);
+    } catch (err) {
+      return { data: null, error: err };
+    }
+  };
+
   const [summaryResult, reviewsResult] = await Promise.all([
-    supabase
-      .from('page_review_summaries')
-      .select('published_count, average_rating, rating_breakdown, last_review_at')
-      .eq('page_id', pageId)
-      .maybeSingle(),
-    supabase
-      .from('reviews')
-      .select('id, rating, title, body, reviewer_display_name, verification_status, published_at, is_featured')
-      .eq('page_id', pageId)
-      .eq('status', 'published')
-      .order('is_featured', { ascending: false })
-      .order('published_at', { ascending: false })
-      .limit(safeLimit),
+    fetchSummary(),
+    fetchReviews(),
   ]);
 
-  if (summaryResult.error) throw summaryResult.error;
-  if (reviewsResult.error) throw reviewsResult.error;
+  if (summaryResult.error) {
+    if (isMissingTableError(summaryResult.error)) {
+      console.warn('page_review_summaries table not found. Falling back to empty summary.');
+    } else {
+      throw summaryResult.error;
+    }
+  }
+
+  if (reviewsResult.error) {
+    if (isMissingTableError(reviewsResult.error)) {
+      console.warn('reviews table not found. Falling back to empty reviews.');
+    } else {
+      throw reviewsResult.error;
+    }
+  }
 
   const summaryRow = summaryResult.data;
   const reviews = (reviewsResult.data || [])

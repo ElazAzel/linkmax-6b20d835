@@ -5,6 +5,7 @@ import { createDefaultPageData } from '@/lib/constants';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
+import { isMissingTableError } from './reviews';
 
 // ============= Block & Page Value Objects =============
 
@@ -416,15 +417,30 @@ export async function fetchExpertDirectoryProfiles(
   const summariesByPageId = new Map<string, ExpertDirectorySummaryRow>();
 
   if (pageIds.length > 0) {
-    const { data: summaryRows, error: summaryError } = await supabase
-      .from('page_review_summaries')
-      .select('page_id, published_count, average_rating, last_review_at')
-      .in('page_id', pageIds);
+    let summaryRows = null;
+    let summaryError = null;
 
-    if (summaryError) throw wrapError(summaryError);
+    try {
+      const result = await supabase
+        .from('page_review_summaries')
+        .select('page_id, published_count, average_rating, last_review_at')
+        .in('page_id', pageIds);
+      summaryRows = result.data;
+      summaryError = result.error;
+    } catch (err) {
+      summaryError = err;
+    }
 
-    for (const summary of (summaryRows || []) as unknown as ExpertDirectorySummaryRow[]) {
-      summariesByPageId.set(summary.page_id, summary);
+    if (summaryError) {
+      if (isMissingTableError(summaryError)) {
+        logger.info('page_review_summaries table not found or not accessible. Gracefully skipping summaries.');
+      } else {
+        throw wrapError(summaryError);
+      }
+    } else {
+      for (const summary of (summaryRows || []) as unknown as ExpertDirectorySummaryRow[]) {
+        summariesByPageId.set(summary.page_id, summary);
+      }
     }
   }
 
