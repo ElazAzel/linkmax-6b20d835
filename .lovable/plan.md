@@ -1,82 +1,115 @@
 ## Цель
 
-Дать пользователю значительно больше и качественнее опций визуальной кастомизации публичной страницы и профиля, оставаясь в текущем визуальном языке LinkMAX (Warm Paper). База доступна всем, «wow»-эффекты и анимации — под Premium.
+Довести до продакшена три параллельных трека: (1) отполировать недавно выпущенную кастомизацию профиля, (2) дать владельцу страницы понятную аналитику «что работает», (3) поднять конверсию публичных страниц через встроенные CRO-инструменты. Всё — в рамках Warm Paper, без ломающих миграций, база бесплатна, «wow» — Premium.
 
-## Что появится
+---
 
-### 1. Профиль (шапка, аватар, имя, фон)
-- **Аватар**: 6 форм (circle, squircle, rounded, hexagon, blob, sticker), 8 стилей рамок (none, minimal, gradient, glow, dashed, ticket, gold-frame, neon), опция «status ring» (онлайн/offline/verified).
-- **Имя**: расширенный `NameAnimationSelector` — новые анимации (shine, wave, glitch, ticker, typewriter, rainbow-slow, underline-draw). База: none/bold/gradient.
-- **Шапка (cover)**: высоты small/medium/large/xl, 12 готовых градиентов + 6 паттернов (dots, grid, waves, noise, topo, mesh), режимы image/video/gradient/pattern, overlay-tint 0–80%, parallax on scroll (Premium).
-- **Био**: подсветка ссылок, иконки соцсетей рядом с именем, badge-строка (город/статус/эмодзи).
+## Трек A. Полировка кастомизации профиля
 
-### 2. Обложка/фон страницы
-- Единый выбор фона: solid | gradient (12 пресетов + кастом) | pattern (6) | image (upload) | video-loop (Premium) | animated-mesh (Premium).
-- Blur / noise / vignette слайдеры, opacity, режим наложения.
-- Fixed / scroll / parallax поведение.
+Цель: снять острые углы после большого релиза, поднять качество, добавить недостающие пресеты.
 
-### 3. Стиль блоков (кнопки/карточки)
-Новый глобальный `blockStyle` пресет + тонкая настройка:
-- **Форма**: sharp / soft / rounded / pill / ticket / squircle.
-- **Заливка**: solid / outline / ghost / glass / gradient / neo-brutalism / soft-shadow.
-- **Тени**: none / sm / md / lg / glow / inner.
-- **Границы**: none / thin / medium / thick + цвет из палитры.
-- **Hover**: none / lift / scale / glow / underline / swap.
-- **Иконки**: показывать/скрывать, стиль (line / duotone / filled).
-- **Разделители** между блоками: none / hairline / dotted / gradient / ornament.
+1. **Live-preview в редакторе**
+   - Правая колонка `ThemePanel` — мини-фрейм с реальным `ProfileBlock` + одним CTA-блоком, обновляется на каждое изменение без сохранения.
+   - Кнопка «Сброс к теме» откатывает переопределения к пресету.
 
-### 4. Темы и типографика
-- **10 готовых тем страницы** (Warm Paper, Midnight, Editorial Mono, Sunset, Ocean, Forest, Blush, Noir & Gold, Neon Mint, Terracotta). Каждая тема = набор токенов (bg, surface, text, accent, radius, shadow).
-- **8 шрифтовых пар** (Manrope+Inter — база; Space Grotesk+DM Sans; Instrument Serif+Work Sans; DM Serif+Fira Sans; Syne+Jakarta; Bebas+Barlow; Cormorant+Karla; JetBrains Mono+Work Sans).
-- **Custom accent**: color picker + автоподбор контраста для текста.
-- **Dark mode toggle** на публичной странице (auto/light/dark).
+2. **Пресеты обложек и паттернов**
+   - Довести до 12 градиентов и 6 паттернов (dots, grid, waves, noise, topo, mesh) — сейчас часть заглушена.
+   - Video-cover и animated-mesh — гейт Premium с превью-постером для free.
 
-### 5. Premium-гейт
-- Бесплатно: базовые формы аватара, 4 темы, 3 шрифтовые пары, solid/gradient фон, базовые формы блоков, простые hover.
-- Premium: все анимации имени, video/animated-mesh фон, parallax, glass/neon/gold-frame, все 10 тем, все 8 шрифтовых пар, custom accent color, dark-mode toggle.
-- Заблокированные опции показываются с иконкой замка и ведут на `/pricing`.
+3. **Аватар**
+   - Формы blob и sticker — фактическая маска через SVG `clipPath`, а не border-radius.
+   - Status-ring (online/verified/custom-color) как отдельный слой, не ломает существующие рамки.
 
-## Технические детали
+4. **Анимации имени**
+   - Аудит на мобильных: `glitch`, `ticker`, `rainbow-slow` — проверить FPS и переполнение контейнера.
+   - Добавить `prefers-reduced-motion` fallback → статичный gradient.
 
-**Схема данных** (`pages.appearance` JSONB, миграция):
+5. **A11y и i18n**
+   - Контраст авто-подбора accent-цвета (WCAG AA) — если проваливается, подставляем dark/light вариант текста.
+   - Все новые ключи в ru/en/kk/uz, включая tooltips премиум-гейта.
+
+6. **Снапшоты**
+   - Каждое изменение `appearance` → запись в `page_snapshots` (уже есть триггер), добавить «Откатить к предыдущей теме» в UI.
+
+---
+
+## Трек B. Аналитика профиля v2
+
+Цель: владелец страницы за 10 секунд понимает, что работает и что чинить.
+
+1. **Data-слой**
+   - Использовать уже существующую каноническую таксономию (`analytics.metadata.event`, `source_object`).
+   - Новые RPC (SECURITY DEFINER, доступ по `page_id` владельца):
+     - `get_page_funnel(page_id, from, to)` — visits → profile_view → block_click → cta_click.
+     - `get_block_heatmap(page_id, from, to)` — clicks / impressions по каждому блоку + CTR.
+     - `get_traffic_sources(page_id, from, to)` — группировка по `utm_source` + AI-detection (ChatGPT/Perplexity/Claude/Gemini уже есть).
+     - `get_geo_breakdown(page_id, from, to)` — страна/город по IP.
+
+2. **UI (`/dashboard/insights`)**
+   - 4 карточки KPI: Visits, Unique, CTA rate, Top block.
+   - Воронка (horizontal bar), Heatmap (список блоков + CTR + sparklines), Источники (donut + список), Гео (флаги + %).
+   - Фильтр периода: 7д / 30д / 90д / custom.
+   - Empty-state: подсказки «мало данных → поделись SmartLink».
+
+3. **Weekly digest**
+   - Расширить `send-weekly-digest`: включить top-block, best source, CTA-rate change WoW.
+   - Telegram-вариант (если бот подключён) + email fallback.
+
+4. **Экспорт**
+   - CSV export кликов/визитов (только owner, лимит 90 дней) через edge-функцию.
+
+---
+
+## Трек C. Конверсия публичной страницы
+
+Цель: превратить страницу из «визитки» в лид-машину.
+
+1. **Sticky CTA-док**
+   - Фиксированная нижняя панель на мобиле: до 3 CTA (WA / TG / tel / email / custom link).
+   - Настраивается в редакторе (новый блок-псевдо `sticky_cta`), автоскрывается при скролле вверх.
+   - Каноническое событие `cta_click` с `source_object: {type:'sticky_cta'}`.
+
+2. **Exit-intent модалка (Premium)**
+   - Триггер: mouseleave вверх (desktop) / back-swipe (mobile), 1 раз в 24ч.
+   - Контент: заголовок + одно поле (телефон/email) + submit → создаёт `lead` с source `exit_intent`.
+   - Настраиваемый copy + возможность отключить.
+
+3. **A/B-тест первого экрана (Premium)**
+   - Простой сплит 50/50 двух вариантов `ProfileBlock` (имя, био, обложка).
+   - Победитель определяется по CTA-rate за 7 дней (min 200 visits) → авто-применение с уведомлением.
+   - Таблица `page_experiments` + RPC `assign_variant(page_id, visitor_id)`.
+
+4. **AI Coach «Улучшить страницу»**
+   - Кнопка в редакторе: анализирует последние 30 дней аналитики + текущий контент, выдаёт 3–5 действий (заменить обложку, сократить био, добавить отзыв, поменять порядок блоков).
+   - Использует Lovable AI Gateway (Gemini fallback), результат — карточки с «применить одним кликом».
+
+5. **Auto-optimizations (без AI)**
+   - Детект: если первый блок — не CTA и CTA-rate < 2%, показать баннер «Переместить контакт наверх».
+   - Детект: если обложка > 500KB, предложить сжатие.
+
+---
+
+## Порядок и приоритеты
+
+```text
+Week 1  → A1, A2, A3, A5          (полировка, самое видимое)
+Week 2  → B1, B2                  (RPC + Insights UI)
+Week 3  → C1 sticky CTA + C5 auto-optimizations
+Week 4  → B3 digest, B4 export, C2 exit-intent
+Week 5  → C3 A/B, C4 AI Coach     (крупные Premium-фичи)
 ```
-{
-  theme: string,
-  fontPair: string,
-  accentColor: string | null,
-  darkMode: 'auto'|'light'|'dark',
-  background: { kind, value, overlay, blur, noise, behavior },
-  profile: { avatarShape, avatarFrame, statusRing, nameAnimation, coverHeight, coverKind, coverValue, coverOverlay, parallax },
-  blocks: { shape, fill, shadow, border, borderColor, hover, iconStyle, divider }
-}
-```
-Обратная совместимость: пустые поля → текущие дефолты. RLS не меняем (поле внутри существующей `pages`).
 
-**Код**:
-- `src/lib/appearance/presets.ts` — все пресеты (themes, fontPairs, gradients, patterns, blockStyles, avatarFrames, nameAnimations).
-- `src/lib/appearance/tokens.ts` — рантайм-конвертер `appearance → CSS vars` (inline `<style>` в public page + editor preview).
-- `src/hooks/appearance/useAppearance.ts` — чтение/запись + Premium-гейт.
-- Editor: новая вкладка **«Дизайн»** с 4 секциями (Theme, Profile, Background, Blocks). Каждая секция — визуальный picker (свотчи/превью), не форма.
-- Public page: применение через CSS-переменные, шрифты подгружаются через существующий font-loader.
-- `NameAnimationSelector`, `AvatarFrameSelector`, `CoverEditor` — расширяем существующие; `BlockStyleSelector`, `ThemePicker`, `FontPairPicker`, `BackgroundPicker` — новые.
-- Все опции локализованы (ru/en/kk/uz).
+## Технические принципы
 
-**Ограничения области**
-- Не трогаем бизнес-логику (CRM, автоматизации, платежи).
-- Не меняем layout самих типов блоков — только визуальные обёртки.
-- Custom CSS не добавляем (риск XSS + вне scope).
+- Без ломающих миграций: новые поля через JSONB (`pages.appearance`, `pages.cro_settings`).
+- RLS: все новые RPC — SECURITY DEFINER + проверка `owner_id = auth.uid()`.
+- Premium-гейт: через существующий `canUsePremium*`, без дубликатов.
+- События — только через `trackCanonicalEvent`.
+- Все edge-функции — с size-limit, auth-check, HTML-escape (стандарт закреплён предыдущим проходом).
 
-## Порядок работы
+## Вне scope
 
-1. Миграция `pages.appearance` + типы + дефолты.
-2. `presets.ts` + `tokens.ts` + применение на public page.
-3. Editor: вкладка «Дизайн» с 4 секциями и Premium-гейтом.
-4. Расширение существующих селекторов (Name, Avatar, Cover).
-5. i18n + smoke-check на 4 языках, проверка dark mode.
-
-## Что вне scope этого релиза
-
-- Полностью кастомный CSS/тема-редактор с нуля.
-- Пользовательские загружаемые шрифты.
-- Экспорт/импорт тем между аккаунтами.
-- Marketplace тем.
+- Полноценный визуальный A/B-редактор (multi-variant, сегментация).
+- Кастомный HTML/CSS/JS от пользователя.
+- Marketplace тем и шаблонов.
+- Внешние аналитические провайдеры (GA/Mixpanel) — только внутренняя.
