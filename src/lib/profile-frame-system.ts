@@ -312,6 +312,20 @@ export const NAME_ANIMATION_CSS = `
   .name-animation-rainbow-slow {
     animation: name-rainbow 12s linear infinite;
   }
+
+  /* A4: respect reduced-motion — freeze all name animations */
+  @media (prefers-reduced-motion: reduce) {
+    [class*="name-animation-"] {
+      animation: none !important;
+      text-shadow: none !important;
+    }
+    .name-animation-underline-draw::after,
+    .name-animation-glitch::before,
+    .name-animation-glitch::after {
+      animation: none !important;
+      display: none !important;
+    }
+  }
 `;
 
 export function getNameAnimationClass(animation: NameAnimationType): string {
