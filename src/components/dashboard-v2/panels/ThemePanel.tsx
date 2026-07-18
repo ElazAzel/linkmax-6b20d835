@@ -117,10 +117,24 @@ export const ThemePanel = memo(function ThemePanel({
     <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <SheetContent side="right" className="w-full sm:max-w-md p-0 overflow-y-auto">
         <SheetHeader className="p-5 border-b border-border/50 sticky top-0 bg-background/95 backdrop-blur-xl z-10">
-          <SheetTitle className="flex items-center gap-2">
-            <Palette className="h-5 w-5 text-primary" />
-            {t('themes.pageTheme', 'Тема и оформление')}
-          </SheetTitle>
+          <div className="flex items-center justify-between gap-2">
+            <SheetTitle className="flex items-center gap-2">
+              <Palette className="h-5 w-5 text-primary" />
+              {t('themes.pageTheme', 'Тема и оформление')}
+            </SheetTitle>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs h-8"
+              onClick={() => {
+                const preset = THEME_PRESETS.find(p => p.id === activeThemeId) ?? THEME_PRESETS[0];
+                onThemeChange({ ...preset.theme, themePreset: preset.id });
+              }}
+              title={t('themes.resetToPreset', 'Сбросить переопределения к теме')}
+            >
+              {t('themes.reset', 'Сброс')}
+            </Button>
+          </div>
         </SheetHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
