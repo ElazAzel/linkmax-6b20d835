@@ -134,5 +134,5 @@
 }
 
 /* Accent color: expose to any child using bg-primary/text-primary via a light bridge */
-[style*="--lm-accent"] .lm-accent-bg { background-color: var(--lm-accent); color: #fff; }
+[style*="--lm-accent"] .lm-accent-bg { background-color: var(--lm-accent); color: var(--lm-accent-fg, #fff); }
 [style*="--lm-accent"] .lm-accent-text { color: var(--lm-accent); }
