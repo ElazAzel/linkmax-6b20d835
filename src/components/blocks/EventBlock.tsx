@@ -331,6 +331,18 @@ export const EventBlock = memo(function EventBlock({
         return;
       }
 
+      // Auto-confirm free registrations that don't require approval
+      const autoConfirm = !block.settings?.requireApproval && !block.isPaid;
+      if (autoConfirm) {
+        const { error: confirmErr } = await supabase.rpc(
+          'confirm_free_event_registration' as never,
+          { p_registration_id: registration.id } as never
+        );
+        if (confirmErr) {
+          console.warn('Auto-confirm failed, registration stays pending:', confirmErr);
+        }
+      }
+
       // Wait a moment for the trigger to create the ticket
       await new Promise(r => setTimeout(r, 500));
 
