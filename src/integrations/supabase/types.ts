@@ -4723,6 +4723,10 @@ export type Database = {
         Args: { p_page_id: string }
         Returns: number
       }
+      confirm_free_event_registration: {
+        Args: { p_registration_id: string }
+        Returns: string
+      }
       convert_tokens_to_premium: { Args: { p_user_id: string }; Returns: Json }
       create_user_page: {
         Args: { p_slug: string; p_title: string; p_user_id: string }
