@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://pphdcfxucfndmwulpfwv.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "linkmax-mcp",
+      "version": "0.1.0",
+      "title": "LinkMAX MCP"
+    },
+    "tools": [
+      {
+        "name": "list_my_pages",
+        "title": "List my LinkMAX pages",
+        "description": "List all link-in-bio pages that belong to the signed-in LinkMAX user. Returns slug, title, publish status, view count and update time.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Maximum number of pages to return. Defaults to 50."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_leads",
+        "title": "List my LinkMAX leads",
+        "description": "List recent leads captured by the signed-in LinkMAX user's pages. Returns contact fields and source page.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Max leads to return. Default 50."
+            },
+            "page_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional page UUID to filter leads by page."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_analytics_summary",
+        "title": "Get analytics summary",
+        "description": "Return a lightweight analytics summary for the signed-in LinkMAX user: total events, unique visitors and top pages within the given number of days (default 30).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365,
+              "description": "Look-back window in days. Default 30."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

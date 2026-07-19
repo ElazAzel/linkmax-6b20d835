@@ -4,6 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { visualizer } from "rollup-plugin-visualizer";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
 
 // Plugin to make CSS non-render-blocking in production
 function nonBlockingCssPlugin() {
@@ -46,6 +47,7 @@ export default defineConfig(({ mode }) => ({
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
       },
     }),
+    mcpPlugin(),
     visualizer({
       filename: "stats.html",
       gzipSize: true,

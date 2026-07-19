@@ -132,6 +132,7 @@ const BlogPost = lazy(() => import("./pages/BlogPost"));
 const SmartLinkRedirect = lazy(() => import("./pages/SmartLinkRedirect"));
 const SmartLinks = lazy(() => import("./pages/SmartLinks"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -148,6 +149,8 @@ const router = createBrowserRouter([
       { path: "uz", element: <LocaleIndex /> },
       { path: "auth", element: <Auth /> },
       { path: "auth/callback", element: <AuthCallback /> },
+      // Managed OAuth server consent screen for external MCP clients
+      { path: ".lovable/oauth/consent", element: <OAuthConsent /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "dashboard/home", element: <Dashboard /> },
       { path: "dashboard/pages", element: <Dashboard /> },
