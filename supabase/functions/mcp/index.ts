@@ -8,7 +8,7 @@ import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.23.0";
 // src/lib/mcp/tools/list-my-pages.ts
 import { createClient } from "npm:@supabase/supabase-js@2.95.3";
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z } from "npm:zod@3.23.8";
+import { z } from "npm:zod@3.25.76";
 function supabaseForUser(ctx) {
   return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
     global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
@@ -42,7 +42,7 @@ var list_my_pages_default = defineTool({
 // src/lib/mcp/tools/list-my-leads.ts
 import { createClient as createClient2 } from "npm:@supabase/supabase-js@2.95.3";
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z2 } from "npm:zod@3.23.8";
+import { z as z2 } from "npm:zod@3.25.76";
 function supabaseForUser2(ctx) {
   return createClient2(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
     global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
@@ -79,7 +79,7 @@ var list_my_leads_default = defineTool2({
 // src/lib/mcp/tools/get-analytics-summary.ts
 import { createClient as createClient3 } from "npm:@supabase/supabase-js@2.95.3";
 import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z3 } from "npm:zod@3.23.8";
+import { z as z3 } from "npm:zod@3.25.76";
 function supabaseForUser3(ctx) {
   return createClient3(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
     global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
