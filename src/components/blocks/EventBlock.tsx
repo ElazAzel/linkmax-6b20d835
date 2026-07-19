@@ -310,7 +310,9 @@ export const EventBlock = memo(function EventBlock({
           attendee_email: email.trim(),
           attendee_phone: resolveAttendeePhone(),
           answers_json: answers,
-          status: block.settings?.requireApproval ? 'pending' : 'confirmed',
+          // Always insert as 'pending' to satisfy RLS safely; free events without
+          // approval are upgraded to 'confirmed' right after via a SECURITY DEFINER RPC.
+          status: 'pending',
           payment_status: 'none',
           utm_json: Object.keys(utmParams).length > 0 ? utmParams : {},
         })
@@ -327,6 +329,18 @@ export const EventBlock = memo(function EventBlock({
           setEventError(t('event.registrationError', 'Не удалось зарегистрироваться') + `: ${error.message}`);
         }
         return;
+      }
+
+      // Auto-confirm free registrations that don't require approval
+      const autoConfirm = !block.settings?.requireApproval && !block.isPaid;
+      if (autoConfirm) {
+        const { error: confirmErr } = await supabase.rpc(
+          'confirm_free_event_registration' as never,
+          { p_registration_id: registration.id } as never
+        );
+        if (confirmErr) {
+          console.warn('Auto-confirm failed, registration stays pending:', confirmErr);
+        }
       }
 
       // Wait a moment for the trigger to create the ticket
