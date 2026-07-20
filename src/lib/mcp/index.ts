@@ -2,6 +2,8 @@ import { auth, defineMcp } from "@lovable.dev/mcp-js";
 import listMyPages from "./tools/list-my-pages";
 import listMyLeads from "./tools/list-my-leads";
 import getAnalyticsSummary from "./tools/get-analytics-summary";
+import createPage from "./tools/create-page";
+import getPageStructure from "./tools/get-page-structure";
 
 // OAuth issuer MUST be the direct Supabase host, built from the project ref.
 // import.meta.env.VITE_SUPABASE_PROJECT_ID is inlined by Vite at build time so
