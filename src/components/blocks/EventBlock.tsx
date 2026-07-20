@@ -329,10 +329,11 @@ export const EventBlock = memo(function EventBlock({
         return;
       }
 
-      const row = Array.isArray(rpcResult) ? rpcResult[0] : rpcResult;
-      const registration = { id: row?.registration_id as string | undefined };
-      setTicketCode((row?.ticket_code as string | null) || null);
-      // Session read kept for downstream tracking parity
+      const row = (Array.isArray(rpcResult) ? rpcResult[0] : rpcResult) as
+        | { registration_id?: string; ticket_code?: string | null; status?: string }
+        | null;
+      const registration = { id: row?.registration_id };
+      setTicketCode(row?.ticket_code || null);
       void session;
       setRegistrationCount(prev => prev + 1);
       toast.success(
