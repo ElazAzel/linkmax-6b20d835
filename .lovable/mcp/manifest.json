@@ -92,6 +92,69 @@
           "$schema": "http://json-schema.org/draft-07/schema#"
         },
         "outputSchema": null
+      },
+      {
+        "name": "create_page",
+        "title": "Create a new LinkMAX page",
+        "description": "Create a new link-in-bio page for the signed-in LinkMAX user. Returns the new page id, slug and default settings so the agent can immediately edit blocks and appearance.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Page title shown in the header and SEO."
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "Short page description (SEO/bio)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_page_structure",
+        "title": "Get page structure and blocks",
+        "description": "Return the full block structure and current configuration of one of the signed-in user's LinkMAX pages, so an agent can review and edit it. Accepts either a page_id (uuid) or a slug.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Page UUID. Provide this OR slug."
+            },
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Page slug. Provide this OR page_id."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
       }
     ]
   }
