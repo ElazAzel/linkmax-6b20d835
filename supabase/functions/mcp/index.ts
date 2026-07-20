@@ -124,6 +124,108 @@ var get_analytics_summary_default = defineTool3({
   }
 });
 
+// src/lib/mcp/tools/create-page.ts
+import { createClient as createClient4 } from "npm:@supabase/supabase-js@2.95.3";
+import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z4 } from "npm:zod@3.25.76";
+function supabaseForUser4(ctx) {
+  return createClient4(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
+    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
+var create_page_default = defineTool4({
+  name: "create_page",
+  title: "Create a new LinkMAX page",
+  description: "Create a new link-in-bio page for the signed-in LinkMAX user. Returns the new page id, slug and default settings so the agent can immediately edit blocks and appearance.",
+  inputSchema: {
+    slug: z4.string().trim().min(1).max(64).optional().describe("Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."),
+    title: z4.string().trim().min(1).max(120).optional().describe("Page title shown in the header and SEO."),
+    description: z4.string().trim().max(500).optional().describe("Short page description (SEO/bio).")
+  },
+  annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
+  handler: async ({ slug, title, description }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
+    const supabase = supabaseForUser4(ctx);
+    const { data, error } = await supabase.rpc("mcp_create_user_page", {
+      p_slug: slug ?? null,
+      p_title: title ?? null,
+      p_description: description ?? null
+    });
+    if (error) {
+      return { content: [{ type: "text", text: error.message }], isError: true };
+    }
+    const row = Array.isArray(data) ? data[0] : data;
+    const settings = {
+      editable_fields: [
+        "title",
+        "description",
+        "avatar_url",
+        "theme_settings",
+        "seo_meta",
+        "is_published",
+        "niche",
+        "contact_email",
+        "contact_phone",
+        "contact_whatsapp"
+      ],
+      block_types: ["link", "text", "image", "video", "form", "event", "product", "profile", "social"],
+      public_url_pattern: "https://lnkmx.my/{slug}"
+    };
+    return {
+      content: [{ type: "text", text: JSON.stringify({ page: row, settings }, null, 2) }],
+      structuredContent: { page: row, settings }
+    };
+  }
+});
+
+// src/lib/mcp/tools/get-page-structure.ts
+import { createClient as createClient5 } from "npm:@supabase/supabase-js@2.95.3";
+import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z5 } from "npm:zod@3.25.76";
+function supabaseForUser5(ctx) {
+  return createClient5(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
+    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
+var get_page_structure_default = defineTool5({
+  name: "get_page_structure",
+  title: "Get page structure and blocks",
+  description: "Return the full block structure and current configuration of one of the signed-in user's LinkMAX pages, so an agent can review and edit it. Accepts either a page_id (uuid) or a slug.",
+  inputSchema: {
+    page_id: z5.string().uuid().optional().describe("Page UUID. Provide this OR slug."),
+    slug: z5.string().trim().min(1).optional().describe("Page slug. Provide this OR page_id.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ page_id, slug }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
+    if (!page_id && !slug) {
+      return { content: [{ type: "text", text: "Provide page_id or slug." }], isError: true };
+    }
+    const supabase = supabaseForUser5(ctx);
+    let pageQuery = supabase.from("pages").select(
+      "id, user_id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, niche, entity_type, contact_email, contact_phone, contact_whatsapp, editor_mode, grid_config, integrations, custom_domain, page_type, updated_at"
+    ).eq("user_id", ctx.getUserId()).limit(1);
+    pageQuery = page_id ? pageQuery.eq("id", page_id) : pageQuery.eq("slug", slug);
+    const { data: pages, error: pageErr } = await pageQuery;
+    if (pageErr) return { content: [{ type: "text", text: pageErr.message }], isError: true };
+    const page = pages?.[0];
+    if (!page) return { content: [{ type: "text", text: "Page not found for this user." }], isError: true };
+    const { data: blocks, error: blocksErr } = await supabase.from("blocks").select("id, type, position, title, content, style, is_premium, click_count, schedule").eq("page_id", page.id).order("position", { ascending: true });
+    if (blocksErr) return { content: [{ type: "text", text: blocksErr.message }], isError: true };
+    const result = { page, blocks: blocks ?? [], block_count: (blocks ?? []).length };
+    return {
+      content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      structuredContent: result
+    };
+  }
+});
+
 // src/lib/mcp/index.ts
 var projectRef = "pphdcfxucfndmwulpfwv";
 var mcp_default = defineMcp({
@@ -135,7 +237,7 @@ var mcp_default = defineMcp({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated"
   }),
-  tools: [list_my_pages_default, list_my_leads_default, get_analytics_summary_default]
+  tools: [list_my_pages_default, list_my_leads_default, get_analytics_summary_default, create_page_default, get_page_structure_default]
 });
 
 // lovable-mcp-supabase-entry.ts

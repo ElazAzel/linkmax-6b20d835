@@ -298,61 +298,43 @@ export const EventBlock = memo(function EventBlock({
         if (value) utmParams[key] = value;
       });
 
-      const { data: registration, error } = await supabase
-        .from('event_registrations')
-        .insert({
-          event_id: block.eventId,
-          block_id: block.id,
-          page_id: pageId,
-          owner_id: pageOwnerId,
-          user_id: session?.session?.user?.id || null,
-          attendee_name: resolveAttendeeName(),
-          attendee_email: email.trim(),
-          attendee_phone: resolveAttendeePhone(),
-          answers_json: answers,
-          // Always insert as 'pending' to satisfy RLS safely; free events without
-          // approval are upgraded to 'confirmed' right after via a SECURITY DEFINER RPC.
-          status: 'pending',
-          payment_status: 'none',
-          utm_json: Object.keys(utmParams).length > 0 ? utmParams : {},
-        })
-        .select('id')
-        .single();
+      // Use SECURITY DEFINER RPC so anonymous visitors can register without
+      // hitting SELECT RLS after INSERT.
+      const { data: rpcResult, error } = await supabase.rpc(
+        'register_for_event' as never,
+        {
+          p_event_id: block.eventId,
+          p_block_id: block.id,
+          p_page_id: pageId,
+          p_attendee_name: resolveAttendeeName(),
+          p_attendee_email: email.trim(),
+          p_attendee_phone: resolveAttendeePhone(),
+          p_answers: answers,
+          p_utm: Object.keys(utmParams).length > 0 ? utmParams : {},
+        } as never
+      );
 
       if (error) {
         console.error('Registration error:', error);
-        if (error.code === '23505') {
+        const msg = (error.message || '').toLowerCase();
+        if (error.code === '23505' || msg.includes('duplicate')) {
           setEventError(t('event.duplicateRegistration', 'Вы уже зарегистрированы на этот ивент.'));
-        } else if (error.code === '23503') {
+        } else if (msg.includes('event_not_found')) {
           setEventError(t('event.eventNotFound', 'Событие не найдено. Попробуйте обновить страницу.'));
+        } else if (msg.includes('page_not_published')) {
+          setEventError(t('event.registrationClosed', 'Регистрация закрыта'));
         } else {
           setEventError(t('event.registrationError', 'Не удалось зарегистрироваться') + `: ${error.message}`);
         }
         return;
       }
 
-      // Auto-confirm free registrations that don't require approval
-      const autoConfirm = !block.settings?.requireApproval && !block.isPaid;
-      if (autoConfirm) {
-        const { error: confirmErr } = await supabase.rpc(
-          'confirm_free_event_registration' as never,
-          { p_registration_id: registration.id } as never
-        );
-        if (confirmErr) {
-          console.warn('Auto-confirm failed, registration stays pending:', confirmErr);
-        }
-      }
-
-      // Wait a moment for the trigger to create the ticket
-      await new Promise(r => setTimeout(r, 500));
-
-      const { data: ticket } = await supabase
-        .from('event_tickets')
-        .select('ticket_code')
-        .eq('registration_id', registration.id)
-        .maybeSingle();
-
-      setTicketCode(ticket?.ticket_code || null);
+      const row = (Array.isArray(rpcResult) ? rpcResult[0] : rpcResult) as
+        | { registration_id?: string; ticket_code?: string | null; status?: string }
+        | null;
+      const registration = { id: row?.registration_id };
+      setTicketCode(row?.ticket_code || null);
+      void session;
       setRegistrationCount(prev => prev + 1);
       toast.success(
         block.settings?.requireApproval

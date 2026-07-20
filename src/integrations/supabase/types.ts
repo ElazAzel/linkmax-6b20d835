@@ -4974,6 +4974,15 @@ export type Database = {
       leave_zone: { Args: { p_zone_id: string }; Returns: Json }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       like_template: { Args: { p_template_id: string }; Returns: undefined }
+      mcp_create_user_page: {
+        Args: { p_description?: string; p_slug: string; p_title?: string }
+        Returns: {
+          id: string
+          is_published: boolean
+          slug: string
+          title: string
+        }[]
+      }
       process_marketplace_purchase:
         | {
             Args: {
@@ -5001,6 +5010,23 @@ export type Database = {
       regenerate_zone_calendar_feed_token: {
         Args: { p_zone_id: string }
         Returns: string
+      }
+      register_for_event: {
+        Args: {
+          p_answers: Json
+          p_attendee_email: string
+          p_attendee_name: string
+          p_attendee_phone: string
+          p_block_id: string
+          p_event_id: string
+          p_page_id: string
+          p_utm: Json
+        }
+        Returns: {
+          registration_id: string
+          status: string
+          ticket_code: string
+        }[]
       }
       remove_zone_member: {
         Args: { p_member_user_id: string; p_zone_id: string }
