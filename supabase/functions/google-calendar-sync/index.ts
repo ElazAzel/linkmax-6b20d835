@@ -39,11 +39,20 @@ serve(async (req) => {
             Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
         );
 
-        // Auth is optional: user-initiated actions need it,
-        // server-to-server calls (check_availability, push_booking) use service role.
+        // Auth is optional at this layer: some actions (check_availability) are
+        // callable from public booking widgets, others require an authenticated
+        // user or a trusted server caller. Per-action authorization is enforced
+        // further below.
         const authHeader = req.headers.get("Authorization");
+        const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+        const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+        const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
+        const providedCronSecret = req.headers.get("x-cron-secret") ?? req.headers.get("X-Cron-Secret") ?? "";
+        const isTrustedServerCaller =
+            (!!serviceRoleKey && bearer === serviceRoleKey) ||
+            (!!cronSecret && providedCronSecret === cronSecret);
         let user: { id: string } | null = null;
-        if (authHeader && !authHeader.includes(Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "___")) {
+        if (authHeader && !isTrustedServerCaller) {
             const { data } = await supabaseClient.auth.getUser();
             user = data.user ?? null;
         }
@@ -70,14 +79,62 @@ serve(async (req) => {
             throw new Error("Invalid JSON payload");
         }
 
-        const SERVER_ACTIONS = new Set(["check_availability", "push_booking", "create_event"]);
-        if (!user && !SERVER_ACTIONS.has(action)) {
+        // Actions that never need a signed-in user (public booking widget can
+        // check busy slots for a target owner/staff without login).
+        const PUBLIC_ACTIONS = new Set(["check_availability"]);
+        // Actions that must be invoked either by an authenticated user or a
+        // trusted server caller (service role / CRON secret).
+        const PROTECTED_ACTIONS = new Set(["create_event", "push_booking"]);
+        if (!user && !isTrustedServerCaller && !PUBLIC_ACTIONS.has(action)) {
             return new Response(JSON.stringify({ error: "Unauthorized" }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
                 status: 401,
             });
         }
-        console.log(`[GCAL] Action: ${action}`, { user_id: user?.id ?? "service" });
+
+        // Helper: verify the caller is authorized to act on the given target
+        // (either the owner themselves or a zone admin for that staff record).
+        async function assertAuthorizedForTarget(opts: { owner_id?: string | null; staff_id?: string | null }): Promise<Response | null> {
+            if (isTrustedServerCaller) return null;
+            if (!user) {
+                return new Response(JSON.stringify({ error: "Unauthorized" }), {
+                    status: 401,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
+            if (opts.staff_id) {
+                const { data: staff } = await supabaseAdmin
+                    .from("zone_staff")
+                    .select("id, user_id, zone_id")
+                    .eq("id", opts.staff_id)
+                    .maybeSingle();
+                if (!staff) {
+                    return new Response(JSON.stringify({ error: "Staff not found" }), {
+                        status: 404,
+                        headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    });
+                }
+                if (staff.user_id === user.id) return null;
+                const { data: isAdmin } = await supabaseAdmin.rpc("is_zone_admin", {
+                    _zone_id: staff.zone_id,
+                    _user_id: user.id,
+                });
+                if (isAdmin === true) return null;
+                return new Response(JSON.stringify({ error: "Forbidden" }), {
+                    status: 403,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
+            const targetOwner = opts.owner_id ?? user.id;
+            if (targetOwner !== user.id) {
+                return new Response(JSON.stringify({ error: "Forbidden" }), {
+                    status: 403,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
+            return null;
+        }
+        console.log(`[GCAL] Action: ${action}`, { user_id: user?.id ?? (isTrustedServerCaller ? "server" : "anon") });
 
         // ─── Generate Google OAuth URL ───
         if (action === "get_auth_url") {
