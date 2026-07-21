@@ -391,7 +391,7 @@ serve(async (req) => {
         // ─── Push booking to Google Calendar ───
         if (action === "push_booking") {
             const { booking_id, staff_id } = payload;
-            
+
             // Fetch booking details
             const { data: booking, error: bErr } = await supabaseAdmin
                 .from("bookings")
@@ -402,6 +402,8 @@ serve(async (req) => {
             if (bErr || !booking) throw new Error("Booking not found");
 
             const finalStaffId = staff_id || booking.staff_id;
+            const authzErr = await assertAuthorizedForTarget({ owner_id: booking.owner_id, staff_id: finalStaffId });
+            if (authzErr) return authzErr;
             const targetId = finalStaffId ? { staffId: finalStaffId } : { userId: booking.owner_id };
             const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
