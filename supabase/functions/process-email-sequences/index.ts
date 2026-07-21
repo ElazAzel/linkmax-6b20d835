@@ -106,7 +106,15 @@ serve(async (req) => {
           .single();
 
         if (template && sub.lead && sub.lead.email) {
-          const leadName = (sub.lead.form_data?.name as string) || (sub.lead.form_data?.Имя as string) || "Клиент";
+          const rawLeadName = (sub.lead.form_data?.name as string) || (sub.lead.form_data?.Имя as string) || "Клиент";
+          const escapeHtml = (s: string) =>
+            String(s)
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+          const leadName = escapeHtml(rawLeadName);
           let sent = false;
           let errorMsg = null;
 
@@ -120,7 +128,7 @@ serve(async (req) => {
               body: JSON.stringify({
                 from: senderEmail,
                 to: sub.lead.email,
-                subject: template.subject.replace('{lead_name}', leadName),
+                subject: template.subject.replace('{lead_name}', rawLeadName),
                 html: template.content_html
                   .replace(/\{lead_name\}/g, leadName)
               })

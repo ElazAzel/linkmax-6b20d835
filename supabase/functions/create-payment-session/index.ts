@@ -37,7 +37,22 @@ serve(async (req) => {
             throw new Error("Missing required parameters: zoneId, planCode, cycle");
         }
 
-        // 3. Verify Plan & Calculate Amount
+        // 3. Verify caller is admin/owner of the target zone before opening
+        // any billing session; otherwise anyone could overwrite another
+        // zone's plan by paying the cheapest tier.
+        const { data: isAdmin, error: adminErr } = await supabase.rpc('is_zone_admin', {
+            _zone_id: zoneId,
+            _user_id: user.id,
+        });
+        if (adminErr) {
+            console.error('is_zone_admin lookup failed', adminErr);
+            return createErrorResponse('Authorization check failed', 500);
+        }
+        if (isAdmin !== true) {
+            return createErrorResponse('Forbidden: not a zone admin', 403);
+        }
+
+        // 4. Verify Plan & Calculate Amount
         const plan = ZONE_PLANS.find(p => p.code === planCode);
         if (!plan) throw new Error(`Invalid plan code: ${planCode}`);
 
