@@ -56,12 +56,17 @@ Deno.serve(async (req) => {
 
   const rawBody = await req.text();
   const secret = Deno.env.get('DOCUSEAL_WEBHOOK_SECRET');
-  if (secret) {
-    const ok = await verifySignature(rawBody, req.headers.get('x-docuseal-signature'), secret);
-    if (!ok) {
-      console.warn('DocuSeal webhook signature mismatch');
-      return new Response('Invalid signature', { status: 401, headers: corsHeaders });
-    }
+  if (!secret) {
+    console.error('DOCUSEAL_WEBHOOK_SECRET not configured — rejecting webhook');
+    return new Response(JSON.stringify({ error: 'Webhook secret not configured' }), {
+      status: 503,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+  const ok = await verifySignature(rawBody, req.headers.get('x-docuseal-signature'), secret);
+  if (!ok) {
+    console.warn('DocuSeal webhook signature mismatch');
+    return new Response('Invalid signature', { status: 401, headers: corsHeaders });
   }
 
   let event: any;
