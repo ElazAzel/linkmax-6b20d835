@@ -41,8 +41,8 @@ serve(async (req) => {
         // any billing session; otherwise anyone could overwrite another
         // zone's plan by paying the cheapest tier.
         const { data: isAdmin, error: adminErr } = await supabase.rpc('is_zone_admin', {
-            _zone_id: zoneId,
-            _user_id: user.id,
+            p_zone_id: zoneId,
+            p_user_id: user.id,
         });
         if (adminErr) {
             console.error('is_zone_admin lookup failed', adminErr);
