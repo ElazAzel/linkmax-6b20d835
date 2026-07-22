@@ -116,8 +116,8 @@ serve(async (req) => {
                 }
                 if (staff.user_id === user.id) return null;
                 const { data: isAdmin } = await supabaseAdmin.rpc("is_zone_admin", {
-                    _zone_id: staff.zone_id,
-                    _user_id: user.id,
+                    p_zone_id: staff.zone_id,
+                    p_user_id: user.id,
                 });
                 if (isAdmin === true) return null;
                 return new Response(JSON.stringify({ error: "Forbidden" }), {
