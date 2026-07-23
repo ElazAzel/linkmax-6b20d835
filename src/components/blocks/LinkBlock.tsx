@@ -12,7 +12,7 @@ import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/blocks/block-utils';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { extractDomain, getGoogleFaviconUrl, getDirectFaviconUrl } from '@/lib/favicon-utils';
-import { getBlockStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
 import { cn } from '@/lib/utils/utils';
 import type { LinkBlock as LinkBlockType } from '@/types/page';
 
@@ -81,7 +81,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   const isImageBackground = block.background?.type === 'image';
 
   // Get custom block styles (new system)
-  const { style: blockStyleObj, textEffectClass } = getBlockStyles(block.blockStyle);
+  const { style: blockStyleObj, textEffectClass } = getBlockInnerStyles(block.blockStyle);
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
 
   // Combine styles - new blockStyle takes precedence

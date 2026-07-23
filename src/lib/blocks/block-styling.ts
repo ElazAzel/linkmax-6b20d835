@@ -94,7 +94,9 @@ export interface BlockStyleResult {
 }
 
 /**
- * Get combined style object and className for a block
+ * CONTAINER styles: background, border, padding, radius, shadow, hover.
+ * Applied ONCE by BlockRenderer to the outer wrapper — never by leaf blocks
+ * (avoids double frames/padding).
  */
 export function getBlockStyles(blockStyle?: BlockStyle): BlockStyleResult {
   if (!blockStyle) {
@@ -104,61 +106,50 @@ export function getBlockStyles(blockStyle?: BlockStyle): BlockStyleResult {
   const style: React.CSSProperties = {};
   const classes: string[] = [];
 
-  // Background color
-  if (blockStyle.backgroundColor) {
-    style.backgroundColor = blockStyle.backgroundColor;
-  }
+  if (blockStyle.backgroundColor) style.backgroundColor = blockStyle.backgroundColor;
+  if (blockStyle.backgroundGradient) style.backgroundImage = blockStyle.backgroundGradient;
 
-  // Background gradient
-  if (blockStyle.backgroundGradient) {
-    style.backgroundImage = blockStyle.backgroundGradient;
-  }
+  if (blockStyle.borderRadius) style.borderRadius = RADIUS_PX[blockStyle.borderRadius];
 
-  // Text color
-  if (blockStyle.textColor) {
-    style.color = blockStyle.textColor;
-  }
-
-  // Font family
-  if (blockStyle.fontFamily) {
-    Object.assign(style, getFontStyle(blockStyle.fontFamily));
-  }
-
-  // Border radius
-  if (blockStyle.borderRadius) {
-    style.borderRadius = RADIUS_PX[blockStyle.borderRadius];
-  }
-
-  // Border width + color (color requires width to be visible)
   if (blockStyle.borderWidth && blockStyle.borderWidth !== 'none') {
     style.borderWidth = BORDER_WIDTH_PX[blockStyle.borderWidth];
     style.borderStyle = 'solid';
     style.borderColor = blockStyle.borderColor || '#e5e7eb';
   }
 
-  // Shadow
   if (blockStyle.shadow && blockStyle.shadow !== 'none') {
     style.boxShadow = SHADOW_CSS[blockStyle.shadow];
   }
 
-  // Padding
   if (blockStyle.padding && blockStyle.padding !== 'none') {
     style.padding = PADDING_PX[blockStyle.padding];
   }
 
-  // Hover effect → class
   if (blockStyle.hoverEffect && blockStyle.hoverEffect !== 'none') {
     classes.push(HOVER_CLASS[blockStyle.hoverEffect]);
   }
 
-  // Text effect class
+  // Clip content when custom bg/border/radius is set so children respect the frame
+  if (style.backgroundColor || style.backgroundImage || style.borderWidth || blockStyle.borderRadius) {
+    style.overflow = style.overflow || 'hidden';
+  }
+
   const textEffectClass = getTextEffectClass(blockStyle.textEffect);
 
-  return {
-    style,
-    className: classes.join(' '),
-    textEffectClass,
-  };
+  return { style, className: classes.join(' '), textEffectClass };
+}
+
+/**
+ * INNER styles: color / font-family / text-effect only.
+ * Applied by leaf blocks (Text/Button/Link) on the actual text element.
+ * Never returns background/border/padding/radius/shadow — those live on the wrapper.
+ */
+export function getBlockInnerStyles(blockStyle?: BlockStyle): BlockStyleResult {
+  if (!blockStyle) return { style: {}, className: '', textEffectClass: '' };
+  const style: React.CSSProperties = {};
+  if (blockStyle.textColor) style.color = blockStyle.textColor;
+  if (blockStyle.fontFamily) Object.assign(style, getFontStyle(blockStyle.fontFamily));
+  return { style, className: '', textEffectClass: getTextEffectClass(blockStyle.textEffect) };
 }
 
 /**
