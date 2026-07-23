@@ -81,7 +81,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   const isImageBackground = block.background?.type === 'image';
 
   // Get custom block styles (new system)
-  const { style: blockStyleObj, textEffectClass } = getBlockStyles(block.blockStyle);
+  const { style: blockStyleObj, textEffectClass } = getBlockInnerStyles(block.blockStyle);
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
 
   // Combine styles - new blockStyle takes precedence
