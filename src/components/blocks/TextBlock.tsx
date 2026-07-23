@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { parseRichText } from '@/lib/rich-text-parser';
-import { getBlockStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { getBlockInnerStyles as getBlockStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
 import type { TextBlock as TextBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 
