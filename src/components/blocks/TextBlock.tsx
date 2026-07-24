@@ -31,9 +31,10 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
         <h2
           className={cn(
             "text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight break-words hyphens-auto leading-[1.1]",
-            "text-gradient bg-[length:200%_auto] animate-gradient-x",
+            !hasBlockStyle && "text-gradient bg-[length:200%_auto] animate-gradient-x",
             alignmentClass,
-            textEffectClass
+            textEffectClass,
+            containerClass
           )}
           style={customStyle}
         >
@@ -44,12 +45,12 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
       return (
         <blockquote
           className={cn(
-            "relative p-4 sm:p-6 rounded-card",
-            "qb-card-quiet border-l-4 border-primary/50",
-
+            "relative rounded-card",
+            !hasBlockStyle && "p-4 sm:p-6 qb-card-quiet border-l-4 border-primary/50",
             "italic whitespace-pre-line break-words hyphens-auto text-sm sm:text-base lg:text-lg font-medium",
             alignmentClass,
             textEffectClass,
+            containerClass,
             !hasBlockStyle && 'text-foreground/90'
           )}
           style={customStyle}
@@ -64,6 +65,7 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
             "whitespace-pre-line break-words hyphens-auto text-sm sm:text-base leading-relaxed",
             alignmentClass,
             textEffectClass,
+            containerClass,
             !hasBlockStyle && 'text-foreground'
           )}
           style={customStyle}
