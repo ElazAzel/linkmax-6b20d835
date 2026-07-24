@@ -129,10 +129,8 @@ export function getBlockStyles(blockStyle?: BlockStyle): BlockStyleResult {
     classes.push(HOVER_CLASS[blockStyle.hoverEffect]);
   }
 
-  // Clip content when custom bg/border/radius is set so children respect the frame
-  if (style.backgroundColor || style.backgroundImage || style.borderWidth || blockStyle.borderRadius) {
-    style.overflow = style.overflow || 'hidden';
-  }
+  // Note: intentionally NOT forcing overflow:hidden here — it would clip
+  // hover effects like scale/lift that extend past the wrapper.
 
   const textEffectClass = getTextEffectClass(blockStyle.textEffect);
 

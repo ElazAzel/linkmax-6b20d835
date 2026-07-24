@@ -110,7 +110,13 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
 
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
-  const { style: bsStyle, className: bsClass } = getBlockStyles(block.blockStyle);
+  // Leaf blocks (button, link, text) apply container styles to their own element
+  // so the paint stays on the button/link/quote instead of the full-width row wrapper.
+  const SELF_STYLED_TYPES = new Set(['button', 'link', 'text']);
+  const isSelfStyled = SELF_STYLED_TYPES.has(block.type as string);
+  const { style: bsStyle, className: bsClass } = isSelfStyled
+    ? { style: {} as React.CSSProperties, className: '' }
+    : getBlockStyles(block.blockStyle);
   const wrapperStyle = { ...animationStyle, ...bsStyle };
   const wrapperClass = cn(animationClass, bsClass);
   const RendererComponent = manifest.renderer;

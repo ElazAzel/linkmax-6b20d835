@@ -12,7 +12,7 @@ import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/blocks/block-utils';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { extractDomain, getGoogleFaviconUrl, getDirectFaviconUrl } from '@/lib/favicon-utils';
-import { getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { getBlockStyles, getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
 import { cn } from '@/lib/utils/utils';
 import type { LinkBlock as LinkBlockType } from '@/types/page';
 
@@ -80,8 +80,10 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   const legacyBackgroundStyle = hasLegacyBackground ? getBackgroundStyle(block.background) : {};
   const isImageBackground = block.background?.type === 'image';
 
-  // Get custom block styles (new system)
-  const { style: blockStyleObj, textEffectClass } = getBlockInnerStyles(block.blockStyle);
+  // Get custom block styles (new system) — full container styles go on the link button itself
+  const { style: containerStyle, className: containerClass, textEffectClass } = getBlockStyles(block.blockStyle);
+  const { style: innerStyle } = getBlockInnerStyles(block.blockStyle);
+  const blockStyleObj = { ...containerStyle, ...innerStyle };
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
 
   // Combine styles - new blockStyle takes precedence
@@ -101,6 +103,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           "min-h-[56px] py-3 px-4 sm:px-5",
           "active:scale-[0.99] transition-transform",
           getButtonClass(block.style),
+          containerClass,
           hasAnyCustomStyle && 'border-transparent',
           isImageBackground && 'relative overflow-hidden'
         )}

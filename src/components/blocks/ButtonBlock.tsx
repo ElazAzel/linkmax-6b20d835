@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
-import { getBlockInnerStyles as getBlockStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { getBlockStyles, getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
 import type { ButtonBlock as ButtonBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 
@@ -25,12 +25,14 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
   const isImageBackground = block.background?.type === 'image';
   const legacyButtonStyle = hasLegacyBackground ? getBackgroundStyle(block.background) : {};
 
-  // New block styling system
-  const { style: blockStyleObj, textEffectClass } = getBlockStyles(block.blockStyle);
+  // New block styling system — apply full container styles (bg, border, radius, padding, shadow)
+  // directly to the <button> so the paint stays on the button itself, not the row wrapper.
+  const { style: containerStyle, className: containerClass, textEffectClass } = getBlockStyles(block.blockStyle);
+  const { style: innerStyle } = getBlockInnerStyles(block.blockStyle);
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
 
   // Combine styles - new blockStyle takes precedence
-  const combinedStyle = { ...legacyButtonStyle, ...blockStyleObj };
+  const combinedStyle = { ...legacyButtonStyle, ...containerStyle, ...innerStyle };
   const hasAnyCustomStyle = hasLegacyBackground || hasBlockStyle;
 
   const widthClass = block.width === 'full' ? 'w-full' 
@@ -57,6 +59,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
           "break-words hyphens-auto",
           sizeClass,
           getHoverClass(block.hoverEffect),
+          containerClass,
           hasLegacyBackground
             ? 'text-white drop-shadow-md'
             : hasBlockStyle
