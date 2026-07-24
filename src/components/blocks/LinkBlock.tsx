@@ -80,8 +80,10 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   const legacyBackgroundStyle = hasLegacyBackground ? getBackgroundStyle(block.background) : {};
   const isImageBackground = block.background?.type === 'image';
 
-  // Get custom block styles (new system)
-  const { style: blockStyleObj, textEffectClass } = getBlockInnerStyles(block.blockStyle);
+  // Get custom block styles (new system) — full container styles go on the link button itself
+  const { style: containerStyle, className: containerClass, textEffectClass } = getBlockStyles(block.blockStyle);
+  const { style: innerStyle } = getBlockInnerStyles(block.blockStyle);
+  const blockStyleObj = { ...containerStyle, ...innerStyle };
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
 
   // Combine styles - new blockStyle takes precedence
