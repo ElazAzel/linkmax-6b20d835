@@ -19,8 +19,10 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
     : block.alignment === 'right' ? 'text-right'
       : 'text-left';
 
-  // Get custom block styles
-  const { style: customStyle, textEffectClass } = getBlockStyles(block.blockStyle);
+  // Get custom block styles — container styles go on the text element itself
+  const { style: containerStyle, className: containerClass, textEffectClass } = getBlockStyles(block.blockStyle);
+  const { style: innerStyle } = getBlockInnerStyles(block.blockStyle);
+  const customStyle = { ...containerStyle, ...innerStyle };
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
 
   switch (block.style) {
