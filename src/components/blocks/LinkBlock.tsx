@@ -103,6 +103,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           "min-h-[56px] py-3 px-4 sm:px-5",
           "active:scale-[0.99] transition-transform",
           getButtonClass(block.style),
+          containerClass,
           hasAnyCustomStyle && 'border-transparent',
           isImageBackground && 'relative overflow-hidden'
         )}
