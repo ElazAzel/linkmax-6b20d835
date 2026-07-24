@@ -59,6 +59,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
           "break-words hyphens-auto",
           sizeClass,
           getHoverClass(block.hoverEffect),
+          containerClass,
           hasLegacyBackground
             ? 'text-white drop-shadow-md'
             : hasBlockStyle
