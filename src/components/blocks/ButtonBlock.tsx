@@ -25,12 +25,14 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
   const isImageBackground = block.background?.type === 'image';
   const legacyButtonStyle = hasLegacyBackground ? getBackgroundStyle(block.background) : {};
 
-  // New block styling system
-  const { style: blockStyleObj, textEffectClass } = getBlockStyles(block.blockStyle);
+  // New block styling system — apply full container styles (bg, border, radius, padding, shadow)
+  // directly to the <button> so the paint stays on the button itself, not the row wrapper.
+  const { style: containerStyle, className: containerClass, textEffectClass } = getBlockStyles(block.blockStyle);
+  const { style: innerStyle } = getBlockInnerStyles(block.blockStyle);
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
 
   // Combine styles - new blockStyle takes precedence
-  const combinedStyle = { ...legacyButtonStyle, ...blockStyleObj };
+  const combinedStyle = { ...legacyButtonStyle, ...containerStyle, ...innerStyle };
   const hasAnyCustomStyle = hasLegacyBackground || hasBlockStyle;
 
   const widthClass = block.width === 'full' ? 'w-full' 
