@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
-import { getBlockInnerStyles as getBlockStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { getBlockStyles, getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
 import type { ButtonBlock as ButtonBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 
