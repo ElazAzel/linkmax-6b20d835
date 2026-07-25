@@ -333,7 +333,7 @@ export const Auth = memo(function Auth() {
     const signInResult = await signIn(validation.data.email, validation.data.password);
     if (!signInResult.error) {
       playSuccess();
-      toast.success(t('auth.welcomeBack', 'Welcome back!'));
+      toast.success(t('auth.welcomeBack'));
       trackAuthEvent('auth_success', { method: 'email_signin' });
       setIsLoading(false);
       return;
@@ -620,7 +620,7 @@ export const Auth = memo(function Auth() {
                   data-testid="manage-login-methods"
                 >
                   <Link2 className="h-4 w-4" />
-                  {t('settings.linkedAccounts.title', 'Способы входа')}
+                  {t('settings.linkedAccounts.title')}
                 </Button>
                 <Button
                   variant="outline"
@@ -791,12 +791,12 @@ export const Auth = memo(function Auth() {
                         <div className="h-14 w-14 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
                           <Mail className="h-7 w-7 text-green-500" />
                         </div>
-                        <h3 className="text-lg font-semibold">{t('auth.checkEmail', 'Check your email')}</h3>
+                        <h3 className="text-lg font-semibold">{t('auth.checkEmail')}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {t('auth.signupEmailSent', 'We sent a confirmation link to your email')}
+                          {t('auth.signupEmailSent')}
                         </p>
                         <Button variant="outline" className="w-full h-12 rounded-xl" onClick={() => setSignupEmailSent(false)}>
-                          {t('auth.tryAnotherEmail', 'Use another email')}
+                          {t('auth.backToSignIn')}
                         </Button>
                       </div>
                     ) : (
@@ -829,7 +829,7 @@ export const Auth = memo(function Auth() {
                         />
                       </div>
                       <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg" disabled={isLoading || isOAuthLoading !== null}>
-                        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('auth.continue', 'Continue')}
+                        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('auth.signIn')}
                       </Button>
                     </form>
                     )}
