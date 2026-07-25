@@ -136,3 +136,19 @@
 /* Accent color: expose to any child using bg-primary/text-primary via a light bridge */
 [style*="--lm-accent"] .lm-accent-bg { background-color: var(--lm-accent); color: var(--lm-accent-fg, #fff); }
 [style*="--lm-accent"] .lm-accent-text { color: var(--lm-accent); }
+
+/* Independent accent slots — buttons, links, active elements.
+ * Each falls back to the base --lm-accent, then to the theme primary. */
+.lm-accent-button-bg {
+  background-color: var(--lm-accent-button, var(--lm-accent, hsl(var(--primary))));
+  color: var(--lm-accent-button-fg, var(--lm-accent-fg, hsl(var(--primary-foreground))));
+}
+.lm-accent-link-text {
+  color: var(--lm-accent-link, var(--lm-accent, hsl(var(--primary))));
+}
+.lm-accent-active-bg {
+  background-color: var(--lm-accent-active, var(--lm-accent, hsl(var(--primary))));
+  color: var(--lm-accent-active-fg, var(--lm-accent-fg, hsl(var(--primary-foreground))));
+}
+.lm-accent-active-text { color: var(--lm-accent-active, var(--lm-accent, hsl(var(--primary)))); }
+.lm-accent-active-ring { box-shadow: 0 0 0 2px var(--lm-accent-active, var(--lm-accent, hsl(var(--primary)))); }
