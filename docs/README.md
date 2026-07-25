@@ -25,6 +25,7 @@ This page is the documentation entry point. It separates operational instruction
 | Page customization | [Page customization](features/PAGE_CUSTOMIZATION.md) |
 | Security | [Security baseline](security/SECURITY.md) |
 | Product direction | [Strategic plan](product/STRATEGIC_PLAN_2026.md), [execution plan](roadmap/POST_AUDIT_EXECUTION_PLAN_2026-07.md) |
+| OSS-informed delivery | [Reference implementation plan](roadmap/OSS_REFERENCE_IMPLEMENTATION_PLAN.md) |
 | Agent configuration | [.agent/README.md](../.agent/README.md) |
 
 ## Historical Material

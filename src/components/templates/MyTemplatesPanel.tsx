@@ -26,7 +26,7 @@ import Globe from 'lucide-react/dist/esm/icons/globe';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Layers from 'lucide-react/dist/esm/icons/layers';
 import Pencil from 'lucide-react/dist/esm/icons/pencil';
-import type { Block } from '@/types/page';
+import type { Block, PageTheme } from '@/types/page';
 import { TemplatePreviewCard } from './TemplatePreviewCard';
 import { EditTemplateDialog } from './EditTemplateDialog';
 import { getTemplateCategoryLabel } from '@/lib/templateCategories';
@@ -38,6 +38,7 @@ interface UserTemplate {
   category: string;
   preview_url: string | null;
   blocks: Block[];
+  theme_settings?: Partial<PageTheme> | null;
   is_public: boolean;
   is_for_sale: boolean;
   price: number | null;
@@ -58,7 +59,7 @@ interface PurchasedTemplate {
 interface MyTemplatesPanelProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onApplyTemplate: (blocks: Block[]) => void;
+  onApplyTemplate: (blocks: Block[], theme?: Partial<PageTheme>) => void;
   currentBlocks?: Block[];
 }
 
@@ -101,6 +102,7 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
       setMyTemplates((myData || []).map(t => ({
         ...t,
         blocks: (t.blocks as unknown as Block[]) || [],
+        theme_settings: t.theme_settings as unknown as Partial<PageTheme> | null,
       })));
 
       // Load purchased templates
@@ -118,6 +120,7 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
             category,
             preview_url,
             blocks,
+            theme_settings,
             is_public,
             is_for_sale,
             price,
@@ -178,13 +181,13 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
     }
   };
 
-  const handleApply = (templateBlocks: Block[]) => {
+  const handleApply = (templateBlocks: Block[], templateTheme?: Partial<PageTheme> | null) => {
     // Generate new unique IDs for all blocks to avoid conflicts with existing blocks
     const blocksWithNewIds = templateBlocks.map((block, index) => ({
       ...block,
       id: `${block.type}-${Date.now()}-${index}`,
     }));
-    onApplyTemplate(blocksWithNewIds);
+    onApplyTemplate(blocksWithNewIds, templateTheme ?? undefined);
     onOpenChange(false);
     toast.success(t('templates.applied', 'Шаблон применён!'));
   };
@@ -209,7 +212,7 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
         
         {/* Overlay with actions */}
         <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 flex-wrap p-2">
-          <Button size="sm" onClick={() => handleApply(template.blocks)}>
+          <Button size="sm" onClick={() => handleApply(template.blocks, template.theme_settings)}>
             <Download className="h-4 w-4 mr-1" />
             {t('templates.apply', 'Применить')}
           </Button>

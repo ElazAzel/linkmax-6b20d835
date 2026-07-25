@@ -20,7 +20,7 @@ import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import { storage } from '@/lib/storage';
 
 
-import type { Block, PageData } from '@/types/page';
+import type { Block, PageData, PageTheme } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
 
@@ -171,8 +171,11 @@ export function useDashboard(options?: UseDashboardOptions) {
   });
 
   // Handle apply template
-  const handleApplyTemplate = useCallback((blocks: Block[]) => {
+  const handleApplyTemplate = useCallback((blocks: Block[], theme?: Partial<PageTheme>) => {
     cloudState.replaceBlocks(blocks);
+    if (theme && cloudState.pageData) {
+      cloudState.updatePageDataPartial({ theme: { ...cloudState.pageData.theme, ...theme } });
+    }
     toast.success(t('dashboard.templateApplied', 'Template applied!'));
   }, [cloudState, t]);
 

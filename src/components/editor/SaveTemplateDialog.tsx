@@ -29,7 +29,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/user/useAuth';
-import type { Block } from '@/types/page';
+import type { Block, PageTheme } from '@/types/page';
 import type { Json } from '@/platform/supabase/types';
 import {
   TEMPLATE_CATEGORY_KEYS,
@@ -41,6 +41,7 @@ interface SaveTemplateDialogProps {
   open: boolean;
   onClose: () => void;
   blocks: Block[];
+  theme?: Partial<PageTheme>;
   previewContainerId?: string;
 }
 
@@ -48,6 +49,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
   open,
   onClose,
   blocks,
+  theme,
   previewContainerId = 'preview-container',
 }: SaveTemplateDialogProps) {
   const { t } = useTranslation();
@@ -123,6 +125,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
         description: description.trim() || null,
         category,
         blocks: templateBlocks as unknown as Json,
+        theme_settings: (theme ?? {}) as Json,
         is_public: isPublic,
         is_for_sale: isForSale && isPublic,
         price: isForSale ? parseInt(price) || 0 : 0,

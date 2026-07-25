@@ -881,6 +881,7 @@ function DashboardV2Inner() {
               open={showSaveTemplate}
               onClose={() => setShowSaveTemplate(false)}
               blocks={dashboard.pageData.blocks}
+              theme={dashboard.pageData.theme}
               previewContainerId="preview-container"
             />
           )}

@@ -139,14 +139,29 @@ export function getPublicPageCssVars(theme?: Partial<PageTheme>): CSSProperties 
  * Accepts hex (#rgb/#rrggbb) and rgb()/rgba().
  */
 export function getContrastForeground(color: string): string {
+  const L = getRelativeLuminance(color);
+  if (L === null) return '#0b0b0b';
+  return L > 0.5 ? '#0b0b0b' : '#ffffff';
+}
+
+/** Returns a WCAG contrast ratio when both values are parseable colors. */
+export function getContrastRatio(foreground: string, background: string): number | null {
+  const foregroundLuminance = getRelativeLuminance(foreground);
+  const backgroundLuminance = getRelativeLuminance(background);
+  if (foregroundLuminance === null || backgroundLuminance === null) return null;
+  const lighter = Math.max(foregroundLuminance, backgroundLuminance);
+  const darker = Math.min(foregroundLuminance, backgroundLuminance);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function getRelativeLuminance(color: string): number | null {
   const rgb = parseColor(color);
-  if (!rgb) return '#0b0b0b';
+  if (!rgb) return null;
   const [r, g, b] = rgb.map(c => {
     const s = c / 255;
     return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
   });
-  const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  return L > 0.5 ? '#0b0b0b' : '#ffffff';
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
 function parseColor(c: string): [number, number, number] | null {

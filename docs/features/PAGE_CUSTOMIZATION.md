@@ -12,6 +12,8 @@ The page appearance includes:
 - font pairs and icon styles;
 - card shape, shadow, hover behavior, and dividers.
 
+Users can export this configuration as a versioned JSON file and import it into another page. Imports accept only the supported appearance schema and safe HTTPS image URLs; unsupported fields are discarded.
+
 ## Precedence
 
 1. A theme preset supplies the baseline values.
@@ -24,11 +26,14 @@ Resetting a theme removes page-level overrides before applying the selected pres
 
 Appearance is stored in `pageData.theme` and saved through the normal page autosave path. The same theme is applied to the editor preview and to `PublicPage`, including CSS variables used by shared block cards.
 
+When a user saves a page as a template, its `theme_settings` are stored alongside its blocks. Applying that template restores the saved theme and creates fresh block IDs, so the resulting page does not share mutable block identities with the template.
+
 Core implementation points:
 
 - `src/components/dashboard-v2/panels/ThemePanel.tsx` manages customization controls.
 - `src/lib/appearance/presets.ts` defines preset baselines.
 - `src/lib/appearance/style-utils.ts` translates settings into CSS variables and backgrounds.
+- `src/lib/appearance/theme-transfer.ts` validates import and export payloads.
 - `src/components/dashboard-v2/screens/EditorScreen.tsx` renders the editor preview.
 - `src/pages/PublicPage.tsx` renders the public page.
 - `src/components/blocks/GridBlocksRenderer.tsx` applies global card defaults unless a block explicitly overrides them.
@@ -39,6 +44,7 @@ Run the focused appearance tests after changing customization behavior:
 
 ```powershell
 npx vitest run src/pages/__tests__/PublicPage.test.tsx src/lib/appearance/__tests__/style-utils.test.ts
+npx vitest run src/lib/appearance/__tests__/theme-transfer.test.ts
 ```
 
 Run `npm run typecheck:strict` and `npm run build` before merging changes to this flow.

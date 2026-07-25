@@ -4,7 +4,7 @@
  *
  * Tabs: Themes • Background • Style • Blocks
  */
-import { memo, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Palette from 'lucide-react/dist/esm/icons/palette';
@@ -15,6 +15,9 @@ import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Type from 'lucide-react/dist/esm/icons/type';
 import Square from 'lucide-react/dist/esm/icons/square';
 import WandSparkles from 'lucide-react/dist/esm/icons/wand-sparkles';
+import Download from 'lucide-react/dist/esm/icons/download';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import TriangleAlert from 'lucide-react/dist/esm/icons/triangle-alert';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +28,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { cn } from '@/lib/utils/utils';
+import { toast } from 'sonner';
 import type { PageTheme, PageBackground, BlockShape, BlockShadow, BlockHover, DividerStyle } from '@/types/page';
+import { getContrastForeground, getContrastRatio } from '@/lib/appearance/style-utils';
+import { createThemeTransfer, parseThemeTransfer } from '@/lib/appearance/theme-transfer';
 import {
   THEME_PRESETS,
   GRADIENT_PRESETS,
@@ -57,6 +63,7 @@ export const ThemePanel = memo(function ThemePanel({
 }: ThemePanelProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('themes');
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   const activeThemeId = currentTheme.themePreset
     ?? THEME_PRESETS.find(p => p.theme.backgroundColor === currentTheme.backgroundColor)?.id
@@ -113,6 +120,51 @@ export const ThemePanel = memo(function ThemePanel({
     next();
   };
 
+  const handleExportTheme = () => {
+    const payload = createThemeTransfer(currentTheme);
+    const file = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(file);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'linkmax-theme.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportTheme = async (file?: File) => {
+    if (!file) return;
+    try {
+      const theme = parseThemeTransfer(JSON.parse(await file.text()));
+      if (!theme) throw new Error('invalid theme payload');
+      onThemeChange({
+        customBackground: undefined,
+        accentColor: undefined,
+        accentButton: undefined,
+        accentLink: undefined,
+        accentActive: undefined,
+        blockShape: undefined,
+        blockShadow: undefined,
+        blockHover: undefined,
+        divider: undefined,
+        fontPair: undefined,
+        iconStyle: undefined,
+        animationStyle: undefined,
+        backgroundGradient: undefined,
+        ...THEME_PRESETS[0].theme,
+        ...theme,
+      });
+      toast.success(t('themes.imported', 'Оформление импортировано'));
+    } catch {
+      toast.error(t('themes.importError', 'Не удалось импортировать файл оформления'));
+    } finally {
+      if (importInputRef.current) importInputRef.current.value = '';
+    }
+  };
+
+  const accent = currentTheme.accentButton ?? currentTheme.accentColor;
+  const accentForeground = accent ? getContrastForeground(accent) : undefined;
+  const accentContrast = accent && accentForeground ? getContrastRatio(accentForeground, accent) : null;
+
   return (
     <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <SheetContent side="right" className="w-full sm:max-w-md p-0 overflow-y-auto">
@@ -122,11 +174,25 @@ export const ThemePanel = memo(function ThemePanel({
               <Palette className="h-5 w-5 text-primary" />
               {t('themes.pageTheme', 'Тема и оформление')}
             </SheetTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-xs h-8"
-              onClick={() => {
+            <div className="flex items-center gap-1">
+              <input
+                ref={importInputRef}
+                type="file"
+                accept="application/json"
+                className="hidden"
+                onChange={(event) => void handleImportTheme(event.target.files?.[0])}
+              />
+              <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={() => importInputRef.current?.click()} title={t('themes.import', 'Импорт оформления')} aria-label={t('themes.import', 'Импорт оформления')}>
+                <Upload className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={handleExportTheme} title={t('themes.export', 'Экспорт оформления')} aria-label={t('themes.export', 'Экспорт оформления')}>
+                <Download className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs h-8"
+                onClick={() => {
                 const preset = THEME_PRESETS.find(p => p.id === activeThemeId) ?? THEME_PRESETS[0];
                 onThemeChange({
                   customBackground: undefined,
@@ -150,6 +216,7 @@ export const ThemePanel = memo(function ThemePanel({
             >
               {t('themes.reset', 'Сброс')}
             </Button>
+            </div>
           </div>
         </SheetHeader>
 
@@ -321,6 +388,12 @@ export const ThemePanel = memo(function ThemePanel({
 
           {/* ============ Style tab ============ */}
           <TabsContent value="style" className="p-5 pt-0 space-y-6">
+            {accentContrast !== null && accentContrast < 7 && (
+              <div className="flex gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-foreground">
+                <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                <span>{t('themes.contrastWarning', 'Контраст основного акцента ниже усиленного уровня AAA для обычного текста.')}</span>
+              </div>
+            )}
             <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">{t('themes.fontPair', 'Шрифтовая пара')}</Label>
               <div className="grid grid-cols-1 gap-2 max-h-72 overflow-y-auto pr-1">
