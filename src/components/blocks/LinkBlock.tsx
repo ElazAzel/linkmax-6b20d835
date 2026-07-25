@@ -126,7 +126,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
             />
           ) : (
             <FallbackIcon
-              className={cn("h-5 w-5 flex-shrink-0", hasAnyCustomStyle ? '' : 'text-primary')}
+              className={cn("h-5 w-5 flex-shrink-0", hasAnyCustomStyle ? '' : 'lm-accent-link-text text-primary')}
               style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined}
             />
           )}
