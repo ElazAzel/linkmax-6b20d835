@@ -329,59 +329,101 @@ export const ThemePanel = memo(function ThemePanel({
               </div>
             </div>
 
-            <div className="space-y-3">
-              <Label className="text-xs text-muted-foreground">{t('themes.accentColor', 'Акцентный цвет')}</Label>
-              <div className="grid grid-cols-8 gap-2">
-                {ACCENT_SWATCHES.map((swatch) => {
-                  const isActive = (currentTheme.accentColor ?? '').toLowerCase() === swatch.toLowerCase();
-                  return (
-                    <button
-                      key={swatch}
-                      type="button"
-                      onClick={() => setBlockField('accentColor', swatch)}
-                      className={cn(
-                        'h-8 w-8 rounded-full border transition relative',
-                        isActive ? 'ring-2 ring-offset-2 ring-primary ring-offset-background scale-110' : 'border-border/40 hover:scale-105'
+            {(() => {
+              const ACCENT_SLOTS: Array<{
+                key: 'accentColor' | 'accentButton' | 'accentLink' | 'accentActive';
+                label: string;
+                hint: string;
+              }> = [
+                {
+                  key: 'accentColor',
+                  label: t('themes.accentColor', 'Основной акцент'),
+                  hint: t('themes.accentColorHint', 'Базовый цвет. Используется, если для кнопок / ссылок / активных элементов не задан свой.'),
+                },
+                {
+                  key: 'accentButton',
+                  label: t('themes.accentButton', 'Кнопки'),
+                  hint: t('themes.accentButtonHint', 'Цвет фона основных кнопок (Button-блоки).'),
+                },
+                {
+                  key: 'accentLink',
+                  label: t('themes.accentLink', 'Ссылки'),
+                  hint: t('themes.accentLinkHint', 'Цвет иконок и текстовых ссылок в Link-блоках.'),
+                },
+                {
+                  key: 'accentActive',
+                  label: t('themes.accentActive', 'Активные элементы'),
+                  hint: t('themes.accentActiveHint', 'Цвет активных табов, точек, фокуса и выделений.'),
+                },
+              ];
+              return ACCENT_SLOTS.map(slot => {
+                const value = currentTheme[slot.key] as string | undefined;
+                const inheritsFromBase = slot.key !== 'accentColor' && !value && !!currentTheme.accentColor;
+                return (
+                  <div key={slot.key} className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <Label className="text-xs text-muted-foreground">{slot.label}</Label>
+                      {inheritsFromBase && (
+                        <span className="text-[10px] text-muted-foreground/70">
+                          {t('themes.inheritsBase', 'наследует основной')}
+                        </span>
                       )}
-                      style={{ backgroundColor: swatch }}
-                      title={swatch}
-                      aria-label={swatch}
-                    >
-                      {isActive && <Check className="absolute inset-0 m-auto h-3.5 w-3.5 text-white drop-shadow" />}
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="flex gap-2 items-center">
-                <Input
-                  type="color"
-                  value={currentTheme.accentColor ?? '#ff5701'}
-                  onChange={(e) => setBlockField('accentColor', e.target.value)}
-                  className="w-14 h-10 p-1 cursor-pointer"
-                />
-                <Input
-                  type="text"
-                  value={currentTheme.accentColor ?? ''}
-                  onChange={(e) => setBlockField('accentColor', e.target.value)}
-                  placeholder="#ff5701"
-                  className="flex-1 bg-background/50"
-                />
-                {currentTheme.accentColor && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-10 px-2 text-xs"
-                    onClick={() => setBlockField('accentColor', undefined)}
-                    title={t('themes.resetAccent', 'Сбросить акцент')}
-                  >
-                    {t('themes.reset', 'Сброс')}
-                  </Button>
-                )}
-              </div>
-              <p className="text-[11px] text-muted-foreground">
-                {t('themes.accentColorHint', 'Применяется к кнопкам, ссылкам и активным элементам публичной страницы.')}
-              </p>
-            </div>
+                    </div>
+                    {slot.key === 'accentColor' && (
+                      <div className="grid grid-cols-8 gap-2">
+                        {ACCENT_SWATCHES.map((swatch) => {
+                          const isActive = (value ?? '').toLowerCase() === swatch.toLowerCase();
+                          return (
+                            <button
+                              key={swatch}
+                              type="button"
+                              onClick={() => setBlockField(slot.key, swatch)}
+                              className={cn(
+                                'h-8 w-8 rounded-full border transition relative',
+                                isActive ? 'ring-2 ring-offset-2 ring-primary ring-offset-background scale-110' : 'border-border/40 hover:scale-105'
+                              )}
+                              style={{ backgroundColor: swatch }}
+                              title={swatch}
+                              aria-label={swatch}
+                            >
+                              {isActive && <Check className="absolute inset-0 m-auto h-3.5 w-3.5 text-white drop-shadow" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        type="color"
+                        value={value ?? currentTheme.accentColor ?? '#ff5701'}
+                        onChange={(e) => setBlockField(slot.key, e.target.value)}
+                        className="w-14 h-10 p-1 cursor-pointer"
+                        aria-label={slot.label}
+                      />
+                      <Input
+                        type="text"
+                        value={value ?? ''}
+                        onChange={(e) => setBlockField(slot.key, e.target.value || undefined)}
+                        placeholder={currentTheme.accentColor ?? '#ff5701'}
+                        className="flex-1 bg-background/50"
+                      />
+                      {value && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-10 px-2 text-xs"
+                          onClick={() => setBlockField(slot.key, undefined)}
+                          title={t('themes.reset', 'Сброс')}
+                        >
+                          {t('themes.reset', 'Сброс')}
+                        </Button>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">{slot.hint}</p>
+                  </div>
+                );
+              });
+            })()}
 
             <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">{t('themes.animationStyle', 'Анимации')}</Label>
