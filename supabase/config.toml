@@ -109,6 +109,9 @@ verify_jwt = false # Public: tracking pixel
 [functions.public-experts]
 verify_jwt = false # Public: эксперты
 
+[functions.track-analytics-event]
+verify_jwt = false # Public: validates and rate-limits browser analytics events
+
 # --- Admin & Internal ---
 [functions.seed-demo-accounts]
 verify_jwt = true # Admin only

@@ -32,6 +32,7 @@
 | Vulnerable components | Triage production `npm audit --omit=dev` findings by reachability. | Patches merged or breaking upgrades scheduled with owner/test plan. |
 | Authentication failures | Test email/OAuth/provider linking, redirects, session expiration, and account switching. | No arbitrary redirect, user enumeration leak, or client-only identity merge. |
 | Software/data integrity | Enforce lockfile CI, migration review, and dependency update review. | Reproducible `npm ci`; append-only migration discipline. |
+| Public analytics integrity | Route browser events through `track-analytics-event`; validate event type/page, bound metadata, rate-limit by source IP, and keep direct `analytics` inserts closed by RLS. | Migration and Edge Function are deployed together; public clients cannot insert arbitrary analytics rows. |
 | Logging/monitoring | Redact PII/secrets; define deploy and auth alert signals. | Incidents can be diagnosed without collecting sensitive payloads. |
 | SSRF and external requests | Audit webhooks, URL fetches, and media/proxy endpoints. | Destination validation and timeouts exist where external URLs are accepted. |
 

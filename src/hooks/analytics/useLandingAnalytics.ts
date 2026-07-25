@@ -6,8 +6,8 @@
 import { useEffect, useCallback, useRef } from 'react';
 
 import { supabase } from '@/platform/supabase/client';
-import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
 // Filter out bots and dev traffic
 function isBot(): boolean {
@@ -113,19 +113,13 @@ async function trackLandingEvent({ eventType, metadata = {} }: TrackLandingEvent
       sessionDuration: Date.now() - landingSession.startedAt,
       device: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
       source: document.referrer ? new URL(document.referrer).hostname : 'direct',
-      userAgent: navigator.userAgent,
       language: navigator.language,
       screenWidth: screen.width,
       screenHeight: screen.height,
       timestamp: new Date().toISOString(),
     };
 
-    await supabase.from('analytics').insert({
-      page_id: null as any,
-      block_id: null,
-      event_type: eventType,
-      metadata: enrichedMetadata as Json,
-    } as any);
+    await submitPublicAnalyticsEvent({ eventType, metadata: enrichedMetadata });
   } catch (error) {
     // Silently fail for analytics
     logger.debug('Landing analytics failed:', { context: 'useLandingAnalytics', data: { error } });
@@ -260,28 +254,8 @@ export function useLandingAnalytics() {
         ctaClicks: session.ctaClicks,
       };
 
-      const payload = JSON.stringify({
-        page_id: null,
-        block_id: null,
-        event_type: 'landing_exit',
-        metadata,
-      });
-
-      // Use fetch with keepalive and credentials: 'omit' to ensure reliable delivery
-      // on page unload without triggering CORS credentials errors (since Supabase utilizes a wildcard origin)
       if (typeof fetch === 'function') {
-        const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-        const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
-        void fetch(url, {
-          method: 'POST',
-          body: payload,
-          keepalive: true,
-          credentials: 'omit',
-          headers: {
-            'Content-Type': 'application/json',
-            Prefer: 'return=minimal',
-          },
-        }).catch(() => undefined);
+        void submitPublicAnalyticsEvent({ eventType: 'landing_exit', metadata }, { keepalive: true }).catch(() => undefined);
       }
     };
 

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as analyticsService from '../analytics';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
 // Mock logger
 vi.mock('@/lib/utils/logger', () => ({
@@ -10,6 +11,10 @@ vi.mock('@/lib/utils/logger', () => ({
         info: vi.fn(),
         debug: vi.fn(),
     }
+}));
+
+vi.mock('@/lib/analytics/public-ingestion', () => ({
+    submitPublicAnalyticsEvent: vi.fn(),
 }));
 
 // Mock Supabase
@@ -29,6 +34,8 @@ beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(supabase.from).mockReset();
     vi.mocked(supabase.rpc).mockReset();
+    vi.mocked(submitPublicAnalyticsEvent).mockReset();
+    vi.mocked(submitPublicAnalyticsEvent).mockResolvedValue(undefined);
 
     // Mock Intl.DateTimeFormat timezone to US/Eastern so geo resolves to US
     vi.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => ({
@@ -79,12 +86,7 @@ afterEach(() => {
 
 describe('analyticsService', () => {
     describe('trackEvent', () => {
-        it('should insert an enriched analytics event', async () => {
-            const mockFrom = vi.mocked(supabase.from);
-            mockFrom.mockReturnValueOnce({
-                insert: vi.fn().mockResolvedValue({ data: null, error: null })
-            } as any);
-
+        it('should submit an enriched analytics event through the ingestion boundary', async () => {
             const validUuid = '123e4567-e89b-12d3-a456-426614174000';
             await analyticsService.trackEvent({
                 pageId: validUuid,
@@ -92,12 +94,10 @@ describe('analyticsService', () => {
                 metadata: { customField: 'test' }
             });
 
-            expect(mockFrom).toHaveBeenCalledWith('analytics');
-            const insertCall = vi.mocked(mockFrom).mock.results[0].value.insert;
-            expect(insertCall).toHaveBeenCalledWith(
+            expect(submitPublicAnalyticsEvent).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    page_id: validUuid,
-                    event_type: 'view',
+                    pageId: validUuid,
+                    eventType: 'view',
                     metadata: expect.objectContaining({
                         customField: 'test',
                         source: 'google',
@@ -110,10 +110,7 @@ describe('analyticsService', () => {
         });
 
         it('should fail silently without throwing exceptions', async () => {
-            const mockFrom = vi.mocked(supabase.from);
-            mockFrom.mockReturnValueOnce({
-                insert: vi.fn().mockRejectedValue(new Error('Network error'))
-            } as any);
+            vi.mocked(submitPublicAnalyticsEvent).mockRejectedValueOnce(new Error('Network error'));
 
             // Should not throw
             await analyticsService.trackEvent({
@@ -137,17 +134,16 @@ describe('analyticsService', () => {
                 maybeSingle: vi.fn().mockResolvedValue({ data: { slug: 'test-slug' }, error: null })
             } as any);
 
-            // Mock for trackEvent
-            mockFrom.mockReturnValueOnce({
-                insert: vi.fn().mockResolvedValue({ data: null, error: null })
-            } as any);
-
             mockRpc.mockResolvedValueOnce({ data: null, error: null } as any);
 
-            await analyticsService.trackPageView('page-123');
+            const validUuid = '123e4567-e89b-42d3-a456-426614174000';
+            await analyticsService.trackPageView(validUuid);
 
             expect(mockRpc).toHaveBeenCalledWith('increment_view_count', { page_slug: 'test-slug' });
-            expect(mockFrom).toHaveBeenCalledWith('analytics'); // tracking insert
+            expect(submitPublicAnalyticsEvent).toHaveBeenCalledWith(expect.objectContaining({
+                pageId: validUuid,
+                eventType: 'view',
+            }));
         });
     });
 

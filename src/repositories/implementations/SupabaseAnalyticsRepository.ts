@@ -5,6 +5,7 @@
 
 import { supabase } from '@/platform/supabase/client';
 import { session as sessionStorageWrapper } from '@/lib/storage';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 import { success, failure, tryCatchAsync, type Result } from '@/domain/value-objects/Result';
 import type {
   IAnalyticsRepository,
@@ -13,7 +14,6 @@ import type {
   AnalyticsEvent,
   AnalyticsSummary,
 } from '../interfaces/IAnalyticsRepository';
-import type { Json } from '@/platform/supabase/types';
 
 // ============= Helpers =============
 
@@ -150,18 +150,17 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
         device: getDeviceType(),
         source: referrer.source,
         medium: referrer.medium,
-        userAgent: navigator.userAgent,
         language: navigator.language,
         screenWidth: screen.width,
         screenHeight: screen.height,
         timestamp: new Date().toISOString(),
       };
 
-      await supabase.from('analytics').insert({
-        page_id: toUuidOrNull(pageId),
-        block_id: safeBlockId,
-        event_type: eventType,
-        metadata: enrichedMetadata as Json,
+      await submitPublicAnalyticsEvent({
+        pageId: toUuidOrNull(pageId),
+        blockId: safeBlockId,
+        eventType,
+        metadata: enrichedMetadata,
       });
     });
   }

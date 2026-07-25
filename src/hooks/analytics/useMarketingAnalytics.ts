@@ -1,7 +1,6 @@
 import { useCallback, useRef } from 'react';
-import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
-import type { Json } from '@/platform/supabase/types';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
 export type MarketingEventType =
   | 'landing_view'
@@ -56,17 +55,15 @@ export function useMarketingAnalytics() {
     if (!MARKETING_ANALYTICS_ENABLED || isBot() || isDevTraffic()) return;
 
     try {
-      await supabase.from('analytics').insert({
-        page_id: null,
-        block_id: null,
-        event_type: eventType,
+      await submitPublicAnalyticsEvent({
+        eventType,
         metadata: {
           ...metadata,
           path: window.location.pathname,
           referrer: document.referrer || null,
           language: navigator.language,
           timestamp: new Date().toISOString(),
-        } as Json,
+        },
       });
     } catch (error) {
       // Silently fail for analytics

@@ -8,6 +8,7 @@ import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
 import { session, storage } from '@/lib/storage';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 // trackViewContent, trackClickLink available from @/lib/analytics
 
 // ============================================
@@ -240,32 +241,18 @@ export function initSessionDurationTracking(pageId: string) {
     if (_sessionDurationSentKey === trackingKey) return;
     _sessionDurationSentKey = trackingKey;
 
-    const payload = JSON.stringify({
-      page_id: pageId,
-      event_type: 'session_end',
+    const payload = {
+      pageId,
+      eventType: 'session_end',
       metadata: {
         sessionDuration: duration,
         visitorId: analyticsSession.visitorId,
         sessionId: analyticsSession.id,
       },
-    });
-
-    const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${apiKey}`;
+    };
 
     if (typeof fetch === 'function') {
-      void fetch(url, {
-        method: 'POST',
-        body: payload,
-        keepalive: true,
-        credentials: 'omit',
-        headers: {
-          apikey: apiKey,
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=minimal',
-        },
-      }).catch(() => undefined);
+      void submitPublicAnalyticsEvent(payload, { keepalive: true }).catch(() => undefined);
     }
   };
 
@@ -463,7 +450,6 @@ export async function trackEvent({
       device: getDeviceType(),
       source: referrer.source,
       medium: referrer.medium,
-      userAgent: navigator.userAgent,
       language: navigator.language,
       screenWidth: screen.width,
       screenHeight: screen.height,
@@ -471,15 +457,13 @@ export async function trackEvent({
       // Geo enrichment
       country: geo?.countryCode || undefined,
       countryName: geo?.country || undefined,
-      city: geo?.city || undefined,
-      region: geo?.region || undefined,
     };
 
-    await supabase.from('analytics').insert({
-      page_id: safePageId,
-      block_id: safeBlockId,
-      event_type: eventType,
-      metadata: enrichedMetadata as Json,
+    await submitPublicAnalyticsEvent({
+      pageId: safePageId,
+      blockId: safeBlockId,
+      eventType,
+      metadata: enrichedMetadata,
     });
 
     // Note: third-party pixel forwarding is handled client-side via

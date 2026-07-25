@@ -1,7 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
-import type { Json } from '@/platform/supabase/types';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 import {
   detectRageClickCluster,
   pruneRecentClicks,
@@ -49,9 +48,9 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
 
       // Store click positions
       if (clicks.length > 0) {
-        await supabase.from('analytics').insert({
-          page_id: pageId,
-          event_type: 'heatmap_clicks',
+        await submitPublicAnalyticsEvent({
+          pageId,
+          eventType: 'heatmap_clicks',
           metadata: {
             clicks: clicks.map(c => ({
               x: c.x,
@@ -63,27 +62,27 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
             viewportWidth: clicks[0]?.viewportWidth,
             viewportHeight: clicks[0]?.viewportHeight,
             pageHeight: clicks[0]?.pageHeight,
-          } as Json,
+          },
         });
       }
 
       // Store scroll depth
       if (maxScrollDepth > 0) {
-        await supabase.from('analytics').insert({
-          page_id: pageId,
-          event_type: 'heatmap_scroll',
+        await submitPublicAnalyticsEvent({
+          pageId,
+          eventType: 'heatmap_scroll',
           metadata: {
             maxDepth: maxScrollDepth,
             viewportHeight: events[0]?.viewportHeight,
             pageHeight: events[0]?.pageHeight,
-          } as Json,
+          },
         });
       }
 
       if (rageClicks.length > 0) {
-        await supabase.from('analytics').insert({
-          page_id: pageId,
-          event_type: 'heatmap_rage_clicks',
+        await submitPublicAnalyticsEvent({
+          pageId,
+          eventType: 'heatmap_rage_clicks',
           metadata: {
             clusters: rageClicks.map(cluster => ({
               x: cluster.x,
@@ -97,7 +96,7 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
             viewportWidth: events[0]?.viewportWidth,
             viewportHeight: events[0]?.viewportHeight,
             pageHeight: events[0]?.pageHeight,
-          } as Json,
+          },
         });
       }
     } catch (error) {
