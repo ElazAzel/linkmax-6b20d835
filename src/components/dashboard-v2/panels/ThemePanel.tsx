@@ -471,6 +471,13 @@ export const ThemePanel = memo(function ThemePanel({
 const shapeRadius: Record<BlockShape, string> = {
   sharp: '0px', soft: '8px', rounded: '16px', pill: '9999px', ticket: '20px 20px 4px 4px', squircle: '28px',
 };
+
+const ACCENT_SWATCHES: string[] = [
+  '#ff5701', '#f43f5e', '#ec4899', '#a855f7',
+  '#6366f1', '#3b82f6', '#0ea5e9', '#06b6d4',
+  '#14b8a6', '#22c55e', '#84cc16', '#eab308',
+  '#f59e0b', '#78716c', '#0d0d0d', '#ffffff',
+];
 const shadowCss: Record<BlockShadow, string> = {
   none: 'none',
   sm: '0 1px 2px 0 rgba(0,0,0,.06), 0 1px 3px 0 rgba(0,0,0,.08)',
