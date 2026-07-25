@@ -1,23 +1,5 @@
-# Аудиты и отчёты
+# Historical Audits
 
-Эта папка содержит аудиты платформы, отчёты о состоянии системы и исторические снимки.
+Files in this directory are dated evidence, point-in-time reviews, and remediation records. They may contain obsolete paths, commands, findings, or status claims.
 
-## Актуальные документы (источник истины)
-
-| Документ | Назначение |
-| :--- | :--- |
-| **[PLATFORM_SNAPSHOT.md](../PLATFORM_SNAPSHOT.md)** | **Главный источник истины** — текущее состояние платформы (v2026.03). |
-| **[AUDIT_REPORT_2026_03_07.md](AUDIT_REPORT_2026_03_07.md)** | Сводный аудит бизнес-модели, финмодели и документации (Step-by-Growth). |
-| **[AUDIT_REPORT_2026_02_27.md](AUDIT_REPORT_2026_02_27.md)** | Аудит документации и оркестрации. |
-| **[FULL_AUDIT_REPORT.md](FULL_AUDIT_REPORT.md)** | Глобальный аудит (код, UX, безопасность). |
-| **[FULL_AUDIT_REPORT_2026_04_18.md](FULL_AUDIT_REPORT_2026_04_18.md)** | Новый мультидисциплинарный аудит: разработка, продукт, маркетинг, UXR, архитектура, QA, дизайн, переводы. |
-
-## Исторические отчёты
-
-Остальные файлы в папке — срезы на конкретную дату или по отдельным темам (блоки, дашборд, лендинг, безопасность, ремедиация и т.д.). Их можно использовать для контекста и трендов, но за актуальным состоянием обращайтесь к **PLATFORM_SNAPSHOT.md** и перечисленным выше отчётам.
-
-## Связь с другими разделами
-
-- Архитектура и стек: [../architecture/](../architecture/).
-- Безопасность: [../security/](../security/).
-- Деплой: [../deployment/](../deployment/).
+Do not edit an audit to describe the current implementation. Update the relevant current operating document, create a new dated audit when needed, and link the new result from [docs/README.md](../README.md).

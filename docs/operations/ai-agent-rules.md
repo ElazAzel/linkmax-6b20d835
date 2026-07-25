@@ -1,192 +1,35 @@
-# AI Agent Rules & Skills
+# AI Agent Operating Guide
 
-Набор правил и навыков для AI-агентов, работающих с проектом **LinkMAX** (репозиторий `inkmax`). Каждый навык определяет зону ответственности и стандарты качества. Детальные правила для Antigravity: [`.agent/rules/`](../../.agent/rules/).
+**Last reviewed:** 2026-07-25
 
----
+The executable agent configuration is under `.agent/rules/`. This document is a compact orientation for maintainers and contributors.
 
-## 1. Rapid Spec Builder
+## Required Workflow
 
-Автоматически превращает идею в чёткое ТЗ с архитектурой, API-контрактами и списком задач, чтобы сразу начать разработку без лишних обсуждений.
+1. Read the relevant source, tests, current operating document, and existing local changes.
+2. State scope and acceptance criteria for multi-file or high-risk work.
+3. Use the matching role and skill; do not invent tools, files, workflows, or provider access.
+4. Implement the smallest safe change using existing patterns.
+5. Run proportionate validation and report exact results and blockers.
+6. Update current documentation when a command, contract, security control, workflow, or user-visible behavior changes.
 
-**Когда применять:** При получении новой фичи или крупного изменения.
+## Role Selection
 
-**Выход:**
+| Need | Role |
+|---|---|
+| Cross-layer sequencing | `orchestrator.md` |
+| Implementation | `implementer.md`, `frontend_specialist.md`, `backend_specialist.md` |
+| Design/architecture review | `arch-review.md`, `review.md`, `refactor.md` |
+| Tests and acceptance | `qa_specialist.md`, `test_runner.md`, `verifier.md` |
+| Security-sensitive work | `security_auditor.md` |
+| Documentation update | `documenter.md` |
 
-- Описание фичи (1–2 предложения)
-- Затронутые слои (Domain / Data / UI)
-- API-контракты (входы/выходы)
-- Список задач (todo-items)
-- Критерии приёмки
+## Non-Negotiable Guardrails
 
----
+- Do not discard unrelated user changes or rewrite applied migrations.
+- Do not disclose, copy, or browser-expose privileged secrets.
+- Server-side authorization and RLS are required for protected data and mutations.
+- Historical audits provide context only; current facts belong in the platform snapshot and operating docs.
+- A blocked external credential or provider setting must be reported, not guessed around.
 
-## 2. Clean Architecture Enforcer
-
-Проектирует структуру проекта по принципам Clean Architecture и следит, чтобы код не превращался в хаос.
-
-**Правила:**
-
-- Domain Layer (`src/domain/`, `src/types/`) — **никаких** импортов из UI/Data слоёв
-- Data Layer (`src/repositories/`, `src/services/`) — **никаких** импортов из UI слоя
-- UI Layer (`src/components/`, `src/pages/`, `src/hooks/`) — может импортировать Data и Domain
-- Все зависимости проверяются через [`config/dependency-cruiser.cjs`](../../config/dependency-cruiser.cjs) (`npm run analyze:deps`, `analyze:cycles`, `analyze:layers`)
-- Новые файлы размещаются строго по слоям
-
-**Проверка:** текстовый отчёт зависимостей — `npm run analyze:deps` (при необходимости сохранить вывод в `docs/` отдельным артефактом).
-
----
-
-## 3. Auto Refactor Pro
-
-Анализирует код и предлагает безопасный рефакторинг без изменения бизнес-логики, улучшая читаемость и поддержку.
-
-**Правила:**
-
-- Рефакторинг **не меняет** поведение — только структуру
-- Файлы > 300 строк — кандидаты на разбиение
-- Дублирование кода > 10 строк — извлечь в утилиту/компонент
-- Перед рефакторингом — убедиться, что тесты проходят
-- После рефакторинга — убедиться, что тесты проходят
-
----
-
-## 4. Smart Test Generator
-
-Генерирует unit и integration тесты на основе существующего кода и edge-case сценариев.
-
-**Стандарты:**
-
-- Unit-тесты: Vitest (`src/**/*.test.ts`)
-- E2E-тесты: Playwright (`e2e/`)
-- Покрытие: критическая бизнес-логика (Domain, Use Cases) — 80%+
-- Каждый тест содержит: Arrange → Act → Assert
-- Edge cases: null/undefined, пустые массивы, граничные значения, ошибки сети
-
----
-
-## 5. Dependency Optimizer
-
-Проверяет зависимости проекта, удаляет лишние пакеты и предлагает более лёгкие и быстрые альтернативы.
-
-**Правила:**
-
-- Неиспользуемые зависимости — удалить
-- Дублирующие по функционалу пакеты — оставить один
-- Предпочитать tree-shakeable библиотеки
-- Lucide-react: импортировать иконки поштучно (`lucide-react/dist/esm/icons/...`)
-- Регулярно проверять bundle size через `vite-bundle-visualizer`
-
----
-
-## 6. API Contract Guardian
-
-Валидирует все входящие и исходящие данные, автоматически создаёт схемы и снижает количество багов на интеграциях.
-
-**Стандарты:**
-
-- Все Edge Functions валидируют входные данные через **Zod**
-- Ответы типизированы через TypeScript интерфейсы
-- Ошибки возвращают стандартный формат: `{ error: string, code: string }`
-- Supabase типы берутся **только** из `src/platform/supabase/types.ts`
-- Никаких `any` — строгая типизация (Zero-Any policy)
-
----
-
-## 7. Performance Scanner
-
-Находит узкие места в коде, неоптимальные запросы и тяжёлые операции, предлагая конкретные улучшения.
-
-**Что проверять:**
-
-- Компоненты > 50 re-renders — оптимизировать с `React.memo`, `useMemo`, `useCallback`
-- Запросы без пагинации — добавить `.range()` или `.limit()`
-- Изображения без lazy loading — добавить `loading="lazy"`
-- Bundle chunks > 500KB — разбить через `React.lazy`
-- N+1 запросы — объединить в один
-- Web Vitals: LCP < 2.5s, CLS < 0.1, INP < 200ms
-
----
-
-## 8. Error Handling Standardizer
-
-Внедряет единую систему обработки ошибок и логирования по всему проекту.
-
-**Стандарты:**
-
-- Domain Layer: использовать `Result<T, E>` pattern (никаких throw)
-- UI Layer: `ErrorBoundary` на уровне роутов и критических секций
-- Edge Functions: try/catch + стандартный JSON-ответ с кодом ошибки
-- Все ошибки логируются в Sentry (`@sentry/react`)
-- Toast-уведомления для пользователя через `sonner`
-- Никаких `console.log` в production — только `console.error` для критических
-
----
-
-## 9. CI/CD Quick Setup
-
-Автоматически генерирует пайплайн для деплоя без сложной ручной настройки.
-
-**Текущий стек:**
-
-- **CI:** GitHub Actions (`.github/workflows/ci.yml`)
-- **Деплой:** Lovable Cloud (автоматический)
-- **Качество:** ESLint → TypeScript strict → i18n integrity → 170+ тестов
-- **Безопасность:** RLS-тесты, smoke-тесты рендеринга блоков
-
-**Правила:**
-
-- Все PR проходят CI перед мержем
-- Миграции БД — только через Supabase CLI и файлы в `supabase/migrations/`
-- Edge Functions деплоятся автоматически
-
----
-
-## 10. Context Memory Sync
-
-Сохраняет архитектурные решения и договорённости проекта, чтобы не терять логику между сессиями.
-
-**Что сохранять:**
-
-- Архитектурные решения (выбор паттернов, структура)
-- Бизнес-правила (лимиты, тарифы, доступы)
-- Технический долг и известные ограничения
-- Интеграции и их конфигурации
-
-**Где хранится:**
-
-- [`docs/PLATFORM_SNAPSHOT.md`](../PLATFORM_SNAPSHOT.md) — основной источник истины по платформе
-- [`docs/operations/ai-agent-rules.md`](ai-agent-rules.md) — правила для AI-агентов (этот файл)
-- [`.agent/rules/`](../../.agent/rules/) — конфигурация Antigravity и команды
-- Memory-блоки в контексте сессии
-
----
-
-## 11. Orchestration & Specialist Mapping
-
-Для обеспечения качества и системности, каждый навык (Skill) мапится на конкретную роль агента в системе Antigravity.
-
-| Навык (Skill) | Агент (Role) | Ответственность |
-|---------------|--------------|-----------------|
-| **Rapid Spec Builder** | `planner.md` | ТЗ, API-контракты, декомпозиция |
-| **Clean Architecture** | `arch-review.md` | Контроль слоев, зависимости |
-| **Auto Refactor Pro** | `refactor.md` | Очистка кода, DRY |
-| **Smart Test Generator**| `qa_specialist.md` / `test_runner.md` | Unit/E2E сценарии и выполнение |
-| **Performance Scanner** | `frontend_specialist` / `backend_specialist` | Оптимизация слоев |
-| **API Guardian** | `backend_specialist`| Zod-валидация, типизация |
-| **Standardized Errors** | `debugger.md` | Логирование, отладка |
-| **Verification** | `verifier.md` | Приемка DoD, walkthrough |
-| **Security Audit** | `security_auditor.md`| RLS, секреты, уязвимости |
-| **Documentation** | `documenter.md` | Актуализация docs/, CHANGELOG |
-
----
-
-## Применение
-
-Эти правила действуют для **всех** AI-агентов, работающих с проектом. При каждом изменении кода агент должен:
-
-1. **Проверить архитектуру** (Clean Architecture Enforcer)
-2. **Валидировать контракты** (API Contract Guardian)
-3. **Обработать ошибки** (Error Handling Standardizer)
-4. **Оценить производительность** (Performance Scanner)
-5. **Обновить контекст** (Context Memory Sync)
-6. **Сверить с PLATFORM_SNAPSHOT.md** (Source of Truth)
+See [.agent/README.md](../../.agent/README.md) and [Documentation Governance](../DOCUMENTATION_GOVERNANCE.md) for the complete local policy.

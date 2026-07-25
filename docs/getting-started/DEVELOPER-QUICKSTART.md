@@ -1,92 +1,71 @@
 # Developer Quickstart
 
-> **Last Updated:** July 1, 2026 (Phase 46 Docs Sync)
+**Last reviewed:** 2026-07-25
+**Runtime:** Node.js 22
 
+## 1. Install
 
-## Prerequisites
+```bash
+nvm use
+npm ci
+```
 
-- **Node.js**: v20 or higher (v22 recommended)
-- **npm**: v10 or higher
-- **Git**
+`npm ci` is required for a reproducible install. Use `npm install` only when intentionally changing dependencies and commit the resulting `package-lock.json`.
 
+## 2. Configure browser-safe variables
 
-## Setup
+Copy `.env.example` to `.env` and set only values that are safe to expose in a browser bundle:
 
-1. **Clone the repository**:
+```dotenv
+VITE_SUPABASE_URL=https://<project-ref>.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=<publishable-or-anon-key>
+```
 
-    ```bash
-    git clone https://github.com/ElazAzel/linkmax-6b20d835.git linkmax
-    cd linkmax
-    ```
+Do not put a Supabase service-role key, payment secret, OAuth client secret, Sentry auth token, Cloudflare API token, or Supabase access token in `VITE_*` variables.
 
-2. **Install dependencies**:
+## 3. Start the app
 
-    ```bash
-    npm install
-    # If this fails, see Troubleshooting below
-    ```
+```bash
+npm run dev
+```
 
-3. **Configure environment** (optional for first run):
-   - Copy `.env.example` to `.env` (in project root)
-   - Set `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` (and optionally `VITE_APP_DOMAIN`)
+Open `http://localhost:8080`. The application uses the configured remote Supabase project unless you separately start and configure the local Supabase stack.
 
-4. **Start development server**:
+## 4. Run the smallest useful verification
 
-    ```bash
-    npm run dev
-    ```
-   App runs at **http://localhost:8080**
+```bash
+npm run lint
+npm run typecheck:strict
+npm run test:ci
+npm run build
+```
 
-## Key commands
+For editor, auth, route, or other browser-flow changes run Playwright too:
 
-- `npm run build` — production build
-- `npm run test` — unit tests (Vitest)
-- `npm run e2e` — E2E tests (Playwright; ensure dev server is on port 8080 or start via Playwright)
-- `npm run typecheck` / `npm run typecheck:strict` — TypeScript check
-- `npm run lint` — ESLint
-- `npm run mobile:sync` — sync web build to Capacitor (iOS/Android)
+```bash
+npm run e2e:ci
+```
 
-## Project Structure
+`npm run quality:check` runs the complete local gate. See [Testing](../testing/TESTING.md) for the exact scope and [Local development](../deployment/runbooks/LOCAL_DEVELOPMENT.md) for Supabase and mobile workflows.
 
-- `src/components/`: UI components (blocks, dashboard-v2, zones, shared)
-- `src/pages/`: Route-level components
-- `src/hooks/`: Custom React hooks (70+)
-- `src/services/`: Service-Pattern logic (apiKeys.ts, pages.ts, user.ts, etc.)
-- `src/lib/`: Utilities, SEO, exports
-- `src/i18n/locales/`: Translation files (16 languages)
-- `scripts/`: i18n management and build utilities
+## Common Commands
 
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start Vite on port 8080. |
+| `npm run build` | Generate the production bundle in `dist/`. |
+| `npm run start` | Preview the production bundle locally. |
+| `npm run lint` | Run ESLint. |
+| `npm run typecheck:strict` | Run strict TypeScript validation. |
+| `npm run test:ci` | Run Vitest with coverage. |
+| `npm run e2e:ci` | Run Playwright in CI-style reporting mode. |
+| `npm run quality:check` | Run the repository quality gate. |
+| `npm run mobile:sync` | Build then sync Capacitor native projects. |
+| `npm run docs:check` | Validate local Markdown links. |
 
-## Troubleshooting
+## Before Opening a Pull Request
 
-### "Cannot find module 'react', 'lucide-react', etc."
-
-**Cause:** dependencies are not installed.
-**Fix:**
-
-1. Open your terminal in the project root.
-2. Run `npm install`.
-3. If `npm` command is not found, download and install Node.js from [nodejs.org](https://nodejs.org/).
-
-### "npm command not found"
-
-**Cause:** Node.js is not installed or not in your system PATH.
-**Fix:**
-
-1. Install Node.js LTS version.
-2. Restart your terminal/IDE.
-3. Verify with `node -v` and `npm -v`.
-
-### IDE Errors despite successful install
-
-**Fix:**
-
-1. Open Command Palette (Ctrl+Shift+P).
-2. Type "TypeScript: Restart TS Server".
-
-## Next steps
-
-- **[Comprehensive Platform Guide](../architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — полное описание платформы, модулей и блоков.
-- **[Documentation index](../README.md)** — единая навигация по разделам `docs/` (индекс и роли).
-- **[Platform snapshot](../PLATFORM_SNAPSHOT.md)** — актуальный снимок платформы (SSOT).
-- **[Contributing](../../CONTRIBUTING.md)** — как участвовать в разработке (ветки, коммиты, PR).
+1. Keep migrations in `supabase/migrations/`; never alter an already-applied migration.
+2. Update affected current documentation and translations.
+3. Run the checks that cover the changed behavior.
+4. Do not commit `.env`, build output, credentials, or generated screenshots unless they are intentionally versioned test fixtures.

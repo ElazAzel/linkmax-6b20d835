@@ -1,43 +1,32 @@
-# `.agent` — правила и команды для AI-агентов
+# LinkMAX Agent Configuration
 
-Каталог для Antigravity и согласованной работы ассистентов с репозиторием **LinkMAX** (`inkmax`).
+This directory contains repository-local operating rules for AI-assisted work. It is intentionally separate from editor-global skills and does not grant access to credentials or production systems.
 
-## С чего начать
+## Read Order
 
-1. **[rules/ANTIGRAVITY_CONFIG.md](rules/ANTIGRAVITY_CONFIG.md)** — краткий контекст проекта, язык ответов (русский), ссылки на команды и навыки.
-2. **[rules/123role.md](rules/123role.md)** — роль Principal Engineer: безопасность, верификация, актуализация документации.
-3. **[rules/rules/](rules/rules/)** — стандарты кода (`general.md`, `frontend.md`, `backend.md`, IDE-специфика: `cursor.md`, `windsurf.md`).
-4. **[rules/commands/](rules/commands/)** — конкретные шаги: `dev`, `build`, `test`, `database`, `deploy` и др.
-5. **[rules/agents/](rules/agents/)** — специализированные роли (планировщик, ревьюер, QA, security и т.д.).
-6. **[rules/skills/](rules/skills/)** — навыки React и Supabase.
+1. [Shared role contract](rules/123role.md)
+2. [Collaboration rules](rules/rules/collaboration.md)
+3. The role file in [rules/agents/](rules/agents/)
+4. The relevant task skill in [rules/skills/](rules/skills/)
+5. Current implementation documents in [docs/](../docs/README.md)
 
-Человекочитаемая выжимка для команды также в [docs/operations/ai-agent-rules.md](../docs/operations/ai-agent-rules.md) — при расхождении приоритет у файлов в **`rules/`** этого каталога.
+## Structure
 
----
+| Path | Purpose |
+|---|---|
+| `rules/123role.md` | Shared safety, implementation, and verification contract. |
+| `rules/rules/` | Coding, collaboration, backend, frontend, and tool conventions. |
+| `rules/commands/` | Current local command references. |
+| `rules/agents/` | Focused roles for planning, implementation, QA, security, and review. |
+| `rules/skills/` | Reusable procedures for project domains. |
 
-## Внешняя библиотека: [Ai-Agent-Skills](https://github.com/MoizIbnYousaf/Ai-Agent-Skills)
+## Operating Rules
 
-Курируемая коллекция Agent Skills с CLI (`npm` пакет `ai-agent-skills`, лицензия **MIT**). Протокол для автоматической настройки библиотеки: [FOR_YOUR_AGENT.md (raw)](https://raw.githubusercontent.com/MoizIbnYousaf/Ai-Agent-Skills/main/FOR_YOUR_AGENT.md).
+- Inspect the relevant code and current docs before editing.
+- Work with existing user changes; do not revert or delete unrelated work.
+- Do not invent files, commands, workflows, tools, or environments that are absent from this repository.
+- Make the narrowest safe change, add proportionate verification, and report the exact commands run.
+- Treat `docs/audits/` as historical context. Use `docs/PLATFORM_SNAPSHOT.md` and the current runbooks for the present state.
+- Never print, commit, or move secrets into browser-visible variables.
 
-### Важно для этого репозитория
-
-- Флаг **`-p` / `--project`** в CLI по умолчанию ставит скиллы в **`.agents/skills/`**. Каталог **`.agents/`** в LinkMAX намеренно не используется (конфиг в **`.agent/rules/`**). **Не используйте `-p`**, если не хотите снова создать `.agents/`.
-- Для **скиллов в репозитории под Cursor** используйте **`--agent cursor`**: установка идёт в **`.cursor/skills/`** (проверено `install … --agent cursor --dry-run` на CLI **4.2.0**).
-
-### Примеры
-
-```bash
-# обзор библиотеки (в проекте: npm run skills:browse)
-npx ai-agent-skills
-
-# список скиллов
-npx ai-agent-skills list
-
-# план установки в .cursor/skills (без записи на диск)
-npx ai-agent-skills install playwright --agent cursor --dry-run --yes
-
-# установка одного скилла для Cursor в проект
-npx ai-agent-skills install playwright --agent cursor --yes
-```
-
-Глобально (вне репозитория): без `-p` и без `--agent` — в `~/.claude/skills/` (см. справку `npx ai-agent-skills --help`). Диагностика: `npx ai-agent-skills doctor`.
+Repository-local skills are maintained under the policy in [docs/DOCUMENTATION_GOVERNANCE.md](../docs/DOCUMENTATION_GOVERNANCE.md).

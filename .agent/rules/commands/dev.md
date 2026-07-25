@@ -1,23 +1,23 @@
 ---
-description: Запуск локальной среды разработки
+description: Start the LinkMAX local web and optional Supabase environment
 ---
-# Команда Dev (Разработка)
 
-Эта команда запускает локальные серверы для фронтенда и бэкенда.
+# Development Commands
 
-## 1. Фронтенд (Vite)
-- **Команда**: `npm run dev`
-- **Ожидаемый результат**: Сервер запустится на `http://localhost:8080` (настройка в `vite.config.ts`).
-- **Действие**: Откройте браузер по этому адресу для предварительного просмотра.
+```bash
+nvm use
+npm ci
+npm run dev
+```
 
-## 2. Бэкенд (Supabase)
-Для запуска локальной инфраструктуры Supabase (Postgres, Auth, Storage, Edge Functions):
-- **Запуск всех сервисов**: `npx supabase start`
-- **Запуск Edge Functions**:
-  - Все функции: `npx supabase functions serve`
-  - Конкретная функция с `.env`: `npx supabase functions serve <имя-функции> --env-file supabase/.env.local`
+Vite runs at `http://localhost:8080`.
 
-## 3. Верификация
-- **Фронтенд**: Проверьте, загружается ли страница в браузере.
-- **Supabase Studio**: Откройте локальную панель управления на `http://localhost:54323` для проверки БД и Auth.
-- **Логи**: Следите за терминалом на предмет ошибок типов или проблем с подключением к БД.
+For local Supabase work, with Docker and Supabase CLI installed:
+
+```bash
+npx supabase start
+npx supabase status
+npx supabase functions serve <function-name> --env-file supabase/.env.local
+```
+
+See `docs/deployment/runbooks/LOCAL_DEVELOPMENT.md` for local database and mobile details.

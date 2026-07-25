@@ -1,80 +1,36 @@
-# Runbook: Deployment
+# Deployment Runbook
 
-> **Goal:** Deploy the `inkmax` application to production safely.
+**Last reviewed:** 2026-07-25
 
-## Pre-Deployment Checklist
-
-- [ ] All tests pass (`npm run test`)
-- [ ] Type check passes (`npx tsc --noEmit`)
-- [ ] Build succeeds locally (`npm run build`)
-- [ ] Changelog updated ([docs/operations/CHANGELOG.md](../../operations/CHANGELOG.md))
-- [ ] Edge functions tested locally if modified
-
-## Frontend Deployment
-
-The frontend is deployed via **Lovable Cloud** when pushing to `main`.
-
-1. **Merge to Main**
-   - Ensure your PR is approved and checks pass.
-   - Squash and merge to `main`.
-
-2. **Monitor Build**
-   - Check the deployment dashboard to verify build status.
-
-3. **Post-Deployment Verification**
-   - Visit production: [lnkmx.my](https://lnkmx.my)
-   - Verify: Sign up/Login, Page loading, Editor, Public page rendering.
-
-## Edge Function Deployment
-
-Edge functions are deployed separately via Supabase CLI.
+## Before Merge
 
 ```bash
-# Deploy specific functions
-supabase functions deploy pixel-proxy
-supabase functions deploy seo-ssr
-supabase functions deploy telegram-bot-webhook
-supabase functions deploy create-lead
-
-# Deploy all functions
-supabase functions deploy --all
-
-# Set secrets (if adding new API keys)
-supabase secrets set KEY_NAME=value
+npm ci
+npm run quality:check
+npm run test:ci
+npm run build
 ```
 
-## Database Migrations
+Review migrations, RLS, Edge Function authorization, generated sitemap changes, and documentation updates. Merge only after required CI checks pass.
 
-```bash
-# Apply pending migrations
-supabase db push
+## Automated Delivery
 
-# Or run migration SQL directly in Supabase SQL Editor
-```
+- `deploy.yml` builds the web application and deploys the Cloudflare Worker after pushes to `main`.
+- `deploy-cloudflare-worker.yml` handles worker-only changes.
+- `deploy-supabase.yml` applies migrations and deploys Edge Functions when `supabase/functions/` or `supabase/migrations/` changes.
 
-## Rollback Plan
+Secret requirements are documented in `docs/deployment/GITHUB_ACTIONS_SETUP.md`. A missing deployment secret is an operational blocker; do not substitute it with a committed value.
 
-If a critical issue is found after deployment:
+## Post-deploy Checks
 
-1. **Frontend**: Revert the bad commit on `main`:
-   ```bash
-   git revert <commit-hash>
-   git push origin main
-   ```
+1. Confirm the relevant workflow is successful.
+2. Open `https://lnkmx.my/`, `/auth`, and a representative public page.
+3. Verify the changed function or worker route.
+4. Inspect Sentry and Supabase/Cloudflare logs for errors.
 
-2. **Edge Functions**: Redeploy previous version:
-   ```bash
-   git checkout HEAD~1 -- supabase/functions/<function-name>/
-   supabase functions deploy <function-name>
-   ```
+## Recovery
 
-3. **Database**: Roll back migration (if reversible):
-   ```bash
-   # Restore from Supabase backup or apply inverse migration
-   ```
-
-4. **Verify Rollback**: Confirm previous version is live and functioning.
-
----
-
-*Last updated: 2026-02-18*
+1. Contain impact by disabling the affected provider integration or feature flag where available.
+2. Revert the offending application commit through a reviewed pull request.
+3. For database issues, create a corrective forward migration or restore through the approved provider backup process. Never edit an already-applied migration.
+4. Rotate any credential suspected of exposure and document the incident without its secret values.

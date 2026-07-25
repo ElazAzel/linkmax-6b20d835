@@ -1,23 +1,23 @@
 ---
-description: Запуск автоматизированных тестов
+description: Current LinkMAX test and quality commands
 ---
 
-# Команда Test (Тестирование)
+# Test Commands
 
-Эта команда запускает наборы автоматизированных тестов.
+```bash
+npm run test
+npm run test:ci
+npm run e2e
+npm run e2e:ci
+npm run lint
+npm run typecheck:strict
+npm run quality:check
+```
 
-## 1. Юнит/Интеграционные тесты (Vitest)
+For a focused browser flow:
 
-1. Запуск всех тестов: `npm run test`
-2. Запуск в режиме наблюдения (TDD): `npm run test:watch`
-3. Запуск с отчетом о покрытии: `npm run coverage`
+```bash
+npx playwright test e2e/<spec>.ts --project=chromium
+```
 
-## 2. E2E тесты (Playwright)
-
-1. Убедитесь, что локальный сервер запущен (`npm run dev`).
-2. Запуск E2E тестов: `npx playwright test`
-
-## Верификация
-
-- Все тесты должны иметь статус "PASS".
-- Тесты не должны пропускаться (`.skip`), если только нет связанной задачи на исправление.
+Playwright starts the local Vite server automatically. Install browser binaries on a new machine with `npx playwright install`.

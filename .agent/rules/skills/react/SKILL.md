@@ -1,31 +1,32 @@
-# React Skill
+---
+name: react
+description: React, TypeScript, routing, state, i18n, accessibility, and UI changes in LinkMAX.
+---
 
-## Description
-Expertise in modern React development using Vite, TypeScript, Tailwind CSS, and Shadcn UI.
+# React
 
-## Capabilities
--   Create accessible, responsive UI components.
--   Manage complex state with Hooks and React Query.
--   Optimize performance (Code splitting, memoization).
--   Implement secure routing and auth flows.
--   Write unit and E2E tests.
+Use for routes, components, hooks, client state, and user-visible behavior.
 
-## Key Files
--   `src/components/*`
--   `src/hooks/*`
--   `src/pages/*`
--   `vite.config.ts`
+## Procedure
 
-## Common Commands
--   `npm run dev`: Start dev server.
--   `npm run build`: Production build.
--   `npm run test`: Run unit tests.
+1. Read the nearest component, route, hook, and existing test before adding abstraction.
+2. Reuse project UI primitives and Lucide icons; preserve responsive layout and keyboard behavior.
+3. Keep user-visible strings in i18n resources. Do not silence i18n checks with arbitrary baselines.
+4. Handle loading, empty, error, and disabled states for asynchronous UI.
+5. Add focused tests for changed behavior and a Playwright flow for critical journeys.
 
-## Workflows
+## Verification
 
-### Creating a New Component
-1.  Check if a similar Shadcn UI component already exists (`src/components/ui`) or can be added via `npx shadcn-ui@latest add <component>`.
-2.  If not, create it in `src/components/` (or a feature-specific subfolder).
-3.  Name the file `PascalCase.tsx`.
-4.  Use `export const ComponentName = () => { ... }` (named exports preferred).
-5.  Use Tailwind CSS for styling. Do not use raw CSS or inline styles unnecessarily.
+```bash
+npm run lint
+npm run typecheck:strict
+npm run i18n:check
+npm run lint:i18n
+npx playwright test e2e/<spec>.ts --project=chromium
+```
+
+## Guardrails
+
+- Never make authorization decisions only in the client.
+- Avoid direct browser storage access when the repository storage utility already owns the concern.
+- Do not introduce hard-coded production copy without a deliberate i18n exception.

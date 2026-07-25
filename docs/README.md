@@ -1,85 +1,41 @@
-# 📚 Индекс документации LinkMAX (ex-lnkmx)
+# LinkMAX Documentation
 
-**Версия:** 3.1.0
-**Дата обновления:** 9 июля 2026
-**Статус:** Production Ready (Phase 50: Business Zone Command Center) ✅
+**Current snapshot:** 2026-07-25
+**Repository version:** 3.1.0
+**Runtime baseline:** Node.js 22
 
-Добро пожаловать в портал документации **LinkMAX**.
- Это единая точка входа для всех технических, архитектурных и продуктовых руководств.
-Вместо множества разрозненных индексов (INDEX.md, DOCUMENTATION-INDEX-FULL.md), все ключевые ссылки теперь агрегированы здесь.
+This page is the documentation entry point. It separates operational instructions from historical records so a reader does not mistake an old audit or product proposal for the current implementation.
 
-> [!IMPORTANT]
-> **Текущая стратегия:** развивать LinkMAX как **Business OS** для экспертов и микро-бизнеса: нативный пользовательский UX, Step-by-Growth монетизация и аккуратное заимствование OSS-паттернов без встраивания тяжёлых внешних систем целиком.
+## Start Here
 
----
+1. [Platform snapshot](PLATFORM_SNAPSHOT.md): current architecture, delivery state, and known operational gaps.
+2. [Developer quickstart](getting-started/DEVELOPER-QUICKSTART.md): local setup and validation commands.
+3. [Documentation governance](DOCUMENTATION_GOVERNANCE.md): ownership, freshness rules, and archival policy.
+4. [AI agent rules](operations/ai-agent-rules.md): the compact human-readable workflow for local agents.
 
+## Current Operating Documents
 
-## 🚀 Начните отсюда
+| Area | Primary document |
+|---|---|
+| Architecture | [Architecture guide](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md) |
+| Database and API | [Database schema guide](implementation/DATABASE_SCHEMA_GUIDE.md), [API](implementation/API.md) |
+| Local development | [Local development runbook](deployment/runbooks/LOCAL_DEVELOPMENT.md) |
+| CI/CD and secrets | [GitHub Actions setup](deployment/GITHUB_ACTIONS_SETUP.md) |
+| Testing | [Testing strategy](testing/TESTING.md) |
+| Security | [Security baseline](security/SECURITY.md) |
+| Product direction | [Strategic plan](product/STRATEGIC_PLAN_2026.md), [execution plan](roadmap/POST_AUDIT_EXECUTION_PLAN_2026-07.md) |
+| Agent configuration | [.agent/README.md](../.agent/README.md) |
 
-### Для всех
+## Historical Material
 
-1. **[PLATFORM_SNAPSHOT.md](PLATFORM_SNAPSHOT.md)** — **Единый источник истины.** Главный снимок текущего состояния платформы: архитектура, стек, база данных, фичи и известные риски.
-2. **[CHANGELOG.md](CHANGELOG.md)** — Подробная история версий и изменений.
-3. **[DEVELOPER-QUICKSTART.md](getting-started/DEVELOPER-QUICKSTART.md)** — Быстрый старт для разработчиков (установка, команды).
-4. **[GLOSSARY.md](GLOSSARY.md)** — Глоссарий терминов проекта.
-5. **[README.md](../README.md)** — Корневой README проекта (обзор платформы).
-6. **[DOCS_FRESHNESS_AUDIT_2026_04_18.md](audits/DOCS_FRESHNESS_AUDIT_2026_04_18.md)** — проверка актуальности всей документации (порог 60 дней).
-7. **[OSS_INTEGRATION_STRATEGY.md](roadmap/OSS_INTEGRATION_STRATEGY.md)** — стратегия развития Business OS через OSS-референсы: что строить нативно, что подключать позже и что не тащить в продукт.
+Files under [audits/](audits/) capture the state at their stated date. They are evidence and context, not a release gate or implementation source. Use the snapshot and operating documents above for current decisions.
 
-### Для разработчиков
+Plans, proposals, pitch material, and market research under `product/`, `roadmap/`, `presentation/`, and repository-root planning files are decision inputs. Their status must be checked before implementation.
 
-1. **[COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — Подробнейшая документация по всем подсистемам платформы.
-2. **[UI-COMPONENTS.md](features/UI-COMPONENTS.md)** — Библиотека компонентов (**Living Canvas** Design System).
+## Documentation Rules
 
-3. **[UI_MODAL_CONTRACT.md](architecture/UI_MODAL_CONTRACT.md)** — Единый контракт для `Dialog/Sheet` (крестик, `onOpenChange`, закрытие по overlay/ESC/button).
-4. **[API.md](implementation/API.md)** — Edge Functions, RPCs, интеграции.
-5. **[DATABASE_SCHEMA_GUIDE.md](implementation/DATABASE_SCHEMA_GUIDE.md)** — Схема БД, таблицы, RLS.
-6. **[`.agent/README.md`](../.agent/README.md)** — правила агентов и подключение внешней библиотеки [Ai-Agent-Skills](https://github.com/MoizIbnYousaf/Ai-Agent-Skills) для Cursor (`--agent cursor` → `.cursor/skills/`, без `-p`).
-
-### Для тестировщиков и DevOps
-
-1. **[TESTING.md](testing/TESTING.md)** — Стратегия тестирования.
-2. **[DEPLOYMENT-CHECKLIST.md](deployment/DEPLOYMENT-CHECKLIST.md)** — Чеклист выкатки.
-3. **[FULL_AUDIT_REPORT_2026_04_18.md](audits/FULL_AUDIT_REPORT_2026_04_18.md)** — Отчёт о полном аудите.
-
-### Для Product-менеджеров
-
-1. **[1_PRODUCT_VISION.md](product/1_PRODUCT_VISION.md)** — Видение продукта.
-2. **[2_BUSINESS_FINANCIAL_MODEL.md](product/2_BUSINESS_FINANCIAL_MODEL.md)** — Финмодель (Step-by-Growth, транзакции).
-3. **[STRATEGIC_PLAN_2026.md](product/STRATEGIC_PLAN_2026.md)** — План развития на 2026 год.
-4. **[COMPETITIVE_NOTES.md](product/COMPETITIVE_NOTES.md)** — Анализ рынка и конкурентов.
-5. **[OSS_INTEGRATION_STRATEGY.md](roadmap/OSS_INTEGRATION_STRATEGY.md)** — приоритетная матрица Product Analytics, Webhooks V2, Automations, Booking V2, Forms, Billing и Commerce.
-
----
-
-## 📁 Структура \`docs/\`
-
-| Директория | Описание |
-| :--- | :--- |
-| **`getting-started/`** | Онбординг, быстрый старт. |
-| **`architecture/`** | Архитектура, стек, паттерны, производительность, граф зависимостей. |
-| **`audits/`** | Архив аудитов, health-checks, отчёты о безопасности. |
-| **`deployment/`** | Чек-лист деплоя, GitHub Actions, runbooks. |
-| **`seo/`** | SEO, SSR для ботов (Cloudflare Workers), AEO/GEO интеграция. |
-| **`security/`** | Безопасность, RLS политики. |
-| **`features/`** | Работа фич, UI-компоненты, структура блоков. |
-| **`implementation/`** | API доки, схема БД, процессы перевода (i18n), демо-аккаунты. |
-| **`product/`** | Видение 6 Pillars, маркетинг, бизнес-модель, roadmap, презентации. |
-| **`roadmap/`** | Актуальные стратегические карты внедрения и приоритетные матрицы. |
-| **`testing/`** | Стратегия QA. |
-| **`operations/`** | Операционное руководство, tech debt, a11y, инструкции для AI агентов. |
-| **`ADR/`** | Architecture Decision Records (Фиксация архитектурных изменений). |
-| **`presentation/`** | Презентации и pitch-модули. |
-
----
-
-## ⚡ Частые Вопросы (FAQ)
-
-**Q: В каком файле описана база данных и таблицы?**
-A: [DATABASE_SCHEMA_GUIDE.md](implementation/DATABASE_SCHEMA_GUIDE.md) и [PLATFORM_SNAPSHOT.md](PLATFORM_SNAPSHOT.md).
-
-**Q: Как работает монетизация и комиссии (Kaspi/Robokassa)?**
-A: Подробно в [2_BUSINESS_FINANCIAL_MODEL.md](product/2_BUSINESS_FINANCIAL_MODEL.md) и [ADR-0026](ADR/0026-monetization-step-by-growth.md).
-
-**Q: Как добавить новый язык или обновить переводы?**
-A: [translation_playbook.md](implementation/translation_playbook.md) и [i18n_ops.md](implementation/i18n_ops.md).
+- Update an operating document whenever its command, secret, deployment path, external contract, or user-visible behavior changes.
+- Use explicit dates and verified facts. Do not claim that a control is implemented without a code, migration, configuration, or test reference.
+- Keep secrets out of Markdown, examples, commits, screenshots, and generated reports.
+- Add new enduring technical decisions as an ADR; keep task notes and point-in-time audits separate.
+- Validate internal Markdown links before merging with the command in [DOCUMENTATION_GOVERNANCE.md](DOCUMENTATION_GOVERNANCE.md).

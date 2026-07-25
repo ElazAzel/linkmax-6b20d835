@@ -1,231 +1,74 @@
-# Security Checklist — lnkmx Platform
+# Security Baseline
 
-## Overview
+**Last reviewed:** 2026-07-25
+**Scope:** application repository, Supabase configuration in migrations/functions, deployment workflows, and browser bundle.
 
-This document outlines the security measures implemented in the lnkmx platform. Last fully audited: **2026-03-15** (Security Hardening Phase).
+This document is an operating baseline, not a certification. A control is considered implemented only when it can be traced to code, configuration, migration, or an automated check. Historical findings belong in `docs/audits/`.
 
----
+## Security Responsibilities
 
-## 1. Authentication & Authorization
+| Area | Required control |
+|---|---|
+| Authentication | Use Supabase Auth; validate the active session server-side for protected actions. |
+| Authorization | Enforce ownership and least privilege with RLS, RPC checks, and Edge Function authorization. |
+| Data validation | Validate untrusted inputs at the system boundary; parameterize database access. |
+| Browser content | Sanitize user-supplied HTML and keep custom code isolated with the narrowest sandbox. |
+| Secrets | Keep privileged values server-side or in GitHub/Supabase/Cloudflare secret stores. |
+| Dependencies | Review `npm audit` results and apply non-breaking patches; plan major upgrades with testing. |
+| Observability | Send actionable runtime failures to Sentry without credentials or unnecessary PII. |
 
-### ✅ Implemented
+## Authentication and Account Linking
 
-- [x] **Email/Password Authentication** via Supabase Auth
-- [x] **Google OAuth** with `returnTo` parameter support
-- [x] **Apple Sign-In** with `returnTo` parameter support
-- [x] **JWT Token Management** with 1-hour expiry, auto-refresh
-- [x] **Telegram Verification** for notifications + login
-- [x] **Role-Based Access Control (RBAC)** with `app_role` enum (admin/moderator/user)
-- [x] **Auth bypass prevention** — `auth.uid()` checks on `claim_daily_token_reward`, `process_marketplace_purchase`, `get_token_analytics`
+- The application supports email/password and OAuth through Supabase Auth.
+- Google and Apple provider setup, redirect allow-list entries, and account-linking behavior must be configured in the Supabase project, not inferred from frontend code.
+- Treat an email match across providers as an account-linking case only through the supported Supabase Auth flow. Do not merge accounts from client-provided identity claims.
+- Redirect destinations must be application-owned allow-listed URLs. Do not pass arbitrary `returnTo` values through OAuth redirects.
+- Do not expose whether an email address is registered in user-facing error messages beyond the agreed authentication UX.
 
-### 🔐 Security Measures
+## Supabase and Database Changes
 
-- JWT tokens stored securely in httpOnly cookies (Supabase default)
-- Session refresh handled automatically by Supabase
-- OAuth `returnTo` parameter properly forwarded in redirect URLs
-- Admin-only functions guarded by `has_role(auth.uid(), 'admin')`
+- Every new table must have RLS enabled and policies reviewed before deployment.
+- Migration SQL is append-only after production application. Create a corrective migration instead of editing history.
+- Service-role clients belong only in trusted server code. Never import their credentials into the browser.
+- RPCs and Edge Functions that mutate user data must authenticate and verify authorization/ownership independently of client UI checks.
+- Test RLS with a non-owner session for every new sensitive resource.
 
----
+## Browser and API Controls
 
-## 2. Database Security (Row Level Security)
+- Use Zod or equivalent explicit validation for external request payloads.
+- Sanitize rich text and never rely on React escaping when rendering explicitly allowed HTML.
+- Keep CORS origin and method lists as narrow as each public endpoint permits.
+- Apply rate limits and bot protection to public write endpoints; an in-memory limit alone is not durable across Edge Function instances.
+- Use content security policy and review every new third-party script, connection target, or frame source.
 
-### ✅ All Tables Have RLS Enabled
+## Secrets and Environments
 
-| Table | RLS | Policies |
-| Table                 | RLS State   | Protection Mechanism           |
-| :-------------------- | :---------- | :----------------------------- |
-| `pages`               | Active      | User ownership                 |
-| `blocks`              | Active      | Access through page ownership  |
-| `user_profiles`       | Active      | Trigger Guard (Sensitive Cols) |
-| `leads`               | Active      | User ownership                 |
-| `bookings`            | Active      | Owner/customer access only     |
-| `analytics`           | Active      | Page owner access for viewing  |
-| `token_transactions`  | Restricted  | Edge functions only            |
-| `user_wallets`        | Strict      | No Update Policy (Edge Only)   |
-| `user_tokens`         | Strict      | No Update Policy (Edge Only)   |
-| `teams`               | Masked      | `public_teams` View + RLS      |
-| `event_registrations` | Restricted  | Hardened INSERT Policy         |
-| `languages`           | Active      | Admin management, public read  |
-| `rate_limits`         | Restricted  | Service role access only       |
+Browser-safe variables may be prefixed `VITE_`. This includes the Supabase URL and publishable/anon key. The prefix is not suitable for:
 
-### 🛡️ Database Hardening Triggers
+- Supabase service-role key or personal access token;
+- Cloudflare API token;
+- payment, OAuth client, AI provider, Telegram, Sentry auth, or Turnstile secrets.
 
-To prevent privilege escalation through direct API updates, sensitive columns are protected by **BEFORE UPDATE** triggers with `SECURITY DEFINER`.
+Store privileged values in the relevant provider secret manager. Update `.env.example` with variable names and descriptions only. Rotate a secret immediately after exposure and invalidate the old value.
 
-```mermaid
-sequenceDiagram
-    participant U as Authenticated User
-    participant A as Supabase API (PostgREST)
-    participant T as BEFORE UPDATE Trigger
-    participant DB as Postgres Table
+## CI and Release Checks
 
-    U->>A: PATCH /user_profiles { is_premium: true }
-    A->>T: Execution check
-    Note over T: Role is not 'service_role'
-    T->>T: Force NEW.is_premium = OLD.is_premium
-    T->>DB: Commit with original values
-    DB-->>A: Success (but values reverted)
-    A-->>U: 204 No Content
-```
-
-**Protected Tables:**
-- `user_profiles`: Protects `is_premium`, `is_verified`, `premium_tier`, `premium_expires_at`, `trial_ends_at`.
-- `challenge_progress`: Protects `is_completed`, `reward_claimed`, `completed_at`.
-
-### Double-Booking Prevention
-
-Partial unique index `bookings_no_double_booking` on `(page_id, block_id, slot_date, slot_time) WHERE status != 'cancelled'`. Timezone column added.
-
----
-
-## 3. API Security
-
-### Rate Limiting
-
-| Endpoint | Limit | Implementation |
-|----------|-------|----------------|
-| `seo-ssr` | 60 req/min per IP | In-memory (Deno) |
-| `pixel-proxy` | 100 req/min per IP | In-memory (Deno) |
-| `create-lead` | 15 req/min per IP | DB-backed (`rate_limits` table) |
-| AI generation | 5 req/day (free) | Application-level |
-
-### Anti-Spam: Cloudflare Turnstile
-
-- **Frontend**: `TurnstileWidget.tsx` renders invisible CAPTCHA on forms
-- **Backend**: `create-lead` verifies token via Cloudflare `siteverify` API
-- Graceful degradation if `TURNSTILE_SECRET_KEY` not configured
-
-### Edge Function Security
-
-- All edge functions validate inputs (regex, length limits)
-- CORS headers properly configured
-- Service role keys used only server-side
-- No secrets exposed in client code
-
----
-
-## 4. Data Protection & GDPR
-
-### ✅ Implemented
-
-- [x] **GDPR Data Export**: `export_user_data(p_user_id)` — returns all user data as JSONB
-- [x] **GDPR Data Deletion**: `delete_user_account(p_user_id)` — cascading delete across 15+ tables
-- [x] **Cookie Consent**: `CookieConsent.tsx` banner with accept/reject, gating analytics
-- [x] **Analytics Consent Gating**: All tracking calls (`trackPageView`, `trackBlockClick`, `trackShare`) require explicit consent
-- [x] **PII Hashing**: Pixel proxy hashes emails/phones with SHA-256 before forwarding to FB CAPI / TikTok
-- [x] **HTTPS Only** — all traffic encrypted
-- [x] **Environment Variables** — secrets in Edge Functions only
-
-### Data Categories
-
-| Category | Storage | Access |
-|----------|---------|--------|
-| User credentials | Supabase Auth (hashed) | Auth system only |
-| Personal info | `user_profiles` | User + Admin |
-| Payment info | NOT stored locally | External processors |
-| Analytics | `analytics` table | Page owner only (consent gated) |
-
----
-
-## 5. XSS & Content Security
-
-### ✅ Implemented
-
-- [x] **CSP Headers**: Strict Content Security Policy in `index.html`
-- [x] **CustomCodeBlock Sandbox**: `sandbox="allow-scripts"` only (removed `allow-forms`, `allow-popups`, `allow-modals`)
-- [x] **DOMPurify**: HTML sanitization on user-generated content
-- [x] **Input Validation**: Zod schemas, regex checks, length limits
-- [x] **SQL Injection**: Prevented by Supabase parameterized queries
-
----
-
-## 6. Storage Security
-
-### Supabase Storage Buckets
-
-| Bucket | Public | Policies |
-|--------|--------|----------|
-| `avatars` | ✅ | Users can upload/update own |
-| `documents` | ❌ | User-specific folders |
-| `templates` | ✅ | Read all, write own |
-
----
-
-## 7. Infrastructure Security
-
-### Environment Variables
-
-| Variable | Location | Security |
-|----------|----------|----------|
-| `VITE_SUPABASE_URL` | Public (.env) | ✅ Safe — publishable |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Public (.env) | ✅ Safe — anon key |
-| `GEMINI_API_KEY` | Edge Functions | 🔐 Server only |
-| `TELEGRAM_BOT_TOKEN` | Edge Functions | 🔐 Server only |
-| `TURNSTILE_SECRET_KEY` | Edge Functions | 🔐 Server only |
-| `FB_CAPI_ACCESS_TOKEN` | Edge Functions | 🔐 Server only |
-| `TT_EVENTS_ACCESS_TOKEN` | Edge Functions | 🔐 Server only |
-| `GA4_MP_API_SECRET` | Edge Functions | 🔐 Server only |
-
-### Cold Start Mitigation
-
-`pg_cron` job `warmup-edge-functions` pings `seo-ssr`, `telegram-bot-webhook`, `pixel-proxy` every 4 minutes via `pg_net`.
-
----
-
-## 8. Compliance
-
-### Legal Requirements (Kazakhstan)
-
-- [x] 14-day refund policy per RK law
-- [x] Terms of Service page
-- [x] Privacy Policy page
-- [x] Payment terms documentation
-- [x] Business registration displayed (БИН: 971207300019)
-
-### Data Retention
-
-- User data retained until account deletion (GDPR delete available)
-- Analytics data: 2 years
-- Logs: 90 days
-
----
-
-## 9. Monitoring & Observability
-
-- **Sentry**: `logger.ts` sends structured error reports to `VITE_SENTRY_DSN` via `sendBeacon`
-- **Supabase Analytics**: DB logs and Edge Function logs
-- **pg_cron monitoring**: `SELECT * FROM cron.job_run_details ORDER BY start_time DESC LIMIT 10`
-
----
-
-## 10. Repository Security & IP Protection
-
-### ✅ Implemented
-- [x] **Private Repository**: Codebase access restricted to authorized personnel only
-- [x] **History Sanitization**: Git history audited and purged of credentials (Feb 2026)
-- [x] **Unified Gitignore**: Standardized tracking, strictly excluding secrets
-
----
-
-## Quick Security Commands
+Before merging security-sensitive work, run the applicable checks:
 
 ```bash
-# Check for exposed secrets
-git log --all --full-history -- "*.env"
-
-# Run type checking
-npx tsc --noEmit
-
-# Check dependencies
-npm audit
-
-# Verify cron jobs
-# SQL: SELECT * FROM cron.job;
-# SQL: SELECT * FROM cron.job_run_details ORDER BY start_time DESC;
+npm run quality:check
+npm run test:ci
+npm run e2e:ci
+npm audit --omit=dev
 ```
 
----
+For migrations and Edge Functions, additionally review RLS/authorization paths and verify the deployment workflow has the required secrets. The full current secret inventory is in [GitHub Actions setup](../deployment/GITHUB_ACTIONS_SETUP.md).
 
-**Security contact**: admin@lnkmx.my
+## Incident Response
 
-*Last updated: 2026-03-15*
+1. Contain: revoke compromised tokens, disable affected integration, and preserve relevant logs.
+2. Assess: identify exposed data, affected accounts, and the first unsafe deployment or request.
+3. Remediate: deploy a minimal corrective change, add a regression test or policy, and rotate credentials.
+4. Communicate: document facts, impact, recovery, and follow-up owners without placing secrets in the repository.
+
+Report security issues privately to `admin@lnkmx.my`.

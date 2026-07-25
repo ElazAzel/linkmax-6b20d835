@@ -1,103 +1,74 @@
-# План после технического аудита
+# Execution Plan: Reliability, Security, and Product Delivery
 
-Дата: 2026-07-25
+**Created:** 2026-07-25
+**Horizon:** 12 weeks
+**Decision source:** current repository audit, workflow configuration, dependency audit, and documentation review.
 
-## Цель
+## Outcomes
 
-Вернуть предсказуемые поставки LinkMAX: каждый pull request должен проходить
-воспроизводимые проверки, а ключевые сценарии публичной страницы, редактора,
-авторизации и платежей должны быть покрыты изолированными тестами.
+1. Every pull request has reproducible, green required checks.
+2. Deployments fail only for actionable configuration or code errors and have a documented recovery path.
+3. Authentication, account scope, RLS, and payment-adjacent mutations have explicit trusted-side tests.
+4. Product work can proceed on a smaller, measured backlog rather than an unbounded quality baseline.
 
-## Текущее состояние
+## Phase 0: Restore Delivery Confidence (Week 1)
 
-- CI был заблокирован рассинхронизацией `package.json` и `package-lock.json`.
-- Quality и unit jobs использовали Node 20, хотя часть зависимостей требует Node 22.
-- E2E setup предполагал автоматический redirect после входа, которого UI не делает.
-- MCP code generation на Windows создаёт непереносимый `npm:` import с абсолютным путём.
-- В кодовой базе остаётся накопленный долг: 1 243 lint warnings, 2 352 literal UI strings
-  и 910 находок Knip. Базовые пороги отражают текущий факт, но не являются целевыми.
+| Work | Owner | Exit criterion |
+|---|---|---|
+| Reconcile i18n literal baseline with intentional UI changes | Frontend + QA | `npm run quality:check` is green without suppressing new literals. |
+| Configure required GitHub environments and deployment secrets | DevOps | Supabase and Cloudflare workflow dispatches authenticate successfully. |
+| Protect `main` with quality, unit, build, and E2E requirements | Maintainer | Direct merge cannot bypass required status checks. |
+| Add a post-deploy smoke checklist | DevOps | Homepage, `/auth`, one public page, and affected function/worker are checked. |
 
-## Phase 0: Release Health (1 неделя)
+## Phase 1: Security and OWASP Workstream (Weeks 1-4)
 
-1. Слить и запустить исправления CI: синхронизированный lockfile и Node 22 во всех jobs.
-2. Проверить GitHub Actions после push: Quality Checks, Unit Tests, Build Check и Deploy.
-3. Настроить отдельные GitHub Environments `staging` и `production`; проверить наличие
-   `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_ACCESS_TOKEN`,
-   `SUPABASE_PROJECT_ID`, `CLOUDFLARE_API_TOKEN` и `CLOUDFLARE_ACCOUNT_ID`.
-4. Добавить health-check после каждого deployment: главная страница, `/auth`, MCP function
-   и одна опубликованная страница.
-5. Включить branch protection для `main`: обязательны quality, unit, build и быстрый E2E smoke.
+| OWASP area | Work | Exit criterion |
+|---|---|---|
+| Broken access control | Map high-risk tables/RPCs/functions; add owner/non-owner RLS tests. | No critical mutation relies on client-only authorization. |
+| Cryptographic failures | Inventory secret stores, remove any unsafe client exposure, add rotation owner/runbook. | No privileged secret appears in source, `VITE_*`, artifacts, or docs. |
+| Injection | Audit public Edge Function/RPC payloads and dynamic query construction. | Inputs have schema validation and database access is parameterized. |
+| Insecure design | Write abuse cases for auth linking, payment callbacks, booking, and public forms. | Each flow has trusted-side authorization and idempotency decisions. |
+| Security misconfiguration | Review CSP/CORS, OAuth redirect allow-list, GitHub/Cloudflare/Supabase permissions. | Configuration is least-privilege and documented. |
+| Vulnerable components | Triage production `npm audit --omit=dev` findings by reachability. | Patches merged or breaking upgrades scheduled with owner/test plan. |
+| Authentication failures | Test email/OAuth/provider linking, redirects, session expiration, and account switching. | No arbitrary redirect, user enumeration leak, or client-only identity merge. |
+| Software/data integrity | Enforce lockfile CI, migration review, and dependency update review. | Reproducible `npm ci`; append-only migration discipline. |
+| Logging/monitoring | Redact PII/secrets; define deploy and auth alert signals. | Incidents can be diagnosed without collecting sensitive payloads. |
+| SSRF and external requests | Audit webhooks, URL fetches, and media/proxy endpoints. | Destination validation and timeouts exist where external URLs are accepted. |
 
-Критерий готовности: `main` имеет зелёный CI на чистом `npm ci`, а deployment сообщает
-действительную причину отсутствующего секрета или завершается успешно.
+## Phase 2: Test Architecture (Weeks 2-5)
 
-## Phase 1: Test Architecture (2 недели)
+1. Split Playwright into `smoke`, authenticated staging, and visual suites.
+2. Replace personal/demo account dependencies with disposable staging fixtures and bounded credentials.
+3. Run smoke on pull requests; run authenticated/visual suites nightly and before release.
+4. Add focused coverage for auth, editor block insertion, public page rendering, account switching, booking conflict, and payment/webhook idempotency.
+5. Publish test ownership and current flaky-test status in the testing document.
 
-1. Разделить Playwright на `smoke`, `authenticated` и `visual` проекты.
-2. Убрать зависимость обычного CI от живого demo-аккаунта: создавать тестового пользователя
-   через service-role только в protected staging environment или использовать заранее
-   подготовленное storage state с контролируемым TTL.
-3. Запускать `smoke` на каждом PR, authenticated/visual - nightly и перед релизом.
-4. Добавить тесты для OAuth consent: отсутствие `authorization_id`, отказ, approve и redirect.
-5. Устранить предупреждения `act(...)` в Telegram tests и сделать console policy явной.
+**Exit criterion:** a pull-request failure produces a reproducible command and useful artifact; sensitive suites do not rely on a personal account.
 
-Критерий готовности: PR feedback до 10 минут, полный набор не зависит от ручного состояния
-аккаунта и публикует trace/screenshot при ошибке.
+## Phase 3: Quality and Performance Debt (Weeks 3-8)
 
-## Phase 2: Quality Debt Burn-down (3-6 недель)
+1. Reduce lint, i18n, and unused-code baselines in small scoped pull requests. Baselines may only decrease unless an approved exception includes cause and expiry.
+2. Remove unused exports/modules based on Knip evidence and build/test verification.
+3. Split heavy route-specific dependencies such as spreadsheet/PDF/export modules and measure bundle impact.
+4. Establish Web Vitals and bundle budget measurements for public pages and dashboard entry.
+5. Test Capacitor sync after Vite, routing, CSP, or environment changes.
 
-1. Зафиксировать инвентарь Knip по категориям: файлы, exports, dependencies, types,
-   duplicates; удалить мёртвые модули небольшими PR.
-2. Снижать лимит Knip минимум на 50 находок в неделю, не повышая baseline без RFC.
-3. Заменять `any` на Supabase `Json`, DTO и narrow error types в сервисах и admin UI.
-4. Исправить React Hook dependency warnings в hooks и async loaders.
-5. Перевести literal UI strings в i18n по экранам: auth, dashboard, blocks, Telegram.
-6. Снизить i18n baseline минимум на 200 строк за фазу и запретить рост в новых файлах.
+**Exit criterion:** debt trends down each release and user-facing performance changes have measurements, not only qualitative claims.
 
-Критерий готовности: lint warnings < 800, Knip < 600, hardcoded UI strings < 2 000.
+## Phase 4: Product Delivery Discipline (Weeks 5-12)
 
-## Phase 3: Performance and Frontend Reliability (2-4 недели)
+For every planned Business Zone, commerce, automation, or AI feature:
 
-1. Разбить `i18n-helpers`, `vendor-ui`, `exceljs`, `sentry` и Event Scanner на
-   route-level/lazy chunks; установить бюджет initial JS и CI-report по bundle size.
-2. Обновить Browserslist database контролируемым dependency PR.
-3. Проверить CSP в dev: разрешить локальный HMR WebSocket либо отключать production CSP
-   заголовок для development server.
-4. Ввести visual regression только для стабильных экранов с локальными fixtures.
-5. Протестировать mobile Capacitor sync после каждой существенной Vite/config change.
+1. Create a short spec: user, problem, permission model, data contract, abuse cases, metric, rollout, and rollback.
+2. Implement behind a feature flag or constrained cohort when risk is material.
+3. Ship schema/RLS, trusted API, UI, telemetry, and tests as one vertical slice.
+4. Review results after a defined interval and either expand, revise, or retire the feature.
 
-Критерий готовности: нет CSP ошибок HMR в локальной разработке, warning по bundle size
-заменён измеряемым бюджетом, LCP основных публичных страниц отслеживается.
+Priority order: account/auth reliability, page editor and public publishing, CRM/lead workflow, booking/events, commerce/payments, automation/AI enhancements.
 
-## Phase 4: Backend and Security (параллельно, 3-6 недель)
+## Governance
 
-1. Сверить миграции Supabase с production history и добавить проверку порядка/дубликатов.
-2. Покрыть RLS и SECURITY DEFINER RPC интеграционными тестами для events, leads,
-   payments, reviews и MCP tools.
-3. Убрать тестовые креденшелы из E2E-кода в GitHub secrets/staging fixtures.
-4. Провести `npm audit` с triage: обновлять только пакеты с достижимой уязвимостью и
-   сопровождать регрессионными тестами.
-5. Закрыть lifecycle секретов: rotation runbook, минимальные scopes, audit log deploys.
-
-Критерий готовности: migration dry-run и RLS suite обязательны перед production deploy;
-в репозитории нет действующих логинов/паролей.
-
-## Phase 5: Product Delivery (квартальный поток)
-
-1. Завершить незакрытые направления из roadmap: защищённая выдача digital goods,
-   AI Financial Advisor, CRM automation и аналитические эксперименты.
-2. Каждую новую premium-функцию выпускать с feature flag, событиями canonical analytics,
-   pricing gate, RLS contract и rollback plan.
-3. Привести планы в `docs/product/` и `.lovable/plan.md` к единому источнику истины:
-   статус, owner, метрика успеха, dependencies, дата проверки.
-4. Публиковать changelog из понятных commit messages; заменить сообщения `Changes` и
-   `Work in progress` на conventional commits.
-
-Критерий готовности: у каждой инициативы есть измеримая метрика, технический контракт,
-тестовый план и владелец.
-
-## Порядок исполнения
-
-Сначала Phase 0, затем Phase 1 и Phase 2 параллельно. Phase 3 начинается после зелёного
-CI. Phase 4 не блокирует UI-работу, но блокирует production deployment для затронутых
-таблиц и Edge Functions. Phase 5 выполняется только через feature flags и staging rollout.
+- Weekly: delivery health, CI failures, dependency/security queue, flaky tests.
+- Biweekly: quality baseline trend, product experiment outcomes, documentation freshness.
+- Per release: OWASP change review for affected areas, secret/access review, smoke evidence, and changelog.
+- Owners must update `docs/PLATFORM_SNAPSHOT.md` when a phase changes system-wide delivery state.

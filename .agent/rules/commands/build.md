@@ -1,16 +1,13 @@
 ---
-description: Сборка проекта для продакшена
+description: Production Vite build verification
 ---
-# Команда Build (Сборка)
 
-Эта команда компилирует фронтенд-приложение для развертывания.
+# Build Command
 
-## Шаги выполнения
-1. **Команда**: `npm run build`
-2. **Процесс**: Vite выполнит транспиляцию TypeScript, оптимизацию CSS и сборку бандла.
+```bash
+npm run build
+```
 
-## Верификация
-- Убедитесь, что директория `dist/` создана и наполнена файлами.
-- Проверьте консоль на отсутствие ошибок сборки или неразрешенных импортов.
-- **Sentry**: Если в окружении есть `SENTRY_AUTH_TOKEN`, исходные карты (sourcemaps) будут автоматически загружены в Sentry.
-- **Производительность**: Обратите внимание на размер чанков (если есть предупреждения от Vite об их размере).
+The command regenerates `public/sitemap.xml` through `prebuild` and writes the web bundle to `dist/`. When `SENTRY_AUTH_TOKEN` is configured, Vite may upload and then remove production source maps according to `vite.config.ts`.
+
+Review generated sitemap changes before committing. A successful build is required after routing, bundler, dependency, or environment changes.

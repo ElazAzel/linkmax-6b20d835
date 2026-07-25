@@ -1,61 +1,34 @@
-# Активация Cloudflare SSR Worker
+# Cloudflare Worker Deployment
 
-## Зачем это нужно
+**Last reviewed:** 2026-07-25
 
-Сейчас Facebook, Telegram, WhatsApp, LinkedIn и часть AI-краулеров (Perplexity, ChatGPT-User) видят **один и тот же** статичный `index.html` для любой страницы — потому что они не выполняют JavaScript. Из-за этого:
+The Worker source and configuration are in `cloudflare-worker/`. It supports bot-facing SSR/prerender and sitemap-related delivery paths. Treat the code and `wrangler.toml` as the authoritative runtime configuration.
 
-- Превью ссылок на `lnkmx.my/<username>` показывает общее описание LinkMAX, а не конкретного эксперта.
-- Google индексирует страницы дольше и хуже ранжирует, поскольку начальный HTML одинаковый.
+## Automated Paths
 
-Edge Function `generate-sitemap` уже генерирует полноценный HTML с per-page `<title>`, `description`, `canonical`, OG, Twitter Card и JSON-LD (Person / LocalBusiness / FAQPage / BreadcrumbList). Осталось включить роутинг через Cloudflare Worker.
+- `deploy.yml` deploys after a successful build on `main`.
+- `deploy-cloudflare-worker.yml` deploys when only Worker files or its workflow change.
 
-## Что уже готово
+Both paths require least-privilege Cloudflare credentials. Required secret names are listed in [GitHub Actions setup](../deployment/GITHUB_ACTIONS_SETUP.md).
 
-- `cloudflare-worker/prerender-worker.js` — маршрутизация всех публичных путей в SSR.
-- `cloudflare-worker/wrangler.toml` — routes для `lnkmx.my/*` и `www.lnkmx.my/*` активированы.
-- `.github/workflows/deploy-cloudflare-worker.yml` — автодеплой при push в `cloudflare-worker/**`.
-
-## Одноразовая активация (≈ 5 минут)
-
-### 1. Включить Proxy на DNS-записи
-
-В Cloudflare → DNS → `lnkmx.my` и `www`: переключить иконку с серого облака **DNS Only** на оранжевое **Proxied**.
-
-> ⚠️ Проверьте, что Supabase Auth callback URL по-прежнему работает (`https://lnkmx.my/auth/callback`). Worker пропускает `/auth/*` и `/api/*` без обработки, так что CORS на `*.supabase.co` не затрагивается.
-
-### 2. Создать Cloudflare API Token
-
-Cloudflare → My Profile → API Tokens → **Create Token** → шаблон **Edit Cloudflare Workers**. Скопировать токен.
-
-### 3. Добавить 4 GitHub Secrets
-
-Repo → Settings → Secrets and variables → Actions → **New repository secret**:
-
-| Secret                          | Значение                                                |
-| ------------------------------- | ------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN`          | токен из шага 2                                         |
-| `CLOUDFLARE_ACCOUNT_ID`         | Cloudflare → правая колонка дашборда                    |
-| `CF_WORKER_SUPABASE_PROJECT`    | `pphdcfxucfndmwulpfwv`                                  |
-| `CF_WORKER_SUPABASE_ANON_KEY`   | anon ключ Lovable Cloud (Settings → Cloud → API keys)   |
-
-### 4. Запустить деплой
-
-GitHub → Actions → **Deploy Cloudflare SSR Worker** → Run workflow. Либо просто запушить любое изменение в `cloudflare-worker/**`.
-
-## Проверка
+## Local Check
 
 ```bash
-# Должен прийти заголовок X-SSR-Rendered: true
-curl -sI -A "facebookexternalhit/1.1" https://lnkmx.my/ | grep -i ssr
-
-# Превью для соц-сетей: Facebook Debugger
-open "https://developers.facebook.com/tools/debug/?q=https://lnkmx.my/<любой_username>"
-
-# Превью для Telegram: отправить ссылку в @WebpageBot
+npm ci
+npm run build
+cd cloudflare-worker
+npx wrangler deploy --dry-run
 ```
 
-В ответе должны быть `og:title`, `og:description`, `og:image` именно этой страницы, а не общие.
+Use the environment and account intended for the deployment. Do not copy a token into `wrangler.toml`, frontend environment variables, documentation, or terminal output.
 
-## Откат
+## Post-deploy Check
 
-Если что-то пошло не так — Cloudflare → DNS → вернуть **DNS Only**. Worker перестанет получать трафик мгновенно, поведение откатится к текущему.
+1. Confirm the GitHub Actions workflow and Cloudflare deployment record succeed.
+2. Request the expected public URL and inspect its status, headers, and rendered metadata.
+3. Confirm sitemap behavior and one representative bot-facing route.
+4. Inspect Worker logs; redact any sensitive request data in incident reports.
+
+## Recovery
+
+Revert a faulty Worker change through a reviewed pull request, redeploy from the known-good revision, then investigate configuration and logs. Rotate `CLOUDFLARE_API_TOKEN` if exposure is suspected.

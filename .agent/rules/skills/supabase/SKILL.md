@@ -1,32 +1,33 @@
-# Supabase Skill
+---
+name: supabase
+description: Supabase Auth, PostgreSQL, RLS, Storage, RPC, migrations, and Edge Functions for LinkMAX.
+---
 
-## Description
-Expertise in Supabase backend development, including PostgreSQL, RLS, Edge Functions, Auth, and Storage.
+# Supabase
 
-## Capabilities
--   Create and manage database schema migrations.
--   Write secure RLS policies.
--   Develop and deploy Edge Functions (Deno).
--   Configure authentication providers.
--   Manage storage buckets and policies.
+Use for any change crossing the client-to-database boundary.
 
-## Key Files
--   `supabase/config.toml`
--   `supabase/migrations/*`
--   `supabase/functions/*`
--   `src/integrations/supabase/client.ts`
+## Procedure
 
-## Common Commands
--   `supabase start`: Start local dev stack.
--   `supabase db diff -f <name>`: Generate migration.
--   `supabase functions deploy <name>`: Deploy function.
+1. Identify the actor, resource, ownership rule, and failure behavior.
+2. Create an append-only migration for schema, index, trigger, RLS, or RPC changes.
+3. Enable RLS and write policies before exposing a table through PostgREST.
+4. Validate Edge Function input, verify session/authorization, and keep service-role clients server-only.
+5. Test with owner and non-owner sessions; then run relevant TypeScript and browser tests.
 
-## Workflows
+## Commands
 
-### Creating a New Edge Function
-1.  Run `supabase functions new <function_name>`.
-2.  Write the logic in `supabase/functions/<function_name>/index.ts` using Deno.
-3.  Ensure CORS headers are properly handled, especially for preflight `OPTIONS` requests.
-4.  Use standard Supabase clients initialized with Authorization headers passed from the client.
-5.  Test locally using `supabase functions serve <function_name>` or `supabase start`.
-6.  Deploy using `supabase functions deploy <function_name>`.
+```bash
+npx supabase start
+npx supabase migration new <feature_name>
+npx supabase db reset
+npx supabase functions serve <function-name> --env-file supabase/.env.local
+```
+
+Use `supabase db push` only for an explicitly targeted remote project after review. CI deploys reviewed migrations from `main`.
+
+## Guardrails
+
+- Never put service-role credentials in browser code or `VITE_*` variables.
+- Client checks improve UX but do not replace RLS or server authorization.
+- Do not change a historical migration after it has been applied remotely.

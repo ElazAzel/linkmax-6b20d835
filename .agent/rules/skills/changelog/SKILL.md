@@ -1,71 +1,13 @@
 ---
 name: changelog
-description: Автоматическая генерация changelog'ов из git-коммитов для LinkMAX.
+description: Release notes and change summaries for LinkMAX.
 ---
 
-# Changelog Skill
+# Changelog
 
-Генерация пользовательских changelog'ов из технических git-коммитов.
+Use when preparing a release or documenting a user-visible change.
 
-## Когда использовать
-
-- Подготовка релиз-нот перед деплоем
-- Создание еженедельного дайджеста обновлений
-- Формирование списка изменений для клиентов
-
-## Воркфлоу
-
-### 1. Генерация changelog
-
-Из корня проекта:
-
-```bash
-# Changelog за последние 7 дней
-git log --oneline --since="7 days ago"
-
-# Changelog между двумя версиями
-git log --oneline v3.0.0..v3.1.0
-```
-
-**Категоризация изменений:**
-| Категория | Метка | Пример |
-|---|---|---|
-| ✨ Новое | `feat:` | Добавлен Kanban-доска |
-| 🔧 Улучшение | `improve:` | Ускорен рендеринг блоков |
-| 🐛 Исправление | `fix:` | Исправлен баг с уведомлениями |
-| 🚀 Производительность | `perf:` | Оптимизированы запросы к БД |
-| 📚 Документация | `docs:` | Обновлён README |
-
-### 2. Формат вывода
-
-```markdown
-# LinkMAX v3.2.0 — 1 Июля 2026
-
-## ✨ Новые возможности
-- **Business Zone**: Drag-and-drop Kanban для сделок
-- **AI Copywriter**: Генерация текста для блоков одним кликом
-
-## 🔧 Улучшения
-- Уведомления в Telegram приходят на 40% быстрее
-- Улучшена мобильная навигация в Dashboard
-
-## 🐛 Исправления
-- Исправлен подсчёт CTR в аналитике
-- Исправлен экспорт PDF при пустых блоках
-```
-
-### 3. Обновление CHANGELOG.md
-
-```bash
-# Добавить к началу файла
-cat - CHANGELOG.md > new_changelog.md
-```
-
-**Ключевые файлы:**
-- `docs/CHANGELOG.md` — основной changelog
-- `docs/CHANGELOG_STYLE.md` — правила форматирования (опционально)
-
-## Связанные модули
-
-- `communications` — рассылка changelog пользователям
-- `devops` — привязка к релизному CI/CD
+1. Derive statements from merged code, migrations, and verified behavior.
+2. Separate user-visible features, fixes, security changes, and operational changes.
+3. Do not disclose vulnerabilities before coordinated remediation or include secret/configuration values.
+4. Link to the current document or issue when a rollout has a prerequisite.

@@ -1,96 +1,55 @@
-# GitHub Actions Deployment Setup
+# GitHub Actions and Deployment Setup
 
-## 🔧 Setup Instructions
+**Last reviewed:** 2026-07-25
 
-### 1. Add API Token to GitHub Secrets
+## Workflows
 
-Follow these steps to add the Cloudflare API token to your GitHub repository:
+| Workflow | Trigger | Responsibility |
+|---|---|---|
+| `ci.yml` | PRs and pushes to `main` | Quality gate, Vitest, Playwright, build. |
+| `deploy.yml` | Pushes to `main`, manual dispatch | Build and Cloudflare Worker deployment. |
+| `deploy-cloudflare-worker.yml` | Worker-only changes, manual dispatch | Cloudflare Worker deployment. |
+| `deploy-supabase.yml` | Supabase functions or migrations on `main`, manual dispatch | Apply migrations and deploy Edge Functions. |
 
-1. Go to your GitHub repository: https://github.com/ElazAzel/linkmax-6b20d835
-2. Click **Settings** (top menu)
-3. In the left sidebar, click **Secrets and variables** → **Actions**
-4. Click **New repository secret**
-5. Enter the following:
-   - **Name:** `CLOUDFLARE_API_TOKEN`
-   - **Value:** *(get the token from Cloudflare Dashboard → API Tokens)*
-6. Click **Add secret**
+All workflow jobs use Node.js 22. CI is a merge gate; a deployment workflow is not a substitute for passing CI.
 
-> **IMPORTANT:** Never commit API tokens or secrets to the repository. Always use GitHub Secrets or environment variables.
+## Required GitHub Secrets
 
-### 2. Verify Configuration
+| Secret | Used by | Notes |
+|---|---|---|
+| `VITE_SUPABASE_URL` | build and E2E | Browser-safe project URL. |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | build | Browser-safe Supabase publishable/anon key. |
+| `VITE_SUPABASE_ANON_KEY` | E2E where configured | Browser-safe key for test flows. |
+| `SUPABASE_PROJECT_ID` | Supabase deploy | Project reference, not a credential. |
+| `SUPABASE_ACCESS_TOKEN` | Supabase deploy | Supabase personal access token with deployment access. |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare workflows | Least-privilege token with Worker deployment permissions. |
+| `CLOUDFLARE_ACCOUNT_ID` | Worker-only workflow | Cloudflare account identifier. |
+| `CF_WORKER_SUPABASE_PROJECT` | Worker-only workflow | Project reference passed to the Worker. |
+| `CF_WORKER_SUPABASE_ANON_KEY` | Worker-only workflow | Browser-safe Supabase key passed as Worker secret. |
 
-Ensure `cloudflare-worker/wrangler.toml` has the correct account ID (get it from Cloudflare Dashboard → Overview):
-```toml
-account_id = "<YOUR_CLOUDFLARE_ACCOUNT_ID>"
-name = "lnkmx-prerender"
-main = "prerender-worker.js"
-```
+Add secrets in GitHub: **Settings -> Secrets and variables -> Actions -> New repository secret**. Never put their values in workflow YAML, `.env.example`, docs, issues, or logs.
 
-### 3. Deploy via GitHub Actions
+## Deployment Procedure
 
-**Option A: Automatic Deployment**
-- Simply push any code to the `main` branch
-- The workflow `.github/workflows/deploy.yml` will automatically:
-  1. Build the project
-  2. Run TypeScript checks
-  3. Deploy the Cloudflare Worker
+1. Open a pull request and wait for `ci.yml` to pass.
+2. Review migrations, Edge Function changes, and generated sitemap changes separately.
+3. Merge to `main`.
+4. Confirm the relevant deploy workflow completed successfully.
+5. Run a smoke check against `https://lnkmx.my/` and inspect Sentry/Supabase logs for regression signals.
 
-**Option B: Manual Workflow Trigger**
-1. Go to GitHub repo → **Actions**
-2. Click **Build and Deploy** workflow
-3. Click **Run workflow** → **Run workflow** button
-4. Wait for the workflow to complete
+## Failure Triage
 
-### 4. Monitor Deployment
+| Symptom | Check |
+|---|---|
+| `supabase` authentication failure | `SUPABASE_ACCESS_TOKEN` exists, is current, and can access `SUPABASE_PROJECT_ID`. |
+| Cloudflare authentication failure | `CLOUDFLARE_API_TOKEN` exists, is active, and has Worker deployment permission for the configured account. |
+| Build lacks Supabase configuration | `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are present in the workflow environment. |
+| Migration fails | Inspect migration order and SQL in a temporary/local Supabase project before retrying production. Do not edit an already-applied migration. |
+| CI quality gate fails | Reproduce the named npm command locally; do not suppress the check without an explicit baseline change and review. |
 
-1. Go to **Actions** tab in GitHub
-2. Click the latest workflow run
-3. View logs for build and deployment steps
-4. Check Cloudflare dashboard for deployed Worker
+## Rotation and Access
 
-## 🔐 Security
-
-- ✅ Token is stored securely in GitHub Secrets (encrypted)
-- ✅ Token is never displayed in logs (masked by GitHub)
-- ✅ Token is only used during workflow execution
-- ✅ Only available to authorized workflows and manual trigger
-- ⚠️ **Never** hardcode tokens in documentation or source code
-- ⚠️ Rotate tokens periodically via Cloudflare Dashboard → API Tokens
-
-## 🚀 Deployment Status
-
-After adding the secret, the next push to `main` will automatically:
-
-```
-1. Checkout code
-2. Setup Node.js 18
-3. Install dependencies (npm ci)
-4. Build project (npm run build)
-5. Deploy Cloudflare Worker (wrangler deploy)
-```
-
-## ⚠️ Troubleshooting
-
-### Workflow Fails: "Authentication error [code: 10000]"
-- **Cause:** Token permissions might be insufficient
-- **Solution:** Verify token has "Workers — Edit" permission in Cloudflare dashboard
-
-### Workflow Fails: "account_id does not match"
-- **Cause:** `account_id` in `wrangler.toml` doesn't match the token's account
-- **Solution:** Update `account_id` in `cloudflare-worker/wrangler.toml`
-
-### Workflow Not Triggering
-- **Cause:** Workflow file might not be on `main` branch
-- **Solution:** Commit `.github/workflows/deploy.yml` to `main` and push
-
-## 📝 Related Files
-
-- Workflow definition: [.github/workflows/deploy.yml](../.github/workflows/deploy.yml)
-- Cloudflare config: [cloudflare-worker/wrangler.toml](../cloudflare-worker/wrangler.toml)
-- Deployment checklist: [DEPLOYMENT-CHECKLIST.md](DEPLOYMENT-CHECKLIST.md)
-
----
-
-**Setup is now complete!** 🎉
-
-Your next `git push origin main` will trigger the automated deployment pipeline.
+- Use least privilege and separate tokens for people, CI, and local development.
+- Rotate deployment tokens immediately after suspected exposure and at a defined operational interval.
+- Remove secrets and environment access when a maintainer no longer needs deployment rights.
+- Record any manual production recovery in the pull request or incident record, without copying secret values.

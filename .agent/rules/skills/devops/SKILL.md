@@ -1,125 +1,29 @@
 ---
 name: devops
-description: CI/CD, инфраструктура и деплой LinkMAX. Supabase, GitHub Actions, Cloudflare Worker, Vercel.
+description: CI/CD, Supabase migrations and Edge Functions, Cloudflare Worker, runtime configuration, and delivery recovery for LinkMAX.
 ---
 
-# DevOps Skill
+# DevOps
 
-Управление инфраструктурой: базы данных, Edge Functions, CI/CD, деплой.
+Use for workflow, deployment, environment, migration, or operational changes.
 
-## Когда использовать
+## Source of Truth
 
-- Создание и применение миграций Supabase
-- Деплой Edge Functions
-- Настройка GitHub Actions / CI-пайплайнов
-- Деплой на Cloudflare Worker (SSR, sitemap)
-- Управление переменными окружения
-- Откат изменений
+- Workflows: `.github/workflows/ci.yml`, `deploy.yml`, `deploy-cloudflare-worker.yml`, `deploy-supabase.yml`.
+- Runtime details: `docs/deployment/GITHUB_ACTIONS_SETUP.md`.
+- Local process: `docs/deployment/runbooks/LOCAL_DEVELOPMENT.md`.
 
-## Воркфлоу
+## Procedure
 
-### 1. Миграции Supabase
+1. Verify Node 22 and run `npm ci`.
+2. Make schema changes in a new append-only file under `supabase/migrations/`.
+3. Test locally where possible; review RLS and Edge Function authorization.
+4. Run `npm run quality:check`, affected tests, and `npm run build`.
+5. Confirm required GitHub secrets by name only. Never print values.
+6. After deploy, smoke-test the affected endpoint and inspect provider logs.
 
-```bash
-# Создать миграцию
-npx supabase db diff -f feature_name
+## Guardrails
 
-# Применить локально
-npx supabase db push
-
-# Применить на прод (после PR)
-npx supabase db push --db-url "$PROD_DB_URL"
-
-# Откат
-npx supabase db diff -f rollback_feature_name
-```
-
-**Правила:**
-- Одна миграция = одно изменение (не смешивать)
-- RLS-политики всегда в той же миграции, что и таблица
-- Перед деплоем: `npm run quality:gate`
-
-**Ключевые файлы:**
-- `supabase/migrations/` — все миграции
-- `supabase/config.toml` — конфигурация
-- `supabase/seed.sql` — тестовые данные
-
-### 2. Edge Functions
-
-```bash
-# Создать
-npx supabase functions new function_name
-
-# Локальный запуск
-npx supabase functions serve function_name
-
-# Деплой
-npx supabase functions deploy function_name
-
-# Логи
-npx supabase functions logs function_name
-```
-
-**Структура функции:**
-```typescript
-// supabase/functions/function_name/index.ts
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { status: 204 });
-  const authHeader = req.headers.get("Authorization")!;
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    { global: { headers: { Authorization: authHeader } } }
-  );
-  // ...
-});
-```
-
-### 3. GitHub Actions
-
-Основные workflow (`.github/workflows/`):
-
-| Файл | Назначение |
-|---|---|
-| `ci.yml` | Lint, typecheck, test на каждый PR |
-| `deploy-supabase.yml` | Деплой миграций + функций |
-| `deploy-cf-worker.yml` | Деплой Cloudflare Worker |
-| `release.yml` | Сборка релиза + changelog |
-
-### 4. Cloudflare Worker
-
-```bash
-cd cloudflare-worker
-npx wrangler deploy
-```
-
-Worker обслуживает:
-- SSR для ботов (prerender)
-- Sitemap.xml
-- Redirects (lnkmx.my → страницы)
-
-### 5. Переменные окружения
-
-Проверить `.env.example` при добавлении новых переменных.
-Синхронизировать между:
-- `.env` (локально)
-- GitHub Secrets
-- Supabase Dashboard → Edge Function secrets
-- Cloudflare Dashboard → Worker secrets
-
-## Команды
-
-```bash
-npm run dev              # Локальная разработка
-npm run build            # Prod-сборка
-npm run quality:check    # Полная проверка качества
-npm run e2e              # E2E тесты
-```
-
-## Связанные модули
-
-- `testing` — запуск тестов перед деплоем
-- `changelog` — генерация релиз-нот после деплоя
+- Do not edit an applied migration or deploy unreviewed database changes.
+- `SUPABASE_ACCESS_TOKEN` and `CLOUDFLARE_API_TOKEN` are CI secrets, never `VITE_*` variables.
+- Treat missing provider credentials as a delivery blocker, not a reason to bypass a workflow.

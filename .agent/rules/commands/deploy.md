@@ -1,27 +1,22 @@
 ---
-description: Развертывание приложения и Edge Functions
+description: Build, CI, Supabase, and Cloudflare deployment references
 ---
 
-# Команда Deploy (Деплой)
+# Deployment Commands
 
-Здесь описаны шаги для развертывания различных частей приложения lnkmx.my.
+## Pre-deploy
 
-## 1. Деплой Фронтенда (обычно через CI/CD)
+```bash
+npm ci
+npm run quality:check
+npm run test:ci
+npm run build
+```
 
-Фронтенд обычно развертывается через Vercel или Cloudflare Pages при пуше в ветку `main`.
-- **Ручная сборка**: `npm run build`
+## Delivery Paths
 
-## 2. Деплой Supabase Edge Functions
+- Web build and Cloudflare Worker: `.github/workflows/deploy.yml`.
+- Worker-only changes: `.github/workflows/deploy-cloudflare-worker.yml`.
+- Supabase migrations and Edge Functions: `.github/workflows/deploy-supabase.yml`.
 
-Чтобы развернуть функции в облако Supabase:
-1. Убедитесь, что вы авторизованы: `npx supabase login`
-2. Свяжите проект, если это не сделано: `npx supabase link --project-ref <project-id>`
-3. Деплой конкретной функции: `npx supabase functions deploy <имя-функции> --no-verify-jwt` (если она публичная, например, вебхук).
-   - *Пример*: `npx supabase functions deploy robokassa-webhook --no-verify-jwt`
-4. Деплой всех функций: `npx supabase functions deploy`
-
-## 3. Схема БД и Миграции
-
-Чтобы отправить локальные миграции в удаленный проект:
-1. Проверьте статус: `npx supabase status`
-2. Отправьте миграции: `npx supabase db push`
+Use provider dashboards/CLI only with the least-privilege credentials for the intended environment. Required secret names and failure recovery are documented in `docs/deployment/GITHUB_ACTIONS_SETUP.md`.

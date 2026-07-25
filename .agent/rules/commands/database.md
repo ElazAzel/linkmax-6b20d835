@@ -1,17 +1,16 @@
 ---
-description: Управление базой данных Supabase
+description: Safe Supabase schema and migration workflow
 ---
 
-# Команды базы данных
+# Database Commands
 
-## Дифф (Миграция)
+```bash
+npx supabase start
+npx supabase migration new <feature_name>
+npx supabase db reset
+npx supabase status
+```
 
-Выполните `npx supabase db diff -f <имя_миграции>` для генерации нового файла миграции на основе локальных изменений схемы.
+Use `supabase db reset` only against the local development stack. Review migrations and RLS policies before applying them to a remote project.
 
-## Сброс (Reset)
-
-Выполните `npx supabase db reset`, чтобы полностью очистить локальную базу данных и заново применить все миграции из папки `supabase/migrations`.
-
-## Пуш (В облако)
-
-Выполните `npx supabase db push`, чтобы применить локальные миграции к удаленному проекту Supabase.
+The `deploy-supabase.yml` workflow applies migrations on `main`. Manual remote `supabase db push` requires an explicitly linked/targeted project and must never be used as an unreviewed production shortcut.

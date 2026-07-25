@@ -1,89 +1,68 @@
-# Runbook: Local Development Setup
+# Local Development Runbook
 
-> **Goal:** Get a developer from zero to running LinkMAX locally.
+**Last reviewed:** 2026-07-25
 
-## Prerequisites
-
-- Node.js (v20 or later recommended)
-- npm (v10 or later recommended)
-- Git
-- Supabase CLI (optional, for edge function testing)
-
-## Initial Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/ElazAzel/linkmax-6b20d835.git linkmax
-   cd linkmax
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment Variables**
-   - Copy `.env.example` to `.env`
-     ```bash
-     cp .env.example .env
-     ```
-   - Fill in the required values:
-     - `VITE_SUPABASE_URL`: Your Supabase project URL
-     - `VITE_SUPABASE_PUBLISHABLE_KEY`: Your Supabase anon key
-
-   > **Note**: LinkMAX is a Vite React SPA. Client-facing variables use the `VITE_*` prefix.
-
-## Running the App
-
-1. **Start Development Server**
-   ```bash
-   npm run dev
-   ```
-   - The app should be running at `http://localhost:8080`.
-
-## Edge Functions (Local)
+## Frontend
 
 ```bash
-# Start Supabase local dev server
-supabase start
-
-# Serve individual edge function
-supabase functions serve <function-name> --env-file supabase/functions/.env
+nvm use
+npm ci
+cp .env.example .env
+npm run dev
 ```
 
-## Common Tasks
+Vite serves the app at `http://localhost:8080`. `predev` and `prebuild` regenerate `public/sitemap.xml`; treat resulting changes as generated output and inspect them before committing.
 
-### Type Checking
+## Supabase
+
+The browser can use the hosted Supabase project through `.env`. To work against the local stack, install Docker and the Supabase CLI, then:
+
 ```bash
-npx tsc --noEmit
+npx supabase start
+npx supabase db reset
+npx supabase status
 ```
 
-### Linting
+Supabase Studio is normally exposed at `http://localhost:54323`. Configure local frontend variables from `supabase status` before using the local API.
+
+Create a new migration with a descriptive timestamped name. Review the SQL and RLS policies, then apply it locally:
+
 ```bash
-npm run lint
+npx supabase migration new <feature_name>
+npx supabase db reset
 ```
 
-### Running Tests
+Do not run `supabase db push` against production casually. The `deploy-supabase.yml` workflow applies reviewed migrations from `main` using `SUPABASE_ACCESS_TOKEN` and `SUPABASE_PROJECT_ID`.
+
+## Edge Functions
+
 ```bash
-npm run test
+npx supabase functions serve <function-name> --env-file supabase/.env.local
+npx supabase functions logs <function-name>
 ```
 
-### Build
+`supabase/.env.local` is local-only. It may contain function secrets and must never be committed.
+
+## Tests and Build
+
 ```bash
+npm run quality:check
+npm run e2e:ci
 npm run build
 ```
 
-## Troubleshooting
+Playwright starts the Vite server automatically through `playwright.config.ts`. On a new machine install browser binaries once:
 
-- **Dependency Issues**: Delete `node_modules` and reinstall:
-  ```bash
-  rm -rf node_modules package-lock.json
-  npm install
-  ```
-- **Supabase Issues**: Ensure your `.env` variables match your Supabase project.
-- **Port Conflicts**: Vite defaults to `5173`. If you need a different port, use `npm run dev -- --port 3001`.
-- **Edge Functions**: Deno lint errors in IDE are expected — edge functions run on Deno runtime, not Node.
+```bash
+npx playwright install
+```
 
----
+## Mobile
 
-*Last updated: 2026-02-18*
+```bash
+npm run mobile:sync
+npm run mobile:open:android
+npm run mobile:open:ios
+```
+
+The sync command rebuilds the web bundle first. Do not hand-edit generated web assets inside native projects.

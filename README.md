@@ -1,202 +1,79 @@
-# LinkMAX — The Micro-Business OS
+# LinkMAX
 
-![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)
-![Node](https://img.shields.io/badge/node-v20+-green.svg)
-![License](https://img.shields.io/badge/license-Proprietary-orange.svg)
-![Status](https://img.shields.io/badge/status-Active-success.svg)
+LinkMAX is a multi-language link-in-bio and micro-business platform. It provides public pages, a visual block editor, commerce, bookings, CRM, analytics, and a mobile shell built with Capacitor.
 
-> **LinkMAX — AI Sales OS, превращающая одну ссылку в био в полноценный бизнес. Сервис за минуту создает конвертящий мини-сайт с приемом платежей и календарем услуг, агрегирует заявки в легкой CRM с таск-трекером и Kanban, предоставляет глубокую аналитику и мгновенно отправляет уведомления о лидах в Telegram.**
->
-> *LinkMAX is the AI Sales OS that turns a single bio link into a fully functioning business. In under a minute, it creates a high-converting mini-site complete with booking calendars and integrated payments, aggregates leads into a lightweight CRM with task tracking and Kanban boards, delivers deep analytics, and sends real-time lead notifications directly to Telegram.*
+This repository is the source of truth for the web application, Supabase schema and Edge Functions, Cloudflare SSR worker, automated checks, and operational documentation.
 
-**LinkMAX** is a comprehensive SaaS platform built for creators, freelancers, and small businesses in the CIS region. It combines a powerful page builder (28+ blocks), a **Business Zone** command center (mini-CRM, Kanban, Tasks, Contacts, Invoices, Automations), and advanced analytics into one unified, mobile-first system.
+## Stack
 
-**[Live Demo](https://lnkmx.my)**
+- React 18, TypeScript, Vite, Tailwind CSS, Radix UI
+- Supabase: Auth, PostgreSQL, Storage, Row Level Security, Edge Functions
+- TanStack Query, Zustand, i18next
+- Playwright and Vitest
+- Capacitor for Android and iOS
+- Cloudflare Worker for bot SSR and sitemap handling
 
----
+## Requirements
 
-## ✨ Features
+- Node.js 22 (see `.nvmrc`)
+- npm 10 or later
+- Optional for local backend work: Supabase CLI and Docker
 
+## Local start
 
-### 🎨 **AI-Powered Page Builder**
-
-- **28+ Block Types**: Profile, links, products, forms, bookings, events, carousels, scratch cards, and more.
-- **Drag & Drop**: Intuitive mobile-first editor (dnd-kit).
-- **AI Generation**: Create entire pages or write copy with one click (Gemini).
-- **Customization**: Themes, fonts, and animations (**Living Canvas** design system).
-- **A/B Testing**: Native multi-variant testing for individual blocks with traffic allocation.
-- **Multi-Page**: Up to 10 pages per user (Pro); each with its own slug and SEO.
-
-### 📈 **Business Zone & Analytics**
-
-- **Mini-CRM**: Leads with status pipeline (New → Contacted → Won/Lost), notes, and history.
-
-- **Command Center**: Daily health score, next actions, work queue, and activation map across deals, tasks, contacts, invoices, and automations.
-- **Kanban**: Deals pipeline with drag-and-drop stages.
-- **Tasks**: Task board with priorities, assignees, due dates, linked contacts and deals.
-- **Contacts**: Unified contact list linked to leads and deals.
-- **Deep Analytics**: Views, clicks, CTR, traffic sources, block performance, geography; **Pixel Proxy** for server-side tracking (Facebook CAPI, TikTok Events).
-- **A/B Experiments**: Test block variants for conversion optimization.
-- **Notifications**: Instant alerts via Telegram for new leads and bookings.
-- **Developer Portal**: API keys (`lk_live_`) and webhook endpoints for expert business automation.
-
-### 🌐 **Localization & SEO**
-
-- **16 Languages**: RU, EN, KK (primary); DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR (lazy-loaded).
-- **SEO/SSR**: Bot detection, pre-rendered landing/gallery/profiles via Cloudflare Worker + Supabase Edge Functions; dynamic sitemap; JSON-LD and GEO schemas.
-
-### 🔗 **Social & Growth**
-
-- **Smart Links**: Messenger shortcuts (WhatsApp, Telegram), social icons.
-- **Monetization**: Sell products, tickets, and digital goods; Robokassa integration (platform layer).
-- **PWA**: Installable app, offline fallback, shortcuts (Dashboard, Create page).
-- **Mobile**: Capacitor 8 (iOS/Android) — initialized for native builds.
-
----
-
-## 🛠 Tech Stack
-
-### Core
-
-- **Framework**: [Vite 6](https://vitejs.dev/) with [React 18.3](https://react.dev/)
-- **Language**: [TypeScript 5.8](https://www.typescriptlang.org/)
-- **Routing**: [React Router 6](https://reactrouter.com/) (lazy-loaded routes)
-
-### Styling & UI
-
-- **CSS**: [TailwindCSS 3](https://tailwindcss.com/)
-- **Components**: [shadcn/ui](https://ui.shadcn.com/) (Radix UI)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-
-### Backend & Infra
-
-- **Platform**: [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage)
-- **Compute**: Supabase Edge Functions (Deno) — 28+ functions
-- **SSR/Bots**: Cloudflare Worker (prerender, sitemap)
-- **AI**: Google Gemini API
-- **Payments**: Robokassa (platform layer)
-- **Monitoring**: Sentry, Web Vitals
-
-### Mobile
-
-- **Capacitor**: 8.1 (iOS/Android)
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js v18+ (v20 recommended)
-- npm v9+
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/ElazAzel/linkmax-6b20d835.git linkmax
-   cd linkmax
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment**
-   Copy `.env.example` to `.env` and set:
-
-   ```env
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
-   VITE_SUPABASE_PROJECT_ID=your_project_id
-   VITE_APP_DOMAIN=https://lnkmx.my
-   ```
-
-   *(Ask the team lead for credentials if you don't have them)*
-
-4. **Start Development Server**
-
-   ```bash
-   npm run dev
-   ```
-
-   App runs at **<http://localhost:8080>**
-
-### Подключение npm (если команда `npm` не найдена)
-
-- Установите [Node.js](https://nodejs.org/) (LTS, v18+) — в комплекте идёт npm.
-- Либо используйте [nvm-windows](https://github.com/coreybutler/nvm-windows): `nvm install 20` → `nvm use 20`. В проекте есть `.nvmrc` (рекомендуемая версия).
-- Откройте **новый** терминал (Cursor/VS Code: Terminal → New Terminal), чтобы подхватился PATH, затем:
-
-  ```bash
-  npm install
-  ```
-
-- Или из PowerShell в корне проекта: `.\scripts\install-deps.ps1`
-
----
-
-## 📂 Project Structure
-
-```text
-lnkmx/
-├── src/
-│   ├── components/       # Reusable UI & Business Components
-│   │   ├── blocks/       # Public view block renderers
-│   │   ├── block-editors/ # Dashboard block editors
-│   │   ├── dashboard-v2/ # Dashboard v2 (screens, layout, analytics)
-│   │   ├── zones/        # Business Zone (CRM, Kanban, Tasks)
-│   │   └── ui/           # Base design system (shadcn)
-│   ├── pages/            # Route-level components (Vite SPA)
-│   ├── hooks/            # Custom React Hooks (60+)
-│   ├── services/         # Business Logic & API calls
-│   ├── domain/           # Core Domain Entities
-│   ├── use-cases/        # Application use cases
-│   ├── repositories/     # Data access layer
-│   ├── platform/         # Platform integrations (Supabase, Robokassa)
-│   ├── i18n/             # Locales (16 languages)
-│   └── lib/              # Utilities, SEO, export (PDF/Excel)
-├── supabase/
-│   ├── functions/        # 28+ Edge Functions
-│   └── migrations/       # Database Schema
-├── cloudflare-worker/    # SSR & sitemap worker
-├── android/              # Capacitor Android
-├── ios/                  # Capacitor iOS
-└── docs/                 # Documentation
+```bash
+nvm use
+npm ci
+cp .env.example .env
+npm run dev
 ```
 
-## 📖 Documentation
+The Vite application runs at `http://localhost:8080`.
 
-- **[Docs overview](docs/README.md)**: Entry point and unified index.
-- **[Platform Snapshot](docs/PLATFORM_SNAPSHOT.md)**: Single source of truth for architecture and features.
-- **[Changelog](docs/CHANGELOG.md)**: Version history.
-- **[Developer Quickstart](docs/getting-started/DEVELOPER-QUICKSTART.md)**: Get running in minutes.
-- **[Comprehensive Platform Guide](docs/architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)**: Product vision, modules, and roadmap.
-- **[Architecture](docs/architecture/architecture.md)**: High-level system design.
-- **[Stack References](docs/architecture/STACK_REFERENCES.md)**: Libraries and best practices.
-- **[API & Backend](docs/implementation/API.md)**: Edge Functions and RPCs.
-- **[Testing](docs/testing/TESTING.md)**: Unit and E2E tests.
-- **[Runbooks](docs/operations/RUNBOOKS/)**: Operational guides (Deploy, Rollback, Incidents).
-- **[ADRs](docs/ADR/)**: Architecture Decision Records history.
-- **[Contributing](CONTRIBUTING.md)**: Guidelines for contributing.
+The browser-safe Supabase variables are:
 
----
+```dotenv
+VITE_SUPABASE_URL=https://<project-ref>.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=<publishable-or-anon-key>
+```
 
-## 🤝 Contributing
+Never add service-role keys, deployment tokens, payment secrets, or OAuth client secrets to `VITE_*` variables.
 
-We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+## Verification
 
-1. Create a branch (`feat/amazing-feature`)
-2. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-3. Push to the branch (`git push origin feat/amazing-feature`)
-4. Open a Pull Request
+Run the checks appropriate to the change:
 
----
+```bash
+npm run lint
+npm run typecheck:strict
+npm run test:ci
+npm run e2e:ci
+npm run build
+```
 
-## 📄 License
+`npm run quality:check` is the complete local quality gate. It includes linting, i18n validation, strict TypeScript, dependency checks, and baseline guards.
 
-Copyright © 2026 ИП BEEGIN. All rights reserved.
+## Documentation
+
+Start with [docs/README.md](docs/README.md). It distinguishes current operating documents from historical reports and links to architecture, development, deployment, testing, security, and roadmap material.
+
+For AI-assisted work, read [.agent/README.md](.agent/README.md) before changing code. The active agent rules and project skills live under `.agent/rules/`.
+
+## Delivery
+
+GitHub Actions runs CI for pull requests and `main`. Deploy workflows are defined in `.github/workflows/`:
+
+- `ci.yml`: quality checks, tests, editor-sheet E2E gate, and build
+- `deploy.yml`: production/staging build and Cloudflare Worker deployment
+- `deploy-cloudflare-worker.yml`: Worker-only deployment
+- `deploy-supabase.yml`: Supabase migrations and Edge Functions
+
+Required deployment secrets and recovery steps are documented in [docs/deployment/GITHUB_ACTIONS_SETUP.md](docs/deployment/GITHUB_ACTIONS_SETUP.md).
+
+## Contributing
+
+Keep changes scoped, add tests for behavioral changes, and update the applicable current documentation in the same pull request. Do not edit archived audit reports to represent the current system; create or update an active document instead.
+
+## License
+
+Copyright (c) 2026 LinkMAX. All rights reserved.

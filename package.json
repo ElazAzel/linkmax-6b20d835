@@ -44,6 +44,7 @@
     "skills:doctor": "ai-agent-skills doctor",
     "quality:baseline": "node scripts/quality-baseline-check.mjs",
     "docs:audit:freshness": "node scripts/audit-docs-freshness.mjs --scope=docs --days=60",
+    "docs:check": "node scripts/validate-doc-links.mjs",
     "predev": "node scripts/generate-sitemap.mjs",
     "prebuild": "node scripts/generate-sitemap.mjs"
   },
