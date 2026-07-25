@@ -35,6 +35,12 @@ export interface PageTheme {
   // Extended appearance v2 (all optional / backward compatible)
   fontPair?: string;
   accentColor?: string;
+  /** Independent accent for primary buttons. Falls back to accentColor. */
+  accentButton?: string;
+  /** Independent accent for links (link block icon, inline links). Falls back to accentColor. */
+  accentLink?: string;
+  /** Independent accent for active/selected UI elements (tabs, dots, focus rings). Falls back to accentColor. */
+  accentActive?: string;
   blockShape?: BlockShape;
   blockShadow?: BlockShadow;
   blockHover?: BlockHover;
