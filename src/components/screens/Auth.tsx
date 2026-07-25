@@ -29,9 +29,9 @@ import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import UserIcon from 'lucide-react/dist/esm/icons/user';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { trackAuthEvent } from '@/services/authFunnel';
 import { session } from '@/lib/storage';
 import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
@@ -313,6 +313,56 @@ export const Auth = memo(function Auth() {
     // Auth state change will trigger redirect
   };
 
+  const handleEmailAccess = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('access-email') as string;
+    const password = formData.get('access-password') as string;
+    const validation = authSchema.safeParse({ email, password });
+
+    if (!validation.success) {
+      toast.error(validation.error.errors[0].message);
+      playError();
+      setIsLoading(false);
+      return;
+    }
+
+    trackAuthEvent('auth_submit_attempt', { method: 'email_access' });
+    const signInResult = await signIn(validation.data.email, validation.data.password);
+    if (!signInResult.error) {
+      playSuccess();
+      toast.success(t('auth.welcomeBack', 'Welcome back!'));
+      trackAuthEvent('auth_success', { method: 'email_signin' });
+      setIsLoading(false);
+      return;
+    }
+
+    session.set(NEW_USER_BUILDER_SESSION_KEY, true);
+    const signUpResult = await signUp(validation.data.email, validation.data.password);
+    if (signUpResult.error) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
+      handleError(signUpResult.error, t('messages.failedToSignIn'));
+      playError();
+      setIsLoading(false);
+      return;
+    }
+
+    if (!signUpResult.data?.session) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
+      setSignupEmailSent(true);
+      playSuccess();
+      setIsLoading(false);
+      return;
+    }
+
+    playSuccess();
+    toast.success(t('messages.accountCreated'));
+    trackAuthEvent('auth_success', { method: 'email_signup', requires_email_confirm: false });
+    setIsLoading(false);
+  };
+
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -566,11 +616,11 @@ export const Auth = memo(function Auth() {
               <CardContent className="space-y-3">
                 <Button
                   className="w-full h-12 rounded-2xl shadow-glass-lg gap-2 transition-all duration-300 hover:scale-[1.01]"
-                  onClick={() => navigate(safeReturnTo || '/dashboard')}
-                  data-testid="continue-to-dashboard"
+                  onClick={() => navigate('/dashboard/settings')}
+                  data-testid="manage-login-methods"
                 >
-                  <LayoutDashboard className="h-4 w-4" />
-                  {t('auth.continueToDashboard', 'Продолжить в дашборд')}
+                  <Link2 className="h-4 w-4" />
+                  {t('settings.linkedAccounts.title', 'Способы входа')}
                 </Button>
                 <Button
                   variant="outline"
@@ -736,7 +786,55 @@ export const Auth = memo(function Auth() {
                       </div>
                     </div>
 
-                    <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as 'signin' | 'signup'); trackAuthEvent('auth_tab_switch', { tab: v }); }} className="w-full">
+                    {signupEmailSent ? (
+                      <div className="space-y-4 pt-3 text-center">
+                        <div className="h-14 w-14 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
+                          <Mail className="h-7 w-7 text-green-500" />
+                        </div>
+                        <h3 className="text-lg font-semibold">{t('auth.checkEmail', 'Check your email')}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {t('auth.signupEmailSent', 'We sent a confirmation link to your email')}
+                        </p>
+                        <Button variant="outline" className="w-full h-12 rounded-xl" onClick={() => setSignupEmailSent(false)}>
+                          {t('auth.tryAnotherEmail', 'Use another email')}
+                        </Button>
+                      </div>
+                    ) : (
+                    <form onSubmit={handleEmailAccess} className="space-y-4 pt-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="access-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
+                        <Input
+                          id="access-email"
+                          name="access-email"
+                          type="email"
+                          data-testid="access-email-input"
+                          placeholder="your@email.com"
+                          required
+                          onFocus={() => trackFieldFocus('email', 'signin')}
+                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="access-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
+                        </div>
+                        <Input
+                          id="access-password"
+                          name="access-password"
+                          type="password"
+                          data-testid="access-password-input"
+                          required
+                          onFocus={() => trackFieldFocus('password', 'signin')}
+                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                        />
+                      </div>
+                      <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg" disabled={isLoading || isOAuthLoading !== null}>
+                        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('auth.continue', 'Continue')}
+                      </Button>
+                    </form>
+                    )}
+
+                    {authMode !== 'signin' && <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as 'signin' | 'signup'); trackAuthEvent('auth_tab_switch', { tab: v }); }} className="w-full">
                       <TabsList className="grid w-full grid-cols-2 h-11 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
                         <TabsTrigger value="signup" data-testid="signup-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass text-xs sm:text-sm">{t('auth.signUp')}</TabsTrigger>
                         <TabsTrigger value="signin" data-testid="signin-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass text-xs sm:text-sm">{t('auth.signIn')}</TabsTrigger>
@@ -987,7 +1085,7 @@ export const Auth = memo(function Auth() {
                       </form>
                     )}
                   </TabsContent>
-                </Tabs>
+                </Tabs>}
                   </>
                 )}
 

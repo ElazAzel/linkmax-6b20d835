@@ -282,7 +282,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       : block.tier === 'pro'
         ? {
             icon: isLocked ? Lock : Crown,
-            label: t('pricing.pro', 'PRO'),
+            label: 'PRO',
             className: isLocked ? 'bg-muted text-muted-foreground' : 'bg-amber-500 text-white',
           }
         : null;
@@ -302,8 +302,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         data-testid={`add-block-option-${block.type}`}
         aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
         className={cn(
-          "relative flex min-h-[124px] flex-col items-center gap-3 rounded-3xl p-4 transition-all",
-          "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "relative flex min-h-[132px] flex-col items-center justify-center gap-3 rounded-2xl border border-transparent bg-card/40 p-4 transition-all",
+          "hover:border-border hover:bg-muted/50 hover:shadow-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           isLocked && "opacity-40 cursor-not-allowed"
         )}
       >
@@ -445,15 +445,16 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             side="bottom"
             hideCloseButton
             data-testid="add-block-sheet"
-            className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
+            className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[24px] outline-none flex flex-col overflow-hidden"
           >
             <div className="flex-1 overflow-y-auto">
               <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/10">
+                <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
                 <div className="flex justify-center pt-4 pb-2">
                   <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
                 </div>
 
-                <SheetHeader className="px-6 pt-2 pb-4">
+                <SheetHeader className="px-0 pt-2 pb-4">
                   <div className="flex items-center justify-between">
                     <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
                     <SheetClose asChild>
@@ -470,7 +471,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                   <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
                 </SheetHeader>
 
-                <div className="px-6 pb-5 bg-background">
+                <div className="pb-5 bg-background">
                   <div className="mb-4">
                     <FreemiumBlockLimit currentBlocks={currentBlockCount} isPremium={isPremium} />
                   </div>
@@ -486,9 +487,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     />
                   </div>
                 </div>
+                </div>
               </div>
 
-              <div className="px-5 py-5">
+              <div className="mx-auto w-full max-w-6xl px-5 py-5 sm:px-8">
               {/* Featured Presets (Expert only) */}
               {featuredPresets.length > 0 && (
                 <div className="mb-8">
@@ -500,7 +502,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                       {t('expert.featured_presets', 'Готовые решения')}
                     </h3>
                   </div>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                     {featuredPresets.map(preset => renderPresetItem(preset, true))}
                   </div>
                 </div>
@@ -514,7 +516,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                       {t('recommendations.title', 'Рекомендовано для вас')}
                     </h3>
                   </div>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                     <TooltipProvider delayDuration={300}>
                       {recommendedBlocks.map((block) => renderBlockItem(block, true))}
                     </TooltipProvider>
@@ -529,7 +531,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                       {t('editor.presets_tab', 'Готовые блоки')}
                     </h3>
                   </div>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                     {filteredPresets.map(preset => renderPresetItem(preset))}
                   </div>
                 </div>
@@ -544,7 +546,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                       </h3>
                     </div>
                   )}
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                     <TooltipProvider delayDuration={300}>
                       {otherBlocks.map((block) => renderBlockItem(block, false))}
                     </TooltipProvider>
