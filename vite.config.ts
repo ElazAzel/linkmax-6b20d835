@@ -47,7 +47,9 @@ export default defineConfig(({ mode }) => ({
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
       },
     }),
-    mcpPlugin(),
+    // The MCP bundler currently treats Windows absolute paths as npm specifiers.
+    // CI and deployment run on Linux, where it generates the Supabase function.
+    process.platform !== 'win32' && mcpPlugin(),
     visualizer({
       filename: "stats.html",
       gzipSize: true,

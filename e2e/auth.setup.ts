@@ -8,6 +8,7 @@ const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
 // Ensure we start with a clean state for authentication
 setup.use({ storageState: { cookies: [], origins: [] } });
+setup.setTimeout(120_000);
 
 setup('authenticate', async ({ page }) => {
   // Use a demo account found in seed-demo-accounts
@@ -22,15 +23,17 @@ setup('authenticate', async ({ page }) => {
   });
 
   console.log('Navigating to /auth...');
-  await page.goto('/auth', { waitUntil: 'load', timeout: 60000 });
+  await page.goto('/auth', { waitUntil: 'domcontentloaded', timeout: 60000 });
   
   // Wait for React to hydrate and page to be stable
   await page.waitForTimeout(2000);
 
-  // Wait for the auth page to load (defaults to signin)
+  // The initial auth screen is signup with the email form collapsed.
   try {
+    await page.getByTestId('expand-email-form').click({ timeout: 20_000 });
     const signinTab = page.getByTestId('signin-tab');
     await expect(signinTab).toBeVisible({ timeout: 20000 });
+    await signinTab.click();
     console.log('Signin tab is visible');
 
     // Fill signin form
@@ -42,9 +45,11 @@ setup('authenticate', async ({ page }) => {
     // Pressing Enter is often more reliable than clicking a button that might be obscured
     await passwordInput.press('Enter');
 
-    // Wait for dashboard or onboarding
-    // Increased timeout for slow redirects
-    await page.waitForURL(url => url.pathname.includes('/dashboard') || url.pathname.includes('/onboarding'), { timeout: 60000 });
+    // Successful sign-in shows a confirmation card; navigation is explicit.
+    const continueToDashboard = page.getByTestId('continue-to-dashboard');
+    await expect(continueToDashboard).toBeVisible({ timeout: 60_000 });
+    await continueToDashboard.click();
+    await page.waitForURL(url => url.pathname.includes('/dashboard') || url.pathname.includes('/onboarding'), { timeout: 60_000 });
     console.log('Successfully authenticated as', testEmail);
     
   } catch (error) {

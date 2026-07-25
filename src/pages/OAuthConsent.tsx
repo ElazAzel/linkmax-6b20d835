@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ const oauth = (supabase.auth as any).oauth as {
 };
 
 export default function OAuthConsent() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const authorizationId = params.get("authorization_id") ?? "";
   const [details, setDetails] = useState<OAuthDetails | null>(null);
@@ -31,7 +33,7 @@ export default function OAuthConsent() {
     let active = true;
     (async () => {
       if (!authorizationId) {
-        setError("Missing authorization_id");
+        setError(t('oauth.missingAuthorizationId', 'Missing authorization_id'));
         return;
       }
       const { data: sess } = await supabase.auth.getSession();
@@ -44,7 +46,7 @@ export default function OAuthConsent() {
 
       if (!oauth?.getAuthorizationDetails) {
         setError(
-          "OAuth server is not enabled on this project. Ask the workspace admin to enable managed OAuth."
+          t('oauth.serverDisabled', 'OAuth server is not enabled on this project. Ask the workspace admin to enable managed OAuth.')
         );
         return;
       }
@@ -81,67 +83,71 @@ export default function OAuthConsent() {
     const target = res.data?.redirect_url ?? res.data?.redirect_to;
     if (!target) {
       setBusy(false);
-      setError("No redirect returned by the authorization server.");
+      setError(t('oauth.missingRedirect', 'No redirect returned by the authorization server.'));
       return;
     }
     window.location.href = target;
   }
 
-  const clientName = details?.client?.name ?? "External app";
+  const clientName = details?.client?.name ?? t('oauth.externalApp', 'External app');
 
   return (
     <main className="min-h-screen flex items-center justify-center p-6 bg-background">
       <Card className="w-full max-w-md p-6 space-y-5">
         {error ? (
           <>
-            <h1 className="text-xl font-semibold">Cannot complete authorization</h1>
+            <h1 className="text-xl font-semibold">{t('oauth.cannotComplete', 'Cannot complete authorization')}</h1>
             <p className="text-sm text-muted-foreground break-words">{error}</p>
             <Button variant="outline" onClick={() => window.history.back()}>
-              Go back
+              {t('oauth.goBack', 'Go back')}
             </Button>
           </>
         ) : !details ? (
           <div className="flex items-center gap-2 text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" />
-            Loading authorization…
+            {t('oauth.loading', 'Loading authorization...')}
           </div>
         ) : (
           <>
             <div className="space-y-1">
-              <h1 className="text-xl font-semibold">Connect {clientName} to LinkMAX</h1>
+              <h1 className="text-xl font-semibold">
+                {t('oauth.connectTitle', 'Connect {{clientName}} to LinkMAX', { clientName })}
+              </h1>
               <p className="text-sm text-muted-foreground">
-                {clientName} will be able to call LinkMAX's enabled tools while you are signed in
-                {userEmail ? ` as ${userEmail}` : ""}.
+                {t(
+                  'oauth.permissionDescription',
+                  '{{clientName}} will be able to call LinkMAX\'s enabled tools while you are signed in{{userSuffix}}.',
+                  { clientName, userSuffix: userEmail ? ` ${t('oauth.as', 'as')} ${userEmail}` : '' }
+                )}
               </p>
             </div>
 
             <div className="rounded-md border p-3 text-sm space-y-1">
               <div>
-                <span className="text-muted-foreground">App: </span>
+                <span className="text-muted-foreground">{t('oauth.app', 'App')}: </span>
                 <span className="font-medium">{clientName}</span>
               </div>
               {details.client?.redirect_uris?.[0] && (
                 <div className="break-all">
-                  <span className="text-muted-foreground">Redirect: </span>
+                  <span className="text-muted-foreground">{t('oauth.redirect', 'Redirect')}: </span>
                   <span className="font-mono text-xs">{details.client.redirect_uris[0]}</span>
                 </div>
               )}
               {details.scope && (
                 <div>
-                  <span className="text-muted-foreground">Scope: </span>
+                  <span className="text-muted-foreground">{t('oauth.scope', 'Scope')}: </span>
                   <span className="font-mono text-xs">{details.scope}</span>
                 </div>
               )}
             </div>
 
             <p className="text-xs text-muted-foreground">
-              This does not bypass LinkMAX permissions or database policies — the app can only see
-              your own data.
+              {t('oauth.permissionsNote', 'This does not bypass LinkMAX permissions or database policies. The app can only see your own data.')}
             </p>
 
             <div className="flex gap-2">
               <Button className="flex-1" disabled={busy} onClick={() => decide(true)}>
-                {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Approve"}
+                {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : t('oauth.approve', 'Approve')}
               </Button>
               <Button
                 variant="outline"
@@ -149,7 +155,7 @@ export default function OAuthConsent() {
                 disabled={busy}
                 onClick={() => decide(false)}
               >
-                Cancel
+                {t('oauth.cancel', 'Cancel')}
               </Button>
             </div>
           </>
