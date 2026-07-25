@@ -99,6 +99,22 @@ export function getPublicPageCssVars(theme?: Partial<PageTheme>): CSSProperties 
     // A5: WCAG-aware foreground for anything sitting on the accent color
     vars['--lm-accent-fg'] = getContrastForeground(t.accentColor);
   }
+  // Independent accent slots (fall back to accentColor at render time via var()).
+  const btn = t.accentButton ?? t.accentColor;
+  if (btn) {
+    vars['--lm-accent-button'] = btn;
+    vars['--lm-accent-button-fg'] = getContrastForeground(btn);
+  }
+  const link = t.accentLink ?? t.accentColor;
+  if (link) {
+    vars['--lm-accent-link'] = link;
+    vars['--lm-accent-link-fg'] = getContrastForeground(link);
+  }
+  const active = t.accentActive ?? t.accentColor;
+  if (active) {
+    vars['--lm-accent-active'] = active;
+    vars['--lm-accent-active-fg'] = getContrastForeground(active);
+  }
   return vars as CSSProperties;
 }
 
