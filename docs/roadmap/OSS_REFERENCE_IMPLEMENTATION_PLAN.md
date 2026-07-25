@@ -37,12 +37,12 @@ LinkMAX already includes a block editor, templates, smart links, UTM attribution
 
 ### 2. Smart-Link Lifecycle (2 weeks)
 
-1. Extend the existing smart-link UI with start/end scheduling, click limits, and archived state.
-2. Add UTM presets and per-link attribution views, reusing the current `smart_links` and analytics contracts.
-3. Add server-side tests for inactive, expired, malformed, and unauthorized redirect requests.
-4. Preserve open-redirect protections and rate limits in the redirect edge function.
+1. Completed: start/end scheduling and click limits are stored in `smart_links` and enforced by `increment_smart_link_click`.
+2. Completed: the redirect RPC returns UTM fields, allowing the Edge Function to preserve attribution in the destination URL.
+3. Completed: public execution of the increment RPC is revoked; only the service-role Edge Function can consume a click.
+4. Next: add UTM presets, per-link attribution views, archive state, and integration tests for deployed Edge Function behavior.
 
-**Exit criterion:** every redirect is owner-managed, expiry is enforced server-side, and click totals remain attributable.
+**Current criterion:** expiry and click caps are enforced server-side, and click totals remain attributable. The full slice additionally requires deployed Edge Function integration tests.
 
 ### 3. Analytics for Decisions (3 weeks)
 

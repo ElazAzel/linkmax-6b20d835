@@ -23,6 +23,7 @@ This page is the documentation entry point. It separates operational instruction
 | CI/CD and secrets | [GitHub Actions setup](deployment/GITHUB_ACTIONS_SETUP.md) |
 | Testing | [Testing strategy](testing/TESTING.md) |
 | Page customization | [Page customization](features/PAGE_CUSTOMIZATION.md) |
+| Smart links | [Smart links](features/SMART_LINKS.md) |
 | Security | [Security baseline](security/SECURITY.md) |
 | Product direction | [Strategic plan](product/STRATEGIC_PLAN_2026.md), [execution plan](roadmap/POST_AUDIT_EXECUTION_PLAN_2026-07.md) |
 | OSS-informed delivery | [Reference implementation plan](roadmap/OSS_REFERENCE_IMPLEMENTATION_PLAN.md) |

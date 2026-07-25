@@ -14,7 +14,9 @@ import {
   buildSmartLinkUrl,
   createSmartLink,
   deleteSmartLink,
+  getSmartLinkAvailability,
   isValidSmartLinkSlug,
+  isValidSmartLinkTargetUrl,
   listMySmartLinks,
   updateSmartLink,
   type SmartLink,
@@ -37,6 +39,9 @@ export default function SmartLinks() {
     utm_source: '',
     utm_medium: '',
     utm_campaign: '',
+    active_from: '',
+    expires_at: '',
+    max_clicks: '',
   });
 
   useEffect(() => {
@@ -71,10 +76,8 @@ export default function SmartLinks() {
       toast.error('Slug: a-z, 0-9, "-", "_", 2–64 символа');
       return;
     }
-    try {
-      new URL(form.target_url);
-    } catch {
-      toast.error('Некорректный target URL');
+    if (!isValidSmartLinkTargetUrl(form.target_url)) {
+      toast.error('Target URL должен начинаться с http:// или https://');
       return;
     }
     setSaving(true);
@@ -86,9 +89,12 @@ export default function SmartLinks() {
         utm_source: form.utm_source.trim() || null,
         utm_medium: form.utm_medium.trim() || null,
         utm_campaign: form.utm_campaign.trim() || null,
+        active_from: form.active_from ? new Date(form.active_from).toISOString() : null,
+        expires_at: form.expires_at ? new Date(form.expires_at).toISOString() : null,
+        max_clicks: form.max_clicks ? Number(form.max_clicks) : null,
       });
       setItems((prev) => [created, ...prev]);
-      setForm({ slug: '', target_url: '', campaign: '', utm_source: '', utm_medium: '', utm_campaign: '' });
+      setForm({ slug: '', target_url: '', campaign: '', utm_source: '', utm_medium: '', utm_campaign: '', active_from: '', expires_at: '', max_clicks: '' });
       toast.success('SmartLink создан');
     } catch (err) {
       toast.error((err as Error)?.message ?? 'Ошибка создания');
@@ -159,6 +165,18 @@ export default function SmartLinks() {
               <Label htmlFor="campaign">Campaign name</Label>
               <Input id="campaign" value={form.campaign} onChange={(e) => setForm((f) => ({ ...f, campaign: e.target.value }))} placeholder="Осенний оффер" />
             </div>
+            <div>
+              <Label htmlFor="active_from">Начать показ</Label>
+              <Input id="active_from" type="datetime-local" value={form.active_from} onChange={(e) => setForm((f) => ({ ...f, active_from: e.target.value }))} />
+            </div>
+            <div>
+              <Label htmlFor="expires_at">Завершить показ</Label>
+              <Input id="expires_at" type="datetime-local" min={form.active_from || undefined} value={form.expires_at} onChange={(e) => setForm((f) => ({ ...f, expires_at: e.target.value }))} />
+            </div>
+            <div>
+              <Label htmlFor="max_clicks">Лимит переходов</Label>
+              <Input id="max_clicks" type="number" min="1" max="10000000" value={form.max_clicks} onChange={(e) => setForm((f) => ({ ...f, max_clicks: e.target.value }))} placeholder="Без лимита" />
+            </div>
             <div className="sm:col-span-2 flex justify-end">
               <Button type="submit" disabled={saving}>
                 {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
@@ -178,16 +196,25 @@ export default function SmartLinks() {
             <div className="space-y-2">
               {items.map((row) => {
                 const publicUrl = buildSmartLinkUrl(row.slug, origin);
+                const availability = getSmartLinkAvailability(row);
+                const statusLabel = {
+                  active: 'активна',
+                  inactive: 'отключена',
+                  scheduled: 'ожидает запуска',
+                  expired: 'срок завершён',
+                  limit_reached: 'лимит исчерпан',
+                }[availability];
                 return (
                   <Card key={row.id} className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <code className="text-sm font-medium truncate">/s/{row.slug}</code>
-                        {!row.is_active && <span className="text-xs text-muted-foreground">(отключён)</span>}
+                        <span className="text-xs text-muted-foreground">({statusLabel})</span>
                       </div>
                       <p className="text-xs text-muted-foreground truncate mt-1">→ {row.target_url}</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {row.click_count} кликов · {row.conversion_count} конверсий
+                        {row.max_clicks ? ` · лимит ${row.max_clicks}` : ''}
                       </p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
