@@ -329,13 +329,58 @@ export const ThemePanel = memo(function ThemePanel({
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label className="text-xs text-muted-foreground">{t('themes.accentColor', 'Акцентный цвет')}</Label>
-              <div className="flex gap-2 items-center">
-                <Input type="color" value={currentTheme.accentColor ?? '#ff5701'} onChange={(e) => requirePremium(true, () => setBlockField('accentColor', e.target.value))} className="w-14 h-10 p-1 cursor-pointer" disabled={!isPremium} />
-                <Input type="text" value={currentTheme.accentColor ?? ''} onChange={(e) => requirePremium(true, () => setBlockField('accentColor', e.target.value))} placeholder={isPremium ? '#ff5701' : t('themes.premiumOnly', 'Только Premium')} className="flex-1 bg-background/50" disabled={!isPremium} />
-                {!isPremium && <Badge variant="secondary" className="gap-1"><Crown className="h-3 w-3" />PRO</Badge>}
+              <div className="grid grid-cols-8 gap-2">
+                {ACCENT_SWATCHES.map((swatch) => {
+                  const isActive = (currentTheme.accentColor ?? '').toLowerCase() === swatch.toLowerCase();
+                  return (
+                    <button
+                      key={swatch}
+                      type="button"
+                      onClick={() => setBlockField('accentColor', swatch)}
+                      className={cn(
+                        'h-8 w-8 rounded-full border transition relative',
+                        isActive ? 'ring-2 ring-offset-2 ring-primary ring-offset-background scale-110' : 'border-border/40 hover:scale-105'
+                      )}
+                      style={{ backgroundColor: swatch }}
+                      title={swatch}
+                      aria-label={swatch}
+                    >
+                      {isActive && <Check className="absolute inset-0 m-auto h-3.5 w-3.5 text-white drop-shadow" />}
+                    </button>
+                  );
+                })}
               </div>
+              <div className="flex gap-2 items-center">
+                <Input
+                  type="color"
+                  value={currentTheme.accentColor ?? '#ff5701'}
+                  onChange={(e) => setBlockField('accentColor', e.target.value)}
+                  className="w-14 h-10 p-1 cursor-pointer"
+                />
+                <Input
+                  type="text"
+                  value={currentTheme.accentColor ?? ''}
+                  onChange={(e) => setBlockField('accentColor', e.target.value)}
+                  placeholder="#ff5701"
+                  className="flex-1 bg-background/50"
+                />
+                {currentTheme.accentColor && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-10 px-2 text-xs"
+                    onClick={() => setBlockField('accentColor', undefined)}
+                    title={t('themes.resetAccent', 'Сбросить акцент')}
+                  >
+                    {t('themes.reset', 'Сброс')}
+                  </Button>
+                )}
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                {t('themes.accentColorHint', 'Применяется к кнопкам, ссылкам и активным элементам публичной страницы.')}
+              </p>
             </div>
 
             <div className="space-y-2">
