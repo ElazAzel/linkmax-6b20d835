@@ -64,7 +64,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
             ? 'text-white drop-shadow-md'
             : hasBlockStyle
               ? ''
-              : 'bg-primary text-primary-foreground'
+              : 'lm-accent-button-bg bg-primary text-primary-foreground'
         )}
         style={combinedStyle}
       >
