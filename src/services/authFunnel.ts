@@ -7,9 +7,9 @@
  * Used to identify drop-off points in the signup flow.
  */
 
-import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
 export type AuthFunnelEvent =
   | 'auth_form_view'
@@ -89,20 +89,12 @@ export async function trackAuthEvent(
         : false,
     };
 
-    // Fire-and-forget; don't block UI
-    void supabase
-      .from('analytics')
-      .insert({
-        page_id: null,
-        block_id: null,
-        event_type: `auth:${event}`,
-        metadata: enriched as Json,
-      })
-      .then(({ error }) => {
-        if (error) {
-          logger.debug('Auth funnel insert failed', { context: 'authFunnel', data: error });
-        }
-      });
+    void submitPublicAnalyticsEvent({
+      eventType: `auth:${event}`,
+      metadata: enriched as Record<string, unknown>,
+    }).catch((error) => {
+      logger.debug('Auth funnel insert failed', { context: 'authFunnel', data: error });
+    });
   } catch (err) {
     logger.debug('Auth funnel error', { context: 'authFunnel', data: err });
   }

@@ -45,6 +45,23 @@ function sanitizeMetadata(value: unknown): Record<string, unknown> {
   return sanitized && typeof sanitized === "object" && !Array.isArray(sanitized) ? sanitized as Record<string, unknown> : {};
 }
 
+function isNamespacedEvent(eventType: string) {
+  return /^(editor|auth|activation):[a-z][a-z0-9_:-]{0,79}$/.test(eventType);
+}
+
+function isAuthenticatedEditorEvent(eventType: string) {
+  return /^editor:[a-z][a-z0-9_:-]{0,79}$/.test(eventType);
+}
+
+async function hasAuthenticatedUser(supabaseUrl: string, apiKey: string, authorization: string | null) {
+  if (!authorization?.startsWith("Bearer ")) return false;
+  const authClient = createClient(supabaseUrl, apiKey, {
+    global: { headers: { Authorization: authorization } },
+  });
+  const { data: { user } } = await authClient.auth.getUser();
+  return Boolean(user);
+}
+
 async function checkRateLimit(supabase: ReturnType<typeof createClient>, ipAddress: string) {
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_SECONDS * 1000).toISOString();
   const endpoint = "track-analytics-event";
@@ -66,7 +83,8 @@ serve(async (req: Request) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    if (!supabaseUrl || !serviceRoleKey) return jsonResponse({ error: "Service misconfigured" }, 500);
+    const publishableKey = Deno.env.get("SUPABASE_ANON_KEY");
+    if (!supabaseUrl || !serviceRoleKey || !publishableKey) return jsonResponse({ error: "Service misconfigured" }, 500);
     const supabase = createClient(supabaseUrl, serviceRoleKey);
     const ipAddress = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || req.headers.get("x-real-ip") || "unknown";
     if (!await checkRateLimit(supabase, ipAddress)) return jsonResponse({ error: "Too many requests" }, 429);
@@ -74,9 +92,14 @@ serve(async (req: Request) => {
     const pageId = typeof payload.pageId === "string" ? payload.pageId : null;
     const blockId = typeof payload.blockId === "string" && UUID_RE.test(payload.blockId) ? payload.blockId : null;
     const eventType = typeof payload.eventType === "string" ? payload.eventType : "";
-    if (!ALLOWED_EVENT_TYPES.has(eventType)) return jsonResponse({ error: "Unsupported event type" }, 400);
+    if (!ALLOWED_EVENT_TYPES.has(eventType) && !isNamespacedEvent(eventType)) return jsonResponse({ error: "Unsupported event type" }, 400);
+    if (isAuthenticatedEditorEvent(eventType) && !await hasAuthenticatedUser(supabaseUrl, publishableKey, req.headers.get("authorization"))) {
+      return jsonResponse({ error: "Authentication required" }, 401);
+    }
     if (pageId && !UUID_RE.test(pageId)) return jsonResponse({ error: "Invalid page id" }, 400);
-    if (!pageId && !MARKETING_EVENT_TYPES.has(eventType)) return jsonResponse({ error: "Page id is required" }, 400);
+    if (!pageId && !MARKETING_EVENT_TYPES.has(eventType) && !eventType.startsWith("auth:") && !isAuthenticatedEditorEvent(eventType)) {
+      return jsonResponse({ error: "Page id is required" }, 400);
+    }
     if (pageId) {
       const { data: page } = await supabase.from("pages").select("id").eq("id", pageId).eq("is_published", true).maybeSingle();
       if (!page) return jsonResponse({ error: "Unknown page" }, 404);

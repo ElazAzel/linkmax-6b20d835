@@ -7,6 +7,7 @@ export interface PublicAnalyticsEvent {
 
 interface SubmitOptions {
   keepalive?: boolean;
+  requireAuthentication?: boolean;
 }
 
 const FUNCTION_NAME = 'track-analytics-event';
@@ -21,11 +22,23 @@ export async function submitPublicAnalyticsEvent(
 
   if (!baseUrl || !apiKey) return;
 
+  const headers: Record<string, string> = {
+    apikey: apiKey,
+    'Content-Type': 'application/json',
+  };
+
+  if (options.requireAuthentication) {
+    const { supabase } = await import('@/platform/supabase/client');
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) return;
+    headers.Authorization = `Bearer ${session.access_token}`;
+  }
+
   const response = await fetch(`${baseUrl}/functions/v1/${FUNCTION_NAME}`, {
     method: 'POST',
     credentials: 'omit',
     keepalive: options.keepalive,
-    headers: { apikey: apiKey, 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(event),
   });
 

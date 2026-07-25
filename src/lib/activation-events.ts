@@ -3,10 +3,9 @@
  * Activation: wizard_completed, page_published, page_shared, first_external_view
  * CRM: lead_seen, lead_replied, lead_status_changed, booking_confirmed, first_lead_reply, lead_stale_24h
  */
-import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
-import type { Json } from '@/platform/supabase/types';
 import { trackProductEventFromActivation } from '@/services/product-analytics';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
 export type ActivationEventType =
   | 'activation_checklist_step_clicked'
@@ -85,23 +84,21 @@ export async function trackActivationEvent(
   }
 
   try {
-    const { error } = await supabase
-      .from('analytics')
-      .insert([{ 
-        page_id: pageId,
-        block_id: null,
-        event_type: `activation:${eventType}`,
-        metadata: (metadata ?? {}) as Json,
-      }]);
+    await submitPublicAnalyticsEvent({
+      pageId,
+      eventType: `activation:${eventType}`,
+      metadata: metadata ?? {},
+    });
 
-    if (error) {
+    void trackProductEventFromActivation(pageId, eventType, metadata ?? {});
+    /* if (error) {
       // RLS denies inserts for unpublished pages — это ожидаемо, тихо игнорируем
       const code = (error as { code?: string }).code;
       if (code === '42501' || code === 'PGRST301' || code === '403') return;
       logger.error('Failed to track activation event', error, { context: 'activation-events' });
     } else {
       void trackProductEventFromActivation(pageId, eventType, metadata ?? {});
-    }
+    } */
   } catch (err) {
     // Fire-and-forget: never block UI for analytics
     logger.error('Activation event error', err, { context: 'activation-events' });

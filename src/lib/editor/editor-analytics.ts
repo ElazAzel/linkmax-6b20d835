@@ -2,7 +2,7 @@
  * Editor Analytics - Friction tracking for editor interactions
  * Tracks meaningful editor events to understand bottlenecks
  */
-import type { Json } from '@/platform/supabase/types';
+import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
 export type EditorAnalyticsAction =
   | 'block_added'
@@ -75,7 +75,7 @@ const DEBOUNCE_MS = 300;
 
 /**
  * Track an editor action for friction analysis.
- * In production, sends to analytics table. In dev, logs to console.
+ * In production, sends through the protected analytics ingestion endpoint.
  */
 export function trackEditorAction(
   action: EditorAnalyticsAction,
@@ -95,18 +95,10 @@ export function trackEditorAction(
       console.debug(`[editor-analytics] ${action}`, meta);
     }
 
-    // Insert into analytics table async
-    import('@/platform/supabase/client').then(({ supabase }) => {
-      supabase
-        .from('analytics')
-        .insert([{
-          event_type: `editor:${action}`,
-          metadata: meta ? (JSON.parse(JSON.stringify(meta)) as Json) : null,
-          page_id: null as unknown as string,
-          block_id: meta?.blockId ?? null,
-        }])
-        .then(() => {});
-    });
+    void submitPublicAnalyticsEvent({
+      eventType: `editor:${action}`,
+      metadata: meta ? JSON.parse(JSON.stringify(meta)) as Record<string, unknown> : {},
+    }, { requireAuthentication: true }).catch(() => undefined);
   } catch {
     // Never throw from analytics
   }
