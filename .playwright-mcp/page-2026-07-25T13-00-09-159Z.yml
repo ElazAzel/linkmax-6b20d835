@@ -1,0 +1,10 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#root"
+  - generic [ref=e3]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - region "Notifications (F8)":
+      - list
+    - region "Notifications alt+T"
+    - paragraph [ref=e9]: Загрузка...
