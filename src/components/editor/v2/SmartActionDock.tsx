@@ -17,6 +17,7 @@ import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Rocket from 'lucide-react/dist/esm/icons/rocket';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Palette from 'lucide-react/dist/esm/icons/palette';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { hapticLight, hapticSelection, hapticSuccess } from '@/platform/native/haptics';
@@ -24,6 +25,7 @@ import { hapticLight, hapticSelection, hapticSuccess } from '@/platform/native/h
 export interface SmartActionDockProps {
   onAddBlock: () => void;
   onAIImprove?: () => void;
+  onCustomize?: () => void;
   onPreview: () => void;
   onPublish: () => void;
   isPublished?: boolean;
@@ -34,6 +36,7 @@ export interface SmartActionDockProps {
 export const SmartActionDock = memo(function SmartActionDock({
   onAddBlock,
   onAIImprove,
+  onCustomize,
   onPreview,
   onPublish,
   isPublished,
@@ -82,6 +85,22 @@ export const SmartActionDock = memo(function SmartActionDock({
         </button>
 
         {/* AI Improve — only when there is content */}
+        {onCustomize && (
+          <button
+            type="button"
+            onClick={() => { hapticSelection(); onCustomize(); }}
+            aria-label={t('editor.dock.customize', 'Оформление страницы')}
+            title={t('editor.dock.customize', 'Оформление страницы')}
+            className={cn(
+              'flex items-center justify-center h-12 w-12 rounded-xl transition-colors',
+              'text-muted-foreground hover:text-foreground hover:bg-accent',
+              'active:scale-[0.95]',
+            )}
+          >
+            <Palette className="h-5 w-5" />
+          </button>
+        )}
+
         {onAIImprove && hasContent && (
           <button
             type="button"

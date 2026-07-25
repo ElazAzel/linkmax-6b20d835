@@ -31,7 +31,7 @@ import { checkPremiumStatus } from '@/services/user';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
-import { getBackgroundStyle, getPublicPageCssVars, getAppearanceRootClass } from '@/lib/appearance/style-utils';
+import { getBackgroundStyle, getPublicPageCssVars, getAppearanceRootClass, getThemeBackgroundStyle } from '@/lib/appearance/style-utils';
 import type { PageData, Block } from '@/types/page';
 import {
   Dialog,
@@ -281,6 +281,7 @@ export default function PublicPage() {
   const iconStyleClass = getIconStyleClass(pageData?.theme?.iconStyle);
   const appearanceVars = getPublicPageCssVars(pageData?.theme);
   const appearanceRootClass = getAppearanceRootClass(pageData?.theme);
+  const themeBackgroundStyle = getThemeBackgroundStyle(pageData?.theme);
 
   return (
     <AnimatePresence mode="wait">
@@ -295,8 +296,10 @@ export default function PublicPage() {
             'min-h-screen bg-background lm-typography relative',
             appearanceRootClass,
           )}
+          data-testid="public-page-root"
           style={{
             ...appearanceVars,
+            ...themeBackgroundStyle,
             color: pageData?.theme?.textColor || 'inherit',
             fontFamily: FONT_FAMILY_MAP[pageFontFamily],
           }}

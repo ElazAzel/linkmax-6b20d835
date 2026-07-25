@@ -80,6 +80,21 @@ export function getBackgroundStyle(bg?: PageBackground): {
 }
 
 /**
+ * Resolve the base page background stored by legacy themes and newer presets.
+ * A custom background is rendered in a separate layer, so this remains visible
+ * below transparent patterns and while an image is loading.
+ */
+export function getThemeBackgroundStyle(theme?: Partial<PageTheme>): CSSProperties {
+  const background = theme?.backgroundGradient || theme?.backgroundColor;
+
+  if (!background) return {};
+
+  return background.includes('gradient(')
+    ? { background }
+    : { backgroundColor: background };
+}
+
+/**
  * Compute CSS variables + font-family for the public page root.
  * These variables are consumed by public-appearance.css and blocks.
  */

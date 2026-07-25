@@ -513,6 +513,7 @@ function DashboardV2Inner() {
                   onShare={() => dashboard.sharingState.handleShare()}
                   onOpenTemplates={() => setTemplateGalleryOpen(true)}
                   onOpenAI={() => dashboard.aiState.openAIBuilder()}
+                  onOpenTheme={() => setShowTheme(true)}
                   canUndo={editorHistory.canUndo}
                   canRedo={editorHistory.canRedo}
                   onUndo={editorHistory.undo}

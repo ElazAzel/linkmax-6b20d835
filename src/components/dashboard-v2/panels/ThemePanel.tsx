@@ -128,7 +128,23 @@ export const ThemePanel = memo(function ThemePanel({
               className="text-xs h-8"
               onClick={() => {
                 const preset = THEME_PRESETS.find(p => p.id === activeThemeId) ?? THEME_PRESETS[0];
-                onThemeChange({ ...preset.theme, themePreset: preset.id });
+                onThemeChange({
+                  customBackground: undefined,
+                  accentColor: undefined,
+                  accentButton: undefined,
+                  accentLink: undefined,
+                  accentActive: undefined,
+                  blockShape: undefined,
+                  blockShadow: undefined,
+                  blockHover: undefined,
+                  divider: undefined,
+                  fontPair: undefined,
+                  iconStyle: undefined,
+                  animationStyle: undefined,
+                  backgroundGradient: undefined,
+                  ...preset.theme,
+                  themePreset: preset.id,
+                });
               }}
               title={t('themes.resetToPreset', 'Сбросить переопределения к теме')}
             >

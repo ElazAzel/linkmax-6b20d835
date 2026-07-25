@@ -120,13 +120,17 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             };
             if (bs?.backgroundColor) wrapperStyle.backgroundColor = bs.backgroundColor;
             if (bs?.backgroundGradient) wrapperStyle.backgroundImage = bs.backgroundGradient;
-            if (bs?.borderRadius) wrapperStyle.borderRadius = radiusMap[bs.borderRadius];
+            wrapperStyle.borderRadius = bs?.borderRadius
+              ? radiusMap[bs.borderRadius]
+              : 'var(--lm-block-radius, 16px)';
             if (bs?.borderWidth && bs.borderWidth !== 'none') {
               wrapperStyle.borderWidth = borderWidthMap[bs.borderWidth];
               wrapperStyle.borderStyle = 'solid';
               wrapperStyle.borderColor = bs.borderColor || 'hsl(var(--border))';
             }
-            if (bs?.shadow) wrapperStyle.boxShadow = shadowMap[bs.shadow];
+            wrapperStyle.boxShadow = bs?.shadow
+              ? shadowMap[bs.shadow]
+              : 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))';
             const hoverClass =
               bs?.hoverEffect === 'scale' ? 'hover:scale-[1.02]'
               : bs?.hoverEffect === 'lift' ? 'hover:-translate-y-1'
@@ -140,6 +144,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 key={block.id}
                 className={cn(
                   'group relative flex overflow-hidden transition-all duration-300',
+                  !isTransparent && 'block-card',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,

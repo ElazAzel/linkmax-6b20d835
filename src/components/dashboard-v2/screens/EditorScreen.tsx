@@ -26,6 +26,7 @@ import { EditorTopBar } from '@/components/editor/v2/EditorTopBar';
 import { SmartActionDock } from '@/components/editor/v2/SmartActionDock';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
+import { getAppearanceRootClass, getBackgroundStyle, getPublicPageCssVars, getThemeBackgroundStyle } from '@/lib/appearance/style-utils';
 import { storage } from '@/lib/storage';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
@@ -69,6 +70,7 @@ interface EditorScreenProps {
   onShare: () => void;
   onOpenTemplates: () => void;
   onOpenAI: () => void;
+  onOpenTheme: () => void;
   // Undo/Redo
   canUndo?: boolean;
   canRedo?: boolean;
@@ -97,6 +99,7 @@ export const EditorScreen = memo(function EditorScreen({
   onShare,
   onOpenTemplates,
   onOpenAI,
+  onOpenTheme,
   canUndo = false,
   canRedo = false,
   onUndo,
@@ -130,6 +133,11 @@ export const EditorScreen = memo(function EditorScreen({
 
   // P5: Friction recovery
   const { signal: frictionSignal, pushEvent: pushFrictionEvent, dismiss: dismissFriction, accept: acceptFriction } = useFrictionRecovery();
+  const appearanceVars = useMemo(() => getPublicPageCssVars(pageData?.theme), [pageData?.theme]);
+  const appearanceRootClass = useMemo(() => getAppearanceRootClass(pageData?.theme), [pageData?.theme]);
+  const themeBackgroundStyle = useMemo(() => getThemeBackgroundStyle(pageData?.theme), [pageData?.theme]);
+  const customBackground = pageData?.theme?.customBackground;
+  const background = useMemo(() => getBackgroundStyle(customBackground), [customBackground]);
 
   // P5: Wrapped handlers that feed friction detector
   const handleInsertBlockWithFriction = useCallback((blockType: string, position: number) => {
@@ -483,27 +491,39 @@ export const EditorScreen = memo(function EditorScreen({
       })()}
 
       {/* Grid Editor */}
-      <div className="pt-4">
-      <RenderContextProvider value="editor">
-        <Suspense fallback={<EditorCanvasSkeleton />}>
-          <GridEditor
-            blocks={pageData.blocks}
-            isPremium={isPremium}
-            currentTier={currentTier}
-            premiumTier={premiumTier}
-            gridConfig={pageData.gridConfig}
-            pageNiche={pageData.niche}
-            onInsertBlock={handleInsertBlockWithFriction}
-            onEditBlock={onEditBlock}
-            onDeleteBlock={handleDeleteBlockWithFriction}
-            onUpdateBlock={onUpdateBlock}
-            onReorderBlocks={onReorderBlocks}
-            onDuplicateBlock={onDuplicateBlock}
-            onInsertPreset={handleInsertPresetWithFriction}
-            recentlyAddedBlockId={recentlyAddedBlockId}
-          />
-        </Suspense>
-      </RenderContextProvider>
+      <div
+        className={cn('relative isolate mt-4 overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border', appearanceRootClass)}
+        style={{ ...appearanceVars, ...themeBackgroundStyle, color: pageData.theme?.textColor }}
+        data-testid="editor-appearance-preview"
+      >
+        <div
+          aria-hidden
+          className={cn('pointer-events-none absolute inset-0', background.className)}
+          style={background.style}
+        />
+        {background.overlay && <div aria-hidden className="pointer-events-none absolute inset-0" style={background.overlay} />}
+        <div className="relative z-[1]">
+          <RenderContextProvider value="editor">
+            <Suspense fallback={<EditorCanvasSkeleton />}>
+              <GridEditor
+                blocks={pageData.blocks}
+                isPremium={isPremium}
+                currentTier={currentTier}
+                premiumTier={premiumTier}
+                gridConfig={pageData.gridConfig}
+                pageNiche={pageData.niche}
+                onInsertBlock={handleInsertBlockWithFriction}
+                onEditBlock={onEditBlock}
+                onDeleteBlock={handleDeleteBlockWithFriction}
+                onUpdateBlock={onUpdateBlock}
+                onReorderBlocks={onReorderBlocks}
+                onDuplicateBlock={onDuplicateBlock}
+                onInsertPreset={handleInsertPresetWithFriction}
+                recentlyAddedBlockId={recentlyAddedBlockId}
+              />
+            </Suspense>
+          </RenderContextProvider>
+        </div>
       </div>
 
       {/* Sprint 2: Section picker — append ready-made groups of blocks */}
@@ -564,6 +584,7 @@ export const EditorScreen = memo(function EditorScreen({
       {/* Smart Action Dock — primary action surface */}
       <SmartActionDock
         onAddBlock={triggerAddBlock}
+        onCustomize={onOpenTheme}
         onAIImprove={onOpenAI}
         onPreview={onPreview}
         onPublish={onShare}

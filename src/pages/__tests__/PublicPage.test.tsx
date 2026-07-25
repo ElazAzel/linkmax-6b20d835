@@ -205,6 +205,26 @@ describe('PublicPage', () => {
             expect(screen.getByTestId('grid-blocks')).toHaveTextContent('2 blocks');
         });
 
+        it('applies the saved theme background to the public page root', async () => {
+            mockUsePublicPage.mockReturnValue({
+                data: {
+                    ...mockPageData,
+                    theme: { backgroundColor: 'linear-gradient(135deg, #111111, #333333)' },
+                },
+                isLoading: false,
+                error: null,
+            });
+            mockUsePublicPageByDomain.mockReturnValue({ data: null, isLoading: false, error: null });
+
+            await renderPublicPage('testuser');
+
+            await waitFor(() => {
+                expect(screen.getByTestId('public-page-root')).toHaveStyle({
+                    background: 'linear-gradient(135deg, #111111, #333333)',
+                });
+            });
+        });
+
         it('renders share button', async () => {
             mockUsePublicPage.mockReturnValue({
                 data: mockPageData,
