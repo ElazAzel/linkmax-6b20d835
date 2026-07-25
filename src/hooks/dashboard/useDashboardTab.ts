@@ -21,7 +21,7 @@ export function useDashboardTab() {
     if (ALL_TABS.includes(lastPart as TabId)) {
       return lastPart as TabId;
     }
-    return 'editor';
+    return 'home';
   }, [searchParams, location.pathname]);
 
   const handleTabChange = useCallback((tabId: string) => {
