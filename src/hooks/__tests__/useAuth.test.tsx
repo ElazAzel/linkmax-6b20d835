@@ -4,6 +4,7 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from '@/hooks/user/useAuth';
 
 // Mock supabase
@@ -13,6 +14,7 @@ const mockSignInWithOAuth = vi.fn();
 const mockSignOut = vi.fn();
 const mockGetSession = vi.fn();
 const mockOnAuthStateChange = vi.fn();
+const mockSetSession = vi.fn();
 
 vi.mock('@/platform/supabase/client', () => ({
     supabase: {
@@ -21,6 +23,7 @@ vi.mock('@/platform/supabase/client', () => ({
             signInWithPassword: (...args: unknown[]) => mockSignInWithPassword(...args),
             signInWithOAuth: (...args: unknown[]) => mockSignInWithOAuth(...args),
             signOut: () => mockSignOut(),
+            setSession: (...args: unknown[]) => mockSetSession(...args),
             getSession: () => mockGetSession(),
             onAuthStateChange: (callback: (event: string, session: unknown) => void) => {
                 mockOnAuthStateChange(callback);
@@ -55,12 +58,15 @@ vi.mock('@/lib/posthog', () => ({
 }));
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <AuthProvider>{children}</AuthProvider>
+    <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+        <AuthProvider>{children}</AuthProvider>
+    </QueryClientProvider>
 );
 
 describe('useAuth', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        window.localStorage.clear();
         mockGetSession.mockResolvedValue({ data: { session: null }, error: null });
     });
 
@@ -275,6 +281,45 @@ describe('useAuth', () => {
             });
 
             expect(mockSignOut).toHaveBeenCalled();
+        });
+    });
+
+    describe('device account switching', () => {
+        it('restores a saved session and makes it active', async () => {
+            const savedSession = {
+                user: { id: 'saved-user', email: 'saved@example.com' },
+                access_token: 'saved-access-token',
+                refresh_token: 'saved-refresh-token',
+                expires_at: 1_800_000_000,
+            };
+            const activeSession = {
+                user: { id: 'active-user', email: 'active@example.com' },
+                access_token: 'active-access-token',
+                refresh_token: 'active-refresh-token',
+                expires_at: 1_800_000_000,
+            };
+            mockGetSession.mockResolvedValueOnce({ data: { session: activeSession }, error: null });
+            mockSetSession.mockResolvedValueOnce({ data: { session: savedSession }, error: null });
+            window.localStorage.setItem('inkmax_v2_device_auth_accounts', JSON.stringify([{
+                userId: savedSession.user.id,
+                email: savedSession.user.email,
+                accessToken: savedSession.access_token,
+                refreshToken: savedSession.refresh_token,
+                expiresAt: savedSession.expires_at,
+                updatedAt: new Date().toISOString(),
+            }]));
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+            await waitFor(() => expect(result.current.loading).toBe(false));
+
+            await act(async () => {
+                await expect(result.current.switchDeviceAccount('saved-user')).resolves.toEqual({ error: null });
+            });
+
+            expect(mockSetSession).toHaveBeenCalledWith({
+                access_token: savedSession.access_token,
+                refresh_token: savedSession.refresh_token,
+            });
         });
     });
 

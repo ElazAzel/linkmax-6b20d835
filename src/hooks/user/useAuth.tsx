@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
+import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { storage } from '@/lib/storage';
 import { logger } from '@/lib/utils/logger';
@@ -32,6 +33,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -221,6 +223,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { error };
     }
 
+    // Some legacy query keys are not account-scoped. Clear them before rendering another account.
+    queryClient.clear();
     if (data.session) setDeviceAccounts(rememberDeviceSession(data.session));
     return { error: null };
   };
@@ -232,7 +236,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async (options?: { localOnly?: boolean; forgetCurrent?: boolean }) => {
     const currentUserId = user?.id;
     await supabase.auth.signOut(options?.localOnly ? { scope: 'local' } : undefined);
-    if (options?.forgetCurrent && currentUserId) {
+    queryClient.clear();
+    const forgetCurrent = options?.forgetCurrent ?? !options?.localOnly;
+    if (forgetCurrent && currentUserId) {
       setDeviceAccounts(forgetDeviceAccount(currentUserId));
     } else {
       setDeviceAccounts(getDeviceAccounts());

@@ -8,6 +8,16 @@ import X from 'lucide-react/dist/esm/icons/x';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { useAuth } from '@/hooks/user/useAuth';
 import { cn } from '@/lib/utils/utils';
 
@@ -25,6 +35,7 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
   const { t } = useTranslation();
   const { user, deviceAccounts, switchDeviceAccount, removeDeviceAccount, signOut } = useAuth();
   const [switchingUserId, setSwitchingUserId] = useState<string | null>(null);
+  const [accountToRemove, setAccountToRemove] = useState<string | null>(null);
 
   const otherAccounts = deviceAccounts.filter((account) => account.userId !== user?.id);
   const hasAccounts = deviceAccounts.length > 0;
@@ -44,9 +55,11 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
   };
 
   const handleAddAccount = async () => {
-    await signOut({ localOnly: true });
+    if (user) await signOut({ localOnly: true });
     onAddAccount?.();
   };
+
+  const accountPendingRemoval = deviceAccounts.find((account) => account.userId === accountToRemove);
 
   if (!hasAccounts && !onAddAccount) return null;
 
@@ -77,9 +90,10 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
                 </Avatar>
                 <button
                   type="button"
-                  className="min-w-0 flex-1 text-left"
+                  className="min-h-11 min-w-0 flex-1 rounded-lg py-1 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default"
                   onClick={() => handleSwitch(account.userId)}
                   disabled={isCurrent || isSwitching}
+                  aria-current={isCurrent ? 'true' : undefined}
                 >
                   <div className="truncate text-sm font-semibold">
                     {account.displayName || account.email}
@@ -107,7 +121,7 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
                     size="icon"
                     className="h-8 w-8 text-muted-foreground hover:text-destructive"
                     aria-label={t('auth.removeSavedAccount', 'Убрать аккаунт из списка')}
-                    onClick={() => removeDeviceAccount(account.userId)}
+                    onClick={() => setAccountToRemove(account.userId)}
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -128,6 +142,29 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
           </Button>
         </div>
       )}
+
+      <AlertDialog open={Boolean(accountPendingRemoval)} onOpenChange={(open) => !open && setAccountToRemove(null)}>
+        <AlertDialogContent className="max-w-sm rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('auth.removeSavedAccountTitle', 'Remove this account from the device?')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('auth.removeSavedAccountDescription', 'The account will remain available, but signing in again will require authentication.')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (accountPendingRemoval) removeDeviceAccount(accountPendingRemoval.userId);
+                setAccountToRemove(null);
+              }}
+            >
+              {t('auth.removeSavedAccount', 'Remove account')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -30,7 +30,6 @@ import { DeviceAccountSwitcher } from '@/components/auth/DeviceAccountSwitcher';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import UserIcon from 'lucide-react/dist/esm/icons/user';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { trackAuthEvent } from '@/services/authFunnel';
@@ -80,7 +79,7 @@ export const Auth = memo(function Auth() {
     'auth.seo.description',
     'Access your LinkMAX dashboard to build and publish your link in bio page.'
   );
-  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, signOut } = useAuth();
+  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram } = useAuth();
   const { handleError } = useAppError();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
@@ -219,13 +218,6 @@ export const Auth = memo(function Auth() {
       }
     }
   }, [user, navigate, authMode, safeReturnTo]);
-
-  const handleSignOutAndStay = async () => {
-    trackAuthEvent('auth_tab_switch', { tab: 'signout' });
-    await signOut({ localOnly: true });
-    setShowEmailForm(true);
-    toast.success(t('auth.signedOut', 'Signed out'));
-  };
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -624,15 +616,6 @@ export const Auth = memo(function Auth() {
                   <Link2 className="h-4 w-4" />
                   {t('settings.linkedAccounts.title')}
                 </Button>
-                <Button
-                  variant="outline"
-                  className="w-full h-12 rounded-2xl gap-2"
-                  onClick={handleSignOutAndStay}
-                  data-testid="signout-switch-account"
-                >
-                  <LogOut className="h-4 w-4" />
-                  {t('auth.useAnotherAccount', 'Войти под другим аккаунтом')}
-                </Button>
                 <DeviceAccountSwitcher
                   compact
                   onAddAccount={() => {
@@ -742,6 +725,14 @@ export const Auth = memo(function Auth() {
                 )}
               </CardHeader>
               <CardContent className="space-y-4">
+                <DeviceAccountSwitcher
+                  compact
+                  onAddAccount={() => {
+                    setShowEmailForm(true);
+                    setActiveTab('signin');
+                    trackAuthEvent('auth_expand_email');
+                  }}
+                />
                 {/* PRIMARY: Google OAuth — biggest, fastest path */}
                 <Button
                   type="button"
