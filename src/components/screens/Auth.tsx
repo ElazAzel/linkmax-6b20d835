@@ -817,6 +817,13 @@ export const Auth = memo(function Auth() {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <Label htmlFor="access-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
+                          <button
+                            type="button"
+                            onClick={() => { setAuthMode('reset'); setActiveTab('signin'); }}
+                            className="text-xs text-primary hover:underline"
+                          >
+                            {t('auth.forgotPassword', 'Забыли пароль?')}
+                          </button>
                         </div>
                         <Input
                           id="access-password"
