@@ -17,37 +17,69 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { targetUserId, type } = await req.json() as NotificationPayload;
-
-    console.log(`Sending friend notification: ${type} to user ${targetUserId}`);
-
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
-
-    // Get sender's profile
     const authHeader = req.headers.get('Authorization');
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader || '' } } }
-    );
-
-    const { data: { user: sender } } = await supabaseClient.auth.getUser();
-    
-    let senderName = 'Кто-то';
-    if (sender) {
-      const { data: senderProfile } = await supabaseAdmin
-        .from('user_profiles')
-        .select('display_name, username')
-        .eq('id', sender.id)
-        .maybeSingle();
-      
-      senderName = senderProfile?.display_name || senderProfile?.username || 'Кто-то';
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    // Get target user's profile
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+    const userClient = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claims, error: claimsErr } = await userClient.auth.getClaims(token);
+    if (claimsErr || !claims?.claims?.sub) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    const callerId = claims.claims.sub as string;
+
+    const { targetUserId, type } = await req.json() as NotificationPayload;
+    if (!targetUserId || !type || callerId === targetUserId) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'invalid_request' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabaseAdmin = createClient(supabaseUrl, serviceKey);
+
+    // For a 'request': caller must be requester (user_id) with target as friend_id.
+    // For an 'accepted': caller must be the acceptor (friend_id) with target as user_id.
+    const userId = type === 'request' ? callerId : targetUserId;
+    const friendId = type === 'request' ? targetUserId : callerId;
+    const requiredStatus = type === 'request' ? 'pending' : 'accepted';
+
+    const { data: friendship } = await supabaseAdmin
+      .from('friendships')
+      .select('id, status')
+      .eq('user_id', userId)
+      .eq('friend_id', friendId)
+      .maybeSingle();
+
+    if (!friendship || friendship.status !== requiredStatus) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'no_matching_friendship' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Derive sender name from caller's own profile
+    const { data: senderProfile } = await supabaseAdmin
+      .from('user_profiles')
+      .select('display_name, username')
+      .eq('id', callerId)
+      .maybeSingle();
+    const senderName = senderProfile?.display_name || senderProfile?.username || 'Кто-то';
+
     const { data: profile, error: profileError } = await supabaseAdmin
       .from('user_profiles')
       .select('telegram_chat_id, telegram_notifications_enabled')
@@ -55,7 +87,6 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (profileError) {
-      console.error('Error fetching profile:', profileError);
       return new Response(
         JSON.stringify({ error: 'Failed to fetch user profile' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -63,14 +94,12 @@ Deno.serve(async (req) => {
     }
 
     if (!profile?.telegram_notifications_enabled || !profile?.telegram_chat_id) {
-      console.log('User has Telegram notifications disabled or no chat_id');
       return new Response(
         JSON.stringify({ success: true, sent: false, reason: 'notifications_disabled' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Build message
     let message = '';
     switch (type) {
       case 'request':
@@ -81,9 +110,8 @@ Deno.serve(async (req) => {
         break;
     }
 
-    // Send Telegram notification
     if (!isConfigured()) {
-      return new Response(JSON.stringify({ error: "Telegram not configured" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Telegram not configured' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     try {
@@ -96,17 +124,14 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log('Friend notification sent successfully');
     return new Response(
       JSON.stringify({ success: true, sent: true }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-
   } catch (error: unknown) {
     console.error('Error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
+      JSON.stringify({ success: false, error: 'server_error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
