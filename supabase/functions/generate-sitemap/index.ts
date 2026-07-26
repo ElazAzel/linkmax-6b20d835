@@ -213,9 +213,8 @@ function buildProfileSchemaGraph(
     mainEntity['areaServed'] = page.city;
   }
 
-  // Contact
-  if (page.contact_email) mainEntity['email'] = page.contact_email;
-  if (page.contact_phone) mainEntity['telephone'] = page.contact_phone;
+  // Contact fields (email/phone) intentionally omitted from SSR JSON-LD to avoid PII scraping.
+
 
   // Role
   if (entityType === 'Person') {
