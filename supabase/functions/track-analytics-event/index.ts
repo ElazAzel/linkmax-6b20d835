@@ -6,6 +6,8 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Max-Age": "86400",
+  "Vary": "Origin, Access-Control-Request-Headers",
 };
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const PAGE_EVENT_TYPES = new Set(["view", "click", "share", "session_end", "heatmap_clicks", "heatmap_scroll", "heatmap_rage_clicks"]);
@@ -77,7 +79,7 @@ async function checkRateLimit(supabase: ReturnType<typeof createClient>, ipAddre
 }
 
 serve(async (req: Request) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: { ...corsHeaders, "Content-Length": "0" } });
   if (req.method !== "POST") return jsonResponse({ error: "Method not allowed" }, 405);
   if (Number(req.headers.get("content-length") || 0) > MAX_BODY_BYTES) return jsonResponse({ error: "Payload too large" }, 413);
   try {

@@ -11,6 +11,9 @@ interface SubmitOptions {
 }
 
 const FUNCTION_NAME = 'track-analytics-event';
+const FAILURE_COOLDOWN_MS = 5 * 60 * 1000;
+
+let disabledUntil = 0;
 
 /** Sends browser analytics through the server-side validation boundary. */
 export async function submitPublicAnalyticsEvent(
@@ -21,6 +24,7 @@ export async function submitPublicAnalyticsEvent(
   const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
   if (!baseUrl || !apiKey) return;
+  if (Date.now() < disabledUntil) return;
 
   const headers: Record<string, string> = {
     apikey: apiKey,
@@ -34,15 +38,24 @@ export async function submitPublicAnalyticsEvent(
     headers.Authorization = `Bearer ${session.access_token}`;
   }
 
-  const response = await fetch(`${baseUrl}/functions/v1/${FUNCTION_NAME}`, {
-    method: 'POST',
-    credentials: 'omit',
-    keepalive: options.keepalive,
-    headers,
-    body: JSON.stringify(event),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${baseUrl}/functions/v1/${FUNCTION_NAME}`, {
+      method: 'POST',
+      credentials: 'omit',
+      keepalive: options.keepalive,
+      headers,
+      body: JSON.stringify(event),
+    });
+  } catch (error) {
+    disabledUntil = Date.now() + FAILURE_COOLDOWN_MS;
+    throw error;
+  }
 
   if (!response.ok) {
+    if (response.status === 404 || response.status === 503) {
+      disabledUntil = Date.now() + FAILURE_COOLDOWN_MS;
+    }
     throw new Error(`Analytics ingestion failed with status ${response.status}`);
   }
 }

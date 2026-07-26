@@ -17,12 +17,20 @@ tmp/
 output/
 coverage/
 .codex-artifacts/
+scratch/
 
 # Temporary lint/report artifacts
 lint_errors*.txt
 lint_results*.json
 lint_src_results*.json
 missing.txt
+stats.html
+auth-unified.png
+customization-home.png
+cleanup.js
+cleanup_locales.py
+debug_json.js
+refactor_locales.js
 
 # Environment variables - NEVER commit these!
 .env

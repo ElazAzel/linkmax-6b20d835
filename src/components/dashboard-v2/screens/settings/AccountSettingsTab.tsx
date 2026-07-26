@@ -33,6 +33,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { TelegramVerification } from '@/components/auth/TelegramVerification';
+import { DeviceAccountSwitcher } from '@/components/auth/DeviceAccountSwitcher';
 import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSection';
 import { cn } from '@/lib/utils/utils';
@@ -386,6 +387,14 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Linked Accounts (Google / Apple) */}
             <LinkedAccountsSection userEmail={displayName} />
+
+            {/* Device Accounts */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    {t('dashboard.accountSettings.deviceAccounts', 'Device Accounts')}
+                </h3>
+                <DeviceAccountSwitcher onAddAccount={() => navigate('/auth?method=email&mode=signin')} />
+            </div>
 
             {/* Security */}
             <div className="space-y-2">

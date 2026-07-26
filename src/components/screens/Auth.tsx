@@ -26,6 +26,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
+import { DeviceAccountSwitcher } from '@/components/auth/DeviceAccountSwitcher';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
@@ -221,7 +222,8 @@ export const Auth = memo(function Auth() {
 
   const handleSignOutAndStay = async () => {
     trackAuthEvent('auth_tab_switch', { tab: 'signout' });
-    await signOut();
+    await signOut({ localOnly: true });
+    setShowEmailForm(true);
     toast.success(t('auth.signedOut', 'Signed out'));
   };
 
@@ -631,9 +633,13 @@ export const Auth = memo(function Auth() {
                   <LogOut className="h-4 w-4" />
                   {t('auth.useAnotherAccount', 'Войти под другим аккаунтом')}
                 </Button>
-                <p className="text-xs text-muted-foreground text-center pt-1">
-                  {t('auth.alreadySignedInHint', 'Можно сменить аккаунт — текущая сессия будет завершена.')}
-                </p>
+                <DeviceAccountSwitcher
+                  compact
+                  onAddAccount={() => {
+                    setShowEmailForm(true);
+                    setActiveTab('signin');
+                  }}
+                />
               </CardContent>
             </Card>
           ) : authMode === 'update-password' ? (

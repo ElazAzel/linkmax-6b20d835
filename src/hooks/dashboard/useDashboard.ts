@@ -40,7 +40,7 @@ type UserProfilesLastSeenClient = {
 export function useDashboard(options?: UseDashboardOptions) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const sounds = useSoundEffects();
   const haptics = useHapticFeedback();
 
@@ -181,10 +181,9 @@ export function useDashboard(options?: UseDashboardOptions) {
 
   // Handle sign out
   const handleSignOut = useCallback(async () => {
-    const { supabase } = await import('@/platform/supabase/client');
-    await supabase.auth.signOut();
-    navigate('/');
-  }, [navigate]);
+    await signOut({ localOnly: true });
+    navigate('/auth');
+  }, [navigate, signOut]);
 
   // Current tier string (using new 4-tier model)
   const currentTier = isPremium ? (tier || 'pro') : 'identity';

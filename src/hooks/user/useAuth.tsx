@@ -7,17 +7,26 @@ import { posthog } from '@/lib/posthog';
 import { NEW_USER_BUILDER_ROUTE } from '@/lib/onboarding/routes';
 import { buildAuthCallbackRedirect } from '@/services/auth-redirects';
 import type { TelegramAuthPayload } from '@/types/telegram-auth';
+import {
+  forgetDeviceAccount,
+  getDeviceAccounts,
+  rememberDeviceSession,
+  type DeviceAccount,
+} from '@/lib/auth/device-accounts';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  deviceAccounts: DeviceAccount[];
   signUp: (email: string, password: string) => Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }>;
   signIn: (email: string, password: string) => Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }>;
   signInWithGoogle: (returnTo?: string) => Promise<{ error: Error | null }>;
   signInWithApple: (returnTo?: string) => Promise<{ error: Error | null }>;
   signInWithTelegram: (telegramData: TelegramAuthPayload) => Promise<{ error: Error | null }>;
-  signOut: () => Promise<void>;
+  switchDeviceAccount: (userId: string) => Promise<{ error: Error | null }>;
+  removeDeviceAccount: (userId: string) => void;
+  signOut: (options?: { localOnly?: boolean; forgetCurrent?: boolean }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deviceAccounts, setDeviceAccounts] = useState<DeviceAccount[]>(() => getDeviceAccounts());
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -59,6 +69,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         setSession(session);
         setUser(session?.user ?? null);
+        if (session?.user) {
+          setDeviceAccounts(rememberDeviceSession(session));
+        }
         setLoading(false);
 
         // Analytics identification
@@ -104,6 +117,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) {
+        setDeviceAccounts(rememberDeviceSession(session));
+      } else {
+        setDeviceAccounts(getDeviceAccounts());
+      }
       setLoading(false);
     });
 
@@ -121,6 +139,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
     });
 
+    if (data?.session) setDeviceAccounts(rememberDeviceSession(data.session));
     return { data, error };
   };
 
@@ -130,6 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
     });
 
+    if (data?.session) setDeviceAccounts(rememberDeviceSession(data.session));
     return { data, error };
   };
 
@@ -173,6 +193,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         if (setSessionError) throw setSessionError;
+        const { data: currentSession } = await supabase.auth.getSession();
+        if (currentSession.session) {
+          setDeviceAccounts(rememberDeviceSession(currentSession.session));
+        }
       }
 
       return { error: null };
@@ -183,12 +207,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const switchDeviceAccount = async (userId: string) => {
+    const account = getDeviceAccounts().find((item) => item.userId === userId);
+    if (!account) return { error: new Error('Account is not saved on this device') };
+
+    const { data, error } = await supabase.auth.setSession({
+      access_token: account.accessToken,
+      refresh_token: account.refreshToken,
+    });
+
+    if (error) {
+      setDeviceAccounts(forgetDeviceAccount(userId));
+      return { error };
+    }
+
+    if (data.session) setDeviceAccounts(rememberDeviceSession(data.session));
+    return { error: null };
+  };
+
+  const removeDeviceAccount = (userId: string) => {
+    setDeviceAccounts(forgetDeviceAccount(userId));
+  };
+
+  const signOut = async (options?: { localOnly?: boolean; forgetCurrent?: boolean }) => {
+    const currentUserId = user?.id;
+    await supabase.auth.signOut(options?.localOnly ? { scope: 'local' } : undefined);
+    if (options?.forgetCurrent && currentUserId) {
+      setDeviceAccounts(forgetDeviceAccount(currentUserId));
+    } else {
+      setDeviceAccounts(getDeviceAccounts());
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, deviceAccounts, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, switchDeviceAccount, removeDeviceAccount, signOut }}>
       {children}
     </AuthContext.Provider>
   );
