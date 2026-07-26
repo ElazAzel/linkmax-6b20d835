@@ -461,18 +461,23 @@ const handler = async (req: Request): Promise<Response> => {
       baseUrl
     );
 
-    // Send email via Resend
-    // NOTE: Using verified domain @lnkmx.my
+    // Send email via Resend. Domain verification may be pending — degrade
+    // gracefully so that event registration does not fail when the sender
+    // domain is not yet verified in Resend.
+    const fromAddress = Deno.env.get("RESEND_FROM_ADDRESS") || "LNKMX Events <admin@lnkmx.my>";
     const { data: emailResult, error: emailError } = await resend.emails.send({
-      from: "LNKMX Events <admin@lnkmx.my>",
+      from: fromAddress,
       to: [regData.attendee_email],
       subject: `🎫 ${t.subject} — ${eventTitle}`,
       html: emailHTML,
     });
 
     if (emailError) {
-      console.error("Resend error:", emailError);
-      throw new Error(`Failed to send email: ${emailError.message}`);
+      console.error("Resend error (non-fatal):", emailError);
+      return new Response(
+        JSON.stringify({ success: false, warning: "email_send_failed", details: emailError.message }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
     }
 
     console.log("Email sent successfully:", emailResult?.id, "to:", regData.attendee_email);

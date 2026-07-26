@@ -245,19 +245,12 @@ serve(async (req: Request) => {
       }
     }
 
-    // 4. Send notification and create lead via send-booking-notification
+    // 4. Send notification and create lead via send-booking-notification.
+    //    Only the bookingId is passed — the receiver re-derives all fields from the DB
+    //    via service role so callers cannot spoof lead content.
     try {
       await supabase.functions.invoke('send-booking-notification', {
-        body: {
-          ownerId: pageData.user_id,
-          staffId: staffId || null,
-          clientName: sanitize(clientName, 200),
-          clientPhone: clientPhone || null,
-          clientEmail: clientEmail || null,
-          date: sanitize(slotDate, 10),
-          time: sanitize(slotTime, 5),
-          notes: sanitize(clientNotes, 500) || null
-        }
+        body: { bookingId: booking.id }
       });
     } catch (e) {
       console.error('Failed to trigger booking notification function', e);

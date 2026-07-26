@@ -9,47 +9,8 @@ const corsHeaders = {
 
 interface CollabNotificationRequest {
   targetUserId: string;
-  requesterName: string;
   message?: string;
   type: 'request' | 'accepted' | 'rejected';
-}
-
-// Send Telegram notification
-async function sendTelegramNotification(
-  chatId: string,
-  requesterName: string,
-  message: string | undefined,
-  type: 'request' | 'accepted' | 'rejected'
-): Promise<{ success: boolean; error?: string }> {
-  if (!isConfigured()) {
-    console.log("Telegram gateway not configured");
-    return { success: false, error: "Telegram not configured" };
-  }
-
-  let text: string;
-  switch (type) {
-    case 'request':
-      text = `🤝 *Запрос на коллаборацию!*\n\n👤 *От:* ${requesterName}`;
-      if (message) text += `\n💬 *Сообщение:* ${message}`;
-      text += `\n\nОткройте приложение, чтобы принять или отклонить.`;
-      break;
-    case 'accepted':
-      text = `✅ *Коллаборация принята!*\n\n👤 ${requesterName} принял(а) ваш запрос на коллаборацию.`;
-      break;
-    case 'rejected':
-      text = `❌ *Коллаборация отклонена*\n\n👤 ${requesterName} отклонил(а) ваш запрос.`;
-      break;
-  }
-
-  try {
-    await sendMessage(chatId, text, { parse_mode: "Markdown" });
-
-    console.log("Telegram collab notification sent successfully");
-    return { success: true };
-  } catch (error: any) {
-    console.error("Telegram send error:", error);
-    return { success: false, error: error.message };
-  }
 }
 
 serve(async (req) => {
@@ -58,52 +19,119 @@ serve(async (req) => {
   }
 
   try {
-    const { targetUserId, requesterName, message, type }: CollabNotificationRequest = await req.json();
-    
-    console.log(`Sending collab notification (${type}) to user ${targetUserId}`);
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    // Get notification settings from user profile
-    const { data: profile, error: profileError } = await supabase
+    const userClient = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claims, error: claimsErr } = await userClient.auth.getClaims(token);
+    if (claimsErr || !claims?.claims?.sub) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    const callerId = claims.claims.sub as string;
+
+    const { targetUserId, message, type }: CollabNotificationRequest = await req.json();
+    if (!targetUserId || !type || callerId === targetUserId) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'invalid_request' }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, serviceKey);
+
+    // Verify a matching collaboration row links caller and target
+    const requesterId = type === 'request' ? callerId : targetUserId;
+    const targetId = type === 'request' ? targetUserId : callerId;
+    const { data: collab } = await supabase
+      .from('collaborations')
+      .select('id')
+      .eq('requester_id', requesterId)
+      .eq('target_id', targetId)
+      .maybeSingle();
+
+    if (!collab) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'no_matching_collaboration' }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Derive requesterName from caller's own profile (never trust body)
+    const { data: senderProfile } = await supabase
+      .from('user_profiles')
+      .select('display_name, username')
+      .eq('id', callerId)
+      .maybeSingle();
+    const requesterName = senderProfile?.display_name || senderProfile?.username || 'Пользователь';
+
+    const { data: profile } = await supabase
       .from('user_profiles')
       .select('telegram_notifications_enabled, telegram_chat_id')
       .eq('id', targetUserId)
       .maybeSingle();
 
-    if (profileError) {
-      console.error('Could not fetch user profile:', profileError);
-      return new Response(
-        JSON.stringify({ success: false, error: 'Profile not found' }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
     if (!profile?.telegram_notifications_enabled || !profile?.telegram_chat_id) {
-      console.log('Telegram notifications not enabled for user');
       return new Response(
-        JSON.stringify({ success: true, skipped: true, reason: 'Telegram not enabled' }),
+        JSON.stringify({ success: true, skipped: true }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const result = await sendTelegramNotification(
-      profile.telegram_chat_id,
-      requesterName,
-      message,
-      type
-    );
+    if (!isConfigured()) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'telegram_not_configured' }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    let text: string;
+    switch (type) {
+      case 'request':
+        text = `🤝 *Запрос на коллаборацию!*\n\n👤 *От:* ${requesterName}`;
+        if (message) text += `\n💬 *Сообщение:* ${String(message).slice(0, 500)}`;
+        text += `\n\nОткройте приложение, чтобы принять или отклонить.`;
+        break;
+      case 'accepted':
+        text = `✅ *Коллаборация принята!*\n\n👤 ${requesterName} принял(а) ваш запрос на коллаборацию.`;
+        break;
+      case 'rejected':
+        text = `❌ *Коллаборация отклонена*\n\n👤 ${requesterName} отклонил(а) ваш запрос.`;
+        break;
+    }
+
+    try {
+      await sendMessage(profile.telegram_chat_id, text, { parse_mode: "Markdown" });
+    } catch (error: any) {
+      console.error("Telegram send error:", error);
+      return new Response(
+        JSON.stringify({ success: false, error: error.message }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     return new Response(
-      JSON.stringify({ success: result.success, error: result.error }),
+      JSON.stringify({ success: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: any) {
     console.error("Error sending collab notification:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: 'server_error' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

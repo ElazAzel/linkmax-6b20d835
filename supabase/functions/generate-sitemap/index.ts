@@ -102,9 +102,8 @@ interface PageData {
   country_code: string | null;
   profession: string | null;
   entity_type: string | null;
-  contact_email: string | null;
-  contact_phone: string | null;
-  contact_whatsapp: string | null;
+  // Contact fields intentionally NOT selected for SSR — avoids leaking owner PII to bots/scrapers.
+  // Humans see contacts in the interactive client-rendered page.
   quality_score: number | null;
   is_indexable: boolean | null;
   service_slugs?: Record<string, { slug: string; state: string; title: string }> | null;
@@ -214,9 +213,8 @@ function buildProfileSchemaGraph(
     mainEntity['areaServed'] = page.city;
   }
 
-  // Contact
-  if (page.contact_email) mainEntity['email'] = page.contact_email;
-  if (page.contact_phone) mainEntity['telephone'] = page.contact_phone;
+  // Contact fields (email/phone) intentionally omitted from SSR JSON-LD to avoid PII scraping.
+
 
   // Role
   if (entityType === 'Person') {
@@ -307,7 +305,7 @@ function isPageIndexable(page: PageData): boolean {
 async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lang: LanguageKey): Promise<Response> {
   const { data: pageData, error: pageError } = await supabase
     .from('pages')
-    .select('id, slug, title, description, avatar_url, updated_at, niche, city, country_code, profession, entity_type, contact_email, contact_phone, contact_whatsapp, quality_score, is_indexable, service_slugs')
+    .select('id, slug, title, description, avatar_url, updated_at, niche, city, country_code, profession, entity_type, quality_score, is_indexable, service_slugs')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
@@ -521,13 +519,8 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
       <p>${escapeHtml(sourceText)}</p>
       <p><a href="${canonical}">${canonical}</a></p>
     </section>
-    ${(page.contact_email || page.contact_phone || page.contact_whatsapp) ? `
-    <section class="contact">
-      <h2>${lang === 'ru' ? 'Контакты' : lang === 'kk' ? 'Байланыс' : 'Contact'}</h2>
-      ${page.contact_email ? `<a href="mailto:${escapeHtml(page.contact_email)}" itemprop="email">${escapeHtml(page.contact_email)}</a>` : ''}
-      ${page.contact_phone ? `<a href="tel:${escapeHtml(page.contact_phone)}" itemprop="telephone">${escapeHtml(page.contact_phone)}</a>` : ''}
-      ${page.contact_whatsapp ? `<a href="${escapeHtml(page.contact_whatsapp)}" rel="noopener">WhatsApp</a>` : ''}
-    </section>` : ''}
+    <!-- Contact block intentionally omitted from SSR HTML to prevent PII scraping. Live page renders contacts client-side. -->
+
   </main>
   <footer>
     <p>${lang === 'ru' ? 'Создано на' : lang === 'kk' ? 'Жасалған' : 'Created with'} <a href="${BASE_URL}/">LinkMAX</a></p>
