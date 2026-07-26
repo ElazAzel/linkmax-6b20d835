@@ -82,7 +82,7 @@ async function sendCollabNotification(
 ): Promise<void> {
   try {
     await supabase.functions.invoke('send-collab-notification', {
-      body: { targetUserId, requesterName, message, type }
+      body: { targetUserId, message, type }
     });
   } catch (error) {
     logger.error('Failed to send collab notification', error, { context: 'collaboration' });
