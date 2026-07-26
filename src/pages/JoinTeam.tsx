@@ -89,8 +89,7 @@ async function joinTeam(teamId: string): Promise<{ success: boolean; error?: str
     await supabase.functions.invoke('send-team-notification', {
       body: {
         targetUserId: team.owner_id,
-        teamName: team.name,
-        inviterName: profile?.display_name || profile?.username || 'Someone',
+        teamId,
         type: 'joined',
       },
     });

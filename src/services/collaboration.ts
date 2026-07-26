@@ -372,7 +372,7 @@ export async function inviteToTeam(
       await supabase.functions.invoke('send-team-notification', {
         body: {
           targetUserId: userId,
-          teamName: teamData.name,
+          teamId,
           type: 'invited'
         }
       });
@@ -446,7 +446,7 @@ export async function removeMemberFromTeam(
       await supabase.functions.invoke('send-team-notification', {
         body: {
           targetUserId: memberId,
-          teamName: team.name,
+          teamId,
           type: 'removed'
         }
       });
@@ -546,8 +546,7 @@ export async function joinTeamByInviteCode(inviteCode: string): Promise<{ succes
     await supabase.functions.invoke('send-team-notification', {
       body: {
         targetUserId: team.owner_id,
-        teamName: team.name,
-        inviterName: memberName,
+        teamId: team.id,
         type: 'joined'
       }
     });
