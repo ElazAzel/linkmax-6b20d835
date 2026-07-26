@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => ({
     // The MCP bundler currently treats Windows absolute paths as npm specifiers.
     // CI and deployment run on Linux, where it generates the Supabase function.
     process.platform !== 'win32' && mcpPlugin(),
-    visualizer({
+    process.env.ANALYZE === 'true' && visualizer({
       filename: "stats.html",
       gzipSize: true,
       brotliSize: true,
@@ -80,8 +80,11 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-ui': ['framer-motion', 'lucide-react', 'recharts'],
-          'vendor-utils': ['@supabase/supabase-js', 'i18next', 'zod'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-charts': ['recharts'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-i18n': ['i18next'],
+          'vendor-validation': ['zod'],
         },
       },
     },
