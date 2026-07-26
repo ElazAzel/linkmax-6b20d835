@@ -102,9 +102,8 @@ interface PageData {
   country_code: string | null;
   profession: string | null;
   entity_type: string | null;
-  contact_email: string | null;
-  contact_phone: string | null;
-  contact_whatsapp: string | null;
+  // Contact fields intentionally NOT selected for SSR — avoids leaking owner PII to bots/scrapers.
+  // Humans see contacts in the interactive client-rendered page.
   quality_score: number | null;
   is_indexable: boolean | null;
   service_slugs?: Record<string, { slug: string; state: string; title: string }> | null;
