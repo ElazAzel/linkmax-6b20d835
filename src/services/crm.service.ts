@@ -41,13 +41,14 @@ export class CrmService {
       zoneDeals = data;
     }
 
-    // 3. Fetch Bookings count
+    // 3. Fetch Bookings count (bookings table stores slot_date / slot_time separately)
+    const today = new Date().toISOString().slice(0, 10);
     const { count: activeBookings } = await supabase
       .from('bookings')
       .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId)
+      .eq('owner_id', userId)
       .eq('status', 'confirmed')
-      .gte('start_time', new Date().toISOString());
+      .gte('slot_date', today);
 
     const allLeads = (leads || []) as any[];
     const totalLeads = allLeads.length;
