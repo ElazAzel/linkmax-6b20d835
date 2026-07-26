@@ -519,13 +519,8 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
       <p>${escapeHtml(sourceText)}</p>
       <p><a href="${canonical}">${canonical}</a></p>
     </section>
-    ${(page.contact_email || page.contact_phone || page.contact_whatsapp) ? `
-    <section class="contact">
-      <h2>${lang === 'ru' ? 'Контакты' : lang === 'kk' ? 'Байланыс' : 'Contact'}</h2>
-      ${page.contact_email ? `<a href="mailto:${escapeHtml(page.contact_email)}" itemprop="email">${escapeHtml(page.contact_email)}</a>` : ''}
-      ${page.contact_phone ? `<a href="tel:${escapeHtml(page.contact_phone)}" itemprop="telephone">${escapeHtml(page.contact_phone)}</a>` : ''}
-      ${page.contact_whatsapp ? `<a href="${escapeHtml(page.contact_whatsapp)}" rel="noopener">WhatsApp</a>` : ''}
-    </section>` : ''}
+    <!-- Contact block intentionally omitted from SSR HTML to prevent PII scraping. Live page renders contacts client-side. -->
+
   </main>
   <footer>
     <p>${lang === 'ru' ? 'Создано на' : lang === 'kk' ? 'Жасалған' : 'Created with'} <a href="${BASE_URL}/">LinkMAX</a></p>
