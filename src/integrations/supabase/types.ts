@@ -3580,6 +3580,7 @@ export type Database = {
           is_default: boolean | null
           name: string
           order_index: number
+          pipeline_id: string | null
           zone_id: string
         }
         Insert: {
@@ -3589,6 +3590,7 @@ export type Database = {
           is_default?: boolean | null
           name: string
           order_index?: number
+          pipeline_id?: string | null
           zone_id: string
         }
         Update: {
@@ -3598,9 +3600,17 @@ export type Database = {
           is_default?: boolean | null
           name?: string
           order_index?: number
+          pipeline_id?: string | null
           zone_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "zone_deal_stages_pipeline_id_fkey"
+            columns: ["pipeline_id"]
+            isOneToOne: false
+            referencedRelation: "zone_pipelines"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "zone_deal_stages_zone_id_fkey"
             columns: ["zone_id"]

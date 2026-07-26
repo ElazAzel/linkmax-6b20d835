@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { parseRichText } from '@/lib/rich-text-parser';
-import { getBlockStyles, getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { getBlockStyles, getBlockInnerStyles } from '@/lib/blocks/block-styling';
 import type { TextBlock as TextBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 
@@ -19,11 +19,19 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
     : block.alignment === 'right' ? 'text-right'
       : 'text-left';
 
-  // Get custom block styles — container styles go on the text element itself
+  // Container styles go directly on the text element itself
   const { style: containerStyle, className: containerClass, textEffectClass } = getBlockStyles(block.blockStyle);
   const { style: innerStyle } = getBlockInnerStyles(block.blockStyle);
   const customStyle = { ...containerStyle, ...innerStyle };
-  const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
+
+  // Granular override detection — only strip DEFAULT visuals for the specific
+  // field the user overrode. This preserves the built-in quote card / heading
+  // gradient when the user only tweaks unrelated properties (e.g. font).
+  const bs = block.blockStyle;
+  const hasBgOverride = !!(bs?.backgroundColor || bs?.backgroundGradient);
+  const hasBorderOverride = !!(bs?.borderWidth && bs.borderWidth !== 'none');
+  const hasPaddingOverride = !!(bs?.padding && bs.padding !== 'none');
+  const hasTextColorOverride = !!(bs?.textColor || bs?.textEffect);
 
   switch (block.style) {
     case 'heading':
@@ -31,7 +39,7 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
         <h2
           className={cn(
             "text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight break-words hyphens-auto leading-[1.1]",
-            !hasBlockStyle && "text-gradient bg-[length:200%_auto] animate-gradient-x",
+            !hasTextColorOverride && "text-gradient bg-[length:200%_auto] animate-gradient-x",
             alignmentClass,
             textEffectClass,
             containerClass
@@ -46,12 +54,14 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
         <blockquote
           className={cn(
             "relative rounded-card",
-            !hasBlockStyle && "p-4 sm:p-6 qb-card-quiet border-l-4 border-primary/50",
+            !hasPaddingOverride && "p-4 sm:p-6",
+            !hasBgOverride && "qb-card-quiet",
+            !hasBorderOverride && "border-l-4 border-primary/50",
             "italic whitespace-pre-line break-words hyphens-auto text-sm sm:text-base lg:text-lg font-medium",
             alignmentClass,
             textEffectClass,
             containerClass,
-            !hasBlockStyle && 'text-foreground/90'
+            !hasTextColorOverride && 'text-foreground/90'
           )}
           style={customStyle}
         >
@@ -66,7 +76,7 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
             alignmentClass,
             textEffectClass,
             containerClass,
-            !hasBlockStyle && 'text-foreground'
+            !hasTextColorOverride && 'text-foreground'
           )}
           style={customStyle}
         >
