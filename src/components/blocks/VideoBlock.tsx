@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { VideoBlock as VideoBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { hasCustomBlockContainer } from '@/lib/blocks/block-styling';
 
 interface VideoBlockProps {
   block: VideoBlockType;
@@ -31,6 +32,7 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   const { t, i18n } = useTranslation();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const embedUrl = getVideoEmbedUrl(block.url, block.platform);
+  const isNaked = hasCustomBlockContainer(block.blockStyle);
 
   const aspectRatioClass = {
     '16:9': 'aspect-video',
@@ -52,6 +54,29 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
           </p>
         </CardContent>
       </Card>
+    );
+  }
+
+  // Naked mode: no card frame, no title bar background — the wrapper's
+  // custom styling is the visible frame.
+  if (isNaked) {
+    return (
+      <div onClick={() => onClick?.()} className="w-full">
+        {title && (
+          <div className="pb-2">
+            <h3 className="text-base sm:text-lg font-semibold truncate">{title}</h3>
+          </div>
+        )}
+        <div className={cn('relative w-full overflow-hidden', aspectRatioClass)} style={{ borderRadius: 'inherit' }}>
+          <iframe
+            src={embedUrl}
+            className="absolute inset-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
+            allowFullScreen
+            title={title || 'Video'}
+          />
+        </div>
+      </div>
     );
   }
 

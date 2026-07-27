@@ -4,6 +4,7 @@ import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
+import { hasCustomBlockContainer } from '@/lib/blocks/block-styling';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
 
 interface ImageBlockProps {
@@ -18,8 +19,15 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
 
   const isBanner = block.style === 'banner';
   const hasLink = Boolean(block.link);
+  // When the user paints their own container (bg/border/radius/shadow) via
+  // the style panel, drop our default decorative frame so we don't render
+  // two nested frames.
+  const isNaked = hasCustomBlockContainer(block.blockStyle);
 
   const getImageClass = () => {
+    if (isNaked && block.style !== 'polaroid' && block.style !== 'vignette' && block.style !== 'circle') {
+      return '';
+    }
     switch (block.style) {
       case 'polaroid':
         return 'p-3 sm:p-4 bg-white/5  border border-hairline shadow-soft rotate-[-2deg] hover:rotate-0 transition-all duration-500 rounded-sm hover:shadow-lift';

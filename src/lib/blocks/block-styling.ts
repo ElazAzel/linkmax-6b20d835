@@ -169,3 +169,21 @@ export function hasCustomBlockStyle(blockStyle?: BlockStyle): boolean {
     blockStyle.contentAlignment
   );
 }
+
+/**
+ * True when the user has customized the block's *container* (bg / border /
+ * radius / shadow / padding). In that case, media/embed blocks should render
+ * "naked" — without their default decorative frame — so the wrapper's style
+ * is the only frame the user sees (avoids double borders/paddings).
+ */
+export function hasCustomBlockContainer(blockStyle?: BlockStyle): boolean {
+  if (!blockStyle) return false;
+  return !!(
+    blockStyle.backgroundColor ||
+    blockStyle.backgroundGradient ||
+    (blockStyle.borderRadius && blockStyle.borderRadius !== 'none') ||
+    (blockStyle.borderWidth && blockStyle.borderWidth !== 'none') ||
+    (blockStyle.shadow && blockStyle.shadow !== 'none') ||
+    (blockStyle.padding && blockStyle.padding !== 'none')
+  );
+}
