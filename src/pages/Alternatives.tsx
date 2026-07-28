@@ -417,8 +417,13 @@ export default function Alternatives() {
             <div className="backdrop-blur-2xl bg-card/50 border border-border/30 rounded-2xl shadow-glass-lg">
               <div className="container mx-auto px-4 h-14 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={handleBack}>
-                    <ArrowLeft className="h-5 w-5" />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleBack}
+                    aria-label={t('alternatives.header.back', 'Back to homepage')}
+                  >
+                    <ArrowLeft className="h-5 w-5" aria-hidden="true" />
                   </Button>
                   <Link to="/" className="flex items-center gap-2">
                     <span className="text-xl font-bold">
