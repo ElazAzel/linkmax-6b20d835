@@ -75,7 +75,7 @@ export function TopReferrers() {
   const getMedalColor = (index: number) => {
     switch (index) {
       case 0: return 'text-yellow-500';
-      case 1: return 'text-gray-400';
+      case 1: return 'text-gray-500 dark:text-gray-300';
       case 2: return 'text-amber-600';
       default: return 'text-muted-foreground';
     }
