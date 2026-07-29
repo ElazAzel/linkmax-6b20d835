@@ -62,12 +62,12 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
         return (
             <div
                 className={cn(
-                    "fixed top-6 inset-x-0 z-50 flex justify-center pointer-events-none transition-transform duration-300 ease-in-out",
+                    "fixed top-0 inset-x-0 z-50 flex justify-center pointer-events-none px-4 transition-transform duration-300 ease-in-out sm:px-6",
                     hidden ? "-translate-y-[100px]" : "translate-y-0"
                 )}
             >
-                <div className="pointer-events-auto flex items-center gap-1 rounded-lg border border-[#16131A]/15 bg-white px-2 py-1.5 shadow-[0_12px_32px_rgba(22,19,26,0.12)]">
-                    <button type="button" onClick={() => scrollTo('#hero')} className="mr-2 rounded-md px-2 py-1" aria-label="LinkMAX">
+                <div className="pointer-events-auto flex w-full max-w-[1180px] items-center gap-1 border-b border-[#16131A]/15 bg-[#F4F5F0]/95 px-1 py-3 backdrop-blur-sm">
+                    <button type="button" onClick={() => scrollTo('#hero')} className="mr-3 px-2 py-1" aria-label="LinkMAX">
                         <BrandLogo className="h-7" />
                     </button>
 
@@ -117,13 +117,13 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
     return (
         <div
             className={cn(
-                "fixed top-4 inset-x-0 z-50 flex justify-center pointer-events-none px-4 transition-transform duration-300 ease-in-out",
+                "fixed top-0 inset-x-0 z-50 flex justify-center pointer-events-none transition-transform duration-300 ease-in-out",
                 hidden ? "-translate-y-[100px]" : "translate-y-0"
             )}
         >
             <div
                 className={cn(
-                    "pointer-events-auto relative flex w-full max-w-md flex-col items-center overflow-hidden rounded-lg border border-[#16131A]/15 bg-white shadow-[0_12px_32px_rgba(22,19,26,0.14)] transition-all duration-300 ease-out"
+                    "pointer-events-auto relative flex w-full flex-col items-center overflow-hidden border-b border-[#16131A]/15 bg-[#F4F5F0]/95 backdrop-blur-sm transition-all duration-300 ease-out"
                 )}
             >
                 {/* Compact bar */}

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { VideoBlock as VideoBlockType } from '@/types/page';
@@ -34,6 +34,13 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   const embedUrl = getVideoEmbedUrl(block.url, block.platform);
   const isNaked = hasCustomBlockContainer(block.blockStyle);
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!onClick || (event.key !== 'Enter' && event.key !== ' ')) return;
+
+    event.preventDefault();
+    onClick();
+  };
+
   const aspectRatioClass = {
     '16:9': 'aspect-video',
     '4:3': 'aspect-[4/3]',
@@ -60,8 +67,8 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   // Naked mode: no card frame, no title bar background — the wrapper's
   // custom styling is the visible frame.
   if (isNaked) {
-    return (
-      <div onClick={() => onClick?.()} className="w-full">
+    const content = (
+      <>
         {title && (
           <div className="pb-2">
             <h3 className="text-base sm:text-lg font-semibold truncate">{title}</h3>
@@ -76,6 +83,16 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
             title={title || 'Video'}
           />
         </div>
+      </>
+    );
+
+    if (!onClick) {
+      return <div className="w-full">{content}</div>;
+    }
+
+    return (
+      <div className="w-full" onClick={onClick} onKeyDown={handleKeyDown} role="button" tabIndex={0}>
+        {content}
       </div>
     );
   }

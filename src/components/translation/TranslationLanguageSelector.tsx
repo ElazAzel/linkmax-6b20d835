@@ -301,14 +301,14 @@ export function TranslationLanguageSelector({
                                 <Info className="h-3 w-3 text-muted-foreground" />
                               </TooltipTrigger>
                               <TooltipContent>
-                                {t('translation.englishMandatory', 'Английский обязателен для международной аудитории')}
+                                {t('englishMandatory', 'Английский обязателен для международной аудитории')}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
                         )}
                         {isSource && (
                           <Badge variant="outline" className="text-xs">
-                            {t('translation.source', 'Источник')}
+                            {t('source', 'Источник')}
                           </Badge>
                         )}
                       </button>
