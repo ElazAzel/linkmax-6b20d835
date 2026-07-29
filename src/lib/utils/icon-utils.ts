@@ -73,6 +73,10 @@ import Wrench from 'lucide-react/dist/esm/icons/wrench';
 import Youtube from 'lucide-react/dist/esm/icons/youtube';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import ArrowLeftRight from 'lucide-react/dist/esm/icons/arrow-left-right';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Grid3X3 from 'lucide-react/dist/esm/icons/grid-3x3';
+import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import Search from 'lucide-react/dist/esm/icons/search';
 
 // Curated icon registry. Only icons listed here are bundled — this
 // preserves tree-shaking. Users picking icons from AVATAR_ICON_OPTIONS,
@@ -81,6 +85,10 @@ import ArrowLeftRight from 'lucide-react/dist/esm/icons/arrow-left-right';
 const ICON_MAP: Record<string, ComponentType<LucideProps>> = {
   ArrowLeftRight,
   Award,
+  CreditCard,
+  Grid3X3,
+  Search,
+  Share2,
   BadgeCheck,
   Box,
   Briefcase,
