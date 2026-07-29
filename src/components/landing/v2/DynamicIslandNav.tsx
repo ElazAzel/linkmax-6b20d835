@@ -62,11 +62,11 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
         return (
             <div
                 className={cn(
-                    "fixed top-0 inset-x-0 z-50 flex justify-center pointer-events-none px-4 transition-transform duration-300 ease-in-out sm:px-6",
+                    "fixed top-0 inset-x-0 z-50 flex justify-center border-b border-[#16131A]/15 bg-[#F4F5F0]/95 px-4 pointer-events-none transition-transform duration-300 ease-in-out sm:px-6",
                     hidden ? "-translate-y-[100px]" : "translate-y-0"
                 )}
             >
-                <div className="pointer-events-auto flex w-full max-w-[1180px] items-center gap-1 border-b border-[#16131A]/15 bg-[#F4F5F0]/95 px-1 py-3 backdrop-blur-sm">
+                <div className="pointer-events-auto flex w-full max-w-[1180px] items-center gap-1 bg-transparent px-1 py-3">
                     <button type="button" onClick={() => scrollTo('#hero')} className="mr-3 px-2 py-1" aria-label="LinkMAX">
                         <BrandLogo className="h-7" />
                     </button>

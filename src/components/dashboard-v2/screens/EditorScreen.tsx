@@ -406,14 +406,14 @@ export const EditorScreen = memo(function EditorScreen({
       {(() => {
         if (activation.showCelebration) {
           return (
-            <div className="mx-4 mt-4 animate-fade-in zoom-in-95 duration-500">
+            <div className="mx-4 mt-4 animate-fade-in">
               <ActivationCelebration onDismiss={activation.dismissCelebration} />
             </div>
           );
         }
         if (frictionSignal) {
           return (
-            <div className="mx-4 mt-3 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2">
+            <div className="mx-4 mt-3 flex items-center gap-2 rounded-md border border-amber-500/30 bg-card px-3 py-2">
               <Lightbulb className="h-4 w-4 text-amber-500 shrink-0" />
               <span className="text-xs text-foreground/80 flex-1">
                 {t(`friction.${frictionSignal.suggestedActionKey}`, frictionSignal.suggestedAction)}
@@ -431,8 +431,8 @@ export const EditorScreen = memo(function EditorScreen({
           const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
           if (top) {
             return (
-              <div className="mx-4 mt-3 flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
-                <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <div className="mx-4 mt-3 flex items-center gap-3 rounded-md border border-border bg-card px-4 py-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10">
                   <Lightbulb className="h-4 w-4 text-primary" />
                 </div>
                 <span className="text-xs font-medium text-foreground/80 flex-1 leading-relaxed">
@@ -450,7 +450,7 @@ export const EditorScreen = memo(function EditorScreen({
         }
         if (primaryTip) {
           return (
-            <div className="mx-4 mt-3 flex items-start gap-3 rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
+            <div className="mx-4 mt-3 flex items-start gap-3 rounded-md border border-border bg-card px-4 py-3">
               <Lightbulb className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold">{primaryTip.title}</p>
@@ -472,13 +472,13 @@ export const EditorScreen = memo(function EditorScreen({
         if (onboardingHints.length > 0) {
           const hint = onboardingHints[0];
           return (
-            <div className="mx-4 mt-3 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
+            <div className="mx-4 mt-3 flex items-start gap-3 rounded-md border border-border bg-card px-4 py-3">
               <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold">{hint.title}</p>
                 <p className="text-xs text-muted-foreground mt-1">{hint.description}</p>
               </div>
-              <Button size="sm" className="h-9 px-4 rounded-xl text-xs font-semibold" onClick={hint.onCta}>
+              <Button size="sm" className="h-9 rounded-md px-4 text-xs font-semibold" onClick={hint.onCta}>
                 {hint.ctaLabel}
               </Button>
               <button className="p-1 rounded-lg hover:bg-white/10 text-muted-foreground" onClick={() => dismissOnboardingHint(hint.id)} aria-label={t('common.dismiss', 'Скрыть')}>
@@ -492,7 +492,7 @@ export const EditorScreen = memo(function EditorScreen({
 
       {/* Grid Editor */}
       <div
-        className={cn('relative isolate mt-4 overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border', appearanceRootClass)}
+        className={cn('relative isolate mt-4 overflow-hidden border-y border-border/40 py-3', appearanceRootClass)}
         style={{ ...appearanceVars, ...themeBackgroundStyle, color: pageData.theme?.textColor }}
         data-testid="editor-appearance-preview"
       >
@@ -532,7 +532,7 @@ export const EditorScreen = memo(function EditorScreen({
           type="button"
           onClick={() => setSectionPickerOpen(true)}
           className={cn(
-            'inline-flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-semibold',
+            'inline-flex h-10 items-center gap-2 rounded-md px-4 text-xs font-semibold',
             'border border-dashed border-border/60 text-muted-foreground',
             'hover:border-primary/50 hover:text-foreground hover:bg-accent transition-colors',
           )}

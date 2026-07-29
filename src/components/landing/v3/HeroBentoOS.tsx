@@ -23,7 +23,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
 
   return (
     <section className="relative isolate min-h-[min(760px,84svh)] overflow-hidden bg-[#F4F5F0] text-[#16131A]">
-      <picture className="absolute right-0 top-0 -z-20 hidden h-[300px] w-[38%] overflow-hidden border-b border-l border-[#16131A]/15 md:block">
+      <picture className="absolute right-0 top-0 -z-20 hidden h-[300px] w-[38%] overflow-hidden border-b border-l border-[#16131A]/15 lg:block">
         <source srcSet="/brand/linkmax-hero-studio.webp" type="image/webp" />
         <img
           src="/brand/linkmax-hero-studio.png"
@@ -34,7 +34,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
         />
       </picture>
       <div className="mx-auto flex min-h-[min(760px,84svh)] max-w-[1440px] flex-col px-4 pb-10 pt-20 sm:px-6 sm:pt-24 lg:px-10">
-        <div className="flex max-w-[720px] flex-1 flex-col justify-center py-8 md:max-w-[56%]">
+        <div className="flex max-w-[720px] flex-1 flex-col justify-center py-8 lg:max-w-[56%]">
           <div className="mb-5 flex items-center gap-3 text-sm font-semibold">
             <span className="h-2.5 w-2.5 bg-[#C93618]" aria-hidden="true" />
             {t('landing.short.eyebrow', 'Сайт, заявки и продажи в одной системе')}

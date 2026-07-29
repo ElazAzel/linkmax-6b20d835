@@ -100,8 +100,8 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pt-3 pointer-events-none">
-        <div className="app-bottom-nav pointer-events-auto overflow-hidden rounded-lg border border-white/10 shadow-[0_18px_44px_-18px_rgba(0,0,0,0.72)]">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom md:hidden pointer-events-none">
+        <div className="app-bottom-nav pointer-events-auto overflow-hidden border-t border-white/10">
           <div className="grid grid-cols-5 h-[4.25rem]">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.id;

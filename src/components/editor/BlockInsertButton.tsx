@@ -168,12 +168,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return tierLevel(currentTier) >= tierLevel(blockTier);
   };
 
-  const getBlockLabel = useCallback((key: string, fallback: string) => {
+  const getText = useCallback((key: string, fallback: string) => {
     const value = t(key, { defaultValue: fallback });
     return typeof value === 'string' && !value.toLowerCase().includes('returned an object')
       ? value
       : fallback;
   }, [t]);
+
+  const getBlockLabel = getText;
 
   const filteredBlocks = MANIFEST_BLOCKS.filter(block => {
     const matchesCategory = activeCategory === 'all' || block.category === activeCategory;
@@ -186,10 +188,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     if (!searchQuery) return [];
     const query = searchQuery.toLowerCase();
     return BLOCK_PRESETS.filter(preset =>
-      t(preset.labelKey).toLowerCase().includes(query) ||
+      getText(preset.labelKey, preset.id).toLowerCase().includes(query) ||
       preset.keywords.some(k => k.toLowerCase().includes(query))
     );
-  }, [searchQuery, t]);
+  }, [searchQuery, getText]);
 
   const featuredPresets = useMemo(() => {
     if (searchQuery || pageNiche !== 'expert') return [];
@@ -289,7 +291,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const getReasonTooltip = (blockType: string): string | null => {
     const rec = recommendations.find(r => r.block === blockType);
-    return rec ? t(rec.reason, '') : null;
+    return rec ? getText(rec.reason, '') : null;
   };
 
   const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
@@ -298,7 +300,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const marker = showRelevantBadge && !isLocked
       ? {
           icon: Sparkles,
-          label: t('recommendations.relevant', 'Актуально'),
+          label: getText('recommendations.relevant', 'Актуально'),
           className: 'bg-emerald-500 text-white',
         }
       : block.tier === 'pro'
@@ -370,7 +372,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     );
 
     const proHint = isLocked
-      ? t('pricing.proHint', 'Откройте этот блок на тарифе Pro — без ограничений на типы блоков.')
+      ? getText('pricing.proHint', 'Откройте этот блок на тарифе Pro — без ограничений на типы блоков.')
       : reasonTooltip;
 
     if (proHint && !isMobile) {
@@ -404,14 +406,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         onClick={() => handleInsertPresetClick(preset)}
         disabled={isLocked}
         className={cn(
-            "relative flex flex-col items-center gap-2 rounded-lg p-4 transition-all",
-          "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          "relative flex flex-col items-center gap-2 rounded-md border border-border bg-card p-3 transition-colors",
+          "hover:border-primary hover:bg-accent/40 active:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           isLocked && "opacity-40 cursor-not-allowed",
           isFeatured && "ring-1 ring-primary/20 bg-primary/5"
         )}
       >
         <div className={cn(
-          "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md overflow-hidden",
+          "w-12 h-12 rounded-md flex items-center justify-center text-white overflow-hidden",
           color
         )}>
           <AnimatedBlockIcon 
@@ -423,10 +425,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
         <div className="flex flex-col items-center gap-0.5">
           <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">
-            {t(manifest.labelKey)}
+            {getBlockLabel(manifest.labelKey, manifest.type)}
           </span>
           <span className="text-xs font-bold text-center leading-tight">
-            {t(preset.labelKey)}
+            {getText(preset.labelKey, preset.id)}
           </span>
         </div>
 
@@ -522,7 +524,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                             : 'border-border bg-card text-muted-foreground hover:text-foreground'
                         )}
                       >
-                        {t(`editor.categories.${category.id}`, category.label)}
+                        {getText(`editor.categories.${category.id}`, category.label)}
                       </button>
                     ))}
                   </div>

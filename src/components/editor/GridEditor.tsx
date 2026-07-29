@@ -88,9 +88,9 @@ function InsertBetweenDivider({
           type="button"
           onClick={() => onOpenInsert(position)}
           className={cn(
-            "shrink-0 p-0 flex items-center justify-center rounded-full transition-all duration-300",
-            "bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
-            "active:scale-95 hover:scale-110",
+            "shrink-0 p-0 flex items-center justify-center rounded-md border border-dashed border-border transition-colors",
+            "bg-background hover:border-primary hover:bg-primary hover:text-primary-foreground",
+            "active:scale-95",
             isMobile ? "h-11 w-11" : "h-7 w-7"
           )}
           aria-label="Insert block here"
@@ -231,13 +231,13 @@ function SortableGridBlockItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-shadow duration-200 rounded-2xl border-0',
+        'relative group rounded-md border border-transparent transition-colors',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
         // Quiet hover: 1px outline + soft lift, no background tint
-        !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
-        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
+        !selected && !isDragging && 'hover:border-border hover:ring-1 hover:ring-border/50',
+        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
         // P4: Selection ring
@@ -251,7 +251,7 @@ function SortableGridBlockItem({
     >
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
-        <div className="pointer-events-none w-full h-full isolate bg-card rounded-2xl overflow-hidden" data-editor-block>
+        <div className="pointer-events-none h-full w-full isolate overflow-hidden rounded-md bg-card" data-editor-block>
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
@@ -263,7 +263,7 @@ function SortableGridBlockItem({
           {...attributes}
           {...listeners}
           className={cn(
-            'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
+            'absolute inset-0 z-20 h-auto min-h-0 rounded-md bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
             isDragging ? 'cursor-grabbing' : 'cursor-grab',
           )}
           onClick={(e) => {
@@ -383,7 +383,7 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
   return (
     <div
       className={cn(
-        'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-visible cursor-grabbing',
+        'relative overflow-visible rounded-md border-2 border-primary bg-card cursor-grabbing',
         widthClass,
         dimensions.gridRows === 2 ? 'h-[296px]' : 'h-[140px]'
       )}
@@ -413,7 +413,7 @@ function SectionHeader({
   onToggleCollapse: () => void;
 }) {
   return (
-    <div className="col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-muted/30 border border-border/10">
+    <div className="col-span-2 flex items-center gap-2 border-y border-border/50 px-3 py-2 bg-muted/20">
       <Button variant="ghost" className="h-auto p-0.5 hover:bg-transparent" onClick={onToggleCollapse}>
         <ChevronRight className={cn(
           'h-4 w-4 text-muted-foreground transition-transform',
@@ -761,10 +761,10 @@ export const GridEditor = memo(function GridEditor({
   }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId]);
 
   return (
-    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-5 pb-32 md:pb-24 bg-surface-quiet rounded-card">
+    <div className="mx-auto max-w-2xl space-y-5 bg-transparent px-[var(--space-page-px)] py-4 pb-32 md:pb-24">
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
-        <div className="relative isolate qb-card overflow-hidden" data-onboarding="profile-block" data-editor-block>
+        <div className="relative isolate overflow-hidden rounded-md border border-border bg-card" data-onboarding="profile-block" data-editor-block>
           <InlineProfileEditor
             block={profileBlock}
             onUpdate={(updates) => onUpdateBlock(profileBlock.id, updates)}
@@ -801,7 +801,7 @@ export const GridEditor = memo(function GridEditor({
         <motion.button
           type="button"
           onClick={() => openInsertSheet(blocks.length)}
-          className="w-full mt-4 h-14 rounded-2xl border border-dashed border-border/40 bg-transparent hover:bg-accent/30 hover:border-border transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
+          className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-md border border-dashed border-border/60 bg-transparent text-muted-foreground transition-colors hover:border-primary hover:bg-accent/30 hover:text-foreground"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.25 }}
@@ -821,7 +821,7 @@ export const GridEditor = memo(function GridEditor({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
             <Plus className="h-7 w-7 text-primary" strokeWidth={2.5} />
           </div>
           <h3 className="text-lg font-semibold text-foreground mb-1">
