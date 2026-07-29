@@ -24,7 +24,7 @@ export const ActionCard = memo(function ActionCard({
   title,
   description,
   onClick,
-  gradient = 'from-primary/15 to-violet-500/15',
+  gradient: _gradient = 'from-primary/15 to-violet-500/15',
   border = 'border-primary/20',
   className,
 }: ActionCardProps) {
@@ -32,15 +32,13 @@ export const ActionCard = memo(function ActionCard({
     <button
       onClick={onClick}
       className={cn(
-        "p-[var(--space-card-p)] rounded-[2rem] text-left transition-all active:scale-[0.97] relative overflow-hidden group",
-        "bg-card hover:bg-accent/50 hover:translate-y-[-4px]",
-        "shadow-sm hover:shadow-md",
-        "border border-border/10",
+        "group relative overflow-hidden rounded-md border bg-card p-[var(--space-card-p)] text-left transition-colors active:opacity-85",
+        "hover:bg-accent/50",
+        border,
         className
       )}
     >
-      <div className={cn("absolute inset-0 bg-gradient-to-br opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500", gradient)} />
-      <div className={cn("h-12 w-12 rounded-[1.25rem] flex items-center justify-center mb-4 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3", iconBg)}>
+      <div className={cn("mb-4 flex h-12 w-12 items-center justify-center rounded-md", iconBg)}>
         <Icon className={cn("h-6 w-6", iconColor)} />
       </div>
       <p className="font-bold">{title}</p>

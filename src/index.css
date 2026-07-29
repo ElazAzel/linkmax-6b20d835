@@ -483,73 +483,59 @@
 
   /* Base glass effect */
   .glass {
-    background: hsl(var(--glass-bg));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass);
   }
 
   /* Subtle glass - more transparent */
   .glass-subtle {
-    background: hsl(var(--glass-bg-subtle));
-    backdrop-filter: blur(var(--glass-blur-sm));
-    -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--glass-border-subtle));
   }
 
   /* Strong glass - more opaque */
   .glass-strong {
-    background: hsl(var(--glass-bg-strong));
-    backdrop-filter: blur(var(--glass-blur-lg));
-    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass-lg);
   }
 
   /* Liquid glass card */
   .glass-card {
-    background: hsl(var(--glass-bg));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--glass-border));
     border-radius: var(--radius);
     box-shadow: var(--shadow-glass);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
   }
 
   .glass-card:hover {
-    box-shadow: var(--shadow-glass-lg);
-    transform: translateY(-2px);
+    border-color: hsl(var(--primary) / 0.4);
   }
 
   /* Glass button */
   .glass-button {
-    background: hsl(var(--glass-bg-strong));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
   }
 
   .glass-button:hover {
-    background: hsl(var(--glass-bg));
-    box-shadow: var(--shadow-glass-lg);
-    transform: translateY(-1px);
+    background: hsl(var(--accent));
+    border-color: hsl(var(--primary) / 0.4);
   }
 
   .glass-button:active {
-    transform: translateY(0) scale(0.98);
+    opacity: 0.85;
   }
 
   /* Glass input */
   .glass-input {
-    background: hsl(var(--glass-bg-subtle));
-    backdrop-filter: blur(var(--glass-blur-sm));
-    -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--glass-border-subtle));
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
   }
 
   .glass-input:focus {
@@ -560,19 +546,15 @@
 
   /* Glass modal/dialog */
   .glass-modal {
-    background: hsl(var(--glass-bg-strong));
-    backdrop-filter: blur(var(--glass-blur-xl));
-    -webkit-backdrop-filter: blur(var(--glass-blur-xl));
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass-xl);
-    border-radius: calc(var(--radius) + 0.5rem);
+    border-radius: var(--radius);
   }
 
   /* Glass navbar */
   .glass-nav {
-    background: hsl(var(--glass-bg));
-    backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
+    background: hsl(var(--card));
     border-bottom: 1px solid hsl(var(--glass-border-subtle));
   }
 

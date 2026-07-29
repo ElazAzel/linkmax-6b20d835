@@ -9,9 +9,9 @@ const textareaVariants = cva(
     variants: {
       variant: {
         default:
-          "border-border hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25 focus-visible:ring-offset-0 focus-visible:border-primary/70 focus-visible:shadow-soft",
+          "border-border hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25 focus-visible:ring-offset-0 focus-visible:border-primary/70",
         glass:
-          "border-border/70 bg-card/82 backdrop-blur-xl hover:bg-card hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:border-primary/60",
+          "border-border bg-card hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:border-primary/60",
         minimal:
           "border-transparent bg-transparent hover:bg-muted/30 focus-visible:outline-none focus-visible:bg-muted/50 focus-visible:ring-0",
       },
