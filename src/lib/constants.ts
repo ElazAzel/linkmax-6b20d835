@@ -19,10 +19,39 @@ export const createDefaultProfileBlock = (): ProfileBlock => ({
 
 // Default theme settings
 export const DEFAULT_THEME: PageTheme = {
+  schemaVersion: 2,
+  appearanceMode: 'v2',
   backgroundColor: 'hsl(var(--background))',
   textColor: 'hsl(var(--foreground))',
   buttonStyle: 'rounded',
   fontFamily: 'sans',
+  colors: {
+    canvas: '#F4F5F0',
+    surface: '#FFFFFF',
+    text: '#16131A',
+    mutedText: '#68636D',
+    primary: '#C93618',
+    primaryText: '#FFFFFF',
+    secondary: '#2F52E0',
+    border: '#C8C9C2',
+    focus: '#2F52E0',
+    success: '#087A54',
+    warning: '#FFD84A',
+    danger: '#B42318',
+  },
+  typography: {
+    headingFamily: 'Onest',
+    bodyFamily: 'Onest',
+    monoFamily: 'JetBrains Mono',
+    headingWeight: 700,
+    bodyWeight: 400,
+    scale: 'balanced',
+  },
+  radii: { control: 8, card: 8, block: 8, image: 6 },
+  spacing: { density: 'comfortable', sectionGap: 48, blockGap: 16, pagePadding: 20 },
+  imageTreatment: 'natural',
+  buttonWeight: 600,
+  motionLevel: 'standard',
 };
 
 // Default SEO settings

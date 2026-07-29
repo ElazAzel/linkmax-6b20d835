@@ -119,138 +119,111 @@
   mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
 }
 
-/* ============================================
-   LIQUID GLASS DESIGN SYSTEM - Apple Style
-   All colors MUST be HSL.
-   ============================================ */
+/* LinkMAX Creative OS: Modular Collage */
 
 @layer base {
   :root {
-    /* LinkMAX brand foundations: landing and product share one palette. */
-    --brand-ink: 216 20% 8%;
-    --brand-paper: 60 22% 95%;
-    --brand-orange: 20 100% 50%;
-    --brand-orange-action: 20 100% 40%;
-    --brand-sage: 90 4% 45%;
+    --brand-ink: 270 16% 9%;
+    --brand-canvas: 72 20% 95%;
+    --brand-surface: 0 0% 100%;
+    --brand-coral: 10 79% 44%;
+    --brand-blue: 228 74% 53%;
+    --brand-mint: 160 88% 25%;
+    --brand-sun: 47 100% 65%;
+    /* Compatibility aliases while legacy screens migrate to semantic names. */
+    --brand-paper: var(--brand-canvas);
+    --brand-orange: var(--brand-coral);
+    --brand-orange-action: var(--brand-coral);
+    --brand-sage: 270 5% 43%;
 
-    --background: var(--brand-paper);
+    --background: var(--brand-canvas);
     --foreground: var(--brand-ink);
 
-    /* Liquid Glass card - translucent white */
-    --card: 40 33% 99%;
+    --card: var(--brand-surface);
     --card-foreground: var(--brand-ink);
 
-    /* Popover/Dropdown - glass effect */
-    --popover: 40 33% 99%;
+    --popover: var(--brand-surface);
     --popover-foreground: var(--brand-ink);
 
-    /* Primary actions use the accessible deep-orange companion of #ff5701. */
-    --primary: var(--brand-orange-action);
+    --primary: var(--brand-coral);
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Subtle frosted */
-    --secondary: 60 14% 91%;
-    --secondary-foreground: var(--brand-ink);
+    --secondary: var(--brand-blue);
+    --secondary-foreground: 0 0% 100%;
 
-    /* Muted - Soft gray glass */
-    --muted: 55 12% 91%;
-    --muted-foreground: var(--brand-sage);
+    --muted: 70 12% 90%;
+    --muted-foreground: 270 5% 38%;
 
-    /* Accent - Light glass tint */
-    --accent: 20 100% 95%;
-    --accent-foreground: 20 100% 30%;
+    --accent: 159 39% 91%;
+    --accent-foreground: var(--brand-mint);
 
-    /* Destructive - Soft red */
-    --destructive: 0 72% 51%;
+    --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Success - Emerald */
-    --success: 142 71% 45%;
+    --success: var(--brand-mint);
     --success-foreground: 0 0% 100%;
 
-    /* Warning - Amber */
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: var(--brand-sun);
+    --warning-foreground: var(--brand-ink);
 
-    /* Info - Sky */
-    --info: 203 87% 44%;
+    --info: var(--brand-blue);
     --info-foreground: 0 0% 100%;
 
-    --border: 52 14% 81%;
-    --input: 52 14% 81%;
-    --ring: var(--brand-orange-action);
+    --border: 72 7% 78%;
+    --input: 72 7% 72%;
+    --ring: var(--brand-blue);
 
-    --radius: 1rem;
+    --radius: 0.5rem;
 
-    /* Sidebar - Frosted glass */
     --sidebar-background: var(--brand-ink);
-    --sidebar-foreground: 60 22% 95%;
-    --sidebar-primary: var(--brand-orange);
+    --sidebar-foreground: var(--brand-canvas);
+    --sidebar-primary: var(--brand-coral);
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 100% / 0.08;
+    --sidebar-accent: 0 0% 100% / 0.1;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 100% / 0.12;
-    --sidebar-ring: var(--brand-orange);
+    --sidebar-border: 0 0% 100% / 0.14;
+    --sidebar-ring: var(--brand-blue);
     --sidebar: var(--brand-ink);
 
-    /* Chart colors - Vibrant gradient palette */
-    --chart-1: 20 100% 45%;
-    --chart-2: 203 87% 44%;
-    --chart-3: 151 60% 36%;
-    --chart-4: 335 72% 48%;
-    --chart-5: 42 92% 46%;
+    --chart-1: var(--brand-coral);
+    --chart-2: var(--brand-blue);
+    --chart-3: var(--brand-mint);
+    --chart-4: 270 16% 26%;
+    --chart-5: 47 84% 50%;
 
-    /* Typography */
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-sans: 'Onest', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading: 'Onest', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Unbounded', 'Onest', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-    /* ========================================
-       2026 LIVING CANVAS TOKENS
-       ======================================== */
+    /* Legacy glass helpers now resolve to quiet, mostly opaque surfaces. */
+    --glass-bg: var(--brand-surface);
+    --glass-bg-subtle: 0 0% 100% / 0.9;
+    --glass-bg-strong: var(--brand-surface);
+    --glass-blur: 0px;
+    --glass-blur-sm: 0px;
+    --glass-blur-lg: 0px;
+    --glass-blur-xl: 0px;
+    --glass-border: 72 7% 78%;
+    --glass-border-subtle: 72 7% 84%;
+    --prismatic-blur: 0px;
+    --prismatic-glow: none;
 
-    /* Glass backgrounds with varying opacity */
-    --glass-bg: 40 33% 99% / 0.82;
-    --glass-bg-subtle: 40 33% 99% / 0.58;
-    --glass-bg-strong: 40 33% 99% / 0.94;
-
-    /* Blur Radius */
-    --glass-blur: 16px;
-    --glass-blur-sm: 8px;
-    --glass-blur-lg: 24px;
-    --glass-blur-xl: 40px;
-
-    /* Prismatic Border Effect */
-    --glass-border: 52 14% 81% / 0.72;
-    --glass-border-subtle: 52 14% 81% / 0.42;
-    --prismatic-blur: 15px;
-    --prismatic-glow: linear-gradient(135deg, hsl(var(--brand-orange) / 0.24), hsl(var(--brand-ink) / 0.12));
-
-    /* Enhanced Shadows - Editorial & Physical */
     --shadow-glass:
       0 0 0 1px hsl(var(--border) / 0.7),
-      0 8px 24px -14px hsl(var(--brand-ink) / 0.24),
-      0 2px 6px -3px hsl(var(--brand-ink) / 0.12);
-
+      0 8px 18px -14px hsl(var(--brand-ink) / 0.22);
     --shadow-glass-lg:
       0 0 0 1px hsl(var(--border) / 0.8),
-      0 18px 44px -18px hsl(var(--brand-ink) / 0.28),
-      0 6px 14px -8px hsl(var(--brand-orange) / 0.18);
-
+      0 16px 32px -22px hsl(var(--brand-ink) / 0.28);
     --shadow-glass-xl:
       0 0 0 1px hsl(var(--border) / 0.9),
-      0 28px 64px -24px hsl(var(--brand-ink) / 0.34),
-      0 10px 22px -12px hsl(var(--brand-orange) / 0.2);
+      0 24px 48px -28px hsl(var(--brand-ink) / 0.34);
 
-    /* Material simulation */
-    --grain-opacity: 0.04;
-    --radius: 1rem;
+    --grain-opacity: 0.025;
 
-    /* Typography */
-    --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
     --text-primary: 1;
-    --text-secondary: 0.8;
-    --text-tertiary: 0.6;
-
-    /* Section spacing - responsive */
+    --text-secondary: 0.78;
+    --text-tertiary: 0.58;
     --section-gap: clamp(3rem, 8vw, 6rem);
     --content-gap: clamp(1rem, 3vw, 2rem);
     --page-padding-x: clamp(1rem, 4vw, 2.5rem);
@@ -259,25 +232,25 @@
 
   .dark {
     --background: var(--brand-ink);
-    --foreground: 60 22% 95%;
+    --foreground: 72 20% 95%;
 
-    --card: 216 16% 12%;
-    --card-foreground: 60 22% 95%;
+    --card: 270 13% 13%;
+    --card-foreground: 72 20% 95%;
 
-    --popover: 216 16% 12%;
-    --popover-foreground: 60 22% 95%;
+    --popover: 270 13% 13%;
+    --popover-foreground: 72 20% 95%;
 
-    --primary: 20 100% 62%;
-    --primary-foreground: var(--brand-ink);
+    --primary: 10 79% 56%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 216 14% 17%;
-    --secondary-foreground: 60 18% 92%;
+    --secondary: 228 74% 62%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 216 14% 15%;
-    --muted-foreground: 60 5% 64%;
+    --muted: 270 10% 18%;
+    --muted-foreground: 72 6% 67%;
 
-    --accent: 20 58% 17%;
-    --accent-foreground: 20 100% 78%;
+    --accent: 160 45% 18%;
+    --accent-foreground: 159 58% 70%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -293,23 +266,23 @@
 
     --border: 0 0% 100% / 0.13;
     --input: 0 0% 100% / 0.16;
-    --ring: 20 100% 62%;
+    --ring: 228 74% 62%;
 
     --sidebar-background: var(--brand-ink);
     --sidebar-foreground: 60 22% 95%;
-    --sidebar-primary: 20 100% 62%;
-    --sidebar-primary-foreground: var(--brand-ink);
+    --sidebar-primary: 10 79% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 100% / 0.08;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 100% / 0.12;
-    --sidebar-ring: 20 100% 62%;
-    --sidebar: 216 16% 12%;
+    --sidebar-ring: 228 74% 62%;
+    --sidebar: 270 13% 13%;
 
-    --chart-1: 20 100% 62%;
-    --chart-2: 198 88% 62%;
-    --chart-3: 150 62% 55%;
-    --chart-4: 335 78% 68%;
-    --chart-5: 45 95% 60%;
+    --chart-1: 10 79% 56%;
+    --chart-2: 228 74% 62%;
+    --chart-3: 160 68% 47%;
+    --chart-4: 72 10% 76%;
+    --chart-5: 47 100% 65%;
 
     --glass-bg: 216 16% 12% / 0.78;
     --glass-bg-subtle: 216 16% 14% / 0.48;
@@ -355,8 +328,17 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
+    font-family: var(--font-heading, 'Onest', sans-serif);
     letter-spacing: 0;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-metric {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
   }
 
   html {

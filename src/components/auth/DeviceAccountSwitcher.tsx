@@ -64,7 +64,7 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
   if (!hasAccounts && !onAddAccount) return null;
 
   return (
-    <div className={cn('overflow-hidden rounded-2xl border border-border/70 bg-card/80', className)}>
+    <div className={cn('overflow-hidden rounded-md border border-border bg-white', className)}>
       <div className="border-b border-border/50 px-4 py-3">
         <div className="text-sm font-bold">{t('auth.deviceAccounts', 'Аккаунты на этом устройстве')}</div>
         {!compact && (
@@ -82,9 +82,9 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
 
             return (
               <div key={account.userId} className="flex items-center gap-3 p-3">
-                <Avatar className="h-10 w-10 rounded-xl">
+                <Avatar className="h-10 w-10 rounded-md">
                   <AvatarImage src={account.avatarUrl || ''} alt={account.email} />
-                  <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-bold">
+                  <AvatarFallback className="rounded-md bg-primary/10 text-primary font-bold">
                     {getInitial(account.displayName || account.email)}
                   </AvatarFallback>
                 </Avatar>
@@ -134,7 +134,7 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
 
       {onAddAccount && (
         <div className="p-3">
-          <Button type="button" variant="outline" className="w-full gap-2 rounded-xl" onClick={handleAddAccount}>
+          <Button type="button" variant="outline" className="w-full gap-2 rounded-md" onClick={handleAddAccount}>
             <Plus className="h-4 w-4" />
             {otherAccounts.length > 0
               ? t('auth.addAnotherAccount', 'Добавить еще аккаунт')
@@ -144,7 +144,7 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
       )}
 
       <AlertDialog open={Boolean(accountPendingRemoval)} onOpenChange={(open) => !open && setAccountToRemove(null)}>
-        <AlertDialogContent className="max-w-sm rounded-2xl">
+        <AlertDialogContent className="max-w-sm rounded-lg">
           <AlertDialogHeader>
             <AlertDialogTitle>{t('auth.removeSavedAccountTitle', 'Remove this account from the device?')}</AlertDialogTitle>
             <AlertDialogDescription>

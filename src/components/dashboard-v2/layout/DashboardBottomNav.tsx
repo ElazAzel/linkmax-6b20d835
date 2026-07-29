@@ -6,7 +6,7 @@
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Home from 'lucide-react/dist/esm/icons/home';
-import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
+import FilePenLine from 'lucide-react/dist/esm/icons/file-pen-line';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
@@ -43,11 +43,11 @@ const TABS: NavTab[] = [
     path: '/dashboard/home',
   },
   {
-    id: 'editor',
-    icon: PenTool,
-    labelKey: 'dashboard.nav.editor',
-    defaultLabel: 'Редактор',
-    path: '/dashboard/home?tab=editor',
+    id: 'pages',
+    icon: FilePenLine,
+    labelKey: 'dashboard.nav.site',
+    defaultLabel: 'Сайт',
+    path: '/dashboard/pages',
   },
   {
     id: 'activity',
@@ -101,7 +101,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
   return (
     <>
       <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pt-3 pointer-events-none">
-        <div className="app-bottom-nav overflow-hidden pointer-events-auto rounded-[20px] border border-white/10 shadow-[0_18px_44px_-18px_rgba(0,0,0,0.72)]">
+        <div className="app-bottom-nav pointer-events-auto overflow-hidden rounded-lg border border-white/10 shadow-[0_18px_44px_-18px_rgba(0,0,0,0.72)]">
           <div className="grid grid-cols-5 h-[4.25rem]">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -157,7 +157,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
 
       {/* More Sheet */}
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent side="bottom" className="rounded-t-2xl px-4 pb-8">
+        <SheetContent side="bottom" className="rounded-t-lg px-4 pb-8">
           <SheetHeader>
             <SheetTitle className="text-left">{t('dashboard.nav.menu', 'Меню')}</SheetTitle>
           </SheetHeader>
@@ -170,7 +170,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                   key={item.id}
                   onClick={() => handleMoreItemClick(item)}
                   className={cn(
-                    "flex flex-col items-center gap-2 p-4 rounded-xl transition-all active:scale-95",
+                    "flex flex-col items-center gap-2 rounded-lg p-4 transition-all active:scale-95",
                     isActive ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground hover:bg-muted"
                   )}
                   data-testid={`${item.id}-tab`}

@@ -267,7 +267,7 @@ export default {
       },
       fontFamily: {
         sans: [
-          'Inter',
+          'Onest',
           'ui-sans-serif',
           'system-ui',
           '-apple-system',
@@ -279,11 +279,22 @@ export default {
           'sans-serif'
         ],
         heading: [
-          'Manrope',
-          'Inter',
+          'Onest',
           'ui-sans-serif',
           'system-ui',
           'sans-serif'
+        ],
+        display: [
+          'Unbounded',
+          'Onest',
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif'
+        ],
+        mono: [
+          'JetBrains Mono',
+          'ui-monospace',
+          'monospace'
         ]
       },
       fontSize: {
@@ -291,15 +302,15 @@ export default {
         'sm': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }],
         'base': ['1rem', { lineHeight: '1.5rem', letterSpacing: '0' }],
         'lg': ['1.125rem', { lineHeight: '1.625rem', letterSpacing: '0' }],
-        'xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '-0.01em' }],
-        '2xl': ['1.5rem', { lineHeight: '1.8rem', letterSpacing: '-0.015em' }],
-        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.02em' }],
-        '4xl': ['2.25rem', { lineHeight: '2.4rem', letterSpacing: '-0.025em' }],
-        '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
-        '6xl': ['3.5rem', { lineHeight: '1.05', letterSpacing: '-0.035em' }],
-        '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.04em' }],
-        '8xl': ['5.5rem', { lineHeight: '1', letterSpacing: '-0.045em' }],
-        '9xl': ['7rem', { lineHeight: '1', letterSpacing: '-0.05em' }]
+        'xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '0' }],
+        '2xl': ['1.5rem', { lineHeight: '1.8rem', letterSpacing: '0' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '0' }],
+        '4xl': ['2.25rem', { lineHeight: '2.4rem', letterSpacing: '0' }],
+        '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '0' }],
+        '6xl': ['3.5rem', { lineHeight: '1.05', letterSpacing: '0' }],
+        '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '0' }],
+        '8xl': ['5.5rem', { lineHeight: '1', letterSpacing: '0' }],
+        '9xl': ['7rem', { lineHeight: '1', letterSpacing: '0' }]
       },
       letterSpacing: {
         'tighter': '-0.05em',

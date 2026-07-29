@@ -5,8 +5,19 @@ export function getSafeReturnTo(
   returnTo: string | null | undefined,
   fallback = DEFAULT_RETURN_TO
 ): string {
-  if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
-    return returnTo;
+  const isInternalPath =
+    Boolean(returnTo) &&
+    returnTo!.startsWith('/') &&
+    !returnTo!.startsWith('//') &&
+    !returnTo!.includes('\\') &&
+    !/%(?:2f|5c)/i.test(returnTo!) &&
+    ![...returnTo!].some((character) => {
+      const codePoint = character.charCodeAt(0);
+      return codePoint <= 31 || codePoint === 127;
+    });
+
+  if (isInternalPath) {
+    return returnTo!;
   }
 
   return fallback;

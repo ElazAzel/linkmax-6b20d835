@@ -65,7 +65,7 @@ export const DashboardLayout = memo(function DashboardLayout({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className={cn("w-full h-full", isMobile ? "p-0" : "px-5 py-5 lg:px-7 lg:py-6")}
+            className={cn("h-full w-full", isMobile ? "p-0" : "px-4 py-4 lg:px-6 lg:py-5")}
           >
             <div className="max-w-7xl mx-auto min-h-full overflow-visible">
               {children}

@@ -6,6 +6,7 @@ import Menu from 'lucide-react/dist/esm/icons/menu';
 import X from 'lucide-react/dist/esm/icons/x';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 
 // Lazy load LanguageSwitcher — it imports dropdown-menu, switch, input, scroll-area
 // which are not needed until user interacts with the nav
@@ -56,9 +57,6 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
     const hidden = useScrollHide(expanded);
-    const brandPrefix = t('landing.short.brandPrefix', 'lnk');
-    const brandAccent = t('landing.short.brandAccent', 'mx');
-
     // Desktop: inline nav, no expandable menu
     if (!isMobile) {
         return (
@@ -68,10 +66,10 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                     hidden ? "-translate-y-[100px]" : "translate-y-0"
                 )}
             >
-                <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-[#ded9c9] bg-white/[0.92] px-2 py-1.5 shadow-[0_16px_40px_rgba(16,19,24,0.12)] backdrop-blur-xl">
-                    <span className="cursor-default px-4 font-bold tracking-tight text-[#101318]">
-                        {brandPrefix}<span className="text-[#ff5701]">{brandAccent}</span>
-                    </span>
+                <div className="pointer-events-auto flex items-center gap-1 rounded-lg border border-[#16131A]/15 bg-white px-2 py-1.5 shadow-[0_12px_32px_rgba(22,19,26,0.12)]">
+                    <button type="button" onClick={() => scrollTo('#hero')} className="mr-2 rounded-md px-2 py-1" aria-label="LinkMAX">
+                        <BrandLogo className="h-7" />
+                    </button>
 
                     <nav className="flex items-center gap-1">
                         {[
@@ -82,14 +80,14 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                             <button
                                 key={href}
                                 onClick={() => scrollTo(href)}
-                                className="rounded-full px-3 py-1.5 text-sm font-medium text-[#62675f] transition-colors hover:bg-[#f6f6f1] hover:text-[#101318]"
+                                className="rounded-md px-3 py-1.5 text-sm font-medium text-[#16131A]/70 transition-colors hover:bg-[#F4F5F0] hover:text-[#16131A]"
                             >
                                 {label}
                             </button>
                         ))}
                     </nav>
 
-                    <div className="mx-1 h-5 w-px bg-[#ded9c9]" />
+                    <div className="mx-1 h-5 w-px bg-[#16131A]/15" />
 
                     <Suspense fallback={null}>
                         <LanguageSwitcher />
@@ -98,14 +96,14 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 rounded-full px-3 text-xs font-semibold text-[#42473f] hover:bg-[#f6f6f1] hover:text-[#101318]"
+                        className="h-8 rounded-md px-3 text-xs font-semibold text-[#16131A]/75 hover:bg-[#F4F5F0] hover:text-[#16131A]"
                         onClick={onLogin}
                     >
                         {t('landing.v2.nav.login', 'Войти')}
                     </Button>
                     <Button
                         size="sm"
-                        className="h-8 rounded-full bg-[#101318] px-4 text-xs font-semibold text-white hover:bg-[#232832]"
+                        className="h-8 rounded-md bg-[#C93618] px-4 text-xs font-semibold text-white hover:bg-[#A92D16]"
                         onClick={onSignup}
                     >
                         {t('landing.short.nav.create', 'Создать')}
@@ -125,36 +123,33 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
         >
             <div
                 className={cn(
-                    "pointer-events-auto relative flex w-full max-w-md flex-col items-center overflow-hidden border border-[#ded9c9] bg-white/[0.94] shadow-[0_16px_40px_rgba(16,19,24,0.12)] backdrop-blur-xl transition-all duration-300 ease-out",
-                    expanded ? "rounded-[20px]" : "rounded-full"
+                    "pointer-events-auto relative flex w-full max-w-md flex-col items-center overflow-hidden rounded-lg border border-[#16131A]/15 bg-white shadow-[0_12px_32px_rgba(22,19,26,0.14)] transition-all duration-300 ease-out"
                 )}
             >
                 {/* Compact bar */}
                 <div className="flex items-center justify-between w-full h-12 px-2 pl-4 gap-2 shrink-0">
-                    <span className="cursor-default text-sm font-bold tracking-tight text-[#101318]">
-                        {brandPrefix}<span className="text-[#ff5701]">{brandAccent}</span>
-                    </span>
+                    <BrandLogo className="h-7" />
 
                     {!expanded ? (
                         <div className="flex items-center gap-1 animate-in fade-in duration-200">
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-7 rounded-full px-2.5 text-xs font-semibold text-[#42473f] hover:bg-[#f6f6f1] hover:text-[#101318]"
+                                className="h-8 rounded-md px-2.5 text-xs font-semibold text-[#16131A]/75 hover:bg-[#F4F5F0] hover:text-[#16131A]"
                                 onClick={onLogin}
                             >
                                 {t('landing.v2.nav.login', 'Войти')}
                             </Button>
                             <Button
                                 size="sm"
-                                className="h-7 rounded-full bg-[#101318] px-3 text-xs font-semibold text-white hover:bg-[#232832]"
+                                className="h-8 rounded-md bg-[#C93618] px-3 text-xs font-semibold text-white hover:bg-[#A92D16]"
                                 onClick={onSignup}
                             >
                                 {t('landing.short.nav.create', 'Создать')}
                             </Button>
                             <button
                                 onClick={() => setExpanded(true)}
-                                className="rounded-full p-2 text-[#42473f] transition-colors hover:bg-[#f6f6f1] hover:text-[#101318]"
+                                className="rounded-md p-2 text-[#16131A]/75 transition-colors hover:bg-[#F4F5F0] hover:text-[#16131A]"
                                 aria-label={t('landing.v2.nav.openMenu', 'Открыть меню')}
                             >
                                 <Menu className="w-4 h-4" />
@@ -163,7 +158,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                     ) : (
                         <button
                             onClick={() => setExpanded(false)}
-                            className="z-20 rounded-full p-2 text-[#42473f] transition-colors animate-in fade-in spin-in-90 duration-200 hover:bg-[#f6f6f1] hover:text-[#101318]"
+                            className="z-20 rounded-md p-2 text-[#16131A]/75 transition-colors animate-in fade-in spin-in-90 duration-200 hover:bg-[#F4F5F0] hover:text-[#16131A]"
                             aria-label={t('landing.v2.nav.closeMenu', 'Закрыть меню')}
                         >
                             <X className="w-4 h-4" />
@@ -188,7 +183,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                                         key={href}
                                         href={href}
                                         onClick={(e) => { e.preventDefault(); scrollTo(href); setExpanded(false); }}
-                                        className="block border-b border-[#ece7d8] py-2.5 text-base font-medium text-[#42473f] transition-colors hover:text-[#101318]"
+                                        className="block border-b border-[#16131A]/10 py-2.5 text-base font-medium text-[#16131A]/75 transition-colors hover:text-[#16131A]"
                                     >
                                         {label}
                                     </a>
@@ -199,18 +194,18 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                                 <LanguageSwitcher />
                             </Suspense>
 
-                            <div className="h-px w-full bg-[#ece7d8]" />
+                            <div className="h-px w-full bg-[#16131A]/10" />
 
                             <div className="flex flex-col gap-2">
                                 <Button
-                                    className="h-11 w-full justify-between rounded-xl border border-[#ded9c9] bg-white text-[#101318] hover:bg-[#f6f6f1]"
+                                    className="h-11 w-full justify-between rounded-md border border-[#16131A]/20 bg-white text-[#16131A] hover:bg-[#F4F5F0]"
                                     variant="outline"
                                     onClick={() => { onLogin(); setExpanded(false); }}
                                 >
                                     {t('landing.v2.nav.login', 'Войти')}
                                 </Button>
                                 <Button
-                                    className="h-11 w-full justify-between rounded-xl bg-[#101318] text-white hover:bg-[#232832]"
+                                    className="h-11 w-full justify-between rounded-md bg-[#C93618] text-white hover:bg-[#A92D16]"
                                     onClick={() => { onSignup(); setExpanded(false); }}
                                 >
                                     {t('landing.short.nav.createFree', 'Создать бесплатно')}

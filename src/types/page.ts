@@ -22,7 +22,49 @@ export type BlockShadow = 'none' | 'sm' | 'md' | 'lg' | 'glow' | 'inner';
 export type BlockHover = 'none' | 'lift' | 'scale' | 'glow' | 'underline';
 export type DividerStyle = 'none' | 'hairline' | 'dotted' | 'gradient' | 'ornament';
 
+export interface PageThemeColors {
+  canvas: string;
+  surface: string;
+  text: string;
+  mutedText: string;
+  primary: string;
+  primaryText: string;
+  secondary: string;
+  border: string;
+  focus: string;
+  success: string;
+  warning: string;
+  danger: string;
+}
+
+export interface PageThemeTypography {
+  headingFamily: string;
+  bodyFamily: string;
+  monoFamily: string;
+  headingWeight: 500 | 600 | 700;
+  bodyWeight: 400 | 500 | 600;
+  scale: 'compact' | 'balanced' | 'expressive';
+}
+
+export interface PageThemeRadii {
+  control: number;
+  card: number;
+  block: number;
+  image: number;
+}
+
+export interface PageThemeSpacing {
+  density: 'compact' | 'comfortable' | 'spacious';
+  sectionGap: number;
+  blockGap: number;
+  pagePadding: number;
+}
+
 export interface PageTheme {
+  /** Version 2 adds semantic roles while preserving all legacy fields. */
+  schemaVersion?: 2;
+  /** Published legacy pages stay visually locked until the user applies v2. */
+  appearanceMode?: 'legacy' | 'v2';
   backgroundColor: string;
   backgroundGradient?: string;
   textColor: string;
@@ -46,6 +88,13 @@ export interface PageTheme {
   blockHover?: BlockHover;
   divider?: DividerStyle;
   themePreset?: string;
+  colors?: PageThemeColors;
+  typography?: PageThemeTypography;
+  radii?: PageThemeRadii;
+  spacing?: PageThemeSpacing;
+  imageTreatment?: 'natural' | 'editorial' | 'monochrome';
+  buttonWeight?: 500 | 600 | 700;
+  motionLevel?: 'none' | 'reduced' | 'standard' | 'expressive';
 }
 
 export interface PageMetrics {
