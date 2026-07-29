@@ -23,7 +23,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
 
   return (
     <section className="relative isolate min-h-[min(820px,88svh)] overflow-hidden bg-[#F4F5F0] text-[#16131A]">
-      <picture className="absolute inset-y-0 right-0 -z-20 w-full sm:w-[64%]">
+      <picture className="absolute inset-y-0 right-0 -z-20 w-full md:w-[40%]">
         <source srcSet="/brand/linkmax-hero-studio.webp" type="image/webp" />
         <img
           src="/brand/linkmax-hero-studio.png"
@@ -34,22 +34,22 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           fetchPriority="high"
         />
       </picture>
-      <div className="absolute inset-0 -z-10 bg-[#F4F5F0]/85 sm:right-[46%] sm:bg-[#F4F5F0]" aria-hidden="true" />
+      <div className="absolute inset-0 -z-10 bg-[#F4F5F0]/90 md:right-[40%] md:bg-[#F4F5F0]" aria-hidden="true" />
 
       <div className="mx-auto flex min-h-[min(820px,88svh)] max-w-[1440px] flex-col px-4 pb-8 pt-24 sm:px-6 sm:pt-28 lg:px-10">
-        <div className="flex max-w-[650px] flex-1 flex-col justify-center py-8">
+        <div className="flex max-w-[720px] flex-1 flex-col justify-center py-8 md:max-w-[58%]">
           <div className="mb-5 flex items-center gap-3 text-sm font-semibold">
             <span className="h-2.5 w-2.5 bg-[#C93618]" aria-hidden="true" />
             {t('landing.short.eyebrow', 'Сайт, заявки и продажи в одной системе')}
           </div>
 
-          <h1 className="font-display text-[clamp(3.25rem,7vw,6rem)] font-bold leading-[0.94] text-[#16131A]">
+          <h1 className="font-display text-5xl font-bold leading-none text-[#16131A] sm:text-6xl xl:text-7xl">
             LinkMAX
           </h1>
-          <p className="mt-5 max-w-[590px] text-xl font-semibold leading-tight sm:text-2xl">
+          <p className="mt-5 max-w-[590px] text-xl font-semibold leading-snug xl:text-2xl">
             {t('landing.short.title', 'Соберите рабочую страницу бизнеса и управляйте клиентами без лишних сервисов')}
           </p>
-          <p className="mt-4 max-w-[560px] text-base leading-7 text-[#4E4952] sm:text-lg">
+          <p className="mt-4 max-w-[560px] text-base leading-7 text-[#4E4952] xl:text-lg">
             {t(
               'landing.short.subtitle',
               'AI помогает начать, гибкий редактор сохраняет ваш стиль, а заявки, оплаты и аналитика остаются рядом.'
@@ -57,7 +57,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-7 max-w-[620px]">
-            <div className="grid gap-2 border border-[#16131A] bg-white p-2 shadow-[6px_6px_0_#16131A] sm:grid-cols-[1fr_auto]">
+            <div className="grid min-w-0 gap-2 border border-[#16131A] bg-white p-2 shadow-[4px_4px_0_#16131A] xl:grid-cols-[minmax(0,1fr)_auto]">
               <label className="flex h-12 min-w-0 items-center px-3" htmlFor="hero-slug">
                 <span className="shrink-0 text-sm font-semibold text-[#68636D]">
                   {t('landing.short.slugPrefix', 'lnkmx.my/')}
@@ -74,7 +74,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
               </label>
               <Button
                 type="submit"
-                className="h-12 rounded-md bg-[#C93618] px-5 font-semibold text-white hover:bg-[#A92D16]"
+                className="h-12 w-full rounded-md bg-[#C93618] px-5 font-semibold text-white hover:bg-[#A92D16] xl:w-auto"
               >
                 {t('landing.short.create', 'Создать страницу')}
                 <ArrowRight className="ml-2 h-4 w-4" />
