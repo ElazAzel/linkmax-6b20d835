@@ -769,7 +769,90 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: { label: 'Попробовать LinkMAX — альтернативу Linktree и Taplink', href: '/auth?ref=blog-linktree-vs-taplink-vs-linkmax' },
   },
+  {
+    slug: 'how-to-add-link-in-bio-to-instagram',
+    title: 'How to add a link in bio to Instagram (2026 step-by-step)',
+    description:
+      'Step-by-step guide to adding a link in bio to your Instagram profile: edit profile, add your LinkMAX URL, add multiple links, and track clicks.',
+    publishedAt: '2026-07-30',
+    readingMinutes: 6,
+    tags: ['instagram', 'link in bio', 'linkinbio', 'how-to'],
+    answer:
+      'To add a link in bio on Instagram, open your profile, tap Edit profile, paste your URL into the Links (or Website) field and save. To share more than one destination, use a link-in-bio page such as lnkmx.my/yourname, which holds all your links, services, booking form and payment buttons behind one URL.',
+    sections: [
+      {
+        heading: 'What "link in bio" means on Instagram',
+        paragraphs: [
+          'Instagram does not allow clickable links in regular feed captions. The only always-clickable link is the one in your profile bio, which is why creators and service businesses write "link in bio" in their posts.',
+          'Since 2023 Instagram allows up to five links in the profile, but visitors still see a plain list without context, prices or a way to book. A dedicated link-in-bio page solves that: one URL, unlimited content.',
+        ],
+      },
+      {
+        heading: 'Step-by-step: add a link to your Instagram bio',
+        paragraphs: ['It takes under a minute on both iOS and Android:'],
+        bullets: [
+          'Open the Instagram app and tap your profile picture (bottom right).',
+          'Tap Edit profile.',
+          'Tap Links → Add external link.',
+          'Paste your URL, for example https://lnkmx.my/yourname.',
+          'Optionally add a Link title such as "Book a session" or "Prices & booking".',
+          'Tap Done, then Save. The link now appears under your bio text.',
+        ],
+      },
+      {
+        heading: 'How to add multiple links in bio',
+        paragraphs: [
+          'Instagram allows up to 5 profile links, but they compete with each other and cannot show prices, photos or forms. The common fix is one link-in-bio page that contains everything.',
+          'Create a page at lnkmx.my/yourname, add your services, prices, WhatsApp and Telegram buttons, a booking form and payment links, then put that single URL in your bio.',
+        ],
+        bullets: [
+          'Services with prices instead of a bare price list in Stories',
+          'Booking form with dates and time slots',
+          'WhatsApp / Telegram / Kaspi buttons for instant contact and payment',
+          'Photo gallery, reviews and FAQ for trust',
+          'Click analytics so you know which link actually converts',
+        ],
+      },
+      {
+        heading: 'Create your link in bio page with LinkMAX',
+        paragraphs: [
+          'Sign up, pick a short slug (lnkmx.my/yourname), and let the AI builder assemble the first version from a short description of your business. Edit the blocks, publish, and paste the URL into your Instagram profile.',
+          'Every lead from the page lands in the built-in mini-CRM and triggers a Telegram notification, so nothing gets lost in Direct.',
+        ],
+      },
+      {
+        heading: 'Track clicks from Instagram',
+        paragraphs: [
+          'LinkMAX analytics shows visits, click-through per block, traffic sources and geography. You can see how many people came from Instagram, which button they tapped and where they dropped off — data Instagram itself does not give you for external links.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'Why can I not add a link to my Instagram post?',
+        answer:
+          'Instagram disables links in feed captions to prevent spam. Links are only clickable in the profile bio, in Stories (link sticker) and in ads, which is why creators point followers to the link in bio.',
+      },
+      {
+        question: 'How many links can I add to my Instagram bio?',
+        answer:
+          'Instagram supports up to 5 external links in the profile. For more destinations — services, prices, booking, payments — use a single link-in-bio page such as lnkmx.my/yourname.',
+      },
+      {
+        question: 'Is a link in bio page free?',
+        answer:
+          'Yes. LinkMAX has a free plan with a published page, unlimited links, contact buttons and basic analytics. Paid plans add a custom domain, auto-translation, payments and advanced CRM.',
+      },
+      {
+        question: 'How do I change the link in my Instagram bio?',
+        answer:
+          'Go to Edit profile → Links, tap the existing link, replace the URL and save. If you use a link-in-bio page you rarely need to change it: you update the content of the page instead.',
+      },
+    ],
+    cta: { label: 'Create your free link in bio page', href: '/auth?ref=blog-link-in-bio-instagram' },
+  },
 ];
+
 
 
 export function getBlogPost(slug: string): BlogPost | undefined {

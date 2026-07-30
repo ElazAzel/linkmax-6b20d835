@@ -216,9 +216,28 @@ serve(async (req) => {
 
     const { url } = await req.json();
 
-    if (!url) {
+    if (!url || typeof url !== 'string') {
       return new Response(
         JSON.stringify({ error: 'url_required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // SSRF protection: only allow exact Google Forms hosts over https
+    const ALLOWED_HOSTS = ['forms.gle', 'docs.google.com'];
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url.trim());
+    } catch {
+      return new Response(
+        JSON.stringify({ error: 'invalid_url' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    const isShortLink = parsedUrl.hostname === 'forms.gle';
+    if (parsedUrl.protocol !== 'https:' || !ALLOWED_HOSTS.includes(parsedUrl.hostname)) {
+      return new Response(
+        JSON.stringify({ error: 'invalid_url' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -233,11 +252,18 @@ serve(async (req) => {
 
     // Construct the viewform URL
     let viewformUrl: string;
-    if (url.includes('forms.gle')) {
-      // Short URL - need to follow redirect first
-      const redirectResponse = await fetch(url, { redirect: 'follow' });
-      viewformUrl = redirectResponse.url;
-    } else if (url.includes('/d/e/')) {
+    if (isShortLink) {
+      // Short URL - need to follow redirect first, then re-validate the final host
+      const redirectResponse = await fetch(parsedUrl.toString(), { redirect: 'follow' });
+      const finalUrl = new URL(redirectResponse.url);
+      if (finalUrl.protocol !== 'https:' || !ALLOWED_HOSTS.includes(finalUrl.hostname)) {
+        return new Response(
+          JSON.stringify({ error: 'invalid_url' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      viewformUrl = finalUrl.toString();
+    } else if (parsedUrl.pathname.includes('/d/e/')) {
       viewformUrl = `https://docs.google.com/forms/d/e/${formId}/viewform`;
     } else {
       viewformUrl = `https://docs.google.com/forms/d/${formId}/viewform`;

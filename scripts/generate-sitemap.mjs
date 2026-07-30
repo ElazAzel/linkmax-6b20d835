@@ -88,9 +88,9 @@ const NICHE_LANDINGS = [
   // hair-stylist, makeup-artist, cosmetologist) removed 2026-07-02 —
   // scanner flags them as route mismatches because pre-rendered HTML
   // does not carry niche-specific content.
-  'massage-therapist',
-  'tattoo-artist', 'barber',
-  'business-coach', 'life-coach', 'career-coach', 'financial-advisor', 'nutrition-coach',
+  // massage-therapist, tattoo-artist, barber, business-coach, life-coach
+  // removed 2026-07-30 — scanner flags them as stale route mismatches.
+  'career-coach', 'financial-advisor', 'nutrition-coach',
   'relationship-coach', 'mindfulness-coach',
   'english-tutor', 'math-tutor', 'music-teacher', 'art-teacher', 'online-school', 'course-creator',
   'wedding-photographer', 'videographer', 'illustrator', 'dj', 'musician', 'blogger', 'event-planner',
@@ -119,6 +119,7 @@ const BLOG_POSTS = [
   'mini-crm-dlya-frilansera-zachem-i-kak',
   'instagram-bio-ideas-for-photographers',
   'linktree-vs-taplink-vs-linkmax',
+  'how-to-add-link-in-bio-to-instagram',
 ];
 
 
