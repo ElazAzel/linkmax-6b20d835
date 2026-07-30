@@ -260,24 +260,19 @@ export const HomeScreen = memo(function HomeScreen({
                   <div className="flex flex-col items-center space-y-1">
                     <AlertTriangle className="h-5 w-5 text-amber-500 animate-pulse" />
                     <span className="text-xs uppercase font-bold text-amber-500/80 tracking-widest">{t('common.enable', 'Включить')}</span>
-                )}
-                onClick={() => onNavigate?.('settings')}
-              >
-                {telegramChatId ? (
-                  <div className="flex flex-col items-center space-y-1">
-                    <StatusBadge status="published" size="sm" className="bg-emerald-500/20 text-emerald-500 border-none px-2" />
-                    <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('settings.notifications', 'Уведомления')}</span>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center space-y-1">
-                    <AlertTriangle className="h-5 w-5 text-amber-500 animate-pulse" />
-                    <span className="text-xs uppercase font-bold text-amber-500/80 tracking-widest">{t('common.enable', 'Включить')}</span>
                   </div>
                 )}
               </Card>
 
               <Card className="cursor-pointer space-y-1 rounded-md border-border p-4 text-center transition-colors hover:bg-accent/50" onClick={onOpenInsights}>
-                size="lg" 
+                <span className="text-2xl font-black text-primary">{weeklyStats.views}</span>
+                <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'просмотры')}</span>
+              </Card>
+            </div>
+
+            {realLeadsCount > 0 && (
+              <Button
+                size="lg"
                 className="h-12 w-full rounded-md bg-primary text-base font-semibold text-white"
                 onClick={onOpenActivity}
               >
@@ -286,6 +281,7 @@ export const HomeScreen = memo(function HomeScreen({
                 <Badge className="ml-3 bg-white/20 text-white border-none">{realLeadsCount}</Badge>
               </Button>
             )}
+
             
             {/* Only show feed if there is activity or it's an expert */}
             {(realLeadsCount > 0 || pageData?.niche === 'expert') && (
