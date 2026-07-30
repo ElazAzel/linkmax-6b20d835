@@ -119,6 +119,7 @@ const BLOG_POSTS = [
   'mini-crm-dlya-frilansera-zachem-i-kak',
   'instagram-bio-ideas-for-photographers',
   'linktree-vs-taplink-vs-linkmax',
+  'how-to-add-link-in-bio-to-instagram',
 ];
 
 
