@@ -153,6 +153,7 @@ const router = createBrowserRouter([
       { path: ".lovable/oauth/consent", element: <OAuthConsent /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "dashboard/home", element: <Dashboard /> },
+      { path: "dashboard/editor", element: <Dashboard /> },
       { path: "dashboard/pages", element: <Dashboard /> },
       { path: "dashboard/activity", element: <Dashboard /> },
       { path: "dashboard/insights", element: <Dashboard /> },

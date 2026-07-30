@@ -269,7 +269,7 @@ function DashboardV2Inner() {
     if (tabId === 'home') {
       navigate('/dashboard/home');
     } else if (tabId === 'editor') {
-      navigate('/dashboard/home?tab=editor');
+      navigate('/dashboard/editor');
     } else {
       navigate(`/dashboard/${tabId}`);
     }
@@ -295,7 +295,7 @@ function DashboardV2Inner() {
   // Handle edit page (navigate to editor)
   const handleEditPage = useCallback((pageId: string) => {
     multiPage.switchPage(pageId);
-    handleTabChange('home');
+    handleTabChange('editor');
   }, [multiPage, handleTabChange]);
 
   // Handle page actions

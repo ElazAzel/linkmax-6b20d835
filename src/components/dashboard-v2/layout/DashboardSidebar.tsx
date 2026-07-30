@@ -11,6 +11,7 @@ const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'
 
 import Home from 'lucide-react/dist/esm/icons/home';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
+import FilePenLine from 'lucide-react/dist/esm/icons/file-pen-line';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import Settings from 'lucide-react/dist/esm/icons/settings';
@@ -59,6 +60,7 @@ interface DashboardSidebarProps {
 
 const MAIN_ITEMS: SidebarItem[] = [
   { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Главная' },
+  { id: 'editor', icon: FilePenLine, labelKey: 'dashboard.nav.editor', defaultLabel: 'Редактор' },
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.site', defaultLabel: 'Сайт' },
   { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
   { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },

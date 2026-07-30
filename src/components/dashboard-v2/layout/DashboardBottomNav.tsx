@@ -43,8 +43,15 @@ const TABS: NavTab[] = [
     path: '/dashboard/home',
   },
   {
-    id: 'pages',
+    id: 'editor',
     icon: FilePenLine,
+    labelKey: 'dashboard.nav.editor',
+    defaultLabel: 'Редактор',
+    path: '/dashboard/editor',
+  },
+  {
+    id: 'pages',
+    icon: FileText,
     labelKey: 'dashboard.nav.site',
     defaultLabel: 'Сайт',
     path: '/dashboard/pages',
@@ -56,17 +63,10 @@ const TABS: NavTab[] = [
     defaultLabel: 'Входящие',
     path: '/dashboard/activity',
   },
-  {
-    id: 'insights',
-    icon: BarChart3,
-    labelKey: 'dashboard.nav.insights',
-    defaultLabel: 'Аналитика',
-    path: '/dashboard/insights',
-  },
 ];
 
 const MORE_ITEMS: NavTab[] = [
-  { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
+  { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика', path: '' },
   { id: 'zone-deals', icon: Contact, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-tasks', icon: Calendar, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи', path: '' },
   { id: 'zone-invoices', icon: FileText, labelKey: 'zones.nav.invoices', defaultLabel: 'Финансы', path: '' },

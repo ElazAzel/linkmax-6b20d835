@@ -22,19 +22,9 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
   };
 
   return (
-    <section className="relative isolate min-h-[min(760px,84svh)] overflow-hidden bg-[#F4F5F0] text-[#16131A]">
-      <picture className="absolute right-0 top-0 -z-20 hidden h-[300px] w-[38%] overflow-hidden border-b border-l border-[#16131A]/15 lg:block">
-        <source srcSet="/brand/linkmax-hero-studio.webp" type="image/webp" />
-        <img
-          src="/brand/linkmax-hero-studio.png"
-          alt=""
-          className="h-full w-full origin-top scale-x-[1.42] scale-y-[2] object-cover object-[62%_0%]"
-          width={2688}
-          height={1536}
-        />
-      </picture>
-      <div className="mx-auto flex min-h-[min(760px,84svh)] max-w-[1440px] flex-col px-4 pb-10 pt-20 sm:px-6 sm:pt-24 lg:px-10">
-        <div className="flex max-w-[720px] flex-1 flex-col justify-center py-8 lg:max-w-[56%]">
+    <section className="relative overflow-hidden bg-[#F4F5F0] text-[#16131A]">
+      <div className="mx-auto grid min-h-[720px] max-w-[1180px] items-center gap-12 px-4 pb-16 pt-24 sm:px-6 sm:pt-28 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)] lg:px-8">
+        <div className="min-w-0 py-8">
           <div className="mb-5 flex items-center gap-3 text-sm font-semibold">
             <span className="h-2.5 w-2.5 bg-[#C93618]" aria-hidden="true" />
             {t('landing.short.eyebrow', 'Сайт, заявки и продажи в одной системе')}
@@ -99,6 +89,27 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           </div>
         </div>
 
+        <div className="relative hidden h-[520px] min-w-0 overflow-hidden rounded-lg border border-[#16131A]/15 bg-white lg:block">
+          <picture>
+            <source srcSet="/brand/linkmax-hero-studio.webp" type="image/webp" />
+            <img
+              src="/brand/linkmax-hero-studio.png"
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover object-right"
+              width={2688}
+              height={1536}
+              fetchPriority="high"
+            />
+          </picture>
+          <div className="absolute inset-x-0 bottom-0 border-t border-white/20 bg-[#16131A]/90 p-5 text-white">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/65">
+              {t('landing.short.previewEyebrow', 'Всё в одном месте')}
+            </p>
+            <p className="mt-2 text-lg font-semibold">
+              {t('landing.short.previewTitle', 'Страница, клиенты и оплата рядом')}
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

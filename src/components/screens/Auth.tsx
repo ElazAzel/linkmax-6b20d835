@@ -32,6 +32,7 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import UserIcon from 'lucide-react/dist/esm/icons/user';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import { trackAuthEvent } from '@/services/authFunnel';
 import type { TelegramAuthPayload } from '@/types/telegram-auth';
 import { BrandLogo } from '@/components/brand/BrandLogo';
@@ -551,18 +552,31 @@ export const Auth = memo(function Auth() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <div className="relative flex min-h-screen items-center justify-center overflow-x-hidden bg-[#F4F5F0] p-4 pb-safe">
-        <img
-          src="/brand/linkmax-hero-studio.webp"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-25"
-          width={2688}
-          height={1536}
-          aria-hidden="true"
-        />
+      <div className="relative min-h-dvh overflow-x-hidden bg-[#F4F5F0] pb-safe">
         <div className="absolute inset-x-0 top-0 h-1 bg-[#C93618]" aria-hidden="true" />
 
-        <div className="relative w-full max-w-md space-y-6">
+        <div className="relative mx-auto grid min-h-dvh w-full max-w-[1180px] items-center gap-12 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(400px,448px)] lg:px-8">
+          <div className="relative hidden h-[min(720px,calc(100dvh-96px))] min-h-[560px] overflow-hidden rounded-lg border border-[#16131A]/15 bg-white lg:block">
+            <picture>
+              <source srcSet="/brand/linkmax-hero-studio.webp" type="image/webp" />
+              <img
+                src="/brand/linkmax-hero-studio.png"
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover object-right"
+                width={2688}
+                height={1536}
+                aria-hidden="true"
+              />
+            </picture>
+            <div className="absolute inset-x-0 bottom-0 border-t border-white/20 bg-[#16131A]/90 p-7 text-white">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/65">LinkMAX</p>
+              <p className="mt-2 max-w-md text-2xl font-semibold leading-tight">
+                {t('auth.visualTitle', 'Страница, заявки и оплата — в одной системе')}
+              </p>
+            </div>
+          </div>
+
+          <div className="mx-auto w-full max-w-md space-y-6">
           {/* Referral Banner */}
           {refCode && (
             <Card className="border-border bg-card p-4 shadow-lift animate-fade-in">
@@ -618,7 +632,16 @@ export const Auth = memo(function Auth() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button
-                  className="h-12 w-full gap-2 rounded-lg shadow-glass-lg transition-colors"
+                  className="h-12 w-full gap-2 rounded-lg bg-[#C93618] text-white shadow-none transition-colors hover:bg-[#A92D16]"
+                  onClick={() => navigate('/dashboard')}
+                  data-testid="go-to-dashboard"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  {t('auth.goToDashboard', 'Перейти в кабинет')}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 w-full gap-2 rounded-lg border-[#16131A]/20 bg-white shadow-none transition-colors hover:bg-[#F4F5F0]"
                   onClick={() => navigate('/dashboard/settings')}
                   data-testid="manage-login-methods"
                 >
@@ -1153,6 +1176,7 @@ export const Auth = memo(function Auth() {
               {t('auth.backToHome', 'На главную')}
             </Button>
           </div>
+        </div>
         </div>
       </div>
     </>
