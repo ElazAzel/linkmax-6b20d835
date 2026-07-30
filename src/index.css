@@ -8,12 +8,6 @@
 
 
 
-/* Shimmer animation for lazy loading */
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
 /* Chaotic grid animations - slower for calm effect */
 @keyframes grid-morph-1 {
 
@@ -130,7 +124,6 @@
     --brand-blue: 228 74% 53%;
     --brand-mint: 160 88% 25%;
     --brand-sun: 47 100% 65%;
-    /* Compatibility aliases while legacy screens migrate to semantic names. */
     --brand-paper: var(--brand-canvas);
     --brand-orange: var(--brand-coral);
     --brand-orange-action: var(--brand-coral);
@@ -228,6 +221,10 @@
     --content-gap: clamp(1rem, 3vw, 2rem);
     --page-padding-x: clamp(1rem, 4vw, 2.5rem);
     --page-padding-y: clamp(1.5rem, 4vw, 3rem);
+    --space-page-px: clamp(1rem, 5vw, 2rem);
+    --space-section-y: clamp(3rem, 10vw, 6rem);
+    --space-block-gap: clamp(0.5rem, 2vw, 1rem);
+    --space-card-p: clamp(1rem, 3vw, 1.5rem);
   }
 
   .dark {
@@ -369,7 +366,7 @@
 
   /* Display — Landing hero ONLY. Avoid in multilingual-heavy UIs. */
   .text-display {
-    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
+    font-family: var(--font-display, 'Unbounded', 'Onest', sans-serif);
     font-size: clamp(2.5rem, 8vw, 4.5rem);
     line-height: 1.05;
     font-weight: 800;
@@ -378,7 +375,7 @@
 
   /* Hero — Section hero, page titles. ONE per screen. */
   .text-hero {
-    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
+    font-family: var(--font-heading, 'Onest', sans-serif);
     font-size: clamp(1.75rem, 5vw, 3rem);
     line-height: 1.1;
     font-weight: 700;
@@ -451,12 +448,6 @@
   /* ========================================
      FLUID SPACING SYSTEM
      ======================================== */
-  :root {
-    --space-page-px: clamp(1rem, 5vw, 2rem);
-    --space-section-y: clamp(3rem, 10vw, 6rem);
-    --space-block-gap: clamp(0.5rem, 2vw, 1rem);
-    --space-card-p: clamp(1rem, 3vw, 1.5rem);
-  }
 
   /* Responsive section padding */
   .section-padding {
@@ -805,23 +796,6 @@
 
     100% {
       transform: translateX(100%);
-    }
-  }
-
-  /* Floating animation for decorative elements */
-  .floating {
-    animation: floating 6s ease-in-out infinite;
-  }
-
-  @keyframes floating {
-
-    0%,
-    100% {
-      transform: translateY(0) rotate(0deg);
-    }
-
-    50% {
-      transform: translateY(-20px) rotate(3deg);
     }
   }
 
