@@ -5,7 +5,7 @@ import { fintechService, WalletOverview, WalletTransaction } from '@/services/fi
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { Card } from '@/components/ui/card';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { EmptyState, LoadingState } from '@/components/ui/states';
+import { EmptyState, LoadingState } from '@/components/ui';
 import { useQuery } from '@tanstack/react-query';
 import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';

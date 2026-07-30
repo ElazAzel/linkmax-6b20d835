@@ -1,6 +1,6 @@
 import { memo, ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { EmptyState as UiEmptyState } from '@/components/ui/states';
+import { EmptyState as UiEmptyState } from '@/components/ui';
 
 interface EmptyStateProps {
   icon: LucideIcon | ReactNode;

@@ -25,11 +25,6 @@ import { LocaleCode } from '@/i18n/config';
 import { useOptionalLanguage } from '@/contexts/LanguageContext';
 import { TranslationLanguageSelector, getLanguageInfo } from '@/components/translation/TranslationLanguageSelector';
 
-import { SUPPORTED_LANGUAGES } from '@/i18n/config';
-
-// Languages that have actual locale files (available for UI)
-const AVAILABLE_LANGUAGES = new Set<string>(SUPPORTED_LANGUAGES);
-
 // Extended language list - covers major world languages
 // Greyed out entries are "coming soon" — no locale file yet
 const ALL_LANGUAGES: { code: LocaleCode; name: string; flag: string; available?: boolean }[] = [
