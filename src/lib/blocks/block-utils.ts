@@ -5,6 +5,7 @@
 
 import type { Block } from '@/types/page';
 import { logger } from '@/lib/utils/logger';
+import { isSafeUrl } from '@/lib/blocks/block-validators';
 
 export type ButtonStyle = 'default' | 'rounded' | 'pill';
 export type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
