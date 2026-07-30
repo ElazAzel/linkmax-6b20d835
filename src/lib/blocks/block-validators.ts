@@ -42,19 +42,28 @@ function normalizeToString(value: unknown): string {
   return String(value);
 }
 
+const SAFE_URL_SCHEMES = ['http:', 'https:', 'mailto:', 'tel:'];
+
+export function isSafeUrl(value: string): boolean {
+  try {
+    return SAFE_URL_SCHEMES.includes(new URL(value.trim()).protocol);
+  } catch {
+    return false;
+  }
+}
+
 export function validateUrl(url: unknown, fieldName = 'URL'): string | null {
   const urlStr = normalizeToString(url);
   if (!urlStr || urlStr.trim() === '') {
     return `${fieldName} is required`;
   }
 
-  try {
-    new URL(urlStr);
-    return null;
-  } catch {
-    return `${fieldName} must be a valid URL`;
+  if (!isSafeUrl(urlStr)) {
+    return `${fieldName} must be a valid http(s), mailto or tel URL`;
   }
+  return null;
 }
+
 
 export function validateRequired(value: unknown, fieldName: string): string | null {
   const str = normalizeToString(value);
