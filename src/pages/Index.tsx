@@ -228,15 +228,16 @@ function ShortFinalCTA({ onStart }: { onStart: () => void }) {
     <section className="bg-[#C93618] px-4 py-14 text-white sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-[1120px] gap-6 md:grid-cols-[1fr_auto] md:items-center">
         <div>
-          <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white/[0.70]">
+          <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white">
             {t('landing.short.final.eyebrow', 'Готовы начать')}
           </div>
           <h2 className="font-display max-w-2xl text-3xl font-semibold leading-tight md:text-5xl">
           {t('landing.short.final.title', 'Страница может быть готова уже сегодня')}
           </h2>
-          <p className="mt-4 max-w-xl text-base leading-7 text-white/[0.78]">
+          <p className="mt-4 max-w-xl text-base leading-7 text-white">
             {t('landing.short.final.subtitle', 'Начните бесплатно: сначала соберите страницу, потом подключите запись, оплату и CRM по мере роста.')}
           </p>
+
         </div>
         <Button onClick={onStart} className="h-12 rounded-md bg-[#16131A] px-6 text-base font-semibold text-white hover:bg-black md:h-14">
           {t('landing.short.final.cta', 'Создать страницу')}

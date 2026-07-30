@@ -40,9 +40,10 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
             {t('landing.short.eyebrow', 'Сайт, заявки и продажи в одной системе')}
           </div>
 
-          <h1 className="font-display text-5xl font-bold leading-none text-[#16131A] sm:text-6xl xl:text-7xl">
-            LinkMAX
+          <h1 className="font-display text-4xl font-bold leading-tight text-[#16131A] sm:text-5xl xl:text-6xl">
+            {t('landing.short.h1', 'LinkMAX — сайт, заявки и CRM для сферы услуг')}
           </h1>
+
           <p className="mt-5 max-w-[590px] text-xl font-semibold leading-snug xl:text-2xl">
             {t('landing.short.title', 'Соберите рабочую страницу бизнеса и управляйте клиентами без лишних сервисов')}
           </p>
