@@ -765,7 +765,7 @@
     "paymentTerms": "Payment Terms",
     "product": "Product",
     "rights": "All rights reserved.",
-    "copyright": "В© 2025 LinkMAX"
+    "copyright": "© 2025 LinkMAX"
   },
   "seo": {
     "landing": {
@@ -778,7 +778,7 @@
       "street": "Sholokhov St., 20/7"
     },
     "readiness": {
-      "title": "Видимость в поиске"
+      "title": "Search Visibility"
     },
     "answer": "LinkMAX is an AI-powered page builder for creators.",
     "howToDesc": "Create a professional page in 2 minutes",
@@ -789,7 +789,7 @@
   },
   "animationSettings": {
     "bounce": "Bounce",
-    "delay": "Задержка: {{value}}мс",
+    "delay": "Delay: {{value}}ms",
     "delayHint": "Time before animation starts (0-2000ms)",
     "fadeIn": "Fade In",
     "none": "No animation",
@@ -960,7 +960,7 @@
   "blockManager": {
     "content": "Content",
     "delete": "Delete",
-    "description": "{{count}} блоков · Перетащите для сортировки",
+    "description": "{{count}} blocks · Drag to reorder",
     "duplicate": "Duplicate",
     "edit": "Edit",
     "empty": "No blocks",
@@ -1000,10 +1000,10 @@
     "videoTitle": "Video"
   },
   "blockSize": {
-    "large": "2Г—2",
-    "small": "1Г—1",
-    "tall": "1Г—2",
-    "wide": "2Г—1"
+    "large": "2×2",
+    "small": "1×1",
+    "tall": "1×2",
+    "wide": "2×1"
   },
   "blockTypes": {
     "avatar": "Avatar",
@@ -1213,7 +1213,7 @@
     "continue": "Next",
     "email": "Email",
     "error": "Error while writing. Try again.",
-    "formPrepaymentNote": "Предоплата {{amount}} {{currency}} после записи",
+    "formPrepaymentNote": "Prepayment {{amount}} {{currency}} after booking",
     "limitReached": {
       "customer": "Booking is temporarily unavailable. Contact directly."
     },
@@ -1225,10 +1225,10 @@
     "notes": "Comment",
     "notesPlaceholder": "Additional information...",
     "phone": "Telephone",
-    "prepaymentBadge": "Предоплата {{amount}} {{currency}}",
+    "prepaymentBadge": "Prepayment {{amount}} {{currency}}",
     "prepaymentNote": "After registration you will be redirected to WhatsApp for payment",
     "selectedTime": "Time selected",
-    "slotPrepaymentHint": "Предоплата {{amount}} {{currency}} · гарантирует бронь",
+    "slotPrepaymentHint": "Prepayment {{amount}} {{currency}} · guarantees booking",
     "step1": "Date",
     "step2": "Time",
     "success": "You have successfully registered!",
@@ -1237,12 +1237,12 @@
     "today": "Today",
     "tomorrow": "Tomorrow",
     "whatsapp": {
-      "greeting": "Здравствуйте! Я записался(ась) на {{date}} в {{time}}.",
-      "name": "Имя: {{name}}",
+      "greeting": "Hello! I booked for {{date}} at {{time}}.",
+      "name": "Name: {{name}}",
       "pay": "I want to pay for the recording.",
-      "prepayment": "Сумма предоплаты: {{amount}} {{currency}}"
+      "prepayment": "Prepayment: {{amount}} {{currency}}"
     },
-    "yourTimezone": "Ваш пояс"
+    "yourTimezone": "Your timezone"
   },
   "bookingBlock": {
     "addSlot": "Add",
@@ -1349,7 +1349,7 @@
     "shoutoutPlaceholder": "Write a recommendation...",
     "shoutoutReasonPlaceholder": "Write why you recommend this person...",
     "shoutoutRecommendDesc": "Send a shoutout recommendation for this user",
-    "shoutoutRecommendTitle": "Рекомендовать {{name}}",
+    "shoutoutRecommendTitle": "Recommend {{name}}",
     "showAll": "Show all",
     "title": "Collaboration",
     "userSearchPlaceholder": "Search by name..."
@@ -1361,7 +1361,7 @@
     "incomingRequests": "Incoming requests",
     "manageBlocks": "Block management",
     "members": "Participants",
-    "nicheUsers": "Пользователи в нише \"{{niche}}\"",
+    "nicheUsers": "Users in \"{{niche}}\" niche",
     "noActiveCollabs": "No active collaborations",
     "noMembers": "No participants",
     "offer": "Offer",
@@ -1417,7 +1417,7 @@
       "submit": "Submit",
       "tryAgain": "Try again",
       "upgrade": "Upgrade",
-      "upgradeToTier": "Улучшить до {{tier}}"
+      "upgradeToTier": "Upgrade to {{tier}}"
     },
     "date": "Date",
     "delete": "Delete",
@@ -1708,11 +1708,11 @@
       "title": "Finance"
     },
     "fintech": {
-      "fees": "Комиссия",
-      "gmv": "Оборот",
-      "net_balance": "Доступно к выводу",
-      "view_details": "Детализация финансов",
-      "wallet": "Ваш кошелек"
+      "fees": "Fees",
+      "gmv": "Revenue",
+      "net_balance": "Available for withdrawal",
+      "view_details": "Financial Details",
+      "wallet": "Your Wallet"
     },
     "header": {
       "live": "Live Platform"
@@ -2054,8 +2054,8 @@
     },
     "templateApplied": "Template applied!",
     "tryAgain": "Try again",
-    "dealsCount": "{{count}} сделок",
-    "openDealsCount": "{{count}} открытых сделок"
+    "dealsCount": "{{count}} deals",
+    "openDealsCount": "{{count}} open deals"
   },
   "days": {
     "friday": "Fri",
@@ -2084,9 +2084,9 @@
     "experimentCreated": "Experiment created! Now you can edit Variant B in the block settings.",
     "experimentName": "Test name",
     "history": {
-      "blockAdded": "Блок добавлен: {{type}}",
-      "blockDeleted": "Блок удалён: {{type}}",
-      "blockUpdated": "Блок изменён: {{type}}",
+      "blockAdded": "Block added: {{type}}",
+      "blockDeleted": "Block deleted: {{type}}",
+      "blockUpdated": "Block updated: {{type}}",
       "blocksReordered": "Block order changed",
       "redone": "Action repeated",
       "undoHint": "Click to cancel",
@@ -2418,7 +2418,7 @@
       "starting": "Error starting experiment"
     },
     "insight": {
-      "desc": "Данных пока недостаточно для 95% уверенности, но Вариант {{variant}} показывает лучший результат по CTR.",
+      "desc": "Not enough data for 95% confidence yet, but Variant {{variant}} shows the best CTR result.",
       "title": "Interim insight"
     },
     "label": {
@@ -2463,7 +2463,7 @@
     "profiles": "profiles",
     "searchPlaceholder": "Search by name or niche...",
     "subtitle": "Mini-sites for experts, freelancers and small businesses",
-    "tagDescription": "Профили {{tag}} специалистов на LinkMAX",
+    "tagDescription": "{{tag}} specialist profiles on LinkMAX",
     "title": "experts",
     "views": "views"
   },
@@ -2699,10 +2699,10 @@
   "freemium": {
     "blockLimitReached": "5 blocks is enough to start 🚀",
     "blockLimitDesc": "Go PRO to add lead forms, products, and build a full landing page with no limits.",
-    "blocksRemaining": "Осталось блоков: {{count}} из {{max}}",
+    "blocksRemaining": "Blocks remaining: {{count}} of {{max}}",
     "aiLimitReached": "Free AI generation used up",
     "aiLimitDesc": "With PRO, our AI generates dozens of converting headlines and descriptions to boost your clicks.",
-    "aiGenerationsRemaining": "Осталось AI генераций: {{count}}",
+    "aiGenerationsRemaining": "AI generations remaining: {{count}}",
     "aiLimitResetMonthlyPro": "The limit will be updated next month",
     "aiLimitResetsMonthly": "The limit is updated every month",
     "moreAIGenerations": "10 generations/mo with PRO",
@@ -2714,10 +2714,10 @@
     "getPremium": "Get Premium",
     "left": "left",
     "limit": "Limit",
-    "upgradeToEdit": "Обновите до {{tier}} для редактирования",
+    "upgradeToEdit": "Upgrade to {{tier}} to edit",
     "upgradeToPremium": "Upgrade to Premium",
     "viewOnly": "View",
-    "viewOnlyHint": "Требуется {{tier}} для редактирования",
+    "viewOnlyHint": "Requires {{tier}} to edit",
     "gate": {
       "forms": "Forms = leads. PRO sends them to CRM + Telegram.",
       "crm": "Statuses & quick replies to never lose a client.",
@@ -2795,10 +2795,10 @@
     "description": "Shows the path of users from page viewing to target action",
     "dropOff": "outflow",
     "engageDesc": "Completed actions (clicks, shares)",
-    "insightGoodConversion": "Хорошая конверсия {{rate}}%!",
-    "insightHighCtr": "Отличный CTR ({{rate}}%)! Контент вовлекает пользователей.",
-    "insightLowConversion": "Конверсия {{rate}}%. Оптимизируйте CTA и формы.",
-    "insightLowCtr": "Низкий CTR ({{rate}}%). Попробуйте добавить более заметные кнопки.",
+    "insightGoodConversion": "Good conversion {{rate}}%!",
+    "insightHighCtr": "Great CTR ({{rate}}%)! Content engages users.",
+    "insightLowConversion": "Conversion {{rate}}%. Optimize CTA and forms.",
+    "insightLowCtr": "Low CTR ({{rate}}%). Try adding more visible buttons.",
     "insightLowTraffic": "Not enough data to analyze. Share the link to the page.",
     "insightNoConversions": "There is engagement, but no conversions. Add a form or reservation.",
     "insights": "Recommendations",
@@ -2840,8 +2840,8 @@
     "seo": {
       "description": "Real user pages: templates, niches, ideas for your link in bio.",
       "imageAlt": "LinkMAX Gallery - Link in Bio Examples",
-      "nicheDescription": "Примеры страниц LinkMAX в нише {{niche}}: шаблоны, идеи и структура.",
-      "nicheTitle": "Галерея LinkMAX — {{niche}}",
+      "nicheDescription": "LinkMAX page examples for {{niche}}: templates, ideas and structure.",
+      "nicheTitle": "LinkMAX Gallery — {{niche}}",
       "opt": {
         "answer": "The LinkMAX Gallery showcases real examples of pages created by users across different industries including freelancers, businesses, beauty professionals, fitness coaches, and content creators.",
         "audience": {
@@ -2888,7 +2888,7 @@
     "tabLeaderboard": "Rating",
     "templateCopied": "Template copied!",
     "title": "Gallery of the best pages",
-    "totalPages": "Страницы: {{count}} в галерее",
+    "totalPages": "Pages: {{count}} in gallery",
     "tryAnotherFilter": "Try a different filter",
     "unlike": "Don't like it",
     "untitled": "Untitled",
@@ -2926,7 +2926,7 @@
     "import": "Import",
     "importDescription": "Import field structure from public Google Forms",
     "importFromUrl": "Import",
-    "importSuccess": "Импортировано полей: {{count}}",
+    "importSuccess": "Fields imported: {{count}}",
     "importTitle": "Import from Google Forms",
     "invalidUrl": "Invalid link. Use a link like docs.google.com/forms/...",
     "jsonHint": "Types: short_text, long_text, single_choice, multiple_choice, dropdown, date",
@@ -3581,7 +3581,7 @@
         "title": "Loved"
       },
       "pricing": {
-        "billedYearly": "Оплата {{price}} в год"
+        "billedYearly": "Billed {{price}} per year"
       }
     },
     "v4": {
@@ -3764,7 +3764,7 @@
       }
     },
     "pricing": {
-      "billedYearly": "Оплата {{price}} в год"
+      "billedYearly": "Billed {{price}} per year"
     }
   },
   "analytics": {
@@ -3801,7 +3801,7 @@
       "video": "Video"
     },
     "blocks": {
-      "andMore": "и ещё {{count}} блоков",
+      "andMore": "and {{count}} more blocks",
       "avgCtr": "Wed. CTR",
       "clicks": "clicks",
       "noData": "No click data",
@@ -3869,7 +3869,7 @@
       "views": "Views"
     },
     "geography": {
-      "andMore": "и ещё {{count}} стран",
+      "andMore": "and {{count}} more countries",
       "noData": "No geographical data",
       "title": "Geography"
     },
@@ -4252,8 +4252,8 @@
     "startFree": "Start for free",
     "subscribe": "Subscribe",
     "tokens": {
-      "balanceDescription": "100 Linkkon = 1 день Premium. Ваш баланс: {{balance}} токенов",
-      "buyDay": "Купить 1 день за {{cost}} Linkkon",
+      "balanceDescription": "100 Linkkon = 1 Premium day. Your balance: {{balance}} tokens",
+      "buyDay": "Buy 1 day for {{cost}} Linkkon",
       "buyTokens": "Buy tokens",
       "converting": "Conversion...",
       "title": "Or pay with Linkkon tokens"
@@ -4291,10 +4291,10 @@
     "title": "Premium",
     "active": "Pro active",
     "blockLocked": "Premium block",
-    "featureRequires": "{{feature}} доступно в {{tier}}",
+    "featureRequires": "{{feature}} is available in {{tier}}",
     "features": "Pro Features",
     "premiumFramesLocked": "Premium frames require PRO subscription",
-    "requiresTier": "Требуется {{tier}}",
+    "requiresTier": "Requires {{tier}}",
     "trial": "Trial period",
     "unlockWith": "Unlock this block with a Pro subscription",
     "upgrade": "Upgrade to Pro",
@@ -4448,7 +4448,7 @@
       "blog": "Blog",
       "company": "Company",
       "contacts": "Contacts",
-      "copyright": "© {{year}} LinkMAX. Сделано в Казахстане.",
+      "copyright": "© {{year}} LinkMAX. Made in Kazakhstan.",
       "description": "The all-in-one platform for creators and micro-businesses.",
       "examples": "Examples",
       "language": "Language",
@@ -4637,14 +4637,14 @@
     "anyLanguageSupported": "Any language supported",
     "autoTranslate": "Autotranslation",
     "autoTranslated": "Content has been automatically translated",
-    "autoTranslatedTo": "Переведено на: {{languages}}",
+    "autoTranslatedTo": "Translated to: {{languages}}",
     "contentLanguage": "Content language",
     "flexibleMultilingual": "Flexible multilingual",
     "moreLanguages": "Other languages",
     "noLanguageFound": "Language not found",
     "searchLanguage": "Search for language...",
     "selectLanguage": "Select language",
-    "showMoreLanguages": "Ещё {{count}} языков",
+    "showMoreLanguages": "{{count}} more languages",
     "translating": "Translation...",
     "translationError": "Auto translation error",
     "uiLanguage": "Interface language"
@@ -4679,7 +4679,7 @@
       "title": "Leads are coming in"
     },
     "repeatCustomers": {
-      "hint": "У вас {{count}} постоянных клиентов — отличная работа! 🎉",
+      "hint": "You have {{count}} regular clients — great job! 🎉",
       "title": "Repeat customers"
     },
     "trafficNoLeads": {
@@ -4839,15 +4839,15 @@
   },
   "operator": {
     "followUp": {
-      "completedOn": "Визит {{date}}",
+      "completedOn": "Visit {{date}}",
       "send": "Message",
       "sent": "Sent",
-      "template": "Здравствуйте, {{name}}! Спасибо за визит! Как вам? Будем рады видеть вас снова 😊",
+      "template": "Hello, {{name}}! Thank you for visiting! How was it? We look forward to seeing you again 😊",
       "title": "Follow-up needed",
-      "visitedYesterday": "Визит вчера в {{time}}"
+      "visitedYesterday": "Visit yesterday at {{time}}"
     },
     "rebook": {
-      "daysSince": "{{days}} дн. назад",
+      "daysSince": "{{days}} days ago",
       "nudge": "Nudge",
       "title": "Time to bring back client"
     },
@@ -4859,12 +4859,12 @@
       "page": "Page hasn't been updated in over 2 weeks — refresh your content"
     },
     "today": {
-      "next": "Ближайшая: {{name}} в {{time}}",
-      "title": "Сегодня записей: {{count}}"
+      "next": "Upcoming: {{name}} at {{time}}",
+      "title": "Today appointments: {{count}}"
     },
     "unanswered": {
-      "missed": "{{count}} пропущено (>24ч)",
-      "title": "Необработано: {{count}}"
+      "missed": "{{count}} missed (>24h)",
+      "title": "Unprocessed: {{count}}"
     },
     "week": {
       "leads": "This week:"
@@ -4942,7 +4942,7 @@
     "buying": "Purchase...",
     "needMore": "Need more",
     "notEnoughTokens": "Not enough tokens",
-    "purchaseDescription": "Покупка товара: {{name}}",
+    "purchaseDescription": "Product purchase: {{name}}",
     "purchaseSuccess": "You have successfully purchased",
     "purchasing": "Purchase...",
     "tapToView": "Read more →"
@@ -5239,23 +5239,23 @@
     "width": "Width"
   },
   "sequences": {
-    "addStep": "Добавить шаг",
-    "addStepError": "Ошибка при добавлении шага",
-    "choose": "Выбрать...",
-    "confirmDelete": "Удалить эту цепочку?",
-    "createError": "Ошибка при создании цепочки",
-    "delayHours": "Задержка (в часах)",
-    "deleted": "Цепочка удалена",
-    "empty": "Создайте свою первую автоматическую рассылку",
-    "enterName": "Введите название цепочки",
-    "loadDetailError": "Ошибка при загрузке данных",
-    "new": "Новая рассылка",
-    "noDesc": "Нет описания",
-    "selectTemplate": "Выберите шаблон",
-    "statusUpdated": "Статус обновлен",
-    "stepAdded": "Шаг добавлен",
-    "steps": "Шаги рассылки",
-    "title": "Email-рассылки"
+    "addStep": "Add step",
+    "addStepError": "Error adding step",
+    "choose": "Select...",
+    "confirmDelete": "Delete this chain?",
+    "createError": "Error creating chain",
+    "delayHours": "Delay (hours)",
+    "deleted": "Chain deleted",
+    "empty": "Create your first automated campaign",
+    "enterName": "Enter chain name",
+    "loadDetailError": "Error loading data",
+    "new": "New campaign",
+    "noDesc": "No description",
+    "selectTemplate": "Select template",
+    "statusUpdated": "Status updated",
+    "stepAdded": "Step added",
+    "steps": "Campaign steps",
+    "title": "Email campaigns"
   },
   "settings": {
     "aiTools": "AI tools",
@@ -6147,7 +6147,7 @@
   "wizard": {
     "avatar": {
       "description": "Add an avatar - it will help people recognize you",
-      "hint": "Recommended: square photo at least 400Г—400px",
+      "hint": "Recommended: square photo at least 400×400px",
       "size": "Avatar size",
       "title": "Your photo"
     },
@@ -6566,7 +6566,7 @@
       "title": "Join Workspace"
     },
     "invoices": {
-      "actSuccess": "Акт сохранен",
+      "actSuccess": "Certificate saved",
       "addItem": "Add item",
       "cancelPayment": "Cancel payment",
       "client": "Client",
@@ -6576,8 +6576,8 @@
       "created": "Invoice created successfully",
       "deal": "Deal",
       "dealStatus": "Status",
-      "downloadAct": "Акт выполненных работ",
-      "downloadInvoice": "Счет на оплату",
+      "downloadAct": "Certificate of completed work",
+      "downloadInvoice": "Invoice",
       "downloadPDF": "Download PDF",
       "emptyDesc": "Click \"Create Invoice\" to send a payment request to the client.",
       "emptyTitle": "No invoices yet",
@@ -6988,7 +6988,7 @@
         "closeMenu": "Close menu"
       },
       "pricing": {
-        "billedYearly": "Оплата {{price}} в год"
+        "billedYearly": "Billed {{price}} per year"
       }
     },
     "v4": {
