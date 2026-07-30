@@ -160,8 +160,8 @@ function ShortFeatureSection() {
 
           <div className="grid gap-3">
             {items.map((item, index) => (
-              <div key={item.id} className="grid gap-4 rounded-lg border border-[#16131A]/15 bg-white p-5 sm:grid-cols-[56px_1fr]">
-                <div className="font-metric flex h-14 w-14 items-center justify-center rounded-md bg-[#F4F5F0] text-base font-bold text-[#16131A]">
+              <div key={item.id} className="grid grid-cols-[48px_1fr] items-start gap-4 rounded-lg border border-[#16131A]/15 bg-white p-5">
+                <div className="font-metric flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#F4F5F0] text-sm font-bold text-[#16131A] whitespace-nowrap">
                   0{index + 1}
                 </div>
                 <div className="flex gap-3">
@@ -254,11 +254,11 @@ function SimpleFooter() {
 
   return (
     <footer className="bg-[#F4F5F0] px-4 pb-8 pt-8 text-center text-xs text-[#68636D] sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-[#16131A]/15 pt-5">
+      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-[#16131A]/15 pt-5">
         <span>{t('landing.short.footer.copyright', '© {{year}} LinkMAX', { year })}</span>
-        <a href="/privacy" className="hover:text-[#16131A]">{t('landing.short.footer.privacy', 'Privacy')}</a>
-        <a href="/terms" className="hover:text-[#16131A]">{t('landing.short.footer.terms', 'Terms')}</a>
-        <a href="/payment-terms" className="hover:text-[#16131A]">{t('landing.short.footer.payments', 'Payments')}</a>
+        <a href="/privacy" className="font-medium text-[#16131A]/70 underline-offset-4 hover:text-[#16131A] hover:underline transition-colors">{t('landing.short.footer.privacy', 'Privacy')}</a>
+        <a href="/terms" className="font-medium text-[#16131A]/70 underline-offset-4 hover:text-[#16131A] hover:underline transition-colors">{t('landing.short.footer.terms', 'Terms')}</a>
+        <a href="/payment-terms" className="font-medium text-[#16131A]/70 underline-offset-4 hover:text-[#16131A] hover:underline transition-colors">{t('landing.short.footer.payments', 'Payments')}</a>
       </div>
     </footer>
   );

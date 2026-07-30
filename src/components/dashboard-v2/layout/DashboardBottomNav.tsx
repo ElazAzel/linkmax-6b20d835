@@ -73,7 +73,6 @@ const MORE_ITEMS: NavTab[] = [
   { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки', path: '' },
 ];
 
-// Tabs that count as "more" active
 const MORE_TAB_IDS = MORE_ITEMS.map(i => i.id);
 
 export const DashboardBottomNav = memo(function DashboardBottomNav({
@@ -176,7 +175,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                   data-testid={`${item.id}-tab`}
                 >
                   <Icon className="h-6 w-6" />
-                  <span className="text-xs font-medium text-center whitespace-normal break-words text-wrap leading-tight max-w-[5.5rem]">
+                  <span className="text-xs font-medium text-center leading-tight line-clamp-2 w-full">
                     {t(item.labelKey, item.defaultLabel)}
                   </span>
                 </button>

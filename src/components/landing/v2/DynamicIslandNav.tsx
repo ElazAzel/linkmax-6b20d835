@@ -122,53 +122,6 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
             )}
         >
             <div
-                className={cn(
-                    "pointer-events-auto relative flex w-full flex-col items-center overflow-hidden border-b border-[#16131A]/15 bg-[#F4F5F0]/95 backdrop-blur-sm transition-all duration-300 ease-out"
-                )}
-            >
-                {/* Compact bar */}
-                <div className="flex items-center justify-between w-full h-12 px-2 pl-4 gap-2 shrink-0">
-                    <BrandLogo className="h-7" />
-
-                    {!expanded ? (
-                        <div className="flex items-center gap-1 animate-in fade-in duration-200">
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 rounded-md px-2.5 text-xs font-semibold text-[#16131A]/75 hover:bg-[#F4F5F0] hover:text-[#16131A]"
-                                onClick={onLogin}
-                            >
-                                {t('landing.v2.nav.login', 'Войти')}
-                            </Button>
-                            <Button
-                                size="sm"
-                                className="h-8 rounded-md bg-[#C93618] px-3 text-xs font-semibold text-white hover:bg-[#A92D16]"
-                                onClick={onSignup}
-                            >
-                                {t('landing.short.nav.create', 'Создать')}
-                            </Button>
-                            <button
-                                onClick={() => setExpanded(true)}
-                                className="rounded-md p-2 text-[#16131A]/75 transition-colors hover:bg-[#F4F5F0] hover:text-[#16131A]"
-                                aria-label={t('landing.v2.nav.openMenu', 'Открыть меню')}
-                            >
-                                <Menu className="w-4 h-4" />
-                            </button>
-                        </div>
-                    ) : (
-                        <button
-                            onClick={() => setExpanded(false)}
-                            className="z-20 rounded-md p-2 text-[#16131A]/75 transition-colors animate-in fade-in spin-in-90 duration-200 hover:bg-[#F4F5F0] hover:text-[#16131A]"
-                            aria-label={t('landing.v2.nav.closeMenu', 'Закрыть меню')}
-                        >
-                            <X className="w-4 h-4" />
-                        </button>
-                    )}
-                </div>
-
-                {/* Expanded content - CSS grid transition for smooth height */}
-                <div
-                    className="grid transition-all duration-300 ease-out w-full"
                     style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
                 >
                     <div className="overflow-hidden">

@@ -23,8 +23,8 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
 
   return (
     <section className="relative overflow-hidden bg-[#F4F5F0] text-[#16131A]">
-      <div className="mx-auto grid min-h-[720px] max-w-[1180px] items-center gap-12 px-4 pb-16 pt-24 sm:px-6 sm:pt-28 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)] lg:px-8">
-        <div className="min-w-0 py-8">
+      <div className="mx-auto grid min-h-[640px] max-w-[1180px] items-center gap-8 px-4 pb-16 pt-24 sm:px-6 sm:pt-28 md:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)] lg:gap-12 lg:px-8">
+        <div className="min-w-0 py-4 md:py-8">
           <div className="mb-5 flex items-center gap-3 text-sm font-semibold">
             <span className="h-2.5 w-2.5 bg-[#C93618]" aria-hidden="true" />
             {t('landing.short.eyebrow', 'Сайт, заявки и продажи в одной системе')}
@@ -90,13 +90,13 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           </div>
         </div>
 
-        <div className="relative hidden h-[520px] min-w-0 overflow-hidden rounded-lg border border-[#16131A]/15 bg-white lg:block">
+        <div className="relative hidden h-[440px] min-w-0 overflow-hidden rounded-lg border border-[#16131A]/15 bg-white md:block lg:h-[520px]">
           <picture>
             <source srcSet="/brand/linkmax-hero-studio.webp" type="image/webp" />
             <img
               src="/brand/linkmax-hero-studio.png"
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover object-right"
+              alt="LinkMAX Studio Preview"
+              className="absolute inset-0 h-full w-full object-cover object-center"
               width={2688}
               height={1536}
               fetchPriority="high"

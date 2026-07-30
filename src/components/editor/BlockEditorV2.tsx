@@ -343,7 +343,8 @@ export function BlockEditorV2({
         return (
             <>
                 <Drawer open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
-                    <DrawerContent className="h-[96vh] max-h-[96vh] bg-background border-t-0 rounded-t-[32px]">
+                    <DrawerContent className="h-[96vh] max-h-[96vh] bg-background border-t-0 rounded-t-[32px] pt-1">
+                        <div className="mx-auto my-2 h-1.5 w-12 rounded-full bg-muted-foreground/30 shrink-0" aria-hidden="true" />
                         {shellContent}
                     </DrawerContent>
                 </Drawer>
