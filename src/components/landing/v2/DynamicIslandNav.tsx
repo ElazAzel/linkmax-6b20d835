@@ -121,10 +121,28 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                 hidden ? "-translate-y-[100px]" : "translate-y-0"
             )}
         >
-            <div
+            <div className="pointer-events-auto mt-2 w-[calc(100%-1.5rem)] max-w-[420px] overflow-hidden rounded-2xl border border-[#16131A]/15 bg-[#F4F5F0]/95 shadow-sm">
+                <div className="flex items-center justify-between px-4 py-2.5">
+                    <button type="button" onClick={() => scrollTo('#hero')} className="px-1 py-1" aria-label="LinkMAX">
+                        <BrandLogo className="h-6" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setExpanded((v) => !v)}
+                        className="flex h-9 w-9 items-center justify-center rounded-lg text-[#16131A]"
+                        aria-label={expanded ? 'Close menu' : 'Open menu'}
+                        aria-expanded={expanded}
+                    >
+                        {expanded ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    </button>
+                </div>
+
+                <div
+                    className="grid transition-all duration-300 ease-in-out"
                     style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
                 >
                     <div className="overflow-hidden">
+
                         <div className="px-5 pb-5 pt-1 flex flex-col gap-4">
                             <nav className="flex flex-col gap-1">
                                 {[
