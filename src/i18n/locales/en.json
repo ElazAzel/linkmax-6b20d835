@@ -5859,7 +5859,13 @@
     "neonMint": "Neon mint",
     "neonMintDesc": "Dark background with bright mint glow",
     "brutalistPop": "Brutalist pop",
-    "brutalistPopDesc": "Hard borders and high-contrast blocks"
+    "brutalistPopDesc": "Hard borders and high-contrast blocks",
+    "layout": "Page layout",
+    "contentWidth": "Content width",
+    "blockGap": "Gap between blocks",
+    "pagePaddingX": "Side padding",
+    "blockRadiusPx": "Block corner radius",
+    "textScale": "Text scale"
   },
   "tier": {
     "blocksCount": "blocks",
@@ -7361,5 +7367,29 @@
   "selected": "Selected",
   "source": "Source",
   "targetLanguages": "Translation languages",
-  "translateNow": "Translate"
+  "translateNow": "Translate",
+  "blockStyle": {
+    "typography": "Typography (precise)",
+    "advanced": "Precise block settings",
+    "fontScale": "Text size",
+    "letterSpacing": "Letter spacing",
+    "lineHeight": "Line height",
+    "fontWeight": "Font weight",
+    "textAlign": "Alignment",
+    "textTransform": "Text case",
+    "auto": "Auto",
+    "left": "Left",
+    "right": "Right",
+    "radiusPx": "Corner radius, px",
+    "paddingPx": "Inner padding, px",
+    "borderWidthPx": "Border width, px",
+    "backdropBlur": "Glass (blur)",
+    "opacity": "Opacity",
+    "rotate": "Tilt",
+    "borderStyle": "Border style",
+    "solid": "Solid",
+    "dashed": "Dashed",
+    "dotted": "Dotted",
+    "shadowColor": "Shadow color"
+  }
 }
