@@ -105,9 +105,12 @@ export async function fetchTranslationsFromDB(lng: string): Promise<any> {
 
         return data?.data || null;
     } catch (err) {
-        logger.error(`Catch error fetching translations for ${lng}:`, err);
+        // Network aborts (navigation, offline) must never surface as app errors —
+        // bundled JSON locales already cover the UI.
+        logger.warn(`Skipped DB translations for ${lng}: ${err instanceof Error ? err.message : String(err)}`);
         return null;
     }
+
 }
 
 /**

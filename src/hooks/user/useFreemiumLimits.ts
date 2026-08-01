@@ -1,6 +1,8 @@
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { storage } from '@/lib/storage';
 import type { AppPremiumTier } from '@/domain/billing/tiers';
+import { isBlocksFreePromoActive } from '@/lib/promo/free-blocks-promo';
+
 
 // Block tiers based on pricing plans (Free + Pro only)
 // booking + form moved to FREE to enable core thesis: social traffic → booking → prepayment
@@ -103,10 +105,20 @@ export const BUSINESS_LIMITS: TierFeatures = {
 
 // Helper to get block tier
 export function getBlockTier(blockType: string): FreeTier {
+  // Promo: every block behaves as a free block until the promo ends
+  if (isBlocksFreePromoActive()) return 'identity';
   if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'identity';
   if ((PRO_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
   if ((PRO_EXTENDED_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
   return 'identity';
+}
+
+const ALL_BLOCKS_FOR_PROMO = [...FREE_BLOCKS, ...PRO_BLOCKS, ...PRO_EXTENDED_BLOCKS] as unknown as string[];
+
+/** Applies the "all blocks free" promo to a tier's limits without touching other gates. */
+function withBlocksPromo(limits: TierFeatures): TierFeatures {
+  if (!isBlocksFreePromoActive()) return limits;
+  return { ...limits, allowedBlocks: ALL_BLOCKS_FOR_PROMO, premiumBlocks: [] };
 }
 
 export function useFreemiumLimits() {
@@ -120,8 +132,9 @@ export function useFreemiumLimits() {
     return FREE_LIMITS;
   };
 
-  const limits = getCurrentLimits();
+  const limits = withBlocksPromo(getCurrentLimits());
   const currentTier: FreeTier = tier === 'business' ? 'business' : tier === 'pro' || isPremium ? 'pro' : tier === 'starter' ? 'starter' : 'identity';
+
 
   const canAddBlock = (currentBlockCount: number) => {
     return currentBlockCount < limits.maxBlocks;

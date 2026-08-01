@@ -30,7 +30,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
-import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import { BLOCK_MANIFEST, isBlockPremium } from '@/lib/blocks/block-manifest';
 import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
@@ -98,9 +98,11 @@ const MANIFEST_BLOCKS = Object.values(BLOCK_MANIFEST)
     labelKey: entry.labelKey,
     icon: entry.icon,
     color: BLOCK_COLORS[entry.type] || 'bg-muted',
-    tier: (entry.isPremium ? 'pro' : 'free') as BlockTier,
+    // Respects the "all blocks free" promo — otherwise free users see locked cards
+    tier: (isBlockPremium(entry.type) ? 'pro' : 'free') as BlockTier,
     category: entry.category,
   }));
+
 
 const BLOCK_CATEGORIES: Array<{ id: 'all' | BlockCategory; label: string }> = [
   { id: 'all', label: 'Все' },
@@ -262,7 +264,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const handleInsertPresetClick = (preset: BlockPreset) => {
     const manifest = BLOCK_MANIFEST[preset.blockType];
-    const blockTier = (manifest?.isPremium ? 'pro' : 'free') as BlockTier;
+    const blockTier = (manifest && isBlockPremium(manifest.type) ? 'pro' : 'free') as BlockTier;
 
     if (!canUseBlock(blockTier)) {
       toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
@@ -377,8 +379,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     if (proHint && !isMobile) {
       return (
-        <Tooltip>
+        <Tooltip key={block.type}>
           <TooltipTrigger asChild>
+
             {blockButton}
           </TooltipTrigger>
           <TooltipContent side="bottom" className="max-w-[220px]">
@@ -395,7 +398,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const manifest = BLOCK_MANIFEST[preset.blockType];
     if (!manifest) return null;
 
-    const blockTier = (manifest.isPremium ? 'pro' : 'free') as BlockTier;
+    const blockTier = (isBlockPremium(manifest.type) ? 'pro' : 'free') as BlockTier;
     const isLocked = !canUseBlock(blockTier);
     const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
 
