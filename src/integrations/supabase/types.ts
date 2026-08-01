@@ -977,6 +977,27 @@ export type Database = {
           },
         ]
       }
+      external_api_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          payload: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at: string
+          payload: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
       friend_activities: {
         Row: {
           activity_type: string
@@ -4720,6 +4741,7 @@ export type Database = {
             Returns: Json
           }
       claim_premium_gift: { Args: { p_gift_id: string }; Returns: Json }
+      cleanup_external_api_cache: { Args: never; Returns: undefined }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       complete_daily_quest: {
         Args: { p_bonus_hours?: number; p_quest_key: string; p_user_id: string }
