@@ -56,7 +56,9 @@ export function MediaUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const showStockTab = accept.includes('image');
 
+  const MAX_SIZE_MB = isPremium ? 30 : 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
