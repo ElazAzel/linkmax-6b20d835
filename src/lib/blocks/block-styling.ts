@@ -199,7 +199,19 @@ export function hasCustomBlockStyle(blockStyle?: BlockStyle): boolean {
     (blockStyle.shadow && blockStyle.shadow !== 'none') ||
     (blockStyle.padding && blockStyle.padding !== 'none') ||
     (blockStyle.hoverEffect && blockStyle.hoverEffect !== 'none') ||
-    blockStyle.contentAlignment
+    blockStyle.contentAlignment ||
+    typeof blockStyle.radiusPx === 'number' ||
+    typeof blockStyle.paddingPx === 'number' ||
+    typeof blockStyle.borderWidthPx === 'number' ||
+    typeof blockStyle.backdropBlur === 'number' ||
+    typeof blockStyle.opacity === 'number' ||
+    typeof blockStyle.rotate === 'number' ||
+    typeof blockStyle.fontScale === 'number' ||
+    blockStyle.fontWeight ||
+    typeof blockStyle.letterSpacing === 'number' ||
+    typeof blockStyle.lineHeight === 'number' ||
+    blockStyle.textAlign ||
+    blockStyle.textTransform
   );
 }
 
@@ -217,6 +229,10 @@ export function hasCustomBlockContainer(blockStyle?: BlockStyle): boolean {
     (blockStyle.borderRadius && blockStyle.borderRadius !== 'none') ||
     (blockStyle.borderWidth && blockStyle.borderWidth !== 'none') ||
     (blockStyle.shadow && blockStyle.shadow !== 'none') ||
-    (blockStyle.padding && blockStyle.padding !== 'none')
+    (blockStyle.padding && blockStyle.padding !== 'none') ||
+    typeof blockStyle.radiusPx === 'number' ||
+    typeof blockStyle.paddingPx === 'number' ||
+    typeof blockStyle.borderWidthPx === 'number' ||
+    (typeof blockStyle.backdropBlur === 'number' && blockStyle.backdropBlur > 0)
   );
 }
