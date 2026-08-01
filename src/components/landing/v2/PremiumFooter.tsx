@@ -35,6 +35,7 @@ export const PremiumFooter = () => {
               <FooterButton onClick={() => navigate('/alternatives')}>{t('footer.alternatives', 'Alternatives')}</FooterButton>
               <FooterButton onClick={() => navigate('/integrations')}>{t('footer.integrations', 'Integrations')}</FooterButton>
               <FooterButton onClick={() => navigate('/docs/api')}>{t('footer.apiDocs', 'API & agents')}</FooterButton>
+              <FooterButton onClick={() => navigate('/connect')}>{t('footer.connectAgent', 'Подключить AI-ассистента')}</FooterButton>
 
             </FooterColumn>
 
