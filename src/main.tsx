@@ -191,7 +191,7 @@ const router = createBrowserRouter([
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
       { path: "integrations", element: <IntegrationsPage /> },
-      { path: "docs/api", element: <ApiDocs /> },
+      { path: "connect", element: <ConnectAgent /> },
 
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
       { path: "seo-landing", element: <SeoLanding /> },
