@@ -34,6 +34,8 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
   const { t } = useTranslation();
   const [aiLoading, setAiLoading] = useState(false);
   const [faviconLoading, setFaviconLoading] = useState(false);
+  const { loading: previewLoading, fetchPreview } = useLinkPreview();
+
   const [faviconPreview, setFaviconPreview] = useState<string | null>(null);
 
   const iconMode = formData.iconMode || 'auto';
