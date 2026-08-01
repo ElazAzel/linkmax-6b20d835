@@ -135,6 +135,7 @@ const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 const IntegrationsPage = lazy(() => import("./pages/Integrations"));
 const ApiDocs = lazy(() => import("./pages/ApiDocs"));
+const ConnectAgent = lazy(() => import("./pages/ConnectAgent"));
 
 
 // Create router with optimized code splitting
