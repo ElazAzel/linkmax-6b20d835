@@ -158,6 +158,18 @@ export function sanitizeTheme(theme: unknown): Partial<PageTheme> | null {
   if (candidate.buttonWeight === 500 || candidate.buttonWeight === 600 || candidate.buttonWeight === 700) sanitized.buttonWeight = candidate.buttonWeight;
   if (candidate.motionLevel === 'none' || candidate.motionLevel === 'reduced' || candidate.motionLevel === 'standard' || candidate.motionLevel === 'expressive') sanitized.motionLevel = candidate.motionLevel;
 
+  const numeric = (key: keyof PageTheme, min: number, max: number) => {
+    const raw = candidate[key as string];
+    if (typeof raw === 'number' && Number.isFinite(raw) && raw >= min && raw <= max) {
+      (sanitized as Record<string, unknown>)[key as string] = raw;
+    }
+  };
+  numeric('contentWidth', 320, 1400);
+  numeric('blockGap', 0, 64);
+  numeric('pagePaddingX', 0, 64);
+  numeric('blockRadiusPx', 0, 64);
+  numeric('textScale', 0.8, 1.5);
+
   const background = sanitizeBackground(candidate.customBackground);
   if (background) sanitized.customBackground = background;
   return sanitized;
