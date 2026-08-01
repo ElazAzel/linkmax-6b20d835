@@ -18,6 +18,7 @@ import Type from 'lucide-react/dist/esm/icons/type';
 import Frame from 'lucide-react/dist/esm/icons/frame';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Eraser from 'lucide-react/dist/esm/icons/eraser';
+import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal';
 
 interface BlockStyleEditorProps {
   formData: Partial<Block>;
@@ -571,6 +572,60 @@ function Section({
         )}
       </div>
       <div className="p-4">{children}</div>
+    </div>
+  );
+}
+
+function NumberSlider({
+  label,
+  value,
+  fallback,
+  min,
+  max,
+  step,
+  suffix,
+  onChange,
+}: {
+  label: string;
+  value: number | undefined;
+  fallback: number;
+  min: number;
+  max: number;
+  step: number;
+  suffix?: string;
+  onChange: (value: number | undefined) => void;
+}) {
+  const { t } = useTranslation();
+  const current = value ?? fallback;
+  const isSet = typeof value === 'number';
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <Label className="text-xs text-muted-foreground font-medium">{label}</Label>
+        <div className="flex items-center gap-2">
+          <span className={cn('text-xs tabular-nums', isSet ? 'text-foreground font-medium' : 'text-muted-foreground')}>
+            {Number(current.toFixed(2))}{suffix ?? ''}
+          </span>
+          {isSet && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-6 px-1.5 text-[11px] text-muted-foreground"
+              onClick={() => onChange(undefined)}
+            >
+              {t('blockStyle.auto', 'Авто')}
+            </Button>
+          )}
+        </div>
+      </div>
+      <Slider
+        value={[current]}
+        min={min}
+        max={max}
+        step={step}
+        onValueChange={(vals: number[]) => onChange(vals[0])}
+      />
     </div>
   );
 }
