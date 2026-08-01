@@ -295,7 +295,7 @@ export function MediaUpload({
                 placeholder={t('upload.stockPlaceholder', 'Search free photos...')}
               />
               <Button type="submit" variant="secondary" disabled={stockLoading}>
-                {stockLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                {stockLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <SearchIcon className="h-4 w-4" />}
               </Button>
             </form>
 
@@ -307,7 +307,7 @@ export function MediaUpload({
 
             {photos.length > 0 && (
               <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
-                {photos.map((photo) => (
+                {photos.map((photo: StockPhoto) => (
                   <button
                     key={photo.id}
                     type="button"
