@@ -600,6 +600,63 @@ export const ThemePanel = memo(function ThemePanel({
               )}
             />
 
+
+            <div className="space-y-4 rounded-2xl border border-border/40 p-4">
+              <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {t('themes.layout', 'Макет страницы')}
+              </Label>
+              <ThemeSlider
+                label={t('themes.contentWidth', 'Ширина контента')}
+                value={currentTheme.contentWidth}
+                fallback={672}
+                min={420}
+                max={1100}
+                step={4}
+                suffix="px"
+                onChange={(v) => setBlockField('contentWidth', v)}
+              />
+              <ThemeSlider
+                label={t('themes.blockGap', 'Расстояние между блоками')}
+                value={currentTheme.blockGap}
+                fallback={16}
+                min={4}
+                max={40}
+                step={1}
+                suffix="px"
+                onChange={(v) => setBlockField('blockGap', v)}
+              />
+              <ThemeSlider
+                label={t('themes.pagePaddingX', 'Боковые отступы')}
+                value={currentTheme.pagePaddingX}
+                fallback={12}
+                min={0}
+                max={48}
+                step={1}
+                suffix="px"
+                onChange={(v) => setBlockField('pagePaddingX', v)}
+              />
+              <ThemeSlider
+                label={t('themes.blockRadiusPx', 'Скругление блоков')}
+                value={currentTheme.blockRadiusPx}
+                fallback={16}
+                min={0}
+                max={48}
+                step={1}
+                suffix="px"
+                onChange={(v) => setBlockField('blockRadiusPx', v)}
+              />
+              <ThemeSlider
+                label={t('themes.textScale', 'Масштаб текста')}
+                value={currentTheme.textScale}
+                fallback={1}
+                min={0.9}
+                max={1.3}
+                step={0.01}
+                suffix="×"
+                onChange={(v) => setBlockField('textScale', v)}
+              />
+            </div>
+
             <Card className="p-4 bg-muted/20 border-border/50">
               <div className="flex items-start gap-3">
                 <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
