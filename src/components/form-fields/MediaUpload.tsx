@@ -5,6 +5,10 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import SearchIcon from 'lucide-react/dist/esm/icons/search';
+import { useStockPhotos } from '@/hooks/useStockPhotos';
+import type { StockPhoto } from '@/lib/integrations/external-api';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
