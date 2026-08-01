@@ -107,7 +107,7 @@ export async function fetchTranslationsFromDB(lng: string): Promise<any> {
     } catch (err) {
         // Network aborts (navigation, offline) must never surface as app errors —
         // bundled JSON locales already cover the UI.
-        logger.warn(`Skipped DB translations for ${lng}:`, err);
+        logger.warn(`Skipped DB translations for ${lng}: ${err instanceof Error ? err.message : String(err)}`);
         return null;
     }
 
