@@ -51,9 +51,11 @@ export function MediaUpload({
   const [compressing, setCompressing] = useState(false);
   const [compressionInfo, setCompressionInfo] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>(value ? 'url' : 'upload');
+  const [stockQuery, setStockQuery] = useState('');
+  const { photos, loading: stockLoading, unavailable, search } = useStockPhotos();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const showStockTab = accept.includes('image');
 
-  const MAX_SIZE_MB = isPremium ? 30 : 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
