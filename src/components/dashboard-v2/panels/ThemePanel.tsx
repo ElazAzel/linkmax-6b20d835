@@ -22,6 +22,7 @@ import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Slider } from '@/components/ui/slider';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
@@ -722,6 +723,53 @@ interface PresetGridProps<T extends { id: string; name: string; isPremium: boole
   onSelect: (id: string) => void;
   onUpgrade?: () => void;
   renderPreview: (id: string) => React.ReactNode;
+}
+
+function ThemeSlider({
+  label,
+  value,
+  fallback,
+  min,
+  max,
+  step,
+  suffix,
+  onChange,
+}: {
+  label: string;
+  value: number | undefined;
+  fallback: number;
+  min: number;
+  max: number;
+  step: number;
+  suffix?: string;
+  onChange: (value: number | undefined) => void;
+}) {
+  const current = value ?? fallback;
+  const isSet = typeof value === 'number';
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <Label className="text-xs text-muted-foreground font-medium">{label}</Label>
+        <div className="flex items-center gap-2">
+          <span className={cn('text-xs tabular-nums', isSet ? 'text-foreground font-medium' : 'text-muted-foreground')}>
+            {Number(current.toFixed(2))}{suffix ?? ''}
+          </span>
+          {isSet && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-6 px-1.5 text-[11px] text-muted-foreground"
+              onClick={() => onChange(undefined)}
+            >
+              Auto
+            </Button>
+          )}
+        </div>
+      </div>
+      <Slider value={[current]} min={min} max={max} step={step} onValueChange={(vals: number[]) => onChange(vals[0])} />
+    </div>
+  );
 }
 
 function PresetGrid<T extends { id: string; name: string; isPremium: boolean }>({ label, items, current, isPremium, onSelect, onUpgrade, renderPreview }: PresetGridProps<T>) {
