@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { cn } from '@/lib/utils/utils';
+import { getBlockStyles } from '@/lib/blocks/block-styling';
 import { Block, BLOCK_SIZE_DIMENSIONS } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
@@ -69,7 +70,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {/* Bento grid */}
       {contentBlocks.length > 0 && (
         <motion.div
-          className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+          className="grid grid-cols-2 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+          style={{ gap: 'var(--lm-block-gap, 1rem)' }}
           initial="hidden"
           animate="show"
           viewport={{ once: true }}
@@ -105,38 +107,13 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
 
             // Translate BlockStyle into wrapper-level visuals so user customizations are visible
             const bs = block.blockStyle;
-            const wrapperStyle: React.CSSProperties = {};
-            const radiusMap: Record<string, string> = {
-              none: '0px', sm: '12px', md: '18px', lg: '28px', full: '9999px',
+            const engine = getBlockStyles(bs);
+            const wrapperStyle: React.CSSProperties = {
+              borderRadius: 'var(--lm-block-radius, 16px)',
+              boxShadow: 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))',
+              ...engine.style,
             };
-            const borderWidthMap: Record<string, string> = { none: '0px', thin: '1px', medium: '2px', thick: '3px' };
-            const shadowMap: Record<string, string> = {
-              none: 'none',
-              sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-              md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-              lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-              xl: '0 20px 25px -5px rgb(0 0 0 / 0.15)',
-              glow: '0 0 24px hsl(var(--primary) / 0.45)',
-            };
-            if (bs?.backgroundColor) wrapperStyle.backgroundColor = bs.backgroundColor;
-            if (bs?.backgroundGradient) wrapperStyle.backgroundImage = bs.backgroundGradient;
-            wrapperStyle.borderRadius = bs?.borderRadius
-              ? radiusMap[bs.borderRadius]
-              : 'var(--lm-block-radius, 16px)';
-            if (bs?.borderWidth && bs.borderWidth !== 'none') {
-              wrapperStyle.borderWidth = borderWidthMap[bs.borderWidth];
-              wrapperStyle.borderStyle = 'solid';
-              wrapperStyle.borderColor = bs.borderColor || 'hsl(var(--border))';
-            }
-            wrapperStyle.boxShadow = bs?.shadow
-              ? shadowMap[bs.shadow]
-              : 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))';
-            const hoverClass =
-              bs?.hoverEffect === 'scale' ? 'hover:scale-[1.02]'
-              : bs?.hoverEffect === 'lift' ? 'hover:-translate-y-1'
-              : bs?.hoverEffect === 'glow' ? 'hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)]'
-              : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
-              : '';
+            const hoverClass = engine.className;
             const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
 
             return (
