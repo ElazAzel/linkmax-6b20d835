@@ -1,38 +1,48 @@
-# План: лучшие идеи из public-apis и ECC для LinkMAX
+# План: внедрение публичных API и идей ECC в LinkMAX
 
-## Что реально даёт каждый репозиторий
+## Что изучено
 
-**public-apis** — не библиотека, а образцовый каталог: строгий формат записи (Auth / HTTPS / CORS / описание), категории, авто-валидация ссылок в CI. Идея для нас: превратить LinkMAX в машиночитаемую, публично документированную платформу и одновременно получить SEO-каталог интеграций.
+**public-apis** — каталог бесплатных REST API с указанием Auth / HTTPS / CORS. Полезны те, что закрывают реальные дыры LinkMAX: медиа для редактора, валидация лидов, гео, превью ссылок, календарь-праздники, курсы валют.
 
-**ECC** — «операционная система» для AI-агентов: цикл `plan → test → implement → review → verify → remember → improve`, набор специализированных агентов/скиллов, hooks, память, и AgentShield (скан промптов, hooks, MCP-конфига, секретов). Идея для нас: усилить уже существующие `.agent/rules/*` и MCP-слой дисциплиной и безопасностью.
+**ECC** — «harness» для агентов: цикл plan → test → implement → review → verify, каталог скиллов и AgentShield (скан секретов/hooks/MCP). Полезна идея каталога и авто-валидации, а не сам код.
 
-## Track 1 — Публичный API + каталог интеграций (из public-apis)
+Что уже есть в проекте (не дублируем): `currency-rates` (Нацбанк РК + open.er-api.com фолбэк), гео по timezone с IP-фолбэком в `src/services/analytics.ts`, MCP-сервер с 5 инструментами, `.well-known/api-catalog`.
 
-Сейчас `public/.well-known/api-catalog` ссылается на `https://lnkmx.my/docs/api` и `/.well-known/openapi.json`, но ни файла спецификации, ни страницы документации в проекте нет — ссылки битые.
+## Слой 1 — API-шлюз (единая обёртка)
 
-1. **OpenAPI 3.1 спека** `public/.well-known/openapi.json` — описать публичные endpoints (публичная страница, отправка лида, бронирование, регистрация на событие, health) + существующие MCP-инструменты.
-2. **Страница `/docs/api`** — человекочитаемая документация в стиле public-apis: таблица endpoint / auth / CORS / описание, примеры curl, локализация через i18n.
-3. **`/integrations` каталог** — страница-каталог всех интеграций LinkMAX (Telegram, WhatsApp, Robokassa, Google Calendar, DocuSeal, Resend, MCP-агенты) в формате public-apis, с фильтрами по категории и JSON-LD. Даёт SEO-охват по запросам «X интеграция».
-4. **CI-валидатор каталога** (по образцу их link-checker) — скрипт, проверяющий, что все ссылки из `api-catalog`, `llms.txt` и `/integrations` живые; подключить в существующий quality gate.
+Все внешние API вызываются только через edge-функции, никогда из браузера (ключи + CORS + кэш).
 
-## Track 2 — Дисциплина агентов и безопасность (из ECC)
+1. Новая функция `supabase/functions/external-api/index.ts` — прокси с allowlist провайдеров, таймаутом, кэшем в таблице `external_api_cache` (ключ + TTL) и лимитом на пользователя. Один код для всех интеграций ниже.
 
-5. **Единый цикл в `.agent/rules`** — привести существующие роли к ECC-циклу `plan → test → implement → review → verify → remember`: у каждой роли явные входы, критерии приёмки и обязательное «доказательство» (тест/сборка).
-6. **Skills-first**: добавить в `.agent/rules/skills/` отсутствующие домены под наш стек — `seo-aeo`, `blocks-system`, `rls-security`, `i18n` — по нашему же формату SKILL.md.
-7. **AgentShield-lite** — скрипт `scripts/agent-shield.mjs`: скан репозитория на секреты в коде, небезопасные паттерны в edge-функциях (отсутствие проверки подписи/JWT), и проверка MCP-манифеста на утечку приватных полей. В CI как предупреждение.
-8. **Memory-дисциплина** — правило: после каждой значимой задачи фиксировать решение в docs/ADR или память проекта, чтобы не повторять уже отменённые идеи.
+## Слой 2 — Конкретные API по фичам
 
-## Track 3 — Публичный «MCP-каталог» LinkMAX (пересечение обеих идей)
+2. **Медиа-библиотека в редакторе** — Unsplash + Pexels API: поиск бесплатных фото прямо в блоках Image/Cover/Hero, вместо только загрузки файла. Самая заметная фича для пользователя.
+3. **Валидация лидов** — email через mailboxlayer (или бесплатный disify) + телефон через numverify: в `submit-lead`/`create-lead` помечать лид флагами `email_valid`, `phone_valid`, `phone_e164`, страна. Убирает спам-заявки и чинит формат номеров для WhatsApp-ссылок.
+4. **Превью ссылок** — microlink.io: блок Link/SmartLink подтягивает title, favicon и картинку сайта → красивые карточки вместо голого URL.
+5. **Скриншот-превью страниц** — thum.io / screenshotlayer: миниатюры пользовательских страниц для галереи шаблонов, дашборда и превью при шаринге.
+6. **Праздники и часовые пояса** — Nager.Date + timezone-данные: блок Bookings автоматически закрывает нерабочие дни по стране (RU/KZ/UZ) и корректно считает слоты для клиента из другого часового пояса.
+7. **Мультивалютные цены** — расширить существующий `currency-rates`: блоки Pricing/Offers показывают цену в валюте посетителя (KZT/RUB/UZS/USD) по гео, с фиксацией валюты расчёта в чеке.
+8. **Гео-обогащение аналитики** — ipwho.is/ipapi как явный фолбэк с кэшем в `external-api`, чтобы город/страна в Insights не зависели только от timezone.
+9. **Каталог стран/флагов** — restcountries: единый источник для селекторов страны и телефонных кодов в формах и настройках.
 
-9. Описать наши MCP-инструменты (`list_my_pages`, `list_my_leads`, `get_analytics_summary`, `mcp_create_user_page`, `get_page_structure`) в публичном каталоге + `llms.txt`, чтобы ChatGPT/Perplexity/Claude могли обнаруживать LinkMAX как инструмент, а не только как сайт.
+## Слой 3 — Каталог и открытость (формат public-apis)
+
+10. **Страница `/integrations`** — каталог всех интеграций LinkMAX в стиле public-apis (категория, что даёт, нужен ли ключ, тариф), фильтры + JSON-LD. Даёт SEO-охват по запросам «LinkMAX + сервис».
+11. **`public/.well-known/openapi.json` и страница `/docs/api`** — сейчас `api-catalog` и кнопка «View API Documentation» в настройках ведут на несуществующие `/docs/api` и `openapi.json`. Описать публичные endpoints (лиды, бронирование, события, health) + MCP-инструменты.
+12. **CI-валидатор ссылок** (идея из public-apis) — `scripts/validate-api-catalog.mjs`: проверяет живость всех внешних и внутренних ссылок каталога, подключается в существующий quality gate.
+
+## Слой 4 — Идеи ECC для процесса
+
+13. **AgentShield-lite** — `scripts/agent-shield.mjs`: скан на секреты в коде, edge-функции без проверки JWT/подписи, лишние поля в MCP-манифесте. В CI как предупреждение.
+14. **Skills-каталог** — добавить в `.agent/rules/skills/` домены под наш стек: `external-apis`, `seo-aeo`, `blocks-system`, `rls-security`.
 
 ## Технические детали
 
-- Новые файлы: `public/.well-known/openapi.json`, `src/pages/ApiDocs.tsx`, `src/pages/Integrations.tsx`, `src/lib/integrations/catalog.ts`, `scripts/validate-api-catalog.mjs`, `scripts/agent-shield.mjs`.
-- Роутинг через `react-router-dom` в `src/App.tsx`; весь текст — через i18n (ru базовый, en/kk/uz).
-- Новые страницы добавляются в `scripts/generate-sitemap.mjs`.
-- Изменений схемы БД и бизнес-логики нет — только документация, публичные страницы и dev-скрипты.
+- Новые файлы: `supabase/functions/external-api/index.ts`, `src/lib/integrations/catalog.ts`, `src/pages/Integrations.tsx`, `src/pages/ApiDocs.tsx`, `public/.well-known/openapi.json`, `scripts/validate-api-catalog.mjs`, `scripts/agent-shield.mjs`, хук `src/hooks/useStockPhotos.ts`.
+- Миграция: таблица `external_api_cache` (RLS: только service_role) + новые колонки валидации в `leads`.
+- Ключи (Unsplash, Pexels, mailboxlayer, numverify, microlink) запрашиваются как секреты по мере включения фич; без ключа фича мягко отключается.
+- Весь UI-текст через i18n (ru базовый + en/kk/uz), новые страницы добавляются в `scripts/generate-sitemap.mjs`.
 
-## Порядок реализации
+## Порядок
 
-Сначала Track 1 (пункты 1–4) — закрывает битые ссылки и даёт SEO-эффект. Затем Track 3 (9). Track 2 (5–8) — отдельным проходом, без влияния на прод.
+Сначала слой 1 + пункты 2–4 (медиа-библиотека, валидация лидов, превью ссылок) — максимальная польза пользователю. Затем 5–9. Потом слой 3 (каталог и битые ссылки на API-докcы) и в конце слой 4.
