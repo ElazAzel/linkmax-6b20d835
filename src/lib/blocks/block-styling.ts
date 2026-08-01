@@ -110,19 +110,43 @@ export function getBlockStyles(blockStyle?: BlockStyle): BlockStyleResult {
   if (blockStyle.backgroundGradient) style.backgroundImage = blockStyle.backgroundGradient;
 
   if (blockStyle.borderRadius) style.borderRadius = RADIUS_PX[blockStyle.borderRadius];
+  if (typeof blockStyle.radiusPx === 'number') style.borderRadius = `${blockStyle.radiusPx}px`;
 
-  if (blockStyle.borderWidth && blockStyle.borderWidth !== 'none') {
-    style.borderWidth = BORDER_WIDTH_PX[blockStyle.borderWidth];
-    style.borderStyle = 'solid';
+  const borderWidth =
+    typeof blockStyle.borderWidthPx === 'number'
+      ? `${blockStyle.borderWidthPx}px`
+      : blockStyle.borderWidth && blockStyle.borderWidth !== 'none'
+        ? BORDER_WIDTH_PX[blockStyle.borderWidth]
+        : null;
+  if (borderWidth && borderWidth !== '0px') {
+    style.borderWidth = borderWidth;
+    style.borderStyle = blockStyle.borderStyle || 'solid';
     style.borderColor = blockStyle.borderColor || '#e5e7eb';
   }
 
   if (blockStyle.shadow && blockStyle.shadow !== 'none') {
-    style.boxShadow = SHADOW_CSS[blockStyle.shadow];
+    style.boxShadow =
+      blockStyle.shadowColor && blockStyle.shadow !== 'glow'
+        ? SHADOW_CSS[blockStyle.shadow].replace(/rgb\(0 0 0 \/ [\d.]+\)/g, blockStyle.shadowColor)
+        : SHADOW_CSS[blockStyle.shadow];
   }
 
   if (blockStyle.padding && blockStyle.padding !== 'none') {
     style.padding = PADDING_PX[blockStyle.padding];
+  }
+  if (typeof blockStyle.paddingPx === 'number') style.padding = `${blockStyle.paddingPx}px`;
+
+  if (typeof blockStyle.backdropBlur === 'number' && blockStyle.backdropBlur > 0) {
+    style.backdropFilter = `blur(${blockStyle.backdropBlur}px)`;
+    (style as Record<string, unknown>).WebkitBackdropFilter = `blur(${blockStyle.backdropBlur}px)`;
+  }
+
+  if (typeof blockStyle.opacity === 'number' && blockStyle.opacity < 100) {
+    style.opacity = Math.max(0, Math.min(100, blockStyle.opacity)) / 100;
+  }
+
+  if (typeof blockStyle.rotate === 'number' && blockStyle.rotate !== 0) {
+    style.transform = `rotate(${blockStyle.rotate}deg)`;
   }
 
   if (blockStyle.hoverEffect && blockStyle.hoverEffect !== 'none') {
@@ -138,7 +162,7 @@ export function getBlockStyles(blockStyle?: BlockStyle): BlockStyleResult {
 }
 
 /**
- * INNER styles: color / font-family / text-effect only.
+ * INNER styles: typography only (color, font, size, spacing, alignment).
  * Applied by leaf blocks (Text/Button/Link) on the actual text element.
  * Never returns background/border/padding/radius/shadow — those live on the wrapper.
  */
@@ -147,8 +171,17 @@ export function getBlockInnerStyles(blockStyle?: BlockStyle): BlockStyleResult {
   const style: React.CSSProperties = {};
   if (blockStyle.textColor) style.color = blockStyle.textColor;
   if (blockStyle.fontFamily) Object.assign(style, getFontStyle(blockStyle.fontFamily));
+  if (typeof blockStyle.fontScale === 'number' && blockStyle.fontScale !== 1) {
+    style.fontSize = `${blockStyle.fontScale}em`;
+  }
+  if (blockStyle.fontWeight) style.fontWeight = blockStyle.fontWeight;
+  if (typeof blockStyle.letterSpacing === 'number') style.letterSpacing = `${blockStyle.letterSpacing}em`;
+  if (typeof blockStyle.lineHeight === 'number') style.lineHeight = blockStyle.lineHeight;
+  if (blockStyle.textAlign) style.textAlign = blockStyle.textAlign;
+  if (blockStyle.textTransform) style.textTransform = blockStyle.textTransform;
   return { style, className: '', textEffectClass: getTextEffectClass(blockStyle.textEffect) };
 }
+
 
 /**
  * Check if block has custom styling that needs to be applied
@@ -166,7 +199,19 @@ export function hasCustomBlockStyle(blockStyle?: BlockStyle): boolean {
     (blockStyle.shadow && blockStyle.shadow !== 'none') ||
     (blockStyle.padding && blockStyle.padding !== 'none') ||
     (blockStyle.hoverEffect && blockStyle.hoverEffect !== 'none') ||
-    blockStyle.contentAlignment
+    blockStyle.contentAlignment ||
+    typeof blockStyle.radiusPx === 'number' ||
+    typeof blockStyle.paddingPx === 'number' ||
+    typeof blockStyle.borderWidthPx === 'number' ||
+    typeof blockStyle.backdropBlur === 'number' ||
+    typeof blockStyle.opacity === 'number' ||
+    typeof blockStyle.rotate === 'number' ||
+    typeof blockStyle.fontScale === 'number' ||
+    blockStyle.fontWeight ||
+    typeof blockStyle.letterSpacing === 'number' ||
+    typeof blockStyle.lineHeight === 'number' ||
+    blockStyle.textAlign ||
+    blockStyle.textTransform
   );
 }
 
@@ -184,6 +229,10 @@ export function hasCustomBlockContainer(blockStyle?: BlockStyle): boolean {
     (blockStyle.borderRadius && blockStyle.borderRadius !== 'none') ||
     (blockStyle.borderWidth && blockStyle.borderWidth !== 'none') ||
     (blockStyle.shadow && blockStyle.shadow !== 'none') ||
-    (blockStyle.padding && blockStyle.padding !== 'none')
+    (blockStyle.padding && blockStyle.padding !== 'none') ||
+    typeof blockStyle.radiusPx === 'number' ||
+    typeof blockStyle.paddingPx === 'number' ||
+    typeof blockStyle.borderWidthPx === 'number' ||
+    (typeof blockStyle.backdropBlur === 'number' && blockStyle.backdropBlur > 0)
   );
 }

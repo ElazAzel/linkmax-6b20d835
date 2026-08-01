@@ -5859,7 +5859,13 @@
     "neonMint": "Неоновый мятный",
     "neonMintDesc": "Тёмный фон с ярким мятным свечением",
     "brutalistPop": "Бруталист",
-    "brutalistPopDesc": "Жёсткие рамки и контрастные блоки"
+    "brutalistPopDesc": "Жёсткие рамки и контрастные блоки",
+    "layout": "Макет страницы",
+    "contentWidth": "Ширина контента",
+    "blockGap": "Расстояние между блоками",
+    "pagePaddingX": "Боковые отступы",
+    "blockRadiusPx": "Скругление блоков",
+    "textScale": "Масштаб текста"
   },
   "tier": {
     "blocksCount": "блоки",
@@ -7361,5 +7367,29 @@
   "selected": "Выбрано",
   "source": "Источник",
   "targetLanguages": "Языки перевода",
-  "translateNow": "Переводить"
+  "translateNow": "Переводить",
+  "blockStyle": {
+    "typography": "Типографика (точно)",
+    "advanced": "Точная настройка блока",
+    "fontScale": "Размер текста",
+    "letterSpacing": "Межбуквенный интервал",
+    "lineHeight": "Межстрочный интервал",
+    "fontWeight": "Насыщенность",
+    "textAlign": "Выравнивание",
+    "textTransform": "Регистр",
+    "auto": "Авто",
+    "left": "Слева",
+    "right": "Справа",
+    "radiusPx": "Скругление, px",
+    "paddingPx": "Внутренние отступы, px",
+    "borderWidthPx": "Толщина рамки, px",
+    "backdropBlur": "Стекло (blur)",
+    "opacity": "Прозрачность",
+    "rotate": "Наклон",
+    "borderStyle": "Стиль рамки",
+    "solid": "Сплошная",
+    "dashed": "Пунктир",
+    "dotted": "Точки",
+    "shadowColor": "Цвет тени"
+  }
 }

@@ -22,6 +22,7 @@ import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Slider } from '@/components/ui/slider';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
@@ -600,6 +601,63 @@ export const ThemePanel = memo(function ThemePanel({
               )}
             />
 
+
+            <div className="space-y-4 rounded-2xl border border-border/40 p-4">
+              <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {t('themes.layout', 'Макет страницы')}
+              </Label>
+              <ThemeSlider
+                label={t('themes.contentWidth', 'Ширина контента')}
+                value={currentTheme.contentWidth}
+                fallback={672}
+                min={420}
+                max={1100}
+                step={4}
+                suffix="px"
+                onChange={(v) => setBlockField('contentWidth', v)}
+              />
+              <ThemeSlider
+                label={t('themes.blockGap', 'Расстояние между блоками')}
+                value={currentTheme.blockGap}
+                fallback={16}
+                min={4}
+                max={40}
+                step={1}
+                suffix="px"
+                onChange={(v) => setBlockField('blockGap', v)}
+              />
+              <ThemeSlider
+                label={t('themes.pagePaddingX', 'Боковые отступы')}
+                value={currentTheme.pagePaddingX}
+                fallback={12}
+                min={0}
+                max={48}
+                step={1}
+                suffix="px"
+                onChange={(v) => setBlockField('pagePaddingX', v)}
+              />
+              <ThemeSlider
+                label={t('themes.blockRadiusPx', 'Скругление блоков')}
+                value={currentTheme.blockRadiusPx}
+                fallback={16}
+                min={0}
+                max={48}
+                step={1}
+                suffix="px"
+                onChange={(v) => setBlockField('blockRadiusPx', v)}
+              />
+              <ThemeSlider
+                label={t('themes.textScale', 'Масштаб текста')}
+                value={currentTheme.textScale}
+                fallback={1}
+                min={0.9}
+                max={1.3}
+                step={0.01}
+                suffix="×"
+                onChange={(v) => setBlockField('textScale', v)}
+              />
+            </div>
+
             <Card className="p-4 bg-muted/20 border-border/50">
               <div className="flex items-start gap-3">
                 <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -665,6 +723,53 @@ interface PresetGridProps<T extends { id: string; name: string; isPremium: boole
   onSelect: (id: string) => void;
   onUpgrade?: () => void;
   renderPreview: (id: string) => React.ReactNode;
+}
+
+function ThemeSlider({
+  label,
+  value,
+  fallback,
+  min,
+  max,
+  step,
+  suffix,
+  onChange,
+}: {
+  label: string;
+  value: number | undefined;
+  fallback: number;
+  min: number;
+  max: number;
+  step: number;
+  suffix?: string;
+  onChange: (value: number | undefined) => void;
+}) {
+  const current = value ?? fallback;
+  const isSet = typeof value === 'number';
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <Label className="text-xs text-muted-foreground font-medium">{label}</Label>
+        <div className="flex items-center gap-2">
+          <span className={cn('text-xs tabular-nums', isSet ? 'text-foreground font-medium' : 'text-muted-foreground')}>
+            {Number(current.toFixed(2))}{suffix ?? ''}
+          </span>
+          {isSet && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-6 px-1.5 text-[11px] text-muted-foreground"
+              onClick={() => onChange(undefined)}
+            >
+              Auto
+            </Button>
+          )}
+        </div>
+      </div>
+      <Slider value={[current]} min={min} max={max} step={step} onValueChange={(vals: number[]) => onChange(vals[0])} />
+    </div>
+  );
 }
 
 function PresetGrid<T extends { id: string; name: string; isPremium: boolean }>({ label, items, current, isPremium, onSelect, onUpgrade, renderPreview }: PresetGridProps<T>) {

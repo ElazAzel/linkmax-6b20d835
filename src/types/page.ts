@@ -95,6 +95,17 @@ export interface PageTheme {
   imageTreatment?: 'natural' | 'editorial' | 'monochrome';
   buttonWeight?: 500 | 600 | 700;
   motionLevel?: 'none' | 'reduced' | 'standard' | 'expressive';
+  // ----- Fine layout controls (v3) -----
+  /** Max content width of the page in px (420-1100). */
+  contentWidth?: number;
+  /** Gap between blocks in px (4-40). */
+  blockGap?: number;
+  /** Horizontal page padding in px (0-48). */
+  pagePaddingX?: number;
+  /** Exact block corner radius in px — overrides blockShape. */
+  blockRadiusPx?: number;
+  /** Global text size multiplier (0.9-1.25). */
+  textScale?: number;
 }
 
 export interface PageMetrics {
