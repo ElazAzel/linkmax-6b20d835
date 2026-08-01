@@ -159,10 +159,14 @@ export function MediaUpload({
       {label && <Label>{label}</Label>}
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className={`grid w-full ${showStockTab ? 'grid-cols-3' : 'grid-cols-2'}`}>
           <TabsTrigger value="upload">{t('upload.tab', 'Upload')}</TabsTrigger>
           <TabsTrigger value="url">{t('url.tab', 'URL')}</TabsTrigger>
+          {showStockTab && (
+            <TabsTrigger value="stock">{t('upload.stockTab', 'Photos')}</TabsTrigger>
+          )}
         </TabsList>
+
 
         <TabsContent value="upload" className="space-y-3">
           <input
