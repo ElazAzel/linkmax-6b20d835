@@ -1,115 +1,38 @@
-## Цель
+# План: лучшие идеи из public-apis и ECC для LinkMAX
 
-Довести до продакшена три параллельных трека: (1) отполировать недавно выпущенную кастомизацию профиля, (2) дать владельцу страницы понятную аналитику «что работает», (3) поднять конверсию публичных страниц через встроенные CRO-инструменты. Всё — в рамках Warm Paper, без ломающих миграций, база бесплатна, «wow» — Premium.
+## Что реально даёт каждый репозиторий
 
----
+**public-apis** — не библиотека, а образцовый каталог: строгий формат записи (Auth / HTTPS / CORS / описание), категории, авто-валидация ссылок в CI. Идея для нас: превратить LinkMAX в машиночитаемую, публично документированную платформу и одновременно получить SEO-каталог интеграций.
 
-## Трек A. Полировка кастомизации профиля
+**ECC** — «операционная система» для AI-агентов: цикл `plan → test → implement → review → verify → remember → improve`, набор специализированных агентов/скиллов, hooks, память, и AgentShield (скан промптов, hooks, MCP-конфига, секретов). Идея для нас: усилить уже существующие `.agent/rules/*` и MCP-слой дисциплиной и безопасностью.
 
-Цель: снять острые углы после большого релиза, поднять качество, добавить недостающие пресеты.
+## Track 1 — Публичный API + каталог интеграций (из public-apis)
 
-1. **Live-preview в редакторе**
-   - Правая колонка `ThemePanel` — мини-фрейм с реальным `ProfileBlock` + одним CTA-блоком, обновляется на каждое изменение без сохранения.
-   - Кнопка «Сброс к теме» откатывает переопределения к пресету.
+Сейчас `public/.well-known/api-catalog` ссылается на `https://lnkmx.my/docs/api` и `/.well-known/openapi.json`, но ни файла спецификации, ни страницы документации в проекте нет — ссылки битые.
 
-2. **Пресеты обложек и паттернов**
-   - Довести до 12 градиентов и 6 паттернов (dots, grid, waves, noise, topo, mesh) — сейчас часть заглушена.
-   - Video-cover и animated-mesh — гейт Premium с превью-постером для free.
+1. **OpenAPI 3.1 спека** `public/.well-known/openapi.json` — описать публичные endpoints (публичная страница, отправка лида, бронирование, регистрация на событие, health) + существующие MCP-инструменты.
+2. **Страница `/docs/api`** — человекочитаемая документация в стиле public-apis: таблица endpoint / auth / CORS / описание, примеры curl, локализация через i18n.
+3. **`/integrations` каталог** — страница-каталог всех интеграций LinkMAX (Telegram, WhatsApp, Robokassa, Google Calendar, DocuSeal, Resend, MCP-агенты) в формате public-apis, с фильтрами по категории и JSON-LD. Даёт SEO-охват по запросам «X интеграция».
+4. **CI-валидатор каталога** (по образцу их link-checker) — скрипт, проверяющий, что все ссылки из `api-catalog`, `llms.txt` и `/integrations` живые; подключить в существующий quality gate.
 
-3. **Аватар**
-   - Формы blob и sticker — фактическая маска через SVG `clipPath`, а не border-radius.
-   - Status-ring (online/verified/custom-color) как отдельный слой, не ломает существующие рамки.
+## Track 2 — Дисциплина агентов и безопасность (из ECC)
 
-4. **Анимации имени**
-   - Аудит на мобильных: `glitch`, `ticker`, `rainbow-slow` — проверить FPS и переполнение контейнера.
-   - Добавить `prefers-reduced-motion` fallback → статичный gradient.
+5. **Единый цикл в `.agent/rules`** — привести существующие роли к ECC-циклу `plan → test → implement → review → verify → remember`: у каждой роли явные входы, критерии приёмки и обязательное «доказательство» (тест/сборка).
+6. **Skills-first**: добавить в `.agent/rules/skills/` отсутствующие домены под наш стек — `seo-aeo`, `blocks-system`, `rls-security`, `i18n` — по нашему же формату SKILL.md.
+7. **AgentShield-lite** — скрипт `scripts/agent-shield.mjs`: скан репозитория на секреты в коде, небезопасные паттерны в edge-функциях (отсутствие проверки подписи/JWT), и проверка MCP-манифеста на утечку приватных полей. В CI как предупреждение.
+8. **Memory-дисциплина** — правило: после каждой значимой задачи фиксировать решение в docs/ADR или память проекта, чтобы не повторять уже отменённые идеи.
 
-5. **A11y и i18n**
-   - Контраст авто-подбора accent-цвета (WCAG AA) — если проваливается, подставляем dark/light вариант текста.
-   - Все новые ключи в ru/en/kk/uz, включая tooltips премиум-гейта.
+## Track 3 — Публичный «MCP-каталог» LinkMAX (пересечение обеих идей)
 
-6. **Снапшоты**
-   - Каждое изменение `appearance` → запись в `page_snapshots` (уже есть триггер), добавить «Откатить к предыдущей теме» в UI.
+9. Описать наши MCP-инструменты (`list_my_pages`, `list_my_leads`, `get_analytics_summary`, `mcp_create_user_page`, `get_page_structure`) в публичном каталоге + `llms.txt`, чтобы ChatGPT/Perplexity/Claude могли обнаруживать LinkMAX как инструмент, а не только как сайт.
 
----
+## Технические детали
 
-## Трек B. Аналитика профиля v2
+- Новые файлы: `public/.well-known/openapi.json`, `src/pages/ApiDocs.tsx`, `src/pages/Integrations.tsx`, `src/lib/integrations/catalog.ts`, `scripts/validate-api-catalog.mjs`, `scripts/agent-shield.mjs`.
+- Роутинг через `react-router-dom` в `src/App.tsx`; весь текст — через i18n (ru базовый, en/kk/uz).
+- Новые страницы добавляются в `scripts/generate-sitemap.mjs`.
+- Изменений схемы БД и бизнес-логики нет — только документация, публичные страницы и dev-скрипты.
 
-Цель: владелец страницы за 10 секунд понимает, что работает и что чинить.
+## Порядок реализации
 
-1. **Data-слой**
-   - Использовать уже существующую каноническую таксономию (`analytics.metadata.event`, `source_object`).
-   - Новые RPC (SECURITY DEFINER, доступ по `page_id` владельца):
-     - `get_page_funnel(page_id, from, to)` — visits → profile_view → block_click → cta_click.
-     - `get_block_heatmap(page_id, from, to)` — clicks / impressions по каждому блоку + CTR.
-     - `get_traffic_sources(page_id, from, to)` — группировка по `utm_source` + AI-detection (ChatGPT/Perplexity/Claude/Gemini уже есть).
-     - `get_geo_breakdown(page_id, from, to)` — страна/город по IP.
-
-2. **UI (`/dashboard/insights`)**
-   - 4 карточки KPI: Visits, Unique, CTA rate, Top block.
-   - Воронка (horizontal bar), Heatmap (список блоков + CTR + sparklines), Источники (donut + список), Гео (флаги + %).
-   - Фильтр периода: 7д / 30д / 90д / custom.
-   - Empty-state: подсказки «мало данных → поделись SmartLink».
-
-3. **Weekly digest**
-   - Расширить `send-weekly-digest`: включить top-block, best source, CTA-rate change WoW.
-   - Telegram-вариант (если бот подключён) + email fallback.
-
-4. **Экспорт**
-   - CSV export кликов/визитов (только owner, лимит 90 дней) через edge-функцию.
-
----
-
-## Трек C. Конверсия публичной страницы
-
-Цель: превратить страницу из «визитки» в лид-машину.
-
-1. **Sticky CTA-док**
-   - Фиксированная нижняя панель на мобиле: до 3 CTA (WA / TG / tel / email / custom link).
-   - Настраивается в редакторе (новый блок-псевдо `sticky_cta`), автоскрывается при скролле вверх.
-   - Каноническое событие `cta_click` с `source_object: {type:'sticky_cta'}`.
-
-2. **Exit-intent модалка (Premium)**
-   - Триггер: mouseleave вверх (desktop) / back-swipe (mobile), 1 раз в 24ч.
-   - Контент: заголовок + одно поле (телефон/email) + submit → создаёт `lead` с source `exit_intent`.
-   - Настраиваемый copy + возможность отключить.
-
-3. **A/B-тест первого экрана (Premium)**
-   - Простой сплит 50/50 двух вариантов `ProfileBlock` (имя, био, обложка).
-   - Победитель определяется по CTA-rate за 7 дней (min 200 visits) → авто-применение с уведомлением.
-   - Таблица `page_experiments` + RPC `assign_variant(page_id, visitor_id)`.
-
-4. **AI Coach «Улучшить страницу»**
-   - Кнопка в редакторе: анализирует последние 30 дней аналитики + текущий контент, выдаёт 3–5 действий (заменить обложку, сократить био, добавить отзыв, поменять порядок блоков).
-   - Использует Lovable AI Gateway (Gemini fallback), результат — карточки с «применить одним кликом».
-
-5. **Auto-optimizations (без AI)**
-   - Детект: если первый блок — не CTA и CTA-rate < 2%, показать баннер «Переместить контакт наверх».
-   - Детект: если обложка > 500KB, предложить сжатие.
-
----
-
-## Порядок и приоритеты
-
-```text
-Week 1  → A1, A2, A3, A5          (полировка, самое видимое)
-Week 2  → B1, B2                  (RPC + Insights UI)
-Week 3  → C1 sticky CTA + C5 auto-optimizations
-Week 4  → B3 digest, B4 export, C2 exit-intent
-Week 5  → C3 A/B, C4 AI Coach     (крупные Premium-фичи)
-```
-
-## Технические принципы
-
-- Без ломающих миграций: новые поля через JSONB (`pages.appearance`, `pages.cro_settings`).
-- RLS: все новые RPC — SECURITY DEFINER + проверка `owner_id = auth.uid()`.
-- Premium-гейт: через существующий `canUsePremium*`, без дубликатов.
-- События — только через `trackCanonicalEvent`.
-- Все edge-функции — с size-limit, auth-check, HTML-escape (стандарт закреплён предыдущим проходом).
-
-## Вне scope
-
-- Полноценный визуальный A/B-редактор (multi-variant, сегментация).
-- Кастомный HTML/CSS/JS от пользователя.
-- Marketplace тем и шаблонов.
-- Внешние аналитические провайдеры (GA/Mixpanel) — только внутренняя.
+Сначала Track 1 (пункты 1–4) — закрывает битые ссылки и даёт SEO-эффект. Затем Track 3 (9). Track 2 (5–8) — отдельным проходом, без влияния на прод.
