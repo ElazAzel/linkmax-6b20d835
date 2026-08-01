@@ -18,6 +18,10 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { validateLinkBlock } from '@/lib/blocks/block-validators';
 import { getBestFaviconUrl } from '@/lib/favicon-utils';
+import { useLinkPreview } from '@/hooks/useLinkPreview';
+import { toast } from 'sonner';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import Type from 'lucide-react/dist/esm/icons/type';
@@ -34,6 +38,8 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
   const { t } = useTranslation();
   const [aiLoading, setAiLoading] = useState(false);
   const [faviconLoading, setFaviconLoading] = useState(false);
+  const { loading: previewLoading, fetchPreview } = useLinkPreview();
+
   const [faviconPreview, setFaviconPreview] = useState<string | null>(null);
 
   const iconMode = formData.iconMode || 'auto';
@@ -101,6 +107,32 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
     }
   };
 
+  // Autofill title + thumbnail from the target page's OpenGraph metadata
+  const handleAutofillFromUrl = async () => {
+    if (!formData.url) return;
+    const data = await fetchPreview(formData.url);
+    if (!data) {
+      toast.error(t('fields.autofillFailed', 'Не удалось получить данные по ссылке'));
+      return;
+    }
+    const next: Record<string, unknown> = { ...formData };
+    const existingTitle = migrateToMultilingual(formData.title);
+    if (data.title && !existingTitle.ru && !existingTitle.en) {
+      next.title = { ...existingTitle, ru: data.title };
+    }
+    if (data.image && !formData.customIconUrl) {
+      next.customIconUrl = data.image;
+    }
+    if (data.logo) {
+      next.faviconUrl = data.logo;
+      setFaviconPreview(data.logo);
+    }
+    onChange(next);
+    toast.success(t('fields.autofillDone', 'Данные подставлены'));
+  };
+
+
+
   const handleMagicWand = () => {
     const context: SuggestionContext = {
       city: pageData?.city || '',
@@ -145,7 +177,19 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
             placeholder="https://example.com"
             className="h-12 rounded-xl"
           />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-2 gap-2"
+            disabled={!formData.url || previewLoading}
+            onClick={handleAutofillFromUrl}
+          >
+            <Wand2 className={cn('h-4 w-4', previewLoading && 'animate-spin')} />
+            {t('fields.autofillFromLink', 'Заполнить из ссылки')}
+          </Button>
         </EditorField>
+
 
         <EditorField
           label={t('fields.title', 'Заголовок')}

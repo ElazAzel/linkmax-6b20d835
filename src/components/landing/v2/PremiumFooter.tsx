@@ -33,6 +33,9 @@ export const PremiumFooter = () => {
               <FooterButton onClick={() => navigate('/customers')}>{t('footer.customers', 'Customers')}</FooterButton>
               <FooterButton onClick={() => navigate('/pricing')}>{t('landingV5.footer.pricing', 'Pricing')}</FooterButton>
               <FooterButton onClick={() => navigate('/alternatives')}>{t('footer.alternatives', 'Alternatives')}</FooterButton>
+              <FooterButton onClick={() => navigate('/integrations')}>{t('footer.integrations', 'Integrations')}</FooterButton>
+              <FooterButton onClick={() => navigate('/docs/api')}>{t('footer.apiDocs', 'API & agents')}</FooterButton>
+
             </FooterColumn>
 
             <FooterColumn title={t('footer.legal', 'Legal')}>
