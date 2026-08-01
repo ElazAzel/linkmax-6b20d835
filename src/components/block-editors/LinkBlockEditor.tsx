@@ -145,7 +145,19 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
             placeholder="https://example.com"
             className="h-12 rounded-xl"
           />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-2 gap-2"
+            disabled={!formData.url || previewLoading}
+            onClick={handleAutofillFromUrl}
+          >
+            <Wand2 className={cn('h-4 w-4', previewLoading && 'animate-spin')} />
+            {t('fields.autofillFromLink', 'Заполнить из ссылки')}
+          </Button>
         </EditorField>
+
 
         <EditorField
           label={t('fields.title', 'Заголовок')}
