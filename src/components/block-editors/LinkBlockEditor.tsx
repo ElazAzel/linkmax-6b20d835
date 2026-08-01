@@ -101,6 +101,32 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
     }
   };
 
+  // Autofill title + thumbnail from the target page's OpenGraph metadata
+  const handleAutofillFromUrl = async () => {
+    if (!formData.url) return;
+    const data = await fetchPreview(formData.url);
+    if (!data) {
+      toast.error(t('fields.autofillFailed', 'Не удалось получить данные по ссылке'));
+      return;
+    }
+    const next: Record<string, unknown> = { ...formData };
+    const existingTitle = migrateToMultilingual(formData.title);
+    if (data.title && !existingTitle.ru && !existingTitle.en) {
+      next.title = { ...existingTitle, ru: data.title };
+    }
+    if (data.image && !formData.customIconUrl) {
+      next.customIconUrl = data.image;
+    }
+    if (data.logo) {
+      next.faviconUrl = data.logo;
+      setFaviconPreview(data.logo);
+    }
+    onChange(next);
+    toast.success(t('fields.autofillDone', 'Данные подставлены'));
+  };
+
+
+
   const handleMagicWand = () => {
     const context: SuggestionContext = {
       city: pageData?.city || '',
