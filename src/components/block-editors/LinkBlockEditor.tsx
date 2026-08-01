@@ -18,6 +18,10 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { validateLinkBlock } from '@/lib/blocks/block-validators';
 import { getBestFaviconUrl } from '@/lib/favicon-utils';
+import { useLinkPreview } from '@/hooks/useLinkPreview';
+import { toast } from 'sonner';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import Type from 'lucide-react/dist/esm/icons/type';
