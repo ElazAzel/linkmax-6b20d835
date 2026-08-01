@@ -386,7 +386,15 @@ export default function PublicPage() {
 
               <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
 
-              <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+              <div
+                className="container mx-auto py-4 sm:py-8"
+                style={{
+                  maxWidth: 'var(--lm-content-width, 42rem)',
+                  paddingLeft: 'var(--lm-page-padding-x, 0.75rem)',
+                  paddingRight: 'var(--lm-page-padding-x, 0.75rem)',
+                  fontSize: 'calc(1rem * var(--lm-text-scale, 1))',
+                }}
+              >
                 {/* Grid Blocks - Same layout as editor */}
                 <GridBlocksRenderer
                   blocks={displayBlocks}
