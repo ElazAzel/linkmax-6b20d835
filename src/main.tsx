@@ -133,6 +133,9 @@ const SmartLinkRedirect = lazy(() => import("./pages/SmartLinkRedirect"));
 const SmartLinks = lazy(() => import("./pages/SmartLinks"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
+const IntegrationsPage = lazy(() => import("./pages/Integrations"));
+const ApiDocs = lazy(() => import("./pages/ApiDocs"));
+
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
