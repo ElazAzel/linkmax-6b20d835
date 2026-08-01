@@ -75,9 +75,23 @@ type Photo = {
   provider: "unsplash" | "pexels";
 };
 
+// Resolves a provider key: DB-managed value (admin UI) wins over the env secret.
+async function resolveKey(name: string): Promise<string | undefined> {
+  const { data } = await admin
+    .from("integration_secrets")
+    .select("value")
+    .eq("key", name)
+    .maybeSingle();
+  const dbValue = (data?.value as string | undefined)?.trim();
+  return dbValue || Deno.env.get(name) || undefined;
+}
+
 async function stockPhotos(query: string, page: number): Promise<{ photos: Photo[]; providers: string[] }> {
-  const unsplashKey = Deno.env.get("UNSPLASH_ACCESS_KEY");
-  const pexelsKey = Deno.env.get("PEXELS_API_KEY");
+  const [unsplashKey, pexelsKey] = await Promise.all([
+    resolveKey("UNSPLASH_ACCESS_KEY"),
+    resolveKey("PEXELS_API_KEY"),
+  ]);
+
   const photos: Photo[] = [];
   const providers: string[] = [];
 
