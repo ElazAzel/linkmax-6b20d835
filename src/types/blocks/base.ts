@@ -44,11 +44,42 @@ export interface BlockStyle {
     animationDelay?: number; // in milliseconds (0-2000)
     animationSpeed?: 'slow' | 'normal' | 'fast'; // slow: 0.8s, normal: 0.5s, fast: 0.3s
 
+    // ----- Fine-grained overrides (v3) -----
+    /** Exact corner radius in px. Overrides borderRadius preset when set. */
+    radiusPx?: number;
+    /** Exact padding in px. Overrides padding preset when set. */
+    paddingPx?: number;
+    /** Border line style. */
+    borderStyle?: 'solid' | 'dashed' | 'dotted';
+    /** Exact border width in px. Overrides borderWidth preset when set. */
+    borderWidthPx?: number;
+    /** Custom shadow color (used with shadow presets sm..xl). */
+    shadowColor?: string;
+    /** Backdrop blur in px (glass effect). */
+    backdropBlur?: number;
+    /** Whole-block opacity 0..100. */
+    opacity?: number;
+    /** Block rotation in degrees (-15..15). */
+    rotate?: number;
+    /** Text size multiplier 0.75..2. */
+    fontScale?: number;
+    /** Font weight override. */
+    fontWeight?: 300 | 400 | 500 | 600 | 700 | 800 | 900;
+    /** Letter spacing in em (-0.05..0.3). */
+    letterSpacing?: number;
+    /** Line height multiplier (1..2.2). */
+    lineHeight?: number;
+    /** Horizontal text alignment. */
+    textAlign?: 'left' | 'center' | 'right';
+    /** Text case transform. */
+    textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
+
     // Paid content access (coming soon)
     isPaidContent?: boolean;
     paidContentPrice?: number;
     paidContentCurrency?: Currency;
 }
+
 
 export interface BlockSchedule {
     startDate?: string; // ISO date string
