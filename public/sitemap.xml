@@ -479,6 +479,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://lnkmx.my/english_pro</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lnkmx.my/webdev_timur</loc>
     <lastmod>2026-08-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -779,19 +785,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lnkmx.my/english_pro</loc>
-    <lastmod>2026-07-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/d.potseluiko</loc>
+    <loc>https://lnkmx.my/beegin.pro</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lnkmx.my/sshl.box</loc>
+    <loc>https://lnkmx.my/iss.kanat</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -803,13 +803,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lnkmx.my/beegin.pro</loc>
+    <loc>https://lnkmx.my/sshl.box</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lnkmx.my/iss.kanat</loc>
+    <loc>https://lnkmx.my/d.potseluiko</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
