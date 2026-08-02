@@ -77,31 +77,32 @@ function InsertBetweenDivider({
   isMobile: boolean;
 }) {
   return (
-    <div className="relative group/divider py-1 col-span-2">
+    <div className="relative group/divider py-0.5 col-span-2">
       <div className={cn(
         "flex items-center gap-2 transition-all duration-300",
-        isMobile ? "opacity-100" : "opacity-0 group-hover/divider:opacity-100"
+        isMobile ? "opacity-70" : "opacity-0 group-hover/divider:opacity-100"
       )}>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
         <Button
           variant="ghost"
           type="button"
           onClick={() => onOpenInsert(position)}
           className={cn(
-            "shrink-0 p-0 flex items-center justify-center rounded-md border border-dashed border-border transition-colors",
-            "bg-background hover:border-primary hover:bg-primary hover:text-primary-foreground",
+            "shrink-0 p-0 flex items-center justify-center rounded-full border border-primary/30 transition-colors",
+            "bg-background text-primary hover:border-primary hover:bg-primary hover:text-primary-foreground",
             "active:scale-95",
-            isMobile ? "h-11 w-11" : "h-7 w-7"
+            isMobile ? "h-7 w-7" : "h-6 w-6"
           )}
           aria-label="Insert block here"
         >
-          <Plus className={isMobile ? "h-5 w-5" : "h-4 w-4"} strokeWidth={3} />
+          <Plus className={isMobile ? "h-4 w-4" : "h-3.5 w-3.5"} strokeWidth={3} />
         </Button>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
       </div>
     </div>
   );
 }
+
 
 
 interface GridEditorProps {
@@ -309,7 +310,7 @@ function SortableGridBlockItem({
         </button>
       )}
 
-      {/* Always-visible quick-edit pencil — opens the block editor in one tap */}
+      {/* Quick-edit pencil — subtle, corner-anchored so it never covers content */}
       {!isDragging && (
         <button
           type="button"
@@ -320,19 +321,21 @@ function SortableGridBlockItem({
           }}
           onTouchEnd={(e) => e.stopPropagation()}
           className={cn(
-            'absolute top-2 right-2 z-40 inline-flex items-center justify-center rounded-full',
-            'bg-background/90 backdrop-blur-md border border-border/20 text-foreground/80',
-            'shadow-[0_4px_12px_-4px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:scale-105',
+            'absolute -top-1.5 -right-1.5 z-40 inline-flex items-center justify-center rounded-full',
+            'bg-background border border-border/40 text-muted-foreground',
+            'shadow-[0_2px_6px_-2px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:border-primary',
             'transition-all active:scale-95',
-            isMobile ? 'h-8 w-8 opacity-90' : 'h-7 w-7 opacity-0 group-hover:opacity-100 focus:opacity-100',
+            'h-6 w-6',
+            isMobile ? 'opacity-70' : 'opacity-0 group-hover:opacity-100 focus:opacity-100',
             selected && 'opacity-0',
           )}
           aria-label={t('editor.blockToolbar.edit', 'Редактировать')}
           title={t('editor.blockToolbar.edit', 'Редактировать')}
         >
-          <Edit2 className="h-3.5 w-3.5" />
+          <Edit2 className="h-3 w-3" />
         </button>
       )}
+
 
       {/* Block type label — only on hover/select to keep canvas quiet */}
       <div
