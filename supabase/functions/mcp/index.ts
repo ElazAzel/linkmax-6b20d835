@@ -230,12 +230,6 @@ var get_page_structure_default = defineTool5({
 import { createClient as createClient6 } from "npm:@supabase/supabase-js@2.95.3";
 import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.23.0";
 import { z as z6 } from "npm:zod@3.25.76";
-function supabaseForUser6(ctx) {
-  return createClient6(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
 var BLOCK_TYPES = [
   "profile",
   "link",
@@ -266,6 +260,12 @@ var BLOCK_TYPES = [
   "community",
   "event"
 ];
+function supabaseForUser6(ctx) {
+  return createClient6(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
+    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
 var create_block_default = defineTool6({
   name: "create_block",
   title: "Create a block on a page",
@@ -290,7 +290,7 @@ var create_block_default = defineTool6({
       return { content: [{ type: "text", text: "Page not found for this user." }], isError: true };
     }
     let nextPosition = position;
-    if (nextPosition === undefined) {
+    if (nextPosition === void 0) {
       const { data: last, error: posErr } = await supabase.from("blocks").select("position").eq("page_id", page_id).order("position", { ascending: false }).limit(1);
       if (posErr) return { content: [{ type: "text", text: posErr.message }], isError: true };
       nextPosition = (last?.[0]?.position ?? -1) + 1;
@@ -299,10 +299,10 @@ var create_block_default = defineTool6({
     const blockContent = {
       id: blockId,
       type,
-      ...(content ?? {})
+      ...content ?? {}
     };
-    if (title !== undefined && !(title in blockContent)) blockContent.title = title;
-    if (url !== undefined && !(url in blockContent)) blockContent.url = url;
+    if (title !== void 0 && !(title in blockContent)) blockContent.title = title;
+    if (url !== void 0 && !(url in blockContent)) blockContent.url = url;
     const { data, error } = await supabase.from("blocks").insert({
       id: blockId,
       page_id,
@@ -320,7 +320,11 @@ var create_block_default = defineTool6({
       content: [
         {
           type: "text",
-          text: JSON.stringify({ block: data, content: blockContent, hint: "Use update_block to change its content or style afterwards." }, null, 2)
+          text: JSON.stringify(
+            { block: data, content: blockContent, hint: "Use update_block to change its content or style afterwards." },
+            null,
+            2
+          )
         }
       ],
       structuredContent: { block: data, content: blockContent }
@@ -364,14 +368,14 @@ var update_block_default = defineTool7({
     if (!pageCheck?.[0]) {
       return { content: [{ type: "text", text: "Block does not belong to a page owned by this user." }], isError: true };
     }
-    const mergedContent = { ...(block.content ?? {}), ...(content ?? {}) };
-    if (title !== undefined) mergedContent.title = title;
+    const mergedContent = { ...block.content ?? {}, ...content ?? {} };
+    if (title !== void 0) mergedContent.title = title;
     const update = {
       content: mergedContent,
-      style: { ...(block.style ?? {}), ...(style ?? {}) }
+      style: { ...block.style ?? {}, ...style ?? {} }
     };
-    if (title !== undefined) update.title = title;
-    if (position !== undefined) update.position = position;
+    if (title !== void 0) update.title = title;
+    if (position !== void 0) update.position = position;
     const { data, error } = await supabase.from("blocks").update(update).eq("id", block_id).select("id, type, page_id, position, title, content, style").single();
     if (error) {
       return { content: [{ type: "text", text: error.message }], isError: true };
@@ -418,15 +422,15 @@ var update_page_default = defineTool8({
       return { content: [{ type: "text", text: "Page not found for this user." }], isError: true };
     }
     const update = {};
-    if (title !== undefined) update.title = title;
-    if (description !== undefined) update.description = description;
-    if (avatar_url !== undefined) update.avatar_url = avatar_url;
-    if (is_published !== undefined) update.is_published = is_published;
-    if (theme_settings !== undefined) {
-      update.theme_settings = { ...(existing[0].theme_settings ?? {}), ...theme_settings };
+    if (title !== void 0) update.title = title;
+    if (description !== void 0) update.description = description;
+    if (avatar_url !== void 0) update.avatar_url = avatar_url;
+    if (is_published !== void 0) update.is_published = is_published;
+    if (theme_settings !== void 0) {
+      update.theme_settings = { ...existing[0].theme_settings ?? {}, ...theme_settings };
     }
-    if (seo_meta !== undefined) {
-      update.seo_meta = { ...(existing[0].seo_meta ?? {}), ...seo_meta };
+    if (seo_meta !== void 0) {
+      update.seo_meta = { ...existing[0].seo_meta ?? {}, ...seo_meta };
     }
     const { data, error } = await supabase.from("pages").update(update).eq("id", page_id).select("id, slug, title, description, is_published, theme_settings, updated_at").single();
     if (error) {

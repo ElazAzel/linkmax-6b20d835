@@ -2430,6 +2430,36 @@ export type Database = {
           },
         ]
       }
+      telegram_link_codes: {
+        Row: {
+          chat_id: string | null
+          code: string
+          created_at: string
+          expires_at: string
+          id: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          chat_id?: string | null
+          code: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          chat_id?: string | null
+          code?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       template_likes: {
         Row: {
           created_at: string
