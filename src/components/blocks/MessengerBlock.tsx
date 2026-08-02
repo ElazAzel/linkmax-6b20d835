@@ -12,10 +12,11 @@ import { cn } from '@/lib/utils/utils';
 interface MessengerBlockProps {
   block: MessengerBlockType;
   pageOwnerId?: string;
+  pageId?: string;
   onClick?: () => void;
 }
 
-export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId, onClick }: MessengerBlockProps) {
+export const MessengerBlock = memo(function MessengerBlock({ block, pageId, onClick }: MessengerBlockProps) {
   const { i18n } = useTranslation();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
@@ -54,11 +55,11 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
     // Track analytics click
     onClick?.();
 
-    if (pageOwnerId) {
+    if (pageId) {
       try {
         await supabase.functions.invoke('create-lead', {
           body: {
-            pageOwnerId,
+            pageId,
             name: `${getPlatformName(platform)} Contact`,
             source: 'messenger',
             notes: `Clicked ${getPlatformName(platform)} link: @${username}`,
