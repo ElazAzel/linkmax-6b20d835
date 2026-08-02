@@ -226,18 +226,231 @@ var get_page_structure_default = defineTool5({
   }
 });
 
+// src/lib/mcp/tools/create-block.ts
+import { createClient as createClient6 } from "npm:@supabase/supabase-js@2.95.3";
+import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z6 } from "npm:zod@3.25.76";
+function supabaseForUser6(ctx) {
+  return createClient6(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
+    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
+var BLOCK_TYPES = [
+  "profile",
+  "link",
+  "button",
+  "text",
+  "image",
+  "socials",
+  "product",
+  "video",
+  "carousel",
+  "custom_code",
+  "messenger",
+  "form",
+  "download",
+  "newsletter",
+  "testimonial",
+  "scratch",
+  "map",
+  "avatar",
+  "separator",
+  "catalog",
+  "before_after",
+  "faq",
+  "countdown",
+  "pricing",
+  "shoutout",
+  "booking",
+  "community",
+  "event"
+];
+var create_block_default = defineTool6({
+  name: "create_block",
+  title: "Create a block on a page",
+  description: "Create a new block on one of the signed-in LinkMAX user's pages. Supports all block types: link, text, image, button, video, socials, product, form, messenger, map, separator and more. For a link block pass `url` and `title`. The block is appended at the end of the page unless `position` is given. Returns the created block.",
+  inputSchema: {
+    page_id: z6.string().uuid().describe("UUID of the page to add the block to."),
+    type: z6.enum(BLOCK_TYPES).describe("Block type to create."),
+    title: z6.string().trim().max(120).optional().describe("Block title (link text, heading, etc)."),
+    url: z6.string().url().optional().describe("For link/button/download/video blocks: the target URL."),
+    content: z6.record(z6.any()).optional().describe("Full block content object (JSON). All block fields in one place, e.g. { title, url, icon, style, blockStyle, ... }. `page_id`, `type` and `position` are handled separately."),
+    position: z6.number().int().min(0).optional().describe("Zero-based position on the page. Defaults to append at the end.")
+  },
+  annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
+  handler: async ({ page_id, type, title, url, content, position }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
+    const supabase = supabaseForUser6(ctx);
+    const { data: pages, error: pageErr } = await supabase.from("pages").select("id").eq("id", page_id).eq("user_id", ctx.getUserId()).limit(1);
+    if (pageErr) return { content: [{ type: "text", text: pageErr.message }], isError: true };
+    if (!pages?.[0]) {
+      return { content: [{ type: "text", text: "Page not found for this user." }], isError: true };
+    }
+    let nextPosition = position;
+    if (nextPosition === undefined) {
+      const { data: last, error: posErr } = await supabase.from("blocks").select("position").eq("page_id", page_id).order("position", { ascending: false }).limit(1);
+      if (posErr) return { content: [{ type: "text", text: posErr.message }], isError: true };
+      nextPosition = (last?.[0]?.position ?? -1) + 1;
+    }
+    const blockId = crypto.randomUUID();
+    const blockContent = {
+      id: blockId,
+      type,
+      ...(content ?? {})
+    };
+    if (title !== undefined && !(title in blockContent)) blockContent.title = title;
+    if (url !== undefined && !(url in blockContent)) blockContent.url = url;
+    const { data, error } = await supabase.from("blocks").insert({
+      id: blockId,
+      page_id,
+      type,
+      position: nextPosition,
+      title: title ?? null,
+      content: blockContent,
+      style: {},
+      is_premium: false
+    }).select("id, type, position, title, page_id").single();
+    if (error) {
+      return { content: [{ type: "text", text: error.message }], isError: true };
+    }
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify({ block: data, content: blockContent, hint: "Use update_block to change its content or style afterwards." }, null, 2)
+        }
+      ],
+      structuredContent: { block: data, content: blockContent }
+    };
+  }
+});
+
+// src/lib/mcp/tools/update-block.ts
+import { createClient as createClient7 } from "npm:@supabase/supabase-js@2.95.3";
+import { defineTool as defineTool7 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z7 } from "npm:zod@3.25.76";
+function supabaseForUser7(ctx) {
+  return createClient7(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
+    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
+var update_block_default = defineTool7({
+  name: "update_block",
+  title: "Update a block's content and design",
+  description: "Update the content and/or design (style) of an existing block on one of the signed-in LinkMAX user's pages. Pass `content` with the fields to change (title, url, icon, style, blockStyle, background, etc) and/or `style` for the block's design settings. `title` can be set directly. Returns the updated block.",
+  inputSchema: {
+    block_id: z7.string().uuid().describe("UUID of the block to update."),
+    content: z7.record(z7.any()).optional().describe("Block content fields to merge into the existing content JSON, e.g. { title, url, icon, style, blockStyle }. Omitted fields keep their current value."),
+    style: z7.record(z7.any()).optional().describe("Block design settings to merge into the existing style JSON, e.g. { padding, borderRadius, shadow, hoverEffect, animation, background }. Omitted fields keep their current value."),
+    title: z7.string().trim().max(120).optional().describe("Optional new block title (also merged into content.title)."),
+    position: z7.number().int().min(0).optional().describe("Optional new zero-based position on the page.")
+  },
+  annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
+  handler: async ({ block_id, content, style, title, position }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
+    const supabase = supabaseForUser7(ctx);
+    const { data: existing, error: fetchErr } = await supabase.from("blocks").select("id, type, page_id, content, style, title, position").eq("id", block_id).limit(1);
+    if (fetchErr) return { content: [{ type: "text", text: fetchErr.message }], isError: true };
+    const block = existing?.[0];
+    if (!block) return { content: [{ type: "text", text: "Block not found." }], isError: true };
+    const { data: pageCheck, error: pageErr } = await supabase.from("pages").select("id").eq("id", block.page_id).eq("user_id", ctx.getUserId()).limit(1);
+    if (pageErr) return { content: [{ type: "text", text: pageErr.message }], isError: true };
+    if (!pageCheck?.[0]) {
+      return { content: [{ type: "text", text: "Block does not belong to a page owned by this user." }], isError: true };
+    }
+    const mergedContent = { ...(block.content ?? {}), ...(content ?? {}) };
+    if (title !== undefined) mergedContent.title = title;
+    const update = {
+      content: mergedContent,
+      style: { ...(block.style ?? {}), ...(style ?? {}) }
+    };
+    if (title !== undefined) update.title = title;
+    if (position !== undefined) update.position = position;
+    const { data, error } = await supabase.from("blocks").update(update).eq("id", block_id).select("id, type, page_id, position, title, content, style").single();
+    if (error) {
+      return { content: [{ type: "text", text: error.message }], isError: true };
+    }
+    return {
+      content: [{ type: "text", text: JSON.stringify({ block: data }, null, 2) }],
+      structuredContent: { block: data }
+    };
+  }
+});
+
+// src/lib/mcp/tools/update-page.ts
+import { createClient as createClient8 } from "npm:@supabase/supabase-js@2.95.3";
+import { defineTool as defineTool8 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z8 } from "npm:zod@3.25.76";
+function supabaseForUser8(ctx) {
+  return createClient8(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
+    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
+var update_page_default = defineTool8({
+  name: "update_page",
+  title: "Update a page's design and settings",
+  description: "Update the appearance and settings of one of the signed-in LinkMAX user's pages: title, description, avatar, theme (theme_settings), SEO meta, publish state. Pass only the fields to change. Returns the updated page.",
+  inputSchema: {
+    page_id: z8.string().uuid().describe("UUID of the page to update."),
+    title: z8.string().trim().max(120).optional().describe("New page title shown in header and SEO."),
+    description: z8.string().trim().max(500).optional().describe("New page description (SEO/bio)."),
+    avatar_url: z8.string().url().optional().describe("New avatar image URL."),
+    is_published: z8.boolean().optional().describe("Set true to publish the page, false to unpublish."),
+    theme_settings: z8.record(z8.any()).optional().describe("Page theme/design settings to merge, e.g. { background, font, accent, layout, spacing }. Omitted keys keep current values."),
+    seo_meta: z8.record(z8.any()).optional().describe("SEO meta object to merge, e.g. { title, description, ogImage }.")
+  },
+  annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
+  handler: async ({ page_id, title, description, avatar_url, is_published, theme_settings, seo_meta }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
+    const supabase = supabaseForUser8(ctx);
+    const { data: existing, error: fetchErr } = await supabase.from("pages").select("id, theme_settings, seo_meta").eq("id", page_id).eq("user_id", ctx.getUserId()).limit(1);
+    if (fetchErr) return { content: [{ type: "text", text: fetchErr.message }], isError: true };
+    if (!existing?.[0]) {
+      return { content: [{ type: "text", text: "Page not found for this user." }], isError: true };
+    }
+    const update = {};
+    if (title !== undefined) update.title = title;
+    if (description !== undefined) update.description = description;
+    if (avatar_url !== undefined) update.avatar_url = avatar_url;
+    if (is_published !== undefined) update.is_published = is_published;
+    if (theme_settings !== undefined) {
+      update.theme_settings = { ...(existing[0].theme_settings ?? {}), ...theme_settings };
+    }
+    if (seo_meta !== undefined) {
+      update.seo_meta = { ...(existing[0].seo_meta ?? {}), ...seo_meta };
+    }
+    const { data, error } = await supabase.from("pages").update(update).eq("id", page_id).select("id, slug, title, description, is_published, theme_settings, updated_at").single();
+    if (error) {
+      return { content: [{ type: "text", text: error.message }], isError: true };
+    }
+    return {
+      content: [{ type: "text", text: JSON.stringify({ page: data }, null, 2) }],
+      structuredContent: { page: data }
+    };
+  }
+});
+
 // src/lib/mcp/index.ts
 var projectRef = "pphdcfxucfndmwulpfwv";
 var mcp_default = defineMcp({
   name: "linkmax-mcp",
   title: "LinkMAX MCP",
   version: "0.1.0",
-  instructions: "Tools for LinkMAX \u2014 a link-in-bio and micro-business OS. Use `list_my_pages` to browse the user's published pages, `list_my_leads` to read captured leads, and `get_analytics_summary` for a quick performance overview. All tools operate on the signed-in user's own data.",
+  instructions: "Tools for LinkMAX \u2014 a link-in-bio and micro-business OS. Use `list_my_pages` to browse the user's published pages, `get_page_structure` to inspect a page's blocks, `create_page` to make a new page, `create_block` to add blocks (including links), `update_block` to change block content and design, `update_page` to change the page theme and publish state, `list_my_leads` to read captured leads, and `get_analytics_summary` for a quick performance overview. All tools operate on the signed-in user's own data.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated"
   }),
-  tools: [list_my_pages_default, list_my_leads_default, get_analytics_summary_default, create_page_default, get_page_structure_default]
+  tools: [list_my_pages_default, list_my_leads_default, get_analytics_summary_default, create_page_default, get_page_structure_default, create_block_default, update_block_default, update_page_default]
 });
 
 // lovable-mcp-supabase-entry.ts
