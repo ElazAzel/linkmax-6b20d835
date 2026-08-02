@@ -514,7 +514,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                       </div>
 
                       <Card className="glass border-border/40 shadow-glass rounded-[2rem] overflow-hidden">
-                        <div className="divide-y divide-white/5">
+                        <div className="divide-y divide-border/40">
                           {analytics.staffStats.map((staff, i) => (
                             <div key={staff.staffId} className="p-5 flex items-center gap-4 hover:bg-accent/50 transition-colors group/staff">
                               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-black text-primary border border-primary/20 shrink-0">
