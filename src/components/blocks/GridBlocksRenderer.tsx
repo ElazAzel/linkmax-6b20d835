@@ -105,22 +105,30 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             const isSquare = dimensions.gridCols === 1 && dimensions.gridRows === 1;
             const isTall = dimensions.gridCols === 1 && dimensions.gridRows === 2;
 
-            // Translate BlockStyle into wrapper-level visuals so user customizations are visible
+            // Translate BlockStyle into wrapper-level visuals so user customizations are visible.
+            // Leaf blocks (button/link/text) paint their own container, so the card stays neutral.
+            const SELF_STYLED = new Set(['button', 'link', 'text']);
+            const isSelfStyled = SELF_STYLED.has(block.type as string);
             const bs = block.blockStyle;
-            const engine = getBlockStyles(bs);
+            const engine = isSelfStyled
+              ? { style: {} as React.CSSProperties, className: '' }
+              : getBlockStyles(bs);
             const wrapperStyle: React.CSSProperties = {
               borderRadius: 'var(--lm-block-radius, 16px)',
               boxShadow: 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))',
               ...engine.style,
             };
             const hoverClass = engine.className;
-            const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
+            const hasCustomBg = !isSelfStyled && !!(bs?.backgroundColor || bs?.backgroundGradient);
+            const hasRotation = !isSelfStyled && typeof bs?.rotate === 'number' && bs.rotate !== 0;
+
 
             return (
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex overflow-hidden transition-all duration-300',
+                  'group relative flex transition-all duration-300',
+                  hasRotation ? 'overflow-visible' : 'overflow-hidden',
                   !isTransparent && 'block-card',
                   alignmentClass,
                   colSpanClass,
@@ -152,6 +160,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 <div className="relative w-full h-full">
                   <BlockRenderer
                     block={block}
+                    containerStyled
                     isPreview={isPreview}
                     pageOwnerId={pageOwnerId}
                     pageId={pageId}
