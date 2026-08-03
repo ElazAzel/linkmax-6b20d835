@@ -115,12 +115,14 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             };
             const hoverClass = engine.className;
             const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
+            const hasRotation = typeof bs?.rotate === 'number' && bs.rotate !== 0;
 
             return (
               <motion.div
                 key={block.id}
                 className={cn(
-                  'group relative flex overflow-hidden transition-all duration-300',
+                  'group relative flex transition-all duration-300',
+                  hasRotation ? 'overflow-visible' : 'overflow-hidden',
                   !isTransparent && 'block-card',
                   alignmentClass,
                   colSpanClass,
@@ -152,6 +154,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 <div className="relative w-full h-full">
                   <BlockRenderer
                     block={block}
+                    containerStyled
                     isPreview={isPreview}
                     pageOwnerId={pageOwnerId}
                     pageId={pageId}
