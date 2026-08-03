@@ -105,17 +105,23 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             const isSquare = dimensions.gridCols === 1 && dimensions.gridRows === 1;
             const isTall = dimensions.gridCols === 1 && dimensions.gridRows === 2;
 
-            // Translate BlockStyle into wrapper-level visuals so user customizations are visible
+            // Translate BlockStyle into wrapper-level visuals so user customizations are visible.
+            // Leaf blocks (button/link/text) paint their own container, so the card stays neutral.
+            const SELF_STYLED = new Set(['button', 'link', 'text']);
+            const isSelfStyled = SELF_STYLED.has(block.type as string);
             const bs = block.blockStyle;
-            const engine = getBlockStyles(bs);
+            const engine = isSelfStyled
+              ? { style: {} as React.CSSProperties, className: '' }
+              : getBlockStyles(bs);
             const wrapperStyle: React.CSSProperties = {
               borderRadius: 'var(--lm-block-radius, 16px)',
               boxShadow: 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))',
               ...engine.style,
             };
             const hoverClass = engine.className;
-            const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
-            const hasRotation = typeof bs?.rotate === 'number' && bs.rotate !== 0;
+            const hasCustomBg = !isSelfStyled && !!(bs?.backgroundColor || bs?.backgroundGradient);
+            const hasRotation = !isSelfStyled && typeof bs?.rotate === 'number' && bs.rotate !== 0;
+
 
             return (
               <motion.div
