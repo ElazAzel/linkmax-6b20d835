@@ -19,6 +19,7 @@ This directory contains repository-local operating rules for AI-assisted work. I
 | `rules/commands/` | Current local command references. |
 | `rules/agents/` | Focused roles for planning, implementation, QA, security, and review. |
 | `rules/skills/` | Reusable procedures for project domains. |
+| `rules/design-od.md` | Mandatory design reference: Open Design catalog at `docs/design/` + brand token mapping. |
 
 ## Operating Rules
 
