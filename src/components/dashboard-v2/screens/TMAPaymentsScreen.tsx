@@ -146,8 +146,8 @@ export const TMAPaymentsScreen: React.FC = () => {
             <ShieldCheck className="h-5 w-5 text-green-500" />
             <h3 className="text-lg font-bold">{t('tma.security', 'Transaction Security')}</h3>
           </div>
-          <div className="p-4 bg-white rounded-xl border border-zinc-100 flex gap-4">
-            <div className="h-10 w-10 shrink-0 rounded-full bg-blue-50 flex items-center justify-center">
+          <div className="p-4 bg-card rounded-xl border border-border flex gap-4">
+            <div className="h-10 w-10 shrink-0 rounded-full bg-blue-500/10 flex items-center justify-center">
               <Info className="h-5 w-5 text-blue-500" />
             </div>
             <div className="space-y-1">

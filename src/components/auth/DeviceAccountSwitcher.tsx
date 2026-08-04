@@ -64,7 +64,7 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
   if (!hasAccounts && !onAddAccount) return null;
 
   return (
-    <div className={cn('overflow-hidden rounded-md border border-border bg-white', className)}>
+    <div className={cn('overflow-hidden rounded-md border border-border bg-card', className)}>
       <div className="border-b border-border/50 px-4 py-3">
         <div className="text-sm font-bold">{t('auth.deviceAccounts', 'Аккаунты на этом устройстве')}</div>
         {!compact && (

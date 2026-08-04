@@ -969,6 +969,15 @@ function DashboardV2Inner() {
 
 
 export default function DashboardV2() {
+  // Dashboard v2 is a dark cloud-platform surface by design.
+  // Toggle the `dark` theme tokens while the dashboard is mounted and
+  // restore the light shell (landing, auth, public pages) on unmount.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('dark');
+    return () => root.classList.remove('dark');
+  }, []);
+
   return (
     <ZoneProvider>
       <DashboardV2Inner />
