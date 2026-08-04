@@ -212,7 +212,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
     }
     if (isPaid) {
       return (
-        <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+        <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30">
           <Sparkles className="w-3 h-3 mr-1" />
           {t('dashboard.pageSettings.paidAddon', 'Paid Add-on')}
         </Badge>
@@ -273,7 +273,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
               {t('dashboard.pageSettings.customDomain', 'Custom Domain')}
             </h3>
             {!isPremium && (
-              <Badge variant="outline" className="ml-auto text-xs bg-amber-500/10 text-amber-600 border-amber-500/30">
+              <Badge variant="outline" className="ml-auto text-xs bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30">
                 PRO
               </Badge>
             )}
@@ -307,7 +307,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
               </div>
 
               {!isPremium ? (
-                <Button variant="outline" className="w-full text-amber-600 border-amber-500/30 bg-amber-500/5" onClick={() => navigate('/pricing')}>
+                <Button variant="outline" className="w-full text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/5" onClick={() => navigate('/pricing')}>
                   {t('dashboard.pageSettings.upgradeToConnect', 'Upgrade to Connect Domain')}
                 </Button>
               ) : (

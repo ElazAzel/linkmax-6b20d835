@@ -17,19 +17,19 @@ interface StatusBadgeProps {
 const STATUS_CONFIG: Record<StatusType, { bg: string; text: string; labelKey: string; defaultLabel: string }> = {
   draft: {
     bg: 'bg-amber-500/20',
-    text: 'text-amber-600',
+    text: 'text-amber-700 dark:text-amber-400',
     labelKey: 'dashboard.status.draft',
     defaultLabel: 'Черновик',
   },
   published: {
     bg: 'bg-emerald-500/20',
-    text: 'text-emerald-600',
+    text: 'text-emerald-700 dark:text-emerald-400',
     labelKey: 'dashboard.status.published',
     defaultLabel: 'Опубликован',
   },
   new: {
     bg: 'bg-blue-500/20',
-    text: 'text-blue-600',
+    text: 'text-blue-700 dark:text-blue-400',
     labelKey: 'dashboard.status.new',
     defaultLabel: 'Новый',
   },
@@ -47,7 +47,7 @@ const STATUS_CONFIG: Record<StatusType, { bg: string; text: string; labelKey: st
   },
   success: {
     bg: 'bg-emerald-500/20',
-    text: 'text-emerald-600',
+    text: 'text-emerald-700 dark:text-emerald-400',
     labelKey: 'dashboard.status.success',
     defaultLabel: 'Сохранено',
   },

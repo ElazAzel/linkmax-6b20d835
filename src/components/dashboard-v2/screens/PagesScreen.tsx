@@ -136,7 +136,7 @@ export const PagesScreen = memo(function PagesScreen({
     }
     if (page.isPaid) {
       return (
-        <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs">
+        <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30 text-xs">
           <Sparkles className="w-3 h-3 mr-1" />
           {t('dashboard.pages.paidAddon', 'Add-on')}
         </Badge>

@@ -202,7 +202,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                                     </span>
                                                 </div>
                                                 {isLeading && (
-                                                    <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 border-emerald-500/20 gap-1 h-5 text-xs font-black">
+                                                    <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-500/20 gap-1 h-5 text-xs font-black">
                                                         <TrendingUp className="h-3 w-3" />
                                                         {t('experiments.leading', 'ЛИДИРУЕТ')}
                                                     </Badge>

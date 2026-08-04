@@ -479,7 +479,7 @@ export const HomeScreen = memo(function HomeScreen({
               <ActionCard
                 icon={LayoutTemplate}
                 iconBg="bg-emerald-500/20"
-                iconColor="text-emerald-600"
+                iconColor="text-emerald-700 dark:text-emerald-400"
                 title={t('dashboard.home.templates', 'Шаблоны')}
                 description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
                 onClick={onOpenTemplates}
@@ -493,7 +493,7 @@ export const HomeScreen = memo(function HomeScreen({
               <ActionCard
                 icon={History}
                 iconBg="bg-blue-500/20"
-                iconColor="text-blue-600"
+                iconColor="text-blue-700 dark:text-blue-400"
                 title={t('dashboard.home.versions', 'История')}
                 description={t('dashboard.home.versionsDesc', 'Версии страницы')}
                 onClick={onOpenVersions}
@@ -505,7 +505,7 @@ export const HomeScreen = memo(function HomeScreen({
             <ActionCard
               icon={Store}
               iconBg="bg-violet-500/20"
-              iconColor="text-violet-600"
+              iconColor="text-violet-700 dark:text-violet-400"
               title={t('dashboard.home.marketplace', 'Маркетплейс')}
               description={t('dashboard.home.marketplaceDesc', 'От сообщества')}
               onClick={onOpenMarketplace}
@@ -516,7 +516,7 @@ export const HomeScreen = memo(function HomeScreen({
             <ActionCard
               icon={Users}
               iconBg="bg-pink-500/20"
-              iconColor="text-pink-600"
+              iconColor="text-pink-700 dark:text-pink-400"
               title={t('dashboard.home.gallery', 'Галерея')}
               description={t('dashboard.home.galleryDesc', 'Вдохновление')}
               onClick={() => navigate('/gallery')}
@@ -528,7 +528,7 @@ export const HomeScreen = memo(function HomeScreen({
               <ActionCard
                 icon={Crown}
                 iconBg="bg-amber-500/20"
-                iconColor="text-amber-600"
+                iconColor="text-amber-700 dark:text-amber-400"
                 title={t('dashboard.home.premium', 'Premium')}
                 description={t('dashboard.home.premiumDesc', 'Больше возможностей')}
                 onClick={() => navigate('/pricing')}
@@ -547,7 +547,7 @@ export const HomeScreen = memo(function HomeScreen({
               <Card className="rounded-md border-amber-500/30 bg-card p-5">
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-amber-500/15">
-                    <AlertTriangle className="h-5 w-5 text-amber-600" />
+                    <AlertTriangle className="h-5 w-5 text-amber-700 dark:text-amber-400" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.trafficNoLeads.title', 'Есть трафик, но нет заявок')}</h4>
@@ -564,7 +564,7 @@ export const HomeScreen = memo(function HomeScreen({
               <Card className="rounded-md border-violet-500/30 bg-card p-5">
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-violet-500/15">
-                    <Repeat className="h-5 w-5 text-violet-600" />
+                    <Repeat className="h-5 w-5 text-violet-700 dark:text-violet-400" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.repeatCustomers.title', 'Постоянные клиенты')}</h4>
@@ -581,7 +581,7 @@ export const HomeScreen = memo(function HomeScreen({
               <Card className="rounded-md border-emerald-500/30 bg-card p-5">
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-emerald-500/15">
-                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                    <TrendingUp className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.hasLeads.title', 'Заявки поступают')}</h4>

@@ -219,8 +219,8 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
   const renderEventCard = (event: EventData) => {
     const statusColors: Record<string, string> = {
       draft: 'bg-muted text-muted-foreground',
-      published: 'bg-emerald-500/10 text-emerald-600',
-      closed: 'bg-red-500/10 text-red-600',
+      published: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+      closed: 'bg-red-500/10 text-red-700 dark:text-red-400',
     };
 
     return (
@@ -272,7 +272,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
                 <span className="font-bold">{event.checkedIn}</span>
               </div>
               {event.pendingApproval > 0 && (
-                <Badge variant="secondary" className="text-xs font-black bg-amber-500/10 text-amber-600 border-none">
+                <Badge variant="secondary" className="text-xs font-black bg-amber-500/10 text-amber-700 dark:text-amber-400 border-none">
                   {event.pendingApproval} {t('events.pending', 'ожидают')}
                 </Badge>
               )}

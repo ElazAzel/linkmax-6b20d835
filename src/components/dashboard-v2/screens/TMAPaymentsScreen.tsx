@@ -135,7 +135,7 @@ export const TMAPaymentsScreen: React.FC = () => {
                 <div className="w-8 h-8 rounded bg-yellow-400 flex items-center justify-center text-black font-bold text-lg">★</div>
                 <span className="text-sm font-medium">Telegram Stars</span>
               </div>
-              <Badge className="bg-green-500/20 text-green-600 border-green-500/30 text-[10px] uppercase">Enabled</Badge>
+              <Badge className="bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30 text-[10px] uppercase">Enabled</Badge>
             </div>
           </div>
         </Card>
@@ -181,7 +181,7 @@ export const TMAPaymentsScreen: React.FC = () => {
                   <p className="text-xs text-muted-foreground">{format(new Date(tx.created_at), 'dd MMM yyyy, HH:mm')}</p>
                 </div>
                 <div className="text-right">
-                  <p className={`font-bold ${tx.net_amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className={`font-bold ${tx.net_amount >= 0 ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
                     {tx.net_amount >= 0 ? '+' : ''}{currency}{tx.net_amount.toFixed(2)}
                   </p>
                   <Badge variant="outline" className="text-[10px] uppercase">{tx.status}</Badge>

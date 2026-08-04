@@ -500,7 +500,7 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
                 </Badge>
               )}
               {lead.metadata?.intent === 'commercial' && (
-                <Badge className="h-5 px-2 bg-orange-500/10 text-orange-600 text-xs font-black uppercase tracking-wider border-orange-500/20 shrink-0 rounded-full animate-pulse">
+                <Badge className="h-5 px-2 bg-orange-500/10 text-orange-700 dark:text-orange-400 text-xs font-black uppercase tracking-wider border-orange-500/20 shrink-0 rounded-full animate-pulse">
                   🔥 {t('crm.chatbot.hot', 'Hot')}
                 </Badge>
               )}
@@ -549,14 +549,14 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
                 </button>
                 <button
                   onClick={handleTelegramReply}
-                  className="h-11 w-11 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/20 hover:bg-blue-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title="Telegram"
                 >
                   <Send className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleCallReply}
-                  className="h-11 w-11 rounded-xl bg-violet-500/10 text-violet-600 border border-violet-500/20 hover:bg-violet-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-violet-500/10 text-violet-700 dark:text-violet-400 border border-violet-500/20 hover:bg-violet-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title={t('crm.quickReply.call', 'Позвонить')}
                 >
                   <Phone className="h-5 w-5" />

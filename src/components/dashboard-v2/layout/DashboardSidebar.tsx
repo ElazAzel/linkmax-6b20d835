@@ -180,7 +180,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                   className={cn(
                     "text-xs h-5 px-1.5 ml-2 shrink-0 border-0",
                     item.badgeVariant === 'premium'
-                      ? "bg-amber-500/15 text-amber-600"
+                      ? "bg-amber-500/15 text-amber-700 dark:text-amber-400"
                       : "bg-primary/10 text-primary"
                   )}
                 >
@@ -230,7 +230,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
             >
               <BrandLogo inverted />
               {isPremium && (
-                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs px-1.5 py-0 h-5">
+                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30 text-xs px-1.5 py-0 h-5">
                   <Crown className="h-3 w-3 mr-1" />
                   PRO
                 </Badge>

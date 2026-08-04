@@ -541,7 +541,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             <Button
                                                 variant="secondary"
                                                 size="sm"
-                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
+                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-700 dark:text-emerald-400 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
                                                 onClick={() => openWhatsApp(lead)}
                                             >
                                                 <MessageCircle className="h-4 w-4 mr-2" />

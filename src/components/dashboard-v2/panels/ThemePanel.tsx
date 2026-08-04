@@ -412,7 +412,7 @@ export const ThemePanel = memo(function ThemePanel({
           <TabsContent value="style" className="p-5 pt-0 space-y-6">
             {accentContrast !== null && accentContrast < 7 && (
               <div className="flex gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-foreground">
-                <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
                 <span>{t('themes.contrastWarning', 'Контраст основного акцента ниже усиленного уровня AAA для обычного текста.')}</span>
               </div>
             )}
@@ -806,7 +806,7 @@ function UpgradeCard({ onUpgrade, title, desc }: { onUpgrade?: () => void; title
     <Card className="p-4 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20">
       <div className="flex items-center gap-3 mb-3">
         <div className="h-10 w-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-          <Crown className="h-5 w-5 text-amber-600" />
+          <Crown className="h-5 w-5 text-amber-700 dark:text-amber-400" />
         </div>
         <div>
           <h4 className="font-semibold text-sm">{title}</h4>

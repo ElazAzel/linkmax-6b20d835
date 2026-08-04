@@ -308,7 +308,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
                     {t('operator.followUp.send', 'Написать')}
                   </Button>
                 ) : sentFollowups.has(b.id) ? (
-                  <Badge className="h-7 px-2 bg-emerald-500/15 text-emerald-600 text-xs border-0 shrink-0">
+                  <Badge className="h-7 px-2 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 text-xs border-0 shrink-0">
                     <CheckCircle className="h-3.5 w-3.5 mr-1" />
                     {t('operator.followUp.sent', 'Отправлено')}
                   </Badge>
@@ -340,7 +340,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="h-8 rounded-lg px-3 border-violet-500/20 text-violet-600 hover:bg-violet-500/10 shrink-0"
+                    className="h-8 rounded-lg px-3 border-violet-500/20 text-violet-700 dark:text-violet-400 hover:bg-violet-500/10 shrink-0"
                     onClick={() => handleRebookNudge(b.client_name, b.client_phone)}
                   >
                     <MessageCircle className="h-3.5 w-3.5 mr-1" />
@@ -359,7 +359,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
             <span className="text-muted-foreground">{t('operator.week.leads', 'За неделю:')}</span>
             <span className="font-bold">{weekStats.thisWeek}</span>
             {delta !== 0 && (
-              <span className={cn("flex items-center gap-0.5 font-bold", delta > 0 ? "text-emerald-600" : "text-destructive")}>
+              <span className={cn("flex items-center gap-0.5 font-bold", delta > 0 ? "text-emerald-700 dark:text-emerald-400" : "text-destructive")}>
                 {delta > 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                 {delta > 0 ? '+' : ''}{delta}
               </span>
@@ -370,7 +370,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
             <div className="flex items-center gap-1.5 text-xs">
               <Repeat className="h-3.5 w-3.5 text-violet-500" />
               <span className="text-muted-foreground">{t('operator.repeat.label', 'Повторных:')}</span>
-              <span className="font-bold text-violet-600">{repeatCount}</span>
+              <span className="font-bold text-violet-700 dark:text-violet-400">{repeatCount}</span>
             </div>
           )}
         </div>
@@ -381,8 +381,8 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
             onClick={onOpenEditor}
             className="w-full h-auto flex items-center gap-3 p-3 rounded-xl bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 text-left font-normal whitespace-normal"
           >
-            <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
-            <span className="text-xs text-amber-700 font-medium">
+            <AlertTriangle className="h-4 w-4 text-amber-700 dark:text-amber-400 shrink-0" />
+            <span className="text-xs text-amber-700 dark:text-amber-400 font-medium">
               {t('operator.stale.page', 'Страница не обновлялась более 2 недель — обновите контент')}
             </span>
           </Button>

@@ -167,7 +167,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
                 <div className="flex items-center gap-2">
                   <h2 className="text-lg font-bold truncate">{props.displayName || t('dashboard.accountSettings.user', 'User')}</h2>
                   {props.isPremium && (
-                    <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+                    <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30">
                       <Crown className="h-3 w-3 mr-1" />
                       PRO
                     </Badge>

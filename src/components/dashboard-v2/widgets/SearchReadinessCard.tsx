@@ -140,12 +140,12 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
       {/* Status badges */}
       <div className="flex flex-wrap gap-1.5">
         {isIndexable ? (
-          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-700 dark:text-emerald-400 bg-emerald-500/5">
             <Globe className="h-3 w-3" />
             В поисковых системах
           </Badge>
         ) : isPublished ? (
-          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-700 dark:text-amber-400 bg-amber-500/5">
             <FileX className="h-3 w-3" />
             Не в поиске
           </Badge>
@@ -156,7 +156,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           </Badge>
         )}
         {inSitemap && (
-          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-700 dark:text-emerald-400 bg-emerald-500/5">
             <MapPin className="h-3 w-3" />
             В sitemap
           </Badge>
@@ -170,7 +170,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           </Badge>
         )}
         {childSummary && childSummary.excluded_thin > 0 && (
-          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-700 dark:text-amber-400 bg-amber-500/5">
             {childSummary.excluded_thin} услуг без описания
           </Badge>
         )}
@@ -209,7 +209,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
       )}
 
       {failedChecks.length === 0 && (
-        <div className="flex items-center gap-2 text-sm text-emerald-600">
+        <div className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-400">
           <CheckCircle2 className="h-4 w-4" />
           <span className="font-medium">Все поля заполнены — страница видна в поиске</span>
         </div>
