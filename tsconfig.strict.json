@@ -1,16 +1,13 @@
 {
+    "//": "Strict typecheck for the WHOLE project (not just business logic). Inherits include/exclude from tsconfig.json.",
     "extends": "./tsconfig.json",
     "compilerOptions": {
+        "strict": true,
         "strictNullChecks": true,
-        "noImplicitAny": true
-    },
-    "include": [
-        "src/lib/**/*",
-        "src/domain/**/*",
-        "src/use-cases/**/*",
-        "src/repositories/**/*",
-        "src/services/**/*",
-        "src/types/**/*",
-        "src/vite-env.d.ts"
-    ]
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitOverride": true,
+        "useUnknownInCatchVariables": true,
+        "forceConsistentCasingInFileNames": true
+    }
 }
