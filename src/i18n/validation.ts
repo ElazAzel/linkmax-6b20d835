@@ -1,4 +1,14 @@
 type TranslationObject = Record<string, unknown>;
+
+/**
+ * Dev-only diagnostic output for the i18n validation tooling.
+ * Routed through a single guarded sink so production builds stay silent.
+ */
+const devLog = (...args: unknown[]): void => {
+  if (import.meta.env.MODE === 'production') return;
+  // eslint-disable-next-line no-console
+  console.info(...args);
+};
 type LanguageCode = 'ru' | 'en' | 'kk' | 'de' | 'uk' | 'uz' | 'be' | 'es' | 'fr' | 'it' | 'pt' | 'zh' | 'tr' | 'ja' | 'ko' | 'ar';
 
 // Lazy import all locales — only used in dev mode
@@ -166,13 +176,13 @@ export async function logMissingKeysAsJSON(): Promise<void> {
     if (keys.length > 0) {
       hasMissing = true;
       console.group(`📝 [i18n] Missing keys for ${lang.toUpperCase()} - Copy and merge into ${lang}.json:`);
-      console.log(JSON.stringify(missingWithPlaceholders[lang], null, 2));
+      devLog(JSON.stringify(missingWithPlaceholders[lang], null, 2));
       console.groupEnd();
     }
   });
 
   if (!hasMissing) {
-    console.log('✅ [i18n] No missing keys to generate!');
+    devLog('✅ [i18n] No missing keys to generate!');
   }
 }
 
@@ -185,10 +195,10 @@ export async function copyMissingToClipboard(lang: LanguageCode): Promise<void> 
 
   try {
     await navigator.clipboard.writeText(json);
-    console.log(`✅ Copied missing ${lang.toUpperCase()} keys to clipboard!`);
+    devLog(`✅ Copied missing ${lang.toUpperCase()} keys to clipboard!`);
   } catch (err) {
     console.error('Failed to copy to clipboard:', err);
-    console.log('JSON to copy manually:', json);
+    devLog('JSON to copy manually:', json);
   }
 }
 
@@ -213,7 +223,7 @@ export async function validateTranslations(): Promise<void> {
   });
 
   const totalKeys = allKeys.size;
-  console.log(`📊 Total unique keys: ${totalKeys}`);
+  devLog(`📊 Total unique keys: ${totalKeys}`);
 
   let hasIssues = false;
 
@@ -227,7 +237,7 @@ export async function validateTranslations(): Promise<void> {
       missingFromLang.forEach(key => console.warn(`  • ${key}`));
       console.groupEnd();
     } else {
-      console.log(`✅ ${lang.toUpperCase()}: All ${keys.length} keys present`);
+      devLog(`✅ ${lang.toUpperCase()}: All ${keys.length} keys present`);
     }
   });
 
@@ -235,17 +245,17 @@ export async function validateTranslations(): Promise<void> {
   ALL_LANGUAGES.forEach(lang => {
     const count = langKeys[lang].length;
     const percentage = ((count / totalKeys) * 100).toFixed(1);
-    console.log(`  ${lang.toUpperCase()}: ${count}/${totalKeys} (${percentage}%)`);
+    devLog(`  ${lang.toUpperCase()}: ${count}/${totalKeys} (${percentage}%)`);
   });
   console.groupEnd();
 
   if (hasIssues) {
-    console.log('');
-    console.log('💡 To generate placeholders for missing keys, run in console:');
-    console.log('   window.__i18n.logMissingKeysAsJSON()');
-    console.log('   window.__i18n.copyMissingToClipboard("ru" | "en" | "kk")');
+    devLog('');
+    devLog('💡 To generate placeholders for missing keys, run in console:');
+    devLog('   window.__i18n.logMissingKeysAsJSON()');
+    devLog('   window.__i18n.copyMissingToClipboard("ru" | "en" | "kk")');
   } else {
-    console.log('🎉 All translations are complete!');
+    devLog('🎉 All translations are complete!');
   }
 
   console.groupEnd();

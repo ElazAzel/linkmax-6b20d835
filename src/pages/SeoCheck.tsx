@@ -5,6 +5,7 @@
  */
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { logger } from '@/lib/utils/logger';
 
 type Check = { name: string; ok: boolean; detail?: string; data?: unknown };
 
@@ -104,12 +105,7 @@ export default function SeoCheck() {
       setSitemap(s1);
       setSchemas(s2);
       setRunning(false);
-      // eslint-disable-next-line no-console
-      console.groupCollapsed('%c[SEO Check] Report', 'color:#10b981;font-weight:bold');
-      console.table([...s1, ...s2].map(({ name, ok, detail }) => ({ name, ok, detail })));
-      console.log('Sitemap details:', s1);
-      console.log('Schema details:', s2);
-      console.groupEnd();
+      logger.debug('[SEO Check] Report', { context: 'SeoCheck', data: { sitemap: s1, schemas: s2 } });
     })();
   }, []);
 
