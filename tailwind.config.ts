@@ -24,6 +24,17 @@ export default {
     },
     extend: {
       colors: {
+        brand: {
+          canvas: 'hsl(var(--brand-canvas))',
+          ink: 'hsl(var(--brand-ink))',
+          surface: 'hsl(var(--brand-surface))',
+          coral: 'hsl(var(--brand-coral))',
+          blue: 'hsl(var(--brand-blue))',
+          mint: 'hsl(var(--brand-mint))',
+          sun: 'hsl(var(--brand-sun))',
+          sage: 'hsl(var(--brand-sage))',
+          orange: 'hsl(var(--brand-orange))',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

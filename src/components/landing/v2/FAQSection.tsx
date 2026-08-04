@@ -45,13 +45,13 @@ export const FAQSection = () => {
   ];
 
   return (
-    <SectionWrapper id="faq" className="bg-[#F4F5F0] py-14 md:py-16">
+    <SectionWrapper id="faq" className="bg-brand-canvas py-14 md:py-16">
       <div className="mx-auto max-w-[900px]">
         <div className="mb-8 text-center">
-          <h2 className="font-display text-3xl font-semibold leading-tight text-[#16131A] md:text-4xl">
+          <h2 className="font-display text-3xl font-semibold leading-tight text-brand-ink md:text-4xl">
             {t('landing.faq.title', 'Коротко перед стартом')}
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-[#68636D]">
+          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-brand-sage">
             {t('landing.faq.subtitle', 'Без длинной презентации: только то, что нужно знать перед созданием страницы.')}
           </p>
         </div>
@@ -64,23 +64,23 @@ export const FAQSection = () => {
                 key={faq.q}
                 className={cn(
                   'overflow-hidden rounded-lg border bg-white transition-colors',
-                  isOpen ? 'border-[#C93618]' : 'border-[#16131A]/15'
+                  isOpen ? 'border-brand-coral' : 'border-brand-ink/15'
                 )}
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex min-h-14 w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-[#F4F5F0] sm:px-6"
+                  className="flex min-h-14 w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-brand-canvas sm:px-6"
                   aria-expanded={isOpen}
                 >
-                  <span className="pr-2 text-sm font-semibold text-[#16131A] sm:text-base">{faq.q}</span>
+                  <span className="pr-2 text-sm font-semibold text-brand-ink sm:text-base">{faq.q}</span>
                   <ChevronDown
-                    className={cn('h-5 w-5 shrink-0 text-[#C93618] transition-transform duration-200', isOpen && 'rotate-180')}
+                    className={cn('h-5 w-5 shrink-0 text-brand-coral transition-transform duration-200', isOpen && 'rotate-180')}
                   />
                 </button>
                 <div className={cn('grid transition-all duration-200 ease-out', isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0')}>
                   <div className="overflow-hidden">
-                    <p className="px-5 pb-5 text-sm leading-6 text-[#68636D] sm:px-6">{faq.a}</p>
+                    <p className="px-5 pb-5 text-sm leading-6 text-brand-sage sm:px-6">{faq.a}</p>
                   </div>
                 </div>
               </div>

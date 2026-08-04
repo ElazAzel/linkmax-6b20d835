@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+﻿import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { BrandLogo } from '@/components/brand/BrandLogo';
 
-// Lazy load LanguageSwitcher — it imports dropdown-menu, switch, input, scroll-area
+// Lazy load LanguageSwitcher вЂ” it imports dropdown-menu, switch, input, scroll-area
 // which are not needed until user interacts with the nav
 const LanguageSwitcher = lazy(() => import('@/components/translation/LanguageSwitcher').then(m => ({ default: m.LanguageSwitcher })));
 
@@ -62,7 +62,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
         return (
             <div
                 className={cn(
-                    "fixed top-0 inset-x-0 z-50 flex justify-center border-b border-[#16131A]/15 bg-[#F4F5F0]/95 px-4 pointer-events-none transition-transform duration-300 ease-in-out sm:px-6",
+                    "fixed top-0 inset-x-0 z-50 flex justify-center border-b border-brand-ink/15 bg-brand-canvas/95 px-4 pointer-events-none transition-transform duration-300 ease-in-out sm:px-6",
                     hidden ? "-translate-y-[100px]" : "translate-y-0"
                 )}
             >
@@ -73,21 +73,21 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
 
                     <nav className="flex items-center gap-1">
                         {[
-                            { href: '#features', label: t('landing.short.nav.what', 'Что это') },
-                            { href: '#how-it-works', label: t('landing.short.nav.how', 'Как работает') },
+                            { href: '#features', label: t('landing.short.nav.what', 'Р§С‚Рѕ СЌС‚Рѕ') },
+                            { href: '#how-it-works', label: t('landing.short.nav.how', 'РљР°Рє СЂР°Р±РѕС‚Р°РµС‚') },
                             { href: '#faq', label: t('landing.short.nav.faq', 'FAQ') },
                         ].map(({ href, label }) => (
                             <button
                                 key={href}
                                 onClick={() => scrollTo(href)}
-                                className="rounded-md px-3 py-1.5 text-sm font-medium text-[#16131A]/70 transition-colors hover:bg-[#F4F5F0] hover:text-[#16131A]"
+                                className="rounded-md px-3 py-1.5 text-sm font-medium text-brand-ink/70 transition-colors hover:bg-brand-canvas hover:text-brand-ink"
                             >
                                 {label}
                             </button>
                         ))}
                     </nav>
 
-                    <div className="mx-1 h-5 w-px bg-[#16131A]/15" />
+                    <div className="mx-1 h-5 w-px bg-brand-ink/15" />
 
                     <Suspense fallback={null}>
                         <LanguageSwitcher />
@@ -96,17 +96,17 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 rounded-md px-3 text-xs font-semibold text-[#16131A]/75 hover:bg-[#F4F5F0] hover:text-[#16131A]"
+                        className="h-8 rounded-md px-3 text-xs font-semibold text-brand-ink/75 hover:bg-brand-canvas hover:text-brand-ink"
                         onClick={onLogin}
                     >
-                        {t('landing.v2.nav.login', 'Войти')}
+                        {t('landing.v2.nav.login', 'Р’РѕР№С‚Рё')}
                     </Button>
                     <Button
                         size="sm"
-                        className="h-8 rounded-md bg-[#C93618] px-4 text-xs font-semibold text-white hover:bg-[#A92D16]"
+                        className="h-8 rounded-md bg-brand-coral px-4 text-xs font-semibold text-white hover:bg-brand-coral/90"
                         onClick={onSignup}
                     >
-                        {t('landing.short.nav.create', 'Создать')}
+                        {t('landing.short.nav.create', 'РЎРѕР·РґР°С‚СЊ')}
                     </Button>
                 </div>
             </div>
@@ -121,7 +121,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                 hidden ? "-translate-y-[100px]" : "translate-y-0"
             )}
         >
-            <div className="pointer-events-auto mt-2 w-[calc(100%-1.5rem)] max-w-[420px] overflow-hidden rounded-2xl border border-[#16131A]/15 bg-[#F4F5F0]/95 shadow-sm">
+            <div className="pointer-events-auto mt-2 w-[calc(100%-1.5rem)] max-w-[420px] overflow-hidden rounded-2xl border border-brand-ink/15 bg-brand-canvas/95 shadow-sm">
                 <div className="flex items-center justify-between px-4 py-2.5">
                     <button type="button" onClick={() => scrollTo('#hero')} className="px-1 py-1" aria-label="LinkMAX">
                         <BrandLogo className="h-6" />
@@ -129,7 +129,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                     <button
                         type="button"
                         onClick={() => setExpanded((v) => !v)}
-                        className="flex h-9 w-9 items-center justify-center rounded-lg text-[#16131A]"
+                        className="flex h-9 w-9 items-center justify-center rounded-lg text-brand-ink"
                         aria-label={expanded ? 'Close menu' : 'Open menu'}
                         aria-expanded={expanded}
                     >
@@ -146,15 +146,15 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                         <div className="px-5 pb-5 pt-1 flex flex-col gap-4">
                             <nav className="flex flex-col gap-1">
                                 {[
-                                    { href: '#features', label: t('landing.short.nav.what', 'Что это') },
-                                    { href: '#how-it-works', label: t('landing.short.nav.how', 'Как работает') },
+                                    { href: '#features', label: t('landing.short.nav.what', 'Р§С‚Рѕ СЌС‚Рѕ') },
+                                    { href: '#how-it-works', label: t('landing.short.nav.how', 'РљР°Рє СЂР°Р±РѕС‚Р°РµС‚') },
                                     { href: '#faq', label: t('landing.short.nav.faq', 'FAQ') },
                                 ].map(({ href, label }) => (
                                     <a
                                         key={href}
                                         href={href}
                                         onClick={(e) => { e.preventDefault(); scrollTo(href); setExpanded(false); }}
-                                        className="block border-b border-[#16131A]/10 py-2.5 text-base font-medium text-[#16131A]/75 transition-colors hover:text-[#16131A]"
+                                        className="block border-b border-brand-ink/10 py-2.5 text-base font-medium text-brand-ink/75 transition-colors hover:text-brand-ink"
                                     >
                                         {label}
                                     </a>
@@ -165,21 +165,21 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                                 <LanguageSwitcher />
                             </Suspense>
 
-                            <div className="h-px w-full bg-[#16131A]/10" />
+                            <div className="h-px w-full bg-brand-ink/10" />
 
                             <div className="flex flex-col gap-2">
                                 <Button
-                                    className="h-11 w-full justify-between rounded-md border border-[#16131A]/20 bg-white text-[#16131A] hover:bg-[#F4F5F0]"
+                                    className="h-11 w-full justify-between rounded-md border border-brand-ink/20 bg-white text-brand-ink hover:bg-brand-canvas"
                                     variant="outline"
                                     onClick={() => { onLogin(); setExpanded(false); }}
                                 >
-                                    {t('landing.v2.nav.login', 'Войти')}
+                                    {t('landing.v2.nav.login', 'Р’РѕР№С‚Рё')}
                                 </Button>
                                 <Button
-                                    className="h-11 w-full justify-between rounded-md bg-[#C93618] text-white hover:bg-[#A92D16]"
+                                    className="h-11 w-full justify-between rounded-md bg-brand-coral text-white hover:bg-brand-coral/90"
                                     onClick={() => { onSignup(); setExpanded(false); }}
                                 >
-                                    {t('landing.short.nav.createFree', 'Создать бесплатно')}
+                                    {t('landing.short.nav.createFree', 'РЎРѕР·РґР°С‚СЊ Р±РµСЃРїР»Р°С‚РЅРѕ')}
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>
                             </div>

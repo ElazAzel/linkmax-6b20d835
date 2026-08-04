@@ -14,6 +14,7 @@ import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';
+import { LogoTicker } from '@/components/landing/v2/LogoTicker';
 
 const SEOMetaEnhancer = lazy(() => import('@/components/seo/SEOMetaEnhancer').then(m => ({ default: m.SEOMetaEnhancer })));
 const GEOTagging = lazy(() => import('@/components/seo/GEOTagging').then(m => ({ default: m.GEOTagging })));
@@ -87,7 +88,7 @@ export default function Index() {
         <AISearchOptimizer pageType={LANDING_PAGE_TYPE} entityName={seoImageAlt} entityCategory={LANDING_ENTITY_CATEGORY} />
       </Suspense>
 
-      <div className="min-h-screen overflow-x-hidden bg-[#F4F5F0] text-[#16131A] selection:bg-[#FFD84A] selection:text-[#16131A]">
+      <div className="min-h-screen overflow-x-hidden bg-brand-canvas text-brand-ink selection:bg-[hsl(var(--brand-sun))] selection:text-brand-ink">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
@@ -104,6 +105,8 @@ export default function Index() {
           <div id="features" ref={featuresSectionRef}>
             <ShortFeatureSection />
           </div>
+
+          <LogoTicker />
 
           <div id="how-it-works" ref={howItWorksSectionRef}>
             <HowItWorksSection onStart={() => handleCreatePage('how_it_works_cta')} />
@@ -145,30 +148,30 @@ function ShortFeatureSection() {
   return (
     <section className="px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1120px]">
-        <div className="grid gap-8 border-y border-[#16131A]/15 py-10 md:grid-cols-[0.8fr_1.2fr] md:items-center">
+        <div className="grid gap-8 border-y border-brand-ink/15 py-10 md:grid-cols-[0.8fr_1.2fr] md:items-center">
           <div>
-            <div className="mb-4 inline-flex rounded-md border border-[#16131A]/20 bg-white px-3 py-1 text-xs font-bold uppercase text-[#16131A]">
+            <div className="mb-4 inline-flex rounded-md border border-brand-ink/20 bg-white px-3 py-1 text-xs font-bold uppercase text-brand-ink">
               {t('landing.short.features.badge', 'LinkMAX OS')}
             </div>
-            <h2 className="font-display text-4xl font-semibold leading-tight text-[#16131A] md:text-5xl">
+            <h2 className="font-display text-4xl font-semibold leading-tight text-brand-ink md:text-5xl">
               {t('landing.short.features.title', 'Что это?')}
             </h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-[#68636D]">
+            <p className="mt-5 max-w-md text-base leading-7 text-brand-sage">
               {t('landing.short.features.subtitle', 'Одна публичная ссылка для малого бизнеса: показать предложение, принять заявку и продолжить работу с клиентом.')}
             </p>
           </div>
 
           <div className="grid gap-3">
             {items.map((item, index) => (
-              <div key={item.id} className="grid grid-cols-[48px_1fr] items-start gap-4 rounded-lg border border-[#16131A]/15 bg-white p-5">
-                <div className="font-metric flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#F4F5F0] text-sm font-bold text-[#16131A] whitespace-nowrap">
+              <div key={item.id} className="grid grid-cols-[48px_1fr] items-start gap-4 rounded-lg border border-brand-ink/15 bg-white p-5">
+                <div className="font-metric flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-brand-canvas text-sm font-bold text-brand-ink whitespace-nowrap">
                   0{index + 1}
                 </div>
                 <div className="flex gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[#087A54]" />
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-mint" />
                   <div>
-                    <h3 className="text-lg font-semibold text-[#16131A]">{item.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-[#68636D]">{item.body}</p>
+                    <h3 className="text-lg font-semibold text-brand-ink">{item.title}</h3>
+                    <p className="mt-1 text-sm leading-6 text-brand-sage">{item.body}</p>
                   </div>
                 </div>
               </div>
@@ -189,7 +192,7 @@ function HowItWorksSection({ onStart }: { onStart: () => void }) {
   ];
 
   return (
-    <section className="bg-[#16131A] px-4 py-14 text-white sm:px-6 lg:px-8">
+    <section className="bg-brand-ink px-4 py-14 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1120px]">
         <div className="grid gap-8 md:grid-cols-[0.82fr_1.18fr] md:items-center">
           <div>
@@ -204,13 +207,13 @@ function HowItWorksSection({ onStart }: { onStart: () => void }) {
           <div className="space-y-3">
             {steps.map((step, index) => (
               <div key={step} className="flex items-center gap-4 border-b border-white/15 py-4">
-                <span className="font-metric flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#C93618] text-sm font-bold text-white">
+                <span className="font-metric flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-coral text-sm font-bold text-white">
                   {index + 1}
                 </span>
                 <p className="text-sm font-semibold text-white">{step}</p>
               </div>
             ))}
-            <Button onClick={onStart} className="mt-3 h-12 rounded-md bg-white px-5 text-base font-semibold text-[#16131A] hover:bg-[#F4F5F0]">
+            <Button onClick={onStart} className="mt-3 h-12 rounded-md bg-white px-5 text-base font-semibold text-brand-ink hover:bg-brand-canvas">
               {t('landing.short.steps.cta', 'Создать страницу')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -225,7 +228,7 @@ function ShortFinalCTA({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-[#C93618] px-4 py-14 text-white sm:px-6 lg:px-8">
+    <section className="bg-brand-coral px-4 py-14 text-white sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-[1120px] gap-6 md:grid-cols-[1fr_auto] md:items-center">
         <div>
           <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white">
@@ -239,7 +242,7 @@ function ShortFinalCTA({ onStart }: { onStart: () => void }) {
           </p>
 
         </div>
-        <Button onClick={onStart} className="h-12 rounded-md bg-[#16131A] px-6 text-base font-semibold text-white hover:bg-black md:h-14">
+        <Button onClick={onStart} className="h-12 rounded-md bg-brand-ink px-6 text-base font-semibold text-white hover:bg-black md:h-14">
           {t('landing.short.final.cta', 'Создать страницу')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
@@ -253,12 +256,12 @@ function SimpleFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#F4F5F0] px-4 pb-8 pt-8 text-center text-xs text-[#68636D] sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-[#16131A]/15 pt-5">
+    <footer className="bg-brand-canvas px-4 pb-8 pt-8 text-center text-xs text-brand-sage sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-brand-ink/15 pt-5">
         <span>{t('landing.short.footer.copyright', '© {{year}} LinkMAX', { year })}</span>
-        <a href="/privacy" className="font-medium text-[#16131A]/70 underline-offset-4 hover:text-[#16131A] hover:underline transition-colors">{t('landing.short.footer.privacy', 'Privacy')}</a>
-        <a href="/terms" className="font-medium text-[#16131A]/70 underline-offset-4 hover:text-[#16131A] hover:underline transition-colors">{t('landing.short.footer.terms', 'Terms')}</a>
-        <a href="/payment-terms" className="font-medium text-[#16131A]/70 underline-offset-4 hover:text-[#16131A] hover:underline transition-colors">{t('landing.short.footer.payments', 'Payments')}</a>
+        <a href="/privacy" className="font-medium text-brand-ink/70 underline-offset-4 hover:text-brand-ink hover:underline transition-colors">{t('landing.short.footer.privacy', 'Privacy')}</a>
+        <a href="/terms" className="font-medium text-brand-ink/70 underline-offset-4 hover:text-brand-ink hover:underline transition-colors">{t('landing.short.footer.terms', 'Terms')}</a>
+        <a href="/payment-terms" className="font-medium text-brand-ink/70 underline-offset-4 hover:text-brand-ink hover:underline transition-colors">{t('landing.short.footer.payments', 'Payments')}</a>
       </div>
     </footer>
   );
