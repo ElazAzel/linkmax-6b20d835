@@ -153,23 +153,12 @@ export class CrmService {
         return;
       }
 
-      // 2. Prepare AI Insights
-      const intent = lead.metadata?.intent === 'commercial' ? '🔥 Коммерческий интерес' : 'ℹ️ Инфо-запрос';
-      const lastQuery = lead.metadata?.last_query || '—';
-      const crmLink = `https://lnkmx.my/crm?lead=${lead.id}`;
-
-      // 3. Invoke Edge Function
+      // 2. Invoke Edge Function (message text is built server-side from the verified lead)
       await supabase.functions.invoke('send-social-notification', {
         body: {
           type: 'new_chatbot_lead',
           recipientId: lead.user_id,
-          data: {
-            name: lead.name,
-            phone: lead.phone || '—',
-            intent,
-            query: lastQuery,
-            link: crmLink
-          }
+          leadId: lead.id
         }
       });
     } catch (e) {

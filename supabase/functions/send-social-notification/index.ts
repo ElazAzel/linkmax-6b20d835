@@ -7,18 +7,39 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+type NotificationType =
+  | 'gift_received'
+  | 'gift_claimed'
+  | 'challenge_completed'
+  | 'friend_challenge_completed'
+  | 'page_liked'
+  | 'newsletter_subscribed'
+  | 'new_chatbot_lead';
+
 interface NotificationRequest {
-  type: 'gift_received' | 'gift_claimed' | 'challenge_completed' | 'friend_challenge_completed' | 'page_liked' | 'newsletter_subscribed';
+  type: NotificationType;
   recipientId: string;
-  data?: {
-    senderName?: string;
-    days?: number;
-    challengeTitle?: string;
-    friendName?: string;
-    message?: string;
-    subscriberEmail?: string;
-    pageName?: string;
-  };
+  // Server-verified references (never free-form text)
+  giftId?: string;
+  pageId?: string;
+  leadId?: string;
+  challengeTitle?: string;
+  subscriberEmail?: string;
+}
+
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+function esc(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .slice(0, 300);
 }
 
 serve(async (req: Request) => {
@@ -27,98 +48,197 @@ serve(async (req: Request) => {
   }
 
   try {
-    const { type, recipientId, data }: NotificationRequest = await req.json();
-    
+    const body = (await req.json().catch(() => ({}))) as NotificationRequest;
+    const { type, recipientId } = body;
+
     if (!type || !recipientId) {
-      return new Response(
-        JSON.stringify({ success: false, error: 'missing_params' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json({ success: false, error: 'missing_params' }, 400);
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Get recipient's Telegram settings
+    // Resolve the authenticated caller (may be null for public page events)
+    const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+    let callerId: string | null = null;
+    if (token) {
+      const { data } = await createClient(supabaseUrl, anonKey).auth.getUser(token);
+      callerId = data?.user?.id ?? null;
+    }
+
+    const requireAuth = (): string | null => callerId;
+
+    async function displayName(userId: string): Promise<string> {
+      const { data } = await supabase
+        .from('user_profiles')
+        .select('display_name, username')
+        .eq('id', userId)
+        .maybeSingle();
+      return data?.display_name || data?.username || 'Пользователь';
+    }
+
+    // ---------- Authorization + message construction from verified DB state ----------
+    let message = '';
+
+    switch (type) {
+      case 'gift_received': {
+        const caller = requireAuth();
+        if (!caller) return json({ success: false, error: 'unauthorized' }, 401);
+        const { data: gift } = await supabase
+          .from('premium_gifts')
+          .select('id, days_gifted, message, sender_id, recipient_id')
+          .eq('sender_id', caller)
+          .eq('recipient_id', recipientId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (!gift) return json({ success: false, error: 'forbidden' }, 403);
+
+        message = `🎁 <b>Вам подарили Premium!</b>\n\n${esc(await displayName(caller))} отправил вам подарок: <b>${esc(gift.days_gifted ?? 7)} дней Premium</b>`;
+        if (gift.message) message += `\n\n💬 Сообщение: "${esc(gift.message)}"`;
+        message += '\n\n👉 Откройте lnkmx.my, чтобы активировать подарок!';
+        break;
+      }
+
+      case 'gift_claimed': {
+        const caller = requireAuth();
+        if (!caller) return json({ success: false, error: 'unauthorized' }, 401);
+        // Caller must be the recipient of a claimed gift sent by recipientId (the sender)
+        const { data: gift } = await supabase
+          .from('premium_gifts')
+          .select('id')
+          .eq('recipient_id', caller)
+          .eq('sender_id', recipientId)
+          .eq('is_claimed', true)
+          .limit(1)
+          .maybeSingle();
+        if (!gift) return json({ success: false, error: 'forbidden' }, 403);
+
+        message = `✅ <b>Ваш подарок активирован!</b>\n\n${esc(await displayName(caller))} активировал ваш подарок Premium!`;
+        break;
+      }
+
+      case 'challenge_completed': {
+        const caller = requireAuth();
+        if (!caller || caller !== recipientId) {
+          return json({ success: false, error: 'forbidden' }, 403);
+        }
+        message = `🏆 <b>Челлендж выполнен!</b>\n\nВы выполнили челлендж "<b>${esc(body.challengeTitle || 'Еженедельный')}</b>"!\n\n🎉 Получите награду в приложении!`;
+        break;
+      }
+
+      case 'friend_challenge_completed': {
+        const caller = requireAuth();
+        if (!caller) return json({ success: false, error: 'unauthorized' }, 401);
+        const { data: friendship } = await supabase
+          .from('friendships')
+          .select('id')
+          .eq('status', 'accepted')
+          .or(
+            `and(user_id.eq.${caller},friend_id.eq.${recipientId}),and(user_id.eq.${recipientId},friend_id.eq.${caller})`
+          )
+          .limit(1)
+          .maybeSingle();
+        if (!friendship) return json({ success: false, error: 'forbidden' }, 403);
+
+        message = `👏 <b>${esc(await displayName(caller))}</b> выполнил челлендж!\n\n"${esc(body.challengeTitle || 'Еженедельный челлендж')}"`;
+        break;
+      }
+
+      case 'page_liked': {
+        // Triggered by public visitors: verify the page exists and is owned by recipientId
+        if (!body.pageId) return json({ success: false, error: 'missing_params' }, 400);
+        const { data: page } = await supabase
+          .from('pages')
+          .select('id, user_id, title')
+          .eq('id', body.pageId)
+          .maybeSingle();
+        if (!page || page.user_id !== recipientId) {
+          return json({ success: false, error: 'forbidden' }, 403);
+        }
+        message = `❤️ <b>Новый лайк!</b>\n\nКто-то лайкнул вашу страницу${page.title ? ` "${esc(page.title)}"` : ''}!\n\n👉 Посмотрите в галерее lnkmx.my`;
+        break;
+      }
+
+      case 'newsletter_subscribed': {
+        // Triggered by public visitors: a matching subscription row must exist for this owner
+        const email = typeof body.subscriberEmail === 'string' ? body.subscriberEmail.trim().toLowerCase() : '';
+        if (!email) return json({ success: false, error: 'missing_params' }, 400);
+        const { data: sub } = await supabase
+          .from('newsletter_subscriptions')
+          .select('id, email, page_id, owner_id')
+          .eq('owner_id', recipientId)
+          .eq('email', email)
+          .limit(1)
+          .maybeSingle();
+        if (!sub) return json({ success: false, error: 'forbidden' }, 403);
+
+        let pageName = '';
+        if (sub.page_id) {
+          const { data: page } = await supabase
+            .from('pages')
+            .select('title')
+            .eq('id', sub.page_id)
+            .maybeSingle();
+          pageName = page?.title || '';
+        }
+        message = `📧 <b>Новый подписчик!</b>\n\n${esc(sub.email)} подписался на вашу рассылку${pageName ? ` на странице "${esc(pageName)}"` : ''}.`;
+        break;
+      }
+
+      case 'new_chatbot_lead': {
+        // The lead must genuinely belong to the recipient
+        if (!body.leadId) return json({ success: false, error: 'missing_params' }, 400);
+        const { data: lead } = await supabase
+          .from('leads')
+          .select('id, name, phone, user_id, metadata')
+          .eq('id', body.leadId)
+          .eq('user_id', recipientId)
+          .maybeSingle();
+        if (!lead) return json({ success: false, error: 'forbidden' }, 403);
+
+        const meta = (lead.metadata ?? {}) as Record<string, unknown>;
+        const intent = meta.intent === 'commercial' ? '🔥 Коммерческий интерес' : 'ℹ️ Инфо-запрос';
+        message =
+          `🤖 <b>Новый лид из чат-бота</b>\n\n` +
+          `👤 ${esc(lead.name)}\n` +
+          `📱 ${esc(lead.phone || '—')}\n` +
+          `${intent}\n` +
+          `💬 ${esc(meta.last_query || '—')}\n\n` +
+          `👉 https://lnkmx.my/crm?lead=${esc(lead.id)}`;
+        break;
+      }
+
+      default:
+        return json({ success: false, error: 'invalid_type' }, 400);
+    }
+
+    // ---------- Delivery ----------
     const { data: profile, error: profileError } = await supabase
       .from('user_profiles')
-      .select('telegram_chat_id, telegram_notifications_enabled, display_name, username')
+      .select('telegram_chat_id, telegram_notifications_enabled')
       .eq('id', recipientId)
       .single();
 
     if (profileError || !profile?.telegram_notifications_enabled || !profile?.telegram_chat_id) {
-      console.log('Recipient has no Telegram notifications enabled');
-      return new Response(
-        JSON.stringify({ success: false, error: 'telegram_not_enabled' }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json({ success: false, error: 'telegram_not_enabled' });
     }
     if (!isConfigured()) {
-      console.log("Telegram gateway not configured");
-      return new Response(
-        JSON.stringify({ success: false, error: 'telegram_not_configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json({ success: false, error: 'telegram_not_configured' }, 500);
     }
 
-    // Build message based on notification type
-    let message = '';
-    switch (type) {
-      case 'gift_received':
-        message = `🎁 <b>Вам подарили Premium!</b>\n\n${data?.senderName || 'Пользователь'} отправил вам подарок: <b>${data?.days || 7} дней Premium</b>`;
-        if (data?.message) {
-          message += `\n\n💬 Сообщение: "${data.message}"`;
-        }
-        message += '\n\n👉 Откройте lnkmx.my, чтобы активировать подарок!';
-        break;
-
-      case 'gift_claimed':
-        message = `✅ <b>Ваш подарок активирован!</b>\n\n${data?.senderName || 'Получатель'} активировал ваш подарок Premium!`;
-        break;
-
-      case 'challenge_completed':
-        message = `🏆 <b>Челлендж выполнен!</b>\n\nВы выполнили челлендж "<b>${data?.challengeTitle || 'Еженедельный'}</b>"!\n\n🎉 Получите награду в приложении!`;
-        break;
-
-      case 'friend_challenge_completed':
-        message = `👏 <b>${data?.friendName || 'Ваш друг'}</b> выполнил челлендж!\n\n"${data?.challengeTitle || 'Еженедельный челлендж'}"`;
-        break;
-
-      case 'page_liked':
-        message = `❤️ <b>Новый лайк!</b>\n\nКто-то лайкнул вашу страницу${data?.pageName ? ` "${data.pageName}"` : ''}!\n\n👉 Посмотрите в галерее lnkmx.my`;
-        break;
-
-      case 'newsletter_subscribed':
-        message = `📧 <b>Новый подписчик!</b>\n\n${data?.subscriberEmail || 'Кто-то'} подписался на вашу рассылку${data?.pageName ? ` на странице "${data.pageName}"` : ''}.`;
-        break;
-
-      default:
-        message = '📬 У вас новое уведомление в lnkmx.my!';
-    }
-
-    console.log(`Sending ${type} notification to ${profile.telegram_chat_id}`);
-
-    // Send Telegram message — sendMessage returns parsed JSON, not Response
     try {
       await sendMessage(profile.telegram_chat_id, message, { parse_mode: 'HTML' });
     } catch (sendError) {
       console.error('Failed to send Telegram message:', sendError);
-      return new Response(
-        JSON.stringify({ success: false, error: 'telegram_send_failed' }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json({ success: false, error: 'telegram_send_failed' });
     }
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return json({ success: true });
   } catch (error) {
     console.error('Error sending notification:', error);
-    return new Response(
-      JSON.stringify({ success: false, error: 'server_error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return json({ success: false, error: 'server_error' }, 500);
   }
 });

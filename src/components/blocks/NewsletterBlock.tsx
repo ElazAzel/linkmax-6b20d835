@@ -99,9 +99,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
           body: {
             type: 'newsletter_subscribed',
             recipientId: pageOwnerId,
-            data: {
-              subscriberEmail: trimmedEmail,
-            },
+            subscriberEmail: trimmedEmail,
           },
         });
       } catch (notifError) {

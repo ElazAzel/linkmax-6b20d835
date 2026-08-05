@@ -223,7 +223,7 @@ export async function likeGalleryPage(pageId: string): Promise<void> {
         body: {
           type: 'page_liked',
           recipientId: page.user_id,
-          data: { pageName: page.title || '' },
+          pageId,
         },
       }).catch(() => {});
     }
