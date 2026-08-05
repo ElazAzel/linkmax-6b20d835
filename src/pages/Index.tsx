@@ -57,7 +57,7 @@ export default function Index() {
     handleNav(`/auth?${params.toString()}`, ctaType, location);
   }, [handleNav, trackMarketingEvent]);
 
-  // Analytics observers
+    // Analytics observers
   const trackMarketingSection = useCallback(
     (sectionId: string) => {
       trackSectionView(sectionId);
@@ -66,10 +66,27 @@ export default function Index() {
     [trackOnce, trackSectionView]
   );
 
-  const heroSectionRef = useSectionObserver<HTMLDivElement>('hero', trackMarketingSection);
-  const featuresSectionRef = useSectionObserver<HTMLDivElement>('features', trackMarketingSection);
-  const howItWorksSectionRef = useSectionObserver<HTMLDivElement>('how_it_works', trackMarketingSection);
-  const faqSectionRef = useSectionObserver<HTMLDivElement>('faq', trackMarketingSection);
+  // Enhanced section observers with theme-aware callbacks
+  const trackThemeAwareMarketingSection = useCallback(
+    (sectionId: string, isDarkMode: boolean) => {
+      trackSectionView(sectionId);
+      trackMarketingEvent({ 
+        eventType: 'section_view', 
+        metadata: { 
+          sectionId, 
+          theme: isDarkMode ? 'dark' : 'light',
+          timestamp: Date.now() 
+        } 
+      });
+      if (sectionId === 'how_it_works') trackOnce({ eventType: 'how_it_works_view' });
+    },
+    [trackOnce, trackSectionView, trackMarketingEvent]
+  );
+
+  const heroSectionRef = useSectionObserver<HTMLDivElement>('hero', (sectionId) => trackThemeAwareMarketingSection(sectionId, i18n.language === 'kk' || document.documentElement.classList.contains('dark')));
+  const featuresSectionRef = useSectionObserver<HTMLDivElement>('features', (sectionId) => trackThemeAwareMarketingSection(sectionId, i18n.language === 'kk' || document.documentElement.classList.contains('dark')));
+  const howItWorksSectionRef = useSectionObserver<HTMLDivElement>('how_it_works', (sectionId) => trackThemeAwareMarketingSection(sectionId, i18n.language === 'kk' || document.documentElement.classList.contains('dark')));
+  const faqSectionRef = useSectionObserver<HTMLDivElement>('faq', (sectionId) => trackThemeAwareMarketingSection(sectionId, i18n.language === 'kk' || document.documentElement.classList.contains('dark')));
 
   return (
     <ScreenErrorBoundary screenName={LANDING_SCREEN_NAME}>
@@ -89,6 +106,25 @@ export default function Index() {
       </Suspense>
 
       <div className="min-h-screen overflow-x-hidden bg-brand-canvas text-brand-ink selection:bg-[hsl(var(--brand-sun))] selection:text-brand-ink">
+        {/* Theme-aware background effects for dark mode with enhanced visual depth */}
+        <div className="absolute inset-0">
+          {/* Base gradient that adapts to theme */}
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-canvas via-brand-canvas to-brand-canvas/80 dark:from-brand-ink dark:via-brand-ink/95 dark:to-brand-ink/90 transition-all duration-500" />
+          
+          {/* Theme-aware animated gradient orbs */}
+          <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-brand-coral/20 dark:bg-brand-coral/10 rounded-full blur-3xl animate-float-slow" />
+          <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-brand-blue/15 dark:bg-brand-blue/5 rounded-full blur-3xl animate-float-medium" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[700px] h-[700px] bg-brand-mint/15 dark:bg-brand-mint/5 rounded-full blur-3xl animate-float-fast" style={{ animationDelay: '2s' }} />
+          
+          {/* Subtle grid pattern for depth */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--brand-ink))/10_1px,transparent_1px),linear-gradient(90deg,rgba(var(--brand-ink))/10_1px,transparent_1px)] bg-size-[40px_40px] dark:bg-[linear-gradient(rgba(var(--brand-canvas))/15_1px,transparent_1px),linear-gradient(90deg,rgba(var(--brand-canvas))/15_1px,transparent_1px)] opacity-50" />
+        </div>
+
+        {/* Enhanced theme transition overlay with theme-aware effects */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-canvas/60 dark:via-brand-ink/60 to-brand-canvas dark:to-brand-ink/90 pointer-events-none transition-all duration-500" />
+        
+        {/* Theme-aware vignette for better focus */}
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-brand-canvas/80 dark:to-brand-ink/80 pointer-events-none" />
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
@@ -102,17 +138,23 @@ export default function Index() {
             />
           </div>
 
-          <div id="features" ref={featuresSectionRef}>
+          <div id="features" ref={featuresSectionRef} className="relative">
+            {/* Theme-aware section background with subtle gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-brand-canvas/50 via-transparent to-brand-canvas/30 dark:from-brand-ink/50 dark:via-transparent dark:to-brand-ink/30 -z-10" />
             <ShortFeatureSection />
           </div>
 
-          <LogoTicker />
+          <LogoTicker className="relative z-10" />
 
-          <div id="how-it-works" ref={howItWorksSectionRef}>
+          <div id="how-it-works" ref={howItWorksSectionRef} className="relative">
+            {/* Theme-aware section background with diagonal pattern */}
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-canvas/50 via-transparent to-brand-canvas/30 dark:from-brand-ink/50 dark:via-transparent dark:to-brand-ink/30 -z-10" />
             <HowItWorksSection onStart={() => handleCreatePage('how_it_works_cta')} />
           </div>
 
-          <div ref={faqSectionRef}>
+          <div ref={faqSectionRef} className="relative">
+            {/* Theme-aware section background with subtle glow */}
+            <div className="absolute inset-0 bg-gradient-to-b from-brand-canvas via-brand-canvas/50 to-brand-canvas dark:from-brand-ink dark:via-brand-ink/50 dark:to-brand-ink -z-10" />
             <FAQSection />
           </div>
 
