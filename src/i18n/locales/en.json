@@ -7174,7 +7174,9 @@
         "leadsTitle": "Leads",
         "leadsBody": "Forms, messengers, and bookings land in one stream instead of getting lost in chats.",
         "moneyTitle": "Payment",
-        "moneyBody": "Invoices, payments, and basic CRM stay next to the page."
+        "moneyBody": "Invoices, payments, and basic CRM stay next to the page.",
+        "insightsTitle": "Analytics",
+        "insightsBody": "See where clients came from, which blocks work and what to change."
       },
       "steps": {
         "title": "How to launch",
@@ -7182,7 +7184,8 @@
         "one": "Enter a short page address.",
         "two": "Answer a few business questions.",
         "three": "AI builds the structure, copy, and first blocks.",
-        "cta": "Create page"
+        "cta": "Create page",
+        "badge": "01 — 03"
       },
       "final": {
         "eyebrow": "Ready to start",
@@ -7195,6 +7198,17 @@
         "privacy": "Privacy",
         "terms": "Terms",
         "payments": "Payments"
+      },
+      "h1": "One link for all your client work",
+      "proof": {
+        "setupValue": "5 min",
+        "setupLabel": "from address to a live page",
+        "blocksValue": "28",
+        "blocksLabel": "blocks: services, booking, payment, reviews",
+        "langsValue": "4",
+        "langsLabel": "interface and page languages",
+        "priceValue": "$0",
+        "priceLabel": "start with no card or subscription"
       }
     },
     "faq": {

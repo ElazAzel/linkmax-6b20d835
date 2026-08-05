@@ -7115,7 +7115,9 @@
         "leadsTitle": "Arizalar",
         "leadsBody": "Formalar, messenjerlar va bronlar chatlarda yo?qolmay, bitta oqimga tushadi.",
         "moneyTitle": "To?lov",
-        "moneyBody": "Invoyslar, to?lovlar va asosiy CRM sahifa yonida."
+        "moneyBody": "Invoyslar, to?lovlar va asosiy CRM sahifa yonida.",
+        "insightsTitle": "Analitika",
+        "insightsBody": "Mijozlar qayerdan kelganini va qaysi bloklar ishlashini ko‘rasiz."
       },
       "steps": {
         "title": "Qanday ishga tushadi",
@@ -7123,7 +7125,8 @@
         "one": "Sahifaning qisqa manzilini kiriting.",
         "two": "Biznes haqida bir nechta savolga javob bering.",
         "three": "AI tuzilma, matnlar va birinchi bloklarni yig?adi.",
-        "cta": "Sahifa yaratish"
+        "cta": "Sahifa yaratish",
+        "badge": "01 — 03"
       },
       "final": {
         "eyebrow": "Boshlashga tayyor",
@@ -7136,6 +7139,17 @@
         "privacy": "Privacy",
         "terms": "Terms",
         "payments": "Payments"
+      },
+      "h1": "Bitta havola — mijozlar bilan barcha ishingiz",
+      "proof": {
+        "setupValue": "5 daq",
+        "setupLabel": "manzildan tayyor sahifagacha",
+        "blocksValue": "28",
+        "blocksLabel": "blok: xizmatlar, band qilish, to‘lov, izohlar",
+        "langsValue": "4",
+        "langsLabel": "interfeys va sahifa tillari",
+        "priceValue": "0",
+        "priceLabel": "kartasiz va obunasiz start"
       }
     },
     "faq": {
