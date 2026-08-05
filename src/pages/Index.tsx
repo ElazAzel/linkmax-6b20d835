@@ -9,7 +9,6 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { Button } from '@/components/ui/button';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 
 import { HeroOS2026 } from '@/components/landing/v3/HeroOS2026';
 import { ProofStrip } from '@/components/landing/v3/ProofStrip';
@@ -128,64 +127,6 @@ export default function Index() {
         <SimpleFooter />
       </div>
     </ScreenErrorBoundary>
-  );
-}
-
-function ShortFeatureSection() {
-  const { t } = useTranslation();
-  const items = [
-    {
-      id: 'page',
-      title: t('landing.short.features.pageTitle', 'Страница'),
-      body: t('landing.short.features.pageBody', 'Услуги, ссылки, портфолио, отзывы и кнопки связи в одном коротком профиле.'),
-    },
-    {
-      id: 'leads',
-      title: t('landing.short.features.leadsTitle', 'Заявки'),
-      body: t('landing.short.features.leadsBody', 'Формы, мессенджеры и записи складываются в единый поток, а не теряются в переписках.'),
-    },
-    {
-      id: 'money',
-      title: t('landing.short.features.moneyTitle', 'Оплата'),
-      body: t('landing.short.features.moneyBody', 'Инвойсы, платежи и базовая CRM уже рядом со страницей.'),
-    },
-  ];
-
-  return (
-    <section className="px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1120px]">
-        <div className="grid gap-8 border-y border-brand-ink/15 py-10 md:grid-cols-[0.8fr_1.2fr] md:items-center">
-          <div>
-            <div className="mb-4 inline-flex rounded-md border border-brand-ink/20 bg-white px-3 py-1 text-xs font-bold uppercase text-brand-ink">
-              {t('landing.short.features.badge', 'LinkMAX OS')}
-            </div>
-            <h2 className="font-display text-4xl font-semibold leading-tight text-brand-ink md:text-5xl">
-              {t('landing.short.features.title', 'Что это?')}
-            </h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-brand-sage">
-              {t('landing.short.features.subtitle', 'Одна публичная ссылка для малого бизнеса: показать предложение, принять заявку и продолжить работу с клиентом.')}
-            </p>
-          </div>
-
-          <div className="grid gap-3">
-            {items.map((item, index) => (
-              <div key={item.id} className="grid grid-cols-[48px_1fr] items-start gap-4 rounded-lg border border-brand-ink/15 bg-white p-5">
-                <div className="font-metric flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-brand-canvas text-sm font-bold text-brand-ink whitespace-nowrap">
-                  0{index + 1}
-                </div>
-                <div className="flex gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-mint" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-brand-ink">{item.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-brand-sage">{item.body}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 
