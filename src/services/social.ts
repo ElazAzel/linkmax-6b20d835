@@ -166,12 +166,6 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
 
 async function notifyFriendsAboutChallenge(userId: string, challengeTitle: string): Promise<void> {
   // Get user's display name
-  const { data: userProfile } = await supabase
-    .from('user_profiles')
-    .select('display_name, username')
-    .eq('id', userId)
-    .single();
-
   // Get friends (accepted friendships)
   const { data: friendships } = await supabase
     .from('friendships')
