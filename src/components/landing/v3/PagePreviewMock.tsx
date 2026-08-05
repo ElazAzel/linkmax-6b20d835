@@ -37,10 +37,10 @@ export function PagePreviewMock({ className = '' }: { className?: string }) {
   ];
 
   return (
-    <div className={`relative ${className}`} aria-hidden="true">
+    <div className={`relative lg:pl-12 ${className}`} aria-hidden="true">
       {/* accent slabs behind the device */}
-      <div className="pointer-events-none absolute -left-3 top-8 hidden h-24 w-24 bg-brand-sun md:block" />
-      <div className="pointer-events-none absolute -right-2 bottom-14 hidden h-16 w-16 bg-brand-coral md:block" />
+      <div className="pointer-events-none absolute -z-10 right-2 top-4 hidden h-28 w-28 rounded-2xl bg-brand-sun md:block" />
+      <div className="pointer-events-none absolute -z-10 left-4 bottom-8 hidden h-20 w-20 rounded-2xl bg-brand-coral md:block" />
 
       <div className="relative mx-auto w-full max-w-[340px] rounded-[28px] border border-brand-ink/20 bg-brand-ink p-2 shadow-[0_24px_60px_-30px_hsl(var(--brand-ink)/0.55)]">
         <div className="overflow-hidden rounded-[22px] bg-white">
@@ -109,7 +109,7 @@ export function PagePreviewMock({ className = '' }: { className?: string }) {
       </div>
 
       {/* floating inbox card */}
-      <div className="absolute -bottom-4 left-0 hidden w-[236px] rounded-2xl border border-brand-ink/15 bg-white p-3 shadow-[0_18px_40px_-24px_hsl(var(--brand-ink)/0.45)] lg:block">
+      <div className="absolute -bottom-2 left-0 z-10 hidden w-[212px] rounded-2xl border border-brand-ink/15 bg-white p-3 shadow-[0_18px_40px_-24px_hsl(var(--brand-ink)/0.45)] lg:block">
         <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-sage">
           {t('landing.short.preview.inboxLabel', 'Новая заявка')}
         </p>
