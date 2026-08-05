@@ -99,17 +99,20 @@ export default function Index() {
 
         <main className="flex-grow">
           <div id="hero" ref={heroSectionRef}>
-            <HeroBentoOS
-              onStart={(desiredSlug) => handleCreatePage('hero_cta', 'signup', desiredSlug)}
+            <HeroOS2026
+              onStart={(desiredSlug?: string) => handleCreatePage('hero_cta', 'signup', desiredSlug)}
               onExamples={() => handleNav('/gallery', 'gallery', 'hero_examples')}
             />
           </div>
 
+          <ProofStrip />
+
           <div id="features" ref={featuresSectionRef}>
-            <ShortFeatureSection />
+            <ValueBento />
           </div>
 
           <LogoTicker />
+
 
           <div id="how-it-works" ref={howItWorksSectionRef}>
             <HowItWorksSection onStart={() => handleCreatePage('how_it_works_cta')} />
