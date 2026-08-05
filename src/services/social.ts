@@ -183,7 +183,6 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
   if (!friendships || friendships.length === 0) return;
 
   const friendIds = friendships.map(f => f.user_id === userId ? f.friend_id : f.user_id);
-  const friendName = userProfile?.display_name || userProfile?.username || i18n.t('common.friend');
 
   // Notify each friend (in parallel, but limited)
   await Promise.all(
@@ -208,13 +207,6 @@ export async function sendPremiumGift(
 ): Promise<{ success: boolean; error?: string }> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: 'not_authenticated' };
-
-  // Get sender's display name
-  const { data: senderProfile } = await supabase
-    .from('user_profiles')
-    .select('display_name, username')
-    .eq('id', user.id)
-    .single();
 
   const { error } = await supabase
     .from('premium_gifts')
@@ -307,12 +299,6 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
 
     // Notify sender that gift was claimed
     if (giftInfo?.sender_id && user) {
-      const { data: recipientProfile } = await supabase
-        .from('user_profiles')
-        .select('display_name, username')
-        .eq('id', user.id)
-        .single();
-
       try {
         await supabase.functions.invoke('send-social-notification', {
           body: {
