@@ -77,32 +77,31 @@ function InsertBetweenDivider({
   isMobile: boolean;
 }) {
   return (
-    <div className="relative group/divider py-0.5 col-span-2">
+    <div className="relative group/divider py-1 col-span-2">
       <div className={cn(
         "flex items-center gap-2 transition-all duration-300",
-        isMobile ? "opacity-70" : "opacity-0 group-hover/divider:opacity-100"
+        isMobile ? "opacity-100" : "opacity-0 group-hover/divider:opacity-100"
       )}>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         <Button
           variant="ghost"
           type="button"
           onClick={() => onOpenInsert(position)}
           className={cn(
-            "shrink-0 p-0 flex items-center justify-center rounded-full border border-primary/30 transition-colors",
-            "bg-background text-primary hover:border-primary hover:bg-primary hover:text-primary-foreground",
-            "active:scale-95",
-            isMobile ? "h-7 w-7" : "h-6 w-6"
+            "shrink-0 p-0 flex items-center justify-center rounded-full transition-all duration-300",
+            "bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
+            "active:scale-95 hover:scale-110",
+            isMobile ? "h-11 w-11" : "h-7 w-7"
           )}
           aria-label="Insert block here"
         >
-          <Plus className={isMobile ? "h-4 w-4" : "h-3.5 w-3.5"} strokeWidth={3} />
+          <Plus className={isMobile ? "h-5 w-5" : "h-4 w-4"} strokeWidth={3} />
         </Button>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </div>
     </div>
   );
 }
-
 
 
 interface GridEditorProps {
@@ -232,13 +231,13 @@ function SortableGridBlockItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group rounded-md border border-transparent transition-colors',
+        'relative group transition-shadow duration-200 rounded-2xl border-0',
         !isFrameless && 'bg-card',
         colSpanClass,
         rowSpanClass,
         // Quiet hover: 1px outline + soft lift, no background tint
-        !selected && !isDragging && 'hover:border-border hover:ring-1 hover:ring-border/50',
-        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50',
+        !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
+        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
         // P4: Selection ring
@@ -252,7 +251,7 @@ function SortableGridBlockItem({
     >
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
-        <div className="pointer-events-none h-full w-full isolate overflow-hidden rounded-md bg-card" data-editor-block>
+        <div className="pointer-events-none w-full h-full isolate bg-card rounded-2xl overflow-hidden" data-editor-block>
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
@@ -264,7 +263,7 @@ function SortableGridBlockItem({
           {...attributes}
           {...listeners}
           className={cn(
-            'absolute inset-0 z-20 h-auto min-h-0 rounded-md bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
+            'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
             isDragging ? 'cursor-grabbing' : 'cursor-grab',
           )}
           onClick={(e) => {
@@ -310,7 +309,7 @@ function SortableGridBlockItem({
         </button>
       )}
 
-      {/* Quick-edit pencil — subtle, corner-anchored so it never covers content */}
+      {/* Always-visible quick-edit pencil — opens the block editor in one tap */}
       {!isDragging && (
         <button
           type="button"
@@ -321,21 +320,19 @@ function SortableGridBlockItem({
           }}
           onTouchEnd={(e) => e.stopPropagation()}
           className={cn(
-            'absolute -top-1.5 -right-1.5 z-40 inline-flex items-center justify-center rounded-full',
-            'bg-background border border-border/40 text-muted-foreground',
-            'shadow-[0_2px_6px_-2px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:border-primary',
+            'absolute top-2 right-2 z-40 inline-flex items-center justify-center rounded-full',
+            'bg-background/90 backdrop-blur-md border border-border/20 text-foreground/80',
+            'shadow-[0_4px_12px_-4px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:scale-105',
             'transition-all active:scale-95',
-            'h-6 w-6',
-            isMobile ? 'opacity-70' : 'opacity-0 group-hover:opacity-100 focus:opacity-100',
+            isMobile ? 'h-8 w-8 opacity-90' : 'h-7 w-7 opacity-0 group-hover:opacity-100 focus:opacity-100',
             selected && 'opacity-0',
           )}
           aria-label={t('editor.blockToolbar.edit', 'Редактировать')}
           title={t('editor.blockToolbar.edit', 'Редактировать')}
         >
-          <Edit2 className="h-3 w-3" />
+          <Edit2 className="h-3.5 w-3.5" />
         </button>
       )}
-
 
       {/* Block type label — only on hover/select to keep canvas quiet */}
       <div
@@ -386,7 +383,7 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
   return (
     <div
       className={cn(
-        'relative overflow-visible rounded-md border-2 border-primary bg-card cursor-grabbing',
+        'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-visible cursor-grabbing',
         widthClass,
         dimensions.gridRows === 2 ? 'h-[296px]' : 'h-[140px]'
       )}
@@ -416,7 +413,7 @@ function SectionHeader({
   onToggleCollapse: () => void;
 }) {
   return (
-    <div className="col-span-2 flex items-center gap-2 border-y border-border/50 px-3 py-2 bg-muted/20">
+    <div className="col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-muted/30 border border-border/10">
       <Button variant="ghost" className="h-auto p-0.5 hover:bg-transparent" onClick={onToggleCollapse}>
         <ChevronRight className={cn(
           'h-4 w-4 text-muted-foreground transition-transform',
@@ -764,10 +761,10 @@ export const GridEditor = memo(function GridEditor({
   }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId]);
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5 bg-transparent px-[var(--space-page-px)] py-4 pb-32 md:pb-24">
+    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-5 pb-32 md:pb-24 bg-surface-quiet rounded-card">
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
-        <div className="relative isolate overflow-hidden rounded-md border border-border bg-card" data-onboarding="profile-block" data-editor-block>
+        <div className="relative isolate qb-card overflow-hidden" data-onboarding="profile-block" data-editor-block>
           <InlineProfileEditor
             block={profileBlock}
             onUpdate={(updates) => onUpdateBlock(profileBlock.id, updates)}
@@ -804,7 +801,7 @@ export const GridEditor = memo(function GridEditor({
         <motion.button
           type="button"
           onClick={() => openInsertSheet(blocks.length)}
-          className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-md border border-dashed border-border/60 bg-transparent text-muted-foreground transition-colors hover:border-primary hover:bg-accent/30 hover:text-foreground"
+          className="w-full mt-4 h-14 rounded-2xl border border-dashed border-border/40 bg-transparent hover:bg-accent/30 hover:border-border transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.25 }}
@@ -824,7 +821,7 @@ export const GridEditor = memo(function GridEditor({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
+          <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
             <Plus className="h-7 w-7 text-primary" strokeWidth={2.5} />
           </div>
           <h3 className="text-lg font-semibold text-foreground mb-1">

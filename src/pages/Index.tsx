@@ -9,14 +9,11 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { Button } from '@/components/ui/button';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 
-import { HeroOS2026 } from '@/components/landing/v3/HeroOS2026';
-import { ProofStrip } from '@/components/landing/v3/ProofStrip';
-import { ValueBento } from '@/components/landing/v3/ValueBento';
+import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';
-import { LogoTicker } from '@/components/landing/v2/LogoTicker';
-
 
 const SEOMetaEnhancer = lazy(() => import('@/components/seo/SEOMetaEnhancer').then(m => ({ default: m.SEOMetaEnhancer })));
 const GEOTagging = lazy(() => import('@/components/seo/GEOTagging').then(m => ({ default: m.GEOTagging })));
@@ -90,7 +87,7 @@ export default function Index() {
         <AISearchOptimizer pageType={LANDING_PAGE_TYPE} entityName={seoImageAlt} entityCategory={LANDING_ENTITY_CATEGORY} />
       </Suspense>
 
-      <div className="min-h-screen overflow-x-hidden bg-brand-canvas text-brand-ink selection:bg-[hsl(var(--brand-sun))] selection:text-brand-ink">
+      <div className="min-h-screen overflow-x-hidden bg-[#f6f6f1] text-[#101318] selection:bg-[#ffdfcf] selection:text-[#101318]">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
@@ -98,20 +95,15 @@ export default function Index() {
 
         <main className="flex-grow">
           <div id="hero" ref={heroSectionRef}>
-            <HeroOS2026
-              onStart={(desiredSlug?: string) => handleCreatePage('hero_cta', 'signup', desiredSlug)}
+            <HeroBentoOS
+              onStart={(desiredSlug) => handleCreatePage('hero_cta', 'signup', desiredSlug)}
               onExamples={() => handleNav('/gallery', 'gallery', 'hero_examples')}
             />
           </div>
 
-          <ProofStrip />
-
           <div id="features" ref={featuresSectionRef}>
-            <ValueBento />
+            <ShortFeatureSection />
           </div>
-
-          <LogoTicker />
-
 
           <div id="how-it-works" ref={howItWorksSectionRef}>
             <HowItWorksSection onStart={() => handleCreatePage('how_it_works_cta')} />
@@ -130,6 +122,64 @@ export default function Index() {
   );
 }
 
+function ShortFeatureSection() {
+  const { t } = useTranslation();
+  const items = [
+    {
+      id: 'page',
+      title: t('landing.short.features.pageTitle', 'Страница'),
+      body: t('landing.short.features.pageBody', 'Услуги, ссылки, портфолио, отзывы и кнопки связи в одном коротком профиле.'),
+    },
+    {
+      id: 'leads',
+      title: t('landing.short.features.leadsTitle', 'Заявки'),
+      body: t('landing.short.features.leadsBody', 'Формы, мессенджеры и записи складываются в единый поток, а не теряются в переписках.'),
+    },
+    {
+      id: 'money',
+      title: t('landing.short.features.moneyTitle', 'Оплата'),
+      body: t('landing.short.features.moneyBody', 'Инвойсы, платежи и базовая CRM уже рядом со страницей.'),
+    },
+  ];
+
+  return (
+    <section className="px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1120px]">
+        <div className="grid gap-8 border-y border-[#ded9c9] py-10 md:grid-cols-[0.8fr_1.2fr] md:items-center">
+          <div>
+            <div className="mb-4 inline-flex rounded-full bg-[#101318] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-white">
+              {t('landing.short.features.badge', 'LinkMAX OS')}
+            </div>
+            <h2 className="text-4xl font-semibold tracking-[-0.04em] text-[#101318] md:text-[56px] md:leading-[0.94]">
+              {t('landing.short.features.title', 'Что это?')}
+            </h2>
+            <p className="mt-5 max-w-md text-base leading-7 text-[#62675f]">
+              {t('landing.short.features.subtitle', 'Одна публичная ссылка для малого бизнеса: показать предложение, принять заявку и продолжить работу с клиентом.')}
+            </p>
+          </div>
+
+          <div className="grid gap-3">
+            {items.map((item, index) => (
+              <div key={item.id} className="group grid gap-4 rounded-[24px] bg-white p-5 shadow-[0_12px_34px_rgba(16,19,24,0.06)] transition-transform hover:-translate-y-0.5 sm:grid-cols-[64px_1fr]">
+                <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#f6f6f1] text-lg font-black text-[#101318]">
+                  0{index + 1}
+                </div>
+                <div className="flex gap-3">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[#ff5701]" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#101318]">{item.title}</h3>
+                    <p className="mt-1 text-sm leading-6 text-[#62675f]">{item.body}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HowItWorksSection({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
   const steps = [
@@ -139,39 +189,28 @@ function HowItWorksSection({ onStart }: { onStart: () => void }) {
   ];
 
   return (
-    <section className="border-b border-brand-ink/15 bg-brand-canvas px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-      <div className="mx-auto max-w-[1180px]">
-        <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:items-start">
+    <section className="px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1120px] rounded-[32px] bg-[#101318] p-5 text-white shadow-[0_22px_70px_rgba(16,19,24,0.18)] md:p-8">
+        <div className="grid gap-8 md:grid-cols-[0.82fr_1.18fr] md:items-center">
           <div>
-            <div className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-brand-sage">
-              {t('landing.short.steps.badge', '01 — 03')}
-            </div>
-            <h2 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-brand-ink md:text-5xl">
+            <h2 className="text-4xl font-semibold tracking-[-0.04em] text-white md:text-[56px] md:leading-[0.94]">
               {t('landing.short.steps.title', 'Как запуститься')}
             </h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-brand-sage">
+            <p className="mt-5 text-base leading-7 text-white/[0.70]">
               {t('landing.short.steps.subtitle', 'Без настройки конструктора с нуля: сначала получаете готовую основу, потом меняете детали.')}
             </p>
           </div>
 
-          <div>
-            <ol className="grid gap-3">
-              {steps.map((step, index) => (
-                <li
-                  key={step}
-                  className="flex items-start gap-4 rounded-2xl border border-brand-ink/15 bg-white px-5 py-5 transition-colors hover:border-brand-ink/40"
-                >
-                  <span className="font-metric flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink text-sm font-bold text-white">
-                    {index + 1}
-                  </span>
-                  <p className="pt-1.5 text-[15px] font-semibold leading-5 text-brand-ink">{step}</p>
-                </li>
-              ))}
-            </ol>
-            <Button
-              onClick={onStart}
-              className="mt-5 h-12 w-full rounded-xl bg-brand-ink px-6 text-base font-bold text-white hover:bg-black sm:w-auto"
-            >
+          <div className="space-y-3">
+            {steps.map((step, index) => (
+              <div key={step} className="flex items-center gap-4 rounded-[20px] border border-white/[0.10] bg-white/[0.08] p-4">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#ff5701] text-sm font-bold text-white">
+                  {index + 1}
+                </span>
+                <p className="text-sm font-semibold text-white">{step}</p>
+              </div>
+            ))}
+            <Button onClick={onStart} className="mt-2 h-12 rounded-[14px] bg-white px-5 text-base font-semibold text-[#101318] hover:bg-[#f6f6f1]">
               {t('landing.short.steps.cta', 'Создать страницу')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -186,45 +225,39 @@ function ShortFinalCTA({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-brand-ink px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-20">
-      <div className="mx-auto max-w-[1180px] rounded-3xl border border-white/15 bg-brand-coral px-6 py-10 sm:px-10 sm:py-12">
-        <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white/80">
-              {t('landing.short.final.eyebrow', 'Готовы начать')}
-            </div>
-            <h2 className="font-display max-w-2xl text-3xl font-bold leading-[1.05] tracking-tight md:text-5xl">
-              {t('landing.short.final.title', 'Страница может быть готова уже сегодня')}
-            </h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-white/90">
-              {t('landing.short.final.subtitle', 'Начните бесплатно: сначала соберите страницу, потом подключите запись, оплату и CRM по мере роста.')}
-            </p>
+    <section className="px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-[1120px] gap-6 rounded-[32px] bg-[#ff5701] px-6 py-8 text-white shadow-[0_22px_70px_rgba(255,87,1,0.22)] md:grid-cols-[1fr_auto] md:items-center md:px-8">
+        <div>
+          <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white/[0.70]">
+            {t('landing.short.final.eyebrow', 'Готовы начать')}
           </div>
-          <Button
-            onClick={onStart}
-            className="h-12 w-full rounded-xl bg-white px-6 text-base font-bold text-brand-ink hover:bg-brand-canvas md:h-14 md:w-auto"
-          >
-            {t('landing.short.final.cta', 'Создать страницу')}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <h2 className="max-w-2xl text-3xl font-semibold tracking-[-0.04em] md:text-[48px] md:leading-[0.98]">
+          {t('landing.short.final.title', 'Страница может быть готова уже сегодня')}
+          </h2>
+          <p className="mt-4 max-w-xl text-base leading-7 text-white/[0.78]">
+            {t('landing.short.final.subtitle', 'Начните бесплатно: сначала соберите страницу, потом подключите запись, оплату и CRM по мере роста.')}
+          </p>
         </div>
+        <Button onClick={onStart} className="h-[52px] rounded-[16px] bg-[#101318] px-6 text-base font-semibold text-white hover:bg-[#232832] md:h-14">
+          {t('landing.short.final.cta', 'Создать страницу')}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
       </div>
     </section>
   );
 }
-
 
 function SimpleFooter() {
   const { t } = useTranslation();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-brand-canvas px-4 pb-8 pt-8 text-center text-xs text-brand-sage sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-brand-ink/15 pt-5">
+    <footer className="px-4 pb-8 pt-4 text-center text-xs text-[#62675f] sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-[#ded9c9] pt-5">
         <span>{t('landing.short.footer.copyright', '© {{year}} LinkMAX', { year })}</span>
-        <a href="/privacy" className="font-medium text-brand-ink/70 underline-offset-4 hover:text-brand-ink hover:underline transition-colors">{t('landing.short.footer.privacy', 'Privacy')}</a>
-        <a href="/terms" className="font-medium text-brand-ink/70 underline-offset-4 hover:text-brand-ink hover:underline transition-colors">{t('landing.short.footer.terms', 'Terms')}</a>
-        <a href="/payment-terms" className="font-medium text-brand-ink/70 underline-offset-4 hover:text-brand-ink hover:underline transition-colors">{t('landing.short.footer.payments', 'Payments')}</a>
+        <a href="/privacy" className="hover:text-[#101318]">{t('landing.short.footer.privacy', 'Privacy')}</a>
+        <a href="/terms" className="hover:text-[#101318]">{t('landing.short.footer.terms', 'Terms')}</a>
+        <a href="/payment-terms" className="hover:text-[#101318]">{t('landing.short.footer.payments', 'Payments')}</a>
       </div>
     </footer>
   );

@@ -39,19 +39,19 @@ export const FAQSection = () => {
       q: t('landing.faq.q4', 'Что происходит после регистрации?'),
       a: t(
         'landing.faq.a4',
-        'После входа откроется главная кабинета. Редактор запускается только при создании новой страницы или по прямой ссылке.'
+        'Вы попадаете в мастер создания страницы. Если указали короткий адрес на лендинге, он передаётся в signup flow.'
       ),
     },
   ];
 
   return (
-    <SectionWrapper id="faq" className="bg-brand-canvas py-14 md:py-16">
+    <SectionWrapper id="faq" className="bg-[#f6f6f1] py-12 md:py-16">
       <div className="mx-auto max-w-[900px]">
         <div className="mb-8 text-center">
-          <h2 className="font-display text-3xl font-semibold leading-tight text-brand-ink md:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-[-0.035em] text-[#101318] md:text-[42px] md:leading-[1.08]">
             {t('landing.faq.title', 'Коротко перед стартом')}
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-brand-sage">
+          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-[#62675f]">
             {t('landing.faq.subtitle', 'Без длинной презентации: только то, что нужно знать перед созданием страницы.')}
           </p>
         </div>
@@ -63,24 +63,24 @@ export const FAQSection = () => {
               <div
                 key={faq.q}
                 className={cn(
-                  'overflow-hidden rounded-lg border bg-white transition-colors',
-                  isOpen ? 'border-brand-coral' : 'border-brand-ink/15'
+                  'overflow-hidden rounded-[20px] border bg-white transition-all',
+                  isOpen ? 'border-[#ff5701] shadow-[0_16px_40px_rgba(16,19,24,0.10)]' : 'border-[#ded9c9]'
                 )}
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex min-h-14 w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-brand-canvas sm:px-6"
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-[#f6f6f1] sm:px-6 sm:py-5"
                   aria-expanded={isOpen}
                 >
-                  <span className="pr-2 text-sm font-semibold text-brand-ink sm:text-base">{faq.q}</span>
+                  <span className="pr-2 text-sm font-semibold text-[#101318] sm:text-base">{faq.q}</span>
                   <ChevronDown
-                    className={cn('h-5 w-5 shrink-0 text-brand-coral transition-transform duration-200', isOpen && 'rotate-180')}
+                    className={cn('h-5 w-5 shrink-0 text-[#ff5701] transition-transform duration-200', isOpen && 'rotate-180')}
                   />
                 </button>
                 <div className={cn('grid transition-all duration-200 ease-out', isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0')}>
                   <div className="overflow-hidden">
-                    <p className="px-5 pb-5 text-sm leading-6 text-brand-sage sm:px-6">{faq.a}</p>
+                    <p className="px-5 pb-5 text-sm leading-6 text-[#62675f] sm:px-6">{faq.a}</p>
                   </div>
                 </div>
               </div>

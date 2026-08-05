@@ -1088,34 +1088,6 @@ serve(async (req: Request) => {
             replyMarkup = { inline_keyboard: buttons };
           }
         }
-      } else if (/^\d{6}$/.test(text)) {
-        // Link account: the 6-digit one-time code proves this chat belongs to the user
-        const { data: linkCode } = await supabase
-          .from('telegram_link_codes')
-          .select('id, user_id, expires_at, used_at')
-          .eq('code', text)
-          .is('used_at', null)
-          .maybeSingle();
-
-        if (linkCode && new Date(linkCode.expires_at).getTime() > Date.now()) {
-          await supabase
-            .from('user_profiles')
-            .update({ telegram_chat_id: chatIdStr, telegram_notifications_enabled: true })
-            .eq('id', linkCode.user_id);
-
-          await supabase
-            .from('telegram_link_codes')
-            .update({ used_at: new Date().toISOString(), chat_id: chatIdStr })
-            .eq('id', linkCode.id);
-
-          responseText = lang === 'ru'
-            ? '✅ Telegram подключён! Теперь вы будете получать уведомления о новых заявках.'
-            : '✅ Telegram connected! You will now receive notifications about new leads.';
-        } else {
-          responseText = lang === 'ru'
-            ? '❌ Код неверный или истёк. Запросите новый код в LinkMAX.'
-            : '❌ Invalid or expired code. Request a new code in LinkMAX.';
-        }
       } else if (text === '/edit_bio' || text === '/edit_profile') {
         responseText = m.edit_bio_prompt;
         await setPendingAction(supabase, chatIdStr, 'edit_bio');

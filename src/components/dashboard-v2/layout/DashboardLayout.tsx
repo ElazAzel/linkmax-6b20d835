@@ -58,14 +58,20 @@ export const DashboardLayout = memo(function DashboardLayout({
           isMobile && "pb-24 h-auto"
         )}
       >
-        <div
-          key={activeTab}
-          className={cn("h-full w-full animate-in fade-in duration-150 ease-out", isMobile ? "p-0" : "px-4 py-4 lg:px-6 lg:py-5")}
-        >
-          <div className="max-w-7xl mx-auto min-h-full overflow-visible">
-            {children}
-          </div>
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className={cn("w-full h-full", isMobile ? "p-0" : "px-5 py-5 lg:px-7 lg:py-6")}
+          >
+            <div className="max-w-7xl mx-auto min-h-full overflow-visible">
+              {children}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Mobile Bottom Nav */}

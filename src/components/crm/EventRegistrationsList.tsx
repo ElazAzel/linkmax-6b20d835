@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
-import { EmptyState, LoadingState } from '@/components/ui';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Download from 'lucide-react/dist/esm/icons/download';

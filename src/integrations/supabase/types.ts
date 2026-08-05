@@ -977,27 +977,6 @@ export type Database = {
           },
         ]
       }
-      external_api_cache: {
-        Row: {
-          cache_key: string
-          created_at: string
-          expires_at: string
-          payload: Json
-        }
-        Insert: {
-          cache_key: string
-          created_at?: string
-          expires_at: string
-          payload: Json
-        }
-        Update: {
-          cache_key?: string
-          created_at?: string
-          expires_at?: string
-          payload?: Json
-        }
-        Relationships: []
-      }
       friend_activities: {
         Row: {
           activity_type: string
@@ -1141,27 +1120,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      integration_secrets: {
-        Row: {
-          key: string
-          updated_at: string
-          updated_by: string | null
-          value: string
-        }
-        Insert: {
-          key: string
-          updated_at?: string
-          updated_by?: string | null
-          value: string
-        }
-        Update: {
-          key?: string
-          updated_at?: string
-          updated_by?: string | null
-          value?: string
-        }
-        Relationships: []
       }
       lead_interactions: {
         Row: {
@@ -1631,71 +1589,6 @@ export type Database = {
           },
         ]
       }
-      page_review_summaries: {
-        Row: {
-          average_rating: number | null
-          last_review_at: string | null
-          organization_id: string | null
-          owner_id: string
-          page_id: string
-          published_count: number
-          rating_breakdown: Json
-          updated_at: string
-          zone_id: string | null
-        }
-        Insert: {
-          average_rating?: number | null
-          last_review_at?: string | null
-          organization_id?: string | null
-          owner_id: string
-          page_id: string
-          published_count?: number
-          rating_breakdown?: Json
-          updated_at?: string
-          zone_id?: string | null
-        }
-        Update: {
-          average_rating?: number | null
-          last_review_at?: string | null
-          organization_id?: string | null
-          owner_id?: string
-          page_id?: string
-          published_count?: number
-          rating_breakdown?: Json
-          updated_at?: string
-          zone_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "page_review_summaries_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "page_review_summaries_page_id_fkey"
-            columns: ["page_id"]
-            isOneToOne: true
-            referencedRelation: "pages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "page_review_summaries_page_id_fkey"
-            columns: ["page_id"]
-            isOneToOne: true
-            referencedRelation: "public_pages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "page_review_summaries_zone_id_fkey"
-            columns: ["zone_id"]
-            isOneToOne: false
-            referencedRelation: "zones"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       page_snapshots: {
         Row: {
           blocks_json: Json
@@ -2123,124 +2016,6 @@ export type Database = {
           },
         ]
       }
-      reviews: {
-        Row: {
-          body: string | null
-          booking_id: string | null
-          created_at: string
-          hidden_at: string | null
-          id: string
-          is_featured: boolean
-          metadata: Json
-          moderation_reason: string | null
-          order_id: string | null
-          organization_id: string | null
-          owner_id: string
-          page_id: string
-          published_at: string | null
-          rating: number
-          reviewer_contact_hash: string | null
-          reviewer_display_name: string
-          source: string
-          status: string
-          title: string | null
-          updated_at: string
-          verification_status: string
-          zone_id: string | null
-        }
-        Insert: {
-          body?: string | null
-          booking_id?: string | null
-          created_at?: string
-          hidden_at?: string | null
-          id?: string
-          is_featured?: boolean
-          metadata?: Json
-          moderation_reason?: string | null
-          order_id?: string | null
-          organization_id?: string | null
-          owner_id: string
-          page_id: string
-          published_at?: string | null
-          rating: number
-          reviewer_contact_hash?: string | null
-          reviewer_display_name: string
-          source?: string
-          status?: string
-          title?: string | null
-          updated_at?: string
-          verification_status?: string
-          zone_id?: string | null
-        }
-        Update: {
-          body?: string | null
-          booking_id?: string | null
-          created_at?: string
-          hidden_at?: string | null
-          id?: string
-          is_featured?: boolean
-          metadata?: Json
-          moderation_reason?: string | null
-          order_id?: string | null
-          organization_id?: string | null
-          owner_id?: string
-          page_id?: string
-          published_at?: string | null
-          rating?: number
-          reviewer_contact_hash?: string | null
-          reviewer_display_name?: string
-          source?: string
-          status?: string
-          title?: string | null
-          updated_at?: string
-          verification_status?: string
-          zone_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reviews_booking_id_fkey"
-            columns: ["booking_id"]
-            isOneToOne: false
-            referencedRelation: "bookings"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_page_id_fkey"
-            columns: ["page_id"]
-            isOneToOne: false
-            referencedRelation: "pages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_page_id_fkey"
-            columns: ["page_id"]
-            isOneToOne: false
-            referencedRelation: "public_pages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_zone_id_fkey"
-            columns: ["zone_id"]
-            isOneToOne: false
-            referencedRelation: "zones"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       shoutouts: {
         Row: {
           created_at: string
@@ -2612,36 +2387,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      telegram_link_codes: {
-        Row: {
-          chat_id: string | null
-          code: string
-          created_at: string
-          expires_at: string
-          id: string
-          used_at: string | null
-          user_id: string
-        }
-        Insert: {
-          chat_id?: string | null
-          code: string
-          created_at?: string
-          expires_at?: string
-          id?: string
-          used_at?: string | null
-          user_id: string
-        }
-        Update: {
-          chat_id?: string | null
-          code?: string
-          created_at?: string
-          expires_at?: string
-          id?: string
-          used_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
       }
       template_likes: {
         Row: {
@@ -4960,10 +4705,6 @@ export type Database = {
         Args: { p_owner_id: string }
         Returns: number
       }
-      can_moderate_review: {
-        Args: { p_review_id: string; p_user_id: string }
-        Returns: boolean
-      }
       check_email_registered_for_event: {
         Args: { p_email: string; p_event_id: string }
         Returns: boolean
@@ -4979,7 +4720,6 @@ export type Database = {
             Returns: Json
           }
       claim_premium_gift: { Args: { p_gift_id: string }; Returns: Json }
-      cleanup_external_api_cache: { Args: never; Returns: undefined }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       complete_daily_quest: {
         Args: { p_bonus_hours?: number; p_quest_key: string; p_user_id: string }
@@ -4998,18 +4738,6 @@ export type Database = {
         Returns: string
       }
       convert_tokens_to_premium: { Args: { p_user_id: string }; Returns: Json }
-      create_review_for_booking: {
-        Args: {
-          p_body?: string
-          p_booking_id: string
-          p_metadata?: Json
-          p_rating: number
-          p_reviewer_contact?: string
-          p_reviewer_display_name?: string
-          p_title?: string
-        }
-        Returns: Json
-      }
       create_user_page: {
         Args: { p_slug: string; p_title: string; p_user_id: string }
         Returns: Json
@@ -5212,7 +4940,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      hash_review_contact: { Args: { p_contact: string }; Returns: string }
       increment_block_clicks:
         | {
             Args: { block_uuid: string }
@@ -5241,12 +4968,6 @@ export type Database = {
         }[]
       }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
-      is_allowed_review_source: { Args: { p_source: string }; Returns: boolean }
-      is_allowed_review_status: { Args: { p_status: string }; Returns: boolean }
-      is_allowed_review_verification_status: {
-        Args: { p_status: string }
-        Returns: boolean
-      }
       is_team_member: {
         Args: { p_team_id: string; p_user_id: string }
         Returns: boolean
@@ -5272,10 +4993,6 @@ export type Database = {
           title: string
         }[]
       }
-      moderate_review: {
-        Args: { p_reason?: string; p_review_id: string; p_status: string }
-        Returns: Json
-      }
       process_marketplace_purchase:
         | {
             Args: {
@@ -5300,10 +5017,6 @@ export type Database = {
             Returns: Json
           }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
-      refresh_page_review_summary: {
-        Args: { p_page_id: string }
-        Returns: undefined
-      }
       regenerate_zone_calendar_feed_token: {
         Args: { p_zone_id: string }
         Returns: string
@@ -5329,7 +5042,6 @@ export type Database = {
         Args: { p_member_user_id: string; p_zone_id: string }
         Returns: Json
       }
-      resolve_page_zone_id: { Args: { p_page_id: string }; Returns: string }
       rotate_team_invite_code: { Args: { p_team_id: string }; Returns: string }
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }

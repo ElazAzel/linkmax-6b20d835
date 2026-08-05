@@ -1,50 +1,50 @@
 # Page Customization
 
-## Contract
+## Scope
 
-`PageTheme v2` is the semantic appearance contract for customer pages. It lives in `src/types/page.ts` and contains:
+The editor supports page-level visual customization without requiring edits to individual blocks. It is available from the palette button in the editor dock and from the branding area in settings.
 
-- semantic color roles;
-- heading/body/mono typography;
-- small, medium and large radii;
-- section, block and control spacing;
-- image treatment;
-- button weight;
-- motion level;
-- explicit schema and appearance mode.
+The page appearance includes:
 
-Dashboard appearance is not part of `PageTheme`. A customer's public theme cannot change the product shell.
+- coherent theme presets;
+- solid, gradient, patterned, and image backgrounds;
+- text and accent colors for buttons, links, and active states;
+- font pairs and icon styles;
+- card shape, shadow, hover behavior, and dividers.
 
-## Legacy Preservation
-
-Existing published pages keep their legacy theme unchanged. `preserveLegacyPageTheme` returns the original object until the owner explicitly applies the v2 preview in the theme inspector. This prevents a release from silently restyling published pages.
-
-`previewPageThemeV2` produces the proposed migration. The inspector shows a migration notice and only writes v2 after an explicit action.
-
-## Import And Export
-
-Theme transfer payload version is `2`. Imports accept v1 and v2 payloads, discard unknown fields and sanitize nested semantic values. Remote image values remain subject to the existing safe URL rules.
-
-Implementation:
-
-- `src/lib/appearance/page-theme-v2.ts`
-- `src/lib/appearance/theme-transfer.ts`
-- `src/components/dashboard-v2/panels/ThemePanel.tsx`
-- `src/domain/entities/Page.ts`
+Users can export this configuration as a versioned JSON file and import it into another page. Imports accept only the supported appearance schema and safe HTTPS image URLs; unsupported fields are discarded.
 
 ## Precedence
 
-1. Preset baseline.
-2. Page-level semantic theme.
-3. Explicit block-level override.
+1. A theme preset supplies the baseline values.
+2. Page-level controls override that baseline for the published page and editor preview.
+3. A block-level option, where available, overrides only that block.
 
-Resetting a preset clears incompatible page overrides. Template creation stores the theme with blocks, while newly applied templates receive fresh block IDs.
+Resetting a theme removes page-level overrides before applying the selected preset. This prevents stale background, accent, or card settings from surviving a reset.
 
-## Verification
+## Rendering and Persistence
+
+Appearance is stored in `pageData.theme` and saved through the normal page autosave path. The same theme is applied to the editor preview and to `PublicPage`, including CSS variables used by shared block cards.
+
+When a user saves a page as a template, its `theme_settings` are stored alongside its blocks. Applying that template restores the saved theme and creates fresh block IDs, so the resulting page does not share mutable block identities with the template.
+
+Core implementation points:
+
+- `src/components/dashboard-v2/panels/ThemePanel.tsx` manages customization controls.
+- `src/lib/appearance/presets.ts` defines preset baselines.
+- `src/lib/appearance/style-utils.ts` translates settings into CSS variables and backgrounds.
+- `src/lib/appearance/theme-transfer.ts` validates import and export payloads.
+- `src/components/dashboard-v2/screens/EditorScreen.tsx` renders the editor preview.
+- `src/pages/PublicPage.tsx` renders the public page.
+- `src/components/blocks/GridBlocksRenderer.tsx` applies global card defaults unless a block explicitly overrides them.
+
+## Validation
+
+Run the focused appearance tests after changing customization behavior:
 
 ```powershell
-npx vitest run src/lib/appearance/__tests__/page-theme-v2.test.ts
+npx vitest run src/pages/__tests__/PublicPage.test.tsx src/lib/appearance/__tests__/style-utils.test.ts
 npx vitest run src/lib/appearance/__tests__/theme-transfer.test.ts
-npm run typecheck:strict
-npm run build
 ```
+
+Run `npm run typecheck:strict` and `npm run build` before merging changes to this flow.

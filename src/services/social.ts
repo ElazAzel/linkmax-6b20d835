@@ -150,7 +150,9 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
         body: {
           type: 'challenge_completed',
           recipientId: user.id,
-          challengeTitle: challengeInfo?.title || i18n.t('social.weeklyChallenge')
+          data: {
+            challengeTitle: challengeInfo?.title || i18n.t('social.weeklyChallenge')
+          }
         }
       });
     } catch (e) {
@@ -166,6 +168,12 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
 
 async function notifyFriendsAboutChallenge(userId: string, challengeTitle: string): Promise<void> {
   // Get user's display name
+  const { data: userProfile } = await supabase
+    .from('user_profiles')
+    .select('display_name, username')
+    .eq('id', userId)
+    .single();
+
   // Get friends (accepted friendships)
   const { data: friendships } = await supabase
     .from('friendships')
@@ -177,6 +185,7 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
   if (!friendships || friendships.length === 0) return;
 
   const friendIds = friendships.map(f => f.user_id === userId ? f.friend_id : f.user_id);
+  const friendName = userProfile?.display_name || userProfile?.username || i18n.t('common.friend');
 
   // Notify each friend (in parallel, but limited)
   await Promise.all(
@@ -185,7 +194,10 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
         body: {
           type: 'friend_challenge_completed',
           recipientId: friendId,
-          challengeTitle
+          data: {
+            friendName,
+            challengeTitle
+          }
         }
       }).catch(e => logger.error('Failed to notify friend', e, { context: 'social' }))
     )
@@ -201,6 +213,13 @@ export async function sendPremiumGift(
 ): Promise<{ success: boolean; error?: string }> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: 'not_authenticated' };
+
+  // Get sender's display name
+  const { data: senderProfile } = await supabase
+    .from('user_profiles')
+    .select('display_name, username')
+    .eq('id', user.id)
+    .single();
 
   const { error } = await supabase
     .from('premium_gifts')
@@ -224,7 +243,12 @@ export async function sendPremiumGift(
     await supabase.functions.invoke('send-social-notification', {
       body: {
         type: 'gift_received',
-        recipientId
+        recipientId,
+        data: {
+          senderName: senderProfile?.display_name || senderProfile?.username || i18n.t('common.user'),
+          days,
+          message
+        }
       }
     });
   } catch (e) {
@@ -293,11 +317,20 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
 
     // Notify sender that gift was claimed
     if (giftInfo?.sender_id && user) {
+      const { data: recipientProfile } = await supabase
+        .from('user_profiles')
+        .select('display_name, username')
+        .eq('id', user.id)
+        .single();
+
       try {
         await supabase.functions.invoke('send-social-notification', {
           body: {
             type: 'gift_claimed',
-            recipientId: giftInfo.sender_id
+            recipientId: giftInfo.sender_id,
+            data: {
+              senderName: recipientProfile?.display_name || recipientProfile?.username || i18n.t('common.recipient')
+            }
           }
         });
       } catch (e) {

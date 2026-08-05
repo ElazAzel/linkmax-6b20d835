@@ -1,6 +1,4 @@
 import React from 'react';
-import { isSafeUrl } from '@/lib/blocks/block-validators';
-
 
 /**
  * Parse text with Markdown-style links [text](url) and line breaks
@@ -26,26 +24,19 @@ export function parseRichText(text: string): React.ReactNode[] {
     
     // Add the link
     const linkText = match[1];
-    const linkUrl = match[2].trim();
-
-    if (isSafeUrl(linkUrl)) {
-      elements.push(
-        <a
-          key={`link-${keyIndex++}`}
-          href={linkUrl}
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className="text-primary hover:underline break-words"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {linkText}
-        </a>
-      );
-    } else {
-      // Unsafe scheme (javascript:, data:, …) — render as plain text
-      elements.push(<React.Fragment key={`text-${keyIndex++}`}>{linkText}</React.Fragment>);
-    }
-
+    const linkUrl = match[2];
+    elements.push(
+      <a
+        key={`link-${keyIndex++}`}
+        href={linkUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-primary hover:underline"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {linkText}
+      </a>
+    );
     
     lastIndex = match.index + match[0].length;
   }

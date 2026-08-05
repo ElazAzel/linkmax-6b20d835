@@ -269,7 +269,7 @@ function DashboardV2Inner() {
     if (tabId === 'home') {
       navigate('/dashboard/home');
     } else if (tabId === 'editor') {
-      navigate('/dashboard/editor');
+      navigate('/dashboard/home?tab=editor');
     } else {
       navigate(`/dashboard/${tabId}`);
     }
@@ -295,7 +295,7 @@ function DashboardV2Inner() {
   // Handle edit page (navigate to editor)
   const handleEditPage = useCallback((pageId: string) => {
     multiPage.switchPage(pageId);
-    handleTabChange('editor');
+    handleTabChange('home');
   }, [multiPage, handleTabChange]);
 
   // Handle page actions
@@ -969,15 +969,6 @@ function DashboardV2Inner() {
 
 
 export default function DashboardV2() {
-  // Dashboard v2 is a dark cloud-platform surface by design.
-  // Toggle the `dark` theme tokens while the dashboard is mounted and
-  // restore the light shell (landing, auth, public pages) on unmount.
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.add('dark');
-    return () => root.classList.remove('dark');
-  }, []);
-
   return (
     <ZoneProvider>
       <DashboardV2Inner />

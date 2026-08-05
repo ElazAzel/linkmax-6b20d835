@@ -30,15 +30,14 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
-import { BLOCK_MANIFEST, isBlockPremium } from '@/lib/blocks/block-manifest';
+import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
-import { BLOCK_PRESETS, type BlockPreset } from '@/lib/editor/editor-presets';
+import { BLOCK_PRESETS, type BlockPreset, getPresetsForType } from '@/lib/editor/editor-presets';
 import { AnimatedBlockIcon } from '@/components/editor/AnimatedBlockIcon';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
-import type { BlockCategory } from '@/lib/blocks/block-manifest';
 
 interface BlockInsertButtonProps {
   onInsert: (blockType: string) => void;
@@ -98,21 +97,8 @@ const MANIFEST_BLOCKS = Object.values(BLOCK_MANIFEST)
     labelKey: entry.labelKey,
     icon: entry.icon,
     color: BLOCK_COLORS[entry.type] || 'bg-muted',
-    // Respects the "all blocks free" promo — otherwise free users see locked cards
-    tier: (isBlockPremium(entry.type) ? 'pro' : 'free') as BlockTier,
-    category: entry.category,
+    tier: (entry.isPremium ? 'pro' : 'free') as BlockTier,
   }));
-
-
-const BLOCK_CATEGORIES: Array<{ id: 'all' | BlockCategory; label: string }> = [
-  { id: 'all', label: 'Все' },
-  { id: 'basic', label: 'Основные' },
-  { id: 'media', label: 'Медиа' },
-  { id: 'interactive', label: 'Интерактив' },
-  { id: 'commerce', label: 'Продажи' },
-  { id: 'social', label: 'Сообщество' },
-  { id: 'advanced', label: 'Дополнительно' },
-];
 
 export const BlockInsertButton = memo(function BlockInsertButton({
   onInsert,
@@ -133,7 +119,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   const navigate = useNavigate();
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState<'all' | BlockCategory>('all');
 
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = onOpenChange || setInternalIsOpen;
@@ -142,7 +127,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   useEffect(() => {
     if (!isOpen) {
       setSearchQuery('');
-      setActiveCategory('all');
     }
   }, [isOpen]);
 
@@ -151,6 +135,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   }, [setIsOpen]);
 
   const isAtBlockLimit = !isPremium && currentBlockCount >= FREE_LIMITS.maxBlocks;
+  const remainingBlocks = isPremium ? Infinity : FREE_LIMITS.maxBlocks - currentBlockCount;
+
   const recommendations = useMemo(() => {
     return getRecommendedBlocks(pageNiche, existingBlocks);
   }, [pageNiche, existingBlocks]);
@@ -170,30 +156,18 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return tierLevel(currentTier) >= tierLevel(blockTier);
   };
 
-  const getText = useCallback((key: string, fallback: string) => {
-    const value = t(key, { defaultValue: fallback });
-    return typeof value === 'string' && !value.toLowerCase().includes('returned an object')
-      ? value
-      : fallback;
-  }, [t]);
-
-  const getBlockLabel = getText;
-
-  const filteredBlocks = MANIFEST_BLOCKS.filter(block => {
-    const matchesCategory = activeCategory === 'all' || block.category === activeCategory;
-    return matchesCategory && getBlockLabel(block.labelKey, block.type)
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-  });
+  const filteredBlocks = MANIFEST_BLOCKS.filter(block =>
+    t(block.labelKey, block.type).toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const filteredPresets = useMemo(() => {
     if (!searchQuery) return [];
     const query = searchQuery.toLowerCase();
     return BLOCK_PRESETS.filter(preset =>
-      getText(preset.labelKey, preset.id).toLowerCase().includes(query) ||
+      t(preset.labelKey).toLowerCase().includes(query) ||
       preset.keywords.some(k => k.toLowerCase().includes(query))
     );
-  }, [searchQuery, getText]);
+  }, [searchQuery, t]);
 
   const featuredPresets = useMemo(() => {
     if (searchQuery || pageNiche !== 'expert') return [];
@@ -264,7 +238,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const handleInsertPresetClick = (preset: BlockPreset) => {
     const manifest = BLOCK_MANIFEST[preset.blockType];
-    const blockTier = (manifest && isBlockPremium(manifest.type) ? 'pro' : 'free') as BlockTier;
+    const blockTier = (manifest?.isPremium ? 'pro' : 'free') as BlockTier;
 
     if (!canUseBlock(blockTier)) {
       toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
@@ -293,7 +267,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const getReasonTooltip = (blockType: string): string | null => {
     const rec = recommendations.find(r => r.block === blockType);
-    return rec ? getText(rec.reason, '') : null;
+    return rec ? t(rec.reason, '') : null;
   };
 
   const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
@@ -302,7 +276,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const marker = showRelevantBadge && !isLocked
       ? {
           icon: Sparkles,
-          label: getText('recommendations.relevant', 'Актуально'),
+          label: t('recommendations.relevant', 'Актуально'),
           className: 'bg-emerald-500 text-white',
         }
       : block.tier === 'pro'
@@ -326,26 +300,26 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         }}
         disabled={isLocked}
         data-testid={`add-block-option-${block.type}`}
-        aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: getBlockLabel(block.labelKey, block.type) })}
+        aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
         className={cn(
-          "relative flex min-h-[116px] flex-col items-center justify-center gap-2 rounded-lg border border-border bg-card p-3 transition-colors",
-          "hover:border-primary hover:bg-accent/40 active:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "relative flex min-h-[132px] flex-col items-center justify-center gap-3 rounded-2xl border border-transparent bg-card/40 p-4 transition-all",
+          "hover:border-border hover:bg-muted/50 hover:shadow-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           isLocked && "opacity-40 cursor-not-allowed"
         )}
       >
         <div className={cn(
-          "flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg text-white",
+          "w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg overflow-hidden",
           block.color
         )}>
           <AnimatedBlockIcon 
             type={block.type} 
             icon={block.icon} 
-            className="h-6 w-6"
+            className="h-8 w-8" 
           />
         </div>
 
         <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
-          {getBlockLabel(block.labelKey, block.type)}
+          {t(block.labelKey, block.type)}
         </span>
 
         {marker && (
@@ -374,14 +348,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     );
 
     const proHint = isLocked
-      ? getText('pricing.proHint', 'Откройте этот блок на тарифе Pro — без ограничений на типы блоков.')
+      ? t('pricing.proHint', 'Откройте этот блок на тарифе Pro — без ограничений на типы блоков.')
       : reasonTooltip;
 
     if (proHint && !isMobile) {
       return (
-        <Tooltip key={block.type}>
+        <Tooltip>
           <TooltipTrigger asChild>
-
             {blockButton}
           </TooltipTrigger>
           <TooltipContent side="bottom" className="max-w-[220px]">
@@ -398,7 +371,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const manifest = BLOCK_MANIFEST[preset.blockType];
     if (!manifest) return null;
 
-    const blockTier = (isBlockPremium(manifest.type) ? 'pro' : 'free') as BlockTier;
+    const blockTier = (manifest.isPremium ? 'pro' : 'free') as BlockTier;
     const isLocked = !canUseBlock(blockTier);
     const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
 
@@ -409,14 +382,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         onClick={() => handleInsertPresetClick(preset)}
         disabled={isLocked}
         className={cn(
-          "relative flex flex-col items-center gap-2 rounded-md border border-border bg-card p-3 transition-colors",
-          "hover:border-primary hover:bg-accent/40 active:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          "relative flex flex-col items-center gap-2 rounded-3xl p-4 transition-all",
+          "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           isLocked && "opacity-40 cursor-not-allowed",
           isFeatured && "ring-1 ring-primary/20 bg-primary/5"
         )}
       >
         <div className={cn(
-          "w-12 h-12 rounded-md flex items-center justify-center text-white overflow-hidden",
+          "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md overflow-hidden",
           color
         )}>
           <AnimatedBlockIcon 
@@ -428,10 +401,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
         <div className="flex flex-col items-center gap-0.5">
           <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">
-            {getBlockLabel(manifest.labelKey, manifest.type)}
+            {t(manifest.labelKey)}
           </span>
           <span className="text-xs font-bold text-center leading-tight">
-            {getText(preset.labelKey, preset.id)}
+            {t(preset.labelKey)}
           </span>
         </div>
 
@@ -457,7 +430,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             "shadow-xl shadow-primary/30 transition-all active:scale-95",
             isMobile
               ? "h-18 w-18 rounded-full"
-              : "h-14 w-14 rounded-lg"
+              : "h-14 w-14 rounded-2xl"
           )}
           data-onboarding="add-block"
           data-testid="add-block-trigger"
@@ -472,7 +445,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             side="bottom"
             hideCloseButton
             data-testid="add-block-sheet"
-            className="flex h-[85vh] flex-col overflow-hidden rounded-t-lg border-t bg-background p-0 outline-none"
+            className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[24px] outline-none flex flex-col overflow-hidden"
           >
             <div className="flex-1 overflow-y-auto">
               <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/10">
@@ -510,26 +483,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                       placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-12 rounded-lg border-border bg-background pl-14 text-base font-medium"
+                      className="pl-14 h-14 text-lg rounded-2xl bg-background border-border/30 font-medium"
                     />
-                  </div>
-                  <div className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label={t('editor.blockCategories', 'Категории блоков')}>
-                    {BLOCK_CATEGORIES.map((category) => (
-                      <button
-                        key={category.id}
-                        type="button"
-                        onClick={() => setActiveCategory(category.id)}
-                        aria-pressed={activeCategory === category.id}
-                        className={cn(
-                          'min-h-11 shrink-0 rounded-md border px-3 text-sm font-semibold transition-colors',
-                          activeCategory === category.id
-                            ? 'border-[#16131A] bg-[#16131A] text-white'
-                            : 'border-border bg-card text-muted-foreground hover:text-foreground'
-                        )}
-                      >
-                        {getText(`editor.categories.${category.id}`, category.label)}
-                      </button>
-                    ))}
                   </div>
                 </div>
                 </div>

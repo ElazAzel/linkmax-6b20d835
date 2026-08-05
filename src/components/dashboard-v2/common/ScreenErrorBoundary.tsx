@@ -24,7 +24,7 @@ export class ScreenErrorBoundary extends Component<Props, State> {
         return { hasError: true };
     }
 
-    public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error(`Error in screen ${this.props.screenName}:`, error, errorInfo);
     }
 
@@ -32,7 +32,7 @@ export class ScreenErrorBoundary extends Component<Props, State> {
         this.setState({ hasError: false });
     };
 
-    public override render() {
+    public render() {
         if (this.state.hasError) {
             return (
                 <div className="flex flex-col items-center justify-center min-h-[400px] p-6 text-center space-y-4">

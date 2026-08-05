@@ -26,7 +26,7 @@ class ZoneErrorBoundaryInner extends Component<Props & { t: (key: string, fallba
     return { hasError: true };
   }
 
-  public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error(`Zone Error [${this.props.screenName || 'unknown'}]:`, error, errorInfo);
   }
 
@@ -34,7 +34,7 @@ class ZoneErrorBoundaryInner extends Component<Props & { t: (key: string, fallba
     this.setState({ hasError: false });
   };
 
-  public override render() {
+  public render() {
     const { t, screenName, children } = this.props;
 
     if (this.state.hasError) {

@@ -355,6 +355,7 @@ export const EventBlock = memo(function EventBlock({
           body: {
             registrationId: registration.id,
             eventId: block.eventId,
+            ownerId: pageOwnerId,
           },
         }).catch(err => console.warn('Notification send failed:', err));
       }

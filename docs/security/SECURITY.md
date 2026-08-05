@@ -1,6 +1,6 @@
 # Security Baseline
 
-**Last reviewed:** 2026-07-29
+**Last reviewed:** 2026-07-25
 **Scope:** application repository, Supabase configuration in migrations/functions, deployment workflows, and browser bundle.
 
 This document is an operating baseline, not a certification. A control is considered implemented only when it can be traced to code, configuration, migration, or an automated check. Historical findings belong in `docs/audits/`.
@@ -63,23 +63,6 @@ npm audit --omit=dev
 ```
 
 For migrations and Edge Functions, additionally review RLS/authorization paths and verify the deployment workflow has the required secrets. The full current secret inventory is in [GitHub Actions setup](../deployment/GITHUB_ACTIONS_SETUP.md).
-
-## OWASP Top 10 Review (2026-07-29)
-
-| Category | Repository control | Current result |
-| --- | --- | --- |
-| A01 Broken Access Control | Supabase RLS, ownership checks, organization scoping | No new access-control surface in the Creative OS change |
-| A02 Security Misconfiguration | CSP, narrow Edge Function CORS, environment separation | Retain deployment-time origin validation |
-| A03 Software Supply Chain | Lockfile, Dependabot, `npm audit --omit=dev` | No critical advisory; major dependency upgrades remain tracked below |
-| A04 Cryptographic Failures | Supabase TLS/session handling, server-side secrets | No custom cryptography introduced |
-| A05 Injection | React escaping, DOMPurify, Zod, parameterized Supabase APIs | Unified auth input is schema validated |
-| A06 Insecure Design | Explicit legacy theme migration and account isolation | No automatic cross-account or published-theme mutation |
-| A07 Authentication Failures | Supabase Auth, provider linking, device-session vault | Network errors cannot trigger account creation; normal login returns to dashboard |
-| A08 Integrity Failures | Versioned theme import with field allow-listing | Unknown theme fields are discarded |
-| A09 Logging Failures | Sentry/logger and consent-aware analytics | Auth analytics excludes credentials |
-| A10 Exceptional Conditions | Loading/error states and fail-closed redirect validation | Backslash, encoded separator and protocol-relative redirects are rejected |
-
-Dependency audit currently reports advisories in `react-router-dom@6`, `exceljs` transitive archive packages and `@lovable.dev/mcp-js` development tooling. Automated remediation proposes breaking framework changes or an `exceljs` downgrade, so it is not applied without a migration test cycle. Application redirects are independently allow-listed by `getSafeReturnTo`; MCP/esbuild development dependencies are not shipped as production runtime code. Track replacement or major upgrades in the next dependency maintenance release.
 
 ## Incident Response
 

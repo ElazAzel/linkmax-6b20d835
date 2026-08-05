@@ -553,7 +553,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       <CardContent className="p-3 space-y-2">
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
-                            {deal.contact?.name?.charAt(0) ?? '?'}
+                            {deal.contact?.name.charAt(0)}
                           </div>
                           <div>
                             <p className="text-xs font-bold leading-none">{deal.contact?.name}</p>

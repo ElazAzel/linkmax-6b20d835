@@ -102,18 +102,18 @@ serve(async (req: Request) => {
       }
     }
 
-    if (!pageId || !name) {
+    if (!pageOwnerId || !name) {
       return new Response(
-        JSON.stringify({ error: "pageId and name are required" }),
+        JSON.stringify({ error: "pageOwnerId and name are required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Validate pageId is a valid UUID
+    // Validate pageOwnerId is a valid UUID
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(pageId)) {
+    if (!uuidRegex.test(pageOwnerId)) {
       return new Response(
-        JSON.stringify({ error: "Invalid pageId format" }),
+        JSON.stringify({ error: "Invalid pageOwnerId format" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -142,32 +142,26 @@ serve(async (req: Request) => {
       );
     }
 
-    // SECURITY: derive the owner from the page itself — never trust a client-supplied owner id.
-    const { data: page, error: pageError } = await supabase
-      .from('pages')
-      .select('id, user_id')
-      .eq('id', pageId)
+    // Verify that the page owner exists
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('id', pageOwnerId)
       .maybeSingle();
 
-    if (pageError || !page?.user_id) {
-      console.error('Invalid page for lead creation:', pageId, pageError);
+    if (profileError || !profile) {
+      console.error('Invalid page owner:', pageOwnerId);
       return new Response(
-        JSON.stringify({ error: "Invalid page" }),
+        JSON.stringify({ error: "Invalid page owner" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
-    }
-
-    const ownerId: string = page.user_id;
-
-    if (pageOwnerId && pageOwnerId !== ownerId) {
-      console.warn(`Ignoring mismatched pageOwnerId for page ${pageId}`);
     }
 
     // Create the lead
     const { data: lead, error: leadError } = await supabase
       .from('leads')
       .insert({
-        user_id: ownerId,
+        user_id: pageOwnerId,
         name: name.trim().substring(0, 255),
         email: email?.trim().substring(0, 255) || null,
         phone: phone?.trim().substring(0, 50) || null,
@@ -187,7 +181,7 @@ serve(async (req: Request) => {
       );
     }
 
-    console.log(`Lead created for user ${ownerId}: ${lead.id} (IP: ${ipAddress})`);
+    console.log(`Lead created for user ${pageOwnerId}: ${lead.id} (IP: ${ipAddress})`);
 
     // Send inline Telegram notification (bypasses broken notification_queue)
     try {
@@ -195,7 +189,7 @@ serve(async (req: Request) => {
         const { data: profile } = await supabase
           .from('user_profiles')
           .select('telegram_chat_id, telegram_notifications_enabled, telegram_language')
-          .eq('id', ownerId)
+          .eq('id', pageOwnerId)
           .single();
 
         if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
@@ -274,7 +268,7 @@ serve(async (req: Request) => {
                 created_at: lead.created_at,
               },
               pageId,
-              pageOwnerId: ownerId,
+              pageOwnerId,
             }),
           }).catch(err => console.error('Error sending webhook:', err));
         }

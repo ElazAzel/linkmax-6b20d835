@@ -209,7 +209,7 @@ export const HomeScreen = memo(function HomeScreen({
         actions={pageSwitcher}
       />
 
-      <div className="space-y-5 px-4 py-5 md:px-5">
+      <div className="px-4 md:px-5 py-6 space-y-6">
         {/* Activation Checklist — ABOVE page card for visibility */}
         {activation.isVisible && !checklistDismissed && (
           <ActivationChecklist
@@ -239,15 +239,15 @@ export const HomeScreen = memo(function HomeScreen({
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Minimal Stats Hub */}
             <div className="grid grid-cols-3 gap-3">
-              <Card className="cursor-pointer space-y-1 rounded-md border-border p-4 text-center transition-colors hover:bg-accent/50" onClick={onOpenActivity}>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenActivity}>
                 <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{realLeadsCount}</span>
                 <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
               </Card>
               
               <Card 
                 className={cn(
-                  "cursor-pointer space-y-1 rounded-md border-border p-4 text-center transition-colors hover:bg-accent/50",
-                  !telegramChatId && "border-amber-500/40"
+                  "p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group",
+                  !telegramChatId && "border-amber-500/20"
                 )}
                 onClick={() => onNavigate?.('settings')}
               >
@@ -264,24 +264,24 @@ export const HomeScreen = memo(function HomeScreen({
                 )}
               </Card>
 
-              <Card className="cursor-pointer space-y-1 rounded-md border-border p-4 text-center transition-colors hover:bg-accent/50" onClick={onOpenInsights}>
-                <span className="text-2xl font-black text-primary">{weeklyStats.views}</span>
-                <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'просмотры')}</span>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenInsights}>
+                <span className="text-2xl font-black text-violet-500 group-hover:scale-110 transition-transform">{viewCount}</span>
+                <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
               </Card>
             </div>
 
             {realLeadsCount > 0 && (
-              <Button
-                size="lg"
-                className="h-12 w-full rounded-md bg-primary text-base font-semibold text-white"
+              <Button 
+                size="lg" 
+                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-lg group overflow-hidden relative"
                 onClick={onOpenActivity}
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
                 {t('dashboard.home.viewLeads', 'Смотреть заявки')}
                 <Badge className="ml-3 bg-white/20 text-white border-none">{realLeadsCount}</Badge>
               </Button>
             )}
-
             
             {/* Only show feed if there is activity or it's an expert */}
             {(realLeadsCount > 0 || pageData?.niche === 'expert') && (
@@ -338,14 +338,16 @@ export const HomeScreen = memo(function HomeScreen({
         )}
 
         {/* Primary Page Card */}
-        <Card className="space-y-6 rounded-md border-border bg-card p-5 md:p-7">
+        <Card className="p-5 md:p-8 space-y-6 bg-card border-border/10 shadow-sm relative overflow-hidden group rounded-[2.5rem] md:rounded-[3rem]">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-30 group-hover:opacity-50 transition-opacity duration-1000 -z-10" />
           
           {/* Page Header */}
           <div className="flex items-center gap-6">
-            <div className="shrink-0">
-              <Avatar className="relative h-20 w-20 rounded-md border border-border md:h-24 md:w-24">
+            <div className="relative group/avatar shrink-0">
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-2xl blur-md opacity-20 group-hover/avatar:opacity-40 transition duration-1000 animate-pulse" />
+              <Avatar className="h-20 w-20 md:h-24 md:w-24 rounded-2xl border-2 border-border/20 relative shadow-sm">
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-                <AvatarFallback className="rounded-md bg-muted text-2xl font-bold text-primary md:text-3xl">
+                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-black bg-muted text-primary">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -353,9 +355,9 @@ export const HomeScreen = memo(function HomeScreen({
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 mb-2">
-                <h2 className="truncate text-2xl font-semibold text-foreground md:text-3xl">{name}</h2>
+                <h2 className="text-3xl font-black tracking-tighter truncate text-foreground drop-shadow-sm">{name}</h2>
                 {isPremium && (
-                  <Badge className="shrink-0 rounded-full border-amber-500/30 bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-700">
+                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-lg shrink-0 font-black text-xs px-3 py-1 rounded-full">
                     <Crown className="h-3 w-3 mr-1.5" />
                     PRO
                   </Badge>
@@ -400,13 +402,13 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
 
           {/* Primary Actions — Premium pill buttons */}
-          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+          <div className="flex flex-col sm:flex-row gap-4 pt-2">
             {!isPublished ? (
               <>
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-12 flex-1 rounded-md border border-border bg-muted text-base font-semibold transition-colors group/btn hover:bg-accent"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-muted hover:bg-accent transition-all border-border/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
                   <PenTool className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
@@ -414,7 +416,7 @@ export const HomeScreen = memo(function HomeScreen({
                 </Button>
                 <Button
                   size="lg"
-                  className="h-12 flex-1 rounded-md bg-emerald-600 text-base font-semibold text-white transition-colors group/btn hover:bg-emerald-700"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
                   <Share2 className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
@@ -425,7 +427,7 @@ export const HomeScreen = memo(function HomeScreen({
               <>
                 <Button
                   size="lg"
-                  className="h-12 flex-1 rounded-md bg-primary text-base font-semibold text-white transition-colors group/btn hover:bg-primary/90"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-primary/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
                   <PenTool className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
@@ -434,7 +436,7 @@ export const HomeScreen = memo(function HomeScreen({
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-12 flex-1 rounded-md border border-border bg-muted text-base font-semibold transition-colors group/btn hover:bg-accent"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-muted hover:bg-accent transition-all border-border/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
                   <Share2 className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
@@ -446,14 +448,14 @@ export const HomeScreen = memo(function HomeScreen({
 
           {/* Secondary Actions */}
           <div className="flex gap-3">
-            <Button variant="ghost" className="h-11 flex-1 rounded-md border border-border bg-muted text-xs font-semibold hover:bg-accent" onClick={onPreview}>
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl bg-muted border-none hover:bg-accent text-xs font-bold uppercase tracking-widest opacity-70 hover:opacity-100" onClick={onPreview}>
               <Eye className="h-4 w-4 mr-2" />
               {t('dashboard.home.preview', 'Предпросмотр')}
             </Button>
             {isPublished && (
               <Button
                 variant="ghost"
-                className="h-11 w-11 rounded-md border border-border bg-muted p-0 hover:bg-accent"
+                className="h-12 w-12 rounded-xl p-0 bg-muted border-none hover:bg-accent opacity-70 hover:opacity-100"
                 onClick={() => window.open(`/${slug}`, '_blank')}
               >
                 <ExternalLink className="h-4 w-4" />
@@ -479,7 +481,7 @@ export const HomeScreen = memo(function HomeScreen({
               <ActionCard
                 icon={LayoutTemplate}
                 iconBg="bg-emerald-500/20"
-                iconColor="text-emerald-700 dark:text-emerald-400"
+                iconColor="text-emerald-600"
                 title={t('dashboard.home.templates', 'Шаблоны')}
                 description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
                 onClick={onOpenTemplates}
@@ -493,7 +495,7 @@ export const HomeScreen = memo(function HomeScreen({
               <ActionCard
                 icon={History}
                 iconBg="bg-blue-500/20"
-                iconColor="text-blue-700 dark:text-blue-400"
+                iconColor="text-blue-600"
                 title={t('dashboard.home.versions', 'История')}
                 description={t('dashboard.home.versionsDesc', 'Версии страницы')}
                 onClick={onOpenVersions}
@@ -505,7 +507,7 @@ export const HomeScreen = memo(function HomeScreen({
             <ActionCard
               icon={Store}
               iconBg="bg-violet-500/20"
-              iconColor="text-violet-700 dark:text-violet-400"
+              iconColor="text-violet-600"
               title={t('dashboard.home.marketplace', 'Маркетплейс')}
               description={t('dashboard.home.marketplaceDesc', 'От сообщества')}
               onClick={onOpenMarketplace}
@@ -516,7 +518,7 @@ export const HomeScreen = memo(function HomeScreen({
             <ActionCard
               icon={Users}
               iconBg="bg-pink-500/20"
-              iconColor="text-pink-700 dark:text-pink-400"
+              iconColor="text-pink-600"
               title={t('dashboard.home.gallery', 'Галерея')}
               description={t('dashboard.home.galleryDesc', 'Вдохновление')}
               onClick={() => navigate('/gallery')}
@@ -528,7 +530,7 @@ export const HomeScreen = memo(function HomeScreen({
               <ActionCard
                 icon={Crown}
                 iconBg="bg-amber-500/20"
-                iconColor="text-amber-700 dark:text-amber-400"
+                iconColor="text-amber-600"
                 title={t('dashboard.home.premium', 'Premium')}
                 description={t('dashboard.home.premiumDesc', 'Больше возможностей')}
                 onClick={() => navigate('/pricing')}
@@ -544,10 +546,10 @@ export const HomeScreen = memo(function HomeScreen({
           // Lifecycle-aware nudge replaces static tip
           if (isPublished && viewCount > 0 && realLeadsCount === 0) {
             return (
-              <Card className="rounded-md border-amber-500/30 bg-card p-5">
+              <Card className="p-5 bg-gradient-to-br from-amber-500/5 to-orange-500/5 border-amber-500/10">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-amber-500/15">
-                    <AlertTriangle className="h-5 w-5 text-amber-700 dark:text-amber-400" />
+                  <div className="h-10 w-10 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
+                    <AlertTriangle className="h-5 w-5 text-amber-600" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.trafficNoLeads.title', 'Есть трафик, но нет заявок')}</h4>
@@ -561,10 +563,10 @@ export const HomeScreen = memo(function HomeScreen({
           }
           if (repeatCount > 0) {
             return (
-              <Card className="rounded-md border-violet-500/30 bg-card p-5">
+              <Card className="p-5 bg-gradient-to-br from-violet-500/5 to-purple-500/5 border-violet-500/10">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-violet-500/15">
-                    <Repeat className="h-5 w-5 text-violet-700 dark:text-violet-400" />
+                  <div className="h-10 w-10 rounded-xl bg-violet-500/15 flex items-center justify-center shrink-0">
+                    <Repeat className="h-5 w-5 text-violet-600" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.repeatCustomers.title', 'Постоянные клиенты')}</h4>
@@ -578,10 +580,10 @@ export const HomeScreen = memo(function HomeScreen({
           }
           if (isPublished && realLeadsCount > 0) {
             return (
-              <Card className="rounded-md border-emerald-500/30 bg-card p-5">
+              <Card className="p-5 bg-gradient-to-br from-emerald-500/5 to-green-500/5 border-emerald-500/10">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-emerald-500/15">
-                    <TrendingUp className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+                  <div className="h-10 w-10 rounded-xl bg-emerald-500/15 flex items-center justify-center shrink-0">
+                    <TrendingUp className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.hasLeads.title', 'Заявки поступают')}</h4>
@@ -594,9 +596,9 @@ export const HomeScreen = memo(function HomeScreen({
             );
           }
           return (
-            <Card className="rounded-md border-primary/30 bg-card p-5">
+            <Card className="p-5 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/10">
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/15">
+                <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
                   <Sparkles className="h-5 w-5 text-primary" />
                 </div>
                 <div className="flex-1">

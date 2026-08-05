@@ -118,9 +118,3 @@ verify_jwt = true # Admin only
 
 [functions.process-transaction-fee]
 verify_jwt = true # Admin only
-
-# --- MCP (agent integration) ---
-# Must be public so the MCP OAuth handshake (401 + WWW-Authenticate challenge)
-# reaches the function; the handler itself validates tokens and user scope.
-[functions.mcp]
-verify_jwt = false

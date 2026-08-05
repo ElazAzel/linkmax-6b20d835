@@ -133,10 +133,6 @@ const SmartLinkRedirect = lazy(() => import("./pages/SmartLinkRedirect"));
 const SmartLinks = lazy(() => import("./pages/SmartLinks"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
-const IntegrationsPage = lazy(() => import("./pages/Integrations"));
-const ApiDocs = lazy(() => import("./pages/ApiDocs"));
-const ConnectAgent = lazy(() => import("./pages/ConnectAgent"));
-
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -157,7 +153,6 @@ const router = createBrowserRouter([
       { path: ".lovable/oauth/consent", element: <OAuthConsent /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "dashboard/home", element: <Dashboard /> },
-      { path: "dashboard/editor", element: <Dashboard /> },
       { path: "dashboard/pages", element: <Dashboard /> },
       { path: "dashboard/activity", element: <Dashboard /> },
       { path: "dashboard/insights", element: <Dashboard /> },
@@ -190,10 +185,6 @@ const router = createBrowserRouter([
       { path: "customers", element: <Customers /> },
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
-      { path: "integrations", element: <IntegrationsPage /> },
-      { path: "docs/api", element: <ApiDocs /> },
-      { path: "connect", element: <ConnectAgent /> },
-
       { path: "alternatives/:competitor", element: <AlternativeDetail /> },
       { path: "seo-landing", element: <SeoLanding /> },
       { path: "admin", element: <Admin /> },

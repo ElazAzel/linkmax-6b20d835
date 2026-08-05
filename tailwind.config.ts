@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 import animate from "tailwindcss-animate";
 
 export default {
@@ -24,17 +25,6 @@ export default {
     },
     extend: {
       colors: {
-        brand: {
-          canvas: 'hsl(var(--brand-canvas))',
-          ink: 'hsl(var(--brand-ink))',
-          surface: 'hsl(var(--brand-surface))',
-          coral: 'hsl(var(--brand-coral))',
-          blue: 'hsl(var(--brand-blue))',
-          mint: 'hsl(var(--brand-mint))',
-          sun: 'hsl(var(--brand-sun))',
-          sage: 'hsl(var(--brand-sage))',
-          orange: 'hsl(var(--brand-orange))',
-        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -277,7 +267,7 @@ export default {
       },
       fontFamily: {
         sans: [
-          'Onest',
+          'Inter',
           'ui-sans-serif',
           'system-ui',
           '-apple-system',
@@ -289,22 +279,11 @@ export default {
           'sans-serif'
         ],
         heading: [
-          'Onest',
+          'Manrope',
+          'Inter',
           'ui-sans-serif',
           'system-ui',
           'sans-serif'
-        ],
-        display: [
-          'Unbounded',
-          'Onest',
-          'ui-sans-serif',
-          'system-ui',
-          'sans-serif'
-        ],
-        mono: [
-          'JetBrains Mono',
-          'ui-monospace',
-          'monospace'
         ]
       },
       fontSize: {
@@ -312,15 +291,15 @@ export default {
         'sm': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }],
         'base': ['1rem', { lineHeight: '1.5rem', letterSpacing: '0' }],
         'lg': ['1.125rem', { lineHeight: '1.625rem', letterSpacing: '0' }],
-        'xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '0' }],
-        '2xl': ['1.5rem', { lineHeight: '1.8rem', letterSpacing: '0' }],
-        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '0' }],
-        '4xl': ['2.25rem', { lineHeight: '2.4rem', letterSpacing: '0' }],
-        '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '0' }],
-        '6xl': ['3.5rem', { lineHeight: '1.05', letterSpacing: '0' }],
-        '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '0' }],
-        '8xl': ['5.5rem', { lineHeight: '1', letterSpacing: '0' }],
-        '9xl': ['7rem', { lineHeight: '1', letterSpacing: '0' }]
+        'xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '-0.01em' }],
+        '2xl': ['1.5rem', { lineHeight: '1.8rem', letterSpacing: '-0.015em' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.02em' }],
+        '4xl': ['2.25rem', { lineHeight: '2.4rem', letterSpacing: '-0.025em' }],
+        '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
+        '6xl': ['3.5rem', { lineHeight: '1.05', letterSpacing: '-0.035em' }],
+        '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.04em' }],
+        '8xl': ['5.5rem', { lineHeight: '1', letterSpacing: '-0.045em' }],
+        '9xl': ['7rem', { lineHeight: '1', letterSpacing: '-0.05em' }]
       },
       letterSpacing: {
         'tighter': '-0.05em',

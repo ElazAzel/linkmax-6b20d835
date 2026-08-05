@@ -28,7 +28,6 @@ vi.mock('@/lib/blocks/block-manifest', () => ({
     text: { type: 'text', labelKey: 'Text', icon: 'type', isPremium: false },
     image: { type: 'image', labelKey: 'Image', icon: 'image', isPremium: false },
   },
-  isBlockPremium: (type: string) => type === 'image' || type === 'product' || type === 'booking',
 }));
 
 vi.mock('@/lib/blocks/block-recommendations', () => ({

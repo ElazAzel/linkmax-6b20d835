@@ -22,49 +22,7 @@ export type BlockShadow = 'none' | 'sm' | 'md' | 'lg' | 'glow' | 'inner';
 export type BlockHover = 'none' | 'lift' | 'scale' | 'glow' | 'underline';
 export type DividerStyle = 'none' | 'hairline' | 'dotted' | 'gradient' | 'ornament';
 
-export interface PageThemeColors {
-  canvas: string;
-  surface: string;
-  text: string;
-  mutedText: string;
-  primary: string;
-  primaryText: string;
-  secondary: string;
-  border: string;
-  focus: string;
-  success: string;
-  warning: string;
-  danger: string;
-}
-
-export interface PageThemeTypography {
-  headingFamily: string;
-  bodyFamily: string;
-  monoFamily: string;
-  headingWeight: 500 | 600 | 700;
-  bodyWeight: 400 | 500 | 600;
-  scale: 'compact' | 'balanced' | 'expressive';
-}
-
-export interface PageThemeRadii {
-  control: number;
-  card: number;
-  block: number;
-  image: number;
-}
-
-export interface PageThemeSpacing {
-  density: 'compact' | 'comfortable' | 'spacious';
-  sectionGap: number;
-  blockGap: number;
-  pagePadding: number;
-}
-
 export interface PageTheme {
-  /** Version 2 adds semantic roles while preserving all legacy fields. */
-  schemaVersion?: 2;
-  /** Published legacy pages stay visually locked until the user applies v2. */
-  appearanceMode?: 'legacy' | 'v2';
   backgroundColor: string;
   backgroundGradient?: string;
   textColor: string;
@@ -88,24 +46,6 @@ export interface PageTheme {
   blockHover?: BlockHover;
   divider?: DividerStyle;
   themePreset?: string;
-  colors?: PageThemeColors;
-  typography?: PageThemeTypography;
-  radii?: PageThemeRadii;
-  spacing?: PageThemeSpacing;
-  imageTreatment?: 'natural' | 'editorial' | 'monochrome';
-  buttonWeight?: 500 | 600 | 700;
-  motionLevel?: 'none' | 'reduced' | 'standard' | 'expressive';
-  // ----- Fine layout controls (v3) -----
-  /** Max content width of the page in px (420-1100). */
-  contentWidth?: number;
-  /** Gap between blocks in px (4-40). */
-  blockGap?: number;
-  /** Horizontal page padding in px (0-48). */
-  pagePaddingX?: number;
-  /** Exact block corner radius in px — overrides blockShape. */
-  blockRadiusPx?: number;
-  /** Global text size multiplier (0.9-1.25). */
-  textScale?: number;
 }
 
 export interface PageMetrics {

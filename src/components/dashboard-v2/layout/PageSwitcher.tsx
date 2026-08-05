@@ -52,7 +52,7 @@ function PageStatusBadge({ page }: { page: UserPage }) {
 
   if (page.isPrimaryPaid) {
     return (
-      <Badge variant="secondary" className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30 text-xs px-1.5">
+      <Badge variant="secondary" className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs px-1.5">
         <Crown className="h-2.5 w-2.5 mr-0.5" />
         {t('dashboard.pageSwitcher.included', 'Incl.')}
       </Badge>
@@ -61,7 +61,7 @@ function PageStatusBadge({ page }: { page: UserPage }) {
 
   if (page.isPaid) {
     return (
-      <Badge variant="secondary" className="bg-violet-500/20 text-violet-700 dark:text-violet-400 border-violet-500/30 text-xs px-1.5">
+      <Badge variant="secondary" className="bg-violet-500/20 text-violet-600 border-violet-500/30 text-xs px-1.5">
         <Sparkles className="h-2.5 w-2.5 mr-0.5" />
         {t('dashboard.pageSwitcher.addon', 'Add-on')}
       </Badge>
@@ -338,10 +338,10 @@ function DesktopPageSwitcher({
             className="flex items-center gap-3 p-3 rounded-lg bg-amber-500/10"
           >
             <div className="h-8 w-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <Crown className="h-4 w-4 text-amber-700 dark:text-amber-400" />
+              <Crown className="h-4 w-4 text-amber-600" />
             </div>
             <div className="flex-1">
-              <div className="text-sm font-medium text-amber-700 dark:text-amber-400">{t('dashboard.pageSwitcher.getMore', 'Get more pages')}</div>
+              <div className="text-sm font-medium text-amber-600">{t('dashboard.pageSwitcher.getMore', 'Get more pages')}</div>
               <div className="text-xs text-muted-foreground">{t('dashboard.pageSwitcher.upgradeDesc', 'Upgrade to Pro')}</div>
             </div>
           </DropdownMenuItem>

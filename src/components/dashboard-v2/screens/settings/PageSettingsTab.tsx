@@ -99,7 +99,7 @@ const GooglePreview = memo(function GooglePreview({ title, slug, description }: 
     return (
         <div className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/50 space-y-1">
             <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.googlePreview', 'Превью в Google')}</p>
-            <p className="text-sm text-blue-700 dark:text-blue-400 dark:text-blue-400 font-medium truncate">{displayTitle}</p>
+            <p className="text-sm text-blue-600 dark:text-blue-400 font-medium truncate">{displayTitle}</p>
             <p className="text-xs text-green-700 dark:text-green-500">{displayUrl}</p>
             <p className="text-xs text-muted-foreground line-clamp-2">{displayDesc}</p>
         </div>
@@ -111,9 +111,9 @@ const SEOScoreBadge = memo(function SEOScoreBadge({ score }: { score?: number })
     const { t } = useTranslation();
     if (score === undefined || score === null) return null;
 
-    const color = score >= 70 ? 'text-green-700 dark:text-green-400 bg-green-500/10 border-green-500/20' :
-                  score >= INDEXABLE_THRESHOLD ? 'text-amber-700 dark:text-amber-400 bg-amber-500/10 border-amber-500/20' :
-                  'text-red-700 dark:text-red-400 bg-red-500/10 border-red-500/20';
+    const color = score >= 70 ? 'text-green-600 bg-green-500/10 border-green-500/20' :
+                  score >= INDEXABLE_THRESHOLD ? 'text-amber-600 bg-amber-500/10 border-amber-500/20' :
+                  'text-red-600 bg-red-500/10 border-red-500/20';
     const label = score >= 70 ? t('seo.good', 'Хорошо') :
                   score >= INDEXABLE_THRESHOLD ? t('seo.average', 'Средне') :
                   t('seo.weak', 'Слабо');
@@ -144,7 +144,7 @@ const SEOTips = memo(function SEOTips({ city, profession, bio, seoTitle, seoDesc
                 <AlertTriangle className="h-3 w-3" />
                 {t('seo.tips.title', 'Советы по улучшению')}
             </p>
-            <ul className="text-xs text-amber-700 dark:text-amber-400 dark:text-amber-400 space-y-0.5 list-disc list-inside">
+            <ul className="text-xs text-amber-600 dark:text-amber-400 space-y-0.5 list-disc list-inside">
                 {tips.map((tip, i) => <li key={i}>{tip}</li>)}
             </ul>
         </div>
@@ -275,7 +275,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
         }
         if (isPaid) {
             return (
-                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30 shadow-sm">
+                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 shadow-sm">
                     <Sparkles className="w-3 h-3 mr-1" />
                     {t('dashboard.pageSettings.paidAddon', 'Paid Add-on')}
                 </Badge>
@@ -435,11 +435,11 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
                     {/* AI Bot readiness */}
                     <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-sm">
-                        <Bot className="h-4 w-4 text-blue-700 dark:text-blue-400 dark:text-blue-400" />
+                        <Bot className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                         <span className="text-blue-700 dark:text-blue-300 text-xs">
                             {t('seo.aiBotReady', 'JSON-LD и Answer Block генерируются автоматически для AI-ботов')}
                         </span>
-                        <Check className="h-3.5 w-3.5 text-green-700 dark:text-green-400 ml-auto" />
+                        <Check className="h-3.5 w-3.5 text-green-600 ml-auto" />
                     </div>
 
                     {/* SEO Tips */}
@@ -650,7 +650,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     </button>
                     <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenTemplates}>
                         <div className="h-11 w-11 rounded-2xl bg-emerald-500/15 flex items-center justify-center">
-                            <LayoutTemplate className="w-5 h-5 text-emerald-700 dark:text-emerald-400" />
+                            <LayoutTemplate className="w-5 h-5 text-emerald-600" />
                         </div>
                         <div className="flex-1">
                             <span className="font-medium">{t('dashboard.pageSettings.templates', 'Шаблоны')}</span>
@@ -660,7 +660,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     </button>
                     <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenMarketplace}>
                         <div className="h-11 w-11 rounded-2xl bg-violet-500/15 flex items-center justify-center">
-                            <Store className="w-5 h-5 text-violet-700 dark:text-violet-400" />
+                            <Store className="w-5 h-5 text-violet-600" />
                         </div>
                         <div className="flex-1">
                             <span className="font-medium">{t('dashboard.pageSettings.marketplace', 'Маркетплейс')}</span>

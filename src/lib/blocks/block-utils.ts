@@ -5,7 +5,6 @@
 
 import type { Block } from '@/types/page';
 import { logger } from '@/lib/utils/logger';
-import { isSafeUrl } from '@/lib/blocks/block-validators';
 
 export type ButtonStyle = 'default' | 'rounded' | 'pill';
 export type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
@@ -88,10 +87,6 @@ export function openUrlSafely(url: string, trackingCallback?: () => void): void 
   if (trackingCallback) {
     trackingCallback();
   }
-  if (!isSafeUrl(url)) {
-    console.warn('Blocked navigation to unsafe URL scheme');
-    return;
-  }
   // Small delay to allow tracking request to be sent
   // Using setTimeout 0 puts this in the next event loop tick
   setTimeout(() => {
@@ -119,7 +114,7 @@ export function createBlockClickHandler(
     }
 
     // Open URL after tracking
-    if (url && isSafeUrl(url)) {
+    if (url) {
       // Small delay to ensure tracking request is sent
       setTimeout(() => {
         window.open(url, '_blank', 'noopener,noreferrer');

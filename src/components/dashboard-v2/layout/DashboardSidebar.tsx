@@ -10,26 +10,25 @@ import { useTranslation } from 'react-i18next';
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
 import Home from 'lucide-react/dist/esm/icons/home';
+import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
-import FilePenLine from 'lucide-react/dist/esm/icons/file-pen-line';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import Settings from 'lucide-react/dist/esm/icons/settings';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import PanelLeftClose from 'lucide-react/dist/esm/icons/panel-left-close';
 import PanelLeft from 'lucide-react/dist/esm/icons/panel-left';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Contact from 'lucide-react/dist/esm/icons/contact';
-import BriefcaseBusiness from 'lucide-react/dist/esm/icons/briefcase-business';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { BrandLogo } from '@/components/brand/BrandLogo';
 
 interface SidebarItem {
   id: string;
@@ -59,25 +58,42 @@ interface DashboardSidebarProps {
 }
 
 const MAIN_ITEMS: SidebarItem[] = [
-  { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Главная' },
-  { id: 'editor', icon: FilePenLine, labelKey: 'dashboard.nav.editor', defaultLabel: 'Редактор' },
-  { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.site', defaultLabel: 'Сайт' },
+  { id: 'editor', icon: PenTool, labelKey: 'dashboard.nav.editor', defaultLabel: 'Редактор' },
   { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
   { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },
-  { id: 'zone-dashboard', icon: BriefcaseBusiness, labelKey: 'dashboard.nav.business', defaultLabel: 'Бизнес' },
 ];
 
 const SECTIONS: SidebarSection[] = [
+  {
+    id: 'pages',
+    titleKey: 'dashboard.sidebar.design',
+    defaultTitle: 'Страницы',
+    items: [
+      { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Мои страницы' },
+      { id: 'templates', icon: LayoutTemplate, labelKey: 'dashboard.sidebar.templates', defaultLabel: 'Шаблоны' },
+    ],
+  },
+  {
+    id: 'business-tools',
+    titleKey: 'dashboard.sidebar.zone',
+    defaultTitle: 'Бизнес-инструменты',
+    items: [
+      { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды' },
+      { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События' },
+    ],
+  },
   {
     id: 'account',
     titleKey: 'dashboard.sidebar.account',
     defaultTitle: 'Аккаунт',
     items: [
+      { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор' },
       { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
     ],
   },
 ];
 
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import Kanban from 'lucide-react/dist/esm/icons/kanban';
 import CheckSquare from 'lucide-react/dist/esm/icons/check-square';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
@@ -89,17 +105,18 @@ import Mail from 'lucide-react/dist/esm/icons/mail';
 const BUSINESS_SECTION: SidebarSection = {
   id: 'business-zone',
   titleKey: 'dashboard.sidebar.business_zone',
-  defaultTitle: 'Инструменты бизнеса',
+  defaultTitle: 'Бизнес-зона',
   items: [
+    { id: 'zone-dashboard', icon: LayoutDashboard, labelKey: 'zones.nav.dashboard', defaultLabel: 'Дашборд' },
     { id: 'zone-deals', icon: Kanban, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки' },
     { id: 'zone-contacts', icon: Contact, labelKey: 'zones.nav.contacts', defaultLabel: 'Контакты' },
     { id: 'zone-tasks', icon: CheckSquare, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи' },
     { id: 'zone-inbox', icon: Mail, labelKey: 'zones.nav.inbox', defaultLabel: 'Сообщения' },
     { id: 'zone-calendar', icon: Calendar, labelKey: 'zones.nav.calendar', defaultLabel: 'Календарь' },
-    { id: 'zone-invoices', icon: Receipt, labelKey: 'zones.nav.invoices', defaultLabel: 'Счета' },
-    { id: 'zone-products', icon: Package, labelKey: 'zones.nav.products', defaultLabel: 'Товары' },
+    { id: 'zone-invoices', icon: Receipt, labelKey: 'zones.nav.invoices', defaultLabel: 'Финансы' },
+    { id: 'zone-products', icon: Package, labelKey: 'zones.nav.products', defaultLabel: 'Продукты' },
     { id: 'zone-automations', icon: Zap, labelKey: 'zones.nav.automations', defaultLabel: 'Автоматизации' },
-    { id: 'zone-settings', icon: Settings2, labelKey: 'zones.nav.settings', defaultLabel: 'Настройки бизнеса' },
+    { id: 'zone-settings', icon: Settings2, labelKey: 'zones.nav.settings', defaultLabel: 'Настройки зоны' },
   ],
 };
 
@@ -157,7 +174,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         {isActive && (
           <motion.span
             layoutId="activeTabIndicator"
-            className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 bg-primary"
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-full bg-primary"
             transition={{ type: 'spring', stiffness: 400, damping: 32 }}
           />
         )}
@@ -180,7 +197,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                   className={cn(
                     "text-xs h-5 px-1.5 ml-2 shrink-0 border-0",
                     item.badgeVariant === 'premium'
-                      ? "bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                      ? "bg-amber-500/15 text-amber-600"
                       : "bg-primary/10 text-primary"
                   )}
                 >
@@ -228,9 +245,11 @@ export const DashboardSidebar = memo(function DashboardSidebar({
               animate={{ opacity: 1, width: 'auto' }}
               exit={{ opacity: 0, width: 0 }}
             >
-              <BrandLogo inverted />
+              <span className="brand-wordmark text-lg">
+                Link<span className="brand-wordmark-accent">MAX</span>
+              </span>
               {isPremium && (
-                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30 text-xs px-1.5 py-0 h-5">
+                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs px-1.5 py-0 h-5">
                   <Crown className="h-3 w-3 mr-1" />
                   PRO
                 </Badge>

@@ -19,7 +19,6 @@ vi.mock('@/lib/blocks/block-manifest', () => ({
       isPremium: false,
     },
   },
-  isBlockPremium: (type: string) => type === 'image' || type === 'product' || type === 'booking',
 }));
 
 vi.mock('@/lib/blocks/block-recommendations', () => ({

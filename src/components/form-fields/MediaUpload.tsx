@@ -5,10 +5,6 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import SearchIcon from 'lucide-react/dist/esm/icons/search';
-import { useStockPhotos } from '@/hooks/useStockPhotos';
-import type { StockPhoto } from '@/lib/integrations/external-api';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -55,14 +51,10 @@ export function MediaUpload({
   const [compressing, setCompressing] = useState(false);
   const [compressionInfo, setCompressionInfo] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>(value ? 'url' : 'upload');
-  const [stockQuery, setStockQuery] = useState('');
-  const { photos, loading: stockLoading, unavailable, search } = useStockPhotos();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const showStockTab = accept.includes('image');
 
   const MAX_SIZE_MB = isPremium ? 30 : 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
-
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -167,14 +159,10 @@ export function MediaUpload({
       {label && <Label>{label}</Label>}
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className={`grid w-full ${showStockTab ? 'grid-cols-3' : 'grid-cols-2'}`}>
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="upload">{t('upload.tab', 'Upload')}</TabsTrigger>
           <TabsTrigger value="url">{t('url.tab', 'URL')}</TabsTrigger>
-          {showStockTab && (
-            <TabsTrigger value="stock">{t('upload.stockTab', 'Photos')}</TabsTrigger>
-          )}
         </TabsList>
-
 
         <TabsContent value="upload" className="space-y-3">
           <input
@@ -279,60 +267,7 @@ export function MediaUpload({
             </div>
           )}
         </TabsContent>
-
-        {showStockTab && (
-          <TabsContent value="stock" className="space-y-3">
-            <form
-              className="flex gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                search(stockQuery);
-              }}
-            >
-              <Input
-                value={stockQuery}
-                onChange={(e) => setStockQuery(e.target.value)}
-                placeholder={t('upload.stockPlaceholder', 'Search free photos...')}
-              />
-              <Button type="submit" variant="secondary" disabled={stockLoading}>
-                {stockLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <SearchIcon className="h-4 w-4" />}
-              </Button>
-            </form>
-
-            {unavailable && (
-              <p className="text-xs text-muted-foreground">
-                {t('upload.stockUnavailable', 'Photo search is not configured yet.')}
-              </p>
-            )}
-
-            {photos.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
-                {photos.map((photo: StockPhoto) => (
-                  <button
-                    key={photo.id}
-                    type="button"
-                    className="relative rounded-md overflow-hidden border hover:ring-2 hover:ring-primary transition"
-                    onClick={() => {
-                      onChange(photo.url);
-                      setActiveTab('url');
-                    }}
-                    aria-label={`${t('upload.stockUse', 'Use photo by')} ${photo.author}`}
-                  >
-                    <img src={photo.thumb} alt={photo.author} loading="lazy" className="w-full h-20 object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {photos.length > 0 && (
-              <p className="text-[11px] text-muted-foreground">
-                {t('upload.stockCredit', 'Photos from Unsplash and Pexels — free for commercial use.')}
-              </p>
-            )}
-          </TabsContent>
-        )}
       </Tabs>
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ErrorState as UiErrorState } from '@/components/ui';
+import { ErrorState as UiErrorState } from '@/components/ui/states';
 
 interface ErrorStateProps {
   title?: string;
