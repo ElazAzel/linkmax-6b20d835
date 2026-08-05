@@ -11,10 +11,13 @@ import { Button } from '@/components/ui/button';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 
-import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
+import { HeroOS2026 } from '@/components/landing/v3/HeroOS2026';
+import { ProofStrip } from '@/components/landing/v3/ProofStrip';
+import { ValueBento } from '@/components/landing/v3/ValueBento';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';
 import { LogoTicker } from '@/components/landing/v2/LogoTicker';
+
 
 const SEOMetaEnhancer = lazy(() => import('@/components/seo/SEOMetaEnhancer').then(m => ({ default: m.SEOMetaEnhancer })));
 const GEOTagging = lazy(() => import('@/components/seo/GEOTagging').then(m => ({ default: m.GEOTagging })));
