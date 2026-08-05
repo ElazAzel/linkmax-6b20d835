@@ -163,13 +163,7 @@ export class CrmService {
         body: {
           type: 'new_chatbot_lead',
           recipientId: lead.user_id,
-          data: {
-            name: lead.name,
-            phone: lead.phone || '—',
-            intent,
-            query: lastQuery,
-            link: crmLink
-          }
+          leadId: lead.id
         }
       });
     } catch (e) {

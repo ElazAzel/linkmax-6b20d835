@@ -150,9 +150,7 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
         body: {
           type: 'challenge_completed',
           recipientId: user.id,
-          data: {
-            challengeTitle: challengeInfo?.title || i18n.t('social.weeklyChallenge')
-          }
+          challengeTitle: challengeInfo?.title || i18n.t('social.weeklyChallenge')
         }
       });
     } catch (e) {
@@ -194,10 +192,7 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
         body: {
           type: 'friend_challenge_completed',
           recipientId: friendId,
-          data: {
-            friendName,
-            challengeTitle
-          }
+          challengeTitle
         }
       }).catch(e => logger.error('Failed to notify friend', e, { context: 'social' }))
     )
@@ -243,12 +238,7 @@ export async function sendPremiumGift(
     await supabase.functions.invoke('send-social-notification', {
       body: {
         type: 'gift_received',
-        recipientId,
-        data: {
-          senderName: senderProfile?.display_name || senderProfile?.username || i18n.t('common.user'),
-          days,
-          message
-        }
+        recipientId
       }
     });
   } catch (e) {
@@ -327,10 +317,7 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
         await supabase.functions.invoke('send-social-notification', {
           body: {
             type: 'gift_claimed',
-            recipientId: giftInfo.sender_id,
-            data: {
-              senderName: recipientProfile?.display_name || recipientProfile?.username || i18n.t('common.recipient')
-            }
+            recipientId: giftInfo.sender_id
           }
         });
       } catch (e) {
