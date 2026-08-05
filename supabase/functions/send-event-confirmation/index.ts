@@ -16,7 +16,6 @@ const corsHeaders = {
 interface EventConfirmationRequest {
   registrationId: string;
   eventId: string;
-  ownerId: string;
 }
 
 interface EventData {
