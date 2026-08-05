@@ -139,28 +139,39 @@ function HowItWorksSection({ onStart }: { onStart: () => void }) {
   ];
 
   return (
-    <section className="bg-brand-ink px-4 py-14 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1120px]">
-        <div className="grid gap-8 md:grid-cols-[0.82fr_1.18fr] md:items-center">
+    <section className="border-b border-brand-ink/15 bg-brand-canvas px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-[1180px]">
+        <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:items-start">
           <div>
-            <h2 className="font-display text-4xl font-semibold leading-tight text-white md:text-5xl">
+            <div className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-brand-sage">
+              {t('landing.short.steps.badge', '01 — 03')}
+            </div>
+            <h2 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-brand-ink md:text-5xl">
               {t('landing.short.steps.title', 'Как запуститься')}
             </h2>
-            <p className="mt-5 text-base leading-7 text-white/[0.70]">
+            <p className="mt-5 max-w-md text-base leading-7 text-brand-sage">
               {t('landing.short.steps.subtitle', 'Без настройки конструктора с нуля: сначала получаете готовую основу, потом меняете детали.')}
             </p>
           </div>
 
-          <div className="space-y-3">
-            {steps.map((step, index) => (
-              <div key={step} className="flex items-center gap-4 border-b border-white/15 py-4">
-                <span className="font-metric flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-coral text-sm font-bold text-white">
-                  {index + 1}
-                </span>
-                <p className="text-sm font-semibold text-white">{step}</p>
-              </div>
-            ))}
-            <Button onClick={onStart} className="mt-3 h-12 rounded-md bg-white px-5 text-base font-semibold text-brand-ink hover:bg-brand-canvas">
+          <div>
+            <ol className="grid gap-3">
+              {steps.map((step, index) => (
+                <li
+                  key={step}
+                  className="flex items-start gap-4 rounded-2xl border border-brand-ink/15 bg-white px-5 py-5 transition-colors hover:border-brand-ink/40"
+                >
+                  <span className="font-metric flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink text-sm font-bold text-white">
+                    {index + 1}
+                  </span>
+                  <p className="pt-1.5 text-[15px] font-semibold leading-5 text-brand-ink">{step}</p>
+                </li>
+              ))}
+            </ol>
+            <Button
+              onClick={onStart}
+              className="mt-5 h-12 w-full rounded-xl bg-brand-ink px-6 text-base font-bold text-white hover:bg-black sm:w-auto"
+            >
               {t('landing.short.steps.cta', 'Создать страницу')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -175,28 +186,33 @@ function ShortFinalCTA({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-brand-coral px-4 py-14 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-[1120px] gap-6 md:grid-cols-[1fr_auto] md:items-center">
-        <div>
-          <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white">
-            {t('landing.short.final.eyebrow', 'Готовы начать')}
+    <section className="bg-brand-ink px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-[1180px] rounded-3xl border border-white/15 bg-brand-coral px-6 py-10 sm:px-10 sm:py-12">
+        <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white/80">
+              {t('landing.short.final.eyebrow', 'Готовы начать')}
+            </div>
+            <h2 className="font-display max-w-2xl text-3xl font-bold leading-[1.05] tracking-tight md:text-5xl">
+              {t('landing.short.final.title', 'Страница может быть готова уже сегодня')}
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-7 text-white/90">
+              {t('landing.short.final.subtitle', 'Начните бесплатно: сначала соберите страницу, потом подключите запись, оплату и CRM по мере роста.')}
+            </p>
           </div>
-          <h2 className="font-display max-w-2xl text-3xl font-semibold leading-tight md:text-5xl">
-          {t('landing.short.final.title', 'Страница может быть готова уже сегодня')}
-          </h2>
-          <p className="mt-4 max-w-xl text-base leading-7 text-white">
-            {t('landing.short.final.subtitle', 'Начните бесплатно: сначала соберите страницу, потом подключите запись, оплату и CRM по мере роста.')}
-          </p>
-
+          <Button
+            onClick={onStart}
+            className="h-12 w-full rounded-xl bg-white px-6 text-base font-bold text-brand-ink hover:bg-brand-canvas md:h-14 md:w-auto"
+          >
+            {t('landing.short.final.cta', 'Создать страницу')}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </div>
-        <Button onClick={onStart} className="h-12 rounded-md bg-brand-ink px-6 text-base font-semibold text-white hover:bg-black md:h-14">
-          {t('landing.short.final.cta', 'Создать страницу')}
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
       </div>
     </section>
   );
 }
+
 
 function SimpleFooter() {
   const { t } = useTranslation();
