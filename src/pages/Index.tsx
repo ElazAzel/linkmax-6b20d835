@@ -9,12 +9,14 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { Button } from '@/components/ui/button';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 
-import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
+import { HeroOS2026 } from '@/components/landing/v3/HeroOS2026';
+import { ProofStrip } from '@/components/landing/v3/ProofStrip';
+import { ValueBento } from '@/components/landing/v3/ValueBento';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';
 import { LogoTicker } from '@/components/landing/v2/LogoTicker';
+
 
 const SEOMetaEnhancer = lazy(() => import('@/components/seo/SEOMetaEnhancer').then(m => ({ default: m.SEOMetaEnhancer })));
 const GEOTagging = lazy(() => import('@/components/seo/GEOTagging').then(m => ({ default: m.GEOTagging })));
@@ -96,17 +98,20 @@ export default function Index() {
 
         <main className="flex-grow">
           <div id="hero" ref={heroSectionRef}>
-            <HeroBentoOS
-              onStart={(desiredSlug) => handleCreatePage('hero_cta', 'signup', desiredSlug)}
+            <HeroOS2026
+              onStart={(desiredSlug?: string) => handleCreatePage('hero_cta', 'signup', desiredSlug)}
               onExamples={() => handleNav('/gallery', 'gallery', 'hero_examples')}
             />
           </div>
 
+          <ProofStrip />
+
           <div id="features" ref={featuresSectionRef}>
-            <ShortFeatureSection />
+            <ValueBento />
           </div>
 
           <LogoTicker />
+
 
           <div id="how-it-works" ref={howItWorksSectionRef}>
             <HowItWorksSection onStart={() => handleCreatePage('how_it_works_cta')} />
@@ -125,64 +130,6 @@ export default function Index() {
   );
 }
 
-function ShortFeatureSection() {
-  const { t } = useTranslation();
-  const items = [
-    {
-      id: 'page',
-      title: t('landing.short.features.pageTitle', 'Страница'),
-      body: t('landing.short.features.pageBody', 'Услуги, ссылки, портфолио, отзывы и кнопки связи в одном коротком профиле.'),
-    },
-    {
-      id: 'leads',
-      title: t('landing.short.features.leadsTitle', 'Заявки'),
-      body: t('landing.short.features.leadsBody', 'Формы, мессенджеры и записи складываются в единый поток, а не теряются в переписках.'),
-    },
-    {
-      id: 'money',
-      title: t('landing.short.features.moneyTitle', 'Оплата'),
-      body: t('landing.short.features.moneyBody', 'Инвойсы, платежи и базовая CRM уже рядом со страницей.'),
-    },
-  ];
-
-  return (
-    <section className="px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1120px]">
-        <div className="grid gap-8 border-y border-brand-ink/15 py-10 md:grid-cols-[0.8fr_1.2fr] md:items-center">
-          <div>
-            <div className="mb-4 inline-flex rounded-md border border-brand-ink/20 bg-white px-3 py-1 text-xs font-bold uppercase text-brand-ink">
-              {t('landing.short.features.badge', 'LinkMAX OS')}
-            </div>
-            <h2 className="font-display text-4xl font-semibold leading-tight text-brand-ink md:text-5xl">
-              {t('landing.short.features.title', 'Что это?')}
-            </h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-brand-sage">
-              {t('landing.short.features.subtitle', 'Одна публичная ссылка для малого бизнеса: показать предложение, принять заявку и продолжить работу с клиентом.')}
-            </p>
-          </div>
-
-          <div className="grid gap-3">
-            {items.map((item, index) => (
-              <div key={item.id} className="grid grid-cols-[48px_1fr] items-start gap-4 rounded-lg border border-brand-ink/15 bg-white p-5">
-                <div className="font-metric flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-brand-canvas text-sm font-bold text-brand-ink whitespace-nowrap">
-                  0{index + 1}
-                </div>
-                <div className="flex gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-mint" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-brand-ink">{item.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-brand-sage">{item.body}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function HowItWorksSection({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
   const steps = [
@@ -192,28 +139,39 @@ function HowItWorksSection({ onStart }: { onStart: () => void }) {
   ];
 
   return (
-    <section className="bg-brand-ink px-4 py-14 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1120px]">
-        <div className="grid gap-8 md:grid-cols-[0.82fr_1.18fr] md:items-center">
+    <section className="border-b border-brand-ink/15 bg-brand-canvas px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-[1180px]">
+        <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:items-start">
           <div>
-            <h2 className="font-display text-4xl font-semibold leading-tight text-white md:text-5xl">
+            <div className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-brand-sage">
+              {t('landing.short.steps.badge', '01 — 03')}
+            </div>
+            <h2 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-brand-ink md:text-5xl">
               {t('landing.short.steps.title', 'Как запуститься')}
             </h2>
-            <p className="mt-5 text-base leading-7 text-white/[0.70]">
+            <p className="mt-5 max-w-md text-base leading-7 text-brand-sage">
               {t('landing.short.steps.subtitle', 'Без настройки конструктора с нуля: сначала получаете готовую основу, потом меняете детали.')}
             </p>
           </div>
 
-          <div className="space-y-3">
-            {steps.map((step, index) => (
-              <div key={step} className="flex items-center gap-4 border-b border-white/15 py-4">
-                <span className="font-metric flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-coral text-sm font-bold text-white">
-                  {index + 1}
-                </span>
-                <p className="text-sm font-semibold text-white">{step}</p>
-              </div>
-            ))}
-            <Button onClick={onStart} className="mt-3 h-12 rounded-md bg-white px-5 text-base font-semibold text-brand-ink hover:bg-brand-canvas">
+          <div>
+            <ol className="grid gap-3">
+              {steps.map((step, index) => (
+                <li
+                  key={step}
+                  className="flex items-start gap-4 rounded-2xl border border-brand-ink/15 bg-white px-5 py-5 transition-colors hover:border-brand-ink/40"
+                >
+                  <span className="font-metric flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink text-sm font-bold text-white">
+                    {index + 1}
+                  </span>
+                  <p className="pt-1.5 text-[15px] font-semibold leading-5 text-brand-ink">{step}</p>
+                </li>
+              ))}
+            </ol>
+            <Button
+              onClick={onStart}
+              className="mt-5 h-12 w-full rounded-xl bg-brand-ink px-6 text-base font-bold text-white hover:bg-black sm:w-auto"
+            >
               {t('landing.short.steps.cta', 'Создать страницу')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -228,28 +186,33 @@ function ShortFinalCTA({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-brand-coral px-4 py-14 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-[1120px] gap-6 md:grid-cols-[1fr_auto] md:items-center">
-        <div>
-          <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white">
-            {t('landing.short.final.eyebrow', 'Готовы начать')}
+    <section className="bg-brand-ink px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-[1180px] rounded-3xl border border-white/15 bg-brand-coral px-6 py-10 sm:px-10 sm:py-12">
+        <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-white/80">
+              {t('landing.short.final.eyebrow', 'Готовы начать')}
+            </div>
+            <h2 className="font-display max-w-2xl text-3xl font-bold leading-[1.05] tracking-tight md:text-5xl">
+              {t('landing.short.final.title', 'Страница может быть готова уже сегодня')}
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-7 text-white/90">
+              {t('landing.short.final.subtitle', 'Начните бесплатно: сначала соберите страницу, потом подключите запись, оплату и CRM по мере роста.')}
+            </p>
           </div>
-          <h2 className="font-display max-w-2xl text-3xl font-semibold leading-tight md:text-5xl">
-          {t('landing.short.final.title', 'Страница может быть готова уже сегодня')}
-          </h2>
-          <p className="mt-4 max-w-xl text-base leading-7 text-white">
-            {t('landing.short.final.subtitle', 'Начните бесплатно: сначала соберите страницу, потом подключите запись, оплату и CRM по мере роста.')}
-          </p>
-
+          <Button
+            onClick={onStart}
+            className="h-12 w-full rounded-xl bg-white px-6 text-base font-bold text-brand-ink hover:bg-brand-canvas md:h-14 md:w-auto"
+          >
+            {t('landing.short.final.cta', 'Создать страницу')}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </div>
-        <Button onClick={onStart} className="h-12 rounded-md bg-brand-ink px-6 text-base font-semibold text-white hover:bg-black md:h-14">
-          {t('landing.short.final.cta', 'Создать страницу')}
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
       </div>
     </section>
   );
 }
+
 
 function SimpleFooter() {
   const { t } = useTranslation();
