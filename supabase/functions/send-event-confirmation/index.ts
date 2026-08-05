@@ -148,9 +148,9 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { registrationId, eventId, ownerId }: EventConfirmationRequest = await req.json();
+    const { registrationId, eventId }: EventConfirmationRequest = await req.json();
 
-    if (!registrationId || !eventId || !ownerId) {
+    if (!registrationId || !eventId) {
       throw new Error("Missing required fields");
     }
 
@@ -158,6 +158,23 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Fetch event first — the owner is ALWAYS derived server-side from the event row,
+    // never taken from the request body (prevents redirecting attendee PII to an attacker).
+    const { data: event, error: eventError } = await supabase
+      .from("events")
+      .select("title_i18n_json, start_at, location_value, owner_id")
+      .eq("id", eventId)
+      .single();
+
+    if (eventError || !event) {
+      throw new Error("Event not found");
+    }
+
+    const ownerId = (event as EventData & { owner_id: string }).owner_id;
+    if (!ownerId) {
+      throw new Error("Event owner not found");
+    }
 
     // Check if owner is Pro
     const { data: ownerProfile } = await supabase
@@ -178,26 +195,18 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Fetch event and registration data
-    const { data: event, error: eventError } = await supabase
-      .from("events")
-      .select("title_i18n_json, start_at, location_value")
-      .eq("id", eventId)
-      .single();
-
-    if (eventError || !event) {
-      throw new Error("Event not found");
-    }
-
+    // Registration must belong to the requested event (prevents cross-event IDOR)
     const { data: registration, error: regError } = await supabase
       .from("event_registrations")
       .select("attendee_name, attendee_email, attendee_phone, answers_json, event_tickets(ticket_code)")
       .eq("id", registrationId)
+      .eq("event_id", eventId)
       .single();
 
     if (regError || !registration) {
       throw new Error("Registration not found");
     }
+
 
     const eventData = event as EventData;
     const regData = registration as unknown as RegistrationData;
