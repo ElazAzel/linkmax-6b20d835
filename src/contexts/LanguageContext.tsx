@@ -8,6 +8,8 @@ import { isI18nText, isMultilingualString } from '@/lib/i18n-helpers';
 import { storage } from '@/lib/storage';
 import { TranslatedBlock } from '@/types/language-context';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
+import { queueTranslation } from '@/lib/i18n/translation-queue';
+
 
 // Extended language names for translation
 const LANGUAGE_NAMES: Record<string, string> = {
@@ -144,7 +146,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   ): Promise<Record<string, string> | null> => {
     if (!text?.trim() || targetLanguages.length === 0) return null;
 
-    try {
+    return queueTranslation(text, sourceLanguage, targetLanguages, async () => {
       const { data, error } = await supabase.functions.invoke('translate-content', {
         body: {
           text,
@@ -154,12 +156,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (error) throw error;
-      return data.translations || null;
-    } catch (error) {
-      console.error('Translation error:', error);
-      return null;
-    }
+      return (data?.translations as Record<string, string> | undefined) ?? null;
+    });
   };
+
 
   // Whitelist of field names that contain user-facing text and should be translated
   // even when stored as plain strings (legacy data not yet migrated to I18nText).

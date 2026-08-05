@@ -479,6 +479,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://lnkmx.my/elazart</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lnkmx.my/demo_nails</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
@@ -576,12 +582,6 @@
   </url>
   <url>
     <loc>https://lnkmx.my/realty_astana</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/elazart</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -785,19 +785,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lnkmx.my/torossyan.david</loc>
-    <lastmod>2026-06-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/iss.kanat</loc>
-    <lastmod>2026-06-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/d.potseluiko</loc>
+    <loc>https://lnkmx.my/beegin.pro</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -809,7 +797,19 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lnkmx.my/beegin.pro</loc>
+    <loc>https://lnkmx.my/torossyan.david</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/d.potseluiko</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lnkmx.my/iss.kanat</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
