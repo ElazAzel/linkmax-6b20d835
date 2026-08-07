@@ -4,6 +4,7 @@ import React from 'https://esm.sh/react@18.2.0?target=deno';
 import { renderAsync } from 'https://esm.sh/@react-email/render@0.0.7?target=deno';
 import { WelcomeEmail } from '../_shared/emails/WelcomeEmail.tsx';
 import { LeadNotification } from '../_shared/emails/LeadNotification.tsx';
+import { requireCronAuth } from '../_shared/cron-auth.ts';
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -23,6 +24,12 @@ serve(async (req) => {
     if (req.method === "OPTIONS") {
         return new Response("ok", { headers: corsHeaders });
     }
+
+    // SECURITY: internal-only endpoint. Only pg_cron (X-Cron-Secret) or trusted
+    // server-side callers using the service-role key may send email, otherwise
+    // anyone could send spam/phishing from the verified domain.
+    const authError = requireCronAuth(req, corsHeaders);
+    if (authError) return authError;
 
     try {
         const { to, subject, template, data } = await req.json() as EmailRequest;
