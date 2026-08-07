@@ -50,7 +50,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
     try {
       // Save newsletter subscription using typed client
-      const { error: subscriptionError } = await supabase
+      const { data: subscriptionRow, error: subscriptionError } = await supabase
         .from('newsletter_subscriptions')
         .insert({
           email: trimmedEmail,
@@ -58,7 +58,9 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
           block_id: block.id,
           owner_id: pageOwnerId,
           status: 'active',
-        });
+        })
+        .select('id')
+        .maybeSingle();
 
       if (subscriptionError) {
         // Check if already subscribed (unique constraint violation)
@@ -95,18 +97,19 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
       // Send Telegram notification to page owner
       try {
-        await supabase.functions.invoke('send-social-notification', {
-          body: {
-            type: 'newsletter_subscribed',
-            recipientId: pageOwnerId,
-            data: {
-              subscriberEmail: trimmedEmail,
+        if (subscriptionRow?.id) {
+          await supabase.functions.invoke('send-social-notification', {
+            body: {
+              type: 'newsletter_subscribed',
+              recipientId: pageOwnerId,
+              subscriptionId: subscriptionRow.id,
             },
-          },
-        });
+          });
+        }
       } catch (notifError) {
         console.warn('Newsletter notification failed:', notifError);
       }
+
 
       toast.success(t('success.subscribed', 'Successfully subscribed!'));
       setIsSubscribed(true);

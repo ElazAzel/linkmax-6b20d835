@@ -163,6 +163,7 @@ export class CrmService {
         body: {
           type: 'new_chatbot_lead',
           recipientId: lead.user_id,
+          leadId: lead.id,
           data: {
             name: lead.name,
             phone: lead.phone || '—',
