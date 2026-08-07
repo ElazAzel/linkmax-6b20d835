@@ -16,7 +16,6 @@ const corsHeaders = {
 interface EventConfirmationRequest {
   registrationId: string;
   eventId: string;
-  ownerId: string;
 }
 
 interface EventData {
@@ -148,9 +147,9 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { registrationId, eventId, ownerId }: EventConfirmationRequest = await req.json();
+    const { registrationId, eventId }: EventConfirmationRequest = await req.json();
 
-    if (!registrationId || !eventId || !ownerId) {
+    if (!registrationId || !eventId) {
       throw new Error("Missing required fields");
     }
 
@@ -158,6 +157,36 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // SECURITY: never trust a client-supplied ownerId. Resolve the registration
+    // first, ensure it belongs to the supplied event, and derive the organizer
+    // from the event row itself. This prevents IDOR-based PII harvesting.
+    const { data: regRow, error: regRowError } = await supabase
+      .from("event_registrations")
+      .select("id, event_id, owner_id")
+      .eq("id", registrationId)
+      .maybeSingle();
+
+    if (regRowError || !regRow || regRow.event_id !== eventId) {
+      return new Response(
+        JSON.stringify({ success: false, error: "not_found" }),
+        { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const { data: eventOwnerRow } = await supabase
+      .from("events")
+      .select("owner_id")
+      .eq("id", eventId)
+      .maybeSingle();
+
+    const ownerId = eventOwnerRow?.owner_id as string | undefined;
+    if (!ownerId || (regRow.owner_id && regRow.owner_id !== ownerId)) {
+      return new Response(
+        JSON.stringify({ success: false, error: "not_found" }),
+        { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
 
     // Check if owner is Pro
     const { data: ownerProfile } = await supabase
