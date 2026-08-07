@@ -180,6 +180,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                     pageId={pageId}
                     isOwnerPremium={isOwnerPremium}
                     ownerTier={ownerTier}
+                    containerStyled={!isTransparent}
                   />
                 </div>
               </motion.div>
