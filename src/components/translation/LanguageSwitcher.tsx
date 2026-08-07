@@ -21,7 +21,7 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils/utils';
-import { LocaleCode } from '@/i18n/config';
+import { LocaleCode, SUPPORTED_LANGUAGES } from '@/i18n/config';
 import { useOptionalLanguage } from '@/contexts/LanguageContext';
 import { TranslationLanguageSelector, getLanguageInfo } from '@/components/translation/TranslationLanguageSelector';
 
@@ -38,7 +38,7 @@ const ALL_LANGUAGES: { code: LocaleCode; name: string; flag: string }[] = [
   { code: 'az', name: 'Azərbaycan', flag: '🇦🇿' },
   { code: 'ky', name: 'Кыргызча', flag: '🇰🇬' },
   { code: 'tg', name: 'Тоҷикӣ', flag: '🇹🇯' },
-  { code: 'hy', name: 'Հայdelays', flag: '🇦🇲' },
+  { code: 'hy', name: 'Հայերեն', flag: '🇦🇲' },
   { code: 'ka', name: 'ქართული', flag: '🇬🇪' },
   // European languages
   { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
@@ -178,30 +178,47 @@ export function LanguageSwitcher({
 
   const currentLanguage = ALL_LANGUAGES.find(l => l.code === i18n.language) || ALL_LANGUAGES[0];
 
-  const renderLanguageItem = (lang: { code: LocaleCode; name: string; flag: string }) => (
-    <DropdownMenuItem
-      key={lang.code}
-      onClick={() => handleLanguageChange(lang.code)}
-      data-testid={`language-option-${lang.code}`}
-      className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer",
-        "transition-all duration-200",
-        "hover:bg-primary/10",
-        i18n.language === lang.code && "bg-primary/5"
-      )}
-    >
-      <span className="text-lg">{lang.flag}</span>
-      <span className={cn(
-        "flex-1 text-sm font-medium",
-        i18n.language === lang.code ? "text-foreground" : "text-muted-foreground"
-      )}>
-        {lang.name}
-      </span>
-      {i18n.language === lang.code && (
-        <Check className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" />
-      )}
-    </DropdownMenuItem>
-  );
+  const isAvailable = (code: LocaleCode) => (SUPPORTED_LANGUAGES as readonly string[]).includes(code as string);
+
+  const renderLanguageItem = (lang: { code: LocaleCode; name: string; flag: string }) => {
+    const available = isAvailable(lang.code);
+    return (
+      <DropdownMenuItem
+        key={lang.code}
+        disabled={!available}
+        onSelect={(e) => {
+          if (!available) {
+            e.preventDefault();
+            return;
+          }
+          handleLanguageChange(lang.code);
+        }}
+        data-testid={`language-option-${lang.code}`}
+        className={cn(
+          "flex items-center gap-3 px-3 py-2.5 rounded-lg",
+          "transition-all duration-200",
+          available ? "cursor-pointer hover:bg-primary/10" : "cursor-not-allowed opacity-50",
+          available && i18n.language === lang.code && "bg-primary/5"
+        )}
+      >
+        <span className="text-lg">{lang.flag}</span>
+        <span className={cn(
+          "flex-1 text-sm font-medium",
+          i18n.language === lang.code ? "text-foreground" : "text-muted-foreground"
+        )}>
+          {lang.name}
+        </span>
+        {available && i18n.language === lang.code && (
+          <Check className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" />
+        )}
+        {!available && (
+          <Badge variant="secondary" className="text-[10px] h-4 px-1.5">
+            {t('language.comingSoon', 'Скоро')}
+          </Badge>
+        )}
+      </DropdownMenuItem>
+    );
+  };
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={(open) => {
