@@ -58,7 +58,9 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
           block_id: block.id,
           owner_id: pageOwnerId,
           status: 'active',
-        });
+        })
+        .select('id')
+        .maybeSingle();
 
       if (subscriptionError) {
         // Check if already subscribed (unique constraint violation)
