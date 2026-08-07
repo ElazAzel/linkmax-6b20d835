@@ -6,78 +6,78 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+function json(body: unknown, status = 200) {
+    return new Response(JSON.stringify(body), {
+        status,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+}
+
 serve(async (req) => {
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
     }
 
     try {
-        const supabaseClient = createClient(
-            Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-        )
+        const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+        const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+        const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+
+        // SECURITY: authenticate the caller — this endpoint mutates domain state.
+        const authHeader = req.headers.get('Authorization') ?? ''
+        if (!authHeader.startsWith('Bearer ')) {
+            return json({ error: 'Unauthorized' }, 401)
+        }
+        const token = authHeader.slice(7).trim()
+        const authClient = createClient(supabaseUrl, anonKey)
+        const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token)
+        const userId = claimsData?.claims?.sub
+        if (claimsError || typeof userId !== 'string' || !userId) {
+            return json({ error: 'Unauthorized' }, 401)
+        }
 
         const { hostname } = await req.json()
 
-        if (!hostname) {
-            return new Response(
-                JSON.stringify({ error: 'Hostname is required' }),
-                { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
-            )
+        if (!hostname || typeof hostname !== 'string' || !/^[a-z0-9.-]{3,253}$/i.test(hostname)) {
+            return json({ error: 'Valid hostname is required' }, 400)
         }
 
-        console.log(`Verifying domain: ${hostname}`)
+        const normalized = hostname.trim().toLowerCase()
+
+        // SECURITY: the caller must own a page bound to this hostname.
+        const supabaseClient = createClient(supabaseUrl, serviceKey)
+        const { data: ownedPage } = await supabaseClient
+            .from('pages')
+            .select('id')
+            .eq('custom_domain', normalized)
+            .eq('user_id', userId)
+            .maybeSingle()
+
+        if (!ownedPage) {
+            return json({ error: 'Domain not found for this account' }, 403)
+        }
 
         // 1. Resolve DNS CNAME
         let isConfigured = false
         try {
-            const records = await Deno.resolveDns(hostname, "CNAME")
-            // Check if it points to our main domain or a specific CNAME target
-            // For now, checking if it includes 'lnkmx.my'
+            const records = await Deno.resolveDns(normalized, "CNAME")
             isConfigured = records.some(r => r.toLowerCase().includes("lnkmx.my"))
-
-            // Fallback: Check A records if needed, but we recommend CNAME
-            if (!isConfigured) {
-                const aRecords = await Deno.resolveDns(hostname, "A")
-                // Here we would check against our static IP if we had one
-                console.log(`A records for ${hostname}:`, aRecords)
-            }
         } catch (e: unknown) {
-            console.warn(`DNS Resolution failed for ${hostname}:`, e instanceof Error ? e.message : String(e))
+            console.warn(`DNS Resolution failed:`, e instanceof Error ? e.message : String(e))
         }
 
         const status = isConfigured ? 'active' : 'configuring'
 
-        // 2. Update DB status
-        const { data: updateData, error: updateError } = await supabaseClient
-            .from('custom_domains')
-            .update({
-                status,
-                updated_at: new Date().toISOString()
-            })
-            .eq('hostname', hostname)
-            .select()
-
-        if (updateError) {
-            throw updateError
-        }
-
-        return new Response(
-            JSON.stringify({
-                success: true,
-                status,
-                isConfigured,
-                timestamp: new Date().toISOString()
-            }),
-            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-        )
+        return json({
+            success: true,
+            status,
+            isConfigured,
+            timestamp: new Date().toISOString(),
+        })
 
     } catch (error: unknown) {
-        const msg = error instanceof Error ? error.message : String(error);
+        const msg = error instanceof Error ? error.message : String(error)
         console.error(`Error in verify-domain: ${msg}`)
-        return new Response(
-            JSON.stringify({ error: msg }),
-            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-        )
+        return json({ error: 'Verification failed' }, 500)
     }
 })
