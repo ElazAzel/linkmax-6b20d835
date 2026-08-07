@@ -31,6 +31,8 @@ interface BlockRendererProps {
   pageId?: string;
   isOwnerPremium?: boolean;
   ownerTier?: PremiumTier;
+  /** Parent (e.g. bento grid card) already painted bg/border/shadow/radius — skip container styles here */
+  containerStyled?: boolean;
 }
 
 const BlockSkeleton = () => (
