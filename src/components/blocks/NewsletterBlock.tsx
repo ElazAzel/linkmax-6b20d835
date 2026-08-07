@@ -50,7 +50,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
     try {
       // Save newsletter subscription using typed client
-      const { error: subscriptionError } = await supabase
+      const { data: subscriptionRow, error: subscriptionError } = await supabase
         .from('newsletter_subscriptions')
         .insert({
           email: trimmedEmail,
