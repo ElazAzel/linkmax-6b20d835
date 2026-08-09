@@ -60,11 +60,12 @@ export default function BlogPost() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Helmet>
-        <title>{post.title} — LinkMAX Blog</title>
-        <meta name="description" content={post.description} />
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
         <link rel="canonical" href={url} />
         <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.description} />
+        <meta property="og:description" content={seoDescription} />
+
         <meta property="og:url" content={url} />
         <meta property="og:type" content="article" />
         <meta property="article:published_time" content={post.publishedAt} />
