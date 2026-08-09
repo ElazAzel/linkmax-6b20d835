@@ -22,6 +22,7 @@ interface NotificationRequest {
   pageId?: string;
   leadId?: string;
   subscriptionId?: string;
+  subscriberEmail?: string;
   data?: {
     days?: number;
     challengeTitle?: string;
