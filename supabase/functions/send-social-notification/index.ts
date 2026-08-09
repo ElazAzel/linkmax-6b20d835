@@ -22,6 +22,7 @@ interface NotificationRequest {
   pageId?: string;
   leadId?: string;
   subscriptionId?: string;
+  subscriberEmail?: string;
   data?: {
     days?: number;
     challengeTitle?: string;
@@ -162,12 +163,27 @@ serve(async (req: Request) => {
       }
       case 'newsletter_subscribed': {
         // Public visitors can subscribe, so authorization is based on the
-        // subscription row actually existing for this owner.
-        if (!body.subscriptionId) return json({ success: false, error: 'forbidden' }, 403);
-        const { data: sub } = await supabase
+        // subscription row actually existing for this owner. Anonymous
+        // inserts cannot read back their own row (owner-only SELECT policy),
+        // so allow resolving it by page_id + email as well.
+        let query = supabase
           .from('newsletter_subscriptions')
           .select('id, owner_id, page_id')
-          .eq('id', body.subscriptionId)
+          .eq('owner_id', recipientId);
+
+        if (body.subscriptionId) {
+          query = query.eq('id', body.subscriptionId);
+        } else if (body.pageId && body.subscriberEmail) {
+          query = query
+            .eq('page_id', body.pageId)
+            .eq('email', body.subscriberEmail.trim().toLowerCase());
+        } else {
+          return json({ success: false, error: 'forbidden' }, 403);
+        }
+
+        const { data: sub } = await query
+          .order('created_at', { ascending: false })
+          .limit(1)
           .maybeSingle();
         if (!sub || sub.owner_id !== recipientId) {
           return json({ success: false, error: 'forbidden' }, 403);
