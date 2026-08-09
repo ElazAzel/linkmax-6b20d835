@@ -579,8 +579,9 @@ export const Auth = memo(function Auth() {
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold font-[var(--font-heading)] text-white animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
-              {t('auth.title', 'Добро пожаловать в LinkMAX')}
+              {t('auth.h1', 'Вход и регистрация в LinkMAX')}
             </h1>
+
             <p className="text-sm sm:text-base text-white/60 mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
               {t('auth.subtitle', 'AI-страница для бизнеса за 2 минуты')}
             </p>
