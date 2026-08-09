@@ -13,7 +13,12 @@ export interface BlogPost {
   slug: string;
   title: string;
   description: string;
+  /** Optional SEO title override (keep under 60 chars incl. brand suffix) */
+  metaTitle?: string;
+  /** Optional SEO description override (keep under 160 chars) */
+  metaDescription?: string;
   publishedAt: string; // ISO date
+
   updatedAt?: string;
   readingMinutes: number;
   tags: string[];
