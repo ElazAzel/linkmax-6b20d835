@@ -97,15 +97,17 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
 
       // Send Telegram notification to page owner
       try {
-        if (subscriptionRow?.id) {
-          await supabase.functions.invoke('send-social-notification', {
-            body: {
-              type: 'newsletter_subscribed',
-              recipientId: pageOwnerId,
-              subscriptionId: subscriptionRow.id,
-            },
-          });
-        }
+        await supabase.functions.invoke('send-social-notification', {
+          body: {
+            type: 'newsletter_subscribed',
+            recipientId: pageOwnerId,
+            // Anonymous visitors cannot read back the inserted row, so fall
+            // back to page + email lookup on the server.
+            subscriptionId: subscriptionRow?.id ?? undefined,
+            pageId: pageId,
+            subscriberEmail: trimmedEmail,
+          },
+        });
       } catch (notifError) {
         console.warn('Newsletter notification failed:', notifError);
       }
