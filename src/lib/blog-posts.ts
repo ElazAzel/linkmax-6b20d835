@@ -13,7 +13,12 @@ export interface BlogPost {
   slug: string;
   title: string;
   description: string;
+  /** Optional SEO title override (keep under 60 chars incl. brand suffix) */
+  metaTitle?: string;
+  /** Optional SEO description override (keep under 160 chars) */
+  metaDescription?: string;
   publishedAt: string; // ISO date
+
   updatedAt?: string;
   readingMinutes: number;
   tags: string[];
@@ -262,6 +267,9 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'chto-takoe-link-in-bio-i-zachem-on-nuzhen',
     title: 'Что такое link-in-bio и зачем он нужен в 2026 году?',
     description: 'Простое объяснение: что такое link-in-bio, чем отличается от сайта-визитки, и когда его выбрать вместо Linktree или Taplink.',
+    metaTitle: 'Link in bio — что это значит и перевод',
+    metaDescription: 'Link in bio — что это значит: перевод «ссылка в описании профиля», простыми словами, зачем нужна и как сделать её бесплатно за 2 минуты.',
+
     publishedAt: '2026-05-25',
     readingMinutes: 5,
     tags: ['link-in-bio', 'basics', 'aeo'],

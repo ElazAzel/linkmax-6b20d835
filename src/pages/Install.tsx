@@ -114,7 +114,8 @@ export default function Install() {
         </div>
 
         {/* Features */}
-        <div className="grid sm:grid-cols-3 gap-4">
+        <section className="grid sm:grid-cols-3 gap-4">
+          <h2 className="sr-only">{t('install.features.heading', 'App features')}</h2>
           {features.map((feature) => (
             <Card key={feature.title} className="p-4 text-center">
               <feature.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
@@ -122,7 +123,8 @@ export default function Install() {
               <p className="text-xs text-muted-foreground">{feature.description}</p>
             </Card>
           ))}
-        </div>
+        </section>
+
 
         {/* Install Card */}
         <Card className="p-6">
