@@ -57,7 +57,13 @@ export default function BlogPost() {
     },
   };
 
+  const suffix = ' — LinkMAX';
+  const baseTitle = post.metaTitle || post.title;
+  const seoTitle = baseTitle.length + suffix.length <= 60 ? `${baseTitle}${suffix}` : baseTitle.slice(0, 60);
+  const seoDescription = post.metaDescription || post.description;
+
   return (
+
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Helmet>
         <title>{seoTitle}</title>
