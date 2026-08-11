@@ -21,32 +21,31 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils/utils';
-import { LocaleCode } from '@/i18n/config';
+import { LocaleCode, SUPPORTED_LANGUAGES } from '@/i18n/config';
 import { useOptionalLanguage } from '@/contexts/LanguageContext';
 import { TranslationLanguageSelector, getLanguageInfo } from '@/components/translation/TranslationLanguageSelector';
 
 // Extended language list - covers major world languages
-// Greyed out entries are "coming soon" — no locale file yet
-const ALL_LANGUAGES: { code: LocaleCode; name: string; flag: string; available?: boolean }[] = [
+const ALL_LANGUAGES: { code: LocaleCode; name: string; flag: string }[] = [
   // Primary languages (shown first)
-  { code: 'ru', name: 'Русский', flag: '🇷🇺', available: true },
-  { code: 'en', name: 'English', flag: '🇺🇸', available: true },
-  { code: 'kk', name: 'Қазақша', flag: '🇰🇿', available: true },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'kk', name: 'Қазақша', flag: '🇰🇿' },
   // CIS & neighboring countries
-  { code: 'uk', name: 'Українська', flag: '🇺🇦', available: true },
-  { code: 'be', name: 'Беларуская', flag: '🇧🇾', available: true },
-  { code: 'uz', name: "O'zbekcha", flag: '🇺🇿', available: true },
+  { code: 'uk', name: 'Українська', flag: '🇺🇦' },
+  { code: 'be', name: 'Беларуская', flag: '🇧🇾' },
+  { code: 'uz', name: "O'zbekcha", flag: '🇺🇿' },
   { code: 'az', name: 'Azərbaycan', flag: '🇦🇿' },
   { code: 'ky', name: 'Кыргызча', flag: '🇰🇬' },
   { code: 'tg', name: 'Тоҷикӣ', flag: '🇹🇯' },
   { code: 'hy', name: 'Հայերեն', flag: '🇦🇲' },
   { code: 'ka', name: 'ქართული', flag: '🇬🇪' },
   // European languages
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪', available: true },
-  { code: 'fr', name: 'Français', flag: '🇫🇷', available: true },
-  { code: 'es', name: 'Español', flag: '🇪🇸', available: true },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹', available: true },
-  { code: 'pt', name: 'Português', flag: '🇵🇹', available: true },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹' },
   { code: 'pl', name: 'Polski', flag: '🇵🇱' },
   { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
   { code: 'cs', name: 'Čeština', flag: '🇨🇿' },
@@ -65,18 +64,18 @@ const ALL_LANGUAGES: { code: LocaleCode; name: string; flag: string; available?:
   { code: 'lv', name: 'Latviešu', flag: '🇱🇻' },
   { code: 'lt', name: 'Lietuvių', flag: '🇱🇹' },
   // Turkish
-  { code: 'tr', name: 'Türkçe', flag: '🇹🇷', available: true },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
   // Asian languages
-  { code: 'zh', name: '中文', flag: '🇨🇳', available: true },
-  { code: 'ja', name: '日本語', flag: '🇯🇵', available: true },
-  { code: 'ko', name: '한국어', flag: '🇰🇷', available: true },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' },
   { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
   { code: 'th', name: 'ไทย', flag: '🇹🇭' },
   { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
   { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
   { code: 'ms', name: 'Bahasa Melayu', flag: '🇲🇾' },
   // Middle Eastern
-  { code: 'ar', name: 'العربية', flag: '🇸🇦', available: true },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
   { code: 'he', name: 'עברית', flag: '🇮🇱' },
 ];
 
@@ -133,7 +132,7 @@ export function LanguageSwitcher({
   }, [browserLanguage, languageContext]);
 
   // Filter and organize languages
-  const { visibleLanguages, moreLanguages, filteredLanguages, availableLanguages, comingSoonLanguages } = useMemo(() => {
+  const { visibleLanguages, moreLanguages, filteredLanguages } = useMemo(() => {
     // Prioritize browser language in visible list
     let visibleCodes = [...DEFAULT_VISIBLE_CODES];
     if (browserLanguage && !visibleCodes.includes(browserLanguage)) {
@@ -152,10 +151,7 @@ export function LanguageSwitcher({
       )
       : [];
 
-    const availableLanguages = ALL_LANGUAGES.filter(l => l.available);
-    const comingSoonLanguages = ALL_LANGUAGES.filter(l => !l.available);
-
-    return { visibleLanguages: visible, moreLanguages: more, filteredLanguages: filtered, availableLanguages, comingSoonLanguages };
+    return { visibleLanguages: visible, moreLanguages: more, filteredLanguages: filtered };
   }, [searchQuery, browserLanguage]);
 
   const handleLanguageChange = (langCode: LocaleCode) => {
@@ -182,19 +178,27 @@ export function LanguageSwitcher({
 
   const currentLanguage = ALL_LANGUAGES.find(l => l.code === i18n.language) || ALL_LANGUAGES[0];
 
-  const renderLanguageItem = (lang: { code: LocaleCode; name: string; flag: string; available?: boolean }) => {
-    const isAvailable = lang.available !== false;
+  const isAvailable = (code: LocaleCode) => (SUPPORTED_LANGUAGES as readonly string[]).includes(code as string);
+
+  const renderLanguageItem = (lang: { code: LocaleCode; name: string; flag: string }) => {
+    const available = isAvailable(lang.code);
     return (
       <DropdownMenuItem
         key={lang.code}
-        onClick={() => isAvailable && handleLanguageChange(lang.code)}
-        disabled={!isAvailable}
+        disabled={!available}
+        onSelect={(e) => {
+          if (!available) {
+            e.preventDefault();
+            return;
+          }
+          handleLanguageChange(lang.code);
+        }}
         data-testid={`language-option-${lang.code}`}
         className={cn(
           "flex items-center gap-3 px-3 py-2.5 rounded-lg",
-          isAvailable ? "cursor-pointer hover:bg-primary/10" : "cursor-not-allowed opacity-50",
           "transition-all duration-200",
-          i18n.language === lang.code && "bg-primary/5"
+          available ? "cursor-pointer hover:bg-primary/10" : "cursor-not-allowed opacity-50",
+          available && i18n.language === lang.code && "bg-primary/5"
         )}
       >
         <span className="text-lg">{lang.flag}</span>
@@ -204,13 +208,13 @@ export function LanguageSwitcher({
         )}>
           {lang.name}
         </span>
-        {i18n.language === lang.code && (
+        {available && i18n.language === lang.code && (
           <Check className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" />
         )}
-        {!isAvailable && (
-          <span className="text-[10px] text-muted-foreground/50 italic">
+        {!available && (
+          <Badge variant="secondary" className="text-[10px] h-4 px-1.5">
             {t('language.comingSoon', 'Скоро')}
-          </span>
+          </Badge>
         )}
       </DropdownMenuItem>
     );
@@ -300,48 +304,39 @@ export function LanguageSwitcher({
               {/* Primary languages */}
               {visibleLanguages.map(renderLanguageItem)}
 
-              {/* All available languages */}
-              {comingSoonLanguages.length > 0 && (
+              {/* More languages */}
+              {moreLanguages.length > 0 && (
                 <>
                   <DropdownMenuSeparator className="my-1" />
-                  <div className="px-3 py-1.5 text-xs text-muted-foreground font-medium">
-                    {t('language.availableLanguages', 'Доступные языки')}
-                  </div>
-                  {availableLanguages.filter(l => !DEFAULT_VISIBLE_CODES.includes(l.code)).map(renderLanguageItem)}
-                </>
-              )}
 
-              {/* Coming soon languages */}
-              {showMoreLanguages && comingSoonLanguages.length > 0 && (
-                <>
-                  <DropdownMenuSeparator className="my-1" />
-                  <div className="px-3 py-1.5 text-xs text-muted-foreground font-medium">
-                    {t('language.comingSoonLanguages', 'Скоро будут доступны')}
-                  </div>
-                  {comingSoonLanguages.map(renderLanguageItem)}
-                </>
-              )}
-
-              {/* Toggle coming-soon languages */}
-              {comingSoonLanguages.length > 0 && (
-                <DropdownMenuItem
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowMoreLanguages(!showMoreLanguages);
-                  }}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer",
-                    "transition-all duration-200",
-                    "hover:bg-muted/50"
+                  {showMoreLanguages ? (
+                    // Show all languages
+                    <>
+                      <div className="px-3 py-1.5 text-xs text-muted-foreground font-medium">
+                        {t('language.moreLanguages', 'Другие языки')}
+                      </div>
+                      {moreLanguages.map(renderLanguageItem)}
+                    </>
+                  ) : (
+                    // Show "More languages" button
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowMoreLanguages(true);
+                      }}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer",
+                        "transition-all duration-200",
+                        "hover:bg-muted/50"
+                      )}
+                    >
+                      <Plus className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        {t('language.showMoreLanguages', 'Ещё {{count}} языков', { count: moreLanguages.length })}
+                      </span>
+                    </DropdownMenuItem>
                   )}
-                >
-                  <Plus className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
-                    {showMoreLanguages
-                      ? t('language.hideComingSoon', 'Скрыть')
-                      : t('language.showMoreLanguages', 'Ещё {{count}} языков', { count: comingSoonLanguages.length })}
-                  </span>
-                </DropdownMenuItem>
+                </>
               )}
             </>
           )}

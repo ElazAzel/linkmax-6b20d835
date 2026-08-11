@@ -11,6 +11,7 @@ import Palette from 'lucide-react/dist/esm/icons/palette';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import ImageIcon from 'lucide-react/dist/esm/icons/image';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Type from 'lucide-react/dist/esm/icons/type';
 import Square from 'lucide-react/dist/esm/icons/square';
 import WandSparkles from 'lucide-react/dist/esm/icons/wand-sparkles';
@@ -19,10 +20,10 @@ import Upload from 'lucide-react/dist/esm/icons/upload';
 import TriangleAlert from 'lucide-react/dist/esm/icons/triangle-alert';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Slider } from '@/components/ui/slider';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
@@ -31,7 +32,6 @@ import { toast } from 'sonner';
 import type { PageTheme, PageBackground, BlockShape, BlockShadow, BlockHover, DividerStyle } from '@/types/page';
 import { getContrastForeground, getContrastRatio } from '@/lib/appearance/style-utils';
 import { createThemeTransfer, parseThemeTransfer } from '@/lib/appearance/theme-transfer';
-import { isPageThemeV2, previewPageThemeV2 } from '@/lib/appearance/page-theme-v2';
 import {
   THEME_PRESETS,
   GRADIENT_PRESETS,
@@ -167,8 +167,8 @@ export const ThemePanel = memo(function ThemePanel({
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-[320px]">
-        <SheetHeader className="sticky top-0 z-10 border-b border-border bg-background p-4">
+      <SheetContent side="right" className="w-full sm:max-w-md p-0 overflow-y-auto">
+        <SheetHeader className="p-5 border-b border-border/50 sticky top-0 bg-background/95 backdrop-blur-xl z-10">
           <div className="flex items-center justify-between gap-2">
             <SheetTitle className="flex items-center gap-2">
               <Palette className="h-5 w-5 text-primary" />
@@ -220,30 +220,8 @@ export const ThemePanel = memo(function ThemePanel({
           </div>
         </SheetHeader>
 
-        {!isPageThemeV2(currentTheme) && (
-          <div className="mx-4 mt-4 border border-[#2F52E0] bg-[#2F52E0]/5 p-3">
-            <div className="flex items-start gap-2">
-              <WandSparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#2F52E0]" />
-              <div className="space-y-2">
-                <p className="text-sm font-semibold">{t('themes.v2.title', 'Гибкая тема v2')}</p>
-                <p className="text-xs leading-5 text-muted-foreground">
-                  {t('themes.v2.description', 'Семантические цвета, типографика, отступы и motion. Текущий вид сохранится до применения.')}
-                </p>
-                <Button
-                  type="button"
-                  size="sm"
-                  className="h-9 rounded-md"
-                  onClick={() => onThemeChange(previewPageThemeV2(currentTheme))}
-                >
-                  {t('themes.v2.apply', 'Применить v2')}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mx-4 my-4 grid w-auto grid-cols-4">
+          <TabsList className="w-full grid grid-cols-4 m-4 mx-5" style={{ width: 'calc(100% - 40px)' }}>
             <TabsTrigger value="themes" className="gap-1.5 text-xs"><Palette className="h-3.5 w-3.5" />{t('themes.themes', 'Темы')}</TabsTrigger>
             <TabsTrigger value="background" className="gap-1.5 text-xs"><ImageIcon className="h-3.5 w-3.5" />{t('themes.background', 'Фон')}</TabsTrigger>
             <TabsTrigger value="style" className="gap-1.5 text-xs"><Type className="h-3.5 w-3.5" />{t('themes.style', 'Стиль')}</TabsTrigger>
@@ -412,7 +390,7 @@ export const ThemePanel = memo(function ThemePanel({
           <TabsContent value="style" className="p-5 pt-0 space-y-6">
             {accentContrast !== null && accentContrast < 7 && (
               <div className="flex gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-foreground">
-                <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
+                <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
                 <span>{t('themes.contrastWarning', 'Контраст основного акцента ниже усиленного уровня AAA для обычного текста.')}</span>
               </div>
             )}
@@ -601,63 +579,6 @@ export const ThemePanel = memo(function ThemePanel({
               )}
             />
 
-
-            <div className="space-y-4 rounded-2xl border border-border/40 p-4">
-              <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t('themes.layout', 'Макет страницы')}
-              </Label>
-              <ThemeSlider
-                label={t('themes.contentWidth', 'Ширина контента')}
-                value={currentTheme.contentWidth}
-                fallback={672}
-                min={420}
-                max={1100}
-                step={4}
-                suffix="px"
-                onChange={(v) => setBlockField('contentWidth', v)}
-              />
-              <ThemeSlider
-                label={t('themes.blockGap', 'Расстояние между блоками')}
-                value={currentTheme.blockGap}
-                fallback={16}
-                min={4}
-                max={40}
-                step={1}
-                suffix="px"
-                onChange={(v) => setBlockField('blockGap', v)}
-              />
-              <ThemeSlider
-                label={t('themes.pagePaddingX', 'Боковые отступы')}
-                value={currentTheme.pagePaddingX}
-                fallback={12}
-                min={0}
-                max={48}
-                step={1}
-                suffix="px"
-                onChange={(v) => setBlockField('pagePaddingX', v)}
-              />
-              <ThemeSlider
-                label={t('themes.blockRadiusPx', 'Скругление блоков')}
-                value={currentTheme.blockRadiusPx}
-                fallback={16}
-                min={0}
-                max={48}
-                step={1}
-                suffix="px"
-                onChange={(v) => setBlockField('blockRadiusPx', v)}
-              />
-              <ThemeSlider
-                label={t('themes.textScale', 'Масштаб текста')}
-                value={currentTheme.textScale}
-                fallback={1}
-                min={0.9}
-                max={1.3}
-                step={0.01}
-                suffix="×"
-                onChange={(v) => setBlockField('textScale', v)}
-              />
-            </div>
-
             <Card className="p-4 bg-muted/20 border-border/50">
               <div className="flex items-start gap-3">
                 <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -725,53 +646,6 @@ interface PresetGridProps<T extends { id: string; name: string; isPremium: boole
   renderPreview: (id: string) => React.ReactNode;
 }
 
-function ThemeSlider({
-  label,
-  value,
-  fallback,
-  min,
-  max,
-  step,
-  suffix,
-  onChange,
-}: {
-  label: string;
-  value: number | undefined;
-  fallback: number;
-  min: number;
-  max: number;
-  step: number;
-  suffix?: string;
-  onChange: (value: number | undefined) => void;
-}) {
-  const current = value ?? fallback;
-  const isSet = typeof value === 'number';
-  return (
-    <div className="space-y-1.5">
-      <div className="flex items-center justify-between gap-2">
-        <Label className="text-xs text-muted-foreground font-medium">{label}</Label>
-        <div className="flex items-center gap-2">
-          <span className={cn('text-xs tabular-nums', isSet ? 'text-foreground font-medium' : 'text-muted-foreground')}>
-            {Number(current.toFixed(2))}{suffix ?? ''}
-          </span>
-          {isSet && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="h-6 px-1.5 text-[11px] text-muted-foreground"
-              onClick={() => onChange(undefined)}
-            >
-              Auto
-            </Button>
-          )}
-        </div>
-      </div>
-      <Slider value={[current]} min={min} max={max} step={step} onValueChange={(vals: number[]) => onChange(vals[0])} />
-    </div>
-  );
-}
-
 function PresetGrid<T extends { id: string; name: string; isPremium: boolean }>({ label, items, current, isPremium, onSelect, onUpgrade, renderPreview }: PresetGridProps<T>) {
   return (
     <div className="space-y-2">
@@ -806,7 +680,7 @@ function UpgradeCard({ onUpgrade, title, desc }: { onUpgrade?: () => void; title
     <Card className="p-4 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20">
       <div className="flex items-center gap-3 mb-3">
         <div className="h-10 w-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-          <Crown className="h-5 w-5 text-amber-700 dark:text-amber-400" />
+          <Crown className="h-5 w-5 text-amber-600" />
         </div>
         <div>
           <h4 className="font-semibold text-sm">{title}</h4>

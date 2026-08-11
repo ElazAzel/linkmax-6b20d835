@@ -9,11 +9,10 @@ import {
   THEME_PRESETS,
 } from './presets';
 
-export const THEME_TRANSFER_VERSION = 2;
-const LEGACY_THEME_TRANSFER_VERSION = 1;
+export const THEME_TRANSFER_VERSION = 1;
 
 export interface ThemeTransferPayload {
-  version: typeof THEME_TRANSFER_VERSION | typeof LEGACY_THEME_TRANSFER_VERSION;
+  version: typeof THEME_TRANSFER_VERSION;
   theme: Partial<PageTheme>;
 }
 
@@ -59,79 +58,11 @@ function sanitizeBackground(value: unknown): PageBackground | undefined {
   return background;
 }
 
-function sanitizeSemanticColors(value: unknown): PageTheme['colors'] | undefined {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
-  const candidate = value as Record<string, unknown>;
-  const keys: Array<keyof NonNullable<PageTheme['colors']>> = [
-    'canvas', 'surface', 'text', 'mutedText', 'primary', 'primaryText',
-    'secondary', 'border', 'focus', 'success', 'warning', 'danger',
-  ];
-  const colors = {} as NonNullable<PageTheme['colors']>;
-  for (const key of keys) {
-    if (!isSafeCssValue(candidate[key])) return undefined;
-    colors[key] = candidate[key];
-  }
-  return colors;
-}
-
-function sanitizeTypography(value: unknown): PageTheme['typography'] | undefined {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
-  const candidate = value as Record<string, unknown>;
-  if (
-    !isSafeCssValue(candidate.headingFamily)
-    || !isSafeCssValue(candidate.bodyFamily)
-    || !isSafeCssValue(candidate.monoFamily)
-    || ![500, 600, 700].includes(Number(candidate.headingWeight))
-    || ![400, 500, 600].includes(Number(candidate.bodyWeight))
-    || !['compact', 'balanced', 'expressive'].includes(String(candidate.scale))
-  ) return undefined;
-  return {
-    headingFamily: candidate.headingFamily,
-    bodyFamily: candidate.bodyFamily,
-    monoFamily: candidate.monoFamily,
-    headingWeight: candidate.headingWeight as 500 | 600 | 700,
-    bodyWeight: candidate.bodyWeight as 400 | 500 | 600,
-    scale: candidate.scale as NonNullable<PageTheme['typography']>['scale'],
-  };
-}
-
-function sanitizeRadii(value: unknown): PageTheme['radii'] | undefined {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
-  const candidate = value as Record<string, unknown>;
-  const read = (key: string) => typeof candidate[key] === 'number' && candidate[key] >= 0 && candidate[key] <= 48
-    ? candidate[key] as number
-    : null;
-  const control = read('control');
-  const card = read('card');
-  const block = read('block');
-  const image = read('image');
-  return control === null || card === null || block === null || image === null
-    ? undefined
-    : { control, card, block, image };
-}
-
-function sanitizeSpacing(value: unknown): PageTheme['spacing'] | undefined {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
-  const candidate = value as Record<string, unknown>;
-  if (!['compact', 'comfortable', 'spacious'].includes(String(candidate.density))) return undefined;
-  const isValid = (key: string, max: number) =>
-    typeof candidate[key] === 'number' && candidate[key] >= 0 && candidate[key] <= max;
-  if (!isValid('sectionGap', 160) || !isValid('blockGap', 64) || !isValid('pagePadding', 64)) return undefined;
-  return {
-    density: candidate.density as NonNullable<PageTheme['spacing']>['density'],
-    sectionGap: candidate.sectionGap as number,
-    blockGap: candidate.blockGap as number,
-    pagePadding: candidate.pagePadding as number,
-  };
-}
-
 export function sanitizeTheme(theme: unknown): Partial<PageTheme> | null {
   if (!theme || typeof theme !== 'object' || Array.isArray(theme)) return null;
   const candidate = theme as Record<string, unknown>;
   const sanitized: Partial<PageTheme> = {};
 
-  if (candidate.schemaVersion === 2) sanitized.schemaVersion = 2;
-  if (candidate.appearanceMode === 'legacy' || candidate.appearanceMode === 'v2') sanitized.appearanceMode = candidate.appearanceMode;
   for (const field of COLOR_FIELDS) {
     if (isSafeCssValue(candidate[field])) sanitized[field] = candidate[field];
   }
@@ -146,29 +77,6 @@ export function sanitizeTheme(theme: unknown): Partial<PageTheme> | null {
   if (isOneOf(candidate.blockHover, BLOCK_HOVER_PRESETS)) sanitized.blockHover = candidate.blockHover;
   if (isOneOf(candidate.divider, DIVIDER_PRESETS)) sanitized.divider = candidate.divider;
   if (isOneOf(candidate.themePreset, THEME_PRESETS)) sanitized.themePreset = candidate.themePreset;
-  const colors = sanitizeSemanticColors(candidate.colors);
-  if (colors) sanitized.colors = colors;
-  const typography = sanitizeTypography(candidate.typography);
-  if (typography) sanitized.typography = typography;
-  const radii = sanitizeRadii(candidate.radii);
-  if (radii) sanitized.radii = radii;
-  const spacing = sanitizeSpacing(candidate.spacing);
-  if (spacing) sanitized.spacing = spacing;
-  if (candidate.imageTreatment === 'natural' || candidate.imageTreatment === 'editorial' || candidate.imageTreatment === 'monochrome') sanitized.imageTreatment = candidate.imageTreatment;
-  if (candidate.buttonWeight === 500 || candidate.buttonWeight === 600 || candidate.buttonWeight === 700) sanitized.buttonWeight = candidate.buttonWeight;
-  if (candidate.motionLevel === 'none' || candidate.motionLevel === 'reduced' || candidate.motionLevel === 'standard' || candidate.motionLevel === 'expressive') sanitized.motionLevel = candidate.motionLevel;
-
-  const numeric = (key: keyof PageTheme, min: number, max: number) => {
-    const raw = candidate[key as string];
-    if (typeof raw === 'number' && Number.isFinite(raw) && raw >= min && raw <= max) {
-      (sanitized as Record<string, unknown>)[key as string] = raw;
-    }
-  };
-  numeric('contentWidth', 320, 1400);
-  numeric('blockGap', 0, 64);
-  numeric('pagePaddingX', 0, 64);
-  numeric('blockRadiusPx', 0, 64);
-  numeric('textScale', 0.8, 1.5);
 
   const background = sanitizeBackground(candidate.customBackground);
   if (background) sanitized.customBackground = background;
@@ -182,6 +90,6 @@ export function createThemeTransfer(theme: Partial<PageTheme>): ThemeTransferPay
 export function parseThemeTransfer(value: unknown): Partial<PageTheme> | null {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const payload = value as Partial<ThemeTransferPayload>;
-  if (payload.version !== THEME_TRANSFER_VERSION && payload.version !== LEGACY_THEME_TRANSFER_VERSION) return null;
+  if (payload.version !== THEME_TRANSFER_VERSION) return null;
   return sanitizeTheme(payload.theme);
 }

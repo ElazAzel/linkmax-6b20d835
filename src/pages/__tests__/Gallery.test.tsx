@@ -21,10 +21,6 @@ vi.mock('react-i18next', () => ({
       changeLanguage: vi.fn(),
     },
   }),
-  initReactI18next: {
-    type: '3rdParty',
-    init: vi.fn(),
-  },
 }));
 
 // Mock hooks

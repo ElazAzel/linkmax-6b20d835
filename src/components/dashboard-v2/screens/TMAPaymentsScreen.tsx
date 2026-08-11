@@ -135,7 +135,7 @@ export const TMAPaymentsScreen: React.FC = () => {
                 <div className="w-8 h-8 rounded bg-yellow-400 flex items-center justify-center text-black font-bold text-lg">★</div>
                 <span className="text-sm font-medium">Telegram Stars</span>
               </div>
-              <Badge className="bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30 text-[10px] uppercase">Enabled</Badge>
+              <Badge className="bg-green-500/20 text-green-600 border-green-500/30 text-[10px] uppercase">Enabled</Badge>
             </div>
           </div>
         </Card>
@@ -146,8 +146,8 @@ export const TMAPaymentsScreen: React.FC = () => {
             <ShieldCheck className="h-5 w-5 text-green-500" />
             <h3 className="text-lg font-bold">{t('tma.security', 'Transaction Security')}</h3>
           </div>
-          <div className="p-4 bg-card rounded-xl border border-border flex gap-4">
-            <div className="h-10 w-10 shrink-0 rounded-full bg-blue-500/10 flex items-center justify-center">
+          <div className="p-4 bg-white rounded-xl border border-zinc-100 flex gap-4">
+            <div className="h-10 w-10 shrink-0 rounded-full bg-blue-50 flex items-center justify-center">
               <Info className="h-5 w-5 text-blue-500" />
             </div>
             <div className="space-y-1">
@@ -181,7 +181,7 @@ export const TMAPaymentsScreen: React.FC = () => {
                   <p className="text-xs text-muted-foreground">{format(new Date(tx.created_at), 'dd MMM yyyy, HH:mm')}</p>
                 </div>
                 <div className="text-right">
-                  <p className={`font-bold ${tx.net_amount >= 0 ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
+                  <p className={`font-bold ${tx.net_amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {tx.net_amount >= 0 ? '+' : ''}{currency}{tx.net_amount.toFixed(2)}
                   </p>
                   <Badge variant="outline" className="text-[10px] uppercase">{tx.status}</Badge>

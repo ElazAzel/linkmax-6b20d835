@@ -92,15 +92,15 @@ export const TMASettingsScreen: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center justify-between p-2 rounded hover:bg-muted/50 transition-colors">
                 <span className="text-sm">{t('tma.syncTheme', 'Sync Theme Colors')}</span>
-                <Badge variant="outline" className="text-[10px] text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 border-green-200 dark:border-green-800">ON</Badge>
+                <Badge variant="outline" className="text-[10px] text-green-600 bg-green-50 border-green-200">ON</Badge>
               </div>
               <div className="flex items-center justify-between p-2 rounded hover:bg-muted/50 transition-colors">
                 <span className="text-sm">{t('tma.hapticFeedback', 'Haptic Feedback')}</span>
-                <Badge variant="outline" className="text-[10px] text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 border-green-200 dark:border-green-800">ON</Badge>
+                <Badge variant="outline" className="text-[10px] text-green-600 bg-green-50 border-green-200">ON</Badge>
               </div>
               <div className="flex items-center justify-between p-2 rounded hover:bg-muted/50 transition-colors">
                 <span className="text-sm">{t('tma.expandedMode', 'Full Height Mode')}</span>
-                <Badge variant="outline" className="text-[10px] text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800">AUTO</Badge>
+                <Badge variant="outline" className="text-[10px] text-blue-600 bg-blue-50 border-blue-200">AUTO</Badge>
               </div>
             </div>
           </div>

@@ -15,7 +15,6 @@ import { useSoundEffects } from '@/hooks/ui/useSoundEffects';
 import Gift from 'lucide-react/dist/esm/icons/gift';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Check from 'lucide-react/dist/esm/icons/check';
-import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import { z } from 'zod';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { applyReferralCode } from '@/services/referral';
@@ -29,14 +28,14 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 import { DeviceAccountSwitcher } from '@/components/auth/DeviceAccountSwitcher';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import UserIcon from 'lucide-react/dist/esm/icons/user';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
-import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import { trackAuthEvent } from '@/services/authFunnel';
+import { session } from '@/lib/storage';
+import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
 import type { TelegramAuthPayload } from '@/types/telegram-auth';
-import { BrandLogo } from '@/components/brand/BrandLogo';
-import { getSafeReturnTo } from '@/services/auth-redirects';
 
 // Zod schema is created inside the component to access t()
 // We define a factory function here
@@ -89,7 +88,7 @@ export const Auth = memo(function Auth() {
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [signupEmailSent, setSignupEmailSent] = useState(false);
   const [passwordUpdated, setPasswordUpdated] = useState(false);
-  const [showEmailForm, setShowEmailForm] = useState(true);
+  const [showEmailForm, setShowEmailForm] = useState(() => searchParams.get('method') === 'email');
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [activeTab, setActiveTab] = useState<'signin' | 'signup'>(() =>
     searchParams.get('mode') === 'signin' ? 'signin' : 'signup'
@@ -144,7 +143,7 @@ export const Auth = memo(function Auth() {
   const hashParams = new URL(window.location.href).hash.substring(1);
   const hashSearchParams = new URLSearchParams(hashParams);
   const returnTo = searchParams.get('returnTo') || hashSearchParams.get('returnTo');
-  const safeReturnTo = returnTo ? getSafeReturnTo(returnTo) : undefined;
+  const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : undefined;
 
   // Check for auth errors returned from OAuth redirect
   const authError = searchParams.get('auth_error');
@@ -203,10 +202,17 @@ export const Auth = memo(function Auth() {
     }
   }, [user, refCode, t]);
 
-  // Explicit deep links are honored. Normal authentication always lands on
-  // the dashboard home and never opens the editor implicitly.
+  // Auto-redirect only when there's an explicit return target or signup builder intent.
+  // Otherwise show the "already signed in" card so the user can choose.
   useEffect(() => {
     if (user && authMode !== 'update-password') {
+      const shouldOpenBuilder = session.get<boolean>(NEW_USER_BUILDER_SESSION_KEY);
+      if (shouldOpenBuilder) {
+        session.remove(NEW_USER_BUILDER_SESSION_KEY);
+        navigate(safeReturnTo || NEW_USER_BUILDER_ROUTE);
+        return;
+      }
+
       if (safeReturnTo) {
         navigate(safeReturnTo);
       }
@@ -235,9 +241,11 @@ export const Auth = memo(function Auth() {
       return;
     }
 
+    session.set(NEW_USER_BUILDER_SESSION_KEY, true);
     const { data, error } = await signUp(validation.data.email, validation.data.password);
 
     if (error) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
       logger.error('Signup error:', error, { context: 'Auth' });
       handleError(error, t('messages.failedToSignUp'));
       playError();
@@ -257,8 +265,8 @@ export const Auth = memo(function Auth() {
     playSuccess();
     toast.success(t('messages.accountCreated'));
     trackAuthEvent('auth_success', { method: 'email_signup', requires_email_confirm: false });
+    // Auth state change will trigger redirect
     setIsLoading(false);
-    navigate(safeReturnTo || '/dashboard');
   };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -296,8 +304,7 @@ export const Auth = memo(function Auth() {
     playSuccess();
     toast.success(t('auth.welcomeBack', 'Welcome back!'));
     trackAuthEvent('auth_success', { method: 'email_signin' });
-    setIsLoading(false);
-    navigate(safeReturnTo || '/dashboard');
+    // Auth state change will trigger redirect
   };
 
   const handleEmailAccess = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -323,22 +330,13 @@ export const Auth = memo(function Auth() {
       toast.success(t('auth.welcomeBack'));
       trackAuthEvent('auth_success', { method: 'email_signin' });
       setIsLoading(false);
-      navigate(safeReturnTo || '/dashboard');
       return;
     }
 
-    const canCreateAccount =
-      signInResult.error.code === 'invalid_credentials' ||
-      /invalid login credentials/i.test(signInResult.error.message);
-    if (!canCreateAccount) {
-      handleError(signInResult.error, t('messages.failedToSignIn'));
-      playError();
-      setIsLoading(false);
-      return;
-    }
-
+    session.set(NEW_USER_BUILDER_SESSION_KEY, true);
     const signUpResult = await signUp(validation.data.email, validation.data.password);
     if (signUpResult.error) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
       handleError(signUpResult.error, t('messages.failedToSignIn'));
       playError();
       setIsLoading(false);
@@ -346,6 +344,7 @@ export const Auth = memo(function Auth() {
     }
 
     if (!signUpResult.data?.session) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
       setSignupEmailSent(true);
       playSuccess();
       setIsLoading(false);
@@ -356,7 +355,6 @@ export const Auth = memo(function Auth() {
     toast.success(t('messages.accountCreated'));
     trackAuthEvent('auth_success', { method: 'email_signup', requires_email_confirm: false });
     setIsLoading(false);
-    navigate(safeReturnTo || '/dashboard');
   };
 
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -552,31 +550,10 @@ export const Auth = memo(function Auth() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <div className="relative min-h-dvh overflow-x-hidden bg-[#F4F5F0] pb-safe">
-        <div className="absolute inset-x-0 top-0 h-1 bg-[#C93618]" aria-hidden="true" />
+      <div className="min-h-screen bg-[hsl(var(--brand-ink))] flex items-center justify-center p-4 relative overflow-x-hidden pb-safe">
+        <div className="absolute inset-x-0 top-0 h-1 bg-[hsl(var(--brand-orange))]" aria-hidden="true" />
 
-        <div className="relative mx-auto grid min-h-dvh w-full max-w-[1180px] items-center gap-12 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(400px,448px)] lg:px-8">
-          <div className="relative hidden h-[min(720px,calc(100dvh-96px))] min-h-[560px] overflow-hidden rounded-lg border border-[#16131A]/15 bg-white lg:block">
-            <picture>
-              <source srcSet="/brand/linkmax-hero-studio.webp" type="image/webp" />
-              <img
-                src="/brand/linkmax-hero-studio.png"
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover object-right"
-                width={2688}
-                height={1536}
-                aria-hidden="true"
-              />
-            </picture>
-            <div className="absolute inset-x-0 bottom-0 border-t border-white/20 bg-[#16131A]/90 p-7 text-white">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/65">LinkMAX</p>
-              <p className="mt-2 max-w-md text-2xl font-semibold leading-tight">
-                {t('auth.visualTitle', 'Страница, заявки и оплата — в одной системе')}
-              </p>
-            </div>
-          </div>
-
-          <div className="mx-auto w-full max-w-md space-y-6">
+        <div className="w-full max-w-md space-y-6">
           {/* Referral Banner */}
           {refCode && (
             <Card className="border-border bg-card p-4 shadow-lift animate-fade-in">
@@ -597,18 +574,19 @@ export const Auth = memo(function Auth() {
           {/* Logo */}
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
-              <div className="flex h-16 min-w-16 items-center justify-center rounded-lg border border-[#16131A] bg-white px-3 shadow-[4px_4px_0_#2F52E0] animate-scale-in">
-                <BrandLogo compact />
+              <div className="h-16 w-16 rounded-card bg-card border border-white/15 shadow-lift flex items-center justify-center animate-scale-in">
+                <img src="/favicon.png" alt="LinkMAX — business OS for experts and small businesses" className="h-10 w-10 object-contain" />
               </div>
             </div>
-            <h1 className="mx-auto max-w-[20rem] text-wrap break-words text-2xl font-bold text-[#16131A] animate-fade-in sm:max-w-none sm:text-3xl" style={{ animationDelay: '0.1s' }}>
-              {t('auth.title', 'Добро пожаловать в LinkMAX')}
+            <h1 className="text-2xl sm:text-3xl font-bold font-[var(--font-heading)] text-white animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
+              {t('auth.h1', 'Вход и регистрация в LinkMAX')}
             </h1>
-            <p className="mx-auto mt-2 max-w-[22rem] text-wrap break-words text-sm text-[#68636D] animate-fade-in sm:max-w-none sm:text-base" style={{ animationDelay: '0.2s' }}>
+
+            <p className="text-sm sm:text-base text-white/60 mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
               {t('auth.subtitle', 'AI-страница для бизнеса за 2 минуты')}
             </p>
             <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <div className="inline-flex rounded-lg border border-border bg-white">
+              <div className="app-sidebar inline-flex rounded-full">
                 <LanguageSwitcher />
               </div>
             </div>
@@ -616,10 +594,10 @@ export const Auth = memo(function Auth() {
 
           {/* Already signed-in panel — quick actions instead of full auth form */}
           {user && authMode !== 'update-password' ? (
-            <Card className="rounded-lg border border-border bg-card shadow-[6px_6px_0_#16131A] animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/15">
+                  <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
                     <UserIcon className="h-5 w-5 text-primary" />
                   </div>
                   <div className="min-w-0">
@@ -632,16 +610,7 @@ export const Auth = memo(function Auth() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button
-                  className="h-12 w-full gap-2 rounded-lg bg-[#C93618] text-white shadow-none transition-colors hover:bg-[#A92D16]"
-                  onClick={() => navigate('/dashboard')}
-                  data-testid="go-to-dashboard"
-                >
-                  <LayoutDashboard className="h-4 w-4" />
-                  {t('auth.goToDashboard', 'Перейти в кабинет')}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-12 w-full gap-2 rounded-lg border-[#16131A]/20 bg-white shadow-none transition-colors hover:bg-[#F4F5F0]"
+                  className="w-full h-12 rounded-2xl shadow-glass-lg gap-2 transition-all duration-300 hover:scale-[1.01]"
                   onClick={() => navigate('/dashboard/settings')}
                   data-testid="manage-login-methods"
                 >
@@ -658,7 +627,7 @@ export const Auth = memo(function Auth() {
               </CardContent>
             </Card>
           ) : authMode === 'update-password' ? (
-            <Card className="rounded-lg border border-[#16131A]/15 bg-white shadow-[6px_6px_0_#16131A] animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
                 <CardDescription>
@@ -730,7 +699,7 @@ export const Auth = memo(function Auth() {
             <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/15">
+                  <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center">
                     <Sparkles className="h-4 w-4 text-primary" />
                   </div>
                   <CardTitle className="text-xl">
@@ -741,14 +710,14 @@ export const Auth = memo(function Auth() {
                   {t('auth.heroSubtitle', 'AI соберёт сайт за 2 минуты. Бесплатно навсегда.')}
                 </CardDescription>
                 {hasSignupContext && (
-                  <div className="mt-3 rounded-md border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+                  <div className="mt-3 rounded-2xl border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span className="font-semibold text-primary">
                         {t('auth.context.title', 'Продолжим настройку')}
                       </span>
                       {nicheContextLabel && <span>{nicheContextLabel}</span>}
                       {previewSlug && (
-                        <span className="rounded-md bg-background/70 px-2 py-0.5 font-mono text-[11px] text-foreground">
+                        <span className="rounded-full bg-background/70 px-2 py-0.5 font-mono text-[11px] text-foreground">
                           lnkmx.my/{previewSlug}
                         </span>
                       )}
@@ -768,7 +737,7 @@ export const Auth = memo(function Auth() {
                 {/* PRIMARY: Google OAuth — biggest, fastest path */}
                 <Button
                   type="button"
-                  className="h-12 w-full gap-3 rounded-md border border-[#16131A]/20 bg-white text-base font-semibold text-[#16131A] shadow-none transition-colors hover:bg-[#F4F5F0]"
+                  className="w-full gap-3 h-14 rounded-2xl bg-white text-gray-900 hover:bg-white/90 border border-border/30 shadow-glass-lg font-semibold text-base transition-all duration-300 hover:scale-[1.01]"
                   onClick={handleGoogleSignIn}
                   disabled={isOAuthLoading !== null || isLoading}
                   data-testid="google-signin-primary"
@@ -840,7 +809,7 @@ export const Auth = memo(function Auth() {
                           placeholder="your@email.com"
                           required
                           onFocus={() => trackFieldFocus('email', 'signin')}
-                          className="h-12 rounded-md border-border bg-white focus:border-primary"
+                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                         />
                       </div>
                       <div className="space-y-2">
@@ -861,11 +830,11 @@ export const Auth = memo(function Auth() {
                           data-testid="access-password-input"
                           required
                           onFocus={() => trackFieldFocus('password', 'signin')}
-                          className="h-12 rounded-md border-border bg-white focus:border-primary"
+                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                         />
                       </div>
-                      <Button type="submit" className="h-12 w-full rounded-md bg-[#C93618] text-white shadow-none hover:bg-[#A92D16]" disabled={isLoading || isOAuthLoading !== null}>
-                        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('auth.continueWithEmail', 'Продолжить с Email')}
+                      <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg" disabled={isLoading || isOAuthLoading !== null}>
+                        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('auth.signIn')}
                       </Button>
                     </form>
                     )}
@@ -1176,7 +1145,6 @@ export const Auth = memo(function Auth() {
               {t('auth.backToHome', 'На главную')}
             </Button>
           </div>
-        </div>
         </div>
       </div>
     </>

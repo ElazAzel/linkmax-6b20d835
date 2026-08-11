@@ -108,14 +108,7 @@ export function getPublicPageCssVars(theme?: Partial<PageTheme>): CSSProperties 
     '--lm-block-shadow': BLOCK_SHADOW_CSS[shadow],
     '--lm-heading-font': font.heading,
     '--lm-body-font': font.body,
-    '--lm-content-width': `${t.contentWidth ?? 672}px`,
-    '--lm-block-gap': `${t.blockGap ?? 16}px`,
-    '--lm-page-padding-x': `${t.pagePaddingX ?? 16}px`,
-    '--lm-text-scale': String(t.textScale ?? 1),
   };
-  if (typeof t.blockRadiusPx === 'number') {
-    vars['--lm-block-radius'] = `${t.blockRadiusPx}px`;
-  }
   if (t.accentColor) {
     vars['--lm-accent'] = t.accentColor;
     // A5: WCAG-aware foreground for anything sitting on the accent color

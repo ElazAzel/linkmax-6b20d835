@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { EmptyState, LoadingState } from '@/components/ui';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/user/useAuth';

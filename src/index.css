@@ -8,6 +8,12 @@
 
 
 
+/* Shimmer animation for lazy loading */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* Chaotic grid animations - slower for calm effect */
 @keyframes grid-morph-1 {
 
@@ -113,141 +119,165 @@
   mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
 }
 
-/* LinkMAX Creative OS: Modular Collage */
+/* ============================================
+   LIQUID GLASS DESIGN SYSTEM - Apple Style
+   All colors MUST be HSL.
+   ============================================ */
 
 @layer base {
   :root {
-    --brand-ink: 270 16% 9%;
-    --brand-canvas: 72 20% 95%;
-    --brand-surface: 0 0% 100%;
-    --brand-coral: 10 79% 44%;
-    --brand-blue: 228 74% 53%;
-    --brand-mint: 160 88% 25%;
-    --brand-sun: 47 100% 65%;
-    --brand-paper: var(--brand-canvas);
-    --brand-orange: var(--brand-coral);
-    --brand-orange-action: var(--brand-coral);
-    --brand-sage: 270 5% 43%;
+    /* LinkMAX brand foundations: landing and product share one palette. */
+    --brand-ink: 216 20% 8%;
+    --brand-paper: 60 22% 95%;
+    --brand-orange: 20 100% 50%;
+    --brand-orange-action: 20 100% 40%;
+    --brand-sage: 90 4% 45%;
 
-    --background: var(--brand-canvas);
+    --background: var(--brand-paper);
     --foreground: var(--brand-ink);
 
-    --card: var(--brand-surface);
+    /* Liquid Glass card - translucent white */
+    --card: 40 33% 99%;
     --card-foreground: var(--brand-ink);
 
-    --popover: var(--brand-surface);
+    /* Popover/Dropdown - glass effect */
+    --popover: 40 33% 99%;
     --popover-foreground: var(--brand-ink);
 
-    --primary: var(--brand-coral);
+    /* Primary actions use the accessible deep-orange companion of #ff5701. */
+    --primary: var(--brand-orange-action);
     --primary-foreground: 0 0% 100%;
 
-    --secondary: var(--brand-blue);
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - Subtle frosted */
+    --secondary: 60 14% 91%;
+    --secondary-foreground: var(--brand-ink);
 
-    --muted: 70 12% 90%;
-    --muted-foreground: 270 5% 38%;
+    /* Muted - Soft gray glass */
+    --muted: 55 12% 91%;
+    --muted-foreground: var(--brand-sage);
 
-    --accent: 159 39% 91%;
-    --accent-foreground: var(--brand-mint);
+    /* Accent - Light glass tint */
+    --accent: 20 100% 95%;
+    --accent-foreground: 20 100% 30%;
 
-    --destructive: 0 72% 45%;
+    /* Destructive - Soft red */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: var(--brand-mint);
+    /* Success - Emerald */
+    --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
 
-    --warning: var(--brand-sun);
-    --warning-foreground: var(--brand-ink);
+    /* Warning - Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
 
-    --info: var(--brand-blue);
+    /* Info - Sky */
+    --info: 203 87% 44%;
     --info-foreground: 0 0% 100%;
 
-    --border: 72 7% 78%;
-    --input: 72 7% 72%;
-    --ring: var(--brand-blue);
+    --border: 52 14% 81%;
+    --input: 52 14% 81%;
+    --ring: var(--brand-orange-action);
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
+    /* Sidebar - Frosted glass */
     --sidebar-background: var(--brand-ink);
-    --sidebar-foreground: var(--brand-canvas);
-    --sidebar-primary: var(--brand-coral);
+    --sidebar-foreground: 60 22% 95%;
+    --sidebar-primary: var(--brand-orange);
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 100% / 0.1;
+    --sidebar-accent: 0 0% 100% / 0.08;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 100% / 0.14;
-    --sidebar-ring: var(--brand-blue);
+    --sidebar-border: 0 0% 100% / 0.12;
+    --sidebar-ring: var(--brand-orange);
     --sidebar: var(--brand-ink);
 
-    --chart-1: var(--brand-coral);
-    --chart-2: var(--brand-blue);
-    --chart-3: var(--brand-mint);
-    --chart-4: 270 16% 26%;
-    --chart-5: 47 84% 50%;
+    /* Chart colors - Vibrant gradient palette */
+    --chart-1: 20 100% 45%;
+    --chart-2: 203 87% 44%;
+    --chart-3: 151 60% 36%;
+    --chart-4: 335 72% 48%;
+    --chart-5: 42 92% 46%;
 
-    --font-sans: 'Onest', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-heading: 'Onest', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-display: 'Unbounded', 'Onest', sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-    /* Legacy glass helpers now resolve to quiet, mostly opaque surfaces. */
-    --glass-bg: var(--brand-surface);
-    --glass-bg-subtle: 0 0% 100% / 0.9;
-    --glass-bg-strong: var(--brand-surface);
-    --glass-blur: 0px;
-    --glass-blur-sm: 0px;
-    --glass-blur-lg: 0px;
-    --glass-blur-xl: 0px;
-    --glass-border: 72 7% 78%;
-    --glass-border-subtle: 72 7% 84%;
-    --prismatic-blur: 0px;
-    --prismatic-glow: none;
+    /* ========================================
+       2026 LIVING CANVAS TOKENS
+       ======================================== */
 
+    /* Glass backgrounds with varying opacity */
+    --glass-bg: 40 33% 99% / 0.82;
+    --glass-bg-subtle: 40 33% 99% / 0.58;
+    --glass-bg-strong: 40 33% 99% / 0.94;
+
+    /* Blur Radius */
+    --glass-blur: 16px;
+    --glass-blur-sm: 8px;
+    --glass-blur-lg: 24px;
+    --glass-blur-xl: 40px;
+
+    /* Prismatic Border Effect */
+    --glass-border: 52 14% 81% / 0.72;
+    --glass-border-subtle: 52 14% 81% / 0.42;
+    --prismatic-blur: 15px;
+    --prismatic-glow: linear-gradient(135deg, hsl(var(--brand-orange) / 0.24), hsl(var(--brand-ink) / 0.12));
+
+    /* Enhanced Shadows - Editorial & Physical */
     --shadow-glass:
       0 0 0 1px hsl(var(--border) / 0.7),
-      0 8px 18px -14px hsl(var(--brand-ink) / 0.22);
+      0 8px 24px -14px hsl(var(--brand-ink) / 0.24),
+      0 2px 6px -3px hsl(var(--brand-ink) / 0.12);
+
     --shadow-glass-lg:
       0 0 0 1px hsl(var(--border) / 0.8),
-      0 16px 32px -22px hsl(var(--brand-ink) / 0.28);
+      0 18px 44px -18px hsl(var(--brand-ink) / 0.28),
+      0 6px 14px -8px hsl(var(--brand-orange) / 0.18);
+
     --shadow-glass-xl:
       0 0 0 1px hsl(var(--border) / 0.9),
-      0 24px 48px -28px hsl(var(--brand-ink) / 0.34);
+      0 28px 64px -24px hsl(var(--brand-ink) / 0.34),
+      0 10px 22px -12px hsl(var(--brand-orange) / 0.2);
 
-    --grain-opacity: 0.025;
+    /* Material simulation */
+    --grain-opacity: 0.04;
+    --radius: 1rem;
 
+    /* Typography */
+    --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
     --text-primary: 1;
-    --text-secondary: 0.78;
-    --text-tertiary: 0.58;
+    --text-secondary: 0.8;
+    --text-tertiary: 0.6;
+
+    /* Section spacing - responsive */
     --section-gap: clamp(3rem, 8vw, 6rem);
     --content-gap: clamp(1rem, 3vw, 2rem);
     --page-padding-x: clamp(1rem, 4vw, 2.5rem);
     --page-padding-y: clamp(1.5rem, 4vw, 3rem);
-    --space-page-px: clamp(1rem, 5vw, 2rem);
-    --space-section-y: clamp(3rem, 10vw, 6rem);
-    --space-block-gap: clamp(0.5rem, 2vw, 1rem);
-    --space-card-p: clamp(1rem, 3vw, 1.5rem);
   }
 
   .dark {
     --background: var(--brand-ink);
-    --foreground: 72 20% 95%;
+    --foreground: 60 22% 95%;
 
-    --card: 270 13% 13%;
-    --card-foreground: 72 20% 95%;
+    --card: 216 16% 12%;
+    --card-foreground: 60 22% 95%;
 
-    --popover: 270 13% 13%;
-    --popover-foreground: 72 20% 95%;
+    --popover: 216 16% 12%;
+    --popover-foreground: 60 22% 95%;
 
-    --primary: 10 79% 56%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 20 100% 62%;
+    --primary-foreground: var(--brand-ink);
 
-    --secondary: 228 74% 62%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 216 14% 17%;
+    --secondary-foreground: 60 18% 92%;
 
-    --muted: 270 10% 18%;
-    --muted-foreground: 72 6% 67%;
+    --muted: 216 14% 15%;
+    --muted-foreground: 60 5% 64%;
 
-    --accent: 160 45% 18%;
-    --accent-foreground: 159 58% 70%;
+    --accent: 20 58% 17%;
+    --accent-foreground: 20 100% 78%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -263,23 +293,23 @@
 
     --border: 0 0% 100% / 0.13;
     --input: 0 0% 100% / 0.16;
-    --ring: 228 74% 62%;
+    --ring: 20 100% 62%;
 
     --sidebar-background: var(--brand-ink);
     --sidebar-foreground: 60 22% 95%;
-    --sidebar-primary: 10 79% 56%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 20 100% 62%;
+    --sidebar-primary-foreground: var(--brand-ink);
     --sidebar-accent: 0 0% 100% / 0.08;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 100% / 0.12;
-    --sidebar-ring: 228 74% 62%;
-    --sidebar: 270 13% 13%;
+    --sidebar-ring: 20 100% 62%;
+    --sidebar: 216 16% 12%;
 
-    --chart-1: 10 79% 56%;
-    --chart-2: 228 74% 62%;
-    --chart-3: 160 68% 47%;
-    --chart-4: 72 10% 76%;
-    --chart-5: 47 100% 65%;
+    --chart-1: 20 100% 62%;
+    --chart-2: 198 88% 62%;
+    --chart-3: 150 62% 55%;
+    --chart-4: 335 78% 68%;
+    --chart-5: 45 95% 60%;
 
     --glass-bg: 216 16% 12% / 0.78;
     --glass-bg-subtle: 216 16% 14% / 0.48;
@@ -325,17 +355,8 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-heading, 'Onest', sans-serif);
+    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
     letter-spacing: 0;
-  }
-
-  .font-display {
-    font-family: var(--font-display);
-  }
-
-  .font-metric {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
   }
 
   html {
@@ -366,7 +387,7 @@
 
   /* Display — Landing hero ONLY. Avoid in multilingual-heavy UIs. */
   .text-display {
-    font-family: var(--font-display, 'Unbounded', 'Onest', sans-serif);
+    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
     font-size: clamp(2.5rem, 8vw, 4.5rem);
     line-height: 1.05;
     font-weight: 800;
@@ -375,7 +396,7 @@
 
   /* Hero — Section hero, page titles. ONE per screen. */
   .text-hero {
-    font-family: var(--font-heading, 'Onest', sans-serif);
+    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
     font-size: clamp(1.75rem, 5vw, 3rem);
     line-height: 1.1;
     font-weight: 700;
@@ -448,6 +469,12 @@
   /* ========================================
      FLUID SPACING SYSTEM
      ======================================== */
+  :root {
+    --space-page-px: clamp(1rem, 5vw, 2rem);
+    --space-section-y: clamp(3rem, 10vw, 6rem);
+    --space-block-gap: clamp(0.5rem, 2vw, 1rem);
+    --space-card-p: clamp(1rem, 3vw, 1.5rem);
+  }
 
   /* Responsive section padding */
   .section-padding {
@@ -474,59 +501,73 @@
 
   /* Base glass effect */
   .glass {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass);
   }
 
   /* Subtle glass - more transparent */
   .glass-subtle {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg-subtle));
+    backdrop-filter: blur(var(--glass-blur-sm));
+    -webkit-backdrop-filter: blur(var(--glass-blur-sm));
     border: 1px solid hsl(var(--glass-border-subtle));
   }
 
   /* Strong glass - more opaque */
   .glass-strong {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg-strong));
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass-lg);
   }
 
   /* Liquid glass card */
   .glass-card {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid hsl(var(--glass-border));
     border-radius: var(--radius);
     box-shadow: var(--shadow-glass);
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-card:hover {
-    border-color: hsl(var(--primary) / 0.4);
+    box-shadow: var(--shadow-glass-lg);
+    transform: translateY(-2px);
   }
 
   /* Glass button */
   .glass-button {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg-strong));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass);
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-button:hover {
-    background: hsl(var(--accent));
-    border-color: hsl(var(--primary) / 0.4);
+    background: hsl(var(--glass-bg));
+    box-shadow: var(--shadow-glass-lg);
+    transform: translateY(-1px);
   }
 
   .glass-button:active {
-    opacity: 0.85;
+    transform: translateY(0) scale(0.98);
   }
 
   /* Glass input */
   .glass-input {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg-subtle));
+    backdrop-filter: blur(var(--glass-blur-sm));
+    -webkit-backdrop-filter: blur(var(--glass-blur-sm));
     border: 1px solid hsl(var(--glass-border-subtle));
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-input:focus {
@@ -537,15 +578,19 @@
 
   /* Glass modal/dialog */
   .glass-modal {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg-strong));
+    backdrop-filter: blur(var(--glass-blur-xl));
+    -webkit-backdrop-filter: blur(var(--glass-blur-xl));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass-xl);
-    border-radius: var(--radius);
+    border-radius: calc(var(--radius) + 0.5rem);
   }
 
   /* Glass navbar */
   .glass-nav {
-    background: hsl(var(--card));
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
     border-bottom: 1px solid hsl(var(--glass-border-subtle));
   }
 
@@ -796,6 +841,23 @@
 
     100% {
       transform: translateX(100%);
+    }
+  }
+
+  /* Floating animation for decorative elements */
+  .floating {
+    animation: floating 6s ease-in-out infinite;
+  }
+
+  @keyframes floating {
+
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+      transform: translateY(-20px) rotate(3deg);
     }
   }
 

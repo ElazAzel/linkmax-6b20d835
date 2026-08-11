@@ -26,7 +26,6 @@ import Handshake from 'lucide-react/dist/esm/icons/handshake';
 import Banknote from 'lucide-react/dist/esm/icons/banknote';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Brain from 'lucide-react/dist/esm/icons/brain';
-import KeyRound from 'lucide-react/dist/esm/icons/key-round';
 
 // Lazy load heavy tab components
 const AdminOverviewTab = lazy(() => import('@/components/admin/AdminOverviewTab').then(m => ({ default: m.AdminOverviewTab })));
@@ -42,7 +41,6 @@ const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTa
 const AdminFintechTab = lazy(() => import('@/components/admin/AdminFintechTab').then(m => ({ default: m.AdminFintechTab })));
 const AdminSearchDiagnosticsTab = lazy(() => import('@/components/admin/AdminSearchDiagnosticsTab').then(m => ({ default: m.AdminSearchDiagnosticsTab })));
 const AdminBroadcastTab = lazy(() => import('@/components/admin/AdminBroadcastTab').then(m => ({ default: m.AdminBroadcastTab })));
-const AdminIntegrationKeysTab = lazy(() => import('@/components/admin/AdminIntegrationKeysTab').then(m => ({ default: m.AdminIntegrationKeysTab })));
 const AdminGrowthTab = lazy(() => import('@/components/admin/AdminGrowthTab').then(m => ({ default: m.AdminGrowthTab })));
 
 function TabLoader() {
@@ -106,7 +104,6 @@ export default function Admin() {
     { value: 'fintech', label: t('admin.fintech', 'Финансы'), icon: Banknote },
     { value: 'broadcast', label: t('admin.broadcast', 'Рассылка'), icon: Megaphone },
     { value: 'seo', label: 'SEO', icon: Search },
-    { value: 'integrations', label: t('admin.integrationKeys.tab', 'Ключи API'), icon: KeyRound },
   ];
 
   return (
@@ -237,10 +234,6 @@ export default function Admin() {
 
               <TabsContent value="seo">
                 <AdminSearchDiagnosticsTab />
-              </TabsContent>
-
-              <TabsContent value="integrations">
-                <AdminIntegrationKeysTab />
               </TabsContent>
             </Suspense>
           </Tabs>

@@ -195,7 +195,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         <div className="flex items-center gap-2">
                             <h2 className="text-lg font-black tracking-tight text-gradient truncate">{displayName}</h2>
                             {isPremium && (
-                                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30 shadow-sm animate-pulse-subtle">
+                                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 shadow-sm animate-pulse-subtle">
                                     <Crown className="h-3 w-3 mr-1" />
                                     PRO
                                 </Badge>

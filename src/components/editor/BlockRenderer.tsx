@@ -31,7 +31,7 @@ interface BlockRendererProps {
   pageId?: string;
   isOwnerPremium?: boolean;
   ownerTier?: PremiumTier;
-  /** True when an outer container (e.g. grid card) already applied blockStyle container styles. */
+  /** Parent (e.g. bento grid card) already painted bg/border/shadow/radius — skip container styles here */
   containerStyled?: boolean;
 }
 
@@ -116,9 +116,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   // so the paint stays on the button/link/quote instead of the full-width row wrapper.
   const SELF_STYLED_TYPES = new Set(['button', 'link', 'text']);
   const isSelfStyled = SELF_STYLED_TYPES.has(block.type as string);
-  // Skip container styles when a parent already painted them (grid card) to
-  // avoid stacking padding/opacity/rotate/backdrop-filter twice.
-  const { style: bsStyle, className: bsClass } = isSelfStyled || containerStyled
+  const { style: bsStyle, className: bsClass } = (isSelfStyled || containerStyled)
     ? { style: {} as React.CSSProperties, className: '' }
     : getBlockStyles(block.blockStyle);
   const wrapperStyle = { ...animationStyle, ...bsStyle };

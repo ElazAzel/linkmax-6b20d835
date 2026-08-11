@@ -1,33 +1,18 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendMessage, getChat, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-/**
- * SECURITY: this function never accepts a client-supplied Telegram chat id.
- * Ownership of a chat is proven by the user sending a short-lived one-time code
- * to the bot from that chat (handled in telegram-bot-webhook), which links the
- * chat to their account. Here we only issue codes and report link status.
- */
-
-type Action = 'start' | 'status';
-
-function json(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  });
-}
-
-function generateCode(): string {
-  const n = crypto.getRandomValues(new Uint32Array(1))[0] % 1000000;
-  return n.toString().padStart(6, '0');
+interface ValidateRequest {
+  chatId: string;
 }
 
 serve(async (req: Request) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -35,76 +20,100 @@ serve(async (req: Request) => {
   try {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
-      return json({ valid: false, error: 'missing_authorization' }, 401);
+      return new Response(
+        JSON.stringify({ valid: false, error: 'missing_authorization' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    const userClient = createClient(
+    const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: authError } = await userClient.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+
     if (authError || !user) {
-      return json({ valid: false, error: 'unauthorized' }, 401);
+      return new Response(
+        JSON.stringify({ valid: false, error: 'unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    const admin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    const { chatId }: ValidateRequest = await req.json();
 
-    let body: { action?: Action } = {};
+    if (!chatId || !chatId.trim()) {
+      console.log('Empty chat ID provided');
+      return new Response(
+        JSON.stringify({ valid: false, error: 'empty_chat_id' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!isConfigured()) {
+      console.error('Telegram gateway not configured');
+      return new Response(
+        JSON.stringify({ valid: false, error: 'bot_not_configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log(`Validating Telegram chat ID: ${chatId}`);
+
     try {
-      body = await req.json();
-    } catch {
-      body = {};
+      // Try to get chat info to validate the chat ID
+      const result = await getChat(chatId);
+      console.log('Telegram API response:', JSON.stringify(result));
+
+      // Send a test message to confirm the bot can reach this chat
+      try {
+        await sendMessage(chatId,
+          '✅ lnkmx.my подключен! Теперь вы будете получать уведомления о новых заявках.\n\n✅ lnkmx.my connected! You will now receive notifications about new leads.',
+          { parse_mode: 'HTML' }
+        );
+
+        return new Response(
+          JSON.stringify({
+            valid: true,
+            chatInfo: {
+              id: result.result.id,
+              type: result.result.type,
+              firstName: result.result.first_name,
+              username: result.result.username,
+            }
+          }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch (sendErr: unknown) {
+        const errMsg = sendErr instanceof Error ? sendErr.message : String(sendErr);
+        console.log('Failed to send test message:', errMsg);
+        return new Response(
+          JSON.stringify({
+            valid: false,
+            error: 'cannot_send_message',
+            description: errMsg
+          }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    } catch (chatErr: unknown) {
+      const errMsg = chatErr instanceof Error ? chatErr.message : String(chatErr);
+      console.log('Invalid chat ID:', errMsg);
+      return new Response(
+        JSON.stringify({
+          valid: false,
+          error: 'invalid_chat_id',
+          description: errMsg
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
-    const action: Action = body.action === 'status' ? 'status' : 'start';
-
-    // Always report the currently linked chat (verified server-side only)
-    const { data: profile } = await admin
-      .from('user_profiles')
-      .select('telegram_chat_id')
-      .eq('id', user.id)
-      .maybeSingle();
-
-    if (profile?.telegram_chat_id) {
-      return json({ valid: true, linked: true, chatId: profile.telegram_chat_id });
-    }
-
-    if (action === 'status') {
-      return json({ valid: false, linked: false, error: 'not_linked' });
-    }
-
-    // Issue a fresh one-time code, invalidating previous unused ones
-    await admin
-      .from('telegram_link_codes')
-      .delete()
-      .eq('user_id', user.id)
-      .is('used_at', null);
-
-    let code = '';
-    for (let attempt = 0; attempt < 5; attempt++) {
-      code = generateCode();
-      const { error: insertError } = await admin
-        .from('telegram_link_codes')
-        .insert({
-          user_id: user.id,
-          code,
-          expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
-        });
-      if (!insertError) break;
-      code = '';
-    }
-
-    if (!code) {
-      return json({ valid: false, linked: false, error: 'code_generation_failed' }, 500);
-    }
-
-    return json({ valid: false, linked: false, code, expiresInMinutes: 15 });
   } catch (error) {
-    console.error('validate-telegram error:', error instanceof Error ? error.message : String(error));
-    return json({ valid: false, error: 'server_error' }, 500);
+    console.error('Error validating Telegram chat ID:', error);
+    return new Response(
+      JSON.stringify({ valid: false, error: 'server_error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 });

@@ -16,7 +16,7 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
 import { trackActivationEvent } from '@/lib/activation-events';
 
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingState } from '@/components/ui/states/LoadingState';
 
 export default function FromPage() {
   const { slug } = useParams<{ slug: string }>();

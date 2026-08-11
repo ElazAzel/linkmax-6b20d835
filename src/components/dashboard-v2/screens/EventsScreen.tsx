@@ -19,7 +19,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import { EmptyState, LoadingState } from '@/components/ui';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Input } from '@/components/ui/input';
 import Users from 'lucide-react/dist/esm/icons/users';
 import QrCode from 'lucide-react/dist/esm/icons/qr-code';
@@ -219,8 +219,8 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
   const renderEventCard = (event: EventData) => {
     const statusColors: Record<string, string> = {
       draft: 'bg-muted text-muted-foreground',
-      published: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-      closed: 'bg-red-500/10 text-red-700 dark:text-red-400',
+      published: 'bg-emerald-500/10 text-emerald-600',
+      closed: 'bg-red-500/10 text-red-600',
     };
 
     return (
@@ -272,7 +272,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
                 <span className="font-bold">{event.checkedIn}</span>
               </div>
               {event.pendingApproval > 0 && (
-                <Badge variant="secondary" className="text-xs font-black bg-amber-500/10 text-amber-700 dark:text-amber-400 border-none">
+                <Badge variant="secondary" className="text-xs font-black bg-amber-500/10 text-amber-600 border-none">
                   {event.pendingApproval} {t('events.pending', 'ожидают')}
                 </Badge>
               )}

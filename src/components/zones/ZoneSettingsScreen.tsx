@@ -512,7 +512,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
             <AlertDialogTitle>{t('zones.settings.removeMemberTitle', 'Remove member?')}</AlertDialogTitle>
             <AlertDialogDescription>
               {t('zones.settings.removeMemberDesc', 'This will remove {{name}} from the zone. They will lose access to all zone data.', {
-                name: removeMember?.display_name || removeMember?.user_id?.slice(0, 8) || ''
+                name: removeMember?.display_name || removeMember?.user_id.slice(0, 8) || ''
               })}
             </AlertDialogDescription>
           </AlertDialogHeader>

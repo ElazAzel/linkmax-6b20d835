@@ -75,10 +75,10 @@ class RouteErrorBoundary extends React.Component<
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-  override componentDidCatch(error: unknown) {
+  componentDidCatch(error: unknown) {
     console.error('Route error:', error);
   }
-  override render() {
+  render() {
     if (this.state.hasError) {
       const c = ERROR_COPY[getLang()];
       return (

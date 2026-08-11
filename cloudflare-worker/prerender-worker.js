@@ -290,8 +290,10 @@ async function handleRequest(request, env) {
   }
 }
 
-// Module Worker format only: the `fetch` export is the single entrypoint.
-// (Legacy `addEventListener('fetch', ...)` removed — mixing both formats is invalid.)
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request, globalThis));
+});
+
 export default {
   async fetch(request, env, ctx) {
     return handleRequest(request, env);

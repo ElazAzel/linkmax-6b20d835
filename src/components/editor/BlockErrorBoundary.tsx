@@ -12,7 +12,7 @@ interface State {
 }
 
 export class BlockErrorBoundary extends Component<Props, State> {
-    public override state: State = {
+    public state: State = {
         hasError: false
     };
 
@@ -20,7 +20,7 @@ export class BlockErrorBoundary extends Component<Props, State> {
         return { hasError: true, error };
     }
 
-    public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error('Block rendering error:', error, errorInfo);
         // Lazy-load Sentry to avoid pulling it into the main bundle
         import('@/lib/utils/sentry').then(({ Sentry, isSentryEnabled }) => {
@@ -34,7 +34,7 @@ export class BlockErrorBoundary extends Component<Props, State> {
         });
     }
 
-    public override render() {
+    public render() {
         if (this.state.hasError) {
             return this.props.fallback || (
                 <div className="w-full p-4 rounded-card border border-destructive/20 bg-destructive/5 flex items-center gap-3 text-destructive">

@@ -8,7 +8,7 @@ const BASE = 'https://lnkmx.my';
 
 export default function BlogIndex() {
   const posts = listBlogPosts();
-  const title = 'Блог LinkMAX — как принимать заявки, оплаты и собирать сайт-визитку';
+  const title = 'Блог LinkMAX — заявки, оплаты и сайт-визитка';
   const description =
     'Гайды для специалистов, мастеров, коучей и фрилансеров: как собрать сайт-визитку, мультиссылку, принимать оплаты через WhatsApp и Telegram, вести CRM.';
 

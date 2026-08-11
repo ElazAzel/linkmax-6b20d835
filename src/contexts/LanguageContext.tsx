@@ -250,6 +250,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return result;
   };
 
+  // Translate blocks to a single language (backward compatibility)
+  const translateBlocksToLanguage = useCallback(async (
+    blocks: TranslatedBlock[],
+    targetLang: LocaleCode
+  ): Promise<TranslatedBlock[]> => {
+    return translateBlocksToMultipleLanguagesInternal(blocks, [targetLang]);
+  }, []);
+
   // Detect best source language across all blocks (most-used non-empty lang in i18n fields, fallback 'ru')
   const detectSourceLanguage = (blocks: TranslatedBlock[]): LocaleCode => {
     const counts: Record<string, number> = {};
@@ -271,26 +279,30 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Translate blocks to multiple languages
-  const translateBlocksToMultipleLanguages = useCallback(async (
+  const translateBlocksToMultipleLanguagesInternal = async (
     blocks: TranslatedBlock[],
     targetLanguages: LocaleCode[]
   ): Promise<TranslatedBlock[]> => {
     if (!blocks?.length || targetLanguages.length === 0) return blocks;
 
+    // Auto-translation of blocks is a paid feature.
     if (!isPremium) {
       return blocks;
     }
+
 
     setIsTranslating(true);
 
     try {
       const sourceLang = detectSourceLanguage(blocks);
+      // Skip if all targets are the source language
       const realTargets = targetLanguages.filter(l => l !== sourceLang);
       if (realTargets.length === 0) {
         setIsTranslating(false);
         return blocks;
       }
 
+      // Translate all blocks (translateObject internally skips fields that don't need work)
       const translatedBlocks = await Promise.all(
         blocks.map(async (block) => {
           if (!block.content) return block;
@@ -307,42 +319,29 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsTranslating(false);
     }
-  }, [isPremium, detectSourceLanguage, translateObject, t, setIsTranslating]);
+  };
 
-  // Translate blocks to a single language
-  const translateBlocksToLanguage = useCallback(async (
-    blocks: TranslatedBlock[],
-    targetLang: LocaleCode
-  ): Promise<TranslatedBlock[]> => {
-    return translateBlocksToMultipleLanguages(blocks, [targetLang]);
-  }, [translateBlocksToMultipleLanguages]);
 
-  const contextValue = useMemo(() => ({
-    currentLanguage,
-    setCurrentLanguage,
-    isTranslating,
-    translateBlocksToLanguage,
-    translateBlocksToMultipleLanguages,
-    autoTranslateEnabled,
-    setAutoTranslateEnabled,
-    browserLanguage,
-    targetTranslationLanguages,
-    setTargetTranslationLanguages,
-  }), [
-    currentLanguage,
-    setCurrentLanguage,
-    isTranslating,
-    translateBlocksToLanguage,
-    translateBlocksToMultipleLanguages,
-    autoTranslateEnabled,
-    setAutoTranslateEnabled,
-    browserLanguage,
-    targetTranslationLanguages,
-    setTargetTranslationLanguages,
-  ]);
+  const translateBlocksToMultipleLanguages = useCallback(
+    translateBlocksToMultipleLanguagesInternal,
+    [t]
+  );
 
   return (
-    <LanguageContext.Provider value={contextValue}>
+    <LanguageContext.Provider
+      value={{
+        currentLanguage,
+        setCurrentLanguage,
+        isTranslating,
+        translateBlocksToLanguage,
+        translateBlocksToMultipleLanguages,
+        autoTranslateEnabled,
+        setAutoTranslateEnabled,
+        browserLanguage,
+        targetTranslationLanguages,
+        setTargetTranslationLanguages,
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );
