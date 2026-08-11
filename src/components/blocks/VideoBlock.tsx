@@ -61,7 +61,18 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   // custom styling is the visible frame.
   if (isNaked) {
     return (
-      <div onClick={() => onClick?.()} className="w-full">
+      <div
+        onClick={() => onClick?.()}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClick?.();
+          }
+        }}
+        className="w-full"
+      >
         {title && (
           <div className="pb-2">
             <h3 className="text-base sm:text-lg font-semibold truncate">{title}</h3>

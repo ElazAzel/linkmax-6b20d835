@@ -49,29 +49,37 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
 
   let rawTitle: string | { ru?: string; en?: string; kk?: string } | undefined;
 
+  const b = block as unknown as Record<string, unknown>;
+
   switch (block.type) {
     case 'profile':
     case 'product':
     case 'avatar':
-      rawTitle = (block as any)?.name;
+      rawTitle = typeof b.name === 'string' || (typeof b.name === 'object' && b.name !== null)
+        ? (b.name as string | { ru?: string; en?: string; kk?: string })
+        : undefined;
       break;
     case 'text':
-      rawTitle = (block as any)?.content;
+      rawTitle = typeof b.content === 'string' || (typeof b.content === 'object' && b.content !== null)
+        ? (b.content as string | { ru?: string; en?: string; kk?: string })
+        : undefined;
       break;
     case 'shoutout':
-      rawTitle = (block as any)?.displayName || (block as any)?.username;
+      rawTitle = typeof b.displayName === 'string' ? b.displayName : (typeof b.username === 'string' ? b.username : undefined);
       break;
     case 'image':
-      rawTitle = (block as any)?.alt;
+      rawTitle = typeof b.alt === 'string' ? b.alt : undefined;
       break;
     case 'map':
-      rawTitle = (block as any)?.address;
+      rawTitle = typeof b.address === 'string' ? b.address : undefined;
       break;
     case 'separator':
       rawTitle = 'separator';
       break;
     default:
-      rawTitle = (block as any)?.title;
+      rawTitle = typeof b.title === 'string' || (typeof b.title === 'object' && b.title !== null)
+        ? (b.title as string | { ru?: string; en?: string; kk?: string })
+        : undefined;
       break;
   }
 

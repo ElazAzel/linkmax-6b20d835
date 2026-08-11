@@ -9,6 +9,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 
 // Mock i18next specific for Gallery
 vi.mock('react-i18next', () => ({
+  initReactI18next: { type: '3rdParty', init: () => undefined },
   useTranslation: () => ({
     t: (key: string, options?: any) => {
       if (key === 'gallery.seoIntro.highlights' && options?.returnObjects) {

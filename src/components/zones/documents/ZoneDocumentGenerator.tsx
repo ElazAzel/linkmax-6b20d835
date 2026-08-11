@@ -21,6 +21,7 @@ import {
   User, Briefcase, Copy, Info, Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
+import DOMPurify from 'dompurify';
 import { ZoneDocument, ZoneDocumentTemplate } from '@/types/zones';
 import {
   buildDocumentVariables,
@@ -214,7 +215,7 @@ export const ZoneDocumentGenerator = ({
                   <div 
                     className="bg-white text-black p-8 rounded-lg shadow-lg border prose prose-sm max-w-none"
                     style={{ fontFamily: 'Times New Roman, serif' }}
-                    dangerouslySetInnerHTML={{ __html: previewHTML }}
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(previewHTML) }}
                   />
                 </div>
               </ScrollArea>
