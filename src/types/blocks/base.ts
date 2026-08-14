@@ -2,7 +2,7 @@
 export type EditorMode = 'grid';
 
 // Multilingual string support
-import type { I18nText, MultilingualString } from '@/lib/i18n-helpers';
+export type { I18nText, MultilingualString } from '@/lib/i18n-helpers';
 
 export type Currency = 'KZT' | 'RUB' | 'BYN' | 'AMD' | 'AZN' | 'KGS' | 'TJS' | 'TMT' | 'UZS' | 'USD' | 'EUR' | 'GBP' | 'CNY' | 'JPY' | 'CHF' | 'CAD' | 'AUD';
 

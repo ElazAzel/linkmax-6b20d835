@@ -33,13 +33,43 @@ const cutoffMs = now.getTime() - opts.days * 24 * 60 * 60 * 1000;
 const cutoff = new Date(cutoffMs);
 const cutoffIso = cutoff.toISOString().slice(0, 10);
 
-const fileListRaw = execFileSync('rg', ['--files', '-g', '*.md', '-g', '*.MD', opts.scope], { encoding: 'utf8' });
-const files = fileListRaw
-  .split('\n')
-  .map((item) => item.trim())
-  .filter(Boolean)
-  .filter((item) => !item.includes('node_modules/'))
-  .sort((a, b) => a.localeCompare(b));
+import fs from 'node:fs';
+
+function getMarkdownFiles(scopePath) {
+  try {
+    const raw = execFileSync('git', ['ls-files', scopePath], { encoding: 'utf8' });
+    const list = raw.split('\n').map((item) => item.trim()).filter(Boolean);
+    const mdList = list.filter((item) => (item.endsWith('.md') || item.endsWith('.MD')) && !item.includes('node_modules/'));
+    if (mdList.length > 0) {
+      return mdList.sort((a, b) => a.localeCompare(b));
+    }
+  } catch {
+    // Fall back to node:fs walk
+  }
+
+  function walk(dir) {
+    let results = [];
+    try {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'dist') continue;
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          results = results.concat(walk(full));
+        } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.MD'))) {
+          results.push(full.replace(/\\/g, '/'));
+        }
+      }
+    } catch {
+      // Directory may not exist
+    }
+    return results;
+  }
+
+  return walk(scopePath).sort((a, b) => a.localeCompare(b));
+}
+
+const files = getMarkdownFiles(opts.scope);
 
 const rows = [];
 for (const file of files) {

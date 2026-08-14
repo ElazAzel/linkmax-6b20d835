@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 import type {
     TelegramWebApp,
-    TelegramUser,
     ThemeParams,
     BottomButtonConfig,
     TelegramAuthResult,
@@ -126,11 +125,11 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
                 .maybeSingle();
 
             if (healthError && healthError.code !== 'PGRST116') {
-              console.error('[TelegramApp] Health check failed:', healthError);
+              logger.error('[TelegramApp] Health check failed:', healthError);
               // We don't block the whole app, but log it
             }
         } catch (err) {
-            console.error('[TelegramApp] Health check exception:', err);
+            logger.error('[TelegramApp] Health check exception:', err);
         }
     }, []);
 
@@ -139,7 +138,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
         const tg = window.Telegram?.WebApp;
 
         if (!tg) {
-            if (import.meta.env.DEV) console.debug('Telegram WebApp SDK not available — running outside Telegram');
+            if (import.meta.env.DEV) logger.debug('Telegram WebApp SDK not available — running outside Telegram');
             setIsLoading(false);
             setError('not_in_telegram');
             setRoute({ screen: 'error' });
@@ -179,7 +178,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
                 tg.MainButton.offClick(mainButtonCbRef.current);
             }
         };
-    }, []);
+    }, [checkHealth]);
 
     // ---- Validate authentication ----
     async function validateAuth(tg: TelegramWebApp) {

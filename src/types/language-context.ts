@@ -3,7 +3,7 @@
  * Safe types for translation operations
  */
 
-import type { SupportedLanguage, MultilingualString } from '@/lib/i18n-helpers';
+import type { MultilingualString } from '@/lib/i18n-helpers';
 
 export interface TranslatableObject {
   [key: string]: unknown | MultilingualString | TranslatableObject[];

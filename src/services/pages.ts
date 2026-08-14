@@ -1,6 +1,6 @@
 import { supabase } from '@/platform/supabase/client';
 import type { AppDatabase } from '@/platform/supabase/extended-types';
-import type { PageData, Block, ProfileBlock, PageTheme, EditorMode, GridConfig, PageExperiment } from '@/types/page';
+import type { PageData, Block, ProfileBlock, PageTheme, GridConfig, PageExperiment } from '@/types/page';
 import { createDefaultPageData } from '@/lib/constants';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { logger } from '@/lib/utils/logger';

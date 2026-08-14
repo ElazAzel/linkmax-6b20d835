@@ -173,7 +173,7 @@ async function fetchIndexablePages() {
     const rows = await res.json();
     return rows.filter((r) => r.is_indexable !== false && isPublicProfileSlug(r.slug));
   } catch (err) {
-    console.warn('[sitemap] fetch error', err.message);
+    console.warn('[sitemap] Supabase unreachable or offline, using static sitemap fallback:', err.message);
     return [];
   }
 }
