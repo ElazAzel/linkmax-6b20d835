@@ -1,13 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
-import { defineTool, type ToolContext } from "@lovable.dev/mcp-js";
+import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-
-function supabaseForUser(ctx: ToolContext) {
-  return createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-}
+import { databaseError, getAuthenticatedContext, isToolError, jsonResult } from "../utils";
 
 export default defineTool({
   name: "create_page",
@@ -20,6 +13,7 @@ export default defineTool({
       .trim()
       .min(1)
       .max(64)
+      .transform((value) => value.toLowerCase())
       .optional()
       .describe("Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."),
     title: z.string().trim().min(1).max(120).optional().describe("Page title shown in the header and SEO."),
@@ -27,17 +21,17 @@ export default defineTool({
   },
   annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
   handler: async ({ slug, title, description }, ctx) => {
-    if (!ctx.isAuthenticated()) {
-      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    }
-    const supabase = supabaseForUser(ctx);
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+
+    const { supabase } = authContext;
     const { data, error } = await supabase.rpc("mcp_create_user_page", {
       p_slug: slug ?? null,
       p_title: title ?? null,
       p_description: description ?? null,
     });
     if (error) {
-      return { content: [{ type: "text", text: error.message }], isError: true };
+      return databaseError("create_page");
     }
     const row = Array.isArray(data) ? data[0] : data;
     const settings = {
@@ -56,9 +50,6 @@ export default defineTool({
       block_types: ["link", "text", "image", "video", "form", "event", "product", "profile", "social"],
       public_url_pattern: "https://lnkmx.my/{slug}",
     };
-    return {
-      content: [{ type: "text", text: JSON.stringify({ page: row, settings }, null, 2) }],
-      structuredContent: { page: row, settings },
-    };
+    return jsonResult({ page: row, settings });
   },
 });

@@ -49,8 +49,9 @@ export default defineConfig(({ mode }) => ({
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
       },
     }),
-    // The MCP bundler currently treats Windows absolute paths as npm specifiers.
-    // CI and deployment run on Linux, where it generates the Supabase function.
+    // The SDK bundler treats Windows absolute paths as npm specifiers. The
+    // Windows prebuild generator uses a relative entrypoint instead; Linux
+    // and CI use the official Vite plugin.
     process.platform !== 'win32' && mcpPlugin(),
     process.env.ANALYZE === 'true' && visualizer({
       filename: "stats.html",
