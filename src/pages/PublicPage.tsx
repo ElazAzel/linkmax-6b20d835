@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import QrCode from 'lucide-react/dist/esm/icons/qr-code';
+import Copy from 'lucide-react/dist/esm/icons/copy';
 // import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 // import Copy from 'lucide-react/dist/esm/icons/copy';
 import { GridBlocksRenderer } from '@/components/blocks/GridBlocksRenderer';
@@ -28,6 +29,8 @@ import { useHeatmapTracking } from '@/hooks/analytics/useHeatmapTracking';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackShare } from '@/services/analytics';
 import { checkPremiumStatus } from '@/services/user';
+import { clonePublicPageToUserTemplate } from '@/services/page-cloning';
+import { recordGrowthEvent } from '@/services/viral-growth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
@@ -44,6 +47,7 @@ import { QRCodeSVG } from 'qrcode.react';
 
 import { usePageExperiments } from '@/hooks/page/usePageExperiments';
 import { getVisitorId } from '@/services/analytics';
+import { supabase } from '@/platform/supabase/client';
 
 const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
 
@@ -137,6 +141,7 @@ export default function PublicPage() {
   const [showQR, setShowQR] = useState(false);
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
   const [enhancementsReady, setEnhancementsReady] = useState(false);
+  const [cloningPage, setCloningPage] = useState(false);
   const currentUrl = window.location.href;
 
   const visitorId = useMemo(() => getVisitorId(), []);
@@ -270,6 +275,37 @@ export default function PublicPage() {
     } else {
       navigator.clipboard.writeText(currentUrl);
       toast.success(t('share.linkCopied', 'Ссылка скопирована'));
+    }
+  };
+
+  const handleClonePage = async () => {
+    if (!pageData || cloningPage) return;
+    setCloningPage(true);
+    try {
+      const templateId = await clonePublicPageToUserTemplate(pageData);
+      if (!templateId) {
+        const { data: authData } = await supabase.auth.getUser();
+        if (!authData.user) {
+          toast.success(t('growth.clone.authRedirect', 'Войдите — после входа копия сохранится в ваших шаблонах.'));
+          window.location.assign('/auth?source=page-clone');
+        } else {
+          toast.error(t('growth.clone.error', 'Не удалось сохранить копию'));
+        }
+        return;
+      }
+
+      const referralCode = new URLSearchParams(window.location.search).get('ref');
+      if (referralCode) {
+        void recordGrowthEvent({
+          code: referralCode,
+          eventName: 'template_cloned',
+          pageId: pageData.id,
+          metadata: { source: 'public-page', templateId },
+        });
+      }
+      toast.success(t('growth.clone.success', 'Копия сохранена в ваших шаблонах'));
+    } finally {
+      setCloningPage(false);
     }
   };
 
@@ -411,6 +447,12 @@ export default function PublicPage() {
                       <QrCode className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                       {t('share.qrCode', 'QR-код')}
                     </Button>
+                    {pageData.viralSettings?.cloneable !== false && (
+                      <Button variant="outline" onClick={() => void handleClonePage()} disabled={cloningPage} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
+                        <Copy className={cn("h-4 w-4 mr-2", iconStyleClass)} />
+                        {cloningPage ? t('growth.clone.saving', 'Сохраняем…') : t('growth.clone.button', 'Создать копию')}
+                      </Button>
+                    )}
                   </div>
                   <div className="flex gap-2 justify-center">
                     <a

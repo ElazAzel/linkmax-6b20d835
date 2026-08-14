@@ -50,6 +50,7 @@ import { storage } from '@/lib/storage';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import { ViralReadinessCard } from '@/components/dashboard-v2/widgets/ViralReadinessCard';
 
 interface HomeScreenProps {
   pageData: PageData | null;
@@ -233,6 +234,8 @@ export const HomeScreen = memo(function HomeScreen({
         {activation.showCelebration && (
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
         )}
+
+        <ViralReadinessCard pageData={pageData} compact />
 
         {/* --- QUICK IMPACT HUB (Universal) --- */}
         {isPublished && (

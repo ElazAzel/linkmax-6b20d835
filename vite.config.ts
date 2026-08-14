@@ -27,7 +27,9 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     hmr: {
-      clientPort: 443,
+      // Keep local HMR on the Vite port; deployments behind a TLS proxy can
+      // override it with VITE_HMR_CLIENT_PORT without changing the config.
+      clientPort: Number(process.env.VITE_HMR_CLIENT_PORT ?? 8080),
     },
   },
   plugins: [
@@ -47,8 +49,9 @@ export default defineConfig(({ mode }) => ({
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
       },
     }),
-    // The MCP bundler currently treats Windows absolute paths as npm specifiers.
-    // CI and deployment run on Linux, where it generates the Supabase function.
+    // The SDK bundler treats Windows absolute paths as npm specifiers. The
+    // Windows prebuild generator uses a relative entrypoint instead; Linux
+    // and CI use the official Vite plugin.
     process.platform !== 'win32' && mcpPlugin(),
     process.env.ANALYZE === 'true' && visualizer({
       filename: "stats.html",

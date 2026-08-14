@@ -804,6 +804,11 @@
   },
   "auth": {
     "alreadyHaveAccount": "Есептік жазбаңыз әлдеқашан бар ма?",
+    "deviceAccounts": "Осы құрылғыдағы аккаунттар",
+    "useAnotherAccount": "Басқа аккаунтпен кіру",
+    "removeSavedAccountTitle": "Бұл аккаунтты құрылғыдан өшіру керек пе?",
+    "removeSavedAccountDescription": "Аккаунт қолжетімді болып қалады, бірақ қайта кіру үшін аутентификация қажет.",
+    "removeSavedAccount": "Аккаунтты өшіру",
     "backToHome": "Басты бетке",
     "backToSignIn": "Кіруге қайту",
     "checkEmail": "Поштаңызды тексеріңіз",

@@ -351,7 +351,7 @@ export function LanguageSwitcher({
             {browserLanguage && browserLanguage !== i18n.language && (
               <div className="px-3 py-2 text-xs text-muted-foreground flex items-center gap-2">
                 <Globe className="h-3 w-3" />
-                {t('translation.browserLanguageDetected', 'Язык браузера: {{language}}', {
+                {t('browserLanguageDetected', 'Язык браузера: {{language}}', {
                   language: getLanguageInfo(browserLanguage).name
                 })}
               </div>
@@ -397,7 +397,7 @@ export function LanguageSwitcher({
               >
                 <Settings2 className="h-4 w-4 text-muted-foreground" />
                 <span className="flex-1 text-sm text-muted-foreground">
-                  {t('translation.selectLanguages', 'Выбрать языки')}
+                  {t('selectLanguages', 'Выбрать языки')}
                 </span>
                 <div className="flex gap-0.5">
                   {targetTranslationLanguages.slice(0, 3).map(code => (

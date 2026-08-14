@@ -1,4 +1,16 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+async function openEmailAuth(page: Page) {
+  const expandEmailForm = page.getByTestId('expand-email-form');
+  if (await expandEmailForm.isVisible().catch(() => false)) return expandEmailForm.click();
+
+  const continueWithEmail = page.getByRole('button', { name: /continue with email/i });
+  if (await continueWithEmail.isVisible().catch(() => false)) return continueWithEmail.click();
+
+  const moreOptions = page.getByRole('button', { name: /more sign-in options/i });
+  if (await moreOptions.isVisible().catch(() => false)) await moreOptions.click();
+  await page.getByRole('button', { name: /continue with email/i }).click();
+}
 
 // Reset storage state for auth tests to ensure clean start
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -20,6 +32,7 @@ test.describe('Authentication Flow', () => {
   test('navigate to auth page', async ({ page }) => {
     // Click CTA button or navigate to auth
     await page.goto('/auth');
+    await openEmailAuth(page);
     
     // Check auth form is visible
     await expect(page.locator('input[type="email"]')).toBeVisible();
@@ -27,6 +40,7 @@ test.describe('Authentication Flow', () => {
 
   test('signup form validation', async ({ page }) => {
     await page.goto('/auth');
+    await openEmailAuth(page);
     
     // Try to submit empty form
     const submitButton = page.locator('button[type="submit"]').first();
@@ -38,6 +52,7 @@ test.describe('Authentication Flow', () => {
 
   test('signup with valid credentials', async ({ page }) => {
     await page.goto('/auth');
+    await openEmailAuth(page);
     
     // Generate unique email for test
     const testEmail = `test-${Date.now()}@example.com`;

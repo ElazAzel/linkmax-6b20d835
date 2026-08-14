@@ -353,7 +353,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     if (proHint && !isMobile) {
       return (
-        <Tooltip>
+        <Tooltip key={block.type}>
           <TooltipTrigger asChild>
             {blockButton}
           </TooltipTrigger>

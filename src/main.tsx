@@ -131,6 +131,7 @@ const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const SmartLinkRedirect = lazy(() => import("./pages/SmartLinkRedirect"));
 const SmartLinks = lazy(() => import("./pages/SmartLinks"));
+const ReferralRedirect = lazy(() => import("./pages/ReferralRedirect"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
@@ -180,6 +181,7 @@ const router = createBrowserRouter([
       { path: "dashboard/team", element: <Dashboard /> },
       { path: "dashboard/smart-links", element: <SmartLinks /> },
       { path: "s/:slug", element: <SmartLinkRedirect /> },
+      { path: "r/:code", element: <ReferralRedirect /> },
       { path: "install", element: <Install /> },
       { path: "gallery", element: <Gallery /> },
       { path: "customers", element: <Customers /> },
