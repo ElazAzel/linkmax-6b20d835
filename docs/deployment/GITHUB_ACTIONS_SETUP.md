@@ -18,8 +18,9 @@ All workflow jobs use Node.js 22. CI is a merge gate; a deployment workflow is n
 | Secret | Used by | Notes |
 |---|---|---|
 | `VITE_SUPABASE_URL` | build and E2E | Browser-safe project URL. |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | build | Browser-safe Supabase publishable/anon key. |
-| `VITE_SUPABASE_ANON_KEY` | E2E where configured | Browser-safe key for test flows. |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | build and E2E | Browser-safe Supabase publishable/anon key. |
+| `E2E_TEST_EMAIL` | authenticated E2E | Dedicated staging test account email. |
+| `E2E_TEST_PASSWORD` | authenticated E2E | Dedicated staging test account password. |
 | `SUPABASE_PROJECT_ID` | Supabase deploy | Project reference, not a credential. |
 | `SUPABASE_ACCESS_TOKEN` | Supabase deploy | Supabase personal access token with deployment access. |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare workflows | Least-privilege token with Worker deployment permissions. |

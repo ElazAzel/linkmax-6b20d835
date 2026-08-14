@@ -804,6 +804,11 @@
   },
   "auth": {
     "alreadyHaveAccount": "У вас уже есть аккаунт?",
+    "deviceAccounts": "Аккаунты на этом устройстве",
+    "useAnotherAccount": "Войти под другим аккаунтом",
+    "removeSavedAccountTitle": "Удалить этот аккаунт с устройства?",
+    "removeSavedAccountDescription": "Аккаунт останется доступным, но для повторного входа потребуется авторизация.",
+    "removeSavedAccount": "Удалить аккаунт",
     "backToHome": "На главную",
     "backToSignIn": "Назад ко входу",
     "checkEmail": "Проверьте почту",

@@ -234,6 +234,11 @@ Deno.serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured')
     }
 
+    const demoAccountPassword = Deno.env.get('DEMO_ACCOUNT_PASSWORD')
+    if (!demoAccountPassword) {
+      throw new Error('DEMO_ACCOUNT_PASSWORD is not configured')
+    }
+
     const results: { email: string; status: string; error?: string }[] = []
     const endIndex = Math.min(startFrom + limit, DEMO_ACCOUNTS.length)
     
@@ -243,7 +248,7 @@ Deno.serve(async (req) => {
       const account = DEMO_ACCOUNTS[i]
       const accountNum = i + 1
       const email = `demoaccount${accountNum}@gmail.com`
-      const password = `Account@123${accountNum}`
+      const password = demoAccountPassword
 
       try {
         console.log(`Processing account ${accountNum}: ${account.slug}`)

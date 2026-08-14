@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createBlock } from '../block-factory';
+import { ALL_BLOCK_TYPES } from '../block-registry';
 
 // Mock crypto.randomUUID for event block generation
 if (typeof crypto === 'undefined') {
@@ -45,11 +46,21 @@ describe('block-factory', () => {
         const block = createBlock('image', overrides);
         expect(block.blockStyle!.padding).toBe('none');
         expect(block.blockStyle!.borderRadius).toBe('2xl');
-        // Check if other default props in blockStyle are preserved or overwritten correctly
-        // The current implementation uses spread: ...overrides, which replaces blockStyle if it exists in overrides.
-        // Wait, let's check the implementation again:
-        // image: (id, overrides) => ({ ..., blockStyle: { ... }, ...overrides })
-        // If overrides contains blockStyle, it replaces the default blockStyle entirely.
-        // This is the current behavior, let's verify it in test.
+        expect(block.blockStyle!.shadow).toBe('md');
+    });
+
+    it('should create unique ids for consecutive blocks of the same type', () => {
+        const first = createBlock('text');
+        const second = createBlock('text');
+
+        expect(first.id).not.toBe(second.id);
+    });
+
+    it('should have a factory path for every registered block type', () => {
+        for (const type of ALL_BLOCK_TYPES) {
+            const block = createBlock(type);
+            expect(block.type).toBe(type);
+            expect(block.id).toMatch(new RegExp(`^${type}-`));
+        }
     });
 });

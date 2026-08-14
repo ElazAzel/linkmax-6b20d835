@@ -27,7 +27,9 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     hmr: {
-      clientPort: 443,
+      // Keep local HMR on the Vite port; deployments behind a TLS proxy can
+      // override it with VITE_HMR_CLIENT_PORT without changing the config.
+      clientPort: Number(process.env.VITE_HMR_CLIENT_PORT ?? 8080),
     },
   },
   plugins: [

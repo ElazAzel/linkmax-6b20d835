@@ -442,13 +442,24 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
 };
 
 export function createBlock(type: string, overrides?: Record<string, any>): Block {
-  const timestamp = Date.now();
-  const id = `${type}-${timestamp}`;
+  const id = `${type}-${generateUuid()}`;
 
   const generator = BLOCK_GENERATORS[type];
   if (!generator) {
     throw new Error(`Unknown block type: ${type}`);
   }
 
-  return generator(id, overrides);
+  const generated = generator(id);
+  return {
+    ...generated,
+    ...overrides,
+    ...(generated.blockStyle || overrides?.blockStyle
+      ? {
+          blockStyle: {
+            ...generated.blockStyle,
+            ...overrides?.blockStyle,
+          },
+        }
+      : {}),
+  } as Block;
 }
