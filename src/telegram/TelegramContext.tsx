@@ -205,7 +205,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
                 });
 
                 if (setSessionError) {
-                    console.error('[TelegramApp] Failed to set session:', setSessionError);
+                    logger.error('[TelegramApp] Failed to set session', setSessionError);
                 }
             }
 
@@ -223,7 +223,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
                 `[TelegramApp] Authenticated: ${data.user.first_name} (${data.user.telegram_user_id}), screen: ${parsedRoute.screen}`
             );
         } catch (err: any) {
-            console.error('[TelegramApp] Auth failed:', err);
+            logger.error('[TelegramApp] Auth failed', err);
             setError(err.message);
             setRoute({ screen: 'error' });
         } finally {

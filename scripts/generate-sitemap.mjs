@@ -167,13 +167,22 @@ async function fetchIndexablePages() {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
     });
     if (!res.ok) {
-      console.warn(`[sitemap] Failed to fetch pages: HTTP ${res.status}`);
+      const status = `${res.status}${res.statusText ? ` ${res.statusText}` : ''}`;
+      console.warn(
+        `[sitemap] Could not load dynamic pages from Supabase (${status}); `
+        + 'generating the sitemap with static entries only.',
+      );
       return [];
     }
     const rows = await res.json();
     return rows.filter((r) => r.is_indexable !== false && isPublicProfileSlug(r.slug));
   } catch (err) {
-    console.warn('[sitemap] Supabase unreachable or offline, using static sitemap fallback:', err.message);
+    const reason = err instanceof Error ? err.message : String(err);
+    console.warn(
+      `[sitemap] Could not reach Supabase at ${SUPABASE_URL}; `
+      + 'generating the sitemap with static entries only. '
+      + `This is expected during local/offline builds. Reason: ${reason}`,
+    );
     return [];
   }
 }
