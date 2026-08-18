@@ -27,15 +27,27 @@ const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalet
 const PaymentTestModeBanner = lazy(() => import("@/components/PaymentTestModeBanner").then(m => ({ default: m.PaymentTestModeBanner })));
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error) => reportBackendFailure(error),
+    onSuccess: () => reportBackendSuccess(),
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => reportBackendFailure(error),
+    onSuccess: () => reportBackendSuccess(),
+  }),
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
       gcTime: 10 * 60 * 1000,
-      retry: 2,
       refetchOnWindowFocus: false,
+      ...queryRetryOptions,
+    },
+    mutations: {
+      ...mutationRetryOptions,
     },
   },
 });
+
 
 // Loading fallback for pages
 const LOADER_COPY: Record<string, string> = {
