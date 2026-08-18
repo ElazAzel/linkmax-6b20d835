@@ -168,6 +168,7 @@ const App = () => {
                   <RoutePrefetchManager />
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>
+                    <BackendStatusBanner />
                     <PaymentTestModeBanner />
                     <div id="main-content" className="outline-none" tabIndex={-1}>
                       <Suspense fallback={<PageLoader />}>
