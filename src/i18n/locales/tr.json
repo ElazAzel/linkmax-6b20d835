@@ -7308,5 +7308,11 @@
   "selected": "Selected",
   "source": "Source",
   "targetLanguages": "Translation languages",
-  "translateNow": "Translate"
+  "translateNow": "Translate",
+  "resilience": {
+    "offlineBanner": "You're offline — changes are saved locally",
+    "backendDown": "The server is temporarily unavailable — showing last saved data",
+    "retry": "Retry",
+    "sectionError": "This section failed to load"
+  }
 }

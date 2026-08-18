@@ -6,7 +6,10 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner, toast } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
+import { queryRetryOptions, mutationRetryOptions } from "@/lib/resilience/retry-policy";
+import { reportBackendFailure, reportBackendSuccess } from "@/lib/resilience/backend-health";
+import { BackendStatusBanner } from "@/components/system/BackendStatusBanner";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -27,15 +30,27 @@ const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalet
 const PaymentTestModeBanner = lazy(() => import("@/components/PaymentTestModeBanner").then(m => ({ default: m.PaymentTestModeBanner })));
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error) => reportBackendFailure(error),
+    onSuccess: () => reportBackendSuccess(),
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => reportBackendFailure(error),
+    onSuccess: () => reportBackendSuccess(),
+  }),
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
       gcTime: 10 * 60 * 1000,
-      retry: 2,
       refetchOnWindowFocus: false,
+      ...queryRetryOptions,
+    },
+    mutations: {
+      ...mutationRetryOptions,
     },
   },
 });
+
 
 // Loading fallback for pages
 const LOADER_COPY: Record<string, string> = {
@@ -153,6 +168,7 @@ const App = () => {
                   <RoutePrefetchManager />
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>
+                    <BackendStatusBanner />
                     <PaymentTestModeBanner />
                     <div id="main-content" className="outline-none" tabIndex={-1}>
                       <Suspense fallback={<PageLoader />}>
