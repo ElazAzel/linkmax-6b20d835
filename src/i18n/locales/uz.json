@@ -7308,5 +7308,11 @@
   "selected": "Tanlangan",
   "source": "Manba",
   "targetLanguages": "Tarjima tillari",
-  "translateNow": "Tarjima"
+  "translateNow": "Tarjima",
+  "resilience": {
+    "offlineBanner": "Tarmoq yo‘q — oflayn rejimda ishlayapmiz, o‘zgarishlar lokal saqlanadi",
+    "backendDown": "Server vaqtincha ishlamayapti — oxirgi saqlangan ma’lumotlar ko‘rsatilmoqda",
+    "retry": "Qayta urinish",
+    "sectionError": "Bu bo‘lim yuklanmadi"
+  }
 }
