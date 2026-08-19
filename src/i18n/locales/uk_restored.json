@@ -7470,6 +7470,8 @@
     "offlineBanner": "You're offline — changes are saved locally",
     "backendDown": "The server is temporarily unavailable — showing last saved data",
     "retry": "Retry",
-    "sectionError": "This section failed to load"
+    "sectionError": "This section failed to load",
+    "screenError": "This section failed to load",
+    "blockError": "This block could not be displayed"
   }
 }

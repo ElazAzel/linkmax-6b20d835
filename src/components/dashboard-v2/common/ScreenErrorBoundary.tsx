@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import RefreshCcw from 'lucide-react/dist/esm/icons/refresh-ccw';
 import { Button } from '@/components/ui/button';
@@ -8,16 +9,16 @@ interface Props {
     screenName: string;
 }
 
+type InnerProps = Props & { t: (key: string, fallback: string) => string };
+
 interface State {
     hasError: boolean;
 }
 
-export class ScreenErrorBoundary extends Component<Props, State> {
-    constructor(props: Props) {
+class ScreenErrorBoundaryInner extends Component<InnerProps, State> {
+    constructor(props: InnerProps) {
         super(props);
-        this.state = {
-            hasError: false
-        };
+        this.state = { hasError: false };
     }
 
     public static getDerivedStateFromError(_: Error): State {
@@ -33,6 +34,8 @@ export class ScreenErrorBoundary extends Component<Props, State> {
     };
 
     public render() {
+        const { t, screenName, children } = this.props;
+
         if (this.state.hasError) {
             return (
                 <div className="flex flex-col items-center justify-center min-h-[400px] p-6 text-center space-y-4">
@@ -40,19 +43,31 @@ export class ScreenErrorBoundary extends Component<Props, State> {
                         <AlertTriangle className="h-10 w-10" />
                     </div>
                     <div className="space-y-2">
-                        <h3 className="text-xl font-bold">Что-то пошло не так</h3>
+                        <h3 className="text-xl font-bold">
+                            {t('resilience.screenError', 'Раздел не загрузился')}
+                        </h3>
                         <p className="text-muted-foreground max-w-md mx-auto">
-                            Произошла ошибка при загрузке экрана "{this.props.screenName}".
+                            {t('resilience.sectionError', 'Этот раздел не загрузился')}
+                            {screenName ? ` — ${screenName}` : ''}
                         </p>
                     </div>
-                    <Button variant="outline" onClick={this.handleRetry} className="gap-2">
+                    <Button variant="outline" onClick={this.handleRetry} className="gap-2 min-h-11">
                         <RefreshCcw className="h-4 w-4" />
-                        Попробовать снова
+                        {t('resilience.retry', 'Повторить')}
                     </Button>
                 </div>
             );
         }
 
-        return this.props.children;
+        return children;
     }
+}
+
+export function ScreenErrorBoundary({ children, screenName }: Props) {
+    const { t } = useTranslation();
+    return (
+        <ScreenErrorBoundaryInner t={t} screenName={screenName}>
+            {children}
+        </ScreenErrorBoundaryInner>
+    );
 }
