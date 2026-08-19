@@ -7313,6 +7313,8 @@
     "offlineBanner": "Желі жоқ — офлайн режимде жұмыс істеп жатырмыз, өзгерістер жергілікті сақталады",
     "backendDown": "Сервер уақытша қолжетімсіз — соңғы сақталған деректер көрсетілуде",
     "retry": "Қайталау",
-    "sectionError": "Бұл бөлім жүктелмеді"
+    "sectionError": "Бұл бөлім жүктелмеді",
+    "screenError": "This section failed to load",
+    "blockError": "This block could not be displayed"
   }
 }
