@@ -21,6 +21,8 @@ import { SiteHeaderNav } from '@/components/public/SiteHeaderNav';
 import { SiteFooter } from '@/components/public/SiteFooter';
 import { StickyContactCTA } from '@/components/public/StickyContactCTA';
 import { VerifiedReviewsSection } from '@/components/public/VerifiedReviewsSection';
+import { SectionErrorBoundary } from '@/components/system/SectionErrorBoundary';
+
 import { decompressPageData } from '@/lib/utils/compression';
 import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
 import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
