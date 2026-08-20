@@ -21,6 +21,8 @@ import { SiteHeaderNav } from '@/components/public/SiteHeaderNav';
 import { SiteFooter } from '@/components/public/SiteFooter';
 import { StickyContactCTA } from '@/components/public/StickyContactCTA';
 import { VerifiedReviewsSection } from '@/components/public/VerifiedReviewsSection';
+import { SectionErrorBoundary } from '@/components/system/SectionErrorBoundary';
+
 import { decompressPageData } from '@/lib/utils/compression';
 import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
 import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
@@ -384,21 +386,28 @@ export default function PublicPage() {
                 )}
               </div>
 
-              <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
+              <SectionErrorBoundary name="site-header-nav" compact>
+                <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
+              </SectionErrorBoundary>
 
               <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
                 {/* Grid Blocks - Same layout as editor */}
-                <GridBlocksRenderer
-                  blocks={displayBlocks}
-                  pageOwnerId={pageData?.userId}
-                  pageId={pageData?.id}
-                  isOwnerPremium={isOwnerPremium}
-                  ownerTier={ownerTier}
-                  isPreview={false}
-                  className={appearanceRootClass}
-                />
+                <SectionErrorBoundary name="page-blocks">
+                  <GridBlocksRenderer
+                    blocks={displayBlocks}
+                    pageOwnerId={pageData?.userId}
+                    pageId={pageData?.id}
+                    isOwnerPremium={isOwnerPremium}
+                    ownerTier={ownerTier}
+                    isPreview={false}
+                    className={appearanceRootClass}
+                  />
+                </SectionErrorBoundary>
 
-                <VerifiedReviewsSection pageId={pageData?.id} />
+                <SectionErrorBoundary name="verified-reviews" compact>
+                  <VerifiedReviewsSection pageId={pageData?.id} />
+                </SectionErrorBoundary>
+
 
                 {/* Share Section - Mobile Optimized. Force readable contrast independent of page theme textColor. */}
                 <div className="mt-6 sm:mt-8 space-y-3 [color:hsl(var(--foreground))]">
@@ -444,10 +453,15 @@ export default function PublicPage() {
                 {showWatermark && <div className="h-16" />}
               </div>
 
-              <SiteFooter ownerUserId={pageData?.userId} />
+              <SectionErrorBoundary name="site-footer" compact>
+                <SiteFooter ownerUserId={pageData?.userId} />
+              </SectionErrorBoundary>
 
               {/* Mobile sticky contact capsule — Quiet Bento Sprint E */}
-              <StickyContactCTA blocks={displayBlocks as Block[]} pageId={pageData?.id} />
+              <SectionErrorBoundary name="sticky-cta" fallback={null}>
+                <StickyContactCTA blocks={displayBlocks as Block[]} pageId={pageData?.id} />
+              </SectionErrorBoundary>
+
 
               {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
               <FreemiumWatermark show={showWatermark} slug={slug} />
