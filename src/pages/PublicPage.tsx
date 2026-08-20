@@ -453,10 +453,15 @@ export default function PublicPage() {
                 {showWatermark && <div className="h-16" />}
               </div>
 
-              <SiteFooter ownerUserId={pageData?.userId} />
+              <SectionErrorBoundary name="site-footer" compact>
+                <SiteFooter ownerUserId={pageData?.userId} />
+              </SectionErrorBoundary>
 
               {/* Mobile sticky contact capsule — Quiet Bento Sprint E */}
-              <StickyContactCTA blocks={displayBlocks as Block[]} pageId={pageData?.id} />
+              <SectionErrorBoundary name="sticky-cta" fallback={null}>
+                <StickyContactCTA blocks={displayBlocks as Block[]} pageId={pageData?.id} />
+              </SectionErrorBoundary>
+
 
               {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
               <FreemiumWatermark show={showWatermark} slug={slug} />
