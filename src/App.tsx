@@ -9,6 +9,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
 import { queryRetryOptions, mutationRetryOptions } from "@/lib/resilience/retry-policy";
 import { reportBackendFailure, reportBackendSuccess } from "@/lib/resilience/backend-health";
+import { hydrateQueryCache, persistQueryCache } from "@/lib/resilience/query-cache-persist";
+
 import { BackendStatusBanner } from "@/components/system/BackendStatusBanner";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/user/useAuth";
