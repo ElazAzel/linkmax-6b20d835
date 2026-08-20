@@ -384,21 +384,28 @@ export default function PublicPage() {
                 )}
               </div>
 
-              <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
+              <SectionErrorBoundary name="site-header-nav" compact>
+                <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
+              </SectionErrorBoundary>
 
               <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
                 {/* Grid Blocks - Same layout as editor */}
-                <GridBlocksRenderer
-                  blocks={displayBlocks}
-                  pageOwnerId={pageData?.userId}
-                  pageId={pageData?.id}
-                  isOwnerPremium={isOwnerPremium}
-                  ownerTier={ownerTier}
-                  isPreview={false}
-                  className={appearanceRootClass}
-                />
+                <SectionErrorBoundary name="page-blocks">
+                  <GridBlocksRenderer
+                    blocks={displayBlocks}
+                    pageOwnerId={pageData?.userId}
+                    pageId={pageData?.id}
+                    isOwnerPremium={isOwnerPremium}
+                    ownerTier={ownerTier}
+                    isPreview={false}
+                    className={appearanceRootClass}
+                  />
+                </SectionErrorBoundary>
 
-                <VerifiedReviewsSection pageId={pageData?.id} />
+                <SectionErrorBoundary name="verified-reviews" compact>
+                  <VerifiedReviewsSection pageId={pageData?.id} />
+                </SectionErrorBoundary>
+
 
                 {/* Share Section - Mobile Optimized. Force readable contrast independent of page theme textColor. */}
                 <div className="mt-6 sm:mt-8 space-y-3 [color:hsl(var(--foreground))]">
