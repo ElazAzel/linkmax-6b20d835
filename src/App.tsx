@@ -51,6 +51,13 @@ const queryClient = new QueryClient({
   },
 });
 
+// Последние успешные данные живут в localStorage: при недоступном бэкенде
+// показываем их вместо пустых экранов.
+hydrateQueryCache(queryClient);
+persistQueryCache(queryClient);
+
+
+
 
 // Loading fallback for pages
 const LOADER_COPY: Record<string, string> = {
