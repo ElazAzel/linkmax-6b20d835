@@ -97,7 +97,8 @@ const MANIFEST_BLOCKS = Object.values(BLOCK_MANIFEST)
     labelKey: entry.labelKey,
     icon: entry.icon,
     color: BLOCK_COLORS[entry.type] || 'bg-muted',
-    tier: (entry.isPremium ? 'pro' : 'free') as BlockTier,
+    // Respect the free-blocks promo: gating comes from isBlockPremium, not the raw manifest flag
+    tier: (isBlockPremium(entry.type) ? 'pro' : 'free') as BlockTier,
   }));
 
 export const BlockInsertButton = memo(function BlockInsertButton({
