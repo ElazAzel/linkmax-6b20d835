@@ -157,8 +157,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return tierLevel(currentTier) >= tierLevel(blockTier);
   };
 
+  const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredBlocks = MANIFEST_BLOCKS.filter(block =>
-    t(block.labelKey, block.type).toLowerCase().includes(searchQuery.toLowerCase())
+    t(block.labelKey, block.type).toLowerCase().includes(normalizedQuery) ||
+    block.type.replace(/_/g, ' ').includes(normalizedQuery)
   );
 
   const filteredPresets = useMemo(() => {
