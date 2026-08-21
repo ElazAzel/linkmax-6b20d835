@@ -169,6 +169,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   };
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
+  const MANIFEST_BLOCKS = getManifestBlocks();
   const filteredBlocks = MANIFEST_BLOCKS.filter(block =>
     t(block.labelKey, block.type).toLowerCase().includes(normalizedQuery) ||
     block.type.replace(/_/g, ' ').includes(normalizedQuery)
@@ -192,11 +193,11 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const { recommendedBlocks, otherBlocks } = useMemo(() => {
     if (searchQuery) {
-      return { recommendedBlocks: [] as typeof MANIFEST_BLOCKS, otherBlocks: filteredBlocks };
+      return { recommendedBlocks: [] as ManifestBlock[], otherBlocks: filteredBlocks };
     }
 
-    const recommended: typeof MANIFEST_BLOCKS = [];
-    const others: typeof MANIFEST_BLOCKS = [];
+    const recommended: ManifestBlock[] = [];
+    const others: ManifestBlock[] = [];
 
     filteredBlocks.forEach(block => {
       if (recommendedBlockTypes.has(block.type as BlockType)) {
@@ -283,7 +284,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return rec ? t(rec.reason, '') : null;
   };
 
-  const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
+  const renderBlockItem = (block: ManifestBlock, showRelevantBadge: boolean = false) => {
     const isLocked = !canUseBlock(block.tier);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
     const marker = showRelevantBadge && !isLocked
