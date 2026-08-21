@@ -373,7 +373,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const manifest = BLOCK_MANIFEST[preset.blockType];
     if (!manifest) return null;
 
-    const blockTier = (manifest.isPremium ? 'pro' : 'free') as BlockTier;
+    const blockTier = (isBlockPremium(preset.blockType) ? 'pro' : 'free') as BlockTier;
     const isLocked = !canUseBlock(blockTier);
     const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
 
