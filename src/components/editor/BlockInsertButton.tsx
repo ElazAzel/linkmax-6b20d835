@@ -30,7 +30,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
-import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import { BLOCK_MANIFEST, isBlockPremium } from '@/lib/blocks/block-manifest';
 import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
