@@ -77,10 +77,11 @@ export async function completeQuest(userId: string, questKey: string): Promise<{
     return { success: false, tokensEarned: 0 };
   }
 
+  // Награда определяется на сервере (daily_quest_definitions),
+  // клиент не передаёт сумму токенов.
   const { data, error } = await supabase.rpc('complete_daily_quest', {
     p_user_id: userId,
     p_quest_key: questKey,
-    p_tokens: quest.tokens,
   });
 
   if (error) {
