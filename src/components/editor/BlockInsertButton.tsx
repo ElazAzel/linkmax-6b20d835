@@ -240,8 +240,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   };
 
   const handleInsertPresetClick = (preset: BlockPreset) => {
-    const manifest = BLOCK_MANIFEST[preset.blockType];
-    const blockTier = (manifest?.isPremium ? 'pro' : 'free') as BlockTier;
+    const blockTier = (isBlockPremium(preset.blockType) ? 'pro' : 'free') as BlockTier;
 
     if (!canUseBlock(blockTier)) {
       toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
