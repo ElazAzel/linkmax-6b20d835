@@ -30,7 +30,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
-import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import { BLOCK_MANIFEST, isBlockPremium } from '@/lib/blocks/block-manifest';
 import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
@@ -90,15 +90,27 @@ const BLOCK_COLORS: Record<string, string> = {
 
 // Derive block list from manifest (single source of truth)
 // Exclude 'profile' since it's auto-added and not insertable
-const MANIFEST_BLOCKS = Object.values(BLOCK_MANIFEST)
-  .filter((entry) => entry.type !== 'profile')
-  .map((entry) => ({
-    type: entry.type,
-    labelKey: entry.labelKey,
-    icon: entry.icon,
-    color: BLOCK_COLORS[entry.type] || 'bg-muted',
-    tier: (entry.isPremium ? 'pro' : 'free') as BlockTier,
-  }));
+// Built lazily: isBlockPremium reads the manifest + promo window at call time.
+function buildManifestBlocks() {
+  return Object.values(BLOCK_MANIFEST)
+    .filter((entry) => entry.type !== 'profile')
+    .map((entry) => ({
+      type: entry.type,
+      labelKey: entry.labelKey,
+      icon: entry.icon,
+      color: BLOCK_COLORS[entry.type] || 'bg-muted',
+      // Respect the free-blocks promo: gating comes from isBlockPremium, not the raw manifest flag
+      tier: (isBlockPremium(entry.type) ? 'pro' : 'free') as BlockTier,
+    }));
+}
+
+type ManifestBlock = ReturnType<typeof buildManifestBlocks>[number];
+
+let manifestBlocksCache: ManifestBlock[] | null = null;
+function getManifestBlocks(): ManifestBlock[] {
+  if (!manifestBlocksCache) manifestBlocksCache = buildManifestBlocks();
+  return manifestBlocksCache;
+}
 
 export const BlockInsertButton = memo(function BlockInsertButton({
   onInsert,
@@ -156,8 +168,11 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return tierLevel(currentTier) >= tierLevel(blockTier);
   };
 
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const MANIFEST_BLOCKS = getManifestBlocks();
   const filteredBlocks = MANIFEST_BLOCKS.filter(block =>
-    t(block.labelKey, block.type).toLowerCase().includes(searchQuery.toLowerCase())
+    t(block.labelKey, block.type).toLowerCase().includes(normalizedQuery) ||
+    block.type.replace(/_/g, ' ').includes(normalizedQuery)
   );
 
   const filteredPresets = useMemo(() => {
@@ -178,11 +193,11 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const { recommendedBlocks, otherBlocks } = useMemo(() => {
     if (searchQuery) {
-      return { recommendedBlocks: [] as typeof MANIFEST_BLOCKS, otherBlocks: filteredBlocks };
+      return { recommendedBlocks: [] as ManifestBlock[], otherBlocks: filteredBlocks };
     }
 
-    const recommended: typeof MANIFEST_BLOCKS = [];
-    const others: typeof MANIFEST_BLOCKS = [];
+    const recommended: ManifestBlock[] = [];
+    const others: ManifestBlock[] = [];
 
     filteredBlocks.forEach(block => {
       if (recommendedBlockTypes.has(block.type as BlockType)) {
@@ -237,8 +252,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   };
 
   const handleInsertPresetClick = (preset: BlockPreset) => {
-    const manifest = BLOCK_MANIFEST[preset.blockType];
-    const blockTier = (manifest?.isPremium ? 'pro' : 'free') as BlockTier;
+    const blockTier = (isBlockPremium(preset.blockType) ? 'pro' : 'free') as BlockTier;
 
     if (!canUseBlock(blockTier)) {
       toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
@@ -270,7 +284,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return rec ? t(rec.reason, '') : null;
   };
 
-  const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
+  const renderBlockItem = (block: ManifestBlock, showRelevantBadge: boolean = false) => {
     const isLocked = !canUseBlock(block.tier);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
     const marker = showRelevantBadge && !isLocked
@@ -353,7 +367,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     if (proHint && !isMobile) {
       return (
-        <Tooltip>
+        <Tooltip key={block.type}>
+
           <TooltipTrigger asChild>
             {blockButton}
           </TooltipTrigger>
@@ -371,7 +386,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const manifest = BLOCK_MANIFEST[preset.blockType];
     if (!manifest) return null;
 
-    const blockTier = (manifest.isPremium ? 'pro' : 'free') as BlockTier;
+    const blockTier = (isBlockPremium(preset.blockType) ? 'pro' : 'free') as BlockTier;
     const isLocked = !canUseBlock(blockTier);
     const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
 
