@@ -26,6 +26,7 @@ vi.mock('@/lib/blocks/block-manifest', () => ({
     text: { type: 'text', labelKey: 'Text', icon: 'type', isPremium: false },
     image: { type: 'image', labelKey: 'Image', icon: 'image', isPremium: false },
   },
+  isBlockPremium: () => false,
 }));
 
 vi.mock('@/lib/blocks/block-recommendations', () => ({

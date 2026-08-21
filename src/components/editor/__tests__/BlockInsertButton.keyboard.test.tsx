@@ -19,6 +19,7 @@ vi.mock('@/lib/blocks/block-manifest', () => ({
       isPremium: false,
     },
   },
+  isBlockPremium: () => false,
 }));
 
 vi.mock('@/lib/blocks/block-recommendations', () => ({
