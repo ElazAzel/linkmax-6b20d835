@@ -90,16 +90,27 @@ const BLOCK_COLORS: Record<string, string> = {
 
 // Derive block list from manifest (single source of truth)
 // Exclude 'profile' since it's auto-added and not insertable
-const MANIFEST_BLOCKS = Object.values(BLOCK_MANIFEST)
-  .filter((entry) => entry.type !== 'profile')
-  .map((entry) => ({
-    type: entry.type,
-    labelKey: entry.labelKey,
-    icon: entry.icon,
-    color: BLOCK_COLORS[entry.type] || 'bg-muted',
-    // Respect the free-blocks promo: gating comes from isBlockPremium, not the raw manifest flag
-    tier: (isBlockPremium(entry.type) ? 'pro' : 'free') as BlockTier,
-  }));
+// Built lazily: isBlockPremium reads the manifest + promo window at call time.
+function buildManifestBlocks() {
+  return Object.values(BLOCK_MANIFEST)
+    .filter((entry) => entry.type !== 'profile')
+    .map((entry) => ({
+      type: entry.type,
+      labelKey: entry.labelKey,
+      icon: entry.icon,
+      color: BLOCK_COLORS[entry.type] || 'bg-muted',
+      // Respect the free-blocks promo: gating comes from isBlockPremium, not the raw manifest flag
+      tier: (isBlockPremium(entry.type) ? 'pro' : 'free') as BlockTier,
+    }));
+}
+
+type ManifestBlock = ReturnType<typeof buildManifestBlocks>[number];
+
+let manifestBlocksCache: ManifestBlock[] | null = null;
+function getManifestBlocks(): ManifestBlock[] {
+  if (!manifestBlocksCache) manifestBlocksCache = buildManifestBlocks();
+  return manifestBlocksCache;
+}
 
 export const BlockInsertButton = memo(function BlockInsertButton({
   onInsert,
