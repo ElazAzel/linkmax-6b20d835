@@ -8,7 +8,7 @@ import { Toaster as Sonner, toast } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
 import { queryRetryOptions, mutationRetryOptions } from "@/lib/resilience/retry-policy";
-import { reportBackendFailure, reportBackendSuccess } from "@/lib/resilience/backend-health";
+import { reportBackendFailure, reportBackendSuccess, startNetworkHealthWatch } from "@/lib/resilience/backend-health";
 import { hydrateQueryCache, persistQueryCache } from "@/lib/resilience/query-cache-persist";
 
 import { BackendStatusBanner } from "@/components/system/BackendStatusBanner";
@@ -57,6 +57,11 @@ const queryClient = new QueryClient({
 // показываем их вместо пустых экранов.
 hydrateQueryCache(queryClient);
 persistQueryCache(queryClient);
+
+// Возврат сети → сбрасываем состояние и обновляем активные запросы.
+startNetworkHealthWatch(() => {
+  void queryClient.refetchQueries({ type: 'active' });
+});
 
 
 

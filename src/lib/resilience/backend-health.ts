@@ -82,8 +82,39 @@ export function subscribeBackendHealth(listener: () => void): () => void {
   return () => listeners.delete(listener);
 }
 
+/**
+ * Подписываемся на события браузера online/offline.
+ * offline → сразу помечаем бэкенд недоступным (запросы всё равно не пройдут),
+ * online → сбрасываем состояние и отдаём колбэк для refetch активных запросов.
+ */
+export function startNetworkHealthWatch(onReconnect?: () => void): () => void {
+  if (typeof window === 'undefined') return () => {};
+
+  const handleOffline = () => {
+    set({ state: 'down', failures: Math.max(snapshot.failures, 3), lastFailureAt: Date.now() });
+  };
+  const handleOnline = () => {
+    set({ state: 'ok', failures: 0, lastRecoveryAt: Date.now() });
+    try {
+      onReconnect?.();
+    } catch {
+      /* refetch не должен ломать обработчик */
+    }
+  };
+
+  if (!navigator.onLine) handleOffline();
+  window.addEventListener('offline', handleOffline);
+  window.addEventListener('online', handleOnline);
+
+  return () => {
+    window.removeEventListener('offline', handleOffline);
+    window.removeEventListener('online', handleOnline);
+  };
+}
+
 /** Для тестов. */
 export function resetBackendHealth() {
   snapshot = { state: 'ok', failures: 0, lastFailureAt: null, lastRecoveryAt: null };
   emit();
 }
+
