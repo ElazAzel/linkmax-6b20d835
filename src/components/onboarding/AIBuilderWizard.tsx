@@ -78,7 +78,7 @@ function hasTemplateBlockType(value: unknown): value is TemplateBlockDraft {
 }
 
 function isKnownTemplateBlock(value: unknown): value is TemplateBlockDraft {
-  return hasTemplateBlockType(value) && KNOWN_BLOCK_TYPES.has(value.type);
+  return hasTemplateBlockType(value) && canCreateBlock(value.type);
 }
 
 function getTemplateBlockPreviews(value: unknown): TemplateBlockDraft[] {
