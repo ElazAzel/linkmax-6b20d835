@@ -35,7 +35,7 @@ import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
-import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
+import { createBlock as createBaseBlock, canCreateBlock } from '@/lib/blocks/block-factory';
 import { generateBlocksFromTemplate } from '@/lib/blocks/internal-builder';
 import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
@@ -48,12 +48,6 @@ import {
 } from '@/lib/activation-events';
 import { trackCurrentUserProductEvent } from '@/services/product-analytics';
 
-// Whitelist of block types supported by the editor (must match block-factory.ts)
-const KNOWN_BLOCK_TYPES = new Set([
-  'profile', 'link', 'button', 'text', 'image', 'socials', 'product', 'video',
-  'carousel', 'messenger', 'form', 'testimonial', 'separator', 'catalog',
-  'faq', 'countdown', 'pricing', 'booking',
-]);
 
 const AI_TIMEOUT_MS = 25000;
 const MAX_REGENERATE_RETRIES = 2;
@@ -84,7 +78,7 @@ function hasTemplateBlockType(value: unknown): value is TemplateBlockDraft {
 }
 
 function isKnownTemplateBlock(value: unknown): value is TemplateBlockDraft {
-  return hasTemplateBlockType(value) && KNOWN_BLOCK_TYPES.has(value.type);
+  return hasTemplateBlockType(value) && canCreateBlock(value.type);
 }
 
 function getTemplateBlockPreviews(value: unknown): TemplateBlockDraft[] {
@@ -359,6 +353,21 @@ export function AIBuilderWizard({
       );
     }
 
+    // 3) Last-resort safety net: a new user must never land on an empty page
+    if (finalBlocks.length === 0) {
+      const safeTypes: string[] = ['text', 'messenger', 'socials'];
+      finalBlocks = safeTypes
+        .map((type) => {
+          try {
+            return createBaseBlock(type) as Block;
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean) as Block[];
+    }
+
+
     incrementAIPageGeneration();
 
     // Update profile bio from AI if user left it empty
@@ -484,6 +493,15 @@ export function AIBuilderWizard({
                 </button>
               ))}
             </div>
+
+            <Button
+              variant="ghost"
+              className="w-full h-11 rounded-xl text-sm text-muted-foreground"
+              onClick={onClose}
+            >
+              {t('aiBuilder.buildManually', 'Соберу страницу вручную')}
+            </Button>
+
           </div>
         )}
 
