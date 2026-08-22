@@ -353,6 +353,21 @@ export function AIBuilderWizard({
       );
     }
 
+    // 3) Last-resort safety net: a new user must never land on an empty page
+    if (finalBlocks.length === 0) {
+      const safeTypes: string[] = ['text', 'messenger', 'socials'];
+      finalBlocks = safeTypes
+        .map((type) => {
+          try {
+            return createBaseBlock(type) as Block;
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean) as Block[];
+    }
+
+
     incrementAIPageGeneration();
 
     // Update profile bio from AI if user left it empty
