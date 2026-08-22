@@ -493,6 +493,15 @@ export function AIBuilderWizard({
                 </button>
               ))}
             </div>
+
+            <Button
+              variant="ghost"
+              className="w-full h-11 rounded-xl text-sm text-muted-foreground"
+              onClick={onClose}
+            >
+              {t('aiBuilder.buildManually', 'Соберу страницу вручную')}
+            </Button>
+
           </div>
         )}
 
