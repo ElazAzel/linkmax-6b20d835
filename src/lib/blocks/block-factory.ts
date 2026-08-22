@@ -441,6 +441,11 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
   },
 };
 
+/** True when the factory can instantiate this block type (source of truth for generators/wizards). */
+export function canCreateBlock(type: string): boolean {
+  return Object.prototype.hasOwnProperty.call(BLOCK_GENERATORS, type);
+}
+
 export function createBlock(type: string, overrides?: Record<string, any>): Block {
   const timestamp = Date.now();
   const id = `${type}-${timestamp}`;
