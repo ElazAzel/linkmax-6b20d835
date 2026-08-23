@@ -353,7 +353,19 @@ export function AIBuilderWizard({
       );
     }
 
-    // 3) Last-resort safety net: a new user must never land on an empty page
+    // 3) Quality pass: drop empty blocks, hydrate user data, guarantee essentials, order them
+    setGenPhase('layout');
+    finalBlocks = refineGeneratedBlocks(finalBlocks, {
+      name: userInfo.name,
+      bio: userInfo.bio,
+      goal: selectedGoal || undefined,
+      contacts: userInfo.contacts,
+      services: userInfo.services,
+      socials: userInfo.socials,
+      mediaLinks: userInfo.mediaLinks,
+    });
+
+    // 4) Last-resort safety net: a new user must never land on an empty page
     if (finalBlocks.length === 0) {
       const safeTypes: string[] = ['text', 'messenger', 'socials'];
       finalBlocks = safeTypes
@@ -366,6 +378,7 @@ export function AIBuilderWizard({
         })
         .filter(Boolean) as Block[];
     }
+
 
 
     incrementAIPageGeneration();
