@@ -653,6 +653,16 @@ export function AIBuilderWizard({
                         className="h-12 rounded-2xl bg-background/80 border-border/30 text-sm"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold ml-1">{t('aiBuilder.socialsLabel', 'Соцсети')}</Label>
+                      <Input
+                        value={userInfo.socials}
+                        onChange={(e) => setUserInfo(p => ({ ...p, socials: e.target.value }))}
+                        placeholder={t('aiBuilder.socialsPlaceholder', 'instagram.com/nick, tiktok.com/@nick')}
+                        className="h-12 rounded-2xl bg-background/80 border-border/30 text-sm"
+                      />
+                    </div>
+
                   </CollapsibleContent>
                 </Collapsible>
               </div>
