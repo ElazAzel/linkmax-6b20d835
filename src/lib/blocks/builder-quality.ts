@@ -82,7 +82,6 @@ export function isMeaningfulBlock(block: Block): boolean {
       return nonEmptyString(b.url) && nonEmptyString(b.title);
     case 'image':
     case 'video':
-    case 'audio':
       return nonEmptyString(b.url);
     case 'socials':
       return (
@@ -96,12 +95,11 @@ export function isMeaningfulBlock(block: Block): boolean {
       );
     case 'catalog':
     case 'pricing':
-    case 'products':
       return nonEmptyArray(b.items);
     case 'faq':
       return nonEmptyArray(b.items) || nonEmptyArray(b.questions);
-    case 'gallery':
-      return nonEmptyArray(b.images);
+    case 'carousel':
+      return nonEmptyArray(b.images) || nonEmptyArray(b.items);
     case 'map':
       return nonEmptyString(b.address);
     case 'separator':
@@ -144,17 +142,16 @@ const ORDER_WEIGHT: Record<string, number> = {
   text: 20,
   video: 30,
   image: 30,
-  gallery: 30,
+  carousel: 30,
   catalog: 40,
   pricing: 40,
-  products: 40,
-  services: 40,
+  product: 40,
   booking: 50,
   form: 55,
   messenger: 60,
   scratch: 65,
   faq: 70,
-  reviews: 72,
+  testimonial: 72,
   map: 80,
   socials: 90,
   separator: 95,
@@ -239,7 +236,7 @@ function ensureEssentials(blocks: Block[], info: BuilderUserInfo): Block[] {
   }
 
   const hasContent = result.some((b) =>
-    ['text', 'catalog', 'pricing', 'products', 'gallery', 'video', 'image', 'faq'].includes(b.type)
+    ['text', 'catalog', 'pricing', 'carousel', 'video', 'image', 'faq', 'product'].includes(b.type)
   );
   if (!hasContent) {
     const services = extractServicesPipeline(info.services || '');
@@ -302,7 +299,6 @@ export function summarizeBlock(block: Block): string {
       return String(b.content ?? '').replace(/[#*_>`]/g, '').trim().slice(0, 80);
     case 'catalog':
     case 'pricing':
-    case 'products':
       return (Array.isArray(b.items) ? (b.items as Loose[]) : [])
         .slice(0, 3)
         .map((item) => String(item?.name ?? ''))
