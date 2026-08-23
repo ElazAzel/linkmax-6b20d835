@@ -15,7 +15,31 @@ import {
   extractServicesPipeline,
   extractContactsPipeline,
   extractSocialsPipeline,
+  type ParsedService,
+  type ParsedMessenger,
+  type ParsedSocial,
 } from './extractors';
+
+function servicesToItems(services: ParsedService[]): Loose[] {
+  return services.map((srv, i) => ({
+    id: `item-${Date.now().toString(36)}-${i}`,
+    name: srv.title,
+    description: srv.description,
+    price: srv.price,
+  }));
+}
+
+function contactsToMessengers(contacts: ParsedMessenger[]): Loose[] {
+  return contacts.map((c) => ({ platform: c.platform, username: c.username }));
+}
+
+function socialsToPlatforms(socials: ParsedSocial[]): Loose[] {
+  return socials.map((s, i) => ({
+    id: `soc-${Date.now().toString(36)}-${i}`,
+    platform: s.platform,
+    url: s.url,
+  }));
+}
 
 export interface BuilderUserInfo {
   name: string;
@@ -179,28 +203,19 @@ function hydrateWithUserData(blocks: Block[], info: BuilderUserInfo): Block[] {
     }
 
     if ((block.type === 'catalog' || block.type === 'pricing') && !nonEmptyArray(b.items) && services.length > 0) {
-      b.items = services.map((srv: Loose, i: number) => ({
-        id: `item-${Date.now().toString(36)}-${i}`,
-        name: srv.title,
-        description: srv.description,
-        price: srv.price,
-      }));
+      b.items = servicesToItems(services);
     }
 
     if (block.type === 'messenger' && !nonEmptyArray(b.messengers)) {
       if (contacts.length > 0) {
-        b.messengers = contacts.map((c: Loose) => ({ platform: c.platform, username: c.username }));
+        b.messengers = contactsToMessengers(contacts);
       } else if (nonEmptyString(info.contacts)) {
         b.messengers = [{ platform: 'whatsapp', username: info.contacts.trim() }];
       }
     }
 
     if (block.type === 'socials' && !nonEmptyArray(b.platforms) && socials.length > 0) {
-      b.platforms = socials.map((s: Loose, i: number) => ({
-        id: `soc-${Date.now().toString(36)}-${i}`,
-        platform: s.platform,
-        url: s.url,
-      }));
+      b.platforms = socialsToPlatforms(socials);
     }
 
     return block;
@@ -229,14 +244,7 @@ function ensureEssentials(blocks: Block[], info: BuilderUserInfo): Block[] {
   if (!hasContent) {
     const services = extractServicesPipeline(info.services || '');
     if (services.length > 0) {
-      const catalog = safeCreate('catalog', {
-        items: services.map((srv: Loose, i: number) => ({
-          id: `item-${Date.now().toString(36)}-${i}`,
-          name: srv.title,
-          description: srv.description,
-          price: srv.price,
-        })),
-      });
+      const catalog = safeCreate('catalog', { items: servicesToItems(services) });
       if (catalog) result.push(catalog);
     } else if (nonEmptyString(info.bio)) {
       const text = safeCreate('text', { content: info.bio.trim() });
@@ -250,7 +258,7 @@ function ensureEssentials(blocks: Block[], info: BuilderUserInfo): Block[] {
     const messenger = safeCreate('messenger', {
       messengers:
         contacts.length > 0
-          ? contacts.map((c: Loose) => ({ platform: c.platform, username: c.username }))
+          ? contactsToMessengers(contacts)
           : nonEmptyString(info.contacts)
             ? [{ platform: 'whatsapp', username: info.contacts.trim() }]
             : [],
