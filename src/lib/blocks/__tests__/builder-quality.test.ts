@@ -13,9 +13,12 @@ const info = {
 
 describe('builder-quality', () => {
   it('drops empty blocks', () => {
-    const empty = createBlock('text') as Block;
+    const empty = createBlock('text', { content: '' }) as Block;
     expect(isMeaningfulBlock(empty)).toBe(false);
+    const filled = createBlock('text', { content: 'Привет' }) as Block;
+    expect(isMeaningfulBlock(filled)).toBe(true);
   });
+
 
   it('always produces a profile and a contact path', () => {
     const blocks = refineGeneratedBlocks([], info);
