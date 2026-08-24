@@ -649,7 +649,10 @@
     "success": "✨ Sahifa yaratildi!",
     "templateDesc": "AI shablonni kontentingiz bilan to'ldiradi",
     "templateTitle": "Shablonni tanlang",
-    "title": "AI Builder"
+    "title": "AI Builder",
+    "result": {
+      "title": "Nima yigʻdik"
+    }
   },
   "alternatives": {
     "bitrix24": {

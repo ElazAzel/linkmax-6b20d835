@@ -37,6 +37,9 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { createBlock as createBaseBlock, canCreateBlock } from '@/lib/blocks/block-factory';
 import { generateBlocksFromTemplate } from '@/lib/blocks/internal-builder';
+import { refineGeneratedBlocks, summarizeBlock } from '@/lib/blocks/builder-quality';
+import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import type { BlockType } from '@/types/blocks/base';
 import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
@@ -153,6 +156,15 @@ export function AIBuilderWizard({
 }: AIBuilderWizardProps) {
   const { t } = useTranslation();
   const { canUseAIPageGeneration, incrementAIPageGeneration } = useFreemiumLimits();
+
+  const blockLabel = useCallback(
+    (type: string) => {
+      const entry = BLOCK_MANIFEST[type as BlockType];
+      return entry ? t(entry.labelKey, type) : t(`blockTypes.${type}`, type);
+    },
+    [t]
+  );
+
 
   const [step, setStep] = useState<Step>('goal');
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -606,8 +618,8 @@ export function AIBuilderWizard({
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedTemplateBlocks.slice(0, 8).map((b, i) => (
-                      <span key={i} className="text-[10px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                        {b.type}
+                      <span key={`${b.type}-${i}`} className="text-[10px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                        {blockLabel(b.type)}
                       </span>
                     ))}
                   </div>
@@ -750,11 +762,42 @@ export function AIBuilderWizard({
               <p className="text-muted-foreground mb-2">
                 {t('aiBuilder.complete.desc', 'Опубликуйте её, чтобы получить ссылку и первых посетителей')}
               </p>
-              <p className="text-xs text-primary font-semibold mb-6">
+              <p className="text-xs text-primary font-semibold mb-4">
                 {usedAI
                   ? t('aiBuilder.aiSucceeded', '✓ AI сгенерировал контент')
                   : t('aiBuilder.fallbackUsed', '✓ Шаблон применён')}
               </p>
+
+              {/* What exactly was built — makes the result tangible */}
+              {generatedBlocks.length > 0 && (
+                <Card className="mb-4 p-3 text-left bg-background/70 border-border/50 rounded-2xl">
+                  <p className="text-xs font-bold mb-2">
+                    {t('aiBuilder.result.title', 'Что мы собрали')} · {generatedBlocks.length}
+                  </p>
+                  <ScrollArea className="max-h-40">
+                    <ul className="space-y-1.5 pr-2">
+                      {generatedBlocks.map((block, index) => {
+                        const summary = summarizeBlock(block);
+                        return (
+                          <li key={block.id} className="flex items-start gap-2 text-xs">
+                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-primary/10 text-[10px] font-bold text-primary">
+                              {index + 1}
+                            </span>
+                            <span className="min-w-0 break-words">
+                              <span className="font-semibold">{blockLabel(block.type)}</span>
+                              {summary && (
+                                <span className="text-muted-foreground"> — {summary}</span>
+                              )}
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </ScrollArea>
+                </Card>
+              )}
+
+
 
               <Card className="mb-4 p-3 text-left bg-background/70 border-border/50 rounded-2xl">
                 <div className="flex items-start gap-3">

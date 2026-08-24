@@ -649,7 +649,10 @@
     "success": "✨ Сторінку створено!",
     "templateDesc": "AI заповнить шаблон вашим контентом",
     "templateTitle": "Оберіть шаблон",
-    "title": "AI-конструктор"
+    "title": "AI-конструктор",
+    "result": {
+      "title": "Що ми зібрали"
+    }
   },
   "alternatives": {
     "bitrix24": {
