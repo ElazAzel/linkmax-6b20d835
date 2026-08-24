@@ -157,6 +157,15 @@ export function AIBuilderWizard({
   const { t } = useTranslation();
   const { canUseAIPageGeneration, incrementAIPageGeneration } = useFreemiumLimits();
 
+  const blockLabel = useCallback(
+    (type: string) => {
+      const entry = BLOCK_MANIFEST[type as BlockType];
+      return entry ? t(entry.labelKey, type) : t(`blockTypes.${type}`, type);
+    },
+    [t]
+  );
+
+
   const [step, setStep] = useState<Step>('goal');
   const [userInfo, setUserInfo] = useState<UserInfo>({
     name: '',
