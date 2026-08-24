@@ -618,8 +618,8 @@ export function AIBuilderWizard({
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedTemplateBlocks.slice(0, 8).map((b, i) => (
-                      <span key={i} className="text-[10px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                        {b.type}
+                      <span key={`${b.type}-${i}`} className="text-[10px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                        {blockLabel(b.type)}
                       </span>
                     ))}
                   </div>
