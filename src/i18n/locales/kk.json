@@ -649,7 +649,10 @@
     "success": "✨ Парақ жасалды!",
     "templateDesc": "AI үлгіні мазмұныңызбен толтырады",
     "templateTitle": "Үлгіні таңдаңыз",
-    "title": "AI Builder"
+    "title": "AI Builder",
+    "result": {
+      "title": "Біз нені жинадық"
+    }
   },
   "alternatives": {
     "bitrix24": {

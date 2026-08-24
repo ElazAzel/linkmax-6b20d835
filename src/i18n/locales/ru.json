@@ -649,7 +649,10 @@
     "success": "✨ Страница создана!",
     "templateDesc": "AI заполнит шаблон вашим контентом",
     "templateTitle": "Выберите шаблон",
-    "title": "ИИ-строитель"
+    "title": "ИИ-строитель",
+    "result": {
+      "title": "Что мы собрали"
+    }
   },
   "alternatives": {
     "bitrix24": {

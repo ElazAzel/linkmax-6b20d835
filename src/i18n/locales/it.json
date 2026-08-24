@@ -649,7 +649,10 @@
     "success": "✨ The page has been created!",
     "templateDesc": "AI will fill the template with your content",
     "templateTitle": "Select a template",
-    "title": "AI Builder"
+    "title": "AI Builder",
+    "result": {
+      "title": "Cosa abbiamo creato"
+    }
   },
   "alternatives": {
     "bitrix24": {
