@@ -226,12 +226,25 @@ i18n
     returnNull: false,
   });
 
-// If the detected language is a lazy locale, load it immediately
-const detectedLang = i18n.language;
-if (LAZY_LANGUAGES.includes(detectedLang as any)) {
-  loadLazyLocale(detectedLang);
-}
-syncDbLocale(detectedLang || 'ru');
+// Load the detected locale (single chunk) — this is the only translation payload
+// on the critical path. Fallback locales are warmed up afterwards, in background.
+const detectedLang = normalizeLanguage(i18n.language || 'ru');
+
+const FALLBACK_WARMUP: string[] = ['ru', 'en'];
+
+export const i18nReady: Promise<void> = loadLazyLocale(detectedLang)
+  .catch(() => undefined)
+  .then(() => {
+    // Warm fallbacks without blocking first paint
+    _ric(() => {
+      FALLBACK_WARMUP.filter((l) => l !== detectedLang).forEach((l) => {
+        loadLazyLocale(l);
+      });
+    });
+  });
+
+syncDbLocale(detectedLang);
+
 
 // Development diagnostics (lazy-loaded)
 if (process.env.NODE_ENV === 'development') {
