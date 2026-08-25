@@ -6,10 +6,10 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { storage } from '@/lib/storage';
 
-// Only eagerly import the 3 primary locales (ru, en, kk) — rest are lazy-loaded on demand
-import ru from './locales/ru.json';
-import en from './locales/en.json';
-import kk from './locales/kk.json';
+// No locale JSON is eagerly imported — every locale (including ru/en/kk) is
+// code-split and fetched on demand. This keeps ~1MB of translation JSON out of
+// the critical path for first paint on public pages.
+
 
 // Merge all top-level keys into translation namespace
 // Deep-merge helper: combines values from both sources; for overlapping object
