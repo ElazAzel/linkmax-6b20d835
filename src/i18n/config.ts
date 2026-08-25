@@ -250,7 +250,7 @@ syncDbLocale(detectedLang);
 if (process.env.NODE_ENV === 'development') {
   import('@/lib/utils/logger').then(({ logger }) => {
     logger.debug('Initialized with language: ' + i18n.language, { context: 'i18n' });
-    logger.debug('Eagerly loaded: ru, en, kk. Lazy locales: ' + LAZY_LANGUAGES.join(', '), { context: 'i18n' });
+    logger.debug('All locales lazy-loaded. Active: ' + i18n.language, { context: 'i18n' });
   });
   // Defer validation to not block startup
   _ric(() => {
