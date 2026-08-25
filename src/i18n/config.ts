@@ -6,10 +6,10 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { storage } from '@/lib/storage';
 
-// Only eagerly import the 3 primary locales (ru, en, kk) — rest are lazy-loaded on demand
-import ru from './locales/ru.json';
-import en from './locales/en.json';
-import kk from './locales/kk.json';
+// No locale JSON is eagerly imported — every locale (including ru/en/kk) is
+// code-split and fetched on demand. This keeps ~1MB of translation JSON out of
+// the critical path for first paint on public pages.
+
 
 // Merge all top-level keys into translation namespace
 // Deep-merge helper: combines values from both sources; for overlapping object
@@ -60,12 +60,16 @@ export const SUPPORTED_LANGUAGES = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'e
 
 export type LocaleCode = typeof SUPPORTED_LANGUAGES[number] | (string & {});
 
-// Languages that are lazy-loaded (not in initial bundle)
-const LAZY_LANGUAGES = ['de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'] as const;
+// Every language is lazy-loaded (no locale JSON in the initial bundle)
+const LAZY_LANGUAGES = SUPPORTED_LANGUAGES;
 
 // Dynamic import map for lazy locales
 const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>> = {
+  ru: () => import('./locales/ru.json').then(m => m.default as unknown as Record<string, unknown>),
+  en: () => import('./locales/en.json').then(m => m.default as unknown as Record<string, unknown>),
+  kk: () => import('./locales/kk.json').then(m => m.default as unknown as Record<string, unknown>),
   de: () => import('./locales/de.json').then(m => m.default as unknown as Record<string, unknown>),
+
   uk: () => import('./locales/uk.json').then(m => m.default as unknown as Record<string, unknown>),
   uz: () => import('./locales/uz.json').then(m => m.default as unknown as Record<string, unknown>),
   be: () => import('./locales/be.json').then(m => m.default as unknown as Record<string, unknown>),
@@ -166,16 +170,15 @@ const customLanguageDetector = {
 const languageDetectorPlugin = new LanguageDetector();
 languageDetectorPlugin.addDetector(customLanguageDetector);
 
-// Initialize i18n with only the 3 primary locales
+// Initialize i18n with no bundled resources — the detected locale is fetched
+// as a separate chunk and awaited via `i18nReady` before the app renders.
 i18n
   .use(languageDetectorPlugin)
   .use(initReactI18next)
   .init({
-    resources: {
-      ru: mergeNamespaces(ru),
-      en: mergeNamespaces(en),
-      kk: mergeNamespaces(kk),
-    },
+    resources: {},
+    partialBundledLanguages: true,
+
     supportedLngs: ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'],
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',
@@ -223,18 +226,31 @@ i18n
     returnNull: false,
   });
 
-// If the detected language is a lazy locale, load it immediately
-const detectedLang = i18n.language;
-if (LAZY_LANGUAGES.includes(detectedLang as any)) {
-  loadLazyLocale(detectedLang);
-}
-syncDbLocale(detectedLang || 'ru');
+// Load the detected locale (single chunk) — this is the only translation payload
+// on the critical path. Fallback locales are warmed up afterwards, in background.
+const detectedLang = normalizeLanguage(i18n.language || 'ru');
+
+const FALLBACK_WARMUP: string[] = ['ru', 'en'];
+
+export const i18nReady: Promise<void> = loadLazyLocale(detectedLang)
+  .catch(() => undefined)
+  .then(() => {
+    // Warm fallbacks without blocking first paint
+    _ric(() => {
+      FALLBACK_WARMUP.filter((l) => l !== detectedLang).forEach((l) => {
+        loadLazyLocale(l);
+      });
+    });
+  });
+
+syncDbLocale(detectedLang);
+
 
 // Development diagnostics (lazy-loaded)
 if (process.env.NODE_ENV === 'development') {
   import('@/lib/utils/logger').then(({ logger }) => {
     logger.debug('Initialized with language: ' + i18n.language, { context: 'i18n' });
-    logger.debug('Eagerly loaded: ru, en, kk. Lazy locales: ' + LAZY_LANGUAGES.join(', '), { context: 'i18n' });
+    logger.debug('All locales lazy-loaded. Active: ' + i18n.language, { context: 'i18n' });
   });
   // Defer validation to not block startup
   _ric(() => {
