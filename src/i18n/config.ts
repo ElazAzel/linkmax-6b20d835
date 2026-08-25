@@ -60,12 +60,16 @@ export const SUPPORTED_LANGUAGES = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'e
 
 export type LocaleCode = typeof SUPPORTED_LANGUAGES[number] | (string & {});
 
-// Languages that are lazy-loaded (not in initial bundle)
-const LAZY_LANGUAGES = ['de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'] as const;
+// Every language is lazy-loaded (no locale JSON in the initial bundle)
+const LAZY_LANGUAGES = SUPPORTED_LANGUAGES;
 
 // Dynamic import map for lazy locales
 const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>> = {
+  ru: () => import('./locales/ru.json').then(m => m.default as unknown as Record<string, unknown>),
+  en: () => import('./locales/en.json').then(m => m.default as unknown as Record<string, unknown>),
+  kk: () => import('./locales/kk.json').then(m => m.default as unknown as Record<string, unknown>),
   de: () => import('./locales/de.json').then(m => m.default as unknown as Record<string, unknown>),
+
   uk: () => import('./locales/uk.json').then(m => m.default as unknown as Record<string, unknown>),
   uz: () => import('./locales/uz.json').then(m => m.default as unknown as Record<string, unknown>),
   be: () => import('./locales/be.json').then(m => m.default as unknown as Record<string, unknown>),
