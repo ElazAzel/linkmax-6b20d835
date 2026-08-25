@@ -289,7 +289,17 @@ function ensureEssentials(blocks: Block[], info: BuilderUserInfo): Block[] {
     }
   }
 
+  // Socials the user typed must never be silently dropped.
+  if (!has('socials')) {
+    const socials = extractSocialsPipeline(info.socials || '');
+    if (socials.length > 0) {
+      const block = safeCreate('socials', { platforms: socialsToPlatforms(socials) });
+      if (block) result.push(block);
+    }
+  }
+
   return result;
+
 }
 
 /**
