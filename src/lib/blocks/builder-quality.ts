@@ -63,6 +63,23 @@ function nonEmptyArray(value: unknown): boolean {
   return Array.isArray(value) && value.length > 0;
 }
 
+/** True when at least one social entry carries a real url/username. */
+function hasUsablePlatform(value: unknown): boolean {
+  return (
+    nonEmptyArray(value) &&
+    (value as Loose[]).some((p) => nonEmptyString(p?.url) || nonEmptyString(p?.username))
+  );
+}
+
+/** True when at least one messenger entry carries a real handle/url. */
+function hasUsableMessenger(value: unknown): boolean {
+  return (
+    nonEmptyArray(value) &&
+    (value as Loose[]).some((m) => nonEmptyString(m?.username) || nonEmptyString(m?.url))
+  );
+}
+
+
 /**
  * A block is meaningful when it carries content a visitor can actually see or use.
  * Blocks that would render as an empty shell are dropped — they are the main
@@ -203,7 +220,9 @@ function hydrateWithUserData(blocks: Block[], info: BuilderUserInfo): Block[] {
       b.items = servicesToItems(services);
     }
 
-    if (block.type === 'messenger' && !nonEmptyArray(b.messengers)) {
+    // Factory defaults ship one blank placeholder entry, so a non-empty array is
+    // not proof of real data — hydrate whenever no entry carries a handle/url.
+    if (block.type === 'messenger' && !hasUsableMessenger(b.messengers)) {
       if (contacts.length > 0) {
         b.messengers = contactsToMessengers(contacts);
       } else if (nonEmptyString(info.contacts)) {
@@ -211,9 +230,10 @@ function hydrateWithUserData(blocks: Block[], info: BuilderUserInfo): Block[] {
       }
     }
 
-    if (block.type === 'socials' && !nonEmptyArray(b.platforms) && socials.length > 0) {
+    if (block.type === 'socials' && !hasUsablePlatform(b.platforms) && socials.length > 0) {
       b.platforms = socialsToPlatforms(socials);
     }
+
 
     return block;
   });
@@ -269,7 +289,17 @@ function ensureEssentials(blocks: Block[], info: BuilderUserInfo): Block[] {
     }
   }
 
+  // Socials the user typed must never be silently dropped.
+  if (!has('socials')) {
+    const socials = extractSocialsPipeline(info.socials || '');
+    if (socials.length > 0) {
+      const block = safeCreate('socials', { platforms: socialsToPlatforms(socials) });
+      if (block) result.push(block);
+    }
+  }
+
   return result;
+
 }
 
 /**
