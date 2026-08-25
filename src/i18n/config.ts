@@ -170,16 +170,15 @@ const customLanguageDetector = {
 const languageDetectorPlugin = new LanguageDetector();
 languageDetectorPlugin.addDetector(customLanguageDetector);
 
-// Initialize i18n with only the 3 primary locales
+// Initialize i18n with no bundled resources — the detected locale is fetched
+// as a separate chunk and awaited via `i18nReady` before the app renders.
 i18n
   .use(languageDetectorPlugin)
   .use(initReactI18next)
   .init({
-    resources: {
-      ru: mergeNamespaces(ru),
-      en: mergeNamespaces(en),
-      kk: mergeNamespaces(kk),
-    },
+    resources: {},
+    partialBundledLanguages: true,
+
     supportedLngs: ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'],
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',
