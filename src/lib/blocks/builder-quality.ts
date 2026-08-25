@@ -63,6 +63,23 @@ function nonEmptyArray(value: unknown): boolean {
   return Array.isArray(value) && value.length > 0;
 }
 
+/** True when at least one social entry carries a real url/username. */
+function hasUsablePlatform(value: unknown): boolean {
+  return (
+    nonEmptyArray(value) &&
+    (value as Loose[]).some((p) => nonEmptyString(p?.url) || nonEmptyString(p?.username))
+  );
+}
+
+/** True when at least one messenger entry carries a real handle/url. */
+function hasUsableMessenger(value: unknown): boolean {
+  return (
+    nonEmptyArray(value) &&
+    (value as Loose[]).some((m) => nonEmptyString(m?.username) || nonEmptyString(m?.url))
+  );
+}
+
+
 /**
  * A block is meaningful when it carries content a visitor can actually see or use.
  * Blocks that would render as an empty shell are dropped — they are the main
