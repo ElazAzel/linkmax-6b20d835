@@ -203,7 +203,9 @@ function hydrateWithUserData(blocks: Block[], info: BuilderUserInfo): Block[] {
       b.items = servicesToItems(services);
     }
 
-    if (block.type === 'messenger' && !nonEmptyArray(b.messengers)) {
+    // Factory defaults ship one blank placeholder entry, so a non-empty array is
+    // not proof of real data — hydrate whenever no entry carries a handle/url.
+    if (block.type === 'messenger' && !hasUsableMessenger(b.messengers)) {
       if (contacts.length > 0) {
         b.messengers = contactsToMessengers(contacts);
       } else if (nonEmptyString(info.contacts)) {
@@ -211,9 +213,10 @@ function hydrateWithUserData(blocks: Block[], info: BuilderUserInfo): Block[] {
       }
     }
 
-    if (block.type === 'socials' && !nonEmptyArray(b.platforms) && socials.length > 0) {
+    if (block.type === 'socials' && !hasUsablePlatform(b.platforms) && socials.length > 0) {
       b.platforms = socialsToPlatforms(socials);
     }
+
 
     return block;
   });
