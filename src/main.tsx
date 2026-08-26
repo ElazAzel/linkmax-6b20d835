@@ -252,11 +252,16 @@ const router = createBrowserRouter([
 import { PushService } from "@/lib/notifications/push-service";
 import { logger } from "@/lib/utils/logger";
 
-createRoot(document.getElementById("root")!).render(
+const root = createRoot(document.getElementById("root")!);
+const renderApp = () => root.render(
   <StrictMode>
     <RouterProvider router={router} future={{ v7_startTransition: true }} />
   </StrictMode>
 );
+
+// Wait for the active locale chunk before first paint so no raw keys flash
+i18nReady.then(renderApp).catch(renderApp);
+
 
 // Initialize Push Notifications for native mobile
 PushService.init();
