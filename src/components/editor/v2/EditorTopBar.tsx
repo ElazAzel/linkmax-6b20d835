@@ -197,6 +197,12 @@ export const EditorTopBar = memo(function EditorTopBar({
                 {t('editor.artDirection.title', 'Дизайн страницы')}
               </DropdownMenuItem>
             )}
+            {hasContent && onOpenDesignHealth && (
+              <DropdownMenuItem onClick={onOpenDesignHealth}>
+                <Gauge className="h-4 w-4 mr-2 text-primary" />
+                {t('editor.designHealth.title', 'Качество дизайна')}
+              </DropdownMenuItem>
+            )}
             {onOpenAI && (
               <DropdownMenuItem onClick={onOpenAI}>
                 <Sparkles className="h-4 w-4 mr-2 text-primary" />
