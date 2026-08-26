@@ -2235,6 +2235,13 @@
         "loudCta": "Highlight the CTA",
         "regroup": "Group blocks"
       }
+    },
+    "blockToolbar": {
+      "label": "Block actions",
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "ai": "Improve with AI",
+      "delete": "Delete"
     }
   },
   "errors": {

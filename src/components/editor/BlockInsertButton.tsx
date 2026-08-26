@@ -447,7 +447,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
               ? "h-18 w-18 rounded-full"
               : "h-14 w-14 rounded-2xl"
           )}
-          data-onboarding="add-block"
           data-testid="add-block-trigger"
         >
           <Plus className={isMobile ? "h-9 w-9" : "h-7 w-7"} strokeWidth={2.5} />

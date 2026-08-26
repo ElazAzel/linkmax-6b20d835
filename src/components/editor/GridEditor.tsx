@@ -943,7 +943,6 @@ export const GridEditor = memo(function GridEditor({
           <button
             type="button"
             onClick={() => openInsertSheet(blocks.length)}
-            data-onboarding="add-block"
             className="inline-flex items-center gap-2 h-11 rounded-xl px-5 bg-primary text-primary-foreground font-semibold text-sm shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.4)] hover:bg-primary/90 active:scale-[0.98] transition-all"
           >
             <Plus className="h-4 w-4" strokeWidth={2.5} />

@@ -55,6 +55,20 @@ const EditorCanvasSkeleton = () => (
   </div>
 );
 
+/**
+ * Ask the canvas (GridEditor) to open the block-insert sheet.
+ * GridEditor listens for this event, so we never click DOM anchors — the old
+ * anchor only existed in the empty state, so "+ Block" silently did nothing
+ * once the page had blocks.
+ */
+function openInsertSheet(position?: number) {
+  window.dispatchEvent(
+    new CustomEvent('editor:open-insert-sheet', {
+      detail: typeof position === 'number' ? { position } : {},
+    }),
+  );
+}
+
 interface EditorScreenProps {
   pageData: PageData | null;
   loading: boolean;
@@ -282,10 +296,7 @@ export const EditorScreen = memo(function EditorScreen({
         title: t('editor.onboarding.addBlockTitle', 'Добавьте первый блок'),
         description: t('editor.onboarding.addBlockDesc', 'Начните с оффера, ссылки или формы — это первый шаг к лидам.'),
         ctaLabel: t('editor.onboarding.addBlockCta', 'Добавить блок'),
-        onCta: () => {
-          const addBlockButton = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
-          addBlockButton?.click();
-        },
+        onCta: () => openInsertSheet(),
       });
     }
 
@@ -349,12 +360,7 @@ export const EditorScreen = memo(function EditorScreen({
     storage.set('editor_context_tips_disabled', next);
   }, [disabledTips]);
 
-  // Trigger insert-sheet by clicking the hidden anchor placed inside the canvas.
-  // Must be declared before any early return to satisfy rules-of-hooks.
-  const triggerAddBlock = useCallback(() => {
-    const target = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
-    target?.click();
-  }, []);
+  const triggerAddBlock = useCallback(() => openInsertSheet(), [openInsertSheet]);
 
   // Sprint 2: append a section preset (group of blocks) to the end of the page.
   const handleInsertSection = useCallback((sectionBlocks: Block[], presetId: string) => {

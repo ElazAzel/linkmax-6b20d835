@@ -2235,6 +2235,13 @@
         "loudCta": "Chaqiruvni ajratish",
         "regroup": "Guruhlash"
       }
+    },
+    "blockToolbar": {
+      "label": "Blok amallari",
+      "edit": "Tahrirlash",
+      "duplicate": "Nusxalash",
+      "ai": "AI bilan yaxshilash",
+      "delete": "Oʻchirish"
     }
   },
   "errors": {
