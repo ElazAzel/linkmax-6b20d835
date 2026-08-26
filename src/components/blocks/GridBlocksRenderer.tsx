@@ -56,7 +56,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
     opts?: { index?: number; total?: number; composition?: CompositionDef },
   ) => {
     const composition = opts?.composition;
-    const variant = resolveBlockVariant(block.type, (block as any).variant);
+    const variant = resolveBlockVariant(block.type, (block as any).designVariant);
 
     // Resolve span: explicit blockSize wins; otherwise infer from block type
     const explicitSize = block.blockSize;

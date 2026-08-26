@@ -94,7 +94,7 @@ export interface BlockGridProps {
     variantLabel?: string; // For A/B testing tracking
     sectionId?: string; // P5: Section grouping
     /** Phase 1: named visual variant id (see src/lib/design/block-variants.ts) */
-    variant?: string;
+    designVariant?: string;
     /** Phase 1: composition id, set on the FIRST block of a section run */
     composition?: string;
     /** Phase 1: SectionPattern this block was created from */
