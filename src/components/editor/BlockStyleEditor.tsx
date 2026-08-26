@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils/utils';
 import { AnimationSettings } from './AnimationSettings';
+import { BlockVariantPicker } from './design/BlockVariantPicker';
 import type { Block } from '@/types/page';
 import type { BlockStyle, BlockFontFamily } from '@/types/blocks/base';
 import Palette from 'lucide-react/dist/esm/icons/palette';
