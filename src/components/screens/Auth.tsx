@@ -30,8 +30,6 @@ import { DeviceAccountSwitcher } from '@/components/auth/DeviceAccountSwitcher';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import UserIcon from 'lucide-react/dist/esm/icons/user';
-import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { trackAuthEvent } from '@/services/authFunnel';
 import { session } from '@/lib/storage';
 import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
