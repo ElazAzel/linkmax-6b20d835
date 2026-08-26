@@ -29,6 +29,8 @@ import {
   type PageRecipe,
 } from '@/lib/design/art-direction';
 import { getComposition } from '@/lib/design/composition';
+import { getKitsForTier, resolveDesignKit, detectActiveKit } from '@/lib/design/design-kits';
+import type { PageTheme } from '@/types/page';
 import type { Block } from '@/types/blocks';
 
 export interface ArtDirectionSheetProps {
@@ -37,6 +39,12 @@ export interface ArtDirectionSheetProps {
   blocks: Block[];
   /** Applies the new (annotated) block list — same content, same order. */
   onApply: (blocks: Block[], recipeId: string | null) => void;
+  /** Phase 7: applies palette + typography together with the layout. */
+  onApplyTheme?: (theme: Partial<PageTheme>) => void;
+  /** Current theme preset id, used to highlight the active kit. */
+  currentThemePreset?: string | null;
+  isPremium?: boolean;
+  onUpgrade?: () => void;
 }
 
 /** Tiny CSS wireframe that hints at the rhythm of the recipe's sections. */
