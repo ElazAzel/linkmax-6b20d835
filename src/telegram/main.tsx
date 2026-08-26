@@ -39,6 +39,8 @@ if (container) {
             </QueryClientProvider>
         </React.StrictMode>
     );
+    i18nReady.then(render).catch(render);
 } else {
+
     console.error('[TelegramApp] #tg-root element not found');
 }
