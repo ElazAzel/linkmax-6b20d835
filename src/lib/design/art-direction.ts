@@ -200,11 +200,11 @@ export function applyArtDirection(
     sectionCount += 1;
 
     run.forEach((block, i) => {
-      const existingVariant = options.preserveExisting ? block.variant : undefined;
+      const existingVariant = options.preserveExisting ? block.designVariant : undefined;
       let variant = existingVariant;
 
       if (!variant) {
-        if (isHero && i === 0 && (block.type === 'text' || block.type === 'heading')) {
+        if (isHero && i === 0 && block.type === 'text') {
           variant = recipe.heroTextVariant;
         } else if (MEDIA_TYPES.has(block.type)) {
           variant = recipe.mediaVariant;
@@ -222,7 +222,7 @@ export function applyArtDirection(
               ? block.composition
               : compositionId
             : undefined,
-        variant,
+        designVariant: variant,
       });
     });
   });
@@ -232,5 +232,5 @@ export function applyArtDirection(
 
 /** Strip all art-direction fields (used by "reset design"). */
 export function clearArtDirection(blocks: Block[]): Block[] {
-  return (blocks || []).map(({ sectionId, composition, variant, ...rest }) => rest as Block);
+  return (blocks || []).map(({ sectionId, composition, designVariant, ...rest }) => rest as Block);
 }
