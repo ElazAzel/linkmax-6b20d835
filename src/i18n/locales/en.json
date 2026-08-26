@@ -2187,6 +2187,52 @@
       "bentoProof": "Bento proof",
       "fullscreenContact": "Fullscreen contact",
       "horizontalProjects": "Horizontal rail"
+    },
+    "designHealth": {
+      "title": "Design quality",
+      "subtitle": "AI-free layout check: section rhythm, hero, visuals and the final step. Fixes never change your content.",
+      "empty": "Add at least one block to the page first.",
+      "score": "Design score",
+      "sections": "Sections",
+      "allGood": "The layout reads as one piece — no critical issues.",
+      "issue": {
+        "noArtDirection": {
+          "title": "No art direction applied",
+          "desc": "Blocks look like identical cards. Apply a design recipe so sections get rhythm, accents and typography."
+        },
+        "weakHero": {
+          "title": "Weak first impression",
+          "desc": "The first section is a plain stack. A hero should be big: split, editorial or full-width media."
+        },
+        "monotone": {
+          "title": "Monotonous rhythm",
+          "desc": "Five or more blocks run in the same rhythm. Break the page into sections with different layouts."
+        },
+        "noVisual": {
+          "title": "No visuals",
+          "desc": "The page is text and buttons only. Add work photos, a gallery or a video — that's your strongest argument."
+        },
+        "noClosingCta": {
+          "title": "No final step",
+          "desc": "There is no booking, form or contact at the end. The visitor finishes reading with nothing to tap."
+        },
+        "quietCta": {
+          "title": "Quiet call to action",
+          "desc": "Your closing booking or contact block looks like everything else. Make it a full-screen section."
+        },
+        "tooManySections": {
+          "title": "Too many sections",
+          "desc": "Almost every block is its own section. The page fragments and stops reading as a whole."
+        }
+      },
+      "fix": {
+        "generic": "Fix",
+        "applyRecipe": "Apply design",
+        "upgradeHero": "Strengthen hero",
+        "rebalance": "Split into sections",
+        "loudCta": "Highlight the CTA",
+        "regroup": "Group blocks"
+      }
     }
   },
   "errors": {
