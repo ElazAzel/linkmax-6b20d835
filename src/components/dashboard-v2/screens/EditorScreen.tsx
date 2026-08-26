@@ -591,6 +591,10 @@ export const EditorScreen = memo(function EditorScreen({
             onOpenChange={setArtDirectionOpen}
             blocks={pageData.blocks}
             onApply={handleApplyArtDirection}
+            onApplyTheme={onApplyTheme}
+            currentThemePreset={pageData.theme?.themePreset ?? null}
+            isPremium={isPremium}
+            onUpgrade={onOpenTheme}
           />
         </Suspense>
       )}
