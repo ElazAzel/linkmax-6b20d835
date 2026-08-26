@@ -240,6 +240,66 @@ export const ArtDirectionSheet = memo(function ArtDirectionSheet({
           </div>
         )}
 
+        {canApply && onApplyTheme && (
+          <div className="mt-6">
+            <div className="flex items-center gap-2">
+              <Palette className="h-3.5 w-3.5 text-primary" />
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {t('editor.artDirection.kits', 'Дизайн-киты')}
+              </h3>
+            </div>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              {t(
+                'editor.artDirection.kitsHint',
+                'Вёрстка, палитра и шрифты сразу — один тап на готовый стиль.',
+              )}
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3">
+              {kits.map((kit) => {
+                const resolved = resolveDesignKit(kit.id);
+                if (!resolved) return null;
+                const locked = kit.isPremium && !isPremium;
+                const isActive = activeKitId === kit.id;
+                return (
+                  <button
+                    key={kit.id}
+                    type="button"
+                    onClick={() => handleApplyKit(kit.id)}
+                    aria-pressed={isActive}
+                    className={cn(
+                      'flex items-center gap-3 rounded-xl border p-2.5 text-left transition-colors hover:bg-accent',
+                      isActive ? 'border-primary/60 ring-1 ring-primary/30' : 'border-border/50',
+                      locked && 'opacity-70',
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        'flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-1 rounded-lg',
+                        resolved.preview.bg,
+                      )}
+                    >
+                      <span className={cn('text-[10px] font-bold', resolved.preview.text)}>Aa</span>
+                      <span className={cn('h-1.5 w-6 rounded-full', resolved.preview.button)} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className="truncate text-xs font-semibold">
+                          {t(kit.labelKey, kit.labelFallback)}
+                        </span>
+                        {locked && <Lock className="h-3 w-3 shrink-0 text-muted-foreground" />}
+                        {isActive && !locked && <Check className="h-3 w-3 shrink-0 text-primary" />}
+                      </div>
+                      <span className="line-clamp-2 text-[10px] leading-snug text-muted-foreground">
+                        {t(kit.descKey, kit.descFallback)}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="mt-5 flex items-center justify-between gap-2 border-t border-border/40 pt-4">
           <p className="text-[11px] text-muted-foreground">
             {t('editor.artDirection.note', 'Блоки не удаляются и не переставляются.')}
