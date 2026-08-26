@@ -30,6 +30,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   SITE_TEMPLATES,
   buildPageBlocks,
+  getTemplateThemePatch,
   type SiteTemplate,
   type SiteTemplateId,
 } from '@/lib/sections/site-templates';
@@ -77,10 +78,13 @@ export const SiteTemplateGallery = memo(function SiteTemplateGallery({
   const handleApply = async (tpl: SiteTemplate) => {
     if (!siteId || !userId) return;
     // Trim to remaining slots so we never violate Starter limit.
+    // Phase 8: seed both the layout rhythm and the palette from the template kit.
+    const themePatch = getTemplateThemePatch(tpl) as Record<string, unknown> | undefined;
     const pages = tpl.pages.slice(0, Math.max(0, remainingSlots)).map((p) => ({
       path: p.path,
       title: t(p.titleKey, p.titleFallback),
-      seedBlocks: buildPageBlocks(p.sections),
+      seedBlocks: buildPageBlocks(p.sections, tpl.defaultKitId),
+      theme: themePatch,
     }));
     if (pages.length === 0) {
       toast.error(

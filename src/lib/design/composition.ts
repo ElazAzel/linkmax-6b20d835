@@ -63,7 +63,7 @@ const COMPOSITION_LIST: CompositionDef[] = [
     labelKey: 'editor.composition.splitHero',
     labelFallback: 'Split-герой',
     shellClass: 'py-8',
-    gridClass: 'grid grid-cols-1 md:grid-cols-2 gap-6 md:items-center',
+    gridClass: 'grid grid-cols-1 md:grid-cols-2 gap-6 md:items-center [&>*]:min-w-0',
     naked: true,
   },
   {
@@ -71,8 +71,8 @@ const COMPOSITION_LIST: CompositionDef[] = [
     rhythm: 'editorial',
     labelKey: 'editor.composition.editorialHero',
     labelFallback: 'Редакционный герой',
-    shellClass: 'py-10',
-    gridClass: 'flex flex-col gap-3 text-left',
+    shellClass: 'py-8 sm:py-10',
+    gridClass: 'flex flex-col gap-3 text-left [&>*]:min-w-0',
     itemClass: (i) => (i === 0 ? 'lm-display-scale max-w-[22ch]' : 'max-w-[46ch]'),
     naked: true,
   },
@@ -101,7 +101,7 @@ const COMPOSITION_LIST: CompositionDef[] = [
     labelKey: 'editor.composition.projectSpotlight',
     labelFallback: 'Спотлайт проекта',
     shellClass: 'py-8',
-    gridClass: 'grid grid-cols-1 gap-5',
+    gridClass: 'grid grid-cols-1 gap-5 [&>*]:min-w-0',
     itemClass: (i) => (i === 0 ? 'md:scale-[1.02] origin-left' : ''),
   },
   {
@@ -110,16 +110,18 @@ const COMPOSITION_LIST: CompositionDef[] = [
     labelKey: 'editor.composition.bentoProof',
     labelFallback: 'Бенто-доказательства',
     shellClass: 'py-8',
-    gridClass: 'grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]',
-    itemClass: (i, total) => (total > 2 && i === 0 ? 'col-span-2' : ''),
+    // Phase 10: one column on phones — two columns of tiny cards were unreadable.
+    gridClass:
+      'grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)] [&>*]:min-w-0',
+    itemClass: (i, total) => (total > 2 && i === 0 ? 'sm:col-span-2' : ''),
   },
   {
     id: 'fullscreen-contact',
     rhythm: 'full-bleed',
     labelKey: 'editor.composition.fullscreenContact',
     labelFallback: 'Контакт на весь экран',
-    shellClass: 'py-14 text-center',
-    gridClass: 'flex flex-col items-center gap-5',
+    shellClass: 'py-10 sm:py-14 text-center',
+    gridClass: 'flex flex-col items-center gap-5 w-full [&>*]:min-w-0 [&>*]:max-w-full',
     naked: true,
   },
   {
@@ -130,7 +132,7 @@ const COMPOSITION_LIST: CompositionDef[] = [
     shellClass: 'py-8 -mx-4 px-4 sm:-mx-6 sm:px-6',
     gridClass:
       'flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-    itemClass: () => 'snap-start shrink-0 w-[78%] sm:w-[46%]',
+    itemClass: () => 'snap-start shrink-0 w-[86%] xs:w-[78%] sm:w-[46%] min-w-0',
   },
 ];
 

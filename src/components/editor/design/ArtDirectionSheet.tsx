@@ -15,6 +15,7 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
 import Palette from 'lucide-react/dist/esm/icons/palette';
 import Lock from 'lucide-react/dist/esm/icons/lock';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import {
   Sheet,
   SheetContent,
@@ -125,6 +126,57 @@ const RecipeWireframe = memo(function RecipeWireframe({ recipe }: { recipe: Page
   );
 });
 
+/**
+ * Phase 10: phone-sized mock of a kit — palette + section rhythm as they land on
+ * a 390px screen, where most visitors actually see the page.
+ */
+const KitPhonePreview = memo(function KitPhonePreview({
+  kitId,
+}: {
+  kitId: string;
+}) {
+  const resolved = resolveDesignKit(kitId);
+  if (!resolved) return null;
+  const rhythms = [resolved.recipe.hero, ...resolved.recipe.body.slice(0, 2), resolved.recipe.closing].map(
+    (id) => getComposition(id)?.rhythm ?? 'stack',
+  );
+
+  return (
+    <div className="mx-auto w-[92px] rounded-[12px] border border-border/60 p-1">
+      <div className={cn('flex flex-col gap-1 overflow-hidden rounded-[8px] p-1.5', resolved.preview.bg)}>
+        {rhythms.map((rhythm, i) => {
+          if (rhythm === 'split') {
+            return (
+              <div key={i} className="grid grid-cols-2 gap-0.5">
+                <span className={cn('h-3 rounded-sm opacity-80', resolved.preview.button)} />
+                <span className={cn('h-3 rounded-sm opacity-40', resolved.preview.button)} />
+              </div>
+            );
+          }
+          if (rhythm === 'bento') {
+            return (
+              <div key={i} className="flex flex-col gap-0.5">
+                <span className={cn('h-2 rounded-sm opacity-70', resolved.preview.button)} />
+                <span className={cn('h-2 rounded-sm opacity-50', resolved.preview.button)} />
+              </div>
+            );
+          }
+          if (rhythm === 'full-bleed') {
+            return <span key={i} className={cn('-mx-1.5 h-4 opacity-80', resolved.preview.button)} />;
+          }
+          return (
+            <div key={i} className="flex flex-col gap-0.5">
+              <span className={cn('h-1.5 w-3/4 rounded-sm', resolved.preview.button)} />
+              <span className={cn('h-1 w-full rounded-sm opacity-30', resolved.preview.button)} />
+            </div>
+          );
+        })}
+        <span className={cn('mt-0.5 text-[7px] font-bold leading-none', resolved.preview.text)}>Aa</span>
+      </div>
+    </div>
+  );
+});
+
 export const ArtDirectionSheet = memo(function ArtDirectionSheet({
   open,
   onOpenChange,
@@ -144,6 +196,7 @@ export const ArtDirectionSheet = memo(function ArtDirectionSheet({
   }, [blocks]);
 
   const [selected, setSelected] = useState<string | null>(currentRecipeId);
+  const [phonePreview, setPhonePreview] = useState(false);
 
   const contentBlocks = blocks.filter((b) => b.type !== 'profile');
   const canApply = contentBlocks.length > 0;
@@ -250,6 +303,18 @@ export const ArtDirectionSheet = memo(function ArtDirectionSheet({
                 {t('editor.artDirection.kits', 'Дизайн-киты')}
               </h3>
             </div>
+            <button
+              type="button"
+              onClick={() => setPhonePreview((v) => !v)}
+              aria-pressed={phonePreview}
+              className={cn(
+                'mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors',
+                phonePreview ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground hover:bg-accent',
+              )}
+            >
+              <Smartphone className="h-3.5 w-3.5" />
+              {t('editor.artDirection.phonePreview', 'Как на телефоне')}
+            </button>
             <p className="mt-1 text-[11px] text-muted-foreground">
               {t(
                 'editor.artDirection.kitsHint',
@@ -269,20 +334,25 @@ export const ArtDirectionSheet = memo(function ArtDirectionSheet({
                     onClick={() => handleApplyKit(kit.id)}
                     aria-pressed={isActive}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl border p-2.5 text-left transition-colors hover:bg-accent',
+                      'rounded-xl border p-2.5 text-left transition-colors hover:bg-accent',
+                      phonePreview ? 'flex flex-col gap-2' : 'flex items-center gap-3',
                       isActive ? 'border-primary/60 ring-1 ring-primary/30' : 'border-border/50',
                       locked && 'opacity-70',
                     )}
                   >
-                    <div
-                      className={cn(
-                        'flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-1 rounded-lg',
-                        resolved.preview.bg,
-                      )}
-                    >
-                      <span className={cn('text-[10px] font-bold', resolved.preview.text)}>Aa</span>
-                      <span className={cn('h-1.5 w-6 rounded-full', resolved.preview.button)} />
-                    </div>
+                    {phonePreview ? (
+                      <KitPhonePreview kitId={kit.id} />
+                    ) : (
+                      <div
+                        className={cn(
+                          'flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-1 rounded-lg',
+                          resolved.preview.bg,
+                        )}
+                      >
+                        <span className={cn('text-[10px] font-bold', resolved.preview.text)}>Aa</span>
+                        <span className={cn('h-1.5 w-6 rounded-full', resolved.preview.button)} />
+                      </div>
+                    )}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
                         <span className="truncate text-xs font-semibold">

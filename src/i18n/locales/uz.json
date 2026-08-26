@@ -2157,7 +2157,8 @@
         "calm": "Yumshoq o'tishlar, ustma-ust portret, engil to'r"
       },
       "kits": "Dizayn to‘plamlari",
-      "kitsHint": "Tuzilma, palitra va shriftlar birdan — tayyor uslubga bir teginish."
+      "kitsHint": "Tuzilma, palitra va shriftlar birdan — tayyor uslubga bir teginish.",
+      "phonePreview": "Telefonda qanday"
     },
     "design": {
       "variantTitle": "Dizayn uslubi",
@@ -2225,6 +2226,10 @@
         "tooManySections": {
           "title": "Bo'limlar juda ko'p",
           "desc": "Deyarli har bir blok alohida bo'lim. Sahifa bo'linib, yaxlit o'qilmaydi."
+        },
+        "lowContrast": {
+          "title": "Matn yaxshi oʻqilmaydi",
+          "desc": "Matn rangi fonga juda yaqin — telefonda va yorugʻda oʻqib boʻlmaydi. Kontrast 4.5:1 dan kam boʻlmasin."
         }
       },
       "fix": {
@@ -2233,7 +2238,8 @@
         "upgradeHero": "Heroni kuchaytirish",
         "rebalance": "Bo'limlarga ajratish",
         "loudCta": "Chaqiruvni ajratish",
-        "regroup": "Guruhlash"
+        "regroup": "Guruhlash",
+        "contrast": "Matn rangini tuzatish"
       }
     },
     "blockToolbar": {
@@ -2242,6 +2248,18 @@
       "duplicate": "Nusxalash",
       "ai": "AI bilan yaxshilash",
       "delete": "Oʻchirish"
+    },
+    "prePublish": {
+      "title": "Dizaynni bir tegishda yaxshilash mumkin",
+      "subtitle": "Sahifani hozir nashr qilishingiz mumkin — avval birinchi taassurotni buzayotgan narsani koʻrib chiqing.",
+      "fixAll": "Hammasini tuzatib nashr qilish",
+      "details": "Batafsil koʻrish",
+      "publishAnyway": "Shundayligicha nashr qilish"
+    },
+    "onboarding": {
+      "designKitTitle": "Sahifaga koʻrinish bering",
+      "designKitDesc": "Dizayn-kit bir tegishda maket, palitra va shriftlarni sozlaydi — kontent oʻzgarmaydi.",
+      "designKitCta": "Uslub tanlash"
     }
   },
   "errors": {

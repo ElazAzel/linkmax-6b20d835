@@ -57,6 +57,8 @@ export interface EditorTopBarProps {
   onOpenTemplates?: () => void;
   onOpenArtDirection?: () => void;
   onOpenDesignHealth?: () => void;
+  /** Phase 9: compact design score (0-100). Hidden when null. */
+  designScore?: number | null;
   onOpenAI?: () => void;
   reviewMode?: string;
   onToggleReviewMode?: (mode: 'problematic' | 'cta_contact') => void;
@@ -80,6 +82,7 @@ export const EditorTopBar = memo(function EditorTopBar({
   onOpenTemplates,
   onOpenArtDirection,
   onOpenDesignHealth,
+  designScore = null,
   onOpenAI,
   reviewMode = 'normal',
   onToggleReviewMode,
@@ -108,8 +111,27 @@ export const EditorTopBar = memo(function EditorTopBar({
       </div>
 
       {/* Center: health (desktop, hidden on small mobile) */}
-      <div className="hidden xs:flex items-center justify-center shrink-0">
+      <div className="hidden xs:flex items-center justify-center gap-1.5 shrink-0">
         <PageHealthMeter {...health} />
+        {designScore !== null && hasContent && (
+          <button
+            type="button"
+            onClick={onOpenDesignHealth}
+            title={t('editor.designHealth.title', 'Качество дизайна')}
+            aria-label={`${t('editor.designHealth.score', 'Оценка дизайна')}: ${designScore}`}
+            className={cn(
+              'inline-flex items-center gap-1 h-7 rounded-full px-2 text-[11px] font-semibold transition-colors',
+              designScore >= 80
+                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20'
+                : designScore >= 50
+                  ? 'bg-primary/10 text-primary hover:bg-primary/20'
+                  : 'bg-destructive/10 text-destructive hover:bg-destructive/20',
+            )}
+          >
+            <Gauge className="h-3.5 w-3.5" />
+            {designScore}
+          </button>
+        )}
       </div>
 
       {/* Right: actions */}

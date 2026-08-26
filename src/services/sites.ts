@@ -109,6 +109,8 @@ export async function createSubPage(input: {
   pagePath: string;
   title: string;
   seedBlocks?: Block[];
+  /** Phase 8: theme patch from the template's design kit. */
+  theme?: Record<string, unknown>;
 }): Promise<{ id: string } | null> {
   const slug = `${input.siteId.slice(0, 8)}-${input.pagePath}`;
   const { data, error } = await supabase
@@ -121,6 +123,7 @@ export async function createSubPage(input: {
       title: input.title,
       is_home: false,
       is_published: false,
+      ...(input.theme ? { theme_settings: input.theme } : {}),
     } as never)
     .select('id')
     .single();
@@ -287,7 +290,7 @@ export async function getSitePagesStats(
 export async function applySiteTemplate(input: {
   siteId: string;
   userId: string;
-  pages: Array<{ path: string; title: string; seedBlocks: Block[] }>;
+  pages: Array<{ path: string; title: string; seedBlocks: Block[]; theme?: Record<string, unknown> }>;
 }): Promise<{ created: number; skipped: string[] }> {
   const { data: existing } = await supabase
     .from('pages')
@@ -312,6 +315,7 @@ export async function applySiteTemplate(input: {
       pagePath: p.path,
       title: p.title,
       seedBlocks: p.seedBlocks,
+      theme: p.theme,
     });
     if (res) {
       created += 1;
