@@ -1315,3 +1315,81 @@
   filter: none !important;
   -webkit-filter: none !important;
 }
+
+/* ==========================================================
+   BuildingLoader — «страница собирается по кусочкам»
+   ========================================================== */
+@keyframes lm-load-drop {
+  0% { opacity: 0; transform: translateY(14px) scale(0.94); }
+  55% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0.35; transform: translateY(0) scale(1); }
+}
+.lm-load-drop { animation: lm-load-drop 1.6s cubic-bezier(.2,.8,.2,1) infinite; }
+
+@keyframes lm-load-magnet-l {
+  0%, 100% { transform: translateX(-14px); opacity: 0.45; }
+  45%, 65% { transform: translateX(2px); opacity: 1; }
+}
+@keyframes lm-load-magnet-r {
+  0%, 100% { transform: translateX(14px); opacity: 0.45; }
+  45%, 65% { transform: translateX(-2px); opacity: 1; }
+}
+.lm-load-magnet-l { animation: lm-load-magnet-l 1.5s cubic-bezier(.3,1.4,.4,1) infinite; }
+.lm-load-magnet-r { animation: lm-load-magnet-r 1.5s cubic-bezier(.3,1.4,.4,1) infinite; }
+
+@keyframes lm-load-pop {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
+}
+.lm-load-pop { animation: lm-load-pop 1.5s ease-in-out infinite; }
+
+@keyframes lm-load-swap-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(40px); }
+}
+@keyframes lm-load-swap-up {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-40px); }
+}
+.lm-load-swap-down { animation: lm-load-swap-down 1.8s cubic-bezier(.65,0,.35,1) infinite; }
+.lm-load-swap-up { animation: lm-load-swap-up 1.8s cubic-bezier(.65,0,.35,1) infinite; }
+
+@keyframes lm-load-pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.8; }
+}
+.lm-load-pulse { animation: lm-load-pulse 1.4s ease-in-out infinite; }
+
+@keyframes lm-load-line {
+  0% { transform: translateY(-50%) scaleX(0); }
+  60%, 100% { transform: translateY(-50%) scaleX(1); }
+}
+.lm-load-line { animation: lm-load-line 1.8s ease-out infinite; }
+
+@keyframes lm-load-node {
+  0%, 20% { opacity: 0; transform: translateY(-50%) scale(0.4); }
+  45% { opacity: 1; transform: translateY(-50%) scale(1.15); }
+  100% { opacity: 0.5; transform: translateY(-50%) scale(1); }
+}
+.lm-load-node { animation: lm-load-node 1.8s ease-out infinite; }
+
+@keyframes lm-load-dissolve {
+  0%, 25% { opacity: 0.9; transform: scaleX(1); filter: none; }
+  60%, 100% { opacity: 0; transform: scaleX(0.6); }
+}
+.lm-load-dissolve { animation: lm-load-dissolve 1.7s ease-in-out infinite; }
+
+@keyframes lm-load-rise {
+  0%, 25% { transform: translateY(0); opacity: 0.3; }
+  60%, 100% { transform: translateY(-32px); opacity: 0.8; }
+}
+.lm-load-rise { animation: lm-load-rise 1.7s cubic-bezier(.4,0,.2,1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lm-load-drop, .lm-load-magnet-l, .lm-load-magnet-r, .lm-load-pop,
+  .lm-load-swap-down, .lm-load-swap-up, .lm-load-pulse, .lm-load-line,
+  .lm-load-node, .lm-load-dissolve, .lm-load-rise {
+    animation-duration: 2.4s;
+    animation-timing-function: ease-in-out;
+  }
+}
