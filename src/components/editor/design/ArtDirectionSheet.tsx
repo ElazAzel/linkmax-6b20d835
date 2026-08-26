@@ -128,6 +128,10 @@ export const ArtDirectionSheet = memo(function ArtDirectionSheet({
   onOpenChange,
   blocks,
   onApply,
+  onApplyTheme,
+  currentThemePreset,
+  isPremium = false,
+  onUpgrade,
 }: ArtDirectionSheetProps) {
   const { t } = useTranslation();
 
