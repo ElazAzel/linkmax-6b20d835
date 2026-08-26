@@ -621,6 +621,149 @@ export type Database = {
         }
         Relationships: []
       }
+      digital_products: {
+        Row: {
+          access_ttl_hours: number
+          created_at: string
+          currency: string
+          description: string | null
+          download_limit: number
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          is_active: boolean
+          mime_type: string | null
+          page_id: string | null
+          price: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_ttl_hours?: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          download_limit?: number
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          is_active?: boolean
+          mime_type?: string | null
+          page_id?: string | null
+          price?: number
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_ttl_hours?: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          download_limit?: number
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          is_active?: boolean
+          mime_type?: string | null
+          page_id?: string | null
+          price?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "digital_products_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "digital_products_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      digital_purchases: {
+        Row: {
+          access_token: string
+          amount: number
+          buyer_email: string
+          buyer_user_id: string | null
+          created_at: string
+          currency: string
+          download_limit: number
+          downloads_used: number
+          expires_at: string | null
+          id: string
+          last_download_at: string | null
+          paid_at: string | null
+          product_id: string
+          provider: string | null
+          provider_ref: string | null
+          seller_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string
+          amount?: number
+          buyer_email: string
+          buyer_user_id?: string | null
+          created_at?: string
+          currency?: string
+          download_limit?: number
+          downloads_used?: number
+          expires_at?: string | null
+          id?: string
+          last_download_at?: string | null
+          paid_at?: string | null
+          product_id: string
+          provider?: string | null
+          provider_ref?: string | null
+          seller_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          amount?: number
+          buyer_email?: string
+          buyer_user_id?: string | null
+          created_at?: string
+          currency?: string
+          download_limit?: number
+          downloads_used?: number
+          expires_at?: string | null
+          id?: string
+          last_download_at?: string | null
+          paid_at?: string | null
+          product_id?: string
+          provider?: string | null
+          provider_ref?: string | null
+          seller_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "digital_purchases_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "digital_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_signatures: {
         Row: {
           created_at: string
@@ -5090,6 +5233,21 @@ export type Database = {
         }
       }
       get_auth_user_email: { Args: never; Returns: string }
+      get_digital_product_public: {
+        Args: { _product_id: string }
+        Returns: {
+          access_ttl_hours: number
+          currency: string
+          description: string
+          download_limit: number
+          file_name: string
+          file_size: number
+          id: string
+          price: number
+          seller_id: string
+          title: string
+        }[]
+      }
       get_event_registration_count: {
         Args: { p_event_id: string }
         Returns: number
