@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import Check from 'lucide-react/dist/esm/icons/check';
 import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import {
   Sheet,
   SheetContent,
