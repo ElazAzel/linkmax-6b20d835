@@ -710,26 +710,80 @@ export const GridEditor = memo(function GridEditor({
     trackEditorAction('block_copied', { blockType: block.type, source: 'grid' });
   }, [setClipboardContent]);
 
-  // Build grid items with section headers
-  const gridItems = useMemo(() => {
-    const items: React.ReactNode[] = [];
+  // Build canvas runs: composed sections (WYSIWYG) + legacy bento grid groups
+  const canvasRuns = useMemo(() => {
     const profileOffset = profileBlock ? 1 : 0;
+
+    type Run =
+      | { kind: 'grid'; key: string; nodes: React.ReactNode[] }
+      | {
+          kind: 'section';
+          key: string;
+          composition: CompositionDef;
+          header: React.ReactNode;
+          nodes: React.ReactNode[];
+        };
+
+    const runs: Run[] = [];
     let currentSectionId: string | undefined;
+
+    const renderBlock = (
+      block: Block,
+      index: number,
+      composition?: CompositionDef,
+      compositionIndex = 0,
+      compositionTotal = 1,
+    ) => (
+      <SortableGridBlockItem
+        key={block.id}
+        block={block}
+        onEdit={onEditBlock}
+        onDelete={onDeleteBlock}
+        onDuplicate={onDuplicateBlock}
+        onUpdateBlock={onUpdateBlock}
+        isPremium={isPremium}
+        premiumTier={premiumTier}
+        isMobile={isMobile}
+        isSelected={selectedBlockIds.size <= 1 && selectedBlockIds.has(block.id)}
+        isMultiSelected={selectedBlockIds.size > 1 && selectedBlockIds.has(block.id)}
+        isDimmed={reviewDimmedIds.has(block.id)}
+        onStartExperiment={setExperimentBlock}
+        onBlockClick={handleBlockClick}
+        onBlockDoubleClick={handleBlockDoubleClick}
+        onTransform={handleTransform}
+        onCopy={handleCopyBlock}
+        isFirst={index === 0}
+        isLast={index === contentBlocks.length - 1}
+        onMoveUp={index > 0 ? () => {
+          const reordered = arrayMove(contentBlocks, index, index - 1);
+          onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+        } : undefined}
+        onMoveDown={index < contentBlocks.length - 1 ? () => {
+          const reordered = arrayMove(contentBlocks, index, index + 1);
+          onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+        } : undefined}
+        isRecentlyAdded={recentlyAddedBlockId === block.id}
+        composition={composition}
+        compositionIndex={compositionIndex}
+        compositionTotal={compositionTotal}
+      />
+    );
 
     contentBlocks.forEach((block, index) => {
       const blockSectionId = (block as any).sectionId as string | undefined;
+      const blockComposition = getComposition((block as any).composition);
+      const startsNewSection = !!blockSectionId && blockSectionId !== currentSectionId;
 
-      // Insert section header when entering a new section
-      if (blockSectionId && blockSectionId !== currentSectionId) {
+      let header: React.ReactNode = null;
+      if (startsNewSection && blockSectionId) {
         const meta = sectionMeta.get(blockSectionId);
-        const section = sections.find(s => s.id === blockSectionId);
-        const isCollapsed = collapsedSections.has(blockSectionId);
-        items.push(
+        const section = sections.find(sct => sct.id === blockSectionId);
+        header = (
           <SectionHeader
             key={`section-${blockSectionId}`}
             label={meta?.label || t('editor.section', 'Секция')}
             blockCount={section?.blockIds.length || 0}
-            isCollapsed={isCollapsed}
+            isCollapsed={collapsedSections.has(blockSectionId)}
             onToggleCollapse={() => toggleSectionCollapse(blockSectionId)}
             compositionId={(block as any).composition}
             onSelectComposition={(id) => onUpdateBlock(block.id, { composition: id } as any)}
@@ -738,12 +792,15 @@ export const GridEditor = memo(function GridEditor({
       }
       currentSectionId = blockSectionId;
 
-      // Skip blocks in collapsed sections
+      // Collapsed section: only keep the header
       if (blockSectionId && collapsedSections.has(blockSectionId)) {
+        if (header) {
+          runs.push({ kind: 'grid', key: `grid-collapsed-${blockSectionId}`, nodes: [header] });
+        }
         return;
       }
 
-      items.push(
+      const divider = (
         <InsertBetweenDivider
           key={`divider-${block.id}`}
           position={index + profileOffset}
@@ -751,42 +808,46 @@ export const GridEditor = memo(function GridEditor({
           isMobile={isMobile}
         />
       );
-      items.push(
-        <SortableGridBlockItem
-          key={block.id}
-          block={block}
-          onEdit={onEditBlock}
-          onDelete={onDeleteBlock}
-          onDuplicate={onDuplicateBlock}
-          onUpdateBlock={onUpdateBlock}
-          isPremium={isPremium}
-          premiumTier={premiumTier}
-          isMobile={isMobile}
-          isSelected={selectedBlockIds.size <= 1 && selectedBlockIds.has(block.id)}
-          isMultiSelected={selectedBlockIds.size > 1 && selectedBlockIds.has(block.id)}
-          isDimmed={reviewDimmedIds.has(block.id)}
-          onStartExperiment={setExperimentBlock}
-          onBlockClick={handleBlockClick}
-          onBlockDoubleClick={handleBlockDoubleClick}
-          onTransform={handleTransform}
-          onCopy={handleCopyBlock}
-          isFirst={index === 0}
-          isLast={index === contentBlocks.length - 1}
-          onMoveUp={index > 0 ? () => {
-            const reordered = arrayMove(contentBlocks, index, index - 1);
-            onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
-          } : undefined}
-          onMoveDown={index < contentBlocks.length - 1 ? () => {
-            const reordered = arrayMove(contentBlocks, index, index + 1);
-            onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
-          } : undefined}
-          isRecentlyAdded={recentlyAddedBlockId === block.id}
-        />
-      );
+
+      const last = runs[runs.length - 1];
+
+      // A composition on a block opens a new composed section run
+      if (blockComposition) {
+        runs.push({
+          kind: 'section',
+          key: `sec-${block.id}`,
+          composition: blockComposition,
+          header,
+          nodes: [renderBlock(block, index, blockComposition, 0, 1)],
+        });
+        return;
+      }
+
+      // Continue the previous composed section when the sectionId matches
+      if (
+        last?.kind === 'section' &&
+        blockSectionId &&
+        !startsNewSection
+      ) {
+        last.nodes.push(renderBlock(block, index, last.composition, last.nodes.length, last.nodes.length + 1));
+        return;
+      }
+
+      if (last?.kind === 'grid') {
+        if (header) last.nodes.push(header);
+        last.nodes.push(divider, renderBlock(block, index));
+        return;
+      }
+
+      runs.push({
+        kind: 'grid',
+        key: `grid-${block.id}`,
+        nodes: header ? [header, divider, renderBlock(block, index)] : [divider, renderBlock(block, index)],
+      });
     });
 
-    return items;
-  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId]);
+    return runs;
+  }, [contentBlocks, profileBlock, isPremium, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, handleTransform, handleCopyBlock, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId, openInsertSheet]);
 
   return (
     <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-5 pb-32 md:pb-24 bg-surface-quiet rounded-card">
@@ -812,8 +873,29 @@ export const GridEditor = memo(function GridEditor({
           items={contentBlocks.map(b => b.id)}
           strategy={rectSortingStrategy}
         >
-          <div className="grid grid-cols-2 xs:grid-cols-2 gap-2.5 sm:gap-3.5 grid-flow-row-dense auto-rows-[minmax(0,auto)]">
-            {gridItems}
+          <div className="space-y-4">
+            {canvasRuns.map((run) =>
+              run.kind === 'grid' ? (
+                <div
+                  key={run.key}
+                  className="grid grid-cols-2 xs:grid-cols-2 gap-2.5 sm:gap-3.5 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+                >
+                  {run.nodes}
+                </div>
+              ) : (
+                <div key={run.key} className="space-y-2">
+                  {run.header && (
+                    <div className="grid grid-cols-2 gap-2.5">{run.header}</div>
+                  )}
+                  <section
+                    data-composition={run.composition.id}
+                    className={cn('relative', run.composition.shellClass)}
+                  >
+                    <div className={run.composition.gridClass}>{run.nodes}</div>
+                  </section>
+                </div>
+              ),
+            )}
           </div>
         </SortableContext>
 
