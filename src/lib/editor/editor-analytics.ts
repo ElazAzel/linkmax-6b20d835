@@ -26,6 +26,7 @@ export type EditorAnalyticsAction =
   | 'preset_used'
   | 'template_used'
   | 'block_insert_search_used'
+  | 'art_direction_applied'
   // P4: Multi-select & interaction
   | 'keyboard_navigate'
   | 'inline_edit_opened'
