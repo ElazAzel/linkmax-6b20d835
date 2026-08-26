@@ -1,7 +1,3 @@
--- PENDING: apply as a migration once the hosted database is resumed.
--- Fixes: aggregate_usage cross-tenant read, complete_daily_quest token minting,
--- upsert_telegram_account account takeover.
-
 -- 1. aggregate_usage: ownership check
 CREATE OR REPLACE FUNCTION public.aggregate_usage(
   _subscription_id uuid, _metric_code text,

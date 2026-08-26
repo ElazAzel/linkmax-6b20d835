@@ -549,6 +549,24 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_quest_definitions: {
+        Row: {
+          created_at: string
+          quest_key: string
+          tokens: number
+        }
+        Insert: {
+          created_at?: string
+          quest_key: string
+          tokens: number
+        }
+        Update: {
+          created_at?: string
+          quest_key?: string
+          tokens?: number
+        }
+        Relationships: []
+      }
       daily_quests_completed: {
         Row: {
           completed_date: string
@@ -4981,10 +4999,24 @@ export type Database = {
       claim_premium_gift: { Args: { p_gift_id: string }; Returns: Json }
       cleanup_external_api_cache: { Args: never; Returns: undefined }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
-      complete_daily_quest: {
-        Args: { p_bonus_hours?: number; p_quest_key: string; p_user_id: string }
-        Returns: Json
-      }
+      complete_daily_quest:
+        | {
+            Args: {
+              p_bonus_hours?: number
+              p_quest_key: string
+              p_user_id: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_bonus_hours?: number
+              p_quest_key: string
+              p_tokens?: number
+              p_user_id: string
+            }
+            Returns: Json
+          }
       complete_weekly_challenge: {
         Args: { p_challenge_id: string }
         Returns: Json
@@ -5370,6 +5402,20 @@ export type Database = {
           p_zone_id: string
         }
         Returns: Json
+      }
+      upsert_telegram_account: {
+        Args: {
+          p_allows_write_to_pm?: boolean
+          p_first_name?: string
+          p_is_premium?: boolean
+          p_language_code?: string
+          p_last_name?: string
+          p_photo_url?: string
+          p_telegram_user_id: number
+          p_user_id: string
+          p_username?: string
+        }
+        Returns: undefined
       }
       upsert_telegram_bot_active_page: {
         Args: { p_chat_id: string; p_page_id: string }
