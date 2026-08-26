@@ -159,6 +159,28 @@ export const ArtDirectionSheet = memo(function ArtDirectionSheet({
     onOpenChange(false);
   };
 
+  // Phase 7: design kits — layout recipe + palette/typography in one tap.
+  const kits = useMemo(() => getKitsForTier(isPremium), [isPremium]);
+  const activeKitId = useMemo(() => {
+    const hero = blocks.find((b) => b.type !== 'profile' && b.composition)?.composition;
+    return detectActiveKit(currentThemePreset, hero)?.id ?? null;
+  }, [blocks, currentThemePreset]);
+
+  const handleApplyKit = (kitId: string) => {
+    const resolved = resolveDesignKit(kitId);
+    if (!resolved) return;
+    if (resolved.kit.isPremium && !isPremium) {
+      onUpgrade?.();
+      return;
+    }
+    const result = applyArtDirection(blocks, { recipeId: resolved.recipe.id });
+    onApply(result.blocks, resolved.recipe.id);
+    onApplyTheme?.(resolved.theme);
+    setSelected(resolved.recipe.id);
+    onOpenChange(false);
+  };
+
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="max-h-[90vh] overflow-y-auto rounded-t-2xl">
