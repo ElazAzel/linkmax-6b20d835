@@ -4,6 +4,8 @@ import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { cn } from '@/lib/utils/utils';
 import { Block, BLOCK_SIZE_DIMENSIONS } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
+import { getComposition, type CompositionDef } from '@/lib/design/composition';
+import { resolveBlockVariant } from '@/lib/design/block-variants';
 
 interface GridBlocksRendererProps {
   blocks: Block[];
@@ -16,9 +18,13 @@ interface GridBlocksRendererProps {
 }
 
 /**
- * Renders blocks in a responsive 2-column grid layout.
- * Used in both editor preview and public page for consistent layout.
- * Matches GridEditor.tsx behavior using grid-flow-row-dense.
+ * Renders blocks in a responsive layout.
+ *
+ * Default (legacy) behaviour: a 2-column bento grid — unchanged.
+ * Phase 1: contiguous blocks sharing a `sectionId` whose first block carries a
+ * `composition` are rendered inside that composition's shell, so sections can
+ * be split heroes, editorial stacks, horizontal rails, etc. instead of a stack
+ * of identical rounded cards.
  */
 export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   blocks,
@@ -45,6 +51,161 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
     'pricing', 'map', 'countdown', 'cta', 'share',
   ]);
 
+  const renderCell = (
+    block: Block,
+    opts?: { index?: number; total?: number; composition?: CompositionDef },
+  ) => {
+    const composition = opts?.composition;
+    const variant = resolveBlockVariant(block.type, (block as any).variant);
+
+    // Resolve span: explicit blockSize wins; otherwise infer from block type
+    const explicitSize = block.blockSize;
+    const dimensions = explicitSize
+      ? BLOCK_SIZE_DIMENSIONS[explicitSize] || BLOCK_SIZE_DIMENSIONS['small']
+      : NATURALLY_WIDE.has(block.type)
+        ? BLOCK_SIZE_DIMENSIONS['wide']
+        : BLOCK_SIZE_DIMENSIONS['small'];
+
+    // Inside a composition the shell owns the grid, so spans/aspect are dropped
+    const inComposition = !!composition;
+    const colSpanClass = inComposition ? '' : dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
+    const rowSpanClass = inComposition ? '' : dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
+
+    const contentAlignment = block.blockStyle?.contentAlignment || 'center';
+    const alignmentClass =
+      contentAlignment === 'top' ? 'items-start'
+        : contentAlignment === 'bottom' ? 'items-end'
+          : 'items-center';
+
+    const isTransparent =
+      TRANSPARENT_BLOCKS.has(block.type) || !!composition?.naked || !!variant?.naked;
+    const isSquare = !inComposition && dimensions.gridCols === 1 && dimensions.gridRows === 1;
+    const isTall = !inComposition && dimensions.gridCols === 1 && dimensions.gridRows === 2;
+
+    // Translate BlockStyle into wrapper-level visuals so user customizations are visible.
+    // Variant style patches sit UNDER the user's explicit settings.
+    const bs = { ...(variant?.stylePatch || {}), ...(block.blockStyle || {}) } as NonNullable<Block['blockStyle']>;
+    const wrapperStyle: React.CSSProperties = {};
+    const radiusMap: Record<string, string> = {
+      none: '0px', sm: '12px', md: '18px', lg: '28px', full: '9999px',
+    };
+    const borderWidthMap: Record<string, string> = { none: '0px', thin: '1px', medium: '2px', thick: '3px' };
+    const shadowMap: Record<string, string> = {
+      none: 'none',
+      sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+      md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+      lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+      xl: '0 20px 25px -5px rgb(0 0 0 / 0.15)',
+      glow: '0 0 24px hsl(var(--primary) / 0.45)',
+    };
+    if (bs?.backgroundColor) wrapperStyle.backgroundColor = bs.backgroundColor;
+    if (bs?.backgroundGradient) wrapperStyle.backgroundImage = bs.backgroundGradient;
+    wrapperStyle.borderRadius = bs?.borderRadius
+      ? radiusMap[bs.borderRadius]
+      : 'var(--lm-block-radius, 16px)';
+    if (bs?.borderWidth && bs.borderWidth !== 'none') {
+      wrapperStyle.borderWidth = borderWidthMap[bs.borderWidth];
+      wrapperStyle.borderStyle = 'solid';
+      wrapperStyle.borderColor = bs.borderColor || 'hsl(var(--border))';
+    }
+    wrapperStyle.boxShadow = bs?.shadow
+      ? shadowMap[bs.shadow]
+      : 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))';
+    const hoverClass =
+      bs?.hoverEffect === 'scale' ? 'hover:scale-[1.02]'
+      : bs?.hoverEffect === 'lift' ? 'hover:-translate-y-1'
+      : bs?.hoverEffect === 'glow' ? 'hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)]'
+      : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
+      : '';
+    const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
+
+    const itemClass = composition?.itemClass?.(opts?.index ?? 0, opts?.total ?? 1) || '';
+
+    return (
+      <motion.div
+        key={block.id}
+        className={cn(
+          'group relative flex overflow-hidden transition-all duration-300',
+          !isTransparent && 'block-card',
+          alignmentClass,
+          colSpanClass,
+          rowSpanClass,
+          // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
+          !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
+          isTransparent && 'bg-transparent',
+          hoverClass,
+          !isTransparent && isSquare && 'aspect-square',
+          !isTransparent && isTall && 'min-h-[280px]',
+          !isTransparent && !isSquare && !isTall && !inComposition && 'min-h-[120px]',
+          variant?.className,
+          itemClass,
+        )}
+        style={!isTransparent ? wrapperStyle : undefined}
+        variants={{
+          hidden: { opacity: 0, y: 12, scale: 0.99 },
+          show: {
+            opacity: 1, y: 0, scale: 1,
+            transition: { type: 'spring', stiffness: 260, damping: 26 },
+          },
+        }}
+      >
+        {/* Ambient hover sheen */}
+        {!isTransparent && !hasCustomBg && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
+          />
+        )}
+        <div className="relative w-full h-full">
+          <BlockRenderer
+            block={block}
+            isPreview={isPreview}
+            pageOwnerId={pageOwnerId}
+            pageId={pageId}
+            isOwnerPremium={isOwnerPremium}
+            ownerTier={ownerTier}
+            containerStyled={!isTransparent}
+          />
+        </div>
+      </motion.div>
+    );
+  };
+
+  // Split content into runs: composed sections vs legacy bento groups
+  type Run =
+    | { kind: 'grid'; blocks: Block[] }
+    | { kind: 'section'; composition: CompositionDef; blocks: Block[] };
+
+  const runs: Run[] = [];
+  for (const block of contentBlocks) {
+    const composition = getComposition((block as any).composition);
+    const sectionId = (block as any).sectionId as string | undefined;
+    const last = runs[runs.length - 1];
+
+    if (composition) {
+      runs.push({ kind: 'section', composition, blocks: [block] });
+      continue;
+    }
+    if (
+      last?.kind === 'section' &&
+      sectionId &&
+      (last.blocks[0] as any).sectionId === sectionId
+    ) {
+      last.blocks.push(block);
+      continue;
+    }
+    if (last?.kind === 'grid') {
+      last.blocks.push(block);
+      continue;
+    }
+    runs.push({ kind: 'grid', blocks: [block] });
+  }
+
+  const staggerVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.05, delayChildren: 0.04 } },
+  };
+
   return (
     <div className={cn('space-y-6', className)}>
       {/* Profile Block — always full bleed */}
@@ -66,127 +227,37 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
         </motion.div>
       )}
 
-      {/* Bento grid */}
-      {contentBlocks.length > 0 && (
-        <motion.div
-          className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
-          initial="hidden"
-          animate="show"
-          viewport={{ once: true }}
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: { staggerChildren: 0.05, delayChildren: 0.04 },
-            },
-          }}
-        >
-          {contentBlocks.map((block) => {
-            // Resolve span: explicit blockSize wins; otherwise infer from block type
-            const explicitSize = block.blockSize;
-            const dimensions = explicitSize
-              ? BLOCK_SIZE_DIMENSIONS[explicitSize] || BLOCK_SIZE_DIMENSIONS['small']
-              : NATURALLY_WIDE.has(block.type)
-                ? BLOCK_SIZE_DIMENSIONS['wide']
-                : BLOCK_SIZE_DIMENSIONS['small'];
-
-            const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-            const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
-
-            const contentAlignment = block.blockStyle?.contentAlignment || 'center';
-            const alignmentClass =
-              contentAlignment === 'top' ? 'items-start'
-                : contentAlignment === 'bottom' ? 'items-end'
-                  : 'items-center';
-
-            const isTransparent = TRANSPARENT_BLOCKS.has(block.type);
-            const isSquare = dimensions.gridCols === 1 && dimensions.gridRows === 1;
-            const isTall = dimensions.gridCols === 1 && dimensions.gridRows === 2;
-
-            // Translate BlockStyle into wrapper-level visuals so user customizations are visible
-            const bs = block.blockStyle;
-            const wrapperStyle: React.CSSProperties = {};
-            const radiusMap: Record<string, string> = {
-              none: '0px', sm: '12px', md: '18px', lg: '28px', full: '9999px',
-            };
-            const borderWidthMap: Record<string, string> = { none: '0px', thin: '1px', medium: '2px', thick: '3px' };
-            const shadowMap: Record<string, string> = {
-              none: 'none',
-              sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-              md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-              lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-              xl: '0 20px 25px -5px rgb(0 0 0 / 0.15)',
-              glow: '0 0 24px hsl(var(--primary) / 0.45)',
-            };
-            if (bs?.backgroundColor) wrapperStyle.backgroundColor = bs.backgroundColor;
-            if (bs?.backgroundGradient) wrapperStyle.backgroundImage = bs.backgroundGradient;
-            wrapperStyle.borderRadius = bs?.borderRadius
-              ? radiusMap[bs.borderRadius]
-              : 'var(--lm-block-radius, 16px)';
-            if (bs?.borderWidth && bs.borderWidth !== 'none') {
-              wrapperStyle.borderWidth = borderWidthMap[bs.borderWidth];
-              wrapperStyle.borderStyle = 'solid';
-              wrapperStyle.borderColor = bs.borderColor || 'hsl(var(--border))';
-            }
-            wrapperStyle.boxShadow = bs?.shadow
-              ? shadowMap[bs.shadow]
-              : 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))';
-            const hoverClass =
-              bs?.hoverEffect === 'scale' ? 'hover:scale-[1.02]'
-              : bs?.hoverEffect === 'lift' ? 'hover:-translate-y-1'
-              : bs?.hoverEffect === 'glow' ? 'hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)]'
-              : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
-              : '';
-            const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
-
-            return (
-              <motion.div
-                key={block.id}
-                className={cn(
-                  'group relative flex overflow-hidden transition-all duration-300',
-                  !isTransparent && 'block-card',
-                  alignmentClass,
-                  colSpanClass,
-                  rowSpanClass,
-                  // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
-                  !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
-                  isTransparent && 'bg-transparent',
-                  hoverClass,
-                  !isTransparent && isSquare && 'aspect-square',
-                  !isTransparent && isTall && 'min-h-[280px]',
-                  !isTransparent && !isSquare && !isTall && 'min-h-[120px]',
-                )}
-                style={!isTransparent ? wrapperStyle : undefined}
-                variants={{
-                  hidden: { opacity: 0, y: 12, scale: 0.99 },
-                  show: {
-                    opacity: 1, y: 0, scale: 1,
-                    transition: { type: 'spring', stiffness: 260, damping: 26 },
-                  },
-                }}
-              >
-                {/* Ambient hover sheen */}
-                {!isTransparent && !hasCustomBg && (
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
-                  />
-                )}
-                <div className="relative w-full h-full">
-                  <BlockRenderer
-                    block={block}
-                    isPreview={isPreview}
-                    pageOwnerId={pageOwnerId}
-                    pageId={pageId}
-                    isOwnerPremium={isOwnerPremium}
-                    ownerTier={ownerTier}
-                    containerStyled={!isTransparent}
-                  />
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+      {runs.map((run, runIndex) =>
+        run.kind === 'grid' ? (
+          <motion.div
+            key={`grid-${runIndex}`}
+            className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+            initial="hidden"
+            animate="show"
+            viewport={{ once: true }}
+            variants={staggerVariants}
+          >
+            {run.blocks.map((block) => renderCell(block))}
+          </motion.div>
+        ) : (
+          <section
+            key={`sec-${runIndex}`}
+            data-composition={run.composition.id}
+            className={cn('relative', run.composition.shellClass)}
+          >
+            <motion.div
+              className={run.composition.gridClass}
+              initial="hidden"
+              animate="show"
+              viewport={{ once: true }}
+              variants={staggerVariants}
+            >
+              {run.blocks.map((block, i) =>
+                renderCell(block, { index: i, total: run.blocks.length, composition: run.composition }),
+              )}
+            </motion.div>
+          </section>
+        ),
       )}
     </div>
   );

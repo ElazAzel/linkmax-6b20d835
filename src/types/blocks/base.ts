@@ -93,6 +93,13 @@ export interface BlockGridProps {
     experimentId?: string; // For A/B testing tracking
     variantLabel?: string; // For A/B testing tracking
     sectionId?: string; // P5: Section grouping
+    /** Phase 1: named visual variant id (see src/lib/design/block-variants.ts) */
+    variant?: string;
+    /** Phase 1: composition id, set on the FIRST block of a section run */
+    composition?: string;
+    /** Phase 1: SectionPattern this block was created from */
+    sectionPatternId?: string;
+
 }
 
 export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event';

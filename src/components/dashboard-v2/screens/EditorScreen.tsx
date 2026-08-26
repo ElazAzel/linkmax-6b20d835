@@ -548,6 +548,9 @@ export const EditorScreen = memo(function EditorScreen({
             open={sectionPickerOpen}
             onOpenChange={setSectionPickerOpen}
             onInsert={handleInsertSection}
+            existingBlockTypes={(pageData.blocks || []).map((b) => b.type)}
+            niche={(pageData as any)?.niche ?? null}
+
           />
         </Suspense>
       )}
