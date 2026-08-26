@@ -78,6 +78,7 @@ export const EditorTopBar = memo(function EditorTopBar({
   onOpenVersions,
   onOpenTemplates,
   onOpenArtDirection,
+  onOpenDesignHealth,
   onOpenAI,
   reviewMode = 'normal',
   onToggleReviewMode,
