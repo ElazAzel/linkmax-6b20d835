@@ -23,6 +23,7 @@ import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import Gauge from 'lucide-react/dist/esm/icons/gauge';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import {
