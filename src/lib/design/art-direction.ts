@@ -241,9 +241,18 @@ export function clearArtDirection(blocks: Block[]): Block[] {
 
 /** Which recipe the page currently follows, detected from the hero composition. */
 export function detectPageRecipeId(blocks: Block[]): string | null {
-  const hero = (blocks || []).find((b) => b.type !== 'profile' && b.composition)?.composition;
-  if (!hero) return null;
-  return PAGE_RECIPES.find((r) => r.hero === hero)?.id ?? null;
+  const content = (blocks || []).filter((b) => b.type !== 'profile');
+  const hero = content.find((b) => b.composition)?.composition;
+  const byHero = hero ? PAGE_RECIPES.find((r) => r.hero === hero) : undefined;
+  if (byHero) return byHero.id;
+
+  // A single-block hero falls back to 'stack', so match on the variants instead.
+  const heroText = content.find((b) => b.type === 'text' && b.designVariant)?.designVariant;
+  const byText = heroText ? PAGE_RECIPES.find((r) => r.heroTextVariant === heroText) : undefined;
+  if (byText) return byText.id;
+
+  const media = content.find((b) => MEDIA_TYPES.has(b.type) && b.designVariant)?.designVariant;
+  return (media ? PAGE_RECIPES.find((r) => r.mediaVariant === media)?.id : null) ?? null;
 }
 
 /** True when no block carries art-direction fields yet. */
