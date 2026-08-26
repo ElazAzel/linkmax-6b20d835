@@ -531,6 +531,12 @@ export const Auth = memo(function Auth() {
     setIsOAuthLoading(null);
   };
 
+  // Авторизованный пользователь не видит экран входа вообще —
+  // useEffect выше уже редиректит в кабинет/билдер.
+  if (user && authMode !== 'update-password') {
+    return <div className="min-h-screen bg-[hsl(var(--brand-ink))]" aria-hidden="true" />;
+  }
+
   return (
     <>
       <StaticSEOHead
@@ -588,15 +594,8 @@ export const Auth = memo(function Auth() {
             </div>
           </div>
 
-          {/* Authenticated: brief redirect state (no extra confirmation step) */}
-          {user && authMode !== 'update-password' ? (
-            <div className="flex flex-col items-center gap-3 py-8 animate-fade-in">
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
-              <p className="text-sm text-white/70 text-center break-words">
-                {t('auth.redirecting', 'Перенаправляем в кабинет…')}
-              </p>
-            </div>
-          ) : authMode === 'update-password' ? (
+          {authMode === 'update-password' ? (
+
 
             <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
