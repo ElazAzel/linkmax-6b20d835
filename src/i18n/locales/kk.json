@@ -891,7 +891,8 @@
     "heroTitle": "lnkmx.my парақшаңызды жасаңыз",
     "heroSubtitle": "AI сайтты 2 минутта құрастырады. Мәңгі тегін.",
     "continueWithEmail": "Email арқылы жалғастыру",
-    "moreOptions": "Кірудің басқа жолдары"
+    "moreOptions": "Кірудің басқа жолдары",
+    "createWithGoogle": "Google арқылы құру"
   },
   "automations": {
     "startSequence": "Sequences басқару"

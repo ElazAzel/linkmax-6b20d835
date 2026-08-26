@@ -891,7 +891,8 @@
     "heroTitle": "Create your lnkmx.my page",
     "heroSubtitle": "AI builds your site in 2 minutes. Free forever.",
     "continueWithEmail": "Continue with Email",
-    "moreOptions": "More sign-in options"
+    "moreOptions": "More sign-in options",
+    "createWithGoogle": "Створити через Google"
   },
   "automations": {
     "startSequence": "Manage Sequences"
