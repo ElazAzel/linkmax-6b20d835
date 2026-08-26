@@ -43,6 +43,7 @@ import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m => ({ default: m.GridEditor })));
 const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
 const SectionPickerSheet = lazy(() => import('@/components/editor/sections/SectionPickerSheet').then(m => ({ default: m.SectionPickerSheet })));
+const DesignHealthSheet = lazy(() => import('@/components/editor/design/DesignHealthSheet').then(m => ({ default: m.DesignHealthSheet })));
 const ArtDirectionSheet = lazy(() => import('@/components/editor/design/ArtDirectionSheet').then(m => ({ default: m.ArtDirectionSheet })));
 
 const EditorCanvasSkeleton = () => (
@@ -115,6 +116,7 @@ export const EditorScreen = memo(function EditorScreen({
   const [structureOpen, setStructureOpen] = useState(false);
   const [sectionPickerOpen, setSectionPickerOpen] = useState(false);
   const [artDirectionOpen, setArtDirectionOpen] = useState(false);
+  const [designHealthOpen, setDesignHealthOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
@@ -365,6 +367,12 @@ export const EditorScreen = memo(function EditorScreen({
     trackEditorAction('art_direction_applied', { recipe: recipeId ?? 'reset' });
   }, [onReorderBlocks]);
 
+  // Phase 6: apply a single design-health fix (design fields only).
+  const handleApplyDesignFix = useCallback((nextBlocks: Block[], issueId: string) => {
+    onReorderBlocks(nextBlocks);
+    trackEditorAction('art_direction_applied', { recipe: `fix:${issueId}` });
+  }, [onReorderBlocks]);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
@@ -405,6 +413,7 @@ export const EditorScreen = memo(function EditorScreen({
         onOpenVersions={onOpenVersions}
         onOpenTemplates={onOpenTemplates}
         onOpenArtDirection={() => setArtDirectionOpen(true)}
+        onOpenDesignHealth={() => setDesignHealthOpen(true)}
         onOpenAI={onOpenAI}
         reviewMode={reviewMode}
         onToggleReviewMode={toggleReviewMode}
@@ -560,6 +569,17 @@ export const EditorScreen = memo(function EditorScreen({
             existingBlockTypes={(pageData.blocks || []).map((b) => b.type)}
             niche={(pageData as any)?.niche ?? null}
 
+          />
+        </Suspense>
+      )}
+
+      {designHealthOpen && (
+        <Suspense fallback={null}>
+          <DesignHealthSheet
+            open={designHealthOpen}
+            onOpenChange={setDesignHealthOpen}
+            blocks={pageData.blocks}
+            onApply={handleApplyDesignFix}
           />
         </Suspense>
       )}
