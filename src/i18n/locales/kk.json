@@ -2144,7 +2144,19 @@
     "unsavedDescription": "Сізде әлі сақталмаған өзгертулер бар. Сіз не істегіңіз келеді?",
     "versions": "Әңгіме",
     "swipeForActions": "Әрекеттер үшін сырғытыңыз",
-    "sectionNameDescription": "Жаңа бөлімге атау енгізіңіз"
+    "sectionNameDescription": "Жаңа бөлімге атау енгізіңіз",
+    "artDirection": {
+      "title": "Бет дизайны",
+      "subtitle": "Мазмұн өзгермейді — тек секциялардың орналасуы, ырғағы мен типографиясы ауысады.",
+      "empty": "Алдымен бетке кемінде бір блок қосыңыз.",
+      "note": "Блоктар жойылмайды және орны ауыспайды.",
+      "reset": "Дизайнды қалпына келтіру",
+      "mood": {
+        "editorial": "Кең кеңістік, ірі тақырыптар, тыныш ырғақ",
+        "bold": "Контрастты герой, толық медиа, күшті CTA",
+        "calm": "Жұмсақ өтулер, қабаттасқан портрет, жеңіл тор"
+      }
+    }
   },
   "errors": {
     "createYourPage": "Өз парақшаңызды жасағыңыз келе ме?",
@@ -7320,5 +7332,12 @@
     "sectionError": "Бұл бөлім жүктелмеді",
     "screenError": "This section failed to load",
     "blockError": "This block could not be displayed"
+  },
+  "design": {
+    "recipe": {
+      "editorialQuiet": "Редакциялық",
+      "boldStatement": "Батыл",
+      "calmPortrait": "Тыныш"
+    }
   }
 }

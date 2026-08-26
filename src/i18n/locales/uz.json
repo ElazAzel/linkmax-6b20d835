@@ -2144,7 +2144,19 @@
     "unsavedDescription": "Sizda hali saqlanmagan o'zgarishlar mavjud. Nima qilmoqchisiz?",
     "versions": "Hikoya",
     "swipeForActions": "Harakatlar uchun suring",
-    "sectionNameDescription": "Yangi bo'lim uchun nom kiriting"
+    "sectionNameDescription": "Yangi bo'lim uchun nom kiriting",
+    "artDirection": {
+      "title": "Sahifa dizayni",
+      "subtitle": "Kontent o'zgarmaydi — faqat bo'limlar joylashuvi, ritmi va tipografiyasi o'zgaradi.",
+      "empty": "Avval sahifaga kamida bitta blok qo'shing.",
+      "note": "Bloklar o'chirilmaydi va o'rni almashmaydi.",
+      "reset": "Dizaynni tiklash",
+      "mood": {
+        "editorial": "Keng bo'shliq, yirik sarlavhalar, tinch ritm",
+        "bold": "Kontrastli hero, to'liq media, kuchli CTA",
+        "calm": "Yumshoq o'tishlar, ustma-ust portret, engil to'r"
+      }
+    }
   },
   "errors": {
     "createYourPage": "O'z sahifangizni yaratmoqchimisiz?",
@@ -7320,5 +7332,12 @@
     "sectionError": "Bu bo‘lim yuklanmadi",
     "screenError": "This section failed to load",
     "blockError": "This block could not be displayed"
+  },
+  "design": {
+    "recipe": {
+      "editorialQuiet": "Tahririy",
+      "boldStatement": "Jasur",
+      "calmPortrait": "Tinch"
+    }
   }
 }

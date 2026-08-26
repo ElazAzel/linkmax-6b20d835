@@ -2144,7 +2144,19 @@
     "unsavedDescription": "You have changes that have not yet been saved. What do you want to do?",
     "versions": "Story",
     "swipeForActions": "Swipe for actions",
-    "sectionNameDescription": "Enter a name for the new section"
+    "sectionNameDescription": "Enter a name for the new section",
+    "artDirection": {
+      "title": "Page design",
+      "subtitle": "Your content stays the same — only the section layout changes: rhythm, accents and typography.",
+      "empty": "Add at least one block to the page first.",
+      "note": "No blocks are removed or reordered.",
+      "reset": "Reset design",
+      "mood": {
+        "editorial": "Airy spacing, large headlines, calm rhythm",
+        "bold": "High-contrast hero, full-bleed media, strong CTAs",
+        "calm": "Soft transitions, overlapping portrait, light grid"
+      }
+    }
   },
   "errors": {
     "createYourPage": "Want to create your own page?",
@@ -7320,5 +7332,12 @@
     "sectionError": "This section failed to load",
     "screenError": "This section failed to load",
     "blockError": "This block could not be displayed"
+  },
+  "design": {
+    "recipe": {
+      "editorialQuiet": "Editorial",
+      "boldStatement": "Bold",
+      "calmPortrait": "Calm"
+    }
   }
 }
