@@ -202,22 +202,20 @@ export const Auth = memo(function Auth() {
     }
   }, [user, refCode, t]);
 
-  // Auto-redirect only when there's an explicit return target or signup builder intent.
-  // Otherwise show the "already signed in" card so the user can choose.
+  // Authenticated users never stay on /auth — send them straight to their workspace.
   useEffect(() => {
     if (user && authMode !== 'update-password') {
       const shouldOpenBuilder = session.get<boolean>(NEW_USER_BUILDER_SESSION_KEY);
       if (shouldOpenBuilder) {
         session.remove(NEW_USER_BUILDER_SESSION_KEY);
-        navigate(safeReturnTo || NEW_USER_BUILDER_ROUTE);
+        navigate(safeReturnTo || NEW_USER_BUILDER_ROUTE, { replace: true });
         return;
       }
 
-      if (safeReturnTo) {
-        navigate(safeReturnTo);
-      }
+      navigate(safeReturnTo || '/dashboard', { replace: true });
     }
   }, [user, navigate, authMode, safeReturnTo]);
+
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
