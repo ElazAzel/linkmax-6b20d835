@@ -43,6 +43,7 @@ import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m => ({ default: m.GridEditor })));
 const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
 const SectionPickerSheet = lazy(() => import('@/components/editor/sections/SectionPickerSheet').then(m => ({ default: m.SectionPickerSheet })));
+const ArtDirectionSheet = lazy(() => import('@/components/editor/design/ArtDirectionSheet').then(m => ({ default: m.ArtDirectionSheet })));
 
 const EditorCanvasSkeleton = () => (
   <div className="space-y-4 p-4 animate-pulse">
@@ -113,6 +114,7 @@ export const EditorScreen = memo(function EditorScreen({
   const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
   const [sectionPickerOpen, setSectionPickerOpen] = useState(false);
+  const [artDirectionOpen, setArtDirectionOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
@@ -357,6 +359,12 @@ export const EditorScreen = memo(function EditorScreen({
     trackEditorAction('section_inserted', { source: 'picker', preset: presetId });
   }, [pageData, onReorderBlocks, pushFrictionEvent]);
 
+  // Phase 3: apply an art-direction recipe to the blocks already on the page.
+  const handleApplyArtDirection = useCallback((nextBlocks: Block[], recipeId: string | null) => {
+    onReorderBlocks(nextBlocks);
+    trackEditorAction('art_direction_applied', { recipe: recipeId ?? 'reset' });
+  }, [onReorderBlocks]);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
@@ -396,6 +404,7 @@ export const EditorScreen = memo(function EditorScreen({
         onOpenStructure={() => setStructureOpen(true)}
         onOpenVersions={onOpenVersions}
         onOpenTemplates={onOpenTemplates}
+        onOpenArtDirection={() => setArtDirectionOpen(true)}
         onOpenAI={onOpenAI}
         reviewMode={reviewMode}
         onToggleReviewMode={toggleReviewMode}
@@ -551,6 +560,17 @@ export const EditorScreen = memo(function EditorScreen({
             existingBlockTypes={(pageData.blocks || []).map((b) => b.type)}
             niche={(pageData as any)?.niche ?? null}
 
+          />
+        </Suspense>
+      )}
+
+      {artDirectionOpen && (
+        <Suspense fallback={null}>
+          <ArtDirectionSheet
+            open={artDirectionOpen}
+            onOpenChange={setArtDirectionOpen}
+            blocks={pageData.blocks}
+            onApply={handleApplyArtDirection}
           />
         </Suspense>
       )}
