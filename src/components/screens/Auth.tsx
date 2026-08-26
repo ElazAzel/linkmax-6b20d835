@@ -590,41 +590,16 @@ export const Auth = memo(function Auth() {
             </div>
           </div>
 
-          {/* Already signed-in panel — quick actions instead of full auth form */}
+          {/* Authenticated: brief redirect state (no extra confirmation step) */}
           {user && authMode !== 'update-password' ? (
-            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
-                    <UserIcon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="min-w-0">
-                    <CardTitle className="text-lg truncate">
-                      {t('auth.alreadySignedIn', 'Вы уже вошли')}
-                    </CardTitle>
-                    <CardDescription className="truncate">{user.email}</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button
-                  className="w-full h-12 rounded-2xl shadow-glass-lg gap-2 transition-all duration-300 hover:scale-[1.01]"
-                  onClick={() => navigate('/dashboard/settings')}
-                  data-testid="manage-login-methods"
-                >
-                  <Link2 className="h-4 w-4" />
-                  {t('settings.linkedAccounts.title')}
-                </Button>
-                <DeviceAccountSwitcher
-                  compact
-                  onAddAccount={() => {
-                    setShowEmailForm(true);
-                    setActiveTab('signin');
-                  }}
-                />
-              </CardContent>
-            </Card>
+            <div className="flex flex-col items-center gap-3 py-8 animate-fade-in">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <p className="text-sm text-white/70 text-center break-words">
+                {t('auth.redirecting', 'Перенаправляем в кабинет…')}
+              </p>
+            </div>
           ) : authMode === 'update-password' ? (
+
             <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
