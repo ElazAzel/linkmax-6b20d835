@@ -531,6 +531,12 @@ export const Auth = memo(function Auth() {
     setIsOAuthLoading(null);
   };
 
+  // Авторизованный пользователь не видит экран входа вообще —
+  // useEffect выше уже редиректит в кабинет/билдер.
+  if (user && authMode !== 'update-password') {
+    return <div className="min-h-screen bg-[hsl(var(--brand-ink))]" aria-hidden="true" />;
+  }
+
   return (
     <>
       <StaticSEOHead
