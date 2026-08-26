@@ -10,19 +10,19 @@ type Variant = 1 | 2 | 3 | 4 | 5 | 6;
 
 const VARIANTS: Variant[] = [1, 2, 3, 4, 5, 6];
 
-const Block = ({
-  className,
-  style,
-}: {
-  className?: string;
-  style?: React.CSSProperties;
-}) => (
+const Block = forwardRef<
+  HTMLDivElement,
+  { className?: string; style?: React.CSSProperties }
+>(({ className, style }, ref) => (
   <div
+    ref={ref}
     className={cn("rounded-md bg-primary/25", className)}
     style={style}
     aria-hidden
   />
-);
+));
+Block.displayName = "BuildingLoaderBlock";
+
 
 /** 1. Блоки прилетают снизу и встают в стек (сборка страницы) */
 const AssembleStack = () => (
