@@ -11,7 +11,8 @@
  * Deterministic: no LLM, no randomness beyond a seeded pick, so the same input
  * always produces the same page. Never adds, removes or reorders blocks.
  */
-import type { Block, BlockType } from '@/types/blocks/base';
+import type { BlockType } from '@/types/blocks/base';
+import type { Block } from '@/types/blocks';
 import { getBlockMeta, type BusinessIntent } from '@/lib/blocks/block-meta';
 import { getComposition, type CompositionId } from '@/lib/design/composition';
 
@@ -191,7 +192,7 @@ export function applyArtDirection(
 
     // A single-block run in a multi-column composition looks empty — fall back.
     const def = getComposition(compositionId);
-    if (run.length === 1 && def && (def.rhythm === 'split' || def.rhythm === 'grid')) {
+    if (run.length === 1 && def && (def.rhythm === 'split' || def.rhythm === 'bento')) {
       compositionId = 'stack';
     }
 
