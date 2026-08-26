@@ -26,6 +26,8 @@ import type {
   TextBlock,
 } from '@/types/page';
 import type { Niche, OnboardingGoal } from '@/lib/niches';
+import { applyArtDirection } from '@/lib/design/art-direction';
+
 
 export interface SmartBuilderUserInfo {
   name: string;
