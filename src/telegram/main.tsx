@@ -6,7 +6,7 @@
  * - Telegram WebApp SDK script loaded via tg.html <head>
  */
 
-import '../i18n/config';
+import { i18nReady } from '../i18n/config';
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -29,7 +29,8 @@ const queryClient = new QueryClient({
 const container = document.getElementById('tg-root');
 
 if (container) {
-    createRoot(container).render(
+    const root = createRoot(container);
+    const render = () => root.render(
         <React.StrictMode>
             <QueryClientProvider client={queryClient}>
                 <AuthProvider>
