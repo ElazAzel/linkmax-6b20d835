@@ -62,6 +62,7 @@ import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
+import { SectionCompositionPicker } from './design/SectionCompositionPicker';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion } from 'framer-motion';
@@ -406,11 +407,15 @@ function SectionHeader({
   blockCount,
   isCollapsed,
   onToggleCollapse,
+  compositionId,
+  onSelectComposition,
 }: {
   label: string;
   blockCount: number;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
+  compositionId?: string;
+  onSelectComposition?: (id?: string) => void;
 }) {
   return (
     <div className="col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-muted/30 border border-border/10">
@@ -422,6 +427,9 @@ function SectionHeader({
       </Button>
       <FolderOpen className="h-4 w-4 text-primary shrink-0" />
       <span className="text-xs font-bold text-foreground flex-1 truncate">{label}</span>
+      {onSelectComposition && (
+        <SectionCompositionPicker compositionId={compositionId} onSelect={onSelectComposition} />
+      )}
       <span className="text-xs text-muted-foreground">{blockCount}</span>
     </div>
   );
@@ -705,6 +713,8 @@ export const GridEditor = memo(function GridEditor({
             blockCount={section?.blockIds.length || 0}
             isCollapsed={isCollapsed}
             onToggleCollapse={() => toggleSectionCollapse(blockSectionId)}
+            compositionId={(block as any).composition}
+            onSelectComposition={(id) => onUpdateBlock(block.id, { composition: id } as any)}
           />
         );
       }
