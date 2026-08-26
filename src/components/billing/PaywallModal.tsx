@@ -6,7 +6,7 @@
 import { memo, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import posthog from 'posthog-js';
+import { posthog } from '@/lib/posthog';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import {
