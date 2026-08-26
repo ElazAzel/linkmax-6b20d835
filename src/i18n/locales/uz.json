@@ -2155,7 +2155,9 @@
         "editorial": "Keng bo'shliq, yirik sarlavhalar, tinch ritm",
         "bold": "Kontrastli hero, to'liq media, kuchli CTA",
         "calm": "Yumshoq o'tishlar, ustma-ust portret, engil to'r"
-      }
+      },
+      "kits": "Dizayn to‘plamlari",
+      "kitsHint": "Tuzilma, palitra va shriftlar birdan — tayyor uslubga bir teginish."
     },
     "design": {
       "variantTitle": "Dizayn uslubi",
@@ -7415,6 +7417,20 @@
       "editorialQuiet": "Tahririy",
       "boldStatement": "Jasur",
       "calmPortrait": "Tinch"
+    },
+    "kit": {
+      "studioPaper": "Qogʻoz studiya",
+      "studioPaperDesc": "Iliq fon, tinch ritm, yirik sarlavhalar",
+      "cleanService": "Toza servis",
+      "cleanServiceDesc": "Oq fon, aniq tuzilma, ozoda kartochkalar",
+      "nightBold": "Qorongʻi va dadil",
+      "nightBoldDesc": "Kontrastli hero, toʻliq kenglikdagi media, kuchli CTA",
+      "editorialMono": "Tahririyat",
+      "editorialMonoDesc": "Jurnal tipografiyasi va koʻp boʻsh joy",
+      "noirPremium": "Nuar va tilla",
+      "noirPremiumDesc": "Tilla aksentli premium qorongʻi uslub",
+      "softCare": "Yumshoq gʻamxoʻrlik",
+      "softCareDesc": "Pastel, yengil tor, ustma-ust portret"
     }
   }
 }

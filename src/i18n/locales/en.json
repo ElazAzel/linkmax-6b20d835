@@ -2155,7 +2155,9 @@
         "editorial": "Airy spacing, large headlines, calm rhythm",
         "bold": "High-contrast hero, full-bleed media, strong CTAs",
         "calm": "Soft transitions, overlapping portrait, light grid"
-      }
+      },
+      "kits": "Design kits",
+      "kitsHint": "Layout, palette and fonts at once — one tap for a finished style."
     },
     "design": {
       "variantTitle": "Design preset",
@@ -7415,6 +7417,20 @@
       "editorialQuiet": "Editorial",
       "boldStatement": "Bold",
       "calmPortrait": "Calm"
+    },
+    "kit": {
+      "studioPaper": "Paper studio",
+      "studioPaperDesc": "Warm background, calm rhythm, large headings",
+      "cleanService": "Clean service",
+      "cleanServiceDesc": "White background, clear structure, tidy cards",
+      "nightBold": "Dark & bold",
+      "nightBoldDesc": "High-contrast hero, full-width media, strong CTAs",
+      "editorialMono": "Editorial",
+      "editorialMonoDesc": "Magazine typography with generous whitespace",
+      "noirPremium": "Noir & gold",
+      "noirPremiumDesc": "Premium dark style with gold accents",
+      "softCare": "Soft care",
+      "softCareDesc": "Pastels, light grid, overlapping portrait"
     }
   }
 }

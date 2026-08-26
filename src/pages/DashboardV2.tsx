@@ -496,6 +496,10 @@ function DashboardV2Inner() {
                   onOpenTemplates={() => setTemplateGalleryOpen(true)}
                   onOpenAI={() => dashboard.aiState.openAIBuilder()}
                   onOpenTheme={() => setShowTheme(true)}
+                  onApplyTheme={(theme) => {
+                    if (!dashboard.pageData) return;
+                    dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData.theme, ...theme } });
+                  }}
                   canUndo={editorHistory.canUndo}
                   canRedo={editorHistory.canRedo}
                   onUndo={editorHistory.undo}
