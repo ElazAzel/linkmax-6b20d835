@@ -3,7 +3,7 @@
  * Mobile-first design with GridEditor and block editing capabilities
  * P5: Structure view, review modes, friction recovery, sections wired
  */
-import { memo, useCallback, useState, useMemo, lazy, Suspense } from 'react';
+import { memo, useCallback, useState, useMemo, useRef, lazy, Suspense } from 'react';
 import { RenderContextProvider } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -36,6 +36,8 @@ import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklis
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { dissolveSection, deleteSection, duplicateSection } from '@/lib/editor/section-engine';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
+import { analyzeDesignHealth } from '@/lib/design/design-health';
+import { applyRecipeToNewSection, detectPageRecipeId, hasArtDirection } from '@/lib/design/art-direction';
 import type { PageData, Block, ProfileBlock } from '@/types/page';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
@@ -44,6 +46,7 @@ const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m =>
 const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
 const SectionPickerSheet = lazy(() => import('@/components/editor/sections/SectionPickerSheet').then(m => ({ default: m.SectionPickerSheet })));
 const DesignHealthSheet = lazy(() => import('@/components/editor/design/DesignHealthSheet').then(m => ({ default: m.DesignHealthSheet })));
+const PrePublishDesignGate = lazy(() => import('@/components/editor/design/PrePublishDesignGate').then(m => ({ default: m.PrePublishDesignGate })));
 const ArtDirectionSheet = lazy(() => import('@/components/editor/design/ArtDirectionSheet').then(m => ({ default: m.ArtDirectionSheet })));
 
 const EditorCanvasSkeleton = () => (
@@ -134,6 +137,7 @@ export const EditorScreen = memo(function EditorScreen({
   const [sectionPickerOpen, setSectionPickerOpen] = useState(false);
   const [artDirectionOpen, setArtDirectionOpen] = useState(false);
   const [designHealthOpen, setDesignHealthOpen] = useState(false);
+  const [prePublishOpen, setPrePublishOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
@@ -300,6 +304,17 @@ export const EditorScreen = memo(function EditorScreen({
       });
     }
 
+    // Phase 8: page has content but no art direction yet — offer a design kit.
+    if (hasContent && !hasArtDirection(pageData?.blocks || [])) {
+      hints.push({
+        id: 'apply-design-kit',
+        title: t('editor.onboarding.designKitTitle', 'Придайте странице вид'),
+        description: t('editor.onboarding.designKitDesc', 'Дизайн-кит соберёт вёрстку, палитру и шрифты за один тап — контент не изменится.'),
+        ctaLabel: t('editor.onboarding.designKitCta', 'Выбрать стиль'),
+        onCta: () => setArtDirectionOpen(true),
+      });
+    }
+
     if (hasContent && !isPublished) {
       hints.push({
         id: 'publish-page',
@@ -311,7 +326,7 @@ export const EditorScreen = memo(function EditorScreen({
     }
 
     return hints.filter((hint) => !dismissedOnboardingHints.includes(hint.id));
-  }, [dismissedOnboardingHints, hasContent, isPublished, onShare, t]);
+  }, [dismissedOnboardingHints, hasContent, isPublished, onShare, pageData?.blocks, t]);
 
   const dismissOnboardingHint = useCallback((hintId: string) => {
     setDismissedOnboardingHints((prev) => {
@@ -365,7 +380,10 @@ export const EditorScreen = memo(function EditorScreen({
   // Sprint 2: append a section preset (group of blocks) to the end of the page.
   const handleInsertSection = useCallback((sectionBlocks: Block[], presetId: string) => {
     if (!pageData || sectionBlocks.length === 0) return;
-    onReorderBlocks([...pageData.blocks, ...sectionBlocks]);
+    // Phase 8: the new section inherits the page's art direction instead of
+    // landing as a flat stack of blocks.
+    const styled = applyRecipeToNewSection(pageData.blocks, sectionBlocks, detectPageRecipeId(pageData.blocks));
+    onReorderBlocks([...pageData.blocks, ...styled]);
     pushFrictionEvent('block_added', `section:${presetId}`);
     trackEditorAction('section_inserted', { source: 'picker', preset: presetId });
   }, [pageData, onReorderBlocks, pushFrictionEvent]);
@@ -375,6 +393,46 @@ export const EditorScreen = memo(function EditorScreen({
     onReorderBlocks(nextBlocks);
     trackEditorAction('art_direction_applied', { recipe: recipeId ?? 'reset' });
   }, [onReorderBlocks]);
+
+  // Phase 9-10: deterministic design audit (blocks + theme contrast).
+  const designReport = useMemo(
+    () => analyzeDesignHealth(pageData?.blocks || [], { theme: pageData?.theme }),
+    [pageData?.blocks, pageData?.theme],
+  );
+
+  const designGateSeen = useRef(false);
+
+  const handleApplyThemeFix = useCallback((patch: Partial<import('@/types/page').PageTheme>, issueId: string) => {
+    onApplyTheme?.(patch);
+    trackEditorAction('art_direction_applied', { recipe: `theme-fix:${issueId}` });
+  }, [onApplyTheme]);
+
+  /** Publish, but first offer a one-tap design review when quality is low. */
+  const handleShareWithGate = useCallback(() => {
+    const contentCount = (pageData?.blocks || []).filter((b) => b.type !== 'profile').length;
+    if (!designGateSeen.current && contentCount >= 2 && designReport.score < 70 && designReport.issues.length > 0) {
+      designGateSeen.current = true;
+      setPrePublishOpen(true);
+      trackEditorAction('art_direction_applied', { recipe: 'pre-publish-gate' });
+      return;
+    }
+    onShare();
+  }, [designReport, onShare, pageData?.blocks]);
+
+  const handleFixAllAndPublish = useCallback(() => {
+    if (!pageData) return;
+    let next = pageData.blocks;
+    let themePatch: Partial<import('@/types/page').PageTheme> = {};
+    for (const issue of designReport.issues) {
+      if (issue.fix) next = issue.fix(next);
+      if (issue.themeFix) themePatch = { ...themePatch, ...issue.themeFix };
+    }
+    if (next !== pageData.blocks) onReorderBlocks(next);
+    if (Object.keys(themePatch).length > 0) onApplyTheme?.(themePatch);
+    trackEditorAction('art_direction_applied', { recipe: 'fix-all' });
+    setPrePublishOpen(false);
+    onShare();
+  }, [designReport, onApplyTheme, onReorderBlocks, onShare, pageData]);
 
   // Phase 6: apply a single design-health fix (design fields only).
   const handleApplyDesignFix = useCallback((nextBlocks: Block[], issueId: string) => {
@@ -413,7 +471,8 @@ export const EditorScreen = memo(function EditorScreen({
         }}
         isPublished={isPublished}
         onPreview={onPreview}
-        onShare={onShare}
+        onShare={handleShareWithGate}
+        designScore={designReport.score}
         canUndo={canUndo}
         canRedo={canRedo}
         onUndo={handleUndoWithFriction}
@@ -588,7 +647,22 @@ export const EditorScreen = memo(function EditorScreen({
             open={designHealthOpen}
             onOpenChange={setDesignHealthOpen}
             blocks={pageData.blocks}
+            theme={pageData.theme}
             onApply={handleApplyDesignFix}
+            onApplyTheme={handleApplyThemeFix}
+          />
+        </Suspense>
+      )}
+
+      {prePublishOpen && (
+        <Suspense fallback={null}>
+          <PrePublishDesignGate
+            open={prePublishOpen}
+            onOpenChange={setPrePublishOpen}
+            report={designReport}
+            onFixAll={handleFixAllAndPublish}
+            onOpenDetails={() => { setPrePublishOpen(false); setDesignHealthOpen(true); }}
+            onPublishAnyway={() => { setPrePublishOpen(false); onShare(); }}
           />
         </Suspense>
       )}

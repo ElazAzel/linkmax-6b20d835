@@ -14,6 +14,8 @@ import type { Block } from '@/types/blocks';
 import { getBlockMeta, type BusinessIntent } from '@/lib/blocks/block-meta';
 import { applyArtDirection } from '@/lib/design/art-direction';
 import { getComposition } from '@/lib/design/composition';
+import { AA_BODY, contrastRatio, readableTextColor } from '@/lib/design/contrast';
+import type { PageTheme } from '@/types/page';
 
 export type DesignIssueSeverity = 'critical' | 'warning' | 'hint';
 
@@ -30,6 +32,8 @@ export interface DesignIssue {
   fix?: (blocks: Block[]) => Block[];
   fixLabelKey?: string;
   fixLabelFallback?: string;
+  /** Phase 10: fixes that live in the page theme instead of the blocks. */
+  themeFix?: Partial<PageTheme>;
 }
 
 export interface DesignHealthReport {
@@ -78,7 +82,15 @@ function longestMonotoneRun(blocks: Block[]): number {
   return best;
 }
 
-export function analyzeDesignHealth(blocks: Block[]): DesignHealthReport {
+export interface DesignHealthOptions {
+  /** Page theme — enables the Phase 10 contrast check. */
+  theme?: Partial<PageTheme> | null;
+}
+
+export function analyzeDesignHealth(
+  blocks: Block[],
+  options: DesignHealthOptions = {},
+): DesignHealthReport {
   const content = contentBlocks(blocks);
   const issues: DesignIssue[] = [];
   const sectionCount = countSections(blocks);
@@ -243,6 +255,27 @@ export function analyzeDesignHealth(blocks: Block[]): DesignHealthReport {
       fixLabelFallback: 'Сгруппировать',
       fix: (b) => applyArtDirection(b, { seed: 'regroup' }).blocks,
     });
+  }
+
+  // 8. Phase 10 — unreadable text on the page background (WCAG AA).
+  const theme = options.theme;
+  if (theme?.backgroundColor && theme?.textColor) {
+    const ratio = contrastRatio(theme.textColor, theme.backgroundColor);
+    if (ratio !== null && ratio < AA_BODY) {
+      issues.push({
+        id: 'low-contrast',
+        severity: 'critical',
+        weight: 25,
+        titleKey: 'editor.designHealth.issue.lowContrast.title',
+        titleFallback: 'Текст плохо читается',
+        descKey: 'editor.designHealth.issue.lowContrast.desc',
+        descFallback:
+          'Цвет текста слишком близок к фону — на телефоне и при ярком свете страницу не прочитать. Нужен контраст не меньше 4.5:1.',
+        fixLabelKey: 'editor.designHealth.fix.contrast',
+        fixLabelFallback: 'Исправить цвет текста',
+        themeFix: { textColor: readableTextColor(theme.backgroundColor) },
+      });
+    }
   }
 
   const penalty = issues.reduce((sum, i) => sum + i.weight, 0);

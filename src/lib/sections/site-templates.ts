@@ -8,6 +8,8 @@
  */
 import type { Block } from '@/types/blocks';
 import { SECTION_PRESETS, type SectionPresetId } from '@/lib/sections/section-presets';
+import { applyArtDirection } from '@/lib/design/art-direction';
+import { resolveDesignKit } from '@/lib/design/design-kits';
 
 export interface SiteTemplatePage {
   /** URL path segment, e.g. 'about'. Latin/digits/hyphen only, ≤40 chars. */
@@ -30,6 +32,11 @@ export type SiteTemplateId =
 
 export interface SiteTemplate {
   id: SiteTemplateId;
+  /**
+   * Phase 8: design kit applied to every page of the template on creation, so a
+   * fresh site never starts as an unstyled stack of blocks.
+   */
+  defaultKitId?: string;
   /** i18n key for label. */
   labelKey: string;
   labelFallback: string;
@@ -48,18 +55,28 @@ export interface SiteTemplate {
  * Compose a page's seedBlocks by concatenating its section presets.
  * Exported for callers (apply-template service, previews).
  */
-export function buildPageBlocks(sections: SectionPresetId[]): Block[] {
+export function buildPageBlocks(sections: SectionPresetId[], kitId?: string): Block[] {
   const out: Block[] = [];
   for (const sid of sections) {
     const preset = SECTION_PRESETS.find((s) => s.id === sid);
     if (preset) out.push(...preset.build());
   }
-  return out;
+  if (!kitId || out.length === 0) return out;
+  const resolved = resolveDesignKit(kitId);
+  if (!resolved) return out;
+  return applyArtDirection(out, { recipeId: resolved.recipe.id }).blocks;
+}
+
+/** Theme patch that belongs to a template's default kit (empty when none). */
+export function getTemplateThemePatch(template: SiteTemplate) {
+  if (!template.defaultKitId) return undefined;
+  return resolveDesignKit(template.defaultKitId)?.theme;
 }
 
 export const SITE_TEMPLATES: SiteTemplate[] = [
   {
     id: 'services',
+    defaultKitId: 'clean-service',
     labelKey: 'siteTemplates.services.label',
     labelFallback: 'Услуги',
     descKey: 'siteTemplates.services.desc',
@@ -89,6 +106,7 @@ export const SITE_TEMPLATES: SiteTemplate[] = [
   },
   {
     id: 'expert',
+    defaultKitId: 'studio-paper',
     labelKey: 'siteTemplates.expert.label',
     labelFallback: 'Эксперт',
     descKey: 'siteTemplates.expert.desc',
@@ -118,6 +136,7 @@ export const SITE_TEMPLATES: SiteTemplate[] = [
   },
   {
     id: 'cafe',
+    defaultKitId: 'soft-care',
     labelKey: 'siteTemplates.cafe.label',
     labelFallback: 'Кафе / Ресторан',
     descKey: 'siteTemplates.cafe.desc',
@@ -141,6 +160,7 @@ export const SITE_TEMPLATES: SiteTemplate[] = [
   },
   {
     id: 'school',
+    defaultKitId: 'clean-service',
     labelKey: 'siteTemplates.school.label',
     labelFallback: 'Школа / Курсы',
     descKey: 'siteTemplates.school.desc',
@@ -170,6 +190,7 @@ export const SITE_TEMPLATES: SiteTemplate[] = [
   },
   {
     id: 'portfolio',
+    defaultKitId: 'editorial-mono',
     labelKey: 'siteTemplates.portfolio.label',
     labelFallback: 'Портфолио',
     descKey: 'siteTemplates.portfolio.desc',
@@ -199,6 +220,7 @@ export const SITE_TEMPLATES: SiteTemplate[] = [
   },
   {
     id: 'product-landing',
+    defaultKitId: 'night-bold',
     labelKey: 'siteTemplates.product.label',
     labelFallback: 'Лендинг продукта',
     descKey: 'siteTemplates.product.desc',

@@ -2157,7 +2157,8 @@
         "calm": "Soft transitions, overlapping portrait, light grid"
       },
       "kits": "Design kits",
-      "kitsHint": "Layout, palette and fonts at once — one tap for a finished style."
+      "kitsHint": "Layout, palette and fonts at once — one tap for a finished style.",
+      "phonePreview": "Phone view"
     },
     "design": {
       "variantTitle": "Design preset",
@@ -2225,6 +2226,10 @@
         "tooManySections": {
           "title": "Too many sections",
           "desc": "Almost every block is its own section. The page fragments and stops reading as a whole."
+        },
+        "lowContrast": {
+          "title": "Text is hard to read",
+          "desc": "Your text color is too close to the background — unreadable on a phone or in bright light. Aim for at least 4.5:1 contrast."
         }
       },
       "fix": {
@@ -2233,7 +2238,8 @@
         "upgradeHero": "Strengthen hero",
         "rebalance": "Split into sections",
         "loudCta": "Highlight the CTA",
-        "regroup": "Group blocks"
+        "regroup": "Group blocks",
+        "contrast": "Fix text color"
       }
     },
     "blockToolbar": {
@@ -2242,6 +2248,18 @@
       "duplicate": "Duplicate",
       "ai": "Improve with AI",
       "delete": "Delete"
+    },
+    "prePublish": {
+      "title": "One tap improves the design",
+      "subtitle": "You can publish right now — but first see what spoils the first impression.",
+      "fixAll": "Fix everything and publish",
+      "details": "See details",
+      "publishAnyway": "Publish as is"
+    },
+    "onboarding": {
+      "designKitTitle": "Give the page a look",
+      "designKitDesc": "A design kit sets layout, palette and fonts in one tap — your content stays untouched.",
+      "designKitCta": "Pick a style"
     }
   },
   "errors": {

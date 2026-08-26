@@ -234,3 +234,73 @@ export function applyArtDirection(
 export function clearArtDirection(blocks: Block[]): Block[] {
   return (blocks || []).map(({ sectionId, composition, designVariant, ...rest }) => rest as Block);
 }
+
+// ---------------------------------------------------------------------------
+// Phase 8 — design from minute one
+// ---------------------------------------------------------------------------
+
+/** Which recipe the page currently follows, detected from the hero composition. */
+export function detectPageRecipeId(blocks: Block[]): string | null {
+  const hero = (blocks || []).find((b) => b.type !== 'profile' && b.composition)?.composition;
+  if (!hero) return null;
+  return PAGE_RECIPES.find((r) => r.hero === hero)?.id ?? null;
+}
+
+/** True when no block carries art-direction fields yet. */
+export function hasArtDirection(blocks: Block[]): boolean {
+  return (blocks || []).some((b) => b.type !== 'profile' && !!b.sectionId);
+}
+
+/**
+ * Annotate a freshly inserted group of blocks (a section preset) so it joins the
+ * page with the same art direction instead of landing as a flat stack.
+ *
+ * `existing` is used only to count sections already on the page — that decides
+ * which body composition of the recipe comes next. Existing blocks are never
+ * modified here.
+ */
+export function applyRecipeToNewSection(
+  existing: Block[],
+  newBlocks: Block[],
+  recipeId?: string | null,
+): Block[] {
+  if (!newBlocks || newBlocks.length === 0) return newBlocks ?? [];
+  const recipe = getPageRecipe(recipeId ?? detectPageRecipeId(existing));
+
+  const sectionIds = new Set(
+    (existing || []).filter((b) => b.type !== 'profile' && b.sectionId).map((b) => b.sectionId!),
+  );
+  const isFirstSection = sectionIds.size === 0;
+  const isClosing = newBlocks.some((b) => {
+    const list = getBlockMeta(b.type).intents ?? [];
+    return list.includes('contact') || list.includes('capture') || list.includes('book');
+  });
+
+  let compositionId: CompositionId = isFirstSection
+    ? recipe.hero
+    : isClosing
+      ? recipe.closing
+      : recipe.body[(sectionIds.size - 1) % recipe.body.length];
+
+  const def = getComposition(compositionId);
+  if (newBlocks.length === 1 && def && (def.rhythm === 'split' || def.rhythm === 'bento')) {
+    compositionId = 'stack';
+  }
+
+  const sectionId = `sec-${Date.now().toString(36)}-new`;
+
+  return newBlocks.map((block, i) => {
+    let variant = block.designVariant;
+    if (!variant) {
+      if (isFirstSection && i === 0 && block.type === 'text') variant = recipe.heroTextVariant;
+      else if (MEDIA_TYPES.has(block.type)) variant = recipe.mediaVariant;
+      else if (block.type === 'button') variant = isFirstSection ? 'button-solid-bold' : 'button-pill-quiet';
+    }
+    return {
+      ...block,
+      sectionId,
+      composition: i === 0 ? compositionId : undefined,
+      designVariant: variant,
+    };
+  });
+}

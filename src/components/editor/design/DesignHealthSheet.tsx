@@ -23,14 +23,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/utils';
 import { analyzeDesignHealth, healthTone, type DesignIssue } from '@/lib/design/design-health';
+import type { PageTheme } from '@/types/page';
 import type { Block } from '@/types/blocks';
 
 export interface DesignHealthSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   blocks: Block[];
+  /** Current page theme — enables the contrast check. */
+  theme?: Partial<PageTheme> | null;
   /** Applies design-only changes to the page. */
   onApply: (blocks: Block[], issueId: string) => void;
+  /** Applies theme-only fixes (e.g. readable text color). */
+  onApplyTheme?: (patch: Partial<PageTheme>, issueId: string) => void;
 }
 
 const SEVERITY_ICON = {
@@ -64,7 +69,7 @@ const IssueRow = memo(function IssueRow({
         <p className="mt-0.5 text-xs leading-snug text-muted-foreground break-words">
           {t(issue.descKey, issue.descFallback)}
         </p>
-        {issue.fix && (
+        {(issue.fix || issue.themeFix) && (
           <Button
             size="sm"
             variant="secondary"
@@ -84,11 +89,13 @@ export const DesignHealthSheet = memo(function DesignHealthSheet({
   open,
   onOpenChange,
   blocks,
+  theme,
   onApply,
+  onApplyTheme,
 }: DesignHealthSheetProps) {
   const { t } = useTranslation();
 
-  const report = useMemo(() => analyzeDesignHealth(blocks || []), [blocks]);
+  const report = useMemo(() => analyzeDesignHealth(blocks || [], { theme }), [blocks, theme]);
   const tone = healthTone(report.score);
 
   const toneClass = {
@@ -104,6 +111,10 @@ export const DesignHealthSheet = memo(function DesignHealthSheet({
   }[tone];
 
   const handleFix = (issue: DesignIssue) => {
+    if (issue.themeFix) {
+      onApplyTheme?.(issue.themeFix, issue.id);
+      return;
+    }
     if (!issue.fix) return;
     onApply(issue.fix(blocks), issue.id);
   };
