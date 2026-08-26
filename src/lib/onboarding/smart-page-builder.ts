@@ -664,13 +664,21 @@ export function buildSmartPage(input: SmartPageBuilderInput): SmartPageBuilderRe
     return applyCommonStyle(block, preferredSize, index);
   });
 
+  // Phase 2: art-direction pass — groups blocks into designed sections
+  // (composition + variants) without changing content or order.
+  const directed = applyArtDirection(polishedBlocks, {
+    seed: `${input.niche}:${profile.name}`,
+  });
+  appliedRules.push(`art-direction:${directed.recipe.id}`);
+
   return {
     profile,
-    blocks: polishedBlocks,
+    blocks: directed.blocks,
     diagnostics: {
       revenueMode,
-      qualityScore: qualityScore(polishedBlocks),
+      qualityScore: qualityScore(directed.blocks),
       appliedRules,
     },
   };
 }
+
