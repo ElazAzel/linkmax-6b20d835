@@ -1,5 +1,5 @@
 // CRITICAL: i18n must be imported FIRST, before any React components
-import "./i18n/config";
+import { i18nReady } from "./i18n/config";
 import { validateEnv } from "./lib/utils/env-validator";
 
 // Validate environment before anything else
@@ -252,11 +252,16 @@ const router = createBrowserRouter([
 import { PushService } from "@/lib/notifications/push-service";
 import { logger } from "@/lib/utils/logger";
 
-createRoot(document.getElementById("root")!).render(
+const root = createRoot(document.getElementById("root")!);
+const renderApp = () => root.render(
   <StrictMode>
     <RouterProvider router={router} future={{ v7_startTransition: true }} />
   </StrictMode>
 );
+
+// Wait for the active locale chunk before first paint so no raw keys flash
+i18nReady.then(renderApp).catch(renderApp);
+
 
 // Initialize Push Notifications for native mobile
 PushService.init();
