@@ -63,6 +63,7 @@ import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import { SectionCompositionPicker } from './design/SectionCompositionPicker';
+import { getComposition, type CompositionDef } from '@/lib/design/composition';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion } from 'framer-motion';
@@ -151,6 +152,10 @@ interface SortableGridBlockItemProps {
   onMoveDown?: () => void;
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset) => void;
   isRecentlyAdded?: boolean;
+  /** Phase 5: when set, the parent composition owns the grid (spans dropped). */
+  composition?: CompositionDef;
+  compositionIndex?: number;
+  compositionTotal?: number;
 }
 
 function SortableGridBlockItem({
@@ -175,6 +180,9 @@ function SortableGridBlockItem({
   onMoveUp,
   onMoveDown,
   isRecentlyAdded = false,
+  composition,
+  compositionIndex = 0,
+  compositionTotal = 1,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const {
@@ -193,9 +201,12 @@ function SortableGridBlockItem({
 
   const blockSize = block.blockSize || 'small';
   const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
-  const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-  const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
-  const isFrameless = block.type === 'separator' || block.type === 'socials';
+  const inComposition = !!composition;
+  const colSpanClass = inComposition ? '' : dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
+  const rowSpanClass = inComposition ? '' : dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
+  const compositionItemClass = composition?.itemClass?.(compositionIndex, compositionTotal) || '';
+  const isFrameless =
+    block.type === 'separator' || block.type === 'socials' || !!composition?.naked;
 
   // Get block type label from manifest
   const manifest = BLOCK_MANIFEST[block.type as BlockType];
@@ -239,8 +250,9 @@ function SortableGridBlockItem({
         // Quiet hover: 1px outline + soft lift, no background tint
         !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
         isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
-        !isFrameless && 'min-h-[140px]',
-        !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
+        !isFrameless && !inComposition && 'min-h-[140px]',
+        !isFrameless && !inComposition && dimensions.gridRows === 2 && 'min-h-[296px]',
+        compositionItemClass,
         // P4: Selection ring
         selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
         isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
@@ -252,7 +264,13 @@ function SortableGridBlockItem({
     >
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
-        <div className="pointer-events-none w-full h-full isolate bg-card rounded-2xl overflow-hidden" data-editor-block>
+        <div
+          className={cn(
+            'pointer-events-none w-full h-full isolate rounded-2xl overflow-hidden',
+            isFrameless ? 'bg-transparent' : 'bg-card',
+          )}
+          data-editor-block
+        >
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
