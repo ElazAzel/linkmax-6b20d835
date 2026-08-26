@@ -27,15 +27,16 @@ export function useZones() {
       setZones((data as Zone[]) || []);
 
       // Auto-select first zone if none selected
-      if (!currentZoneId && data && data.length > 0) {
-        setCurrentZoneId(data[0].id);
+      if (data && data.length > 0) {
+        setCurrentZoneId(prev => prev ?? data[0].id);
       }
     } catch (err) {
       console.error('Error fetching zones:', err);
     } finally {
       setLoading(false);
     }
-  }, [user?.id, currentZoneId]);
+  }, [user?.id]);
+
 
   useEffect(() => { fetchZones(); }, [fetchZones]);
 
