@@ -22,6 +22,7 @@ import Layers from 'lucide-react/dist/esm/icons/layers';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import {
@@ -53,6 +54,7 @@ export interface EditorTopBarProps {
   onOpenStructure?: () => void;
   onOpenVersions?: () => void;
   onOpenTemplates?: () => void;
+  onOpenArtDirection?: () => void;
   onOpenAI?: () => void;
   reviewMode?: string;
   onToggleReviewMode?: (mode: 'problematic' | 'cta_contact') => void;
@@ -74,6 +76,7 @@ export const EditorTopBar = memo(function EditorTopBar({
   onOpenStructure,
   onOpenVersions,
   onOpenTemplates,
+  onOpenArtDirection,
   onOpenAI,
   reviewMode = 'normal',
   onToggleReviewMode,
@@ -184,6 +187,12 @@ export const EditorTopBar = memo(function EditorTopBar({
               <DropdownMenuItem onClick={onOpenStructure}>
                 <Layers className="h-4 w-4 mr-2" />
                 {t('editor.structure', 'Структура страницы')}
+              </DropdownMenuItem>
+            )}
+            {onOpenArtDirection && (
+              <DropdownMenuItem onClick={onOpenArtDirection}>
+                <Wand2 className="h-4 w-4 mr-2 text-primary" />
+                {t('editor.artDirection.title', 'Дизайн страницы')}
               </DropdownMenuItem>
             )}
             {onOpenAI && (
