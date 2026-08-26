@@ -179,61 +179,21 @@ export default function Admin() {
             </div>
 
             <Suspense fallback={<TabLoader />}>
-              <TabsContent value="overview">
-                <AdminOverviewTab />
-              </TabsContent>
-
-              <TabsContent value="growth">
-                <AdminGrowthTab />
-              </TabsContent>
-
-              <TabsContent value="users">
-                <AdminUsersTab />
-              </TabsContent>
-
-              <TabsContent value="pages">
-                <AdminPagesTab />
-              </TabsContent>
-
-              <TabsContent value="tokens">
-                <AdminTokensTab />
-              </TabsContent>
-
-              <TabsContent value="analytics">
-                <AdminCharts />
-              </TabsContent>
-
-
-              <TabsContent value="detailed">
-                <AdminAnalyticsDashboard />
-              </TabsContent>
-
-              <TabsContent value="tiers">
-                <UserTierManager />
-              </TabsContent>
-
-              <TabsContent value="verification">
-                <AdminVerificationPanel />
-              </TabsContent>
-
-              <TabsContent value="partners">
-                <AdminPartnersTab />
-              </TabsContent>
-
-              <TabsContent value="templates">
-                <AdminTemplatesTab />
-              </TabsContent>
-
-              <TabsContent value="fintech">
-                <AdminFintechTab />
-              </TabsContent>
-
-              <TabsContent value="broadcast">
-                <AdminBroadcastTab />
-              </TabsContent>
-
-              <TabsContent value="seo">
-                <AdminSearchDiagnosticsTab />
+              <TabsContent value={selectedTab}>
+                {selectedTab === 'overview' && <AdminOverviewTab />}
+                {selectedTab === 'growth' && <AdminGrowthTab />}
+                {selectedTab === 'users' && <AdminUsersTab />}
+                {selectedTab === 'pages' && <AdminPagesTab />}
+                {selectedTab === 'tokens' && <AdminTokensTab />}
+                {selectedTab === 'analytics' && <AdminCharts />}
+                {selectedTab === 'detailed' && <AdminAnalyticsDashboard />}
+                {selectedTab === 'tiers' && <UserTierManager />}
+                {selectedTab === 'verification' && <AdminVerificationPanel />}
+                {selectedTab === 'partners' && <AdminPartnersTab />}
+                {selectedTab === 'templates' && <AdminTemplatesTab />}
+                {selectedTab === 'fintech' && <AdminFintechTab />}
+                {selectedTab === 'broadcast' && <AdminBroadcastTab />}
+                {selectedTab === 'seo' && <AdminSearchDiagnosticsTab />}
               </TabsContent>
             </Suspense>
           </Tabs>

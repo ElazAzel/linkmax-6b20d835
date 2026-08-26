@@ -16,7 +16,6 @@ import { BuildingLoader } from "@/components/ui/building-loader";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import { RoutePrefetchManager } from "@/components/performance/RoutePrefetchManager";
 import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
@@ -170,7 +169,6 @@ const App = () => {
                     <Sonner />
                     <CommandPalette />
                   </Suspense>
-                  <RoutePrefetchManager />
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>
                     <BackendStatusBanner />

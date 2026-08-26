@@ -94,18 +94,6 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     setMetaTag('apple-mobile-web-app-status-bar-style', 'default');
     setMetaTag('apple-mobile-web-app-title', 'LinkMAX');
 
-    // Font preload for performance
-    const preloadFont = document.querySelector('link[rel="preload"][as="font"]');
-    if (!preloadFont) {
-      const fontLink = document.createElement('link');
-      fontLink.rel = 'preload';
-      fontLink.href = 'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2';
-      fontLink.as = 'font';
-      fontLink.type = 'font/woff2';
-      fontLink.crossOrigin = 'anonymous';
-      document.head.appendChild(fontLink);
-    }
-
     // Canonical: reflect the current language-prefixed route if present.
     const pathLang = (typeof window !== 'undefined'
       ? window.location.pathname.match(/^\/(ru|en|kk|uz)(\/|$)/)?.[1]

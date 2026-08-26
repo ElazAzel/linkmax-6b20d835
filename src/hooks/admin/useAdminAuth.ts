@@ -9,12 +9,24 @@ export function useAdminAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function checkAdminRole() {
-      if (!user) {
-        setIsAdmin(false);
-        setLoading(false);
+      if (authLoading) {
+        setLoading(true);
         return;
       }
+
+      if (!user) {
+        if (!cancelled) {
+          setIsAdmin(false);
+          setLoading(false);
+        }
+        return;
+      }
+
+      setLoading(true);
+      setIsAdmin(false);
 
       try {
         const { data, error } = await supabase
@@ -26,22 +38,24 @@ export function useAdminAuth() {
 
         if (error) {
           logger.error('Error checking admin role:', error, { context: 'useAdminAuth' });
-          setIsAdmin(false);
+          if (!cancelled) setIsAdmin(false);
         } else {
-          setIsAdmin(!!data);
+          if (!cancelled) setIsAdmin(!!data);
         }
       } catch (err) {
         logger.error('Error checking admin role:', err, { context: 'useAdminAuth' });
-        setIsAdmin(false);
+        if (!cancelled) setIsAdmin(false);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
 
-    if (!authLoading) {
-      checkAdminRole();
-    }
-  }, [user, authLoading]);
+    void checkAdminRole();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, authLoading]);
 
   return { isAdmin, loading: loading || authLoading, user };
 }

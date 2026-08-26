@@ -94,7 +94,6 @@ const LoadingState = () => (
 // 2026 Living Canvas Background
 const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
-import { prefetchRouteChunks } from '@/lib/routing/route-prefetch';
 
 // Lazy load heavy components for better bundle splitting
 const BlockEditorV2 = lazy(() => import('@/components/editor/BlockEditorV2').then(m => ({ default: m.BlockEditorV2 })));
@@ -246,23 +245,6 @@ function DashboardV2Inner() {
   const seoDescription = t('dashboard.seo.description', 'Manage your LinkMAX pages, leads, and analytics.');
 
   // QuickStartFlow removed — AIBuilderWizard handles all onboarding via useDashboardOnboarding
-
-  useEffect(() => {
-    // Prefetch only nearest probable next transitions by active dashboard tab
-    if (currentTab === 'home') {
-      prefetchRouteChunks(['editor']);
-      return;
-    }
-
-    if (currentTab === 'editor') {
-      prefetchRouteChunks(['publicPage']);
-      return;
-    }
-
-    if (currentTab === 'pages') {
-      prefetchRouteChunks(['publicPage', 'editor']);
-    }
-  }, [currentTab]);
 
   // Handle tab change - navigate to the proper route
   const handleTabChange = useCallback((tabId: string) => {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { storage } from '@/lib/storage';
+import { initPostHog } from '@/lib/posthog';
 
 
 const CONSENT_KEY = 'lnkmx_cookie_consent';
@@ -58,6 +59,7 @@ export function CookieConsent() {
     const handleAccept = () => {
         setConsent('accepted');
         setVisible(false);
+        void initPostHog();
     };
 
     const handleReject = () => {
