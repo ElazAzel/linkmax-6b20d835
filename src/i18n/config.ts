@@ -105,17 +105,18 @@ function syncDbLocale(lang: string): void {
  * Load a lazy locale on demand and add it to i18n
  */
 async function loadLazyLocale(lang: string): Promise<void> {
-  if (loadedLazyLocales.has(lang)) return;
-  const importer = lazyLocaleImporters[lang];
+  const normalized = normalizeLanguage(lang);
+  if (loadedLazyLocales.has(normalized)) return;
+  const importer = lazyLocaleImporters[normalized];
   if (!importer) return;
 
   try {
     const data = await importer();
     const merged = mergeNamespaces(data);
-    i18n.addResourceBundle(lang, 'translation', merged.translation, true, true);
-    loadedLazyLocales.add(lang);
+    i18n.addResourceBundle(normalized, 'translation', merged.translation, true, true);
+    loadedLazyLocales.add(normalized);
   } catch (e) {
-    console.warn(`[i18n] Failed to load locale: ${lang}`, e);
+    console.warn(`[i18n] Failed to load locale: ${normalized}`, e);
   }
 }
 
@@ -172,7 +173,7 @@ languageDetectorPlugin.addDetector(customLanguageDetector);
 
 // Initialize i18n with no bundled resources — the detected locale is fetched
 // as a separate chunk and awaited via `i18nReady` before the app renders.
-i18n
+const i18nInitPromise = i18n
   .use(languageDetectorPlugin)
   .use(initReactI18next)
   .init({
@@ -197,6 +198,11 @@ i18n
     showSupportNotice: false,
     ns: ['translation'],
     defaultNS: 'translation',
+    react: {
+      useSuspense: false,
+      bindI18n: 'languageChanged loaded',
+      bindI18nStore: 'added removed',
+    },
     detection: {
       order: ['customDetector'],
       caches: ['localStorage'],
@@ -228,16 +234,32 @@ i18n
 
 // Load the detected locale (single chunk) — this is the only translation payload
 // on the critical path. Fallback locales are warmed up afterwards, in background.
-const detectedLang = normalizeLanguage(i18n.language || 'ru');
+const detectedLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language || 'ru');
 
 const FALLBACK_WARMUP: string[] = ['ru', 'en'];
 
-export const i18nReady: Promise<void> = loadLazyLocale(detectedLang)
-  .catch(() => undefined)
+export const i18nReady: Promise<void> = i18nInitPromise
+  .then(async () => {
+    const activeLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language || detectedLang);
+    await loadLazyLocale(activeLang);
+
+    // Never allow the first React render to start with an empty resource store.
+    // If the detected locale chunk fails, fall back to Russian before mounting.
+    if (!i18n.hasResourceBundle(activeLang, 'translation')) {
+      await loadLazyLocale('ru');
+      if (activeLang !== 'ru' && i18n.hasResourceBundle('ru', 'translation')) {
+        await i18n.changeLanguage('ru');
+      }
+    }
+  })
+  .catch(async () => {
+    await loadLazyLocale('ru');
+  })
   .then(() => {
     // Warm fallbacks without blocking first paint
+    const activeLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language || detectedLang);
     _ric(() => {
-      FALLBACK_WARMUP.filter((l) => l !== detectedLang).forEach((l) => {
+      FALLBACK_WARMUP.filter((l) => l !== activeLang).forEach((l) => {
         loadLazyLocale(l);
       });
     });
