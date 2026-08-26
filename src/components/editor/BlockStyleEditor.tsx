@@ -61,6 +61,9 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
 
   return (
     <div className="space-y-4">
+      {/* Phase 4: art-direction variant for this block */}
+      <BlockVariantPicker formData={formData} onChange={onChange} />
+
       {/* Background */}
       <Section
         icon={<Palette className="h-4 w-4 text-primary" />}
