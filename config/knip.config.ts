@@ -1,9 +1,9 @@
 import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
-  entry: ['src/main.tsx'],
+  entry: ['src/main.tsx', 'src/telegram/main.tsx'],
   project: ['src/**/*.{ts,tsx}'],
-  ignore: ['src/platform/supabase/types.ts'],
+  ignore: ['src/integrations/supabase/types.ts', 'src/platform/supabase/types.ts'],
   ignoreDependencies: ['@playwright/test'],
 };
 

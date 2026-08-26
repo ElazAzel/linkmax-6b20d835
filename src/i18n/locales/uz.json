@@ -133,23 +133,23 @@
     "steps": {
       "createPage": "Biznes kartangizni yarating",
       "addBlock": "Xizmatlaringizni namoyish qiling",
+      "addServices": "Narxlari bilan xizmatlar qoʻshing",
+      "addContact": "Aloqa tugmasini qoʻshing",
       "publish": "Dunyoga ishga tushiring",
       "connectTelegram": "Tezkor bildirishnomalarni yoqing",
       "firstLead": "Birinchi rahbarni oling",
       "firstBooking": "Birinchi yozilishni oling",
       "firstConversion": "Birinchi javobni oling",
-      "firstVisitor": "Birinchi tashrif buyuruvchini oling",
-      "addServices": "Narxlari bilan xizmatlar qoʻshing",
-      "addContact": "Aloqa tugmasini qoʻshing"
+      "firstVisitor": "Birinchi tashrif buyuruvchini oling"
     },
     "cta": {
       "openEditor": "Muharrirni oching",
       "addBlock": "Blok qo'shish",
+      "addServices": "Qoʻshish",
+      "addContact": "Qoʻshish",
       "publish": "Nashr qilish",
       "connectTelegram": "Ulanish",
-      "promotePage": "Rag'batlantirish",
-      "addServices": "Qoʻshish",
-      "addContact": "Qoʻshish"
+      "promotePage": "Rag'batlantirish"
     },
     "tips": {
       "addBlock": "Birinchi blokni qoʻshing — havola, mahsulot yoki video",
@@ -7271,6 +7271,14 @@
       "a4": "Sahifa yaratish ustasiga o?tasiz. Agar landingda qisqa manzil ko?rsatilgan bo?lsa, u signup flow ichiga uzatiladi."
     }
   },
+  "upgradeBenefits": {
+    "b1Title": "Barcha bloklar va formalar",
+    "b1Desc": "Arizalar, bron, toʻlovlar",
+    "b2Title": "7% oʻrniga 1% komissiya",
+    "b2Desc": "50 000 ₸ aylanmasidan boshlab qoplanadi",
+    "b3Title": "Oʻz domeningiz · brendingsiz",
+    "b3Desc": "Professional koʻrinish"
+  },
   "ritual": {
     "niches": {
       "beauty": "Zapisatsya ko mne onlayn: {{url}}",
@@ -7378,14 +7386,6 @@
     "recommended": "Tavsiya etamiz",
     "siteDesc": "Bir nechta tayyor sahifa (Asosiy, Xizmatlar, FAQ) navigatsiya va futer bilan.",
     "later": "Keyinroq"
-  },
-  "upgradeBenefits": {
-    "b1Title": "Barcha bloklar va formalar",
-    "b1Desc": "Arizalar, bron, toʻlovlar",
-    "b2Title": "7% oʻrniga 1% komissiya",
-    "b2Desc": "50 000 ₸ aylanmasidan boshlab qoplanadi",
-    "b3Title": "Oʻz domeningiz · brendingsiz",
-    "b3Desc": "Professional koʻrinish"
   },
   "edit": "O'zgartirish",
   "englishMandatory": "Xalqaro auditoriya uchun ingliz tili talab qilinadi",

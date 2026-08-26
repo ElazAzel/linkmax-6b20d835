@@ -14,7 +14,7 @@ const LOCALES_DIR = path.resolve(__dirname, '../src/i18n/locales');
 const SOURCE_LOCALE = 'en';
 
 const LOCALE_FILES = [
-  'ru.json', 'kk.json', 'uz.json', 'de.json', 'uk.json', 'uk_restored.json', 'be.json',
+  'ru.json', 'kk.json', 'uz.json', 'de.json', 'uk.json', 'be.json',
   'es.json', 'fr.json', 'it.json', 'pt.json', 'zh.json', 'tr.json',
   'ja.json', 'ko.json', 'ar.json',
 ];

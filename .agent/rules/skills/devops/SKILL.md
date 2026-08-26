@@ -1,29 +1,53 @@
 ---
 name: devops
-description: CI/CD, Supabase migrations and Edge Functions, Cloudflare Worker, runtime configuration, and delivery recovery for LinkMAX.
+description: CI/CD workflows, Supabase migrations, Edge Functions deployment, Cloudflare SSR Worker, and release operations.
 ---
 
-# DevOps
+# DevOps & Infrastructure
 
-Use for workflow, deployment, environment, migration, or operational changes.
+Use for GitHub Actions workflows, Supabase database migrations, Edge Function deployments, Cloudflare Worker SSR, and production release pipelines.
 
-## Source of Truth
+## When to Use
+- Managing GitHub Actions pipelines (`.github/workflows/`).
+- Creating and testing Supabase migrations and RLS policies (`supabase/migrations/`).
+- Deploying and updating Supabase Edge Functions (`supabase/functions/`).
+- Managing Cloudflare Worker SSR and bot rendering (`cloudflare-worker/`).
+- Running local quality gates and release validation.
 
-- Workflows: `.github/workflows/ci.yml`, `deploy.yml`, `deploy-cloudflare-worker.yml`, `deploy-supabase.yml`.
-- Runtime details: `docs/deployment/GITHUB_ACTIONS_SETUP.md`.
-- Local process: `docs/deployment/runbooks/LOCAL_DEVELOPMENT.md`.
+## Core Workflows
 
-## Procedure
+### 1. Supabase Database Migrations
+1. Create new migration via `npx supabase migration new <name>`.
+2. Write idempotent SQL: use `IF NOT EXISTS`, add indexes concurrently where needed, and define RLS policies explicitly.
+3. Test migration locally with `npx supabase db reset` or verify against active schema.
+4. Never modify existing, already-deployed migration files.
 
-1. Verify Node 22 and run `npm ci`.
-2. Make schema changes in a new append-only file under `supabase/migrations/`.
-3. Test locally where possible; review RLS and Edge Function authorization.
-4. Run `npm run quality:check`, affected tests, and `npm run build`.
-5. Confirm required GitHub secrets by name only. Never print values.
-6. After deploy, smoke-test the affected endpoint and inspect provider logs.
+### 2. Edge Function Deployments
+1. Develop function under `supabase/functions/<function-name>/index.ts`.
+2. Use shared utilities from `supabase/functions/_shared/`.
+3. Validate environment secrets via `Deno.env.get()`.
+4. Deploy using `supabase functions deploy <function-name>` or push to `main` via `deploy-supabase.yml`.
 
-## Guardrails
+### 3. Cloudflare Worker SSR
+1. Worker logic resides in `cloudflare-worker/worker.ts`.
+2. Injects meta tags, title, and OpenGraph images for crawler bots (Googlebot, TelegramBot, TwitterBot).
+3. Test locally or via `scripts/test-ssr.sh` / `scripts/verify-ssr.js`.
+4. Deploy via `.github/workflows/deploy-cloudflare-worker.yml`.
 
-- Do not edit an applied migration or deploy unreviewed database changes.
-- `SUPABASE_ACCESS_TOKEN` and `CLOUDFLARE_API_TOKEN` are CI secrets, never `VITE_*` variables.
-- Treat missing provider credentials as a delivery blocker, not a reason to bypass a workflow.
+## Key Files & Configs
+- **Workflows**: `.github/workflows/ci.yml`, `.github/workflows/deploy.yml`, `.github/workflows/deploy-supabase.yml`
+- **Supabase Config**: `supabase/config.toml`, `supabase/migrations/`
+- **Worker**: `cloudflare-worker/worker.ts`, `cloudflare-worker/wrangler.toml`
+- **Documentation**: `docs/deployment/`, `docs/operations/`
+
+## Commands & Verification
+```bash
+npm run quality:check
+npm run test:ci
+npm run build
+```
+
+## Best Practices & Guardrails
+- **Secret Separation**: Never expose `SUPABASE_SERVICE_ROLE_KEY` to client apps or `VITE_*` env vars.
+- **Append-Only Migrations**: Preserve all historical migration sequence integrity.
+- **Fail-Fast CI**: Ensure all quality gates (Lint, i18n, Typecheck, Tests, Cycles) pass before deploying.

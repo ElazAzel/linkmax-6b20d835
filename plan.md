@@ -92,19 +92,19 @@
 
 ## План внедрения
 
-### Phase 1 (сейчас)
+### Phase 1 (Core Skills)
 - [x] Загрузить все SKILL.md из awesome-claude-skills
-- [ ] Создать `plan.md` — этот документ
-- [ ] Написать 5 **core skills**: `business-zone`, `communications`, `content-creation`, `devops`, `payments`
-- [ ] Обновить `.agent/rules/ANTIGRAVITY_CONFIG.md`
+- [x] Создать `plan.md` — этот документ
+- [x] Написать 5 **core skills**: `business-zone`, `communications`, `content-creation`, `devops`, `payments`
+- [x] Обновить `.agent/rules/ANTIGRAVITY_CONFIG.md`
 
-### Phase 2
-- [ ] Написать 4 **supporting skills**: `analytics`, `calendar`, `design-brand`, `testing`
-- [ ] Интегрировать с .agent/rules/agents/ (backend_specialist, frontend_specialist)
+### Phase 2 (Supporting Skills)
+- [x] Написать 4 **supporting skills**: `analytics`, `calendar`, `design-brand`, `testing`
+- [x] Интегрировать с .agent/rules/agents/ (backend_specialist, frontend_specialist)
 
-### Phase 3
-- [ ] Написать 2 **utility skills**: `changelog`, `file-management`
-- [ ] Задокументировать workflow для агентов
+### Phase 3 (Utility Skills)
+- [x] Написать 2 **utility skills**: `changelog`, `file-management`
+- [x] Задокументировать workflow для агентов
 
 ## Технические заметки
 

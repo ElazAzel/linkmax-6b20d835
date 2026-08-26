@@ -133,23 +133,23 @@
     "steps": {
       "createPage": "Create your business card",
       "addBlock": "Showcase your services",
+      "addServices": "Add services with pricing",
+      "addContact": "Add a contact button",
       "publish": "Launch to the world",
       "connectTelegram": "Enable instant notifications",
       "firstLead": "Get your first lead",
       "firstBooking": "Get your first booking",
       "firstConversion": "Get your first response",
-      "firstVisitor": "Get your first visitor",
-      "addServices": "Add services with pricing",
-      "addContact": "Add a contact button"
+      "firstVisitor": "Get your first visitor"
     },
     "cta": {
       "openEditor": "Open Editor",
       "addBlock": "Add Block",
+      "addServices": "Add",
+      "addContact": "Add",
       "publish": "Publish",
       "connectTelegram": "Connect",
-      "promotePage": "Promote",
-      "addServices": "Add",
-      "addContact": "Add"
+      "promotePage": "Promote"
     },
     "tips": {
       "addBlock": "Add your first block — a link, product, or video",
@@ -2144,7 +2144,123 @@
     "unsavedDescription": "You have changes that have not yet been saved. What do you want to do?",
     "versions": "Story",
     "swipeForActions": "Swipe for actions",
-    "sectionNameDescription": "Enter a name for the new section"
+    "sectionNameDescription": "Enter a name for the new section",
+    "artDirection": {
+      "title": "Page design",
+      "subtitle": "Your content stays the same — only the section layout changes: rhythm, accents and typography.",
+      "empty": "Add at least one block to the page first.",
+      "note": "No blocks are removed or reordered.",
+      "reset": "Reset design",
+      "mood": {
+        "editorial": "Airy spacing, large headlines, calm rhythm",
+        "bold": "High-contrast hero, full-bleed media, strong CTAs",
+        "calm": "Soft transitions, overlapping portrait, light grid"
+      },
+      "kits": "Design kits",
+      "kitsHint": "Layout, palette and fonts at once — one tap for a finished style.",
+      "phonePreview": "Phone view"
+    },
+    "design": {
+      "variantTitle": "Design preset",
+      "variantHint": "Ready-made art direction presets for this block.",
+      "variantNone": "Default",
+      "compositionPick": "Composition",
+      "compositionTitle": "Section rhythm",
+      "compositionNone": "Default grid"
+    },
+    "variant": {
+      "displayOversized": "Oversized display",
+      "editorialLead": "Editorial lead",
+      "labelEyebrow": "Eyebrow label",
+      "metricBig": "Big metric",
+      "buttonPillQuiet": "Quiet pill",
+      "buttonSolidBold": "Solid bold",
+      "mediaFullBleed": "Full bleed",
+      "mediaEditorialCrop": "Editorial crop",
+      "mediaFloating": "Floating media",
+      "cardQuiet": "Quiet card"
+    },
+    "composition": {
+      "stack": "Stack",
+      "splitHero": "Split hero",
+      "editorialHero": "Editorial hero",
+      "overlapPortrait": "Overlap portrait",
+      "cinematicVideo": "Cinematic video",
+      "projectSpotlight": "Project spotlight",
+      "bentoProof": "Bento proof",
+      "fullscreenContact": "Fullscreen contact",
+      "horizontalProjects": "Horizontal rail"
+    },
+    "designHealth": {
+      "title": "Design quality",
+      "subtitle": "AI-free layout check: section rhythm, hero, visuals and the final step. Fixes never change your content.",
+      "empty": "Add at least one block to the page first.",
+      "score": "Design score",
+      "sections": "Sections",
+      "allGood": "The layout reads as one piece — no critical issues.",
+      "issue": {
+        "noArtDirection": {
+          "title": "No art direction applied",
+          "desc": "Blocks look like identical cards. Apply a design recipe so sections get rhythm, accents and typography."
+        },
+        "weakHero": {
+          "title": "Weak first impression",
+          "desc": "The first section is a plain stack. A hero should be big: split, editorial or full-width media."
+        },
+        "monotone": {
+          "title": "Monotonous rhythm",
+          "desc": "Five or more blocks run in the same rhythm. Break the page into sections with different layouts."
+        },
+        "noVisual": {
+          "title": "No visuals",
+          "desc": "The page is text and buttons only. Add work photos, a gallery or a video — that's your strongest argument."
+        },
+        "noClosingCta": {
+          "title": "No final step",
+          "desc": "There is no booking, form or contact at the end. The visitor finishes reading with nothing to tap."
+        },
+        "quietCta": {
+          "title": "Quiet call to action",
+          "desc": "Your closing booking or contact block looks like everything else. Make it a full-screen section."
+        },
+        "tooManySections": {
+          "title": "Too many sections",
+          "desc": "Almost every block is its own section. The page fragments and stops reading as a whole."
+        },
+        "lowContrast": {
+          "title": "Text is hard to read",
+          "desc": "Your text color is too close to the background — unreadable on a phone or in bright light. Aim for at least 4.5:1 contrast."
+        }
+      },
+      "fix": {
+        "generic": "Fix",
+        "applyRecipe": "Apply design",
+        "upgradeHero": "Strengthen hero",
+        "rebalance": "Split into sections",
+        "loudCta": "Highlight the CTA",
+        "regroup": "Group blocks",
+        "contrast": "Fix text color"
+      }
+    },
+    "blockToolbar": {
+      "label": "Block actions",
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "ai": "Improve with AI",
+      "delete": "Delete"
+    },
+    "prePublish": {
+      "title": "One tap improves the design",
+      "subtitle": "You can publish right now — but first see what spoils the first impression.",
+      "fixAll": "Fix everything and publish",
+      "details": "See details",
+      "publishAnyway": "Publish as is"
+    },
+    "onboarding": {
+      "designKitTitle": "Give the page a look",
+      "designKitDesc": "A design kit sets layout, palette and fonts in one tap — your content stays untouched.",
+      "designKitCta": "Pick a style"
+    }
   },
   "errors": {
     "createYourPage": "Want to create your own page?",
@@ -5817,6 +5933,28 @@
     "free": "Free"
   },
   "tma": {
+    "settingsTitle": "TMA Settings",
+    "settingsSubtitle": "Configure your app presence within the Telegram ecosystem.",
+    "botConnection": "Bot Connection",
+    "botDesc": "Connect your own Telegram Bot for a white-label experience.",
+    "setupBot": "Configure Bot Token",
+    "uiControl": "UI Control",
+    "language": "Language",
+    "languageDesc": "Choose your preferred interface language.",
+    "syncTheme": "Sync Theme Colors",
+    "hapticFeedback": "Haptic Feedback",
+    "expandedMode": "Full Height Mode",
+    "advancedSettings": "Advanced Bot Features",
+    "pushNotifications": "Push Notifications",
+    "pushDesc": "Send service updates directly via the bot.",
+    "customDomain": "Bot Domain Mapping",
+    "domainDesc": "Map your bot to a custom subdomain.",
+    "paymentsTitle": "TMA Payments",
+    "paymentsSubtitle": "Manage native Telegram payments and checkout.",
+    "availableBalance": "Available Balance",
+    "withdraw": "Withdraw",
+    "withdrawStarted": "Withdrawal Request",
+    "withdrawDesc": "Please select a payout method in your global settings to continue.",
     "action_bookings_desc": "Schedule and entries",
     "action_bookings_title": "Bookings",
     "action_crm_desc": "Incoming requests",
@@ -5902,29 +6040,7 @@
     "stub_upcoming": "Coming soon in the next update",
     "tab_links": "Links",
     "tab_profile": "Profile",
-    "tab_qr": "QR Code",
-    "settingsTitle": "TMA Settings",
-    "settingsSubtitle": "Configure your app presence within the Telegram ecosystem.",
-    "botConnection": "Bot Connection",
-    "botDesc": "Connect your own Telegram Bot for a white-label experience.",
-    "setupBot": "Configure Bot Token",
-    "uiControl": "UI Control",
-    "language": "Language",
-    "languageDesc": "Choose your preferred interface language.",
-    "syncTheme": "Sync Theme Colors",
-    "hapticFeedback": "Haptic Feedback",
-    "expandedMode": "Full Height Mode",
-    "advancedSettings": "Advanced Bot Features",
-    "pushNotifications": "Push Notifications",
-    "pushDesc": "Send service updates directly via the bot.",
-    "customDomain": "Bot Domain Mapping",
-    "domainDesc": "Map your bot to a custom subdomain.",
-    "paymentsTitle": "TMA Payments",
-    "paymentsSubtitle": "Manage native Telegram payments and checkout.",
-    "availableBalance": "Available Balance",
-    "withdraw": "Withdraw",
-    "withdrawStarted": "Withdrawal Request",
-    "withdrawDesc": "Please select a payout method in your global settings to continue."
+    "tab_qr": "QR Code"
   },
   "toasts": {
     "ai": {
@@ -7009,6 +7125,57 @@
         "trust3": "Analytics"
       }
     },
+    "v5": {
+      "badge": "An operating flow for services, experts and small teams",
+      "title1": "A page where clients book,",
+      "title2": "pay and land in your CRM",
+      "subtitle": "LinkMAX connects your service storefront, messengers, online booking, payments and analytics so the owner sees the full client path in one place.",
+      "cta_primary": "Create a page for free",
+      "cta_secondary": "Open examples",
+      "metric1": "minutes to launch",
+      "metric2": "Starter fee",
+      "metric3": "lead feed",
+      "preview": {
+        "eyebrow": "live flow",
+        "title": "Page, CRM and payments together",
+        "status": "online",
+        "booking": "Today"
+      },
+      "bento": {
+        "builder": {
+          "title": "Service storefront without empty sections",
+          "desc": "Show services, schedule, prices and a lead form the way clients need them before booking.",
+          "badge": "booking open",
+          "service1": "Consultation",
+          "service2": "Diagnostics",
+          "service3": "Subscription",
+          "service4": "Single visit",
+          "cta": "Book an available time"
+        },
+        "ai": {
+          "eyebrow": "Page draft",
+          "title": "Structure in a few minutes",
+          "desc": "Describe your niche and get a foundation you can edit by hand right away."
+        },
+        "pay": {
+          "title": "Payment before the visit",
+          "desc": "Kaspi QR, Robokassa, Stripe"
+        },
+        "crm": {
+          "title": "Leads and statuses",
+          "desc": "Forms, messengers and bookings land in one feed. Telegram tells you about new clients right away.",
+          "notify_title": "New lead",
+          "notify_desc": "Anna - booking at 2:00 PM",
+          "pipeline": "Pipeline: 12 leads",
+          "pipeline_desc": "New, in progress, paid"
+        },
+        "analytics": {
+          "title": "What worked",
+          "desc": "See which sections, sources and services bring leads.",
+          "week": "by day"
+        }
+      }
+    },
     "short": {
       "brandPrefix": "lnk",
       "brandAccent": "mx",
@@ -7102,58 +7269,15 @@
       "a3": "LinkMAX is not limited to a list of links. It includes leads, bookings, invoices, mini CRM, analytics, and a business workspace.",
       "q4": "What happens after sign-up?",
       "a4": "You enter the page creation wizard. If you entered a short address on the landing page, it is passed into the signup flow."
-    },
-    "v5": {
-      "badge": "An operating flow for services, experts and small teams",
-      "title1": "A page where clients book,",
-      "title2": "pay and land in your CRM",
-      "subtitle": "LinkMAX connects your service storefront, messengers, online booking, payments and analytics so the owner sees the full client path in one place.",
-      "cta_primary": "Create a page for free",
-      "cta_secondary": "Open examples",
-      "metric1": "minutes to launch",
-      "metric2": "Starter fee",
-      "metric3": "lead feed",
-      "preview": {
-        "eyebrow": "live flow",
-        "title": "Page, CRM and payments together",
-        "status": "online",
-        "booking": "Today"
-      },
-      "bento": {
-        "builder": {
-          "title": "Service storefront without empty sections",
-          "desc": "Show services, schedule, prices and a lead form the way clients need them before booking.",
-          "badge": "booking open",
-          "service1": "Consultation",
-          "service2": "Diagnostics",
-          "service3": "Subscription",
-          "service4": "Single visit",
-          "cta": "Book an available time"
-        },
-        "ai": {
-          "eyebrow": "Page draft",
-          "title": "Structure in a few minutes",
-          "desc": "Describe your niche and get a foundation you can edit by hand right away."
-        },
-        "pay": {
-          "title": "Payment before the visit",
-          "desc": "Kaspi QR, Robokassa, Stripe"
-        },
-        "crm": {
-          "title": "Leads and statuses",
-          "desc": "Forms, messengers and bookings land in one feed. Telegram tells you about new clients right away.",
-          "notify_title": "New lead",
-          "notify_desc": "Anna - booking at 2:00 PM",
-          "pipeline": "Pipeline: 12 leads",
-          "pipeline_desc": "New, in progress, paid"
-        },
-        "analytics": {
-          "title": "What worked",
-          "desc": "See which sections, sources and services bring leads.",
-          "week": "by day"
-        }
-      }
     }
+  },
+  "upgradeBenefits": {
+    "b1Title": "All blocks & forms",
+    "b1Desc": "Leads, booking, payments",
+    "b2Title": "1% fee instead of 5%",
+    "b2Desc": "Pays off from $130 revenue",
+    "b3Title": "Custom domain · no branding",
+    "b3Desc": "Professional look"
   },
   "ritual": {
     "niches": {
@@ -7177,16 +7301,16 @@
     "totalCount": "Всего: {{count}}"
   },
   "siteTemplates": {
-    "appliedToast": "Создано страниц: {{n}}",
-    "trimmedHint": "На Starter добавим первые {{n}} страниц. На Pro — все.",
     "trigger": "Site template",
     "title": "Ready-made site templates",
     "subtitle": "Pick a template — we'll create the pages and fill them with sections. Easy to edit later.",
     "apply": "Apply template",
     "applying": "Creating…",
+    "appliedToast": "Создано страниц: {{n}}",
     "allSkipped": "All template pages already exist",
     "applyError": "Couldn't apply the template",
     "noSlots": "No free page slots. Remove some pages or upgrade to Pro.",
+    "trimmedHint": "На Starter добавим первые {{n}} страниц. На Pro — все.",
     "services": {
       "label": "Services",
       "desc": "Perfect for agencies: home, services, pricing, contacts"
@@ -7227,14 +7351,6 @@
       "features": "Features",
       "pricing": "Pricing"
     }
-  },
-  "upgradeBenefits": {
-    "b1Title": "All blocks & forms",
-    "b1Desc": "Leads, booking, payments",
-    "b2Title": "1% fee instead of 5%",
-    "b2Desc": "Pays off from $130 revenue",
-    "b3Title": "Custom domain · no branding",
-    "b3Desc": "Professional look"
   },
   "siteNav": {
     "title": "Navigation & footer",
@@ -7320,5 +7436,26 @@
     "sectionError": "This section failed to load",
     "screenError": "This section failed to load",
     "blockError": "This block could not be displayed"
+  },
+  "design": {
+    "recipe": {
+      "editorialQuiet": "Editorial",
+      "boldStatement": "Bold",
+      "calmPortrait": "Calm"
+    },
+    "kit": {
+      "studioPaper": "Paper studio",
+      "studioPaperDesc": "Warm background, calm rhythm, large headings",
+      "cleanService": "Clean service",
+      "cleanServiceDesc": "White background, clear structure, tidy cards",
+      "nightBold": "Dark & bold",
+      "nightBoldDesc": "High-contrast hero, full-width media, strong CTAs",
+      "editorialMono": "Editorial",
+      "editorialMonoDesc": "Magazine typography with generous whitespace",
+      "noirPremium": "Noir & gold",
+      "noirPremiumDesc": "Premium dark style with gold accents",
+      "softCare": "Soft care",
+      "softCareDesc": "Pastels, light grid, overlapping portrait"
+    }
   }
 }
