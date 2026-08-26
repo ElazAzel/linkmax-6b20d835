@@ -23,6 +23,7 @@ import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import Gauge from 'lucide-react/dist/esm/icons/gauge';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import {
@@ -55,6 +56,7 @@ export interface EditorTopBarProps {
   onOpenVersions?: () => void;
   onOpenTemplates?: () => void;
   onOpenArtDirection?: () => void;
+  onOpenDesignHealth?: () => void;
   onOpenAI?: () => void;
   reviewMode?: string;
   onToggleReviewMode?: (mode: 'problematic' | 'cta_contact') => void;
@@ -77,6 +79,7 @@ export const EditorTopBar = memo(function EditorTopBar({
   onOpenVersions,
   onOpenTemplates,
   onOpenArtDirection,
+  onOpenDesignHealth,
   onOpenAI,
   reviewMode = 'normal',
   onToggleReviewMode,
@@ -193,6 +196,12 @@ export const EditorTopBar = memo(function EditorTopBar({
               <DropdownMenuItem onClick={onOpenArtDirection}>
                 <Wand2 className="h-4 w-4 mr-2 text-primary" />
                 {t('editor.artDirection.title', 'Дизайн страницы')}
+              </DropdownMenuItem>
+            )}
+            {hasContent && onOpenDesignHealth && (
+              <DropdownMenuItem onClick={onOpenDesignHealth}>
+                <Gauge className="h-4 w-4 mr-2 text-primary" />
+                {t('editor.designHealth.title', 'Качество дизайна')}
               </DropdownMenuItem>
             )}
             {onOpenAI && (

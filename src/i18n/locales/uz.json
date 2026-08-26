@@ -2187,6 +2187,52 @@
       "bentoProof": "Bento proof",
       "fullscreenContact": "Fullscreen contact",
       "horizontalProjects": "Horizontal rail"
+    },
+    "designHealth": {
+      "title": "Dizayn sifati",
+      "subtitle": "AI'siz tekshiruv: bo'lim ritmi, hero, vizual va yakuniy qadam. Tuzatishlar kontentni o'zgartirmaydi.",
+      "empty": "Avval sahifaga kamida bitta blok qo'shing.",
+      "score": "Dizayn bahosi",
+      "sections": "Bo'limlar",
+      "allGood": "Sahifa yaxlit ko'rinadi — jiddiy muammo yo'q.",
+      "issue": {
+        "noArtDirection": {
+          "title": "Art-direksiya qo'llanmagan",
+          "desc": "Bloklar bir xil kartochkalar kabi. Dizayn reseptini qo'llang — bo'limlar ritm va urg'u oladi."
+        },
+        "weakHero": {
+          "title": "Kuchsiz birinchi taassurot",
+          "desc": "Birinchi bo'lim oddiy to'plam. Hero katta bo'lishi kerak: split, editorial yoki to'liq media."
+        },
+        "monotone": {
+          "title": "Bir xil ritm",
+          "desc": "Besh yoki undan ko'p blok bir ritmda ketadi. Sahifani turli tartibdagi bo'limlarga ajrating."
+        },
+        "noVisual": {
+          "title": "Vizual yo'q",
+          "desc": "Sahifada faqat matn va tugmalar. Ish rasmlari, galereya yoki video qo'shing."
+        },
+        "noClosingCta": {
+          "title": "Yakuniy qadam yo'q",
+          "desc": "Sahifa oxirida band qilish, forma yoki kontakt yo'q. Mijoz o'qib bo'ldi — bosadigan joy yo'q."
+        },
+        "quietCta": {
+          "title": "Sust chaqiruv",
+          "desc": "Yakuniy kontakt bloki boshqalardan ajralmaydi. Uni to'liq ekran bo'limiga aylantiring."
+        },
+        "tooManySections": {
+          "title": "Bo'limlar juda ko'p",
+          "desc": "Deyarli har bir blok alohida bo'lim. Sahifa bo'linib, yaxlit o'qilmaydi."
+        }
+      },
+      "fix": {
+        "generic": "Tuzatish",
+        "applyRecipe": "Dizaynni qo'llash",
+        "upgradeHero": "Heroni kuchaytirish",
+        "rebalance": "Bo'limlarga ajratish",
+        "loudCta": "Chaqiruvni ajratish",
+        "regroup": "Guruhlash"
+      }
     }
   },
   "errors": {
