@@ -1,5 +1,5 @@
 // CRITICAL: i18n must be imported FIRST, before any React components
-import "./i18n/config";
+import { i18nReady } from "./i18n/config";
 import { validateEnv } from "./lib/utils/env-validator";
 
 // Validate environment before anything else
