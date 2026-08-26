@@ -5055,6 +5055,7 @@ export type Database = {
         }
         Returns: string
       }
+      ensure_user_wallet: { Args: never; Returns: string }
       generate_referral_code: { Args: { p_user_id: string }; Returns: string }
       generate_unique_slug: { Args: { base_slug: string }; Returns: string }
       get_admin_dashboard_aggregates: {
