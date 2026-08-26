@@ -2156,6 +2156,37 @@
         "bold": "High-contrast hero, full-bleed media, strong CTAs",
         "calm": "Soft transitions, overlapping portrait, light grid"
       }
+    },
+    "design": {
+      "variantTitle": "Design preset",
+      "variantHint": "Ready-made art direction presets for this block.",
+      "variantNone": "Default",
+      "compositionPick": "Composition",
+      "compositionTitle": "Section rhythm",
+      "compositionNone": "Default grid"
+    },
+    "variant": {
+      "displayOversized": "Oversized display",
+      "editorialLead": "Editorial lead",
+      "labelEyebrow": "Eyebrow label",
+      "metricBig": "Big metric",
+      "buttonPillQuiet": "Quiet pill",
+      "buttonSolidBold": "Solid bold",
+      "mediaFullBleed": "Full bleed",
+      "mediaEditorialCrop": "Editorial crop",
+      "mediaFloating": "Floating media",
+      "cardQuiet": "Quiet card"
+    },
+    "composition": {
+      "stack": "Stack",
+      "splitHero": "Split hero",
+      "editorialHero": "Editorial hero",
+      "overlapPortrait": "Overlap portrait",
+      "cinematicVideo": "Cinematic video",
+      "projectSpotlight": "Project spotlight",
+      "bentoProof": "Bento proof",
+      "fullscreenContact": "Fullscreen contact",
+      "horizontalProjects": "Horizontal rail"
     }
   },
   "errors": {

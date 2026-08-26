@@ -2156,6 +2156,37 @@
         "bold": "Контрастты герой, толық медиа, күшті CTA",
         "calm": "Жұмсақ өтулер, қабаттасқан портрет, жеңіл тор"
       }
+    },
+    "design": {
+      "variantTitle": "Безендіру стилі",
+      "variantHint": "Осы блок үшін дайын дизайн пресеттері.",
+      "variantNone": "Қалыпты",
+      "compositionPick": "Композиция",
+      "compositionTitle": "Секция ырғағы",
+      "compositionNone": "Әдепкі тор"
+    },
+    "variant": {
+      "displayOversized": "Oversized display",
+      "editorialLead": "Editorial lead",
+      "labelEyebrow": "Eyebrow label",
+      "metricBig": "Big metric",
+      "buttonPillQuiet": "Quiet pill",
+      "buttonSolidBold": "Solid bold",
+      "mediaFullBleed": "Full bleed",
+      "mediaEditorialCrop": "Editorial crop",
+      "mediaFloating": "Floating media",
+      "cardQuiet": "Quiet card"
+    },
+    "composition": {
+      "stack": "Stack",
+      "splitHero": "Split hero",
+      "editorialHero": "Editorial hero",
+      "overlapPortrait": "Overlap portrait",
+      "cinematicVideo": "Cinematic video",
+      "projectSpotlight": "Project spotlight",
+      "bentoProof": "Bento proof",
+      "fullscreenContact": "Fullscreen contact",
+      "horizontalProjects": "Horizontal rail"
     }
   },
   "errors": {

@@ -2156,6 +2156,37 @@
         "bold": "Kontrastli hero, to'liq media, kuchli CTA",
         "calm": "Yumshoq o'tishlar, ustma-ust portret, engil to'r"
       }
+    },
+    "design": {
+      "variantTitle": "Dizayn uslubi",
+      "variantHint": "Bu blok uchun tayyor dizayn presetlari.",
+      "variantNone": "Oddiy",
+      "compositionPick": "Kompozitsiya",
+      "compositionTitle": "Boʻlim ritmi",
+      "compositionNone": "Standart panjara"
+    },
+    "variant": {
+      "displayOversized": "Oversized display",
+      "editorialLead": "Editorial lead",
+      "labelEyebrow": "Eyebrow label",
+      "metricBig": "Big metric",
+      "buttonPillQuiet": "Quiet pill",
+      "buttonSolidBold": "Solid bold",
+      "mediaFullBleed": "Full bleed",
+      "mediaEditorialCrop": "Editorial crop",
+      "mediaFloating": "Floating media",
+      "cardQuiet": "Quiet card"
+    },
+    "composition": {
+      "stack": "Stack",
+      "splitHero": "Split hero",
+      "editorialHero": "Editorial hero",
+      "overlapPortrait": "Overlap portrait",
+      "cinematicVideo": "Cinematic video",
+      "projectSpotlight": "Project spotlight",
+      "bentoProof": "Bento proof",
+      "fullscreenContact": "Fullscreen contact",
+      "horizontalProjects": "Horizontal rail"
     }
   },
   "errors": {
