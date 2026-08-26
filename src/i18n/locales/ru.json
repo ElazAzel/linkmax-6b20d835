@@ -2156,6 +2156,37 @@
         "bold": "Контрастный герой, медиа на всю ширину, сильные CTA",
         "calm": "Мягкие переходы, портрет с наложением, лёгкая сетка"
       }
+    },
+    "design": {
+      "variantTitle": "Стиль оформления",
+      "variantHint": "Готовые художественные пресеты для этого блока.",
+      "variantNone": "Обычный",
+      "compositionPick": "Композиция",
+      "compositionTitle": "Ритм секции",
+      "compositionNone": "Сетка по умолчанию"
+    },
+    "variant": {
+      "displayOversized": "Крупный дисплейный",
+      "editorialLead": "Редакционный лид",
+      "labelEyebrow": "Надзаголовок",
+      "metricBig": "Метрика",
+      "buttonPillQuiet": "Тихая пилюля",
+      "buttonSolidBold": "Плотная кнопка",
+      "mediaFullBleed": "Во всю ширину",
+      "mediaEditorialCrop": "Редакционный кроп",
+      "mediaFloating": "Парящее медиа",
+      "cardQuiet": "Тихая карточка"
+    },
+    "composition": {
+      "stack": "Стопка",
+      "splitHero": "Split-герой",
+      "editorialHero": "Редакционный герой",
+      "overlapPortrait": "Портрет с наложением",
+      "cinematicVideo": "Кинематографичное видео",
+      "projectSpotlight": "Спотлайт проекта",
+      "bentoProof": "Бенто-доказательства",
+      "fullscreenContact": "Контакт на весь экран",
+      "horizontalProjects": "Горизонтальная лента"
     }
   },
   "errors": {
