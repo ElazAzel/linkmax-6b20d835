@@ -73,6 +73,8 @@ interface EditorScreenProps {
   onOpenTemplates: () => void;
   onOpenAI: () => void;
   onOpenTheme: () => void;
+  /** Phase 7: apply palette + typography from a design kit. */
+  onApplyTheme?: (theme: Partial<import('@/types/page').PageTheme>) => void;
   // Undo/Redo
   canUndo?: boolean;
   canRedo?: boolean;
@@ -102,6 +104,7 @@ export const EditorScreen = memo(function EditorScreen({
   onOpenTemplates,
   onOpenAI,
   onOpenTheme,
+  onApplyTheme,
   canUndo = false,
   canRedo = false,
   onUndo,
