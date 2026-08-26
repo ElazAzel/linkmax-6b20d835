@@ -55,6 +55,20 @@ const EditorCanvasSkeleton = () => (
   </div>
 );
 
+/**
+ * Ask the canvas (GridEditor) to open the block-insert sheet.
+ * GridEditor listens for this event, so we never click DOM anchors — the old
+ * anchor only existed in the empty state, so "+ Block" silently did nothing
+ * once the page had blocks.
+ */
+function openInsertSheet(position?: number) {
+  window.dispatchEvent(
+    new CustomEvent('editor:open-insert-sheet', {
+      detail: typeof position === 'number' ? { position } : {},
+    }),
+  );
+}
+
 interface EditorScreenProps {
   pageData: PageData | null;
   loading: boolean;
