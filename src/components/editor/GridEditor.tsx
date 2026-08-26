@@ -782,7 +782,7 @@ export const GridEditor = memo(function GridEditor({
       >
         <SortableContext
           items={contentBlocks.map(b => b.id)}
-          strategy={verticalListSortingStrategy}
+          strategy={rectSortingStrategy}
         >
           <div className="grid grid-cols-2 xs:grid-cols-2 gap-2.5 sm:gap-3.5 grid-flow-row-dense auto-rows-[minmax(0,auto)]">
             {gridItems}
