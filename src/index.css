@@ -1393,3 +1393,17 @@
     animation-timing-function: ease-in-out;
   }
 }
+
+/* ===== Phase 1: semantic typography scale (Composition / BlockVariant layer) ===== */
+.lm-display-scale {
+  font-size: clamp(2rem, 9vw, 4.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  font-weight: 650;
+  text-wrap: balance;
+}
+.lm-display-scale * {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit;
+}
