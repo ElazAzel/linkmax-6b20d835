@@ -12,6 +12,7 @@ import { reportBackendFailure, reportBackendSuccess, startNetworkHealthWatch } f
 import { hydrateQueryCache, persistQueryCache } from "@/lib/resilience/query-cache-persist";
 
 import { BackendStatusBanner } from "@/components/system/BackendStatusBanner";
+import { BuildingLoader } from "@/components/ui/building-loader";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
