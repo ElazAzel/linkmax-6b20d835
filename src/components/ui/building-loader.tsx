@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 /**
  * BuildingLoader — текстовый-free лоадер: страница «собирается по кусочкам».
