@@ -123,7 +123,104 @@ serve(async (req: Request) => {
                 console.error("Failed to upgrade zone", zoneError);
                 return new Response("DB ERROR", { status: 500 });
             }
+        } else if (shp_type === 'digital_goods' && shp_related_id) {
+            // Fulfil a digital goods purchase: unlock the download and credit the seller
+            const { data: purchase } = await supabase
+                .from('digital_purchases')
+                .select('id, status, product_id, seller_id, digital_products(access_ttl_hours)')
+                .eq('id', shp_related_id)
+                .maybeSingle();
+
+            if (!purchase) {
+                console.error("Digital purchase not found", shp_related_id);
+                return new Response("DB ERROR", { status: 500 });
+            }
+
+            if (purchase.status !== 'paid') {
+                const ttlHours = Number((purchase as any).digital_products?.access_ttl_hours) || 720;
+                const { error: fulfilError } = await supabase
+                    .from('digital_purchases')
+                    .update({
+                        status: 'paid',
+                        provider: 'robokassa',
+                        provider_ref: invId,
+                        paid_at: new Date().toISOString(),
+                        expires_at: new Date(Date.now() + ttlHours * 3600_000).toISOString(),
+                    } as any)
+                    .eq('id', purchase.id);
+
+                if (fulfilError) {
+                    console.error("Failed to fulfil digital purchase", fulfilError);
+                    return new Response("DB ERROR", { status: 500 });
+                }
+
+                // Credit the seller wallet with the net amount
+                try {
+                    const gross = parseFloat(outSum);
+                    const { data: sellerProfile } = await supabase
+                        .from('user_profiles')
+                        .select('id, is_premium, telegram_chat_id, telegram_notifications_enabled, telegram_language')
+                        .eq('id', purchase.seller_id)
+                        .maybeSingle();
+
+                    const feeRate = sellerProfile?.is_premium ? 0.01 : 0.07;
+                    const feeAmount = Math.round(gross * feeRate * 100) / 100;
+                    const netAmount = Math.round((gross - feeAmount) * 100) / 100;
+
+                    await supabase.rpc('ensure_user_wallet', { p_user_id: purchase.seller_id });
+                    const { data: wallet } = await supabase
+                        .from('user_wallets')
+                        .select('id, balance')
+                        .eq('user_id', purchase.seller_id)
+                        .maybeSingle();
+
+                    if (wallet) {
+                        await supabase.from('wallet_transactions').insert({
+                            wallet_id: wallet.id,
+                            user_id: purchase.seller_id,
+                            gross_amount: gross,
+                            fee_amount: feeAmount,
+                            net_amount: netAmount,
+                            type: 'payment',
+                            status: 'completed',
+                            description: `Digital goods sale (InvId: ${invId})`,
+                            related_entity_id: purchase.id,
+                            related_entity_type: 'digital_purchase',
+                            metadata: { internal_ref: invId, fee_rate: feeRate, gateway: 'robokassa' },
+                            completed_at: new Date().toISOString(),
+                        } as any);
+
+                        await supabase
+                            .from('user_wallets')
+                            .update({ balance: Number(wallet.balance) + netAmount, updated_at: new Date().toISOString() })
+                            .eq('id', wallet.id);
+                    }
+
+                    if (sellerProfile?.telegram_chat_id && sellerProfile?.telegram_notifications_enabled) {
+                        const lang = sellerProfile.telegram_language || 'ru';
+                        const netTxt = netAmount.toLocaleString('ru-RU');
+                        const text = lang === 'en'
+                            ? `📦 <b>Digital product sold!</b>\n\nProfit: <b>${netTxt} KZT</b>\nID: ${invId}`
+                            : lang === 'kk'
+                                ? `📦 <b>Цифрлық тауар сатылды!</b>\n\nПайда: <b>${netTxt} KZT</b>\nID: ${invId}`
+                                : `📦 <b>Продан цифровой товар!</b>\n\nПрибыль: <b>${netTxt} KZT</b>\nID: ${invId}`;
+                        await supabase.from('notification_queue').insert({
+                            user_id: purchase.seller_id,
+                            event_type: 'payment_success',
+                            payload: {
+                                channel: 'telegram',
+                                telegram: { chat_id: sellerProfile.telegram_chat_id, text, parse_mode: 'HTML' },
+                            },
+                            status: 'pending',
+                            idempotency_key: `digital_success_${invId}`,
+                        });
+                    }
+                } catch (walletErr) {
+                    console.error("Failed to credit seller for digital sale", walletErr);
+                }
+            }
         } else if (shp_type === 'offer_purchase' && shp_seller) {
+
             // Credit the seller's wallet with net (fee applied) amount
             const gross = parseFloat(outSum);
             const { data: sellerProfile } = await supabase
