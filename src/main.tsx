@@ -125,6 +125,10 @@ const router = createBrowserRouter([
       { path: "kk", element: <LocaleIndex /> },
       { path: "uz", element: <LocaleIndex /> },
       { path: "auth", element: <Auth /> },
+      // Digital goods: public checkout and protected download
+      { path: "goods/:id", element: <PublicGoodsPage /> },
+      { path: "purchase/:token", element: <PublicPurchasePage /> },
+
       { path: "auth/callback", element: <AuthCallback /> },
       // Managed OAuth server consent screen for external MCP clients
       { path: ".lovable/oauth/consent", element: <OAuthConsent /> },
