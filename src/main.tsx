@@ -111,6 +111,8 @@ const SmartLinks = lazy(() => import("./pages/SmartLinks"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const PublicGoodsPage = lazy(() => import("./pages/PublicGoodsPage"));
 const PublicPurchasePage = lazy(() => import("./pages/PublicPurchasePage"));
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
+
 
 
 // Create router with optimized code splitting
