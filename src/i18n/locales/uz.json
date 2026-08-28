@@ -7457,5 +7457,48 @@
       "softCare": "Yumshoq gʻamxoʻrlik",
       "softCareDesc": "Pastel, yengil tor, ustma-ust portret"
     }
+  },
+  "digitalGoods": {
+    "title": "Raqamli mahsulotlar",
+    "subtitle": "Fayllarni soting: yuklab olish chekli himoyalangan havola",
+    "create": "Mahsulot qo'shish",
+    "created": "Mahsulot qo'shildi",
+    "deleted": "Mahsulot o'chirildi",
+    "linkCopied": "Havola nusxalandi",
+    "copyLink": "Havolani nusxalash",
+    "empty": "Hozircha mahsulot yo'q. Birinchi faylni yuklang.",
+    "free": "Bepul",
+    "fields": {
+      "title": "Nomi",
+      "titlePlaceholder": "Masalan: Sotuv bo'yicha qo'llanma (PDF)",
+      "price": "Narxi",
+      "file": "Fayl"
+    },
+    "errors": {
+      "title": "Mahsulot nomini kiriting",
+      "file": "Faylni tanlang",
+      "tooLarge": "Fayl 200 MB dan katta",
+      "upload": "Faylni yuklab bo'lmadi",
+      "save": "Mahsulotni saqlab bo'lmadi"
+    },
+    "buy": {
+      "email": "Kirish uchun e-mail",
+      "get": "Faylni olish",
+      "pay": "To'lash va yuklab olish",
+      "invalidEmail": "To'g'ri e-mail kiriting",
+      "failed": "Xaridni amalga oshirib bo'lmadi",
+      "notFound": "Mahsulot topilmadi yoki sotuvda yo'q",
+      "protected": "Fayl yuklab olish soni va muddati cheklangan himoyalangan havola orqali beriladi."
+    },
+    "download": {
+      "title": "Sizning xaridingiz",
+      "action": "Faylni yuklab olish",
+      "failed": "Faylni olib bo'lmadi",
+      "notFound": "Xarid topilmadi",
+      "pending": "To'lov tasdiqlanishini kutamiz. Bir daqiqadan so'ng yangilang.",
+      "expired": "Havola muddati tugadi. Sotuvchiga murojaat qiling.",
+      "exhausted": "Yuklab olish chegarasi tugadi.",
+      "counter": "{{limit}} dan {{used}} yuklab olindi"
+    }
   }
 }

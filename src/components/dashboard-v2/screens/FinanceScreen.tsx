@@ -29,6 +29,8 @@ const GET_DATE_LOCALE = (lang: string) => {
 };
 
 import { FinanceInsightsWidget } from '../widgets/FinanceInsightsWidget';
+import { DigitalGoodsManager } from '../widgets/DigitalGoodsManager';
+
 
 export const FinanceScreen = memo(function FinanceScreen() {
     const { t, i18n } = useTranslation();
@@ -81,6 +83,10 @@ export const FinanceScreen = memo(function FinanceScreen() {
             <div className="px-4 py-6 space-y-6 pb-24">
                 {/* Insights Widget - Q2 Feature */}
                 <FinanceInsightsWidget className="min-h-[400px]" />
+
+                {/* Digital goods: sell protected files */}
+                <DigitalGoodsManager />
+
 
                 {/* Wallet Balance Card */}
                 <Card className="p-8 glass-strong border-white/20 shadow-glass-xl overflow-hidden relative rounded-[2.5rem] bg-gradient-to-br from-card/80 to-primary/5 glass-shimmer">
