@@ -82,6 +82,10 @@ export const FinanceScreen = memo(function FinanceScreen() {
                 {/* Insights Widget - Q2 Feature */}
                 <FinanceInsightsWidget className="min-h-[400px]" />
 
+                {/* Digital goods: sell protected files */}
+                <DigitalGoodsManager />
+
+
                 {/* Wallet Balance Card */}
                 <Card className="p-8 glass-strong border-white/20 shadow-glass-xl overflow-hidden relative rounded-[2.5rem] bg-gradient-to-br from-card/80 to-primary/5 glass-shimmer">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] rounded-full -mr-16 -mt-16 animate-pulse" />
