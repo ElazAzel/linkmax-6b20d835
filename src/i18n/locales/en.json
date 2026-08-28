@@ -7457,5 +7457,48 @@
       "softCare": "Soft care",
       "softCareDesc": "Pastels, light grid, overlapping portrait"
     }
+  },
+  "digitalGoods": {
+    "title": "Digital goods",
+    "subtitle": "Sell files: access via a protected link with a download limit",
+    "create": "Add product",
+    "created": "Product added",
+    "deleted": "Product deleted",
+    "linkCopied": "Link copied",
+    "copyLink": "Copy link",
+    "empty": "No products yet. Upload your first file.",
+    "free": "Free",
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "E.g. Sales guide (PDF)",
+      "price": "Price",
+      "file": "File"
+    },
+    "errors": {
+      "title": "Enter a product title",
+      "file": "Choose a file",
+      "tooLarge": "File is larger than 200 MB",
+      "upload": "Could not upload the file",
+      "save": "Could not save the product"
+    },
+    "buy": {
+      "email": "E-mail for access",
+      "get": "Get the file",
+      "pay": "Pay and download",
+      "invalidEmail": "Enter a valid e-mail",
+      "failed": "Could not create the purchase",
+      "notFound": "Product not found or no longer on sale",
+      "protected": "The file is delivered via a protected link with a limited number of downloads and an expiry date."
+    },
+    "download": {
+      "title": "Your purchase",
+      "action": "Download file",
+      "failed": "Could not get the file",
+      "notFound": "Purchase not found",
+      "pending": "Waiting for payment confirmation. Refresh in a minute.",
+      "expired": "The link has expired. Contact the seller.",
+      "exhausted": "Download limit reached.",
+      "counter": "Downloaded {{used}} of {{limit}}"
+    }
   }
 }
