@@ -29,6 +29,8 @@ const GET_DATE_LOCALE = (lang: string) => {
 };
 
 import { FinanceInsightsWidget } from '../widgets/FinanceInsightsWidget';
+import { DigitalGoodsManager } from '../widgets/DigitalGoodsManager';
+
 
 export const FinanceScreen = memo(function FinanceScreen() {
     const { t, i18n } = useTranslation();
