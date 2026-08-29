@@ -10,7 +10,7 @@ const DEMO_PAGE_ID = '3229befa-752c-4032-9eac-4e4f63e7ade0'
 const AVATAR_URL = 'https://pphdcfxucfndmwulpfwv.supabase.co/storage/v1/object/public/user-media/6a7bbf2e-0db9-49d3-9f17-32c15a764e63%2Favatar.jpg'
 
 const PAGE_UPDATE = {
-  slug: 'demo_nails',
+  slug: 'demo-nails',
   title: 'Айгерим · Маникюр Алматы',
   description: 'Маникюр, гель-лак, укрепление, дизайн. Онлайн-запись за 30 секунд 💅',
   niche: 'beauty',
@@ -296,7 +296,7 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         message: 'demo-nails page v2 seeded successfully',
-        page_url: '/demo_nails',
+        page_url: '/demo-nails',
         blocks_count: BLOCKS.length,
         avatar: AVATAR_URL,
       }),

@@ -11,6 +11,7 @@ const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (
 import { StrictMode, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { CanonicalDemoRedirect } from "./components/routing/CanonicalDemoRedirect";
 import "./index.css";
 import App from "./App";
 const Index = lazy(() => import("./pages/Index"));
@@ -102,7 +103,6 @@ const ReviewRequest = lazy(() => import("./pages/ReviewRequest"));
 const ForMasters = lazy(() => import("./pages/ForMasters"));
 const NicheLanding = lazy(() => import("./pages/NicheLanding"));
 const FromPage = lazy(() => import("./pages/FromPage"));
-const DeveloperSettings = lazy(() => import("./pages/DeveloperSettings"));
 const Customers = lazy(() => import("./pages/Customers"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -203,6 +203,7 @@ const router = createBrowserRouter([
       { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "review/request/:token", element: <ReviewRequest /> },
+      { path: "demo_nails", element: <CanonicalDemoRedirect /> },
       { path: "p/:compressed", element: <PublicPage /> },
       { path: ":slug/services/:serviceSlug", element: <PublicServicePage /> },
       { path: ":slug/events/:eventId", element: <PublicEventPage /> },

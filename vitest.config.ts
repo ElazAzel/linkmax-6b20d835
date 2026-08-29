@@ -9,7 +9,10 @@ export default defineConfig({
     globals: true,
     testTimeout: 60000, // Increased testTimeout from 30000 to 60000
     setupFiles: ['./src/testing/setup.ts'],
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: [
+      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'cloudflare-worker/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
