@@ -17,7 +17,6 @@ import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import Store from 'lucide-react/dist/esm/icons/store';
 import Users from 'lucide-react/dist/esm/icons/users';
 import History from 'lucide-react/dist/esm/icons/history';
-import LayoutGrid from 'lucide-react/dist/esm/icons/layout-grid';
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -27,10 +26,8 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatusBadge } from '../common/StatusBadge';
 import { ActionCard } from '../common/ActionCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
-import { StatCard } from '@/components/shared/StatCard';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { SearchReadinessCard } from '@/components/dashboard-v2/widgets/SearchReadinessCard';
 import { KaspiQRWidget } from '@/components/dashboard-v2/widgets/KaspiQRWidget';
@@ -42,7 +39,11 @@ import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
 import { WalletOverviewWidget } from '@/components/dashboard-v2/widgets/WalletOverviewWidget';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
-import { trackActivationEvent, trackCreatorReturnedAfterGap } from '@/lib/activation-events';
+import {
+  trackActivationEvent,
+  trackCreatorReturnedAfterGap,
+  type ActivationEventType,
+} from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { differenceInDays, parseISO } from 'date-fns';
@@ -114,7 +115,7 @@ export const HomeScreen = memo(function HomeScreen({
     const trackedSteps = storage.get<string[]>(trackingKey) || [];
     const trackedSet = new Set(trackedSteps);
 
-    const completionEvents: Record<string, string> = {
+    const completionEvents: Partial<Record<string, ActivationEventType>> = {
       'create-page': 'funnel_step_create_page_completed',
       'add-block': 'funnel_step_add_block_completed',
       'publish': 'funnel_step_publish_completed',
@@ -126,7 +127,7 @@ export const HomeScreen = memo(function HomeScreen({
 
     activation.steps.forEach((step) => {
       if (!step.completed || trackedSet.has(step.id)) return;
-      const eventType = completionEvents[step.id] as any;
+      const eventType = completionEvents[step.id];
       if (!eventType) return;
       trackActivationEvent(pageData.id, eventType);
       trackedSet.add(step.id);
@@ -168,10 +169,10 @@ export const HomeScreen = memo(function HomeScreen({
       return t('activation.tips.publish', 'Опубликуйте страницу, чтобы она стала доступна по ссылке');
     }
     if (isPublished && viewCount === 0) {
-      return t('activation.tips.shareForVisitor', 'Поделитесь ссылкой — 5 из 10 пользователей получают первого посетителя в первый час');
+      return t('activation.tips.shareForVisitor', 'Поделитесь ссылкой, чтобы начать собирать просмотры');
     }
     if (isPublished && viewCount > 0 && realLeadsCount === 0) {
-      return t('activation.tips.addForm', 'Добавьте форму сбора контактов — каждая 5-я страница с формой получает лиды');
+      return t('activation.tips.addForm', 'Добавьте форму или запись, чтобы принимать обращения');
     }
     if (!hasContent) {
       return t('activation.tips.addBlock', 'Добавьте первый блок — ссылку, товар или видео');
@@ -191,14 +192,7 @@ export const HomeScreen = memo(function HomeScreen({
       : rawName
     : t('dashboard.home.myPage', 'Моя страница');
   const avatarUrl = profileBlock?.avatar || '';
-  const blockCount = pageData.blocks.length;
   const slug = pageData.slug || 'mypage';
-
-  // Real stats from props
-  const weeklyStats = {
-    views: viewCount,
-    leads: realLeadsCount,
-  };
 
   return (
     <div className="min-h-screen safe-area-top">
@@ -234,42 +228,9 @@ export const HomeScreen = memo(function HomeScreen({
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
         )}
 
-        {/* --- QUICK IMPACT HUB (Universal) --- */}
-        {isPublished && (
+        {/* Operational lead feed; quantitative performance lives in one region below. */}
+        {isPublished && (realLeadsCount > 0 || pageData.niche === 'expert') && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Minimal Stats Hub */}
-            <div className="grid grid-cols-3 gap-3">
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenActivity}>
-                <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{realLeadsCount}</span>
-                <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
-              </Card>
-              
-              <Card 
-                className={cn(
-                  "p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group",
-                  !telegramChatId && "border-amber-500/20"
-                )}
-                onClick={() => onNavigate?.('settings')}
-              >
-                {telegramChatId ? (
-                  <div className="flex flex-col items-center space-y-1">
-                    <StatusBadge status="published" size="sm" className="bg-emerald-500/20 text-emerald-500 border-none px-2" />
-                    <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('settings.notifications', 'Уведомления')}</span>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center space-y-1">
-                    <AlertTriangle className="h-5 w-5 text-amber-500 animate-pulse" />
-                    <span className="text-xs uppercase font-bold text-amber-500/80 tracking-widest">{t('common.enable', 'Включить')}</span>
-                  </div>
-                )}
-              </Card>
-
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 border-border/10 hover:bg-accent/50 transition-colors cursor-pointer group" onClick={onOpenInsights}>
-                <span className="text-2xl font-black text-violet-500 group-hover:scale-110 transition-transform">{viewCount}</span>
-                <span className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
-              </Card>
-            </div>
-
             {realLeadsCount > 0 && (
               <Button 
                 size="lg" 
@@ -283,14 +244,11 @@ export const HomeScreen = memo(function HomeScreen({
               </Button>
             )}
             
-            {/* Only show feed if there is activity or it's an expert */}
-            {(realLeadsCount > 0 || pageData?.niche === 'expert') && (
-              <IncomingWidget
-                pageId={pageData?.id}
-                onOpenActivity={onOpenActivity}
-                onShare={onShare}
-              />
-            )}
+            <IncomingWidget
+              pageId={pageData.id}
+              onOpenActivity={onOpenActivity}
+              onShare={onShare}
+            />
           </div>
         )}
 
@@ -321,7 +279,7 @@ export const HomeScreen = memo(function HomeScreen({
             </div>
 
             {/* Performance Hub / Metrics */}
-            <div className="space-y-4 pt-2">
+            <div className="space-y-4 pt-2" data-testid="home-performance-region">
               <div className="flex items-center justify-between px-1">
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                   {t('dashboard.home.performance', 'Эффективность')}
@@ -368,37 +326,6 @@ export const HomeScreen = memo(function HomeScreen({
                 <StatusBadge status={isPublished ? 'published' : 'draft'} size="sm" />
               </div>
             </div>
-          </div>
-
-          {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-2 md:gap-5">
-            <Button variant="ghost" onClick={onOpenEditor} className="h-auto p-0 hover:bg-transparent text-left transition-smooth active:scale-95 group/stat">
-              <StatCard
-                icon={<LayoutGrid className="w-5 h-5 group-hover/stat:scale-110 group-hover/stat:text-primary transition-all" />}
-                value={blockCount}
-                label={t('dashboard.home.blocks', 'блоков')}
-                variant="glass"
-                compact
-              />
-            </Button>
-            <Button variant="ghost" onClick={onOpenInsights} className="h-auto p-0 hover:bg-transparent text-left transition-smooth active:scale-95 group/stat">
-              <StatCard
-                icon={<Eye className="h-5 w-5 text-emerald-500 group-hover/stat:scale-110 transition-transform" />}
-                value={viewCount}
-                label={t('dashboard.home.views', 'просмотров')}
-                variant="glass"
-                compact
-              />
-            </Button>
-            <Button variant="ghost" onClick={onOpenActivity} className="h-auto p-0 hover:bg-transparent text-left transition-smooth active:scale-95 group/stat">
-              <StatCard
-                icon={<MessageSquare className="h-5 w-5 text-violet-500 group-hover/stat:scale-110 transition-transform" />}
-                value={weeklyStats.leads}
-                label={t('dashboard.home.leads', 'заявок')}
-                variant="glass"
-                compact
-              />
-            </Button>
           </div>
 
           {/* Primary Actions — Premium pill buttons */}
@@ -542,7 +469,8 @@ export const HomeScreen = memo(function HomeScreen({
         </div>
 
         {/* Lifecycle Nudge — data-driven contextual tip */}
-        {(() => {
+        <div data-testid="home-next-action-region">
+          {(() => {
           // Lifecycle-aware nudge replaces static tip
           if (isPublished && viewCount > 0 && realLeadsCount === 0) {
             return (
@@ -554,7 +482,7 @@ export const HomeScreen = memo(function HomeScreen({
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.trafficNoLeads.title', 'Есть трафик, но нет заявок')}</h4>
                     <p className="text-sm text-muted-foreground">
-                      {t('lifecycle.trafficNoLeads.hint', 'Добавьте форму сбора контактов или блок записи — каждая 5-я страница с формой получает заявки')}
+                      {t('lifecycle.trafficNoLeads.hint', 'Добавьте форму или запись, чтобы принимать обращения')}
                     </p>
                   </div>
                 </div>
@@ -588,7 +516,7 @@ export const HomeScreen = memo(function HomeScreen({
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.hasLeads.title', 'Заявки поступают')}</h4>
                     <p className="text-sm text-muted-foreground">
-                      {t('lifecycle.hasLeads.hint', 'Напишите клиентам после визита — это повышает возврат на 30%')}
+                      {t('lifecycle.hasLeads.hint', 'Напишите клиентам после визита и предложите удобную повторную запись')}
                     </p>
                   </div>
                 </div>
@@ -608,7 +536,8 @@ export const HomeScreen = memo(function HomeScreen({
               </div>
             </Card>
           );
-        })()}
+          })()}
+        </div>
 
         {/* "Why LinkMAX" card REMOVED — user already converted, this is landing copy */}
       </div>

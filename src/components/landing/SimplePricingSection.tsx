@@ -224,8 +224,10 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
           style={{ animationDelay: '500ms' }}
         >
           <p className="text-muted-foreground text-sm">
-            <span className="font-semibold text-foreground">0% комиссии</span>
-            {' '}- все деньги от ваших продаж остаются вам
+            {t(
+              'landing.simplePricing.feeNote',
+              'Комиссия зависит от тарифа и всегда показывается до подключения платежей',
+            )}
           </p>
         </div>
       </div>
