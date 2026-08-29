@@ -1,6 +1,7 @@
 {
   "anyMax": 808,
   "consoleLogMax": 24,
+  "eslintWarningsMax": 1230,
   "i18nHardcodedMax": 2365,
   "knipIssuesMax": 940
 }

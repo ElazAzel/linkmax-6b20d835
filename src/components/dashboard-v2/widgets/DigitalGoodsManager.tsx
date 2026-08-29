@@ -83,7 +83,7 @@ export const DigitalGoodsManager = memo(function DigitalGoodsManager({ className
     }
 
     setBusy(true);
-    const safeName = file.name.replace(/[^\w.\-]+/g, '_');
+    const safeName = file.name.replace(/[^\w.-]+/g, '_');
     const path = `${user.id}/${crypto.randomUUID()}-${safeName}`;
 
     const { error: uploadError } = await supabase.storage
