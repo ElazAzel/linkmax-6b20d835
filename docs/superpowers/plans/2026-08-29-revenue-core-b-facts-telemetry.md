@@ -137,11 +137,11 @@ git commit -m "feat: add normalized service offerings"
 - Produces: extended `bookings`, `booking_payments`, `booking_status_transitions`, `transition_booking`, `record_manual_booking_payment`, aggregate trigger.
 - Consumes: `service_offerings`, existing `bookings`, `is_zone_admin` where organization access exists.
 
-- [ ] **Step 1: Write failing lifecycle SQL tests**
+- [x] **Step 1: Write failing lifecycle SQL tests**
 
 Assert that direct status update is rejected, `pending_payment → confirmed` succeeds only after payment/waiver, `confirmed → completed` records payment atomically, duplicate idempotency returns the first result, and stale `expected_version` is rejected.
 
-- [ ] **Step 2: Write failing ledger SQL tests**
+- [x] **Step 2: Write failing ledger SQL tests**
 
 Insert succeeded deposit `2000.00`, succeeded balance `5000.00`, and succeeded refund `1000.00`; assert booking projections are `paid_amount = 7000.00`, `refunded_amount = 1000.00`, `payment_status = partially_refunded`.
 
@@ -151,11 +151,11 @@ Run: `supabase test db supabase/tests/booking_lifecycle.test.sql supabase/tests/
 
 Expected: FAIL because the objects do not exist.
 
-- [ ] **Step 4: Implement forward migration**
+- [x] **Step 4: Implement forward migration**
 
 Add spec columns including `version`. Replace booking status/payment checks without rewriting historical payment truth. Create immutable ledger/audit tables, projection trigger and RPCs. Revoke public update access to booking state.
 
-- [ ] **Step 5: Disable automatic completion**
+- [x] **Step 5: Disable automatic completion**
 
 Replace `auto_complete_past_bookings` body with an explicit exception `automatic_booking_completion_disabled` and remove all application invocations. Past confirmed appointments remain queryable for owner review.
 
@@ -167,7 +167,7 @@ Run: `supabase test db supabase/tests/booking_lifecycle.test.sql supabase/tests/
 
 Run two concurrent `create_public_booking` fixture calls for the same slot and assert one success plus one `slot_unavailable`.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add supabase/migrations/20260829121000_booking_lifecycle_and_payment_ledger.sql supabase/tests/booking_lifecycle.test.sql supabase/tests/booking_payments.test.sql src

@@ -15,14 +15,12 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ResponseTimeTag } from '@/components/crm/ResponseTimeTag';
 import { EmptyState } from '@/components/dashboard-v2/common/EmptyState';
-import { cn } from '@/lib/utils/utils';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
-import Share2 from 'lucide-react/dist/esm/icons/share-2';
 
 interface IncomingWidgetProps {
   pageId?: string;
@@ -57,7 +55,7 @@ export const IncomingWidget = memo(function IncomingWidget({
       .from('bookings')
       .select('id, client_name, slot_date, slot_time, status, created_at')
       .eq('owner_id', user.id)
-      .eq('status', 'pending')
+      .eq('status', 'pending_payment')
       .order('created_at', { ascending: false })
       .limit(5)
       .then(({ data }) => {

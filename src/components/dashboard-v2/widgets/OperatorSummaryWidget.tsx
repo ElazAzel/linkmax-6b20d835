@@ -106,9 +106,6 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
     if (!user) return;
 
     const fetchData = async () => {
-      // Auto-complete past bookings first
-      await supabase.rpc('auto_complete_past_bookings', { p_owner_id: user.id });
-
       // Today's upcoming
       const { data: todayData } = await supabase
         .from('bookings')
@@ -219,7 +216,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
     // Mark followup_sent_at
     await supabase
       .from('bookings')
-      .update({ followup_sent_at: new Date().toISOString() } as any)
+      .update({ followup_sent_at: new Date().toISOString() })
       .eq('id', bookingId);
 
     setSentFollowups(prev => new Set(prev).add(bookingId));
