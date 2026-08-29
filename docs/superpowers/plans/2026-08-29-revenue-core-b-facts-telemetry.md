@@ -37,7 +37,7 @@
 - Produces: `validateServiceOffering`, `calculateDepositAmount`, `canTransitionBooking`, `parseMoney`, `REVENUE_EVENTS`, `isAuthoritativeRevenueEvent`.
 - Consumes: no React or Supabase dependencies.
 
-- [ ] **Step 1: Write failing deposit and service validation tests**
+- [x] **Step 1: Write failing deposit and service validation tests**
 
 ```ts
 expect(calculateDepositAmount({ mode: 'fixed', value: '2000.00' }, '7000.00')).toBe('2000.00');
@@ -46,7 +46,7 @@ expect(() => calculateDepositAmount({ mode: 'fixed', value: '8000.00' }, '7000.0
 expect(validateServiceOffering({ name: '', durationMinutes: 60, priceAmount: '5000.00', currency: 'KZT' }).ok).toBe(false);
 ```
 
-- [ ] **Step 2: Write failing lifecycle and authority tests**
+- [x] **Step 2: Write failing lifecycle and authority tests**
 
 ```ts
 expect(canTransitionBooking('pending_payment', 'confirmed')).toBe(true);
@@ -56,23 +56,23 @@ expect(isAuthoritativeRevenueEvent('booking_completed')).toBe(true);
 expect(isAuthoritativeRevenueEvent('booking_started')).toBe(false);
 ```
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/domain/revenue`
 
 Expected: FAIL because the domain files do not exist.
 
-- [ ] **Step 4: Implement minimal pure domains**
+- [x] **Step 4: Implement minimal pure domains**
 
 Use integer minor units internally in `money.ts` and return fixed two-decimal strings. Define booking statuses exactly as `pending_payment | confirmed | completed | cancelled | no_show`. Encode allowed transitions as a `Readonly<Record<BookingStatus, readonly BookingStatus[]>>`.
 
-- [ ] **Step 5: Verify GREEN and lint**
+- [x] **Step 5: Verify GREEN and lint**
 
 Run: `npm test -- --run src/domain/revenue`
 
 Run: `npx eslint src/domain/revenue`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/domain/revenue
