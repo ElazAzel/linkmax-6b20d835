@@ -35,7 +35,7 @@
 - Produces: `BILLING_CATALOG`, `BillingPeriodMonths`, `getProPrice(period)`, `getPlanCommissionRate(tier)`.
 - Consumes: existing `AppPremiumTier` and `DatabasePremiumTier` names.
 
-- [ ] **Step 1: Write the failing billing catalog tests**
+- [x] **Step 1: Write the failing billing catalog tests**
 
 ```ts
 import { describe, expect, it } from 'vitest';
@@ -57,13 +57,13 @@ describe('billing catalog', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test and verify RED**
+- [x] **Step 2: Run the test and verify RED**
 
 Run: `npm test -- --run src/domain/billing/__tests__/catalog.test.ts`
 
 Expected: FAIL because `../catalog` does not exist.
 
-- [ ] **Step 3: Implement the minimal catalog**
+- [x] **Step 3: Implement the minimal catalog**
 
 ```ts
 export type BillingPeriodMonths = 3 | 6 | 12;
@@ -82,11 +82,11 @@ export function getPlanCommissionRate(tier: keyof typeof COMMISSION): number {
 }
 ```
 
-- [ ] **Step 4: Replace duplicated runtime constants**
+- [x] **Step 4: Replace duplicated runtime constants**
 
 Use `getProPrice()` in `useCurrencyRate.ts`, `SimplePricingSection.tsx`, and SEO structured data. Make `tiers.ts` delegate to `getPlanCommissionRate()` while preserving its public API.
 
-- [ ] **Step 5: Run focused tests and lint**
+- [x] **Step 5: Run focused tests and lint**
 
 Run: `npm test -- --run src/domain/billing/__tests__/catalog.test.ts src/services/__tests__/user.test.ts src/services/__tests__/fintech.test.ts`
 
@@ -94,7 +94,7 @@ Run: `npx eslint src/domain/billing/catalog.ts src/domain/billing/__tests__/cata
 
 Expected: all tests pass; ESLint exits 0 with no output for errors.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/domain/billing src/hooks/useCurrencyRate.ts src/components/landing/SimplePricingSection.tsx src/components/landing/SEOLandingHead.tsx
@@ -116,7 +116,7 @@ git commit -m "refactor: centralize billing catalog"
 - Produces: an HTTP 301 at the Cloudflare edge and `<CanonicalDemoRedirect />` as an origin/preview fallback, mounted at `demo_nails` before `:slug`.
 - Consumes: the production Cloudflare Worker, React Router `Navigate`, and current router definition.
 
-- [ ] **Step 1: Write the failing redirect test**
+- [x] **Step 1: Write the failing redirect test**
 
 ```tsx
 import { render, screen } from '@testing-library/react';
@@ -139,13 +139,13 @@ it('resolves the legacy demo path to the canonical path in-app', () => {
 
 Add a worker contract test that calls the exported worker `fetch()` handler with `https://lnkmx.my/demo_nails?utm_source=test` and expects status `301` plus `Location: https://lnkmx.my/demo-nails?utm_source=test`. This is the authoritative permanent-redirect assertion; the React test only covers the SPA fallback.
 
-- [ ] **Step 2: Run the test and verify RED**
+- [x] **Step 2: Run the test and verify RED**
 
 Run: `npm test -- --run src/components/routing/__tests__/CanonicalDemoRedirect.test.tsx cloudflare-worker/__tests__/canonical-demo-redirect.test.ts`
 
 Expected: FAIL because the component does not exist.
 
-- [ ] **Step 3: Implement and mount the redirect**
+- [x] **Step 3: Implement and mount the redirect**
 
 ```tsx
 import { Navigate } from 'react-router-dom';
@@ -157,7 +157,7 @@ export function CanonicalDemoRedirect() {
 
 Before any environment-dependent branch in `handleRequest()`, return `Response.redirect()` with status `301` when the platform-domain pathname is exactly `/demo_nails`, preserving the query string. Add `{ path: "demo_nails", element: <CanonicalDemoRedirect /> }` before `{ path: ":slug", ... }` in `main.tsx` as a fallback for previews or origin access that bypasses the Worker. Update GTM and sitemap generation to emit only `/demo-nails`.
 
-- [ ] **Step 4: Verify route behavior**
+- [x] **Step 4: Verify route behavior**
 
 Run: `npm test -- --run src/components/routing/__tests__/CanonicalDemoRedirect.test.tsx cloudflare-worker/__tests__/canonical-demo-redirect.test.ts`
 
@@ -165,7 +165,7 @@ Run: `npm run build`
 
 Expected: test and build exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/routing src/main.tsx cloudflare-worker/prerender-worker.js cloudflare-worker/__tests__ docs/gtm/FOUNDER_GTM_PLAYBOOK.md scripts/generate-sitemap.mjs public/sitemap.xml
@@ -187,7 +187,7 @@ git commit -m "fix: canonicalize demo route"
 - Produces: one `data-testid="home-performance-region"` and one `data-testid="home-next-action-region"` per Home render.
 - Consumes: current Home props and current analytics hooks.
 
-- [ ] **Step 1: Write a regression test that catches duplicate regions**
+- [x] **Step 1: Write a regression test that catches duplicate regions**
 
 Create a realistic `PageData` fixture and render the real `HomeScreen` with query/auth providers. Assert:
 
@@ -198,27 +198,27 @@ expect(screen.queryByText(/получают на 40%/i)).not.toBeInTheDocument()
 expect(screen.queryByText(/повышают.*25%/i)).not.toBeInTheDocument();
 ```
 
-- [ ] **Step 2: Run the test and verify RED**
+- [x] **Step 2: Run the test and verify RED**
 
 Run: `npm test -- --run src/components/dashboard-v2/screens/__tests__/HomeScreen.regression.test.tsx`
 
 Expected: FAIL because regions are not uniquely identified and unsupported claims are still reachable.
 
-- [ ] **Step 3: Make Home composition unique**
+- [x] **Step 3: Make Home composition unique**
 
 Wrap the sole metrics/funnel composition in `home-performance-region`. Render one deterministic recommendation region and remove the second composition path that currently repeats widgets in full-page production captures.
 
-- [ ] **Step 4: Replace universal uplift copy**
+- [x] **Step 4: Replace universal uplift copy**
 
 Use neutral RU/KK/EN copy: `Добавьте цены, чтобы клиент мог принять решение до обращения`, `Добавьте проверенные отзывы после завершённых записей`, and `Добавьте форму или запись, чтобы принимать обращения`.
 
-- [ ] **Step 5: Verify component tests and lint**
+- [x] **Step 5: Verify component tests and lint**
 
 Run: `npm test -- --run src/components/dashboard-v2/screens/__tests__/HomeScreen.regression.test.tsx src/pages/__tests__/Dashboard.test.tsx`
 
 Run: `npx eslint src/components/dashboard-v2/screens/HomeScreen.tsx src/components/analytics/AIInsightsPanel.tsx src/components/dashboard-v2/screens/InsightsScreen.tsx src/components/dashboard-v2/screens/__tests__/HomeScreen.regression.test.tsx`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/dashboard-v2 src/components/analytics src/i18n/locales/ru.json src/i18n/locales/kk.json src/i18n/locales/en.json
@@ -238,21 +238,21 @@ git commit -m "fix: remove duplicated outcome regions"
 - Produces: `npm run lint:ratchet`, which fails when the total warning count increases above the committed baseline and always fails on errors.
 - Consumes: ESLint JSON formatter output.
 
-- [ ] **Step 1: Write the failing ratchet script test**
+- [x] **Step 1: Write the failing ratchet script test**
 
 Use a temporary JSON fixture containing one error and two warnings. Invoke the script with `--input fixture --max-warnings 2` and assert non-zero exit because errors are never allowed. Use a second warning-only fixture with three warnings and assert non-zero exit above the baseline.
 
-- [ ] **Step 2: Run and verify RED**
+- [x] **Step 2: Run and verify RED**
 
 Run: `node --test scripts/__tests__/eslint-warning-ratchet.test.mjs`
 
 Expected: FAIL because the script does not exist.
 
-- [ ] **Step 3: Implement the parser and fix the current lint error**
+- [x] **Step 3: Implement the parser and fix the current lint error**
 
 The script sums `errorCount` and `warningCount` from ESLint JSON. Remove the unnecessary escape in `DigitalGoodsManager.tsx` so error count becomes zero.
 
-- [ ] **Step 4: Add package scripts**
+- [x] **Step 4: Add package scripts**
 
 ```json
 "lint:json": "eslint . -f json -o tmp/eslint-results.json",
@@ -261,7 +261,7 @@ The script sums `errorCount` and `warningCount` from ESLint JSON. Remove the unn
 
 Update `quality:check` to invoke `lint:ratchet` instead of the unbounded lint command.
 
-- [ ] **Step 5: Verify quality behavior**
+- [x] **Step 5: Verify quality behavior**
 
 Run: `node --test scripts/__tests__/eslint-warning-ratchet.test.mjs`
 
@@ -269,7 +269,7 @@ Run: `npm run lint:ratchet`
 
 Expected: tests pass; ratchet exits 0 with zero errors and warning count at or below baseline.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/dashboard-v2/widgets/DigitalGoodsManager.tsx scripts package.json config/quality-baseline.json
@@ -285,11 +285,11 @@ git commit -m "chore: enforce eslint warning ratchet"
 - Consumes: Tasks 1–4.
 - Produces: verified trust-baseline commit series.
 
-- [ ] **Step 1: Run targeted test suite**
+- [x] **Step 1: Run targeted test suite**
 
 Run: `npm test -- --run src/domain/billing/__tests__/catalog.test.ts src/components/routing/__tests__/CanonicalDemoRedirect.test.tsx src/components/dashboard-v2/screens/__tests__/HomeScreen.regression.test.tsx`
 
-- [ ] **Step 2: Run repository gates**
+- [x] **Step 2: Run repository gates**
 
 Run: `npm run typecheck:strict`
 
@@ -297,7 +297,7 @@ Run: `npm run lint:ratchet`
 
 Run: `npm run build`
 
-- [ ] **Step 3: Inspect diff and commit plan progress**
+- [x] **Step 3: Inspect diff and commit plan progress**
 
 Run: `git diff --check` and `git status --short`.
 
