@@ -89,7 +89,7 @@ git commit -m "feat: add revenue domain contracts"
 - Produces: `service_offerings`, owner policies, public-safe active-offering policy, deposit checks.
 - Consumes: `pages`, `auth.users`, `update_updated_at_column()`.
 
-- [ ] **Step 1: Write SQL assertions before the migration**
+- [x] **Step 1: Write SQL assertions before the migration**
 
 The test transaction creates an owner/page and asserts:
 
@@ -109,7 +109,7 @@ Run: `supabase test db supabase/tests/revenue_service_offerings.test.sql`
 
 Expected: FAIL because the table does not exist.
 
-- [ ] **Step 3: Implement migration exactly from spec**
+- [x] **Step 3: Implement migration exactly from spec**
 
 Add table, indexes `(page_id, is_active, display_order)` and `(owner_id, updated_at desc)`, validation function for deposit configuration, timestamp trigger and RLS policies.
 
@@ -119,7 +119,7 @@ Run: `supabase db reset`
 
 Run: `supabase test db supabase/tests/revenue_service_offerings.test.sql`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add supabase/migrations/20260829120000_revenue_service_offerings.sql supabase/tests/revenue_service_offerings.test.sql
