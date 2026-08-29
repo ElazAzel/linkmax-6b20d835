@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { getProPrice } from '@/domain/billing/catalog';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
@@ -22,12 +23,11 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
 
   const isKztPrimary = i18n.language === 'ru' || i18n.language === 'kk';
 
-  // Pricing in KZT: 3mo = 4350₸/mo, 6mo = 3698₸/mo (15% off), 12mo = 3045₸/mo (30% off)
   // USD equivalent (approximate): 3mo = $8.50, 6mo = $7.20, 12mo = $5.95
   const pricingPlans = {
-    '3': { monthlyKzt: 4350, totalKzt: 13050, monthlyUsd: 8.50, totalUsd: 25.50 },
-    '6': { monthlyKzt: 3698, totalKzt: 22185, monthlyUsd: 7.20, totalUsd: 43.20 },
-    '12': { monthlyKzt: 3045, totalKzt: 36540, monthlyUsd: 5.95, totalUsd: 71.40 },
+    '3': { ...getProPrice(3), monthlyUsd: 8.50, totalUsd: 25.50 },
+    '6': { ...getProPrice(6), monthlyUsd: 7.20, totalUsd: 43.20 },
+    '12': { ...getProPrice(12), monthlyUsd: 5.95, totalUsd: 71.40 },
   };
 
   const freeFeatures = [
