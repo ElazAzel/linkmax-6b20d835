@@ -167,15 +167,28 @@ serve(async (req: Request) => {
                     const feeAmount = Math.round(gross * feeRate * 100) / 100;
                     const netAmount = Math.round((gross - feeAmount) * 100) / 100;
 
-                    await supabase.rpc('ensure_user_wallet', { p_user_id: purchase.seller_id });
-                    const { data: wallet } = await supabase
+                    let { data: wallet } = await supabase
                         .from('user_wallets')
                         .select('id, balance')
                         .eq('user_id', purchase.seller_id)
                         .maybeSingle();
 
-                    if (wallet) {
-                        await supabase.from('wallet_transactions').insert({
+                    if (!wallet) {
+                        const { data: created, error: createErr } = await supabase
+                            .from('user_wallets')
+                            .insert({ user_id: purchase.seller_id, balance: 0, currency: 'KZT' } as any)
+                            .select('id, balance')
+                            .single();
+                        if (createErr) {
+                            console.error("Failed to create seller wallet for digital sale", createErr);
+                        }
+                        wallet = created;
+                    }
+
+                    if (!wallet) {
+                        console.error("No wallet available to credit seller for digital sale", { invId, seller: purchase.seller_id });
+                    } else {
+                        const { error: txErr } = await supabase.from('wallet_transactions').insert({
                             wallet_id: wallet.id,
                             user_id: purchase.seller_id,
                             gross_amount: gross,
@@ -190,11 +203,19 @@ serve(async (req: Request) => {
                             completed_at: new Date().toISOString(),
                         } as any);
 
-                        await supabase
-                            .from('user_wallets')
-                            .update({ balance: Number(wallet.balance) + netAmount, updated_at: new Date().toISOString() })
-                            .eq('id', wallet.id);
+                        if (txErr) {
+                            console.error("Failed to record digital sale tx", txErr);
+                        } else {
+                            const { error: balErr } = await supabase
+                                .from('user_wallets')
+                                .update({ balance: Number(wallet.balance) + netAmount, updated_at: new Date().toISOString() })
+                                .eq('id', wallet.id);
+                            if (balErr) {
+                                console.error("Failed to update seller balance for digital sale", balErr);
+                            }
+                        }
                     }
+
 
                     if (sellerProfile?.telegram_chat_id && sellerProfile?.telegram_notifications_enabled) {
                         const lang = sellerProfile.telegram_language || 'ru';
