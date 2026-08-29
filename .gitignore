@@ -18,6 +18,7 @@ output/
 coverage/
 .codex-artifacts/
 scratch/
+.worktrees/
 
 # Temporary lint/report artifacts
 lint_errors*.txt
