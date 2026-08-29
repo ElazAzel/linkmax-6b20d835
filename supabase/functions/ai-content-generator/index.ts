@@ -1,6 +1,7 @@
 /// <reference lib="deno.ns" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { HUMANIZER_RU_PROMPT, humanizeDeep, humanizeText } from '../_shared/humanizer-ru.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
