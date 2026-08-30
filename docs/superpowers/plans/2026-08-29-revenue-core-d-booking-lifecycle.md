@@ -200,21 +200,28 @@ git commit -m "feat: make booking notifications durable"
 - Consumes: Tasks 1–4.
 - Produces: verified public booking lifecycle.
 
-- [ ] **Step 1: Run public-flow test suite**
+- [x] **Step 1: Run public-flow test suite**
 
 Run: `npm test -- --run src/components/booking src/pages/__tests__/BookingManagement.test.tsx src/components/blocks/__tests__/BlocksRendering.test.tsx`
 
-- [ ] **Step 2: Run Edge Function tests**
+- [x] **Step 2: Run Edge Function tests**
 
 Run: `deno test supabase/functions/send-booking-notification/index_test.ts supabase/functions/send-booking-reminder/index_test.ts supabase/functions/process-notifications/index_test.ts`
 
-- [ ] **Step 3: Run gates**
+- [x] **Step 3: Run gates**
 
 Run: `npm run typecheck:strict && npm run i18n:check && npm run build`
 
-- [ ] **Step 4: Commit plan progress**
+- [x] **Step 4: Commit plan progress**
 
 ```bash
 git add docs/superpowers/plans/2026-08-29-revenue-core-d-booking-lifecycle.md
 git commit -m "docs: record booking lifecycle completion"
 ```
+
+## Verification record — 2026-08-30
+
+- Public booking, management, block integration and SQL contract suite: 54 tests passed.
+- Edge notification contracts: 7 Deno tests passed; all three Edge entrypoints passed `deno check`.
+- Strict TypeScript, RU/KK/EN runtime i18n structure, ESLint ratchet (0 errors) and production build passed.
+- Live PostgreSQL migration/pgTAP execution remains deferred because the local Docker backend requires WSL2; static SQL contracts passed.
