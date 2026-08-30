@@ -74,6 +74,9 @@ verify_jwt = false # Cron: invoked by pg_cron
 [functions.send-booking-reminder]
 verify_jwt = false # Cron: invoked by pg_cron
 
+[functions.process-notifications]
+verify_jwt = false # Cron: guarded in-code by X-Cron-Secret or service role
+
 # --- Webhooks (External) ---
 [functions.validate-telegram]
 verify_jwt = false # Webhook: called by Telegram API

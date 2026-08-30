@@ -11,11 +11,14 @@ import {
 } from '../booking-lifecycle';
 
 vi.mock('@/platform/supabase/client', () => ({
-  supabase: { rpc: vi.fn() },
+  supabase: { rpc: vi.fn(), functions: { invoke: vi.fn() } },
 }));
 
 describe('booking lifecycle service', () => {
-  beforeEach(() => vi.mocked(supabase.rpc).mockReset());
+  beforeEach(() => {
+    vi.mocked(supabase.rpc).mockReset();
+    vi.mocked(supabase.functions.invoke).mockReset().mockResolvedValue({ data: null, error: null });
+  });
 
   it('sends only visitor-owned booking input and preserves decimal strings', async () => {
     vi.mocked(supabase.rpc).mockResolvedValueOnce({
@@ -62,9 +65,47 @@ describe('booking lifecycle service', () => {
       p_idempotency_key: 'public-booking:mutation-1',
     });
     expect(result.depositRequiredAmount).toBe('2500.00');
+    expect(supabase.functions.invoke).toHaveBeenCalledWith('send-booking-notification', {
+      body: {
+        bookingId: 'booking-1',
+        accessToken: 'a'.repeat(64),
+        locale: undefined,
+      },
+    });
     expect(Object.keys(vi.mocked(supabase.rpc).mock.calls[0][1] as object)).not.toEqual(
       expect.arrayContaining(['owner_id', 'price_amount', 'payment_status']),
     );
+  });
+
+  it('does not roll back an authoritative booking when notification enqueueing fails', async () => {
+    vi.mocked(supabase.rpc).mockResolvedValueOnce({
+      data: {
+        ok: true,
+        bookingId: 'booking-2',
+        status: 'confirmed',
+        version: 1,
+        paymentStatus: 'not_applicable',
+        depositRequiredAmount: '0.00',
+        currency: 'KZT',
+        accessToken: 'b'.repeat(64),
+        idempotentReplay: false,
+      },
+      error: null,
+    } as never);
+    vi.mocked(supabase.functions.invoke).mockRejectedValueOnce(new Error('network unavailable'));
+
+    await expect(createPublicBooking({
+      pageId: 'page-1',
+      blockId: 'booking-block-1',
+      serviceOfferingId: 'offering-1',
+      slotDate: '2026-09-01',
+      slotTime: '10:00:00',
+      staffId: null,
+      client: { name: 'Алия', phone: '+77000000000', email: null, notes: null },
+      bookingTimezone: 'Asia/Almaty',
+      attribution: {},
+      idempotencyKey: 'public-booking:mutation-notification-failure',
+    })).resolves.toMatchObject({ bookingId: 'booking-2', status: 'confirmed' });
   });
 
   it('maps slot conflicts to a typed non-network error', async () => {

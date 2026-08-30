@@ -53,6 +53,7 @@ export interface CreatePublicBookingInput {
     notes: string | null;
   };
   bookingTimezone: string;
+  locale?: string;
   attribution: Record<string, string | number | boolean | null>;
   idempotencyKey: string;
 }
@@ -366,7 +367,7 @@ export async function createPublicBooking(
     throw new BookingLifecycleError('invalid_response', true);
   }
 
-  return {
+  const booking: PublicBookingCreated = {
     bookingId: data.bookingId,
     status: data.status,
     version: data.version,
@@ -376,6 +377,20 @@ export async function createPublicBooking(
     accessToken: data.accessToken,
     idempotentReplay: data.idempotentReplay,
   };
+
+  try {
+    await supabase.functions?.invoke?.('send-booking-notification', {
+      body: {
+        bookingId: booking.bookingId,
+        accessToken: booking.accessToken,
+        locale: input.locale,
+      },
+    });
+  } catch {
+    // Booking is authoritative and must not roll back when notification enqueueing fails.
+  }
+
+  return booking;
 }
 
 export async function manageBookingWithToken(

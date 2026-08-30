@@ -194,6 +194,7 @@ export function PublicBookingFlow({
           notes: state.contact.notes.trim() || null,
         },
         bookingTimezone: block.timezone || 'Asia/Almaty',
+        locale: i18n.language,
         attribution: safeAttribution(),
         idempotencyKey: mutationIdRef.current,
       });

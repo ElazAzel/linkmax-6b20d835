@@ -166,23 +166,23 @@ git commit -m "feat: add booking self service"
 - Produces: stable notification payload and idempotency keys; delivery outcome revenue events.
 - Consumes: booking management URL and notification queue.
 
-- [ ] **Step 1: Write failing notification contract tests**
+- [x] **Step 1: Write failing notification contract tests**
 
 Assert owner/customer payloads include `booking_id`, `recipient_role`, `channel`, `template_key`, locale and safe variables; assert phone/email/token are absent from logs/event metadata.
 
-- [ ] **Step 2: Write failing idempotency test**
+- [x] **Step 2: Write failing idempotency test**
 
 Schedule the same 24-hour reminder twice and assert one queue row with key `booking:{id}:reminder_24h:{channel}:{window}`.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `deno test supabase/functions/send-booking-notification/index_test.ts supabase/functions/send-booking-reminder/index_test.ts supabase/functions/process-notifications/index_test.ts`
 
-- [ ] **Step 4: Implement templates and delivery projection**
+- [x] **Step 4: Implement templates and delivery projection**
 
 Use booking timezone for schedule calculation. A failed notification does not roll back booking. Terminal delivery writes one `reminder_delivered` or operational failure fact.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 Run: `deno test supabase/functions/send-booking-notification/index_test.ts supabase/functions/send-booking-reminder/index_test.ts supabase/functions/process-notifications/index_test.ts`
 
