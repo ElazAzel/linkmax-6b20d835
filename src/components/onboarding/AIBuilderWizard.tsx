@@ -28,6 +28,7 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Send from 'lucide-react/dist/esm/icons/send';
+import { humanizeDeep } from '@/lib/text/humanizer-ru';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
