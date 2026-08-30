@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import { humanizeDeep, humanizeText } from '@/lib/text/humanizer-ru';
 import type { Block } from '@/types/page';
 
 interface AIGeneratorProps {
