@@ -686,7 +686,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                 type="textarea"
                 className="text-base rounded-2xl border-2 border-primary/50 focus:border-primary resize-none transition-colors"
               />
+              <div className="flex items-center justify-center">
+                <HumanizeButton value={editedBio} onChange={setEditedBio} />
+              </div>
               <div className="flex items-center justify-center gap-3">
+
                 <Button size="lg" onClick={handleSaveBio} className="rounded-2xl px-6 h-12 font-bold shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
                   <Check className="h-5 w-5 mr-2" />
                   {t('common.save', 'Сохранить')}
