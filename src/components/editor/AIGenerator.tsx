@@ -111,7 +111,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
       }
 
       toast.success(t('toasts.ai.generated'));
-      onResult(data.result);
+      onResult(typeof data.result === 'string' ? humanizeText(data.result) : humanizeDeep(data.result));
       onClose();
     } catch (error) {
       console.error('AI generation error:', error);
