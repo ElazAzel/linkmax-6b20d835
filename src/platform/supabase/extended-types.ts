@@ -1055,6 +1055,14 @@ export type AppDatabase = Omit<Database, 'public'> & {
     Functions: Merge<
       Database['public']['Functions'],
       {
+        apply_revenue_kit_v1: {
+          Args: {
+            p_page_id: string;
+            p_draft: Json;
+            p_mutation_id: string;
+          };
+          Returns: Json;
+        };
         create_public_booking: {
           Args: {
             p_page_id: string;
@@ -1075,6 +1083,13 @@ export type AppDatabase = Omit<Database, 'public'> & {
         };
         get_booking_by_access_token: {
           Args: { p_token: string };
+          Returns: Json;
+        };
+        get_revenue_kit_draft: {
+          Args: {
+            p_page_id: string;
+            p_kit_id?: string;
+          };
           Returns: Json;
         };
         get_public_availability: {
@@ -1115,6 +1130,15 @@ export type AppDatabase = Omit<Database, 'public'> & {
             p_currency: string;
             p_method: 'kaspi_manual' | 'cash' | 'manual_card' | 'bank_transfer' | 'other';
             p_idempotency_key: string;
+          };
+          Returns: Json;
+        };
+        save_revenue_kit_draft: {
+          Args: {
+            p_page_id: string;
+            p_kit_id: string;
+            p_step: string;
+            p_draft: Json;
           };
           Returns: Json;
         };

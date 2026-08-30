@@ -74,11 +74,11 @@ git commit -m "feat: define beauty revenue kit"
 - Produces: `revenue_kit_drafts`, `save_revenue_kit_draft`, `apply_revenue_kit_v1`, `loadRevenueKitDraft`, `applyRevenueKit`.
 - Consumes: offerings, pages, blocks and feature flags.
 
-- [ ] **Step 1: Write failing SQL behavior tests**
+- [x] **Step 1: Write failing SQL behavior tests**
 
 Assert applying a valid draft creates offerings plus one linked pricing block and one linked booking block, applying twice is idempotent, and an unrelated text block remains unchanged.
 
-- [ ] **Step 2: Write failing service adapter tests**
+- [x] **Step 2: Write failing service adapter tests**
 
 Test that `applyRevenueKit(pageId, draft, mutationId)` sends exact RPC fields and returns typed offering/block IDs; malformed server response returns `invalid_response`.
 
@@ -88,7 +88,7 @@ Run: `supabase test db supabase/tests/beauty_revenue_kit.test.sql`
 
 Run: `npm test -- --run src/services/__tests__/revenue-kit.test.ts`
 
-- [ ] **Step 4: Implement migration and adapter**
+- [x] **Step 4: Implement migration and adapter**
 
 Draft rows are owner-readable, keyed by `(user_id, page_id, kit_id)`, and store current step plus validated JSON. RPC validates ownership, uses one transaction, upserts by stable kit IDs and emits `revenue_kit_applied` once.
 
@@ -98,7 +98,7 @@ Run: `supabase db reset && supabase test db supabase/tests/beauty_revenue_kit.te
 
 Run: `npm test -- --run src/services/__tests__/revenue-kit.test.ts`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add supabase/migrations/20260829124000_beauty_revenue_kit_rpc_and_flags.sql supabase/tests/beauty_revenue_kit.test.sql src/services/revenue-kit.ts src/services/__tests__/revenue-kit.test.ts
