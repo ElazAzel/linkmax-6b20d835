@@ -239,7 +239,7 @@ git commit -m "feat: integrate beauty revenue kit"
 - Consumes: Tasks 1–5.
 - Produces: pilot-ready, feature-flagged kit.
 
-- [ ] **Step 1: Run all kit tests**
+- [x] **Step 1: Run all kit tests**
 
 Run: `npm test -- --run src/domain/revenue-kits src/services/__tests__/revenue-kit.test.ts src/hooks/revenue/__tests__/useRevenueKit.test.tsx src/components/onboarding/revenue-kit src/pages/__tests__/Dashboard.revenue-kit.test.tsx`
 
@@ -248,6 +248,11 @@ Run: `npm test -- --run src/domain/revenue-kits src/services/__tests__/revenue-k
 Run: `supabase test db supabase/tests/beauty_revenue_kit.test.sql`
 
 Run: `npm run typecheck:strict && npm run i18n:check && npm run build`
+
+Application gates passed on 2026-08-30: 31 focused tests, strict typecheck,
+RU/KK/EN runtime structure check, and production build. The database part of
+Step 2 remains open because the local Docker backend cannot start until WSL2 is
+installed; SQL contract tests pass, but they do not replace pgTAP.
 
 - [ ] **Step 3: Commit plan progress**
 
