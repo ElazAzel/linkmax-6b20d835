@@ -32,7 +32,7 @@
 - Produces: `publicBookingReducer`, `PublicBookingState`, `createPublicBooking`, `loadPublicAvailability`, `manageBookingWithToken`.
 - Consumes: Revenue Core RPC result and error types.
 
-- [ ] **Step 1: Write failing reducer tests**
+- [x] **Step 1: Write failing reducer tests**
 
 ```ts
 expect(reduce(initial, { type: 'SERVICE_SELECTED', service })).toMatchObject({ step: 'slot', service });
@@ -40,19 +40,19 @@ expect(reduce(formState, { type: 'SUBMIT_CONFLICT' })).toMatchObject({ step: 'sl
 expect(reduce(submitting, { type: 'CREATED', status: 'pending_payment' })).toMatchObject({ step: 'deposit', bookingStatus: 'pending_payment' });
 ```
 
-- [ ] **Step 2: Write failing adapter contract tests**
+- [x] **Step 2: Write failing adapter contract tests**
 
 Assert decimal strings and idempotency key are preserved, owner/price/payment status are never sent by the client, and server error codes map to typed retryability.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/components/booking/__tests__/public-booking-machine.test.ts src/services/__tests__/booking-lifecycle.test.ts`
 
-- [ ] **Step 4: Implement minimal reducer and adapters**
+- [x] **Step 4: Implement minimal reducer and adapters**
 
 Steps are `service | slot | contact | submitting | deposit | confirmed | error`. Reducer has no network or browser dependencies.
 
-- [ ] **Step 5: Verify GREEN and commit**
+- [x] **Step 5: Verify GREEN and commit**
 
 Run: `npm test -- --run src/components/booking/__tests__/public-booking-machine.test.ts src/services/__tests__/booking-lifecycle.test.ts`
 
