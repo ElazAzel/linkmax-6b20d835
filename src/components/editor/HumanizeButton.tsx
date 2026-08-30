@@ -4,7 +4,7 @@ import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { auditRu, humanizeText, isRussian } from '@/lib/text/humanizer-ru';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface HumanizeButtonProps {
   value: string;
