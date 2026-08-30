@@ -79,6 +79,34 @@ const itemVariants = {
   show: { opacity: 1, y: 0 }
 };
 
+interface RevenueInsightsContainerProps {
+  pageId: string;
+  from: string;
+  to: string;
+}
+
+function RevenueInsightsContainer({ pageId, from, to }: RevenueInsightsContainerProps) {
+  const { t } = useTranslation();
+  const outcomeQuery = useRevenueOutcomeSummary({ pageId, from, to });
+
+  if (!outcomeQuery.data) return null;
+
+  return (
+    <section className="space-y-4" data-testid="revenue-insights">
+      <div className="px-1">
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
+          {t('revenueInsights.eyebrow', 'Выручка и записи')}
+        </p>
+        <h2 className="mt-1 text-xl font-black">
+          {t('revenueInsights.title', 'От источника до завершённого визита')}
+        </h2>
+      </div>
+      <RevenueFunnel funnel={outcomeQuery.data.funnel} />
+      <RevenueBySource sources={outcomeQuery.data.bySource} />
+    </section>
+  );
+}
+
 export const InsightsScreen = memo(function InsightsScreen({
   pageId,
   slug,
@@ -98,11 +126,6 @@ export const InsightsScreen = memo(function InsightsScreen({
       to: format(to, 'yyyy-MM-dd'),
     };
   }, [period]);
-  const outcomeQuery = useRevenueOutcomeSummary({
-    pageId: revenueOutcomesEnabled ? pageId : undefined,
-    from: outcomePeriod.from,
-    to: outcomePeriod.to,
-  });
   const { analytics, loading, error, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics(
     pageId || null,
     '7d',
@@ -202,12 +225,7 @@ export const InsightsScreen = memo(function InsightsScreen({
     );
   }
 
-  const hasRevenueData = Boolean(outcomeQuery.data && (
-    outcomeQuery.data.readiness.hasKit
-    || outcomeQuery.data.outcome.bookingCount > 0
-    || outcomeQuery.data.funnel.serviceViewed > 0
-  ));
-  const hasData = stats.views > 0 || stats.clicks > 0 || hasRevenueData;
+  const hasData = stats.views > 0 || stats.clicks > 0;
 
   return (
     <div className="min-h-screen safe-area-top">
@@ -249,19 +267,12 @@ export const InsightsScreen = memo(function InsightsScreen({
       </div>
 
       <div className="px-[var(--space-page-px)] pb-24 space-y-7">
-        {revenueOutcomesEnabled && outcomeQuery.data && (
-          <section className="space-y-4" data-testid="revenue-insights">
-            <div className="px-1">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
-                {t('revenueInsights.eyebrow', 'Выручка и записи')}
-              </p>
-              <h2 className="mt-1 text-xl font-black">
-                {t('revenueInsights.title', 'От источника до завершённого визита')}
-              </h2>
-            </div>
-            <RevenueFunnel funnel={outcomeQuery.data.funnel} />
-            <RevenueBySource sources={outcomeQuery.data.bySource} />
-          </section>
+        {revenueOutcomesEnabled && (
+          <RevenueInsightsContainer
+            pageId={pageId}
+            from={outcomePeriod.from}
+            to={outcomePeriod.to}
+          />
         )}
 
         {!hasData ? (

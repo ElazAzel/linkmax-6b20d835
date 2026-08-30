@@ -75,6 +75,39 @@ interface HomeScreenProps {
   onOpenRevenueKit?: () => void;
 }
 
+interface RevenueOutcomeHomeContainerProps {
+  pageId: string;
+  onNavigate: (href: string) => void;
+  onReadyChange: (ready: boolean) => void;
+}
+
+function RevenueOutcomeHomeContainer({
+  pageId,
+  onNavigate,
+  onReadyChange,
+}: RevenueOutcomeHomeContainerProps) {
+  const outcomePeriod = useMemo(() => {
+    const to = new Date();
+    return {
+      from: format(subDays(to, 29), 'yyyy-MM-dd'),
+      to: format(to, 'yyyy-MM-dd'),
+    };
+  }, []);
+  const outcomeQuery = useRevenueOutcomeSummary({
+    pageId,
+    from: outcomePeriod.from,
+    to: outcomePeriod.to,
+  });
+
+  useEffect(() => {
+    onReadyChange(Boolean(outcomeQuery.data));
+  }, [onReadyChange, outcomeQuery.data]);
+
+  if (!outcomeQuery.data) return null;
+
+  return <OutcomeHome summary={outcomeQuery.data} onNavigate={onNavigate} />;
+}
+
 export const HomeScreen = memo(function HomeScreen({
   pageData,
   loading,
@@ -101,19 +134,12 @@ export const HomeScreen = memo(function HomeScreen({
   const gapDetectedRef = useRef(false);
 
   const viewCount = pageData?.viewCount || 0;
-  const outcomePeriod = useMemo(() => {
-    const to = new Date();
-    return {
-      from: format(subDays(to, 29), 'yyyy-MM-dd'),
-      to: format(to, 'yyyy-MM-dd'),
-    };
-  }, []);
-  const outcomeQuery = useRevenueOutcomeSummary({
-    pageId: outcomeHomeEnabled ? pageData?.id : undefined,
-    from: outcomePeriod.from,
-    to: outcomePeriod.to,
-  });
-  const outcomeExperienceActive = outcomeHomeEnabled && Boolean(outcomeQuery.data);
+  const [outcomeHomeReady, setOutcomeHomeReady] = useState(false);
+  const outcomeExperienceActive = outcomeHomeEnabled && outcomeHomeReady;
+
+  useEffect(() => {
+    setOutcomeHomeReady(false);
+  }, [outcomeHomeEnabled, pageData?.id]);
 
   const handleOutcomeNavigate = useCallback((href: string) => {
     if (href.includes('revenueKit=beauty-v1') && onOpenRevenueKit) {
@@ -235,8 +261,12 @@ export const HomeScreen = memo(function HomeScreen({
       />
 
       <div className="px-4 md:px-5 py-6 space-y-6">
-        {outcomeQuery.data && (
-          <OutcomeHome summary={outcomeQuery.data} onNavigate={handleOutcomeNavigate} />
+        {outcomeHomeEnabled && pageData.id && (
+          <RevenueOutcomeHomeContainer
+            pageId={pageData.id}
+            onNavigate={handleOutcomeNavigate}
+            onReadyChange={setOutcomeHomeReady}
+          />
         )}
 
         {/* Activation Checklist — ABOVE page card for visibility */}

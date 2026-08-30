@@ -21,4 +21,9 @@ describe('booking owner detail SQL contract', () => {
     expect(sql).not.toContain("'accessToken'");
     expect(sql).not.toContain("'payload'");
   });
+
+  it('fails closed when legacy booking timezone data is invalid', () => {
+    expect(sql).toContain('pg_timezone_names');
+    expect(sql).toContain('ELSE false');
+  });
 });

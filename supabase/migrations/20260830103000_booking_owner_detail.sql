@@ -34,7 +34,13 @@ BEGIN
     'statusReason', v_booking.status_reason,
     'localStart', to_char(v_booking.slot_date + v_booking.slot_time, 'YYYY-MM-DD"T"HH24:MI:SS'),
     'timezone', v_booking.booking_timezone,
-    'slotStarted', ((v_booking.slot_date + v_booking.slot_time) AT TIME ZONE v_booking.booking_timezone) <= now(),
+    'slotStarted', CASE
+      WHEN EXISTS (
+        SELECT 1 FROM pg_timezone_names timezone_name
+        WHERE timezone_name.name = v_booking.booking_timezone
+      ) THEN ((v_booking.slot_date + v_booking.slot_time) AT TIME ZONE v_booking.booking_timezone) <= now()
+      ELSE false
+    END,
     'serviceName', COALESCE(
       NULLIF(v_booking.service_snapshot #>> '{name,ru}', ''),
       NULLIF(v_booking.service_snapshot #>> '{name,kk}', ''),

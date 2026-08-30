@@ -250,6 +250,7 @@ function isBookingOwnerDetail(value: Json | undefined): boolean {
     || !requiredString(value.timezone)
     || typeof value.slotStarted !== 'boolean'
     || !requiredString(value.serviceName)
+    || !isRecord(value.serviceSnapshot)
     || !isRecord(value.client)
     || !isRecord(value.payment)
     || !isRecord(value.attribution)

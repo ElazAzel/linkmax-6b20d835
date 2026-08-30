@@ -30,7 +30,7 @@ export function RevenueBySource({ sources }: RevenueBySourceProps) {
         </p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[680px] text-sm">
+          <table className="w-full min-w-[760px] text-sm">
             <thead className="bg-muted/40 text-left text-xs text-muted-foreground">
               <tr>
                 <th className="px-5 py-3 font-semibold">{t('revenueInsights.sources.source', 'Источник')}</th>
@@ -38,6 +38,7 @@ export function RevenueBySource({ sources }: RevenueBySourceProps) {
                 <th className="px-3 py-3 text-right font-semibold">{t('revenueInsights.sources.started', 'Старт')}</th>
                 <th className="px-3 py-3 text-right font-semibold">{t('revenueInsights.sources.bookings', 'Записи')}</th>
                 <th className="px-3 py-3 text-right font-semibold">{t('revenueInsights.sources.paid', 'Оплачено')}</th>
+                <th className="px-3 py-3 text-right font-semibold">{t('revenueInsights.sources.completed', 'Завершено')}</th>
                 <th className="px-5 py-3 text-right font-semibold">{t('revenueInsights.sources.net', 'После возвратов')}</th>
               </tr>
             </thead>
@@ -49,6 +50,7 @@ export function RevenueBySource({ sources }: RevenueBySourceProps) {
                   <td className="px-3 py-4 text-right tabular-nums">{source.bookingStarted}</td>
                   <td className="px-3 py-4 text-right tabular-nums">{source.bookingCreated}</td>
                   <td className="px-3 py-4 text-right tabular-nums">{source.bookingPaid}</td>
+                  <td className="px-3 py-4 text-right tabular-nums">{source.bookingCompleted}</td>
                   <td className="px-5 py-4 text-right font-black tabular-nums">
                     {source.netCollectedAmount} {source.currency}
                   </td>

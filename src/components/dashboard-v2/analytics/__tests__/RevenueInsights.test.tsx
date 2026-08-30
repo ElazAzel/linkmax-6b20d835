@@ -26,6 +26,7 @@ describe('RevenueInsights', () => {
     ]);
     expect(funnel).not.toHaveTextContent(/Infinity|NaN/);
     expect(funnel).toHaveTextContent('—');
+    expect(screen.getByTestId('revenue-funnel-bar-serviceViewed')).toHaveStyle({ width: '0%' });
   });
 
   it('keeps unknown attribution visible and displays server decimal strings', () => {
@@ -44,5 +45,6 @@ describe('RevenueInsights', () => {
     expect(within(table).getByText('unknown')).toBeInTheDocument();
     expect(table).toHaveTextContent('12000.50');
     expect(table).toHaveTextContent('KZT');
+    expect(within(table).getByText('Завершено')).toBeInTheDocument();
   });
 });

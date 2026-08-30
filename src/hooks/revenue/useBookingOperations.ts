@@ -83,9 +83,22 @@ export function useBookingOperations({
       return result;
     },
     retry: (failureCount, error) => (
-      error instanceof BookingOperationError && error.retryable && failureCount < 1
+      error instanceof BookingOperationError
+      && error.code === 'request_failed'
+      && error.retryable
+      && failureCount < 1
     ),
     retryDelay: 0,
+    onError: async (error, variables) => {
+      if (error instanceof BookingOperationError && error.code === 'version_conflict') {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['bookings'] }),
+          queryClient.invalidateQueries({
+            queryKey: bookingRevenueKeys.detail(variables.input.bookingId),
+          }),
+        ]);
+      }
+    },
     onSuccess: async (result) => {
       const invalidations: Array<Promise<unknown>> = [
         queryClient.invalidateQueries({ queryKey: ['bookings'] }),

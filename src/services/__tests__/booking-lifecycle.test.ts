@@ -4,6 +4,7 @@ import { supabase } from '@/platform/supabase/client';
 import {
   BookingLifecycleError,
   createPublicBooking,
+  loadBookingOwnerDetail,
   loadBookingManagementAvailability,
   loadBookingManagementContext,
   loadPublicAvailability,
@@ -237,6 +238,49 @@ describe('booking lifecycle service', () => {
       code: 'token_expired',
       retryable: false,
       details: { ownerPagePath: '/aru' },
+    });
+  });
+
+  it('accepts only an owner detail response with a structured service snapshot', async () => {
+    const ownerDetail = {
+      ok: true,
+      bookingId: 'booking-1',
+      pageId: 'page-1',
+      version: 3,
+      status: 'confirmed',
+      statusReason: null,
+      localStart: '2026-09-01T10:00:00',
+      timezone: 'Asia/Almaty',
+      slotStarted: false,
+      serviceName: 'Маникюр',
+      serviceSnapshot: { name: { ru: 'Маникюр' }, currency: 'KZT' },
+      client: { name: 'Алия', phone: null, email: 'aliya@example.com', notes: null },
+      payment: {
+        status: 'paid',
+        totalAmount: '7000.00',
+        depositRequiredAmount: '2000.00',
+        paidAmount: '2000.00',
+        refundedAmount: '0.00',
+        currency: 'KZT',
+        facts: [],
+      },
+      attribution: { source: 'instagram', medium: null, campaign: null, referrerHost: null },
+      transitions: [],
+      notifications: [],
+    };
+    vi.mocked(supabase.rpc)
+      .mockResolvedValueOnce({ data: ownerDetail, error: null } as never)
+      .mockResolvedValueOnce({
+        data: { ...ownerDetail, serviceSnapshot: 'unstructured' },
+        error: null,
+      } as never);
+
+    await expect(loadBookingOwnerDetail('booking-1')).resolves.toMatchObject({
+      bookingId: 'booking-1',
+      serviceSnapshot: ownerDetail.serviceSnapshot,
+    });
+    await expect(loadBookingOwnerDetail('booking-1')).rejects.toMatchObject({
+      code: 'invalid_response',
     });
   });
 });

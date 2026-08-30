@@ -7718,6 +7718,11 @@
       "noShow": "Customer did not show",
       "cancel": "Cancel booking"
     },
+    "cancelConfirm": {
+      "title": "Cancel this booking?",
+      "description": "The status will change to Cancelled. The operation history will be preserved.",
+      "action": "Yes, cancel"
+    },
     "success": {
       "confirmed": "Deposit confirmed",
       "waived": "Booking confirmed without a deposit",
@@ -7753,6 +7758,7 @@
       "started": "Started",
       "bookings": "Bookings",
       "paid": "Paid",
+      "completed": "Completed",
       "net": "After refunds"
     }
   }

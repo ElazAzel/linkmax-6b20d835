@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 const migrationPath = resolve(
   process.cwd(),
-  'supabase/migrations/20260829125000_revenue_outcome_summary.sql',
+  'supabase/migrations/20260830104000_revenue_outcome_summary.sql',
 );
 
 describe('revenue outcome summary SQL contract', () => {
@@ -28,8 +28,16 @@ describe('revenue outcome summary SQL contract', () => {
   it('keeps money authoritative and missing attribution honest', () => {
     expect(sql).toContain('paid_amount');
     expect(sql).toContain('refunded_amount');
+    expect(sql).toContain('booking.paid_amount - booking.refunded_amount');
     expect(sql).toContain("'unknown'");
     expect(sql).not.toContain('posthog');
+  });
+
+  it('keeps funnel booking stages on one created-at cohort', () => {
+    const funnelStart = sql.indexOf("'serviceViewed'");
+    const funnelSection = sql.slice(funnelStart, sql.indexOf('INTO v_funnel', funnelStart));
+    expect(funnelSection.match(/booking\.created_at >= v_start_at/g)).toHaveLength(3);
+    expect(funnelSection).not.toContain('booking.slot_date BETWEEN p_from AND p_to');
   });
 
   it('returns the outcome, operations, readiness, funnel and source sections', () => {

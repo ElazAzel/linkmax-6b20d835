@@ -116,7 +116,10 @@ BEGIN
       WHERE COALESCE(booking.service_snapshot->>'currency', v_currency) = v_currency
     ), 0), 'FM999999999999990.00'),
     'pendingPaymentAmount', to_char(COALESCE(sum(
-      GREATEST(booking.deposit_required_amount - booking.paid_amount, 0)
+      GREATEST(
+        booking.deposit_required_amount - GREATEST(booking.paid_amount - booking.refunded_amount, 0),
+        0
+      )
     ) FILTER (
       WHERE booking.status = 'pending_payment'
         AND COALESCE(booking.service_snapshot->>'currency', v_currency) = v_currency
@@ -264,7 +267,7 @@ BEGIN
     'bookingCompleted', (
       SELECT count(*) FROM public.bookings booking
       WHERE booking.page_id = p_page_id
-        AND booking.slot_date BETWEEN p_from AND p_to
+        AND booking.created_at >= v_start_at AND booking.created_at < v_end_at
         AND booking.status = 'completed'
     )
   )
@@ -319,7 +322,7 @@ BEGIN
     'bookingCompleted', (
       SELECT count(*) FROM public.bookings booking
       WHERE booking.page_id = p_page_id
-        AND booking.slot_date BETWEEN p_from AND p_to
+        AND booking.created_at >= v_start_at AND booking.created_at < v_end_at
         AND booking.status = 'completed'
         AND COALESCE(NULLIF(booking.attribution->>'source', ''), 'unknown') = sources.source
     ),

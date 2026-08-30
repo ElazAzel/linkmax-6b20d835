@@ -47,7 +47,8 @@ export function RevenueFunnel({ funnel }: RevenueFunnelProps) {
                 <div className="h-2 overflow-hidden rounded-full bg-muted">
                   <div
                     className="h-full rounded-full bg-primary transition-[width]"
-                    style={{ width: `${Math.max(3, (step.value / maximum) * 100)}%` }}
+                    data-testid={`revenue-funnel-bar-${step.id}`}
+                    style={{ width: step.value === 0 ? '0%' : `${Math.max(3, (step.value / maximum) * 100)}%` }}
                   />
                 </div>
               </div>

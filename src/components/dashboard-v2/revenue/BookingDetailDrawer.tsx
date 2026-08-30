@@ -10,6 +10,17 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -162,9 +173,32 @@ export function BookingDetailDrawer({
             )}
 
             {(detail.status === 'pending_payment' || detail.status === 'confirmed') && (
-              <Button disabled={pending} variant="destructive" className="w-full" onClick={onCancel}>
-                {t('bookingDetail.actions.cancel', 'Отменить запись')}
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button disabled={pending} variant="destructive" className="w-full">
+                    {t('bookingDetail.actions.cancel', 'Отменить запись')}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {t('bookingDetail.cancelConfirm.title', 'Отменить эту запись?')}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {t('bookingDetail.cancelConfirm.description', 'Статус изменится на «Отменена». История операции сохранится.')}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>{t('common.cancel', 'Не отменять')}</AlertDialogCancel>
+                    <AlertDialogAction
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      onClick={onCancel}
+                    >
+                      {t('bookingDetail.cancelConfirm.action', 'Да, отменить')}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             )}
 
             <section className="rounded-2xl border border-border/60 p-4">

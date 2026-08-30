@@ -62,6 +62,17 @@ describe('BookingDetailDrawer', () => {
     expect(screen.getByRole('button', { name: 'Отменить запись' })).toBeInTheDocument();
   });
 
+  it('requires explicit confirmation before cancelling', () => {
+    handlers.onCancel.mockClear();
+    render(<BookingDetailDrawer open detail={detail('confirmed')} onOpenChange={vi.fn()} {...handlers} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Отменить запись' }));
+    expect(handlers.onCancel).not.toHaveBeenCalled();
+    expect(screen.getByRole('heading', { name: 'Отменить эту запись?' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Да, отменить' }));
+    expect(handlers.onCancel).toHaveBeenCalledTimes(1);
+  });
+
   it('offers completion and no-show for a past confirmed appointment', () => {
     render(<BookingDetailDrawer open detail={detail('confirmed')} onOpenChange={vi.fn()} {...handlers} />);
 

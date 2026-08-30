@@ -59,7 +59,7 @@ git commit -m "feat: choose deterministic revenue actions"
 ### Task 2: Add the outcome summary RPC
 
 **Files:**
-- Create: `supabase/migrations/20260829125000_revenue_outcome_summary.sql`
+- Create: `supabase/migrations/20260830104000_revenue_outcome_summary.sql`
 - Create: `supabase/tests/revenue_outcome_summary.test.sql`
 
 **Interfaces:**
@@ -89,7 +89,7 @@ Static SQL contract verification is green. Steps 3 and 5 retain their database g
 Run: `supabase db reset && supabase test db supabase/tests/revenue_outcome_summary.test.sql`
 
 ```bash
-git add supabase/migrations/20260829125000_revenue_outcome_summary.sql supabase/tests/revenue_outcome_summary.test.sql
+git add supabase/migrations/20260830104000_revenue_outcome_summary.sql supabase/tests/revenue_outcome_summary.test.sql
 git commit -m "feat: aggregate revenue outcomes"
 ```
 
@@ -259,7 +259,7 @@ git commit -m "feat: add revenue outcome insights"
 - Consumes: Tasks 1–6.
 - Produces: verified outcome-first owner experience.
 
-- [ ] **Step 1: Run outcome tests**
+- [x] **Step 1: Run outcome tests**
 
 Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts src/services/__tests__/revenue-outcomes.test.ts src/hooks/revenue src/components/dashboard-v2/revenue src/components/dashboard-v2/analytics/__tests__/RevenueInsights.test.tsx`
 
@@ -267,15 +267,29 @@ Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts sr
 
 Run: `supabase test db supabase/tests/revenue_outcome_summary.test.sql`
 
-- [ ] **Step 3: Run full application gates**
+- [x] **Step 3: Run full application gates**
 
 Run: `npm test -- --run`
 
 Run: `npm run typecheck:strict && npm run i18n:check && npm run lint:ratchet && npm run build`
 
-- [ ] **Step 4: Commit plan progress**
+- [x] **Step 4: Commit plan progress**
 
 ```bash
 git add docs/superpowers/plans/2026-08-29-revenue-core-e-outcome-home.md
 git commit -m "docs: record outcome home completion"
 ```
+
+Verification record (2026-08-31): 40 focused outcome/operations contract tests
+passed; the full application suite passed with 105 files and 600 tests. Strict
+TypeScript, RU/KK/EN runtime i18n structure, ESLint ratchet (0 errors, 1195
+warnings against a maximum of 1230), production build, seven Deno notification
+tests and all three Edge entrypoint checks passed. A local browser smoke test
+confirmed a non-blank landing page, no framework error overlay or captured
+console errors, and the expected `/dashboard/*` to `/auth` guard for a local
+unauthenticated session.
+
+Step 2 remains open: `supabase test db` cannot reach the local PostgreSQL port
+(`ECONNREFUSED 127.0.0.1:54322`) because this Windows host has no installed
+WSL2 distribution and therefore no Docker Linux engine. Static SQL contracts
+pass, but they do not replace the pgTAP gate.

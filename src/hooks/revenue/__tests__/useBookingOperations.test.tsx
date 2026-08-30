@@ -97,4 +97,31 @@ describe('useBookingOperations', () => {
     expect(vi.mocked(transitionBooking).mock.calls[0][0])
       .toEqual(vi.mocked(transitionBooking).mock.calls[1][0]);
   });
+
+  it('does not retry an optimistic version conflict and refreshes stale booking facts', async () => {
+    vi.mocked(transitionBooking).mockResolvedValue({
+      ok: false,
+      code: 'version_conflict',
+      retryable: true,
+      currentVersion: 4,
+    });
+    const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+    const { result } = renderHook(() => useBookingOperations({
+      pageId: 'page-1',
+      createId: () => 'transition-conflict',
+    }), { wrapper: wrapper(queryClient) });
+
+    await act(async () => {
+      await expect(result.current.cancel({
+        bookingId: 'booking-1',
+        expectedVersion: 3,
+      })).rejects.toMatchObject({ code: 'version_conflict' });
+    });
+
+    expect(transitionBooking).toHaveBeenCalledTimes(1);
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: ['bookings'] });
+    expect(invalidate).toHaveBeenCalledWith({
+      queryKey: ['booking-revenue-detail', 'booking-1'],
+    });
+  });
 });
