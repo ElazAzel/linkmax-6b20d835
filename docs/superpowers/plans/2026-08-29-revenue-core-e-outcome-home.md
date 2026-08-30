@@ -225,23 +225,23 @@ git commit -m "feat: add booking revenue operations"
 - Produces: source → service → booking → paid → completed funnel and net-collected source table.
 - Consumes: outcome summary and existing traffic analytics.
 
-- [ ] **Step 1: Write failing funnel test**
+- [x] **Step 1: Write failing funnel test**
 
 Using literal counts, assert steps render in required order and rate denominators never divide by zero.
 
-- [ ] **Step 2: Write failing source table test**
+- [x] **Step 2: Write failing source table test**
 
 Assert `unknown` is displayed honestly and KZT values come from server decimal strings.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/components/dashboard-v2/analytics/__tests__/RevenueInsights.test.tsx`
 
-- [ ] **Step 4: Implement and replace unsupported recommendation copy**
+- [x] **Step 4: Implement and replace unsupported recommendation copy**
 
 Keep traffic overview available below Revenue. Do not show percentage uplift unless produced by a configured experiment with sample metadata.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 Run: `npm test -- --run src/components/dashboard-v2/analytics/__tests__/RevenueInsights.test.tsx`
 

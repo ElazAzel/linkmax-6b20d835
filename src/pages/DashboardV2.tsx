@@ -625,6 +625,7 @@ function DashboardV2Inner() {
                   slug={dashboard.pageData?.slug || ''}
                   blocks={dashboard.pageData?.blocks || []}
                   isPremium={dashboard.isPremium}
+                  revenueOutcomesEnabled={outcomeHomeEnabled}
                   onApplyInsight={(_action) => {
                     handleTabChange('home');
                   }}

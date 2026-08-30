@@ -7731,5 +7731,29 @@
       "slot_not_started": "The appointment has not started yet.",
       "payment_required": "Confirm the deposit first."
     }
+  },
+  "revenueInsights": {
+    "eyebrow": "Revenue and bookings",
+    "title": "From source to completed visit",
+    "funnel": {
+      "title": "Path to a completed booking",
+      "description": "Observed events and booking facts for the selected period.",
+      "serviceViewed": "Service viewed",
+      "bookingStarted": "Booking started",
+      "bookingCreated": "Booking created",
+      "bookingPaid": "Paid",
+      "bookingCompleted": "Completed"
+    },
+    "sources": {
+      "title": "Revenue by source",
+      "description": "Missing attribution remains unknown and is not distributed artificially.",
+      "empty": "No attributed bookings in this period yet.",
+      "source": "Source",
+      "views": "Service",
+      "started": "Started",
+      "bookings": "Bookings",
+      "paid": "Paid",
+      "net": "After refunds"
+    }
   }
 }
