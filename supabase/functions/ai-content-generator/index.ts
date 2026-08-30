@@ -481,6 +481,10 @@ Return ONLY valid JSON, no markdown.`;
         throw new Error('Invalid type');
     }
 
+    // Живой русский по умолчанию: инструкция humanizer-ru идёт в каждый промпт,
+    // а результат дополнительно чистится детерминированно ниже.
+    systemPrompt = `${systemPrompt}\n\n${HUMANIZER_RU_PROMPT}`;
+
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
