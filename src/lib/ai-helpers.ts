@@ -6,6 +6,7 @@
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
+import { humanizeDeep, humanizeText } from '@/lib/text/humanizer-ru';
 
 export interface MagicTitleInput {
   url: string;
