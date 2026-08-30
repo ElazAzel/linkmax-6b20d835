@@ -1100,6 +1100,14 @@ export type AppDatabase = Omit<Database, 'public'> & {
           };
           Returns: Json;
         };
+        get_revenue_outcome_summary: {
+          Args: {
+            p_page_id: string;
+            p_from: string;
+            p_to: string;
+          };
+          Returns: Json;
+        };
         get_public_availability: {
           Args: {
             p_page_id: string;

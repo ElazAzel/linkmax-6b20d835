@@ -105,23 +105,25 @@ git commit -m "feat: aggregate revenue outcomes"
 - Produces: `fetchRevenueOutcomeSummary` and `useRevenueOutcomeSummary({ pageId, from, to })`.
 - Consumes: outcome RPC and TanStack Query.
 
-- [ ] **Step 1: Write failing response-validation test**
+- [x] **Step 1: Write failing response-validation test**
 
 Return malformed numeric values and assert `invalid_outcome_summary`; return a complete literal fixture and assert exact normalized contract.
 
-- [ ] **Step 2: Write failing query-state test**
+- [x] **Step 2: Write failing query-state test**
 
 Assert disabled query when page ID is absent, literal query key when present, and invalidation after a booking operation.
 
-- [ ] **Step 3: Run RED**
+The disabled/key contract is covered here; outcome invalidation is exercised with the booking mutation in Task 5.
+
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/services/__tests__/revenue-outcomes.test.ts src/hooks/revenue/__tests__/useRevenueOutcomeSummary.test.tsx`
 
-- [ ] **Step 4: Implement adapter and hook**
+- [x] **Step 4: Implement adapter and hook**
 
 No client-side recomputation of money totals. Keep the last successful summary during background refresh.
 
-- [ ] **Step 5: Verify GREEN and commit**
+- [x] **Step 5: Verify GREEN and commit**
 
 Run: `npm test -- --run src/services/__tests__/revenue-outcomes.test.ts src/hooks/revenue/__tests__/useRevenueOutcomeSummary.test.tsx`
 
