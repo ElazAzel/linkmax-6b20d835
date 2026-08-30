@@ -1,6 +1,25 @@
 import type { Json } from '@/platform/supabase/types';
 import { supabase } from '@/platform/supabase/client';
 import type { BookingStatus } from '@/domain/revenue/booking-lifecycle';
+import { calculateDepositAmount, type DepositConfiguration } from '@/domain/revenue/service-offering';
+
+export interface PublicBookingContextService {
+  id: string;
+  name: string;
+  description: string | null;
+  durationMinutes: number;
+  priceAmount: string;
+  currency: string;
+  depositMode: DepositConfiguration['mode'];
+  depositValue: string;
+  depositRequiredAmount: string;
+  paymentInstructions: string | null;
+}
+
+export interface PublicBookingContext {
+  page: { id: string; slug: string; title: string };
+  services: PublicBookingContextService[];
+}
 
 export interface PublicAvailabilitySlot {
   date: string;
@@ -108,6 +127,10 @@ function requiredVersion(value: Json | undefined): value is number {
   return typeof value === 'number' && Number.isInteger(value) && value > 0;
 }
 
+function optionalString(value: Json | undefined): string | null {
+  return typeof value === 'string' && value.length > 0 ? value : null;
+}
+
 function throwResponseError(value: Json | undefined): never {
   if (isRecord(value) && value.ok === false) {
     throw new BookingLifecycleError(
@@ -116,6 +139,58 @@ function throwResponseError(value: Json | undefined): never {
     );
   }
   throw new BookingLifecycleError('invalid_response', true);
+}
+
+export async function loadPublicBookingContext(pageId: string): Promise<PublicBookingContext> {
+  const { data, error } = await supabase.rpc('get_public_booking_context', { p_page_id: pageId });
+  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (!isRecord(data) || data.ok !== true) throwResponseError(data);
+  if (!isRecord(data.page) || !Array.isArray(data.services)) {
+    throw new BookingLifecycleError('invalid_response', true);
+  }
+
+  const page = data.page;
+  if (!requiredString(page.id) || !requiredString(page.slug) || !requiredString(page.title)) {
+    throw new BookingLifecycleError('invalid_response', true);
+  }
+
+  const services = data.services.map((raw) => {
+    if (!isRecord(raw)) throw new BookingLifecycleError('invalid_response', true);
+    const mode = raw.depositMode;
+    if (
+      !requiredString(raw.id)
+      || !requiredString(raw.name)
+      || typeof raw.durationMinutes !== 'number'
+      || typeof raw.priceAmount !== 'string'
+      || !requiredString(raw.currency)
+      || (mode !== 'none' && mode !== 'fixed' && mode !== 'percent')
+      || typeof raw.depositValue !== 'string'
+    ) {
+      throw new BookingLifecycleError('invalid_response', true);
+    }
+
+    const depositRequiredAmount = typeof raw.depositRequiredAmount === 'string'
+      ? raw.depositRequiredAmount
+      : calculateDepositAmount({ mode, value: raw.depositValue }, raw.priceAmount);
+
+    return {
+      id: raw.id,
+      name: raw.name,
+      description: optionalString(raw.description),
+      durationMinutes: raw.durationMinutes,
+      priceAmount: raw.priceAmount,
+      currency: raw.currency,
+      depositMode: mode,
+      depositValue: raw.depositValue,
+      depositRequiredAmount,
+      paymentInstructions: optionalString(raw.paymentInstructions),
+    };
+  });
+
+  return {
+    page: { id: page.id, slug: page.slug, title: page.title },
+    services,
+  };
 }
 
 export async function loadPublicAvailability(

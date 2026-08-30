@@ -32,7 +32,8 @@ describe('public booking state machine', () => {
       type: 'SLOT_SELECTED',
       slot: { date: '2026-09-01', time: '10:00:00', endTime: '11:30:00' },
     });
-    const contactState = publicBookingReducer(slotState, {
+    const contactStep = publicBookingReducer(slotState, { type: 'CONTINUE_TO_CONTACT' });
+    const contactState = publicBookingReducer(contactStep, {
       type: 'CONTACT_CHANGED',
       contact: { name: 'Алия', phone: '+77000000000', email: '', notes: '' },
     });

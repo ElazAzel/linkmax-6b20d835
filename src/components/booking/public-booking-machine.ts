@@ -36,6 +36,7 @@ export interface PublicBookingContact {
 
 export interface PublicBookingState {
   step: PublicBookingStep;
+  services: PublicBookingService[];
   service: PublicBookingService | null;
   slots: PublicBookingSlot[];
   selectedSlot: PublicBookingSlot | null;
@@ -50,6 +51,7 @@ export type PublicBookingAction =
   | { type: 'SERVICE_SELECTED'; service: PublicBookingService }
   | { type: 'SLOTS_LOADED'; slots: PublicBookingSlot[] }
   | { type: 'SLOT_SELECTED'; slot: Omit<PublicBookingSlot, 'available'> | PublicBookingSlot }
+  | { type: 'CONTINUE_TO_CONTACT' }
   | { type: 'CONTACT_CHANGED'; contact: PublicBookingContact }
   | { type: 'SUBMIT' }
   | { type: 'SUBMIT_CONFLICT'; slots: PublicBookingSlot[] }
@@ -65,6 +67,7 @@ export function createInitialPublicBookingState(
 ): PublicBookingState {
   return {
     step: service ? 'slot' : 'service',
+    services: service ? [service] : [],
     service,
     slots: [],
     selectedSlot: null,
@@ -82,8 +85,8 @@ export function publicBookingReducer(
   switch (action.type) {
     case 'SERVICES_LOADED':
       return state.service || action.services.length !== 1
-        ? state
-        : { ...state, service: action.services[0], step: 'slot' };
+        ? { ...state, services: action.services }
+        : { ...state, services: action.services, service: action.services[0], step: 'slot' };
     case 'SERVICE_SELECTED':
       return {
         ...state,
@@ -101,8 +104,12 @@ export function publicBookingReducer(
         ...state,
         selectedSlot: { ...action.slot, available: true },
         error: null,
-        step: 'contact',
+        step: 'slot',
       };
+    case 'CONTINUE_TO_CONTACT':
+      return state.selectedSlot
+        ? { ...state, step: 'contact', error: null }
+        : { ...state, error: 'slot_required' };
     case 'CONTACT_CHANGED':
       return { ...state, contact: action.contact, error: null };
     case 'SUBMIT':
