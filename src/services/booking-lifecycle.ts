@@ -169,9 +169,11 @@ export async function loadPublicBookingContext(pageId: string): Promise<PublicBo
       throw new BookingLifecycleError('invalid_response', true);
     }
 
+    const depositMode = mode as DepositConfiguration['mode'];
+
     const depositRequiredAmount = typeof raw.depositRequiredAmount === 'string'
       ? raw.depositRequiredAmount
-      : calculateDepositAmount({ mode, value: raw.depositValue }, raw.priceAmount);
+      : calculateDepositAmount({ mode: depositMode, value: raw.depositValue }, raw.priceAmount);
 
     return {
       id: raw.id,
@@ -180,7 +182,7 @@ export async function loadPublicBookingContext(pageId: string): Promise<PublicBo
       durationMinutes: raw.durationMinutes,
       priceAmount: raw.priceAmount,
       currency: raw.currency,
-      depositMode: mode,
+      depositMode,
       depositValue: raw.depositValue,
       depositRequiredAmount,
       paymentInstructions: optionalString(raw.paymentInstructions),
