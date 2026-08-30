@@ -332,7 +332,7 @@ export function AIBuilderWizard({
       if (error) throw error;
 
       // Edge function wraps response in `result`: { result: { profile, blocks } }
-      const payload = data?.result ?? data ?? null;
+      const payload = humanizeDeep(data?.result ?? data ?? null);
       const aiBlocks = getKnownTemplateBlockDrafts(payload?.blocks);
 
       if (aiBlocks.length > 0) {
