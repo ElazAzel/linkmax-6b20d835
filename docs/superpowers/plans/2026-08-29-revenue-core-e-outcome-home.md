@@ -66,11 +66,11 @@ git commit -m "feat: choose deterministic revenue actions"
 - Produces: `get_revenue_outcome_summary(page_id, from, to)` matching `RevenueOutcomeSummary`.
 - Consumes: bookings, payment projections, service offerings and attribution snapshots.
 
-- [ ] **Step 1: Write failing fixture totals test**
+- [x] **Step 1: Write failing fixture totals test**
 
 Create one paid completed booking, one fully refunded completed booking, one free completed booking, one no-show and one pending-payment booking. Assert paid count `1`, free count `1`, no-show count `1`, pending count `1`, and net collected equals the non-refunded paid booking.
 
-- [ ] **Step 2: Write failing authorization and source tests**
+- [x] **Step 2: Write failing authorization and source tests**
 
 Assert another owner receives permission error; assert source grouping uses `unknown` when attribution source is absent.
 
@@ -78,9 +78,11 @@ Assert another owner receives permission error; assert source grouping uses `unk
 
 Run: `supabase test db supabase/tests/revenue_outcome_summary.test.sql`
 
-- [ ] **Step 4: Implement stable JSON contract**
+- [x] **Step 4: Implement stable JSON contract**
 
 Use page timezone for period boundaries and `numeric::text` for amounts. Mark the latest seven completion days provisional in the response metadata.
+
+Static SQL contract verification is green. Steps 3 and 5 retain their database gate because this machine cannot start the Supabase PostgreSQL stack until WSL2 is available.
 
 - [ ] **Step 5: Verify GREEN and commit**
 
