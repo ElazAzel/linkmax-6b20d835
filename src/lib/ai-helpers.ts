@@ -43,7 +43,9 @@ async function generateAIContent<T>(
     });
 
     if (error) throw error;
-    return data.result;
+    // Второй проход humanizer-ru: даже если модель проигнорировала инструкцию,
+    // клиент получает текст без канцелярита и AI-клише.
+    return typeof data.result === 'string' ? humanizeText(data.result) : humanizeDeep(data.result);
   } catch (error) {
     logger.error(`AI ${type} generation error`, error, { context: 'ai-helpers', data: { type } });
     throw error;
