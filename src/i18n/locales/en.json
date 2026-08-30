@@ -7503,5 +7503,75 @@
       "exhausted": "Download limit reached.",
       "counter": "Downloaded {{used}} of {{limit}}"
     }
+  },
+  "revenueKit": {
+    "title": "Beauty Revenue Kit",
+    "progress": "Step {{current}} of {{total}}",
+    "identity": {
+      "title": "About you and your business",
+      "description": "These details will appear on your finished page.",
+      "name": "Business name",
+      "city": "City",
+      "specialization": "Specialization",
+      "contact": "WhatsApp or Telegram"
+    },
+    "services": {
+      "title": "Services",
+      "description": "You can edit prices and duration now or later.",
+      "active": "Active service",
+      "price": "Price, ₸",
+      "duration": "Duration, min"
+    },
+    "availability": {
+      "title": "Availability",
+      "timezone": "Timezone: Almaty (UTC+5)",
+      "start": "Start of day",
+      "end": "End of day",
+      "days": "Working days",
+      "daysShort": {
+        "0": "Sun",
+        "1": "Mon",
+        "2": "Tue",
+        "3": "Wed",
+        "4": "Thu",
+        "5": "Fri",
+        "6": "Sat"
+      }
+    },
+    "deposit": {
+      "title": "Deposit and cancellation",
+      "description": "Customers see an honest pending state until payment is confirmed.",
+      "mode": "Deposit amount",
+      "none": "No deposit",
+      "fixed": "Fixed amount",
+      "percent": "Percentage",
+      "value": "Amount or percentage",
+      "instructions": "Payment instructions"
+    },
+    "preview": {
+      "title": "Trust and preview",
+      "description": "This is how the booking experience looks on a 360 px screen.",
+      "policy": "I checked the prices, schedule, and cancellation terms."
+    },
+    "publish": {
+      "title": "Your page is ready for its first bookings",
+      "description": "{{count}} services, availability, and booking will be published together.",
+      "action": "Publish page",
+      "applying": "Publishing…",
+      "advanced": "Open advanced editor"
+    },
+    "errors": {
+      "identityRequired": "Enter a business name, city, and contact",
+      "activeServiceRequired": "Keep at least one service active",
+      "serviceInvalid": "Check service prices and duration",
+      "workingDayRequired": "Choose at least one working day",
+      "hoursInvalid": "The end time must be later than the start time",
+      "depositTooHigh": "The deposit cannot exceed the service price",
+      "percentInvalid": "The deposit percentage must be between 1 and 100",
+      "depositInvalid": "Check the deposit amount",
+      "paymentInstructionsRequired": "Add payment instructions",
+      "policyRequired": "Confirm the prices, schedule, and cancellation terms",
+      "publishFailed": "The page could not be published"
+    }
   }
 }

@@ -26,6 +26,7 @@
     "i18n:prep": "node scripts/i18n-manager.mjs prep",
     "i18n:merge": "node scripts/i18n-manager.mjs merge",
     "i18n:check": "node scripts/i18n-manager.mjs check && node scripts/i18n-runtime-structure-check.mjs",
+    "i18n:check:all": "node scripts/i18n-manager.mjs fix && node scripts/i18n-runtime-structure-check.mjs --all",
     "i18n:fill": "node scripts/sync-locales-fill-missing.mjs",
     "i18n:check-coverage": "node scripts/check-locale-coverage.mjs",
     "i18n:audit": "node scripts/audit-locales.mjs",

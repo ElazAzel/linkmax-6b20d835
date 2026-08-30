@@ -8,6 +8,7 @@ const QUEUE_FILE = path.resolve(__dirname, '../i18n-queue.json');
 const BASE_LANG = 'ru';
 const ALL_LANGS = ['ru', 'en', 'kk', 'uz', 'de', 'uk', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
 const TARGET_LANGS = ['en', 'kk', 'uz']; // Primary targets for sync and auto-translation
+const RELEASE_LANGS = ['en', 'kk'];
 
 function getFlatKeys(obj, prefix = '') {
     let keys = {};
@@ -185,13 +186,13 @@ function mergeQueue() {
     console.log('🗑️ Removed translation queue file.');
 }
 
-function fixPlaceholders() {
+function fixPlaceholders(languages = ALL_LANGS) {
     console.log('🩹 Checking and fixing interpolation placeholders...');
     const locales = loadLocales();
     const baseFlat = getFlatKeys(locales[BASE_LANG]);
     const interpolationPattern = /{{\s*([\w.]+)\s*}}/g;
 
-    for (const lang of ALL_LANGS) {
+    for (const lang of languages) {
         if (lang === BASE_LANG) continue;
         const langFlat = getFlatKeys(locales[lang]);
         let fixed = 0;
@@ -251,7 +252,7 @@ switch (arg) {
     case 'status': status(); break;
     case 'check':
         status();
-        fixPlaceholders();
+        fixPlaceholders(RELEASE_LANGS);
         break;
     default:
         console.log(`

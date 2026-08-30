@@ -156,33 +156,33 @@ git commit -m "feat: add resumable revenue kit state"
 - Produces: feature-flagged guided setup UI.
 - Consumes: `useRevenueKit`, existing form primitives, editor preview and publish callbacks.
 
-- [ ] **Step 1: Write failing identity/services flow test**
+- [x] **Step 1: Write failing identity/services flow test**
 
 Render the real wizard, enter identity, continue, choose nails presets, edit one literal price and assert the saved draft contains that price as a decimal string.
 
-- [ ] **Step 2: Write failing validation tests**
+- [x] **Step 2: Write failing validation tests**
 
 Assert no active service blocks progression, invalid working-hour range blocks progression, fixed deposit above price blocks progression, and missing payment instruction blocks manual-deposit progression.
 
-- [ ] **Step 3: Write failing resume/publish test**
+- [x] **Step 3: Write failing resume/publish test**
 
 Start with persisted `trust-preview`; assert earlier data is present, apply succeeds once, and publish CTA receives returned page/block IDs.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 Run: `npm test -- --run src/components/onboarding/revenue-kit/__tests__/RevenueKitWizard.test.tsx`
 
-- [ ] **Step 5: Implement the shell and focused step components**
+- [x] **Step 5: Implement the shell and focused step components**
 
 Every step owns only its inputs and validation message. The shell owns navigation, persistence and submit. Preview uses the existing design system inside a fixed 360 px viewport; no new visual language is introduced.
 
-- [ ] **Step 6: Add RU/KK/EN keys and verify**
+- [x] **Step 6: Add RU/KK/EN keys and verify**
 
 Run: `npm run i18n:check`
 
 Run: `npm test -- --run src/components/onboarding/revenue-kit/__tests__/RevenueKitWizard.test.tsx`
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/components/onboarding/revenue-kit src/i18n/locales/ru.json src/i18n/locales/kk.json src/i18n/locales/en.json
