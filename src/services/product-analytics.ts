@@ -1,6 +1,10 @@
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
+export {
+  captureRevenueEvent,
+  prepareClientRevenueEvent,
+} from '@/lib/posthog';
 
 export const PRODUCT_EVENT_NAMES = [
   'signup_completed',
@@ -384,7 +388,6 @@ export function mapActivationEventToProductEvent(
       return 'lead_viewed';
     case 'lead_status_changed':
       return 'lead_status_changed';
-    case 'booking_confirmed':
     case 'booking_submitted':
       return 'booking_created';
     case 'creator_returned_after_gap':

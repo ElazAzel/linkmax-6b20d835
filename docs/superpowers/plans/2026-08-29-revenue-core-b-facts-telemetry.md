@@ -228,7 +228,7 @@ git commit -m "security: harden public booking access"
 - Produces: v2 event columns, `emit_revenue_product_event`, sanitized `captureRevenueEvent`.
 - Consumes: transition/payment triggers and existing `product_events`.
 
-- [ ] **Step 1: Write failing event authority tests**
+- [x] **Step 1: Write failing event authority tests**
 
 Assert client facade refuses `booking_completed`, permits `booking_started`, strips phone/email/token properties, and server transition emits one `booking_completed` for duplicate mutation replay.
 
@@ -238,11 +238,11 @@ Run: `npm test -- --run src/services/__tests__/product-analytics.test.ts src/dom
 
 Run: `supabase test db supabase/tests/revenue_events.test.sql`
 
-- [ ] **Step 3: Extend product events and trigger projections**
+- [x] **Step 3: Extend product events and trigger projections**
 
 Add `taxonomy_version`, `booking_id`, `service_offering_id`, `actor_type`, and `idempotency_key` with a partial unique index. Update allowed names and make authoritative inserts service-role/system-only.
 
-- [ ] **Step 4: Consolidate TypeScript facade**
+- [x] **Step 4: Consolidate TypeScript facade**
 
 Public intent calls use v2 event names. Deprecated activation names map to the new facade but never generate authoritative outcomes. PostHog receives pseudonymous IDs and allowlisted properties.
 
@@ -252,7 +252,7 @@ Run: `npm test -- --run src/domain/revenue src/services/__tests__/product-analyt
 
 Run: `supabase test db supabase/tests/revenue_events.test.sql`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add supabase/migrations/20260829123000_revenue_event_taxonomy_v2.sql supabase/tests/revenue_events.test.sql src/domain/revenue src/lib/analytics src/lib/activation-events.ts src/services/product-analytics.ts src/lib/posthog.ts
