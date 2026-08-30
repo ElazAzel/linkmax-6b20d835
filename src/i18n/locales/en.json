@@ -7507,6 +7507,49 @@
       "counter": "Downloaded {{used}} of {{limit}}"
     }
   },
+  "publicBooking": {
+    "minutes": "min",
+    "manage": "Manage booking",
+    "service": {
+      "title": "Choose a service",
+      "description": "The price and duration will be saved with the booking."
+    },
+    "slot": {
+      "title": "Choose a date and time",
+      "timezone": "Times are shown in the specialist's time zone.",
+      "date": "Date",
+      "available": "Available times",
+      "empty": "There are no available times on this date."
+    },
+    "contact": {
+      "title": "Contact details",
+      "description": "Enter your name and at least one way to contact you.",
+      "name": "Name",
+      "phone": "Phone",
+      "notes": "Comment (optional)",
+      "submitting": "Creating booking…",
+      "submit": "Confirm booking"
+    },
+    "deposit": {
+      "pendingTitle": "Waiting for deposit confirmation",
+      "pendingDescription": "The time will be confirmed after the specialist verifies the payment.",
+      "contactOwner": "Contact the specialist for payment details."
+    },
+    "confirmed": {
+      "title": "Booking confirmed",
+      "description": "Save this link to confirm attendance, reschedule, or cancel the booking."
+    },
+    "errors": {
+      "contactRequired": "Enter your name and a phone number or email.",
+      "slotRequired": "Choose a time to continue.",
+      "slotUnavailable": "That time is no longer available. Choose an updated slot.",
+      "slot_unavailable": "That time is no longer available. Choose an updated slot.",
+      "service_unavailable": "There are no services available for booking right now.",
+      "page_not_public": "This page has not been published yet.",
+      "request_failed": "The booking could not be loaded. Try again.",
+      "invalid_response": "The booking service returned an invalid response. Try again."
+    }
+  },
   "revenueKit": {
     "title": "Beauty Revenue Kit",
     "progress": "Step {{current}} of {{total}}",

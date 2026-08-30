@@ -1,4 +1,4 @@
- import { useState, useEffect, useCallback, memo, useRef } from 'react';
+ import { useState, useEffect, useCallback, memo, useRef, lazy, Suspense } from 'react';
  import { useTranslation } from 'react-i18next';
  import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar } from '@/components/ui/calendar';
@@ -40,6 +40,10 @@ import {
   BOOKING_OFFERING_SELECTED_EVENT,
   type BookingOfferingSelectedDetail,
 } from '@/lib/revenue/booking-offering-events';
+
+const PublicBookingFlow = lazy(() => import('@/components/booking/PublicBookingFlow').then((module) => ({
+  default: module.PublicBookingFlow,
+})));
 
 interface BookingBlockProps {
   block: BookingBlockType;
@@ -98,7 +102,7 @@ function getSafeBookingAttribution(): Record<string, string | null> {
   };
 }
 
-export const BookingBlock = memo(function BookingBlockComponent({
+const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
   block,
   pageOwnerId,
   pageId
@@ -122,28 +126,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
   const [fullyBookedDates, setFullyBookedDates] = useState<Set<string>>(new Set());
   const [staff, setStaff] = useState<ZoneStaff[]>([]);
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
-  const [selectedServiceOfferingId, setSelectedServiceOfferingId] = useState<string | null>(
-    block.serviceOfferingIds?.[0] ?? null,
-  );
-  const bookingRootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleOfferingSelection = (event: Event) => {
-      const { serviceOfferingId } = (event as CustomEvent<BookingOfferingSelectedDetail>).detail;
-      if (!block.serviceOfferingIds?.includes(serviceOfferingId)) return;
-      setSelectedServiceOfferingId(serviceOfferingId);
-      bookingRootRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
-    };
-
-    window.addEventListener(BOOKING_OFFERING_SELECTED_EVENT, handleOfferingSelection);
-    return () => window.removeEventListener(BOOKING_OFFERING_SELECTED_EVENT, handleOfferingSelection);
-  }, [block.serviceOfferingIds]);
-
-  useEffect(() => {
-    if (selectedServiceOfferingId && block.serviceOfferingIds?.includes(selectedServiceOfferingId)) return;
-    setSelectedServiceOfferingId(block.serviceOfferingIds?.[0] ?? null);
-  }, [block.serviceOfferingIds, selectedServiceOfferingId]);
-
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
   // Fetch available slots for selected date
@@ -442,7 +424,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
         body: {
           pageId,
           blockId: block.id,
-          serviceOfferingId: selectedServiceOfferingId,
+          serviceOfferingId: block.serviceOfferingIds?.[0] ?? null,
           slotDate: format(selectedDate, 'yyyy-MM-dd'),
           slotTime: selectedSlot.time,
           clientName: formData.name,
@@ -769,11 +751,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
   }
 
   return (
-    <div
-      ref={bookingRootRef}
-      data-selected-service-offering-id={selectedServiceOfferingId ?? undefined}
-      className="w-full rounded-2xl overflow-hidden qb-card border-hairline shadow-soft"
-    >
+    <div className="w-full rounded-2xl overflow-hidden qb-card border-hairline shadow-soft">
       {/* Header */}
       <div className="p-5 sm:p-6 pb-2">
         <div className="flex items-center gap-3">
@@ -1267,5 +1245,37 @@ export const BookingBlock = memo(function BookingBlockComponent({
         </DialogContent>
       </Dialog>
     </div >
+  );
+});
+
+export const BookingBlock = memo(function BookingBlockComponent(props: BookingBlockProps) {
+  const { block, pageId } = props;
+  const [linkedServiceId, setLinkedServiceId] = useState<string | null>(block.serviceOfferingIds?.[0] ?? null);
+  const bookingRootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOfferingSelection = (event: Event) => {
+      const { serviceOfferingId } = (event as CustomEvent<BookingOfferingSelectedDetail>).detail;
+      if (!block.serviceOfferingIds?.includes(serviceOfferingId)) return;
+      setLinkedServiceId(serviceOfferingId);
+      bookingRootRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+    };
+    window.addEventListener(BOOKING_OFFERING_SELECTED_EVENT, handleOfferingSelection);
+    return () => window.removeEventListener(BOOKING_OFFERING_SELECTED_EVENT, handleOfferingSelection);
+  }, [block.serviceOfferingIds]);
+
+  useEffect(() => {
+    if (linkedServiceId && block.serviceOfferingIds?.includes(linkedServiceId)) return;
+    setLinkedServiceId(block.serviceOfferingIds?.[0] ?? null);
+  }, [block.serviceOfferingIds, linkedServiceId]);
+
+  if (!pageId || !block.serviceOfferingIds?.length) return <LegacyBookingBlock {...props} />;
+
+  return (
+    <div ref={bookingRootRef} data-selected-service-offering-id={linkedServiceId ?? undefined}>
+      <Suspense fallback={<div aria-busy="true" className="h-40 animate-pulse rounded-2xl border bg-muted/40" />}>
+        <PublicBookingFlow pageId={pageId} block={block} linkedServiceId={linkedServiceId} />
+      </Suspense>
+    </div>
   );
 });

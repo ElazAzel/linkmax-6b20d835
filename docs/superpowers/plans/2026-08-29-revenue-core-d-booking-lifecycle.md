@@ -77,27 +77,27 @@ git commit -m "feat: define public booking state machine"
 - Produces: `<PublicBookingFlow pageId block linkedServiceId />` and a legacy adapter.
 - Consumes: reducer, lifecycle service, existing Calendar/Input/Button components.
 
-- [ ] **Step 1: Write failing no-deposit journey test**
+- [x] **Step 1: Write failing no-deposit journey test**
 
 Use real step components with a fake network adapter at the service boundary. Select service/date/slot, enter name+phone, submit and assert confirmed state plus management URL.
 
-- [ ] **Step 2: Write failing manual-deposit language test**
+- [x] **Step 2: Write failing manual-deposit language test**
 
 Submit a required Kaspi-manual service and assert the screen contains `Ожидает подтверждения предоплаты` and does not contain `Вы записаны`.
 
-- [ ] **Step 3: Write failing conflict and accessibility tests**
+- [x] **Step 3: Write failing conflict and accessibility tests**
 
 Return `slot_unavailable`, assert focus moves to the error summary and refreshed slots render. Keyboard-select a slot and assert `aria-selected=true`.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 Run: `npm test -- --run src/components/booking/__tests__/PublicBookingFlow.test.tsx`
 
-- [ ] **Step 5: Implement focused components**
+- [x] **Step 5: Implement focused components**
 
 Lazy-load flow when invoked. Preserve entered non-sensitive fields during retry. Remove client-side wallet mutation from `BookingBlock`; ledger facts are server-side only.
 
-- [ ] **Step 6: Verify GREEN, lint and bundle**
+- [x] **Step 6: Verify GREEN, lint and bundle**
 
 Run: `npm test -- --run src/components/booking/__tests__/PublicBookingFlow.test.tsx src/components/blocks/__tests__/BlocksRendering.test.tsx`
 
@@ -105,7 +105,7 @@ Run: `npx eslint src/components/booking src/components/blocks/BookingBlock.tsx`
 
 Run: `npm run build`
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/components/booking src/components/blocks/BookingBlock.tsx

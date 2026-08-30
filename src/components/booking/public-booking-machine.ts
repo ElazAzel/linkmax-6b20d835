@@ -18,6 +18,7 @@ export interface PublicBookingService {
   currency: string;
   depositMode: 'none' | 'fixed' | 'percent';
   depositRequiredAmount: string;
+  paymentInstructions?: string | null;
 }
 
 export interface PublicBookingSlot {
@@ -50,6 +51,7 @@ export type PublicBookingAction =
   | { type: 'SERVICES_LOADED'; services: PublicBookingService[] }
   | { type: 'SERVICE_SELECTED'; service: PublicBookingService }
   | { type: 'SLOTS_LOADED'; slots: PublicBookingSlot[] }
+  | { type: 'CLEAR_ERROR' }
   | { type: 'SLOT_SELECTED'; slot: Omit<PublicBookingSlot, 'available'> | PublicBookingSlot }
   | { type: 'CONTINUE_TO_CONTACT' }
   | { type: 'CONTACT_CHANGED'; contact: PublicBookingContact }
@@ -98,7 +100,9 @@ export function publicBookingReducer(
         step: 'slot',
       };
     case 'SLOTS_LOADED':
-      return { ...state, slots: action.slots, error: null };
+      return { ...state, slots: action.slots };
+    case 'CLEAR_ERROR':
+      return { ...state, error: null };
     case 'SLOT_SELECTED':
       return {
         ...state,

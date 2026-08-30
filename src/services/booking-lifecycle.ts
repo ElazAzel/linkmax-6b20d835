@@ -13,7 +13,7 @@ export interface PublicBookingContextService {
   depositMode: DepositConfiguration['mode'];
   depositValue: string;
   depositRequiredAmount: string;
-  paymentInstructions: string | null;
+  paymentInstructions: string | Record<string, string> | null;
 }
 
 export interface PublicBookingContext {
@@ -131,6 +131,14 @@ function optionalString(value: Json | undefined): string | null {
   return typeof value === 'string' && value.length > 0 ? value : null;
 }
 
+function optionalLocalizedText(value: Json | undefined): string | Record<string, string> | null {
+  const literal = optionalString(value);
+  if (literal) return literal;
+  if (!isRecord(value)) return null;
+  const entries = Object.entries(value).filter((entry): entry is [string, string] => typeof entry[1] === 'string');
+  return entries.length > 0 ? Object.fromEntries(entries) : null;
+}
+
 function throwResponseError(value: Json | undefined): never {
   if (isRecord(value) && value.ok === false) {
     throw new BookingLifecycleError(
@@ -172,6 +180,7 @@ export async function loadPublicBookingContext(pageId: string): Promise<PublicBo
     const depositRequiredAmount = typeof raw.depositRequiredAmount === 'string'
       ? raw.depositRequiredAmount
       : calculateDepositAmount({ mode, value: raw.depositValue }, raw.priceAmount);
+    const depositMode = mode as DepositConfiguration['mode'];
 
     return {
       id: raw.id,
@@ -180,10 +189,10 @@ export async function loadPublicBookingContext(pageId: string): Promise<PublicBo
       durationMinutes: raw.durationMinutes,
       priceAmount: raw.priceAmount,
       currency: raw.currency,
-      depositMode: mode,
+      depositMode,
       depositValue: raw.depositValue,
       depositRequiredAmount,
-      paymentInstructions: optionalString(raw.paymentInstructions),
+      paymentInstructions: optionalLocalizedText(raw.paymentInstructions),
     };
   });
 
