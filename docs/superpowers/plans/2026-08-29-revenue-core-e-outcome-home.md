@@ -293,3 +293,9 @@ Step 2 remains open: `supabase test db` cannot reach the local PostgreSQL port
 (`ECONNREFUSED 127.0.0.1:54322`) because this Windows host has no installed
 WSL2 distribution and therefore no Docker Linux engine. Static SQL contracts
 pass, but they do not replace the pgTAP gate.
+
+Once Docker is available, run `npm run verify:revenue-core:db`. The checked
+runner performs Docker preflight, starts Supabase, rebuilds all migrations,
+runs every file in `supabase/tests`, and lints the rebuilt public schema in that
+order. Use `npm run verify:revenue-core:db -- --dry-run` to inspect the commands
+without changing a database.
