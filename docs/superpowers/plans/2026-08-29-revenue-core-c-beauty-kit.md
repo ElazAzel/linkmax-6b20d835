@@ -115,23 +115,23 @@ git commit -m "feat: persist and apply revenue kits"
 - Produces: `useRevenueKit({ pageId })` with `draft`, `step`, `saveStep`, `apply`, `isSaving`, `error`.
 - Consumes: `revenue-kit.ts` service and TanStack Query.
 
-- [ ] **Step 1: Write failing resume test**
+- [x] **Step 1: Write failing resume test**
 
 Render the hook with a real QueryClient, return a saved draft at step `availability`, and assert the hook exposes that step rather than restarting at identity.
 
-- [ ] **Step 2: Write failing save serialization test**
+- [x] **Step 2: Write failing save serialization test**
 
 Call `saveStep('services', literalDraft)` and assert the service receives a complete draft with version `1` and no UI-only fields.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/hooks/revenue/__tests__/useRevenueKit.test.tsx`
 
-- [ ] **Step 4: Implement minimal query/mutation hook**
+- [x] **Step 4: Implement minimal query/mutation hook**
 
 Use query key `['revenue-kit', pageId, 'beauty-v1']`; invalidate page, offerings and kit queries after apply.
 
-- [ ] **Step 5: Verify GREEN and commit**
+- [x] **Step 5: Verify GREEN and commit**
 
 Run: `npm test -- --run src/hooks/revenue/__tests__/useRevenueKit.test.tsx`
 
