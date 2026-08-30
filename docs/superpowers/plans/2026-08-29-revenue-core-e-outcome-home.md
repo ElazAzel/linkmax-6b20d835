@@ -30,7 +30,7 @@
 - Produces: `selectRevenueNextAction(input): RevenueNextAction`.
 - Consumes: literal readiness/operation counts, no React or Supabase.
 
-- [ ] **Step 1: Write failing priority-table tests**
+- [x] **Step 1: Write failing priority-table tests**
 
 ```ts
 expect(selectRevenueNextAction({ hasKit: false, ...healthy })).toMatchObject({ id: 'start_revenue_kit' });
@@ -39,15 +39,15 @@ expect(selectRevenueNextAction({ ...healthy, pastAppointmentsNeedingReview: 1 })
 expect(selectRevenueNextAction(healthy)).toMatchObject({ id: 'open_outcome_insights' });
 ```
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts`
 
-- [ ] **Step 3: Implement ordered pure rules**
+- [x] **Step 3: Implement ordered pure rules**
 
 Return one item with stable `id`, `href`, and `reasonCode`; do not return arrays or AI-generated text.
 
-- [ ] **Step 4: Verify GREEN and commit**
+- [x] **Step 4: Verify GREEN and commit**
 
 Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts`
 
