@@ -129,6 +129,25 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
           />
         </EditorSection>
 
+        {(block.serviceOfferingIds?.length ?? 0) > 0 && (
+          <EditorSection
+            title={t('bookingBlock.linkedServices', 'Связанные услуги')}
+            icon={<Sparkles className="h-5 w-5 text-primary" />}
+            collapsible={false}
+          >
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-3">
+              <p className="text-sm font-medium">
+                {t('bookingBlock.linkedServicesCount', '{{count}} услуг связаны с этой записью', {
+                  count: block.serviceOfferingIds?.length ?? 0,
+                })}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t('bookingBlock.linkedServicesHint', 'Выбор услуги в прайс-листе будет передан в форму записи.')}
+              </p>
+            </div>
+          </EditorSection>
+        )}
+
         {/* Working Hours */}
         <EditorSection
           title={t('bookingBlock.workingHours', 'Рабочие часы')}

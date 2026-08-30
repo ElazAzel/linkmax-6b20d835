@@ -1,3 +1,9 @@
+import {
+  REVENUE_EVENTS,
+  isAuthoritativeRevenueEvent,
+  type RevenueEventName,
+} from '@/domain/revenue/events';
+
 type PostHogClient = typeof import('posthog-js').default;
 
 const CONSENT_KEY = 'lnkmx_cookie_consent';
@@ -91,3 +97,69 @@ export const posthog = {
     return !shouldUsePostHog() || Boolean(posthogClient?.has_opted_out_capturing());
   },
 };
+
+const REVENUE_PROPERTY_KEY_MAP = {
+  pageId: 'page_id',
+  blockId: 'block_id',
+  serviceOfferingId: 'service_offering_id',
+  bookingId: 'booking_id',
+  visitorId: 'visitor_id',
+  sessionId: 'session_id',
+  actorType: 'actor_type',
+  source: 'source',
+  medium: 'medium',
+  campaign: 'campaign',
+  content: 'content',
+  referrerHost: 'referrer_host',
+  landingPath: 'landing_path',
+  action: 'action',
+  step: 'step',
+  durationMinutes: 'duration_minutes',
+  method: 'method',
+  hasPrepayment: 'has_prepayment',
+} as const;
+
+type SafeRevenueProperty = string | number | boolean | null;
+
+export interface PreparedClientRevenueEvent {
+  eventName: RevenueEventName;
+  properties: Record<string, SafeRevenueProperty>;
+}
+
+const REVENUE_EVENT_NAMES = new Set<string>(Object.values(REVENUE_EVENTS));
+
+export function prepareClientRevenueEvent(
+  eventName: string,
+  properties: Record<string, unknown>,
+): PreparedClientRevenueEvent | null {
+  if (!REVENUE_EVENT_NAMES.has(eventName) || isAuthoritativeRevenueEvent(eventName)) {
+    return null;
+  }
+
+  const safeProperties: Record<string, SafeRevenueProperty> = { taxonomy_version: 2 };
+
+  for (const [inputKey, outputKey] of Object.entries(REVENUE_PROPERTY_KEY_MAP)) {
+    const value = properties[inputKey];
+    if (value === null || typeof value === 'number' || typeof value === 'boolean') {
+      safeProperties[outputKey] = value;
+    } else if (typeof value === 'string' && value.length > 0) {
+      safeProperties[outputKey] = value.slice(0, inputKey === 'landingPath' ? 500 : 200);
+    }
+  }
+
+  return {
+    eventName: eventName as RevenueEventName,
+    properties: safeProperties,
+  };
+}
+
+export function captureRevenueEvent(
+  eventName: string,
+  properties: Record<string, unknown> = {},
+): boolean {
+  const event = prepareClientRevenueEvent(eventName, properties);
+  if (!event) return false;
+
+  posthog.capture(event.eventName, event.properties);
+  return true;
+}

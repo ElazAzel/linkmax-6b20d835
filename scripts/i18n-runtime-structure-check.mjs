@@ -4,7 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const localesDir = path.join(rootDir, 'src', 'i18n', 'locales');
-const languages = ['ru', 'en', 'kk', 'uz', 'de', 'uk', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
+const allLanguages = ['ru', 'en', 'kk', 'uz', 'de', 'uk', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
+const releaseLanguages = ['ru', 'en', 'kk'];
+const languages = process.argv.includes('--all') ? allLanguages : releaseLanguages;
 const requiredRuntimeKeys = [
   'auth.title',
   'common.cancel',

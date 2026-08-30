@@ -9,8 +9,27 @@ type Merge<A, B> = {
 // Types for missing tables to avoid 'any'
 export type EmailSequenceStatus = 'active' | 'paused' | 'draft';
 
+type LeadConversationMessage = {
+  id?: string;
+  role: 'user' | 'assistant';
+  content: string;
+  source?: 'faq' | 'pricing' | 'about' | 'contact' | 'booking' | 'system';
+};
+
+type LeadMetadata = {
+  intent?: string;
+  last_query?: string;
+  conversation?: LeadConversationMessage[];
+  chat_lead?: boolean;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  referrer?: string;
+  [key: string]: unknown;
+};
+
 export type AppDatabase = Omit<Database, 'public'> & {
-  public: Omit<Database['public'], 'Tables'> & {
+  public: Omit<Database['public'], 'Tables' | 'Functions'> & {
     Tables: Merge<
       Database['public']['Tables'],
       {
@@ -311,7 +330,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             address: string | null;
             source: string | null;
             notes: string | null;
-            custom_fields: Json | null;
+            custom_fields: Record<string, unknown> | null;
             created_at: string;
             updated_at: string;
           };
@@ -330,7 +349,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             tags?: string[];
             telegram_user_id?: string | null;
             telegram_username?: string | null;
-            custom_fields?: any | null;
+            custom_fields?: Json | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -349,7 +368,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             tags?: string[];
             telegram_user_id?: string | null;
             telegram_username?: string | null;
-            custom_fields?: any | null;
+            custom_fields?: Record<string, unknown> | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -526,7 +545,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             source: Database["public"]["Enums"]["lead_source"];
             automation_sent_count: number | null;
             last_automation_check: string | null;
-            metadata: any | null;
+            metadata: LeadMetadata | null;
             created_at: string;
             updated_at: string;
           };
@@ -541,7 +560,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             source?: Database["public"]["Enums"]["lead_source"];
             automation_sent_count?: number | null;
             last_automation_check?: string | null;
-            metadata?: any | null;
+            metadata?: LeadMetadata | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -556,7 +575,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             source?: Database["public"]["Enums"]["lead_source"];
             automation_sent_count?: number | null;
             last_automation_check?: string | null;
-            metadata?: any | null;
+            metadata?: LeadMetadata | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -646,10 +665,28 @@ export type AppDatabase = Omit<Database, 'public'> & {
             client_phone: string | null;
             client_email: string | null;
             client_notes: string | null;
-            status: 'pending' | 'confirmed' | 'cancelled' | 'no_show' | 'completed';
-            payment_status: 'none' | 'pending' | 'paid' | 'refunded';
+            owner_id: string;
+            service_offering_id: string | null;
+            service_snapshot: Json;
+            booking_timezone: string;
+            status: 'pending_payment' | 'confirmed' | 'cancelled' | 'no_show' | 'completed';
+            status_reason: string | null;
+            payment_status: 'not_applicable' | 'pending' | 'partially_paid' | 'paid' | 'partially_refunded' | 'refunded' | 'failed' | 'waived';
             payment_amount: number | null;
             payment_method: string | null;
+            total_price_amount: number;
+            deposit_required_amount: number;
+            paid_amount: number;
+            refunded_amount: number;
+            version: number;
+            confirmed_at: string | null;
+            cancelled_at: string | null;
+            completed_at: string | null;
+            no_show_at: string | null;
+            deposit_due_at: string | null;
+            client_identity_hash: string | null;
+            attribution: Json;
+            followup_sent_at: string | null;
             gcal_event_id: string | null;
             created_at: string;
             updated_at: string;
@@ -668,10 +705,28 @@ export type AppDatabase = Omit<Database, 'public'> & {
             client_phone?: string | null;
             client_email?: string | null;
             client_notes?: string | null;
-            status?: 'pending' | 'confirmed' | 'cancelled' | 'no_show' | 'completed';
-            payment_status?: 'none' | 'pending' | 'paid' | 'refunded';
+            owner_id: string;
+            service_offering_id?: string | null;
+            service_snapshot?: Json;
+            booking_timezone?: string;
+            status?: 'pending_payment' | 'confirmed' | 'cancelled' | 'no_show' | 'completed';
+            status_reason?: string | null;
+            payment_status?: 'not_applicable' | 'pending' | 'partially_paid' | 'paid' | 'partially_refunded' | 'refunded' | 'failed' | 'waived';
             payment_amount?: number | null;
             payment_method?: string | null;
+            total_price_amount?: number;
+            deposit_required_amount?: number;
+            paid_amount?: number;
+            refunded_amount?: number;
+            version?: number;
+            confirmed_at?: string | null;
+            cancelled_at?: string | null;
+            completed_at?: string | null;
+            no_show_at?: string | null;
+            deposit_due_at?: string | null;
+            client_identity_hash?: string | null;
+            attribution?: Json;
+            followup_sent_at?: string | null;
             gcal_event_id?: string | null;
             created_at?: string;
             updated_at?: string;
@@ -690,10 +745,28 @@ export type AppDatabase = Omit<Database, 'public'> & {
             client_phone?: string | null;
             client_email?: string | null;
             client_notes?: string | null;
-            status?: 'pending' | 'confirmed' | 'cancelled' | 'no_show' | 'completed';
-            payment_status?: 'none' | 'pending' | 'paid' | 'refunded';
+            owner_id?: string;
+            service_offering_id?: string | null;
+            service_snapshot?: Json;
+            booking_timezone?: string;
+            status?: 'pending_payment' | 'confirmed' | 'cancelled' | 'no_show' | 'completed';
+            status_reason?: string | null;
+            payment_status?: 'not_applicable' | 'pending' | 'partially_paid' | 'paid' | 'partially_refunded' | 'refunded' | 'failed' | 'waived';
             payment_amount?: number | null;
             payment_method?: string | null;
+            total_price_amount?: number;
+            deposit_required_amount?: number;
+            paid_amount?: number;
+            refunded_amount?: number;
+            version?: number;
+            confirmed_at?: string | null;
+            cancelled_at?: string | null;
+            completed_at?: string | null;
+            no_show_at?: string | null;
+            deposit_due_at?: string | null;
+            client_identity_hash?: string | null;
+            attribution?: Json;
+            followup_sent_at?: string | null;
             gcal_event_id?: string | null;
             created_at?: string;
             updated_at?: string;
@@ -798,7 +871,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             description: string | null;
             related_entity_id: string | null;
             related_entity_type: string | null;
-            metadata: any | null;
+            metadata: Record<string, unknown>;
             created_at: string;
           };
           Insert: {
@@ -813,7 +886,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             description?: string | null;
             related_entity_id?: string | null;
             related_entity_type?: string | null;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
           };
           Update: {
@@ -828,7 +901,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             description?: string | null;
             related_entity_id?: string | null;
             related_entity_type?: string | null;
-            metadata?: any | null;
+            metadata?: Json | null;
             created_at?: string;
           };
           Relationships: [];
@@ -839,7 +912,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             user_id: string;
             amount: number;
             payment_method: string;
-            payment_details: any;
+            payment_details: Json;
             status: 'pending' | 'approved' | 'rejected' | 'completed';
             processed_at: string | null;
             created_at: string;
@@ -849,7 +922,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             user_id: string;
             amount: number;
             payment_method: string;
-            payment_details: any;
+            payment_details: Json;
             status?: 'pending' | 'approved' | 'rejected' | 'completed';
             processed_at?: string | null;
             created_at?: string;
@@ -859,7 +932,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
             user_id?: string;
             amount?: number;
             payment_method?: string;
-            payment_details?: any;
+            payment_details?: Json;
             status?: 'pending' | 'approved' | 'rejected' | 'completed';
             processed_at?: string | null;
             created_at?: string;
@@ -978,6 +1051,114 @@ export type AppDatabase = Omit<Database, 'public'> & {
           Relationships: [];
         };
       }
-    >
+    >;
+    Functions: Merge<
+      Database['public']['Functions'],
+      {
+        apply_revenue_kit_v1: {
+          Args: {
+            p_page_id: string;
+            p_draft: Json;
+            p_mutation_id: string;
+          };
+          Returns: Json;
+        };
+        create_public_booking: {
+          Args: {
+            p_page_id: string;
+            p_block_id: string;
+            p_service_offering_id: string | null;
+            p_slot_date: string;
+            p_slot_time: string;
+            p_staff_id: string | null;
+            p_client_name: string;
+            p_client_phone: string | null;
+            p_client_email: string | null;
+            p_client_notes: string | null;
+            p_booking_timezone: string;
+            p_attribution: Json;
+            p_idempotency_key: string;
+          };
+          Returns: Json;
+        };
+        get_booking_by_access_token: {
+          Args: { p_token: string };
+          Returns: Json;
+        };
+        get_revenue_kit_draft: {
+          Args: {
+            p_page_id: string;
+            p_kit_id?: string;
+          };
+          Returns: Json;
+        };
+        get_public_availability: {
+          Args: {
+            p_page_id: string;
+            p_block_id: string;
+            p_from_date: string;
+            p_to_date: string;
+            p_staff_id?: string | null;
+          };
+          Returns: {
+            slot_date: string;
+            slot_time: string;
+            slot_end_time: string | null;
+            available: boolean;
+          }[];
+        };
+        get_public_booking_context: {
+          Args: { p_page_id: string };
+          Returns: Json;
+        };
+        manage_booking_by_access_token: {
+          Args: {
+            p_token: string;
+            p_action: 'confirm' | 'cancel' | 'reschedule';
+            p_idempotency_key: string;
+            p_slot_date?: string | null;
+            p_slot_time?: string | null;
+            p_slot_end_time?: string | null;
+          };
+          Returns: Json;
+        };
+        record_manual_booking_payment: {
+          Args: {
+            p_booking_id: string;
+            p_kind: 'deposit' | 'balance' | 'refund';
+            p_amount: string;
+            p_currency: string;
+            p_method: 'kaspi_manual' | 'cash' | 'manual_card' | 'bank_transfer' | 'other';
+            p_idempotency_key: string;
+          };
+          Returns: Json;
+        };
+        save_revenue_kit_draft: {
+          Args: {
+            p_page_id: string;
+            p_kit_id: string;
+            p_step: string;
+            p_draft: Json;
+          };
+          Returns: Json;
+        };
+        transition_booking: {
+          Args: {
+            p_booking_id: string;
+            p_to_status: 'pending_payment' | 'confirmed' | 'completed' | 'cancelled' | 'no_show';
+            p_expected_version: number;
+            p_reason_code: string;
+            p_idempotency_key: string;
+            p_payment_amount?: string | null;
+            p_payment_method?: string | null;
+            p_payment_idempotency_key?: string | null;
+            p_waive_payment?: boolean;
+            p_privileged_correction?: boolean;
+            p_actor_type?: 'owner' | 'system' | 'provider';
+          };
+          Returns: Json;
+        };
+      }
+    >;
   }
 };

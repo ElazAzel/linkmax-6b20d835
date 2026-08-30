@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Block } from '@/types/page';
 import { NICHES, type Niche } from '@/lib/niches';
+import { isBeautyRevenueKitNiche, type SignupNiche } from '@/pages/dashboard-onboarding';
 
 import { storage } from '@/lib/storage';
 
@@ -34,6 +35,7 @@ interface OnboardingProfile {
 
 interface SignupOnboardingContext {
   initialNiche?: Niche;
+  revenueKitNiche?: Extract<SignupNiche, 'nails' | 'lashes' | 'brows'>;
   from?: string;
   refSlug?: string;
   desiredSlug?: string;
@@ -95,8 +97,10 @@ function clearSignupContext(): void {
 
 function readSignupContext(): SignupOnboardingContext {
   const niche = readSessionValue(SIGNUP_CONTEXT_KEYS.niche) || null;
+  const signupNiche = niche ?? undefined;
   return {
     initialNiche: isNiche(niche) ? niche : undefined,
+    revenueKitNiche: isBeautyRevenueKitNiche(signupNiche) ? signupNiche : undefined,
     from: readSessionValue(SIGNUP_CONTEXT_KEYS.from),
     refSlug: readSessionValue(SIGNUP_CONTEXT_KEYS.refSlug),
     desiredSlug: readSessionValue(SIGNUP_CONTEXT_KEYS.desiredSlug),
@@ -174,6 +178,14 @@ export function useDashboardOnboarding({
     [onNicheComplete, userId]
   );
 
+  const handleRevenueKitComplete = useCallback(() => {
+    setScopedValue(userId, STORAGE_KEYS.SMART_BUILDER_USED, 'true');
+    setScopedValue(userId, STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    storage.remove(getScopedKey(userId, STORAGE_KEYS.ONBOARDING_DISMISSED_AT));
+    clearSignupContext();
+    setShowAIBuilderWizard(false);
+  }, [userId]);
+
   const openAIBuilderFromSettings = useCallback(() => {
     setSignupContext(readSignupContext());
     setShowAIBuilderWizard(true);
@@ -187,6 +199,7 @@ export function useDashboardOnboarding({
     handleChooseSingle,
     handleAIBuilderClose,
     handleAIBuilderComplete,
+    handleRevenueKitComplete,
     openAIBuilderFromSettings,
   };
 }

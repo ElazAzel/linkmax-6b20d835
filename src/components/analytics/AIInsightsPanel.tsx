@@ -18,11 +18,8 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
-import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Check from 'lucide-react/dist/esm/icons/check';
-import X from 'lucide-react/dist/esm/icons/x';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import MousePointer from 'lucide-react/dist/esm/icons/mouse-pointer';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
@@ -34,7 +31,6 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
-import { supabase } from '@/platform/supabase/client';
 import type { AnalyticsSummary } from '@/hooks/analytics/usePageAnalytics';
 
 interface AIInsight {
@@ -90,8 +86,8 @@ export const AIInsightsPanel = memo(function AIInsightsPanel({
           type: 'add',
           priority: 'high',
           title: t('insights.lowViews.title', 'Добавьте соцсети'),
-          description: t('insights.lowViews.description', 'Страницы с соцсетями получают на 40% больше переходов'),
-          impact: '+40% трафика',
+          description: t('insights.lowViews.description', 'Добавьте ссылки на активные соцсети, чтобы посетители могли продолжить знакомство'),
+          impact: t('insights.lowViews.impact', 'Больше точек контакта'),
           action: {
             type: 'add_block',
             blockType: 'socials',
@@ -110,8 +106,8 @@ export const AIInsightsPanel = memo(function AIInsightsPanel({
           type: 'add',
           priority: 'high',
           title: t('insights.lowCTR.title', 'Добавьте CTA-кнопку'),
-          description: t('insights.lowCTR.description', 'Яркая кнопка с призывом к действию увеличит конверсию'),
-          impact: '+25% кликов',
+          description: t('insights.lowCTR.description', 'Добавьте понятную кнопку с конкретным следующим действием'),
+          impact: t('insights.lowCTR.impact', 'Понятнее следующий шаг'),
           action: {
             type: 'add_block',
             blockType: 'button',

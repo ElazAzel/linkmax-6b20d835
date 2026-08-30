@@ -3,6 +3,7 @@ import {
   PRODUCT_EVENT_NAMES,
   calculateCreatorHealthScore,
   mapActivationEventToProductEvent,
+  prepareClientRevenueEvent,
 } from '../product-analytics';
 
 describe('product analytics', () => {
@@ -54,5 +55,37 @@ describe('product analytics', () => {
   it('ignores activation events that are not creator activation milestones', () => {
     expect(mapActivationEventToProductEvent('activation_checklist_step_clicked')).toBeNull();
     expect(mapActivationEventToProductEvent('repeat_followup_sent')).toBeNull();
+  });
+
+  it('refuses authoritative revenue outcomes from the client facade', () => {
+    expect(prepareClientRevenueEvent('booking_completed', {})).toBeNull();
+    expect(prepareClientRevenueEvent('deposit_payment_succeeded', {})).toBeNull();
+  });
+
+  it('permits intent events and strips direct identifiers and secrets', () => {
+    expect(prepareClientRevenueEvent('booking_started', {
+      pageId: '23000000-0000-0000-0000-000000000001',
+      visitorId: 'visitor-pseudonym',
+      source: 'instagram',
+      phone: '+7 700 000 00 00',
+      clientEmail: 'customer@example.test',
+      accessToken: 'raw-secret',
+      nested: { token: 'also-secret' },
+      arbitrary: 'not-allowlisted',
+    })).toEqual({
+      eventName: 'booking_started',
+      properties: {
+        taxonomy_version: 2,
+        page_id: '23000000-0000-0000-0000-000000000001',
+        visitor_id: 'visitor-pseudonym',
+        source: 'instagram',
+      },
+    });
+  });
+
+  it('does not map legacy authoritative activation names to client product facts', () => {
+    expect(mapActivationEventToProductEvent('booking_confirmed')).toBeNull();
+    expect(mapActivationEventToProductEvent('booking_completed')).toBeNull();
+    expect(mapActivationEventToProductEvent('booking_payment_confirmed')).toBeNull();
   });
 });

@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import { useAuth } from '@/hooks/user/useAuth';
 import { buildReviewRequestUrl, createBookingReviewRequest } from '@/services/reviews';
+import { transitionBooking } from '@/services/booking-lifecycle';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EmptyState, LoadingState } from '@/components/ui/states';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,6 +49,7 @@ interface Booking {
   slot_time: string;
   slot_end_time: string | null;
   status: string;
+  version: number;
   created_at: string;
   block_id: string;
 }
@@ -71,7 +73,7 @@ async function copyText(value: string): Promise<void> {
 
 const statusColors: Record<string, string> = {
   confirmed: 'bg-green-500/20 text-green-500 border-green-500/30',
-  pending: 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30',
+  pending_payment: 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30',
   cancelled: 'bg-red-500/20 text-red-500 border-red-500/30',
   completed: 'bg-blue-500/20 text-blue-500 border-blue-500/30',
 };
@@ -89,7 +91,7 @@ export function BookingsPanel() {
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     if (!user) return;
     setLoading(true);
 
@@ -107,27 +109,25 @@ export function BookingsPanel() {
       setBookings(data || []);
     }
     setLoading(false);
-  };
+  }, [t, user]);
 
-  // Auto-complete past confirmed bookings on mount
   useEffect(() => {
     if (!user) return;
-    const autoComplete = async () => {
-      await supabase.rpc('auto_complete_past_bookings', { p_owner_id: user.id });
-      fetchBookings();
-    };
-    autoComplete();
-  }, [user]);
+    fetchBookings();
+  }, [fetchBookings, user]);
 
   const handleCancelBooking = async () => {
     if (!selectedBooking) return;
 
-    const { error } = await supabase
-      .from('bookings')
-      .update({ status: 'cancelled', cancelled_by: 'owner' })
-      .eq('id', selectedBooking.id);
+    const result = await transitionBooking({
+      bookingId: selectedBooking.id,
+      toStatus: 'cancelled',
+      expectedVersion: selectedBooking.version,
+      reasonCode: 'owner_cancelled',
+      idempotencyKey: `owner-cancel:${selectedBooking.id}:${crypto.randomUUID()}`,
+    });
 
-    if (error) {
+    if (!result.ok) {
       toast.error(t('bookings.cancelError', 'Failed to cancel booking'));
     } else {
       toast.success(t('bookings.cancelSuccess', 'Booking cancelled'));
@@ -139,29 +139,18 @@ export function BookingsPanel() {
   };
 
   const handleConfirmBooking = async (booking: Booking) => {
-    const { error } = await supabase
-      .from('bookings')
-      .update({ status: 'confirmed' })
-      .eq('id', booking.id);
+    const result = await transitionBooking({
+      bookingId: booking.id,
+      toStatus: 'confirmed',
+      expectedVersion: booking.version,
+      reasonCode: 'owner_confirmed',
+      idempotencyKey: `owner-confirm:${booking.id}:${crypto.randomUUID()}`,
+    });
 
-    if (error) {
+    if (!result.ok) {
       toast.error(t('bookings.confirmError', 'Failed to confirm booking'));
     } else {
       toast.success(t('bookings.confirmSuccess', 'Booking confirmed'));
-      fetchBookings();
-    }
-  };
-
-  const handleCompleteBooking = async (booking: Booking) => {
-    const { error } = await supabase
-      .from('bookings')
-      .update({ status: 'completed', completed_at: new Date().toISOString() } as any)
-      .eq('id', booking.id);
-
-    if (error) {
-      toast.error(t('bookings.completeError', 'Failed to complete booking'));
-    } else {
-      toast.success(t('bookings.completeSuccess', 'Booking marked as completed'));
       fetchBookings();
     }
   };
@@ -356,7 +345,11 @@ END:VCALENDAR`;
       </div>
 
       {/* Filter Tabs */}
-      <Tabs value={statusFilter} onValueChange={(v: string) => setStatusFilter(v as any)} className="w-full">
+      <Tabs
+        value={statusFilter}
+        onValueChange={(value) => setStatusFilter(value as 'all' | 'upcoming' | 'past')}
+        className="w-full"
+      >
         <TabsList className="grid w-full grid-cols-3 mx-0 rounded-none border-b bg-transparent h-10">
           <TabsTrigger value="upcoming" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs">
             {t('bookings.upcoming', 'Upcoming')}
@@ -451,22 +444,12 @@ END:VCALENDAR`;
                         >
                           <CalendarPlus className="h-4 w-4" />
                         </Button>
-                        {booking.status === 'pending' && (
+                        {booking.status === 'pending_payment' && (
                           <Button
                             size="sm"
                             variant="ghost"
                             className="h-7 w-7 p-0 text-green-500 hover:text-green-600 hover:bg-green-500/10"
                             onClick={() => handleConfirmBooking(booking)}
-                          >
-                            <Check className="h-4 w-4" />
-                          </Button>
-                        )}
-                        {booking.status === 'confirmed' && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-7 w-7 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10"
-                            onClick={() => handleCompleteBooking(booking)}
                           >
                             <Check className="h-4 w-4" />
                           </Button>

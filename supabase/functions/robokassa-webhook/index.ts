@@ -372,6 +372,30 @@ serve(async (req: Request) => {
                 .eq('user_id', shp_user)
                 .single();
 
+            if (shp_related_id) {
+                const { data: bookingPayment, error: bookingPaymentError } = await supabase.rpc(
+                    'record_platform_booking_payment',
+                    {
+                        p_booking_id: shp_related_id,
+                        p_amount: outSum,
+                        p_currency: 'KZT',
+                        p_provider: 'robokassa',
+                        p_provider_reference: invId,
+                        p_idempotency_key: `robokassa:${invId}`,
+                    },
+                );
+
+                if (bookingPaymentError) {
+                    console.error('Failed to record authoritative booking payment', bookingPaymentError);
+                    return new Response('BOOKING PAYMENT ERROR', { status: 500 });
+                }
+
+                if (bookingPayment?.ok === false && bookingPayment.code !== 'booking_not_found') {
+                    console.error('Authoritative booking payment was rejected', bookingPayment);
+                    return new Response('BOOKING PAYMENT REJECTED', { status: 500 });
+                }
+            }
+
             if (wallet) {
                 const { error: txError } = await supabase
                     .from('wallet_transactions')
@@ -419,19 +443,6 @@ serve(async (req: Request) => {
                         } as any)
                         .eq('id', shp_related_id)
                         .eq('user_id', shp_user)
-                        .select('id')
-                        .maybeSingle();
-
-                    // 5. Update related Booking if applicable
-                    const { data: booking } = await supabase
-                        .from('bookings')
-                        .update({ 
-                            status: 'confirmed', 
-                            payment_status: 'paid',
-                            updated_at: new Date().toISOString() 
-                        } as any)
-                        .eq('id', shp_related_id)
-                        .eq('owner_id', shp_user)
                         .select('id')
                         .maybeSingle();
 

@@ -35,7 +35,10 @@ import { PublicationRitual } from '@/components/dashboard-v2/dialogs/Publication
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
 import { Button } from '@/components/ui/button';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Crown from 'lucide-react/dist/esm/icons/crown';
+import { isCurrentUserFeatureFlagEnabled } from '@/services/feature-flags';
+import { selectDashboardOnboardingWizard } from './dashboard-onboarding';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
 const HomeScreen = lazy(() => import('@/components/dashboard-v2/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
@@ -102,6 +105,7 @@ const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarke
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
 const AIGenerator = lazy(() => import('@/components/editor/AIGenerator').then(m => ({ default: m.AIGenerator })));
 const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
+const RevenueKitWizard = lazy(() => import('@/components/onboarding/revenue-kit/RevenueKitWizard').then(m => ({ default: m.RevenueKitWizard })));
 const OnboardingScopeChoice = lazy(() => import('@/components/onboarding/OnboardingScopeChoice').then(m => ({ default: m.OnboardingScopeChoice })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
 const InstallPromptDialog = lazy(() => import('@/components/pwa/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
@@ -164,6 +168,41 @@ function DashboardV2Inner() {
   const multiPage = useMultiPage();
   const { limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
+
+  const revenueKitNiche = dashboard.onboardingState.signupContext.revenueKitNiche;
+  const [beautyKitFlag, setBeautyKitFlag] = useState(() => ({
+    niche: revenueKitNiche,
+    enabled: false,
+    resolved: !revenueKitNiche,
+  }));
+
+  useEffect(() => {
+    if (!revenueKitNiche) {
+      setBeautyKitFlag({ niche: undefined, enabled: false, resolved: true });
+      return;
+    }
+
+    let active = true;
+    setBeautyKitFlag({ niche: revenueKitNiche, enabled: false, resolved: false });
+    void isCurrentUserFeatureFlagEnabled('beauty_revenue_kit_v1', {
+      niche: revenueKitNiche,
+      language: i18n.language,
+    }).then((enabled) => {
+      if (active) setBeautyKitFlag({ niche: revenueKitNiche, enabled, resolved: true });
+    });
+
+    return () => { active = false; };
+  }, [i18n.language, revenueKitNiche]);
+
+  const onboardingSelection = useMemo(() => selectDashboardOnboardingWizard({
+    beautyRevenueKitEnabled: beautyKitFlag.resolved
+      && beautyKitFlag.niche === revenueKitNiche
+      && beautyKitFlag.enabled,
+    signupNiche: revenueKitNiche ?? dashboard.onboardingState.signupContext.initialNiche,
+  }), [beautyKitFlag, dashboard.onboardingState.signupContext.initialNiche, revenueKitNiche]);
+
+  const onboardingSelectionReady = !revenueKitNiche
+    || (beautyKitFlag.resolved && beautyKitFlag.niche === revenueKitNiche);
 
   // P2: Editor store (must be before early returns)
   const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
@@ -846,16 +885,44 @@ function DashboardV2Inner() {
           )}
 
           {/* AI Builder Wizard (onboarding + settings) */}
-          {dashboard.onboardingState.showAIBuilderWizard && (
+          {dashboard.onboardingState.showAIBuilderWizard
+            && onboardingSelectionReady
+            && onboardingSelection.kind === 'ai-builder' && (
             <AIBuilderWizard
               open={dashboard.onboardingState.showAIBuilderWizard}
               onClose={dashboard.onboardingState.handleAIBuilderClose}
               onComplete={dashboard.onboardingState.handleAIBuilderComplete}
               isOnboarding={true}
-              initialNiche={dashboard.onboardingState.signupContext.initialNiche}
+              initialNiche={onboardingSelection.initialNiche}
               pageId={dashboard.pageData.id}
               signupContext={dashboard.onboardingState.signupContext}
             />
+          )}
+
+          {dashboard.onboardingState.showAIBuilderWizard
+            && onboardingSelectionReady
+            && onboardingSelection.kind === 'beauty-revenue-kit' && (
+            <Dialog
+              open
+              onOpenChange={(open) => {
+                if (!open) dashboard.onboardingState.handleAIBuilderClose();
+              }}
+            >
+              <DialogContent className="max-w-4xl p-0 sm:p-4">
+                <RevenueKitWizard
+                  pageId={dashboard.pageData.id}
+                  initialNiche={onboardingSelection.initialNiche}
+                  onPublished={() => {
+                    dashboard.onboardingState.handleRevenueKitComplete();
+                    window.location.assign('/dashboard/home?tab=editor');
+                  }}
+                  onOpenAdvancedEditor={() => {
+                    dashboard.onboardingState.handleAIBuilderClose();
+                    handleTabChange('editor');
+                  }}
+                />
+              </DialogContent>
+            </Dialog>
           )}
 
           {/* Panels & Dialogs */}

@@ -22,13 +22,7 @@ export const TIER_LABELS = {
   business: 'Business',
 } as const satisfies Record<TierKey, string>;
 
-export const TIER_COMMISSION_RATES = {
-  free: 0,
-  identity: 0,
-  starter: 0.07,
-  pro: 0.01,
-  business: 0,
-} as const satisfies Record<TierKey, number>;
+export const TIER_COMMISSION_RATES = BILLING_CATALOG.commissionRates satisfies Record<TierKey, number>;
 
 export function isDatabasePremiumTier(tier: unknown): tier is DatabasePremiumTier {
   return typeof tier === 'string' && DATABASE_PREMIUM_TIERS.includes(tier as DatabasePremiumTier);
@@ -63,5 +57,6 @@ export function getTierDisplayName(tier: AppPremiumTier): string {
 }
 
 export function getTierCommissionRate(tier: AppPremiumTier | DatabasePremiumTier): number {
-  return TIER_COMMISSION_RATES[tier];
+  return getPlanCommissionRate(tier);
 }
+import { BILLING_CATALOG, getPlanCommissionRate } from './catalog';

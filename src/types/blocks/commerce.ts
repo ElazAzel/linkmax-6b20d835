@@ -56,6 +56,7 @@ export type ServiceType =
 // Pricing Block with structured service data
 export interface PricingItem {
     id: string;
+    serviceOfferingId?: string;
     name: string | I18nText | MultilingualString;
     description?: string | I18nText | MultilingualString;
     price: number;
@@ -99,6 +100,7 @@ export interface BookingBlock {
     workingHoursEnd?: number;
     slotDuration?: number;
     slots?: BookingSlot[];
+    serviceOfferingIds?: string[];
     disabledWeekdays?: number[];
     maxBookingDays?: number;
     requirePhone?: boolean;

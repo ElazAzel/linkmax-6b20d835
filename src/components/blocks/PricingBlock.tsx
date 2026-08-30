@@ -10,6 +10,7 @@ import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import Star from 'lucide-react/dist/esm/icons/star';
 import Tag from 'lucide-react/dist/esm/icons/tag';
 import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
+import { dispatchBookingOfferingSelection } from '@/lib/revenue/booking-offering-events';
 
 interface PricingBlockProps {
   block: PricingBlockType;
@@ -56,7 +57,15 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
           const name = getI18nText(item.name, currentLang);
           const description = item.description ? getI18nText(item.description, currentLang) : '';
           const period = item.period ? getI18nText(item.period, currentLang) : '';
-          const handle = () => onBlockClick(block.id, block.type, `${title} - ${name}`);
+          const handle = () => {
+            onBlockClick(block.id, block.type, `${title} - ${name}`);
+            if (item.serviceOfferingId) {
+              dispatchBookingOfferingSelection({
+                serviceOfferingId: item.serviceOfferingId,
+                pricingBlockId: block.id,
+              });
+            }
+          };
 
           return (
             <div
