@@ -274,7 +274,7 @@ Run: `supabase db reset`
 
 Run: `supabase test db`
 
-- [ ] **Step 2: Test application contracts**
+- [x] **Step 2: Test application contracts**
 
 Run: `npm test -- --run src/domain/revenue src/services/__tests__/product-analytics.test.ts`
 
