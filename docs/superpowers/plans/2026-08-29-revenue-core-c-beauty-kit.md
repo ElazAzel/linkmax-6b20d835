@@ -254,9 +254,12 @@ RU/KK/EN runtime structure check, and production build. The database part of
 Step 2 remains open because the local Docker backend cannot start until WSL2 is
 installed; SQL contract tests pass, but they do not replace pgTAP.
 
-- [ ] **Step 3: Commit plan progress**
+- [x] **Step 3: Commit plan progress**
 
 ```bash
 git add docs/superpowers/plans/2026-08-29-revenue-core-c-beauty-kit.md
 git commit -m "docs: record beauty kit completion"
 ```
+
+Plan progress was committed in `d90a8bf0`; only the database portion of Step 2
+remains open.
