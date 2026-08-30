@@ -203,23 +203,23 @@ git commit -m "feat: add beauty revenue kit wizard"
 - Produces: `serviceOfferingId?: string` on pricing items, `serviceOfferingIds?: string[]` on booking blocks, cohort-specific first-run wizard.
 - Consumes: native feature flag evaluation and current dashboard onboarding state.
 
-- [ ] **Step 1: Write failing flag-off compatibility test**
+- [x] **Step 1: Write failing flag-off compatibility test**
 
 Assert existing `AIBuilderWizard` remains selected when `beauty_revenue_kit_v1` is false.
 
-- [ ] **Step 2: Write failing flag-on cohort test**
+- [x] **Step 2: Write failing flag-on cohort test**
 
 Assert a nails user with the flag sees `RevenueKitWizard`, while an expert user with the same flag remains on the existing wizard.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/pages/__tests__/Dashboard.revenue-kit.test.tsx`
 
-- [ ] **Step 4: Implement feature-gated composition and block linkage**
+- [x] **Step 4: Implement feature-gated composition and block linkage**
 
 Do not change the default catch-all route. Pricing CTA passes the offering ID into the booking flow; unlinked legacy items retain their current behavior.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 Run: `npm test -- --run src/pages/__tests__/Dashboard.revenue-kit.test.tsx src/components/blocks/__tests__/BlocksRendering.test.tsx`
 

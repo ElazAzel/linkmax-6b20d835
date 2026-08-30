@@ -11,6 +11,10 @@ export const FEATURE_FLAG_KEYS = [
   'marketplace_enabled',
   'native_push_enabled',
   'ai_copilot_enabled',
+  'revenue_core_v1',
+  'beauty_revenue_kit_v1',
+  'outcome_home_v1',
+  'booking_self_service_v1',
 ] as const;
 
 type FeatureFlagKey = typeof FEATURE_FLAG_KEYS[number];

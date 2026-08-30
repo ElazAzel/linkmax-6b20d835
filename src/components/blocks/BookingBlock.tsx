@@ -1,4 +1,4 @@
- import { useState, useEffect, useCallback, memo } from 'react';
+ import { useState, useEffect, useCallback, memo, useRef } from 'react';
  import { useTranslation } from 'react-i18next';
  import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar } from '@/components/ui/calendar';
@@ -36,6 +36,10 @@ import type { BookingBlock as BookingBlockType } from '@/types/page';
 import type { ZoneStaff } from '@/types/zones';
 import UserCog from 'lucide-react/dist/esm/icons/user-cog';
 import Search from 'lucide-react/dist/esm/icons/search';
+import {
+  BOOKING_OFFERING_SELECTED_EVENT,
+  type BookingOfferingSelectedDetail,
+} from '@/lib/revenue/booking-offering-events';
 
 interface BookingBlockProps {
   block: BookingBlockType;
@@ -118,6 +122,27 @@ export const BookingBlock = memo(function BookingBlockComponent({
   const [fullyBookedDates, setFullyBookedDates] = useState<Set<string>>(new Set());
   const [staff, setStaff] = useState<ZoneStaff[]>([]);
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
+  const [selectedServiceOfferingId, setSelectedServiceOfferingId] = useState<string | null>(
+    block.serviceOfferingIds?.[0] ?? null,
+  );
+  const bookingRootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOfferingSelection = (event: Event) => {
+      const { serviceOfferingId } = (event as CustomEvent<BookingOfferingSelectedDetail>).detail;
+      if (!block.serviceOfferingIds?.includes(serviceOfferingId)) return;
+      setSelectedServiceOfferingId(serviceOfferingId);
+      bookingRootRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+    };
+
+    window.addEventListener(BOOKING_OFFERING_SELECTED_EVENT, handleOfferingSelection);
+    return () => window.removeEventListener(BOOKING_OFFERING_SELECTED_EVENT, handleOfferingSelection);
+  }, [block.serviceOfferingIds]);
+
+  useEffect(() => {
+    if (selectedServiceOfferingId && block.serviceOfferingIds?.includes(selectedServiceOfferingId)) return;
+    setSelectedServiceOfferingId(block.serviceOfferingIds?.[0] ?? null);
+  }, [block.serviceOfferingIds, selectedServiceOfferingId]);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
@@ -413,13 +438,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
     setSubmitting(true);
     try {
       const mutationId = crypto.randomUUID();
-      const linkedServiceOfferingId = block.serviceOfferingIds?.[0] ?? null;
-
       const { data: fnResponse, error: fnError } = await supabase.functions.invoke('submit-booking', {
         body: {
           pageId,
           blockId: block.id,
-          serviceOfferingId: linkedServiceOfferingId,
+          serviceOfferingId: selectedServiceOfferingId,
           slotDate: format(selectedDate, 'yyyy-MM-dd'),
           slotTime: selectedSlot.time,
           clientName: formData.name,
@@ -746,7 +769,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
   }
 
   return (
-    <div className="w-full rounded-2xl overflow-hidden qb-card border-hairline shadow-soft">
+    <div
+      ref={bookingRootRef}
+      data-selected-service-offering-id={selectedServiceOfferingId ?? undefined}
+      className="w-full rounded-2xl overflow-hidden qb-card border-hairline shadow-soft"
+    >
       {/* Header */}
       <div className="p-5 sm:p-6 pb-2">
         <div className="flex items-center gap-3">
