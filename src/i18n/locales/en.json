@@ -7691,5 +7691,45 @@
       "improve_booking_conversion": { "label": "Review the booking path", "description": "There is enough service interest, but no bookings yet." },
       "open_outcome_insights": { "label": "Open outcomes", "description": "Operations are clear — explore your sources and funnel." }
     }
+  },
+  "bookingDetail": {
+    "title": "Booking",
+    "loading": "Loading booking facts…",
+    "open": "Details",
+    "client": "Customer",
+    "source": "Source",
+    "payment": "Payment",
+    "total": "Total",
+    "paid": "Collected",
+    "deposit": "Deposit",
+    "refunded": "Refunded",
+    "amount": "Amount collected",
+    "method": "Payment method",
+    "history": "Status history",
+    "notifications": "Notifications",
+    "notificationsEmpty": "No delivery facts yet",
+    "delivered": "Delivered",
+    "failed": "Failed",
+    "methods": { "cash": "Cash", "card": "Card", "transfer": "Transfer", "other": "Other" },
+    "actions": {
+      "confirmDeposit": "Confirm deposit",
+      "waive": "Confirm without deposit",
+      "complete": "Complete visit",
+      "noShow": "Customer did not show",
+      "cancel": "Cancel booking"
+    },
+    "success": {
+      "confirmed": "Deposit confirmed",
+      "waived": "Booking confirmed without a deposit",
+      "cancelled": "Booking cancelled",
+      "completed": "Visit completed",
+      "noShow": "No-show recorded"
+    },
+    "errors": {
+      "request_failed": "The booking could not be updated",
+      "version_conflict": "The booking has changed. Refresh and try again.",
+      "slot_not_started": "The appointment has not started yet.",
+      "payment_required": "Confirm the deposit first."
+    }
   }
 }

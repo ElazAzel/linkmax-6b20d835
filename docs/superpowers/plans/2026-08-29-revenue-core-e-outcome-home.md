@@ -188,23 +188,23 @@ git commit -m "feat: make dashboard outcome first"
 - Produces: owner payment/transition mutations with UUID idempotency and optimistic version, state-aware drawer.
 - Consumes: lifecycle service and outcome query invalidation.
 
-- [ ] **Step 1: Write failing operation mutation tests**
+- [x] **Step 1: Write failing operation mutation tests**
 
 Assert completion sends amount/method/expected version, creates one mutation UUID, and invalidates booking plus outcome queries after success. Assert retries reuse the same UUID.
 
-- [ ] **Step 2: Write failing allowed-action tests**
+- [x] **Step 2: Write failing allowed-action tests**
 
 Pending payment shows confirm/waive/cancel; confirmed past shows complete/no-show; completed shows no destructive primary action and displays history.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/hooks/revenue/__tests__/useBookingOperations.test.tsx src/components/dashboard-v2/revenue/__tests__/BookingDetailDrawer.test.tsx`
 
-- [ ] **Step 4: Implement hook, drawer and Activity integration**
+- [x] **Step 4: Implement hook, drawer and Activity integration**
 
 Render service snapshot, local time, deposit/balance facts, transition history, attribution source and notification delivery state. Never render raw token/provider payload.
 
-- [ ] **Step 5: Verify GREEN and commit**
+- [x] **Step 5: Verify GREEN and commit**
 
 Run: `npm test -- --run src/hooks/revenue/__tests__/useBookingOperations.test.tsx src/components/dashboard-v2/revenue/__tests__/BookingDetailDrawer.test.tsx`
 

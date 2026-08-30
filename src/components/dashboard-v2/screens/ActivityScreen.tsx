@@ -49,7 +49,7 @@ import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMonthlyInboundCount } from '@/hooks/dashboard/useMonthlyInboundCount';
 import { useAuth } from '@/hooks/user/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface ActivityScreenProps {
   isPremium: boolean;
@@ -99,12 +99,20 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const { user } = useAuth();
   const { data: crmMetrics, isLoading: metricsLoading } = useCrmMetrics();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const bookingFocus = searchParams.get('filter');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [activeTab, setActiveTab] = useState<'leads' | 'bookings' | 'reviews'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'bookings' | 'reviews'>(
+    bookingFocus ? 'bookings' : 'leads',
+  );
+
+  useEffect(() => {
+    if (bookingFocus) setActiveTab('bookings');
+  }, [bookingFocus]);
 
   const stats = getLeadStats();
   const monthlyLeadCount = useMonthlyInboundCount(user?.id, isPremium, [leads.length]);
@@ -373,7 +381,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
           >
-            <BookingsPanel />
+            <BookingsPanel focusFilter={bookingFocus} />
           </motion.div>
         )}
 

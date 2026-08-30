@@ -135,6 +135,64 @@ export interface TransitionBookingInput {
   privilegedCorrection?: boolean;
 }
 
+export interface BookingOwnerDetail {
+  bookingId: string;
+  pageId: string;
+  version: number;
+  status: BookingStatus;
+  statusReason: string | null;
+  localStart: string;
+  timezone: string;
+  slotStarted: boolean;
+  serviceName: string;
+  serviceSnapshot: Json;
+  client: {
+    name: string;
+    phone: string | null;
+    email: string | null;
+    notes: string | null;
+  };
+  payment: {
+    status: string;
+    totalAmount: string;
+    depositRequiredAmount: string;
+    paidAmount: string;
+    refundedAmount: string;
+    currency: string;
+    facts: Array<{
+      kind: string;
+      status: string;
+      amount: string;
+      currency: string;
+      method: string;
+      processingSource: string;
+      confirmedAt: string | null;
+      createdAt: string;
+    }>;
+  };
+  attribution: {
+    source: string;
+    medium: string | null;
+    campaign: string | null;
+    referrerHost: string | null;
+  };
+  transitions: Array<{
+    fromStatus: string | null;
+    toStatus: string;
+    actorType: string;
+    reasonCode: string;
+    occurredAt: string;
+  }>;
+  notifications: Array<{
+    eventKind: 'delivered' | 'failed';
+    recipientRole: string;
+    channel: string;
+    templateKey: string;
+    errorCode: string | null;
+    occurredAt: string;
+  }>;
+}
+
 function isRecord(value: Json | undefined): value is Record<string, Json | undefined> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -173,6 +231,82 @@ function throwResponseError(value: Json | undefined): never {
 const BOOKING_STATUSES: BookingStatus[] = [
   'pending_payment', 'confirmed', 'completed', 'cancelled', 'no_show',
 ];
+
+const MONEY_DECIMAL = /^\d+\.\d{2}$/;
+
+function isNullableString(value: Json | undefined): value is string | null {
+  return value === null || typeof value === 'string';
+}
+
+function isBookingOwnerDetail(value: Json | undefined): boolean {
+  if (!isRecord(value) || value.ok !== true) return false;
+  if (!requiredString(value.bookingId)
+    || !requiredString(value.pageId)
+    || !requiredVersion(value.version)
+    || typeof value.status !== 'string'
+    || !BOOKING_STATUSES.includes(value.status as BookingStatus)
+    || !isNullableString(value.statusReason)
+    || !requiredString(value.localStart)
+    || !requiredString(value.timezone)
+    || typeof value.slotStarted !== 'boolean'
+    || !requiredString(value.serviceName)
+    || !isRecord(value.client)
+    || !isRecord(value.payment)
+    || !isRecord(value.attribution)
+    || !Array.isArray(value.transitions)
+    || !Array.isArray(value.notifications)) return false;
+
+  const client = value.client;
+  const payment = value.payment;
+  const attribution = value.attribution;
+  if (!requiredString(client.name)
+    || !isNullableString(client.phone)
+    || !isNullableString(client.email)
+    || !isNullableString(client.notes)
+    || !requiredString(payment.status)
+    || !requiredString(payment.currency)
+    || ![payment.totalAmount, payment.depositRequiredAmount, payment.paidAmount, payment.refundedAmount]
+      .every((amount) => typeof amount === 'string' && MONEY_DECIMAL.test(amount))
+    || !Array.isArray(payment.facts)
+    || !requiredString(attribution.source)
+    || !isNullableString(attribution.medium)
+    || !isNullableString(attribution.campaign)
+    || !isNullableString(attribution.referrerHost)) return false;
+
+  const factsValid = payment.facts.every((fact) => isRecord(fact)
+    && requiredString(fact.kind)
+    && requiredString(fact.status)
+    && typeof fact.amount === 'string' && MONEY_DECIMAL.test(fact.amount)
+    && requiredString(fact.currency)
+    && requiredString(fact.method)
+    && requiredString(fact.processingSource)
+    && isNullableString(fact.confirmedAt)
+    && requiredString(fact.createdAt));
+  const transitionsValid = value.transitions.every((transition) => isRecord(transition)
+    && isNullableString(transition.fromStatus)
+    && requiredString(transition.toStatus)
+    && requiredString(transition.actorType)
+    && requiredString(transition.reasonCode)
+    && requiredString(transition.occurredAt));
+  const notificationsValid = value.notifications.every((notification) => isRecord(notification)
+    && (notification.eventKind === 'delivered' || notification.eventKind === 'failed')
+    && requiredString(notification.recipientRole)
+    && requiredString(notification.channel)
+    && requiredString(notification.templateKey)
+    && isNullableString(notification.errorCode)
+    && requiredString(notification.occurredAt));
+
+  return factsValid && transitionsValid && notificationsValid;
+}
+
+export async function loadBookingOwnerDetail(bookingId: string): Promise<BookingOwnerDetail> {
+  const { data, error } = await supabase.rpc('get_booking_owner_detail', {
+    p_booking_id: bookingId,
+  });
+  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (!isBookingOwnerDetail(data)) throwResponseError(data);
+  return data as unknown as BookingOwnerDetail;
+}
 
 export async function loadBookingManagementContext(token: string): Promise<BookingManagementContext> {
   const { data, error } = await supabase.rpc('get_booking_by_access_token', { p_token: token });

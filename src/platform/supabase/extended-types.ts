@@ -1093,6 +1093,10 @@ export type AppDatabase = Omit<Database, 'public'> & {
           };
           Returns: Json;
         };
+        get_booking_owner_detail: {
+          Args: { p_booking_id: string };
+          Returns: Json;
+        };
         get_revenue_kit_draft: {
           Args: {
             p_page_id: string;
