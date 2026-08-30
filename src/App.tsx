@@ -20,6 +20,9 @@ import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMo
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
 import { initPostHog } from "@/lib/posthog";
+import { useGrowthAttribution } from "@/hooks/useGrowthAttribution";
+import { consumePendingPageClone } from "@/services/page-cloning";
+import { useAuth } from "@/hooks/user/useAuth";
 
 // Initialize PostHog before rendering
 initPostHog();
@@ -119,6 +122,20 @@ class RouteErrorBoundary extends React.Component<
 }
 
 const App = () => {
+  // Capture page-level referral visits and convert the first-touch attribution
+  // after authentication. The hook is intentionally global so auth redirects
+  // cannot lose the referral code.
+  useGrowthAttribution();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const timer = window.setTimeout(() => {
+      void consumePendingPageClone();
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, [user?.id]);
+
   // Defer non-critical init until user interacts or after 8s
   useEffect(() => {
     let fired = false;

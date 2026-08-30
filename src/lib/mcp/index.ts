@@ -1,25 +1,44 @@
 import { auth, defineMcp } from "@lovable.dev/mcp-js";
-import listMyPages from "./tools/list-my-pages";
-import listMyLeads from "./tools/list-my-leads";
-import getAnalyticsSummary from "./tools/get-analytics-summary";
+import createBlock from "./tools/create-block";
 import createPage from "./tools/create-page";
+import getAnalyticsSummary from "./tools/get-analytics-summary";
 import getPageStructure from "./tools/get-page-structure";
+import listMyLeads from "./tools/list-my-leads";
+import listMyPages from "./tools/list-my-pages";
+import updateBlock from "./tools/update-block";
+import updatePage from "./tools/update-page";
 
-// OAuth issuer MUST be the direct Supabase host, built from the project ref.
-// import.meta.env.VITE_SUPABASE_PROJECT_ID is inlined by Vite at build time so
-// this stays import-safe (no runtime env read at module top level).
-const projectRef =
-  (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "project-ref-unset";
+// Vite inlines these values into the generated Supabase function. Prefer the
+// full URL when present, while retaining project-id compatibility with older
+// LinkMAX deployments. No runtime environment access happens at module load.
+const env = (import.meta as unknown as { env?: {
+  VITE_SUPABASE_PROJECT_ID?: string;
+  VITE_SUPABASE_URL?: string;
+} }).env;
+const supabaseUrl = env?.VITE_SUPABASE_URL?.replace(/\/+$/, "");
+const projectRef = env?.VITE_SUPABASE_PROJECT_ID ?? "project-ref-unset";
+const supabaseIssuer = supabaseUrl
+  ? `${supabaseUrl}/auth/v1`
+  : `https://${projectRef}.supabase.co/auth/v1`;
 
 export default defineMcp({
   name: "linkmax-mcp",
   title: "LinkMAX MCP",
-  version: "0.1.0",
+  version: "0.2.0",
   instructions:
-    "Tools for LinkMAX — a link-in-bio and micro-business OS. Use `list_my_pages` to browse the user's published pages, `list_my_leads` to read captured leads, and `get_analytics_summary` for a quick performance overview. All tools operate on the signed-in user's own data.",
+    "Tools for LinkMAX — a link-in-bio and micro-business OS. Browse pages and leads, inspect page analytics and block structure, create pages and blocks, and update page or block settings. All tools operate only on the signed-in user's own data.",
   auth: auth.oauth.issuer({
-    issuer: `https://${projectRef}.supabase.co/auth/v1`,
+    issuer: supabaseIssuer,
     acceptedAudiences: "authenticated",
   }),
-  tools: [listMyPages, listMyLeads, getAnalyticsSummary, createPage, getPageStructure],
+  tools: [
+    listMyPages,
+    listMyLeads,
+    getAnalyticsSummary,
+    createPage,
+    getPageStructure,
+    createBlock,
+    updateBlock,
+    updatePage,
+  ],
 });

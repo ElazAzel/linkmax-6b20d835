@@ -1,7 +1,7 @@
 {
   "version": 1,
   "sdk_version": "0.23.0",
-  "path": "/functions/v1/mcp",
+  "path": "/mcp",
   "auth": {
     "type": "oauth",
     "issuer": "https://pphdcfxucfndmwulpfwv.supabase.co/auth/v1",
@@ -12,7 +12,7 @@
   "mcp": {
     "server": {
       "name": "linkmax-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "title": "LinkMAX MCP"
     },
     "tools": [
@@ -61,7 +61,7 @@
             "page_id": {
               "type": "string",
               "format": "uuid",
-              "description": "Optional page UUID to filter leads by page."
+              "description": "Optional page UUID stored in lead metadata to filter leads by page."
             }
           },
           "additionalProperties": false,
@@ -148,9 +148,322 @@
             "slug": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 120,
               "description": "Page slug. Provide this OR page_id."
             }
           },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_block",
+        "title": "Create a LinkMAX block",
+        "description": "Create a block on one of the signed-in user's pages. The block is inserted at the requested position or appended to the end when position is omitted.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Page UUID owned by the signed-in user."
+            },
+            "type": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "LinkMAX block type, for example link, text, image or form."
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "Optional block title."
+            },
+            "content": {
+              "description": "JSON content for the block."
+            },
+            "style": {
+              "type": "object",
+              "additionalProperties": {},
+              "description": "Optional JSON style configuration."
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000,
+              "description": "Zero-based position. Defaults to the end."
+            },
+            "is_premium": {
+              "type": "boolean",
+              "description": "Whether the block is marked premium."
+            },
+            "schedule": {
+              "description": "Optional JSON publication schedule."
+            }
+          },
+          "required": [
+            "page_id",
+            "type"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_block",
+        "title": "Update a LinkMAX block",
+        "description": "Update the content, appearance, type or position of a block that belongs to one of the signed-in user's pages.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "block_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Block UUID."
+            },
+            "type": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "title": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "content": {},
+            "style": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "is_premium": {
+              "type": "boolean"
+            },
+            "schedule": {
+              "anyOf": [
+                {},
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "block_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_page",
+        "title": "Update LinkMAX page settings",
+        "description": "Update the settings of one of the signed-in user's pages. Only explicitly supplied allowlisted fields are changed; ownership is checked before the update.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Page UUID owned by the signed-in user."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "description": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "avatar_url": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri",
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "avatar_style": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "theme_settings": {
+              "anyOf": [
+                {
+                  "$ref": "#/properties/avatar_style/anyOf/0"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "seo_meta": {
+              "anyOf": [
+                {
+                  "$ref": "#/properties/avatar_style/anyOf/0"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "is_published": {
+              "type": "boolean"
+            },
+            "niche": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 120
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "entity_type": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "contact_email": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "email",
+                  "maxLength": 320
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "contact_phone": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "contact_whatsapp": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "editor_mode": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "grid_config": {
+              "anyOf": [
+                {
+                  "$ref": "#/properties/avatar_style/anyOf/0"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "integrations": {
+              "anyOf": [
+                {
+                  "$ref": "#/properties/avatar_style/anyOf/0"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "custom_domain": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 253
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "page_type": {
+              "type": "string",
+              "maxLength": 40
+            }
+          },
+          "required": [
+            "page_id"
+          ],
           "additionalProperties": false,
           "$schema": "http://json-schema.org/draft-07/schema#"
         },

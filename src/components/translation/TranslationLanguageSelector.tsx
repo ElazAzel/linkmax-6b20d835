@@ -198,7 +198,7 @@ export function TranslationLanguageSelector({
           onClick={() => setIsOpen(true)}
         >
           <Globe className="h-3 w-3 mr-1" />
-          {t('translation.edit', 'Изменить')}
+          {t('edit', 'Изменить')}
         </Button>
       </div>
     );
@@ -213,7 +213,7 @@ export function TranslationLanguageSelector({
         <DialogTrigger asChild>
           <Button variant="outline" className="gap-2">
             <Languages className="h-4 w-4" />
-            {t('translation.selectLanguages', 'Выбрать языки')}
+            {t('selectLanguages', 'Выбрать языки')}
             <Badge variant="secondary" className="ml-1">
               {ensuredSelection.length}
             </Badge>
@@ -225,10 +225,10 @@ export function TranslationLanguageSelector({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Languages className="h-5 w-5 text-primary" />
-            {t('translation.targetLanguages', 'Языки перевода')}
+            {t('targetLanguages', 'Языки перевода')}
           </DialogTitle>
           <DialogDescription>
-            {t('translation.selectDescription', 'Выберите языки, на которые будет переведён ваш контент. Английский обязателен.')}
+            {t('selectDescription', 'Выберите языки, на которые будет переведён ваш контент. Английский обязателен.')}
           </DialogDescription>
         </DialogHeader>
 
@@ -240,7 +240,7 @@ export function TranslationLanguageSelector({
             onClick={handleSelectAll}
             className="text-xs"
           >
-            {t('translation.selectAll', 'Выбрать все')}
+            {t('selectAll', 'Выбрать все')}
           </Button>
           <Button
             variant="ghost"
@@ -248,11 +248,11 @@ export function TranslationLanguageSelector({
             onClick={handleSelectNone}
             className="text-xs"
           >
-            {t('translation.selectNone', 'Снять выбор')}
+            {t('selectNone', 'Снять выбор')}
           </Button>
           <div className="flex-1" />
           <Badge variant="outline">
-            {t('translation.selected', 'Выбрано')}: {ensuredSelection.length}
+            {t('selected', 'Выбрано')}: {ensuredSelection.length}
           </Badge>
         </div>
 
@@ -301,14 +301,14 @@ export function TranslationLanguageSelector({
                                 <Info className="h-3 w-3 text-muted-foreground" />
                               </TooltipTrigger>
                               <TooltipContent>
-                                {t('translation.englishMandatory', 'Английский обязателен для международной аудитории')}
+                                {t('englishMandatory', 'Английский обязателен для международной аудитории')}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
                         )}
                         {isSource && (
                           <Badge variant="outline" className="text-xs">
-                            {t('translation.source', 'Источник')}
+                            {t('source', 'Источник')}
                           </Badge>
                         )}
                       </button>
@@ -349,7 +349,7 @@ export function TranslationLanguageSelector({
                 ) : (
                   <Languages className="h-4 w-4 mr-2" />
                 )}
-                {t('translation.translateNow', 'Перевести')}
+                {t('translateNow', 'Перевести')}
               </Button>
             )}
             {!onTranslate && (

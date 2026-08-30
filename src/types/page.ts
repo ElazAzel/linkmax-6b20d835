@@ -123,6 +123,12 @@ export interface PageData {
   previewUrl?: string; // Custom preview image for gallery
   organization_id?: string;
   experiments?: PageExperiment[];
+  /** Controls the algorithmic sharing and clone loop for this page. */
+  viralSettings?: {
+    cloneable?: boolean;
+    showBadge?: boolean;
+    defaultCampaign?: string;
+  };
   // Entity fields for search visibility
   city?: string;
   profession?: string;

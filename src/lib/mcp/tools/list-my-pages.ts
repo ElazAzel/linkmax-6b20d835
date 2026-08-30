@@ -1,13 +1,11 @@
-import { createClient } from "@supabase/supabase-js";
-import { defineTool, type ToolContext } from "@lovable.dev/mcp-js";
+import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-
-function supabaseForUser(ctx: ToolContext) {
-  return createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-}
+import {
+  databaseError,
+  getAuthenticatedContext,
+  isToolError,
+  jsonResult,
+} from "../utils";
 
 export default defineTool({
   name: "list_my_pages",
@@ -25,23 +23,20 @@ export default defineTool({
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ limit }, ctx) => {
-    if (!ctx.isAuthenticated()) {
-      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    }
-    const supabase = supabaseForUser(ctx);
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+
+    const { supabase, userId } = authContext;
     const { data, error } = await supabase
       .from("pages")
-      .select("id, slug, title, is_published, views_count, updated_at")
-      .eq("user_id", ctx.getUserId())
+      .select("id, slug, title, is_published, view_count, updated_at")
+      .eq("user_id", userId)
       .order("updated_at", { ascending: false })
       .limit(limit ?? 50);
 
     if (error) {
-      return { content: [{ type: "text", text: error.message }], isError: true };
+      return databaseError("list_my_pages");
     }
-    return {
-      content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }],
-      structuredContent: { pages: data ?? [] },
-    };
+    return jsonResult({ pages: data ?? [] });
   },
 });

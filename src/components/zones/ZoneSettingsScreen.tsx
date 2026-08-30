@@ -36,6 +36,7 @@ import FileText from 'lucide-react/dist/esm/icons/file-text';
 import { useAppError } from '@/hooks/useAppError';
 import { ZoneStaffSettings } from './settings/ZoneStaffSettings';
 import UserCog from 'lucide-react/dist/esm/icons/user-cog';
+import { trackCurrentUserProductEvent } from '@/services/product-analytics';
 
 interface ZoneSettingsScreenProps {
   zone: Zone;
@@ -100,6 +101,9 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
         created_by: user?.id || '',
       } as any);
       if (error) throw error;
+      void trackCurrentUserProductEvent('team_invite_sent', {
+        metadata: { zoneId: zone.id, role: inviteRole, surface: 'zone-settings' },
+      });
       toast.success(t('zones.settings.inviteSent', 'Invite sent'));
       setInviteOpen(false);
       setInviteEmail('');

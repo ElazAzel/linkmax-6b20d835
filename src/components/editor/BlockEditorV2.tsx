@@ -38,6 +38,7 @@ import { BlockStyleEditor } from './BlockStyleEditor';
 import type { Block } from '@/types/page';
 import { BLOCK_MANIFEST, getBlockIcon } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
+import { mergeBlockDraft } from '@/lib/editor/block-draft';
 
 // Lazy load BlockRenderer for Preview
 const BlockRenderer = lazy(() => import('./BlockRenderer').then(m => ({ default: m.BlockRenderer })));
@@ -81,34 +82,9 @@ export function BlockEditorV2({
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const formDataRef = useRef<Partial<Block>>(block ? { ...block } : {});
     const deferredFormData = useDeferredValue(formData);
     const currentBlockIdRef = useRef<string | null>(block ? block.id : null);
-
-    // Update formData when block changes (only if it's a completely new block)
-    useEffect(() => {
-        if (block && block.id !== currentBlockIdRef.current) {
-            setFormData({ ...block });
-            currentBlockIdRef.current = block.id;
-            setHasUnsavedChanges(false);
-            setLastSaved(null);
-        }
-    }, [block]);
-
-    // Check for unsaved changes
-    const handleFormChange = useCallback((updates: Partial<Block>) => {
-        setFormData(updates);
-        setHasUnsavedChanges(true);
-
-        // Autosave if enabled
-        if (enableAutosave) {
-            if (autosaveTimerRef.current) {
-                clearTimeout(autosaveTimerRef.current);
-            }
-            autosaveTimerRef.current = setTimeout(() => {
-                performSave(updates, false);
-            }, autosaveDelay);
-        }
-    }, [enableAutosave, autosaveDelay]);
 
     // Perform save
     const performSave = useCallback(async (data: Partial<Block>, closeAfter: boolean = true) => {
@@ -125,13 +101,31 @@ export function BlockEditorV2({
         }
     }, [onSave, onClose]);
 
+    // Merge patches from any block editor. Several editors intentionally emit
+    // only the field that changed, so replacing the whole draft loses data.
+    const handleFormChange = useCallback((updates: Partial<Block>) => {
+        const nextFormData = mergeBlockDraft(formDataRef.current, updates);
+        formDataRef.current = nextFormData;
+        setFormData(nextFormData);
+        setHasUnsavedChanges(true);
+
+        if (enableAutosave) {
+            if (autosaveTimerRef.current) {
+                clearTimeout(autosaveTimerRef.current);
+            }
+            autosaveTimerRef.current = setTimeout(() => {
+                void performSave(nextFormData, false);
+            }, autosaveDelay);
+        }
+    }, [autosaveDelay, enableAutosave, performSave]);
+
     // Manual save
     const handleSave = useCallback(() => {
         if (autosaveTimerRef.current) {
             clearTimeout(autosaveTimerRef.current);
         }
-        performSave(formData, true);
-    }, [formData, performSave]);
+        void performSave(formDataRef.current, true);
+    }, [performSave]);
 
     // Cleanup autosave timer
     useEffect(() => {
@@ -152,7 +146,9 @@ export function BlockEditorV2({
         }
         if (!block) return;
         if (block.id === currentBlockIdRef.current) return;
-        setFormData({ ...block });
+        const nextFormData = { ...block };
+        formDataRef.current = nextFormData;
+        setFormData(nextFormData);
         currentBlockIdRef.current = block.id;
         setHasUnsavedChanges(false);
         setLastSaved(null);
@@ -168,13 +164,13 @@ export function BlockEditorV2({
             if (autosaveTimerRef.current) {
                 clearTimeout(autosaveTimerRef.current);
             }
-            performSave(formData, true);
+            void performSave(formDataRef.current, true);
         } else if (hasUnsavedChanges) {
             setShowUnsavedDialog(true);
         } else {
             onClose();
         }
-    }, [hasUnsavedChanges, enableAutosave, performSave, formData, onClose, isSaving]);
+    }, [hasUnsavedChanges, enableAutosave, performSave, onClose, isSaving]);
 
     const handleDiscard = useCallback(() => {
         setShowUnsavedDialog(false);
@@ -185,9 +181,9 @@ export function BlockEditorV2({
         if (autosaveTimerRef.current) {
             clearTimeout(autosaveTimerRef.current);
         }
-        performSave(formData, true);
+        void performSave(formDataRef.current, true);
         setShowUnsavedDialog(false);
-    }, [performSave, formData]);
+    }, [performSave]);
 
     // Manifest-driven icon lookup
     const BlockIcon = useMemo(() => {
@@ -220,7 +216,7 @@ export function BlockEditorV2({
 
         // Special case: profile editor gets onComplete
         if (block.type === 'profile') {
-            editorProps.onComplete = () => performSave(formData, true);
+            editorProps.onComplete = () => performSave(formDataRef.current, true);
         }
 
         return (
@@ -271,7 +267,7 @@ export function BlockEditorV2({
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
             onClose={handleCloseAttempt}
-            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates } as Partial<Block>)}
+            onBlockUpdate={handleFormChange}
             enablePreview={block.type !== 'profile'}
             previewComponent={previewComponent}
             onDelete={onDelete ? () => setShowDeleteDialog(true) : undefined}

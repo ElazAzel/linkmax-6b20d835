@@ -336,20 +336,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     };
 
     const faqItems = [
-      { question: t('landing.faq.q1.question'), answer: t('landing.faq.q1.answer') },
-      { question: t('landing.faq.q2.question'), answer: t('landing.faq.q2.answer') },
-      { question: t('landing.faq.q3.question'), answer: t('landing.faq.q3.answer') },
-      { question: t('landing.faq.q4.question'), answer: t('landing.faq.q4.answer') },
-      { question: t('landing.faq.q5.question'), answer: t('landing.faq.q5.answer') },
-      { question: t('landing.faq.q6.question'), answer: t('landing.faq.q6.answer') },
-      { question: t('landing.faq.q7.question'), answer: t('landing.faq.q7.answer') },
-      { question: t('landing.faq.q8.question'), answer: t('landing.faq.q8.answer') },
-      { question: t('landing.faq.q9.question'), answer: t('landing.faq.q9.answer') },
-      { question: t('landing.faq.q10.question'), answer: t('landing.faq.q10.answer') },
-      { question: t('landing.faq.q11.question'), answer: t('landing.faq.q11.answer') },
-      { question: t('landing.faq.q12.question'), answer: t('landing.faq.q12.answer') },
-      { question: t('landing.faq.q13.question'), answer: t('landing.faq.q13.answer') },
-      { question: t('landing.faq.q14.question'), answer: t('landing.faq.q14.answer') },
+      { question: t('landing.faq.q1'), answer: t('landing.faq.a1') },
+      { question: t('landing.faq.q2'), answer: t('landing.faq.a2') },
+      { question: t('landing.faq.q3'), answer: t('landing.faq.a3') },
+      { question: t('landing.faq.q4'), answer: t('landing.faq.a4') },
     ];
 
     const faqSchema = {

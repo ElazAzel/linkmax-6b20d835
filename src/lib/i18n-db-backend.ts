@@ -98,14 +98,16 @@ export async function fetchTranslationsFromDB(lng: string): Promise<any> {
         if (error) {
             // PGRST205 = table not found — expected when i18n_translations table hasn't been created
             if (error.code !== 'PGRST205') {
-                logger.error(`Error fetching translations for ${lng}:`, error);
+                // Database translations are an optional override; bundled locale
+                // files remain the source of truth when the remote table is unavailable.
+                logger.warn(`Unable to fetch optional translations for ${lng}`, { data: error });
             }
             return null;
         }
 
         return data?.data || null;
     } catch (err) {
-        logger.error(`Catch error fetching translations for ${lng}:`, err);
+        logger.warn(`Unable to fetch optional translations for ${lng}`, { data: err });
         return null;
     }
 }

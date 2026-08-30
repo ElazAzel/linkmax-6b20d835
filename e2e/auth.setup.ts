@@ -11,9 +11,9 @@ setup.use({ storageState: { cookies: [], origins: [] } });
 setup.setTimeout(120_000);
 
 setup('authenticate', async ({ page }) => {
-  // Use a demo account found in seed-demo-accounts
-  const testEmail = 'demoaccount1@gmail.com';
-  const testPassword = 'Account@1231';
+  const testEmail = process.env.E2E_TEST_EMAIL ?? '';
+  const testPassword = process.env.E2E_TEST_PASSWORD ?? '';
+  setup.skip(!testEmail || !testPassword, 'E2E_TEST_EMAIL and E2E_TEST_PASSWORD are required for authenticated E2E coverage');
 
   // Log console messages from the browser
   page.on('console', msg => {

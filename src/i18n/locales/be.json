@@ -807,6 +807,11 @@
   },
   "auth": {
     "alreadyHaveAccount": "Already have an account?",
+    "deviceAccounts": "Accounts on this device",
+    "useAnotherAccount": "Sign in with another account",
+    "removeSavedAccountTitle": "Remove this account from the device?",
+    "removeSavedAccountDescription": "The account will remain available, but signing in again will require authentication.",
+    "removeSavedAccount": "Remove account",
     "backToHome": "Back to home",
     "backToSignIn": "Back to sign in",
     "checkEmail": "Check your email",
