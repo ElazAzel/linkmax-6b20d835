@@ -101,7 +101,7 @@ describe('ReviewRequest page', () => {
     expect(await screen.findByText('Как прошла услуга?')).toBeInTheDocument();
     expect(screen.getByText(/Beauty Studio/)).toBeInTheDocument();
     expect(screen.getByText(/Запись:/)).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Айдана')).toBeInTheDocument();
+    expect(await screen.findByDisplayValue('Айдана')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('radio', { name: 'Оценка 5 из 5' }));
     fireEvent.change(screen.getByLabelText('Что понравилось или что можно улучшить'), {
