@@ -30,7 +30,7 @@
 - Produces: `BEAUTY_REVENUE_KIT`, `createBeautyPreset(niche)`, `RevenueKitDraft`.
 - Consumes: revenue service-offering types.
 
-- [ ] **Step 1: Write failing manifest tests**
+- [x] **Step 1: Write failing manifest tests**
 
 ```ts
 expect(BEAUTY_REVENUE_KIT.id).toBe('beauty-v1');
@@ -41,21 +41,21 @@ expect(createBeautyPreset('nails').services).toEqual(expect.arrayContaining([
 expect(() => createBeautyPreset('coach' as never)).toThrow('unsupported_beauty_niche');
 ```
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run: `npm test -- --run src/domain/revenue-kits`
 
-- [ ] **Step 3: Implement immutable manifest and hand-checked presets**
+- [x] **Step 3: Implement immutable manifest and hand-checked presets**
 
 Create three preset sets with realistic but explicitly editable prices/durations. Preset IDs are stable; user edits create offering values rather than mutate constants.
 
-- [ ] **Step 4: Run GREEN and lint**
+- [x] **Step 4: Run GREEN and lint**
 
 Run: `npm test -- --run src/domain/revenue-kits`
 
 Run: `npx eslint src/domain/revenue-kits`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/domain/revenue-kits
