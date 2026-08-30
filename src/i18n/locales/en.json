@@ -7507,6 +7507,40 @@
       "counter": "Downloaded {{used}} of {{limit}}"
     }
   },
+  "bookingManagement": {
+    "eyebrow": "Your booking",
+    "contactOwner": "Contact the specialist",
+    "expired": {
+      "title": "This link has expired",
+      "description": "Contact the specialist for up-to-date information."
+    },
+    "invalid": {
+      "title": "Booking unavailable",
+      "description": "Check the link or ask the specialist for a new one."
+    },
+    "status": {
+      "pending_payment": "Waiting for deposit",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "no_show": "No-show"
+    },
+    "actions": {
+      "reschedule": "Reschedule",
+      "confirm": "Confirm attendance",
+      "cancel": "Cancel booking"
+    },
+    "reschedule": {
+      "date": "New date",
+      "save": "Save new time"
+    },
+    "errors": {
+      "version_conflict": "This booking has already changed. Refresh the page and try again.",
+      "slot_unavailable": "That time is no longer available. Choose another option.",
+      "action_not_allowed": "This action is no longer available.",
+      "request_failed": "The booking could not be updated. Try again."
+    }
+  },
   "publicBooking": {
     "minutes": "min",
     "manage": "Manage booking",

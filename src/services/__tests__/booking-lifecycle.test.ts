@@ -4,6 +4,8 @@ import { supabase } from '@/platform/supabase/client';
 import {
   BookingLifecycleError,
   createPublicBooking,
+  loadBookingManagementAvailability,
+  loadBookingManagementContext,
   loadPublicAvailability,
   manageBookingWithToken,
 } from '../booking-lifecycle';
@@ -113,16 +115,87 @@ describe('booking lifecycle service', () => {
     await manageBookingWithToken({
       token: 'c'.repeat(64),
       action: 'cancel',
+      expectedVersion: 1,
       idempotencyKey: 'manage-booking:mutation-1',
     });
 
     expect(supabase.rpc).toHaveBeenLastCalledWith('manage_booking_by_access_token', {
       p_token: 'c'.repeat(64),
       p_action: 'cancel',
+      p_expected_version: 1,
       p_idempotency_key: 'manage-booking:mutation-1',
       p_slot_date: null,
       p_slot_time: null,
       p_slot_end_time: null,
+    });
+  });
+
+  it('parses only the allowlisted management projection and token-scoped availability', async () => {
+    vi.mocked(supabase.rpc)
+      .mockResolvedValueOnce({
+        data: {
+          ok: true,
+          booking: {
+            id: 'booking-1',
+            serviceName: 'Маникюр',
+            slotDate: '2026-09-01',
+            slotTime: '10:00:00',
+            slotEndTime: '11:30:00',
+            timezone: 'Asia/Almaty',
+            status: 'confirmed',
+            version: 3,
+            paymentStatus: 'paid',
+            depositRequiredAmount: '2500.00',
+            paidAmount: '2500.00',
+            currency: 'KZT',
+            allowedActions: ['cancel', 'reschedule'],
+            ownerPagePath: '/aru',
+            internalNotes: 'must-not-project',
+          },
+        },
+        error: null,
+      } as never)
+      .mockResolvedValueOnce({
+        data: {
+          ok: true,
+          slots: [{ date: '2026-09-02', time: '12:00:00', endTime: '13:30:00', available: true }],
+        },
+        error: null,
+      } as never);
+
+    await expect(loadBookingManagementContext('d'.repeat(64))).resolves.toEqual({
+      id: 'booking-1',
+      serviceName: 'Маникюр',
+      slotDate: '2026-09-01',
+      slotTime: '10:00:00',
+      slotEndTime: '11:30:00',
+      timezone: 'Asia/Almaty',
+      status: 'confirmed',
+      version: 3,
+      paymentStatus: 'paid',
+      depositRequiredAmount: '2500.00',
+      paidAmount: '2500.00',
+      currency: 'KZT',
+      allowedActions: ['cancel', 'reschedule'],
+      ownerPagePath: '/aru',
+    });
+    await expect(loadBookingManagementAvailability({
+      token: 'd'.repeat(64), fromDate: '2026-09-02', toDate: '2026-09-02',
+    })).resolves.toEqual([
+      { date: '2026-09-02', time: '12:00:00', endTime: '13:30:00', available: true },
+    ]);
+  });
+
+  it('preserves only the public owner path when a management token expires', async () => {
+    vi.mocked(supabase.rpc).mockResolvedValueOnce({
+      data: { ok: false, code: 'token_expired', retryable: false, ownerPagePath: '/aru' },
+      error: null,
+    } as never);
+
+    await expect(loadBookingManagementContext('e'.repeat(64))).rejects.toMatchObject({
+      code: 'token_expired',
+      retryable: false,
+      details: { ownerPagePath: '/aru' },
     });
   });
 });

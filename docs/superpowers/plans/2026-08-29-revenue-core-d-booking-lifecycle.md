@@ -123,27 +123,27 @@ git commit -m "feat: add recoverable public booking flow"
 - Produces: `/booking/manage/:token` route with read, confirm, cancel and reschedule actions.
 - Consumes: `manageBookingWithToken` and public-safe booking context.
 
-- [ ] **Step 1: Write failing safe-context test**
+- [x] **Step 1: Write failing safe-context test**
 
 Render with a valid token response and assert service/date/time/status are shown while internal notes, owner ID and provider payload are absent.
 
-- [ ] **Step 2: Write failing expired-token test**
+- [x] **Step 2: Write failing expired-token test**
 
 Return `token_expired`; assert owner contact CTA is rendered and no booking facts are leaked.
 
-- [ ] **Step 3: Write failing reschedule test**
+- [x] **Step 3: Write failing reschedule test**
 
 Choose a new slot, send expected booking version plus mutation UUID, and assert refreshed state reflects new local time.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 Run: `npm test -- --run src/pages/__tests__/BookingManagement.test.tsx`
 
-- [ ] **Step 5: Implement and route page**
+- [x] **Step 5: Implement and route page**
 
 Mount before the catch-all `:slug` route. Allowed action buttons come exclusively from server context.
 
-- [ ] **Step 6: Verify and commit**
+- [x] **Step 6: Verify and commit**
 
 Run: `npm test -- --run src/pages/__tests__/BookingManagement.test.tsx`
 

@@ -68,10 +68,28 @@ export interface LoadPublicAvailabilityInput {
 export interface ManageBookingWithTokenInput {
   token: string;
   action: 'confirm' | 'cancel' | 'reschedule';
+  expectedVersion: number;
   idempotencyKey: string;
   slotDate?: string | null;
   slotTime?: string | null;
   slotEndTime?: string | null;
+}
+
+export interface BookingManagementContext {
+  id: string;
+  serviceName: string;
+  slotDate: string;
+  slotTime: string;
+  slotEndTime: string | null;
+  timezone: string;
+  status: BookingStatus;
+  version: number;
+  paymentStatus: string;
+  depositRequiredAmount: string;
+  paidAmount: string;
+  currency: string;
+  allowedActions: Array<'confirm' | 'cancel' | 'reschedule'>;
+  ownerPagePath: string | null;
 }
 
 export interface ManagedBookingResult {
@@ -85,6 +103,7 @@ export class BookingLifecycleError extends Error {
   constructor(
     public readonly code: string,
     public readonly retryable: boolean,
+    public readonly details: { ownerPagePath?: string } = {},
   ) {
     super(code);
     this.name = 'BookingLifecycleError';
@@ -144,9 +163,97 @@ function throwResponseError(value: Json | undefined): never {
     throw new BookingLifecycleError(
       typeof value.code === 'string' ? value.code : 'request_failed',
       value.retryable === true,
+      typeof value.ownerPagePath === 'string' ? { ownerPagePath: value.ownerPagePath } : {},
     );
   }
   throw new BookingLifecycleError('invalid_response', true);
+}
+
+const BOOKING_STATUSES: BookingStatus[] = [
+  'pending_payment', 'confirmed', 'completed', 'cancelled', 'no_show',
+];
+
+export async function loadBookingManagementContext(token: string): Promise<BookingManagementContext> {
+  const { data, error } = await supabase.rpc('get_booking_by_access_token', { p_token: token });
+  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (!isRecord(data) || data.ok !== true) throwResponseError(data);
+  if (!isRecord(data.booking)) throw new BookingLifecycleError('invalid_response', true);
+
+  const booking = data.booking;
+  const status = booking.status;
+  const rawActions = booking.allowedActions;
+  if (
+    !requiredString(booking.id)
+    || !requiredString(booking.serviceName)
+    || !requiredString(booking.slotDate)
+    || !requiredString(booking.slotTime)
+    || !requiredString(booking.timezone)
+    || typeof status !== 'string'
+    || !BOOKING_STATUSES.includes(status as BookingStatus)
+    || !requiredVersion(booking.version)
+    || !requiredString(booking.paymentStatus)
+    || typeof booking.depositRequiredAmount !== 'string'
+    || typeof booking.paidAmount !== 'string'
+    || !requiredString(booking.currency)
+    || !Array.isArray(rawActions)
+  ) {
+    throw new BookingLifecycleError('invalid_response', true);
+  }
+
+  const allowedActions = rawActions.filter(
+    (action): action is 'confirm' | 'cancel' | 'reschedule' => (
+      action === 'confirm' || action === 'cancel' || action === 'reschedule'
+    ),
+  );
+
+  return {
+    id: booking.id,
+    serviceName: booking.serviceName,
+    slotDate: booking.slotDate,
+    slotTime: booking.slotTime,
+    slotEndTime: optionalString(booking.slotEndTime),
+    timezone: booking.timezone,
+    status: status as BookingStatus,
+    version: booking.version,
+    paymentStatus: booking.paymentStatus,
+    depositRequiredAmount: booking.depositRequiredAmount,
+    paidAmount: booking.paidAmount,
+    currency: booking.currency,
+    allowedActions,
+    ownerPagePath: optionalString(booking.ownerPagePath),
+  };
+}
+
+export async function loadBookingManagementAvailability(input: {
+  token: string;
+  fromDate: string;
+  toDate: string;
+}): Promise<PublicAvailabilitySlot[]> {
+  const { data, error } = await supabase.rpc('get_booking_management_availability', {
+    p_token: input.token,
+    p_from_date: input.fromDate,
+    p_to_date: input.toDate,
+  });
+  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (!isRecord(data) || data.ok !== true) throwResponseError(data);
+  if (!Array.isArray(data.slots)) throw new BookingLifecycleError('invalid_response', true);
+
+  return data.slots.map((raw) => {
+    if (
+      !isRecord(raw)
+      || !requiredString(raw.date)
+      || !requiredString(raw.time)
+      || typeof raw.available !== 'boolean'
+    ) {
+      throw new BookingLifecycleError('invalid_response', true);
+    }
+    return {
+      date: raw.date,
+      time: raw.time,
+      endTime: optionalString(raw.endTime),
+      available: raw.available,
+    };
+  });
 }
 
 export async function loadPublicBookingContext(pageId: string): Promise<PublicBookingContext> {
@@ -277,6 +384,7 @@ export async function manageBookingWithToken(
   const { data, error } = await supabase.rpc('manage_booking_by_access_token', {
     p_token: input.token,
     p_action: input.action,
+    p_expected_version: input.expectedVersion,
     p_idempotency_key: input.idempotencyKey,
     p_slot_date: input.slotDate ?? null,
     p_slot_time: input.slotTime ?? null,

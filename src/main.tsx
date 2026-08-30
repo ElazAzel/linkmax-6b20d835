@@ -111,6 +111,7 @@ const SmartLinks = lazy(() => import("./pages/SmartLinks"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const PublicGoodsPage = lazy(() => import("./pages/PublicGoodsPage"));
 const PublicPurchasePage = lazy(() => import("./pages/PublicPurchasePage"));
+const BookingManagement = lazy(() => import("./pages/BookingManagement"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 
@@ -132,6 +133,7 @@ const router = createBrowserRouter([
       // Digital goods: public checkout and protected download
       { path: "goods/:id", element: <PublicGoodsPage /> },
       { path: "purchase/:token", element: <PublicPurchasePage /> },
+      { path: "booking/manage/:token", element: <BookingManagement /> },
 
       { path: "auth/callback", element: <AuthCallback /> },
       // Managed OAuth server consent screen for external MCP clients
