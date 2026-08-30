@@ -146,27 +146,27 @@ git commit -m "feat: query revenue outcomes"
 - Produces: outcome-first composition behind `outcome_home_v1`.
 - Consumes: outcome hook, feature flags and dashboard navigation callbacks.
 
-- [ ] **Step 1: Write failing unique-composition test**
+- [x] **Step 1: Write failing unique-composition test**
 
 Assert exactly one `revenue-outcome-strip`, one `revenue-next-action`, and one attention queue. Assert page views/SEO details appear only below the operational section.
 
-- [ ] **Step 2: Write failing empty/new-user state test**
+- [x] **Step 2: Write failing empty/new-user state test**
 
 With no kit and no outcomes, assert primary CTA is `Настроить запись`, not a zero-heavy financial dashboard.
 
-- [ ] **Step 3: Write failing pending/past operations test**
+- [x] **Step 3: Write failing pending/past operations test**
 
 With pending deposits and past confirmed appointments, assert the higher-priority pending-deposit action and both operational groups in the queue.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 Run: `npm test -- --run src/components/dashboard-v2/revenue/__tests__/OutcomeHome.test.tsx`
 
-- [ ] **Step 5: Implement small real components and flag composition**
+- [x] **Step 5: Implement small real components and flag composition**
 
 Reuse existing Card/Button/Badge and typography tokens. Do not introduce a new dashboard style. Flag-off renders existing Home.
 
-- [ ] **Step 6: Verify GREEN and commit**
+- [x] **Step 6: Verify GREEN and commit**
 
 Run: `npm test -- --run src/components/dashboard-v2/revenue/__tests__/OutcomeHome.test.tsx src/pages/__tests__/Dashboard.test.tsx`
 
