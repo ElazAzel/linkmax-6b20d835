@@ -6,10 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import User from 'lucide-react/dist/esm/icons/user';
@@ -22,17 +20,15 @@ import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import XCircle from 'lucide-react/dist/esm/icons/x-circle';
 import Info from 'lucide-react/dist/esm/icons/info';
 import Copy from 'lucide-react/dist/esm/icons/copy';
-import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import { supabase } from '@/platform/supabase/client';
-import { fintechService } from '@/services/fintech';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import { useTimezone } from '@/hooks/useTimezone';
 import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date-fns';
-import { fromZonedTime, toZonedTime, formatInTimeZone } from 'date-fns-tz';
+import { fromZonedTime } from 'date-fns-tz';
 import { ru, kk } from 'date-fns/locale';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import confetti from 'canvas-confetti';
@@ -51,7 +47,6 @@ interface TimeSlot {
   time: string;
   endTime?: string;
   available: boolean;
-  bookingId?: string;
 }
 
 interface BookingFormData {
@@ -73,6 +68,30 @@ interface BookingConfirmation {
   prepaymentMethod?: string;
   ownerPhone?: string;
   kaspiPhone?: string;
+  status: 'pending_payment' | 'confirmed';
+  accessToken?: string;
+}
+
+function getSafeBookingAttribution(): Record<string, string | null> {
+  if (typeof window === 'undefined') return {};
+
+  const params = new URLSearchParams(window.location.search);
+  let referrerHost: string | null = null;
+
+  try {
+    referrerHost = document.referrer ? new URL(document.referrer).hostname : null;
+  } catch {
+    referrerHost = null;
+  }
+
+  return {
+    source: params.get('utm_source'),
+    medium: params.get('utm_medium'),
+    campaign: params.get('utm_campaign'),
+    content: params.get('utm_content'),
+    referrerHost,
+    landingPath: window.location.pathname,
+  };
 }
 
 export const BookingBlock = memo(function BookingBlockComponent({
@@ -97,13 +116,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
     notes: ''
   });
   const [fullyBookedDates, setFullyBookedDates] = useState<Set<string>>(new Set());
-  const [initLoading, setInitLoading] = useState(true);
   const [staff, setStaff] = useState<ZoneStaff[]>([]);
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
-  const [staffLoading, setStaffLoading] = useState(false);
-  const [resources, setResources] = useState<any[]>([]);
-  const [zoneId, setZoneId] = useState<string | null>(null);
-  const [zoneBookings, setZoneBookings] = useState<any[]>([]);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
@@ -113,19 +127,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
     
     // If multiple staff and none selected, don't fetch slots yet
     if (staff.length > 1 && !selectedStaffId) return;
-
-    // Fetch zone bookings for resource check
-    const dateStr = format(date, 'yyyy-MM-dd');
-    if (zoneId) {
-      const { data: zb } = await supabase
-        .from('bookings')
-        .select('slot_time, resource_id')
-        .eq('slot_date', dateStr)
-        .neq('status', 'cancelled');
-        // Filter by zone_id if possible, or we rely on page_id for now if schema allows
-        // Actually, for now we match by page_id's organization_id
-      setZoneBookings(zb || []);
-    }
 
     setLoading(true);
     try {
@@ -148,19 +149,24 @@ export const BookingBlock = memo(function BookingBlockComponent({
       
       const { data: slotTemplates } = await query;
 
-      let bookingQuery = supabase
-        .from('bookings')
-        .select('*')
-        .eq('page_id', pageId)
-        .eq('block_id', block.id)
-        .eq('slot_date', dateStr)
-        .neq('status', 'cancelled');
-      
-      if (selectedStaffId) {
-        bookingQuery = bookingQuery.eq('staff_id', selectedStaffId);
-      }
+      const { data: publicAvailability, error: availabilityError } = await supabase.rpc(
+        'get_public_availability',
+        {
+          p_page_id: pageId,
+          p_block_id: block.id,
+          p_from_date: dateStr,
+          p_to_date: dateStr,
+          p_staff_id: selectedStaffId,
+        },
+      );
 
-      const { data: bookings } = await bookingQuery;
+      if (availabilityError) throw availabilityError;
+
+      const occupiedTimes = new Set(
+        (publicAvailability ?? [])
+          .filter((slot) => !slot.available)
+          .map((slot) => slot.slot_time.slice(0, 5)),
+      );
 
       const generatedSlots: TimeSlot[] = [];
 
@@ -216,50 +222,24 @@ export const BookingBlock = memo(function BookingBlockComponent({
 
       if (block.slots && block.slots.length > 0) {
         block.slots.forEach(slot => {
-          const isBookedLocally = bookings?.some(b => b.slot_time === slot.startTime);
+          const isBookedLocally = occupiedTimes.has(slot.startTime.slice(0, 5));
           const isBookedGcal = checkGcalConflict(slot.startTime, slot.endTime);
-          
-          // Resource availability check
-          let resourceAvailable = true;
-          if (resources.length > 0) {
-            const bookedResourceIds = new Set(
-              zoneBookings
-                ?.filter(zb => zb.slot_time === slot.startTime)
-                .map(zb => zb.resource_id)
-                .filter(Boolean)
-            );
-            resourceAvailable = resources.some(r => !bookedResourceIds.has(r.id));
-          }
 
           generatedSlots.push({
             time: slot.startTime,
             endTime: slot.endTime,
-            available: !isBookedLocally && !isBookedGcal && resourceAvailable,
-            bookingId: bookings?.find(b => b.slot_time === slot.startTime)?.id
+            available: !isBookedLocally && !isBookedGcal,
           });
         });
       } else if (slotTemplates && slotTemplates.length > 0) {
         slotTemplates.forEach(template => {
-          const isBookedLocally = bookings?.some(b => b.slot_time === template.start_time);
+          const isBookedLocally = occupiedTimes.has(template.start_time.slice(0, 5));
           const isBookedGcal = checkGcalConflict(template.start_time, template.end_time ?? undefined);
-          
-          // Resource availability check
-          let resourceAvailable = true;
-          if (resources.length > 0) {
-            const bookedResourceIds = new Set(
-              zoneBookings
-                ?.filter(zb => zb.slot_time === template.start_time)
-                .map(zb => zb.resource_id)
-                .filter(Boolean)
-            );
-            resourceAvailable = resources.some(r => !bookedResourceIds.has(r.id));
-          }
 
           generatedSlots.push({
             time: template.start_time,
             endTime: template.end_time ?? undefined,
-            available: !isBookedLocally && !isBookedGcal && resourceAvailable,
-            bookingId: bookings?.find(b => b.slot_time === template.start_time)?.id
+            available: !isBookedLocally && !isBookedGcal,
           });
         });
       } else {
@@ -279,42 +259,30 @@ export const BookingBlock = memo(function BookingBlockComponent({
           const timeStr = `${startHr.toString().padStart(2, '0')}:${startMin.toString().padStart(2, '0')}:00`;
           const endTimeStr = `${endHr.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}:00`;
 
-          const isBookedLocally = bookings?.some(b => b.slot_time === timeStr);
+          const isBookedLocally = occupiedTimes.has(timeStr.slice(0, 5));
           const isBookedGcal = checkGcalConflict(timeStr, endTimeStr);
-
-          // Resource availability check
-          let resourceAvailable = true;
-          if (resources.length > 0) {
-            const bookedResourceIds = new Set(
-              zoneBookings
-                ?.filter(zb => zb.slot_time === timeStr)
-                .map(zb => zb.resource_id)
-                .filter(Boolean)
-            );
-            resourceAvailable = resources.some(r => !bookedResourceIds.has(r.id));
-          }
 
           generatedSlots.push({
             time: timeStr,
             endTime: endTimeStr,
-            available: !isBookedLocally && !isBookedGcal && resourceAvailable,
-            bookingId: bookings?.find(b => b.slot_time === timeStr)?.id
+            available: !isBookedLocally && !isBookedGcal,
           });
         }
       }
+
+      setSlots(generatedSlots);
 
     } catch (error) {
       console.error('Error fetching slots:', error);
     } finally {
       setLoading(false);
     }
-  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, block.timezone, userTimezone, selectedStaffId, staff.length, resources, zoneId, zoneBookings]);
+  }, [pageId, block.id, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, block.timezone, block.gcalSyncEnabled, userTimezone, selectedStaffId, staff.length, pageOwnerId]);
 
   // Pre-calculate fully booked dates for the next 30 days
   const preCalculateAvailability = useCallback(async () => {
     if (!pageId || !block.id) return;
     
-    setInitLoading(true);
     try {
       const today = startOfDay(new Date());
       const maxDays = block.maxBookingDays || 30;
@@ -323,21 +291,20 @@ export const BookingBlock = memo(function BookingBlockComponent({
       const dateStrStart = format(today, 'yyyy-MM-dd');
       const dateStrEnd = format(endRange, 'yyyy-MM-dd');
 
-      // 1. Fetch all bookings for the range
-      let bookingsQuery = supabase
-        .from('bookings')
-        .select('slot_date, slot_time')
-        .eq('page_id', pageId)
-        .eq('block_id', block.id)
-        .gte('slot_date', dateStrStart)
-        .lte('slot_date', dateStrEnd)
-        .neq('status', 'cancelled');
-      
-      if (selectedStaffId) {
-        bookingsQuery = bookingsQuery.eq('staff_id', selectedStaffId);
-      }
+      const { data: availabilityRows, error: availabilityError } = await supabase.rpc(
+        'get_public_availability',
+        {
+          p_page_id: pageId,
+          p_block_id: block.id,
+          p_from_date: dateStrStart,
+          p_to_date: dateStrEnd,
+          p_staff_id: selectedStaffId,
+        },
+      );
 
-      const { data: allBookings } = await bookingsQuery;
+      if (availabilityError) throw availabilityError;
+
+      const occupiedSlots = (availabilityRows ?? []).filter((slot) => !slot.available);
 
       // 2. Fetch slot templates
       let slotsQuery = supabase
@@ -363,7 +330,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
         const dayOfWeek = currentDate.getDay();
         const dateStr = format(currentDate, 'yyyy-MM-dd');
         
-        const dayBookings = allBookings?.filter(b => b.slot_date === dateStr) || [];
+        const dayBookings = occupiedSlots.filter((booking) => booking.slot_date === dateStr);
         let totalPossibleSlots = 0;
 
         if (block.slots && block.slots.length > 0) {
@@ -389,8 +356,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
       setFullyBookedDates(soldOut);
     } catch (err) {
       console.error('Error pre-calculating availability:', err);
-    } finally {
-      setInitLoading(false);
     }
   }, [pageId, block.id, block.maxBookingDays, block.slots, block.workingHoursStart, block.workingHoursEnd, block.slotDuration, selectedStaffId]);
 
@@ -409,19 +374,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
         .eq('id', pageId)
         .single();
         
-      if (pageData?.organization_id) {
-        setZoneId(pageData.organization_id);
-        
-        // Fetch resources
-        const { data: resData } = await supabase
-          .from('zone_resources')
-          .select('*')
-          .eq('zone_id', pageData.organization_id)
-          .eq('is_active', true);
-        
-        if (resData) setResources(resData);
-      }
-      
       if (!pageData?.organization_id) return;
       
       const { data: staffData } = await supabase
@@ -456,37 +408,36 @@ export const BookingBlock = memo(function BookingBlockComponent({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDate || !selectedSlot || !pageId || !pageOwnerId) return;
+    if (!selectedDate || !selectedSlot || !pageId) return;
 
     setSubmitting(true);
     try {
-      const { data: session } = await supabase.auth.getSession();
-
-      const hasPrepayment = block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0;
-      const paymentStatus = hasPrepayment ? 'pending' : 'none';
-      const paymentMethod = hasPrepayment ? (block.prepaymentMethod || 'whatsapp') : null;
+      const mutationId = crypto.randomUUID();
+      const linkedServiceOfferingId = block.serviceOfferingIds?.[0] ?? null;
 
       const { data: fnResponse, error: fnError } = await supabase.functions.invoke('submit-booking', {
         body: {
           pageId,
           blockId: block.id,
+          serviceOfferingId: linkedServiceOfferingId,
           slotDate: format(selectedDate, 'yyyy-MM-dd'),
           slotTime: selectedSlot.time,
-          slotEndTime: selectedSlot.endTime || null,
           clientName: formData.name,
           clientPhone: formData.phone || null,
           clientEmail: formData.email || null,
           clientNotes: formData.notes || null,
-          paymentStatus,
-          paymentAmount: hasPrepayment ? block.prepaymentAmount : 0,
-          paymentMethod,
-          userId: session?.session?.user?.id || null,
           staffId: selectedStaffId,
+          bookingTimezone: block.timezone || userTimezone || 'Asia/Almaty',
+          attribution: getSafeBookingAttribution(),
+          idempotencyKey: `public-booking:${mutationId}`,
         }
       });
 
       if (fnError) {
-        if (fnError.message?.includes('409') || (fnError as any).status === 409) {
+        const isConflict = fnError.message?.includes('409')
+          || ('context' in fnError && fnError.context instanceof Response && fnError.context.status === 409);
+
+        if (isConflict) {
           toast.error(t('booking.error.alreadyBooked', 'Этот слот уже занят. Пожалуйста, выберите другое время.'));
           fetchSlots(selectedDate); // Refresh slots
           setSubmitting(false);
@@ -505,26 +456,9 @@ export const BookingBlock = memo(function BookingBlockComponent({
       if (fnResponse && !fnResponse.success) throw new Error(fnResponse.error);
 
       const bookingData = fnResponse?.booking;
-
-      // Record in Fintech Ledger
-      if (hasPrepayment) {
-        try {
-          await fintechService.recordPendingIncome({
-            userId: pageOwnerId,
-            amount: block.prepaymentAmount || 0,
-            description: `Бронирование: ${formData.name} (${format(selectedDate, 'dd.MM.yyyy')} ${selectedSlot.time.substring(0, 5)})`,
-            relatedEntityId: block.id,
-            relatedEntityType: 'booking',
-            metadata: {
-              client_name: formData.name,
-              slot_date: format(selectedDate, 'yyyy-MM-dd'),
-              slot_time: selectedSlot.time
-            }
-          });
-        } catch (fintechErr) {
-          console.error('Failed to record fintech transaction', fintechErr);
-        }
-      }
+      const bookingStatus = bookingData?.status === 'pending_payment' ? 'pending_payment' : 'confirmed';
+      const requiresPrepayment = bookingStatus === 'pending_payment';
+      const depositRequiredAmount = Number(bookingData?.depositRequiredAmount ?? 0);
 
       // Notification and lead creation are now handled server-side in submit-booking
 
@@ -538,21 +472,24 @@ export const BookingBlock = memo(function BookingBlockComponent({
         endTime: selectedSlot.endTime?.substring(0, 5),
         name: formData.name,
         bookingId: bookingData?.id || '',
-        requiresPrepayment: !!hasPrepayment,
-        prepaymentAmount: block.prepaymentAmount,
-        prepaymentCurrency: block.prepaymentCurrency || 'KZT',
+        requiresPrepayment,
+        prepaymentAmount: depositRequiredAmount,
+        prepaymentCurrency: bookingData?.currency || block.prepaymentCurrency || 'KZT',
         prepaymentMethod: block.prepaymentMethod || 'whatsapp',
         ownerPhone: block.prepaymentPhone,
         kaspiPhone: block.kaspiPhone,
+        status: bookingStatus,
+        accessToken: bookingData?.accessToken || undefined,
       });
 
-      // Trigger WOW effect
-      confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#10b981', '#34d399', '#ffffff']
-      });
+      if (bookingStatus === 'confirmed') {
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#10b981', '#34d399', '#ffffff']
+        });
+      }
 
       setShowForm(false);
       setFormData({ name: '', phone: '', email: '', notes: '' });
@@ -660,10 +597,14 @@ export const BookingBlock = memo(function BookingBlockComponent({
 
             <div className="space-y-1">
               <h3 className="text-2xl font-black text-gradient tracking-tight">
-                {t('booking.confirmation.title', 'Вы записаны!')}
+                {confirmation.status === 'pending_payment'
+                  ? t('booking.confirmation.pendingTitle', 'Заявка создана')
+                  : t('booking.confirmation.title', 'Вы записаны!')}
               </h3>
               <p className="text-sm font-medium text-muted-foreground/80">
-                {t('booking.confirmation.subtitle', 'Детали вашей записи')}
+                {confirmation.status === 'pending_payment'
+                  ? t('booking.confirmation.pendingSubtitle', 'Время будет подтверждено после предоплаты')
+                  : t('booking.confirmation.subtitle', 'Детали вашей записи')}
               </p>
             </div>
 

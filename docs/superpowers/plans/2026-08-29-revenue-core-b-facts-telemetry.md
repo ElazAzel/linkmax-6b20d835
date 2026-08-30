@@ -184,11 +184,11 @@ git commit -m "feat: enforce booking revenue lifecycle"
 - Produces: `get_public_booking_context`, `get_public_availability`, `create_public_booking`, `booking_access_tokens`, `get_booking_by_access_token`, `manage_booking_by_access_token`.
 - Consumes: service offerings, booking slots, lifecycle RPCs.
 
-- [ ] **Step 1: Write the anonymous RLS test**
+- [x] **Step 1: Write the anonymous RLS test**
 
 Assert anonymous `SELECT client_phone FROM bookings` fails, while `get_public_availability` returns only `slot_date`, `slot_time`, `slot_end_time`, and `available`.
 
-- [ ] **Step 2: Write token tests**
+- [x] **Step 2: Write token tests**
 
 Assert valid token returns public-safe context, invalid/expired tokens return error codes, and raw token text is absent from stored rows.
 
@@ -196,7 +196,7 @@ Assert valid token returns public-safe context, invalid/expired tokens return er
 
 Run: `supabase test db supabase/tests/booking_public_access.test.sql`
 
-- [ ] **Step 4: Implement safe RPCs and policies**
+- [x] **Step 4: Implement safe RPCs and policies**
 
 Drop anonymous raw booking selection/insertion policies. Derive owner, price, deposit and snapshot server-side. Store token hash with `digest(token, 'sha256')`. Cap attribution strings and omit raw URL/query/IP.
 
@@ -206,7 +206,7 @@ Run: `supabase db reset`
 
 Run: `supabase test db supabase/tests/booking_public_access.test.sql`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add supabase/migrations/20260829122000_booking_public_access_hardening.sql supabase/tests/booking_public_access.test.sql

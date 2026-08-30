@@ -99,6 +99,7 @@ export interface BookingBlock {
     workingHoursEnd?: number;
     slotDuration?: number;
     slots?: BookingSlot[];
+    serviceOfferingIds?: string[];
     disabledWeekdays?: number[];
     maxBookingDays?: number;
     requirePhone?: boolean;

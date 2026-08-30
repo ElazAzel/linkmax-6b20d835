@@ -1055,6 +1055,58 @@ export type AppDatabase = Omit<Database, 'public'> & {
     Functions: Merge<
       Database['public']['Functions'],
       {
+        create_public_booking: {
+          Args: {
+            p_page_id: string;
+            p_block_id: string;
+            p_service_offering_id: string | null;
+            p_slot_date: string;
+            p_slot_time: string;
+            p_staff_id: string | null;
+            p_client_name: string;
+            p_client_phone: string | null;
+            p_client_email: string | null;
+            p_client_notes: string | null;
+            p_booking_timezone: string;
+            p_attribution: Json;
+            p_idempotency_key: string;
+          };
+          Returns: Json;
+        };
+        get_booking_by_access_token: {
+          Args: { p_token: string };
+          Returns: Json;
+        };
+        get_public_availability: {
+          Args: {
+            p_page_id: string;
+            p_block_id: string;
+            p_from_date: string;
+            p_to_date: string;
+            p_staff_id?: string | null;
+          };
+          Returns: {
+            slot_date: string;
+            slot_time: string;
+            slot_end_time: string | null;
+            available: boolean;
+          }[];
+        };
+        get_public_booking_context: {
+          Args: { p_page_id: string };
+          Returns: Json;
+        };
+        manage_booking_by_access_token: {
+          Args: {
+            p_token: string;
+            p_action: 'confirm' | 'cancel' | 'reschedule';
+            p_idempotency_key: string;
+            p_slot_date?: string | null;
+            p_slot_time?: string | null;
+            p_slot_end_time?: string | null;
+          };
+          Returns: Json;
+        };
         record_manual_booking_payment: {
           Args: {
             p_booking_id: string;
