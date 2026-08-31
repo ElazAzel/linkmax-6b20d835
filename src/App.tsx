@@ -185,7 +185,8 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>
-              <LanguageProvider>
+              <AppAuthEffects />
+
                 <TooltipProvider>
                   <SkipToMainContent />
                   <Suspense fallback={null}>
