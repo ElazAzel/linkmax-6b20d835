@@ -2,160 +2,144 @@
 // To take ownership, delete this banner line; the plugin then leaves the file alone.
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
+// <define:import.meta.env>
+var define_import_meta_env_default = { VITE_SUPABASE_PROJECT_ID: "pphdcfxucfndmwulpfwv", VITE_SUPABASE_PUBLISHABLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", VITE_SUPABASE_URL: "https://pphdcfxucfndmwulpfwv.supabase.co", VITE_PAYMENTS_CLIENT_TOKEN: "live_b0e4c30cfecad95eabfeeb4eaba", VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", MODE: "production", BASE_URL: "/", DEV: false, PROD: true, SSR: false };
+
 // src/lib/mcp/index.ts
 import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.23.0";
 
-// src/lib/mcp/tools/list-my-pages.ts
-import { createClient } from "npm:@supabase/supabase-js@2.95.3";
+// src/lib/mcp/tools/create-block.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.23.0";
 import { z } from "npm:zod@3.25.76";
-function supabaseForUser(ctx) {
-  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
-var list_my_pages_default = defineTool({
-  name: "list_my_pages",
-  title: "List my LinkMAX pages",
-  description: "List all link-in-bio pages that belong to the signed-in LinkMAX user. Returns slug, title, publish status, view count and update time.",
-  inputSchema: {
-    limit: z.number().int().min(1).max(100).optional().describe("Maximum number of pages to return. Defaults to 50.")
-  },
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async ({ limit }, ctx) => {
-    if (!ctx.isAuthenticated()) {
-      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    }
-    const supabase = supabaseForUser(ctx);
-    const { data, error } = await supabase.from("pages").select("id, slug, title, is_published, views_count, updated_at").eq("user_id", ctx.getUserId()).order("updated_at", { ascending: false }).limit(limit ?? 50);
-    if (error) {
-      return { content: [{ type: "text", text: error.message }], isError: true };
-    }
-    return {
-      content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }],
-      structuredContent: { pages: data ?? [] }
-    };
-  }
-});
 
-// src/lib/mcp/tools/list-my-leads.ts
-import { createClient as createClient2 } from "npm:@supabase/supabase-js@2.95.3";
-import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z2 } from "npm:zod@3.25.76";
-function supabaseForUser2(ctx) {
-  return createClient2(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
-var list_my_leads_default = defineTool2({
-  name: "list_my_leads",
-  title: "List my LinkMAX leads",
-  description: "List recent leads captured by the signed-in LinkMAX user's pages. Returns contact fields and source page.",
-  inputSchema: {
-    limit: z2.number().int().min(1).max(200).optional().describe("Max leads to return. Default 50."),
-    page_id: z2.string().uuid().optional().describe("Optional page UUID to filter leads by page.")
-  },
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async ({ limit, page_id }, ctx) => {
-    if (!ctx.isAuthenticated()) {
-      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    }
-    const supabase = supabaseForUser2(ctx);
-    let query = supabase.from("leads").select("id, page_id, form_data, source, status, created_at").eq("owner_id", ctx.getUserId()).order("created_at", { ascending: false }).limit(limit ?? 50);
-    if (page_id) query = query.eq("page_id", page_id);
-    const { data, error } = await query;
-    if (error) {
-      return { content: [{ type: "text", text: error.message }], isError: true };
-    }
-    return {
-      content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }],
-      structuredContent: { leads: data ?? [] }
-    };
+// src/lib/mcp/utils.ts
+import { createClient } from "npm:@supabase/supabase-js@2.95.3";
+function getAuthenticatedContext(ctx) {
+  const userId = ctx.getUserId();
+  if (!ctx.isAuthenticated() || !userId) {
+    return toolError("not_authenticated", "Sign in to LinkMAX before using this tool.");
   }
-});
-
-// src/lib/mcp/tools/get-analytics-summary.ts
-import { createClient as createClient3 } from "npm:@supabase/supabase-js@2.95.3";
-import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z3 } from "npm:zod@3.25.76";
-function supabaseForUser3(ctx) {
-  return createClient3(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
-var get_analytics_summary_default = defineTool3({
-  name: "get_analytics_summary",
-  title: "Get analytics summary",
-  description: "Return a lightweight analytics summary for the signed-in LinkMAX user: total events, unique visitors and top pages within the given number of days (default 30).",
-  inputSchema: {
-    days: z3.number().int().min(1).max(365).optional().describe("Look-back window in days. Default 30.")
-  },
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async ({ days }, ctx) => {
-    if (!ctx.isAuthenticated()) {
-      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    }
-    const supabase = supabaseForUser3(ctx);
-    const windowDays = days ?? 30;
-    const since = new Date(Date.now() - windowDays * 864e5).toISOString();
-    const { data: pages, error: pagesErr } = await supabase.from("pages").select("id, slug, title, views_count").eq("user_id", ctx.getUserId());
-    if (pagesErr) return { content: [{ type: "text", text: pagesErr.message }], isError: true };
-    const pageIds = (pages ?? []).map((p) => p.id);
-    if (pageIds.length === 0) {
-      return {
-        content: [{ type: "text", text: "No pages yet." }],
-        structuredContent: { totals: { events: 0, unique_sessions: 0 }, pages: [] }
-      };
-    }
-    const { data: events, error: evErr } = await supabase.from("analytics").select("session_id, page_id, event_type").in("page_id", pageIds).gte("created_at", since);
-    if (evErr) return { content: [{ type: "text", text: evErr.message }], isError: true };
-    const list = events ?? [];
-    const uniq = new Set(list.map((e) => e.session_id).filter(Boolean));
-    const byPage = /* @__PURE__ */ new Map();
-    for (const e of list) byPage.set(e.page_id, (byPage.get(e.page_id) ?? 0) + 1);
-    const top = (pages ?? []).map((p) => ({ slug: p.slug, title: p.title, events: byPage.get(p.id) ?? 0, views_total: p.views_count })).sort((a, b) => b.events - a.events).slice(0, 10);
+  const supabaseUrl2 = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!supabaseUrl2 || !supabaseKey) {
+    return toolError("configuration_error", "LinkMAX data access is not configured.");
+  }
+  try {
     return {
-      content: [{ type: "text", text: JSON.stringify({ window_days: windowDays, total_events: list.length, unique_sessions: uniq.size, top_pages: top }, null, 2) }],
-      structuredContent: { window_days: windowDays, totals: { events: list.length, unique_sessions: uniq.size }, top_pages: top }
+      userId,
+      supabase: createClient(supabaseUrl2, supabaseKey, {
+        global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+        auth: { persistSession: false, autoRefreshToken: false }
+      })
     };
+  } catch (error) {
+    console.error("LinkMAX MCP Supabase client initialization failed", {
+      error: error instanceof Error ? error.name : "unknown_error"
+    });
+    return toolError("configuration_error", "LinkMAX data access is not configured.");
+  }
+}
+function toolError(code, message) {
+  return {
+    content: [{ type: "text", text: JSON.stringify({ error: code, message }) }],
+    structuredContent: { error: code, message },
+    isError: true
+  };
+}
+function databaseError(operation) {
+  console.error(`LinkMAX MCP database operation failed: ${operation}`);
+  return toolError("database_error", "LinkMAX could not complete the data request.");
+}
+function jsonResult(value) {
+  return {
+    content: [{ type: "text", text: JSON.stringify(value, null, 2) }],
+    structuredContent: value
+  };
+}
+function getMetadataString(metadata, ...keys) {
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) return void 0;
+  const record = metadata;
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.length > 0) return value;
+  }
+  return void 0;
+}
+function getMetadataPageId(metadata) {
+  return getMetadataString(metadata, "page_id", "pageId");
+}
+function isToolError(value) {
+  return "isError" in value;
+}
+
+// src/lib/mcp/tools/create-block.ts
+var create_block_default = defineTool({
+  name: "create_block",
+  title: "Create a LinkMAX block",
+  description: "Create a block on one of the signed-in user's pages. The block is inserted at the requested position or appended to the end when position is omitted.",
+  inputSchema: {
+    page_id: z.string().uuid().describe("Page UUID owned by the signed-in user."),
+    type: z.string().trim().min(1).max(64).describe("LinkMAX block type, for example link, text, image or form."),
+    title: z.string().trim().max(200).optional().describe("Optional block title."),
+    content: z.unknown().optional().describe("JSON content for the block."),
+    style: z.record(z.string(), z.unknown()).optional().describe("Optional JSON style configuration."),
+    position: z.number().int().min(0).max(1e4).optional().describe("Zero-based position. Defaults to the end."),
+    is_premium: z.boolean().optional().describe("Whether the block is marked premium."),
+    schedule: z.unknown().optional().describe("Optional JSON publication schedule.")
+  },
+  annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
+  handler: async ({ page_id, type, title, content, style, position, is_premium, schedule }, ctx) => {
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+    const { supabase, userId } = authContext;
+    const { data: page, error: pageError } = await supabase.from("pages").select("id").eq("id", page_id).eq("user_id", userId).maybeSingle();
+    if (pageError) return databaseError("create_block.page");
+    if (!page) return toolError("not_found", "Page not found for this user.");
+    let nextPosition = position;
+    if (nextPosition === void 0) {
+      const { data: lastBlock, error: positionError } = await supabase.from("blocks").select("position").eq("page_id", page_id).order("position", { ascending: false }).limit(1).maybeSingle();
+      if (positionError) return databaseError("create_block.position");
+      nextPosition = (lastBlock?.position ?? -1) + 1;
+    }
+    const { data: block, error } = await supabase.from("blocks").insert({
+      page_id,
+      type,
+      title: title ?? null,
+      content: content ?? {},
+      style: style ?? null,
+      position: nextPosition,
+      is_premium: is_premium ?? false,
+      schedule: schedule ?? null
+    }).select("id, page_id, type, position, title, content, style, is_premium, click_count, schedule").single();
+    if (error) return databaseError("create_block");
+    return jsonResult({ block });
   }
 });
 
 // src/lib/mcp/tools/create-page.ts
-import { createClient as createClient4 } from "npm:@supabase/supabase-js@2.95.3";
-import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z4 } from "npm:zod@3.25.76";
-function supabaseForUser4(ctx) {
-  return createClient4(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
-var create_page_default = defineTool4({
+import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z2 } from "npm:zod@3.25.76";
+var create_page_default = defineTool2({
   name: "create_page",
   title: "Create a new LinkMAX page",
   description: "Create a new link-in-bio page for the signed-in LinkMAX user. Returns the new page id, slug and default settings so the agent can immediately edit blocks and appearance.",
   inputSchema: {
-    slug: z4.string().trim().min(1).max(64).optional().describe("Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."),
-    title: z4.string().trim().min(1).max(120).optional().describe("Page title shown in the header and SEO."),
-    description: z4.string().trim().max(500).optional().describe("Short page description (SEO/bio).")
+    slug: z2.string().trim().min(1).max(64).transform((value) => value.toLowerCase()).optional().describe("Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."),
+    title: z2.string().trim().min(1).max(120).optional().describe("Page title shown in the header and SEO."),
+    description: z2.string().trim().max(500).optional().describe("Short page description (SEO/bio).")
   },
   annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
   handler: async ({ slug, title, description }, ctx) => {
-    if (!ctx.isAuthenticated()) {
-      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    }
-    const supabase = supabaseForUser4(ctx);
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+    const { supabase } = authContext;
     const { data, error } = await supabase.rpc("mcp_create_user_page", {
       p_slug: slug ?? null,
       p_title: title ?? null,
       p_description: description ?? null
     });
     if (error) {
-      return { content: [{ type: "text", text: error.message }], isError: true };
+      return databaseError("create_page");
     }
     const row = Array.isArray(data) ? data[0] : data;
     const settings = {
@@ -174,70 +158,273 @@ var create_page_default = defineTool4({
       block_types: ["link", "text", "image", "video", "form", "event", "product", "profile", "social"],
       public_url_pattern: "https://lnkmx.my/{slug}"
     };
-    return {
-      content: [{ type: "text", text: JSON.stringify({ page: row, settings }, null, 2) }],
-      structuredContent: { page: row, settings }
-    };
+    return jsonResult({ page: row, settings });
+  }
+});
+
+// src/lib/mcp/tools/get-analytics-summary.ts
+import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z3 } from "npm:zod@3.25.76";
+var get_analytics_summary_default = defineTool3({
+  name: "get_analytics_summary",
+  title: "Get analytics summary",
+  description: "Return a lightweight analytics summary for the signed-in LinkMAX user: total events, unique visitors and top pages within the given number of days (default 30).",
+  inputSchema: {
+    days: z3.number().int().min(1).max(365).optional().describe("Look-back window in days. Default 30.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ days }, ctx) => {
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+    const { supabase, userId } = authContext;
+    const windowDays = days ?? 30;
+    const since = new Date(Date.now() - windowDays * 864e5).toISOString();
+    const { data: pages, error: pagesErr } = await supabase.from("pages").select("id, slug, title, view_count").eq("user_id", userId);
+    if (pagesErr) return databaseError("get_analytics_summary.pages");
+    const pageIds = (pages ?? []).map((p) => p.id);
+    if (pageIds.length === 0) {
+      return jsonResult({
+        window_days: windowDays,
+        totals: { events: 0, unique_sessions: 0, unique_visitors: 0 },
+        top_pages: []
+      });
+    }
+    const { data: events, count: eventCount, error: evErr } = await supabase.from("analytics").select("page_id, event_type, metadata, created_at", { count: "exact" }).in("page_id", pageIds).gte("created_at", since).limit(1e4);
+    if (evErr) return databaseError("get_analytics_summary.analytics");
+    const list = events ?? [];
+    const uniqueSessions = /* @__PURE__ */ new Set();
+    const uniqueVisitors = /* @__PURE__ */ new Set();
+    const byEventType = /* @__PURE__ */ new Map();
+    const byPage = /* @__PURE__ */ new Map();
+    for (const event of list) {
+      const sessionId = getMetadataString(event.metadata, "sessionId", "session_id");
+      const visitorId = getMetadataString(event.metadata, "visitorId", "visitor_id");
+      if (sessionId) uniqueSessions.add(sessionId);
+      if (visitorId) uniqueVisitors.add(visitorId);
+      byEventType.set(event.event_type, (byEventType.get(event.event_type) ?? 0) + 1);
+      if (event.page_id) byPage.set(event.page_id, (byPage.get(event.page_id) ?? 0) + 1);
+    }
+    const top = (pages ?? []).map((p) => ({ slug: p.slug, title: p.title, events: byPage.get(p.id) ?? 0, views_total: p.view_count ?? 0 })).sort((a, b) => b.events - a.events).slice(0, 10);
+    return jsonResult({
+      window_days: windowDays,
+      sampled: (eventCount ?? list.length) > list.length,
+      totals: {
+        events: eventCount ?? list.length,
+        unique_sessions: uniqueSessions.size,
+        unique_visitors: uniqueVisitors.size
+      },
+      events_by_type: Object.fromEntries(byEventType),
+      top_pages: top
+    });
   }
 });
 
 // src/lib/mcp/tools/get-page-structure.ts
-import { createClient as createClient5 } from "npm:@supabase/supabase-js@2.95.3";
-import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z5 } from "npm:zod@3.25.76";
-function supabaseForUser5(ctx) {
-  return createClient5(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
-var get_page_structure_default = defineTool5({
+import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z4 } from "npm:zod@3.25.76";
+var get_page_structure_default = defineTool4({
   name: "get_page_structure",
   title: "Get page structure and blocks",
   description: "Return the full block structure and current configuration of one of the signed-in user's LinkMAX pages, so an agent can review and edit it. Accepts either a page_id (uuid) or a slug.",
   inputSchema: {
-    page_id: z5.string().uuid().optional().describe("Page UUID. Provide this OR slug."),
-    slug: z5.string().trim().min(1).optional().describe("Page slug. Provide this OR page_id.")
+    page_id: z4.string().uuid().optional().describe("Page UUID. Provide this OR slug."),
+    slug: z4.string().trim().min(1).max(120).optional().describe("Page slug. Provide this OR page_id.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ page_id, slug }, ctx) => {
-    if (!ctx.isAuthenticated()) {
-      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    }
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
     if (!page_id && !slug) {
-      return { content: [{ type: "text", text: "Provide page_id or slug." }], isError: true };
+      return toolError("invalid_input", "Provide page_id or slug.");
     }
-    const supabase = supabaseForUser5(ctx);
+    if (page_id && slug) {
+      return toolError("invalid_input", "Provide either page_id or slug, not both.");
+    }
+    const { supabase, userId } = authContext;
     let pageQuery = supabase.from("pages").select(
-      "id, user_id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, niche, entity_type, contact_email, contact_phone, contact_whatsapp, editor_mode, grid_config, integrations, custom_domain, page_type, updated_at"
-    ).eq("user_id", ctx.getUserId()).limit(1);
+      "id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, niche, entity_type, contact_email, contact_phone, contact_whatsapp, editor_mode, grid_config, integrations, custom_domain, page_type, updated_at"
+    ).eq("user_id", userId).limit(1);
     pageQuery = page_id ? pageQuery.eq("id", page_id) : pageQuery.eq("slug", slug);
     const { data: pages, error: pageErr } = await pageQuery;
-    if (pageErr) return { content: [{ type: "text", text: pageErr.message }], isError: true };
+    if (pageErr) return databaseError("get_page_structure.page");
     const page = pages?.[0];
-    if (!page) return { content: [{ type: "text", text: "Page not found for this user." }], isError: true };
+    if (!page) return toolError("not_found", "Page not found for this user.");
     const { data: blocks, error: blocksErr } = await supabase.from("blocks").select("id, type, position, title, content, style, is_premium, click_count, schedule").eq("page_id", page.id).order("position", { ascending: true });
-    if (blocksErr) return { content: [{ type: "text", text: blocksErr.message }], isError: true };
+    if (blocksErr) return databaseError("get_page_structure.blocks");
     const result = { page, blocks: blocks ?? [], block_count: (blocks ?? []).length };
-    return {
-      content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
-      structuredContent: result
-    };
+    return jsonResult(result);
+  }
+});
+
+// src/lib/mcp/tools/list-my-leads.ts
+import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z5 } from "npm:zod@3.25.76";
+var list_my_leads_default = defineTool5({
+  name: "list_my_leads",
+  title: "List my LinkMAX leads",
+  description: "List recent leads captured by the signed-in LinkMAX user's pages. Returns contact fields and source page.",
+  inputSchema: {
+    limit: z5.number().int().min(1).max(200).optional().describe("Max leads to return. Default 50."),
+    page_id: z5.string().uuid().optional().describe("Optional page UUID stored in lead metadata to filter leads by page.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ limit, page_id }, ctx) => {
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+    const { supabase, userId } = authContext;
+    let query = supabase.from("leads").select("id, name, email, phone, source, status, notes, metadata, created_at, updated_at").eq("user_id", userId).order("created_at", { ascending: false });
+    if (page_id) query = query.contains("metadata", { page_id });
+    const { data, error } = await query.limit(limit ?? 50);
+    if (error) {
+      return databaseError("list_my_leads");
+    }
+    const leads = (data ?? []).map((lead) => ({ ...lead, page_id: getMetadataPageId(lead.metadata) ?? null }));
+    return jsonResult({ leads });
+  }
+});
+
+// src/lib/mcp/tools/list-my-pages.ts
+import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z6 } from "npm:zod@3.25.76";
+var list_my_pages_default = defineTool6({
+  name: "list_my_pages",
+  title: "List my LinkMAX pages",
+  description: "List all link-in-bio pages that belong to the signed-in LinkMAX user. Returns slug, title, publish status, view count and update time.",
+  inputSchema: {
+    limit: z6.number().int().min(1).max(100).optional().describe("Maximum number of pages to return. Defaults to 50.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ limit }, ctx) => {
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+    const { supabase, userId } = authContext;
+    const { data, error } = await supabase.from("pages").select("id, slug, title, is_published, view_count, updated_at").eq("user_id", userId).order("updated_at", { ascending: false }).limit(limit ?? 50);
+    if (error) {
+      return databaseError("list_my_pages");
+    }
+    return jsonResult({ pages: data ?? [] });
+  }
+});
+
+// src/lib/mcp/tools/update-block.ts
+import { defineTool as defineTool7 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z7 } from "npm:zod@3.25.76";
+var update_block_default = defineTool7({
+  name: "update_block",
+  title: "Update a LinkMAX block",
+  description: "Update the content, appearance, type or position of a block that belongs to one of the signed-in user's pages.",
+  inputSchema: {
+    block_id: z7.string().uuid().describe("Block UUID."),
+    type: z7.string().trim().min(1).max(64).optional(),
+    title: z7.string().trim().max(200).nullable().optional(),
+    content: z7.unknown().optional(),
+    style: z7.record(z7.string(), z7.unknown()).nullable().optional(),
+    position: z7.number().int().min(0).max(1e4).optional(),
+    is_premium: z7.boolean().optional(),
+    schedule: z7.unknown().nullable().optional()
+  },
+  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
+  handler: async ({ block_id, type, title, content, style, position, is_premium, schedule }, ctx) => {
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+    const { supabase, userId } = authContext;
+    const { data: block, error: blockError } = await supabase.from("blocks").select("id, page_id").eq("id", block_id).maybeSingle();
+    if (blockError) return databaseError("update_block.lookup");
+    if (!block) return toolError("not_found", "Block not found.");
+    const { data: page, error: pageError } = await supabase.from("pages").select("id").eq("id", block.page_id).eq("user_id", userId).maybeSingle();
+    if (pageError) return databaseError("update_block.authorization");
+    if (!page) return toolError("not_found", "Block not found for this user.");
+    const updates = {};
+    if (type !== void 0) updates.type = type;
+    if (title !== void 0) updates.title = title;
+    if (content !== void 0) updates.content = content;
+    if (style !== void 0) updates.style = style;
+    if (position !== void 0) updates.position = position;
+    if (is_premium !== void 0) updates.is_premium = is_premium;
+    if (schedule !== void 0) updates.schedule = schedule;
+    if (Object.keys(updates).length === 0) {
+      return toolError("invalid_input", "Provide at least one block field to update.");
+    }
+    const { data: updatedBlock, error } = await supabase.from("blocks").update(updates).eq("id", block_id).select("id, page_id, type, position, title, content, style, is_premium, click_count, schedule").single();
+    if (error) return databaseError("update_block");
+    return jsonResult({ block: updatedBlock });
+  }
+});
+
+// src/lib/mcp/tools/update-page.ts
+import { defineTool as defineTool8 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z8 } from "npm:zod@3.25.76";
+var jsonObject = z8.record(z8.string(), z8.unknown());
+var update_page_default = defineTool8({
+  name: "update_page",
+  title: "Update LinkMAX page settings",
+  description: "Update the settings of one of the signed-in user's pages. Only explicitly supplied allowlisted fields are changed; ownership is checked before the update.",
+  inputSchema: {
+    page_id: z8.string().uuid().describe("Page UUID owned by the signed-in user."),
+    title: z8.string().trim().min(1).max(120).optional(),
+    description: z8.string().trim().max(500).nullable().optional(),
+    avatar_url: z8.string().url().max(2048).nullable().optional(),
+    avatar_style: jsonObject.nullable().optional(),
+    theme_settings: jsonObject.nullable().optional(),
+    seo_meta: jsonObject.nullable().optional(),
+    is_published: z8.boolean().optional(),
+    niche: z8.string().trim().max(120).nullable().optional(),
+    entity_type: z8.string().trim().max(80).nullable().optional(),
+    contact_email: z8.string().email().max(320).nullable().optional(),
+    contact_phone: z8.string().trim().max(40).nullable().optional(),
+    contact_whatsapp: z8.string().trim().max(40).nullable().optional(),
+    editor_mode: z8.string().trim().max(40).optional(),
+    grid_config: jsonObject.nullable().optional(),
+    integrations: jsonObject.nullable().optional(),
+    custom_domain: z8.string().trim().max(253).nullable().optional(),
+    page_type: z8.string().trim().max(40).optional()
+  },
+  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
+  handler: async ({ page_id, ...fields }, ctx) => {
+    const authContext = getAuthenticatedContext(ctx);
+    if (isToolError(authContext)) return authContext;
+    const { supabase, userId } = authContext;
+    const { data: page, error: pageError } = await supabase.from("pages").select("id").eq("id", page_id).eq("user_id", userId).maybeSingle();
+    if (pageError) return databaseError("update_page.lookup");
+    if (!page) return toolError("not_found", "Page not found for this user.");
+    const updates = Object.fromEntries(
+      Object.entries(fields).filter(([, value]) => value !== void 0)
+    );
+    if (Object.keys(updates).length === 0) {
+      return toolError("invalid_input", "Provide at least one page field to update.");
+    }
+    const { data: updatedPage, error } = await supabase.from("pages").update(updates).eq("id", page_id).eq("user_id", userId).select(
+      "id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, niche, entity_type, contact_email, contact_phone, contact_whatsapp, editor_mode, grid_config, integrations, custom_domain, page_type, updated_at"
+    ).single();
+    if (error) return databaseError("update_page");
+    return jsonResult({ page: updatedPage });
   }
 });
 
 // src/lib/mcp/index.ts
-var projectRef = "pphdcfxucfndmwulpfwv";
+var env = define_import_meta_env_default;
+var supabaseUrl = env?.VITE_SUPABASE_URL?.replace(/\/+$/, "");
+var projectRef = env?.VITE_SUPABASE_PROJECT_ID ?? "project-ref-unset";
+var supabaseIssuer = supabaseUrl ? `${supabaseUrl}/auth/v1` : `https://${projectRef}.supabase.co/auth/v1`;
 var mcp_default = defineMcp({
   name: "linkmax-mcp",
   title: "LinkMAX MCP",
-  version: "0.1.0",
-  instructions: "Tools for LinkMAX \u2014 a link-in-bio and micro-business OS. Use `list_my_pages` to browse the user's published pages, `list_my_leads` to read captured leads, and `get_analytics_summary` for a quick performance overview. All tools operate on the signed-in user's own data.",
+  version: "0.2.0",
+  instructions: "Tools for LinkMAX \u2014 a link-in-bio and micro-business OS. Browse pages and leads, inspect page analytics and block structure, create pages and blocks, and update page or block settings. All tools operate only on the signed-in user's own data.",
   auth: auth.oauth.issuer({
-    issuer: `https://${projectRef}.supabase.co/auth/v1`,
+    issuer: supabaseIssuer,
     acceptedAudiences: "authenticated"
   }),
-  tools: [list_my_pages_default, list_my_leads_default, get_analytics_summary_default, create_page_default, get_page_structure_default]
+  tools: [
+    list_my_pages_default,
+    list_my_leads_default,
+    get_analytics_summary_default,
+    create_page_default,
+    get_page_structure_default,
+    create_block_default,
+    update_block_default,
+    update_page_default
+  ]
 });
 
 // lovable-mcp-supabase-entry.ts

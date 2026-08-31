@@ -51,7 +51,7 @@
     "docs:audit:freshness": "node scripts/audit-docs-freshness.mjs --scope=docs --days=60",
     "docs:check": "node scripts/validate-doc-links.mjs",
     "predev": "node scripts/generate-sitemap.mjs",
-    "prebuild": "node scripts/generate-sitemap.mjs"
+    "prebuild": "node scripts/generate-sitemap.mjs && node scripts/generate-mcp.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
@@ -158,6 +158,7 @@
     "@vitest/coverage-v8": "^3.2.4",
     "ai-agent-skills": "4.2.0",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^10.1.0",
     "dependency-cruiser": "^16.3.2",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^5.2.0",

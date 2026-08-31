@@ -51,6 +51,7 @@ import { storage } from '@/lib/storage';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import { ViralReadinessCard } from '@/components/dashboard-v2/widgets/ViralReadinessCard';
 import { OutcomeHome } from '@/components/dashboard-v2/revenue/OutcomeHome';
 import { useRevenueOutcomeSummary } from '@/hooks/revenue/useRevenueOutcomeSummary';
 
@@ -296,6 +297,8 @@ export const HomeScreen = memo(function HomeScreen({
         {/* Operational lead feed; quantitative performance lives in one region below. */}
         {isPublished && (realLeadsCount > 0 || pageData.niche === 'expert') && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <ViralReadinessCard pageData={pageData} compact />
+
             {realLeadsCount > 0 && (
               <Button 
                 size="lg" 

@@ -1001,6 +1001,7 @@ function DashboardV2Inner() {
               onOpenChange={dashboard.sharingState.closeShareDialog}
               publishedUrl={dashboard.sharingState.publishedUrl}
               niche={dashboard.pageData?.niche}
+              pageId={dashboard.pageData?.id}
             />
           )}
 

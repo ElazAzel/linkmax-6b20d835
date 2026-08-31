@@ -16,60 +16,60 @@ export function FAQSection() {
 
   const faqItems = [
     {
-      question: t('landing.faq.q1.question'),
-      answer: t('landing.faq.q1.answer')
+      question: t('landingV1.faq.q1.question'),
+      answer: t('landingV1.faq.q1.answer')
     },
     {
-      question: t('landing.faq.q2.question'),
-      answer: t('landing.faq.q2.answer')
+      question: t('landingV1.faq.q2.question'),
+      answer: t('landingV1.faq.q2.answer')
     },
     {
-      question: t('landing.faq.q3.question'),
-      answer: t('landing.faq.q3.answer')
+      question: t('landingV1.faq.q3.question'),
+      answer: t('landingV1.faq.q3.answer')
     },
     {
-      question: t('landing.faq.q4.question'),
-      answer: t('landing.faq.q4.answer')
+      question: t('landingV1.faq.q4.question'),
+      answer: t('landingV1.faq.q4.answer')
     },
     {
-      question: t('landing.faq.q5.question'),
-      answer: t('landing.faq.q5.answer')
+      question: t('landingV1.faq.q5.question'),
+      answer: t('landingV1.faq.q5.answer')
     },
     {
-      question: t('landing.faq.q6.question'),
-      answer: t('landing.faq.q6.answer')
+      question: t('landingV1.faq.q6.question'),
+      answer: t('landingV1.faq.q6.answer')
     },
     {
-      question: t('landing.faq.q7.question'),
-      answer: t('landing.faq.q7.answer')
+      question: t('landingV1.faq.q7.question'),
+      answer: t('landingV1.faq.q7.answer')
     },
     {
-      question: t('landing.faq.q8.question'),
-      answer: t('landing.faq.q8.answer')
+      question: t('landingV1.faq.q8.question'),
+      answer: t('landingV1.faq.q8.answer')
     },
     {
-      question: t('landing.faq.q9.question'),
-      answer: t('landing.faq.q9.answer')
+      question: t('landingV1.faq.q9.question'),
+      answer: t('landingV1.faq.q9.answer')
     },
     {
-      question: t('landing.faq.q10.question'),
-      answer: t('landing.faq.q10.answer')
+      question: t('landingV1.faq.q10.question'),
+      answer: t('landingV1.faq.q10.answer')
     },
     {
-      question: t('landing.faq.q11.question'),
-      answer: t('landing.faq.q11.answer')
+      question: t('landingV1.faq.q11.question'),
+      answer: t('landingV1.faq.q11.answer')
     },
     {
-      question: t('landing.faq.q12.question'),
-      answer: t('landing.faq.q12.answer')
+      question: t('landingV1.faq.q12.question'),
+      answer: t('landingV1.faq.q12.answer')
     },
     {
-      question: t('landing.faq.q13.question'),
-      answer: t('landing.faq.q13.answer')
+      question: t('landingV1.faq.q13.question'),
+      answer: t('landingV1.faq.q13.answer')
     },
     {
-      question: t('landing.faq.q14.question'),
-      answer: t('landing.faq.q14.answer')
+      question: t('landingV1.faq.q14.question'),
+      answer: t('landingV1.faq.q14.answer')
     }
   ];
 
@@ -83,19 +83,19 @@ export function FAQSection() {
             className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 text-xs sm:text-sm font-medium opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in' : ''}`}
           >
             <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
-            <span className="text-primary">{t('landing.faq.badge')}</span>
+            <span className="text-primary">{t('landingV1.faq.badge')}</span>
           </div>
           <h2
             className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
-            {t('landing.faq.title')}
+            {t('landingV1.faq.title')}
           </h2>
           <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 font-normal ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '300ms' }}
           >
-            {t('landing.faq.subtitle')}
+            {t('landingV1.faq.subtitle')}
           </p>
         </div>
 

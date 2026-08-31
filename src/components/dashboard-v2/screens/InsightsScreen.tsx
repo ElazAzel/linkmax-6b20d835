@@ -46,6 +46,7 @@ import type { Block } from '@/types/page';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useInsights } from '@/hooks/analytics/useInsights';
+import { GrowthAnalyticsCard } from '@/components/dashboard-v2/widgets/GrowthAnalyticsCard';
 import { useRevenueOutcomeSummary } from '@/hooks/revenue/useRevenueOutcomeSummary';
 import { RevenueFunnel } from '@/components/dashboard-v2/analytics/RevenueFunnel';
 import { RevenueBySource } from '@/components/dashboard-v2/analytics/RevenueBySource';
@@ -264,6 +265,10 @@ export const InsightsScreen = memo(function InsightsScreen({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="px-[var(--space-page-px)] pb-5">
+        <GrowthAnalyticsCard pageId={pageId} />
       </div>
 
       <div className="px-[var(--space-page-px)] pb-24 space-y-7">

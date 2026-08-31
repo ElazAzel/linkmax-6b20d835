@@ -20,7 +20,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { usePaddleCheckout } from '@/hooks/usePaddleCheckout';
-import { toast } from 'sonner';
 
 interface Props {
   open: boolean;

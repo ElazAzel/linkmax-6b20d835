@@ -1,0 +1,1 @@
+REVOKE SELECT (invite_code) ON public.teams FROM anon, authenticated;

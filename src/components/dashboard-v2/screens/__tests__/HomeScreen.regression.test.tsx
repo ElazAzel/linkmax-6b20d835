@@ -46,6 +46,7 @@ const pageData = {
       id: 'profile-1',
       type: 'profile',
       name: 'Айгерим',
+      bio: 'Мастер маникюра',
       avatar: '',
       blockSize: 'full',
     },

@@ -24,7 +24,7 @@ vi.mock('@/platform/supabase/client', () => ({
 }));
 
 vi.mock('@/lib/utils/logger', () => ({
-    logger: { error: vi.fn(), info: vi.fn() }
+    logger: { error: vi.fn(), warn: vi.fn(), info: vi.fn() }
 }));
 
 describe('i18n-db-backend', () => {

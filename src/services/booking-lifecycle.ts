@@ -420,10 +420,11 @@ export async function loadPublicBookingContext(pageId: string): Promise<PublicBo
       throw new BookingLifecycleError('invalid_response', true);
     }
 
+    const depositMode = mode as DepositConfiguration['mode'];
+
     const depositRequiredAmount = typeof raw.depositRequiredAmount === 'string'
       ? raw.depositRequiredAmount
-      : calculateDepositAmount({ mode, value: raw.depositValue }, raw.priceAmount);
-    const depositMode = mode as DepositConfiguration['mode'];
+      : calculateDepositAmount({ mode: depositMode, value: raw.depositValue }, raw.priceAmount);
 
     return {
       id: raw.id,
