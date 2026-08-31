@@ -7503,5 +7503,11 @@
       "exhausted": "Yuklab olish chegarasi tugadi.",
       "counter": "{{limit}} dan {{used}} yuklab olindi"
     }
+  },
+  "humanizer": {
+    "action": "Insoniylashtirish",
+    "empty": "Avval matn yozing",
+    "alreadyClean": "Matn allaqachon tabiiy o‘qiladi",
+    "done": "Matn tirikroq bo‘ldi"
   }
 }

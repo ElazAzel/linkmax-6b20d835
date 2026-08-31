@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { HumanizeButton } from '@/components/editor/HumanizeButton';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Check from 'lucide-react/dist/esm/icons/check';
 import X from 'lucide-react/dist/esm/icons/x';
@@ -686,7 +687,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                 type="textarea"
                 className="text-base rounded-2xl border-2 border-primary/50 focus:border-primary resize-none transition-colors"
               />
+              <div className="flex items-center justify-center">
+                <HumanizeButton value={editedBio} onChange={setEditedBio} />
+              </div>
               <div className="flex items-center justify-center gap-3">
+
                 <Button size="lg" onClick={handleSaveBio} className="rounded-2xl px-6 h-12 font-bold shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
                   <Check className="h-5 w-5 mr-2" />
                   {t('common.save', 'Сохранить')}
