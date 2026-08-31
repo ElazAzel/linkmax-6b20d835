@@ -186,6 +186,8 @@ const App = () => {
           <TMAProvider>
             <AuthProvider>
               <AppAuthEffects />
+              <LanguageProvider>
+
 
                 <TooltipProvider>
                   <SkipToMainContent />
