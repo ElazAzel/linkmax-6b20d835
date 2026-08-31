@@ -1,7 +1,7 @@
 import type { BlockType } from '@/types/blocks/base';
 import type { Niche } from '@/lib/niches';
 
-export interface AlgorithmicTemplateBlock {
+interface AlgorithmicTemplateBlock {
   type: BlockType;
   overrides?: Record<string, unknown>;
 }
