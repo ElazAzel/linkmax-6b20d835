@@ -481,6 +481,10 @@ Return ONLY valid JSON, no markdown.`;
         throw new Error('Invalid type');
     }
 
+    // Живой русский по умолчанию: инструкция humanizer-ru идёт в каждый промпт,
+    // а результат дополнительно чистится детерминированно ниже.
+    systemPrompt = `${systemPrompt}\n\n${HUMANIZER_RU_PROMPT}`;
+
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -522,7 +526,7 @@ Return ONLY valid JSON, no markdown.`;
     if (type === 'seo' || type === 'ai-builder' || type === 'niche-builder' || type === 'personalize-template') {
       try {
         const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
-        const parsed = JSON.parse(cleanContent);
+        const parsed = humanizeDeep(JSON.parse(cleanContent));
         return new Response(
           JSON.stringify({ result: parsed }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -535,25 +539,38 @@ Return ONLY valid JSON, no markdown.`;
         }
         // For others, return raw content
         return new Response(
-          JSON.stringify({ result: content.trim() }),
+          JSON.stringify({ result: humanizeText(content.trim()) }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
+      }
+    }
+
+    if (type === 'template-filler') {
+      try {
+        const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
+        return new Response(
+          JSON.stringify({ result: humanizeDeep(JSON.parse(cleanContent)) }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch {
+        // не JSON — отдаём как текст ниже
       }
     }
 
     // For search, return content directly
     if (type === 'search') {
       return new Response(
-        JSON.stringify({ content: content.trim() }),
+        JSON.stringify({ content: humanizeText(content.trim()) }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     // For text responses
     return new Response(
-      JSON.stringify({ result: content.trim() }),
+      JSON.stringify({ result: humanizeText(content.trim()) }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
+
 
   } catch (error) {
     console.error('Error in ai-content-generator:', error);

@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import { humanizeDeep, humanizeText } from '@/lib/text/humanizer-ru';
 import type { Block } from '@/types/page';
 
 interface AIGeneratorProps {
@@ -111,7 +112,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
       }
 
       toast.success(t('toasts.ai.generated'));
-      onResult(data.result);
+      onResult(typeof data.result === 'string' ? humanizeText(data.result) : humanizeDeep(data.result));
       onClose();
     } catch (error) {
       console.error('AI generation error:', error);
