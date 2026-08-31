@@ -28,27 +28,41 @@ setup('authenticate', async ({ page }) => {
   // Wait for React to hydrate and page to be stable
   await page.waitForTimeout(2000);
 
-  // The initial auth screen is signup with the email form collapsed.
+  // The current auth screen can render the unified email-access form directly.
+  // Keep the legacy tabbed path as a fallback so the setup remains compatible
+  // while auth experiments are rolled out.
   try {
-    await page.getByTestId('expand-email-form').click({ timeout: 20_000 });
-    const signinTab = page.getByTestId('signin-tab');
-    await expect(signinTab).toBeVisible({ timeout: 20000 });
-    await signinTab.click();
-    console.log('Signin tab is visible');
+    const visibleEmailInput = page.locator('input[type="email"]:visible').first();
 
-    // Fill signin form
-    await page.getByTestId('signin-email-input').fill(testEmail);
-    const passwordInput = page.getByTestId('signin-password-input');
+    if (!(await visibleEmailInput.isVisible().catch(() => false))) {
+      const expandEmailForm = page.getByTestId('expand-email-form');
+      if (await expandEmailForm.isVisible().catch(() => false)) {
+        await expandEmailForm.click();
+      }
+
+      const signinTab = page.getByTestId('signin-tab');
+      if (await signinTab.isVisible().catch(() => false)) {
+        await signinTab.click();
+      }
+    }
+
+    const emailInput = page.locator('input[type="email"]:visible').first();
+    const passwordInput = page.locator('input[type="password"]:visible').first();
+
+    await expect(emailInput).toBeVisible({ timeout: 20_000 });
+    await emailInput.fill(testEmail);
     await passwordInput.fill(testPassword);
     
     console.log('Filled credentials, pressing Enter...');
     // Pressing Enter is often more reliable than clicking a button that might be obscured
     await passwordInput.press('Enter');
 
-    // Successful sign-in shows a confirmation card; navigation is explicit.
+    // Most auth variants redirect immediately. Older variants show an explicit
+    // continuation card, which remains supported during the transition.
     const continueToDashboard = page.getByTestId('continue-to-dashboard');
-    await expect(continueToDashboard).toBeVisible({ timeout: 60_000 });
-    await continueToDashboard.click();
+    if (await continueToDashboard.isVisible({ timeout: 5_000 }).catch(() => false)) {
+      await continueToDashboard.click();
+    }
     await page.waitForURL(url => url.pathname.includes('/dashboard') || url.pathname.includes('/onboarding'), { timeout: 60_000 });
     console.log('Successfully authenticated as', testEmail);
     

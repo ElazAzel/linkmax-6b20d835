@@ -5,20 +5,20 @@ export type DepositConfiguration =
   | { mode: 'fixed'; value: string }
   | { mode: 'percent'; value: string };
 
-export interface ServiceOfferingInput {
+interface ServiceOfferingInput {
   name: string;
   durationMinutes: number;
   priceAmount: string;
   currency: string;
 }
 
-export type ServiceOfferingValidationError =
+type ServiceOfferingValidationError =
   | 'name_required'
   | 'duration_minutes_invalid'
   | 'price_amount_invalid'
   | 'currency_invalid';
 
-export type ServiceOfferingValidationResult =
+type ServiceOfferingValidationResult =
   | { ok: true }
   | { ok: false; errors: ServiceOfferingValidationError[] };
 

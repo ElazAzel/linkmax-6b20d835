@@ -23,7 +23,7 @@ export interface RevenueKitApplyResult {
   idempotentReplay: boolean;
 }
 
-export type RevenueKitServiceResult<T> =
+type RevenueKitServiceResult<T> =
   | { ok: true; value: T }
   | { ok: false; error: string };
 

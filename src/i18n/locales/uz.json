@@ -7261,6 +7261,158 @@
         "payments": "Payments"
       }
     },
+    "revenue": {
+      "nav": {
+        "outcomes": "Natija",
+        "workflow": "Qanday ishlaydi",
+        "examples": "Kimlar uchun",
+        "pricing": "Tariflar"
+      },
+      "seo": {
+        "imageAlt": "LinkMAX — mijoz yo‘li bitta havolada",
+        "title": "LinkMAX — sahifa, bron, to‘lov va mijozlar bilan ishlash",
+        "description": "Xizmat biznesi uchun bitta havola: taklifni ko‘rsating, bron yoki so‘rovni qabul qiling, to‘lovni belgilang va mijoz bo‘yicha keyingi qadamni yo‘qotmang."
+      },
+      "hero": {
+        "eyebrow": "Mutaxassislar va xizmat biznesi uchun",
+        "title": "Mijoz tanlaydi, yoziladi va to‘laydi — barchasi bitta havolada",
+        "subtitle": "LinkMAX mijoz yo‘lini ortiqcha yozishmalarsiz tushunarli qiladi: xizmatni anglash, vaqt tanlash, so‘rov qoldirish va yana qaytish.",
+        "cta": "Bepul boshlash"
+      },
+      "audiences": {
+        "beauty": "Beauty va wellness",
+        "consulting": "Konsalting",
+        "education": "Ta’lim",
+        "creative": "Ijodiy xizmatlar",
+        "local": "Mahalliy servis"
+      },
+      "preview": {
+        "name": "Mariya servisi",
+        "slug": "lnkmx.my/maria",
+        "headline": "Xariddan oldin va keyin mijozga kerak bo‘lgan hamma narsa",
+        "bookingBody": "Mijoz xizmat va vaqtni tanladi",
+        "leadBody": "Aloqa va so‘rov ish ro‘yxatida",
+        "payBody": "Shartlar va summa tasdiqlashdan oldin aniq",
+        "cta": "Xizmat va vaqtni tanlash",
+        "aiLabel": "Sahifa tayyor",
+        "aiBody": "blok tayyor: taklif, narxlar, bron, sharhlar va kontaktlar",
+        "inboxLabel": "Keyingi qadam",
+        "inboxName": "Mijozga qayta yozilishni eslatish",
+        "inboxStatus": "ish ro‘yxatida",
+        "inboxTime": "bugun"
+      },
+      "outcomes": {
+        "eyebrow": "Biznes uchun nima o‘zgaradi",
+        "title": "Shunchaki havola emas. Ishlaydigan mijoz yo‘li.",
+        "subtitle": "Sahifa e’tiborni tortadi, LinkMAX qiymati esa keyin boshlanadi: qiziqish aniq harakatga aylanadi va birinchi xariddan keyin yo‘qolmaydi.",
+        "offer": {
+          "title": "Taklif darhol tushunarli",
+          "body": "Xizmatlar, narxlar, ish namunalari va tez-tez beriladigan savollar bir joyda."
+        },
+        "booking": {
+          "title": "Uzoq yozishmasiz bron",
+          "body": "Mijoz mos xizmat va vaqtni tanlaydi, siz esa tayyor so‘rov olasiz."
+        },
+        "payment": {
+          "title": "Pul xabarlar orasida yo‘qolmaydi",
+          "body": "Narx, oldindan to‘lov va buyurtma holati mijoz ma’lumotlari yonida saqlanadi."
+        },
+        "return": {
+          "title": "Mijozga qachon qaytishni bilasiz",
+          "body": "Ish ro‘yxati kimga javob berish, kimni tasdiqlash va kimga qayta kelishni eslatish kerakligini ko‘rsatadi."
+        }
+      },
+      "journey": {
+        "eyebrow": "Bitta uzluksiz jarayon",
+        "title": "Birinchi bosishdan keyingi tashrifgacha",
+        "subtitle": "Har bir qadamni asta-sekin ulash mumkin. Sahifa va so‘rovlardan boshlang, keyin bron, to‘lov va mijozni qaytarish ishini qo‘shing.",
+        "discover": {
+          "label": "01 · Tanishuv",
+          "title": "Mijoz havolangizni ochadi",
+          "body": "Bir necha soniyada qanday yordam berishingizni va narxini tushunadi."
+        },
+        "act": {
+          "label": "02 · Harakat",
+          "title": "Keyingi qadamni tanlaydi",
+          "body": "Yoziladi, so‘rov qoldiradi yoki to‘lov bo‘yicha aniq ko‘rsatma oladi."
+        },
+        "work": {
+          "label": "03 · Ish",
+          "title": "Mijoz bilan tartibli ishlaysiz",
+          "body": "So‘rov, aloqa, holat va tarix bitta ish maydonida qoladi."
+        },
+        "return": {
+          "label": "04 · Qaytish",
+          "title": "Keyingi savdo noldan boshlanmaydi",
+          "body": "Qayta bron yoki yangi taklif uchun mos paytni ko‘rasiz."
+        }
+      },
+      "segments": {
+        "eyebrow": "Faqat bitta soha emas",
+        "title": "Bitta tamoyil — turli xizmatlar",
+        "subtitle": "LinkMAX mijoz taklifni tushunishi, format yoki vaqtni tanlashi va kelishuvni to‘lovgacha olib borishi kerak bo‘lgan xizmatlarga mos keladi.",
+        "beauty": {
+          "title": "Beauty va wellness",
+          "body": "Xizmatlar, jadval, oldindan to‘lov va qayta bron."
+        },
+        "experts": {
+          "title": "Ekspertlar va maslahatchilar",
+          "body": "Maslahat formatlari, brif, vaqt tanlash va hisob."
+        },
+        "education": {
+          "title": "O‘qituvchilar va mentorlar",
+          "body": "Dasturlar, sinov darslari, yozilish va o‘quvchilar bilan ishlash."
+        },
+        "creative": {
+          "title": "Fotograflar va ijodiy mutaxassislar",
+          "body": "Portfolio, xizmat paketlari, so‘rov, sanani band qilish va to‘lov."
+        }
+      },
+      "comparison": {
+        "eyebrow": "Nega oddiy link-in-bio emas",
+        "title": "Havola ko‘rsatadi. LinkMAX ishni natijaga yetkazishga yordam beradi.",
+        "subtitle": "Oddiy sahifadan boshlash mumkin. Farq so‘rovlar, jadval, to‘lovlar va javob kutayotgan mijozlar ko‘payganda ko‘rinadi.",
+        "links": {
+          "title": "Oddiy havolalar sahifasi",
+          "one": "Tugmalar va kontaktlarni ko‘rsatadi",
+          "two": "Ishni yana messenjerlarga qaytaradi",
+          "three": "So‘rovdan keyin nima qilishni ko‘rsatmaydi"
+        },
+        "product": {
+          "one": "Taklifni tushuntiradi va harakatni qabul qiladi",
+          "two": "So‘rov, bron va holatni birga saqlaydi",
+          "three": "Mijoz bo‘yicha keyingi qadamni ko‘rsatadi"
+        }
+      },
+      "pricing": {
+        "eyebrow": "Hozir kerak bo‘lganidan boshlang",
+        "title": "Boshlash bepul. Pro — biznesga ko‘proq imkoniyat kerak bo‘lganda.",
+        "month": "oy",
+        "disclaimer": "Imkoniyatlar va limitlar tarifga bog‘liq. Aniq narx va shartlar to‘lovni ulashdan oldin doim ko‘rsatiladi.",
+        "free": {
+          "name": "Free",
+          "note": "Vaqt cheklovisiz foydalanish mumkin",
+          "one": "Ochiq sahifa va asosiy bloklar",
+          "two": "So‘rovlar, bron va bazaviy ish ro‘yxati",
+          "three": "QR-kod va bazaviy statistika",
+          "cta": "Bepul boshlash"
+        },
+        "pro": {
+          "name": "Pro · bir yil uchun to‘lov",
+          "total": "12 oy uchun {{total}} ₸",
+          "one": "Cheksiz mijoz so‘rovlari",
+          "two": "Kengaytirilgan tahlil va eksport",
+          "three": "Oltitagacha sahifa va shaxsiy domen",
+          "cta": "Barcha tariflarni ko‘rish"
+        }
+      },
+      "final": {
+        "eyebrow": "Oddiy versiyadan boshlash mumkin",
+        "title": "Mijoz uchun tushunarli yo‘l yarating, qolganini o‘sish bilan qo‘shing",
+        "subtitle": "Karta ham, majburiy obuna ham kerak emas. Sahifa yarating, uni haqiqiy mijozlarda sinang va sizga ish olib keladigan jarayonni rivojlantiring.",
+        "cta": "O‘z sahifangizni yaratish"
+      }
+    },
     "faq": {
       "title": "Boshlashdan oldin qisqacha",
       "subtitle": "Uzun taqdimotsiz: sahifa yaratishdan oldin bilish kerak bo?lgan narsalar.",

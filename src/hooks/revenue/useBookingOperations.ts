@@ -9,12 +9,12 @@ import {
   type TransitionBookingInput,
 } from '@/services/booking-lifecycle';
 
-export const bookingRevenueKeys = {
+const bookingRevenueKeys = {
   all: ['booking-revenue-detail'] as const,
   detail: (bookingId: string) => [...bookingRevenueKeys.all, bookingId] as const,
 };
 
-export class BookingOperationError extends Error {
+class BookingOperationError extends Error {
   constructor(public readonly code: string, public readonly retryable: boolean) {
     super(code);
     this.name = 'BookingOperationError';

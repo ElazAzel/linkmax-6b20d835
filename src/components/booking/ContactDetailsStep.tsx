@@ -15,6 +15,13 @@ interface ContactDetailsStepProps {
   onSubmit: () => void;
 }
 
+const CONTACT_FIELD_IDS = {
+  name: 'public-booking-name',
+  phone: 'public-booking-phone',
+  email: 'public-booking-email',
+  notes: 'public-booking-notes',
+} as const;
+
 export function ContactDetailsStep({ contact, error, submitting, onChange, onBack, onSubmit }: ContactDetailsStepProps) {
   const { t } = useTranslation();
   const update = (patch: Partial<PublicBookingContact>) => onChange({ ...contact, ...patch });
@@ -31,20 +38,20 @@ export function ContactDetailsStep({ contact, error, submitting, onChange, onBac
       </div>
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       <div className="space-y-2">
-        <Label htmlFor="public-booking-name">{t('publicBooking.contact.name', 'Имя')}</Label>
-        <Input id="public-booking-name" value={contact.name} onChange={(event) => update({ name: event.target.value })} />
+        <Label htmlFor={CONTACT_FIELD_IDS.name}>{t('publicBooking.contact.name', 'Имя')}</Label>
+        <Input id={CONTACT_FIELD_IDS.name} value={contact.name} onChange={(event) => update({ name: event.target.value })} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="public-booking-phone">{t('publicBooking.contact.phone', 'Телефон')}</Label>
-        <Input id="public-booking-phone" type="tel" value={contact.phone} onChange={(event) => update({ phone: event.target.value })} />
+        <Label htmlFor={CONTACT_FIELD_IDS.phone}>{t('publicBooking.contact.phone', 'Телефон')}</Label>
+        <Input id={CONTACT_FIELD_IDS.phone} type="tel" value={contact.phone} onChange={(event) => update({ phone: event.target.value })} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="public-booking-email">Email</Label>
-        <Input id="public-booking-email" type="email" value={contact.email} onChange={(event) => update({ email: event.target.value })} />
+        <Label htmlFor={CONTACT_FIELD_IDS.email}>{t('publicBooking.contact.email', 'Email')}</Label>
+        <Input id={CONTACT_FIELD_IDS.email} type="email" value={contact.email} onChange={(event) => update({ email: event.target.value })} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="public-booking-notes">{t('publicBooking.contact.notes', 'Комментарий (необязательно)')}</Label>
-        <Textarea id="public-booking-notes" value={contact.notes} onChange={(event) => update({ notes: event.target.value })} />
+        <Label htmlFor={CONTACT_FIELD_IDS.notes}>{t('publicBooking.contact.notes', 'Комментарий (необязательно)')}</Label>
+        <Textarea id={CONTACT_FIELD_IDS.notes} value={contact.notes} onChange={(event) => update({ notes: event.target.value })} />
       </div>
       <div className="flex justify-between gap-3 border-t pt-4">
         <Button type="button" variant="ghost" disabled={submitting} onClick={onBack}>{t('common.back', 'Назад')}</Button>

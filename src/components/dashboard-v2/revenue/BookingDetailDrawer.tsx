@@ -46,6 +46,18 @@ interface BookingDetailDrawerProps {
   onNoShow: () => void | Promise<void>;
 }
 
+const SHEET_SIDE = 'right';
+const DECIMAL_INPUT_MODE = 'decimal';
+const CURRENCY_SYMBOL = '₸';
+const DETAIL_SEPARATOR = ' · ';
+const PAYMENT_METHODS = {
+  cash: 'cash',
+  kaspiManual: 'kaspi_manual',
+  card: 'manual_card',
+  transfer: 'bank_transfer',
+  other: 'other',
+} as const satisfies Record<string, BookingPaymentMethod>;
+
 function remainingAmount(target: string, paid: string): string {
   const remaining = parseMoney(target) - parseMoney(paid);
   return formatMoney(remaining > 0n ? remaining : 0n);
@@ -76,7 +88,7 @@ export function BookingDetailDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full overflow-y-auto p-5 sm:max-w-lg">
+      <SheetContent side={SHEET_SIDE} className="w-full overflow-y-auto p-5 sm:max-w-lg">
         <SheetHeader className="pr-10">
           <SheetTitle>{detail?.serviceName ?? t('bookingDetail.title', 'Запись')}</SheetTitle>
           <SheetDescription>
@@ -121,10 +133,10 @@ export function BookingDetailDrawer({
                 {t('bookingDetail.payment', 'Оплата')}
               </h3>
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div><span className="text-muted-foreground">{t('bookingDetail.total', 'Стоимость')}</span><div className="font-bold">{detail.payment.totalAmount} ₸</div></div>
-                <div><span className="text-muted-foreground">{t('bookingDetail.paid', 'Получено')}</span><div className="font-bold">{detail.payment.paidAmount} ₸</div></div>
-                <div><span className="text-muted-foreground">{t('bookingDetail.deposit', 'Предоплата')}</span><div className="font-bold">{detail.payment.depositRequiredAmount} ₸</div></div>
-                <div><span className="text-muted-foreground">{t('bookingDetail.refunded', 'Возвращено')}</span><div className="font-bold">{detail.payment.refundedAmount} ₸</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.total', 'Стоимость')}</span><div className="font-bold">{detail.payment.totalAmount} {CURRENCY_SYMBOL}</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.paid', 'Получено')}</span><div className="font-bold">{detail.payment.paidAmount} {CURRENCY_SYMBOL}</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.deposit', 'Предоплата')}</span><div className="font-bold">{detail.payment.depositRequiredAmount} {CURRENCY_SYMBOL}</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.refunded', 'Возвращено')}</span><div className="font-bold">{detail.payment.refundedAmount} {CURRENCY_SYMBOL}</div></div>
               </div>
             </section>
 
@@ -135,7 +147,7 @@ export function BookingDetailDrawer({
                     aria-label={t('bookingDetail.amount', 'Полученная сумма')}
                     value={amount}
                     onChange={(event) => setAmount(event.target.value)}
-                    inputMode="decimal"
+                    inputMode={DECIMAL_INPUT_MODE}
                   />
                   <select
                     aria-label={t('bookingDetail.method', 'Способ оплаты')}
@@ -143,11 +155,11 @@ export function BookingDetailDrawer({
                     value={method}
                     onChange={(event) => setMethod(event.target.value as BookingPaymentMethod)}
                   >
-                    <option value="cash">{t('bookingDetail.methods.cash', 'Наличные')}</option>
-                    <option value="kaspi_manual">Kaspi</option>
-                    <option value="manual_card">{t('bookingDetail.methods.card', 'Карта')}</option>
-                    <option value="bank_transfer">{t('bookingDetail.methods.transfer', 'Перевод')}</option>
-                    <option value="other">{t('bookingDetail.methods.other', 'Другое')}</option>
+                    <option value={PAYMENT_METHODS.cash}>{t('bookingDetail.methods.cash', 'Наличные')}</option>
+                    <option value={PAYMENT_METHODS.kaspiManual}>{t('bookingDetail.methods.kaspi', 'Kaspi')}</option>
+                    <option value={PAYMENT_METHODS.card}>{t('bookingDetail.methods.card', 'Карта')}</option>
+                    <option value={PAYMENT_METHODS.transfer}>{t('bookingDetail.methods.transfer', 'Перевод')}</option>
+                    <option value={PAYMENT_METHODS.other}>{t('bookingDetail.methods.other', 'Другое')}</option>
                   </select>
                 </div>
                 {detail.status === 'pending_payment' ? (
@@ -209,7 +221,7 @@ export function BookingDetailDrawer({
               <div className="space-y-2">
                 {detail.transitions.map((transition, index) => (
                   <div key={`${transition.occurredAt}:${index}`} className="flex justify-between gap-3 text-sm">
-                    <span>{transition.toStatus} · {transition.reasonCode}</span>
+                    <span>{transition.toStatus}{DETAIL_SEPARATOR}{transition.reasonCode}</span>
                     <span className="shrink-0 text-xs text-muted-foreground">{transition.occurredAt.slice(0, 16).replace('T', ' ')}</span>
                   </div>
                 ))}
@@ -225,7 +237,7 @@ export function BookingDetailDrawer({
                 <p className="text-sm text-muted-foreground">{t('bookingDetail.notificationsEmpty', 'Доставок пока нет')}</p>
               ) : detail.notifications.map((notification, index) => (
                 <div key={`${notification.occurredAt}:${index}`} className="flex items-center justify-between gap-3 py-1 text-sm">
-                  <span>{notification.channel} · {notification.recipientRole}</span>
+                  <span>{notification.channel}{DETAIL_SEPARATOR}{notification.recipientRole}</span>
                   <Badge variant={notification.eventKind === 'delivered' ? 'secondary' : 'destructive'}>
                     {notification.eventKind === 'delivered'
                       ? t('bookingDetail.delivered', 'Доставлено')

@@ -1,3 +1,12 @@
+# Routes
+
+LinkMAX is a React 18 + Vite application using React Router with lazy route modules. The authoritative router configuration is below.
+
+## Router configuration
+
+Path: `src/main.tsx`.
+
+```tsx
 // CRITICAL: i18n must be imported FIRST, before any React components
 import { i18nReady } from "./i18n/config";
 import { validateEnv } from "./lib/utils/env-validator";
@@ -111,7 +120,7 @@ const SmartLinks = lazy(() => import("./pages/SmartLinks"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const PublicGoodsPage = lazy(() => import("./pages/PublicGoodsPage"));
 const PublicPurchasePage = lazy(() => import("./pages/PublicPurchasePage"));
-const BookingManagement = lazy(() => import("./pages/BookingManagement").then((module) => ({ default: module.BookingManagement })));
+const BookingManagement = lazy(() => import("./pages/BookingManagement"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 
@@ -281,3 +290,15 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+```
+
+## Key routes
+
+- `/` → `src/pages/Index.tsx`; public commercial landing with `DynamicIslandNav`.
+- `/auth` → authentication and signup.
+- `/dashboard/*` → authenticated dashboard shell and product screens.
+- `/pricing` → commercial plans.
+- `/gallery` → public examples.
+- `/:slug` → published customer page; catch-all must remain last.
+

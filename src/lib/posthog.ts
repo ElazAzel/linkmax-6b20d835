@@ -8,9 +8,9 @@ type PostHogClient = typeof import('posthog-js').default;
 
 const CONSENT_KEY = 'lnkmx_cookie_consent';
 
-export const POSTHOG_KEY = import.meta.env.VITE_LOVABLE_CONNECTOR_POSTHOG_API_KEY || '';
+const POSTHOG_KEY = import.meta.env.VITE_LOVABLE_CONNECTOR_POSTHOG_API_KEY || '';
 const POSTHOG_REGION = import.meta.env.VITE_LOVABLE_CONNECTOR_POSTHOG_REGION || 'us';
-export const POSTHOG_HOST = POSTHOG_REGION === 'eu'
+const POSTHOG_HOST = POSTHOG_REGION === 'eu'
   ? 'https://eu.i.posthog.com'
   : 'https://us.i.posthog.com';
 
@@ -121,7 +121,7 @@ const REVENUE_PROPERTY_KEY_MAP = {
 
 type SafeRevenueProperty = string | number | boolean | null;
 
-export interface PreparedClientRevenueEvent {
+interface PreparedClientRevenueEvent {
   eventName: RevenueEventName;
   properties: Record<string, SafeRevenueProperty>;
 }

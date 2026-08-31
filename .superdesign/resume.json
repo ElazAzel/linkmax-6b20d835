@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "projectId": "09c93035-7817-4c3a-b801-89a4781e3709",
+  "targets": {
+    "/": {
+      "targetKind": "existing-ui",
+      "baselineDraftId": "ad5c2b5d-abb5-4fc8-a81e-46087a89d8fe",
+      "activeDraftId": "ad5c2b5d-abb5-4fc8-a81e-46087a89d8fe",
+      "currentVersion": 3,
+      "visualDirection": "Conversion-focused service-business landing for Kazakhstan: warm off-white and black foundation, LinkMAX orange accents, outcome-first copy, a complete client journey, examples for several professional segments, comparison, pricing, concise FAQ and a single strong final CTA.",
+      "contextFiles": [
+        ".superdesign/design-system.md",
+        "src/index.css:120:450",
+        "src/pages/Index.tsx",
+        "src/components/landing/RevenueLandingSections.tsx",
+        "src/components/landing/v3/HeroBentoOS.tsx",
+        "src/components/landing/v2/DynamicIslandNav.tsx",
+        "src/components/landing/v2/FAQSection.tsx",
+        "src/components/landing/v2/LogoTicker.tsx",
+        "src/components/landing/SimplePricingSection.tsx",
+        "src/components/ui/button.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/accordion.tsx"
+      ],
+      "contextFingerprints": {
+        ".superdesign/design-system.md": "6cc5fe6503f112c0d392008038cb0c7616b1cf0319bcb7ae546955a125298394",
+        "src/index.css": "744ed5b71a9caa2632e798c264bea82fee85f52efbbb5701da2106137fe8febd",
+        "src/pages/Index.tsx": "3199fce0942339da6e9556fc94420b27e8e20af843107bd556799bdefea1d0a3",
+        "src/components/landing/RevenueLandingSections.tsx": "c6f1e6b88c76a4f871063624178275007dd154acefc2c1122dbe7a178a7341e9",
+        "src/components/landing/v3/HeroBentoOS.tsx": "60e3009c8eba38f4ff7bcd8dd291e4b04071a3e6665d5e2e89876d117c7afe20",
+        "src/components/landing/v2/DynamicIslandNav.tsx": "d3ee2e93c1efb40df22932642866fa8cba71f34f078390a4029afd72234e5166",
+        "src/components/landing/v2/FAQSection.tsx": "11dcff60c3f0e9b4923af4ea895606ee73ee01d4fe207de2bc2d93f3b5a455f3",
+        "src/components/landing/v2/LogoTicker.tsx": "40e3270022610c2c7408dfbd0c3b2c33e22b99d0bfe939d9d1c6dbf7f12bd98a",
+        "src/components/landing/SimplePricingSection.tsx": "dda7d7f4a21edaf59d56c174062f3797e820603f0ab29a1b8ab61c47903d113e",
+        "src/components/ui/button.tsx": "31c37b410c6ef9b88d728cb492e8d8dbdeb6d36c1eb18a0d26725726dd9c5f70",
+        "src/components/ui/card.tsx": "9169ce8b0367c85daecc1da0984c2f5506fafa46ffd10138e2b8f4b3d41ff91d",
+        "src/components/ui/accordion.tsx": "fd1a882c7cbfb366a12e0271bf6fd230b7f29075124a01d04ada9a02a15f131c"
+      },
+      "referenceIds": [
+        "src-assets-logo-full.png"
+      ],
+      "brandAssets": [
+        {
+          "assetKey": "src-assets-logo-full.png",
+          "sourcePath": "src/assets/logo-full.png",
+          "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/09c93035-7817-4c3a-b801-89a4781e3709/brand-assets/src-assets-logo-full.png/logo-full.png"
+        }
+      ],
+      "components": [
+        {
+          "name": "DynamicIslandNav",
+          "componentId": "200afdbc-d21c-4583-94a8-e200a44d6e23",
+          "nodeId": "draft-component-200afdbc-d21c-4583-94a8-e200a44d6e23",
+          "logoAssetKey": "src-assets-logo-full.png"
+        }
+      ],
+      "canvasUrl": "https://superdesign.dev/teams/b419f49a-9995-4424-a393-8102cb9af9a4/projects/09c93035-7817-4c3a-b801-89a4781e3709",
+      "previewUrl": "https://p.superdesign.dev/draft/ad5c2b5d-abb5-4fc8-a81e-46087a89d8fe",
+      "updatedAt": "2026-08-31T23:07:35.5951668Z"
+    }
+  }
+}

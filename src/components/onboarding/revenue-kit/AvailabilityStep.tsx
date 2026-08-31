@@ -4,6 +4,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { RevenueKitStepProps } from './types';
 
+const AVAILABILITY_FIELD_IDS = {
+  start: 'revenue-kit-start-time',
+  end: 'revenue-kit-end-time',
+} as const;
+
 export function AvailabilityStep({ draft, onChange }: RevenueKitStepProps) {
   const { t } = useTranslation();
   const updateAvailability = (patch: Partial<typeof draft.availability>) => {
@@ -22,18 +27,18 @@ export function AvailabilityStep({ draft, onChange }: RevenueKitStepProps) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="revenue-kit-start-time">{t('revenueKit.availability.start', 'Начало дня')}</Label>
+          <Label htmlFor={AVAILABILITY_FIELD_IDS.start}>{t('revenueKit.availability.start', 'Начало дня')}</Label>
           <Input
-            id="revenue-kit-start-time"
+            id={AVAILABILITY_FIELD_IDS.start}
             type="time"
             value={draft.availability.startTime}
             onChange={(event) => updateAvailability({ startTime: event.target.value })}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="revenue-kit-end-time">{t('revenueKit.availability.end', 'Конец дня')}</Label>
+          <Label htmlFor={AVAILABILITY_FIELD_IDS.end}>{t('revenueKit.availability.end', 'Конец дня')}</Label>
           <Input
-            id="revenue-kit-end-time"
+            id={AVAILABILITY_FIELD_IDS.end}
             type="time"
             value={draft.availability.endTime}
             onChange={(event) => updateAvailability({ endTime: event.target.value })}

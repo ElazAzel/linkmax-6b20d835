@@ -1,5 +1,5 @@
 export type BillingPeriodMonths = 3 | 6 | 12;
-export type BillingTier = 'free' | 'identity' | 'starter' | 'pro' | 'business';
+type BillingTier = 'free' | 'identity' | 'starter' | 'pro' | 'business';
 
 const PRO_PERIODS = [3, 6, 12] as const satisfies readonly BillingPeriodMonths[];
 

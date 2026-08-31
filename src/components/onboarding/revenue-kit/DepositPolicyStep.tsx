@@ -6,6 +6,18 @@ import { Textarea } from '@/components/ui/textarea';
 import type { DepositConfiguration } from '@/domain/revenue/service-offering';
 import type { RevenueKitStepProps } from './types';
 
+const DEPOSIT_FIELD_IDS = {
+  mode: 'revenue-kit-deposit-mode',
+  value: 'revenue-kit-deposit-value',
+  instructions: 'revenue-kit-payment-instructions',
+} as const;
+const DEPOSIT_MODES = {
+  none: 'none',
+  fixed: 'fixed',
+  percent: 'percent',
+} as const;
+const DECIMAL_INPUT_MODE = 'decimal';
+
 export function DepositPolicyStep({ draft, onChange }: RevenueKitStepProps) {
   const { t } = useTranslation();
   const updateDeposit = (deposit: DepositConfiguration) => {
@@ -23,9 +35,9 @@ export function DepositPolicyStep({ draft, onChange }: RevenueKitStepProps) {
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="revenue-kit-deposit-mode">{t('revenueKit.deposit.mode', 'Размер предоплаты')}</Label>
+        <Label htmlFor={DEPOSIT_FIELD_IDS.mode}>{t('revenueKit.deposit.mode', 'Размер предоплаты')}</Label>
         <select
-          id="revenue-kit-deposit-mode"
+          id={DEPOSIT_FIELD_IDS.mode}
           className="h-10 w-full rounded-md border bg-background px-3 text-sm"
           value={draft.depositPolicy.deposit.mode}
           onChange={(event) => {
@@ -33,18 +45,18 @@ export function DepositPolicyStep({ draft, onChange }: RevenueKitStepProps) {
             updateDeposit({ mode, value: mode === 'none' ? '0.00' : draft.depositPolicy.deposit.value });
           }}
         >
-          <option value="none">{t('revenueKit.deposit.none', 'Без предоплаты')}</option>
-          <option value="fixed">{t('revenueKit.deposit.fixed', 'Фиксированная сумма')}</option>
-          <option value="percent">{t('revenueKit.deposit.percent', 'Процент')}</option>
+          <option value={DEPOSIT_MODES.none}>{t('revenueKit.deposit.none', 'Без предоплаты')}</option>
+          <option value={DEPOSIT_MODES.fixed}>{t('revenueKit.deposit.fixed', 'Фиксированная сумма')}</option>
+          <option value={DEPOSIT_MODES.percent}>{t('revenueKit.deposit.percent', 'Процент')}</option>
         </select>
       </div>
       {draft.depositPolicy.deposit.mode !== 'none' && (
         <>
           <div className="space-y-2">
-            <Label htmlFor="revenue-kit-deposit-value">{t('revenueKit.deposit.value', 'Сумма или процент')}</Label>
+            <Label htmlFor={DEPOSIT_FIELD_IDS.value}>{t('revenueKit.deposit.value', 'Сумма или процент')}</Label>
             <Input
-              id="revenue-kit-deposit-value"
-              inputMode="decimal"
+              id={DEPOSIT_FIELD_IDS.value}
+              inputMode={DECIMAL_INPUT_MODE}
               value={draft.depositPolicy.deposit.value}
               onChange={(event) => updateDeposit({
                 mode: draft.depositPolicy.deposit.mode,
@@ -53,11 +65,11 @@ export function DepositPolicyStep({ draft, onChange }: RevenueKitStepProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="revenue-kit-payment-instructions">
+            <Label htmlFor={DEPOSIT_FIELD_IDS.instructions}>
               {t('revenueKit.deposit.instructions', 'Инструкция по оплате')}
             </Label>
             <Textarea
-              id="revenue-kit-payment-instructions"
+              id={DEPOSIT_FIELD_IDS.instructions}
               value={draft.depositPolicy.paymentInstructions.ru}
               onChange={(event) => onChange({
                 ...draft,

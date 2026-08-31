@@ -7264,6 +7264,158 @@
         "payments": "Payments"
       }
     },
+    "revenue": {
+      "nav": {
+        "outcomes": "Outcomes",
+        "workflow": "How it works",
+        "examples": "Who it is for",
+        "pricing": "Pricing"
+      },
+      "seo": {
+        "imageAlt": "LinkMAX — the client journey in one link",
+        "title": "LinkMAX — page, booking, payments and client workflow",
+        "description": "One link for service businesses: explain your offer, accept a booking or request, track payment and keep the next client action visible."
+      },
+      "hero": {
+        "eyebrow": "For independent professionals and service businesses",
+        "title": "Clients choose, book and pay — through one link",
+        "subtitle": "LinkMAX keeps the journey clear without endless messages: understand the service, choose a time, send a request and come back again.",
+        "cta": "Start for free"
+      },
+      "audiences": {
+        "beauty": "Beauty and wellness",
+        "consulting": "Consulting",
+        "education": "Education",
+        "creative": "Creative services",
+        "local": "Local services"
+      },
+      "preview": {
+        "name": "Maria's service",
+        "slug": "lnkmx.my/maria",
+        "headline": "Everything a client needs before and after buying",
+        "bookingBody": "The client chose a service and time",
+        "leadBody": "The contact and request are in your workspace",
+        "payBody": "The terms and amount are clear before confirmation",
+        "cta": "Choose a service and time",
+        "aiLabel": "Page ready",
+        "aiBody": "blocks are ready: offer, pricing, booking, reviews and contacts",
+        "inboxLabel": "Next action",
+        "inboxName": "Remind the client to book again",
+        "inboxStatus": "in the work list",
+        "inboxTime": "today"
+      },
+      "outcomes": {
+        "eyebrow": "What changes for the business",
+        "title": "More than a link. A working client journey.",
+        "subtitle": "A page gets attention, but LinkMAX becomes valuable after that: when interest turns into a clear action and does not disappear after the first purchase.",
+        "offer": {
+          "title": "The offer is clear right away",
+          "body": "Services, prices, work samples and common answers are together."
+        },
+        "booking": {
+          "title": "Booking without a long chat",
+          "body": "Clients choose a suitable service and time; you receive a structured request."
+        },
+        "payment": {
+          "title": "Money does not get lost between messages",
+          "body": "Price, deposit and order status stay next to the client's details."
+        },
+        "return": {
+          "title": "You know when to follow up",
+          "body": "The work list shows who needs a reply, confirmation or a reminder to return."
+        }
+      },
+      "journey": {
+        "eyebrow": "One continuous process",
+        "title": "From the first click to the next visit",
+        "subtitle": "Add each step when you need it. Start with a page and requests, then add booking, payments and repeat-client work.",
+        "discover": {
+          "label": "01 · Discover",
+          "title": "The client opens your link",
+          "body": "In seconds, they understand how you can help and what it costs."
+        },
+        "act": {
+          "label": "02 · Act",
+          "title": "They choose the next step",
+          "body": "They book, send a request or receive clear payment instructions."
+        },
+        "work": {
+          "label": "03 · Deliver",
+          "title": "You work without the chaos",
+          "body": "The request, contact, status and history stay in one workspace."
+        },
+        "return": {
+          "label": "04 · Return",
+          "title": "The next sale does not start from zero",
+          "body": "You see the right moment for a repeat booking or a new offer."
+        }
+      },
+      "segments": {
+        "eyebrow": "Not limited to one niche",
+        "title": "One principle, different services",
+        "subtitle": "LinkMAX works when a client needs to understand an offer, choose a format or time and carry the agreement through to payment.",
+        "beauty": {
+          "title": "Beauty and wellness",
+          "body": "Services, availability, deposits and repeat bookings."
+        },
+        "experts": {
+          "title": "Experts and consultants",
+          "body": "Consultation formats, brief, time selection and invoice."
+        },
+        "education": {
+          "title": "Teachers and mentors",
+          "body": "Programs, trial lessons, booking and student follow-up."
+        },
+        "creative": {
+          "title": "Photographers and creative professionals",
+          "body": "Portfolio, packages, requests, date reservations and payment."
+        }
+      },
+      "comparison": {
+        "eyebrow": "Why not a regular link-in-bio",
+        "title": "A link displays. LinkMAX helps complete the job.",
+        "subtitle": "You can start with a simple page. The difference appears when requests, schedules, payments and clients waiting for a reply begin to add up.",
+        "links": {
+          "title": "Regular link page",
+          "one": "Shows buttons and contacts",
+          "two": "Moves the work back into messengers",
+          "three": "Does not show what to do after a request"
+        },
+        "product": {
+          "one": "Explains the offer and accepts an action",
+          "two": "Keeps the request, booking and status together",
+          "three": "Shows the next client action"
+        }
+      },
+      "pricing": {
+        "eyebrow": "Start with what you need now",
+        "title": "Free to start. Pro when the business needs more.",
+        "month": "month",
+        "disclaimer": "Features and limits depend on the plan. The exact price and terms are always shown before you connect payment.",
+        "free": {
+          "name": "Free",
+          "note": "Use it without a time limit",
+          "one": "Public page and essential blocks",
+          "two": "Requests, booking and a basic work list",
+          "three": "QR code and basic statistics",
+          "cta": "Start for free"
+        },
+        "pro": {
+          "name": "Pro · billed annually",
+          "total": "{{total}} ₸ for 12 months",
+          "one": "Unlimited client requests",
+          "two": "Advanced analytics and export",
+          "three": "Up to six pages and a custom domain",
+          "cta": "See all plans"
+        }
+      },
+      "final": {
+        "eyebrow": "A simple version is enough to start",
+        "title": "Build a clear client journey, then add more as you grow",
+        "subtitle": "No card and no required subscription. Create the page, test it with real clients and expand the flow that actually brings you work.",
+        "cta": "Create your page"
+      }
+    },
     "faq": {
       "title": "Quick answers before you start",
       "subtitle": "No long presentation: only what you need to know before creating a page.",
@@ -7560,6 +7712,7 @@
       "description": "Enter your name and at least one way to contact you.",
       "name": "Name",
       "phone": "Phone",
+      "email": "Email",
       "notes": "Comment (optional)",
       "submitting": "Creating booking…",
       "submit": "Confirm booking"
@@ -7655,6 +7808,7 @@
     }
   },
   "outcomeHome": {
+    "ariaLabel": "Revenue outcomes",
     "outcome": {
       "eyebrow": "Outcome",
       "title": "What your page delivered",
@@ -7710,7 +7864,7 @@
     "notificationsEmpty": "No delivery facts yet",
     "delivered": "Delivered",
     "failed": "Failed",
-    "methods": { "cash": "Cash", "card": "Card", "transfer": "Transfer", "other": "Other" },
+    "methods": { "cash": "Cash", "kaspi": "Kaspi", "card": "Card", "transfer": "Transfer", "other": "Other" },
     "actions": {
       "confirmDeposit": "Confirm deposit",
       "waive": "Confirm without deposit",
