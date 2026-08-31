@@ -77,27 +77,27 @@ git commit -m "feat: define public booking state machine"
 - Produces: `<PublicBookingFlow pageId block linkedServiceId />` and a legacy adapter.
 - Consumes: reducer, lifecycle service, existing Calendar/Input/Button components.
 
-- [ ] **Step 1: Write failing no-deposit journey test**
+- [x] **Step 1: Write failing no-deposit journey test**
 
 Use real step components with a fake network adapter at the service boundary. Select service/date/slot, enter name+phone, submit and assert confirmed state plus management URL.
 
-- [ ] **Step 2: Write failing manual-deposit language test**
+- [x] **Step 2: Write failing manual-deposit language test**
 
 Submit a required Kaspi-manual service and assert the screen contains `Ожидает подтверждения предоплаты` and does not contain `Вы записаны`.
 
-- [ ] **Step 3: Write failing conflict and accessibility tests**
+- [x] **Step 3: Write failing conflict and accessibility tests**
 
 Return `slot_unavailable`, assert focus moves to the error summary and refreshed slots render. Keyboard-select a slot and assert `aria-selected=true`.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 Run: `npm test -- --run src/components/booking/__tests__/PublicBookingFlow.test.tsx`
 
-- [ ] **Step 5: Implement focused components**
+- [x] **Step 5: Implement focused components**
 
 Lazy-load flow when invoked. Preserve entered non-sensitive fields during retry. Remove client-side wallet mutation from `BookingBlock`; ledger facts are server-side only.
 
-- [ ] **Step 6: Verify GREEN, lint and bundle**
+- [x] **Step 6: Verify GREEN, lint and bundle**
 
 Run: `npm test -- --run src/components/booking/__tests__/PublicBookingFlow.test.tsx src/components/blocks/__tests__/BlocksRendering.test.tsx`
 
@@ -105,7 +105,7 @@ Run: `npx eslint src/components/booking src/components/blocks/BookingBlock.tsx`
 
 Run: `npm run build`
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/components/booking src/components/blocks/BookingBlock.tsx
@@ -123,27 +123,27 @@ git commit -m "feat: add recoverable public booking flow"
 - Produces: `/booking/manage/:token` route with read, confirm, cancel and reschedule actions.
 - Consumes: `manageBookingWithToken` and public-safe booking context.
 
-- [ ] **Step 1: Write failing safe-context test**
+- [x] **Step 1: Write failing safe-context test**
 
 Render with a valid token response and assert service/date/time/status are shown while internal notes, owner ID and provider payload are absent.
 
-- [ ] **Step 2: Write failing expired-token test**
+- [x] **Step 2: Write failing expired-token test**
 
 Return `token_expired`; assert owner contact CTA is rendered and no booking facts are leaked.
 
-- [ ] **Step 3: Write failing reschedule test**
+- [x] **Step 3: Write failing reschedule test**
 
 Choose a new slot, send expected booking version plus mutation UUID, and assert refreshed state reflects new local time.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 Run: `npm test -- --run src/pages/__tests__/BookingManagement.test.tsx`
 
-- [ ] **Step 5: Implement and route page**
+- [x] **Step 5: Implement and route page**
 
 Mount before the catch-all `:slug` route. Allowed action buttons come exclusively from server context.
 
-- [ ] **Step 6: Verify and commit**
+- [x] **Step 6: Verify and commit**
 
 Run: `npm test -- --run src/pages/__tests__/BookingManagement.test.tsx`
 
@@ -166,23 +166,23 @@ git commit -m "feat: add booking self service"
 - Produces: stable notification payload and idempotency keys; delivery outcome revenue events.
 - Consumes: booking management URL and notification queue.
 
-- [ ] **Step 1: Write failing notification contract tests**
+- [x] **Step 1: Write failing notification contract tests**
 
 Assert owner/customer payloads include `booking_id`, `recipient_role`, `channel`, `template_key`, locale and safe variables; assert phone/email/token are absent from logs/event metadata.
 
-- [ ] **Step 2: Write failing idempotency test**
+- [x] **Step 2: Write failing idempotency test**
 
 Schedule the same 24-hour reminder twice and assert one queue row with key `booking:{id}:reminder_24h:{channel}:{window}`.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `deno test supabase/functions/send-booking-notification/index_test.ts supabase/functions/send-booking-reminder/index_test.ts supabase/functions/process-notifications/index_test.ts`
 
-- [ ] **Step 4: Implement templates and delivery projection**
+- [x] **Step 4: Implement templates and delivery projection**
 
 Use booking timezone for schedule calculation. A failed notification does not roll back booking. Terminal delivery writes one `reminder_delivered` or operational failure fact.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 Run: `deno test supabase/functions/send-booking-notification/index_test.ts supabase/functions/send-booking-reminder/index_test.ts supabase/functions/process-notifications/index_test.ts`
 
@@ -200,21 +200,28 @@ git commit -m "feat: make booking notifications durable"
 - Consumes: Tasks 1–4.
 - Produces: verified public booking lifecycle.
 
-- [ ] **Step 1: Run public-flow test suite**
+- [x] **Step 1: Run public-flow test suite**
 
 Run: `npm test -- --run src/components/booking src/pages/__tests__/BookingManagement.test.tsx src/components/blocks/__tests__/BlocksRendering.test.tsx`
 
-- [ ] **Step 2: Run Edge Function tests**
+- [x] **Step 2: Run Edge Function tests**
 
 Run: `deno test supabase/functions/send-booking-notification/index_test.ts supabase/functions/send-booking-reminder/index_test.ts supabase/functions/process-notifications/index_test.ts`
 
-- [ ] **Step 3: Run gates**
+- [x] **Step 3: Run gates**
 
 Run: `npm run typecheck:strict && npm run i18n:check && npm run build`
 
-- [ ] **Step 4: Commit plan progress**
+- [x] **Step 4: Commit plan progress**
 
 ```bash
 git add docs/superpowers/plans/2026-08-29-revenue-core-d-booking-lifecycle.md
 git commit -m "docs: record booking lifecycle completion"
 ```
+
+## Verification record — 2026-08-30
+
+- Public booking, management, block integration and SQL contract suite: 54 tests passed.
+- Edge notification contracts: 7 Deno tests passed; all three Edge entrypoints passed `deno check`.
+- Strict TypeScript, RU/KK/EN runtime i18n structure, ESLint ratchet (0 errors) and production build passed.
+- Live PostgreSQL migration/pgTAP execution remains deferred because the local Docker backend requires WSL2; static SQL contracts passed.

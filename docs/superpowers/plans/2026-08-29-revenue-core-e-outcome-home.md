@@ -30,7 +30,7 @@
 - Produces: `selectRevenueNextAction(input): RevenueNextAction`.
 - Consumes: literal readiness/operation counts, no React or Supabase.
 
-- [ ] **Step 1: Write failing priority-table tests**
+- [x] **Step 1: Write failing priority-table tests**
 
 ```ts
 expect(selectRevenueNextAction({ hasKit: false, ...healthy })).toMatchObject({ id: 'start_revenue_kit' });
@@ -39,15 +39,15 @@ expect(selectRevenueNextAction({ ...healthy, pastAppointmentsNeedingReview: 1 })
 expect(selectRevenueNextAction(healthy)).toMatchObject({ id: 'open_outcome_insights' });
 ```
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts`
 
-- [ ] **Step 3: Implement ordered pure rules**
+- [x] **Step 3: Implement ordered pure rules**
 
 Return one item with stable `id`, `href`, and `reasonCode`; do not return arrays or AI-generated text.
 
-- [ ] **Step 4: Verify GREEN and commit**
+- [x] **Step 4: Verify GREEN and commit**
 
 Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts`
 
@@ -59,18 +59,18 @@ git commit -m "feat: choose deterministic revenue actions"
 ### Task 2: Add the outcome summary RPC
 
 **Files:**
-- Create: `supabase/migrations/20260829125000_revenue_outcome_summary.sql`
+- Create: `supabase/migrations/20260830104000_revenue_outcome_summary.sql`
 - Create: `supabase/tests/revenue_outcome_summary.test.sql`
 
 **Interfaces:**
 - Produces: `get_revenue_outcome_summary(page_id, from, to)` matching `RevenueOutcomeSummary`.
 - Consumes: bookings, payment projections, service offerings and attribution snapshots.
 
-- [ ] **Step 1: Write failing fixture totals test**
+- [x] **Step 1: Write failing fixture totals test**
 
 Create one paid completed booking, one fully refunded completed booking, one free completed booking, one no-show and one pending-payment booking. Assert paid count `1`, free count `1`, no-show count `1`, pending count `1`, and net collected equals the non-refunded paid booking.
 
-- [ ] **Step 2: Write failing authorization and source tests**
+- [x] **Step 2: Write failing authorization and source tests**
 
 Assert another owner receives permission error; assert source grouping uses `unknown` when attribution source is absent.
 
@@ -78,16 +78,18 @@ Assert another owner receives permission error; assert source grouping uses `unk
 
 Run: `supabase test db supabase/tests/revenue_outcome_summary.test.sql`
 
-- [ ] **Step 4: Implement stable JSON contract**
+- [x] **Step 4: Implement stable JSON contract**
 
 Use page timezone for period boundaries and `numeric::text` for amounts. Mark the latest seven completion days provisional in the response metadata.
+
+Static SQL contract verification is green. Steps 3 and 5 retain their database gate because this machine cannot start the Supabase PostgreSQL stack until WSL2 is available.
 
 - [ ] **Step 5: Verify GREEN and commit**
 
 Run: `supabase db reset && supabase test db supabase/tests/revenue_outcome_summary.test.sql`
 
 ```bash
-git add supabase/migrations/20260829125000_revenue_outcome_summary.sql supabase/tests/revenue_outcome_summary.test.sql
+git add supabase/migrations/20260830104000_revenue_outcome_summary.sql supabase/tests/revenue_outcome_summary.test.sql
 git commit -m "feat: aggregate revenue outcomes"
 ```
 
@@ -103,23 +105,25 @@ git commit -m "feat: aggregate revenue outcomes"
 - Produces: `fetchRevenueOutcomeSummary` and `useRevenueOutcomeSummary({ pageId, from, to })`.
 - Consumes: outcome RPC and TanStack Query.
 
-- [ ] **Step 1: Write failing response-validation test**
+- [x] **Step 1: Write failing response-validation test**
 
 Return malformed numeric values and assert `invalid_outcome_summary`; return a complete literal fixture and assert exact normalized contract.
 
-- [ ] **Step 2: Write failing query-state test**
+- [x] **Step 2: Write failing query-state test**
 
 Assert disabled query when page ID is absent, literal query key when present, and invalidation after a booking operation.
 
-- [ ] **Step 3: Run RED**
+The disabled/key contract is covered here; outcome invalidation is exercised with the booking mutation in Task 5.
+
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/services/__tests__/revenue-outcomes.test.ts src/hooks/revenue/__tests__/useRevenueOutcomeSummary.test.tsx`
 
-- [ ] **Step 4: Implement adapter and hook**
+- [x] **Step 4: Implement adapter and hook**
 
 No client-side recomputation of money totals. Keep the last successful summary during background refresh.
 
-- [ ] **Step 5: Verify GREEN and commit**
+- [x] **Step 5: Verify GREEN and commit**
 
 Run: `npm test -- --run src/services/__tests__/revenue-outcomes.test.ts src/hooks/revenue/__tests__/useRevenueOutcomeSummary.test.tsx`
 
@@ -142,27 +146,27 @@ git commit -m "feat: query revenue outcomes"
 - Produces: outcome-first composition behind `outcome_home_v1`.
 - Consumes: outcome hook, feature flags and dashboard navigation callbacks.
 
-- [ ] **Step 1: Write failing unique-composition test**
+- [x] **Step 1: Write failing unique-composition test**
 
 Assert exactly one `revenue-outcome-strip`, one `revenue-next-action`, and one attention queue. Assert page views/SEO details appear only below the operational section.
 
-- [ ] **Step 2: Write failing empty/new-user state test**
+- [x] **Step 2: Write failing empty/new-user state test**
 
 With no kit and no outcomes, assert primary CTA is `Настроить запись`, not a zero-heavy financial dashboard.
 
-- [ ] **Step 3: Write failing pending/past operations test**
+- [x] **Step 3: Write failing pending/past operations test**
 
 With pending deposits and past confirmed appointments, assert the higher-priority pending-deposit action and both operational groups in the queue.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 Run: `npm test -- --run src/components/dashboard-v2/revenue/__tests__/OutcomeHome.test.tsx`
 
-- [ ] **Step 5: Implement small real components and flag composition**
+- [x] **Step 5: Implement small real components and flag composition**
 
 Reuse existing Card/Button/Badge and typography tokens. Do not introduce a new dashboard style. Flag-off renders existing Home.
 
-- [ ] **Step 6: Verify GREEN and commit**
+- [x] **Step 6: Verify GREEN and commit**
 
 Run: `npm test -- --run src/components/dashboard-v2/revenue/__tests__/OutcomeHome.test.tsx src/pages/__tests__/Dashboard.test.tsx`
 
@@ -184,23 +188,23 @@ git commit -m "feat: make dashboard outcome first"
 - Produces: owner payment/transition mutations with UUID idempotency and optimistic version, state-aware drawer.
 - Consumes: lifecycle service and outcome query invalidation.
 
-- [ ] **Step 1: Write failing operation mutation tests**
+- [x] **Step 1: Write failing operation mutation tests**
 
 Assert completion sends amount/method/expected version, creates one mutation UUID, and invalidates booking plus outcome queries after success. Assert retries reuse the same UUID.
 
-- [ ] **Step 2: Write failing allowed-action tests**
+- [x] **Step 2: Write failing allowed-action tests**
 
 Pending payment shows confirm/waive/cancel; confirmed past shows complete/no-show; completed shows no destructive primary action and displays history.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/hooks/revenue/__tests__/useBookingOperations.test.tsx src/components/dashboard-v2/revenue/__tests__/BookingDetailDrawer.test.tsx`
 
-- [ ] **Step 4: Implement hook, drawer and Activity integration**
+- [x] **Step 4: Implement hook, drawer and Activity integration**
 
 Render service snapshot, local time, deposit/balance facts, transition history, attribution source and notification delivery state. Never render raw token/provider payload.
 
-- [ ] **Step 5: Verify GREEN and commit**
+- [x] **Step 5: Verify GREEN and commit**
 
 Run: `npm test -- --run src/hooks/revenue/__tests__/useBookingOperations.test.tsx src/components/dashboard-v2/revenue/__tests__/BookingDetailDrawer.test.tsx`
 
@@ -221,23 +225,23 @@ git commit -m "feat: add booking revenue operations"
 - Produces: source → service → booking → paid → completed funnel and net-collected source table.
 - Consumes: outcome summary and existing traffic analytics.
 
-- [ ] **Step 1: Write failing funnel test**
+- [x] **Step 1: Write failing funnel test**
 
 Using literal counts, assert steps render in required order and rate denominators never divide by zero.
 
-- [ ] **Step 2: Write failing source table test**
+- [x] **Step 2: Write failing source table test**
 
 Assert `unknown` is displayed honestly and KZT values come from server decimal strings.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 Run: `npm test -- --run src/components/dashboard-v2/analytics/__tests__/RevenueInsights.test.tsx`
 
-- [ ] **Step 4: Implement and replace unsupported recommendation copy**
+- [x] **Step 4: Implement and replace unsupported recommendation copy**
 
 Keep traffic overview available below Revenue. Do not show percentage uplift unless produced by a configured experiment with sample metadata.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 Run: `npm test -- --run src/components/dashboard-v2/analytics/__tests__/RevenueInsights.test.tsx`
 
@@ -255,7 +259,7 @@ git commit -m "feat: add revenue outcome insights"
 - Consumes: Tasks 1–6.
 - Produces: verified outcome-first owner experience.
 
-- [ ] **Step 1: Run outcome tests**
+- [x] **Step 1: Run outcome tests**
 
 Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts src/services/__tests__/revenue-outcomes.test.ts src/hooks/revenue src/components/dashboard-v2/revenue src/components/dashboard-v2/analytics/__tests__/RevenueInsights.test.tsx`
 
@@ -263,15 +267,35 @@ Run: `npm test -- --run src/domain/revenue/__tests__/next-best-action.test.ts sr
 
 Run: `supabase test db supabase/tests/revenue_outcome_summary.test.sql`
 
-- [ ] **Step 3: Run full application gates**
+- [x] **Step 3: Run full application gates**
 
 Run: `npm test -- --run`
 
 Run: `npm run typecheck:strict && npm run i18n:check && npm run lint:ratchet && npm run build`
 
-- [ ] **Step 4: Commit plan progress**
+- [x] **Step 4: Commit plan progress**
 
 ```bash
 git add docs/superpowers/plans/2026-08-29-revenue-core-e-outcome-home.md
 git commit -m "docs: record outcome home completion"
 ```
+
+Verification record (2026-08-31): 40 focused outcome/operations contract tests
+passed; the full application suite passed with 105 files and 600 tests. Strict
+TypeScript, RU/KK/EN runtime i18n structure, ESLint ratchet (0 errors, 1195
+warnings against a maximum of 1230), production build, seven Deno notification
+tests and all three Edge entrypoint checks passed. A local browser smoke test
+confirmed a non-blank landing page, no framework error overlay or captured
+console errors, and the expected `/dashboard/*` to `/auth` guard for a local
+unauthenticated session.
+
+Step 2 remains open: `supabase test db` cannot reach the local PostgreSQL port
+(`ECONNREFUSED 127.0.0.1:54322`) because this Windows host has no installed
+WSL2 distribution and therefore no Docker Linux engine. Static SQL contracts
+pass, but they do not replace the pgTAP gate.
+
+Once Docker is available, run `npm run verify:revenue-core:db`. The checked
+runner performs Docker preflight, starts Supabase, rebuilds all migrations,
+runs every file in `supabase/tests`, and lints the rebuilt public schema in that
+order. Use `npm run verify:revenue-core:db -- --dry-run` to inspect the commands
+without changing a database.

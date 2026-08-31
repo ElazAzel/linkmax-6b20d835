@@ -1085,10 +1085,30 @@ export type AppDatabase = Omit<Database, 'public'> & {
           Args: { p_token: string };
           Returns: Json;
         };
+        get_booking_management_availability: {
+          Args: {
+            p_token: string;
+            p_from_date: string;
+            p_to_date: string;
+          };
+          Returns: Json;
+        };
+        get_booking_owner_detail: {
+          Args: { p_booking_id: string };
+          Returns: Json;
+        };
         get_revenue_kit_draft: {
           Args: {
             p_page_id: string;
             p_kit_id?: string;
+          };
+          Returns: Json;
+        };
+        get_revenue_outcome_summary: {
+          Args: {
+            p_page_id: string;
+            p_from: string;
+            p_to: string;
           };
           Returns: Json;
         };
@@ -1115,6 +1135,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
           Args: {
             p_token: string;
             p_action: 'confirm' | 'cancel' | 'reschedule';
+            p_expected_version: number;
             p_idempotency_key: string;
             p_slot_date?: string | null;
             p_slot_time?: string | null;

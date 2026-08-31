@@ -13,7 +13,7 @@ export interface PublicBookingContextService {
   depositMode: DepositConfiguration['mode'];
   depositValue: string;
   depositRequiredAmount: string;
-  paymentInstructions: string | null;
+  paymentInstructions: string | Record<string, string> | null;
 }
 
 export interface PublicBookingContext {
@@ -53,6 +53,7 @@ export interface CreatePublicBookingInput {
     notes: string | null;
   };
   bookingTimezone: string;
+  locale?: string;
   attribution: Record<string, string | number | boolean | null>;
   idempotencyKey: string;
 }
@@ -68,10 +69,28 @@ export interface LoadPublicAvailabilityInput {
 export interface ManageBookingWithTokenInput {
   token: string;
   action: 'confirm' | 'cancel' | 'reschedule';
+  expectedVersion: number;
   idempotencyKey: string;
   slotDate?: string | null;
   slotTime?: string | null;
   slotEndTime?: string | null;
+}
+
+export interface BookingManagementContext {
+  id: string;
+  serviceName: string;
+  slotDate: string;
+  slotTime: string;
+  slotEndTime: string | null;
+  timezone: string;
+  status: BookingStatus;
+  version: number;
+  paymentStatus: string;
+  depositRequiredAmount: string;
+  paidAmount: string;
+  currency: string;
+  allowedActions: Array<'confirm' | 'cancel' | 'reschedule'>;
+  ownerPagePath: string | null;
 }
 
 export interface ManagedBookingResult {
@@ -85,6 +104,7 @@ export class BookingLifecycleError extends Error {
   constructor(
     public readonly code: string,
     public readonly retryable: boolean,
+    public readonly details: { ownerPagePath?: string } = {},
   ) {
     super(code);
     this.name = 'BookingLifecycleError';
@@ -115,6 +135,64 @@ export interface TransitionBookingInput {
   privilegedCorrection?: boolean;
 }
 
+export interface BookingOwnerDetail {
+  bookingId: string;
+  pageId: string;
+  version: number;
+  status: BookingStatus;
+  statusReason: string | null;
+  localStart: string;
+  timezone: string;
+  slotStarted: boolean;
+  serviceName: string;
+  serviceSnapshot: Json;
+  client: {
+    name: string;
+    phone: string | null;
+    email: string | null;
+    notes: string | null;
+  };
+  payment: {
+    status: string;
+    totalAmount: string;
+    depositRequiredAmount: string;
+    paidAmount: string;
+    refundedAmount: string;
+    currency: string;
+    facts: Array<{
+      kind: string;
+      status: string;
+      amount: string;
+      currency: string;
+      method: string;
+      processingSource: string;
+      confirmedAt: string | null;
+      createdAt: string;
+    }>;
+  };
+  attribution: {
+    source: string;
+    medium: string | null;
+    campaign: string | null;
+    referrerHost: string | null;
+  };
+  transitions: Array<{
+    fromStatus: string | null;
+    toStatus: string;
+    actorType: string;
+    reasonCode: string;
+    occurredAt: string;
+  }>;
+  notifications: Array<{
+    eventKind: 'delivered' | 'failed';
+    recipientRole: string;
+    channel: string;
+    templateKey: string;
+    errorCode: string | null;
+    occurredAt: string;
+  }>;
+}
+
 function isRecord(value: Json | undefined): value is Record<string, Json | undefined> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -131,14 +209,187 @@ function optionalString(value: Json | undefined): string | null {
   return typeof value === 'string' && value.length > 0 ? value : null;
 }
 
+function optionalLocalizedText(value: Json | undefined): string | Record<string, string> | null {
+  const literal = optionalString(value);
+  if (literal) return literal;
+  if (!isRecord(value)) return null;
+  const entries = Object.entries(value).filter((entry): entry is [string, string] => typeof entry[1] === 'string');
+  return entries.length > 0 ? Object.fromEntries(entries) : null;
+}
+
 function throwResponseError(value: Json | undefined): never {
   if (isRecord(value) && value.ok === false) {
     throw new BookingLifecycleError(
       typeof value.code === 'string' ? value.code : 'request_failed',
       value.retryable === true,
+      typeof value.ownerPagePath === 'string' ? { ownerPagePath: value.ownerPagePath } : {},
     );
   }
   throw new BookingLifecycleError('invalid_response', true);
+}
+
+const BOOKING_STATUSES: BookingStatus[] = [
+  'pending_payment', 'confirmed', 'completed', 'cancelled', 'no_show',
+];
+
+const MONEY_DECIMAL = /^\d+\.\d{2}$/;
+
+function isNullableString(value: Json | undefined): value is string | null {
+  return value === null || typeof value === 'string';
+}
+
+function isBookingOwnerDetail(value: Json | undefined): boolean {
+  if (!isRecord(value) || value.ok !== true) return false;
+  if (!requiredString(value.bookingId)
+    || !requiredString(value.pageId)
+    || !requiredVersion(value.version)
+    || typeof value.status !== 'string'
+    || !BOOKING_STATUSES.includes(value.status as BookingStatus)
+    || !isNullableString(value.statusReason)
+    || !requiredString(value.localStart)
+    || !requiredString(value.timezone)
+    || typeof value.slotStarted !== 'boolean'
+    || !requiredString(value.serviceName)
+    || !isRecord(value.serviceSnapshot)
+    || !isRecord(value.client)
+    || !isRecord(value.payment)
+    || !isRecord(value.attribution)
+    || !Array.isArray(value.transitions)
+    || !Array.isArray(value.notifications)) return false;
+
+  const client = value.client;
+  const payment = value.payment;
+  const attribution = value.attribution;
+  if (!requiredString(client.name)
+    || !isNullableString(client.phone)
+    || !isNullableString(client.email)
+    || !isNullableString(client.notes)
+    || !requiredString(payment.status)
+    || !requiredString(payment.currency)
+    || ![payment.totalAmount, payment.depositRequiredAmount, payment.paidAmount, payment.refundedAmount]
+      .every((amount) => typeof amount === 'string' && MONEY_DECIMAL.test(amount))
+    || !Array.isArray(payment.facts)
+    || !requiredString(attribution.source)
+    || !isNullableString(attribution.medium)
+    || !isNullableString(attribution.campaign)
+    || !isNullableString(attribution.referrerHost)) return false;
+
+  const factsValid = payment.facts.every((fact) => isRecord(fact)
+    && requiredString(fact.kind)
+    && requiredString(fact.status)
+    && typeof fact.amount === 'string' && MONEY_DECIMAL.test(fact.amount)
+    && requiredString(fact.currency)
+    && requiredString(fact.method)
+    && requiredString(fact.processingSource)
+    && isNullableString(fact.confirmedAt)
+    && requiredString(fact.createdAt));
+  const transitionsValid = value.transitions.every((transition) => isRecord(transition)
+    && isNullableString(transition.fromStatus)
+    && requiredString(transition.toStatus)
+    && requiredString(transition.actorType)
+    && requiredString(transition.reasonCode)
+    && requiredString(transition.occurredAt));
+  const notificationsValid = value.notifications.every((notification) => isRecord(notification)
+    && (notification.eventKind === 'delivered' || notification.eventKind === 'failed')
+    && requiredString(notification.recipientRole)
+    && requiredString(notification.channel)
+    && requiredString(notification.templateKey)
+    && isNullableString(notification.errorCode)
+    && requiredString(notification.occurredAt));
+
+  return factsValid && transitionsValid && notificationsValid;
+}
+
+export async function loadBookingOwnerDetail(bookingId: string): Promise<BookingOwnerDetail> {
+  const { data, error } = await supabase.rpc('get_booking_owner_detail', {
+    p_booking_id: bookingId,
+  });
+  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (!isBookingOwnerDetail(data)) throwResponseError(data);
+  return data as unknown as BookingOwnerDetail;
+}
+
+export async function loadBookingManagementContext(token: string): Promise<BookingManagementContext> {
+  const { data, error } = await supabase.rpc('get_booking_by_access_token', { p_token: token });
+  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (!isRecord(data) || data.ok !== true) throwResponseError(data);
+  if (!isRecord(data.booking)) throw new BookingLifecycleError('invalid_response', true);
+
+  const booking = data.booking;
+  const status = booking.status;
+  const rawActions = booking.allowedActions;
+  if (
+    !requiredString(booking.id)
+    || !requiredString(booking.serviceName)
+    || !requiredString(booking.slotDate)
+    || !requiredString(booking.slotTime)
+    || !requiredString(booking.timezone)
+    || typeof status !== 'string'
+    || !BOOKING_STATUSES.includes(status as BookingStatus)
+    || !requiredVersion(booking.version)
+    || !requiredString(booking.paymentStatus)
+    || typeof booking.depositRequiredAmount !== 'string'
+    || typeof booking.paidAmount !== 'string'
+    || !requiredString(booking.currency)
+    || !Array.isArray(rawActions)
+  ) {
+    throw new BookingLifecycleError('invalid_response', true);
+  }
+
+  const allowedActions = rawActions.filter(
+    (action): action is 'confirm' | 'cancel' | 'reschedule' => (
+      action === 'confirm' || action === 'cancel' || action === 'reschedule'
+    ),
+  );
+
+  return {
+    id: booking.id,
+    serviceName: booking.serviceName,
+    slotDate: booking.slotDate,
+    slotTime: booking.slotTime,
+    slotEndTime: optionalString(booking.slotEndTime),
+    timezone: booking.timezone,
+    status: status as BookingStatus,
+    version: booking.version,
+    paymentStatus: booking.paymentStatus,
+    depositRequiredAmount: booking.depositRequiredAmount,
+    paidAmount: booking.paidAmount,
+    currency: booking.currency,
+    allowedActions,
+    ownerPagePath: optionalString(booking.ownerPagePath),
+  };
+}
+
+export async function loadBookingManagementAvailability(input: {
+  token: string;
+  fromDate: string;
+  toDate: string;
+}): Promise<PublicAvailabilitySlot[]> {
+  const { data, error } = await supabase.rpc('get_booking_management_availability', {
+    p_token: input.token,
+    p_from_date: input.fromDate,
+    p_to_date: input.toDate,
+  });
+  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (!isRecord(data) || data.ok !== true) throwResponseError(data);
+  if (!Array.isArray(data.slots)) throw new BookingLifecycleError('invalid_response', true);
+
+  return data.slots.map((raw) => {
+    if (
+      !isRecord(raw)
+      || !requiredString(raw.date)
+      || !requiredString(raw.time)
+      || typeof raw.available !== 'boolean'
+    ) {
+      throw new BookingLifecycleError('invalid_response', true);
+    }
+    return {
+      date: raw.date,
+      time: raw.time,
+      endTime: optionalString(raw.endTime),
+      available: raw.available,
+    };
+  });
 }
 
 export async function loadPublicBookingContext(pageId: string): Promise<PublicBookingContext> {
@@ -185,7 +436,7 @@ export async function loadPublicBookingContext(pageId: string): Promise<PublicBo
       depositMode,
       depositValue: raw.depositValue,
       depositRequiredAmount,
-      paymentInstructions: optionalString(raw.paymentInstructions),
+      paymentInstructions: optionalLocalizedText(raw.paymentInstructions),
     };
   });
 
@@ -252,7 +503,7 @@ export async function createPublicBooking(
     throw new BookingLifecycleError('invalid_response', true);
   }
 
-  return {
+  const booking: PublicBookingCreated = {
     bookingId: data.bookingId,
     status: data.status,
     version: data.version,
@@ -262,6 +513,20 @@ export async function createPublicBooking(
     accessToken: data.accessToken,
     idempotentReplay: data.idempotentReplay,
   };
+
+  try {
+    await supabase.functions?.invoke?.('send-booking-notification', {
+      body: {
+        bookingId: booking.bookingId,
+        accessToken: booking.accessToken,
+        locale: input.locale,
+      },
+    });
+  } catch {
+    // Booking is authoritative and must not roll back when notification enqueueing fails.
+  }
+
+  return booking;
 }
 
 export async function manageBookingWithToken(
@@ -270,6 +535,7 @@ export async function manageBookingWithToken(
   const { data, error } = await supabase.rpc('manage_booking_by_access_token', {
     p_token: input.token,
     p_action: input.action,
+    p_expected_version: input.expectedVersion,
     p_idempotency_key: input.idempotencyKey,
     p_slot_date: input.slotDate ?? null,
     p_slot_time: input.slotTime ?? null,

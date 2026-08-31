@@ -5,31 +5,25 @@ import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import { useAuth } from '@/hooks/user/useAuth';
 import { buildReviewRequestUrl, createBookingReviewRequest } from '@/services/reviews';
-import { transitionBooking } from '@/services/booking-lifecycle';
+import type { BookingPaymentMethod } from '@/services/booking-lifecycle';
+import {
+  useBookingOperations,
+  useBookingRevenueDetail,
+} from '@/hooks/revenue/useBookingOperations';
+import { BookingDetailDrawer } from '@/components/dashboard-v2/revenue/BookingDetailDrawer';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import User from 'lucide-react/dist/esm/icons/user';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
-import Check from 'lucide-react/dist/esm/icons/check';
-import X from 'lucide-react/dist/esm/icons/x';
+import PanelRightOpen from 'lucide-react/dist/esm/icons/panel-right-open';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import Download from 'lucide-react/dist/esm/icons/download';
@@ -41,6 +35,7 @@ import { ru, kk, enUS } from 'date-fns/locale';
 
 interface Booking {
   id: string;
+  page_id: string;
   client_name: string;
   client_phone: string | null;
   client_email: string | null;
@@ -52,6 +47,10 @@ interface Booking {
   version: number;
   created_at: string;
   block_id: string;
+}
+
+interface BookingsPanelProps {
+  focusFilter?: string | null;
 }
 
 async function copyText(value: string): Promise<void> {
@@ -76,16 +75,16 @@ const statusColors: Record<string, string> = {
   pending_payment: 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30',
   cancelled: 'bg-red-500/20 text-red-500 border-red-500/30',
   completed: 'bg-blue-500/20 text-blue-500 border-blue-500/30',
+  no_show: 'bg-orange-500/20 text-orange-600 border-orange-500/30',
 };
 
-export function BookingsPanel() {
+export function BookingsPanel({ focusFilter }: BookingsPanelProps = {}) {
   const { t, i18n } = useTranslation();
   const { isRepeatCustomer } = useRepeatCustomers();
   const { user } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming');
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [reviewRequestBookingId, setReviewRequestBookingId] = useState<string | null>(null);
 
@@ -111,47 +110,24 @@ export function BookingsPanel() {
     setLoading(false);
   }, [t, user]);
 
+  const detailQuery = useBookingRevenueDetail(selectedBooking?.id);
+  const operations = useBookingOperations({
+    pageId: detailQuery.data?.pageId ?? selectedBooking?.page_id,
+    onSuccess: fetchBookings,
+  });
+
   useEffect(() => {
     if (!user) return;
     fetchBookings();
   }, [fetchBookings, user]);
 
-  const handleCancelBooking = async () => {
-    if (!selectedBooking) return;
-
-    const result = await transitionBooking({
-      bookingId: selectedBooking.id,
-      toStatus: 'cancelled',
-      expectedVersion: selectedBooking.version,
-      reasonCode: 'owner_cancelled',
-      idempotencyKey: `owner-cancel:${selectedBooking.id}:${crypto.randomUUID()}`,
-    });
-
-    if (!result.ok) {
-      toast.error(t('bookings.cancelError', 'Failed to cancel booking'));
-    } else {
-      toast.success(t('bookings.cancelSuccess', 'Booking cancelled'));
-      fetchBookings();
-    }
-
-    setCancelDialogOpen(false);
-    setSelectedBooking(null);
-  };
-
-  const handleConfirmBooking = async (booking: Booking) => {
-    const result = await transitionBooking({
-      bookingId: booking.id,
-      toStatus: 'confirmed',
-      expectedVersion: booking.version,
-      reasonCode: 'owner_confirmed',
-      idempotencyKey: `owner-confirm:${booking.id}:${crypto.randomUUID()}`,
-    });
-
-    if (!result.ok) {
-      toast.error(t('bookings.confirmError', 'Failed to confirm booking'));
-    } else {
-      toast.success(t('bookings.confirmSuccess', 'Booking confirmed'));
-      fetchBookings();
+  const performOperation = async (operation: () => Promise<unknown>, successMessage: string) => {
+    try {
+      await operation();
+      toast.success(successMessage);
+    } catch (error) {
+      const code = error instanceof Error ? error.message : 'request_failed';
+      toast.error(t(`bookingDetail.errors.${code}`, 'Не удалось обновить запись'));
     }
   };
 
@@ -208,6 +184,15 @@ export function BookingsPanel() {
   const filteredBookings = bookings.filter((booking) => {
     const bookingDate = parseISO(booking.slot_date);
     const isBookingPast = isPast(bookingDate) && !isToday(bookingDate);
+
+    if (focusFilter === 'pending_payment') return booking.status === 'pending_payment';
+    if (focusFilter === 'past_confirmed') return booking.status === 'confirmed' && isBookingPast;
+    if (focusFilter === 'confirmation_due') {
+      const start = new Date(`${booking.slot_date}T${booking.slot_time}`);
+      return booking.status === 'confirmed'
+        && start.getTime() >= Date.now()
+        && start.getTime() < Date.now() + 24 * 60 * 60 * 1000;
+    }
 
     if (statusFilter === 'upcoming') {
       return !isBookingPast && booking.status !== 'cancelled' && booking.status !== 'completed';
@@ -432,7 +417,7 @@ END:VCALENDAR`;
                       {t(`bookings.status.${booking.status}`, booking.status)}
                     </Badge>
 
-                    {booking.status !== 'cancelled' && booking.status !== 'completed' && (
+                    {booking.status !== 'cancelled' && booking.status !== 'completed' && booking.status !== 'no_show' && (
                       <div className="flex gap-1">
                         {/* Add to Calendar */}
                         <Button
@@ -443,27 +428,6 @@ END:VCALENDAR`;
                           title={t('bookings.addToCalendar', 'Add to Calendar')}
                         >
                           <CalendarPlus className="h-4 w-4" />
-                        </Button>
-                        {booking.status === 'pending_payment' && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-7 w-7 p-0 text-green-500 hover:text-green-600 hover:bg-green-500/10"
-                            onClick={() => handleConfirmBooking(booking)}
-                          >
-                            <Check className="h-4 w-4" />
-                          </Button>
-                        )}
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-7 w-7 p-0 text-red-500 hover:text-red-600 hover:bg-red-500/10"
-                          onClick={() => {
-                            setSelectedBooking(booking);
-                            setCancelDialogOpen(true);
-                          }}
-                        >
-                          <X className="h-4 w-4" />
                         </Button>
                       </div>
                     )}
@@ -487,6 +451,16 @@ END:VCALENDAR`;
                         </span>
                       </Button>
                     )}
+
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 px-2 text-xs"
+                      onClick={() => setSelectedBooking(booking)}
+                    >
+                      <PanelRightOpen className="mr-1 h-3.5 w-3.5" />
+                      {t('bookingDetail.open', 'Подробнее')}
+                    </Button>
                   </div>
                 </div>
               </Card>
@@ -507,23 +481,57 @@ END:VCALENDAR`;
         </Button>
       </div>
 
-      {/* Cancel Confirmation Dialog */}
-      <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('bookings.cancelTitle', 'Cancel Booking?')}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t('bookings.cancelDescription', 'Are you sure you want to cancel this booking? The client will be notified.')}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleCancelBooking} className="bg-destructive text-destructive-foreground">
-              {t('bookings.confirmCancel', 'Yes, Cancel Booking')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <BookingDetailDrawer
+        open={Boolean(selectedBooking)}
+        detail={detailQuery.data ?? null}
+        loading={detailQuery.isLoading}
+        pending={operations.isPending}
+        onOpenChange={(open) => { if (!open) setSelectedBooking(null); }}
+        onConfirmDeposit={(amount: string, method: BookingPaymentMethod) => {
+          const detail = detailQuery.data;
+          if (!detail) return;
+          return performOperation(() => operations.confirmDeposit({
+            bookingId: detail.bookingId,
+            expectedVersion: detail.version,
+            amount,
+            paymentMethod: method,
+          }), t('bookingDetail.success.confirmed', 'Предоплата подтверждена'));
+        }}
+        onWaivePayment={() => {
+          const detail = detailQuery.data;
+          if (!detail) return;
+          return performOperation(() => operations.waivePayment({
+            bookingId: detail.bookingId,
+            expectedVersion: detail.version,
+          }), t('bookingDetail.success.waived', 'Запись подтверждена без предоплаты'));
+        }}
+        onCancel={() => {
+          const detail = detailQuery.data;
+          if (!detail) return;
+          return performOperation(() => operations.cancel({
+            bookingId: detail.bookingId,
+            expectedVersion: detail.version,
+          }), t('bookingDetail.success.cancelled', 'Запись отменена'));
+        }}
+        onComplete={(amount: string, method: BookingPaymentMethod) => {
+          const detail = detailQuery.data;
+          if (!detail) return;
+          return performOperation(() => operations.complete({
+            bookingId: detail.bookingId,
+            expectedVersion: detail.version,
+            collectedAmount: amount,
+            paymentMethod: method,
+          }), t('bookingDetail.success.completed', 'Визит завершён'));
+        }}
+        onNoShow={() => {
+          const detail = detailQuery.data;
+          if (!detail) return;
+          return performOperation(() => operations.noShow({
+            bookingId: detail.bookingId,
+            expectedVersion: detail.version,
+          }), t('bookingDetail.success.noShow', 'Отмечена неявка'));
+        }}
+      />
     </div>
   );
 }

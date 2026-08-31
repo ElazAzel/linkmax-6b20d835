@@ -38,7 +38,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import { isCurrentUserFeatureFlagEnabled } from '@/services/feature-flags';
-import { selectDashboardOnboardingWizard } from './dashboard-onboarding';
+import { isBeautyRevenueKitNiche, selectDashboardOnboardingWizard } from './dashboard-onboarding';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
 const HomeScreen = lazy(() => import('@/components/dashboard-v2/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
@@ -203,6 +203,18 @@ function DashboardV2Inner() {
 
   const onboardingSelectionReady = !revenueKitNiche
     || (beautyKitFlag.resolved && beautyKitFlag.niche === revenueKitNiche);
+  const [outcomeHomeEnabled, setOutcomeHomeEnabled] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    void isCurrentUserFeatureFlagEnabled('outcome_home_v1', {
+      niche: dashboard.pageData?.niche,
+      language: i18n.language,
+    }).then((enabled) => {
+      if (active) setOutcomeHomeEnabled(enabled);
+    });
+    return () => { active = false; };
+  }, [dashboard.pageData?.niche, i18n.language]);
 
   // P2: Editor store (must be before early returns)
   const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
@@ -241,6 +253,7 @@ function DashboardV2Inner() {
   const [showCreatePage, setShowCreatePage] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
+  const [showRevenueKit, setShowRevenueKit] = useState(false);
   const [deletePageId, setDeletePageId] = useState<string | null>(null);
 
   const confirmDeletePage = async () => {
@@ -511,6 +524,8 @@ function DashboardV2Inner() {
                   telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
                   kaspiWidgetEnabled={dashboard.userProfile.profile?.kaspi_widget_enabled ?? false}
                   onNavigate={handleTabChange}
+                  outcomeHomeEnabled={outcomeHomeEnabled}
+                  onOpenRevenueKit={() => setShowRevenueKit(true)}
                 />
               </ScreenErrorBoundary>
             )}
@@ -610,6 +625,7 @@ function DashboardV2Inner() {
                   slug={dashboard.pageData?.slug || ''}
                   blocks={dashboard.pageData?.blocks || []}
                   isPremium={dashboard.isPremium}
+                  revenueOutcomesEnabled={outcomeHomeEnabled}
                   onApplyInsight={(_action) => {
                     handleTabChange('home');
                   }}
@@ -918,6 +934,27 @@ function DashboardV2Inner() {
                   }}
                   onOpenAdvancedEditor={() => {
                     dashboard.onboardingState.handleAIBuilderClose();
+                    handleTabChange('editor');
+                  }}
+                />
+              </DialogContent>
+            </Dialog>
+          )}
+
+          {showRevenueKit && (
+            <Dialog open onOpenChange={setShowRevenueKit}>
+              <DialogContent className="max-w-4xl p-0 sm:p-4">
+                <RevenueKitWizard
+                  pageId={dashboard.pageData.id}
+                  initialNiche={isBeautyRevenueKitNiche(dashboard.pageData.niche)
+                    ? dashboard.pageData.niche
+                    : 'nails'}
+                  onPublished={() => {
+                    setShowRevenueKit(false);
+                    window.location.assign('/dashboard/home');
+                  }}
+                  onOpenAdvancedEditor={() => {
+                    setShowRevenueKit(false);
                     handleTabChange('editor');
                   }}
                 />

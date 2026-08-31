@@ -4,7 +4,7 @@
  * HomeScreen v2.0 - Activation hub with outcome-based checklist
  * Moves checklist above page card, removes "Why LinkMAX", adds celebration + dynamic CTAs
  */
-import { memo, useMemo, useEffect, useRef, ReactNode, useState } from 'react';
+import { memo, useMemo, useEffect, useRef, ReactNode, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
@@ -46,12 +46,14 @@ import {
 } from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
-import { differenceInDays, parseISO } from 'date-fns';
+import { differenceInDays, format, parseISO, subDays } from 'date-fns';
 import { storage } from '@/lib/storage';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { ViralReadinessCard } from '@/components/dashboard-v2/widgets/ViralReadinessCard';
+import { OutcomeHome } from '@/components/dashboard-v2/revenue/OutcomeHome';
+import { useRevenueOutcomeSummary } from '@/hooks/revenue/useRevenueOutcomeSummary';
 
 interface HomeScreenProps {
   pageData: PageData | null;
@@ -70,6 +72,41 @@ interface HomeScreenProps {
   onOpenActivity?: () => void;
   kaspiWidgetEnabled: boolean;
   onNavigate?: (tabId: string) => void;
+  outcomeHomeEnabled?: boolean;
+  onOpenRevenueKit?: () => void;
+}
+
+interface RevenueOutcomeHomeContainerProps {
+  pageId: string;
+  onNavigate: (href: string) => void;
+  onReadyChange: (ready: boolean) => void;
+}
+
+function RevenueOutcomeHomeContainer({
+  pageId,
+  onNavigate,
+  onReadyChange,
+}: RevenueOutcomeHomeContainerProps) {
+  const outcomePeriod = useMemo(() => {
+    const to = new Date();
+    return {
+      from: format(subDays(to, 29), 'yyyy-MM-dd'),
+      to: format(to, 'yyyy-MM-dd'),
+    };
+  }, []);
+  const outcomeQuery = useRevenueOutcomeSummary({
+    pageId,
+    from: outcomePeriod.from,
+    to: outcomePeriod.to,
+  });
+
+  useEffect(() => {
+    onReadyChange(Boolean(outcomeQuery.data));
+  }, [onReadyChange, outcomeQuery.data]);
+
+  if (!outcomeQuery.data) return null;
+
+  return <OutcomeHome summary={outcomeQuery.data} onNavigate={onNavigate} />;
 }
 
 export const HomeScreen = memo(function HomeScreen({
@@ -89,6 +126,8 @@ export const HomeScreen = memo(function HomeScreen({
   kaspiWidgetEnabled,
   realLeadsCount = 0,
   telegramChatId,
+  outcomeHomeEnabled = false,
+  onOpenRevenueKit,
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -96,6 +135,24 @@ export const HomeScreen = memo(function HomeScreen({
   const gapDetectedRef = useRef(false);
 
   const viewCount = pageData?.viewCount || 0;
+  const [outcomeHomeReady, setOutcomeHomeReady] = useState(false);
+  const outcomeExperienceActive = outcomeHomeEnabled && outcomeHomeReady;
+
+  useEffect(() => {
+    setOutcomeHomeReady(false);
+  }, [outcomeHomeEnabled, pageData?.id]);
+
+  const handleOutcomeNavigate = useCallback((href: string) => {
+    if (href.includes('revenueKit=beauty-v1') && onOpenRevenueKit) {
+      onOpenRevenueKit();
+      return;
+    }
+    if (href.includes('action=share')) {
+      onShare();
+      return;
+    }
+    navigate(href);
+  }, [navigate, onOpenRevenueKit, onShare]);
 
   // Activation checklist with outcome-based data
   const activation = useActivationChecklist({
@@ -205,8 +262,16 @@ export const HomeScreen = memo(function HomeScreen({
       />
 
       <div className="px-4 md:px-5 py-6 space-y-6">
+        {outcomeHomeEnabled && pageData.id && (
+          <RevenueOutcomeHomeContainer
+            pageId={pageData.id}
+            onNavigate={handleOutcomeNavigate}
+            onReadyChange={setOutcomeHomeReady}
+          />
+        )}
+
         {/* Activation Checklist — ABOVE page card for visibility */}
-        {activation.isVisible && !checklistDismissed && (
+        {!outcomeExperienceActive && activation.isVisible && !checklistDismissed && (
           <ActivationChecklist
             steps={activation.steps}
             completedCount={activation.completedCount}
@@ -258,14 +323,16 @@ export const HomeScreen = memo(function HomeScreen({
         {/* --- SUPPLEMENTARY WIDGETS --- */}
         {isPublished && (
           <div className="space-y-6">
-            <OperatorSummaryWidget
-              pageId={pageData?.id}
-              pageSlug={slug}
-              pageNiche={pageData?.niche}
-              pageUpdatedAt={pageData?.updatedAt}
-              onOpenActivity={onOpenActivity}
-              onOpenEditor={onOpenEditor}
-            />
+            {!outcomeExperienceActive && (
+              <OperatorSummaryWidget
+                pageId={pageData?.id}
+                pageSlug={slug}
+                pageNiche={pageData?.niche}
+                pageUpdatedAt={pageData?.updatedAt}
+                onOpenActivity={onOpenActivity}
+                onOpenEditor={onOpenEditor}
+              />
+            )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <WalletOverviewWidget 
@@ -472,7 +539,7 @@ export const HomeScreen = memo(function HomeScreen({
         </div>
 
         {/* Lifecycle Nudge — data-driven contextual tip */}
-        <div data-testid="home-next-action-region">
+        {!outcomeExperienceActive && <div data-testid="home-next-action-region">
           {(() => {
           // Lifecycle-aware nudge replaces static tip
           if (isPublished && viewCount > 0 && realLeadsCount === 0) {
@@ -540,7 +607,7 @@ export const HomeScreen = memo(function HomeScreen({
             </Card>
           );
           })()}
-        </div>
+        </div>}
 
         {/* "Why LinkMAX" card REMOVED — user already converted, this is landing copy */}
       </div>

@@ -284,9 +284,15 @@ Run: `npm run typecheck:strict`
 
 Run the anonymous RLS matrix and inspect function grants using `information_schema.routine_privileges`. Confirm no anonymous booking PII select and no `PUBLIC` execute on owner mutation RPCs.
 
-- [ ] **Step 4: Commit plan progress**
+- [x] **Step 4: Commit plan progress**
 
 ```bash
 git add docs/superpowers/plans/2026-08-29-revenue-core-b-facts-telemetry.md
 git commit -m "docs: record revenue facts completion"
 ```
+
+Plan progress was committed in `82661efa`. The dynamic anonymous-role/RLS and
+routine-privilege inspection in Steps 1 and 3 remains intentionally open until
+the local Supabase PostgreSQL stack is available. Static SQL contracts cover
+the expected revokes, grants and PII boundaries but are not recorded as a
+substitute for the database role matrix.
