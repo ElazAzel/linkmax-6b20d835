@@ -121,7 +121,8 @@ class RouteErrorBoundary extends React.Component<
   }
 }
 
-const App = () => {
+// Runs inside AuthProvider so auth context is available.
+const AppAuthEffects = () => {
   // Capture page-level referral visits and convert the first-touch attribution
   // after authentication. The hook is intentionally global so auth redirects
   // cannot lose the referral code.
@@ -135,6 +136,12 @@ const App = () => {
     }, 500);
     return () => window.clearTimeout(timer);
   }, [user?.id]);
+
+  return null;
+};
+
+const App = () => {
+
 
   // Defer non-critical init until user interacts or after 8s
   useEffect(() => {
