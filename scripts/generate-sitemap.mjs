@@ -69,6 +69,7 @@ const STATIC_PAGES = [
   { loc: '/gallery', changefreq: 'daily', priority: '0.8' },
   { loc: '/experts', changefreq: 'daily', priority: '0.9' },
   { loc: '/pricing', changefreq: 'monthly', priority: '0.9' },
+  { loc: '/demo-nails', changefreq: 'weekly', priority: '0.8' },
   { loc: '/alternatives', changefreq: 'monthly', priority: '0.8' },
   { loc: '/for-masters', changefreq: 'monthly', priority: '0.7' },
   { loc: '/seo-landing', changefreq: 'monthly', priority: '0.7' },
@@ -210,7 +211,7 @@ async function main() {
     ...pages.map((p) => {
       const slug = normalizeSlug(p.slug);
       return {
-        loc: `/${slug}`,
+        loc: slug === 'demo_nails' ? '/demo-nails' : `/${slug}`,
         lastmod: pickLastmod(p, today),
         changefreq: 'weekly',
         priority: '0.7',

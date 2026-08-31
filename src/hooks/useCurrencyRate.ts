@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/platform/supabase/client';
+import { BILLING_CATALOG, type BillingPeriodMonths, getProPrice } from '@/domain/billing/catalog';
+import { supabase } from '@/integrations/supabase/client';
 
 export const BASE_PRICES_USD = {
     3: 8.90,
@@ -8,25 +9,25 @@ export const BASE_PRICES_USD = {
 };
 
 // Fixed KZT prices as per pricing strategy
-export const FIXED_PRICES_KZT: Record<number, number> = {
-    3: 4350,
-    6: 3698,
-    12: 3045
+export const FIXED_PRICES_KZT: Record<BillingPeriodMonths, number> = {
+    3: getProPrice(3).monthlyKzt,
+    6: getProPrice(6).monthlyKzt,
+    12: getProPrice(12).monthlyKzt
 };
 
-export function getMonthlyPriceKzt(period: 3 | 6 | 12): number {
-    return FIXED_PRICES_KZT[period];
+export function getMonthlyPriceKzt(period: BillingPeriodMonths): number {
+    return getProPrice(period).monthlyKzt;
 }
 
-export function getTotalPriceKzt(period: 3 | 6 | 12): number {
-    return FIXED_PRICES_KZT[period] * period;
+export function getTotalPriceKzt(period: BillingPeriodMonths): number {
+    return BILLING_CATALOG.pro.pricesKzt[period];
 }
 
 export function useCurrencyRate() {
     return useQuery({
         queryKey: ['currency_rate', 'USD_KZT'],
         queryFn: async () => {
-            const { data, error } = await (supabase as any)
+            const { data, error } = await supabase
                 .from('currency_rates')
                 .select('rate')
                 .eq('currency_pair', 'USD_KZT')
@@ -37,7 +38,7 @@ export function useCurrencyRate() {
                 return 497.33; // Fallback rate to prevent app break
             }
 
-            return (data as any)?.rate || 497.33;
+            return data?.rate ?? 497.33;
         },
         staleTime: 1000 * 60 * 60 * 12, // 12 hours
         gcTime: 1000 * 60 * 60 * 24, // 24 hours

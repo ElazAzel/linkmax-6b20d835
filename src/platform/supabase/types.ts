@@ -191,33 +191,48 @@ export type Database = {
       }
       product_events: {
         Row: {
+          actor_type: string
+          booking_id: string | null
           created_at: string
           event_name: string
           id: string
+          idempotency_key: string | null
           metadata: Json
           occurred_at: string
           page_id: string | null
+          service_offering_id: string | null
           source: string
+          taxonomy_version: number
           user_id: string
         }
         Insert: {
+          actor_type?: string
+          booking_id?: string | null
           created_at?: string
           event_name: string
           id?: string
+          idempotency_key?: string | null
           metadata?: Json
           occurred_at?: string
           page_id?: string | null
+          service_offering_id?: string | null
           source?: string
+          taxonomy_version?: number
           user_id: string
         }
         Update: {
+          actor_type?: string
+          booking_id?: string | null
           created_at?: string
           event_name?: string
           id?: string
+          idempotency_key?: string | null
           metadata?: Json
           occurred_at?: string
           page_id?: string | null
+          service_offering_id?: string | null
           source?: string
+          taxonomy_version?: number
           user_id?: string
         }
         Relationships: [

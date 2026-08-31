@@ -153,10 +153,10 @@
     },
     "tips": {
       "addBlock": "Add your first block — a link, product, or video",
-      "addForm": "Add a contact form — every 5th page with a form gets leads",
+      "addForm": "Add a form or booking block to accept enquiries",
       "growTraffic": "Share your link on social media to attract more visitors",
       "publish": "Publish your page to make it available via link",
-      "shareForVisitor": "Share your link — 5 out of 10 users get their first visitor within an hour"
+      "shareForVisitor": "Share your link to start collecting views"
     },
     "title": "Launch Your Page"
   },
@@ -1275,6 +1275,9 @@
     "hour2": "2 hours",
     "kaspiHint": "Number for Kaspi transfer",
     "kaspiPhone": "Kaspi number",
+    "linkedServices": "Linked services",
+    "linkedServicesCount": "{{count}} services are linked to this booking",
+    "linkedServicesHint": "A service selected in the price list will be passed to the booking form.",
     "maxDays": "Maximum days for recording",
     "methodKaspi": "Kaspi (QR/transfer)",
     "methodRobokassa": "Robokassa (card)",
@@ -1741,7 +1744,7 @@
       "templates": "Templates",
       "templatesDesc": "Ready pages",
       "tip": "Advice",
-      "tipContent": "Add a price block to increase conversion by 40%",
+      "tipContent": "Add prices so clients can decide before contacting you",
       "title": "Home",
       "versions": "Story",
       "versionsDesc": "Page versions",
@@ -1751,9 +1754,9 @@
       "addForm": "Add a grab form",
       "addFormDesc": "There is traffic, but no conversions. Add a feedback form",
       "addPricing": "Add a pricing block",
-      "addPricingDesc": "Pricing pages get 40% more requests",
+      "addPricingDesc": "Add prices so clients can decide before contacting you",
       "addTestimonials": "Add reviews",
-      "addTestimonialsDesc": "Reviews build trust and increase conversion by 25%",
+      "addTestimonialsDesc": "Add verified reviews after completed bookings",
       "aiInsights": "AI Recommendations",
       "apply": "Apply",
       "clicks": "Clicks",
@@ -3147,7 +3150,8 @@
     "empty": "Click",
     "error": "Analysis error",
     "lowCTR": {
-      "description": "A bright button with a call to action will increase conversions",
+      "description": "Add a clear button with a specific next action",
+      "impact": "A clearer next step",
       "title": "Add a CTA button"
     },
     "lowPerforming": {
@@ -3155,7 +3159,8 @@
       "title": "Ineffective block"
     },
     "lowViews": {
-      "description": "Pages with social networks receive 40% more clicks",
+      "description": "Add links to active social profiles so visitors can keep exploring",
+      "impact": "More contact points",
       "title": "Add social networks"
     },
     "mobileOpt": {
@@ -3382,7 +3387,7 @@
         "question": "What integrations does LinkMAX support?"
       },
       "q8": {
-        "answer": "No. 0% commission on your sales - you only pay for the subscription.",
+        "answer": "The rate depends on your plan: Starter 7%, Pro 1%, Business 0%. It is shown before payments are enabled.",
         "question": "Does LinkMAX take a commission on sales?"
       },
       "q9": {
@@ -3465,13 +3470,13 @@
       "benefit1": "All links in one place",
       "benefit2": "AI creates content",
       "benefit3": "Click analytics",
-      "benefit4": "No commissions",
+      "benefit4": "Transparent plans",
       "benefit5": "Your own domain",
       "benefit6": "Mobile editor",
       "keywords": "Keywords: links page, link in bio, link in bio, multilink, linktree alternative, taplink analogue, mini-landing",
       "p1": "Link-in-Bio (link in bio, multi-link) is a page that you place in the profile description of Instagram, TikTok, YouTube or Telegram. Instead of one link, you get a full-fledged mini-landing page with buttons, contacts and even a product catalog.",
       "p2": "LinkMAX.my is a modern alternative to Linktree and Taplink with AI content generation. You choose a niche (barber, photographer, trainer, psychologist), and artificial intelligence creates a ready-made page in 2 minutes: with a profile, the necessary blocks and texts.",
-      "p3": "Unlike our competitors, we do not take a commission on your sales. All money from goods and services is yours. And built-in analytics and CRM help you understand which links work best.",
+      "p3": "The fee depends on your plan and is shown up front. Built-in analytics and CRM help identify which links and services generate enquiries.",
       "subtitle": "A links page is a mini-site that brings together all your resources: social networks, instant messengers, portfolio, products and services",
       "title": "What is Link-in-Bio and why is it needed?"
     },
@@ -3541,6 +3546,7 @@
     },
     "simplePricing": {
       "badge": "Simple tariffs",
+      "feeNote": "The fee depends on your plan and is shown before payments are enabled",
       "free": {
         "cta": "Start for free",
         "f1_v2": "Basic blocks (links, text, photos)",
@@ -3995,9 +4001,9 @@
     },
     "insights": {
       "addPricing": "Add a block with prices",
-      "addPricingDesc": "Price list pages receive 40% more requests",
+      "addPricingDesc": "Add prices so clients can decide before contacting you",
       "addTestimonials": "Add reviews",
-      "addTestimonialsDesc": "Reviews increase trust and conversion by 25%",
+      "addTestimonialsDesc": "Add verified reviews after completed bookings",
       "duplicateTop": "Duplicate a popular link",
       "duplicateTopDesc": "gets clicks"
     },
@@ -4272,7 +4278,7 @@
       ],
       "title": "Pro"
     },
-    "guarantee": "0% commission on sales. Return 14 days.",
+    "guarantee": "Transparent plan-based fees. 14-day refund window.",
     "recommended": "We recommend",
     "alreadyFree": "Free plan is already active",
     "basicDesc": "Page + bookings + CRM for free",
@@ -4388,7 +4394,7 @@
     "successFirst": "Success First Plan",
     "starterDesc": "Start with $0/mo. We only take a small 7% fee when you actually make a sale.",
     "starterCta": "Start for free",
-    "transactionFeeNote": "* Transaction fees: Starter (7%), Pro (1%), Business (0.1%)"
+    "transactionFeeNote": "* Transaction fees: Starter (7%), Pro (1%), Business (0%)"
   },
   "premium": {
     "badge": "We recommend",
@@ -4736,8 +4742,8 @@
         "title": "Editor in your pocket"
       },
       "noCommission": {
-        "description": "Sell вЂ‹вЂ‹- it's all yours",
-        "title": "0% commission"
+        "description": "The rate is visible before payments are enabled",
+        "title": "Transparent fees"
       },
       "speed": {
         "description": "Pages load instantly. The client will not leave",
@@ -4795,7 +4801,7 @@
   },
   "lifecycle": {
     "hasLeads": {
-      "hint": "Follow up with clients after their visit — it improves return rate by 30%",
+      "hint": "Message clients after their visit and offer a convenient rebooking option",
       "title": "Leads are coming in"
     },
     "repeatCustomers": {
@@ -4803,7 +4809,7 @@
       "title": "Repeat customers"
     },
     "trafficNoLeads": {
-      "hint": "Add a contact form or booking block — every 5th page with a form gets leads",
+      "hint": "Add a form or booking block to accept enquiries",
       "title": "Traffic but no leads"
     }
   },
@@ -7065,7 +7071,7 @@
       "businessCta": "Go Business",
       "aiPowered": "AI-powered",
       "successFirst": "Success starts here",
-      "transactionFeeNote": "0% commission — all your sales revenue stays with you",
+      "transactionFeeNote": "Fees: Starter 7%, Pro 1%, Business 0%",
       "teamLabel": "For teams",
       "f1": "1 page",
       "f2": "Basic blocks",
@@ -7501,10 +7507,259 @@
       "counter": "Downloaded {{used}} of {{limit}}"
     }
   },
-  "humanizer": {
-    "action": "Humanize",
-    "empty": "Write some text first",
-    "alreadyClean": "The text already reads naturally",
-    "done": "Text sounds more human now"
+  "bookingManagement": {
+    "eyebrow": "Your booking",
+    "contactOwner": "Contact the specialist",
+    "expired": {
+      "title": "This link has expired",
+      "description": "Contact the specialist for up-to-date information."
+    },
+    "invalid": {
+      "title": "Booking unavailable",
+      "description": "Check the link or ask the specialist for a new one."
+    },
+    "status": {
+      "pending_payment": "Waiting for deposit",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "no_show": "No-show"
+    },
+    "actions": {
+      "reschedule": "Reschedule",
+      "confirm": "Confirm attendance",
+      "cancel": "Cancel booking"
+    },
+    "reschedule": {
+      "date": "New date",
+      "save": "Save new time"
+    },
+    "errors": {
+      "version_conflict": "This booking has already changed. Refresh the page and try again.",
+      "slot_unavailable": "That time is no longer available. Choose another option.",
+      "action_not_allowed": "This action is no longer available.",
+      "request_failed": "The booking could not be updated. Try again."
+    }
+  },
+  "publicBooking": {
+    "minutes": "min",
+    "manage": "Manage booking",
+    "service": {
+      "title": "Choose a service",
+      "description": "The price and duration will be saved with the booking."
+    },
+    "slot": {
+      "title": "Choose a date and time",
+      "timezone": "Times are shown in the specialist's time zone.",
+      "date": "Date",
+      "available": "Available times",
+      "empty": "There are no available times on this date."
+    },
+    "contact": {
+      "title": "Contact details",
+      "description": "Enter your name and at least one way to contact you.",
+      "name": "Name",
+      "phone": "Phone",
+      "notes": "Comment (optional)",
+      "submitting": "Creating booking…",
+      "submit": "Confirm booking"
+    },
+    "deposit": {
+      "pendingTitle": "Waiting for deposit confirmation",
+      "pendingDescription": "The time will be confirmed after the specialist verifies the payment.",
+      "contactOwner": "Contact the specialist for payment details."
+    },
+    "confirmed": {
+      "title": "Booking confirmed",
+      "description": "Save this link to confirm attendance, reschedule, or cancel the booking."
+    },
+    "errors": {
+      "contactRequired": "Enter your name and a phone number or email.",
+      "slotRequired": "Choose a time to continue.",
+      "slotUnavailable": "That time is no longer available. Choose an updated slot.",
+      "slot_unavailable": "That time is no longer available. Choose an updated slot.",
+      "service_unavailable": "There are no services available for booking right now.",
+      "page_not_public": "This page has not been published yet.",
+      "request_failed": "The booking could not be loaded. Try again.",
+      "invalid_response": "The booking service returned an invalid response. Try again."
+    }
+  },
+  "revenueKit": {
+    "title": "Beauty Revenue Kit",
+    "progress": "Step {{current}} of {{total}}",
+    "identity": {
+      "title": "About you and your business",
+      "description": "These details will appear on your finished page.",
+      "name": "Business name",
+      "city": "City",
+      "specialization": "Specialization",
+      "contact": "WhatsApp or Telegram"
+    },
+    "services": {
+      "title": "Services",
+      "description": "You can edit prices and duration now or later.",
+      "active": "Active service",
+      "price": "Price, ₸",
+      "duration": "Duration, min"
+    },
+    "availability": {
+      "title": "Availability",
+      "timezone": "Timezone: Almaty (UTC+5)",
+      "start": "Start of day",
+      "end": "End of day",
+      "days": "Working days",
+      "daysShort": {
+        "0": "Sun",
+        "1": "Mon",
+        "2": "Tue",
+        "3": "Wed",
+        "4": "Thu",
+        "5": "Fri",
+        "6": "Sat"
+      }
+    },
+    "deposit": {
+      "title": "Deposit and cancellation",
+      "description": "Customers see an honest pending state until payment is confirmed.",
+      "mode": "Deposit amount",
+      "none": "No deposit",
+      "fixed": "Fixed amount",
+      "percent": "Percentage",
+      "value": "Amount or percentage",
+      "instructions": "Payment instructions"
+    },
+    "preview": {
+      "title": "Trust and preview",
+      "description": "This is how the booking experience looks on a 360 px screen.",
+      "policy": "I checked the prices, schedule, and cancellation terms."
+    },
+    "publish": {
+      "title": "Your page is ready for its first bookings",
+      "description": "{{count}} services, availability, and booking will be published together.",
+      "action": "Publish page",
+      "applying": "Publishing…",
+      "advanced": "Open advanced editor"
+    },
+    "errors": {
+      "identityRequired": "Enter a business name, city, and contact",
+      "activeServiceRequired": "Keep at least one service active",
+      "serviceInvalid": "Check service prices and duration",
+      "workingDayRequired": "Choose at least one working day",
+      "hoursInvalid": "The end time must be later than the start time",
+      "depositTooHigh": "The deposit cannot exceed the service price",
+      "percentInvalid": "The deposit percentage must be between 1 and 100",
+      "depositInvalid": "Check the deposit amount",
+      "paymentInstructionsRequired": "Add payment instructions",
+      "policyRequired": "Confirm the prices, schedule, and cancellation terms",
+      "publishFailed": "The page could not be published"
+    }
+  },
+  "outcomeHome": {
+    "outcome": {
+      "eyebrow": "Outcome",
+      "title": "What your page delivered",
+      "netCollected": "Collected after refunds",
+      "paidCompleted": "Paid and completed",
+      "pendingPayments": "Awaiting deposit",
+      "period": "{{from}}–{{to}}",
+      "provisional": "The latest 7 days may change as bookings complete and refunds are recorded."
+    },
+    "empty": {
+      "title": "Start accepting bookings from your page",
+      "description": "Add services, availability, and clear deposit terms."
+    },
+    "next": { "eyebrow": "Next step" },
+    "attention": {
+      "title": "Needs attention",
+      "count": "{{count}} booking tasks",
+      "empty": "No urgent booking actions",
+      "pending": "Awaiting deposit",
+      "past": "Past without an outcome",
+      "upcoming": "Customer confirmation needed",
+      "healthy": "You can focus on bringing in new bookings."
+    },
+    "actions": {
+      "start_revenue_kit": { "label": "Set up booking", "description": "Add services, availability, and deposit rules in one short flow." },
+      "add_first_service": { "label": "Add a service", "description": "Customers need at least one available service." },
+      "set_availability": { "label": "Open availability", "description": "Set future hours when customers can book." },
+      "configure_deposit": { "label": "Clarify the deposit", "description": "Add clear payment instructions." },
+      "publish_page": { "label": "Publish page", "description": "Your page is ready for its first visitors." },
+      "copy_bio_link": { "label": "Share the link", "description": "Bring the first attributed external visit to your published page." },
+      "confirm_pending_deposit": { "label": "Check the deposit", "description": "Bookings are waiting for your confirmation." },
+      "review_past_appointments": { "label": "Resolve past bookings", "description": "Record the outcome of past appointments." },
+      "send_upcoming_confirmation": { "label": "Confirm upcoming bookings", "description": "Check attendance for customers due in the next 24 hours." },
+      "improve_booking_conversion": { "label": "Review the booking path", "description": "There is enough service interest, but no bookings yet." },
+      "open_outcome_insights": { "label": "Open outcomes", "description": "Operations are clear — explore your sources and funnel." }
+    }
+  },
+  "bookingDetail": {
+    "title": "Booking",
+    "loading": "Loading booking facts…",
+    "open": "Details",
+    "client": "Customer",
+    "source": "Source",
+    "payment": "Payment",
+    "total": "Total",
+    "paid": "Collected",
+    "deposit": "Deposit",
+    "refunded": "Refunded",
+    "amount": "Amount collected",
+    "method": "Payment method",
+    "history": "Status history",
+    "notifications": "Notifications",
+    "notificationsEmpty": "No delivery facts yet",
+    "delivered": "Delivered",
+    "failed": "Failed",
+    "methods": { "cash": "Cash", "card": "Card", "transfer": "Transfer", "other": "Other" },
+    "actions": {
+      "confirmDeposit": "Confirm deposit",
+      "waive": "Confirm without deposit",
+      "complete": "Complete visit",
+      "noShow": "Customer did not show",
+      "cancel": "Cancel booking"
+    },
+    "cancelConfirm": {
+      "title": "Cancel this booking?",
+      "description": "The status will change to Cancelled. The operation history will be preserved.",
+      "action": "Yes, cancel"
+    },
+    "success": {
+      "confirmed": "Deposit confirmed",
+      "waived": "Booking confirmed without a deposit",
+      "cancelled": "Booking cancelled",
+      "completed": "Visit completed",
+      "noShow": "No-show recorded"
+    },
+    "errors": {
+      "request_failed": "The booking could not be updated",
+      "version_conflict": "The booking has changed. Refresh and try again.",
+      "slot_not_started": "The appointment has not started yet.",
+      "payment_required": "Confirm the deposit first."
+    }
+  },
+  "revenueInsights": {
+    "eyebrow": "Revenue and bookings",
+    "title": "From source to completed visit",
+    "funnel": {
+      "title": "Path to a completed booking",
+      "description": "Observed events and booking facts for the selected period.",
+      "serviceViewed": "Service viewed",
+      "bookingStarted": "Booking started",
+      "bookingCreated": "Booking created",
+      "bookingPaid": "Paid",
+      "bookingCompleted": "Completed"
+    },
+    "sources": {
+      "title": "Revenue by source",
+      "description": "Missing attribution remains unknown and is not distributed artificially.",
+      "empty": "No attributed bookings in this period yet.",
+      "source": "Source",
+      "views": "Service",
+      "started": "Started",
+      "bookings": "Bookings",
+      "paid": "Paid",
+      "completed": "Completed",
+      "net": "After refunds"
+    }
   }
 }

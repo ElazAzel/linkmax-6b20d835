@@ -139,21 +139,30 @@ function getSSRTarget(pathname) {
 }
 
 async function handleRequest(request, env) {
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+  const hostname = url.hostname;
+  const isPlatformDomain = hostname === 'lnkmx.my'
+    || hostname === 'www.lnkmx.my'
+    || hostname === 'localhost'
+    || hostname === '127.0.0.1'
+    || hostname.endsWith('.workers.dev');
+
+  if (isPlatformDomain && pathname === '/demo_nails') {
+    url.pathname = '/demo-nails';
+    return Response.redirect(url.toString(), 301);
+  }
+
   const SUPABASE_PROJECT = env.SUPABASE_PROJECT;
   if (!SUPABASE_PROJECT) {
     return fetch(request);
   }
 
   const FUNCTION_URL = `https://${SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
-  const url = new URL(request.url);
-  const pathname = url.pathname;
   const userAgent = request.headers.get('User-Agent') || '';
   const queryString = url.search || '';
-  const hostname = url.hostname;
 
   // Custom Domain handling
-  const isPlatformDomain = hostname.includes('lnkmx.my') || hostname.includes('localhost') || hostname.includes('127.0.0.1') || hostname.includes('workers.dev');
-
   if (!isPlatformDomain) {
     // Custom domain → resolve slug, SSR for all agents
     const resolveUrl = `https://${SUPABASE_PROJECT}.supabase.co/functions/v1/resolve-domain`;

@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getProPrice } from '@/domain/billing/catalog';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface SEOLandingHeadProps {
   currentLanguage: string;
 }
+
+const ANNUAL_PRO_MONTHLY_KZT = getProPrice(12).monthlyKzt;
 
 export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
   const { t } = useTranslation();
@@ -243,7 +246,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
         {
           '@type': 'Offer',
           name: 'Pro',
-          price: '3045',
+          price: String(ANNUAL_PRO_MONTHLY_KZT),
           priceCurrency: 'KZT',
           availability: 'https://schema.org/InStock',
           url: `${domain}/pricing`,
@@ -325,7 +328,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
               '@type': 'Service',
               name: 'Pro',
             },
-            price: '3045',
+            price: String(ANNUAL_PRO_MONTHLY_KZT),
             priceCurrency: 'KZT',
           },
         ],

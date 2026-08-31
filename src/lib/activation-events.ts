@@ -6,6 +6,8 @@
 import { logger } from '@/lib/utils/logger';
 import { trackProductEventFromActivation } from '@/services/product-analytics';
 import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
+import { captureRevenueEvent } from '@/lib/posthog';
+import { REVENUE_EVENTS, type RevenueEventName } from '@/domain/revenue/events';
 
 export type ActivationEventType =
   | 'activation_checklist_step_clicked'
@@ -71,6 +73,19 @@ function isValidUuid(value: string | null | undefined): value is string {
   return typeof value === 'string' && UUID_REGEX.test(value);
 }
 
+const ACTIVATION_TO_REVENUE_EVENT: Partial<Record<ActivationEventType, RevenueEventName>> = {
+  booking_slot_selected: REVENUE_EVENTS.bookingSlotSelected,
+  booking_form_opened: REVENUE_EVENTS.bookingStarted,
+  booking_submitted: REVENUE_EVENTS.bookingDetailsSubmitted,
+  booking_prepayment_initiated: REVENUE_EVENTS.depositPaymentStarted,
+  booking_confirmed: REVENUE_EVENTS.bookingConfirmed,
+  booking_payment_confirmed: REVENUE_EVENTS.depositPaymentManuallyConfirmed,
+  booking_cancelled: REVENUE_EVENTS.bookingCancelled,
+  booking_completed: REVENUE_EVENTS.bookingCompleted,
+  booking_marked_completed: REVENUE_EVENTS.bookingCompleted,
+  repeat_booking_started: REVENUE_EVENTS.bookingStarted,
+};
+
 /**
  * Track an activation event to the analytics table
  */
@@ -84,6 +99,12 @@ export async function trackActivationEvent(
   }
 
   try {
+    const revenueEvent = ACTIVATION_TO_REVENUE_EVENT[eventType];
+    if (revenueEvent) {
+      captureRevenueEvent(revenueEvent, { pageId, ...(metadata ?? {}) });
+      return;
+    }
+
     await submitPublicAnalyticsEvent({
       pageId,
       eventType: `activation:${eventType}`,

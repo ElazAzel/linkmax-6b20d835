@@ -15,7 +15,7 @@ export function LinkInBioSection() {
     { icon: Link2, text: t('landing.linkInBio.benefit1', 'Все ссылки в одном месте') },
     { icon: Sparkles, text: t('landing.linkInBio.benefit2', 'AI создаёт контент') },
     { icon: TrendingUp, text: t('landing.linkInBio.benefit3', 'Аналитика кликов') },
-    { icon: Shield, text: t('landing.linkInBio.benefit4', 'Без комиссий') },
+    { icon: Shield, text: t('landing.linkInBio.benefit4', 'Прозрачные тарифы') },
     { icon: Globe, text: t('landing.linkInBio.benefit5', 'Свой домен') },
     { icon: Smartphone, text: t('landing.linkInBio.benefit6', 'Мобильный редактор') },
   ];
@@ -57,7 +57,7 @@ export function LinkInBioSection() {
                   {t('landing.linkInBio.p2', 'lnkmx.my — современная альтернатива Linktree и Taplink с AI-генерацией контента. Вы выбираете нишу (барбер, фотограф, тренер, психолог), и искусственный интеллект создаёт готовую страницу за 2 минуты: с профилем, нужными блоками и текстами.')}
                 </p>
                 <p>
-                  {t('landing.linkInBio.p3', 'В отличие от конкурентов, мы не берём комиссию с ваших продаж. Все деньги от товаров и услуг — ваши. А встроенная аналитика и CRM помогают понять, какие ссылки работают лучше всего.')}
+                  {t('landing.linkInBio.p3', 'Комиссия зависит от тарифа и показывается заранее. Встроенная аналитика и CRM помогают понять, какие ссылки и услуги приносят обращения.')}
                 </p>
               </div>
 

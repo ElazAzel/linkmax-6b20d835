@@ -76,7 +76,7 @@ export function computeInsights(
       id: 'add-pricing',
       type: 'add',
       title: t('dashboard.insights.addPricing', 'Добавьте блок с ценами'),
-      description: t('dashboard.insights.addPricingDesc', 'Страницы с прайсом получают на 40% больше заявок'),
+      description: t('dashboard.insights.addPricingDesc', 'Добавьте цены, чтобы клиент мог принять решение до обращения'),
       action: () => onApplyInsight({ type: 'add', data: { blockType: 'pricing' } }),
       impact: 'high',
     });
@@ -87,7 +87,7 @@ export function computeInsights(
       id: 'add-testimonials',
       type: 'add',
       title: t('dashboard.insights.addTestimonials', 'Добавьте отзывы'),
-      description: t('dashboard.insights.addTestimonialsDesc', 'Отзывы увеличивают доверие и конверсию на 25%'),
+      description: t('dashboard.insights.addTestimonialsDesc', 'Добавьте проверенные отзывы после завершённых записей'),
       action: () => onApplyInsight({ type: 'add', data: { blockType: 'testimonial' } }),
       impact: 'medium',
     });

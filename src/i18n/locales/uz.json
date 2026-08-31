@@ -153,10 +153,10 @@
     },
     "tips": {
       "addBlock": "Birinchi blokni qoʻshing — havola, mahsulot yoki video",
-      "addForm": "Forma qoʻshing — formali har 5-sahifa arizalar oladi",
+      "addForm": "Murojaatlarni qabul qilish uchun forma yoki bandlov blokini qoʻshing",
       "growTraffic": "Havolangizni ijtimoiy tarmoqlarda ulashing, koʻproq tashrif buyuruvchi jalb qiling",
       "publish": "Havola orqali ochilishi uchun sahifani eʼlon qiling",
-      "shareForVisitor": "Havolani ulashing — 10 dan 5 tasi bir soat ichida birinchi tashrif buyuruvchini oladi"
+      "shareForVisitor": "Koʻrishlarni yigʻishni boshlash uchun havolani ulashing"
     },
     "title": "O'z sahifangizni ishga tushiring"
   },
@@ -1741,7 +1741,7 @@
       "templates": "Shablonlar",
       "templatesDesc": "Tayyor sahifalar",
       "tip": "Maslahat",
-      "tipContent": "Konversiyani 40% ga oshirish uchun narx blokini qo'shing",
+      "tipContent": "Mijoz murojaat qilishdan oldin qaror qila olishi uchun narxlarni qoʻshing",
       "title": "Uy",
       "versions": "Hikoya",
       "versionsDesc": "Sahifa versiyalari",
@@ -1751,9 +1751,9 @@
       "addForm": "Qabul qilish shaklini qo'shing",
       "addFormDesc": "Trafik bor, lekin konvertatsiya yo'q. Fikr-mulohaza shaklini qo'shing",
       "addPricing": "Narx blokini qo'shing",
-      "addPricingDesc": "Narxlar sahifalari 40% ko'proq so'rovlarni oladi",
+      "addPricingDesc": "Mijoz murojaat qilishdan oldin qaror qila olishi uchun narxlarni qoʻshing",
       "addTestimonials": "Sharhlar qo'shing",
-      "addTestimonialsDesc": "Sharhlar ishonchni mustahkamlaydi va konvertatsiyani 25% ga oshiradi",
+      "addTestimonialsDesc": "Yakunlangan bandlovlardan keyin tasdiqlangan sharhlarni qoʻshing",
       "aiInsights": "AI bo'yicha tavsiyalar",
       "apply": "Murojaat qiling",
       "clicks": "Bosishlar",
@@ -3147,7 +3147,8 @@
     "empty": "bosing",
     "error": "Tahlil xatosi",
     "lowCTR": {
-      "description": "Harakatga chaqiruvga ega yorqin tugma konversiyalarni oshiradi",
+      "description": "Aniq keyingi harakatni ko‘rsatadigan tushunarli tugma qo‘shing",
+      "impact": "Keyingi qadam tushunarliroq",
       "title": "CTA tugmachasini qo'shing"
     },
     "lowPerforming": {
@@ -3155,7 +3156,8 @@
       "title": "Samarasiz blok"
     },
     "lowViews": {
-      "description": "Ijtimoiy tarmoqlarga ega sahifalar 40% ko'proq klik oladi",
+      "description": "Tashrif buyuruvchilar tanishishni davom ettirishi uchun faol ijtimoiy profillarga havolalar qoʻshing",
+      "impact": "Koʻproq aloqa nuqtalari",
       "title": "Ijtimoiy tarmoqlarni qo'shing"
     },
     "mobileOpt": {
@@ -3382,7 +3384,7 @@
         "question": "LinkMAX qanday integratsiyalarni qo'llab-quvvatlaydi?"
       },
       "q8": {
-        "answer": "Savdolaringiz uchun 0% komissiya yo'q - siz faqat obuna uchun to'laysiz.",
+        "answer": "Stavka tarifga bogʻliq: Starter — 7%, Pro — 1%, Business — 0%. U toʻlovlar yoqilishidan oldin ko‘rsatiladi.",
         "question": "LinkMAX savdodan komissiya oladimi?"
       },
       "q9": {
@@ -3465,13 +3467,13 @@
       "benefit1": "Barcha havolalar bir joyda",
       "benefit2": "AI kontent yaratadi",
       "benefit3": "Analitikani bosing",
-      "benefit4": "Komissiyalar yo'q",
+      "benefit4": "Shaffof tariflar",
       "benefit5": "O'z domeningiz",
       "benefit6": "Mobil muharriri",
       "keywords": "Kalit so'zlar: havolalar sahifasi, biodagi havola, biodagi havola, multilink, linktree alternativi, taplink analogi, mini-landing",
       "p1": "Link-in-Bio (biodagi havola, ko'p havola) - Instagram, TikTok, YouTube yoki Telegram profil tavsifida joylashtirgan sahifa. Bitta havola o'rniga siz tugmalar, kontaktlar va hatto mahsulot katalogiga ega to'liq huquqli mini-uchun sahifaga ega bo'lasiz.",
       "p2": "LinkMAX.my - AI tarkibini yaratishga ega Linktree va Taplink-ga zamonaviy alternativ. Siz joyni tanlaysiz (sartarosh, fotograf, murabbiy, psixolog) va sun'iy intellekt 2 daqiqada tayyor sahifani yaratadi: profil, kerakli bloklar va matnlar.",
-      "p3": "Raqobatchilarimizdan farqli o'laroq, biz sizning savdolaringizdan komissiya olmaymiz. Tovar va xizmatlardan tushgan barcha pul sizniki. O'rnatilgan tahlil va CRM sizga qaysi havolalar yaxshiroq ishlashini tushunishga yordam beradi.",
+      "p3": "Komissiya tarifga bogʻliq va oldindan ko‘rsatiladi. Ichki tahlil va CRM qaysi havola hamda xizmatlar murojaat olib kelishini ko‘rsatadi.",
       "subtitle": "Havolalar sahifasi - bu sizning barcha resurslaringizni birlashtirgan mini-sayt: ijtimoiy tarmoqlar, messenjerlar, portfel, mahsulot va xizmatlar.",
       "title": "Link-in-Bio nima va u nima uchun kerak?"
     },
@@ -3541,6 +3543,7 @@
     },
     "simplePricing": {
       "badge": "Oddiy tariflar",
+      "feeNote": "Komissiya tarifga bogʻliq va toʻlovlar yoqilishidan oldin ko‘rsatiladi",
       "free": {
         "cta": "Bepul boshlang",
         "f1_v2": "Asosiy bloklar (havolalar, matn, rasmlar)",
@@ -3995,9 +3998,9 @@
     },
     "insights": {
       "addPricing": "Narxlar bilan blok qo'shing",
-      "addPricingDesc": "Narxlar ro'yxati sahifalari 40% ko'proq so'rovlarni oladi",
+      "addPricingDesc": "Mijoz murojaat qilishdan oldin qaror qila olishi uchun narxlarni qoʻshing",
       "addTestimonials": "Sharhlar qo'shing",
-      "addTestimonialsDesc": "Sharhlar ishonch va konvertatsiyani 25% ga oshiradi",
+      "addTestimonialsDesc": "Yakunlangan bandlovlardan keyin tasdiqlangan sharhlarni qoʻshing",
       "duplicateTop": "Mashhur havolani nusxalash",
       "duplicateTopDesc": "kliklarni oladi"
     },
@@ -4272,7 +4275,7 @@
       ],
       "title": "Pro"
     },
-    "guarantee": "Sotish uchun 0% komissiya. Qaytish 14 kun.",
+    "guarantee": "Tarif bo‘yicha shaffof komissiya. 14 kunlik qaytarish muddati.",
     "recommended": "Biz tavsiya qilamiz",
     "alreadyFree": "Bepul tarif allaqachon faol",
     "basicDesc": "Sahifa + bandlovlar + CRM bepul",
@@ -4736,8 +4739,8 @@
         "title": "Cho'ntagingizda muharrir"
       },
       "noCommission": {
-        "description": "Soting - hammasi sizniki",
-        "title": "0% komissiya"
+        "description": "Stavka toʻlovlar yoqilishidan oldin ko‘rinadi",
+        "title": "Shaffof komissiya"
       },
       "speed": {
         "description": "Sahifalar bir zumda yuklanadi. Mijoz ketmaydi",
@@ -4795,7 +4798,7 @@
   },
   "lifecycle": {
     "hasLeads": {
-      "hint": "Tashrifdan keyin mijozlarni kuzatib boring - bu qaytish tezligini 30% ga yaxshilaydi",
+      "hint": "Tashrifdan keyin mijozga yozing va qulay qayta bandlovni taklif qiling",
       "title": "Etakchilar kirib kelmoqda"
     },
     "repeatCustomers": {
@@ -4803,7 +4806,7 @@
       "title": "Takroriy mijozlar"
     },
     "trafficNoLeads": {
-      "hint": "Kontakt shakli yoki bandlov blokini qo'shing - formali har 5-sahifada takliflar keladi",
+      "hint": "Murojaatlarni qabul qilish uchun forma yoki bandlov blokini qoʻshing",
       "title": "Trafik, lekin hech qanday sabab yo'q"
     }
   },
@@ -7065,7 +7068,7 @@
       "businessCta": "Подключить Business",
       "aiPowered": "На основе ИИ",
       "successFirst": "Успех начинается здесь",
-      "transactionFeeNote": "0% комиссии — все деньги от продаж остаются вам",
+      "transactionFeeNote": "Komissiya: Starter — 7%, Pro — 1%, Business — 0%",
       "teamLabel": "Команда",
       "f1": "Все блоки без ограничений",
       "f2": "Онлайн-запись и мини-CRM",

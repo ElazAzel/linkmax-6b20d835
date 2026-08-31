@@ -1,217 +1,115 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { requireCronAuth } from "../_shared/cron-auth.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
-import { sendMessage, isConfigured } from "../_shared/telegram.ts";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.1';
+
+import { requireCronAuth } from '../_shared/cron-auth.ts';
+import { encryptNotificationSecret } from '../_shared/notification-crypto.ts';
+import { safeNotificationMetadata, type BookingNotificationPayload } from '../send-booking-notification/contracts.ts';
+import { bookingReminderIdempotencyKey, reminderScheduledAt } from './contracts.ts';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
 
+function isoDateWithOffset(days: number): string {
+  const date = new Date(Date.now() + days * 86_400_000);
+  return date.toISOString().slice(0, 10);
+}
+
+const handler = async (req: Request): Promise<Response> => {
+  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
   const cronAuthError = requireCronAuth(req, corsHeaders);
   if (cronAuthError) return cronAuthError;
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    if (!isConfigured()) {
-      console.log("Telegram gateway not configured");
-      return new Response(
-        JSON.stringify({ error: "Telegram not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseUrl || !serviceKey) return json({ success: false, error: 'service_not_configured' }, 500);
+    const supabase = createClient(supabaseUrl, serviceKey);
+    const encryptionSecret = Deno.env.get('NOTIFICATION_ENCRYPTION_KEY') || serviceKey;
+
+    const { data: bookings, error } = await supabase
+      .from('bookings')
+      .select('id, owner_id, client_name, client_email, slot_date, slot_time, booking_timezone, service_snapshot, status, deposit_required_amount')
+      .gte('slot_date', isoDateWithOffset(-1))
+      .lte('slot_date', isoDateWithOffset(3))
+      .in('status', ['pending_payment', 'confirmed']);
+    if (error) throw new Error('booking_reminder_query_failed');
+
+    let scheduled = 0;
+    for (const booking of bookings || []) {
+      if (!booking.client_email) continue;
+      const scheduledAt = reminderScheduledAt(
+        String(booking.slot_date),
+        String(booking.slot_time),
+        String(booking.booking_timezone || 'Asia/Almaty'),
       );
+      const bookingInstant = new Date(scheduledAt).getTime() + 86_400_000;
+      if (bookingInstant <= Date.now()) continue;
+
+      const { data: createdNotification } = await supabase
+        .from('notification_queue')
+        .select('payload')
+        .eq('event_type', 'booking_created_customer')
+        .contains('payload', { booking_id: booking.id })
+        .maybeSingle();
+      const createdPayload = createdNotification?.payload as Partial<BookingNotificationPayload> | undefined;
+      const reminderLocale = createdPayload?.locale === 'kk' || createdPayload?.locale === 'en'
+        ? createdPayload.locale
+        : 'ru';
+      const secureCiphertext = typeof createdPayload?.secure_ciphertext === 'string'
+        ? createdPayload.secure_ciphertext
+        : await encryptNotificationSecret({ email: booking.client_email, management_url: null }, encryptionSecret);
+      const snapshot = booking.service_snapshot as Record<string, unknown> | null;
+      const payload: BookingNotificationPayload = {
+        booking_id: booking.id,
+        recipient_role: 'customer',
+        channel: 'email',
+        template_key: 'booking_reminder_24h_customer',
+        locale: reminderLocale,
+        variables: {
+          client_name: String(booking.client_name || ''),
+          service_name: typeof snapshot?.name === 'string' ? snapshot.name : '',
+          slot_date: String(booking.slot_date),
+          slot_time: String(booking.slot_time).slice(0, 5),
+          timezone: String(booking.booking_timezone || 'Asia/Almaty'),
+          booking_status: String(booking.status),
+          deposit_required_amount: String(booking.deposit_required_amount || '0.00'),
+        },
+        secure_ciphertext: secureCiphertext,
+      };
+      const idempotencyKey = bookingReminderIdempotencyKey(booking.id, 'email', scheduledAt);
+      const { data: queuedRows, error: queueError } = await supabase.from('notification_queue').upsert({
+        user_id: null,
+        event_type: payload.template_key,
+        payload,
+        idempotency_key: idempotencyKey,
+        scheduled_at: scheduledAt,
+      }, { onConflict: 'idempotency_key', ignoreDuplicates: true }).select('id');
+      if (queueError || !queuedRows?.length) continue;
+
+      await supabase.rpc('emit_revenue_product_event', {
+        p_booking_id: booking.id,
+        p_event_name: 'reminder_queued',
+        p_actor_type: 'system',
+        p_idempotency_key: `event:${idempotencyKey}`,
+        p_metadata: { reasonCode: 'reminder_24h' },
+      });
+      console.info('booking_reminder_queued', safeNotificationMetadata(payload));
+      scheduled += 1;
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-    
-    // Get current time in Kazakhstan timezone (UTC+5)
-    const now = new Date();
-    const kazakhstanOffset = 5 * 60; // UTC+5 in minutes
-    const localTime = new Date(now.getTime() + (kazakhstanOffset + now.getTimezoneOffset()) * 60000);
-    const currentHour = localTime.getHours();
-    const currentMinute = localTime.getMinutes();
-    const currentTimeStr = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
-    
-    // Get today's date in YYYY-MM-DD format
-    const todayStr = localTime.toISOString().split('T')[0];
-    
-    console.log(`Checking reminders at ${currentTimeStr} for date: ${todayStr}`);
-
-    // Get all bookings for today with their owners
-    const { data: bookings, error: bookingsError } = await supabase
-      .from("bookings")
-      .select(`
-        id,
-        client_name,
-        client_phone,
-        slot_time,
-        slot_end_time,
-        owner_id,
-        block_id,
-        page_id,
-        status
-      `)
-      .eq("slot_date", todayStr)
-      .in("status", ["confirmed", "pending"]);
-
-    if (bookingsError) {
-      console.error("Error fetching bookings:", bookingsError);
-      throw new Error("Failed to fetch bookings");
-    }
-
-    if (!bookings || bookings.length === 0) {
-      console.log("No bookings for today");
-      return new Response(
-        JSON.stringify({ success: true, message: "No bookings for today", sent: 0 }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    console.log(`Found ${bookings.length} bookings for today`);
-
-    // Get unique page IDs
-    const pageIds = [...new Set(bookings.map(b => b.page_id))];
-    
-    // Get booking blocks to check reminder settings
-    const { data: blocks, error: blocksError } = await supabase
-      .from("blocks")
-      .select("id, content, page_id")
-      .in("page_id", pageIds)
-      .eq("type", "booking");
-
-    if (blocksError) {
-      console.error("Error fetching blocks:", blocksError);
-    }
-
-    // Create a map of page_id to block settings
-    const blockSettingsByPage = new Map<string, { enabled: boolean; time: string }>();
-    if (blocks) {
-      for (const block of blocks) {
-        const content = block.content as Record<string, unknown>;
-        if (content?.dailyReminderEnabled === true) {
-          const reminderTime = (content?.dailyReminderTime as string) || '08:50';
-          blockSettingsByPage.set(block.page_id, { enabled: true, time: reminderTime });
-        }
-      }
-    }
-
-    // Group bookings by owner, filtering by matching reminder time
-    const bookingsByOwner = new Map<string, typeof bookings>();
-    for (const booking of bookings) {
-      const settings = blockSettingsByPage.get(booking.page_id);
-      if (!settings?.enabled) continue;
-      
-      // Check if current time matches the configured reminder time (within 10 min window)
-      const [reminderHour, reminderMinute] = settings.time.split(':').map(Number);
-      const reminderTotalMinutes = reminderHour * 60 + reminderMinute;
-      const currentTotalMinutes = currentHour * 60 + currentMinute;
-      
-      // Match if within 10-minute window (cron runs every 10 minutes)
-      if (Math.abs(currentTotalMinutes - reminderTotalMinutes) > 5) {
-        continue;
-      }
-      
-      const ownerBookings = bookingsByOwner.get(booking.owner_id) || [];
-      ownerBookings.push(booking);
-      bookingsByOwner.set(booking.owner_id, ownerBookings);
-    }
-
-    if (bookingsByOwner.size === 0) {
-      console.log("No bookings matching reminder time at", currentTimeStr);
-      return new Response(
-        JSON.stringify({ success: true, message: "No matching reminder times", sent: 0 }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Get owner profiles with Telegram settings
-    const ownerIds = Array.from(bookingsByOwner.keys());
-    const { data: owners, error: ownersError } = await supabase
-      .from("user_profiles")
-      .select("id, telegram_chat_id, telegram_notifications_enabled, telegram_language, display_name")
-      .in("id", ownerIds);
-
-    if (ownersError) {
-      console.error("Error fetching owners:", ownersError);
-      throw new Error("Failed to fetch owner profiles");
-    }
-
-    let sentCount = 0;
-
-    for (const owner of owners || []) {
-      if (!owner.telegram_notifications_enabled || !owner.telegram_chat_id) {
-        console.log(`Skipping owner ${owner.id}: Telegram not enabled`);
-        continue;
-      }
-
-      const ownerBookings = bookingsByOwner.get(owner.id) || [];
-      if (ownerBookings.length === 0) continue;
-
-      // Format the message based on language
-      const lang = owner.telegram_language || 'ru';
-      const isRu = lang === 'ru' || lang === 'kk';
-      
-      const greeting = isRu ? 'Доброе утро' : 'Good morning';
-      const todaySchedule = isRu ? 'Ваше расписание на сегодня' : 'Your schedule for today';
-      const bookingsWord = isRu ? 'записей' : 'appointments';
-      
-      // Sort bookings by time
-      ownerBookings.sort((a, b) => a.slot_time.localeCompare(b.slot_time));
-      
-      let message = `☀️ *${greeting}${owner.display_name ? `, ${owner.display_name}` : ''}!*\n\n`;
-      message += `📋 *${todaySchedule}:*\n`;
-      message += `_${ownerBookings.length} ${bookingsWord}_\n\n`;
-      
-      for (let i = 0; i < ownerBookings.length; i++) {
-        const booking = ownerBookings[i];
-        const timeStr = booking.slot_time.substring(0, 5);
-        const endTimeStr = booking.slot_end_time ? ` - ${booking.slot_end_time.substring(0, 5)}` : '';
-        
-        message += `${i + 1}. *${timeStr}${endTimeStr}*\n`;
-        message += `   👤 ${booking.client_name}\n`;
-        if (booking.client_phone) {
-          message += `   📞 ${booking.client_phone}\n`;
-        }
-        message += '\n';
-      }
-      
-      const successWish = isRu ? '✨ Удачного дня!' : '✨ Have a great day!';
-      message += successWish;
-
-      try {
-        const telegramResponse = await sendMessage(owner.telegram_chat_id, message, { parse_mode: "Markdown" });
-
-        if (!telegramResponse.ok) {
-          const errorData = await telegramResponse.text();
-          console.error(`Telegram API error for owner ${owner.id}:`, errorData);
-        } else {
-          console.log(`Reminder sent to owner ${owner.id} at ${currentTimeStr}`);
-          sentCount++;
-        }
-      } catch (telegramError) {
-        console.error(`Error sending Telegram to owner ${owner.id}:`, telegramError);
-      }
-    }
-
-    console.log(`Daily reminder completed at ${currentTimeStr}. Sent ${sentCount} notifications.`);
-
-    return new Response(
-      JSON.stringify({ success: true, sent: sentCount, time: currentTimeStr }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    console.error("Error in send-booking-reminder:", errorMessage);
-    return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json({ success: true, scheduled });
+  } catch {
+    console.error('send_booking_reminder_failed');
+    return json({ success: false, error: 'reminder_schedule_failed' }, 500);
   }
 };
 

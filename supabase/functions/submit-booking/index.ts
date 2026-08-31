@@ -24,16 +24,31 @@ serve(async (req: Request) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!supabaseUrl || !supabaseServiceKey) throw new Error('Missing env vars');
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+    if (!supabaseUrl || !supabaseServiceKey || !supabaseAnonKey) throw new Error('Missing env vars');
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const body = await req.json();
 
-    const { pageId, blockId, staffId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod } = body;
+    const {
+      pageId,
+      blockId,
+      staffId,
+      serviceOfferingId,
+      slotDate,
+      slotTime,
+      clientName,
+      clientPhone,
+      clientEmail,
+      clientNotes,
+      bookingTimezone,
+      attribution,
+      idempotencyKey,
+    } = body;
 
-    // Derive user_id strictly from the caller's verified JWT.
-    // NEVER trust a client-supplied userId — that allows spoofing bookings into other users' histories.
-    let trustedUserId: string | null = null;
+    // Preserve the caller identity only after verifying its JWT. Booking ownership
+    // is still derived from the published page by the database RPC.
+    let callerAuthorization: string | null = null;
     const authHeader = req.headers.get('Authorization');
     if (authHeader?.startsWith('Bearer ')) {
       try {
@@ -43,12 +58,18 @@ serve(async (req: Request) => {
         const token = authHeader.replace('Bearer ', '');
         const { data: claimsData } = await anonClient.auth.getClaims(token);
         if (claimsData?.claims?.sub && isValidUUID(claimsData.claims.sub)) {
-          trustedUserId = claimsData.claims.sub;
+          callerAuthorization = authHeader;
         }
       } catch (_e) {
-        trustedUserId = null;
+        callerAuthorization = null;
       }
     }
+
+    const bookingRpcClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: callerAuthorization ? { Authorization: callerAuthorization } : {},
+      },
+    });
 
     // Validate required fields
     if (!pageId || !isValidUUID(pageId)) throw new Error('Invalid pageId');
@@ -190,42 +211,53 @@ serve(async (req: Request) => {
       }
     }
 
-    // 3. Insert booking
-    const { data: booking, error: insertError } = await supabase
-      .from('bookings')
-      .insert({
-        page_id: pageId,
-        block_id: blockId,
-        owner_id: pageData.user_id,
-        user_id: trustedUserId,
-        slot_date: sanitize(slotDate, 10),
-        slot_time: sanitize(slotTime, 8),
-        slot_end_time: slotEndTime ? sanitize(slotEndTime, 8) : null,
-        client_name: sanitize(clientName, 200),
-        client_phone: clientPhone ? sanitize(clientPhone, 20) : null,
-        client_email: clientEmail ? sanitize(clientEmail, 200) : null,
-        client_notes: sanitize(clientNotes, 1000) || null,
-        staff_id: staffId || null,
-        payment_status: paymentStatus || 'none',
-        payment_amount: paymentAmount || 0,
-        payment_method: paymentMethod || null,
-      })
-      .select('id')
-      .single();
+    // 3. Create through the authoritative RPC. Owner, service price, deposit,
+    // status, snapshot and attribution are derived and sanitized in PostgreSQL.
+    const mutationKey = typeof idempotencyKey === 'string' && idempotencyKey.length >= 8
+      ? idempotencyKey.substring(0, 200)
+      : `public-booking:${crypto.randomUUID()}`;
 
-    if (insertError) {
-      console.error('Error inserting booking:', insertError);
-      
-      // Handle absolute double-booking protection (DB unique constraint)
-      if (insertError.code === '23505') {
-        return new Response(
-          JSON.stringify({ success: false, error: 'slot_already_booked' }),
-          { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-      
-      throw insertError;
+    const { data: bookingResult, error: createError } = await bookingRpcClient.rpc('create_public_booking', {
+      p_page_id: pageId,
+      p_block_id: String(blockId),
+      p_service_offering_id: serviceOfferingId && isValidUUID(serviceOfferingId) ? serviceOfferingId : null,
+      p_slot_date: sanitize(slotDate, 10),
+      p_slot_time: sanitize(slotTime, 8),
+      p_staff_id: staffId && isValidUUID(staffId) ? staffId : null,
+      p_client_name: sanitize(clientName, 200),
+      p_client_phone: clientPhone ? sanitize(clientPhone, 40) : null,
+      p_client_email: clientEmail ? sanitize(clientEmail, 254) : null,
+      p_client_notes: sanitize(clientNotes, 1000) || null,
+      p_booking_timezone: sanitize(bookingTimezone, 100) || blockTz || 'Asia/Almaty',
+      p_attribution: attribution && typeof attribution === 'object' ? attribution : {},
+      p_idempotency_key: mutationKey,
+    });
+
+    if (createError) {
+      console.error('Authoritative booking RPC failed:', createError);
+      throw createError;
     }
+
+    if (!bookingResult?.ok) {
+      const isConflict = bookingResult?.code === 'slot_unavailable';
+      return new Response(
+        JSON.stringify({ success: false, error: bookingResult?.code || 'booking_failed' }),
+        {
+          status: isConflict ? 409 : 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
+      );
+    }
+
+    const booking = {
+      id: bookingResult.bookingId,
+      status: bookingResult.status,
+      version: bookingResult.version,
+      paymentStatus: bookingResult.paymentStatus,
+      depositRequiredAmount: bookingResult.depositRequiredAmount,
+      currency: bookingResult.currency,
+      accessToken: bookingResult.accessToken,
+    };
 
     // 3.1 Push to Google Calendar automatically if enabled
     if (gcalSyncEnabled && booking?.id) {
@@ -246,11 +278,11 @@ serve(async (req: Request) => {
     }
 
     // 4. Send notification and create lead via send-booking-notification.
-    //    Only the bookingId is passed — the receiver re-derives all fields from the DB
-    //    via service role so callers cannot spoof lead content.
+    //    The receiver re-derives all booking fields from the DB and verifies the raw
+    //    management token against its stored hash before encrypting the delivery payload.
     try {
       await supabase.functions.invoke('send-booking-notification', {
-        body: { bookingId: booking.id }
+        body: { bookingId: booking.id, accessToken: booking.accessToken }
       });
     } catch (e) {
       console.error('Failed to trigger booking notification function', e);

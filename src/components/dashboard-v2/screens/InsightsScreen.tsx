@@ -46,6 +46,10 @@ import type { Block } from '@/types/page';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useInsights } from '@/hooks/analytics/useInsights';
+import { useRevenueOutcomeSummary } from '@/hooks/revenue/useRevenueOutcomeSummary';
+import { RevenueFunnel } from '@/components/dashboard-v2/analytics/RevenueFunnel';
+import { RevenueBySource } from '@/components/dashboard-v2/analytics/RevenueBySource';
+import { format, subDays } from 'date-fns';
 
 
 interface InsightsScreenProps {
@@ -53,6 +57,7 @@ interface InsightsScreenProps {
   slug: string;
   blocks: Block[];
   isPremium: boolean;
+  revenueOutcomesEnabled?: boolean;
   onApplyInsight: (action: { type: string; blockId?: string; data?: Record<string, unknown> }) => void;
 }
 
@@ -74,16 +79,53 @@ const itemVariants = {
   show: { opacity: 1, y: 0 }
 };
 
+interface RevenueInsightsContainerProps {
+  pageId: string;
+  from: string;
+  to: string;
+}
+
+function RevenueInsightsContainer({ pageId, from, to }: RevenueInsightsContainerProps) {
+  const { t } = useTranslation();
+  const outcomeQuery = useRevenueOutcomeSummary({ pageId, from, to });
+
+  if (!outcomeQuery.data) return null;
+
+  return (
+    <section className="space-y-4" data-testid="revenue-insights">
+      <div className="px-1">
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
+          {t('revenueInsights.eyebrow', 'Выручка и записи')}
+        </p>
+        <h2 className="mt-1 text-xl font-black">
+          {t('revenueInsights.title', 'От источника до завершённого визита')}
+        </h2>
+      </div>
+      <RevenueFunnel funnel={outcomeQuery.data.funnel} />
+      <RevenueBySource sources={outcomeQuery.data.bySource} />
+    </section>
+  );
+}
+
 export const InsightsScreen = memo(function InsightsScreen({
   pageId,
   slug,
   blocks,
   isPremium,
+  revenueOutcomesEnabled = false,
   onApplyInsight,
 }: InsightsScreenProps) {
   const { t } = useTranslation();
   const [period, setPeriod] = useState<Period>('7d');
   const [activeTab, setActiveTab] = useState<Tab>('overview');
+  const outcomePeriod = useMemo(() => {
+    const to = new Date();
+    const days = period === '7d' ? 7 : period === '30d' ? 30 : period === '90d' ? 90 : 366;
+    return {
+      from: format(subDays(to, days - 1), 'yyyy-MM-dd'),
+      to: format(to, 'yyyy-MM-dd'),
+    };
+  }, [period]);
   const { analytics, loading, error, setPeriod: setAnalyticsPeriod, refresh, isStaffMember, staffMemberName } = usePageAnalytics(
     pageId || null,
     '7d',
@@ -225,6 +267,14 @@ export const InsightsScreen = memo(function InsightsScreen({
       </div>
 
       <div className="px-[var(--space-page-px)] pb-24 space-y-7">
+        {revenueOutcomesEnabled && (
+          <RevenueInsightsContainer
+            pageId={pageId}
+            from={outcomePeriod.from}
+            to={outcomePeriod.to}
+          />
+        )}
+
         {!hasData ? (
           <SmartEmptyState
             icon={Eye}
