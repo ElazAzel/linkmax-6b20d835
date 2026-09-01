@@ -3,7 +3,16 @@ import { test, expect } from '@playwright/test';
 test.use({ storageState: { cookies: [], origins: [] } });
 
 async function openLanguageMenu(page: Parameters<typeof test>[0]['page']) {
-  const trigger = page.getByTestId('language-switcher-trigger');
+  if ((page.viewportSize()?.width ?? 1280) < 768) {
+    const mobileMenuTrigger = page.getByRole('button', { name: /открыть меню|open menu/i });
+    const mobileCloseTrigger = page.getByRole('button', { name: /закрыть меню|close menu/i });
+    if (!(await mobileCloseTrigger.isVisible().catch(() => false))) {
+      await expect(mobileMenuTrigger).toBeVisible({ timeout: 30_000 });
+      await mobileMenuTrigger.click();
+    }
+  }
+
+  const trigger = page.locator('[data-testid="language-switcher-trigger"]:visible').first();
   await expect(trigger).toBeVisible({ timeout: 30_000 });
   if ((await trigger.getAttribute('data-state')) !== 'open') {
     await trigger.click();
@@ -32,8 +41,11 @@ async function resetLanguageToRu(page: Parameters<typeof test>[0]['page']) {
 
 async function dismissCookieConsent(page: Parameters<typeof test>[0]['page']) {
   const consent = page.getByRole('dialog', { name: /cookie|согласие/i });
-  if (await consent.isVisible().catch(() => false)) {
-    await consent.getByRole('button').first().click();
+  const decision = consent.getByRole('button', { name: /отклон|прин|reject|accept/i }).first();
+
+  await decision.waitFor({ state: 'visible', timeout: 2_500 }).catch(() => undefined);
+  if (await decision.isVisible().catch(() => false)) {
+    await decision.click();
   }
 }
 
