@@ -88,6 +88,7 @@ const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>
 const loadedLazyLocales = new Set<string>();
 const syncedDbLocales = new Set<string>();
 const remoteTranslationSyncConfigured = Boolean(
+  import.meta.env.VITE_ENABLE_REMOTE_TRANSLATIONS === 'true' &&
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
 );
 
