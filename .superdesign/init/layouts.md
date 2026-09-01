@@ -1,3 +1,10 @@
+# Shared layouts
+
+## DynamicIslandNav
+
+Path: `src/components/landing/v2/DynamicIslandNav.tsx`. Responsive floating landing navigation used on the public homepage.
+
+```tsx
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
@@ -75,10 +82,9 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
 
                     <nav className="flex items-center gap-1">
                         {[
-                            { href: '#outcomes', label: t('landing.revenue.nav.outcomes', 'Результат') },
-                            { href: '#workflow', label: t('landing.revenue.nav.workflow', 'Как работает') },
-                            { href: '#examples', label: t('landing.revenue.nav.examples', 'Для кого') },
-                            { href: '#pricing', label: t('landing.revenue.nav.pricing', 'Тарифы') },
+                            { href: '#features', label: t('landing.short.nav.what', 'Что это') },
+                            { href: '#how-it-works', label: t('landing.short.nav.how', 'Как работает') },
+                            { href: '#faq', label: t('landing.short.nav.faq', 'FAQ') },
                         ].map(({ href, label }) => (
                             <button
                                 key={href}
@@ -181,10 +187,9 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                         <div className="px-5 pb-5 pt-1 flex flex-col gap-4">
                             <nav className="flex flex-col gap-1">
                                 {[
-                                    { href: '#outcomes', label: t('landing.revenue.nav.outcomes', 'Результат') },
-                                    { href: '#workflow', label: t('landing.revenue.nav.workflow', 'Как работает') },
-                                    { href: '#examples', label: t('landing.revenue.nav.examples', 'Для кого') },
-                                    { href: '#pricing', label: t('landing.revenue.nav.pricing', 'Тарифы') },
+                                    { href: '#features', label: t('landing.short.nav.what', 'Что это') },
+                                    { href: '#how-it-works', label: t('landing.short.nav.how', 'Как работает') },
+                                    { href: '#faq', label: t('landing.short.nav.faq', 'FAQ') },
                                 ].map(({ href, label }) => (
                                     <a
                                         key={href}
@@ -226,3 +231,6 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
         </div>
     );
 };
+
+```
+

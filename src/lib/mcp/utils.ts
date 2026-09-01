@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { type ToolContext, type ToolHandlerResult } from "@lovable.dev/mcp-js";
 
-export type AuthenticatedToolContext = {
+type AuthenticatedToolContext = {
   supabase: SupabaseClient;
   userId: string;
 };

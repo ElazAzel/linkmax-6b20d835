@@ -19,6 +19,8 @@ interface SlotSelectionStepProps {
   onBack: () => void;
 }
 
+const DATE_FIELD_ID = 'public-booking-date';
+
 export function SlotSelectionStep({
   date,
   slots,
@@ -53,9 +55,9 @@ export function SlotSelectionStep({
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="public-booking-date">{t('publicBooking.slot.date', 'Дата')}</Label>
+        <Label htmlFor={DATE_FIELD_ID}>{t('publicBooking.slot.date', 'Дата')}</Label>
         <Input
-          id="public-booking-date"
+          id={DATE_FIELD_ID}
           type="date"
           value={date}
           onChange={(event) => onDateChange(event.target.value)}

@@ -73,7 +73,7 @@ export interface RevenueOutcomeSummary {
   };
 }
 
-export type RevenueOutcomeServiceResult =
+type RevenueOutcomeServiceResult =
   | { ok: true; value: RevenueOutcomeSummary }
   | { ok: false; error: string };
 

@@ -66,6 +66,15 @@ vi.mock('@/components/landing/v2/DynamicIslandNav', () => ({
   ),
 }));
 
+vi.mock('@/components/landing/RevenueLandingSections', () => ({
+  RevenueLandingSections: ({ onStart, onPricing }: { onStart: () => void; onPricing: () => void }) => (
+    <div>
+      <button onClick={onStart}>revenue-start</button>
+      <button onClick={onPricing}>revenue-pricing</button>
+    </div>
+  ),
+}));
+
 vi.mock('@/components/seo/SEOMetaEnhancer', () => ({ SEOMetaEnhancer: () => <div /> }));
 vi.mock('@/components/seo/GEOTagging', () => ({ GEOTagging: () => <div /> }));
 vi.mock('@/components/seo/AEOOptimizer', () => ({ AEOOptimizer: () => <div /> }));
@@ -113,10 +122,22 @@ describe('Index (Landing Page)', () => {
     expect(trackCtaClickMock).toHaveBeenCalledWith('signup', 'nav_signup');
   });
 
+  it('connects the revenue journey and pricing actions to tracked routes', () => {
+    render(<Index />);
+
+    fireEvent.click(screen.getByText('revenue-start'));
+    fireEvent.click(screen.getByText('revenue-pricing'));
+
+    expect(trackCtaClickMock).toHaveBeenCalledWith('signup', 'revenue_flow_cta');
+    expect(trackCtaClickMock).toHaveBeenCalledWith('pricing', 'revenue_pricing_cta');
+    expect(navigateMock).toHaveBeenCalledWith('/auth');
+    expect(navigateMock).toHaveBeenCalledWith('/pricing');
+  });
+
   it('attaches section observer refs to rendered DOM wrappers', () => {
     render(<Index />);
 
-    expect(observerRefs).toHaveLength(4);
+    expect(observerRefs).toHaveLength(3);
     observerRefs.forEach((ref) => {
       expect(ref.current).not.toBeNull();
     });

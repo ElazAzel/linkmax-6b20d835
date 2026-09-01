@@ -30,7 +30,7 @@ interface ApplyVariables {
   mutationId: string;
 }
 
-export function serializeRevenueKitDraft(draft: RevenueKitDraft): RevenueKitDraft {
+function serializeRevenueKitDraft(draft: RevenueKitDraft): RevenueKitDraft {
   return {
     version: 1,
     kitId: 'beauty-v1',

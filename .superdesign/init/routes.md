@@ -1,3 +1,12 @@
+# Routes
+
+LinkMAX is a React 18 + Vite application using React Router with lazy route modules. The authoritative router configuration is below.
+
+## Router configuration
+
+Path: `src/main.tsx`.
+
+```tsx
 // CRITICAL: i18n must be imported FIRST, before any React components
 import { i18nReady } from "./i18n/config";
 import { validateEnv } from "./lib/utils/env-validator";
@@ -108,11 +117,10 @@ const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const SmartLinkRedirect = lazy(() => import("./pages/SmartLinkRedirect"));
 const SmartLinks = lazy(() => import("./pages/SmartLinks"));
-const ReferralRedirect = lazy(() => import("./pages/ReferralRedirect"));
 const LocaleIndex = lazy(() => import("./components/routing/LocaleIndex"));
 const PublicGoodsPage = lazy(() => import("./pages/PublicGoodsPage"));
 const PublicPurchasePage = lazy(() => import("./pages/PublicPurchasePage"));
-const BookingManagement = lazy(() => import("./pages/BookingManagement").then((module) => ({ default: module.BookingManagement })));
+const BookingManagement = lazy(() => import("./pages/BookingManagement"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 
@@ -168,7 +176,6 @@ const router = createBrowserRouter([
       { path: "dashboard/team", element: <Dashboard /> },
       { path: "dashboard/smart-links", element: <SmartLinks /> },
       { path: "s/:slug", element: <SmartLinkRedirect /> },
-      { path: "r/:code", element: <ReferralRedirect /> },
       { path: "install", element: <Install /> },
       { path: "gallery", element: <Gallery /> },
       { path: "customers", element: <Customers /> },
@@ -283,3 +290,15 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+```
+
+## Key routes
+
+- `/` → `src/pages/Index.tsx`; public commercial landing with `DynamicIslandNav`.
+- `/auth` → authentication and signup.
+- `/dashboard/*` → authenticated dashboard shell and product screens.
+- `/pricing` → commercial plans.
+- `/gallery` → public examples.
+- `/:slug` → published customer page; catch-all must remain last.
+

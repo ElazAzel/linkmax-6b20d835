@@ -1,6 +1,6 @@
 import type { Block, PageData } from '@/types/page';
 
-export type ViralDimensionKey =
+type ViralDimensionKey =
   | 'identity'
   | 'offer'
   | 'conversion'
@@ -9,7 +9,7 @@ export type ViralDimensionKey =
   | 'operations'
   | 'analytics';
 
-export interface ViralDimension {
+interface ViralDimension {
   key: ViralDimensionKey;
   score: number;
   weight: number;
@@ -18,19 +18,19 @@ export interface ViralDimension {
   recommendedBlockTypes: string[];
 }
 
-export interface ViralReadinessResult {
+interface ViralReadinessResult {
   score: number;
   dimensions: ViralDimension[];
   nextActions: ViralDimensionKey[];
 }
 
-export interface ViralKFactorInput {
+interface ViralKFactorInput {
   invitesSent: number;
   attributedSignups: number;
   activeUsers: number;
 }
 
-export interface ViralKFactorResult {
+interface ViralKFactorResult {
   invitesPerActiveUser: number;
   inviteToSignupRate: number;
   kFactor: number;

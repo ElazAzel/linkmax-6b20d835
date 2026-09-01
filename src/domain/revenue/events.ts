@@ -29,7 +29,7 @@ export const REVENUE_EVENTS = {
 
 export type RevenueEventName = (typeof REVENUE_EVENTS)[keyof typeof REVENUE_EVENTS];
 
-export interface RevenueEventEnvelope {
+interface RevenueEventEnvelope {
   taxonomyVersion: 2;
   eventId: string;
   eventName: RevenueEventName;

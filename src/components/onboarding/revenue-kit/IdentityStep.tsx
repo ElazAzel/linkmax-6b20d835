@@ -4,6 +4,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { RevenueKitStepProps } from './types';
 
+const IDENTITY_FIELD_IDS = {
+  displayName: 'revenue-kit-display-name',
+  city: 'revenue-kit-city',
+  specialization: 'revenue-kit-specialization',
+  contact: 'revenue-kit-contact',
+} as const;
+
 export function IdentityStep({ draft, onChange }: RevenueKitStepProps) {
   const { t } = useTranslation();
   const updateIdentity = (field: keyof typeof draft.identity, value: string) => {
@@ -21,9 +28,9 @@ export function IdentityStep({ draft, onChange }: RevenueKitStepProps) {
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="revenue-kit-display-name">{t('revenueKit.identity.name', 'Название бизнеса')}</Label>
+        <Label htmlFor={IDENTITY_FIELD_IDS.displayName}>{t('revenueKit.identity.name', 'Название бизнеса')}</Label>
         <Input
-          id="revenue-kit-display-name"
+          id={IDENTITY_FIELD_IDS.displayName}
           value={draft.identity.displayName}
           onChange={(event) => updateIdentity('displayName', event.target.value)}
           maxLength={120}
@@ -31,20 +38,20 @@ export function IdentityStep({ draft, onChange }: RevenueKitStepProps) {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="revenue-kit-city">{t('revenueKit.identity.city', 'Город')}</Label>
+          <Label htmlFor={IDENTITY_FIELD_IDS.city}>{t('revenueKit.identity.city', 'Город')}</Label>
           <Input
-            id="revenue-kit-city"
+            id={IDENTITY_FIELD_IDS.city}
             value={draft.identity.city}
             onChange={(event) => updateIdentity('city', event.target.value)}
             maxLength={100}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="revenue-kit-specialization">
+          <Label htmlFor={IDENTITY_FIELD_IDS.specialization}>
             {t('revenueKit.identity.specialization', 'Специализация')}
           </Label>
           <Input
-            id="revenue-kit-specialization"
+            id={IDENTITY_FIELD_IDS.specialization}
             value={draft.identity.specialization}
             onChange={(event) => updateIdentity('specialization', event.target.value)}
             maxLength={100}
@@ -52,11 +59,11 @@ export function IdentityStep({ draft, onChange }: RevenueKitStepProps) {
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="revenue-kit-contact">
+        <Label htmlFor={IDENTITY_FIELD_IDS.contact}>
           {t('revenueKit.identity.contact', 'WhatsApp или Telegram')}
         </Label>
         <Input
-          id="revenue-kit-contact"
+          id={IDENTITY_FIELD_IDS.contact}
           value={draft.identity.contactValue}
           onChange={(event) => updateIdentity('contactValue', event.target.value)}
           placeholder="+7… / @username"

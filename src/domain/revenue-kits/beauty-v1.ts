@@ -13,7 +13,7 @@ export const REVENUE_KIT_STEPS = [
 ] as const;
 export type RevenueKitStep = (typeof REVENUE_KIT_STEPS)[number];
 
-export type RevenueKitLocale = 'ru' | 'kk' | 'en';
+type RevenueKitLocale = 'ru' | 'kk' | 'en';
 export type RevenueKitI18nText = Record<RevenueKitLocale, string>;
 
 export interface RevenueKitServiceDraft {

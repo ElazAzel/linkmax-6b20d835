@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { RevenueKitStepProps } from './types';
 
+const CURRENCY_SYMBOL = '₸';
+
 export function TrustPreviewStep({ draft, onChange }: RevenueKitStepProps) {
   const { t } = useTranslation();
   const activeServices = draft.services.filter((service) => service.active);
@@ -23,7 +25,7 @@ export function TrustPreviewStep({ draft, onChange }: RevenueKitStepProps) {
           {activeServices.slice(0, 3).map((service) => (
             <div key={service.presetId} className="flex justify-between gap-3 rounded-xl border p-3 text-sm">
               <span>{service.name.ru}</span>
-              <strong>{Number(service.priceAmount).toLocaleString('ru-RU')} ₸</strong>
+              <strong>{Number(service.priceAmount).toLocaleString('ru-RU')} {CURRENCY_SYMBOL}</strong>
             </div>
           ))}
         </div>

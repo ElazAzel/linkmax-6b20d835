@@ -7,13 +7,15 @@ interface BookingConfirmationStepProps {
   booking: PublicBookingCreated;
 }
 
+const CONFIRMED_ICON = '✓';
+
 export function BookingConfirmationStep({ booking }: BookingConfirmationStepProps) {
   const { t } = useTranslation();
   const managementUrl = booking.accessToken ? `/booking/manage/${booking.accessToken}` : null;
 
   return (
     <section className="space-y-4 text-center" aria-labelledby="public-booking-confirmed-title">
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15 text-2xl">✓</div>
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15 text-2xl">{CONFIRMED_ICON}</div>
       <div>
         <h3 id="public-booking-confirmed-title" className="text-xl font-semibold">
           {t('publicBooking.confirmed.title', 'Запись подтверждена')}

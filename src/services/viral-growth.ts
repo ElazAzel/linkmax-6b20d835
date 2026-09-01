@@ -3,7 +3,7 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { getGrowthSessionKey, getGrowthVisitorKey } from '@/lib/growth/visitor';
 import { logger } from '@/lib/utils/logger';
 
-export const GROWTH_EVENT_NAMES = [
+const GROWTH_EVENT_NAMES = [
   'share_clicked',
   'link_copied',
   'qr_generated',
@@ -17,7 +17,7 @@ export const GROWTH_EVENT_NAMES = [
   'first_lead_received',
 ] as const;
 
-export type GrowthEventName = typeof GROWTH_EVENT_NAMES[number];
+type GrowthEventName = typeof GROWTH_EVENT_NAMES[number];
 
 export interface PageGrowthLink {
   id: string;

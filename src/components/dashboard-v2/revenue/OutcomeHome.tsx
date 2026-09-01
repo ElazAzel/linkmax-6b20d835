@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { selectRevenueNextAction } from '@/domain/revenue/next-best-action';
 import type { RevenueOutcomeSummary } from '@/services/revenue-outcomes';
 import { AttentionQueue } from './AttentionQueue';
@@ -10,6 +12,7 @@ interface OutcomeHomeProps {
 }
 
 export function OutcomeHome({ summary, onNavigate }: OutcomeHomeProps) {
+  const { t } = useTranslation();
   const action = selectRevenueNextAction({
     hasKit: summary.readiness.hasKit,
     activeServiceCount: summary.readiness.activeServiceCount,
@@ -26,7 +29,7 @@ export function OutcomeHome({ summary, onNavigate }: OutcomeHomeProps) {
   });
 
   return (
-    <section className="space-y-4" data-testid="revenue-outcome-home" aria-label="Revenue outcomes">
+    <section className="space-y-4" data-testid="revenue-outcome-home" aria-label={t('outcomeHome.ariaLabel', 'Результаты выручки')}>
       <OutcomeStrip summary={summary} />
       <NextRevenueAction action={action} onNavigate={onNavigate} />
       <AttentionQueue operations={summary.operations} onNavigate={onNavigate} />

@@ -1,6 +1,6 @@
 import type { PublicBookingCreated } from '@/services/booking-lifecycle';
 
-export type PublicBookingStep =
+type PublicBookingStep =
   | 'service'
   | 'slot'
   | 'contact'
@@ -35,7 +35,7 @@ export interface PublicBookingContact {
   notes: string;
 }
 
-export interface PublicBookingState {
+interface PublicBookingState {
   step: PublicBookingStep;
   services: PublicBookingService[];
   service: PublicBookingService | null;
@@ -47,7 +47,7 @@ export interface PublicBookingState {
   error: string | null;
 }
 
-export type PublicBookingAction =
+type PublicBookingAction =
   | { type: 'SERVICES_LOADED'; services: PublicBookingService[] }
   | { type: 'SERVICE_SELECTED'; service: PublicBookingService }
   | { type: 'SLOTS_LOADED'; slots: PublicBookingSlot[] }

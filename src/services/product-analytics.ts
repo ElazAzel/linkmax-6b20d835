@@ -2,7 +2,6 @@ import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
 export {
-  captureRevenueEvent,
   prepareClientRevenueEvent,
 } from '@/lib/posthog';
 

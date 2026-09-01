@@ -8,13 +8,15 @@ interface DepositStateStepProps {
   instructions: string | null | undefined;
 }
 
+const PENDING_ICON = '⌛';
+
 export function DepositStateStep({ booking, instructions }: DepositStateStepProps) {
   const { t } = useTranslation();
   const managementUrl = booking.accessToken ? `/booking/manage/${booking.accessToken}` : null;
 
   return (
     <section className="space-y-4 text-center" aria-labelledby="public-booking-deposit-title">
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/15 text-2xl">⌛</div>
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/15 text-2xl">{PENDING_ICON}</div>
       <div>
         <h3 id="public-booking-deposit-title" className="text-xl font-semibold">
           {t('publicBooking.deposit.pendingTitle', 'Ожидает подтверждения предоплаты')}

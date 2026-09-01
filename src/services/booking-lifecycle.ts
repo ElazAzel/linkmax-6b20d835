@@ -58,7 +58,7 @@ export interface CreatePublicBookingInput {
   idempotencyKey: string;
 }
 
-export interface LoadPublicAvailabilityInput {
+interface LoadPublicAvailabilityInput {
   pageId: string;
   blockId: string;
   fromDate: string;
@@ -111,7 +111,7 @@ export class BookingLifecycleError extends Error {
   }
 }
 
-export type BookingMutationResult =
+type BookingMutationResult =
   | { ok: true; bookingId: string; status: BookingStatus; version: number }
   | { ok: false; code: string; retryable: boolean; currentVersion?: number };
 

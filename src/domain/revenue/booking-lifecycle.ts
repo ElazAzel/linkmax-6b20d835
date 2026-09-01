@@ -1,11 +1,11 @@
 export type BookingStatus = 'pending_payment' | 'confirmed' | 'completed' | 'cancelled' | 'no_show';
 
-export interface BookingTransitionOptions {
+interface BookingTransitionOptions {
   privilegedCorrection?: boolean;
   reason?: string;
 }
 
-export const BOOKING_TRANSITIONS = {
+const BOOKING_TRANSITIONS = {
   pending_payment: ['confirmed', 'cancelled'],
   confirmed: ['confirmed', 'completed', 'cancelled', 'no_show'],
   completed: ['confirmed'],

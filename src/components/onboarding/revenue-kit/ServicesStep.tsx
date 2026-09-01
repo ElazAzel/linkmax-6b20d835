@@ -5,6 +5,8 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import type { RevenueKitStepProps } from './types';
 
+const DECIMAL_INPUT_MODE = 'decimal';
+
 export function ServicesStep({ draft, onChange }: RevenueKitStepProps) {
   const { t } = useTranslation();
   const updateService = (index: number, patch: Partial<(typeof draft.services)[number]>) => {
@@ -43,7 +45,7 @@ export function ServicesStep({ draft, onChange }: RevenueKitStepProps) {
               </Label>
               <Input
                 id={`revenue-kit-price-${service.presetId}`}
-                inputMode="decimal"
+                inputMode={DECIMAL_INPUT_MODE}
                 value={service.priceAmount}
                 onChange={(event) => updateService(index, { priceAmount: event.target.value })}
               />

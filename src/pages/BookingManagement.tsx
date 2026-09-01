@@ -45,6 +45,8 @@ const STATUS_FALLBACKS: Record<BookingManagementContext['status'], string> = {
   cancelled: 'Отменена',
   no_show: 'Клиент не пришёл',
 };
+const DATE_FIELD_ID = 'booking-management-date';
+const DATE_SEPARATOR = ' · ';
 
 function mutationId(): string {
   const id = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -195,7 +197,7 @@ export function BookingManagement({
           <p className="text-sm font-medium text-primary">{t('bookingManagement.eyebrow', 'Ваша запись')}</p>
           <h1 className="text-2xl font-semibold">{booking.serviceName}</h1>
           <p className="text-sm text-muted-foreground">
-            {formatDate(booking.slotDate, locale)} · {booking.slotTime.slice(0, 5)}
+            {formatDate(booking.slotDate, locale)}{DATE_SEPARATOR}{booking.slotTime.slice(0, 5)}
             {booking.slotEndTime ? `–${booking.slotEndTime.slice(0, 5)}` : ''}
           </p>
           <p className="text-xs text-muted-foreground">{booking.timezone}</p>
@@ -213,9 +215,9 @@ export function BookingManagement({
         {rescheduling && (
           <div className="space-y-4 rounded-xl border p-4">
             <div className="space-y-2">
-              <Label htmlFor="booking-management-date">{t('bookingManagement.reschedule.date', 'Новая дата')}</Label>
+              <Label htmlFor={DATE_FIELD_ID}>{t('bookingManagement.reschedule.date', 'Новая дата')}</Label>
               <Input
-                id="booking-management-date"
+                id={DATE_FIELD_ID}
                 type="date"
                 value={date}
                 onChange={(event) => setDate(event.target.value)}
@@ -275,5 +277,3 @@ export function BookingManagement({
     </main>
   );
 }
-
-export default BookingManagement;

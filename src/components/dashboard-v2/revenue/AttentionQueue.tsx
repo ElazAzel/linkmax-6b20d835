@@ -13,6 +13,8 @@ interface AttentionQueueProps {
   onNavigate: (href: string) => void;
 }
 
+const DATE_SEPARATOR = ' · ';
+
 function QueueGroup({
   title,
   items,
@@ -34,7 +36,7 @@ function QueueGroup({
       <span className="min-w-0">
         <span className="block font-bold">{title}</span>
         <span className="block truncate text-xs font-normal text-muted-foreground">
-          {items[0].serviceName} · {items[0].localStart.replace('T', ' ')}
+          {items[0].serviceName}{DATE_SEPARATOR}{items[0].localStart.replace('T', ' ')}
         </span>
       </span>
       <Badge variant="secondary" className="ml-3 tabular-nums">{items.length}</Badge>
