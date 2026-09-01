@@ -42,7 +42,9 @@ describe('Dialog keyboard flow', () => {
     fireEvent.click(trigger);
 
     const dialog = await screen.findByRole('dialog');
-    expect(dialog).toHaveAttribute('aria-describedby');
+    await waitFor(() => {
+      expect(dialog).toHaveAccessibleDescription('Описание диалога');
+    });
 
     await waitFor(() => {
       expect(document.activeElement).not.toBe(trigger);

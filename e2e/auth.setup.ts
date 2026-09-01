@@ -1,6 +1,8 @@
 import { test as setup, expect } from '@playwright/test';
+import { mkdirSync } from 'node:fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { AUTHENTICATED_E2E_SKIP_REASON, hasE2ECredentials } from './support/auth';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,7 +15,7 @@ setup.setTimeout(120_000);
 setup('authenticate', async ({ page }) => {
   const testEmail = process.env.E2E_TEST_EMAIL ?? '';
   const testPassword = process.env.E2E_TEST_PASSWORD ?? '';
-  setup.skip(!testEmail || !testPassword, 'E2E_TEST_EMAIL and E2E_TEST_PASSWORD are required for authenticated E2E coverage');
+  setup.skip(!hasE2ECredentials, AUTHENTICATED_E2E_SKIP_REASON);
 
   // Log console messages from the browser
   page.on('console', msg => {
@@ -79,5 +81,6 @@ setup('authenticate', async ({ page }) => {
   }
   
   // Save storage state
+  mkdirSync(path.dirname(authFile), { recursive: true });
   await page.context().storageState({ path: authFile });
 });

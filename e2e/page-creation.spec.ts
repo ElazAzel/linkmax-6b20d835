@@ -1,4 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { AUTHENTICATED_E2E_SKIP_REASON, hasE2ECredentials } from './support/auth';
+
+test.skip(!hasE2ECredentials, AUTHENTICATED_E2E_SKIP_REASON);
 
 test.describe('Page Creation Flow', () => {
   // Note: These tests require authentication

@@ -55,6 +55,7 @@ refactor_locales.js
 playwright-report/
 test-results/
 .playwright/
+playwright/.auth/
 
 # Temporary audit/lint/report files
 reports/

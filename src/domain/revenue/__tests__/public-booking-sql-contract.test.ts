@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8');
+const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8').replace(/\r\n/g, '\n');
 
 const migration = read('supabase/migrations/20260829122000_booking_public_access_hardening.sql');
 const submitBooking = read('supabase/functions/submit-booking/index.ts');

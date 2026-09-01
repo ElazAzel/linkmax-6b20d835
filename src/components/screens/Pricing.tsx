@@ -146,7 +146,10 @@ export const Pricing = memo(function Pricing() {
 
         <main className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">{t('pricing.choosePlan', 'Выберите тариф')}</h2>
+            <h2 data-testid="pricing-title" className="text-3xl font-bold mb-4">{t('pricing.choosePlan', 'Выберите тариф')}</h2>
+            <p data-testid="pricing-description" className="text-muted-foreground mb-8">
+              {t('pricing.description', 'Откройте все возможности LinkMAX.my для вашего бизнеса')}
+            </p>
             <div className="flex justify-center mb-8">
               <div className="bg-muted rounded-xl p-1 flex gap-1">
                 {([3, 6, 12] as BillingPeriod[]).map(p => (
@@ -200,6 +203,7 @@ export const Pricing = memo(function Pricing() {
                   </CardContent>
                   <div className="p-6 pt-0">
                     <Button 
+                      data-testid={`pricing-plan-${key}-cta`}
                       className="w-full rounded-xl h-12 font-bold" 
                       variant={isCurrent ? 'secondary' : (key === 'starter' ? 'default' : 'outline')}
                       disabled={isCurrent || isLoading}

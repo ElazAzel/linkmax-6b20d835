@@ -1,7 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
+import { hasE2ECredentials } from './e2e/support/auth';
+
+const browserStorageState = hasE2ECredentials
+  ? './playwright/.auth/user.json'
+  : { cookies: [], origins: [] };
 
 export default defineConfig({
   testDir: './e2e',
+  timeout: 60_000,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -9,6 +15,7 @@ export default defineConfig({
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:8080',
+    navigationTimeout: 60_000,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -18,7 +25,7 @@ export default defineConfig({
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
-        storageState: './playwright/.auth/user.json',
+        storageState: browserStorageState,
       },
       dependencies: ['setup'],
     },
@@ -26,7 +33,7 @@ export default defineConfig({
       name: 'firefox',
       use: { 
         ...devices['Desktop Firefox'],
-        storageState: './playwright/.auth/user.json',
+        storageState: browserStorageState,
       },
       dependencies: ['setup'],
     },
@@ -34,7 +41,7 @@ export default defineConfig({
       name: 'Mobile Chrome',
       use: { 
         ...devices['Pixel 5'],
-        storageState: './playwright/.auth/user.json',
+        storageState: browserStorageState,
       },
       dependencies: ['setup'],
     },

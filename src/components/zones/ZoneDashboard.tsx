@@ -684,8 +684,8 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                           <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} allowDecimals={false} />
                           <Tooltip
                             contentStyle={{ backgroundColor: 'hsl(var(--background))', borderRadius: '12px', border: '1px solid hsl(var(--border)/0.5)' }}
-                            formatter={(value: number | undefined, name: string | undefined) => [
-                              name === 'count' ? t('zones.dashboard.dealsCount', '{{count}} сделок', { count: value ?? 0 }) : `${formatCurrencyValue(value ?? 0)} ₸`,
+                            formatter={(value, name) => [
+                              name === 'count' ? t('zones.dashboard.dealsCount', '{{count}} сделок', { count: Number(value ?? 0) }) : `${formatCurrencyValue(Number(value ?? 0))} ₸`,
                               (name === 'count' ? t('common.quantity', 'Количество') : t('common.amount', 'Сумма')) as string
                             ]}
                           />

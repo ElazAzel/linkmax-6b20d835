@@ -163,6 +163,7 @@ export function LanguageSwitcher({
     } else {
       i18n.changeLanguage(langCode);
     }
+    storage.setRaw('i18nextLng', langCode);
 
     setIsOpen(false);
     setSearchQuery('');

@@ -11,6 +11,23 @@ import { supabase } from '@/platform/supabase/client';
 // Version key for cache invalidation
 const CACHE_VERSION_KEY = 'cache_version';
 const FALLBACK_CACHE_VERSION = '5'; // Fallback if DB is unreachable
+const CACHE_STORAGE_KEYS = new Set([
+  'lm.qcache.v1',
+  'inkmax_v2_cache_version',
+  'inkmax_v2_page_cache',
+]);
+const CACHE_STORAGE_PREFIXES = [
+  'linkmax-build-',
+  'linkmax-build:',
+  'linkmax_cache_',
+  'lnkmx_cache_',
+];
+
+function isCacheStorageKey(key: string): boolean {
+  return CACHE_STORAGE_KEYS.has(key)
+    || CACHE_STORAGE_PREFIXES.some((prefix) => key.startsWith(prefix))
+    || key.includes('react-query');
+}
 
 /**
  * Clear all local storage items related to lnkmx.my
@@ -22,20 +39,13 @@ export function clearLocalStorageCache(): void {
   for (let i = 0; i < localStorage.length; i++) {
     // eslint-disable-next-line no-restricted-globals
     const key = localStorage.key(i);
-    if (key && (
-      key.startsWith('linkmax_') ||
-      key.startsWith('lnkmx_') ||
-      key.startsWith('inkmax_') ||
-      key.startsWith('sb-') ||
-      key.includes('react-query')
-    )) {
+    if (key && isCacheStorageKey(key)) {
       keysToRemove.push(key);
     }
   }
 
   // eslint-disable-next-line no-restricted-globals
   keysToRemove.forEach(key => localStorage.removeItem(key));
-  storage.clear(); // Ensure namespaced storage is cleared too
 }
 
 /**

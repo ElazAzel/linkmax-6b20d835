@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { AUTHENTICATED_E2E_SKIP_REASON, hasE2ECredentials } from './support/auth';
 
 test.skip(({ browserName }) => browserName !== 'chromium', 'Visual add-block regression is captured on Chromium baseline only.');
+test.skip(!hasE2ECredentials, AUTHENTICATED_E2E_SKIP_REASON);
 
 const VIEWPORTS = {
   desktop: { width: 1440, height: 900 },

@@ -87,7 +87,7 @@ export const TrafficSourcesChart = memo(function TrafficSourcesChart({
                   borderRadius: '8px',
                   fontSize: '12px',
                 }}
-                formatter={(value?: number | string | Array<number | string>, name?: string | number) => [
+                formatter={(value, name) => [
                   `${value ?? 0} (${chartData.find(d => d.name === name)?.percentage.toFixed(0) ?? 0}%)`,
                   String(name ?? ''),
                 ]}
