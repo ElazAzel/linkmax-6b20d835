@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 const migration = readFileSync(
   resolve(process.cwd(), 'supabase/migrations/20260829121000_booking_lifecycle_and_payment_ledger.sql'),
   'utf8',
-);
+).replace(/\r\n/g, '\n');
 
 describe('booking lifecycle SQL contract', () => {
   it('makes payments and transitions immutable authoritative facts', () => {

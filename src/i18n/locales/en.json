@@ -4298,6 +4298,7 @@
       "nameLine": "ARchitecKZ вЂў BIN: 190540008684"
     },
     "currentPlan": "Current",
+    "identityAlreadyActive": "Identity plan is already active",
     "description": "Unlock all the features of LinkMAX.my for your business",
     "features": {
       "advancedAnalytics": "Advanced click analytics",

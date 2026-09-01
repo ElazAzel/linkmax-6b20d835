@@ -87,8 +87,18 @@ const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>
 // Track which lazy locales have been loaded
 const loadedLazyLocales = new Set<string>();
 const syncedDbLocales = new Set<string>();
+const remoteTranslationSyncConfigured = Boolean(
+  import.meta.env.VITE_ENABLE_REMOTE_TRANSLATIONS === 'true' &&
+  import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+);
 
 function syncDbLocale(lang: string): void {
+  // Bundled locale files are the source of truth. Remote translations are an
+  // optional override and should not trigger a browser request when the app
+  // is running without a configured Supabase publishable key (for example in
+  // public previews and CI smoke tests).
+  if (!remoteTranslationSyncConfigured) return;
+
   const normalized = normalizeLanguage(lang);
   if (syncedDbLocales.has(normalized)) return;
   syncedDbLocales.add(normalized);

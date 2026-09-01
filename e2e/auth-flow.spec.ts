@@ -206,6 +206,9 @@ test.describe('Performance', () => {
       !e.includes('net::ERR')
     );
     
-    expect(criticalErrors.length).toBe(0);
+    expect(
+      criticalErrors,
+      `Unexpected console errors on landing page:\n${criticalErrors.join('\n')}`,
+    ).toHaveLength(0);
   });
 });

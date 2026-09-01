@@ -1,4 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { AUTHENTICATED_E2E_SKIP_REASON, hasE2ECredentials } from './support/auth';
+
+test.skip(!hasE2ECredentials, AUTHENTICATED_E2E_SKIP_REASON);
 
 test.describe('Fintech Flow E2E', () => {
     // Rely on global setup for authentication
@@ -67,7 +70,7 @@ test.describe('Fintech Flow E2E', () => {
         await page.goto('/pricing');
 
         // Find the Pro button via testid
-        const buyButton = page.getByTestId('pro-plan-button');
+        const buyButton = page.getByTestId('pricing-plan-pro-cta');
         await expect(buyButton).toBeVisible();
         
         // Intercept the redirect or check navigation

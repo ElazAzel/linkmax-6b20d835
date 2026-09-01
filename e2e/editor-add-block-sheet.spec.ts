@@ -1,13 +1,20 @@
 import { test, expect } from '@playwright/test';
+import { AUTHENTICATED_E2E_SKIP_REASON, hasE2ECredentials } from './support/auth';
+
+test.skip(!hasE2ECredentials, AUTHENTICATED_E2E_SKIP_REASON);
 
 const EDITOR_ROUTE = '/dashboard/home?tab=editor';
 
 async function openAddBlockSheetFromFab(page: import('@playwright/test').Page) {
+  const consent = page.getByRole('dialog', { name: /cookie|согласие/i });
+  if (await consent.isVisible().catch(() => false)) {
+    await consent.getByRole('button').first().click();
+  }
   await page.locator('[data-onboarding="add-block"]').click();
 }
 
 async function getAddBlockDialog(page: import('@playwright/test').Page) {
-  const dialog = page.getByRole('dialog');
+  const dialog = page.getByTestId('add-block-sheet');
   await expect(dialog).toBeVisible();
   return dialog;
 }

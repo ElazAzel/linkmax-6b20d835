@@ -12,11 +12,10 @@ const DialogPortal = DialogPrimitive.Portal;
 
 const DialogClose = DialogPrimitive.Close;
 
-function hasPrimitiveChild(children: React.ReactNode, displayName: string): boolean {
+function hasChildType(children: React.ReactNode, targetType: React.ElementType): boolean {
   return React.Children.toArray(children).some((child) => {
     if (!React.isValidElement(child)) return false;
-    const type = child.type as { displayName?: string };
-    return type.displayName === displayName || hasPrimitiveChild(child.props.children, displayName);
+    return child.type === targetType || hasChildType(child.props.children, targetType);
   });
 }
 
@@ -39,8 +38,8 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
-  const hasTitle = hasPrimitiveChild(children, DialogPrimitive.Title.displayName ?? 'DialogTitle');
-  const hasDescription = hasPrimitiveChild(children, DialogPrimitive.Description.displayName ?? 'DialogDescription');
+  const hasTitle = hasChildType(children, DialogTitle);
+  const hasDescription = hasChildType(children, DialogDescription);
   const descriptionProps =
     !hasDescription && props['aria-describedby'] === undefined ? { 'aria-describedby': undefined } : {};
 
