@@ -47,36 +47,18 @@ CREATE POLICY "Anyone can view active languages"
 -- Only admins can insert/update/delete
 CREATE POLICY "Admins can manage languages"
   ON public.languages FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.users
-      WHERE users.id = auth.uid()
-      AND users.role = 'admin'
-    )
-  );
+  USING (public.has_role(auth.uid(), 'admin'::app_role));
 
 -- Policies for upload history
 -- Only admins can view upload history
 CREATE POLICY "Admins can view upload history"
   ON public.language_upload_history FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.users
-      WHERE users.id = auth.uid()
-      AND users.role = 'admin'
-    )
-  );
+  USING (public.has_role(auth.uid(), 'admin'::app_role));
 
 -- Only admins can insert upload history
 CREATE POLICY "Admins can create upload history"
   ON public.language_upload_history FOR INSERT
-  WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM public.users
-      WHERE users.id = auth.uid()
-      AND users.role = 'admin'
-    )
-  );
+  WITH CHECK (public.has_role(auth.uid(), 'admin'::app_role));
 
 -- Create function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
