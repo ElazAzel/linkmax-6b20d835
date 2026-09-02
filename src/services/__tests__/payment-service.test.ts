@@ -40,6 +40,7 @@ describe('PaymentService', () => {
         });
 
         it('should throw error if function return success: false', async () => {
+            const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
             vi.mocked(supabase.functions.invoke).mockResolvedValue({
                 data: { success: false, error: 'Internal Error' },
                 error: null
@@ -51,9 +52,12 @@ describe('PaymentService', () => {
                 cycle: 'monthly',
                 description: 'd1'
             })).rejects.toThrow('Internal Error');
+            expect(consoleError).toHaveBeenCalled();
+            consoleError.mockRestore();
         });
 
         it('should throw error if invoke fails', async () => {
+            const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
             vi.mocked(supabase.functions.invoke).mockResolvedValue({
                 data: null,
                 error: { message: 'Network Error' }
@@ -65,6 +69,8 @@ describe('PaymentService', () => {
                 cycle: 'monthly',
                 description: 'd1'
             })).rejects.toThrow('Network Error');
+            expect(consoleError).toHaveBeenCalled();
+            consoleError.mockRestore();
         });
     });
 

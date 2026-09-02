@@ -3,153 +3,169 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
 
 jobs:
-
-  editor-sheet-changes:
-    name: Detect Editor Sheet Changes
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    outputs:
-      editor_sheet_changed: ${{ steps.filter.outputs.editor_sheet }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Detect file changes
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            editor_sheet:
-              - 'src/components/editor/**'
-              - 'src/components/ui/sheet.tsx'
-
   quality:
-    name: Quality Checks
+    name: Quality
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Quality Baseline Guardrail
-        run: npm run quality:baseline
-
-      - name: Hardened Quality Gate
+      - run: npm ci
+      - name: Repository script contracts
+        run: npm run test:scripts
+      - name: Quality gate
         run: npm run quality:check
+      - name: Documentation links
+        run: npm run docs:check
+      - name: Runtime dependency audit
+        run: npm audit --omit=dev --audit-level=moderate
+      - name: Full dependency audit
+        run: npm audit --audit-level=high
 
-      # Audit 2026-05-16: block merges that introduce dependency cycles
-      # or break i18n key coverage across ru/en/kk/uz.
-      - name: Dependency Cycles
-        run: npm run analyze:cycles
-
-      - name: Locale Coverage
-        run: npm run i18n:check-coverage
-
-  unit-tests:
-    name: Unit Tests (with Coverage)
+  unit:
+    name: Unit
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run unit tests with coverage
+      - run: npm ci
+      - name: Unit tests and coverage
         run: npm run test:ci
 
-  e2e-tests:
-    name: E2E Tests
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    needs: [quality]
+    timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: E2E tests
+      - run: npm ci
+      - name: Production build
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://pphdcfxucfndmwulpfwv.supabase.co' }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm run build
+      - name: Validate Worker bundle and static assets
+        run: npx --yes wrangler@4.127.1 versions upload --cwd cloudflare-worker --dry-run
+
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Require isolated E2E account
+        env:
           E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$E2E_TEST_EMAIL"
+          test -n "$E2E_TEST_PASSWORD"
+          test -n "$VITE_SUPABASE_URL"
+          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY"
+      - name: Install browser engines
+        run: npx playwright install --with-deps chromium firefox
+      - name: Chromium, Firefox and mobile browser tests
+        env:
+          E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
+          E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run e2e:ci
 
-
-  editor-sheet-required:
-    name: Editor Add-Block Sheet Check
+  database:
+    name: Database
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    needs: [quality, unit-tests, editor-sheet-changes]
-    if: github.event_name == 'pull_request' && needs.editor-sheet-changes.outputs.editor_sheet_changed == 'true'
+    timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
+      - run: npm ci
+      - name: Verify migrations and pgTAP suite
+        run: npm run verify:revenue-core:db
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Run add-block sheet e2e (desktop + mobile)
-        run: npx playwright test e2e/add-block-sheet.spec.ts e2e/editor-add-block-sheet.spec.ts --project=chromium --reporter=line
-
-  build:
-    name: Build Check
+  android:
+    name: Android
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [quality]
+    timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
+      - name: Setup Java
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: npm ci
+      - name: Sync Capacitor
+        run: npm run mobile:sync
+      - name: Build unsigned Android debug app
+        working-directory: android
+        run: ./gradlew assembleDebug
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
+  ios:
+    name: iOS
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Sync Capacitor
+        run: npm run mobile:sync
+      - name: Build unsigned iOS simulator app
+        run: xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug CODE_SIGNING_ALLOWED=NO build

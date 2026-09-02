@@ -12,19 +12,18 @@
          │
          ▼
 ┌─────────────────┐
-│ Cloudflare      │
-│ Worker          │
+│ Cloudflare Worker + Static Assets │
 └────────┬────────┘
          │
     ┌────┴────┐
     │         │
-  Bot?      Human
-    │         │
-    ▼         ▼
-┌─────────┐ ┌─────────┐
-│ SSR     │ │ SPA     │
-│ Edge Fn │ │ (React) │
-└────┬────┘ └────┬────┘
+Public SSR route?   Private/static route?
+    │                       │
+    ▼                       ▼
+┌─────────┐          ┌─────────────┐
+│Supabase │          │ env.ASSETS  │
+│Edge Fn  │          │ React SPA   │
+└────┬────┘          └──────┬──────┘
      │           │
      ▼           ▼
 ┌─────────────────┐
@@ -68,13 +67,13 @@
 ### 1. Установите Wrangler CLI
 
 ```bash
-npm install -g wrangler
+npx --yes wrangler@4.127.1 --version
 ```
 
 ### 2. Авторизуйтесь в Cloudflare
 
 ```bash
-wrangler login
+npx --yes wrangler@4.127.1 login
 ```
 
 ### 3. Настройте wrangler.toml
@@ -84,6 +83,12 @@ name = "lnkmx-ssr-worker"
 main = "prerender-worker.js"
 compatibility_date = "2024-01-01"
 
+[assets]
+directory = "../dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/*", "!/assets/*"]
+
 routes = [
   { pattern = "lnkmx.my/*", zone_name = "lnkmx.my" }
 ]
@@ -92,8 +97,10 @@ routes = [
 ### 4. Деплой
 
 ```bash
-cd cloudflare-worker
-wrangler deploy
+npm run build
+npx --yes wrangler@4.127.1 versions upload --cwd cloudflare-worker
+# Smoke-test the preview URL printed by Wrangler, then promote that version:
+npx --yes wrangler@4.127.1 versions deploy <version-id>@100% --cwd cloudflare-worker --yes
 ```
 
 ## Тестирование
@@ -101,7 +108,8 @@ wrangler deploy
 ### Локальный запуск
 
 ```bash
-wrangler dev
+npm run build
+npx --yes wrangler@4.127.1 dev --cwd cloudflare-worker
 ```
 
 ### Проверка работы
@@ -113,8 +121,14 @@ curl -H "User-Agent: Googlebot/2.1" https://lnkmx.my/elazart | head -50
 # ChatGPT - должен вернуть полный HTML
 curl -H "User-Agent: ChatGPT-User" https://lnkmx.my/elazart | head -50
 
-# Обычный пользователь - должен вернуть SPA
+# Публичный маршрут — SSR для любого user agent
 curl https://lnkmx.my/elazart | head -50
+
+# Приватный маршрут — SPA из Cloudflare Static Assets
+curl https://lnkmx.my/dashboard | head -20
+
+# Идентификатор работающего релиза
+curl https://lnkmx.my/.well-known/linkmax-release.json
 
 # Проверка заголовков для бота
 curl -I -H "User-Agent: Googlebot" https://lnkmx.my/elazart
@@ -176,14 +190,14 @@ POST https://<project-ref>.supabase.co/functions/v1/resolve-domain
 
 ## Исключения
 
-Воркер НЕ обрабатывает:
+Воркер не отправляет следующие маршруты в SSR Edge Function, но обслуживает их через привязку `env.ASSETS`:
 
 - `/api/*` - API эндпоинты
 - `/dashboard` - Панель управления
 - `/auth`, `/login`, `/signup` - Аутентификация
 - `/editor` - Редактор
-- Статические файлы (.js, .css, .png, .jpg, etc.)
-- Статические страницы (/, /gallery, /pricing) - уже имеют хороший HTML
+- Статические файлы (`.js`, `.css`, `.png`, `.jpg` и т. д.)
+- SPA-маршруты, для которых `getSSRTarget` возвращает `null`
 
 ## Мониторинг
 

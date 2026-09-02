@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    env: {
+      VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'test-anon-key',
+    },
     globals: true,
     testTimeout: 60000, // Increased testTimeout from 30000 to 60000
     setupFiles: ['./src/testing/setup.ts'],
