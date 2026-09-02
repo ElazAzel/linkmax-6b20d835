@@ -22,6 +22,7 @@ test('dry run lists every destructive and verification step in safe order', () =
   assert.ok(start < reset, 'Supabase starts before database reset');
   assert.ok(reset < pgTap, 'migrations rebuild before pgTAP');
   assert.ok(pgTap < lint, 'schema lint runs after pgTAP');
+  assert.match(result.stdout, /start --exclude gotrue,realtime,storage-api/);
   assert.match(result.stdout, /--level warning --fail-on error/);
   assert.doesNotMatch(result.stdout, /supabase@latest/);
 });

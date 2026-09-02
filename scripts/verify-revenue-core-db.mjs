@@ -15,7 +15,26 @@ const steps = [
   {
     label: 'Start local Supabase services',
     command: npxCommand,
-    args: [...supabaseCli, 'start'],
+    args: [
+      ...supabaseCli,
+      'start',
+      '--exclude',
+      [
+        'gotrue',
+        'realtime',
+        'storage-api',
+        'imgproxy',
+        'kong',
+        'mailpit',
+        'postgrest',
+        'postgres-meta',
+        'studio',
+        'edge-runtime',
+        'logflare',
+        'vector',
+        'supavisor',
+      ].join(','),
+    ],
   },
   {
     label: 'Rebuild database from committed migrations',
