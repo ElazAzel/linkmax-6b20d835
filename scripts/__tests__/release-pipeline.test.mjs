@@ -67,6 +67,20 @@ test('generated release inputs are deterministic and portable', () => {
   assert.match(iosPackage, /CapacitorPushNotifications/);
 });
 
+test('every configured Supabase function exists in the repository', () => {
+  const config = read('supabase/config.toml');
+  const configuredFunctions = [...config.matchAll(/^\[functions\.([^\]]+)\]$/gm)]
+    .map((match) => match[1]);
+
+  for (const functionName of configuredFunctions) {
+    assert.equal(
+      existsSync(`supabase/functions/${functionName}/index.ts`),
+      true,
+      `supabase/config.toml references missing function ${functionName}`,
+    );
+  }
+});
+
 test('release version is coherent across web, Android, and iOS', () => {
   const pkg = JSON.parse(read('package.json'));
   const android = read('android/app/build.gradle');
