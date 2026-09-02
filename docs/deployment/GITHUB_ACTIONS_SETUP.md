@@ -1,56 +1,70 @@
-# GitHub Actions and Deployment Setup
+# GitHub Actions and deployment setup
 
-**Last reviewed:** 2026-07-25
+**Last reviewed:** 2026-09-01
 
 ## Workflows
 
 | Workflow | Trigger | Responsibility |
 |---|---|---|
-| `ci.yml` | PRs and pushes to `main` | Quality gate, Vitest, Playwright, build. |
-| `deploy.yml` | Pushes to `main`, manual dispatch | Build and Cloudflare Worker deployment. |
-| `deploy-cloudflare-worker.yml` | Worker-only changes, manual dispatch | Cloudflare Worker deployment. |
-| `deploy-supabase.yml` | Supabase functions or migrations on `main`, manual dispatch | Apply migrations and deploy Edge Functions. |
+| `ci.yml` | Pull requests and pushes to `main` | Quality, audits, unit coverage, build, Worker dry run, Playwright, local Supabase, Android, and iOS validation. |
+| `codeql.yml` | Pull requests, `main`, weekly | JavaScript/TypeScript security analysis. |
+| `deploy-staging.yml` | Successful CI run on `main`, manual dispatch | Build and deploy the isolated Supabase/Cloudflare staging stack. |
+| `release.yml` | Manual dispatch with production approval | Build once, preview, migrate, promote, smoke-test, then create the tag and GitHub Release. |
 
-All workflow jobs use Node.js 22. CI is a merge gate; a deployment workflow is not a substitute for passing CI.
+Every external action is pinned to a full commit SHA. Node is pinned to major version 22, Wrangler to `4.127.1`, and Supabase CLI to `2.116.0`.
 
-## Required GitHub Secrets
+## GitHub environments
 
-| Secret | Used by | Notes |
-|---|---|---|
-| `VITE_SUPABASE_URL` | build and E2E | Browser-safe project URL. |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | build and E2E | Browser-safe Supabase publishable/anon key. |
-| `E2E_TEST_EMAIL` | authenticated E2E | Dedicated staging test account email. |
-| `E2E_TEST_PASSWORD` | authenticated E2E | Dedicated staging test account password. |
-| `SUPABASE_PROJECT_ID` | Supabase deploy | Project reference, not a credential. |
-| `SUPABASE_ACCESS_TOKEN` | Supabase deploy | Supabase personal access token with deployment access. |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare workflows | Least-privilege token with Worker deployment permissions. |
-| `CLOUDFLARE_ACCOUNT_ID` | Worker-only workflow | Cloudflare account identifier. |
-| `CF_WORKER_SUPABASE_PROJECT` | Worker-only workflow | Project reference passed to the Worker. |
-| `CF_WORKER_SUPABASE_ANON_KEY` | Worker-only workflow | Browser-safe Supabase key passed as Worker secret. |
+Create `staging` and `production` environments. Use separate projects, tokens, Worker names, and E2E users. Add required reviewers and prevent self-review on `production`.
 
-Add secrets in GitHub: **Settings -> Secrets and variables -> Actions -> New repository secret**. Never put their values in workflow YAML, `.env.example`, docs, issues, or logs.
+Each environment requires these secrets:
 
-## Deployment Procedure
-
-1. Open a pull request and wait for `ci.yml` to pass.
-2. Review migrations, Edge Function changes, and generated sitemap changes separately.
-3. Merge to `main`.
-4. Confirm the relevant deploy workflow completed successfully.
-5. Run a smoke check against `https://lnkmx.my/` and inspect Sentry/Supabase logs for regression signals.
-
-## Failure Triage
-
-| Symptom | Check |
+| Secret | Purpose |
 |---|---|
-| `supabase` authentication failure | `SUPABASE_ACCESS_TOKEN` exists, is current, and can access `SUPABASE_PROJECT_ID`. |
-| Cloudflare authentication failure | `CLOUDFLARE_API_TOKEN` exists, is active, and has Worker deployment permission for the configured account. |
-| Build lacks Supabase configuration | `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are present in the workflow environment. |
-| Migration fails | Inspect migration order and SQL in a temporary/local Supabase project before retrying production. Do not edit an already-applied migration. |
-| CI quality gate fails | Reproduce the named npm command locally; do not suppress the check without an explicit baseline change and review. |
+| `SUPABASE_ACCESS_TOKEN` | Deploy migrations and Edge Functions. |
+| `SUPABASE_PROJECT_ID` | Environment-specific project reference. |
+| `SUPABASE_DB_PASSWORD` | Apply linked database migrations. |
+| `VITE_SUPABASE_URL` | Browser-safe build and health-check URL. |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Browser-safe publishable/anon key. |
+| `CLOUDFLARE_API_TOKEN` | Least-privilege Worker Scripts deployment token. |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account identifier. |
+| `CF_WORKER_SUPABASE_PROJECT` | Project reference bound to the Worker as a secret. |
+| `CF_WORKER_SUPABASE_ANON_KEY` | Browser-safe key bound to the Worker as a secret. |
+| `E2E_TEST_EMAIL` | Dedicated account in the staging Supabase project. |
+| `E2E_TEST_PASSWORD` | Password for the isolated staging test account. |
 
-## Rotation and Access
+Enter values through GitHub environment settings. Do not paste them into logs, workflow dispatch inputs, issues, documentation, or committed `.env` files.
 
-- Use least privilege and separate tokens for people, CI, and local development.
-- Rotate deployment tokens immediately after suspected exposure and at a defined operational interval.
-- Remove secrets and environment access when a maintainer no longer needs deployment rights.
-- Record any manual production recovery in the pull request or incident record, without copying secret values.
+## Main protection
+
+Use a repository ruleset for `main`:
+
+- require pull requests and one approval;
+- dismiss stale approvals and require conversation resolution;
+- require strict, up-to-date checks: `Quality`, `Unit`, `Build`, `E2E`, `Database`, `Android`, `iOS`, and `Analyze`;
+- block force-pushes and deletion;
+- allow squash merge only and delete merged branches automatically.
+
+Enable Dependabot security updates, CodeQL default/setup analysis, secret scanning, and push protection. Require full-length commit SHA pinning for Actions when the repository plan supports that policy.
+
+## Deployment order
+
+Staging runs automatically only after green `main`. Both staging and production use this order:
+
+1. validate credentials without printing values;
+2. build the web assets once;
+3. inspect migration history;
+4. apply database migrations;
+5. deploy Edge Functions;
+6. verify Supabase health;
+7. upload and smoke-test an immutable Worker version;
+8. promote the exact Worker version.
+
+Production additionally requires a backup/PITR confirmation, Lovable mirror identifier, production reviewer approval, artifact checksums, CycloneDX SBOM, and build provenance. The tag and GitHub Release are the final operation.
+
+## Recovery
+
+- Failed production smoke tests invoke Cloudflare rollback.
+- Supabase recovery uses a reviewed forward migration; never edit an applied migration.
+- A failed release publication removes an orphaned tag.
+- Rotate any token immediately after suspected exposure and document only the rotation event, never the value.

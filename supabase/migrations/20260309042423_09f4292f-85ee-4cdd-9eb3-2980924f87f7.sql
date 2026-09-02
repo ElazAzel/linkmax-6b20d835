@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.user_wallets (
 ALTER TABLE public.user_wallets ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
+DROP POLICY IF EXISTS "Users can view own wallet" ON public.user_wallets;
 CREATE POLICY "Users can view own wallet"
   ON public.user_wallets FOR SELECT
   TO authenticated

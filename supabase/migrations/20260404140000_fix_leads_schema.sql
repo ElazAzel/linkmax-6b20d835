@@ -47,6 +47,7 @@ BEGIN
         DROP POLICY IF EXISTS "Users can view leads for their pages" ON public.leads;
         DROP POLICY IF EXISTS "Users can update leads for their pages" ON public.leads;
         DROP POLICY IF EXISTS "Users can view own leads" ON public.leads;
+        DROP POLICY IF EXISTS "Users can update own leads" ON public.leads;
         
         CREATE POLICY "Users can view own leads" ON public.leads
             FOR SELECT USING (auth.uid() = user_id OR EXISTS (

@@ -24,6 +24,7 @@ CREATE INDEX IF NOT EXISTS idx_wallet_transactions_status ON public.wallet_trans
 
 ALTER TABLE public.wallet_transactions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own transactions" ON public.wallet_transactions;
 CREATE POLICY "Users can view own transactions"
   ON public.wallet_transactions FOR SELECT
   TO authenticated

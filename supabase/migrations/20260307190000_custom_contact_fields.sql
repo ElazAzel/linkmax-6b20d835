@@ -22,6 +22,7 @@ ADD COLUMN IF NOT EXISTS custom_fields JSONB DEFAULT '{}'::jsonb;
 -- RLS for zone_contact_fields
 ALTER TABLE public.zone_contact_fields ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Zone members can view contact fields" ON public.zone_contact_fields;
 CREATE POLICY "Zone members can view contact fields"
     ON public.zone_contact_fields FOR SELECT
     USING (

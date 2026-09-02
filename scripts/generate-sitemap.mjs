@@ -15,11 +15,16 @@
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+try {
+  process.loadEnvFile?.();
+} catch {
+  // CI injects variables directly; a local .env file is optional.
+}
+
 const BASE_URL = 'https://lnkmx.my';
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://pphdcfxucfndmwulpfwv.supabase.co';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY
-  || process.env.VITE_SUPABASE_ANON_KEY
-  || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA';
+  || process.env.VITE_SUPABASE_ANON_KEY;
 
 const QUALITY_THRESHOLD = 25;
 const LANGS = ['ru', 'en', 'kk', 'uz'];
@@ -162,7 +167,12 @@ function buildUrlEntry({ loc, lastmod, changefreq, priority, hreflang }) {
 }
 
 async function fetchIndexablePages() {
-  const url = `${SUPABASE_URL}/rest/v1/pages?select=slug,updated_at,is_indexable,quality_score,is_published&is_published=eq.true&quality_score=gte.${QUALITY_THRESHOLD}&order=updated_at.desc.nullslast&limit=10000`;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    console.warn('[sitemap] Supabase build variables are absent; generating static entries only.');
+    return [];
+  }
+
+  const url = `${SUPABASE_URL}/rest/v1/pages?select=slug,updated_at,is_indexable,quality_score,is_published&is_published=eq.true&quality_score=gte.${QUALITY_THRESHOLD}&order=updated_at.desc.nullslast,slug.asc&limit=10000`;
   try {
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },

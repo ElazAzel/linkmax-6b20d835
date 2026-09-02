@@ -12,11 +12,13 @@ CREATE TABLE public.zone_invoice_items (
 
 ALTER TABLE public.zone_invoice_items ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Zone members view invoice items" ON public.zone_invoice_items;
 CREATE POLICY "Zone members view invoice items"
   ON public.zone_invoice_items FOR SELECT
   TO authenticated
   USING (is_zone_member(zone_id, auth.uid()));
 
+DROP POLICY IF EXISTS "Zone admins manage invoice items" ON public.zone_invoice_items;
 CREATE POLICY "Zone admins manage invoice items"
   ON public.zone_invoice_items FOR ALL
   TO authenticated

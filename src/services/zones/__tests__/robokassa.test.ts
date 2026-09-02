@@ -29,6 +29,7 @@ describe('generateRoboKassaUrl', () => {
     });
 
     it('should throw error on failure', async () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
         vi.mocked(supabase.functions.invoke).mockResolvedValue({
             data: null,
             error: { message: 'Network Error' }
@@ -39,5 +40,7 @@ describe('generateRoboKassaUrl', () => {
             amount: 100,
             userId: 'u1'
         })).rejects.toThrow('Network Error');
+        expect(consoleError).toHaveBeenCalled();
+        consoleError.mockRestore();
     });
 });
