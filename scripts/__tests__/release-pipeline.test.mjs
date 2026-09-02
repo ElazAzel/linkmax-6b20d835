@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 
 const read = (path) => readFileSync(path, 'utf8');
@@ -77,6 +77,22 @@ test('every configured Supabase function exists in the repository', () => {
       existsSync(`supabase/functions/${functionName}/index.ts`),
       true,
       `supabase/config.toml references missing function ${functionName}`,
+    );
+  }
+});
+
+test('SQL migrations are UTF-8 text without NUL bytes', () => {
+  const migrations = readdirSync('supabase/migrations')
+    .filter((name) => name.endsWith('.sql'));
+
+  for (const migration of migrations) {
+    const bytes = readFileSync(`supabase/migrations/${migration}`);
+    assert.equal(bytes.includes(0), false, `${migration} contains NUL bytes`);
+    assert.equal(
+      bytes.subarray(0, 2).equals(Buffer.from([0xff, 0xfe]))
+        || bytes.subarray(0, 2).equals(Buffer.from([0xfe, 0xff])),
+      false,
+      `${migration} is UTF-16`,
     );
   }
 });
