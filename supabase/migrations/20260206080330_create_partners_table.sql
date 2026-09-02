@@ -23,9 +23,8 @@ CREATE POLICY "Partners are viewable by everyone"
 CREATE POLICY "Partners are editable by admins only"
   ON public.partners
   FOR ALL
-  USING (
-    auth.uid() IN (SELECT user_id FROM public.admin_users)
-  );
+  USING (public.has_role(auth.uid(), 'admin'::app_role))
+  WITH CHECK (public.has_role(auth.uid(), 'admin'::app_role));
 
 -- Create index for sorting
 CREATE INDEX IF NOT EXISTS idx_partners_sort_order ON public.partners(sort_order);

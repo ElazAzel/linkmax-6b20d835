@@ -87,6 +87,7 @@ test('SQL migrations are UTF-8 text without NUL bytes', () => {
 
   for (const migration of migrations) {
     const bytes = readFileSync(`supabase/migrations/${migration}`);
+    const sql = bytes.toString('utf8');
     assert.equal(bytes.includes(0), false, `${migration} contains NUL bytes`);
     assert.equal(
       bytes.subarray(0, 2).equals(Buffer.from([0xff, 0xfe]))
@@ -94,6 +95,7 @@ test('SQL migrations are UTF-8 text without NUL bytes', () => {
       false,
       `${migration} is UTF-16`,
     );
+    assert.doesNotMatch(sql, /public\.(?:users|admin_users)\b/, `${migration} references a removed admin table`);
   }
 });
 
