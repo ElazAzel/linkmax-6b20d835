@@ -44,9 +44,18 @@ USING (owner_id = auth.uid())
 WITH CHECK (owner_id = auth.uid());
 
 -- Public can view published events
+DROP POLICY IF EXISTS "Public can view published events" ON public.events;
 CREATE POLICY "Public can view published events"
 ON public.events FOR SELECT
-USING (status = 'published');
+USING (
+  status = 'published'
+  AND EXISTS (
+    SELECT 1
+    FROM public.pages p
+    WHERE p.id = events.page_id
+      AND p.is_published = true
+  )
+);
 
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_events_owner ON public.events(owner_id);

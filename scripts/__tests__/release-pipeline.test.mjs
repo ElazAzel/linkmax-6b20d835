@@ -97,6 +97,35 @@ test('SQL migrations are UTF-8 text without NUL bytes', () => {
   }
 });
 
+test('SQL migrations do not recreate an existing RLS policy', () => {
+  const activePolicies = new Map();
+  const migrations = readdirSync('supabase/migrations')
+    .filter((name) => /^\d+_.+\.sql$/.test(name))
+    .sort();
+  const policyStatement = /DROP\s+POLICY(?:\s+IF\s+EXISTS)?\s+"([^"]+)"\s+ON\s+([a-zA-Z0-9_."]+)|CREATE\s+POLICY\s+"([^"]+)"\s+ON\s+([a-zA-Z0-9_."]+)/gis;
+
+  for (const migration of migrations) {
+    const sql = read(`supabase/migrations/${migration}`);
+    for (const match of sql.matchAll(policyStatement)) {
+      const isDrop = Boolean(match[1]);
+      const policyName = isDrop ? match[1] : match[3];
+      const tableName = (isDrop ? match[2] : match[4]).replaceAll('"', '').toLowerCase();
+      const policyKey = `${tableName}|${policyName}`;
+
+      if (isDrop) {
+        activePolicies.delete(policyKey);
+      } else {
+        assert.equal(
+          activePolicies.has(policyKey),
+          false,
+          `${migration} recreates policy ${policyKey} from ${activePolicies.get(policyKey)}`,
+        );
+        activePolicies.set(policyKey, migration);
+      }
+    }
+  }
+});
+
 test('release version is coherent across web, Android, and iOS', () => {
   const pkg = JSON.parse(read('package.json'));
   const android = read('android/app/build.gradle');
