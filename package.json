@@ -109,7 +109,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
-    "dompurify": "^3.4.11",
+    "dompurify": "^3.4.14",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "exceljs": "^4.4.0",
