@@ -22,6 +22,13 @@ describe('public booking access contract', () => {
     expect(migration).not.toContain('RETURNS TABLE (\n  client_phone');
   });
 
+  it('generates fallback slots from booking block hours when no stored slots exist', () => {
+    expect(migration).toContain('generated_candidates AS');
+    expect(migration).toContain("jsonb_array_elements_text(COALESCE(config.content->'disabledWeekdays', '[]'::jsonb))");
+    expect(migration).toContain('generate_series(');
+    expect(migration).toContain('generated_candidates generated');
+  });
+
   it('derives owner, service, deposit and immutable snapshot on the server', () => {
     expect(migration).toContain('v_page.user_id');
     expect(migration).toContain('v_offering.price_amount');
@@ -52,3 +59,4 @@ describe('public booking access contract', () => {
     expect(bookingBlock).not.toContain('recordPendingIncome');
   });
 });
+

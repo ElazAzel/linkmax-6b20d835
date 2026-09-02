@@ -1,7 +1,7 @@
 /// <reference lib="deno.ns" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { HUMANIZER_RU_PROMPT, humanizeDeep, humanizeText } from '../_shared/humanizer-ru.ts';
+import { HUMANIZER_RU_PROMPT } from '../_shared/humanizer-ru.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -526,7 +526,7 @@ Return ONLY valid JSON, no markdown.`;
     if (type === 'seo' || type === 'ai-builder' || type === 'niche-builder' || type === 'personalize-template') {
       try {
         const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
-        const parsed = humanizeDeep(JSON.parse(cleanContent));
+        const parsed = JSON.parse(cleanContent);
         return new Response(
           JSON.stringify({ result: parsed }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -539,7 +539,7 @@ Return ONLY valid JSON, no markdown.`;
         }
         // For others, return raw content
         return new Response(
-          JSON.stringify({ result: humanizeText(content.trim()) }),
+          JSON.stringify({ result: content.trim() }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
@@ -549,7 +549,7 @@ Return ONLY valid JSON, no markdown.`;
       try {
         const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
         return new Response(
-          JSON.stringify({ result: humanizeDeep(JSON.parse(cleanContent)) }),
+          JSON.stringify({ result: JSON.parse(cleanContent) }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       } catch {
@@ -560,14 +560,14 @@ Return ONLY valid JSON, no markdown.`;
     // For search, return content directly
     if (type === 'search') {
       return new Response(
-        JSON.stringify({ content: humanizeText(content.trim()) }),
+        JSON.stringify({ content: content.trim() }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     // For text responses
     return new Response(
-      JSON.stringify({ result: humanizeText(content.trim()) }),
+      JSON.stringify({ result: content.trim() }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
@@ -580,3 +580,4 @@ Return ONLY valid JSON, no markdown.`;
     );
   }
 });
+
