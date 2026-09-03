@@ -5327,6 +5327,21 @@ export type Database = {
           version_id: string
         }[]
       }
+      get_public_availability: {
+        Args: {
+          p_block_id: string
+          p_from_date: string
+          p_page_id: string
+          p_staff_id?: string
+          p_to_date: string
+        }
+        Returns: {
+          available: boolean
+          slot_date: string
+          slot_end_time: string
+          slot_time: string
+        }[]
+      }
       get_public_trust_metrics: { Args: never; Returns: Json }
       get_site_pages_stats: {
         Args: { _days?: number; _site_id: string }
