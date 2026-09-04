@@ -4710,6 +4710,97 @@ export type Database = {
           },
         ]
       }
+      zone_staff: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          gcal_calendar_id: string
+          gcal_sync_enabled: boolean
+          id: string
+          is_active: boolean
+          name: string
+          specialization: string | null
+          updated_at: string
+          user_id: string | null
+          zone_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          gcal_calendar_id?: string
+          gcal_sync_enabled?: boolean
+          id?: string
+          is_active?: boolean
+          name: string
+          specialization?: string | null
+          updated_at?: string
+          user_id?: string | null
+          zone_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          gcal_calendar_id?: string
+          gcal_sync_enabled?: boolean
+          id?: string
+          is_active?: boolean
+          name?: string
+          specialization?: string | null
+          updated_at?: string
+          user_id?: string | null
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_staff_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_staff_availability: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          is_available: boolean
+          staff_id: string
+          start_time: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          is_available?: boolean
+          staff_id: string
+          start_time: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          is_available?: boolean
+          staff_id?: string
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_staff_availability_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "zone_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_subscriptions: {
         Row: {
           created_at: string
