@@ -19,8 +19,8 @@ function getAuthenticatedContext(ctx) {
   if (!ctx.isAuthenticated() || !userId) {
     return toolError("not_authenticated", "Sign in to LinkMAX before using this tool.");
   }
-  const supabaseUrl2 = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const supabaseUrl2 = runtimeEnv("SUPABASE_URL") ?? runtimeEnv("VITE_SUPABASE_URL");
+  const supabaseKey = runtimeEnv("SUPABASE_ANON_KEY") ?? runtimeEnv("SUPABASE_PUBLISHABLE_KEY") ?? publishableKeyFromKeyset() ?? runtimeEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
   if (!supabaseUrl2 || !supabaseKey) {
     return toolError("configuration_error", "LinkMAX data access is not configured.");
   }
