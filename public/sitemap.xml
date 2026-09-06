@@ -497,6 +497,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://lnkmx.my/elazart</loc>
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lnkmx.my/god</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -606,12 +612,6 @@
   </url>
   <url>
     <loc>https://lnkmx.my/english_pro</loc>
-    <lastmod>2026-09-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://lnkmx.my/elazart</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
