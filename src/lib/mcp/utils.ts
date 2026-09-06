@@ -6,6 +6,37 @@ type AuthenticatedToolContext = {
   userId: string;
 };
 
+type RuntimeGlobals = typeof globalThis & {
+  Deno?: { env?: { get?: (name: string) => string | undefined } };
+  process?: { env?: Record<string, string | undefined> };
+};
+
+function runtimeEnv(name: string): string | undefined {
+  const runtime = globalThis as RuntimeGlobals;
+  const value = runtime.Deno?.env?.get?.(name) ?? runtime.process?.env?.[name];
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+}
+
+/**
+ * Supabase Edge Functions on new API keys expose a JSON dictionary instead of
+ * a single publishable key value.
+ */
+function publishableKeyFromKeyset(): string | undefined {
+  const keyset = runtimeEnv("SUPABASE_PUBLISHABLE_KEYS");
+  if (!keyset) return undefined;
+  try {
+    const parsed: unknown = JSON.parse(keyset);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return undefined;
+    const keys = parsed as Record<string, unknown>;
+    return [keys.default, ...Object.values(keys)]
+      .find((v): v is string => typeof v === "string" && v.trim().startsWith("sb_publishable_"))
+      ?.trim();
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * MCP runs inside a Supabase Edge Function, where SUPABASE_ANON_KEY is the
  * platform-provided name. The publishable-key fallbacks keep the same source
