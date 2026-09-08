@@ -384,10 +384,8 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
       if (!pageData?.organization_id) return;
       
       const { data: staffData } = await supabase
-        .from('zone_staff')
-        .select('*')
-        .eq('zone_id', pageData.organization_id)
-        .eq('is_active', true);
+        .rpc('get_public_zone_staff', { p_zone_id: pageData.organization_id });
+
         
       if (staffData) {
         setStaff(staffData as ZoneStaff[]);
