@@ -1159,6 +1159,139 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_flag_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          flag_id: string | null
+          id: string
+          next_value: Json | null
+          previous_value: Json | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          flag_id?: string | null
+          id?: string
+          next_value?: Json | null
+          previous_value?: Json | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          flag_id?: string | null
+          id?: string
+          next_value?: Json | null
+          previous_value?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_flag_audit_log_flag_id_fkey"
+            columns: ["flag_id"]
+            isOneToOne: false
+            referencedRelation: "feature_flags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feature_flag_rules: {
+        Row: {
+          created_at: string
+          flag_id: string
+          id: string
+          is_enabled: boolean
+          operator: string
+          priority: number
+          rollout_percentage: number | null
+          rule_type: string
+          updated_at: string
+          values: Json
+        }
+        Insert: {
+          created_at?: string
+          flag_id: string
+          id?: string
+          is_enabled?: boolean
+          operator?: string
+          priority?: number
+          rollout_percentage?: number | null
+          rule_type: string
+          updated_at?: string
+          values?: Json
+        }
+        Update: {
+          created_at?: string
+          flag_id?: string
+          id?: string
+          is_enabled?: boolean
+          operator?: string
+          priority?: number
+          rollout_percentage?: number | null
+          rule_type?: string
+          updated_at?: string
+          values?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_flag_rules_flag_id_fkey"
+            columns: ["flag_id"]
+            isOneToOne: false
+            referencedRelation: "feature_flags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feature_flags: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          default_enabled: boolean
+          description: string | null
+          ends_at: string | null
+          id: string
+          is_enabled: boolean
+          key: string
+          metadata: Json
+          name: string
+          rollout_percentage: number
+          starts_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          default_enabled?: boolean
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          is_enabled?: boolean
+          key: string
+          metadata?: Json
+          name: string
+          rollout_percentage?: number
+          starts_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          default_enabled?: boolean
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          is_enabled?: boolean
+          key?: string
+          metadata?: Json
+          name?: string
+          rollout_percentage?: number
+          starts_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       friend_activities: {
         Row: {
           activity_type: string
