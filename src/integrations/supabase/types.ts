@@ -5434,6 +5434,18 @@ export type Database = {
         }[]
       }
       get_public_trust_metrics: { Args: never; Returns: Json }
+      get_public_zone_staff: {
+        Args: { p_zone_id: string }
+        Returns: {
+          avatar_url: string
+          bio: string
+          id: string
+          is_active: boolean
+          name: string
+          specialization: string
+          zone_id: string
+        }[]
+      }
       get_site_pages_stats: {
         Args: { _days?: number; _site_id: string }
         Returns: {
