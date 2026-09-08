@@ -383,12 +383,16 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
         
       if (!pageData?.organization_id) return;
       
-      const { data: staffData } = await supabase
-        .rpc('get_public_zone_staff', { p_zone_id: pageData.organization_id });
+      const { data: staffData } = await (supabase.rpc as unknown as (
+        fn: string,
+        args: Record<string, unknown>
+      ) => Promise<{ data: ZoneStaff[] | null }>)('get_public_zone_staff', {
+        p_zone_id: pageData.organization_id,
+      });
 
-        
       if (staffData) {
-        setStaff(staffData as ZoneStaff[]);
+        setStaff(staffData);
+
         // If only 1 staff, select it automatically
         if (staffData.length === 1) {
           setSelectedStaffId(staffData[0].id);
