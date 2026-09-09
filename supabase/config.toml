@@ -121,3 +121,6 @@ verify_jwt = true # Admin only
 
 [functions.process-transaction-fee]
 verify_jwt = true # Admin only
+
+[functions.robokassa]
+verify_jwt = false # Validates the caller's JWT in code (signing-keys compatible)
