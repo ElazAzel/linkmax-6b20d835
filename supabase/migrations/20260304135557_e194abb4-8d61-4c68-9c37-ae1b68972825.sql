@@ -1,5 +1,5 @@
 
-CREATE TABLE public.zone_invoice_items (
+CREATE TABLE IF NOT EXISTS public.zone_invoice_items (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   invoice_id uuid NOT NULL REFERENCES public.zone_invoices(id) ON DELETE CASCADE,
   zone_id uuid NOT NULL REFERENCES public.zones(id) ON DELETE CASCADE,
@@ -25,5 +25,5 @@ CREATE POLICY "Zone admins manage invoice items"
   USING (is_zone_admin(zone_id, auth.uid()))
   WITH CHECK (is_zone_admin(zone_id, auth.uid()));
 
-CREATE INDEX idx_zone_invoice_items_invoice ON public.zone_invoice_items(invoice_id);
-CREATE INDEX idx_zone_invoice_items_zone ON public.zone_invoice_items(zone_id);
+CREATE INDEX IF NOT EXISTS idx_zone_invoice_items_invoice ON public.zone_invoice_items(invoice_id);
+CREATE INDEX IF NOT EXISTS idx_zone_invoice_items_zone ON public.zone_invoice_items(zone_id);
