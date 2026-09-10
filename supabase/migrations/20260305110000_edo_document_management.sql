@@ -64,12 +64,12 @@ CREATE POLICY "Zone members can manage documents"
 CREATE TRIGGER update_zone_document_templates_updated_at
     BEFORE UPDATE ON public.zone_document_templates
     FOR EACH ROW
-    EXECUTE FUNCTION update_modified_column();
+    EXECUTE FUNCTION public.update_updated_at_column();
 
 CREATE TRIGGER update_zone_documents_updated_at
     BEFORE UPDATE ON public.zone_documents
     FOR EACH ROW
-    EXECUTE FUNCTION update_modified_column();
+    EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Storage Bucket for PDFs (assuming a bucket named 'documents' exists)
 -- We insert a bucket if it doesn't exist.
