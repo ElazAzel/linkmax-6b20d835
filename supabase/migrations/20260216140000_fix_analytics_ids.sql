@@ -1,6 +1,6 @@
--- Change analytics.block_id to TEXT to match blocks.id which uses generated string IDs
-ALTER TABLE public.analytics 
-  ALTER COLUMN block_id TYPE TEXT;
+-- analytics.block_id and blocks.id are UUIDs in the canonical schema. Keep the
+-- RPC argument text-compatible with the client, but do not change the FK-backed
+-- column type during replay.
 
 -- Drop the old function that took UUID
 DROP FUNCTION IF EXISTS public.increment_block_clicks(UUID);
@@ -15,6 +15,6 @@ AS $$
 BEGIN
   UPDATE public.blocks
   SET click_count = click_count + 1
-  WHERE id = block_id;
+  WHERE id = block_id::uuid;
 END;
 $$;
