@@ -6,7 +6,6 @@
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
-import { humanizeDeep, humanizeText } from '@/lib/text/humanizer-ru';
 
 export interface MagicTitleInput {
   url: string;
@@ -43,9 +42,9 @@ async function generateAIContent<T>(
     });
 
     if (error) throw error;
-    // Второй проход humanizer-ru: даже если модель проигнорировала инструкцию,
-    // клиент получает текст без канцелярита и AI-клише.
-    return typeof data.result === 'string' ? humanizeText(data.result) : humanizeDeep(data.result);
+    // Generated copy is preserved verbatim: semantic find-and-replace can break
+    // grammar and strip intentional emoji. Humanization remains an explicit editor action.
+    return data.result;
   } catch (error) {
     logger.error(`AI ${type} generation error`, error, { context: 'ai-helpers', data: { type } });
     throw error;
@@ -126,3 +125,4 @@ export async function generatePageLayout(description: string): Promise<any> {
     throw error;
   }
 }
+
