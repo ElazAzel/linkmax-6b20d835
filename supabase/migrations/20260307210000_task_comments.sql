@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS public.zone_task_comments (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    zone_id TEXT NOT NULL REFERENCES public.zones(id) ON DELETE CASCADE,
+    zone_id UUID NOT NULL REFERENCES public.zones(id) ON DELETE CASCADE,
     task_id UUID NOT NULL REFERENCES public.zone_tasks(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES auth.users(id),
     content TEXT NOT NULL,
