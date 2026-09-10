@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS public.widget_templates (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     name_ru TEXT,
-    category TEXT NOT NULL CHECK (category IN ('games', 'calculators', 'timers', 'engagement', 'business', 'social')),
+    category TEXT NOT NULL CHECK (category IN ('games', 'calculators', 'timers', 'engagement', 'business', 'social', 'utility')),
     description TEXT,
     description_ru TEXT,
     icon TEXT,
