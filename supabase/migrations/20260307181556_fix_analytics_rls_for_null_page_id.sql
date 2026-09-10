@@ -11,6 +11,6 @@ WITH CHECK (
     EXISTS (
         SELECT 1 FROM public.pages 
         WHERE pages.id = analytics.page_id 
-        AND pages.status = 'published'
+        AND pages.is_published = true
     )
 );
