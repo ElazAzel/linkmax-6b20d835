@@ -128,12 +128,16 @@ END $$;
 
 -- RLS for Pipelines
 ALTER TABLE zone_pipelines ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Zone members can view pipelines" ON public.zone_pipelines;
 CREATE POLICY "Zone members can view pipelines" ON zone_pipelines
   FOR SELECT USING (public.is_zone_member(zone_id, auth.uid()));
+DROP POLICY IF EXISTS "Zone admins can insert pipelines" ON public.zone_pipelines;
 CREATE POLICY "Zone admins can insert pipelines" ON zone_pipelines
   FOR INSERT WITH CHECK (public.is_zone_admin(zone_id, auth.uid()));
+DROP POLICY IF EXISTS "Zone admins can update pipelines" ON public.zone_pipelines;
 CREATE POLICY "Zone admins can update pipelines" ON zone_pipelines
   FOR UPDATE USING (public.is_zone_admin(zone_id, auth.uid()));
+DROP POLICY IF EXISTS "Zone admins can delete pipelines" ON public.zone_pipelines;
 CREATE POLICY "Zone admins can delete pipelines" ON zone_pipelines
   FOR DELETE USING (public.is_zone_admin(zone_id, auth.uid()));
 
