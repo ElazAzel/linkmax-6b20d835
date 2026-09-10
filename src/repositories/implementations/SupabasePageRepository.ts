@@ -108,11 +108,17 @@ export class SupabasePageRepository implements IPageRepository {
     return tryCatchAsync(async () => {
       const { pageData, userId, chatbotContext } = dto;
 
-      const slugResult = await this.getUserSlug(userId);
-      if (!slugResult.success) {
-        throw (slugResult as { success: false; error: Error }).error;
+      // Target the page being edited; fall back to the account username slug.
+      const ownSlug = typeof pageData.slug === 'string' ? pageData.slug.trim() : '';
+      let slug = ownSlug;
+      if (!slug) {
+        const slugResult = await this.getUserSlug(userId);
+        if (!slugResult.success) {
+          throw (slugResult as { success: false; error: Error }).error;
+        }
+        slug = (slugResult as { success: true; data: string }).data;
       }
-      const slug = (slugResult as { success: true; data: string }).data;
+
 
       // Extract profile block data
       const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;

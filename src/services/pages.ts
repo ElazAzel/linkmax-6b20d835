@@ -460,7 +460,11 @@ export async function savePage(
   chatbotContext?: string
 ): Promise<SavePageResult> {
   try {
-    const slug = await getUserSlug(userId);
+    // Always target the page currently being edited. Only fall back to the
+    // account username slug when the page has no slug of its own yet.
+    const ownSlug = typeof pageData.slug === 'string' ? pageData.slug.trim() : '';
+    const slug = ownSlug.length > 0 ? ownSlug : await getUserSlug(userId);
+
 
     // Extract profile block data
     const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;
