@@ -4,7 +4,7 @@
 -- =====================================================
 
 -- 1. Fix increment_block_clicks (was no-op)
-CREATE OR REPLACE FUNCTION public.increment_block_clicks(block_uuid text)
+CREATE OR REPLACE FUNCTION public.increment_block_clicks(block_id text)
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -13,7 +13,7 @@ AS $$
 BEGIN
   UPDATE public.blocks
   SET click_count = COALESCE(click_count, 0) + 1
-  WHERE id = block_uuid::uuid;
+  WHERE id = block_id::uuid;
 END;
 $$;
 
