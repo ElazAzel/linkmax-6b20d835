@@ -10,6 +10,13 @@ CREATE TABLE IF NOT EXISTS public.leads (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- The legacy CRM migration may have created public.leads already. Reconcile
+-- the page-form fields before creating indexes and policies below.
+ALTER TABLE public.leads
+    ADD COLUMN IF NOT EXISTS page_id UUID REFERENCES public.pages(id) ON DELETE CASCADE,
+    ADD COLUMN IF NOT EXISTS block_id TEXT,
+    ADD COLUMN IF NOT EXISTS form_data JSONB NOT NULL DEFAULT '{}'::jsonb;
+
 -- Add indexes
 CREATE INDEX IF NOT EXISTS idx_leads_page_id ON public.leads(page_id);
 CREATE INDEX IF NOT EXISTS idx_leads_status ON public.leads(status);
