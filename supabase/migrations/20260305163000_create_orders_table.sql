@@ -41,4 +41,4 @@ CREATE POLICY "Only admins/service can manage orders"
 
 -- Trigger for updated_at
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.orders
-    FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

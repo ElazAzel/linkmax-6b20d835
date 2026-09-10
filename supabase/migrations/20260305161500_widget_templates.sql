@@ -37,4 +37,4 @@ CREATE POLICY "Only admins can modify widget templates"
 
 -- Trigger for updated_at
 CREATE TRIGGER handle_updated_at_widgets BEFORE UPDATE ON public.widget_templates
-    FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

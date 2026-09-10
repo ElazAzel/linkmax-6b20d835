@@ -32,4 +32,4 @@ CREATE POLICY "Only admins can modify page templates"
 
 -- Trigger for updated_at
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.page_templates
-    FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
