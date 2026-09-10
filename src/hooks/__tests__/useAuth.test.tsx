@@ -76,14 +76,18 @@ describe('useAuth', () => {
 
     describe('initialization', () => {
         it('throws error when used outside AuthProvider', () => {
+            const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
             expect(() => {
                 renderHook(() => useAuth());
             }).toThrow('useAuth must be used within an AuthProvider');
+            expect(consoleError).toHaveBeenCalled();
+            consoleError.mockRestore();
         });
 
-        it('starts with loading state', () => {
+        it('starts with loading state', async () => {
             const { result } = renderHook(() => useAuth(), { wrapper });
             expect(result.current.loading).toBe(true);
+            await waitFor(() => expect(result.current.loading).toBe(false));
         });
 
         it('sets user to null when no session exists', async () => {

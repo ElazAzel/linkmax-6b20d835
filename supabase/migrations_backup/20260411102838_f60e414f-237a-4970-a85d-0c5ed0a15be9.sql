@@ -1,1 +1,0 @@
-ALTER TABLE public.analytics DROP CONSTRAINT IF EXISTS analytics_event_type_check;

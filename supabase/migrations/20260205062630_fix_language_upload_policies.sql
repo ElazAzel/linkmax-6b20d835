@@ -3,10 +3,4 @@
 
 CREATE POLICY "Admins can update upload history"
   ON public.language_upload_history FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.users
-      WHERE users.id = auth.uid()
-      AND users.role = 'admin'
-    )
-  );
+  USING (public.has_role(auth.uid(), 'admin'::app_role));

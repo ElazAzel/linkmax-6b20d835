@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // <define:import.meta.env>
-var define_import_meta_env_default = { VITE_SUPABASE_PROJECT_ID: "pphdcfxucfndmwulpfwv", VITE_SUPABASE_PUBLISHABLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", VITE_SUPABASE_URL: "https://pphdcfxucfndmwulpfwv.supabase.co", VITE_PAYMENTS_CLIENT_TOKEN: "live_b0e4c30cfecad95eabfeeb4eaba", VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", MODE: "production", BASE_URL: "/", DEV: false, PROD: true, SSR: false };
+var define_import_meta_env_default = { VITE_SUPABASE_PROJECT_ID: "pphdcfxucfndmwulpfwv", VITE_SUPABASE_URL: "https://pphdcfxucfndmwulpfwv.supabase.co", MODE: "production", BASE_URL: "/", DEV: false, PROD: true, SSR: false };
 
 // src/lib/mcp/index.ts
 import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.23.0";

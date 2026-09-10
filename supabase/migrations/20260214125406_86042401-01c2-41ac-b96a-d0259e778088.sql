@@ -1,6 +1,7 @@
 
--- Create partners table
-CREATE TABLE public.partners (
+-- The earlier partners migration already creates this table. Keep this historical
+-- migration replay-safe while retaining its policy contract.
+CREATE TABLE IF NOT EXISTS public.partners (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   logo_url TEXT NOT NULL,
@@ -15,12 +16,14 @@ CREATE TABLE public.partners (
 ALTER TABLE public.partners ENABLE ROW LEVEL SECURITY;
 
 -- Public read access for landing page
+DROP POLICY IF EXISTS "Partners are viewable by everyone" ON public.partners;
 CREATE POLICY "Partners are viewable by everyone"
   ON public.partners
   FOR SELECT
   USING (true);
 
 -- Admin-only write access using has_role()
+DROP POLICY IF EXISTS "Partners are editable by admins only" ON public.partners;
 CREATE POLICY "Partners are editable by admins only"
   ON public.partners
   FOR ALL

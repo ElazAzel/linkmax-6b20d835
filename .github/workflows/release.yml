@@ -1,0 +1,214 @@
+name: Release Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: SemVer without the v prefix
+        required: true
+        default: 3.1.1
+      commit_sha:
+        description: Exact green commit SHA from main
+        required: true
+      backup_confirmed:
+        description: Confirm a recoverable Supabase backup or PITR checkpoint exists
+        required: true
+        type: boolean
+        default: false
+      lovable_deployment_id:
+        description: Successful Lovable mirror deployment identifier
+        required: true
+      lovable_preview_url:
+        description: Lovable preview URL for the exact release commit
+        required: true
+
+concurrency:
+  group: release-production
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+env:
+  NODE_VERSION: "22"
+  SUPABASE_CLI_VERSION: "2.116.0"
+  WRANGLER_VERSION: "4.127.1"
+
+jobs:
+  release:
+    name: Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: production
+    steps:
+      - name: Require explicit backup checkpoint
+        if: ${{ inputs.backup_confirmed != true }}
+        run: |
+          echo "::error::Confirm the managed Supabase backup or PITR checkpoint before release."
+          exit 1
+      - name: Checkout exact release commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.commit_sha }}
+          fetch-depth: 0
+      - name: Validate immutable release identity
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$RELEASE_SHA"
+          test "$(git branch -r --contains "$RELEASE_SHA" | grep -c 'origin/main')" -gt 0
+          test "$(node -p "require('./package.json').version")" = "$RELEASE_VERSION"
+          test "$(git tag -l "v$RELEASE_VERSION")" = ""
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@ab058987d8d6c725971f6cf9d0b5c98467e30bd1 # v1
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+      - run: npm ci
+      - name: Validate production credentials
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_WORKER_SUPABASE_PROJECT: ${{ secrets.CF_WORKER_SUPABASE_PROJECT }}
+          CF_WORKER_SUPABASE_ANON_KEY: ${{ secrets.CF_WORKER_SUPABASE_ANON_KEY }}
+        run: |
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_PROJECT_ID SUPABASE_DB_PASSWORD CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CF_WORKER_SUPABASE_PROJECT CF_WORKER_SUPABASE_ANON_KEY; do
+            test -n "${!name}" || { echo "::error::Missing production secret: $name"; exit 1; }
+          done
+      - name: Build production assets once
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm run build
+      - name: Create release artifacts
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          mkdir -p release-artifacts
+          (cd dist && zip -qr "../release-artifacts/linkmax-web-v$RELEASE_VERSION.zip" .)
+          npx --yes @cyclonedx/cyclonedx-npm@6.0.1 --output-file release-artifacts/bom.cdx.json
+          (cd release-artifacts && sha256sum linkmax-web-*.zip bom.cdx.json > SHA256SUMS)
+      - name: Attest web artifact provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: release-artifacts/linkmax-web-v${{ inputs.version }}.zip
+      - name: Upload Cloudflare version and smoke-test preview
+        id: cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WORKER_PROJECT: ${{ secrets.CF_WORKER_SUPABASE_PROJECT }}
+          WORKER_ANON_KEY: ${{ secrets.CF_WORKER_SUPABASE_ANON_KEY }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          SECRETS_FILE="$RUNNER_TEMP/worker-secrets.json"
+          jq -n --arg project "$WORKER_PROJECT" --arg key "$WORKER_ANON_KEY" '{SUPABASE_PROJECT:$project,SUPABASE_ANON_KEY:$key}' > "$SECRETS_FILE"
+          chmod 600 "$SECRETS_FILE"
+          OUTPUT=$(npx --yes wrangler@4.127.1 versions upload --cwd cloudflare-worker --strict --preview-alias "release-${RELEASE_VERSION//./-}" --tag "v$RELEASE_VERSION" --message "release v$RELEASE_VERSION ($RELEASE_SHA)" --secrets-file "$SECRETS_FILE" --var "APP_VERSION:$RELEASE_VERSION" --var "APP_ENVIRONMENT:production" --var "GIT_SHA:$RELEASE_SHA")
+          printf '%s\n' "$OUTPUT"
+          VERSION_ID=$(printf '%s\n' "$OUTPUT" | grep -Eo '[0-9a-f]{8}-[0-9a-f-]{27,}' | tail -1)
+          PREVIEW_URL=$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^ ]+workers\.dev' | tail -1)
+          test -n "$VERSION_ID"
+          test -n "$PREVIEW_URL"
+          curl --fail --silent --show-error "$PREVIEW_URL/" -o /dev/null
+          curl --fail --silent --show-error "$PREVIEW_URL/auth" -o /dev/null
+          curl --fail --silent --show-error "$PREVIEW_URL/pricing" -o /dev/null
+          curl --fail --silent --show-error "$PREVIEW_URL/sitemap.xml" -o /dev/null
+          curl --fail --silent --show-error "$PREVIEW_URL/.well-known/linkmax-release.json" | jq -e --arg version "$RELEASE_VERSION" --arg sha "$RELEASE_SHA" '.version == $version and .commitSha == $sha and .environment == "production"'
+          echo "version_id=$VERSION_ID" >> "$GITHUB_OUTPUT"
+          echo "preview_url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
+          rm -f "$SECRETS_FILE"
+      - name: Capture migration checkpoint
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: supabase migration list --project-ref "${{ secrets.SUPABASE_PROJECT_ID }}" | tee release-artifacts/supabase-migrations-before.txt
+      - name: Apply production database migrations
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: supabase db push --project-ref "${{ secrets.SUPABASE_PROJECT_ID }}" --password "$SUPABASE_DB_PASSWORD"
+      - name: Deploy production Edge Functions
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase functions deploy --project-ref "${{ secrets.SUPABASE_PROJECT_ID }}"
+      - name: Verify production backend health
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          curl --fail --silent --show-error "$SUPABASE_URL/rest/v1/" -H "apikey: $SUPABASE_KEY" -o /dev/null
+      - name: Promote exact Cloudflare version
+        id: promote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx --yes wrangler@4.127.1 versions deploy "${{ steps.cloudflare.outputs.version_id }}@100%" --cwd cloudflare-worker --yes --message "production v${{ inputs.version }}"
+          echo "promoted=true" >> "$GITHUB_OUTPUT"
+      - name: Production smoke tests
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
+        run: |
+          curl --fail --silent --show-error https://lnkmx.my/ -o /dev/null
+          curl --fail --silent --show-error https://lnkmx.my/auth -o /dev/null
+          curl --fail --silent --show-error https://lnkmx.my/pricing -o /dev/null
+          curl --fail --silent --show-error https://lnkmx.my/demo-nails -D /tmp/profile-headers -o /dev/null
+          grep -qi '^x-ssr-rendered: true' /tmp/profile-headers
+          curl --fail --silent --show-error https://lnkmx.my/sitemap.xml -o /dev/null
+          curl --fail --silent --show-error https://lnkmx.my/.well-known/linkmax-release.json | jq -e --arg version "$RELEASE_VERSION" --arg sha "$RELEASE_SHA" '.version == $version and .commitSha == $sha and .environment == "production"'
+      - name: Roll back Cloudflare after a failed production smoke test
+        if: ${{ failure() && steps.promote.outputs.promoted == 'true' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4.127.1 rollback --cwd cloudflare-worker --yes --message "automatic rollback after failed v${{ inputs.version }} smoke test"
+      - name: Verify and record Lovable mirror deployment
+        env:
+          LOVABLE_DEPLOYMENT_ID: ${{ inputs.lovable_deployment_id }}
+          LOVABLE_PREVIEW_URL: ${{ inputs.lovable_preview_url }}
+        run: |
+          test -n "$LOVABLE_DEPLOYMENT_ID"
+          test -n "$LOVABLE_PREVIEW_URL"
+          curl --fail --silent --show-error --location "$LOVABLE_PREVIEW_URL" -D /tmp/lovable-headers -o /dev/null
+          ACTUAL_DEPLOYMENT_ID=$(awk 'BEGIN{IGNORECASE=1} /^x-deployment-id:/ {print $2}' /tmp/lovable-headers | tr -d '\r' | tail -1)
+          test "$ACTUAL_DEPLOYMENT_ID" = "$LOVABLE_DEPLOYMENT_ID"
+          printf '%s\n' "$LOVABLE_DEPLOYMENT_ID" > release-artifacts/lovable-deployment-id.txt
+      - name: Create annotated tag and GitHub Release
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.version }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
+          CF_VERSION_ID: ${{ steps.cloudflare.outputs.version_id }}
+          LOVABLE_DEPLOYMENT_ID: ${{ inputs.lovable_deployment_id }}
+        run: |
+          git tag -a "v$RELEASE_VERSION" "$RELEASE_SHA" -m "LinkMAX v$RELEASE_VERSION"
+          git push origin "v$RELEASE_VERSION"
+          gh release create "v$RELEASE_VERSION" release-artifacts/linkmax-web-*.zip release-artifacts/SHA256SUMS release-artifacts/bom.cdx.json release-artifacts/supabase-migrations-before.txt release-artifacts/lovable-deployment-id.txt --verify-tag --title "LinkMAX v$RELEASE_VERSION" --generate-notes --notes "Cloudflare version: $CF_VERSION_ID
+          Lovable deployment: $LOVABLE_DEPLOYMENT_ID
+          Commit: $RELEASE_SHA"
+      - name: Remove orphaned tag if release publication fails
+        if: ${{ failure() && steps.publish.outcome == 'failure' }}
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: git push --delete origin "v$RELEASE_VERSION" || true
+      - name: Release summary
+        run: |
+          echo "### LinkMAX v${{ inputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Commit: ${{ inputs.commit_sha }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Cloudflare version: ${{ steps.cloudflare.outputs.version_id }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Lovable deployment: ${{ inputs.lovable_deployment_id }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Lovable preview: ${{ inputs.lovable_preview_url }}" >> "$GITHUB_STEP_SUMMARY"

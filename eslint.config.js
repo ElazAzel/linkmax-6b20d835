@@ -12,6 +12,9 @@ export default tseslint.config(
   {
     ignores: [
       "dist",
+      ".worktrees/**",
+      "android/**/build/**",
+      "ios/**/DerivedData/**",
       // Документация и примеры — не продакшен UI; i18n не требуется
       "docs/**",
       "e2e/**",

@@ -122,8 +122,8 @@ describe('useCloudPageState', () => {
     expect(result.current.saveStatus).toBe('pending');
 
     // Fast-forward 2 seconds for the debounce
-    act(() => {
-      vi.advanceTimersByTime(2000);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2000);
     });
 
     // Now it should be 'saving' or 'saved'

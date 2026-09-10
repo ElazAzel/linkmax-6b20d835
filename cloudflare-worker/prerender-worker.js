@@ -93,6 +93,33 @@ function isSpaPassthrough(firstSegment) {
   return SPA_ONLY_PREFIXES.has(firstSegment);
 }
 
+function fetchAssets(request, env) {
+  if (env?.ASSETS?.fetch) {
+    return env.ASSETS.fetch(request);
+  }
+
+  // Local tests and emergency development sessions may run without an assets
+  // binding. Production and staging always provide ASSETS via wrangler.toml.
+  return fetch(request);
+}
+
+function releaseIdentity(env) {
+  return Response.json(
+    {
+      version: env.APP_VERSION || 'unknown',
+      commitSha: env.GIT_SHA || 'unknown',
+      environment: env.APP_ENVIRONMENT || 'unknown',
+      cloudflareVersionId: env.CF_VERSION_METADATA?.id || 'unknown',
+    },
+    {
+      headers: {
+        'Cache-Control': 'no-store',
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    },
+  );
+}
+
 /**
  * Determine SSR target from pathname.
  * Returns null if route should not be SSR'd.
@@ -153,9 +180,13 @@ async function handleRequest(request, env) {
     return Response.redirect(url.toString(), 301);
   }
 
+  if (isPlatformDomain && pathname === '/.well-known/linkmax-release.json') {
+    return releaseIdentity(env);
+  }
+
   const SUPABASE_PROJECT = env.SUPABASE_PROJECT;
   if (!SUPABASE_PROJECT) {
-    return fetch(request);
+    return fetchAssets(request, env);
   }
 
   const FUNCTION_URL = `https://${SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
@@ -208,7 +239,7 @@ async function handleRequest(request, env) {
         console.error('[Worker] Custom domain SSR error:', e);
       }
     }
-    return fetch(request);
+    return fetchAssets(request, env);
   }
 
   // Sitemap proxy
@@ -234,12 +265,12 @@ async function handleRequest(request, env) {
 
   // Static files → origin
   if (isStaticFile(pathname)) {
-    return fetch(request);
+    return fetchAssets(request, env);
   }
 
   // robots.txt → origin
   if (pathname === '/robots.txt' || pathname === '/llms.txt') {
-    return fetch(request);
+    return fetchAssets(request, env);
   }
 
   // Determine SSR target
@@ -247,7 +278,7 @@ async function handleRequest(request, env) {
 
   if (!ssrTarget) {
     // Not an SSR route → serve SPA from origin
-    const response = await fetch(request);
+    const response = await fetchAssets(request, env);
     // Add noindex for blacklisted routes
     const clean = pathname.replace(/^\/+/, '').split('/')[0];
     if (isPrivate(clean) && isBot(userAgent)) {
@@ -295,16 +326,12 @@ async function handleRequest(request, env) {
     });
   } catch (error) {
     console.error('[Worker] SSR error:', error);
-    return fetch(request);
+    return fetchAssets(request, env);
   }
 }
 
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request, globalThis));
-});
-
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     return handleRequest(request, env);
   }
 };

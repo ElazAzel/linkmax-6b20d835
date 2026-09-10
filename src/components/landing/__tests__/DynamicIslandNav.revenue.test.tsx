@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
@@ -11,8 +11,10 @@ vi.mock('@/hooks/ui/use-mobile', () => ({ useIsMobile: () => false }));
 vi.mock('@/components/translation/LanguageSwitcher', () => ({ LanguageSwitcher: () => <span>language</span> }));
 
 describe('DynamicIslandNav revenue navigation', () => {
-  it('links to the new client-journey sections', () => {
-    render(<DynamicIslandNav onLogin={vi.fn()} onSignup={vi.fn()} />);
+  it('links to the new client-journey sections', async () => {
+    await act(async () => {
+      render(<DynamicIslandNav onLogin={vi.fn()} onSignup={vi.fn()} />);
+    });
 
     expect(screen.getByRole('button', { name: 'Результат' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Как работает' })).toBeInTheDocument();
