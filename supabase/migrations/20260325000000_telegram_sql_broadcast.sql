@@ -12,20 +12,14 @@ ALTER TABLE public.bot_config ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Service role has full access" ON public.bot_config
     FOR ALL TO service_role USING (true) WITH CHECK (true);
 
--- Admin can manage config (check role from user_profiles)
+-- Admin can manage config through the canonical role helper.
 CREATE POLICY "Admins can manage bot_config" ON public.bot_config
     FOR ALL TO authenticated
     USING (
-        EXISTS (
-            SELECT 1 FROM public.user_profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
+        public.has_role(auth.uid(), 'admin')
     )
     WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM public.user_profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
+        public.has_role(auth.uid(), 'admin')
     );
 
 -- Function to send broadcast via SQL (using pg_net)
