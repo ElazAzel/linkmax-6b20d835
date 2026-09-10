@@ -31,7 +31,7 @@ CREATE POLICY "Only admins can modify widget templates"
         EXISTS (
             SELECT 1 FROM public.user_profiles
             WHERE id = auth.uid()
-            AND is_admin = true
+            AND public.has_role(auth.uid(), 'admin')
         )
     );
 

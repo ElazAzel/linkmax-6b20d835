@@ -35,7 +35,7 @@ CREATE POLICY "Only admins/service can manage orders"
         EXISTS (
             SELECT 1 FROM public.user_profiles
             WHERE id = auth.uid()
-            AND is_admin = true
+            AND public.has_role(auth.uid(), 'admin')
         )
     );
 
