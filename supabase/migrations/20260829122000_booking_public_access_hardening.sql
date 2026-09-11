@@ -666,7 +666,7 @@ BEGIN
     'create:' || p_idempotency_key
   );
 
-  v_token := encode(gen_random_bytes(32), 'hex');
+  v_token := encode(extensions.gen_random_bytes(32), 'hex');
 
   INSERT INTO public.booking_access_tokens (
     booking_id,
