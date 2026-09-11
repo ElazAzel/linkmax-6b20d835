@@ -14,7 +14,10 @@ WITH CHECK (
   )
 );
 
--- 2. Add RLS policy to realtime.messages (Zone Broadcast Protection)
+-- 2. Define the topic-check helper for environments where Realtime policies
+-- are managed by the project owner. The managed `realtime.messages` table is
+-- not owned by the application migration role, so its RLS cannot be changed
+-- during a local or hosted migration replay.
 CREATE OR REPLACE FUNCTION public.check_realtime_topic_access(topic text)
 RETURNS boolean AS $$
 DECLARE
@@ -31,17 +34,6 @@ BEGIN
     RETURN true;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
-ALTER TABLE realtime.messages ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Zone members subscribe protection" ON realtime.messages;
-CREATE POLICY "Zone members subscribe protection"
-    ON realtime.messages
-    FOR SELECT
-    TO authenticated
-    USING (
-        public.check_realtime_topic_access(topic)
-    );
 
 -- 3. Prepare api_keys table for Developer Portal
 CREATE TABLE IF NOT EXISTS public.api_keys (
