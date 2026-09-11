@@ -40,7 +40,7 @@ BEGIN
     -- a. Remove references that are no longer in the block
     DELETE FROM public.media_references
     WHERE block_id = NEW.id
-    AND media_asset_id NOT IN (
+    AND asset_id NOT IN (
         SELECT id FROM public.media_assets WHERE url = ANY(found_urls)
     );
     
@@ -54,9 +54,9 @@ BEGIN
         RETURNING id INTO asset_id;
         
         -- Create reference if not exists
-        INSERT INTO public.media_references (block_id, media_asset_id)
+        INSERT INTO public.media_references (block_id, asset_id)
         VALUES (NEW.id, asset_id)
-        ON CONFLICT (block_id, media_asset_id) DO NOTHING;
+        ON CONFLICT (block_id, asset_id) DO NOTHING;
     END LOOP;
     
     RETURN NEW;
@@ -81,12 +81,12 @@ BEGIN
         UPDATE public.media_assets 
         SET reference_count = reference_count + 1,
             deleted_at = NULL
-        WHERE id = NEW.media_asset_id;
+        WHERE id = NEW.asset_id;
     ELSIF TG_OP = 'DELETE' THEN
         UPDATE public.media_assets 
         SET reference_count = GREATEST(0, reference_count - 1),
             deleted_at = CASE WHEN reference_count - 1 <= 0 THEN now() ELSE NULL END
-        WHERE id = OLD.media_asset_id;
+        WHERE id = OLD.asset_id;
     END IF;
     RETURN NULL;
 END;
