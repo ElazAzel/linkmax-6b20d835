@@ -587,7 +587,7 @@ BEGIN
   v_identity_secret := NULLIF(current_setting('app.settings.identity_hash_secret', true), '');
   v_identity_hash := CASE
     WHEN v_identity_source IS NOT NULL AND v_identity_secret IS NOT NULL
-      THEN encode(hmac(v_identity_source, v_identity_secret, 'sha256'), 'hex')
+      THEN encode(extensions.hmac(v_identity_source, v_identity_secret, 'sha256'), 'hex')
     ELSE NULL
   END;
 
