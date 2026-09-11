@@ -1,5 +1,5 @@
 
-CREATE TABLE public.telegram_bot_settings (
+CREATE TABLE IF NOT EXISTS public.telegram_bot_settings (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   chat_id text NOT NULL UNIQUE,
   active_page_id uuid REFERENCES public.pages(id) ON DELETE SET NULL,
@@ -9,8 +9,19 @@ CREATE TABLE public.telegram_bot_settings (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- This table already exists from the original Telegram settings migration.
+-- Reconcile the newer session fields without replacing existing chat settings.
+ALTER TABLE public.telegram_bot_settings
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS active_page_id uuid REFERENCES public.pages(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS pending_action text;
+
+ALTER TABLE public.telegram_bot_settings
+  ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
 ALTER TABLE public.telegram_bot_settings ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Service role full access" ON public.telegram_bot_settings;
 CREATE POLICY "Service role full access" ON public.telegram_bot_settings
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 
