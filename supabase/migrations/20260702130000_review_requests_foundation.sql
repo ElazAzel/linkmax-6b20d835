@@ -73,7 +73,7 @@ SET search_path = public
 AS $$
   SELECT CASE
     WHEN p_token IS NULL OR btrim(p_token) = '' THEN NULL
-    ELSE encode(digest(btrim(p_token), 'sha256'), 'hex')
+    ELSE encode(extensions.digest(btrim(p_token), 'sha256'), 'hex')
   END;
 $$;
 

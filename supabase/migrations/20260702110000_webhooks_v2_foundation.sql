@@ -382,7 +382,7 @@ BEGIN
   END IF;
 
   v_raw_key := 'lk_live_' || encode(gen_random_bytes(32), 'hex');
-  v_key_hash := encode(digest(v_raw_key, 'sha256'), 'hex');
+  v_key_hash := encode(extensions.digest(v_raw_key, 'sha256'), 'hex');
   v_key_prefix := left(v_raw_key, 16);
 
   INSERT INTO public.api_keys (
@@ -446,7 +446,7 @@ BEGIN
     RETURN;
   END IF;
 
-  v_hash := encode(digest(p_api_key, 'sha256'), 'hex');
+  v_hash := encode(extensions.digest(p_api_key, 'sha256'), 'hex');
 
   SELECT *
   INTO v_key
