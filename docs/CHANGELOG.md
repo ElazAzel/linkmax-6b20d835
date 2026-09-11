@@ -369,7 +369,7 @@ Micro-Animations (WOW Factor)
 
 - **Architectural Unification**: Eliminated "Architectural Schizophrenia" by migrating all business logic from legacy layers (`src/domain`, `src/repositories`, `src/use-cases`) into a unified **Service-Pattern** architecture in `src/services`.
 - **Logic Migration**: Centralized validation, premium calculations, and page publishing rules into `user.ts` and `pages.ts` services.
-- **Security Hardening**: Created `20260402160000_platform_audit_hardening.sql` to enforce Row Level Security (RLS) on `blocks`, `user_wallets`, and `media_assets`.
+- **Security Hardening**: Created `20260402160100_platform_audit_hardening.sql` to enforce Row Level Security (RLS) on `blocks`, `user_wallets`, and `media_assets`.
 - **Type Safety**: Normalized `extended-types.ts` by replacing `any` with strict `Json` and interface types for 5+ critical tables.
 - **Test Consolidation**: Merged domain unit tests into service-level test suites, maintaining 100% logic verification during refactoring.
 - **Cleanup**: Marked legacy architectural folders for removal (deletion of `src/domain`, etc. pending environment access).
