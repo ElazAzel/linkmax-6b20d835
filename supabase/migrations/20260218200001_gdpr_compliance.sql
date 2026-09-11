@@ -154,7 +154,7 @@ BEGIN
 
   -- Delete social data (if tables exist)
   BEGIN
-    DELETE FROM collaborations WHERE user_id = p_user_id OR collaborator_id = p_user_id;
+    DELETE FROM collaborations WHERE requester_id = p_user_id OR target_id = p_user_id;
   EXCEPTION WHEN undefined_table THEN NULL;
   END;
 
