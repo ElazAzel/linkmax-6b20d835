@@ -63,12 +63,43 @@ BEGIN
     RAISE EXCEPTION 'not_authorized' USING ERRCODE = '42501';
   END IF;
 
-  v_code := 'team-' || lower(encode(gen_random_bytes(8), 'hex'));
+  v_code := 'team-' || lower(encode(extensions.gen_random_bytes(8), 'hex'));
 
   INSERT INTO public.team_secrets (team_id, invite_code)
   VALUES (p_team_id, v_code)
   ON CONFLICT (team_id) DO UPDATE SET invite_code = EXCLUDED.invite_code, updated_at = now();
 
   RETURN v_code;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.regenerate_zone_calendar_feed_token(p_zone_id uuid)
+RETURNS text
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_user_id uuid := auth.uid();
+  v_token   text;
+BEGIN
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'not_authenticated' USING ERRCODE = '28000';
+  END IF;
+
+  IF NOT public.is_zone_admin(p_zone_id, v_user_id)
+     AND NOT public.has_role(v_user_id, 'admin'::app_role) THEN
+    RAISE EXCEPTION 'not_authorized' USING ERRCODE = '42501';
+  END IF;
+
+  v_token := encode(extensions.gen_random_bytes(24), 'hex');
+
+  INSERT INTO public.zone_secrets (zone_id, calendar_feed_token, updated_at)
+  VALUES (p_zone_id, v_token, now())
+  ON CONFLICT (zone_id) DO UPDATE
+    SET calendar_feed_token = EXCLUDED.calendar_feed_token,
+        updated_at = now();
+
+  RETURN v_token;
 END;
 $$;

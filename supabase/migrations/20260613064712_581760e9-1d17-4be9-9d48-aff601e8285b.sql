@@ -123,7 +123,7 @@ CREATE OR REPLACE FUNCTION public.tg_init_zone_secret()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 BEGIN
   INSERT INTO public.zone_secrets (zone_id, calendar_feed_token)
-  VALUES (NEW.id, encode(gen_random_bytes(24), 'hex'))
+  VALUES (NEW.id, encode(extensions.gen_random_bytes(24), 'hex'))
   ON CONFLICT (zone_id) DO NOTHING;
   RETURN NEW;
 END;
