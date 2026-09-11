@@ -1,6 +1,6 @@
 -- Seed 10 starter templates for missing niches
-INSERT INTO public.templates (name, category, description, blocks, is_public, is_premium, sort_order) VALUES
-('Преподаватель / Курс', 'education', 'Структура для преподавателей, репетиторов и онлайн-курсов', '[
+INSERT INTO public.templates (id, name, category, description, blocks, is_public, is_premium, sort_order) VALUES
+('starter-education', 'Преподаватель / Курс', 'education', 'Структура для преподавателей, репетиторов и онлайн-курсов', '[
   {"type":"profile","name":"Имя преподавателя","bio":"📚 Преподаватель | Помогаю достигать целей через знания"},
   {"type":"text","content":"О направлении","style":"heading"},
   {"type":"text","content":"Здесь короткое описание вашей методики и результата для ученика.","style":"paragraph"},
@@ -10,7 +10,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"whatsapp","username":"+77001234567"}]}
 ]'::jsonb, true, false, 7),
 
-('Медицина / Wellness', 'health', 'Шаблон для психологов, терапевтов и wellness-специалистов', '[
+('starter-health', 'Медицина / Wellness', 'health', 'Шаблон для психологов, терапевтов и wellness-специалистов', '[
   {"type":"profile","name":"Имя специалиста","bio":"🌿 Психолог | Безопасное пространство для роста"},
   {"type":"text","content":"С чем работаю","style":"heading"},
   {"type":"text","content":"Тревога, отношения, выгорание, поиск себя.","style":"paragraph"},
@@ -20,7 +20,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"telegram","username":"username"}]}
 ]'::jsonb, true, false, 8),
 
-('Художник / Креатор', 'art', 'Шаблон для художников, иллюстраторов и креаторов', '[
+('starter-art', 'Художник / Креатор', 'art', 'Шаблон для художников, иллюстраторов и креаторов', '[
   {"type":"profile","name":"Имя автора","bio":"🎨 Иллюстратор | Создаю миры в цвете"},
   {"type":"carousel","title":"Портфолио","images":[{"url":"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800","alt":"Работа 1"},{"url":"https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=800","alt":"Работа 2"}]},
   {"type":"text","content":"Что я делаю","style":"heading"},
@@ -29,7 +29,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"telegram","username":"username"}]}
 ]'::jsonb, true, false, 9),
 
-('Шеф / Кулинар', 'food', 'Шаблон для шефов, кондитеров и фуд-блогеров', '[
+('starter-food', 'Шеф / Кулинар', 'food', 'Шаблон для шефов, кондитеров и фуд-блогеров', '[
   {"type":"profile","name":"Имя шефа","bio":"🍳 Шеф-повар | Авторская кухня и мастер-классы"},
   {"type":"carousel","title":"Меню","images":[{"url":"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800","alt":"Блюдо 1"},{"url":"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800","alt":"Блюдо 2"}]},
   {"type":"pricing","items":[{"id":"1","title":"Кейтеринг на 10 персон","price":"80000","description":"3-блюдное меню"},{"id":"2","title":"Мастер-класс","price":"15000","description":"2 часа с дегустацией"}]},
@@ -38,7 +38,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"whatsapp","username":"+77001234567"}]}
 ]'::jsonb, true, false, 10),
 
-('Музыкант / Артист', 'music', 'Шаблон для музыкантов, DJ и артистов', '[
+('starter-music', 'Музыкант / Артист', 'music', 'Шаблон для музыкантов, DJ и артистов', '[
   {"type":"profile","name":"Имя артиста","bio":"🎵 Music producer | New track out now"},
   {"type":"video","url":"https://www.youtube.com/watch?v=dQw4w9WgXcQ","title":"Latest video"},
   {"type":"link","title":"🎧 Spotify","url":"https://open.spotify.com/","icon":"globe"},
@@ -48,7 +48,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"telegram","username":"username"}]}
 ]'::jsonb, true, false, 11),
 
-('Стилист / Fashion', 'fashion', 'Шаблон для стилистов и модных экспертов', '[
+('starter-fashion', 'Стилист / Fashion', 'fashion', 'Шаблон для стилистов и модных экспертов', '[
   {"type":"profile","name":"Имя стилиста","bio":"👗 Персональный стилист | Подберу образ под вас"},
   {"type":"carousel","title":"Лук-бук","images":[{"url":"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800","alt":"Образ 1"},{"url":"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800","alt":"Образ 2"}]},
   {"type":"pricing","items":[{"id":"1","title":"Разбор гардероба","price":"30000","description":"2 часа онлайн или дома"},{"id":"2","title":"Шопинг-сопровождение","price":"45000","description":"3 часа с подбором"}]},
@@ -57,7 +57,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"whatsapp","username":"+77001234567"}]}
 ]'::jsonb, true, false, 12),
 
-('Travel / Гид', 'travel', 'Шаблон для тревел-блогеров и гидов', '[
+('starter-travel', 'Travel / Гид', 'travel', 'Шаблон для тревел-блогеров и гидов', '[
   {"type":"profile","name":"Имя гида","bio":"✈️ Travel guide | Авторские туры по Казахстану"},
   {"type":"carousel","title":"Маршруты","images":[{"url":"https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800","alt":"Природа"},{"url":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800","alt":"Горы"}]},
   {"type":"pricing","items":[{"id":"1","title":"Тур в Чарын","price":"25000","description":"1 день, группа до 6 человек"},{"id":"2","title":"3-дневный тур по Алматы","price":"95000","description":"Все включено"}]},
@@ -66,7 +66,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"whatsapp","username":"+77001234567"}]}
 ]'::jsonb, true, false, 13),
 
-('Недвижимость', 'realestate', 'Шаблон для риелторов и агентов недвижимости', '[
+('starter-realestate', 'Недвижимость', 'realestate', 'Шаблон для риелторов и агентов недвижимости', '[
   {"type":"profile","name":"Имя риелтора","bio":"🏠 Риелтор | Помогу найти дом мечты"},
   {"type":"text","content":"Услуги","style":"heading"},
   {"type":"pricing","items":[{"id":"1","title":"Подбор квартиры","price":"50000","description":"Полное сопровождение сделки"},{"id":"2","title":"Оценка недвижимости","price":"15000","description":"Профессиональный отчёт"}]},
@@ -76,7 +76,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"whatsapp","username":"+77001234567"}]}
 ]'::jsonb, true, false, 14),
 
-('События / Ивенты', 'events', 'Шаблон для организаторов событий и продажи билетов', '[
+('starter-events', 'События / Ивенты', 'events', 'Шаблон для организаторов событий и продажи билетов', '[
   {"type":"profile","name":"Название события","bio":"🎉 Главное событие года"},
   {"type":"countdown","title":"До начала события","targetDate":"2026-12-31T19:00:00Z"},
   {"type":"text","content":"О событии","style":"heading"},
@@ -86,7 +86,7 @@ INSERT INTO public.templates (name, category, description, blocks, is_public, is
   {"type":"messenger","messengers":[{"platform":"telegram","username":"username"}]}
 ]'::jsonb, true, false, 15),
 
-('Универсальный профиль', 'other', 'Универсальный шаблон для любой деятельности', '[
+('starter-other', 'Универсальный профиль', 'other', 'Универсальный шаблон для любой деятельности', '[
   {"type":"profile","name":"Ваше имя","bio":"✨ Расскажите коротко о себе"},
   {"type":"text","content":"Чем я занимаюсь","style":"heading"},
   {"type":"text","content":"Опишите вашу деятельность 2-3 предложениями.","style":"paragraph"},
