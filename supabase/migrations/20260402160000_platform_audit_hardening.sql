@@ -78,12 +78,12 @@ ALTER TABLE public.media_assets ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Users can view own media assets" ON public.media_assets;
 CREATE POLICY "Users can view own media assets"
 ON public.media_assets FOR SELECT
-USING (auth.uid() = user_id);
+USING (auth.uid() = owner_id);
 
 DROP POLICY IF EXISTS "Users can manage own media assets" ON public.media_assets;
 CREATE POLICY "Users can manage own media assets"
 ON public.media_assets FOR ALL
-USING (auth.uid() = user_id);
+USING (auth.uid() = owner_id);
 
 -- media_references (Join table)
 ALTER TABLE public.media_references ENABLE ROW LEVEL SECURITY;
@@ -91,9 +91,35 @@ ALTER TABLE public.media_references ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Users can view own media references" ON public.media_references;
 CREATE POLICY "Users can view own media references"
 ON public.media_references FOR SELECT
-USING (auth.uid() = user_id);
+USING (
+  EXISTS (
+    SELECT 1
+      FROM public.media_assets
+     WHERE media_assets.id = media_references.asset_id
+       AND media_assets.owner_id = auth.uid()
+  )
+  OR EXISTS (
+    SELECT 1
+      FROM public.pages
+     WHERE pages.id = media_references.page_id
+       AND pages.user_id = auth.uid()
+  )
+);
 
 DROP POLICY IF EXISTS "Users can manage own media references" ON public.media_references;
 CREATE POLICY "Users can manage own media references"
 ON public.media_references FOR ALL
-USING (auth.uid() = user_id);
+USING (
+  EXISTS (
+    SELECT 1
+      FROM public.media_assets
+     WHERE media_assets.id = media_references.asset_id
+       AND media_assets.owner_id = auth.uid()
+  )
+  OR EXISTS (
+    SELECT 1
+      FROM public.pages
+     WHERE pages.id = media_references.page_id
+       AND pages.user_id = auth.uid()
+  )
+);
