@@ -124,13 +124,15 @@ BEGIN
   -- Most tables have ON DELETE CASCADE from auth.users, but we delete explicitly
   -- to handle any tables without proper FK cascading
 
+  -- Delete booking slots before their source blocks; block_id is stored as text.
+  DELETE FROM booking_slots WHERE block_id IN (
+    SELECT b.id::text FROM blocks b JOIN pages p ON b.page_id = p.id WHERE p.user_id = p_user_id
+  );
+
   -- Delete blocks (related to pages)
   DELETE FROM blocks WHERE page_id IN (SELECT id FROM pages WHERE user_id = p_user_id);
 
-  -- Delete booking slots and bookings
-  DELETE FROM booking_slots WHERE block_id IN (
-    SELECT b.id FROM blocks b JOIN pages p ON b.page_id = p.id WHERE p.user_id = p_user_id
-  );
+  -- Delete bookings
   DELETE FROM bookings WHERE owner_id = p_user_id;
 
   -- Delete leads and interactions
