@@ -39,3 +39,27 @@ CREATE POLICY "Members can view their org members" ON public.organization_member
 FOR SELECT USING (
   org_id IN (SELECT public.get_user_org_ids_for_members(auth.uid()))
 );
+
+-- Remove older policies whose direct or indirect reads of organization_members
+-- recurse through RLS while evaluating a membership query.
+DROP POLICY IF EXISTS "Members can view other members in the same org" ON public.organization_members;
+DROP POLICY IF EXISTS "Org owners can manage members" ON public.organization_members;
+
+CREATE OR REPLACE FUNCTION public.is_organization_owner(p_org_id uuid, p_user_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.organizations
+    WHERE id = p_org_id
+      AND owner_id = p_user_id
+  );
+$$;
+
+CREATE POLICY "Org owners can manage members" ON public.organization_members
+FOR ALL USING (public.is_organization_owner(org_id, auth.uid()))
+WITH CHECK (public.is_organization_owner(org_id, auth.uid()));

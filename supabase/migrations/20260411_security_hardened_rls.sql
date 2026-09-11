@@ -15,7 +15,7 @@ BEGIN
   RETURN EXISTS (
     SELECT 1 FROM public.user_roles
     WHERE user_id = p_user_id
-    AND role = p_role
+    AND role = p_role::public.app_role
   );
 END;
 $$;
