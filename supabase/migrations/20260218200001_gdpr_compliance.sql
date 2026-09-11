@@ -124,8 +124,11 @@ BEGIN
   -- Most tables have ON DELETE CASCADE from auth.users, but we delete explicitly
   -- to handle any tables without proper FK cascading
 
-  -- Delete analytics events
-  DELETE FROM page_events WHERE page_id IN (SELECT id FROM pages WHERE user_id = p_user_id);
+  -- Delete legacy analytics events when that optional table exists.
+  IF to_regclass('public.page_events') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.page_events WHERE page_id IN (SELECT id FROM public.pages WHERE user_id = $1)'
+      USING p_user_id;
+  END IF;
 
   -- Delete blocks (related to pages)
   DELETE FROM blocks WHERE page_id IN (SELECT id FROM pages WHERE user_id = p_user_id);

@@ -82,7 +82,7 @@ BEGIN
   END IF;
 
   v_code := 'team-' || lower(
-    encode(gen_random_bytes(8), 'hex')
+    encode(extensions.gen_random_bytes(8), 'hex')
   );
 
   UPDATE public.teams SET invite_code = v_code WHERE id = p_team_id;
@@ -170,7 +170,7 @@ BEGIN
     RAISE EXCEPTION 'not_authorized' USING ERRCODE = '42501';
   END IF;
 
-  v_token := encode(gen_random_bytes(24), 'hex');
+  v_token := encode(extensions.gen_random_bytes(24), 'hex');
 
   UPDATE public.zones
      SET calendar_feed_token = v_token

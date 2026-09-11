@@ -87,7 +87,7 @@ BEGIN
     RETURN jsonb_build_object('success', false, 'error', 'review_already_exists');
   END IF;
 
-  v_raw_token := 'rv_' || encode(gen_random_bytes(32), 'hex');
+  v_raw_token := 'rv_' || encode(extensions.gen_random_bytes(32), 'hex');
   v_token_hash := public.hash_review_request_token(v_raw_token);
   v_expires_at := now() + p_expires_in;
   v_zone_id := public.resolve_page_zone_id(v_booking.page_id);

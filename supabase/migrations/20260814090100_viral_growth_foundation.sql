@@ -326,7 +326,7 @@ BEGIN
     ON CONFLICT (link_id, visitor_key)
     DO UPDATE SET
       last_seen_at = now(),
-      converted_at = COALESCE(converted_at, now()),
+      converted_at = COALESCE(attribution.converted_at, now()),
       referred_user_id = COALESCE(attribution.referred_user_id, EXCLUDED.referred_user_id);
 
     INSERT INTO public.page_growth_rewards (
