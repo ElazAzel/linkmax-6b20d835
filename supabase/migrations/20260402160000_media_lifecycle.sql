@@ -38,9 +38,9 @@ BEGIN
     found_urls := public.extract_storage_urls(NEW.content);
     
     -- a. Remove references that are no longer in the block
-    DELETE FROM public.media_references
-    WHERE block_id = NEW.id
-    AND asset_id NOT IN (
+    DELETE FROM public.media_references AS media_ref
+    WHERE media_ref.block_id = NEW.id
+    AND media_ref.asset_id NOT IN (
         SELECT id FROM public.media_assets WHERE url = ANY(found_urls)
     );
     
