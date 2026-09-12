@@ -1064,7 +1064,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
           };
           Returns: undefined;
         };
-
+        apply_revenue_kit_v1: {
           Args: {
             p_page_id: string;
             p_draft: Json;
@@ -1072,6 +1072,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
           };
           Returns: Json;
         };
+
         create_public_booking: {
           Args: {
             p_page_id: string;
