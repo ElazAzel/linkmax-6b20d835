@@ -1055,7 +1055,16 @@ export type AppDatabase = Omit<Database, 'public'> & {
     Functions: Merge<
       Database['public']['Functions'],
       {
-        apply_revenue_kit_v1: {
+        admin_set_user_tier: {
+          Args: {
+            p_target_user_id: string;
+            p_tier: string;
+            p_expires_at?: string;
+            p_make_admin?: boolean;
+          };
+          Returns: undefined;
+        };
+
           Args: {
             p_page_id: string;
             p_draft: Json;
