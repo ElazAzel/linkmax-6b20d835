@@ -92,6 +92,43 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci
+      - name: Provision isolated E2E account
+        env:
+          E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
+          E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$E2E_TEST_EMAIL"
+          test -n "$E2E_TEST_PASSWORD"
+          test -n "$VITE_SUPABASE_URL"
+          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY"
+
+          payload="$(jq -n \
+            --arg email "$E2E_TEST_EMAIL" \
+            --arg password "$E2E_TEST_PASSWORD" \
+            --arg name "LinkMAX E2E" \
+            '{email:$email,password:$password,data:{full_name:$name}}')"
+          response_file="$(mktemp)"
+          status="$(curl --silent --show-error \
+            --output "$response_file" --write-out '%{http_code}' \
+            --request POST "$VITE_SUPABASE_URL/auth/v1/signup" \
+            --header "apikey: $VITE_SUPABASE_PUBLISHABLE_KEY" \
+            --header 'Content-Type: application/json' \
+            --data "$payload")"
+
+          if [[ "$status" == "200" || "$status" == "201" ]]; then
+            jq -e '.user.id and (.access_token | length > 0)' "$response_file" >/dev/null
+            echo 'Isolated E2E account is ready.'
+          elif jq -e '((.error_code // .code // "") == "user_already_exists") or ((.msg // .message // "") | test("already registered|already exists"; "i"))' "$response_file" >/dev/null; then
+            echo 'Isolated E2E account already exists.'
+          else
+            echo "Supabase signup failed with HTTP $status"
+            jq -c '{error: .error, message: .msg, description: .error_description}' "$response_file" || true
+            exit 1
+          fi
       - name: Require isolated E2E account
         env:
           E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
