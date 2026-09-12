@@ -118,9 +118,10 @@ export function UserTierManager() {
       const { error: rpcError } = await supabase.rpc('admin_set_user_tier', {
         p_target_user_id: editingUser.id,
         p_tier: newTier,
-        p_expires_at: expiresAtIso,
+        p_expires_at: expiresAtIso ?? undefined,
         p_make_admin: isAdmin,
       });
+
 
       if (rpcError) throw rpcError;
 
