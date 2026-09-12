@@ -225,7 +225,7 @@ describe('pagesService', () => {
                 update: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 select: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: mockPageData, error: null })
+                order: vi.fn().mockResolvedValue({ data: [mockPageData], error: null })
             } as any);
 
             const result = await pagesService.publishPage('test-user-id');
