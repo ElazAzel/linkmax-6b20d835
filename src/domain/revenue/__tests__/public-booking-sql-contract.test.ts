@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8').replace(/\r\n/g, '\n');
 
 const migration = read('supabase/migrations/20260829122000_booking_public_access_hardening.sql');
+const availabilityMigration = read('supabase/migrations/20260829125000_fix_public_availability_generated_slots.sql');
 const submitBooking = read('supabase/functions/submit-booking/index.ts');
 const bookingBlock = read('src/components/blocks/BookingBlock.tsx');
 
@@ -23,10 +24,11 @@ describe('public booking access contract', () => {
   });
 
   it('generates fallback slots from booking block hours when no stored slots exist', () => {
-    expect(migration).toContain('generated_candidates AS');
-    expect(migration).toContain("jsonb_array_elements_text(COALESCE(config.content->'disabledWeekdays', '[]'::jsonb))");
-    expect(migration).toContain('generate_series(');
-    expect(migration).toContain('FROM generated_candidates');
+    expect(migration).not.toContain('generated_candidates AS');
+    expect(availabilityMigration).toContain('generated_candidates AS');
+    expect(availabilityMigration).toContain("jsonb_array_elements_text(COALESCE(config.content->'disabledWeekdays', '[]'::jsonb))");
+    expect(availabilityMigration).toContain('generate_series(');
+    expect(availabilityMigration).toContain('FROM generated_candidates');
   });
 
   it('derives owner, service, deposit and immutable snapshot on the server', () => {
