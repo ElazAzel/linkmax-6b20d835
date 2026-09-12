@@ -1,21 +1,5 @@
 # Changelog
 
-## [3.1.1] - 2026-09-01
-
-### Release and deployment hardening
-
-- Consolidated three conflicting deployment workflows into one automatic staging pipeline and one approval-gated production release pipeline.
-- Moved the web bundle behind Cloudflare Worker Static Assets while preserving Worker-first SSR, sitemap routing, private-route noindex behavior, and canonical demo redirects.
-- Added immutable release identity at `/.well-known/linkmax-release.json` with app version, Git commit, environment, and Cloudflare Worker version.
-- Enforced build-once promotion, Supabase migration-before-function ordering, preview and production smoke tests, Cloudflare rollback, release checksums, CycloneDX SBOM, and provenance attestation.
-- Added CodeQL and Dependabot configuration and pinned every GitHub Action and deployment CLI used by the release path.
-- Removed the tracked local `.env`, documented environment-scoped credentials, and standardized npm as the only lockfile-backed package manager.
-- Updated vulnerable direct and transitive dependencies; both runtime and full npm audits report zero known vulnerabilities.
-- Aligned web, Android, and iOS versions to `3.1.1` (`versionCode`/build number `30101`) without publishing mobile binaries.
-- Added Worker and release-pipeline regression contracts and removed known React test warnings.
-
----
-
 ## [Phase 51] - 2026-07-10
 
 ### Unified LinkMAX Visual System
@@ -369,7 +353,7 @@ Micro-Animations (WOW Factor)
 
 - **Architectural Unification**: Eliminated "Architectural Schizophrenia" by migrating all business logic from legacy layers (`src/domain`, `src/repositories`, `src/use-cases`) into a unified **Service-Pattern** architecture in `src/services`.
 - **Logic Migration**: Centralized validation, premium calculations, and page publishing rules into `user.ts` and `pages.ts` services.
-- **Security Hardening**: Created `20260402160100_platform_audit_hardening.sql` to enforce Row Level Security (RLS) on `blocks`, `user_wallets`, and `media_assets`.
+- **Security Hardening**: Created `20260402160000_platform_audit_hardening.sql` to enforce Row Level Security (RLS) on `blocks`, `user_wallets`, and `media_assets`.
 - **Type Safety**: Normalized `extended-types.ts` by replacing `any` with strict `Json` and interface types for 5+ critical tables.
 - **Test Consolidation**: Merged domain unit tests into service-level test suites, maintaining 100% logic verification during refactoring.
 - **Cleanup**: Marked legacy architectural folders for removal (deletion of `src/domain`, etc. pending environment access).

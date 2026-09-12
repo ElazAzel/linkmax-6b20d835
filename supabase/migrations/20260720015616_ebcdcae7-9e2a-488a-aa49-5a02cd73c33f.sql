@@ -102,7 +102,7 @@ BEGIN
 
   v_slug := lower(regexp_replace(COALESCE(NULLIF(p_slug,''), 'page-' || substr(gen_random_uuid()::text, 1, 8)), '[^a-z0-9-]+', '-', 'g'));
 
-  IF EXISTS (SELECT 1 FROM public.pages AS page WHERE page.slug = v_slug) THEN
+  IF EXISTS (SELECT 1 FROM public.pages WHERE slug = v_slug) THEN
     v_slug := v_slug || '-' || substr(gen_random_uuid()::text, 1, 6);
   END IF;
 

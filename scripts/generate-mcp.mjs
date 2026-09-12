@@ -3,9 +3,11 @@ import { loadEnv } from "vite";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-// Generate the MCP function explicitly on every platform. The upstream Vite
-// adapter serializes the entire VITE_* environment into the committed bundle;
-// this generator deliberately allowlists only the public project URL/ref.
+// @lovable.dev/mcp-js@0.23.0's Vite adapter receives an absolute Windows path
+// through esbuild's stdin entrypoint. esbuild then mistakes `C:\\...` for a
+// bare npm package. This small Windows-only compatibility path keeps the same
+// generated Supabase function format while resolving the MCP entry relatively.
+if (process.platform !== "win32") process.exit(0);
 
 const projectRoot = process.cwd();
 const packageJson = JSON.parse(readFileSync(join(projectRoot, "package.json"), "utf8"));
@@ -39,12 +41,7 @@ const externalizeBareAsNpm = {
   },
 };
 
-const loadedEnv = loadEnv("production", projectRoot, "VITE_");
-const viteEnv = {
-  VITE_SUPABASE_PROJECT_ID:
-    process.env.VITE_SUPABASE_PROJECT_ID ?? loadedEnv.VITE_SUPABASE_PROJECT_ID,
-  VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL ?? loadedEnv.VITE_SUPABASE_URL,
-};
+const viteEnv = loadEnv("production", projectRoot, "VITE_");
 const env = {
   // Inline only the values needed to build the OAuth issuer. Never copy the
   // complete process environment (which can contain machine or CI secrets).

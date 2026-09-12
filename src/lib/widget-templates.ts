@@ -14,7 +14,7 @@ export interface WidgetTemplate {
   id: string;
   name: string;
   nameRu: string;
-  category: 'games' | 'calculators' | 'timers' | 'engagement' | 'business' | 'social' | 'utility';
+  category: 'games' | 'calculators' | 'timers' | 'engagement' | 'business' | 'social';
   description: string;
   descriptionRu: string;
   icon: string;
@@ -32,7 +32,6 @@ export const WIDGET_CATEGORIES = {
   engagement: { name: 'Engagement', nameRu: 'Вовлечение', icon: 'Heart' },
   business: { name: 'Business', nameRu: 'Бизнес', icon: 'Briefcase' },
   social: { name: 'Social', nameRu: 'Социальные', icon: 'Users' },
-  utility: { name: 'Utilities', nameRu: 'Утилиты', icon: 'Wrench' },
 } as const;
 
 export const HARDCODED_WIDGET_TEMPLATES: WidgetTemplate[] = [
