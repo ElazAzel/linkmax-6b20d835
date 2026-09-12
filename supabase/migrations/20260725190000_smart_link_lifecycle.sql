@@ -18,10 +18,10 @@ CREATE INDEX IF NOT EXISTS smart_links_active_window_idx
   ON public.smart_links (slug, active_from, expires_at)
   WHERE is_active = true;
 
--- The earlier redirect RPC returned five columns. Drop it before recreating the
--- expanded lifecycle-safe return shape because PostgreSQL cannot change a
--- function's composite return type with CREATE OR REPLACE.
-DROP FUNCTION IF EXISTS public.increment_smart_link_click(text);
+-- This RPC is called only by the service-role Edge Function. Revoking public
+-- execution prevents unauthenticated clients from consuming a link's click cap.
+REVOKE EXECUTE ON FUNCTION public.increment_smart_link_click(text) FROM anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.increment_smart_link_click(text) TO service_role;
 
 CREATE OR REPLACE FUNCTION public.increment_smart_link_click(_slug text)
 RETURNS TABLE (
@@ -63,8 +63,3 @@ BEGIN
      sl.utm_term;
 END;
 $$;
-
--- This RPC is called only by the service-role Edge Function. Revoking public
--- execution prevents unauthenticated clients from consuming a link's click cap.
-REVOKE EXECUTE ON FUNCTION public.increment_smart_link_click(text) FROM anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.increment_smart_link_click(text) TO service_role;

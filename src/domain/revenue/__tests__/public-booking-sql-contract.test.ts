@@ -40,7 +40,7 @@ describe('public booking access contract', () => {
   });
 
   it('stores token hashes and allowlisted attribution without raw URLs', () => {
-    expect(migration).toContain("encode(extensions.digest(p_token, 'sha256'), 'hex')");
+    expect(migration).toContain("encode(digest(p_token, 'sha256'), 'hex')");
     expect(migration).toContain('CREATE TABLE public.booking_access_tokens');
     expect(migration).not.toContain("p_attribution->>'rawUrl'");
     expect(migration).not.toContain("p_attribution->>'queryString'");
@@ -61,4 +61,3 @@ describe('public booking access contract', () => {
     expect(bookingBlock).not.toContain('recordPendingIncome');
   });
 });
-

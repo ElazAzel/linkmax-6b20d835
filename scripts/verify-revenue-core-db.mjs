@@ -3,7 +3,6 @@ import { spawnSync } from 'node:child_process';
 
 const dryRun = process.argv.includes('--dry-run');
 const npxCommand = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-const supabaseCli = ['--yes', 'supabase@2.116.0'];
 
 const steps = [
   {
@@ -15,42 +14,23 @@ const steps = [
   {
     label: 'Start local Supabase services',
     command: npxCommand,
-    args: [
-      ...supabaseCli,
-      'start',
-      '--exclude',
-      [
-        'gotrue',
-        'realtime',
-        'storage-api',
-        'imgproxy',
-        'kong',
-        'mailpit',
-        'postgrest',
-        'postgres-meta',
-        'studio',
-        'edge-runtime',
-        'logflare',
-        'vector',
-        'supavisor',
-      ].join(','),
-    ],
+    args: ['--yes', 'supabase', 'start'],
   },
   {
     label: 'Rebuild database from committed migrations',
     command: npxCommand,
-    args: [...supabaseCli, 'db', 'reset', '--local'],
+    args: ['--yes', 'supabase', 'db', 'reset', '--local'],
   },
   {
     label: 'Run the complete pgTAP suite',
     command: npxCommand,
-    args: [...supabaseCli, 'test', 'db', '--local', 'supabase/tests'],
+    args: ['--yes', 'supabase', 'test', 'db', '--local', 'supabase/tests'],
   },
   {
     label: 'Lint the rebuilt public schema',
     command: npxCommand,
     args: [
-      ...supabaseCli, 'db', 'lint', '--local', '--schema', 'public',
+      '--yes', 'supabase', 'db', 'lint', '--local', '--schema', 'public',
       '--level', 'warning', '--fail-on', 'error',
     ],
   },

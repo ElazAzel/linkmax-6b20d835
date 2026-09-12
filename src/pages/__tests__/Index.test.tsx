@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Index from '../Index';
 
 const navigateMock = vi.fn();
@@ -100,10 +100,8 @@ describe('Index (Landing Page)', () => {
     observerRefs.length = 0;
   });
 
-  it('tracks signup and gallery CTA clicks with explicit event typing', async () => {
-    await act(async () => {
-      render(<Index />);
-    });
+  it('tracks signup and gallery CTA clicks with explicit event typing', () => {
+    render(<Index />);
 
     fireEvent.click(screen.getByText('hero-start'));
     fireEvent.click(screen.getByText('hero-examples'));

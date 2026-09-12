@@ -89,7 +89,7 @@ SET search_path = public
 AS $$
   SELECT CASE
     WHEN p_contact IS NULL OR btrim(p_contact) = '' THEN NULL
-    ELSE encode(extensions.digest(lower(btrim(p_contact)), 'sha256'), 'hex')
+    ELSE encode(digest(lower(btrim(p_contact)), 'sha256'), 'hex')
   END;
 $$;
 

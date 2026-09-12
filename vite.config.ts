@@ -4,6 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { visualizer } from "rollup-plugin-visualizer";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
 
 // Plugin to make CSS non-render-blocking in production
 function nonBlockingCssPlugin() {
@@ -48,8 +49,10 @@ export default defineConfig(({ mode }) => ({
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
       },
     }),
-    // MCP codegen runs in the prebuild script with an explicit environment
-    // allowlist so build credentials are never serialized into the function.
+    // The SDK bundler treats Windows absolute paths as npm specifiers. The
+    // Windows prebuild generator uses a relative entrypoint instead; Linux
+    // and CI use the official Vite plugin.
+    process.platform !== 'win32' && mcpPlugin(),
     process.env.ANALYZE === 'true' && visualizer({
       filename: "stats.html",
       gzipSize: true,

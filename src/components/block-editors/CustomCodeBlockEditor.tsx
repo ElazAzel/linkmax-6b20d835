@@ -14,7 +14,6 @@ import Timer from 'lucide-react/dist/esm/icons/timer';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
 import Users from 'lucide-react/dist/esm/icons/users';
-import Wrench from 'lucide-react/dist/esm/icons/wrench';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateCustomCodeBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +29,7 @@ import { useWidgetTemplates } from '@/hooks/useWidgetTemplates';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-const CATEGORY_ICONS = { games: Gamepad2, calculators: Calculator, timers: Timer, engagement: Heart, business: Briefcase, social: Users, utility: Wrench };
+const CATEGORY_ICONS = { games: Gamepad2, calculators: Calculator, timers: Timer, engagement: Heart, business: Briefcase, social: Users };
 
 function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();

@@ -460,7 +460,11 @@ export async function savePage(
   chatbotContext?: string
 ): Promise<SavePageResult> {
   try {
-    const slug = await getUserSlug(userId);
+    // Always target the page currently being edited. Only fall back to the
+    // account username slug when the page has no slug of its own yet.
+    const ownSlug = typeof pageData.slug === 'string' ? pageData.slug.trim() : '';
+    const slug = ownSlug.length > 0 ? ownSlug : await getUserSlug(userId);
+
 
     // Extract profile block data
     const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;
@@ -837,17 +841,19 @@ export async function publishPage(userId: string): Promise<PublishPageResult> {
       .from('pages')
       .update({ is_published: true })
       .eq('user_id', userId)
-      .select('slug')
-      .maybeSingle();
+      .select('slug, created_at')
+      .order('created_at', { ascending: true });
 
     if (error) return { slug: null, error: wrapError(error) };
-    if (!data) return { slug: null, error: new Error('Page not found') };
+    const first = (data as Array<{ slug: string }> | null)?.[0];
+    if (!first) return { slug: null, error: new Error('Page not found') };
 
-    return { slug: data.slug, error: null };
+    return { slug: first.slug, error: null };
   } catch (error) {
     return { slug: null, error: wrapError(error) };
   }
 }
+
 
 /**
  * Update page niche

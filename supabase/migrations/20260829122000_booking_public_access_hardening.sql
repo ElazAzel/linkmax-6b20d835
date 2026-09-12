@@ -65,7 +65,7 @@ LANGUAGE sql
 IMMUTABLE
 SET search_path = public
 AS $$
-  SELECT encode(extensions.digest(p_token, 'sha256'), 'hex');
+  SELECT encode(digest(p_token, 'sha256'), 'hex');
 $$;
 
 CREATE OR REPLACE FUNCTION public.is_public_booking_slot_allowed(
@@ -543,7 +543,7 @@ BEGIN
   v_identity_secret := NULLIF(current_setting('app.settings.identity_hash_secret', true), '');
   v_identity_hash := CASE
     WHEN v_identity_source IS NOT NULL AND v_identity_secret IS NOT NULL
-      THEN encode(extensions.hmac(v_identity_source, v_identity_secret, 'sha256'), 'hex')
+      THEN encode(hmac(v_identity_source, v_identity_secret, 'sha256'), 'hex')
     ELSE NULL
   END;
 
@@ -622,7 +622,7 @@ BEGIN
     'create:' || p_idempotency_key
   );
 
-  v_token := encode(extensions.gen_random_bytes(32), 'hex');
+  v_token := encode(gen_random_bytes(32), 'hex');
 
   INSERT INTO public.booking_access_tokens (
     booking_id,
@@ -944,4 +944,3 @@ COMMENT ON FUNCTION public.create_public_booking IS
   'Creates an idempotent booking from server-derived owner, service, price, deposit, snapshot and safe attribution facts.';
 COMMENT ON TABLE public.booking_access_tokens IS
   'Stores only SHA-256 access-token hashes; raw customer management tokens are returned once.';
-

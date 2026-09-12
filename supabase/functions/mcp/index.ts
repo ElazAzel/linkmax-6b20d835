@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // <define:import.meta.env>
-var define_import_meta_env_default = { VITE_SUPABASE_PROJECT_ID: "pphdcfxucfndmwulpfwv", VITE_SUPABASE_URL: "https://pphdcfxucfndmwulpfwv.supabase.co", MODE: "production", BASE_URL: "/", DEV: false, PROD: true, SSR: false };
+var define_import_meta_env_default = { VITE_SUPABASE_PROJECT_ID: "pphdcfxucfndmwulpfwv", VITE_SUPABASE_PUBLISHABLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", VITE_SUPABASE_URL: "https://pphdcfxucfndmwulpfwv.supabase.co", VITE_PAYMENTS_CLIENT_TOKEN: "live_b0e4c30cfecad95eabfeeb4eaba", VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", MODE: "production", BASE_URL: "/", DEV: false, PROD: true, SSR: false };
 
 // src/lib/mcp/index.ts
 import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.23.0";
@@ -14,13 +14,31 @@ import { z } from "npm:zod@3.25.76";
 
 // src/lib/mcp/utils.ts
 import { createClient } from "npm:@supabase/supabase-js@2.95.3";
+function runtimeEnv(name) {
+  const runtime = globalThis;
+  const value = runtime.Deno?.env?.get?.(name) ?? runtime.process?.env?.[name];
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : void 0;
+}
+function publishableKeyFromKeyset() {
+  const keyset = runtimeEnv("SUPABASE_PUBLISHABLE_KEYS");
+  if (!keyset) return void 0;
+  try {
+    const parsed = JSON.parse(keyset);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return void 0;
+    const keys = parsed;
+    return [keys.default, ...Object.values(keys)].find((v) => typeof v === "string" && v.trim().startsWith("sb_publishable_"))?.trim();
+  } catch {
+    return void 0;
+  }
+}
 function getAuthenticatedContext(ctx) {
   const userId = ctx.getUserId();
   if (!ctx.isAuthenticated() || !userId) {
     return toolError("not_authenticated", "Sign in to LinkMAX before using this tool.");
   }
-  const supabaseUrl2 = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const supabaseUrl2 = runtimeEnv("SUPABASE_URL") ?? runtimeEnv("VITE_SUPABASE_URL");
+  const supabaseKey = runtimeEnv("SUPABASE_ANON_KEY") ?? runtimeEnv("SUPABASE_PUBLISHABLE_KEY") ?? publishableKeyFromKeyset() ?? runtimeEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
   if (!supabaseUrl2 || !supabaseKey) {
     return toolError("configuration_error", "LinkMAX data access is not configured.");
   }
