@@ -14,13 +14,31 @@ import { z } from "npm:zod@3.25.76";
 
 // src/lib/mcp/utils.ts
 import { createClient } from "npm:@supabase/supabase-js@2.95.3";
+function runtimeEnv(name) {
+  const runtime = globalThis;
+  const value = runtime.Deno?.env?.get?.(name) ?? runtime.process?.env?.[name];
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : void 0;
+}
+function publishableKeyFromKeyset() {
+  const keyset = runtimeEnv("SUPABASE_PUBLISHABLE_KEYS");
+  if (!keyset) return void 0;
+  try {
+    const parsed = JSON.parse(keyset);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return void 0;
+    const keys = parsed;
+    return [keys.default, ...Object.values(keys)].find((v) => typeof v === "string" && v.trim().startsWith("sb_publishable_"))?.trim();
+  } catch {
+    return void 0;
+  }
+}
 function getAuthenticatedContext(ctx) {
   const userId = ctx.getUserId();
   if (!ctx.isAuthenticated() || !userId) {
     return toolError("not_authenticated", "Sign in to LinkMAX before using this tool.");
   }
-  const supabaseUrl2 = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const supabaseUrl2 = runtimeEnv("SUPABASE_URL") ?? runtimeEnv("VITE_SUPABASE_URL");
+  const supabaseKey = runtimeEnv("SUPABASE_ANON_KEY") ?? runtimeEnv("SUPABASE_PUBLISHABLE_KEY") ?? publishableKeyFromKeyset() ?? runtimeEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
   if (!supabaseUrl2 || !supabaseKey) {
     return toolError("configuration_error", "LinkMAX data access is not configured.");
   }
