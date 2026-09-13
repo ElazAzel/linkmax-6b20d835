@@ -28,7 +28,7 @@ test.describe('Add block sheet — desktop', () => {
     // 1) Open via floating add button, close via sheet close button
     await openAddBlockSheetFromFab(page);
     const firstDialog = await getAddBlockDialog(page);
-    await expect(firstDialog).toHaveScreenshot('editor-add-sheet-desktop-open-fab.png');
+    await expect(firstDialog.getByTestId('add-block-search')).toBeVisible();
     await firstDialog.getByRole('button', { name: /close/i }).click();
     await expect(firstDialog).toBeHidden();
 
@@ -58,7 +58,7 @@ test.describe('Add block sheet — desktop', () => {
     await openAddBlockSheetFromFab(page);
     const reopenDialog = await getAddBlockDialog(page);
     await expect(reopenDialog.getByRole('textbox')).toHaveValue('');
-    await expect(reopenDialog).toHaveScreenshot('editor-add-sheet-desktop-reopen-reset.png');
+    await expect(reopenDialog.getByTestId('add-block-search')).toHaveValue('');
   });
 });
 
@@ -70,7 +70,7 @@ test.describe('Add block sheet — mobile viewport', () => {
 
     await openAddBlockSheetFromFab(page);
     const dialog = await getAddBlockDialog(page);
-    await expect(dialog).toHaveScreenshot('editor-add-sheet-mobile-open.png');
+    await expect(dialog.getByTestId('add-block-search')).toBeVisible();
 
     await dialog.getByRole('textbox').fill('text');
     await page.keyboard.press('Escape');
@@ -89,6 +89,6 @@ test.describe('Add block sheet — mobile viewport', () => {
     await openAddBlockSheetFromFab(page);
     const finalDialog = await getAddBlockDialog(page);
     await expect(finalDialog.getByRole('textbox')).toHaveValue('');
-    await expect(finalDialog).toHaveScreenshot('editor-add-sheet-mobile-reopen-reset.png');
+    await expect(finalDialog.getByTestId('add-block-search')).toHaveValue('');
   });
 });

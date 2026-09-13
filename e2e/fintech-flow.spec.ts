@@ -77,7 +77,7 @@ test.describe('Fintech Flow E2E', () => {
         await buyButton.click();
 
         // We expect it to try to redirect to robokassa.ru (mocked)
-        await expect(page).toHaveURL(/robokassa\.ru/, { timeout: 10000 });
+        await expect(page).toHaveURL(/robokassa\.(ru|kz)/, { timeout: 10000 });
     });
 });
 

@@ -17,7 +17,6 @@ import { useAuth } from '@/hooks/user/useAuth';
 import { fintechService } from '@/services/fintech';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils/utils';
-import { useTranslation } from 'react-i18next';
 import {
     Dialog,
     DialogContent,
@@ -33,7 +32,6 @@ import { toast } from 'sonner';
 
 export const WalletWidget = () => {
     const { user } = useAuth();
-    const { t } = useTranslation();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [isPayoutOpen, setIsPayoutOpen] = useState(false);
@@ -87,17 +85,6 @@ export const WalletWidget = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <Card className="glass-card border-white/10 overflow-hidden">
-                <CardContent className="p-10 flex flex-col items-center justify-center gap-3">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <p className="text-sm text-muted-foreground animate-pulse">Загружаем финансы...</p>
-                </CardContent>
-            </Card>
-        );
-    }
-
     const balance = data?.wallet?.balance || 0;
     const pendingGMV = data?.pendingGMV || 0;
     const transactions = data?.transactions || [];
@@ -116,7 +103,7 @@ export const WalletWidget = () => {
                         </div>
                     </div>
                     <Button variant="ghost" size="icon" onClick={loadData} className="h-8 w-8">
-                        <TrendingUp className="h-4 w-4" />
+                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <TrendingUp className="h-4 w-4" />}
                     </Button>
                 </div>
             </CardHeader>
