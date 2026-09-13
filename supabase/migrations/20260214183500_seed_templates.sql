@@ -3,7 +3,7 @@ ALTER TABLE public.templates ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.templates ALTER COLUMN id TYPE text;
 
 -- Insert 'personal' template
-INSERT INTO public.templates (id, name, description, category, preview, is_premium, blocks)
+INSERT INTO public.templates (id, name, description, category, preview_image, is_premium, blocks)
 VALUES (
   'personal',
   'Личная страница',
@@ -25,7 +25,7 @@ VALUES (
   blocks = EXCLUDED.blocks;
 
 -- Insert 'agency' template
-INSERT INTO public.templates (id, name, description, category, preview, is_premium, blocks)
+INSERT INTO public.templates (id, name, description, category, preview_image, is_premium, blocks)
 VALUES (
   'agency',
   'Digital Агентство',
@@ -46,7 +46,7 @@ VALUES (
   blocks = EXCLUDED.blocks;
 
 -- Insert 'influencer' template
-INSERT INTO public.templates (id, name, description, category, preview, is_premium, blocks)
+INSERT INTO public.templates (id, name, description, category, preview_image, is_premium, blocks)
 VALUES (
   'influencer',
   'Блогер / Инфлюенсер',
@@ -65,7 +65,7 @@ VALUES (
   blocks = EXCLUDED.blocks;
 
 -- Insert 'barber' template
-INSERT INTO public.templates (id, name, description, category, preview, is_premium, blocks)
+INSERT INTO public.templates (id, name, description, category, preview_image, is_premium, blocks)
 VALUES (
   'barber',
   'Барбершоп',

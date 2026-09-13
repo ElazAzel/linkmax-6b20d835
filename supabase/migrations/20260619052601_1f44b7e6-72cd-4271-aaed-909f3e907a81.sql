@@ -24,7 +24,7 @@ BEGIN
       '*/15 * * * *',
       $job$
       SELECT net.http_post(
-        url := 'https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/retry-failed-indexing',
+        url := 'https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/retry-failed-indexing',
         headers := '{"Content-Type":"application/json","apikey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA"}'::jsonb,
         body := '{"source":"cron"}'::jsonb
       );

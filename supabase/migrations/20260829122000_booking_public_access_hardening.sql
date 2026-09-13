@@ -65,7 +65,7 @@ LANGUAGE sql
 IMMUTABLE
 SET search_path = public
 AS $$
-  SELECT encode(digest(p_token, 'sha256'), 'hex');
+  SELECT encode(extensions.digest(p_token, 'sha256'), 'hex');
 $$;
 
 CREATE OR REPLACE FUNCTION public.is_public_booking_slot_allowed(

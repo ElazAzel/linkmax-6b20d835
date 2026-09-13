@@ -14,7 +14,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-BASE_URL="https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap"
+BASE_URL="https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/generate-sitemap"
 SITE_URL="https://lnkmx.my"
 GOOGLE_BOT="Mozilla/5.0 (compatible; Googlebot/2.1)"
 BING_BOT="Mozilla/5.0 (compatible; bingbot/2.0)"
@@ -300,7 +300,7 @@ deploy_functions() {
     
     print_section "Deploying Edge Functions"
     if supabase functions deploy generate-sitemap \
-        --project-id pphdcfxucfndmwulpfwv \
+        --project-id hpnycvncipdxmvqfuulf \
         --no-verify-jwt 2>&1; then
         log_success "Edge functions deployed successfully"
     else

@@ -69,7 +69,7 @@ Location: `/public/robots.txt`
 ### Sitemaps
 ```
 Sitemap: https://lnkmx.my/sitemap.xml
-Sitemap: https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap
+Sitemap: https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/generate-sitemap
 ```
 
 ---
@@ -86,7 +86,7 @@ Contains:
 - Legal pages
 
 ### Dynamic Sitemap
-Endpoint: `https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap`
+Endpoint: `https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/generate-sitemap`
 
 Features:
 - All published user pages

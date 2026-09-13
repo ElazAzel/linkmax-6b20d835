@@ -1,6 +1,6 @@
--- Change analytics.block_id to TEXT to match blocks.id which uses generated string IDs
-ALTER TABLE public.analytics 
-  ALTER COLUMN block_id TYPE TEXT;
+-- The baseline schema uses UUID block IDs and keeps a foreign key from
+-- analytics. Keep that contract here; the later analytics migration removes
+-- the foreign key when string IDs are needed by the editor.
 
 -- Drop the old function that took UUID
 DROP FUNCTION IF EXISTS public.increment_block_clicks(UUID);
@@ -15,6 +15,6 @@ AS $$
 BEGIN
   UPDATE public.blocks
   SET click_count = click_count + 1
-  WHERE id = block_id;
+  WHERE id::text = block_id;
 END;
 $$;

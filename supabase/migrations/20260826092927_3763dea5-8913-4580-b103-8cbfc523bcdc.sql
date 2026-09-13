@@ -7,7 +7,32 @@ REVOKE ALL ON public.user_wallets FROM anon;
 GRANT SELECT ON public.user_wallets TO authenticated;
 GRANT ALL ON public.user_wallets TO service_role;
 
-CREATE OR REPLACE FUNCTION public.ensure_user_wallet()
+-- The legacy no-argument function is a trigger function returning trigger.
+-- Keep signup wallet creation under a distinct name and reserve the public
+-- RPC name for the uuid-returning function below.
+DROP TRIGGER IF EXISTS trigger_ensure_wallet_on_profile ON public.user_profiles;
+DROP FUNCTION IF EXISTS public.ensure_user_wallet();
+
+CREATE FUNCTION public.ensure_user_wallet_on_profile()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.user_wallets (user_id)
+  VALUES (NEW.id)
+  ON CONFLICT (user_id) DO NOTHING;
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trigger_ensure_wallet_on_profile
+  AFTER INSERT ON public.user_profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION public.ensure_user_wallet_on_profile();
+
+CREATE FUNCTION public.ensure_user_wallet()
 RETURNS uuid
 LANGUAGE plpgsql
 SECURITY DEFINER

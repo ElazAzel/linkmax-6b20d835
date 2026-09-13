@@ -31,13 +31,8 @@ CREATE POLICY "Users can view their own orders"
 -- (In production, status is updated via secure Edge Function webhooks)
 CREATE POLICY "Only admins/service can manage orders"
     ON public.orders FOR ALL
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.user_profiles
-            WHERE id = auth.uid()
-            AND is_admin = true
-        )
-    );
+    USING (public.has_role(auth.uid(), 'admin'::public.app_role))
+    WITH CHECK (public.has_role(auth.uid(), 'admin'::public.app_role));
 
 -- Trigger for updated_at
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.orders

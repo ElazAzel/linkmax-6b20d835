@@ -229,7 +229,7 @@ curl -s -H "User-Agent: Googlebot" "https://lnkmx.my/{slug}" | head -100
 ### Test Edge Function SSR Directly
 
 ```bash
-curl -s "https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap/ssr/{slug}?lang=ru"
+curl -s "https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/generate-sitemap/ssr/{slug}?lang=ru"
 ```
 
 ### Validate JSON-LD

@@ -11,13 +11,31 @@ CREATE TABLE IF NOT EXISTS public.user_api_keys (
   key_hint text NOT NULL, -- e.g. "key_...a1b2" (last 4 chars) for display
   hashed_key text NOT NULL UNIQUE, -- SHA256 of the actual secret key
   last_used_at timestamp with time zone,
-  created_at timestamp with time zone DEFAULT now() NOT NULL,
-  
-  -- ensure a user doesn't have 1000 keys
-  CONSTRAINT max_keys_per_user_check CHECK (
-    (SELECT count(*) FROM user_api_keys WHERE user_id = auth.uid()) <= 10
-  )
+  created_at timestamp with time zone DEFAULT now() NOT NULL
 );
+
+-- CHECK constraints cannot contain subqueries. Enforce the per-user limit in
+-- a trigger instead, where the existing rows can be counted safely.
+CREATE OR REPLACE FUNCTION public.enforce_user_api_key_limit()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF TG_OP = 'INSERT' OR NEW.user_id IS DISTINCT FROM OLD.user_id THEN
+    IF (SELECT count(*) FROM public.user_api_keys WHERE user_id = NEW.user_id) >= 10 THEN
+      RAISE EXCEPTION 'A user may have at most 10 API keys';
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS enforce_user_api_key_limit ON public.user_api_keys;
+CREATE TRIGGER enforce_user_api_key_limit
+  BEFORE INSERT OR UPDATE OF user_id ON public.user_api_keys
+  FOR EACH ROW EXECUTE FUNCTION public.enforce_user_api_key_limit();
 
 -- RLS: Only the owner can see their own API keys (and only the hints, not hashes)
 ALTER TABLE user_api_keys ENABLE ROW LEVEL SECURITY;
@@ -100,14 +118,16 @@ END $$;
 
 -- RLS for Pipelines
 ALTER TABLE zone_pipelines ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Zone members can view pipelines" ON public.zone_pipelines;
+DROP POLICY IF EXISTS "Zone admins can manage pipelines" ON public.zone_pipelines;
 CREATE POLICY "Zone members can view pipelines" ON zone_pipelines
-  FOR SELECT USING (public.is_zone_member(zone_id));
+  FOR SELECT USING (public.is_zone_member(zone_id, auth.uid()));
 CREATE POLICY "Zone admins can insert pipelines" ON zone_pipelines
-  FOR INSERT WITH CHECK (public.is_zone_admin(zone_id));
+  FOR INSERT WITH CHECK (public.is_zone_admin(zone_id, auth.uid()));
 CREATE POLICY "Zone admins can update pipelines" ON zone_pipelines
-  FOR UPDATE USING (public.is_zone_admin(zone_id));
+  FOR UPDATE USING (public.is_zone_admin(zone_id, auth.uid()));
 CREATE POLICY "Zone admins can delete pipelines" ON zone_pipelines
-  FOR DELETE USING (public.is_zone_admin(zone_id));
+  FOR DELETE USING (public.is_zone_admin(zone_id, auth.uid()));
 
 
 --------------------------------------------------------------------------------
@@ -128,9 +148,9 @@ CREATE TABLE IF NOT EXISTS public.zone_custom_fields (
 -- RLS for Custom Fields Definition
 ALTER TABLE zone_custom_fields ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Zone members can view custom fields" ON zone_custom_fields
-  FOR SELECT USING (public.is_zone_member(zone_id));
+  FOR SELECT USING (public.is_zone_member(zone_id, auth.uid()));
 CREATE POLICY "Zone admins can manage custom fields" ON zone_custom_fields
-  FOR ALL USING (public.is_zone_admin(zone_id));
+  FOR ALL USING (public.is_zone_admin(zone_id, auth.uid()));
 
 -- Add JSONB columns for actual data storage to Deals and Contacts
 DO $$

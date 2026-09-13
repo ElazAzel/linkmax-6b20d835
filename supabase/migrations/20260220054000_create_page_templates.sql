@@ -22,14 +22,9 @@ CREATE POLICY "Anyone can view page templates"
 -- Only admins can insert/update/delete (we will rely on a secure Edge Function or check for an admin flag)
 CREATE POLICY "Only admins can modify page templates"
     ON public.page_templates FOR ALL
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.user_profiles
-            WHERE id = auth.uid()
-            AND is_admin = true
-        )
-    );
+    USING (public.has_role(auth.uid(), 'admin'::public.app_role))
+    WITH CHECK (public.has_role(auth.uid(), 'admin'::public.app_role));
 
 -- Trigger for updated_at
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.page_templates
-    FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

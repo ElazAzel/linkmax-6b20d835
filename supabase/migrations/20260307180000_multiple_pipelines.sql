@@ -23,7 +23,7 @@ USING (
         AND user_id = auth.uid()
     )
     OR zone_id IN (
-        SELECT id FROM public.zones WHERE owner_id = auth.uid()
+        SELECT id FROM public.zones WHERE owner_user_id = auth.uid()
     )
 );
 
@@ -37,7 +37,7 @@ USING (
         AND role IN ('owner', 'admin')
     )
     OR zone_id IN (
-        SELECT id FROM public.zones WHERE owner_id = auth.uid()
+        SELECT id FROM public.zones WHERE owner_user_id = auth.uid()
     )
 );
 

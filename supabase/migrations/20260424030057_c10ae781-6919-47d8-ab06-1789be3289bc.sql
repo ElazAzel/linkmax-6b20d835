@@ -1,4 +1,9 @@
 -- Seed 10 starter templates for missing niches
+-- Older schema bootstrap created templates.id without a default. Restore the
+-- UUID default before inserting these rows so this seed works on both shapes.
+ALTER TABLE public.templates
+  ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
 INSERT INTO public.templates (name, category, description, blocks, is_public, is_premium, sort_order) VALUES
 ('Преподаватель / Курс', 'education', 'Структура для преподавателей, репетиторов и онлайн-курсов', '[
   {"type":"profile","name":"Имя преподавателя","bio":"📚 Преподаватель | Помогаю достигать целей через знания"},
