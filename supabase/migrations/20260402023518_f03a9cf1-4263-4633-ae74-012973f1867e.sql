@@ -1,5 +1,5 @@
 
-CREATE TABLE public.telegram_bot_settings (
+CREATE TABLE IF NOT EXISTS public.telegram_bot_settings (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   chat_id text NOT NULL UNIQUE,
   active_page_id uuid REFERENCES public.pages(id) ON DELETE SET NULL,
@@ -11,6 +11,7 @@ CREATE TABLE public.telegram_bot_settings (
 
 ALTER TABLE public.telegram_bot_settings ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Service role full access" ON public.telegram_bot_settings;
 CREATE POLICY "Service role full access" ON public.telegram_bot_settings
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 

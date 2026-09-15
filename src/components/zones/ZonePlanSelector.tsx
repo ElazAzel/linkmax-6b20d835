@@ -54,7 +54,7 @@ export const ZonePlanSelector = memo(function ZonePlanSelector({ zone, onRefetch
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" data-testid="zone-plan-selector">
             <div className="flex flex-col items-center gap-4">
                 <Tabs value={cycle} onValueChange={(val) => setCycle(val as any)} className="w-[300px]">
                     <TabsList className="grid w-full grid-cols-2">

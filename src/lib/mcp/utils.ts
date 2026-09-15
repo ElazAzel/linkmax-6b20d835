@@ -6,6 +6,37 @@ type AuthenticatedToolContext = {
   userId: string;
 };
 
+type RuntimeGlobals = typeof globalThis & {
+  Deno?: { env?: { get?: (name: string) => string | undefined } };
+  process?: { env?: Record<string, string | undefined> };
+};
+
+function runtimeEnv(name: string): string | undefined {
+  const runtime = globalThis as RuntimeGlobals;
+  const value = runtime.Deno?.env?.get?.(name) ?? runtime.process?.env?.[name];
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+}
+
+/**
+ * Supabase Edge Functions on new API keys expose a JSON dictionary instead of
+ * a single publishable key value.
+ */
+function publishableKeyFromKeyset(): string | undefined {
+  const keyset = runtimeEnv("SUPABASE_PUBLISHABLE_KEYS");
+  if (!keyset) return undefined;
+  try {
+    const parsed: unknown = JSON.parse(keyset);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return undefined;
+    const keys = parsed as Record<string, unknown>;
+    return [keys.default, ...Object.values(keys)]
+      .find((v): v is string => typeof v === "string" && v.trim().startsWith("sb_publishable_"))
+      ?.trim();
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * MCP runs inside a Supabase Edge Function, where SUPABASE_ANON_KEY is the
  * platform-provided name. The publishable-key fallbacks keep the same source
@@ -19,11 +50,12 @@ export function getAuthenticatedContext(
     return toolError("not_authenticated", "Sign in to LinkMAX before using this tool.");
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
+  const supabaseUrl = runtimeEnv("SUPABASE_URL") ?? runtimeEnv("VITE_SUPABASE_URL");
   const supabaseKey =
-    process.env.SUPABASE_ANON_KEY ??
-    process.env.SUPABASE_PUBLISHABLE_KEY ??
-    process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    runtimeEnv("SUPABASE_ANON_KEY") ??
+    runtimeEnv("SUPABASE_PUBLISHABLE_KEY") ??
+    publishableKeyFromKeyset() ??
+    runtimeEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
 
   if (!supabaseUrl || !supabaseKey) {
     return toolError("configuration_error", "LinkMAX data access is not configured.");

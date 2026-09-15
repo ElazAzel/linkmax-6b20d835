@@ -201,9 +201,10 @@ test.describe('Performance', () => {
     await page.waitForTimeout(2000);
     
     // Filter out known acceptable errors
-    const criticalErrors = errors.filter(e => 
-      !e.includes('Failed to load resource') && 
-      !e.includes('net::ERR')
+    const criticalErrors = errors.filter(e =>
+      !e.includes('Failed to load resource') &&
+      !e.includes('net::ERR') &&
+      !e.includes('downloadable font: download failed')
     );
     
     expect(

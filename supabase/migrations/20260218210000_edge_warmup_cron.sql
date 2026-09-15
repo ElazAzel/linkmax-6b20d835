@@ -21,7 +21,7 @@ DECLARE
 BEGIN
   -- Get Supabase URL from environment
   -- These are available in Supabase SQL via current_setting
-  base_url := 'https://pphdcfxucfndmwulpfwv.supabase.co';
+  base_url := 'https://hpnycvncipdxmvqfuulf.supabase.co';
   
   -- Fire warm-up pings (fire-and-forget via pg_net)
   -- seo-ssr: critical for SEO bots

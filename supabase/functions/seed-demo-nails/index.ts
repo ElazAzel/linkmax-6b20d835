@@ -7,7 +7,7 @@ const corsHeaders = {
 
 const DEMO_USER_ID = '6a7bbf2e-0db9-49d3-9f17-32c15a764e63'
 const DEMO_PAGE_ID = '3229befa-752c-4032-9eac-4e4f63e7ade0'
-const AVATAR_URL = 'https://pphdcfxucfndmwulpfwv.supabase.co/storage/v1/object/public/user-media/6a7bbf2e-0db9-49d3-9f17-32c15a764e63%2Favatar.jpg'
+const AVATAR_URL = 'https://hpnycvncipdxmvqfuulf.supabase.co/storage/v1/object/public/user-media/6a7bbf2e-0db9-49d3-9f17-32c15a764e63%2Favatar.jpg'
 
 const PAGE_UPDATE = {
   slug: 'demo-nails',

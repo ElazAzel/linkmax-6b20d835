@@ -1,5 +1,5 @@
 
-CREATE TABLE public.zone_invoice_items (
+CREATE TABLE IF NOT EXISTS public.zone_invoice_items (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   invoice_id uuid NOT NULL REFERENCES public.zone_invoices(id) ON DELETE CASCADE,
   zone_id uuid NOT NULL REFERENCES public.zones(id) ON DELETE CASCADE,
@@ -10,18 +10,23 @@ CREATE TABLE public.zone_invoice_items (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE public.zone_invoice_items
+  ADD COLUMN IF NOT EXISTS description text NOT NULL DEFAULT '';
+
 ALTER TABLE public.zone_invoice_items ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Zone members view invoice items" ON public.zone_invoice_items;
 CREATE POLICY "Zone members view invoice items"
   ON public.zone_invoice_items FOR SELECT
   TO authenticated
   USING (is_zone_member(zone_id, auth.uid()));
 
+DROP POLICY IF EXISTS "Zone admins manage invoice items" ON public.zone_invoice_items;
 CREATE POLICY "Zone admins manage invoice items"
   ON public.zone_invoice_items FOR ALL
   TO authenticated
   USING (is_zone_admin(zone_id, auth.uid()))
   WITH CHECK (is_zone_admin(zone_id, auth.uid()));
 
-CREATE INDEX idx_zone_invoice_items_invoice ON public.zone_invoice_items(invoice_id);
-CREATE INDEX idx_zone_invoice_items_zone ON public.zone_invoice_items(zone_id);
+CREATE INDEX IF NOT EXISTS idx_zone_invoice_items_invoice ON public.zone_invoice_items(invoice_id);
+CREATE INDEX IF NOT EXISTS idx_zone_invoice_items_zone ON public.zone_invoice_items(zone_id);

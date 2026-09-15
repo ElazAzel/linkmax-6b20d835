@@ -132,8 +132,12 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'telegram-vizitka-dlya-koucha-poshagovo',
     title: 'Telegram-визитка для коуча: пошаговая инструкция',
+    metaTitle: 'Telegram-визитка коуча: инструкция по шагам',
+    metaDescription:
+      'Пошагово собираем Telegram-визитку коуча за 15 минут: программы и цены, кейсы клиентов, отзывы, кнопка записи на бесплатную сессию и уведомления о заявках в бот.',
     description:
       'Как собрать профессиональную визитку коуча в Telegram: бот, мини-апп, ссылка lnkmx.my, прайс, отзывы и приём заявок на бесплатную сессию.',
+
     publishedAt: '2026-05-20',
     readingMinutes: 8,
     tags: ['coach', 'telegram', 'leads'],

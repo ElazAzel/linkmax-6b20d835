@@ -62,4 +62,5 @@ END;
 $$;
 
 -- Ensure comments are updated for developers
-COMMENT ON FUNCTION public.complete_daily_quest IS 'Completes a daily quest and awards tokens. p_tokens is preferred over legacy p_bonus_hours.';
+COMMENT ON FUNCTION public.complete_daily_quest(uuid, text, integer, integer)
+  IS 'Completes a daily quest and awards tokens. p_tokens is preferred over legacy p_bonus_hours.';

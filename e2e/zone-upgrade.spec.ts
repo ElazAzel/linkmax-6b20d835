@@ -5,36 +5,34 @@ test.skip(!hasE2ECredentials, AUTHENTICATED_E2E_SKIP_REASON);
 
 test.describe('Zone Monetization Flow', () => {
     test.beforeEach(async ({ page }) => {
-        // Basic auth logic would go here
-        await page.goto('/zones');
+        await page.goto('/dashboard/zone-settings');
     });
 
     test('should allow navigating to billing and seeing plans', async ({ page }) => {
-        // 1. Select a zone
-        await page.click('[data-testid="zone-card"]');
+        await page.getByRole('tab', { name: /Billing|Оплата/i }).click();
 
-        // 2. Go to Settings
-        await page.click('[data-testid="zone-settings-tab"]');
-
-        // 3. Go to Billing tab
-        await page.click('button:has-text("Billing"), button:has-text("Оплата")');
-
-        // 4. Verify Plan Selector exists
         await expect(page.locator('[data-testid="zone-plan-selector"]')).toBeVisible();
-
-        // 5. Verify current plan info
-        await expect(page.locator('text=Current Plan')).toBeVisible();
+        await expect(page.locator('[data-testid="zone-plan-selector"]')).toContainText(/Current Plan|Текущий/i);
     });
 
     test('should initiate upgrade session', async ({ page }) => {
-        await page.goto('/zones/settings?tab=billing');
+        await page.route('**/functions/v1/create-payment-session*', async (route) => {
+            await route.fulfill({
+                json: {
+                    success: true,
+                    paymentUrl: 'https://auth.robokassa.ru/Merchant/Index.aspx?fake=true',
+                    orderId: 'fake-zone-order',
+                },
+            });
+        });
 
-        // Find a plan that is NOT current and click Upgrade
-        const upgradeButton = page.locator('button:has-text("Upgrade"), button:has-text("Улучшить")').first();
+        await page.getByRole('tab', { name: /Billing|Оплата/i }).click();
+
+        const upgradeButton = page
+            .locator('[data-testid="zone-plan-selector"] button')
+            .filter({ hasText: /Upgrade|Улучшить|Повысить/i })
+            .first();
+        await expect(upgradeButton).toBeVisible();
         await upgradeButton.click();
-
-        // Should show loading state or redirect
-        // In a real E2E we would mock the Edge Function response or check for redirect to RoboKassa
-        // await expect(page).toHaveURL(/auth.robokassa.ru/);
     });
 });

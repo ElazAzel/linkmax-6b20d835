@@ -245,7 +245,7 @@ import { logger } from "@/lib/utils/logger";
 const root = createRoot(document.getElementById("root")!);
 const renderApp = () => root.render(
   <StrictMode>
-    <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    <RouterProvider router={router} />
   </StrictMode>
 );
 

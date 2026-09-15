@@ -1055,6 +1055,15 @@ export type AppDatabase = Omit<Database, 'public'> & {
     Functions: Merge<
       Database['public']['Functions'],
       {
+        admin_set_user_tier: {
+          Args: {
+            p_target_user_id: string;
+            p_tier: string;
+            p_expires_at?: string;
+            p_make_admin?: boolean;
+          };
+          Returns: undefined;
+        };
         apply_revenue_kit_v1: {
           Args: {
             p_page_id: string;
@@ -1063,6 +1072,7 @@ export type AppDatabase = Omit<Database, 'public'> & {
           };
           Returns: Json;
         };
+
         create_public_booking: {
           Args: {
             p_page_id: string;
