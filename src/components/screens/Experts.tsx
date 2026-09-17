@@ -189,6 +189,7 @@ export const Experts = memo(function Experts() {
         canonical={canonical}
         currentLanguage={language}
         ogType="website"
+        ogImage={`${getAppDomain()}/og-experts.jpg`}
         alternates={[
           { hreflang: 'ru', href: `${canonical}?lang=ru` },
           { hreflang: 'en', href: `${canonical}?lang=en` },
