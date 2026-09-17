@@ -159,6 +159,7 @@ export const Gallery = memo(function Gallery() {
         description={seoDescription}
         canonical={canonical}
         currentLanguage={i18n.language}
+        ogImage={`${getAppDomain()}/og-gallery.jpg`}
         alternates={[
           { hreflang: 'ru', href: `${canonical}${canonical.includes('?') ? '&' : '?'}lang=ru` },
           { hreflang: 'en', href: `${canonical}${canonical.includes('?') ? '&' : '?'}lang=en` },
@@ -170,7 +171,7 @@ export const Gallery = memo(function Gallery() {
         pageUrl={canonical}
         pageTitle={seoTitle}
         pageDescription={seoDescription}
-        imageUrl={`${getAppDomain()}/og-gallery.png`}
+        imageUrl={`${getAppDomain()}/og-gallery.jpg`}
         imageAlt={t('gallery.seo.imageAlt', 'lnkmx Gallery - Link in Bio Examples')}
         type="website"
       />

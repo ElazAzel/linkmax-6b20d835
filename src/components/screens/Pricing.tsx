@@ -127,8 +127,8 @@ export const Pricing = memo(function Pricing() {
 
   return (
     <>
-      <StaticSEOHead title={seoTitle} description={seoDescription} canonical={canonical} currentLanguage={i18n.language} alternates={[]} />
-      <SEOMetaEnhancer pageUrl={canonical} pageTitle={seoTitle} pageDescription={seoDescription} imageUrl="" imageAlt="" type="website" />
+      <StaticSEOHead title={seoTitle} description={seoDescription} canonical={canonical} currentLanguage={i18n.language} ogImage={`${getAppDomain()}/og-pricing.jpg`} alternates={[]} />
+      <SEOMetaEnhancer pageUrl={canonical} pageTitle={seoTitle} pageDescription={seoDescription} imageUrl={`${getAppDomain()}/og-pricing.jpg`} imageAlt={seoTitle} type="website" />
       <div className="min-h-screen bg-background relative overflow-x-hidden pb-safe">
         <header className="sticky top-0 z-50">
           <div className="mx-4 mt-3">
