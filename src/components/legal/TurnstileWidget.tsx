@@ -3,10 +3,10 @@ import { useRef, useEffect, useState, useCallback, forwardRef, useImperativeHand
 /**
  * Cloudflare Turnstile widget (invisible / managed mode)
  *
- * 1. Include the Turnstile script once in index.html:
- *    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+ * The Turnstile script is loaded on demand by `loadTurnstileScript()` when a
+ * widget mounts — nothing needs to be included in index.html.
  *
- * 2. Usage:
+ * Usage:
  *    const { token, resetTurnstile } = useTurnstile();
  *    <TurnstileWidget onToken={setToken} />
  *
