@@ -74,43 +74,45 @@ export const TurnstileWidget = forwardRef<HTMLDivElement, TurnstileWidgetProps>(
         const el = containerRef.current;
         if (!el || !TURNSTILE_SITE_KEY || TURNSTILE_SITE_KEY.includes('PLACEHOLDER')) return;
 
-        let isMounted = true;
+        let cancelled = false;
 
-        // Wait for turnstile to be loaded
-        const tryRender = () => {
-            if (!isMounted) return;
-            
-            if (!window.turnstile) {
-                setTimeout(tryRender, 500); // Increased delay
-                return;
-            }
-
-            // Remove old widget if exists
-            if (widgetIdRef.current) {
-                try { window.turnstile.remove(widgetIdRef.current); } catch { /* ignore */ }
-            }
-
-            try {
-                widgetIdRef.current = window.turnstile.render(el, {
-                    sitekey: TURNSTILE_SITE_KEY,
-                    callback: (token: string) => {
-                        if (isMounted) onToken(token);
-                    },
-                    'error-callback': () => {
-                        if (isMounted) onError?.();
-                    },
-                    theme: 'auto',
-                    size: 'flexible',
-                });
-            } catch (err) {
-                console.error('Turnstile render error:', err);
-            }
-        };
-        
-        tryRender();
+        // Load the script on demand, then render the widget when ready
+        loadTurnstileScript()
+            .then(() => {
+                const waitForApi = () => {
+                    if (cancelled) return;
+                    if (!window.turnstile) {
+                        setTimeout(waitForApi, 300);
+                        return;
+                    }
+                    if (widgetIdRef.current) {
+                        try { window.turnstile.remove(widgetIdRef.current); } catch { /* ignore */ }
+                    }
+                    try {
+                        widgetIdRef.current = window.turnstile.render(el, {
+                            sitekey: TURNSTILE_SITE_KEY,
+                            callback: (token: string) => {
+                                if (!cancelled) onToken(token);
+                            },
+                            'error-callback': () => {
+                                if (!cancelled) onError?.();
+                            },
+                            theme: 'auto',
+                            size: 'flexible',
+                        });
+                    } catch (err) {
+                        console.error('Turnstile render error:', err);
+                    }
+                };
+                waitForApi();
+            })
+            .catch((err) => {
+                if (!cancelled) onError?.();
+                console.error('Turnstile load error:', err);
+            });
 
         return () => {
-            isMounted = false;
+            cancelled = true;
             if (widgetIdRef.current && window.turnstile) {
                 try { window.turnstile.remove(widgetIdRef.current); } catch { /* ignore */ }
                 widgetIdRef.current = null;
