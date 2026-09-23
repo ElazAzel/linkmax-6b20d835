@@ -53,6 +53,14 @@ setTimeout(fireDeferOnce, 10000);
 
 // Recovery function wraps the imported version
 
+// Benign browser warning: swallow it so overlays/handlers never treat it as a crash.
+window.addEventListener('error', (event) => {
+  if (typeof event.message === 'string' && event.message.includes('ResizeObserver loop')) {
+    event.stopImmediatePropagation();
+    event.preventDefault();
+  }
+}, true);
+
 window.addEventListener('error', (event) => {
   if (isChunkRuntimeError(event.error || event.message)) {
     recoverFromStaleAssets('window.error');
