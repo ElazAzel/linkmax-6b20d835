@@ -9,6 +9,8 @@
 - [ ] Apply security migration for findings `analytics_anon_insert_flood` + `template_likes_public_user_ids`: drop anon/authenticated INSERT on `public.analytics` (ingestion only via `track-analytics-event` service-role function), keep `template_likes` SELECT to own rows for authenticated users, revoke anon SELECT, add `get_template_like_count(uuid)` RPC. SQL prepared 2026-09-15, blocked by paused DB.
 
 
+- [x] Аудит платформы (2026-09-23): сайт стабилен; открыто 1 предупреждение (template_likes, миграция готова), 7 справочных правил и уязвимости в инструментах мобильной сборки. Не поставленная задача: обновить @capacitor/cli и @lovable.dev/mcp-js.
+
 ## Done
 - [x] Created feature flag tables (`feature_flags`, `feature_flag_rules`, `feature_flag_audit_log`) with grants, RLS and seed flags.
 - [x] Fixed `upsert_user_page` so saving no longer collides with `pages_slug_key`.
