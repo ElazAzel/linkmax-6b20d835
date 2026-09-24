@@ -81,8 +81,10 @@ export default defineConfig(({ mode }) => ({
         telegram: path.resolve(__dirname, 'tg.html'),
       },
       output: {
+        // NOTE: React/Router intentionally NOT manually chunked — Vite's default
+        // module preload must manage their execution order to avoid
+        // initialization race conditions (see Runtime Stability standard).
         manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-motion': ['framer-motion'],
           'vendor-charts': ['recharts'],
           'vendor-supabase': ['@supabase/supabase-js'],

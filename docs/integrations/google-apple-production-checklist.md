@@ -2,7 +2,7 @@
 
 Production target: `https://lnkmx.my`
 
-Supabase project ref: `pphdcfxucfndmwulpfwv`
+Supabase project ref: `hpnycvncipdxmvqfuulf`
 
 This checklist is for Auth and Calendar only. Keep `lnkmx.my` on Hostinger DNS for this pass; the connected Cloudflare and Vercel accounts are not authoritative for this setup.
 
@@ -42,8 +42,8 @@ http://127.0.0.1:8080
 OAuth client authorized redirect URIs:
 
 ```text
-https://pphdcfxucfndmwulpfwv.supabase.co/auth/v1/callback
-https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/gcal-callback
+https://hpnycvncipdxmvqfuulf.supabase.co/auth/v1/callback
+https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/gcal-callback
 ```
 
 OAuth consent scopes:
@@ -84,7 +84,7 @@ Required Apple setup:
 - Configure the web return URL:
 
 ```text
-https://pphdcfxucfndmwulpfwv.supabase.co/auth/v1/callback
+https://hpnycvncipdxmvqfuulf.supabase.co/auth/v1/callback
 ```
 
 Supabase Apple provider values:

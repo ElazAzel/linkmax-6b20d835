@@ -44,17 +44,13 @@ END $$;
 DO $$ 
 BEGIN
     IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'leads' AND column_name = 'user_id') THEN
-        DROP POLICY IF EXISTS "Users can view leads for their pages" ON public.leads;
-        DROP POLICY IF EXISTS "Users can update leads for their pages" ON public.leads;
-        DROP POLICY IF EXISTS "Users can view own leads" ON public.leads;
-        
-        CREATE POLICY "Users can view own leads" ON public.leads
-            FOR SELECT USING (auth.uid() = user_id OR EXISTS (
+        ALTER POLICY "Users can view own leads" ON public.leads
+            USING (auth.uid() = user_id OR EXISTS (
                 SELECT 1 FROM public.pages WHERE pages.id = leads.page_id AND pages.user_id = auth.uid()
             ));
 
-        CREATE POLICY "Users can update own leads" ON public.leads
-            FOR UPDATE USING (auth.uid() = user_id OR EXISTS (
+        ALTER POLICY "Users can update own leads" ON public.leads
+            USING (auth.uid() = user_id OR EXISTS (
                 SELECT 1 FROM public.pages WHERE pages.id = leads.page_id AND pages.user_id = auth.uid()
             ));
     END IF;

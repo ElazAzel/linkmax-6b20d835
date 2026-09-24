@@ -1,7 +1,7 @@
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS pgtap WITH SCHEMA extensions;
-SELECT plan(11);
+SELECT plan(12);
 
 INSERT INTO auth.users (
   id, instance_id, aud, role, email, encrypted_password, email_confirmed_at,
@@ -81,6 +81,21 @@ SELECT set_eq(
   $$,
   $$VALUES ('slot_date'), ('slot_time'), ('slot_end_time'), ('available')$$,
   'public availability exposes only slot fields'
+);
+
+SELECT is(
+  (
+    SELECT count(*)::integer
+    FROM public.get_public_availability(
+      '23000000-0000-0000-0000-000000000001',
+      '33000000-0000-0000-0000-000000000001',
+      CURRENT_DATE + 2,
+      CURRENT_DATE + 2,
+      NULL
+    )
+  ),
+  9,
+  'working hours generate nine hourly slots when no stored slots exist'
 );
 
 SELECT is(

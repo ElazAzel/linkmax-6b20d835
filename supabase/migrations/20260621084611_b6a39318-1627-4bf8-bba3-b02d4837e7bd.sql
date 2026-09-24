@@ -40,44 +40,5 @@ REVOKE SELECT (push_subscription, telegram_chat_id) ON public.user_profiles FROM
 REVOKE UPDATE (push_subscription, telegram_chat_id) ON public.user_profiles FROM anon, authenticated;
 -- These fields are server-managed (edge functions via service_role) only.
 
--- 4) Realtime: deny-by-default fallback for non-zone topics.
--- Drop any permissive non-zone fallback and replace with strict allowlist (currently only zone:* topics).
-DO $$
-DECLARE
-  pol record;
-BEGIN
-  FOR pol IN
-    SELECT polname FROM pg_policy
-    WHERE polrelid = 'realtime.messages'::regclass
-      AND polcmd = 'r'  -- SELECT
-  LOOP
-    -- Only drop policies created by us previously; safe-guarded names
-    IF pol.polname IN ('zone_realtime_select', 'allow_zone_or_other_topics', 'realtime_select_fallback') THEN
-      EXECUTE format('DROP POLICY IF EXISTS %I ON realtime.messages', pol.polname);
-    END IF;
-  END LOOP;
-END$$;
-
--- Create a strict SELECT policy: only zone:<zone_id> topics where caller is a zone member.
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policy
-    WHERE polrelid = 'realtime.messages'::regclass
-      AND polname = 'zone_realtime_strict_select'
-  ) THEN
-    EXECUTE $POLICY$
-      CREATE POLICY zone_realtime_strict_select
-      ON realtime.messages
-      FOR SELECT
-      TO authenticated
-      USING (
-        realtime.topic() LIKE 'zone:%'
-        AND public.is_zone_member(
-          auth.uid(),
-          NULLIF(split_part(realtime.topic(), ':', 2), '')::uuid
-        )
-      )
-    $POLICY$;
-  END IF;
-END$$;
+-- Realtime policies are managed by Supabase and are not changed by this
+-- project migration role.

@@ -14,6 +14,7 @@ import Settings from 'lucide-react/dist/esm/icons/settings';
 import Contact from 'lucide-react/dist/esm/icons/contact';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 
@@ -32,6 +33,8 @@ interface DashboardBottomNavProps {
   activeTab: string;
   onTabChange: (tabId: string) => void;
   activityBadge?: number;
+  isPremium?: boolean;
+  isBusinessTier?: boolean;
 }
 
 const TABS: NavTab[] = [
@@ -67,7 +70,9 @@ const TABS: NavTab[] = [
 
 const MORE_ITEMS: NavTab[] = [
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
+  { id: 'zone-dashboard', icon: LayoutDashboard, labelKey: 'zones.nav.dashboard', defaultLabel: 'Дашборд', path: '' },
   { id: 'zone-deals', icon: Contact, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки', path: '' },
+  { id: 'zone-contacts', icon: Contact, labelKey: 'zones.nav.contacts', defaultLabel: 'Контакты', path: '' },
   { id: 'zone-tasks', icon: Calendar, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи', path: '' },
   { id: 'zone-invoices', icon: FileText, labelKey: 'zones.nav.invoices', defaultLabel: 'Финансы', path: '' },
   { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки', path: '' },
@@ -80,12 +85,18 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
   activeTab,
   onTabChange,
   activityBadge,
+  isPremium = false,
+  isBusinessTier = false,
 }: DashboardBottomNavProps) {
   const { t } = useTranslation();
   const haptic = useHapticFeedback();
   const [moreOpen, setMoreOpen] = useState(false);
 
   const isMoreActive = MORE_TAB_IDS.includes(activeTab);
+  const canUseBusinessZone = isPremium || isBusinessTier;
+  const visibleMoreItems = MORE_ITEMS.filter((item) =>
+    canUseBusinessZone || !item.id.startsWith('zone-'),
+  );
 
   const handleTabClick = useCallback((tab: NavTab) => {
     haptic.lightTap();
@@ -162,7 +173,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
             <SheetTitle className="text-left">{t('dashboard.nav.menu', 'Меню')}</SheetTitle>
           </SheetHeader>
           <div className="grid grid-cols-3 gap-3 mt-4">
-            {MORE_ITEMS.map(item => {
+            {visibleMoreItems.map(item => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               return (

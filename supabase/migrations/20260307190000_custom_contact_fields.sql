@@ -3,7 +3,7 @@
 -- 1. Create zone_contact_fields table
 CREATE TABLE IF NOT EXISTS public.zone_contact_fields (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    zone_id TEXT NOT NULL REFERENCES public.zones(id) ON DELETE CASCADE,
+    zone_id UUID NOT NULL REFERENCES public.zones(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     type TEXT NOT NULL CHECK (type IN ('text', 'number', 'date', 'boolean')),
     is_required BOOLEAN DEFAULT false,
@@ -21,6 +21,11 @@ ADD COLUMN IF NOT EXISTS custom_fields JSONB DEFAULT '{}'::jsonb;
 
 -- RLS for zone_contact_fields
 ALTER TABLE public.zone_contact_fields ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Zone members can view contact fields" ON public.zone_contact_fields;
+DROP POLICY IF EXISTS "Zone admins can insert contact fields" ON public.zone_contact_fields;
+DROP POLICY IF EXISTS "Zone admins can update contact fields" ON public.zone_contact_fields;
+DROP POLICY IF EXISTS "Zone admins can delete contact fields" ON public.zone_contact_fields;
 
 CREATE POLICY "Zone members can view contact fields"
     ON public.zone_contact_fields FOR SELECT

@@ -23,7 +23,12 @@ CREATE INDEX IF NOT EXISTS smart_links_active_window_idx
 REVOKE EXECUTE ON FUNCTION public.increment_smart_link_click(text) FROM anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.increment_smart_link_click(text) TO service_role;
 
-CREATE OR REPLACE FUNCTION public.increment_smart_link_click(_slug text)
+-- The original RPC returned five columns. PostgreSQL cannot replace a
+-- function when its RETURNS TABLE row type changes, so replace the exact
+-- overload explicitly before installing the lifecycle-aware result shape.
+DROP FUNCTION public.increment_smart_link_click(text);
+
+CREATE FUNCTION public.increment_smart_link_click(_slug text)
 RETURNS TABLE (
   id uuid,
   target_url text,

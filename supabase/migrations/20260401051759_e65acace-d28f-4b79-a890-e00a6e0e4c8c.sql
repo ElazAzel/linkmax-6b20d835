@@ -1,4 +1,4 @@
-CREATE TABLE public.currency_rates (
+CREATE TABLE IF NOT EXISTS public.currency_rates (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   currency_pair text UNIQUE NOT NULL,
   rate numeric NOT NULL,
@@ -9,6 +9,7 @@ CREATE TABLE public.currency_rates (
 
 ALTER TABLE public.currency_rates ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can read currency rates" ON public.currency_rates;
 CREATE POLICY "Anyone can read currency rates"
   ON public.currency_rates FOR SELECT
   TO anon, authenticated

@@ -44,6 +44,7 @@ USING (owner_id = auth.uid())
 WITH CHECK (owner_id = auth.uid());
 
 -- Public can view published events
+DROP POLICY IF EXISTS "Public can view published events" ON public.events;
 CREATE POLICY "Public can view published events"
 ON public.events FOR SELECT
 USING (status = 'published');

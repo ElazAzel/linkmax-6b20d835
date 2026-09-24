@@ -16,7 +16,7 @@ import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const BASE_URL = 'https://lnkmx.my';
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://pphdcfxucfndmwulpfwv.supabase.co';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://hpnycvncipdxmvqfuulf.supabase.co';
 const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY
   || process.env.VITE_SUPABASE_ANON_KEY
   || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA';

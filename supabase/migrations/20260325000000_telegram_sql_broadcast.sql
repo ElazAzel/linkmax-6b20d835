@@ -15,18 +15,8 @@ CREATE POLICY "Service role has full access" ON public.bot_config
 -- Admin can manage config (check role from user_profiles)
 CREATE POLICY "Admins can manage bot_config" ON public.bot_config
     FOR ALL TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.user_profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
-    )
-    WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM public.user_profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
-    );
+    USING (public.has_role(auth.uid(), 'admin'::public.app_role))
+    WITH CHECK (public.has_role(auth.uid(), 'admin'::public.app_role));
 
 -- Function to send broadcast via SQL (using pg_net)
 CREATE OR REPLACE FUNCTION public.send_telegram_broadcast(p_custom_text text DEFAULT NULL)

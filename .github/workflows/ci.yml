@@ -75,7 +75,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate browser Supabase configuration
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$VITE_SUPABASE_URL" || { echo "::error::Missing CI secret: VITE_SUPABASE_URL"; exit 1; }
+          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY" || { echo "::error::Missing CI secret: VITE_SUPABASE_PUBLISHABLE_KEY"; exit 1; }
+
       - name: Run unit tests with coverage
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run test:ci
 
   e2e-tests:
@@ -96,12 +107,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Require isolated E2E account and staging browser secrets
+        env:
+          E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
+          E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$E2E_TEST_EMAIL" || { echo "::error::Missing CI secret: E2E_TEST_EMAIL"; exit 1; }
+          test -n "$E2E_TEST_PASSWORD" || { echo "::error::Missing CI secret: E2E_TEST_PASSWORD"; exit 1; }
+          test -n "$VITE_SUPABASE_URL" || { echo "::error::Missing CI secret: VITE_SUPABASE_URL"; exit 1; }
+          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY" || { echo "::error::Missing CI secret: VITE_SUPABASE_PUBLISHABLE_KEY"; exit 1; }
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
       - name: E2E tests
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://pphdcfxucfndmwulpfwv.supabase.co' }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}

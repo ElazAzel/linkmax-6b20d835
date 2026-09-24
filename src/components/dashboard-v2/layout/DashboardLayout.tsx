@@ -80,6 +80,8 @@ export const DashboardLayout = memo(function DashboardLayout({
           activeTab={activeTab}
           onTabChange={onTabChange}
           activityBadge={activityBadge}
+          isPremium={isPremium}
+          isBusinessTier={isBusinessTier}
         />
       )}
     </div>

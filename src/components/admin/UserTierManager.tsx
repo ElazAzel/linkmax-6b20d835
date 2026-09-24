@@ -110,38 +110,20 @@ export function UserTierManager() {
 
     setSaving(true);
     try {
-      // Update user profile
-      const isPaidTier = newTier === 'pro' || newTier === 'business';
-      const updateData: Partial<Tables<'user_profiles'>> = {
-        premium_tier: newTier,
-        premium_expires_at: isPaidTier && expiresAt ? new Date(expiresAt).toISOString() : null,
-        is_premium: isPaidTier
-      };
+      const isPaidTier = newTier === 'pro' || newTier === 'business' || newTier === 'starter';
+      const expiresAtIso = isPaidTier && expiresAt
+        ? new Date(expiresAt).toISOString()
+        : null;
 
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .update(updateData)
-        .eq('id', editingUser.id);
+      const { error: rpcError } = await supabase.rpc('admin_set_user_tier', {
+        p_target_user_id: editingUser.id,
+        p_tier: newTier,
+        p_expires_at: expiresAtIso ?? undefined,
+        p_make_admin: isAdmin,
+      });
 
-      if (profileError) throw profileError;
 
-      // Handle admin role
-      const wasAdmin = editingUser.isAdmin || false;
-      if (isAdmin && !wasAdmin) {
-        // Add admin role
-        const { error: roleError } = await supabase
-          .from('user_roles')
-          .insert({ user_id: editingUser.id, role: 'admin' });
-        if (roleError) throw roleError;
-      } else if (!isAdmin && wasAdmin) {
-        // Remove admin role
-        const { error: roleError } = await supabase
-          .from('user_roles')
-          .delete()
-          .eq('user_id', editingUser.id)
-          .eq('role', 'admin');
-        if (roleError) throw roleError;
-      }
+      if (rpcError) throw rpcError;
 
       toast.success(t('admin.tierUpdated'));
       setEditingUser(null);
@@ -153,6 +135,7 @@ export function UserTierManager() {
       setSaving(false);
     }
   };
+
 
   const setQuickExpiry = (duration: 'week' | 'month' | 'year' | 'lifetime') => {
     const now = new Date();

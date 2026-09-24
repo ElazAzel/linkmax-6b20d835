@@ -14,7 +14,9 @@ WITH CHECK (
   )
 );
 
--- 2. Add RLS policy to realtime.messages (Zone Broadcast Protection)
+-- 2. Realtime policies are managed by Supabase and cannot be altered by the
+-- project migration role. Keep the topic helper for application-owned RPCs;
+-- the managed realtime table is intentionally left untouched here.
 CREATE OR REPLACE FUNCTION public.check_realtime_topic_access(topic text)
 RETURNS boolean AS $$
 DECLARE
@@ -31,17 +33,6 @@ BEGIN
     RETURN true;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
-ALTER TABLE realtime.messages ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Zone members subscribe protection" ON realtime.messages;
-CREATE POLICY "Zone members subscribe protection"
-    ON realtime.messages
-    FOR SELECT
-    TO authenticated
-    USING (
-        public.check_realtime_topic_access(topic)
-    );
 
 -- 3. Prepare api_keys table for Developer Portal
 CREATE TABLE IF NOT EXISTS public.api_keys (

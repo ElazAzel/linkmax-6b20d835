@@ -4,7 +4,7 @@
 
 set -e
 
-BASE_URL="https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap"
+BASE_URL="https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/generate-sitemap"
 GOOGLEBOT_UA="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 GREEN='\033[0;32m'
 RED='\033[0;31m'

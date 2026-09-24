@@ -44,7 +44,7 @@ BEGIN
 
   -- Fire-and-forget HTTP POST to the Edge Function.
   PERFORM net.http_post(
-    url := 'https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/notify-indexnow',
+    url := 'https://hpnycvncipdxmvqfuulf.supabase.co/functions/v1/notify-indexnow',
     headers := jsonb_build_object('Content-Type', 'application/json'),
     body := jsonb_build_object(
       'urls', jsonb_build_array(v_url),
