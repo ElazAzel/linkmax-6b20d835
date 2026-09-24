@@ -1,0 +1,25 @@
+{
+  "name": "linkmax-promo-video",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "audio": "node scripts/generate-audio.mjs",
+    "prestudio": "npm run audio",
+    "studio": "remotion studio",
+    "prerender": "npm run audio",
+    "render": "remotion render LinkmaxPromo out/linkmax-promo.mp4",
+    "still": "remotion still LinkmaxPromo out/poster.png --frame=1040",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.528",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.528"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "typescript": "^5.9.3"
+  }
+}

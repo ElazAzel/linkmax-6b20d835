@@ -1,0 +1,4 @@
+node_modules
+out
+# Генерируются детерминированно: npm run audio
+public/audio/*.wav
