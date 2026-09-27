@@ -338,6 +338,13 @@ export const EventCheckin = memo(function EventCheckin() {
 
   return (
     <ScreenErrorBoundary screenName="EventCheckin">
+      <StaticSEOHead
+        title={t('events.checkinStaffMode', 'Проверка билетов на входе')}
+        description={t('events.checkinStaffMode', 'Проверка билетов на входе')}
+        canonical={typeof window !== 'undefined' ? window.location.href : ''}
+        currentLanguage={i18n.language}
+        indexable={false}
+      />
       <div className="min-h-screen bg-background flex flex-col">
         <header className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b safe-area-top">
           <div className="px-4 py-3">
