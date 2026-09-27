@@ -12,6 +12,7 @@
  */
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { isInternalCaller } from '../_shared/internal-auth.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -30,6 +31,17 @@ interface Body {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+
+  const authDb = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  );
+  if (!(await isInternalCaller(req, authDb))) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      status: 403,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
 
   const lovableKey = Deno.env.get('LOVABLE_API_KEY');
   const gscKey = Deno.env.get('GOOGLE_SEARCH_CONSOLE_API_KEY');
@@ -145,6 +157,13 @@ serve(async (req) => {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
+      }
+      let parsedInspect: URL;
+      try { parsedInspect = new URL(body.url); } catch {
+        return new Response(JSON.stringify({ error: 'invalid_url' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (parsedInspect.protocol !== 'https:' || (parsedInspect.hostname !== HOST && parsedInspect.hostname !== `www.${HOST}`)) {
+        return new Response(JSON.stringify({ error: 'url_not_allowed' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       // URL inspection signals Google to look at the URL again.
       const res = await fetch(`${GATEWAY}/v1/urlInspection/index:inspect`, {
