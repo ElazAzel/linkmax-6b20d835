@@ -76,6 +76,9 @@ jobs:
         run: npm ci
 
       - name: Run unit tests with coverage
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run test:ci
 
   e2e-tests:
