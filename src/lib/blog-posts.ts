@@ -3,10 +3,14 @@
 // Add new entries to BLOG_POSTS; the route /blog and /blog/:slug pick them up
 // automatically. Sitemap generator also reads from this file.
 
+import { HUB_OVERRIDES, HUB_NEW_POSTS } from './blog-posts-hub';
+
 export interface BlogPostSection {
   heading: string;
   paragraphs: string[];
   bullets?: string[];
+  /** Internal links shown under the section */
+  links?: Array<{ label: string; href: string }>;
 }
 
 export interface BlogPost {
@@ -28,6 +32,8 @@ export interface BlogPost {
   sections: BlogPostSection[];
   faq?: Array<{ question: string; answer: string }>;
   cta?: { label: string; href: string };
+  /** Slugs of related posts (SEO hub internal linking) */
+  related?: string[];
 }
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -784,12 +790,17 @@ export const BLOG_POSTS: BlogPost[] = [
 ];
 
 
+const ALL_POSTS: BlogPost[] = [
+  ...BLOG_POSTS.map((p) => HUB_OVERRIDES[p.slug] ?? p),
+  ...HUB_NEW_POSTS.filter((n) => !BLOG_POSTS.some((p) => p.slug === n.slug)),
+];
+
 export function getBlogPost(slug: string): BlogPost | undefined {
-  return BLOG_POSTS.find((p) => p.slug === slug);
+  return ALL_POSTS.find((p) => p.slug === slug);
 }
 
 export function listBlogPosts(): BlogPost[] {
-  return [...BLOG_POSTS].sort((a, b) =>
+  return [...ALL_POSTS].sort((a, b) =>
     b.publishedAt.localeCompare(a.publishedAt),
   );
 }

@@ -16,7 +16,10 @@ export default function BlogPost() {
   }
 
   const url = `${BASE}/blog/${post.slug}`;
-  const related = listBlogPosts().filter((p) => p.slug !== post.slug).slice(0, 2);
+  const allPosts = listBlogPosts();
+  const related = post.related?.length
+    ? post.related.map((s) => allPosts.find((p) => p.slug === s)).filter((p): p is NonNullable<typeof p> => !!p)
+    : allPosts.filter((p) => p.slug !== post.slug).slice(0, 2);
 
   const articleLd = {
     '@context': 'https://schema.org',
