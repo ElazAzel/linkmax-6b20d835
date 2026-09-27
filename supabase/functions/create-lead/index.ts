@@ -142,14 +142,24 @@ serve(async (req: Request) => {
       );
     }
 
-    // Verify that the page owner exists
-    const { data: profile, error: profileError } = await supabase
-      .from('user_profiles')
-      .select('id')
-      .eq('id', pageOwnerId)
-      .maybeSingle();
+    // Leads can only be submitted to owners with a published public page,
+    // and a supplied pageId must be a published page of that same owner.
+    if (pageId !== undefined && pageId !== null && (typeof pageId !== 'string' || !uuidRegex.test(pageId))) {
+      return new Response(
+        JSON.stringify({ error: "Invalid pageId format" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    let pageQuery = supabase
+      .from('pages')
+      .select('id, integrations')
+      .eq('user_id', pageOwnerId)
+      .eq('is_published', true);
+    if (pageId) pageQuery = pageQuery.eq('id', pageId);
+    const { data: publishedPages, error: profileError } = await pageQuery.limit(1);
+    const verifiedPage = publishedPages?.[0] ?? null;
 
-    if (profileError || !profile) {
+    if (profileError || !verifiedPage) {
       console.error('Invalid page owner:', pageOwnerId);
       return new Response(
         JSON.stringify({ error: "Invalid page owner" }),
@@ -242,16 +252,20 @@ serve(async (req: Request) => {
     // Handle webhook integrations
     if (pageId) {
       try {
-        const { data: page } = await supabase
-          .from('pages')
-          .select('integrations')
-          .eq('id', pageId)
-          .single();
-
-        const webhookUrl = page?.integrations?.webhook_url;
+        const rawWebhook = (verifiedPage.integrations as Record<string, unknown> | null)?.webhook_url;
+        let webhookUrl: string | null = null;
+        if (typeof rawWebhook === 'string') {
+          try {
+            const u = new URL(rawWebhook);
+            const host = u.hostname.toLowerCase();
+            const privateHost = host === 'localhost' || host.endsWith('.local') || host.endsWith('.internal')
+              || /^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|0\.)/.test(host) || host.includes(':') || host === '[::1]';
+            if (u.protocol === 'https:' && !privateHost) webhookUrl = u.toString();
+          } catch { /* invalid webhook url */ }
+        }
 
         if (webhookUrl) {
-          console.log(`Sending webhook to ${webhookUrl}`);
+          
           fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
