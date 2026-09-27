@@ -127,13 +127,13 @@ serve(async (req) => {
     }
 
     // Only known language codes may reach the prompt.
-    if (typeof sourceLanguage !== 'string' || !(sourceLanguage in LANGUAGE_NAMES)) {
+    if (typeof sourceLanguage !== 'string' || !Object.hasOwn(LANGUAGE_NAMES, sourceLanguage)) {
       return new Response(
         JSON.stringify({ error: "Unsupported sourceLanguage" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-    const knownTargets = targetLanguages.filter((l: unknown): l is string => typeof l === 'string' && l in LANGUAGE_NAMES);
+    const knownTargets = targetLanguages.filter((l: unknown): l is string => typeof l === 'string' && Object.hasOwn(LANGUAGE_NAMES, l));
     if (knownTargets.length === 0) {
       return new Response(
         JSON.stringify({ error: "Unsupported targetLanguages" }),
