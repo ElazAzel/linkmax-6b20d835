@@ -1,9 +1,14 @@
 # Roadmap
 
-## Open (blocked: hosted database paused — no credits, resume disabled for the agent)
+## Open
 - [ ] Deploy edge functions `track-analytics-event` and `robokassa` (was returning 404/401).
-- [ ] Grant lifetime Pro to admin@lnkmx.my (`afc67c7e-660a-4cbe-ae00-517b752e30d3`): `user_profiles.is_premium=true`, `premium_tier='pro'`, `premium_expires_at=NULL`, active subscription until 2099.
-- [ ] Apply migration `admin_set_user_tier` RPC to live DB (SQL ready, retried 2026-09-12, pooler unavailable).
+- [x] Lifetime Pro for admin@lnkmx.my (`afc67c7e-660a-4cbe-ae00-517b752e30d3`) applied 2026-09-27 (`profiles.is_premium=true`, `premium_tier='pro'`, `premium_expires_at=NULL`).
+- [x] `admin_set_user_tier` RPC applied to live DB 2026-09-27 (admin check via `user_roles`, cannot demote self).
+- [x] Outcome Home crash fixed 2026-09-27 by disabling flags `outcome_home`, `revenue_core`, `beauty_revenue_kit`, `booking_self_service` (their tables are not in the DB).
+- [x] Staff check-in link for events 2026-09-27: `events.checkin_token`, RPCs `get_event_checkin_context` / `checkin_event_ticket_by_token` / `get_event_checkin_token` / `rotate_event_checkin_token`, public route `/events/checkin/:token`, dialog in EventDetailScreen. Verified in browser.
+- [x] Niche landings redesign 2026-09-27: NicheLanding.tsx rebuilt (light brand palette, phone mockup, comparison table with Taplink/Linktree, sticky mobile CTA); replaced the dark gradient hero.
+- [x] Dashboard declutter 2026-09-27: removed Tokens / Achievements / Friends entries from Account settings (gamification stays out of the main flow).
+- [ ] React dev warning `Function components cannot be given refs` comes from preview instrumentation, not app code (no `ref` is passed to providers, no `cloneElement` in `src/`). Dev-only, not present in production builds.
 - [ ] Update `.env` with staging Supabase `SUPABASE_PROJECT_ID`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` once user provides them (agent cannot create a Supabase project or mint keys).
 - [x] Оптимизация проекта (2026-09-20): аудит показал, что тяжёлые библиотеки (exceljs, jspdf, recharts, zxing) уже изолированы в ленивых чанках. Убран `vendor-react` из manualChunks (правило Runtime Stability — предотвращает race conditions), Turnstile-скрипт капчи переведён с глобальной загрузки на ленивую (~100 kB на каждый заход). Опционально на будущее: трим неиспользуемых ключей в ru.json (428 KB — самый тяжёлый языковой пакет).
 - [ ] Apply security migration for findings `analytics_anon_insert_flood` + `template_likes_public_user_ids`: drop anon/authenticated INSERT on `public.analytics` (ingestion only via `track-analytics-event` service-role function), keep `template_likes` SELECT to own rows for authenticated users, revoke anon SELECT, add `get_template_like_count(uuid)` RPC. SQL prepared 2026-09-15, blocked by paused DB.
