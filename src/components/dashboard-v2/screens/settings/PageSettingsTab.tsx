@@ -181,6 +181,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     const [contactPhoneInput, setContactPhoneInput] = useState(contactPhone || '');
     const [contactWhatsappInput, setContactWhatsappInput] = useState(contactWhatsapp || '');
     const [countryCodeInput, setCountryCodeInput] = useState(countryCode || '');
+    useEffect(() => { setCountryCodeInput(countryCode || ''); }, [countryCode]);
 
     const handleSaveSlug = async () => {
         if (!onUpdateSlug || slugInput === pageSlug) return;
