@@ -412,7 +412,7 @@ export async function fetchExpertDirectoryProfiles(
 
   if (pageError) throw wrapError(pageError);
 
-  const PLACEHOLDER_TITLES = new Set(['your name', 'ваше имя', 'имя', 'name', 'profile', '']);
+  const PLACEHOLDER_TITLES = new Set(['your name', 'ваше имя', 'имя', 'name', 'profile', 'my page', 'моя страница', '']);
   // Hide empty/template pages so the directory only links to real profiles.
   const pages = ((pageRows || []) as unknown as ExpertDirectoryPageRow[]).filter(
     (page) => !PLACEHOLDER_TITLES.has((page.title || '').trim().toLowerCase()),
