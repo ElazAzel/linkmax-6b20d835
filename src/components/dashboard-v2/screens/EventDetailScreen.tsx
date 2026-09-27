@@ -752,6 +752,13 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
           )}
         </div>
       </ScrollArea>
+
+      <StaffCheckinLinkDialog
+        eventId={eventId}
+        eventTitle={event?.title}
+        open={staffLinkOpen}
+        onOpenChange={setStaffLinkOpen}
+      />
     </div>
   );
 });
