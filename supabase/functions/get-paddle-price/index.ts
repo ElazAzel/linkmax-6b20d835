@@ -1,4 +1,5 @@
 import { gatewayFetch, type PaddleEnv } from '../_shared/paddle.ts';
+import { getSupabaseUser } from '../_shared/utils.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,20 +19,28 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const { user } = await getSupabaseUser(req);
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
     const { priceId, environment } = await req.json();
-    if (!priceId) {
+    if (typeof priceId !== 'string' || !/^[a-zA-Z0-9_-]{1,100}$/.test(priceId)) {
       return new Response(JSON.stringify({ error: 'priceId is required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    const env: PaddleEnv = environment === 'live' ? 'live' : 'sandbox';
+    const serverEnv = Deno.env.get('PADDLE_ENV');
+    const env: PaddleEnv = serverEnv === 'live' || serverEnv === 'sandbox' ? serverEnv : (environment === 'live' ? 'live' : 'sandbox');
     const paddleId = await resolvePaddlePrice(priceId, env);
     return new Response(JSON.stringify({ paddleId }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    return new Response(JSON.stringify({ error: 'Price lookup failed' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
