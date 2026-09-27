@@ -68,6 +68,17 @@ serve(async (req) => {
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
+
+    // Require a signed-in user
+    const authHeader = req.headers.get('Authorization') ?? '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const { data: authData } = token ? await supabase.auth.getUser(token) : { data: { user: null } };
+    if (!authData?.user) {
+      return new Response(
+        JSON.stringify({ error: 'Sign in required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     // Check rate limit
     const allowed = await checkRateLimit(supabase, ipAddress, 'chatbot-stream');
