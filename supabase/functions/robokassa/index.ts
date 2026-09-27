@@ -110,11 +110,12 @@ serve(async (req: Request) => {
             description = `Покупка ${tokenAmount} Linkkon tokens`;
             shp_related_id = tokenAmount.toString();
         } else {
-            if (!amount || amount <= 0) {
-                throw new Error("Invalid amount for payment");
-            }
-            outSum = amount;
-            description = customDescription || `Payment on lnkmx.my`;
+            // Client-priced payments are not accepted: every checkout amount
+            // must come from a server-side price table.
+            return new Response(
+                JSON.stringify({ error: 'Unsupported payment type' }),
+                { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
         }
 
         const mrhLogin = Deno.env.get("ROBOKASSA_LOGIN");
@@ -184,7 +185,7 @@ serve(async (req: Request) => {
     } catch (error: any) {
         console.error("RoboKassa init error:", error);
         return new Response(
-            JSON.stringify({ error: error.message }),
+            JSON.stringify({ error: 'Payment initialization failed' }),
             { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
     }
