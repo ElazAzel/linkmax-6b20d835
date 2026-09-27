@@ -336,13 +336,13 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                   {landing.description}
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <Button asChild size="lg" className="h-13 rounded-2xl px-7 text-base font-bold" onClick={() => handleCtaClick('hero')}>
+                  <Button asChild size="lg" className="h-14 rounded-2xl px-7 text-base font-bold" onClick={() => handleCtaClick('hero')}>
                     <Link to={authUrl}>
                       {landing.primaryCta}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="h-13 rounded-2xl px-7 text-base font-bold">
+                  <Button asChild size="lg" variant="outline" className="h-14 rounded-2xl px-7 text-base font-bold">
                     <Link to={`/gallery?niche=${landing.niche}`}>{landing.secondaryCta}</Link>
                   </Button>
                 </div>
@@ -501,7 +501,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
             <div className="mx-auto max-w-4xl px-4 py-16 text-center">
               <h2 className="text-2xl font-black leading-tight tracking-tight sm:text-3xl">{landing.previewTitle}</h2>
               <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted-foreground">{landing.previewSubtitle}</p>
-              <Button asChild size="lg" className="mt-7 h-13 rounded-2xl px-8 text-base font-bold" onClick={() => handleCtaClick('footer')}>
+              <Button asChild size="lg" className="mt-7 h-14 rounded-2xl px-8 text-base font-bold" onClick={() => handleCtaClick('footer')}>
                 <Link to={authUrl}>
                   {landing.primaryCta}
                   <ArrowRight className="ml-2 h-4 w-4" />
