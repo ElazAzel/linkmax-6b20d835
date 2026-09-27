@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { sendMessage, getChat, isConfigured } from "../_shared/telegram.ts";
+import { getChat, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -66,37 +66,19 @@ serve(async (req: Request) => {
       const result = await getChat(chatId);
       console.log('Telegram API response:', JSON.stringify(result));
 
-      // Send a test message to confirm the bot can reach this chat
-      try {
-        await sendMessage(chatId,
-          '✅ lnkmx.my подключен! Теперь вы будете получать уведомления о новых заявках.\n\n✅ lnkmx.my connected! You will now receive notifications about new leads.',
-          { parse_mode: 'HTML' }
-        );
-
-        return new Response(
-          JSON.stringify({
-            valid: true,
-            chatInfo: {
-              id: result.result.id,
-              type: result.result.type,
-              firstName: result.result.first_name,
-              username: result.result.username,
-            }
-          }),
-          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      } catch (sendErr: unknown) {
-        const errMsg = sendErr instanceof Error ? sendErr.message : String(sendErr);
-        console.log('Failed to send test message:', errMsg);
-        return new Response(
-          JSON.stringify({
-            valid: false,
-            error: 'cannot_send_message',
-            description: errMsg
-          }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
+      // Validation is read-only: we never send messages to a caller-chosen chat.
+      return new Response(
+        JSON.stringify({
+          valid: true,
+          chatInfo: {
+            id: result.result.id,
+            type: result.result.type,
+            firstName: result.result.first_name,
+            username: result.result.username,
+          }
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     } catch (chatErr: unknown) {
       const errMsg = chatErr instanceof Error ? chatErr.message : String(chatErr);
       console.log('Invalid chat ID:', errMsg);
