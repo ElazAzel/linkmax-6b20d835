@@ -235,10 +235,11 @@ serve(async (req: Request) => {
         message = `✅ <b>Ваш подарок активирован!</b>\n\n${senderName} активировал ваш подарок Premium!`;
         break;
       case 'challenge_completed':
-        message = `🏆 <b>Челлендж выполнен!</b>\n\nВы выполнили челлендж "<b>${challengeTitle}</b>"!\n\n🎉 Получите награду в приложении!`;
+        message = `🏆 <b>Челлендж выполнен!</b>\n\nВы выполнили челлендж "<b>${String(challengeTitle).replace(/[<>&]/g, '').slice(0, 100)}</b>"!\n\n🎉 Получите награду в приложении!`;
         break;
       case 'friend_challenge_completed':
-        message = `👏 <b>${senderName}</b> выполнил челлендж!\n\n"${challengeTitle}"`;
+        // Caller-supplied titles are never forwarded to other users.
+        message = `👏 <b>${String(senderName).replace(/[<>&]/g, '')}</b> выполнил еженедельный челлендж!`;
         break;
       case 'page_liked':
         message = `❤️ <b>Новый лайк!</b>\n\nКто-то лайкнул вашу страницу${pageName ? ` "${pageName}"` : ''}!\n\n👉 Посмотрите в галерее lnkmx.my`;
