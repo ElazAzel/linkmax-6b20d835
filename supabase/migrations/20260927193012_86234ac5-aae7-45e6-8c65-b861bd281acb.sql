@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.admin_set_user_tier(uuid, text, timestamptz, boolean) FROM anon;
