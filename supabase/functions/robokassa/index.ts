@@ -51,7 +51,7 @@ serve(async (req: Request) => {
         const authenticatedUserId = user.id;
 
         const payload = await req.json() as PaymentRequest;
-        const { type = 'subscription', userId, plan, period, amount, description: customDescription, relatedId, tokenAmount } = payload;
+        const { type = 'subscription', userId, plan, period, relatedId, tokenAmount } = payload;
 
         // Verify the userId matches the authenticated user
         if (!userId || userId !== authenticatedUserId) {
