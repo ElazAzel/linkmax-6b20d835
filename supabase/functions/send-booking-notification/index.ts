@@ -36,16 +36,10 @@ async function sha256(value: string): Promise<string> {
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
-function callerRole(req: Request): string | null {
-  try {
-    const token = req.headers.get('Authorization')?.replace(/^Bearer\s+/iu, '');
-    if (!token) return null;
-    const payload = token.split('.')[1].replaceAll('-', '+').replaceAll('_', '/');
-    const decoded = JSON.parse(atob(payload.padEnd(Math.ceil(payload.length / 4) * 4, '=')));
-    return typeof decoded.role === 'string' ? decoded.role : null;
-  } catch {
-    return null;
-  }
+// Trusted internal caller: exact service-role key match (no unsigned JWT claims).
+function isServiceCaller(req: Request, serviceKey: string): boolean {
+  const token = req.headers.get('Authorization')?.replace(/^Bearer\s+/iu, '').trim();
+  return !!token && token === serviceKey;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -94,7 +88,7 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    if (callerRole(req) !== 'service_role' && !accessTokenVerified) {
+    if (!isServiceCaller(req, serviceKey) && !accessTokenVerified) {
       return json({ success: false, error: 'not_allowed' }, 403);
     }
 
