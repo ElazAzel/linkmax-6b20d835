@@ -78,6 +78,7 @@ const STATIC_PAGES = [
   { loc: '/terms', changefreq: 'yearly', priority: '0.3' },
   { loc: '/privacy', changefreq: 'yearly', priority: '0.3' },
   { loc: '/payment-terms', changefreq: 'yearly', priority: '0.3' },
+  { loc: '/sitemap', changefreq: 'weekly', priority: '0.5' },
 ];
 
 const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];

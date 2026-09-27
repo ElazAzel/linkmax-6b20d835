@@ -102,6 +102,7 @@ const CollabPage = lazy(() => import("./pages/CollabPage"));
 const JoinTeam = lazy(() => import("./pages/JoinTeam"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
+const SitemapPage = lazy(() => import("./pages/SitemapPage"));
 const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
@@ -194,6 +195,7 @@ const router = createBrowserRouter([
       { path: "invites/:token", element: <AcceptInvite /> },
       { path: "terms", element: <Terms /> },
       { path: "privacy", element: <Privacy /> },
+      { path: "sitemap", element: <SitemapPage /> },
       { path: "payment-terms", element: <PaymentTerms /> },
       { path: "experts", element: <Experts /> },
       { path: "experts/:tag", element: <Experts /> },
