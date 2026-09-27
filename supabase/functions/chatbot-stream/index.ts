@@ -148,19 +148,21 @@ serve(async (req) => {
       throw new Error('Page not found');
     }
 
-    // Fetch private chatbot context from private_page_data table
-    const { data: privateData } = await supabase
-      .from('private_page_data')
-      .select('chatbot_context')
-      .eq('page_id', page.id)
-      .maybeSingle();
-
     // Fetch blocks
     const { data: blocks } = await supabase
       .from('blocks')
       .select('*')
       .eq('page_id', page.id)
       .order('position');
+
+    // The AI assistant only runs for pages whose owner added a chatbot block.
+    const hasChatbot = (blocks ?? []).some((b: { type?: string }) => typeof b.type === 'string' && b.type.toLowerCase().includes('chat'));
+    if (!hasChatbot) {
+      return new Response(
+        JSON.stringify({ error: 'Chatbot is not enabled for this page' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Sanitize user-controlled content to mitigate prompt injection
     function sanitizeForPrompt(text: string): string {
@@ -181,9 +183,6 @@ serve(async (req) => {
     context += `- Name: ${sanitizeForPrompt(page.title || 'Not specified')}\n`;
     context += `- Bio: ${sanitizeForPrompt(page.description || 'Not specified')}\n\n`;
 
-    if (privateData?.chatbot_context) {
-      context += `Additional Context (private):\n${sanitizeForPrompt(privateData.chatbot_context)}\n\n`;
-    }
 
     if (blocks && blocks.length > 0) {
       context += `Page Content:\n`;
