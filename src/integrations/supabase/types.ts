@@ -953,6 +953,7 @@ export type Database = {
         Row: {
           block_id: string
           capacity: number | null
+          checkin_token: string
           cover_url: string | null
           created_at: string
           currency: string | null
@@ -978,6 +979,7 @@ export type Database = {
         Insert: {
           block_id: string
           capacity?: number | null
+          checkin_token?: string
           cover_url?: string | null
           created_at?: string
           currency?: string | null
@@ -1003,6 +1005,7 @@ export type Database = {
         Update: {
           block_id?: string
           capacity?: number | null
+          checkin_token?: string
           cover_url?: string | null
           created_at?: string
           currency?: string | null
@@ -5334,6 +5337,15 @@ export type Database = {
         }
         Returns: Json
       }
+      admin_set_user_tier: {
+        Args: {
+          p_expires_at?: string
+          p_make_admin?: boolean
+          p_target_user_id: string
+          p_tier: string
+        }
+        Returns: undefined
+      }
       aggregate_usage: {
         Args: {
           _metric_code: string
@@ -5360,6 +5372,10 @@ export type Database = {
         Returns: boolean
       }
       check_page_limits: { Args: { p_user_id: string }; Returns: Json }
+      checkin_event_ticket_by_token: {
+        Args: { p_ticket_code: string; p_token: string }
+        Returns: Json
+      }
       claim_daily_token_reward:
         | {
             Args: { p_action_type: string; p_amount: number; p_user_id: string }
@@ -5478,6 +5494,8 @@ export type Database = {
           title: string
         }[]
       }
+      get_event_checkin_context: { Args: { p_token: string }; Returns: Json }
+      get_event_checkin_token: { Args: { p_event_id: string }; Returns: string }
       get_event_registration_count: {
         Args: { p_event_id: string }
         Returns: number
@@ -5782,6 +5800,10 @@ export type Database = {
         Returns: Json
       }
       resolve_page_zone_id: { Args: { p_page_id: string }; Returns: string }
+      rotate_event_checkin_token: {
+        Args: { p_event_id: string }
+        Returns: string
+      }
       rotate_team_invite_code: { Args: { p_team_id: string }; Returns: string }
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }

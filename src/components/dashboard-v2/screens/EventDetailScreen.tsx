@@ -57,6 +57,8 @@ import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';
 import type { SupportedLanguage } from '@/lib/i18n-helpers';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import { StaffCheckinLinkDialog } from '@/components/events/StaffCheckinLinkDialog';
 import type { EventFormField } from '@/types/page';
 
 interface Registration {
@@ -123,6 +125,8 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
   const [activeTab, setActiveTab] = useState<'all' | 'confirmed' | 'pending' | 'checked'>('all');
   const [refreshing, setRefreshing] = useState(false);
   const [exporting, setExporting] = useState(false);
+
+  const [staffLinkOpen, setStaffLinkOpen] = useState(false);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
 
@@ -632,6 +636,25 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
               {!isPremium && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
             </Button>
 
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 h-9 text-xs"
+              onClick={() => {
+                if (!isPremium) {
+                  openPremiumPurchase();
+                  return;
+                }
+                setStaffLinkOpen(true);
+              }}
+            >
+              <Link2 className="h-4 w-4 mr-1.5" />
+              {t('events.staffLink', 'Ссылка на вход')}
+              {!isPremium && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
+            </Button>
+
+
+
             {/* Export Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -729,6 +752,13 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
           )}
         </div>
       </ScrollArea>
+
+      <StaffCheckinLinkDialog
+        eventId={eventId}
+        eventTitle={event?.title}
+        open={staffLinkOpen}
+        onOpenChange={setStaffLinkOpen}
+      />
     </div>
   );
 });
