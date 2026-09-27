@@ -28,16 +28,16 @@ export function useAutoTranslate() {
     if (!text?.trim()) return null;
 
     try {
-      const { data, error } = await supabase.functions.invoke('translate-content', {
-        body: {
-          text,
-          sourceLanguage: options.sourceLanguage,
-          targetLanguages: options.targetLanguages,
-        },
-      });
-
-      if (error) throw error;
-      return data.translations;
+      return await guardedTranslate(
+        `${options.sourceLanguage}|${options.targetLanguages.join(',')}|${text}`,
+        () => supabase.functions.invoke('translate-content', {
+          body: {
+            text,
+            sourceLanguage: options.sourceLanguage,
+            targetLanguages: options.targetLanguages,
+          },
+        }),
+      );
     } catch (error) {
       logger.error('Translation error:', error, { context: 'useAutoTranslate' });
       return null;

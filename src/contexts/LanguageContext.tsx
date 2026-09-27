@@ -145,18 +145,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (!text?.trim() || targetLanguages.length === 0) return null;
 
     try {
-      const { data, error } = await supabase.functions.invoke('translate-content', {
-        body: {
-          text,
-          sourceLanguage,
-          targetLanguages,
-        },
-      });
-
-      if (error) throw error;
-      return data.translations || null;
-    } catch (error) {
-      console.error('Translation error:', error);
+      return await guardedTranslate(
+        `${sourceLanguage}|${targetLanguages.join(',')}|${text}`,
+        () => supabase.functions.invoke('translate-content', {
+          body: { text, sourceLanguage, targetLanguages },
+        }),
+      );
+    } catch {
       return null;
     }
   };
