@@ -10,6 +10,7 @@
  * - Version tracking for stable URLs
  */
 
+import { buildProfileSeoTitle, buildProfileSeoDescription } from '@/lib/seo/profile-title';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PageData } from '@/types/page';
