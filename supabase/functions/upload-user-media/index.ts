@@ -55,7 +55,7 @@ serve(async (req) => {
     // Determine tier
     const { data: profile } = await admin
       .from('user_profiles')
-      .select('is_premium')
+      .select('is_premium, premium_expires_at')
       .eq('id', user.id)
       .maybeSingle();
 
