@@ -447,6 +447,12 @@ export const EventCheckin = memo(function EventCheckin() {
                 <Input
                   value={manualCode}
                   onChange={(e) => setManualCode(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && manualCode.trim() && !processing) {
+                      e.preventDefault();
+                      processScan(manualCode);
+                    }
+                  }}
                   placeholder="XXXXXX"
                   className="font-mono text-center text-lg uppercase"
                   maxLength={32}
