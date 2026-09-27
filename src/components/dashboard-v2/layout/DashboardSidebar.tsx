@@ -303,7 +303,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         </div>
 
         {/* Business Zone section (Pro + Business tier) */}
-        {(isPremium || isBusinessTier) && (
+        {(isPremium || isBusinessTier) && hasBusinessZone && (
           <div className="mb-6">
             <div className="mx-2 mb-4 h-px bg-white/10" />
             {!collapsed && (
