@@ -54,24 +54,41 @@ const NICHE_TAGS = [
 
 export const Experts = memo(function Experts() {
   const params = useParams();
-  const tag = params?.tag as string;
+  const tag = params?.tag as string | undefined;
+  const citySlug = params?.city as string | undefined;
   const [searchParams, setSearchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
   const language = i18n.language as 'ru' | 'en' | 'kk';
+  const hubLang = pickLang(i18n.language);
+  const hubNiche = findHubNiche(tag);
+  const hubCity = findHubCity(citySlug);
   const searchTerm = searchParams.get('q') ?? '';
   const cityFilter = searchParams.get('city') ?? '';
   const verifiedOnly = searchParams.get('verified') === '1';
   const normalizedSearchTerm = normalizeExpertDirectoryFilter(searchTerm)?.toLocaleLowerCase(language) ?? '';
 
   const { data: experts = [], isLoading } = useQuery({
-    queryKey: ['experts', tag, cityFilter, verifiedOnly],
-    queryFn: () => fetchExpertDirectoryProfiles({
-      tag,
-      city: cityFilter,
-      verifiedOnly,
-      limit: 100,
-    }),
+    queryKey: ['experts', tag, citySlug, cityFilter, verifiedOnly],
+    queryFn: async () => {
+      const cities = hubCity ? hubCity.aliases : [cityFilter];
+      const lists = await Promise.all(cities.map((city) => fetchExpertDirectoryProfiles({
+        tag,
+        city,
+        verifiedOnly,
+        limit: 100,
+      })));
+      const seen = new Set<string>();
+      return lists.flat().filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true)));
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // For city hubs with few local pages, show the niche nationwide as a helpful fallback
+  const { data: fallbackExperts = [] } = useQuery({
+    queryKey: ['experts-fallback', tag],
+    queryFn: () => fetchExpertDirectoryProfiles({ tag, verifiedOnly: false, limit: 12 }),
+    enabled: !!hubCity && !isLoading && experts.length < 3,
+    staleTime: 5 * 60 * 1000,
   });
 
   const visibleExperts = useMemo(() => {
@@ -108,22 +125,21 @@ export const Experts = memo(function Experts() {
 
   const buildExpertsPath = (nextTag?: string) => {
     const query = searchParams.toString();
-    return `${nextTag ? `/experts/${nextTag}` : '/experts'}${query ? `?${query}` : ''}`;
+    const base = nextTag
+      ? `/experts/${nextTag}${hubCity && findHubNiche(nextTag)?.hub ? `/${hubCity.slug}` : ''}`
+      : hubCity ? `/experts/city/${hubCity.slug}` : '/experts';
+    return `${base}${query ? `?${query}` : ''}`;
   };
 
   // Page meta
-  const currentTag = NICHE_TAGS.find(t => t.slug === tag);
-  const pageTitle = tag
-    ? `${currentTag?.label[language] || tag} ${t('experts.title', 'эксперты')} | lnkmx`
-    : t('experts.directoryTitle', 'Каталог экспертов | lnkmx');
-
-  const pageDescription = tag
-    ? t('experts.tagDescription', { tag: currentTag?.label[language] || tag })
-    : t('experts.directoryDescription', 'Найдите экспертов и специалистов на lnkmx');
-
-  const canonical = tag
-    ? `${getAppDomain()}/experts/${tag}`
-    : `${getAppDomain()}/experts`;
+  const currentTag = NICHE_TAGS.find(t => t.slug === tag) ?? hubNiche;
+  const meta = buildHubMeta(hubLang, hubNiche, hubCity);
+  const unknownRoute = (!!tag && !hubNiche) || (!!citySlug && !hubCity) || (!!hubCity && !!hubNiche && !hubNiche.hub);
+  const pageTitle = unknownRoute ? `${currentTag?.label[language] || tag} | LinkMAX` : meta.title;
+  const pageDescription = meta.description;
+  const canonical = `${getAppDomain()}${meta.path}`;
+  const hasFilters = !!searchTerm || !!cityFilter || verifiedOnly;
+  const indexable = !unknownRoute && !hasFilters;
 
   // JSON-LD Schema
   useEffect(() => {
