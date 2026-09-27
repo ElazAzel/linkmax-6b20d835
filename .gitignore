@@ -70,3 +70,11 @@ supabase/migrations_backup/
 # Superdesign temporary component conversion files
 .superdesign/tmp/
 
+
+# Agent/tool artifacts
+.gemini/
+.jules/
+.Jules/
+.playwright-mcp/
+supabase/.temp/
+*.tsbuildinfo
