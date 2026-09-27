@@ -5860,6 +5860,7 @@ export type Database = {
         }
         Returns: string
       }
+      verify_internal_job_token: { Args: { p_token: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
