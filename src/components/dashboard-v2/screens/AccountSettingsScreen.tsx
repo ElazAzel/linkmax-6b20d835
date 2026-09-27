@@ -202,40 +202,13 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
           </Card>
         </motion.div>
 
-        {/* Quick Actions */}
-        <motion.div variants={itemVariants} className="grid grid-cols-2 gap-3">
-          <button
-            onClick={props.onOpenTokens}
-            className="p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-violet-500/10 border border-primary/20 text-left transition-all active:scale-[0.98]"
-          >
-            <Coins className="h-6 w-6 text-primary mb-2" />
-            <div className="font-bold">{t('dashboard.accountSettings.tokens', 'Tokens')}</div>
-            <div className="text-xs text-muted-foreground">{t('dashboard.accountSettings.tokensDesc', 'Balance & history')}</div>
-          </button>
-
-          <button
-            onClick={props.onOpenAchievements}
-            className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-left transition-all active:scale-[0.98]"
-          >
-            <Trophy className="h-6 w-6 text-amber-500 mb-2" />
-            <div className="font-bold">{t('dashboard.accountSettings.achievements', 'Achievements')}</div>
-            <div className="text-xs text-muted-foreground">{t('dashboard.accountSettings.achievementsDesc', 'Your progress')}</div>
-          </button>
-        </motion.div>
-
         {/* Account Section */}
         <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.accountSettings.account', 'Account')}
           </h3>
           <Card className="divide-y divide-border/50 overflow-hidden">
-            <SettingsItem
-              icon={Users}
-              iconBg="bg-pink-500/15"
-              iconColor="text-pink-500"
-              label={t('dashboard.accountSettings.friends', 'Friends')}
-              onClick={props.onOpenFriends}
-            />
+
             <SettingsItem
               icon={LayoutTemplate}
               iconBg="bg-emerald-500/15"
