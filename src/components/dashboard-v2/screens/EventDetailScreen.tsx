@@ -636,6 +636,25 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
               {!isPremium && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
             </Button>
 
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 h-9 text-xs"
+              onClick={() => {
+                if (!isPremium) {
+                  openPremiumPurchase();
+                  return;
+                }
+                setStaffLinkOpen(true);
+              }}
+            >
+              <Link2 className="h-4 w-4 mr-1.5" />
+              {t('events.staffLink', 'Ссылка на вход')}
+              {!isPremium && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
+            </Button>
+
+
+
             {/* Export Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
