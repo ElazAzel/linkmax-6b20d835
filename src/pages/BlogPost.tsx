@@ -16,7 +16,10 @@ export default function BlogPost() {
   }
 
   const url = `${BASE}/blog/${post.slug}`;
-  const related = listBlogPosts().filter((p) => p.slug !== post.slug).slice(0, 2);
+  const allPosts = listBlogPosts();
+  const related = post.related?.length
+    ? post.related.map((s) => allPosts.find((p) => p.slug === s)).filter((p): p is NonNullable<typeof p> => !!p)
+    : allPosts.filter((p) => p.slug !== post.slug).slice(0, 2);
 
   const articleLd = {
     '@context': 'https://schema.org',
@@ -134,6 +137,15 @@ export default function BlogPost() {
                   <li key={i}>{b}</li>
                 ))}
               </ul>
+            )}
+            {section.links && section.links.length > 0 && (
+              <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                {section.links.map((l) => (
+                  <Link key={l.href} to={l.href} className="text-primary underline-offset-4 hover:underline">
+                    {l.label} →
+                  </Link>
+                ))}
+              </p>
             )}
           </section>
         ))}

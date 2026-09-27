@@ -43,6 +43,8 @@ export const PremiumFooter = () => {
                 {t('landingV5.footer.privacy', 'Privacy')}
               </PrivacyLink>
               <FooterButton onClick={() => navigate('/payment-terms')}>{t('footer.paymentTerms', 'Billing')}</FooterButton>
+              <a href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">{t('footer.blog', 'Блог')}</a>
+              <a href="/sitemap" className="text-sm text-muted-foreground hover:text-foreground transition-colors">{t('footer.sitemap', 'Карта сайта')}</a>
             </FooterColumn>
 
             <FooterColumn title={t('footer.contacts', 'Support')} className="col-span-2 sm:col-span-1">

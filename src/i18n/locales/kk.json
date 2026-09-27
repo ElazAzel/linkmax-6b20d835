@@ -760,6 +760,7 @@
     }
   },
   "footer": {
+    "sitemap": "Сайт картасы",
     "alternatives": "Салыстыру",
     "brand": "Платформа",
     "companyInfo": "ARchitecKZ / БИН 190540008684 / Қазақстан, Алматы",
@@ -768,7 +769,9 @@
     "paymentTerms": "Төлем шарттары",
     "product": "Өнім",
     "rights": "Барлық құқықтар қорғалған.",
-    "copyright": "В© 2025 LinkMAX"
+    "copyright": "В© 2025 LinkMAX",
+    "blog": "Блог",
+    "sitemap": "Сайт картасы"
   },
   "seo": {
     "landing": {

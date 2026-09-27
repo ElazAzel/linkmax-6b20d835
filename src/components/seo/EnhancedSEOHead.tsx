@@ -10,6 +10,7 @@
  * - Version tracking for stable URLs
  */
 
+import { buildProfileSeoTitle, buildProfileSeoDescription } from '@/lib/seo/profile-title';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PageData } from '@/types/page';
@@ -113,6 +114,19 @@ export function EnhancedSEOHead({
         isNewAccount
       );
       const meta = generatePageMeta(profile, safeBlocks, slug, qualityGate, language);
+      if (language === 'ru') {
+        const seoInput = {
+          name: profile.name,
+          profession: (pageData as any).profession,
+          city: (pageData as any).city,
+          bio: profile.bio,
+          blocks: safeBlocks as Array<{ type?: string }>,
+        };
+        const smartTitle = buildProfileSeoTitle(seoInput);
+        const smartDesc = buildProfileSeoDescription(seoInput);
+        if (smartTitle && !(pageData.seo as any)?.title) meta.title = smartTitle;
+        if (smartDesc && !(pageData.seo as any)?.description) meta.description = smartDesc;
+      }
       // Authoritative source of indexability is the DB flag, not the client heuristic.
       // If the page is explicitly opted out, respect it; otherwise allow indexing so
       // search engines don't see a spurious noindex while blocks are still hydrating.

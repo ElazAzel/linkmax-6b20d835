@@ -760,6 +760,7 @@
     }
   },
   "footer": {
+    "sitemap": "Sayt xaritasi",
     "alternatives": "Taqqoslash",
     "brand": "Platforma",
     "companyInfo": "ARchitecKZ / BIN 190540008684 / Qozog'iston, Olmaota",
@@ -768,7 +769,9 @@
     "paymentTerms": "To'lov shartlari",
     "product": "Mahsulot",
     "rights": "Barcha huquqlar himoyalangan.",
-    "copyright": "V© 2025 LinkMAX"
+    "copyright": "V© 2025 LinkMAX",
+    "blog": "Blog",
+    "sitemap": "Sayt xaritasi"
   },
   "seo": {
     "landing": {

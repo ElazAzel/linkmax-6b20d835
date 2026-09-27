@@ -760,6 +760,7 @@
     }
   },
   "footer": {
+    "sitemap": "Карта сайта",
     "alternatives": "Сравнение",
     "brand": "Платформа",
     "companyInfo": "ARchitecKZ / БИН 190540008684 / Казахстан, Алматы",
@@ -768,7 +769,9 @@
     "paymentTerms": "Условия оплаты",
     "product": "Продукт",
     "rights": "Все права защищены.",
-    "copyright": "© 2025 ЛинМАКС"
+    "copyright": "© 2025 ЛинМАКС",
+    "blog": "Блог",
+    "sitemap": "Карта сайта"
   },
   "seo": {
     "landing": {
