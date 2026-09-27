@@ -60,11 +60,12 @@ serve(async (req: Request) => {
         // Authorization: caller must be a member of the target zone.
         const { data: membership } = await supabase
             .from('zone_members')
-            .select('user_id')
+            .select('user_id, role')
             .eq('zone_id', zone_id)
             .eq('user_id', callerId)
             .maybeSingle();
-        if (!membership) {
+        const callerIsAdmin = membership && ['owner', 'admin'].includes(String(membership.role));
+        if (!membership || (type === 'custom_template' && !callerIsAdmin)) {
             return new Response(JSON.stringify({ error: 'Forbidden' }), {
                 status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             });
@@ -168,7 +169,7 @@ serve(async (req: Request) => {
                     break;
                 }
                 case 'custom_template': {
-                    message = payload.message || '';
+                    message = String(payload.message || '').slice(0, 1000).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                     break;
                 }
             }
