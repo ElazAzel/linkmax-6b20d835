@@ -292,7 +292,7 @@ function generateEmailHTML(
           <tr>
             <td style="padding: 40px 30px;">
               <p style="font-size: 16px; color: #333; margin: 0 0 20px 0;">
-                ${t.greeting}, <strong>${registration.attendee_name}</strong>! 👋
+                ${t.greeting}, <strong>${String(registration.attendee_name ?? "").replace(/[<>&"]/g, "")}</strong>! 👋
               </p>
               
               <p style="font-size: 16px; color: #333; margin: 0 0 30px 0;">
