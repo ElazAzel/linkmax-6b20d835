@@ -43,9 +43,10 @@ jobs:
           path: dist
 
   deploy-worker:
-    name: Deploy Cloudflare Worker
+    name: Deploy Cloudflare Worker (optional)
     needs: build
     runs-on: ubuntu-latest
+    continue-on-error: true
     environment: ${{ github.event.inputs.environment || 'production' }}
     steps:
       - uses: actions/checkout@v4
@@ -56,24 +57,38 @@ jobs:
           name: dist
           path: dist
 
+      - name: Check Cloudflare secrets
+        id: secrets
+        run: |
+          if [ -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] && [ -n "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "has_secrets=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            echo "Cloudflare secrets not configured, skipping deploy..."
+          fi
+
       - name: Setup Node
+        if: steps.secrets.outputs.has_secrets == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
       - name: Install Wrangler
+        if: steps.secrets.outputs.has_secrets == 'true'
         run: npm install -g wrangler@latest
 
-      - name: Wrangler version
-        run: wrangler --version
-
       - name: Deploy Worker
+        if: steps.secrets.outputs.has_secrets == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SUPABASE_PROJECT: ${{ secrets.CF_WORKER_SUPABASE_PROJECT }}
+          SUPABASE_ANON_KEY: ${{ secrets.CF_WORKER_SUPABASE_ANON_KEY }}
         run: |
           wrangler deploy --cwd cloudflare-worker
 
       - name: Smoke test
+        if: steps.secrets.outputs.has_secrets == 'true'
         run: |
           echo "Running smoke test against deployed worker..."
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://lnkmx.my/)
@@ -83,3 +98,7 @@ jobs:
             exit 1
           fi
           echo "✅ Smoke test passed"
+
+      - name: Deploy skipped
+        if: steps.secrets.outputs.has_secrets != 'true'
+        run: echo "Cloudflare deploy skipped - secrets not configured"

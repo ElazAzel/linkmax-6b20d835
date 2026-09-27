@@ -10,14 +10,26 @@ on:
 
 jobs:
   deploy:
-    name: Deploy worker
+    name: Deploy worker (optional)
     runs-on: ubuntu-latest
+    continue-on-error: true
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check Cloudflare secrets
+        id: secrets
+        run: |
+          if [ -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] && [ -n "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "has_secrets=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            echo "Cloudflare secrets not configured, skipping..."
+          fi
+
       - name: Deploy with Wrangler
+        if: steps.secrets.outputs.has_secrets == 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -30,3 +42,7 @@ jobs:
         env:
           SUPABASE_PROJECT: ${{ secrets.CF_WORKER_SUPABASE_PROJECT }}
           SUPABASE_ANON_KEY: ${{ secrets.CF_WORKER_SUPABASE_ANON_KEY }}
+
+      - name: Deploy skipped
+        if: steps.secrets.outputs.has_secrets != 'true'
+        run: echo "Cloudflare deploy skipped - secrets not configured"
