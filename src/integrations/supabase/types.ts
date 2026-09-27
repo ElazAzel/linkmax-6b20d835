@@ -824,6 +824,7 @@ export type Database = {
         Row: {
           answers_json: Json | null
           attendee_email: string
+          attendee_email_sent_at: string | null
           attendee_name: string
           attendee_phone: string | null
           block_id: string
@@ -831,6 +832,7 @@ export type Database = {
           currency: string | null
           event_id: string
           id: string
+          organizer_notified_at: string | null
           owner_id: string
           page_id: string
           paid_amount: number | null
@@ -845,6 +847,7 @@ export type Database = {
         Insert: {
           answers_json?: Json | null
           attendee_email: string
+          attendee_email_sent_at?: string | null
           attendee_name: string
           attendee_phone?: string | null
           block_id: string
@@ -852,6 +855,7 @@ export type Database = {
           currency?: string | null
           event_id: string
           id?: string
+          organizer_notified_at?: string | null
           owner_id: string
           page_id: string
           paid_amount?: number | null
@@ -866,6 +870,7 @@ export type Database = {
         Update: {
           answers_json?: Json | null
           attendee_email?: string
+          attendee_email_sent_at?: string | null
           attendee_name?: string
           attendee_phone?: string | null
           block_id?: string
@@ -873,6 +878,7 @@ export type Database = {
           currency?: string | null
           event_id?: string
           id?: string
+          organizer_notified_at?: string | null
           owner_id?: string
           page_id?: string
           paid_amount?: number | null
