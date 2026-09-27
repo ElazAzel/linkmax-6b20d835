@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { csvRow } from '@/lib/export/csv-safe';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
@@ -248,8 +249,8 @@ export function BookingsPanel({ focusFilter }: BookingsPanelProps = {}) {
     ]);
 
     const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      csvRow(headers),
+      ...rows.map(row => csvRow(row))
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

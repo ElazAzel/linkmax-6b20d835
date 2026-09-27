@@ -4,6 +4,7 @@
  */
 // ExcelJS is dynamically imported to avoid loading 200KB+ on initial page load
 import { format } from 'date-fns';
+import { csvRow } from './csv-safe';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { EventFormField } from '@/types/page';
 
@@ -229,8 +230,8 @@ export function exportToCSV({
   });
 
   const csvContent = [
-    headers.join(','),
-    ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    csvRow(headers),
+    ...rows.map(row => csvRow(row))
   ].join('\n');
 
   const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });

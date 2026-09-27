@@ -1,6 +1,7 @@
 'use client';
 
 import { useNavigate } from 'react-router-dom';
+import { csvRow } from '@/lib/export/csv-safe';
 
 /**
  * EventsScreen - Events management dashboard
@@ -200,7 +201,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
         format(new Date(r.created_at), 'dd.MM.yyyy HH:mm'),
       ]);
 
-      const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+      const csv = [headers, ...rows].map(row => csvRow(row)).join('\n');
       const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
