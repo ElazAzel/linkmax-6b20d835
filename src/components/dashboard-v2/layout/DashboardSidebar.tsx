@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { memo, lazy, Suspense } from 'react';
 import { OrganizationSwitcher } from '../organizations/OrganizationSwitcher';
 import { useTranslation } from 'react-i18next';
+import { useHasBusinessZone } from '@/contexts/ZoneContext';
 
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
