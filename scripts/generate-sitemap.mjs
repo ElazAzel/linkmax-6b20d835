@@ -43,6 +43,7 @@ const RESERVED_SLUGS = new Set([
   'customers',
   'seo-landing',
   'blog',
+  'sitemap',
   'for-masters',
   'ru',
   'en',
