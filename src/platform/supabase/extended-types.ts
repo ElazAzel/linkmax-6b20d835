@@ -1055,6 +1055,22 @@ export type AppDatabase = Omit<Database, 'public'> & {
     Functions: Merge<
       Database['public']['Functions'],
       {
+        get_event_checkin_context: {
+          Args: { p_token: string };
+          Returns: Json;
+        };
+        checkin_event_ticket_by_token: {
+          Args: { p_token: string; p_ticket_code: string };
+          Returns: Json;
+        };
+        get_event_checkin_token: {
+          Args: { p_event_id: string };
+          Returns: string | null;
+        };
+        rotate_event_checkin_token: {
+          Args: { p_event_id: string };
+          Returns: string;
+        };
         admin_set_user_tier: {
           Args: {
             p_target_user_id: string;
