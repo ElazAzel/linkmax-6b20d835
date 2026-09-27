@@ -810,6 +810,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       contact_email: pg.contact_email || undefined,
       contact_phone: pg.contact_phone || undefined,
       contact_whatsapp: pg.contact_whatsapp || undefined,
+      country_code: ((ownerRow as Record<string, unknown>).country_code as string | null) || undefined,
       quality_score: pg.quality_score ?? undefined,
       // Diagnostics fields
       _diagnostics: {
