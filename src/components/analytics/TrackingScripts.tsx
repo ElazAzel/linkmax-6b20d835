@@ -42,12 +42,12 @@ export type YM = {
 
 declare global {
     interface Window {
-        fbq: FBQ;
-        _fbq: FBQ;
-        ttq: TTQ;
-        gtag: GTag;
-        dataLayer: unknown[][];
-        ym: YM;
+        fbq?: FBQ;
+        _fbq?: FBQ;
+        ttq?: TTQ;
+        gtag?: GTag;
+        dataLayer?: unknown[][];
+        ym?: YM;
         yandex_metrika_callbacks2?: Array<() => void>;
         opera?: string;
     }
@@ -123,7 +123,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             window.dataLayer = window.dataLayer || [];
             if (!window.gtag) {
                 window.gtag = function (...args: unknown[]) { 
-                  window.dataLayer.push(args); 
+                  window.dataLayer?.push(args); 
                 } as GTag;
             }
             
@@ -162,9 +162,9 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             window.yandex_metrika_callbacks2 = window.yandex_metrika_callbacks2 || [];
             window.yandex_metrika_callbacks2.push(function () {
                 try {
-                    window.ym = window.ym || function (...args: unknown[]) { (window.ym.a = window.ym.a || []).push(args) };
-                    window.ym.l = 1 * new Date().getTime();
-                    window.ym(integrations.yandex_metrika!, "init", {
+                    const ymFn = (window.ym || function (...args: unknown[]) { (ymFn.a = ymFn.a || []).push(args) }) as YM; window.ym = ymFn;
+                    ymFn.l = 1 * new Date().getTime();
+                    ymFn(integrations.yandex_metrika!, "init", {
                         clickmap: true,
                         trackLinks: true,
                         accurateTrackBounce: true,
