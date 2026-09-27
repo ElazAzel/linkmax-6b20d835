@@ -233,11 +233,31 @@ serve(async (req) => {
 
     // Construct the viewform URL
     let viewformUrl: string;
-    if (url.includes('forms.gle')) {
-      // Short URL - need to follow redirect first
-      const redirectResponse = await fetch(url, { redirect: 'follow' });
-      viewformUrl = redirectResponse.url;
-    } else if (url.includes('/d/e/')) {
+    let parsedUrl: URL;
+    try { parsedUrl = new URL(String(url)); } catch {
+      return new Response(JSON.stringify({ error: 'invalid_url' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    const isShort = parsedUrl.protocol === 'https:' && parsedUrl.hostname === 'forms.gle';
+    const isDocs = parsedUrl.protocol === 'https:' && parsedUrl.hostname === 'docs.google.com' && parsedUrl.pathname.startsWith('/forms/');
+    if (!isShort && !isDocs) {
+      return new Response(JSON.stringify({ error: 'invalid_url' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    if (isShort) {
+      // Resolve the short link manually and only accept a Google Forms destination.
+      const redirectResponse = await fetch(`https://forms.gle/${encodeURIComponent(formId)}`, { redirect: 'manual' });
+      const location = redirectResponse.headers.get('location') ?? '';
+      let dest: URL;
+      try { dest = new URL(location); } catch {
+        return new Response(JSON.stringify({ error: 'invalid_url' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      const destId = extractFormId(dest.pathname);
+      if (dest.protocol !== 'https:' || dest.hostname !== 'docs.google.com' || !destId) {
+        return new Response(JSON.stringify({ error: 'invalid_url' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      viewformUrl = dest.pathname.includes('/d/e/')
+        ? `https://docs.google.com/forms/d/e/${destId}/viewform`
+        : `https://docs.google.com/forms/d/${destId}/viewform`;
+    } else if (parsedUrl.pathname.includes('/d/e/')) {
       viewformUrl = `https://docs.google.com/forms/d/e/${formId}/viewform`;
     } else {
       viewformUrl = `https://docs.google.com/forms/d/${formId}/viewform`;
@@ -247,6 +267,7 @@ serve(async (req) => {
 
     // Fetch the form HTML
     const response = await fetch(viewformUrl, {
+      redirect: 'manual',
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',

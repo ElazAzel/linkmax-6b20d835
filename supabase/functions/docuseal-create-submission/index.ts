@@ -68,6 +68,15 @@ Deno.serve(async (req) => {
       );
     }
 
+    const signerEmail = String(body.signer_email).trim().toLowerCase();
+    if (signerEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signerEmail)) {
+      return new Response(JSON.stringify({ error: 'invalid signer_email' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    body.signer_email = signerEmail;
+
     const supabase = createClient(supabaseUrl, serviceKey);
 
     // Verify caller has access to the parent document (zone member).
@@ -82,11 +91,12 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    const { data: isMember } = await supabase.rpc('is_zone_member', {
-      _zone_id: doc.zone_id,
-      _user_id: userId,
+    // Sending signing requests to external recipients is limited to zone admins.
+    const { data: isAdmin } = await supabase.rpc('is_zone_admin', {
+      p_zone_id: doc.zone_id,
+      p_user_id: userId,
     });
-    if (!isMember) {
+    if (!isAdmin) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), {
         status: 403,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -126,7 +136,7 @@ Deno.serve(async (req) => {
     if (!dsRes.ok) {
       console.error('DocuSeal create failed', dsRes.status, dsPayload);
       return new Response(
-        JSON.stringify({ error: 'DocuSeal error', detail: dsPayload }),
+        JSON.stringify({ error: 'DocuSeal error' }),
         { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       );
     }
