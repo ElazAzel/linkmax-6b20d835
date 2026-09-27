@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from 'react';
+import { memo, useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
@@ -181,6 +181,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     const [contactPhoneInput, setContactPhoneInput] = useState(contactPhone || '');
     const [contactWhatsappInput, setContactWhatsappInput] = useState(contactWhatsapp || '');
     const [countryCodeInput, setCountryCodeInput] = useState(countryCode || '');
+    useEffect(() => { setCountryCodeInput(countryCode || ''); }, [countryCode]);
 
     const handleSaveSlug = async () => {
         if (!onUpdateSlug || slugInput === pageSlug) return;

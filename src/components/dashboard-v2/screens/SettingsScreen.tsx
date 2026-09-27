@@ -72,7 +72,8 @@ interface SettingsScreenProps {
   contactEmail?: string;
   contactPhone?: string;
   contactWhatsapp?: string;
-  onUpdateEntityFields?: (fields: { city?: string; profession?: string; entity_type?: string; contact_email?: string; contact_phone?: string; contact_whatsapp?: string }) => void;
+  countryCode?: string;
+  onUpdateEntityFields?: (fields: { city?: string; profession?: string; entity_type?: string; contact_email?: string; contact_phone?: string; contact_whatsapp?: string; country_code?: string }) => void;
 
   // Actions
   onSignOut: () => void;
@@ -187,6 +188,7 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               contactEmail={props.contactEmail}
               contactPhone={props.contactPhone}
               contactWhatsapp={props.contactWhatsapp}
+              countryCode={props.countryCode}
               onUpdateEntityFields={props.onUpdateEntityFields}
               onOpenTheme={onOpenTheme}
               onOpenTemplates={onOpenTemplates}

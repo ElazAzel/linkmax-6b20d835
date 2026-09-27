@@ -136,6 +136,7 @@ export interface PageData {
   contact_email?: string;
   contact_phone?: string;
   contact_whatsapp?: string;
+  country_code?: string;
   quality_score?: number;
   /** Server-side diagnostics (not for manual editing) */
   _diagnostics?: {
