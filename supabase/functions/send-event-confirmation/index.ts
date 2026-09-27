@@ -48,6 +48,19 @@ async function getOwnerEmail(supabaseUrl: string, supabaseServiceKey: string, ow
   return data?.user?.email || null;
 }
 
+function escapeHtml(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeMarkdown(value: unknown): string {
+  return String(value ?? '').replace(/([_*`\[\]])/g, '\\$1');
+}
+
 function generateOrganizerEmailHTML(
   eventTitle: string,
   registration: RegistrationData,
@@ -76,7 +89,7 @@ function generateOrganizerEmailHTML(
           <!-- Content -->
           <tr>
             <td style="padding: 30px;">
-              <h2 style="margin: 0 0 20px 0; font-size: 18px; color: #1e293b;">${eventTitle}</h2>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; color: #1e293b;">${escapeHtml(eventTitle)}</h2>
               
               <!-- Registration Info -->
               <div style="background-color: #f0fdf4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -84,27 +97,27 @@ function generateOrganizerEmailHTML(
                   <tr>
                     <td style="padding: 8px 0;">
                       <span style="color: #64748b; font-size: 14px;">👤 Имя:</span>
-                      <strong style="color: #1e293b; margin-left: 8px;">${registration.attendee_name}</strong>
+                      <strong style="color: #1e293b; margin-left: 8px;">${escapeHtml(registration.attendee_name)}</strong>
                     </td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0;">
                       <span style="color: #64748b; font-size: 14px;">📧 Email:</span>
-                      <a href="mailto:${registration.attendee_email}" style="color: #6366f1; margin-left: 8px;">${registration.attendee_email}</a>
+                      <a href="mailto:${encodeURIComponent(registration.attendee_email)}" style="color: #6366f1; margin-left: 8px;">${escapeHtml(registration.attendee_email)}</a>
                     </td>
                   </tr>
                   ${registration.attendee_phone ? `
                   <tr>
                     <td style="padding: 8px 0;">
                       <span style="color: #64748b; font-size: 14px;">📱 Телефон:</span>
-                      <a href="tel:${registration.attendee_phone}" style="color: #6366f1; margin-left: 8px;">${registration.attendee_phone}</a>
+                      <a href="tel:${escapeHtml(String(registration.attendee_phone).replace(/[^0-9+]/g, ''))}" style="color: #6366f1; margin-left: 8px;">${escapeHtml(registration.attendee_phone)}</a>
                     </td>
                   </tr>
                   ` : ''}
                   <tr>
                     <td style="padding: 8px 0;">
                       <span style="color: #64748b; font-size: 14px;">🎟 Билет:</span>
-                      <code style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; margin-left: 8px; font-weight: bold;">${registration.event_tickets?.[0]?.ticket_code || 'N/A'}</code>
+                      <code style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; margin-left: 8px; font-weight: bold;">${escapeHtml(registration.event_tickets?.[0]?.ticket_code || 'N/A')}</code>
                     </td>
                   </tr>
                 </table>
@@ -113,8 +126,8 @@ function generateOrganizerEmailHTML(
               ${dateString || location ? `
               <!-- Event Info -->
               <div style="background-color: #f8fafc; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-                ${dateString ? `<p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px;">📅 ${dateString}</p>` : ''}
-                ${location ? `<p style="margin: 0; color: #64748b; font-size: 14px;">📍 ${location}</p>` : ''}
+                ${dateString ? `<p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px;">📅 ${escapeHtml(dateString)}</p>` : ''}
+                ${location ? `<p style="margin: 0; color: #64748b; font-size: 14px;">📍 ${escapeHtml(location)}</p>` : ''}
               </div>
               ` : ''}
               
@@ -188,6 +201,23 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // One-time send, only right after the registration is created. This stops
+    // anonymous callers from re-triggering notifications for old registrations.
+    const { data: claimed } = await supabase
+      .from("event_registrations")
+      .update({ organizer_notified_at: new Date().toISOString() })
+      .eq("id", registrationId)
+      .is("organizer_notified_at", null)
+      .gte("created_at", new Date(Date.now() - 15 * 60 * 1000).toISOString())
+      .select("id")
+      .maybeSingle();
+    if (!claimed) {
+      return new Response(
+        JSON.stringify({ success: false, error: "already_sent_or_expired" }),
+        { status: 409, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     // Check if owner is Pro
     const { data: ownerProfile } = await supabase
       .from("user_profiles")
@@ -251,13 +281,13 @@ const handler = async (req: Request): Promise<Response> => {
     // 1. Send Telegram notification
     if (isConfigured() && profile?.telegram_chat_id && profile?.telegram_notifications_enabled) {
       const message = `🎫 *Новая регистрация!*\n\n` +
-        `📌 *${eventTitle}*\n\n` +
-        `👤 ${regData.attendee_name}\n` +
-        `📧 ${regData.attendee_email}\n` +
-        (regData.attendee_phone ? `📱 ${regData.attendee_phone}\n` : '') +
+        `📌 *${escapeMarkdown(eventTitle)}*\n\n` +
+        `👤 ${escapeMarkdown(regData.attendee_name)}\n` +
+        `📧 ${escapeMarkdown(regData.attendee_email)}\n` +
+        (regData.attendee_phone ? `📱 ${escapeMarkdown(regData.attendee_phone)}\n` : '') +
         `🎟 Билет: \`${ticketCode}\`\n` +
         (dateString ? `📅 ${dateString}\n` : '') +
-        (eventData.location_value ? `📍 ${eventData.location_value}` : '');
+        (eventData.location_value ? `📍 ${escapeMarkdown(eventData.location_value)}` : '');
 
       try {
         const tgResponse = await sendMessage(profile.telegram_chat_id, message, { parse_mode: "Markdown" });
@@ -284,7 +314,7 @@ const handler = async (req: Request): Promise<Response> => {
           const { error: emailError } = await resend.emails.send({
             from: "LNKMX <noreply@lnkmx.my>",
             to: [ownerEmail],
-            subject: `🎫 Новая регистрация - ${eventTitle}`,
+            subject: `🎫 Новая регистрация - ${String(eventTitle).replace(/[\r\n<>]/g, ' ').slice(0, 120)}`,
             html: emailHTML,
           });
 
@@ -311,7 +341,7 @@ const handler = async (req: Request): Promise<Response> => {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     console.error("Error sending event confirmation:", errorMessage);
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: "Internal error" }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }

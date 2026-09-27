@@ -418,7 +418,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Fetch registration with ticket
     const { data: registration, error: regError } = await supabase
       .from("event_registrations")
-      .select("id, attendee_name, attendee_email, status, event_tickets(ticket_code, status)")
+      .select("id, event_id, attendee_name, attendee_email, status, event_tickets(ticket_code, status)")
       .eq("id", registrationId)
       .single();
 
@@ -428,6 +428,31 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const regData = registration as unknown as RegistrationData;
+
+    if ((registration as { event_id?: string }).event_id !== eventId) {
+      return new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } });
+    }
+
+    // Allowed: the event organizer (resend), or a one-time send right after registration.
+    let isOrganizer = false;
+    const authHeader = req.headers.get("Authorization") ?? "";
+    if (authHeader.startsWith("Bearer ")) {
+      const { data: u } = await supabase.auth.getUser(authHeader.slice(7).trim());
+      isOrganizer = !!u?.user && u.user.id === eventData.owner_id;
+    }
+    if (!isOrganizer) {
+      const { data: claimed } = await supabase
+        .from("event_registrations")
+        .update({ attendee_email_sent_at: new Date().toISOString() })
+        .eq("id", registrationId)
+        .is("attendee_email_sent_at", null)
+        .gte("created_at", new Date(Date.now() - 15 * 60 * 1000).toISOString())
+        .select("id")
+        .maybeSingle();
+      if (!claimed) {
+        return new Response(JSON.stringify({ error: "already_sent_or_expired" }), { status: 409, headers: { "Content-Type": "application/json", ...corsHeaders } });
+      }
+    }
 
     // Fetch owner profile
     const { data: owner } = await supabase
