@@ -33,12 +33,9 @@ cleanup_locales.py
 debug_json.js
 refactor_locales.js
 
-# Environment variables - NEVER commit these!
-.env
+# Environment variables - only public values in .env; private keys never go here
 .env.local
 .env.*.local
-.env.production
-.env.development
 
 # Editor directories and files
 .vscode/*
@@ -70,3 +67,11 @@ supabase/migrations_backup/
 # Superdesign temporary component conversion files
 .superdesign/tmp/
 
+
+# Agent/tool artifacts
+.gemini/
+.jules/
+.Jules/
+.playwright-mcp/
+supabase/.temp/
+*.tsbuildinfo
