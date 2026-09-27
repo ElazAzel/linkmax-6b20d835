@@ -34,3 +34,12 @@ export function useZoneContext() {
   if (!ctx) throw new Error('useZoneContext must be used within ZoneProvider');
   return ctx;
 }
+
+/**
+ * Safe variant for navigation shells: returns false when rendered outside the provider.
+ * Used to keep Business Zone navigation hidden until the user actually creates a zone.
+ */
+export function useHasBusinessZone(): boolean {
+  const ctx = useContext(ZoneContext);
+  return (ctx?.zones?.length ?? 0) > 0;
+}
