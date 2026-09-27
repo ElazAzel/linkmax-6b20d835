@@ -5340,6 +5340,7 @@ export type Database = {
       admin_set_user_tier: {
         Args: {
           p_expires_at?: string
+          p_make_admin?: boolean
           p_target_user_id: string
           p_tier: string
         }
