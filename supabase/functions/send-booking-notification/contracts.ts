@@ -1,4 +1,4 @@
-import { bookingReminderIdempotencyKey } from '../send-booking-reminder/contracts.ts';
+import { bookingReminderIdempotencyKey } from '../_shared/booking-reminder-contracts.ts';
 
 export type RecipientRole = 'owner' | 'staff' | 'customer';
 export type NotificationChannel = 'telegram' | 'email';
