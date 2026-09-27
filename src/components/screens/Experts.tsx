@@ -35,6 +35,14 @@ import {
   normalizeExpertDirectoryFilter,
   type ExpertDirectoryProfile,
 } from '@/services/pages';
+import {
+  HUB_CITIES,
+  HUB_NICHES_INDEXED,
+  buildHubMeta,
+  findHubCity,
+  findHubNiche,
+  pickLang,
+} from '@/lib/seo/expert-hubs';
 
 // Normalized niche tags with i18n
 const NICHE_TAGS = [
@@ -146,7 +154,7 @@ export const Experts = memo(function Experts() {
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      name: pageTitle.replace(' | lnkmx', ''),
+      name: meta.h1,
       description: pageDescription,
       url: canonical,
       mainEntity: {
@@ -195,7 +203,7 @@ export const Experts = memo(function Experts() {
     return () => {
       script?.remove();
     };
-  }, [visibleExperts, canonical, pageTitle, pageDescription]);
+  }, [visibleExperts, canonical, meta.h1, pageDescription]);
 
   return (
     <>
@@ -205,6 +213,7 @@ export const Experts = memo(function Experts() {
         canonical={canonical}
         currentLanguage={language}
         ogType="website"
+        indexable={indexable}
         ogImage={`${getAppDomain()}/og-experts.jpg`}
         alternates={[
           { hreflang: 'ru', href: `${canonical}?lang=ru` },
@@ -242,18 +251,11 @@ export const Experts = memo(function Experts() {
             </div>
 
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              {tag ? (
-                <>
-                  {currentTag?.label[language] || tag}
-                  <span className="text-muted-foreground"> {t('experts.onLnkmx', 'на lnkmx')}</span>
-                </>
-              ) : (
-                t('experts.findExperts', 'Найти экспертов')
-              )}
+              {unknownRoute ? (currentTag?.label[language] || tag) : meta.h1}
             </h1>
 
             <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-              {t('experts.subtitle', 'Мини-сайты экспертов, фрилансеров и малого бизнеса')}
+              {meta.intro}
             </p>
 
             <div className="max-w-3xl mx-auto grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_220px_auto]">
@@ -429,6 +431,73 @@ export const Experts = memo(function Experts() {
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* Fallback: same niche in other cities */}
+        {hubCity && experts.length < 3 && fallbackExperts.length > 0 && (
+          <section className="pb-12">
+            <div className="container max-w-6xl mx-auto px-4">
+              <h2 className="text-xl font-semibold mb-4">
+                {t('experts.hub.otherCities', 'Специалисты из других городов, работающие онлайн')}
+              </h2>
+              <div className="flex flex-wrap gap-3">
+                {fallbackExperts.filter((e) => !experts.some((x) => x.id === e.id)).map((e) => (
+                  <Link key={e.id} to={`/${e.slug}`} className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-2 text-sm hover:text-primary">
+                    <Avatar className="h-6 w-6"><AvatarImage src={e.avatar_url || undefined} /><AvatarFallback>{(e.title || e.slug).slice(0, 1)}</AvatarFallback></Avatar>
+                    {e.title || e.slug}{e.city ? ` · ${e.city}` : ''}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* SEO hubs: internal linking by city and niche */}
+        <section className="py-12 border-t">
+          <div className="container max-w-6xl mx-auto px-4 grid gap-10 md:grid-cols-2">
+            {hubNiche?.services[hubLang === 'en' ? 'en' : 'ru'].length ? (
+              <div className="md:col-span-2">
+                <h2 className="text-xl font-semibold mb-3">
+                  {t('experts.hub.popular', 'Популярные услуги')}
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {hubNiche.services[hubLang === 'en' ? 'en' : 'ru'].map((s) => (
+                    <Badge key={s} variant="secondary">{s}</Badge>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            <nav aria-label={t('experts.hub.byCity', 'По городам')}>
+              <h2 className="text-xl font-semibold mb-3">{t('experts.hub.byCity', 'По городам')}</h2>
+              <ul className="grid grid-cols-2 gap-2 text-sm">
+                {HUB_CITIES.map((c) => (
+                  <li key={c.slug}>
+                    <Link
+                      className={cn('hover:text-primary', c.slug === hubCity?.slug && 'text-primary font-medium')}
+                      to={hubNiche?.hub ? `/experts/${hubNiche.slug}/${c.slug}` : `/experts/city/${c.slug}`}
+                    >
+                      {hubNiche?.hub ? `${hubNiche.who[hubLang]} ${c.inCity[hubLang]}` : c.name[hubLang]}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <nav aria-label={t('experts.hub.byNiche', 'По направлениям')}>
+              <h2 className="text-xl font-semibold mb-3">{t('experts.hub.byNiche', 'По направлениям')}</h2>
+              <ul className="grid grid-cols-2 gap-2 text-sm">
+                {HUB_NICHES_INDEXED.map((n) => (
+                  <li key={n.slug}>
+                    <Link
+                      className={cn('hover:text-primary', n.slug === hubNiche?.slug && 'text-primary font-medium')}
+                      to={hubCity ? `/experts/${n.slug}/${hubCity.slug}` : `/experts/${n.slug}`}
+                    >
+                      {hubCity ? `${n.who[hubLang]} ${hubCity.inCity[hubLang]}` : n.who[hubLang]}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
         </section>
 
