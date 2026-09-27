@@ -71,7 +71,20 @@ serve(async (req: Request) => {
 
   try {
     const body = await req.json() as SubmitRequest;
-    const { urls, page_id, action_type = 'update', child_type, child_entries, skip_entries, diff_summary, skip_reason } = body;
+    const { urls, action_type = 'update', child_type, child_entries, skip_entries, diff_summary, skip_reason } = body;
+    // Only trust page_id from platform infrastructure or the page's owner.
+    let page_id: string | undefined = undefined;
+    if (body.page_id && typeof body.page_id === 'string') {
+      if (await isInternalCaller(req, db)) {
+        page_id = body.page_id;
+      } else {
+        const callerId = await getCallerUserId(req, db);
+        if (callerId) {
+          const { data: owned } = await db.from('pages').select('id').eq('id', body.page_id).eq('user_id', callerId).maybeSingle();
+          if (owned) page_id = body.page_id;
+        }
+      }
+    }
 
     // Build the child metadata lookup: url → { item_id, slug, transition }
     const childMeta = new Map<string, { item_id: string; slug: string; transition?: string }>();
