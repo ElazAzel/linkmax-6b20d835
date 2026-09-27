@@ -138,6 +138,15 @@ export default function BlogPost() {
                 ))}
               </ul>
             )}
+            {section.links && section.links.length > 0 && (
+              <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                {section.links.map((l) => (
+                  <Link key={l.href} to={l.href} className="text-primary underline-offset-4 hover:underline">
+                    {l.label} →
+                  </Link>
+                ))}
+              </p>
+            )}
           </section>
         ))}
 
