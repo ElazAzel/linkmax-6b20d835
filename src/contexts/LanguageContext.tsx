@@ -1,3 +1,4 @@
+import { guardedTranslate } from '@/lib/translation-guard';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';

@@ -1,3 +1,4 @@
+import { guardedTranslate } from '@/lib/translation-guard';
 import { useState, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
