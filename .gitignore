@@ -33,12 +33,9 @@ cleanup_locales.py
 debug_json.js
 refactor_locales.js
 
-# Environment variables - NEVER commit these!
-.env
+# Environment variables - only public values in .env; private keys never go here
 .env.local
 .env.*.local
-.env.production
-.env.development
 
 # Editor directories and files
 .vscode/*
