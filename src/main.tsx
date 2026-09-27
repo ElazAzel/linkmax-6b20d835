@@ -106,6 +106,7 @@ const SitemapPage = lazy(() => import("./pages/SitemapPage"));
 const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
+const EventCheckin = lazy(() => import("./pages/EventCheckin"));
 const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 const ReviewRequest = lazy(() => import("./pages/ReviewRequest"));
@@ -144,6 +145,8 @@ const router = createBrowserRouter([
       { path: "goods/:id", element: <PublicGoodsPage /> },
       { path: "purchase/:token", element: <PublicPurchasePage /> },
       { path: "booking/manage/:token", element: <BookingManagement /> },
+      // Staff door scanner: works from a shared secret link, no sign-in needed
+      { path: "events/checkin/:token", element: <EventCheckin /> },
 
       { path: "auth/callback", element: <AuthCallback /> },
       // Managed OAuth server consent screen for external MCP clients
