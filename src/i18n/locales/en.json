@@ -768,7 +768,9 @@
     "paymentTerms": "Payment Terms",
     "product": "Product",
     "rights": "All rights reserved.",
-    "copyright": "В© 2025 LinkMAX"
+    "copyright": "В© 2025 LinkMAX",
+    "blog": "Blog",
+    "sitemap": "Sitemap"
   },
   "seo": {
     "landing": {
@@ -7828,7 +7830,9 @@
       "title": "Start accepting bookings from your page",
       "description": "Add services, availability, and clear deposit terms."
     },
-    "next": { "eyebrow": "Next step" },
+    "next": {
+      "eyebrow": "Next step"
+    },
     "attention": {
       "title": "Needs attention",
       "count": "{{count}} booking tasks",
@@ -7839,17 +7843,50 @@
       "healthy": "You can focus on bringing in new bookings."
     },
     "actions": {
-      "start_revenue_kit": { "label": "Set up booking", "description": "Add services, availability, and deposit rules in one short flow." },
-      "add_first_service": { "label": "Add a service", "description": "Customers need at least one available service." },
-      "set_availability": { "label": "Open availability", "description": "Set future hours when customers can book." },
-      "configure_deposit": { "label": "Clarify the deposit", "description": "Add clear payment instructions." },
-      "publish_page": { "label": "Publish page", "description": "Your page is ready for its first visitors." },
-      "copy_bio_link": { "label": "Share the link", "description": "Bring the first attributed external visit to your published page." },
-      "confirm_pending_deposit": { "label": "Check the deposit", "description": "Bookings are waiting for your confirmation." },
-      "review_past_appointments": { "label": "Resolve past bookings", "description": "Record the outcome of past appointments." },
-      "send_upcoming_confirmation": { "label": "Confirm upcoming bookings", "description": "Check attendance for customers due in the next 24 hours." },
-      "improve_booking_conversion": { "label": "Review the booking path", "description": "There is enough service interest, but no bookings yet." },
-      "open_outcome_insights": { "label": "Open outcomes", "description": "Operations are clear — explore your sources and funnel." }
+      "start_revenue_kit": {
+        "label": "Set up booking",
+        "description": "Add services, availability, and deposit rules in one short flow."
+      },
+      "add_first_service": {
+        "label": "Add a service",
+        "description": "Customers need at least one available service."
+      },
+      "set_availability": {
+        "label": "Open availability",
+        "description": "Set future hours when customers can book."
+      },
+      "configure_deposit": {
+        "label": "Clarify the deposit",
+        "description": "Add clear payment instructions."
+      },
+      "publish_page": {
+        "label": "Publish page",
+        "description": "Your page is ready for its first visitors."
+      },
+      "copy_bio_link": {
+        "label": "Share the link",
+        "description": "Bring the first attributed external visit to your published page."
+      },
+      "confirm_pending_deposit": {
+        "label": "Check the deposit",
+        "description": "Bookings are waiting for your confirmation."
+      },
+      "review_past_appointments": {
+        "label": "Resolve past bookings",
+        "description": "Record the outcome of past appointments."
+      },
+      "send_upcoming_confirmation": {
+        "label": "Confirm upcoming bookings",
+        "description": "Check attendance for customers due in the next 24 hours."
+      },
+      "improve_booking_conversion": {
+        "label": "Review the booking path",
+        "description": "There is enough service interest, but no bookings yet."
+      },
+      "open_outcome_insights": {
+        "label": "Open outcomes",
+        "description": "Operations are clear — explore your sources and funnel."
+      }
     }
   },
   "bookingDetail": {
@@ -7870,7 +7907,13 @@
     "notificationsEmpty": "No delivery facts yet",
     "delivered": "Delivered",
     "failed": "Failed",
-    "methods": { "cash": "Cash", "kaspi": "Kaspi", "card": "Card", "transfer": "Transfer", "other": "Other" },
+    "methods": {
+      "cash": "Cash",
+      "kaspi": "Kaspi",
+      "card": "Card",
+      "transfer": "Transfer",
+      "other": "Other"
+    },
     "actions": {
       "confirmDeposit": "Confirm deposit",
       "waive": "Confirm without deposit",

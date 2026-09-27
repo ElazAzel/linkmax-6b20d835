@@ -768,7 +768,9 @@
     "paymentTerms": "Условия оплаты",
     "product": "Продукт",
     "rights": "Все права защищены.",
-    "copyright": "© 2025 ЛинМАКС"
+    "copyright": "© 2025 ЛинМАКС",
+    "blog": "Блог",
+    "sitemap": "Карта сайта"
   },
   "seo": {
     "landing": {
