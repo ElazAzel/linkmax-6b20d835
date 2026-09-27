@@ -105,6 +105,9 @@ const NICHE_LANDINGS = [
 // Kept in sync with src/lib/blog-posts.ts (BLOG_POSTS export). Every slug
 // listed here must resolve to a real post; the /blog/:slug route 404s otherwise.
 const BLOG_POSTS = [
+  'sayt-vizitka-besplatno-kak-sdelat',
+  'crm-dlya-malogo-biznesa-prostaya',
+  'onlayn-zapis-klientov-kak-nastroit',
   'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
   'kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane',
   'telegram-vizitka-dlya-koucha-poshagovo',

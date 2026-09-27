@@ -412,7 +412,11 @@ export async function fetchExpertDirectoryProfiles(
 
   if (pageError) throw wrapError(pageError);
 
-  const pages = (pageRows || []) as unknown as ExpertDirectoryPageRow[];
+  const PLACEHOLDER_TITLES = new Set(['your name', 'ваше имя', 'имя', 'name', 'profile', '']);
+  // Hide empty/template pages so the directory only links to real profiles.
+  const pages = ((pageRows || []) as unknown as ExpertDirectoryPageRow[]).filter(
+    (page) => !PLACEHOLDER_TITLES.has((page.title || '').trim().toLowerCase()),
+  );
   const pageIds = pages.map((page) => page.id);
   const summariesByPageId = new Map<string, ExpertDirectorySummaryRow>();
 
