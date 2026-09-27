@@ -28,6 +28,7 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
+import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import {
   fetchCheckinContext,
   checkinTicketByToken,
