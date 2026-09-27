@@ -71,10 +71,20 @@ serve(async (req) => {
   }
 
   try {
-    // Public endpoint: no auth required (needed for guest visitors on public pages).
-    // Abuse is mitigated by per-IP rate limiting below.
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+    // Paid AI usage: signed-in users only.
+    const authHeader = req.headers.get('Authorization') ?? '';
+    const jwt = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const authClient = createClient(supabaseUrl, supabaseKey);
+    const { data: authData, error: authErr } = jwt ? await authClient.auth.getUser(jwt) : { data: null, error: new Error('no token') };
+    if (authErr || !authData?.user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
                       req.headers.get('x-real-ip') ||
@@ -82,7 +92,8 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const withinLimit = await checkRateLimit(supabase, ipAddress, 'translate-content');
+    const withinLimit = await checkRateLimit(supabase, `user:${authData.user.id}`, 'translate-content')
+      && await checkRateLimit(supabase, ipAddress, 'translate-content');
     if (!withinLimit) {
       console.log(`Rate limit exceeded for IP: ${ipAddress}`);
       return new Response(
@@ -115,15 +126,29 @@ serve(async (req) => {
       );
     }
 
+    // Only known language codes may reach the prompt.
+    if (typeof sourceLanguage !== 'string' || !(sourceLanguage in LANGUAGE_NAMES)) {
+      return new Response(
+        JSON.stringify({ error: "Unsupported sourceLanguage" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    const knownTargets = targetLanguages.filter((l: unknown): l is string => typeof l === 'string' && l in LANGUAGE_NAMES);
+    if (knownTargets.length === 0) {
+      return new Response(
+        JSON.stringify({ error: "Unsupported targetLanguages" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
     // Limit to 10 languages per request to avoid timeout
-    const limitedTargetLanguages = targetLanguages.slice(0, 10);
+    const limitedTargetLanguages = knownTargets.slice(0, 10);
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const sourceLangName = LANGUAGE_NAMES[sourceLanguage] || sourceLanguage;
+    const sourceLangName = LANGUAGE_NAMES[sourceLanguage];
     const targetLangInfo = limitedTargetLanguages.map((l: string) => ({
       code: l,
       name: LANGUAGE_NAMES[l] || l
