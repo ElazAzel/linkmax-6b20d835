@@ -275,7 +275,18 @@ serve(async (req: Request) => {
     const userAgent = req.headers.get('user-agent') || '';
 
     // Validate required fields
-    const { pageId, event, eventData = {}, userData = {}, sourceUrl = '', clientId, eventId } = body;
+    const { pageId, event, userData = {}, clientId, eventId } = body;
+    // Only allow a small whitelist of primitive custom_data fields
+    const rawData = (body && typeof body.eventData === 'object' && body.eventData) || {};
+    const eventData: Record<string, unknown> = {};
+    if (typeof rawData.value === 'number' && isFinite(rawData.value) && rawData.value >= 0 && rawData.value < 1e9) eventData.value = rawData.value;
+    if (typeof rawData.currency === 'string' && /^[A-Z]{3}$/.test(rawData.currency)) eventData.currency = rawData.currency;
+    for (const k of ['content_name', 'content_category', 'content_type']) {
+        if (typeof rawData[k] === 'string') eventData[k] = rawData[k].slice(0, 100);
+    }
+    if (typeof pageId !== 'string' || !/^[0-9a-f-]{36}$/i.test(pageId)) {
+        return new Response(JSON.stringify({ error: 'Invalid pageId' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
     if (!pageId || !event) {
         return new Response(
@@ -306,13 +317,28 @@ serve(async (req: Request) => {
 
         const { data: page } = await supabase
             .from('pages')
-            .select('integrations')
+            .select('integrations, slug')
             .eq('id', pageId)
-            .single();
+            .eq('is_published', true)
+            .maybeSingle();
 
-        integrations = page?.integrations || {};
+        integrations = { ...(page?.integrations || {}), __slug: page?.slug || '' };
         pageCache.set(pageId, { integrations, cachedAt: Date.now() });
     }
+
+    // Source URL must belong to this published page on our domain
+    const pageSlug = integrations.__slug;
+    if (!pageSlug) {
+        return new Response(JSON.stringify({ status: 'no_integrations' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    const siteHost = Deno.env.get('PUBLIC_HOST') || 'lnkmx.my';
+    let sourceUrl = `https://${siteHost}/${pageSlug}`;
+    try {
+        const u = new URL(String(body.sourceUrl || ''));
+        if (u.protocol === 'https:' && (u.hostname === siteHost || u.hostname.endsWith('.' + siteHost)) && u.pathname.split('/')[1] === pageSlug) {
+            sourceUrl = u.origin + u.pathname;
+        }
+    } catch { /* keep default */ }
 
     // Get platform-level API secrets
     const fbAccessToken = Deno.env.get('FB_CAPI_ACCESS_TOKEN');

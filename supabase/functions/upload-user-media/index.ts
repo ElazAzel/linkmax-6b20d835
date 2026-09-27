@@ -59,7 +59,9 @@ serve(async (req) => {
       .eq('id', user.id)
       .maybeSingle();
 
-    const maxBytes = profile?.is_premium ? PRO_MAX : FREE_MAX;
+    const premiumActive = !!profile?.is_premium &&
+      (!profile?.premium_expires_at || new Date(profile.premium_expires_at).getTime() > Date.now());
+    const maxBytes = premiumActive ? PRO_MAX : FREE_MAX;
     if (file.size > maxBytes) {
       return createErrorResponse(
         `File too large. Max ${Math.round(maxBytes / (1024 * 1024))}MB for your plan.`,
