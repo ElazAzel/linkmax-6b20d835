@@ -132,6 +132,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
 }: DashboardSidebarProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const hasBusinessZone = useHasBusinessZone();
 
   const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-analytics', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-resources'];
 
