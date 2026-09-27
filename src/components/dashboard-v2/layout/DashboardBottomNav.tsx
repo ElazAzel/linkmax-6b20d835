@@ -17,6 +17,7 @@ import FileText from 'lucide-react/dist/esm/icons/file-text';
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
+import { useHasBusinessZone } from '@/contexts/ZoneContext';
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
@@ -93,10 +94,15 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
   const [moreOpen, setMoreOpen] = useState(false);
 
   const isMoreActive = MORE_TAB_IDS.includes(activeTab);
+  const hasBusinessZone = useHasBusinessZone();
   const canUseBusinessZone = isPremium || isBusinessTier;
-  const visibleMoreItems = MORE_ITEMS.filter((item) =>
-    canUseBusinessZone || !item.id.startsWith('zone-'),
-  );
+  // Business Zone stays out of the way: only the entry point until a zone exists,
+  // the full set of zone tabs once the user actually works in one.
+  const visibleMoreItems = MORE_ITEMS.filter((item) => {
+    if (!item.id.startsWith('zone-')) return true;
+    if (!canUseBusinessZone) return false;
+    return hasBusinessZone || item.id === 'zone-dashboard';
+  });
 
   const handleTabClick = useCallback((tab: NavTab) => {
     haptic.lightTap();
