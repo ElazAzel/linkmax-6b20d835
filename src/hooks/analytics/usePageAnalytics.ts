@@ -512,11 +512,18 @@ export function usePageAnalytics(externalPageId?: string | null, initialPeriod: 
       if (bookings) {
         let allStaff: any[] | null = null;
         try {
-          const { data } = await supabase
-            .from('zone_staff')
-            .select('id, name')
-            .eq('owner_id', user.id);
-          allStaff = data;
+          const { data: ownedZones } = await supabase
+            .from('zones' as any)
+            .select('id')
+            .eq('owner_user_id', user.id);
+          const zoneIds = ((ownedZones as any[]) || []).map((z) => z.id);
+          if (zoneIds.length) {
+            const { data } = await supabase
+              .from('zone_staff')
+              .select('id, name')
+              .in('zone_id', zoneIds);
+            allStaff = data;
+          }
         } catch {
           // zone_staff table may not exist — silent fallback
         }
