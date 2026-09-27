@@ -5601,6 +5601,10 @@ export type Database = {
       }
       get_team_invite_code: { Args: { _team_id: string }; Returns: string }
       get_team_owner: { Args: { p_team_id: string }; Returns: string }
+      get_template_like_count: {
+        Args: { p_template_id: string }
+        Returns: number
+      }
       get_token_analytics: {
         Args: { p_end_date?: string; p_start_date?: string }
         Returns: Json
