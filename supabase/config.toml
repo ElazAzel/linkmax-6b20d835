@@ -1,4 +1,4 @@
-project_id = "hpnycvncipdxmvqfuulf"
+project_id = "pphdcfxucfndmwulpfwv"
 
 [auth]
 enable_manual_linking = true
@@ -124,3 +124,111 @@ verify_jwt = true # Admin only
 
 [functions.robokassa]
 verify_jwt = false # Validates the caller's JWT in code (signing-keys compatible)
+
+# --------------------------------------------------------------
+# Previously Missing Functions
+# --------------------------------------------------------------
+
+# --- External Webhooks (callers send signatures, not JWTs) ---
+[functions.robokassa-webhook]
+verify_jwt = false # Webhook: Robokassa payment callback; verifies signature in code
+
+[functions.payments-webhook]
+verify_jwt = false # Webhook: Paddle payment callback; verifies webhook signature in code
+
+[functions.docuseal-webhook]
+verify_jwt = false # Webhook: DocuSeal document signing callback; verifies x-docuseal-signature
+
+# --- MCP ---
+[functions.mcp]
+verify_jwt = false # MCP server: uses publishable key auth internally
+
+# --- Public Checkout / Commerce ---
+[functions.digital-goods-checkout]
+verify_jwt = false # Public: checkout page for digital products (unauthenticated buyers)
+
+[functions.digital-goods-download]
+verify_jwt = false # Public: download link validated via token, not JWT
+
+[functions.create-offer-checkout]
+verify_jwt = false # Public: offer checkout from public pages
+
+[functions.create-payment-session]
+verify_jwt = true # Authenticated: user creates payment session for their own subscription
+
+[functions.get-paddle-price]
+verify_jwt = false # Public: pricing info for display on landing page
+
+# --- Public Redirects & Feeds ---
+[functions.smartlink-redirect]
+verify_jwt = false # Public: short link redirect /s/:slug
+
+[functions.calendar-feed]
+verify_jwt = false # Public: ICS feed for Apple/Google Calendar subscription
+
+[functions.resolve-domain]
+verify_jwt = false # Public: custom domain resolution lookup
+
+[functions.currency-rates]
+verify_jwt = false # Public: exchange rates for currency display
+
+# --- Telegram Auth ---
+[functions.auth-telegram-web]
+verify_jwt = false # Public: Telegram Web App auth (validates initData in code)
+
+[functions.validate-telegram-miniapp]
+verify_jwt = false # Public: Telegram Mini App validation (validates initData in code)
+
+[functions.telegram-password-reset]
+verify_jwt = false # Public: password reset via Telegram bot
+
+# --- Internal / Authenticated Services ---
+[functions.api-deals]
+verify_jwt = true # API: authenticated CRM deals endpoint
+
+[functions.api-leads]
+verify_jwt = true # API: authenticated CRM leads endpoint
+
+[functions.broadcast-update]
+verify_jwt = true # Internal: sends broadcast updates (authenticated)
+
+[functions.docuseal-create-submission]
+verify_jwt = true # Internal: creates DocuSeal submissions (authenticated)
+
+[functions.google-calendar-sync]
+verify_jwt = true # Internal: Google Calendar sync (authenticated)
+
+[functions.upload-user-media]
+verify_jwt = true # Internal: user media upload (authenticated)
+
+[functions.language-upload]
+verify_jwt = true # Internal: i18n language file upload (admin)
+
+[functions.verify-domain]
+verify_jwt = true # Internal: custom domain verification (authenticated)
+
+[functions.send-email]
+verify_jwt = true # Internal: transactional email sending
+
+[functions.send-attendee-email]
+verify_jwt = true # Internal: event attendee email
+
+[functions.send-zone-notification]
+verify_jwt = true # Internal: zone notification
+
+# --- Cron / System ---
+[functions.process-email-sequences]
+verify_jwt = false # Cron: invoked by pg_cron
+
+[functions.run-zone-automations]
+verify_jwt = false # Cron: invoked by pg_cron
+
+[functions.cleanup-orphaned-media]
+verify_jwt = false # Cron: invoked by pg_cron
+
+# --- Admin / Seed ---
+[functions.seed-demo-nails]
+verify_jwt = true # Admin only: seeds demo data
+
+[functions.health-check]
+verify_jwt = false # Public: health check endpoint for monitoring

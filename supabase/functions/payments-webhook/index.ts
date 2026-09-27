@@ -5,7 +5,7 @@ import {
   buildBillingRecoveryNotificationCopy,
   calculateBillingRecoveryState,
   normalizeBillingPromoCode,
-} from '../../../src/domain/billing/recovery.ts';
+} from '../_shared/billing-recovery.ts';
 
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
