@@ -760,6 +760,7 @@
     }
   },
   "footer": {
+    "sitemap": "Sayt xaritasi",
     "alternatives": "Taqqoslash",
     "brand": "Platforma",
     "companyInfo": "ARchitecKZ / BIN 190540008684 / Qozog'iston, Olmaota",
@@ -768,7 +769,8 @@
     "paymentTerms": "To'lov shartlari",
     "product": "Mahsulot",
     "rights": "Barcha huquqlar himoyalangan.",
-    "copyright": "V© 2025 LinkMAX"
+    "copyright": "V© 2025 LinkMAX",
+    "blog": "Blog"
   },
   "seo": {
     "landing": {
@@ -5938,7 +5940,31 @@
     "unlockBackground": "Shaxsiy sahifa foni",
     "unlockBackgroundDesc": "Rang, gradient yoki tasvirni o'rnating",
     "unlockPremium": "Premium mavzularni oching",
-    "unlockPremiumDesc": "PRO bilan barcha mavzularga ruxsat oling"
+    "unlockPremiumDesc": "PRO bilan barcha mavzularga ruxsat oling",
+    "sandDune": "Песок",
+    "sandDuneDesc": "Тёплый беж, спокойно и дорого",
+    "skyClean": "Небо",
+    "skyCleanDesc": "Светлый голубой для экспертов",
+    "matcha": "Матча",
+    "matchaDesc": "Мягкий зелёный, природный",
+    "graphite": "Графит",
+    "graphiteDesc": "Тёмный и строгий",
+    "roseQuartz": "Розовый кварц",
+    "roseQuartzDesc": "Нежный для бьюти-мастеров",
+    "espresso": "Эспрессо",
+    "espressoDesc": "Кофейный, уютный",
+    "electricViolet": "Электрик",
+    "electricVioletDesc": "Яркий фиолетовый для креаторов",
+    "lemonPop": "Лимон",
+    "lemonPopDesc": "Сочный жёлтый, заметный",
+    "arctic": "Арктика",
+    "arcticDesc": "Холодный минимализм",
+    "burgundy": "Бордо",
+    "burgundyDesc": "Глубокий винный, премиально",
+    "kazakhSteppe": "Степь",
+    "kazakhSteppeDesc": "Бирюза и золото",
+    "paperInk": "Бумага и чернила",
+    "paperInkDesc": "Журнальная типографика"
   },
   "tier": {
     "blocksCount": "bloklar",

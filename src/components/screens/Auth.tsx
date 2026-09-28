@@ -31,6 +31,7 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { trackAuthEvent } from '@/services/authFunnel';
+import { getSafeReturnTo } from '@/services/auth-redirects';
 import { session } from '@/lib/storage';
 import { NEW_USER_BUILDER_ROUTE, NEW_USER_BUILDER_SESSION_KEY } from '@/lib/onboarding/routes';
 import type { TelegramAuthPayload } from '@/types/telegram-auth';
@@ -141,7 +142,7 @@ export const Auth = memo(function Auth() {
   const hashParams = new URL(window.location.href).hash.substring(1);
   const hashSearchParams = new URLSearchParams(hashParams);
   const returnTo = searchParams.get('returnTo') || hashSearchParams.get('returnTo');
-  const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : undefined;
+  const safeReturnTo = returnTo ? getSafeReturnTo(returnTo, '') || undefined : undefined;
 
   // Check for auth errors returned from OAuth redirect
   const authError = searchParams.get('auth_error');

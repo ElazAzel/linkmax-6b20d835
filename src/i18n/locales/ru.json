@@ -760,6 +760,7 @@
     }
   },
   "footer": {
+    "sitemap": "Карта сайта",
     "alternatives": "Сравнение",
     "brand": "Платформа",
     "companyInfo": "ARchitecKZ / БИН 190540008684 / Казахстан, Алматы",
@@ -768,7 +769,8 @@
     "paymentTerms": "Условия оплаты",
     "product": "Продукт",
     "rights": "Все права защищены.",
-    "copyright": "© 2025 ЛинМАКС"
+    "copyright": "© 2025 ЛинМАКС",
+    "blog": "Блог"
   },
   "seo": {
     "landing": {
@@ -5938,7 +5940,31 @@
     "unlockBackground": "Пользовательский фон страницы",
     "unlockBackgroundDesc": "Установите цвет, градиент или изображение",
     "unlockPremium": "Разблокируйте премиум-темы",
-    "unlockPremiumDesc": "Получите доступ ко всем темам с PRO"
+    "unlockPremiumDesc": "Получите доступ ко всем темам с PRO",
+    "sandDune": "Песок",
+    "sandDuneDesc": "Тёплый беж, спокойно и дорого",
+    "skyClean": "Небо",
+    "skyCleanDesc": "Светлый голубой для экспертов",
+    "matcha": "Матча",
+    "matchaDesc": "Мягкий зелёный, природный",
+    "graphite": "Графит",
+    "graphiteDesc": "Тёмный и строгий",
+    "roseQuartz": "Розовый кварц",
+    "roseQuartzDesc": "Нежный для бьюти-мастеров",
+    "espresso": "Эспрессо",
+    "espressoDesc": "Кофейный, уютный",
+    "electricViolet": "Электрик",
+    "electricVioletDesc": "Яркий фиолетовый для креаторов",
+    "lemonPop": "Лимон",
+    "lemonPopDesc": "Сочный жёлтый, заметный",
+    "arctic": "Арктика",
+    "arcticDesc": "Холодный минимализм",
+    "burgundy": "Бордо",
+    "burgundyDesc": "Глубокий винный, премиально",
+    "kazakhSteppe": "Степь",
+    "kazakhSteppeDesc": "Бирюза и золото",
+    "paperInk": "Бумага и чернила",
+    "paperInkDesc": "Журнальная типографика"
   },
   "tier": {
     "blocksCount": "блоки",

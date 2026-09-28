@@ -16,6 +16,13 @@ describe('auth redirect helpers', () => {
     expect(getSafeReturnTo(null)).toBe('/dashboard');
   });
 
+  it('rejects backslash and control-character tricks that browsers normalize to //', () => {
+    expect(getSafeReturnTo('/\\evil.com')).toBe('/dashboard');
+    expect(getSafeReturnTo('/\t/evil.com')).toBe('/dashboard');
+    expect(getSafeReturnTo('/\n/evil.com')).toBe('/dashboard');
+    expect(new URL('/\\evil.com', 'https://lnkmx.my').host).toBe('evil.com');
+  });
+
   it('builds the Supabase callback redirect with a safe returnTo', () => {
     expect(buildAuthCallbackRedirect('https://lnkmx.my', '/dashboard/settings')).toBe(
       'https://lnkmx.my/auth/callback?returnTo=%2Fdashboard%2Fsettings'

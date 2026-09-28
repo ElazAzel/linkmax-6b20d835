@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders, createErrorResponse, createSuccessResponse } from "../_shared/utils.ts";
+import { md5Hex } from "../_shared/md5.ts";
 
 /**
  * Public checkout for a digital product.
@@ -11,9 +12,9 @@ import { corsHeaders, createErrorResponse, createSuccessResponse } from "../_sha
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+// crypto.subtle не поддерживает MD5 в Deno — считаем сами (см. _shared/md5.ts)
 async function md5(input: string) {
-    const buf = await crypto.subtle.digest("MD5", new TextEncoder().encode(input));
-    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+    return md5Hex(input);
 }
 
 serve(async (req: Request) => {

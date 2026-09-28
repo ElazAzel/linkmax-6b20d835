@@ -412,7 +412,11 @@ export async function fetchExpertDirectoryProfiles(
 
   if (pageError) throw wrapError(pageError);
 
-  const pages = (pageRows || []) as unknown as ExpertDirectoryPageRow[];
+  const PLACEHOLDER_TITLES = new Set(['your name', 'ваше имя', 'имя', 'name', 'profile', 'my page', 'моя страница', '']);
+  // Hide empty/template pages so the directory only links to real profiles.
+  const pages = ((pageRows || []) as unknown as ExpertDirectoryPageRow[]).filter(
+    (page) => !PLACEHOLDER_TITLES.has((page.title || '').trim().toLowerCase()),
+  );
   const pageIds = pages.map((page) => page.id);
   const summariesByPageId = new Map<string, ExpertDirectorySummaryRow>();
 
@@ -810,6 +814,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       contact_email: pg.contact_email || undefined,
       contact_phone: pg.contact_phone || undefined,
       contact_whatsapp: pg.contact_whatsapp || undefined,
+      country_code: ((ownerRow as Record<string, unknown>).country_code as string | null) || undefined,
       quality_score: pg.quality_score ?? undefined,
       // Diagnostics fields
       _diagnostics: {

@@ -492,7 +492,8 @@ export default function PublicPage() {
               {/* Branding handled by FreemiumWatermark */}
 
                 {/* Extra padding for watermark */}
-                {showWatermark && <div className="h-16" />}
+                <FreemiumWatermark show={showWatermark} slug={slug} />
+                <div className="h-20 sm:hidden" />
               </div>
 
               <SectionErrorBoundary name="site-footer" compact>
@@ -505,8 +506,6 @@ export default function PublicPage() {
               </SectionErrorBoundary>
 
 
-              {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
-              <FreemiumWatermark show={showWatermark} slug={slug} />
 
               {/* QR Dialog */}
               <Dialog open={showQR} onOpenChange={setShowQR}>

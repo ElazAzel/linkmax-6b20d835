@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { memo, lazy, Suspense } from 'react';
 import { OrganizationSwitcher } from '../organizations/OrganizationSwitcher';
 import { useTranslation } from 'react-i18next';
+import { useHasBusinessZone } from '@/contexts/ZoneContext';
 
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
@@ -132,6 +133,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
 }: DashboardSidebarProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const hasBusinessZone = useHasBusinessZone();
 
   const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-analytics', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-resources'];
 
@@ -302,7 +304,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         </div>
 
         {/* Business Zone section (Pro + Business tier) */}
-        {(isPremium || isBusinessTier) && (
+        {(isPremium || isBusinessTier) && hasBusinessZone && (
           <div className="mb-6">
             <div className="mx-2 mb-4 h-px bg-white/10" />
             {!collapsed && (

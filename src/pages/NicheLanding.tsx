@@ -3,10 +3,12 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import CalendarCheck from 'lucide-react/dist/esm/icons/calendar-check';
+import Check from 'lucide-react/dist/esm/icons/check';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
-import Clock from 'lucide-react/dist/esm/icons/clock';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Minus from 'lucide-react/dist/esm/icons/minus';
 import Send from 'lucide-react/dist/esm/icons/send';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -25,6 +27,14 @@ interface NicheLandingProps {
   landingKey?: string;
 }
 
+const COMPARISON_ROWS: Array<{ label: string; linkmax: string; others: string }> = [
+  { label: 'Заявки с формы в одном кабинете', linkmax: 'Входит в бесплатный план', others: 'Нужен внешний сервис' },
+  { label: 'Уведомление о заявке в Telegram', linkmax: 'Сразу после публикации', others: 'Обычно нет' },
+  { label: 'Сборка страницы за пару минут', linkmax: 'AI собирает блоки и тексты', others: 'Собирать блоки вручную' },
+  { label: 'Русский, казахский, узбекский', linkmax: '4 языка интерфейса', others: 'Чаще только английский' },
+  { label: 'Работа без VPN в РФ, KZ, UZ', linkmax: 'Домен lnkmx.my', others: 'Бывают блокировки' },
+];
+
 export default function NicheLanding({ landingKey }: NicheLandingProps) {
   const { landingSlug } = useParams<{ landingSlug: string }>();
   const landing = getNicheLandingByKey(landingKey || landingSlug);
@@ -38,8 +48,6 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   });
 
   const topPages = (pages || []).slice(0, 6);
-  const heroImage = topPages[0]?.preview_url || null;
-
 
   useEffect(() => {
     if (!landing) return;
@@ -148,7 +156,6 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     };
   }, [landing, pageUrl]);
 
-
   const handleCtaClick = (location: string) => {
     trackMarketingEvent({
       eventType: 'niche_landing_cta_click',
@@ -162,9 +169,9 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
 
   const statsElements = useMemo(() =>
     (landing?.stats ?? []).map((stat) => (
-      <div key={stat.label} className="rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-xl">
-        <p className="text-lg font-black text-white">{stat.value}</p>
-        <p className="mt-1 text-[11px] leading-tight text-white/70">{stat.label}</p>
+      <div key={stat.label} className="rounded-2xl border border-border bg-card px-4 py-3">
+        <p className="text-xl font-black tracking-tight text-foreground">{stat.value}</p>
+        <p className="mt-1 text-xs leading-snug text-muted-foreground">{stat.label}</p>
       </div>
     )),
     [landing]
@@ -172,15 +179,15 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
 
   const featuresElements = useMemo(() =>
     [
-      { icon: Link2, text: 'Ссылка для bio, рекламы и личных сообщений' },
-      { icon: CalendarCheck, text: 'Заявки, запись и быстрые контакты на одной странице' },
-      { icon: Send, text: 'Telegram-уведомления после публикации' },
+      { icon: Link2, text: 'Одна ссылка для bio, рекламы и личных сообщений' },
+      { icon: CalendarCheck, text: 'Услуги, цены, запись и заявка на одной странице' },
+      { icon: Send, text: 'Новая заявка сразу приходит в Telegram' },
     ].map((item) => {
       const Icon = item.icon;
       return (
         <div key={item.text} className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-            <Icon className="h-5 w-5 text-primary" />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground">
+            <Icon className="h-5 w-5" />
           </div>
           <p className="text-sm font-semibold leading-snug">{item.text}</p>
         </div>
@@ -192,7 +199,7 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
   const outcomeSummaryElements = useMemo(() =>
     (landing?.outcomes ?? []).map((item) => (
       <li key={item.title} className="flex items-start gap-2">
-        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
         <span>{item.title}</span>
       </li>
     )),
@@ -201,9 +208,11 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
 
   const outcomeCardElements = useMemo(() =>
     (landing?.outcomes ?? []).map((item) => (
-      <Card key={item.title} className="rounded-2xl border-border/60 bg-card/70 p-5 shadow-sm backdrop-blur-xl">
-        <CheckCircle2 className="h-6 w-6 text-emerald-500" />
-        <h3 className="mt-4 text-lg font-black">{item.title}</h3>
+      <Card key={item.title} className="rounded-3xl border-border bg-card p-6 shadow-none">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-accent-foreground">
+          <CheckCircle2 className="h-5 w-5" />
+        </div>
+        <h3 className="mt-4 text-lg font-black tracking-tight">{item.title}</h3>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</p>
       </Card>
     )),
@@ -212,12 +221,12 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
 
   const workflowElements = useMemo(() =>
     (landing?.workflow ?? []).map((item, index) => (
-      <div key={item.title} className="flex gap-4 rounded-2xl border border-border/60 bg-background/80 p-4">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-foreground text-sm font-black text-background">
+      <div key={item.title} id={`step-${index + 1}`} className="flex gap-4 rounded-3xl border border-border bg-card p-5">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-black text-primary-foreground">
           {index + 1}
         </div>
         <div>
-          <h3 className="font-black">{item.title}</h3>
+          <h3 className="font-black tracking-tight">{item.title}</h3>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">{item.description}</p>
         </div>
       </div>
@@ -225,11 +234,16 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
     [landing]
   );
 
+  const previewServices = useMemo(() =>
+    (landing?.outcomes ?? []).slice(0, 3).map((item) => item.title),
+    [landing]
+  );
+
   const galleryElements = useMemo(() =>
     topPages.map((page) => (
       <Link key={page.id} to={`/${page.slug}`} target="_blank" className="group">
-        <Card className="overflow-hidden rounded-2xl border-border/60 bg-card/80">
-          <div className="relative aspect-[9/16] bg-muted/40">
+        <Card className="overflow-hidden rounded-2xl border-border bg-card shadow-none">
+          <div className="relative aspect-[9/16] bg-muted">
             {page.preview_url ? (
               <img
                 src={page.preview_url}
@@ -245,8 +259,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                 </Avatar>
               </div>
             )}
-            <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-0 transition-opacity group-hover:opacity-100">
-              <Eye className="h-5 w-5 text-white" />
+            <div className="absolute inset-0 flex items-center justify-center bg-foreground/30 opacity-0 transition-opacity group-hover:opacity-100">
+              <Eye className="h-5 w-5 text-background" />
             </div>
           </div>
           <div className="p-2">
@@ -260,8 +274,8 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
 
   const faqElements = useMemo(() =>
     (landing?.faq ?? []).map((item) => (
-      <Card key={item.question} className="rounded-2xl border-border/60 bg-card/70 p-5">
-        <h3 className="font-black">{item.question}</h3>
+      <Card key={item.question} className="rounded-3xl border-border bg-card p-6 shadow-none">
+        <h3 className="font-black tracking-tight">{item.question}</h3>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.answer}</p>
       </Card>
     )),
@@ -290,42 +304,35 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
       {localBusinessSchema && <StructuredData id={`localbusiness-${landing.key}`} data={localBusinessSchema} />}
 
       <div className="min-h-screen bg-background text-foreground">
-        <header className="absolute inset-x-0 top-0 z-20">
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-            <Link to="/" className="flex items-center gap-2 font-bold text-white drop-shadow">
-              <Sparkles className="h-5 w-5" />
+        <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
+          <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+            <Link to="/" className="flex items-center gap-2 text-sm font-black tracking-tight">
+              <Sparkles className="h-4 w-4 text-primary" />
               <span>lnkmx</span>
             </Link>
-            <Button asChild size="sm" variant="secondary" className="rounded-xl bg-white/90 text-foreground hover:bg-white">
-              <Link to="/auth?mode=signin">Войти</Link>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button asChild size="sm" variant="ghost" className="rounded-xl">
+                <Link to="/auth?mode=signin">Войти</Link>
+              </Button>
+              <Button asChild size="sm" className="hidden rounded-xl sm:inline-flex" onClick={() => handleCtaClick('header')}>
+                <Link to={authUrl}>{landing.primaryCta}</Link>
+              </Button>
+            </div>
           </div>
         </header>
 
-        <main>
-          <section className="relative min-h-[88svh] overflow-hidden bg-gradient-to-br from-primary via-primary/85 to-accent">
-            {heroImage ? (
-              <img
-                src={heroImage}
-                alt={landing.visualAlt}
-                className="absolute inset-0 h-full w-full object-cover opacity-60"
-                loading="eager"
-              />
-            ) : (
-              <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--primary-foreground)/0.15),transparent_55%),radial-gradient(circle_at_80%_70%,hsl(var(--accent)/0.35),transparent_60%)]" />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-background" />
-
-            <div className="relative z-10 mx-auto flex min-h-[88svh] max-w-6xl flex-col justify-end px-4 pb-12 pt-24">
-              <div className="max-w-3xl">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-xl">
-                  <Sparkles className="h-4 w-4" />
+        <main className="pb-24 sm:pb-0">
+          <section className="border-b border-border">
+            <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1.5 text-xs font-bold text-accent-foreground">
+                  <Sparkles className="h-3.5 w-3.5" />
                   {landing.badge}
                 </div>
-                <h1 className="max-w-4xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
+                <h1 className="mt-5 text-3xl font-black leading-[1.08] tracking-tight sm:text-4xl lg:text-5xl">
                   {landing.title}
                 </h1>
-                <p data-aeo-summary className="mt-5 max-w-2xl text-base leading-7 text-white/82 sm:text-lg">
+                <p data-aeo-summary className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">
                   {landing.description}
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -335,113 +342,184 @@ export default function NicheLanding({ landingKey }: NicheLandingProps) {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="secondary" className="h-14 rounded-2xl bg-white/90 px-7 text-base font-bold text-foreground hover:bg-white">
-                    <Link to={`/gallery?niche=${landing.niche}`}>
-                      {landing.secondaryCta}
-                    </Link>
+                  <Button asChild size="lg" variant="outline" className="h-14 rounded-2xl px-7 text-base font-bold">
+                    <Link to={`/gallery?niche=${landing.niche}`}>{landing.secondaryCta}</Link>
                   </Button>
                 </div>
+                <p className="mt-4 text-xs text-muted-foreground">Бесплатный старт, без банковской карты</p>
+                <div className="mt-8 grid grid-cols-3 gap-3">{statsElements}</div>
               </div>
 
-              <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2">
-                {statsElements}
+              <div className="relative flex justify-center lg:justify-end">
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10 rounded-[3rem] bg-[radial-gradient(circle_at_70%_25%,hsl(var(--primary)/0.12),transparent_65%)]"
+                />
+                <div className="w-[290px] rounded-[2.6rem] border border-border bg-card p-3 shadow-xl sm:w-[320px]">
+                  <div className="overflow-hidden rounded-[2rem] border border-border bg-background">
+                    <div className="h-20 bg-gradient-to-br from-primary/20 via-accent to-background" />
+                    <div className="-mt-9 px-4 pb-5">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-background bg-muted text-lg font-black text-muted-foreground">
+                        {landing.previewTitle.charAt(0)}
+                      </div>
+                      <p className="mt-3 text-base font-black tracking-tight">{landing.previewTitle}</p>
+                      <p className="mt-1 text-xs leading-snug text-muted-foreground">{landing.previewSubtitle}</p>
+
+                      <div className="mt-4 space-y-2">
+                        {previewServices.map((title) => (
+                          <div key={title} className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2.5">
+                            <span className="truncate text-[11px] font-semibold">{title}</span>
+                            <span className="shrink-0 text-[10px] font-bold text-primary">Открыть</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <div className="flex items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-[11px] font-bold text-primary-foreground">
+                          <MessageCircle className="h-3.5 w-3.5" />
+                          WhatsApp
+                        </div>
+                        <div className="flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card py-2.5 text-[11px] font-bold">
+                          <Send className="h-3.5 w-3.5" />
+                          Telegram
+                        </div>
+                      </div>
+
+                      <div className="mt-3 rounded-xl border border-border bg-card p-3">
+                        <p className="text-[11px] font-bold">Оставить заявку</p>
+                        <div className="mt-2 space-y-1.5">
+                          <div className="h-6 rounded-lg bg-muted" />
+                          <div className="h-6 rounded-lg bg-muted" />
+                          <div className="h-6 rounded-lg bg-foreground/85" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
-          <section className="border-y border-border/60 bg-muted/20">
-            <div className="mx-auto grid max-w-6xl gap-4 px-4 py-7 sm:grid-cols-3">
-              {featuresElements}
-            </div>
+          <section className="border-b border-border bg-muted/40">
+            <div className="mx-auto grid max-w-6xl gap-4 px-4 py-7 sm:grid-cols-3">{featuresElements}</div>
           </section>
 
           <section className="mx-auto max-w-4xl px-4 pt-12">
-            <Card data-aeo-answer className="rounded-2xl border-primary/20 bg-primary/5 p-6">
-              <p className="text-xs font-bold uppercase tracking-wide text-primary">Кратко</p>
-              <p className="mt-2 text-base font-semibold leading-7 text-foreground sm:text-lg">
-                {landing.seoDescription}
-              </p>
-              <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
-                {outcomeSummaryElements}
-              </ul>
+            <Card data-aeo-answer className="rounded-3xl border-border bg-card p-6 shadow-none">
+              <p className="text-xs font-bold tracking-wide text-primary">Кратко</p>
+              <p className="mt-2 text-base font-semibold leading-7 sm:text-lg">{landing.seoDescription}</p>
+              <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">{outcomeSummaryElements}</ul>
             </Card>
           </section>
 
           <section className="mx-auto max-w-6xl px-4 py-14">
             <div className="max-w-2xl">
-              <p className="text-sm font-bold uppercase text-primary">Что получает специалист</p>
-              <h2 className="mt-2 text-3xl font-black leading-tight">
-                Не просто мультиссылка, а первый слой Business OS
+              <p className="text-sm font-bold text-primary">Что получает специалист</p>
+              <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight sm:text-3xl">
+                Страница, которая приводит клиентов, а не просто хранит ссылки
               </h2>
             </div>
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {outcomeCardElements}
+            <div className="mt-8 grid gap-4 md:grid-cols-3">{outcomeCardElements}</div>
+          </section>
+
+          <section className="border-y border-border bg-muted/40">
+            <div className="mx-auto max-w-4xl px-4 py-14">
+              <div className="max-w-2xl">
+                <p className="text-sm font-bold text-primary">Сравнение</p>
+                <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight sm:text-3xl">
+                  LinkMAX и обычные мультиссылки
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  Taplink и Linktree собирают ссылки. LinkMAX ведёт клиента дальше: заявка, уведомление и контакт остаются у вас.
+                </p>
+              </div>
+
+              <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-card">
+                <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2 border-b border-border px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+                  <span>Возможность</span>
+                  <span>LinkMAX</span>
+                  <span>Taplink, Linktree</span>
+                </div>
+                {COMPARISON_ROWS.map((row) => (
+                  <div key={row.label} className="grid grid-cols-[1.4fr_1fr_1fr] items-start gap-2 border-b border-border px-4 py-3 last:border-b-0">
+                    <span className="text-xs font-semibold leading-snug sm:text-sm">{row.label}</span>
+                    <span className="flex items-start gap-1.5 text-xs leading-snug text-foreground">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                      {row.linkmax}
+                    </span>
+                    <span className="flex items-start gap-1.5 text-xs leading-snug text-muted-foreground">
+                      <Minus className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                      {row.others}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
-          <section className="bg-muted/25">
-            <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <section className="mx-auto max-w-6xl px-4 py-14">
+            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div>
-                <p className="text-sm font-bold uppercase text-primary">Запуск после регистрации</p>
-                <h2 className="mt-2 text-3xl font-black leading-tight">
-                  От клика до опубликованной страницы без лишних настроек
+                <p className="text-sm font-bold text-primary">Как это работает</p>
+                <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight sm:text-3xl">
+                  От регистрации до опубликованной ссылки
                 </h2>
-                <p className="mt-4 text-muted-foreground">
-                  Ниша передается в `/auth`, поэтому первый онбординг открывает AI Builder уже с правильным направлением.
+                <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                  Сфера подставляется автоматически, поэтому первый запуск открывает готовый шаблон под вашу нишу.
                 </p>
               </div>
-              <div className="space-y-3">
-                {workflowElements}
-              </div>
+              <div className="space-y-3">{workflowElements}</div>
             </div>
           </section>
 
           {topPages.length > 0 && (
-            <section className="mx-auto max-w-6xl px-4 py-14">
-              <div className="flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-sm font-bold uppercase text-primary">Примеры</p>
-                  <h2 className="mt-2 text-3xl font-black">Живые страницы на LinkMAX</h2>
+            <section className="border-t border-border">
+              <div className="mx-auto max-w-6xl px-4 py-14">
+                <div className="flex items-end justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-bold text-primary">Примеры</p>
+                    <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl">Живые страницы на LinkMAX</h2>
+                  </div>
+                  <Button asChild variant="outline" className="hidden rounded-xl sm:inline-flex">
+                    <Link to={`/gallery?niche=${landing.niche}`}>Все примеры</Link>
+                  </Button>
                 </div>
-                <Button asChild variant="outline" className="hidden rounded-xl sm:inline-flex">
-                  <Link to={`/gallery?niche=${landing.niche}`}>Все примеры</Link>
-                </Button>
-              </div>
-              <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                {galleryElements}
+                <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">{galleryElements}</div>
               </div>
             </section>
           )}
 
-          <section className="mx-auto max-w-4xl px-4 py-14">
-            <div className="text-center">
-              <p className="text-sm font-bold uppercase text-primary">FAQ</p>
-              <h2 className="mt-2 text-3xl font-black">Частые вопросы</h2>
-            </div>
-            <div className="mt-8 space-y-3">
-              {faqElements}
+          <section className="border-t border-border bg-muted/40">
+            <div className="mx-auto max-w-4xl px-4 py-14">
+              <p className="text-sm font-bold text-primary">Частые вопросы</p>
+              <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl">Коротко о главном</h2>
+              <div className="mt-8 space-y-3">{faqElements}</div>
             </div>
           </section>
 
-          <section className="border-t border-border/60 bg-foreground text-background">
-            <div className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-10 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="flex items-center gap-2 text-sm font-semibold text-background/70">
-                  <Clock className="h-4 w-4" />
-                  Старт занимает пару минут
-                </div>
-                <h2 className="mt-2 text-2xl font-black">{landing.previewTitle}</h2>
-                <p className="mt-1 text-sm text-background/70">{landing.previewSubtitle}</p>
-              </div>
-              <Button asChild size="lg" variant="secondary" className="h-14 rounded-2xl px-7 font-bold" onClick={() => handleCtaClick('footer')}>
+          <section className="border-t border-border">
+            <div className="mx-auto max-w-4xl px-4 py-16 text-center">
+              <h2 className="text-2xl font-black leading-tight tracking-tight sm:text-3xl">{landing.previewTitle}</h2>
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted-foreground">{landing.previewSubtitle}</p>
+              <Button asChild size="lg" className="mt-7 h-14 rounded-2xl px-8 text-base font-bold" onClick={() => handleCtaClick('footer')}>
                 <Link to={authUrl}>
                   {landing.primaryCta}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+              <p className="mt-4 text-xs text-muted-foreground">Старт занимает пару минут</p>
             </div>
           </section>
         </main>
+
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 p-3 backdrop-blur sm:hidden">
+          <Button asChild size="lg" className="h-12 w-full rounded-2xl text-base font-bold" onClick={() => handleCtaClick('sticky_mobile')}>
+            <Link to={authUrl}>
+              {landing.primaryCta}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
       </div>
     </ScreenErrorBoundary>
   );

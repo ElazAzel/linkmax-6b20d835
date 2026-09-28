@@ -251,18 +251,37 @@ function generateQRCodeDataUrl(ticketCode: string): string {
   return qrUrl;
 }
 
+function escHtml(v: unknown): string {
+  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function escI18n(o: Record<string, string> | null | undefined): Record<string, string> | null {
+  if (!o) return null;
+  return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, escHtml(v)]));
+}
+
 function generateEmailHTML(
-  event: EventData,
+  rawEvent: EventData,
   registration: RegistrationData,
   owner: OwnerData | null,
   page: PageData | null,
   lang: string,
   baseUrl: string
 ): string {
+  const event: EventData = {
+    ...rawEvent,
+    title_i18n_json: escI18n(rawEvent.title_i18n_json as Record<string, string>) as EventData['title_i18n_json'],
+    description_i18n_json: escI18n(rawEvent.description_i18n_json as Record<string, string>) as EventData['description_i18n_json'],
+    location_value: rawEvent.location_value ? escHtml(rawEvent.location_value) : rawEvent.location_value,
+  };
+  const calendarLinkRaw = generateICSLink(rawEvent, lang);
+  registration = { ...registration, attendee_name: escHtml(registration.attendee_name) } as RegistrationData;
+  if (owner) owner = { ...owner, display_name: owner.display_name ? escHtml(owner.display_name) : owner.display_name, username: owner.username ? escHtml(owner.username) : owner.username } as OwnerData;
+  if (page) page = { ...page, title: page.title ? escHtml(page.title) : page.title } as PageData;
   const t = translations[lang as keyof typeof translations] || translations.en;
   const eventTitle = event.title_i18n_json?.[lang] || event.title_i18n_json?.ru || event.title_i18n_json?.en || 'Event';
   const ticketCode = registration.event_tickets?.[0]?.ticket_code || 'N/A';
-  const calendarLink = generateICSLink(event, lang);
+  const calendarLink = escHtml(calendarLinkRaw);
   const isConfirmed = registration.status === 'confirmed';
   const organizerName = owner?.display_name || owner?.username || 'Organizer';
   const pageUrl = page?.slug ? `${baseUrl}/${page.slug}` : baseUrl;
@@ -493,7 +512,7 @@ const handler = async (req: Request): Promise<Response> => {
     const { data: emailResult, error: emailError } = await resend.emails.send({
       from: fromAddress,
       to: [regData.attendee_email],
-      subject: `🎫 ${t.subject} — ${eventTitle}`,
+      subject: `🎫 ${t.subject} — ${String(eventTitle).replace(/[\r\n<>]/g, ' ').slice(0, 150)}`,
       html: emailHTML,
     });
 

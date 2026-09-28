@@ -3,32 +3,10 @@
 // Add new entries to BLOG_POSTS; the route /blog and /blog/:slug pick them up
 // automatically. Sitemap generator also reads from this file.
 
-export interface BlogPostSection {
-  heading: string;
-  paragraphs: string[];
-  bullets?: string[];
-}
+import type { BlogPost } from './blog-post-types';
+import { HUB_OVERRIDES, HUB_NEW_POSTS } from './blog-posts-hub';
 
-export interface BlogPost {
-  slug: string;
-  title: string;
-  description: string;
-  /** Optional SEO title override (keep under 60 chars incl. brand suffix) */
-  metaTitle?: string;
-  /** Optional SEO description override (keep under 160 chars) */
-  metaDescription?: string;
-  publishedAt: string; // ISO date
-
-  updatedAt?: string;
-  readingMinutes: number;
-  tags: string[];
-  cover?: string;
-  // Short ~50 word answer block for AEO/featured snippets
-  answer: string;
-  sections: BlogPostSection[];
-  faq?: Array<{ question: string; answer: string }>;
-  cta?: { label: string; href: string };
-}
+export type { BlogPost, BlogPostSection } from './blog-post-types';
 
 export const BLOG_POSTS: BlogPost[] = [
   {
@@ -784,12 +762,17 @@ export const BLOG_POSTS: BlogPost[] = [
 ];
 
 
+const ALL_POSTS: BlogPost[] = [
+  ...BLOG_POSTS.map((p) => HUB_OVERRIDES[p.slug] ?? p),
+  ...HUB_NEW_POSTS.filter((n) => !BLOG_POSTS.some((p) => p.slug === n.slug)),
+];
+
 export function getBlogPost(slug: string): BlogPost | undefined {
-  return BLOG_POSTS.find((p) => p.slug === slug);
+  return ALL_POSTS.find((p) => p.slug === slug);
 }
 
 export function listBlogPosts(): BlogPost[] {
-  return [...BLOG_POSTS].sort((a, b) =>
+  return [...ALL_POSTS].sort((a, b) =>
     b.publishedAt.localeCompare(a.publishedAt),
   );
 }

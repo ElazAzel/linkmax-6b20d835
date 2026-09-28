@@ -36,3 +36,26 @@ describe('ExpertEngine', () => {
     expect(result.hasMatch).toBe(true);
   });
 });
+
+describe('ExpertEngine page RAG', () => {
+  const blocks = [
+    { id: '1', type: 'profile', name: 'Айгуль', bio: 'Психолог, работаю с тревожностью и выгоранием' },
+    { id: '2', type: 'faq', items: [{ question: 'Работаете онлайн?', answer: 'Да, сессии проходят в Zoom.' }] },
+    { id: '3', type: 'pricing', currency: 'KZT', items: [{ name: 'Сессия', price: 15000 }] },
+    { id: '4', type: 'messenger', messengers: [{ platform: 'whatsapp', username: '+7 701 000 00 00' }] },
+  ] as unknown as Block[];
+  const engine = new ExpertEngine(blocks, { title: 'Айгуль', description: '' });
+
+  it('answers FAQ from flat blocks', () => {
+    expect(engine.getResponse('можно ли онлайн?').message.content).toContain('Zoom');
+  });
+  it('answers price from pricing items', () => {
+    expect(engine.getResponse('сколько стоит сессия').message.content).toContain('15000');
+  });
+  it('returns real contacts', () => {
+    expect(engine.getResponse('как написать в ватсап').message.content).toContain('wa.me/77010000000');
+  });
+  it('finds bio topics', () => {
+    expect(engine.getResponse('помогаете с выгоранием?').message.content).toContain('выгоранием');
+  });
+});

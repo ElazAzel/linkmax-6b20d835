@@ -102,9 +102,11 @@ const CollabPage = lazy(() => import("./pages/CollabPage"));
 const JoinTeam = lazy(() => import("./pages/JoinTeam"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
+const SitemapPage = lazy(() => import("./pages/SitemapPage"));
 const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
+const EventCheckin = lazy(() => import("./pages/EventCheckin"));
 const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 const ReviewRequest = lazy(() => import("./pages/ReviewRequest"));
@@ -143,6 +145,8 @@ const router = createBrowserRouter([
       { path: "goods/:id", element: <PublicGoodsPage /> },
       { path: "purchase/:token", element: <PublicPurchasePage /> },
       { path: "booking/manage/:token", element: <BookingManagement /> },
+      // Staff door scanner: works from a shared secret link, no sign-in needed
+      { path: "events/checkin/:token", element: <EventCheckin /> },
 
       { path: "auth/callback", element: <AuthCallback /> },
       // Managed OAuth server consent screen for external MCP clients
@@ -194,9 +198,12 @@ const router = createBrowserRouter([
       { path: "invites/:token", element: <AcceptInvite /> },
       { path: "terms", element: <Terms /> },
       { path: "privacy", element: <Privacy /> },
+      { path: "sitemap", element: <SitemapPage /> },
       { path: "payment-terms", element: <PaymentTerms /> },
       { path: "experts", element: <Experts /> },
+      { path: "experts/city/:city", element: <Experts /> },
       { path: "experts/:tag", element: <Experts /> },
+      { path: "experts/:tag/:city", element: <Experts /> },
       { path: "для-репетиторов", element: <NicheLanding landingKey="tutors" /> },
       { path: "для-бьюти-мастеров", element: <NicheLanding landingKey="beauty-masters" /> },
       { path: "for-masters", element: <ForMasters /> },

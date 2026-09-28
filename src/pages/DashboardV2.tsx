@@ -754,6 +754,7 @@ function DashboardV2Inner() {
                   contactEmail={dashboard.pageData?.contact_email}
                   contactPhone={dashboard.pageData?.contact_phone}
                   contactWhatsapp={dashboard.pageData?.contact_whatsapp}
+                  countryCode={dashboard.pageData?.country_code}
                   onUpdateEntityFields={dashboard.updateEntityFields}
                   webhookUrl={dashboard.pageData?.webhook_url}
                   webhookSecret={dashboard.pageData?.webhook_secret}
