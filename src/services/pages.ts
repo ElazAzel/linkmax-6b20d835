@@ -741,7 +741,24 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
 /**
  * Load user's own page
  */
-export async function loadUserPage(userId: string): Promise<LoadUserPageResult> {
+// Columns `authenticated` may SELECT directly (see 20260620131736). Sensitive
+// ones (webhook_*, contact_*, diagnostics) are only returned by get_my_full_page.
+const OWNER_PAGE_SAFE_COLUMNS =
+  'id, user_id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, ' +
+  'is_published, view_count, created_at, updated_at, editor_mode, grid_config, is_in_gallery, ' +
+  'gallery_featured_at, gallery_likes, niche, preview_url, quality_score, is_indexable, ' +
+  'last_snapshot_at, is_paid, is_primary_paid, page_type, integrations, favicon_url, hide_branding, ' +
+  'organization_id, custom_domain, city, country_code, profession, entity_type, service_slugs, ' +
+  'site_id, page_path, is_home, last_indexnow_at';
+
+/**
+ * Load one of the user's own pages.
+ *
+ * `pageId` selects which page: get_my_full_page returns a single, arbitrary row
+ * (LIMIT 1 without ORDER BY), so without an id a user with several pages could
+ * get any of them in the editor.
+ */
+export async function loadUserPage(userId: string, pageId?: string | null): Promise<LoadUserPageResult> {
   try {
     // Fetch the owner's full row (including sensitive columns) via SECURITY DEFINER RPC.
     // Direct SELECT on contact_email / contact_phone / contact_whatsapp / webhook_url /
@@ -759,7 +776,22 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       return { data: null, chatbotContext: null, error: wrapError(rpcError) };
     }
 
-    const ownerRow = Array.isArray(rpcRows) ? (rpcRows[0] as Record<string, unknown> | undefined) : null;
+    let ownerRow = Array.isArray(rpcRows) ? (rpcRows[0] as Record<string, unknown> | undefined) : null;
+
+    if (pageId && ownerRow?.id !== pageId) {
+      const { data: requested, error: requestedError } = await supabase
+        .from('pages')
+        .select(OWNER_PAGE_SAFE_COLUMNS)
+        .eq('id', pageId)
+        .eq('user_id', userId)
+        .maybeSingle();
+      if (requestedError) {
+        return { data: null, chatbotContext: null, error: wrapError(requestedError) };
+      }
+      // Unknown or foreign id (deleted page, stale localStorage) — fall back to
+      // the primary page instead of showing an empty editor.
+      if (requested) ownerRow = requested as unknown as Record<string, unknown>;
+    }
 
     if (!ownerRow) {
       return {
@@ -838,22 +870,40 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
 }
 
 /**
- * Publish user's page
+ * Publish one of the user's pages.
+ *
+ * Previously this updated `is_published` for every page of the user, so each
+ * autosave re-published draft sub-pages the owner had hidden.
  */
-export async function publishPage(userId: string): Promise<PublishPageResult> {
+export async function publishPage(userId: string, pageId?: string | null): Promise<PublishPageResult> {
   try {
+    let targetId = pageId ?? null;
+    if (!targetId) {
+      // Legacy callers without an id: publish only the primary (oldest) page.
+      const { data: primary, error: primaryError } = await supabase
+        .from('pages')
+        .select('id')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      if (primaryError) return { slug: null, error: wrapError(primaryError) };
+      targetId = primary?.id ?? null;
+    }
+    if (!targetId) return { slug: null, error: new Error('Page not found') };
+
     const { data, error } = await supabase
       .from('pages')
       .update({ is_published: true })
+      .eq('id', targetId)
       .eq('user_id', userId)
-      .select('slug, created_at')
-      .order('created_at', { ascending: true });
+      .select('slug')
+      .maybeSingle();
 
     if (error) return { slug: null, error: wrapError(error) };
-    const first = (data as Array<{ slug: string }> | null)?.[0];
-    if (!first) return { slug: null, error: new Error('Page not found') };
+    if (!data) return { slug: null, error: new Error('Page not found') };
 
-    return { slug: first.slug, error: null };
+    return { slug: data.slug, error: null };
   } catch (error) {
     return { slug: null, error: wrapError(error) };
   }
@@ -863,12 +913,15 @@ export async function publishPage(userId: string): Promise<PublishPageResult> {
 /**
  * Update page niche
  */
-export async function updatePageNiche(userId: string, niche: string): Promise<{ error: Error | null }> {
+export async function updatePageNiche(userId: string, niche: string, pageId?: string | null): Promise<{ error: Error | null }> {
   try {
-    const { error } = await supabase
+    // Scope to one page: filtering by user_id alone rewrote the niche of all pages.
+    let query = supabase
       .from('pages')
       .update({ niche })
       .eq('user_id', userId);
+    if (pageId) query = query.eq('id', pageId);
+    const { error } = await query;
 
     if (error) return { error: wrapError(error) };
     return { error: null };
@@ -893,13 +946,17 @@ export async function updatePageEntityFields(
     contact_phone?: string;
     contact_whatsapp?: string;
     country_code?: string;
-  }
+  },
+  pageId?: string | null,
 ): Promise<{ error: Error | null }> {
   try {
-    const { error } = await supabase
+    // Scope to one page: filtering by user_id alone rewrote contacts of all pages.
+    let query = supabase
       .from('pages')
       .update(fields)
       .eq('user_id', userId);
+    if (pageId) query = query.eq('id', pageId);
+    const { error } = await query;
 
     if (error) return { error: wrapError(error) };
     return { error: null };

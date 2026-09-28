@@ -97,8 +97,22 @@ export class SupabaseUserRepository implements IUserRepository {
         throw profileError;
       }
 
-      // Sync page slug with new username
-      await supabase.from('pages').update({ slug: normalizedUsername }).eq('user_id', userId);
+      // Sync the primary page slug only (see services/user.ts updateUsername)
+      const { data: primaryPage } = await supabase
+        .from('pages')
+        .select('id')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      if (primaryPage) {
+        const { error: slugError } = await supabase
+          .from('pages')
+          .update({ slug: normalizedUsername })
+          .eq('id', primaryPage.id)
+          .eq('user_id', userId);
+        if (slugError) throw slugError;
+      }
     });
   }
 

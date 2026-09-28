@@ -329,7 +329,7 @@ function DashboardV2Inner() {
   // Handle edit page (navigate to editor)
   const handleEditPage = useCallback((pageId: string) => {
     multiPage.switchPage(pageId);
-    handleTabChange('home');
+    handleTabChange('editor');
   }, [multiPage, handleTabChange]);
 
   // Handle page actions
@@ -587,7 +587,7 @@ function DashboardV2Inner() {
                   onDuplicatePage={async (id) => {
                     const page = multiPage.pages.find(p => p.id === id);
                     if (page) {
-                      const result = await multiPage.createPage(`${page.title} (copy)`, `${page.slug}-copy`);
+                      const result = await multiPage.duplicatePage(id);
                       if (result.success) {
                         toast.success(t('dashboard.pages.duplicated', 'Page duplicated'));
                       } else {
@@ -707,7 +707,15 @@ function DashboardV2Inner() {
                   isIndexable={dashboard.pageData?.isIndexable}
                   faviconUrl={dashboard.pageData?.favicon_url}
                   hideBranding={dashboard.pageData?.hideBranding}
-                  onUpdateSlug={async (slug) => multiPage.updatePageSlug(multiPage.activePageId || '', slug)}
+                  onUpdateSlug={async (slug) => {
+                    const result = await multiPage.updatePageSlug(multiPage.activePageId || '', slug);
+                    // The editor saves by slug (upsert_user_page): without this the
+                    // next autosave wrote the old slug back or hit another page.
+                    if (result.success && dashboard.pageData?.id === multiPage.activePageId) {
+                      dashboard.updatePageDataPartial({ slug });
+                    }
+                    return result;
+                  }}
                   onUpdateCustomDomain={async (domain) => {
                     const result = await multiPage.updatePageCustomDomain(multiPage.activePageId || '', domain);
                     if (result.success) {
@@ -745,9 +753,7 @@ function DashboardV2Inner() {
                   onToggleIndexable={(indexable) => {
                     dashboard.updatePageDataPartial({ isIndexable: indexable });
                   }}
-                  onUpgradePage={() => {
-                    toast.info(t('common.comingSoon', 'Coming soon'));
-                  }}
+                  onUpgradePage={() => navigate('/pricing')}
                   city={dashboard.pageData?.city}
                   profession={dashboard.pageData?.profession}
                   entityType={dashboard.pageData?.entity_type}

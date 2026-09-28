@@ -217,24 +217,73 @@ describe('pagesService', () => {
         });
     });
     describe('publishPage', () => {
-        it('should update is_published to true and return slug', async () => {
-            const mockPageData = { slug: 'test-slug' };
+        it('publishes only the given page and returns its slug', async () => {
             const mockFrom = vi.mocked(supabase.from);
-            
-            mockFrom.mockReturnValueOnce({
+            const chain = {
                 update: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 select: vi.fn().mockReturnThis(),
-                order: vi.fn().mockResolvedValue({ data: [mockPageData], error: null })
-            } as any);
+                maybeSingle: vi.fn().mockResolvedValue({ data: { slug: 'test-slug' }, error: null }),
+            };
+            mockFrom.mockReturnValueOnce(chain as any);
 
-            const result = await pagesService.publishPage('test-user-id');
+            const result = await pagesService.publishPage('test-user-id', 'page-2');
 
             expect(result.error).toBeNull();
             expect(result.slug).toEqual('test-slug');
-            
-            const updateCall = vi.mocked(mockFrom).mock.results[0].value.update;
-            expect(updateCall).toHaveBeenCalledWith({ is_published: true });
+            expect(chain.update).toHaveBeenCalledWith({ is_published: true });
+            expect(chain.eq).toHaveBeenCalledWith('id', 'page-2');
+            expect(chain.eq).toHaveBeenCalledWith('user_id', 'test-user-id');
+        });
+
+        it('without a page id publishes only the primary page, not every page', async () => {
+            const mockFrom = vi.mocked(supabase.from);
+            const lookup = {
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                order: vi.fn().mockReturnThis(),
+                limit: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'primary-page' }, error: null }),
+            };
+            const update = {
+                update: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                select: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({ data: { slug: 'main' }, error: null }),
+            };
+            mockFrom.mockReturnValueOnce(lookup as any).mockReturnValueOnce(update as any);
+
+            const result = await pagesService.publishPage('test-user-id');
+
+            expect(result.slug).toBe('main');
+            expect(lookup.order).toHaveBeenCalledWith('created_at', { ascending: true });
+            expect(update.eq).toHaveBeenCalledWith('id', 'primary-page');
+        });
+    });
+
+    describe('loadUserPage with a page id', () => {
+        it('loads the requested page when get_my_full_page returns a different one', async () => {
+            const mockFrom = vi.mocked(supabase.from);
+            const mockRpc = vi.mocked(supabase.rpc);
+            mockRpc.mockResolvedValueOnce({ data: [{ id: 'primary', slug: 'main', user_id: 'u1' }], error: null } as any);
+
+            const requested = {
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'second', slug: 'second', user_id: 'u1' }, error: null }),
+            };
+            mockFrom
+                .mockReturnValueOnce(requested as any)
+                .mockReturnValueOnce({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockResolvedValue({ data: [], error: null }) } as any)
+                .mockReturnValueOnce({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockResolvedValue({ data: null, error: null }) } as any);
+
+            const result = await pagesService.loadUserPage('u1', 'second');
+
+            expect(result.error).toBeNull();
+            expect(result.data?.id).toBe('second');
+            expect(result.data?.slug).toBe('second');
+            expect(requested.eq).toHaveBeenCalledWith('id', 'second');
+            expect(requested.eq).toHaveBeenCalledWith('user_id', 'u1');
         });
     });
 
@@ -265,6 +314,20 @@ describe('pagesService', () => {
 
             const result = await pagesService.updatePageNiche('u1', 'e-commerce');
             expect(result.error).toBeNull();
+        });
+
+        it('scopes the update to one page when a page id is given', async () => {
+            const mockFrom = vi.mocked(supabase.from);
+            const chain: any = { update: vi.fn(), eq: vi.fn() };
+            chain.update.mockReturnValue(chain);
+            let calls = 0;
+            chain.eq.mockImplementation(() => (++calls < 2 ? chain : Promise.resolve({ error: null })));
+            mockFrom.mockReturnValueOnce(chain);
+
+            const result = await pagesService.updatePageNiche('u1', 'beauty', 'page-7');
+            expect(result.error).toBeNull();
+            expect(chain.eq).toHaveBeenCalledWith('user_id', 'u1');
+            expect(chain.eq).toHaveBeenCalledWith('id', 'page-7');
         });
     });
 

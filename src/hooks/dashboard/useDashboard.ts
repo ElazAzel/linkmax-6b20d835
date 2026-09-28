@@ -127,6 +127,12 @@ export function useDashboard(options?: UseDashboardOptions) {
     onSaveSuccess: async () => {
       await userProfile.refresh();
     },
+    onPrimarySlugChanged: (pageId, slug) => {
+      // The editor saves by slug; keep it in step with the renamed page
+      if (cloudState.pageData?.id === pageId) {
+        cloudState.updatePageDataPartial({ slug });
+      }
+    },
   });
 
   // Onboarding state

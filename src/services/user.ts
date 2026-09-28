@@ -111,6 +111,9 @@ export type UserProfile = AppDatabase['public']['Tables']['user_profiles']['Row'
 export interface UpdateUsernameResult {
   success: boolean;
   error?: string;
+  /** The primary page whose slug now equals the username, if any. */
+  primaryPageId?: string;
+  slug?: string;
 }
 
 // ============= Validation =============
@@ -273,7 +276,32 @@ export async function updateUsername(
   }
 
   try {
-    // Update username in profile
+    // Only the primary (oldest) page follows the username. Updating every page
+    // of the user hit the unique slug constraint as soon as there were two
+    // pages, and the error was ignored while the UI said "updated".
+    const { data: primaryPage, error: primaryError } = await supabase
+      .from('pages')
+      .select('id, slug')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    if (primaryError) {
+      return { success: false, error: 'Failed to update username' };
+    }
+
+    if (primaryPage && primaryPage.slug !== normalizedUsername) {
+      const { data: slugOwner } = await supabase
+        .from('pages')
+        .select('id')
+        .eq('slug', normalizedUsername)
+        .neq('id', primaryPage.id)
+        .maybeSingle();
+      if (slugOwner) {
+        return { success: false, error: 'This username is already taken' };
+      }
+    }
+
     const { error: profileError } = await supabase.from('user_profiles').upsert({
       id: userId,
       username: normalizedUsername,
@@ -283,10 +311,18 @@ export async function updateUsername(
       return { success: false, error: 'Failed to update username' };
     }
 
-    // Sync page slug with new username
-    await supabase.from('pages').update({ slug: normalizedUsername }).eq('user_id', userId);
+    if (primaryPage && primaryPage.slug !== normalizedUsername) {
+      const { error: slugError } = await supabase
+        .from('pages')
+        .update({ slug: normalizedUsername })
+        .eq('id', primaryPage.id)
+        .eq('user_id', userId);
+      if (slugError) {
+        return { success: false, error: 'Username saved, but the page link could not be changed' };
+      }
+    }
 
-    return { success: true };
+    return { success: true, primaryPageId: primaryPage?.id, slug: normalizedUsername };
   } catch {
     return { success: false, error: 'Failed to update username' };
   }
