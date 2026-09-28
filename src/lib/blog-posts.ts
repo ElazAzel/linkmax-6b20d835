@@ -35,6 +35,10 @@ export interface BlogPost {
   /** Slugs of related posts (SEO hub internal linking) */
   related?: string[];
 }
+import type { BlogPost } from './blog-post-types';
+import { HUB_OVERRIDES, HUB_NEW_POSTS } from './blog-posts-hub';
+
+export type { BlogPost, BlogPostSection } from './blog-post-types';
 
 export const BLOG_POSTS: BlogPost[] = [
   {

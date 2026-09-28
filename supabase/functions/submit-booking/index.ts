@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
 import { sendMessage, isConfigured } from "../_shared/telegram.ts";
+import { checkIpRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -28,6 +29,16 @@ serve(async (req: Request) => {
     if (!supabaseUrl || !supabaseServiceKey || !supabaseAnonKey) throw new Error('Missing env vars');
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // pageId публичный: без лимита можно забить слоты и месячный лимит владельца
+    const allowed = await checkIpRateLimit(supabase, getClientIp(req), 'submit-booking', 10, 60);
+    if (!allowed) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'rate_limited' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const body = await req.json();
 
     const {

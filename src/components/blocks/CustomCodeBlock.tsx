@@ -13,6 +13,14 @@ interface CustomCodeBlockProps {
   block: CustomCodeBlockType;
 }
 
+// iframe работает в sandbox без allow-same-origin (opaque origin), поэтому
+// родитель не может прочитать его DOM. Высоту iframe сообщает сам через postMessage.
+const HEIGHT_MESSAGE_TYPE = 'lnkmx:custom-code-height';
+const AUTO_HEIGHT_REPORTER = `<script>(function(){function r(){var d=document.documentElement,b=document.body;` +
+  `var h=Math.max(b?b.scrollHeight:0,b?b.offsetHeight:0,d.scrollHeight,d.offsetHeight);` +
+  `parent.postMessage({type:'${HEIGHT_MESSAGE_TYPE}',height:h},'*');}` +
+  `window.addEventListener('load',r);if(window.ResizeObserver){new ResizeObserver(r).observe(document.documentElement);}r();})();</script>`;
+
 const HEIGHT_MAP = {
   auto: 'auto',
   small: '200px',
@@ -103,9 +111,10 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
 <body>
   ${bodyContent}
   ${js ? `<script>${js}</script>` : ''}
+  ${block.height === 'auto' ? AUTO_HEIGHT_REPORTER : ''}
 </body>
 </html>`;
-  }, [block.html, block.css, block.javascript]);
+  }, [block.html, block.css, block.javascript, block.height]);
 
   // srcdoc is used directly on the iframe element
 
@@ -116,30 +125,20 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
       return;
     }
 
-    const iframe = iframeRef.current;
-    if (!iframe) return;
+    // Без скриптов (enableInteraction === false) iframe не сможет сообщить высоту
+    setIframeHeight(block.enableInteraction === false ? HEIGHT_MAP.medium : '100px');
 
-    const handleLoad = () => {
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow?.document;
-        if (doc && doc.body) {
-          const height = Math.max(
-            doc.body.scrollHeight,
-            doc.body.offsetHeight,
-            doc.documentElement?.scrollHeight || 0,
-            doc.documentElement?.offsetHeight || 0
-          );
-          setIframeHeight(`${Math.min(Math.max(height, 100), 800)}px`);
-        }
-      } catch {
-        // Cross-origin error, use default height
-        setIframeHeight('400px');
-      }
+    const handleMessage = (event: MessageEvent) => {
+      if (event.source !== iframeRef.current?.contentWindow) return;
+      const data = event.data as { type?: unknown; height?: unknown } | null;
+      if (!data || data.type !== HEIGHT_MESSAGE_TYPE || typeof data.height !== 'number') return;
+      if (!Number.isFinite(data.height)) return;
+      setIframeHeight(`${Math.min(Math.max(Math.ceil(data.height), 100), 800)}px`);
     };
 
-    iframe.addEventListener('load', handleLoad);
-    return () => iframe.removeEventListener('load', handleLoad);
-  }, [block.height, iframeContent]);
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [block.height, block.enableInteraction, iframeContent]);
 
   const showHeader = title && title.trim() !== '';
 

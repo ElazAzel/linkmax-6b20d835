@@ -109,6 +109,55 @@ serve(async (req: Request) => {
             outSum = tokenPrices[tokenAmount];
             description = `Покупка ${tokenAmount} Linkkon tokens`;
             shp_related_id = tokenAmount.toString();
+        } else if (type === 'payment') {
+            // Оплата счёта зоны (InvoiceDetailSheet). Сумму берём из zone_invoices,
+            // а не от клиента; ссылку создаёт только админ зоны, потому что
+            // деньги зачисляются на кошелёк shp_user.
+            if (!relatedId || !/^[0-9a-f-]{36}$/i.test(relatedId) || !payload.zoneId) {
+                return new Response(
+                    JSON.stringify({ error: 'Invoice payments require zoneId and relatedId' }),
+                    { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                );
+            }
+            const admin = createClient(supabaseUrl, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+            const { data: invoice, error: invoiceError } = await admin
+                .from('zone_invoices')
+                .select('id, zone_id, amount, currency, status, description, deleted_at')
+                .eq('id', relatedId)
+                .maybeSingle();
+            if (invoiceError) throw invoiceError;
+            if (!invoice || invoice.deleted_at || invoice.zone_id !== payload.zoneId) {
+                return new Response(
+                    JSON.stringify({ error: 'Invoice not found' }),
+                    { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                );
+            }
+            const { data: isAdmin, error: adminError } = await admin.rpc('is_zone_admin', {
+                p_zone_id: invoice.zone_id,
+                p_user_id: authenticatedUserId,
+            });
+            if (adminError) throw adminError;
+            if (isAdmin !== true) {
+                return new Response(
+                    JSON.stringify({ error: 'Forbidden: not a zone admin' }),
+                    { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                );
+            }
+            if (invoice.status === 'paid') {
+                return new Response(
+                    JSON.stringify({ error: 'Invoice is already paid' }),
+                    { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                );
+            }
+            const invoiceAmount = Number(invoice.amount);
+            if ((invoice.currency || 'KZT') !== 'KZT' || !Number.isFinite(invoiceAmount) || invoiceAmount <= 0) {
+                return new Response(
+                    JSON.stringify({ error: 'Invoice amount or currency is not payable via RoboKassa' }),
+                    { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                );
+            }
+            outSum = Math.round(invoiceAmount * 100) / 100;
+            description = invoice.description || `Invoice ${invoice.id.slice(0, 8)}`;
         } else {
             // Client-priced payments are not accepted: every checkout amount
             // must come from a server-side price table.
