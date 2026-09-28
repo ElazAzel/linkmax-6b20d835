@@ -190,6 +190,8 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   const avatarShapeStyle = getAvatarShapeStyle(block.avatarShape || 'circle');
   const statusRing = getStatusRingConfig(block.statusRing);
   const showStatusRing = statusRing.value !== 'none';
+  // Avoid double rings when a decorative frame is already drawn around the avatar
+  const drawStatusRing = showStatusRing && (block.avatarFrame || 'default') === 'default';
   const patternStyle = getCoverPatternStyle(block.coverPattern);
   const hasCoverMedia = !!(block.coverImage || block.coverVideo);
 
@@ -229,7 +231,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
         {/* Outer container for positioning icon - no animation here */}
         <div className="relative">
           {/* Status ring - outer glow */}
-          {showStatusRing && (
+          {drawStatusRing && (
             <span
               aria-hidden
               className={cn(
@@ -237,7 +239,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
                 statusRing.pulse && 'animate-pulse'
               )}
               style={{
-                boxShadow: `0 0 0 3px ${statusRing.color}, 0 0 18px ${statusRing.color}66`,
+                boxShadow: `0 0 0 2px ${statusRing.color}`,
                 borderRadius: (avatarShapeStyle.borderRadius as string) || '9999px',
               }}
             />
@@ -313,9 +315,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
             block.nameAnimation === 'ticker' ? "overflow-hidden w-full" : "overflow-visible"
           )}>
             <h1 className={cn(
-              "max-w-full text-2xl font-bold leading-tight break-words hyphens-auto transition-all duration-300 overflow-visible",
+              "max-w-full text-[1.75rem] sm:text-3xl font-bold tracking-tight leading-[1.1] [text-wrap:balance] break-words hyphens-auto transition-all duration-300 overflow-visible",
               block.nameAnimation === 'none' && "hover:text-primary",
-              (isPremiumUser || (block.nameAnimation && block.nameAnimation !== 'none' && !['shine','ticker','underline-draw','glitch','rainbow-slow'].includes(block.nameAnimation))) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
+              (block.nameAnimation && block.nameAnimation !== 'none' && !['shine','ticker','underline-draw','glitch','rainbow-slow'].includes(block.nameAnimation)) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
               getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
             )}>
               {name}
@@ -323,7 +325,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           </div>
 
           {bio && (
-            <p className="text-muted-foreground max-w-md whitespace-pre-line break-words hyphens-auto leading-relaxed">{parseRichText(bio)}</p>
+            <p className="mx-auto text-[15px] text-muted-foreground max-w-md whitespace-pre-line break-words leading-relaxed [text-wrap:pretty]">{parseRichText(bio)}</p>
           )}
 
           {/* Profile badge row (city / status / emoji / custom) */}
