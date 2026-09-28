@@ -13,6 +13,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders, createErrorResponse, getSupabaseUser } from "../_shared/utils.ts";
+import { md5Hex } from "../_shared/md5.ts";
 
 interface OfferRow {
   id: string;
@@ -75,8 +76,13 @@ serve(async (req) => {
     }
     if (o.price_cents <= 0) return createErrorResponse("Invalid offer price", 422);
 
-    const amountUnits = (o.price_cents / 100) * qty;
+    // Считаем в центах, иначе 19.99 * 3 = 59.97000000000001 попадает в OutSum
+    const amountUnits = Math.round(o.price_cents * qty) / 100;
     const currency = (o.currency || "KZT").toUpperCase();
+    // Robokassa-KZ списывает OutSum в тенге: оффер за $10 ушёл бы как 10 ₸
+    if (currency !== "KZT") {
+      return createErrorResponse(`Currency ${currency} is not supported by RoboKassa checkout`, 422);
+    }
 
     const { data: order, error: orderErr } = await supabase
       .from("orders")
@@ -107,8 +113,11 @@ serve(async (req) => {
     const pass1 = Deno.env.get("ROBOKASSA_PASSWORD_1");
     if (!pass1) throw new Error("RoboKassa Password #1 is not configured");
 
+    // InvId у Robokassa — целое число, UUID заказа передаём подписанным shp_order
+    const invId = Date.now().toString().slice(-9);
     const shp = {
       shp_offer: o.id,
+      shp_order: order.id,
       shp_seller: o.user_id,
       shp_type: "offer_purchase",
       shp_user: o.user_id,
@@ -119,19 +128,14 @@ serve(async (req) => {
       .join(":");
 
     const signatureString =
-      `${merchantLogin}:${amountUnits}:${order.id}:${pass1}:${shpString}`;
-    const hashBuffer = await crypto.subtle.digest(
-      "MD5",
-      new TextEncoder().encode(signatureString),
-    );
-    const signatureValue = Array.from(new Uint8Array(hashBuffer))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
+      `${merchantLogin}:${amountUnits}:${invId}:${pass1}:${shpString}`;
+    // crypto.subtle не поддерживает MD5 в Deno — считаем сами (см. _shared/md5.ts)
+    const signatureValue = md5Hex(signatureString);
 
     const params = new URLSearchParams({
       MerchantLogin: merchantLogin,
       OutSum: amountUnits.toString(),
-      InvId: order.id,
+      InvId: invId,
       Description: `Offer: ${o.name}`.slice(0, 100),
       SignatureValue: signatureValue,
       ...shp,

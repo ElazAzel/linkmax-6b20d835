@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders, createErrorResponse, createSuccessResponse, getSupabaseUser } from "../_shared/utils.ts";
+import { md5Hex } from "../_shared/md5.ts";
 
 // Simplified ZONE_PLANS for server-side validation
 const ZONE_PLANS = [
@@ -88,25 +89,26 @@ serve(async (req) => {
         const shp_plan = planCode;
         const shp_period = period;
         const shp_type = 'zone_upgrade';
+        // InvId у Robokassa — целое число, UUID заказа передаём подписанным shp_order
+        const invId = Date.now().toString().slice(-9);
+        const shp_order = order.id;
 
         // Signature algorithm: MerchantLogin:OutSum:InvId:Pass1:shp_... (alphabetical)
         // Custom shp_ params must be sorted alphabetically
-        const signatureString = `${merchantLogin}:${amount}:${order.id}:${pass1}:shp_period=${shp_period}:shp_plan=${shp_plan}:shp_type=${shp_type}:shp_user=${shp_user}:shp_zone=${shp_zone}`;
+        const signatureString = `${merchantLogin}:${amount}:${invId}:${pass1}:shp_order=${shp_order}:shp_period=${shp_period}:shp_plan=${shp_plan}:shp_type=${shp_type}:shp_user=${shp_user}:shp_zone=${shp_zone}`;
 
-        const encoder = new TextEncoder();
-        const data = encoder.encode(signatureString);
-        const hashBuffer = await crypto.subtle.digest("MD5", data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const signatureValue = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        // crypto.subtle не поддерживает MD5 в Deno — считаем сами (см. _shared/md5.ts)
+        const signatureValue = md5Hex(signatureString);
 
         const queryParams = new URLSearchParams({
             MerchantLogin: merchantLogin,
             OutSum: amount.toString(),
-            InvId: order.id,
+            InvId: invId,
             Description: description || `Upgrade to ${planCode}`,
             SignatureValue: signatureValue,
             shp_user,
             shp_zone,
+            shp_order,
             shp_plan,
             shp_period: shp_period.toString(),
             shp_type

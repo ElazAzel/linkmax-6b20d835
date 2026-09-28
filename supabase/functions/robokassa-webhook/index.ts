@@ -2,6 +2,23 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/utils.ts";
 import { calculateFintechFee } from "../_shared/fintech-utils.ts";
+import { md5Hex } from "../_shared/md5.ts";
+
+// Robokassa повторяет ResultURL, пока не получит OK<InvId>. Любой ретрай после
+// частично успешной обработки (таймаут, 500) раньше зачислял деньги повторно.
+// deno-lint-ignore no-explicit-any
+async function isAlreadyCredited(supabase: any, invId: string): Promise<boolean> {
+    const { data, error } = await supabase
+        .from('wallet_transactions')
+        .select('id')
+        .eq('status', 'completed')
+        .eq('metadata->>internal_ref', invId)
+        .eq('metadata->>gateway', 'robokassa')
+        .limit(1);
+    // Не смогли проверить — пусть Robokassa повторит позже: лучше задержка, чем двойное зачисление
+    if (error) throw error;
+    return (data?.length ?? 0) > 0;
+}
 
 serve(async (req: Request) => {
     if (req.method === "OPTIONS") {
@@ -16,12 +33,15 @@ serve(async (req: Request) => {
 
         // Dynamically collect ALL shp_* custom params so signature matches
         // whichever sender (subscription / zone_upgrade / payment / offer_purchase) built the URL.
-        const shpParams: Record<string, string> = {};
+        const allShpParams: Record<string, string> = {};
         for (const [key, value] of formData.entries()) {
-            if (key.startsWith("shp_") && typeof value === "string" && value.length > 0) {
-                shpParams[key] = value;
+            if (key.startsWith("shp_") && typeof value === "string") {
+                allShpParams[key] = value;
             }
         }
+        const shpParams: Record<string, string> = Object.fromEntries(
+            Object.entries(allShpParams).filter(([, value]) => value.length > 0),
+        );
         const shp_user = shpParams.shp_user;
         const shp_type = shpParams.shp_type;
         const shp_plan = shpParams.shp_plan;
@@ -41,25 +61,28 @@ serve(async (req: Request) => {
             throw new Error("Server configuration error");
         }
 
-        const shpSorted = Object.entries(shpParams)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([key, value]) => `${key}=${value}`);
+        const sign = async (params: Record<string, string>) => {
+            const shpSorted = Object.entries(params)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([key, value]) => `${key}=${value}`);
+            const signatureString = [outSum, invId, mrhPass2, ...shpSorted].join(":");
+            // crypto.subtle не поддерживает MD5 в Deno: раньше здесь бросалось
+            // NotSupportedError, и ни одна оплата не подтверждалась
+            return md5Hex(signatureString).toUpperCase();
+        };
 
-        const signatureString = [
-            outSum,
-            invId,
-            mrhPass2,
-            ...shpSorted
-        ].join(":");
+        // Отправители подписывают счёт вместе с пустыми shp_* (например, shp_zone=
+        // у подписки), а Robokassa возвращает их в ResultURL как есть. Принимаем
+        // подпись в обоих вариантах: с пустыми параметрами и без них. Оба требуют
+        // Password #2, так что подделать ни один нельзя.
+        const received = signatureValue.toUpperCase();
+        const signatureOk =
+            (await sign(allShpParams)) === received ||
+            (await sign(shpParams)) === received;
 
-        const encoder = new TextEncoder();
-        const data = encoder.encode(signatureString);
-        const hashBuffer = await crypto.subtle.digest("MD5", data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const calculatedSignature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
-
-        if (calculatedSignature !== signatureValue.toUpperCase()) {
-            console.error("Invalid signature", { calculatedSignature, received: signatureValue, invId, outSum });
+        if (!signatureOk) {
+            // Вычисленную подпись не логируем: для этих параметров она валидна
+            console.error("Invalid signature", { invId, outSum });
             return new Response("BAD SIGNATURE", { status: 400 });
         }
 
@@ -67,24 +90,44 @@ serve(async (req: Request) => {
         const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
         const supabase = createClient(supabaseUrl, supabaseKey);
 
-        // Update Order status
-        await supabase
-            .from('orders')
-            .update({ status: 'completed', updated_at: new Date().toISOString() })
-            .eq('id', invId);
+        // InvId у Robokassa числовой; UUID заказа (create-payment-session,
+        // create-offer-checkout) приходит в подписанном shp_order. Старые ссылки
+        // могли передавать UUID прямо в InvId. Раньше числовой InvId шёл в uuid-колонки,
+        // запросы молча падали, и история оплат не записывалась.
+        const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        const orderId = UUID_RE.test(invId)
+            ? invId
+            : (shpParams.shp_order && UUID_RE.test(shpParams.shp_order) ? shpParams.shp_order : null);
 
-        // Record billing history
-        await supabase
+        if (orderId) {
+            await supabase
+                .from('orders')
+                .update({ status: 'completed', updated_at: new Date().toISOString() })
+                .eq('id', orderId);
+        }
+
+        // Record billing history (once per InvId: Robokassa retries ResultURL)
+        const billingDescription = `Payment completed via Robokassa (InvId: ${invId})`;
+        const { data: existingBilling } = await supabase
             .from('billing_history')
-            .insert({
-                user_id: shp_user,
-                order_id: invId,
-                type: shp_type || 'subscription',
-                amount: parseFloat(outSum),
-                currency: 'KZT',
-                description: `Payment completed via Robokassa (InvId: ${invId})`,
-                status: 'completed'
-            });
+            .select('id')
+            .eq('user_id', shp_user)
+            .eq('description', billingDescription)
+            .limit(1);
+        if (!existingBilling?.length) {
+            const { error: billingError } = await supabase
+                .from('billing_history')
+                .insert({
+                    user_id: shp_user,
+                    order_id: orderId,
+                    type: shp_type || 'subscription',
+                    amount: parseFloat(outSum),
+                    currency: 'KZT',
+                    description: billingDescription,
+                    status: 'completed'
+                });
+            if (billingError) console.error("Failed to record billing history", billingError);
+        }
 
         if (shp_type === 'subscription' || !shp_type) {
             const months = parseInt(shp_period || "0", 10);
@@ -241,6 +284,10 @@ serve(async (req: Request) => {
                 }
             }
         } else if (shp_type === 'offer_purchase' && shp_seller) {
+            if (await isAlreadyCredited(supabase, invId)) {
+                console.log("offer_purchase already credited, skipping", { invId });
+                return new Response(`OK${invId}`, { status: 200 });
+            }
 
             // Credit the seller's wallet with net (fee applied) amount
             const gross = parseFloat(outSum);
@@ -355,7 +402,7 @@ serve(async (req: Request) => {
             // 1. Get user profile for tier
             const { data: profile } = await supabase
                 .from('user_profiles')
-                .select('is_premium, premium_tier')
+                .select('is_premium, premium_tier, telegram_chat_id, telegram_notifications_enabled, telegram_language')
                 .eq('id', shp_user)
                 .single();
 
@@ -396,7 +443,9 @@ serve(async (req: Request) => {
                 }
             }
 
-            if (wallet) {
+            if (wallet && await isAlreadyCredited(supabase, invId)) {
+                console.log("payment already credited, skipping", { invId });
+            } else if (wallet) {
                 const { error: txError } = await supabase
                     .from('wallet_transactions')
                     .insert({
