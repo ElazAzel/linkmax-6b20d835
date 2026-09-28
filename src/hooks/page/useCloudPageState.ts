@@ -326,8 +326,12 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
       if (!prevData) return prevData;
       let newBlocks: Block[];
       if (typeof position === 'number') {
+        // `position` is an index into the full blocks array (callers use
+        // blocks.length / index + 1). It used to be offset by the profile
+        // block again, so duplicates and restored blocks landed one slot too low.
         const profileIndex = prevData.blocks.findIndex(b => b.type === 'profile');
-        const insertIndex = profileIndex >= 0 ? profileIndex + 1 + position : position;
+        const minIndex = profileIndex >= 0 ? profileIndex + 1 : 0;
+        const insertIndex = Math.min(Math.max(position, minIndex), prevData.blocks.length);
         newBlocks = [
           ...prevData.blocks.slice(0, insertIndex),
           block,
@@ -384,6 +388,28 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         void deleteEventBlock(blockToDelete.eventId, user?.id);
       }
 
+      autoSaveAndPublish(newPageData, chatbotContext);
+      return newPageData;
+    });
+  }, [chatbotContext, autoSaveAndPublish, user]);
+
+  // Delete several blocks in one state update (bulk selection). Calling
+  // deleteBlock in a loop was blocked by the per-operation guard after the first.
+  const deleteBlocks = useCallback((ids: string[]) => {
+    if (ids.length === 0) return;
+    const idSet = new Set(ids);
+    setPageData((prevData) => {
+      if (!prevData) return prevData;
+      const removed = prevData.blocks.filter((block) => idSet.has(block.id) && block.type !== 'profile');
+      if (removed.length === 0) return prevData;
+      const removedIds = new Set(removed.map((block) => block.id));
+      const newPageData = {
+        ...prevData,
+        blocks: prevData.blocks.filter((block) => !removedIds.has(block.id)),
+      };
+      for (const block of removed) {
+        if (block.type === 'event') void deleteEventBlock(block.eventId, user?.id);
+      }
       autoSaveAndPublish(newPageData, chatbotContext);
       return newPageData;
     });
@@ -518,6 +544,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     addBlock,
     updateBlock,
     deleteBlock,
+    deleteBlocks,
     reorderBlocks,
     replaceBlocks,
     updateTheme,
@@ -538,6 +565,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     addBlock,
     updateBlock,
     deleteBlock,
+    deleteBlocks,
     reorderBlocks,
     replaceBlocks,
     updateTheme,

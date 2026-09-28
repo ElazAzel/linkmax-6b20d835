@@ -152,19 +152,28 @@ function DashboardV2Inner() {
   // Editor history — created first so it can be passed to useDashboard
   const editorHistoryRef = useRef<ReturnType<typeof useEditorHistory> | null>(null);
 
-  // We need a stable reference for the first render
+  // Undo/redo applies the restored blocks to the page. The history is created
+  // before the dashboard, so the setter is filled in right after useDashboard.
+  const applyBlocksRef = useRef<((blocks: Block[]) => void) | null>(null);
   const editorHistory = useEditorHistory(
     [],
     {
-      onStateChange: (_blocks) => {
-        // Will be wired after dashboard is available
-      },
+      onStateChange: (blocks) => applyBlocksRef.current?.(blocks),
     }
   );
   editorHistoryRef.current = editorHistory;
 
   // Core state - with onPublish callback for automatic versioning + editorHistory
   const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
+  applyBlocksRef.current = dashboard.setBlocks;
+
+  // History belongs to one page: after switching pages, undo must not apply
+  // the previous page's blocks to the new one.
+  const historyPageId = dashboard.pageData?.id;
+  const resetHistory = editorHistory.resetWithBlocks;
+  useEffect(() => {
+    resetHistory([]);
+  }, [historyPageId, resetHistory]);
   const multiPage = useMultiPage();
   const { limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
@@ -543,6 +552,8 @@ function DashboardV2Inner() {
                   onInsertPreset={dashboard.blockEditor.handleInsertPreset}
                   onEditBlock={dashboard.blockEditor.handleEditBlock}
                   onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
+                  onDeleteBlocks={dashboard.blockEditor.handleDeleteBlocks}
+                  saveStatus={dashboard.saveStatus}
                   onUpdateBlock={dashboard.updateBlock}
                   onReorderBlocks={dashboard.reorderBlocks}
                   onPreview={() => dashboard.sharingState.handlePreview()}

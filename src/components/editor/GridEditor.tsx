@@ -55,7 +55,6 @@ import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { canCreateSection, createSection, getSections, type SectionMeta } from '@/lib/editor/section-engine';
 import { BlockContextToolbar } from './BlockContextToolbar';
-import { FloatingBlockToolbar } from './v2/FloatingBlockToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
@@ -115,6 +114,8 @@ interface GridEditorProps {
   onInsertBlock: (blockType: string, position: number) => void;
   onEditBlock: (block: Block) => void;
   onDeleteBlock: (id: string) => void;
+  /** Delete several blocks in one operation (bulk selection). */
+  onDeleteBlocks?: (ids: string[]) => void;
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;
   onReorderBlocks?: (blocks: Block[]) => void;
   onDuplicateBlock?: (id: string) => void;
@@ -185,6 +186,7 @@ function SortableGridBlockItem({
   compositionTotal = 1,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
+  const clearSelection = useEditorStore((state) => state.clearSelection);
   const {
     attributes,
     listeners,
@@ -233,8 +235,6 @@ function SortableGridBlockItem({
   }, [isRecentlyAdded]);
 
   const [isHovered, setIsHovered] = useState(false);
-  // Quiet canvas: toolbar appears only on selection (kept hover for label/affordance hint)
-  const showToolbar = selected;
 
   return (
     <div
@@ -274,16 +274,19 @@ function SortableGridBlockItem({
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click + Drag Overlay — single layer: dnd-kit's PointerSensor
-            (activationConstraint distance:5) starts drag only on movement,
-            otherwise the click fires for selection. */}
+        {/* Click + Drag Overlay. Desktop: dnd-kit's PointerSensor
+            (distance:5) starts a drag only on movement, otherwise the click
+            selects. Mobile: the overlay only selects — drag lives on the
+            handle below, because a `touch-none` overlay covering every block
+            made the page almost impossible to scroll. */}
         <button
           type="button"
           {...attributes}
-          {...listeners}
+          {...(isMobile ? {} : listeners)}
           className={cn(
-            'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background touch-none',
-            isDragging ? 'cursor-grabbing' : 'cursor-grab',
+            'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+            !isMobile && 'touch-none',
+            isMobile ? 'cursor-pointer' : isDragging ? 'cursor-grabbing' : 'cursor-grab',
           )}
           onClick={(e) => {
             e.preventDefault();
@@ -328,6 +331,19 @@ function SortableGridBlockItem({
         </button>
       )}
 
+      {/* Mobile drag handle — visible, 44px, the only touch drag source */}
+      {isMobile && !isDragging && block.type !== 'profile' && (
+        <button
+          type="button"
+          {...listeners}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          className="absolute bottom-1 right-1 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full bg-background/90 text-foreground/70 border border-border/20 shadow-sm touch-none cursor-grab active:cursor-grabbing"
+          aria-label={t('editor.blockToolbar.drag', 'Перетащить блок')}
+        >
+          <GripVertical className="h-5 w-5" />
+        </button>
+      )}
+
       {/* Always-visible quick-edit pencil — opens the block editor in one tap */}
       {!isDragging && (
         <button
@@ -343,7 +359,7 @@ function SortableGridBlockItem({
             'bg-background/90 backdrop-blur-md border border-border/20 text-foreground/80',
             'shadow-[0_4px_12px_-4px_rgba(0,0,0,0.18)] hover:bg-primary hover:text-primary-foreground hover:scale-105',
             'transition-all active:scale-95',
-            isMobile ? 'h-8 w-8 opacity-90' : 'h-7 w-7 opacity-0 group-hover:opacity-100 focus:opacity-100',
+            isMobile ? 'h-10 w-10 opacity-90' : 'h-8 w-8 opacity-0 group-hover:opacity-100 focus:opacity-100',
             selected && 'opacity-0',
           )}
           aria-label={t('editor.blockToolbar.edit', 'Редактировать')}
@@ -365,16 +381,8 @@ function SortableGridBlockItem({
         </span>
       </div>
 
-      {/* Floating toolbar — appears on hover/select. On mobile показываем при выделении */}
-      <FloatingBlockToolbar
-        visible={showToolbar && !isDragging && !isMultiSelected}
-        isProfile={block.type === 'profile'}
-        onEdit={() => onEdit(block)}
-        onDuplicate={onDuplicate ? () => onDuplicate(block.id) : undefined}
-        onDelete={() => onDelete(block.id)}
-      />
-
-      {/* P5: Context toolbar for single-selected block */}
+      {/* Context toolbar for the single selected block — one toolbar only
+          (a second floating toolbar used to appear on top of it). */}
       {isSelected && !isMultiSelected && !isDragging && (
         <BlockContextToolbar
           block={block}
@@ -387,6 +395,8 @@ function SortableGridBlockItem({
           onTransform={onTransform}
           isFirst={isFirst}
           isLast={isLast}
+          placement={isMobile ? 'dock' : 'inline'}
+          onClose={clearSelection}
         />
       )}
     </div>
@@ -462,6 +472,7 @@ export const GridEditor = memo(function GridEditor({
   onInsertBlock,
   onEditBlock,
   onDeleteBlock,
+  onDeleteBlocks,
   onUpdateBlock,
   onReorderBlocks,
   onDuplicateBlock,
@@ -639,13 +650,19 @@ export const GridEditor = memo(function GridEditor({
   const handleBulkDelete = useCallback(() => {
     const result = bulkDelete(blocks, selectedBlockIds);
     if (result.success && result.newBlocks) {
-      for (const id of result.affectedIds) {
-        onDeleteBlock(id);
+      // One operation: per-block deletes were dropped by the delete guard after
+      // the first one, so bulk delete removed a single block.
+      if (onDeleteBlocks) {
+        onDeleteBlocks([...result.affectedIds]);
+      } else {
+        for (const id of result.affectedIds) {
+          onDeleteBlock(id);
+        }
       }
       clearSelection();
       trackEditorAction('bulk_action_used', { source: 'grid' });
     }
-  }, [blocks, selectedBlockIds, onDeleteBlock, clearSelection]);
+  }, [blocks, selectedBlockIds, onDeleteBlock, onDeleteBlocks, clearSelection]);
 
   const handleBulkDuplicate = useCallback(() => {
     for (const id of selectedBlockIds) {

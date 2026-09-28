@@ -3,8 +3,16 @@
  * P4: Block Editor Interaction OS
  */
 import { memo, useRef, useEffect, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useEditorStore } from '@/store/useEditorStore';
-import { getPrimaryEditableField, getFieldValue, setFieldValue } from '@/lib/editor/inline-edit-config';
+import {
+  getEditableFields,
+  getPrimaryEditableField,
+  getFieldValue,
+  setFieldValue,
+  readInlineText,
+  writeInlineText,
+} from '@/lib/editor/inline-edit-config';
 import type { Block, BlockType } from '@/types/page';
 
 interface InlineTextEditorProps {
@@ -16,16 +24,20 @@ export const InlineTextEditor = memo(function InlineTextEditor({
   block,
   onSave,
 }: InlineTextEditorProps) {
+  const { i18n } = useTranslation();
+  const lang = i18n.language?.split('-')[0] || 'ru';
   const { inlineEditingBlockId, inlineEditField, setInlineEditing } = useEditorStore();
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
-  
-  const field = getPrimaryEditableField(block.type as BlockType);
+
+  const primaryField = getPrimaryEditableField(block.type as BlockType);
   const isEditing = inlineEditingBlockId === block.id;
-  
-  const fieldPath = inlineEditField || field?.field;
-  const currentValue = fieldPath 
-    ? String(getFieldValue(block as unknown as Record<string, unknown>, fieldPath) ?? '')
-    : '';
+
+  const fieldPath = inlineEditField || primaryField?.field;
+  const field = getEditableFields(block.type as BlockType).find((f) => f.field === fieldPath) ?? primaryField;
+  const rawValue = fieldPath
+    ? getFieldValue(block as unknown as Record<string, unknown>, fieldPath)
+    : undefined;
+  const currentValue = readInlineText(rawValue, lang);
   
   const [value, setValue] = useState(currentValue);
 
@@ -49,11 +61,11 @@ export const InlineTextEditor = memo(function InlineTextEditor({
     const updates = setFieldValue(
       {} as Record<string, unknown>,
       fieldPath,
-      value.trim()
+      writeInlineText(rawValue, value.trim(), lang)
     );
     onSave(block.id, updates as Partial<Block>);
     setInlineEditing(null);
-  }, [fieldPath, value, currentValue, block.id, onSave, setInlineEditing]);
+  }, [fieldPath, value, currentValue, rawValue, lang, block.id, onSave, setInlineEditing]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
