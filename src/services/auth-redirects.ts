@@ -5,7 +5,16 @@ export function getSafeReturnTo(
   returnTo: string | null | undefined,
   fallback = DEFAULT_RETURN_TO
 ): string {
-  if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+  // Browsers treat "\" like "/" in URLs, so "/\evil.com" is protocol-relative
+  // ("//evil.com"). Control characters are stripped by the URL parser and can
+  // smuggle the same trick ("/\t/evil.com").
+  if (
+    returnTo &&
+    returnTo.startsWith('/') &&
+    !returnTo.startsWith('//') &&
+    // eslint-disable-next-line no-control-regex
+    !/[\\\u0000-\u001f\u007f]/.test(returnTo)
+  ) {
     return returnTo;
   }
 

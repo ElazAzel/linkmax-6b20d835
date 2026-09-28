@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
+import { checkIpRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 import { sendMessage, isConfigured } from "../_shared/telegram.ts";
 
 const corsHeaders = {
@@ -74,6 +75,16 @@ serve(async (req: Request) => {
         }
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+        // pageId публичный: без лимита чужую страницу можно заспамить и выбить
+        // месячный лимит заявок владельца на free-тарифе.
+        const allowed = await checkIpRateLimit(supabase, getClientIp(req), 'submit-lead', 10, 60);
+        if (!allowed) {
+            return new Response(
+                JSON.stringify({ success: false, error: 'rate_limited' }),
+                { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+        }
 
         const rawBody = await req.text();
         if (rawBody.length > MAX_PAYLOAD_SIZE) {
