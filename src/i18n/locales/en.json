@@ -770,8 +770,7 @@
     "product": "Product",
     "rights": "All rights reserved.",
     "copyright": "В© 2025 LinkMAX",
-    "blog": "Blog",
-    "sitemap": "Sitemap"
+    "blog": "Blog"
   },
   "seo": {
     "landing": {
@@ -5941,7 +5940,31 @@
     "unlockBackground": "Custom page background",
     "unlockBackgroundDesc": "Set color, gradient or image",
     "unlockPremium": "Unlock premium themes",
-    "unlockPremiumDesc": "Get access to all themes with PRO"
+    "unlockPremiumDesc": "Get access to all themes with PRO",
+    "sandDune": "Sand dune",
+    "sandDuneDesc": "Warm beige, calm and premium",
+    "skyClean": "Sky",
+    "skyCleanDesc": "Light blue for experts",
+    "matcha": "Matcha",
+    "matchaDesc": "Soft natural green",
+    "graphite": "Graphite",
+    "graphiteDesc": "Dark and strict",
+    "roseQuartz": "Rose quartz",
+    "roseQuartzDesc": "Gentle, for beauty pros",
+    "espresso": "Espresso",
+    "espressoDesc": "Coffee, cozy",
+    "electricViolet": "Electric violet",
+    "electricVioletDesc": "Bold violet for creators",
+    "lemonPop": "Lemon pop",
+    "lemonPopDesc": "Juicy yellow, stands out",
+    "arctic": "Arctic",
+    "arcticDesc": "Cold minimalism",
+    "burgundy": "Burgundy",
+    "burgundyDesc": "Deep wine, premium",
+    "kazakhSteppe": "Steppe",
+    "kazakhSteppeDesc": "Turquoise and gold",
+    "paperInk": "Paper and ink",
+    "paperInkDesc": "Editorial typography"
   },
   "tier": {
     "blocksCount": "blocks",

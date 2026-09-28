@@ -770,8 +770,7 @@
     "product": "Өнім",
     "rights": "Барлық құқықтар қорғалған.",
     "copyright": "В© 2025 LinkMAX",
-    "blog": "Блог",
-    "sitemap": "Сайт картасы"
+    "blog": "Блог"
   },
   "seo": {
     "landing": {
@@ -5941,7 +5940,31 @@
     "unlockBackground": "Арнаулы бет фоны",
     "unlockBackgroundDesc": "Түсті, градиентті немесе кескінді орнатыңыз",
     "unlockPremium": "Премиум тақырыптардың құлпын ашыңыз",
-    "unlockPremiumDesc": "PRO көмегімен барлық тақырыптарға қол жеткізіңіз"
+    "unlockPremiumDesc": "PRO көмегімен барлық тақырыптарға қол жеткізіңіз",
+    "sandDune": "Песок",
+    "sandDuneDesc": "Тёплый беж, спокойно и дорого",
+    "skyClean": "Небо",
+    "skyCleanDesc": "Светлый голубой для экспертов",
+    "matcha": "Матча",
+    "matchaDesc": "Мягкий зелёный, природный",
+    "graphite": "Графит",
+    "graphiteDesc": "Тёмный и строгий",
+    "roseQuartz": "Розовый кварц",
+    "roseQuartzDesc": "Нежный для бьюти-мастеров",
+    "espresso": "Эспрессо",
+    "espressoDesc": "Кофейный, уютный",
+    "electricViolet": "Электрик",
+    "electricVioletDesc": "Яркий фиолетовый для креаторов",
+    "lemonPop": "Лимон",
+    "lemonPopDesc": "Сочный жёлтый, заметный",
+    "arctic": "Арктика",
+    "arcticDesc": "Холодный минимализм",
+    "burgundy": "Бордо",
+    "burgundyDesc": "Глубокий винный, премиально",
+    "kazakhSteppe": "Степь",
+    "kazakhSteppeDesc": "Бирюза и золото",
+    "paperInk": "Бумага и чернила",
+    "paperInkDesc": "Журнальная типографика"
   },
   "tier": {
     "blocksCount": "блоктар",
