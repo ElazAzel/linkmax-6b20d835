@@ -67,6 +67,9 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         placeholder={t('fields.send', 'Send')}
       />
 
+      {/* Only when there is something to pick: without active sequences (or
+          without the email_sequences table) the select offered just "None". */}
+      {(sequences.length > 0 || formData.sequenceId) && (
       <div className="space-y-2">
         <Label className="text-sm font-medium">{t('crm.triggerSequence', 'Trigger Email Sequence')}</Label>
         <Select
@@ -89,6 +92,7 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
           {t('crm.triggerSequenceHint', 'New leads will be automatically subscribed to this sequence if they provide an email.')}
         </p>
       </div>
+      )}
 
       <ArrayFieldList label={t('fields.formFields', 'Form Fields')} items={fields} onAdd={addField}>
         {fields.map((field: any, index: number) => (

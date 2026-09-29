@@ -11,6 +11,7 @@ import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { useActivePageStore } from '@/store/useActivePageStore';
 import { sanitizeSlug, slugifyTitle, validateSlug } from '@/lib/utils/slug';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 
 // ============= Types =============
 
@@ -100,24 +101,34 @@ export function useMultiPage() {
       setLoading(true);
       setError(null);
 
-      let query = supabase
-        .from('pages')
-        .select('id, user_id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, view_count, created_at, updated_at, editor_mode, grid_config, is_in_gallery, gallery_featured_at, gallery_likes, niche, preview_url, quality_score, is_indexable, last_snapshot_at, is_paid, is_primary_paid, page_type, integrations, favicon_url, hide_branding, organization_id, custom_domain, city, country_code, profession, entity_type, service_slugs, site_id, page_path, is_home')
-        .order('created_at', { ascending: false });
+      const BASE_COLUMNS = 'id, user_id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, view_count, created_at, updated_at, editor_mode, grid_config, is_in_gallery, gallery_featured_at, gallery_likes, niche, preview_url, quality_score, is_indexable, last_snapshot_at, is_paid, is_primary_paid, page_type, integrations, favicon_url, hide_branding, organization_id, custom_domain, city, country_code, profession, entity_type, service_slugs';
+      const buildQuery = (columns: string) => {
+        let query = supabase
+          .from('pages')
+          .select(columns)
+          .order('created_at', { ascending: false });
 
-      // Always the user's own pages. Without this filter the "Personal
-      // Organization" branch (organization_id IS NULL) also returned other
-      // users' published pages through the public-read RLS policy.
-      query = query.eq('user_id', user.id);
-      if (currentOrg?.id) {
-        if (currentOrg.name === 'Personal Organization') {
-          query = query.or(`organization_id.is.null,organization_id.eq.${currentOrg.id}`);
-        } else {
-          query = query.eq('organization_id', currentOrg.id);
+        // Always the user's own pages. Without this filter the "Personal
+        // Organization" branch (organization_id IS NULL) also returned other
+        // users' published pages through the public-read RLS policy.
+        query = query.eq('user_id', user.id);
+        if (currentOrg?.id) {
+          if (currentOrg.name === 'Personal Organization') {
+            query = query.or(`organization_id.is.null,organization_id.eq.${currentOrg.id}`);
+          } else {
+            query = query.eq('organization_id', currentOrg.id);
+          }
         }
-      }
+        return query;
+      };
 
-      const { data: pagesData, error: pagesError } = await query;
+      let { data: pagesData, error: pagesError } = await buildQuery(`${BASE_COLUMNS}, site_id, page_path, is_home`);
+      // Multi-page site columns come from a later migration. If the database
+      // does not have them yet, list the pages without them instead of
+      // showing "no pages".
+      if (pagesError && isMissingSchemaError(pagesError)) {
+        ({ data: pagesData, error: pagesError } = await buildQuery(BASE_COLUMNS));
+      }
 
       if (pagesError) {
         throw pagesError;

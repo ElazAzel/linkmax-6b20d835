@@ -7735,7 +7735,8 @@
       "version_conflict": "This booking has already changed. Refresh the page and try again.",
       "slot_unavailable": "That time is no longer available. Choose another option.",
       "action_not_allowed": "This action is no longer available.",
-      "request_failed": "The booking could not be updated. Try again."
+      "request_failed": "The booking could not be updated. Try again.",
+      "feature_unavailable": "Onlayn yozilish hozir mavjud emas. Sahifa egasiga to‘g‘ridan-to‘g‘ri murojaat qiling."
     }
   },
   "publicBooking": {
@@ -7779,7 +7780,8 @@
       "service_unavailable": "There are no services available for booking right now.",
       "page_not_public": "This page has not been published yet.",
       "request_failed": "The booking could not be loaded. Try again.",
-      "invalid_response": "The booking service returned an invalid response. Try again."
+      "invalid_response": "The booking service returned an invalid response. Try again.",
+      "feature_unavailable": "Onlayn yozilish hozir mavjud emas. Sahifa egasiga to‘g‘ridan-to‘g‘ri murojaat qiling."
     }
   },
   "revenueKit": {
@@ -7849,7 +7851,9 @@
       "depositInvalid": "Check the deposit amount",
       "paymentInstructionsRequired": "Add payment instructions",
       "policyRequired": "Confirm the prices, schedule, and cancellation terms",
-      "publishFailed": "The page could not be published"
+      "publishFailed": "The page could not be published",
+      "feature_unavailable": "Yozilish ustasi hozircha mavjud emas. Sahifani muharrirda yig‘ing — hammasi saqlanadi.",
+      "request_failed": "Ma’lumotlarni yuklab bo‘lmadi. Qayta urinib ko‘ring."
     }
   },
   "outcomeHome": {
@@ -7974,7 +7978,8 @@
       "request_failed": "The booking could not be updated",
       "version_conflict": "The booking has changed. Refresh and try again.",
       "slot_not_started": "The appointment has not started yet.",
-      "payment_required": "Confirm the deposit first."
+      "payment_required": "Confirm the deposit first.",
+      "feature_unavailable": "Bu yozilish funksiyasi bazada hali yoqilmagan. Tuzatyapmiz."
     }
   },
   "revenueInsights": {

@@ -7735,7 +7735,8 @@
       "version_conflict": "This booking has already changed. Refresh the page and try again.",
       "slot_unavailable": "That time is no longer available. Choose another option.",
       "action_not_allowed": "This action is no longer available.",
-      "request_failed": "The booking could not be updated. Try again."
+      "request_failed": "The booking could not be updated. Try again.",
+      "feature_unavailable": "Online booking is unavailable right now. Please contact the page owner directly."
     }
   },
   "publicBooking": {
@@ -7779,7 +7780,8 @@
       "service_unavailable": "There are no services available for booking right now.",
       "page_not_public": "This page has not been published yet.",
       "request_failed": "The booking could not be loaded. Try again.",
-      "invalid_response": "The booking service returned an invalid response. Try again."
+      "invalid_response": "The booking service returned an invalid response. Try again.",
+      "feature_unavailable": "Online booking is unavailable right now. Please contact the page owner directly."
     }
   },
   "revenueKit": {
@@ -7849,7 +7851,9 @@
       "depositInvalid": "Check the deposit amount",
       "paymentInstructionsRequired": "Add payment instructions",
       "policyRequired": "Confirm the prices, schedule, and cancellation terms",
-      "publishFailed": "The page could not be published"
+      "publishFailed": "The page could not be published",
+      "feature_unavailable": "The booking setup wizard is not available yet. Build your page in the editor — nothing is lost.",
+      "request_failed": "Could not load data. Please try again."
     }
   },
   "outcomeHome": {
@@ -7974,7 +7978,8 @@
       "request_failed": "The booking could not be updated",
       "version_conflict": "The booking has changed. Refresh and try again.",
       "slot_not_started": "The appointment has not started yet.",
-      "payment_required": "Confirm the deposit first."
+      "payment_required": "Confirm the deposit first.",
+      "feature_unavailable": "This booking feature is not enabled in the database yet. We are on it."
     }
   },
   "revenueInsights": {

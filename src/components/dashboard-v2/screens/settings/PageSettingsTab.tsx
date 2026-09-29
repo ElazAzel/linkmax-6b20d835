@@ -238,6 +238,9 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     };
 
     const handleSaveWebhooks = () => {
+        // Saved on blur: focusing the field and leaving must not overwrite
+        // the stored webhook with an empty value.
+        if ((webhookUrlInput || '') === (webhookUrl || '') && (webhookSecretInput || '') === (webhookSecret || '')) return;
         if (onUpdateWebhooks) {
             onUpdateWebhooks({ webhook_url: webhookUrlInput || undefined, webhook_secret: webhookSecretInput || undefined });
             toast.success(t('common.saved', 'Сохранено'));

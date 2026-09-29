@@ -6,6 +6,7 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
 import { isMissingTableError } from './reviews';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 
 // ============= Block & Page Value Objects =============
 
@@ -749,7 +750,9 @@ const OWNER_PAGE_SAFE_COLUMNS =
   'gallery_featured_at, gallery_likes, niche, preview_url, quality_score, is_indexable, ' +
   'last_snapshot_at, is_paid, is_primary_paid, page_type, integrations, favicon_url, hide_branding, ' +
   'organization_id, custom_domain, city, country_code, profession, entity_type, service_slugs, ' +
-  'site_id, page_path, is_home, last_indexnow_at';
+  'last_indexnow_at';
+/** Multi-page site columns — from a later migration, may be missing. */
+const OWNER_PAGE_SITE_COLUMNS = ', site_id, page_path, is_home';
 
 /**
  * Load one of the user's own pages.
@@ -764,13 +767,11 @@ export async function loadUserPage(userId: string, pageId?: string | null): Prom
     // Direct SELECT on contact_email / contact_phone / contact_whatsapp / webhook_url /
     // webhook_secret / quality_breakdown / index_exclusion_reasons is no longer granted
     // to the `authenticated` role; the RPC is the owner-only access path.
-    const { data: rpcRows, error: rpcError } = await (supabase.rpc as unknown as (
+    const callRpc = supabase.rpc.bind(supabase) as unknown as (
       fn: string,
       args?: Record<string, unknown>,
-    ) => Promise<{ data: unknown; error: { code?: string; message?: string } | null }>)(
-      'get_my_full_page',
-      { p_user_id: userId },
-    );
+    ) => Promise<{ data: unknown; error: { code?: string; message?: string } | null }>;
+    const { data: rpcRows, error: rpcError } = await callRpc('get_my_full_page', { p_user_id: userId });
 
     if (rpcError) {
       return { data: null, chatbotContext: null, error: wrapError(rpcError) };
@@ -779,12 +780,29 @@ export async function loadUserPage(userId: string, pageId?: string | null): Prom
     let ownerRow = Array.isArray(rpcRows) ? (rpcRows[0] as Record<string, unknown> | undefined) : null;
 
     if (pageId && ownerRow?.id !== pageId) {
-      const { data: requested, error: requestedError } = await supabase
+      // Preferred: the full row including owner-only columns (webhook_*,
+      // contact_*). Until that RPC is deployed, fall back to the columns
+      // `authenticated` may select directly.
+      const { data: fullRows, error: fullError } = await callRpc('get_my_full_page_by_id', { p_page_id: pageId });
+      const fullRow = !fullError && Array.isArray(fullRows)
+        ? (fullRows[0] as Record<string, unknown> | undefined)
+        : undefined;
+      if (fullRow) {
+        ownerRow = fullRow;
+      }
+    }
+
+    if (pageId && ownerRow?.id !== pageId) {
+      const selectRequested = (columns: string) => supabase
         .from('pages')
-        .select(OWNER_PAGE_SAFE_COLUMNS)
+        .select(columns)
         .eq('id', pageId)
         .eq('user_id', userId)
         .maybeSingle();
+      let { data: requested, error: requestedError } = await selectRequested(OWNER_PAGE_SAFE_COLUMNS + OWNER_PAGE_SITE_COLUMNS);
+      if (requestedError && isMissingSchemaError(requestedError)) {
+        ({ data: requested, error: requestedError } = await selectRequested(OWNER_PAGE_SAFE_COLUMNS));
+      }
       if (requestedError) {
         return { data: null, chatbotContext: null, error: wrapError(requestedError) };
       }

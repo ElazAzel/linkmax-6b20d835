@@ -1,5 +1,6 @@
 import type { Json } from '@/platform/supabase/types';
 import { supabase } from '@/platform/supabase/client';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 import type { BookingStatus } from '@/domain/revenue/booking-lifecycle';
 import { calculateDepositAmount, type DepositConfiguration } from '@/domain/revenue/service-offering';
 
@@ -217,6 +218,17 @@ function optionalLocalizedText(value: Json | undefined): string | Record<string,
   return entries.length > 0 ? Object.fromEntries(entries) : null;
 }
 
+/**
+ * Transport-level RPC failure. A missing RPC (booking migrations not applied
+ * to this database) is permanent — report it as unavailable instead of an
+ * endless "try again".
+ */
+function rpcFailure(error: unknown): BookingLifecycleError {
+  return isMissingSchemaError(error)
+    ? new BookingLifecycleError('feature_unavailable', false)
+    : new BookingLifecycleError('request_failed', true);
+}
+
 function throwResponseError(value: Json | undefined): never {
   if (isRecord(value) && value.ok === false) {
     throw new BookingLifecycleError(
@@ -304,14 +316,14 @@ export async function loadBookingOwnerDetail(bookingId: string): Promise<Booking
   const { data, error } = await supabase.rpc('get_booking_owner_detail', {
     p_booking_id: bookingId,
   });
-  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (error) throw rpcFailure(error);
   if (!isBookingOwnerDetail(data)) throwResponseError(data);
   return data as unknown as BookingOwnerDetail;
 }
 
 export async function loadBookingManagementContext(token: string): Promise<BookingManagementContext> {
   const { data, error } = await supabase.rpc('get_booking_by_access_token', { p_token: token });
-  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (error) throw rpcFailure(error);
   if (!isRecord(data) || data.ok !== true) throwResponseError(data);
   if (!isRecord(data.booking)) throw new BookingLifecycleError('invalid_response', true);
 
@@ -370,7 +382,7 @@ export async function loadBookingManagementAvailability(input: {
     p_from_date: input.fromDate,
     p_to_date: input.toDate,
   });
-  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (error) throw rpcFailure(error);
   if (!isRecord(data) || data.ok !== true) throwResponseError(data);
   if (!Array.isArray(data.slots)) throw new BookingLifecycleError('invalid_response', true);
 
@@ -394,7 +406,7 @@ export async function loadBookingManagementAvailability(input: {
 
 export async function loadPublicBookingContext(pageId: string): Promise<PublicBookingContext> {
   const { data, error } = await supabase.rpc('get_public_booking_context', { p_page_id: pageId });
-  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (error) throw rpcFailure(error);
   if (!isRecord(data) || data.ok !== true) throwResponseError(data);
   if (!isRecord(data.page) || !Array.isArray(data.services)) {
     throw new BookingLifecycleError('invalid_response', true);
@@ -457,7 +469,7 @@ export async function loadPublicAvailability(
     p_staff_id: input.staffId,
   });
 
-  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (error) throw rpcFailure(error);
   if (!Array.isArray(data)) throw new BookingLifecycleError('invalid_response', true);
 
   return data.map((slot) => ({
@@ -487,7 +499,7 @@ export async function createPublicBooking(
     p_idempotency_key: input.idempotencyKey,
   });
 
-  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (error) throw rpcFailure(error);
   if (!isRecord(data) || data.ok !== true) throwResponseError(data);
 
   if (
@@ -542,7 +554,7 @@ export async function manageBookingWithToken(
     p_slot_end_time: input.slotEndTime ?? null,
   });
 
-  if (error) throw new BookingLifecycleError('request_failed', true);
+  if (error) throw rpcFailure(error);
   if (!isRecord(data) || data.ok !== true) throwResponseError(data);
 
   if (
@@ -604,7 +616,9 @@ export async function transitionBooking(input: TransitionBookingInput): Promise<
   });
 
   if (error) {
-    return { ok: false, code: 'request_failed', retryable: true };
+    return isMissingSchemaError(error)
+      ? { ok: false, code: 'feature_unavailable', retryable: false }
+      : { ok: false, code: 'request_failed', retryable: true };
   }
 
   return normalizeResult(data);

@@ -24,6 +24,8 @@ describe('organizationsService.inviteMember', () => {
             p_role: 'editor',
         });
         expect(supabase.from).not.toHaveBeenCalled();
+        // Unbound supabase.rpc throws at runtime ("reading 'rest'").
+        expect(vi.mocked(supabase.rpc).mock.contexts[0]).toBe(supabase);
         expect(result).toEqual({ success: true, error: null });
     });
 

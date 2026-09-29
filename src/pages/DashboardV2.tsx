@@ -39,6 +39,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import { isCurrentUserFeatureFlagEnabled } from '@/services/feature-flags';
 import { isBeautyRevenueKitNiche, selectDashboardOnboardingWizard } from './dashboard-onboarding';
+import { isRevenueKitAvailable } from '@/services/revenue-kit';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
 const HomeScreen = lazy(() => import('@/components/dashboard-v2/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
@@ -193,11 +194,16 @@ function DashboardV2Inner() {
 
     let active = true;
     setBeautyKitFlag({ niche: revenueKitNiche, enabled: false, resolved: false });
-    void isCurrentUserFeatureFlagEnabled('beauty_revenue_kit_v1', {
-      niche: revenueKitNiche,
-      language: i18n.language,
-    }).then((enabled) => {
-      if (active) setBeautyKitFlag({ niche: revenueKitNiche, enabled, resolved: true });
+    // The flag alone is not enough: with the kit RPCs missing from the
+    // database the wizard opened on signup and failed on the first step.
+    void Promise.all([
+      isCurrentUserFeatureFlagEnabled('beauty_revenue_kit_v1', {
+        niche: revenueKitNiche,
+        language: i18n.language,
+      }),
+      isRevenueKitAvailable(),
+    ]).then(([flagEnabled, available]) => {
+      if (active) setBeautyKitFlag({ niche: revenueKitNiche, enabled: flagEnabled && available, resolved: true });
     });
 
     return () => { active = false; };
@@ -677,6 +683,9 @@ function DashboardV2Inner() {
             {currentTab === 'settings' && (
               <ScreenErrorBoundary screenName="Settings">
                 <SettingsScreen
+                  // Page fields are initialised from props once; remount per
+                  // page so a switch never shows (and saves) the previous page's values.
+                  key={dashboard.pageData?.id ?? 'no-page'}
                   usernameInput={dashboard.usernameState.usernameInput}
                   onUsernameChange={dashboard.usernameState.setUsernameInput}
                   onUpdateUsername={dashboard.usernameState.handleUpdateUsername}

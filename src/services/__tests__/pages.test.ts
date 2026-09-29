@@ -262,10 +262,32 @@ describe('pagesService', () => {
     });
 
     describe('loadUserPage with a page id', () => {
+        it('uses the full-row RPC for a secondary page', async () => {
+            const mockFrom = vi.mocked(supabase.from);
+            const mockRpc = vi.mocked(supabase.rpc);
+            mockRpc
+                .mockResolvedValueOnce({ data: [{ id: 'primary', slug: 'main', user_id: 'u1' }], error: null } as any)
+                .mockResolvedValueOnce({ data: [{ id: 'second', slug: 'second', user_id: 'u1', webhook_url: 'https://hook.example' }], error: null } as any);
+            mockFrom
+                .mockReturnValueOnce({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockResolvedValue({ data: [], error: null }) } as any)
+                .mockReturnValueOnce({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockResolvedValue({ data: null, error: null }) } as any);
+
+            const result = await pagesService.loadUserPage('u1', 'second');
+
+            expect(result.error).toBeNull();
+            expect(result.data?.id).toBe('second');
+            expect(mockRpc).toHaveBeenCalledWith('get_my_full_page_by_id', { p_page_id: 'second' });
+            // Bound call: an unbound supabase.rpc throws at runtime.
+            expect(mockRpc.mock.contexts[1]).toBe(supabase);
+        });
+
         it('loads the requested page when get_my_full_page returns a different one', async () => {
             const mockFrom = vi.mocked(supabase.from);
             const mockRpc = vi.mocked(supabase.rpc);
-            mockRpc.mockResolvedValueOnce({ data: [{ id: 'primary', slug: 'main', user_id: 'u1' }], error: null } as any);
+            mockRpc
+                .mockResolvedValueOnce({ data: [{ id: 'primary', slug: 'main', user_id: 'u1' }], error: null } as any)
+                // get_my_full_page_by_id not deployed yet
+                .mockResolvedValueOnce({ data: null, error: { code: 'PGRST202', message: 'not found' } } as any);
 
             const requested = {
                 select: vi.fn().mockReturnThis(),

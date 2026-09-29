@@ -11,7 +11,7 @@ interface GrowthAnalyticsCardProps {
   pageId: string;
 }
 
-const EMPTY_METRICS = { shares: 0, visits: 0, signups: 0, clones: 0, invites: 0 };
+const EMPTY_METRICS = { shares: 0, visits: 0, signups: 0, clones: 0, invites: 0, available: true };
 
 export function GrowthAnalyticsCard({ pageId }: GrowthAnalyticsCardProps) {
   const { t } = useTranslation();
@@ -28,6 +28,9 @@ export function GrowthAnalyticsCard({ pageId }: GrowthAnalyticsCardProps) {
     });
     return () => { active = false; };
   }, [pageId]);
+
+  // Tracking tables not deployed: zeros would read as "nobody shared".
+  if (!loading && !metrics.available) return null;
 
   const kFactor = calculateViralKFactor({ invitesSent: metrics.shares, attributedSignups: metrics.signups, activeUsers: 1 });
 

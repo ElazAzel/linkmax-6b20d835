@@ -424,7 +424,8 @@ export type StartProTrialResult =
 export async function startProTrial(): Promise<StartProTrialResult> {
   try {
     // Types regenerate async; cast until then.
-    const rpc = supabase.rpc as unknown as (name: string) => Promise<{ data: unknown; error: unknown }>;
+    // bind: an unbound supabase.rpc throws "reading 'rest'" (the trial button always failed).
+    const rpc = supabase.rpc.bind(supabase) as unknown as (name: string) => Promise<{ data: unknown; error: unknown }>;
     const { data, error } = await rpc('start_pro_trial');
     if (error) return { ok: false, error: 'unknown' };
     const payload = data as { ok?: boolean; trial_ends_at?: string; error?: string } | null;
