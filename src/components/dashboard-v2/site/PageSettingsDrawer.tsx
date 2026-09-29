@@ -113,7 +113,7 @@ export const PageSettingsDrawer = memo(function PageSettingsDrawer({
                 <Label htmlFor="ps-title">
                   {t('pageSettings.seoTitle', 'SEO Title')}
                 </Label>
-                <span className={`text-[10px] tabular-nums ${titleLen > 60 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                <span className={`text-[11px] font-num ${titleLen > 60 ? 'text-destructive' : 'text-muted-foreground'}`}>
                   {titleLen}/60
                 </span>
               </div>
@@ -131,7 +131,7 @@ export const PageSettingsDrawer = memo(function PageSettingsDrawer({
                 <Label htmlFor="ps-desc">
                   {t('pageSettings.seoDesc', 'Meta Description')}
                 </Label>
-                <span className={`text-[10px] tabular-nums ${descLen > 160 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                <span className={`text-[11px] font-num ${descLen > 160 ? 'text-destructive' : 'text-muted-foreground'}`}>
                   {descLen}/160
                 </span>
               </div>
@@ -198,7 +198,7 @@ export const PageSettingsDrawer = memo(function PageSettingsDrawer({
                 <div className="text-sm font-medium flex items-center gap-2">
                   {t('pageSettings.hideBranding', 'Скрыть бренд LinkMAX')}
                   {!isPremium && (
-                    <span className="text-[10px] uppercase tracking-wide text-primary/80 font-semibold">
+                    <span className="text-[11px] uppercase tracking-wide text-primary/80 font-semibold">
                       Pro
                     </span>
                   )}

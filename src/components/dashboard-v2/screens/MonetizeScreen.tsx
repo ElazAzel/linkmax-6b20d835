@@ -48,28 +48,28 @@ const TIER_CONFIG = {
   identity: {
     name: 'IDENTITY',
     icon: Zap,
-    color: 'from-slate-400 to-slate-500',
+    color: 'from-muted to-muted',
     badge: 'secondary' as const,
     commission: null,
   },
   starter: {
     name: 'STARTER',
     icon: Rocket,
-    color: 'from-emerald-500 to-teal-600',
+    color: 'from-success to-success',
     badge: 'default' as const,
     commission: '7%',
   },
   pro: {
     name: 'PRO',
     icon: Crown,
-    color: 'from-violet-500 to-purple-600',
+    color: 'from-primary to-primary',
     badge: 'default' as const,
     commission: '1%',
   },
   business: {
     name: 'BUSINESS',
     icon: Building2,
-    color: 'from-amber-500 to-orange-600',
+    color: 'from-warning to-warning',
     badge: 'default' as const,
     commission: '0%',
   },
@@ -177,7 +177,7 @@ export const MonetizeScreen = memo(function MonetizeScreen({
             "p-6",
             tier !== 'identity'
               ? `bg-gradient-to-br ${currentTierConfig.color}/10`
-              : "bg-gradient-to-br from-muted/50 to-muted"
+              : "bg-muted/50"
           )}>
             <div className="flex items-start justify-between">
               <div>
@@ -288,7 +288,7 @@ export const MonetizeScreen = memo(function MonetizeScreen({
         {/* Upgrade Section (for identity/starter users) */}
         {(tier === 'identity' || tier === 'starter') && (
           <Card className="rounded-2xl border-2 border-primary/20 overflow-hidden">
-            <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-6">
+            <div className="bg-primary/5 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-5 h-5 text-primary" />
                 <span className="font-bold text-primary">

@@ -26,7 +26,7 @@ export function RevenueFunnel({ funnel }: RevenueFunnelProps) {
           <TrendingUp className="h-5 w-5 text-primary" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="font-black">{t('revenueInsights.funnel.title', 'Путь до завершённой записи')}</h2>
+          <h2 className="font-bold">{t('revenueInsights.funnel.title', 'Путь до завершённой записи')}</h2>
           <p className="text-xs text-muted-foreground">
             {t('revenueInsights.funnel.description', 'Наблюдаемые события и факты записей за выбранный период.')}
           </p>
@@ -52,7 +52,7 @@ export function RevenueFunnel({ funnel }: RevenueFunnelProps) {
                   />
                 </div>
               </div>
-              <span className="text-right text-lg font-black tabular-nums">{step.value}</span>
+              <span className="text-right text-lg font-bold font-num">{step.value}</span>
               <span className="text-right text-xs text-muted-foreground">{rate}</span>
             </li>
           );

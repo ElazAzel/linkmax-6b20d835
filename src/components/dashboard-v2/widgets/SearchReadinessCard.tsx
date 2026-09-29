@@ -77,31 +77,30 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         : 'Предпросмотр';
 
   return (
-    <Card className="p-6 space-y-5 glass border-white/10 shadow-glass rounded-[2rem] overflow-hidden group">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-30 pointer-events-none" />
+    <Card className="p-6 space-y-5 bg-card border border-border shadow-sm rounded-card overflow-hidden group">
       
       <div className="flex items-center justify-between relative">
         <div className="flex items-center gap-4">
           <div className={cn(
-            'h-12 w-12 rounded-[1.25rem] flex items-center justify-center shadow-inner transition-transform group-hover:scale-110 duration-500',
-            color === 'emerald' && 'bg-emerald-500/10',
-            color === 'amber' && 'bg-amber-500/10',
-            color === 'red' && 'bg-red-500/10',
+            'h-12 w-12 rounded-control flex items-center justify-center shadow-inner transition-transform group-hover:scale-110 duration-500',
+            color === 'emerald' && 'bg-success/12',
+            color === 'amber' && 'bg-warning/12',
+            color === 'red' && 'bg-destructive/12',
           )}>
             <Search className={cn(
               'h-6 w-6',
-              color === 'emerald' && 'text-emerald-500',
-              color === 'amber' && 'text-amber-500',
-              color === 'red' && 'text-red-500',
+              color === 'emerald' && 'text-success',
+              color === 'amber' && 'text-warning',
+              color === 'red' && 'text-destructive',
             )} />
           </div>
           <div>
-            <h3 className="font-black text-sm tracking-tight">{t('seo.readiness.title', 'Видимость в поиске')}</h3>
+            <h3 className="font-bold text-sm tracking-tight">{t('seo.readiness.title', 'Видимость в поиске')}</h3>
             <p className={cn(
-              'text-xs font-black uppercase tracking-[0.15em] opacity-80',
-              color === 'emerald' && 'text-emerald-500',
-              color === 'amber' && 'text-amber-500',
-              color === 'red' && 'text-red-500',
+              'text-xs font-bold uppercase tracking-[0.06em] opacity-80',
+              color === 'emerald' && 'text-success',
+              color === 'amber' && 'text-warning',
+              color === 'red' && 'text-destructive',
             )}>
               {label}
             </p>
@@ -109,14 +108,14 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         </div>
         <div className="text-right">
           <div className="flex items-baseline justify-end gap-0.5">
-            <span className="text-2xl font-black tracking-tighter tabular-nums">{displayScore}</span>
-            <span className="text-xs text-muted-foreground font-black opacity-40">/100</span>
+            <span className="text-2xl font-bold tracking-tighter font-num">{displayScore}</span>
+            <span className="text-xs text-muted-foreground font-bold opacity-40">/100</span>
           </div>
           <div className="flex items-center gap-1.5 justify-end">
             {diagLoading && <RefreshCw className="h-3 w-3 text-muted-foreground animate-spin" />}
             <span className={cn(
-              'text-xs font-bold uppercase tracking-widest',
-              hasServerData && !isServerStale ? 'text-emerald-500/70' : 'text-muted-foreground/50'
+              'text-xs font-bold uppercase tracking-[0.06em]',
+              hasServerData && !isServerStale ? 'text-success' : 'text-muted-foreground'
             )}>
               {sourceLabel}
             </span>
@@ -124,13 +123,13 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         </div>
       </div>
 
-      <div className="relative h-2.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 shadow-inner">
+      <div className="relative h-2.5 w-full bg-muted rounded-full overflow-hidden border border-border shadow-inner">
         <motion.div 
           className={cn(
             'h-full rounded-full shadow-lg transition-all duration-1000',
-            color === 'emerald' && 'bg-emerald-500 shadow-emerald-500/20',
-            color === 'amber' && 'bg-amber-500 shadow-amber-500/20',
-            color === 'red' && 'bg-red-500 shadow-red-500/20',
+            color === 'emerald' && 'bg-success shadow-success/20',
+            color === 'amber' && 'bg-warning shadow-warning/20',
+            color === 'red' && 'bg-destructive shadow-destructive/20',
           )}
           initial={{ width: 0 }}
           animate={{ width: `${displayScore}%` }}
@@ -140,12 +139,12 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
       {/* Status badges */}
       <div className="flex flex-wrap gap-1.5">
         {isIndexable ? (
-          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-success/30 text-success bg-success/12">
             <Globe className="h-3 w-3" />
             В поисковых системах
           </Badge>
         ) : isPublished ? (
-          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-warning/30 text-warning bg-warning/12">
             <FileX className="h-3 w-3" />
             Не в поиске
           </Badge>
@@ -156,7 +155,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           </Badge>
         )}
         {inSitemap && (
-          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-success/30 text-success bg-success/12">
             <MapPin className="h-3 w-3" />
             В sitemap
           </Badge>
@@ -170,7 +169,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           </Badge>
         )}
         {childSummary && childSummary.excluded_thin > 0 && (
-          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-warning/30 text-warning bg-warning/12">
             {childSummary.excluded_thin} услуг без описания
           </Badge>
         )}
@@ -209,7 +208,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
       )}
 
       {failedChecks.length === 0 && (
-        <div className="flex items-center gap-2 text-sm text-emerald-600">
+        <div className="flex items-center gap-2 text-sm text-success">
           <CheckCircle2 className="h-4 w-4" />
           <span className="font-medium">Все поля заполнены — страница видна в поиске</span>
         </div>
@@ -217,7 +216,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
 
       {/* Exclusion summary for non-indexable published pages */}
       {isPublished && !isIndexable && failedChecks.length > 0 && (
-        <p className="text-[11px] text-muted-foreground/70 leading-relaxed">
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
           Страница опубликована, но пока не включена в поиск и sitemap. Заполните недостающие поля выше, чтобы она стала видна.
         </p>
       )}

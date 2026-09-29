@@ -41,7 +41,7 @@ export const BottomCTA = () => {
             <h2 className="mt-6 max-w-3xl text-3xl font-semibold tracking-tight sm:text-5xl sm:leading-[1.08]">
               {t('landing.bottomCta.title', 'Готовы получать клиентов?')}
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-white/78">
+            <p className="mt-4 max-w-2xl text-base leading-7 text-white/80">
               {t(
                 'landing.bottomCta.subtitle',
                 'AI-страница за 15 минут. Заявки в Telegram. Первые клиенты - уже сегодня.'
@@ -66,10 +66,10 @@ export const BottomCTA = () => {
 
         <div className="mt-10 grid gap-3 sm:grid-cols-3">
           {guarantees.map((item) => (
-            <div key={item.title} className="rounded-[18px] border border-white/16 bg-white/10 p-4">
+            <div key={item.title} className="rounded-[18px] border border-white/15 bg-white/10 p-4">
               <item.icon className="h-5 w-5 text-white" />
               <h3 className="mt-4 text-sm font-semibold">{item.title}</h3>
-              <p className="mt-1 text-sm leading-5 text-white/72">{item.desc}</p>
+              <p className="mt-1 text-sm leading-5 text-white/70">{item.desc}</p>
             </div>
           ))}
         </div>

@@ -100,7 +100,7 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
       <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Coins className="h-5 w-5 text-yellow-500" />
+            <Coins className="h-5 w-5 text-warning" />
             Linkkon Токены
           </DialogTitle>
           <DialogDescription className="sr-only">
@@ -110,27 +110,27 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
 
         <div className="space-y-4">
           {/* Balance Card */}
-          <Card className="p-6 bg-gradient-to-br from-yellow-500/20 via-orange-500/10 to-amber-500/20 border-yellow-500/30">
+          <Card className="bg-warning/12 p-6 border-warning/30">
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Coins className="h-8 w-8 text-yellow-500" />
-                <span className="text-4xl font-bold text-yellow-500">
+                <Coins className="h-8 w-8 text-warning" />
+                <span className="text-4xl font-bold text-warning">
                   {loading ? '...' : (balance?.balance || 0).toFixed(1)}
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">Ваш баланс Linkkon</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 1 Linkkon = {TOKEN_TO_TENGE_RATE} ₸
               </p>
 
               {balance && (
                 <div className="flex justify-center gap-4 mt-3 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
-                    <TrendingUp className="h-3 w-3 text-green-500" />
+                    <TrendingUp className="h-3 w-3 text-success" />
                     <span>Заработано: {balance.totalEarned.toFixed(1)}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Gift className="h-3 w-3 text-violet-500" />
+                    <Gift className="h-3 w-3 text-primary" />
                     <span>Потрачено: {balance.totalSpent.toFixed(1)}</span>
                   </div>
                 </div>
@@ -140,9 +140,9 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
 
           {/* Premium Status */}
           {isPremium && premiumEndsDate && (
-            <Card className="p-4 bg-gradient-to-r from-violet-500/20 to-purple-500/20 border-violet-500/30">
+            <Card className="p-4 border-primary/30">
               <div className="flex items-center gap-3">
-                <Crown className="h-5 w-5 text-violet-400" />
+                <Crown className="h-5 w-5 text-primary" />
                 <div>
                   <p className="font-medium text-sm">Premium активен</p>
                   <p className="text-xs text-muted-foreground">до {premiumEndsDate}</p>
@@ -152,11 +152,11 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
           )}
 
           {/* Convert to Premium */}
-          <Card className="p-4 bg-card/60 border-border/30">
+          <Card className="p-4 bg-card border-border/30">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-                  <Crown className="h-5 w-5 text-white" />
+                <div className="bg-primary h-10 w-10 rounded-xl flex items-center justify-center">
+                  <Crown className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
                   <p className="font-medium text-sm">1 день Premium</p>
@@ -183,67 +183,67 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
           </Card>
 
           {/* How to earn */}
-          <Card className="p-4 bg-card/60 border-border/30">
+          <Card className="p-4 bg-card border-border/30">
             <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-yellow-500" />
+              <Sparkles className="h-4 w-4 text-warning" />
               Как заработать Linkkon
             </h4>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Ежедневный вход</span>
-                <span className="font-medium text-yellow-500">+{TOKEN_REWARDS.daily_visit}</span>
+                <span className="font-medium text-warning">+{TOKEN_REWARDS.daily_visit}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Добавить блок (1 раз/день)</span>
-                <span className="font-medium text-yellow-500">+{TOKEN_REWARDS.add_block}</span>
+                <span className="font-medium text-warning">+{TOKEN_REWARDS.add_block}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Использовать AI</span>
-                <span className="font-medium text-yellow-500">+{TOKEN_REWARDS.use_ai}</span>
+                <span className="font-medium text-warning">+{TOKEN_REWARDS.use_ai}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Пригласить друга (с блоком)</span>
-                <span className="font-medium text-yellow-500">+{TOKEN_REWARDS.referral}</span>
+                <span className="font-medium text-warning">+{TOKEN_REWARDS.referral}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Каждые 3 реферала</span>
-                <span className="font-medium text-violet-500">+1 день Premium</span>
+                <span className="font-medium text-primary">+1 день Premium</span>
               </div>
             </div>
           </Card>
 
           {/* What you can buy */}
-          <Card className="p-4 bg-card/60 border-border/30">
+          <Card className="p-4 bg-card border-border/30">
             <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
-              <ShoppingBag className="h-4 w-4 text-emerald-500" />
+              <ShoppingBag className="h-4 w-4 text-success" />
               На что потратить
             </h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
-                <Crown className="h-4 w-4 text-violet-500" />
+                <Crown className="h-4 w-4 text-primary" />
                 <span className="text-muted-foreground">Premium подписка</span>
-                <Badge variant="secondary" className="text-xs ml-auto bg-green-500/20 text-green-600">
+                <Badge variant="secondary" className="text-xs ml-auto bg-success/12 text-success">
                   100 / день
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <LayoutTemplate className="h-4 w-4 text-blue-500" />
+                <LayoutTemplate className="h-4 w-4 text-info" />
                 <span className="text-muted-foreground">Шаблоны страниц</span>
-                <Badge variant="secondary" className="text-xs ml-auto bg-green-500/20 text-green-600">
+                <Badge variant="secondary" className="text-xs ml-auto bg-success/12 text-success">
                   Активно
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <ShoppingBag className="h-4 w-4 text-orange-500" />
+                <ShoppingBag className="h-4 w-4 text-warning" />
                 <span className="text-muted-foreground">Товары пользователей</span>
-                <Badge variant="secondary" className="text-xs ml-auto bg-green-500/20 text-green-600">
+                <Badge variant="secondary" className="text-xs ml-auto bg-success/12 text-success">
                   Активно
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4 text-pink-500" />
+                <Lock className="h-4 w-4 text-primary" />
                 <span className="text-muted-foreground">Платные блоки</span>
-                <Badge variant="secondary" className="text-xs ml-auto bg-green-500/20 text-green-600">
+                <Badge variant="secondary" className="text-xs ml-auto bg-success/12 text-success">
                   Активно
                 </Badge>
               </div>
@@ -255,11 +255,11 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
 
           {/* Withdraw (Premium only) */}
           {isPremium && (
-            <Card className="p-4 bg-gradient-to-r from-emerald-500/10 to-green-500/10 border-emerald-500/30">
+            <Card className="bg-success/12 p-4 border-success/30">
               <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
-                <Wallet className="h-4 w-4 text-emerald-500" />
+                <Wallet className="h-4 w-4 text-success" />
                 Вывод средств
-                <Badge variant="outline" className="text-xs ml-auto bg-emerald-500/20 border-emerald-500/30">
+                <Badge variant="outline" className="text-xs ml-auto bg-success/12 border-success/30">
                   Premium
                 </Badge>
               </h4>
@@ -340,18 +340,18 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
 
           {/* Transaction History */}
           {showHistory && transactions.length > 0 && (
-            <Card className="p-4 bg-card/60 border-border/30 max-h-48 overflow-y-auto">
+            <Card className="p-4 bg-card border-border/30 max-h-48 overflow-y-auto">
               <h4 className="font-medium text-sm mb-3">Последние транзакции</h4>
               <div className="space-y-2">
                 {transactions.map((tx) => (
                   <div key={tx.id} className="flex justify-between items-center text-sm">
                     <div>
                       <p className="text-muted-foreground">{tx.description || tx.source}</p>
-                      <p className="text-xs text-muted-foreground/70">{formatDate(tx.createdAt)}</p>
+                      <p className="text-xs text-muted-foreground">{formatDate(tx.createdAt)}</p>
                     </div>
                     <span className={cn(
                       'font-medium',
-                      tx.type === 'earn' || tx.type === 'bonus' ? 'text-green-500' : 'text-red-400'
+                      tx.type === 'earn' || tx.type === 'bonus' ? 'text-success' : 'text-destructive'
                     )}>
                       {tx.type === 'earn' || tx.type === 'bonus' ? '+' : '-'}{Math.abs(tx.amount).toFixed(1)}
                     </span>

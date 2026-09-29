@@ -93,7 +93,7 @@ export const OnboardingScopeChoice = memo(function OnboardingScopeChoice({
             </div>
             <div className="text-sm font-medium flex items-center gap-1.5">
               {t('onboardingScope.siteTitle', 'Сайт из шаблона')}
-              <span className="text-[10px] uppercase tracking-wide text-primary font-semibold">
+              <span className="text-[11px] uppercase tracking-wide text-primary font-semibold">
                 {t('onboardingScope.recommended', 'Рекомендуем')}
               </span>
             </div>

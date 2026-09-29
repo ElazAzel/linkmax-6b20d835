@@ -185,14 +185,14 @@ export const SiteTemplateGallery = memo(function SiteTemplateGallery({
                     <Badge
                       key={p.path}
                       variant={i < pagesToCreate ? 'secondary' : 'outline'}
-                      className="text-[10px] font-normal"
+                      className="text-[11px] font-normal"
                     >
                       {t(p.titleKey, p.titleFallback)}
                     </Badge>
                   ))}
                 </div>
                 {trimmed && (
-                  <p className="text-[10px] text-muted-foreground mt-2">
+                  <p className="text-[11px] text-muted-foreground mt-2">
                     {t(
                       'siteTemplates.trimmedHint',
                       'На Starter добавим первые {{n}} страниц. Pro — все.',

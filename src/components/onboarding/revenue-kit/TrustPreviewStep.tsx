@@ -18,7 +18,7 @@ export function TrustPreviewStep({ draft, onChange }: RevenueKitStepProps) {
           {t('revenueKit.preview.description', 'Так основная запись выглядит на экране шириной 360 px.')}
         </p>
       </div>
-      <div className="mx-auto w-full max-w-[360px] rounded-[28px] border-4 border-foreground/10 bg-background p-5 shadow-sm">
+      <div className="mx-auto w-full max-w-[360px] rounded-card border-4 border-foreground/10 bg-background p-5 shadow-sm">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{draft.identity.city}</p>
         <h3 className="mt-1 text-2xl font-bold">{draft.identity.displayName}</h3>
         <div className="mt-5 space-y-3">

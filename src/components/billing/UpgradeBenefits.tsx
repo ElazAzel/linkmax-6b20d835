@@ -51,7 +51,7 @@ export const UpgradeBenefits = memo(function UpgradeBenefits({
           return (
             <li key={i} className="flex items-center gap-2 text-xs">
               <Icon className="w-3.5 h-3.5 text-primary shrink-0" />
-              <span className="font-semibold text-foreground/90">{b.title}</span>
+              <span className="font-semibold text-foreground">{b.title}</span>
             </li>
           );
         })}

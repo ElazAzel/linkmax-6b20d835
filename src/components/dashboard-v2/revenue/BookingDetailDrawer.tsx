@@ -114,7 +114,7 @@ export function BookingDetailDrawer({
             </div>
 
             <section className="rounded-2xl border border-border/60 p-4">
-              <h3 className="mb-3 flex items-center gap-2 font-black">
+              <h3 className="mb-3 flex items-center gap-2 font-bold">
                 <UserRound className="h-4 w-4 text-primary" aria-hidden="true" />
                 {t('bookingDetail.client', 'Клиент')}
               </h3>
@@ -128,7 +128,7 @@ export function BookingDetailDrawer({
             </section>
 
             <section className="rounded-2xl border border-border/60 p-4">
-              <h3 className="mb-3 flex items-center gap-2 font-black">
+              <h3 className="mb-3 flex items-center gap-2 font-bold">
                 <CreditCard className="h-4 w-4 text-primary" aria-hidden="true" />
                 {t('bookingDetail.payment', 'Оплата')}
               </h3>
@@ -214,7 +214,7 @@ export function BookingDetailDrawer({
             )}
 
             <section className="rounded-2xl border border-border/60 p-4">
-              <h3 className="mb-3 flex items-center gap-2 font-black">
+              <h3 className="mb-3 flex items-center gap-2 font-bold">
                 <History className="h-4 w-4 text-primary" aria-hidden="true" />
                 {t('bookingDetail.history', 'История статусов')}
               </h3>
@@ -229,7 +229,7 @@ export function BookingDetailDrawer({
             </section>
 
             <section className="rounded-2xl border border-border/60 p-4">
-              <h3 className="mb-3 flex items-center gap-2 font-black">
+              <h3 className="mb-3 flex items-center gap-2 font-bold">
                 <BellRing className="h-4 w-4 text-primary" aria-hidden="true" />
                 {t('bookingDetail.notifications', 'Уведомления')}
               </h3>

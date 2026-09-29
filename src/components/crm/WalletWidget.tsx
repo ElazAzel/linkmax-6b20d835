@@ -90,7 +90,7 @@ export const WalletWidget = () => {
     const transactions = data?.transactions || [];
 
     return (
-        <Card className="glass-card border-white/10 overflow-hidden shadow-glass h-full flex flex-col">
+        <Card className="bg-card border border-border overflow-hidden shadow-sm h-full flex flex-col">
             <CardHeader className="p-5 pb-2">
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
@@ -107,23 +107,23 @@ export const WalletWidget = () => {
                     </Button>
                 </div>
             </CardHeader>
-            <CardContent className="p-5 flex-1 flex flex-col gap-6">
+            <CardContent className="p-5 flex-1 flex flex-col gap-6 sm:p-5">
                 {/* Balance Cards */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Доступно</p>
-                        <p className="text-2xl font-bold text-gradient" data-testid="wallet-balance">{balance.toLocaleString()} ₸</p>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em] mb-1">Доступно</p>
+                        <p className="text-2xl font-bold text-foreground" data-testid="wallet-balance">{balance.toLocaleString()} ₸</p>
                     </div>
-                    <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">В ожидании (GMV)</p>
-                        <p className="text-2xl font-bold text-emerald-400">+{pendingGMV.toLocaleString()} ₸</p>
+                    <div className="p-4 rounded-2xl bg-success/12 border border-success/20">
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em] mb-1">В ожидании (GMV)</p>
+                        <p className="text-2xl font-bold text-success">+{pendingGMV.toLocaleString()} ₸</p>
                     </div>
                 </div>
 
                 {/* Transactions List */}
                 <div className="flex-1">
                     <div className="flex items-center justify-between mb-3 px-1">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">Последние операции</h4>
+                        <h4 className="text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">Последние операции</h4>
                         <Button variant="link" className="h-auto p-0 text-xs font-bold text-primary">Все</Button>
                     </div>
                     <ScrollArea className="h-[200px] -mx-1 pr-2">
@@ -135,12 +135,12 @@ export const WalletWidget = () => {
                                 </div>
                             ) : (
                                 transactions.map((tx: any) => (
-                                    <div key={tx.id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 group hover:border-primary/30 transition-all cursor-default">
+                                    <div key={tx.id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-muted border border-border group hover:border-primary/30 transition-all cursor-default">
                                         <div className="flex items-center gap-3">
                                             <div className={cn(
                                                 "p-2 rounded-lg",
-                                                tx.type === 'income' ? "bg-emerald-500/10 text-emerald-500" :
-                                                    tx.type === 'fee' ? "bg-amber-500/10 text-amber-500" : "bg-red-500/10 text-red-500"
+                                                tx.type === 'income' ? "bg-success/12 text-success" :
+                                                    tx.type === 'fee' ? "bg-warning/12 text-warning" : "bg-destructive/12 text-destructive"
                                             )}>
                                                 {tx.type === 'income' ? <ArrowDownLeft className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
                                             </div>
@@ -154,13 +154,13 @@ export const WalletWidget = () => {
                                         <div className="text-right">
                                             <p className={cn(
                                                 "text-sm font-bold",
-                                                tx.amount > 0 ? "text-emerald-400" : "text-muted-foreground"
+                                                tx.amount > 0 ? "text-success" : "text-muted-foreground"
                                             )}>
                                                 {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()} ₸
                                             </p>
                                             <Badge variant="outline" className={cn(
-                                                "text-[8px] py-0 h-4 border-none bg-black/40",
-                                                tx.status === 'completed' ? "text-emerald-400" : "text-amber-400"
+                                                "text-[11px] py-0 h-5 border-none",
+                                                tx.status === 'completed' ? "bg-success/12 text-success" : "bg-warning/14 text-warning"
                                             )}>
                                                 {tx.status === 'completed' ? 'Успешно' : 'Ожидает'}
                                             </Badge>
@@ -178,7 +178,7 @@ export const WalletWidget = () => {
                             Вывести средства
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="glass-card border-white/10 sm:max-w-[425px]">
+                    <DialogContent className="bg-card border border-border sm:max-w-[425px]">
                         <DialogHeader>
                             <DialogTitle className="text-xl" data-testid="payout-dialog-title">Запрос выплаты</DialogTitle>
                             <DialogDescription>
@@ -194,7 +194,7 @@ export const WalletWidget = () => {
                                     value={payoutAmount}
                                     onChange={(e) => setPayoutAmount(e.target.value)}
                                     placeholder="Например: 5000"
-                                    className="bg-white/5 border-white/10"
+                                    className="bg-muted border-border"
                                     data-testid="payout-amount-input"
                                 />
                                 <p className="text-xs text-muted-foreground">
@@ -208,7 +208,7 @@ export const WalletWidget = () => {
                                     value={payoutMethod}
                                     onChange={(e) => setPayoutMethod(e.target.value)}
                                     placeholder="4400 ...."
-                                    className="bg-white/5 border-white/10"
+                                    className="bg-muted border-border"
                                 />
                             </div>
                         </div>

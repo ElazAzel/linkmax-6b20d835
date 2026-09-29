@@ -39,7 +39,7 @@ function QueueGroup({
           {items[0].serviceName}{DATE_SEPARATOR}{items[0].localStart.replace('T', ' ')}
         </span>
       </span>
-      <Badge variant="secondary" className="ml-3 tabular-nums">{items.length}</Badge>
+      <Badge variant="secondary" className="ml-3 font-num">{items.length}</Badge>
     </Button>
   );
 }
@@ -54,10 +54,10 @@ export function AttentionQueue({ operations, onNavigate }: AttentionQueueProps) 
     <Card className="rounded-3xl border-border/10 p-5" data-testid="revenue-attention-queue">
       <div className="mb-4 flex items-center gap-3">
         {total > 0
-          ? <AlertCircle className="h-5 w-5 text-amber-600" aria-hidden="true" />
-          : <CheckCircle2 className="h-5 w-5 text-emerald-600" aria-hidden="true" />}
+          ? <AlertCircle className="h-5 w-5 text-warning" aria-hidden="true" />
+          : <CheckCircle2 className="h-5 w-5 text-success" aria-hidden="true" />}
         <div>
-          <h3 className="font-black">{t('outcomeHome.attention.title', 'Требует внимания')}</h3>
+          <h3 className="font-bold">{t('outcomeHome.attention.title', 'Требует внимания')}</h3>
           <p className="text-xs text-muted-foreground">
             {total > 0
               ? t('outcomeHome.attention.count', '{{count}} задач по записям', { count: total })
@@ -88,8 +88,8 @@ export function AttentionQueue({ operations, onNavigate }: AttentionQueueProps) 
         </div>
       )}
       {total === 0 && (
-        <div className="flex items-center gap-2 rounded-2xl bg-emerald-500/5 px-4 py-3 text-sm text-muted-foreground">
-          <CalendarClock className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+        <div className="flex items-center gap-2 rounded-2xl bg-success/12 px-4 py-3 text-sm text-muted-foreground">
+          <CalendarClock className="h-4 w-4 text-success" aria-hidden="true" />
           {t('outcomeHome.attention.healthy', 'Можно сосредоточиться на новых записях.')}
         </div>
       )}

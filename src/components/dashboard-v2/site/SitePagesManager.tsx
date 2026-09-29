@@ -341,7 +341,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               </div>
               <div className="text-xs text-muted-foreground truncate">/{homePage.slug}</div>
             </div>
-            <div className="text-[10px] text-muted-foreground tabular-nums whitespace-nowrap">
+            <div className="text-[11px] text-muted-foreground font-num whitespace-nowrap">
               {(pageStats[homePage.id]?.views ?? 0).toLocaleString()} {t('dashboard.sitePages.views', 'просм.')}
               {' · '}
               {(pageStats[homePage.id]?.clicks ?? 0).toLocaleString()} {t('dashboard.sitePages.clicks', 'клик.')}
@@ -368,7 +368,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               'Starter: до {{n}} подстраниц. Pro — без лимита.',
               { n: SUBPAGE_LIMIT_STARTER },
             )}{' '}
-            <span className="tabular-nums">({subPages.length}/{SUBPAGE_LIMIT_STARTER})</span>
+            <span className="font-num">({subPages.length}/{SUBPAGE_LIMIT_STARTER})</span>
           </p>
         )}
         {subPages.length === 0 && (
@@ -388,7 +388,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
                 /{homePage?.slug}/p/{p.page_path}
               </div>
             </div>
-            <div className="text-[10px] text-muted-foreground tabular-nums whitespace-nowrap hidden sm:block">
+            <div className="text-[11px] text-muted-foreground font-num whitespace-nowrap hidden sm:block">
               {(pageStats[p.id]?.views ?? 0).toLocaleString()} {t('dashboard.sitePages.views', 'просм.')}
               {' · '}
               {(pageStats[p.id]?.clicks ?? 0).toLocaleString()} {t('dashboard.sitePages.clicks', 'клик.')}

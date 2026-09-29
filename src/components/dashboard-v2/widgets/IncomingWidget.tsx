@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ResponseTimeTag } from '@/components/crm/ResponseTimeTag';
-import { EmptyState } from '@/components/dashboard-v2/common/EmptyState';
+import { EmptyState } from '@/components/ui/states';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import Phone from 'lucide-react/dist/esm/icons/phone';
@@ -104,7 +104,7 @@ export const IncomingWidget = memo(function IncomingWidget({
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-bold">{t('home.incoming.title', 'Входящие')}</h3>
           {totalNew > 0 && (
-            <Badge className="h-5 px-1.5 bg-blue-500 text-white text-xs border-0">
+            <Badge className="h-5 px-1.5 bg-info text-info-foreground text-xs border-0">
               {totalNew}
             </Badge>
           )}
@@ -132,25 +132,25 @@ export const IncomingWidget = memo(function IncomingWidget({
             className="w-full flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors text-left"
           >
             <Avatar className="h-9 w-9 rounded-lg shrink-0">
-              <AvatarFallback className="rounded-lg text-xs font-bold bg-blue-500 text-white">
+              <AvatarFallback className="rounded-lg text-xs font-bold bg-info text-info-foreground">
                 {lead.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-sm font-semibold truncate">{lead.name}</span>
+              <span className="block text-sm font-semibold truncate mb-0.5">{lead.name}</span>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
                 <ResponseTimeTag createdAt={lead.created_at} status={lead.status} />
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <MessageCircle className="h-3 w-3" />
-                <span>{t('home.incoming.lead', 'Заявка')}</span>
-                {lead.phone && <span>· {lead.phone}</span>}
+                <span className="inline-flex items-center gap-1">
+                  <MessageCircle className="h-3 w-3" />
+                  {t('home.incoming.lead', 'Заявка')}
+                </span>
+                {lead.phone && <span className="whitespace-nowrap font-num">{lead.phone}</span>}
               </div>
             </div>
             {lead.phone && (
               <Button
                 size="sm"
-                className="h-8 w-8 rounded-lg p-0 bg-emerald-500 hover:bg-emerald-600 text-white shrink-0"
+                className="h-8 w-8 rounded-lg p-0 bg-success hover:bg-success text-success-foreground shrink-0"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleQuickReply(lead.phone!, lead.name);
@@ -169,7 +169,7 @@ export const IncomingWidget = memo(function IncomingWidget({
             className="w-full flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors text-left"
           >
             <Avatar className="h-9 w-9 rounded-lg shrink-0">
-              <AvatarFallback className="rounded-lg text-xs font-bold bg-amber-500 text-white">
+              <AvatarFallback className="rounded-lg text-xs font-bold bg-warning text-warning-foreground">
                 {booking.client_name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -180,7 +180,7 @@ export const IncomingWidget = memo(function IncomingWidget({
                 <span>{booking.slot_date} · {booking.slot_time}</span>
               </div>
             </div>
-            <Badge className="text-xs font-bold h-5 px-1.5 bg-amber-500 text-white border-0 shrink-0">
+            <Badge className="text-xs font-bold h-5 px-1.5 bg-warning text-warning-foreground border-0 shrink-0">
               {t('crm.bookingStatus.pending', 'Ожидает')}
             </Badge>
           </button>

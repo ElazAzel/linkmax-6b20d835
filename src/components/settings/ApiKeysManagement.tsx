@@ -82,14 +82,14 @@ export const ApiKeysManagement = () => {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <Card className="p-4 bg-primary/5 border-primary/20 space-y-3">
+            <Card className="p-4 border-primary/20 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-primary uppercase">
                   {t("settings.integrations.newKeyGenerated", "New API Key Generated")}
                 </span>
                 <Button variant="ghost" size="sm" onClick={() => setGeneratedKey(null)}>✕</Button>
               </div>
-              <p className="text-xs text-amber-600 font-medium">
+              <p className="text-xs text-warning font-medium">
                 {t("settings.integrations.apiKeyWarning", "Copy this key now. You won't be able to see it again!")}
               </p>
               <div className="flex gap-2">
@@ -126,10 +126,10 @@ export const ApiKeysManagement = () => {
               <div className="flex flex-col gap-0.5">
                 <span className="font-medium text-sm">{key.name}</span>
                 <div className="flex items-center gap-2">
-                  <code className="text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground uppercase tracking-wider">
+                  <code className="text-[11px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground uppercase tracking-[0.06em]">
                     {key.key_prefix}...
                   </code>
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-[11px] text-muted-foreground">
                     {t("common.created")}: {new Date(key.created_at).toLocaleDateString()}
                   </span>
                 </div>

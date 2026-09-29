@@ -48,8 +48,8 @@ export const ConversionFunnel = memo(function ConversionFunnel({
       percentage: 100,
       dropOff: null,
       icon: Eye,
-      gradient: 'from-blue-500/20 to-blue-500/40',
-      textColor: 'text-blue-500',
+      gradient: 'from-info/12 to-info/40',
+      textColor: 'text-info',
     },
     {
       id: 'clicks',
@@ -58,8 +58,8 @@ export const ConversionFunnel = memo(function ConversionFunnel({
       percentage: views > 0 ? Math.round((clicks / views) * 100) : 0,
       dropOff: views > 0 ? 100 - Math.round((clicks / views) * 100) : 0,
       icon: MousePointerClick,
-      gradient: 'from-emerald-500/20 to-emerald-500/40',
-      textColor: 'text-emerald-500',
+      gradient: 'from-success/12 to-success/40',
+      textColor: 'text-success',
     },
     {
       id: 'engagement',
@@ -68,8 +68,8 @@ export const ConversionFunnel = memo(function ConversionFunnel({
       percentage: views > 0 ? Math.round(((clicks + shares) / views) * 100) : 0,
       dropOff: clicks > 0 ? 100 - Math.round(((clicks + shares) / clicks) * 100) : null,
       icon: Share2,
-      gradient: 'from-violet-500/20 to-violet-500/40',
-      textColor: 'text-violet-500',
+      gradient: 'from-primary/12 to-primary/40',
+      textColor: 'text-primary',
     },
     {
       id: 'conversions',
@@ -78,8 +78,8 @@ export const ConversionFunnel = memo(function ConversionFunnel({
       percentage: views > 0 ? Math.round((conversions / views) * 100) : 0,
       dropOff: (clicks + shares) > 0 ? 100 - Math.round((conversions / (clicks + shares)) * 100) : null,
       icon: UserCheck,
-      gradient: 'from-amber-500/20 to-amber-500/40',
-      textColor: 'text-amber-500',
+      gradient: 'from-warning/12 to-warning/40',
+      textColor: 'text-warning',
     },
   ];
 
@@ -106,7 +106,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
 
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="font-black text-lg tracking-tight">{t('analytics.funnel.title', 'Воронка конверсии')}</h3>
+          <h3 className="font-bold text-lg tracking-tight">{t('analytics.funnel.title', 'Воронка конверсии')}</h3>
           <p className="text-xs text-muted-foreground">{t('analytics.funnel.subtitle', 'Путь посетителя до покупки')}</p>
         </div>
         <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10">
@@ -143,12 +143,12 @@ export const ConversionFunnel = memo(function ConversionFunnel({
                     <span className="font-bold tracking-tight">{stage.name}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-lg font-black">{stage.count.toLocaleString()}</span>
+                    <span className="text-lg font-bold">{stage.count.toLocaleString()}</span>
                     <div className="flex flex-col items-end">
                       <span className="text-xs text-muted-foreground uppercase font-bold leading-none mb-1">
                         {index === 0 ? 'Base' : 'Conv.'}
                       </span>
-                      <Badge variant="outline" className={cn("text-xs font-black h-5", stage.textColor, "bg-background/50 backdrop-blur-sm")}>
+                      <Badge variant="outline" className={cn("text-xs font-bold h-5", stage.textColor, "bg-muted/60 backdrop-blur-sm")}>
                         {stage.percentage}%
                       </Badge>
                     </div>
@@ -157,7 +157,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
 
                 <div className="h-10 bg-muted/30 rounded-xl overflow-hidden relative border border-border/50 group">
                   <motion.div
-                    className={cn("h-full bg-gradient-to-r transition-all duration-1000", stage.gradient)}
+                    className={cn("h-full transition-all duration-1000", stage.gradient)}
                     initial={{ width: 0 }}
                     animate={{ width: `${widthPercent}%` }}
                     transition={{ type: "spring", stiffness: 50, damping: 20, delay: index * 0.1 }}
@@ -183,25 +183,25 @@ export const ConversionFunnel = memo(function ConversionFunnel({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="mt-8 p-4 rounded-2xl bg-gradient-to-br from-primary/[0.03] to-violet-500/[0.03] border border-primary/10"
+        className="bg-primary/[0.03] mt-8 p-4 rounded-2xl border border-primary/10"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-              <UserCheck className="h-5 w-5 text-emerald-500" />
+            <div className="h-10 w-10 rounded-xl bg-success/12 flex items-center justify-center">
+              <UserCheck className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">
+              <p className="text-xs text-muted-foreground font-bold uppercase tracking-[0.06em]">
                 {t('analytics.funnel.overallLabel', 'Итоговая конверсия')}
               </p>
-              <h4 className="font-black text-xl leading-tight">
+              <h4 className="font-bold text-xl leading-tight">
                 {views > 0 ? ((conversions / views) * 100).toFixed(2) : 0}%
               </h4>
             </div>
           </div>
 
           <div className="text-right">
-            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">
+            <p className="text-xs text-muted-foreground font-bold uppercase tracking-[0.06em] mb-1">
               Efficiency
             </p>
             <div className="flex items-center gap-1 justify-end">
@@ -213,7 +213,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
                     key={s}
                     className={cn(
                       "h-1.5 w-4 rounded-full transition-colors",
-                      active ? "bg-emerald-500" : "bg-muted"
+                      active ? "bg-success" : "bg-muted"
                     )}
                   />
                 );

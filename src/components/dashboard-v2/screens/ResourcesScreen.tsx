@@ -97,7 +97,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-gradient tracking-tight">
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">
             {t('resources.title', 'Resources Management')}
           </h1>
           <p className="text-muted-foreground mt-1 max-w-lg">
@@ -116,11 +116,11 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
       {loading && resources.length === 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-48 rounded-3xl glass-card animate-pulse" />
+            <div key={i} className="h-48 rounded-3xl bg-card border border-border animate-pulse" />
           ))}
         </div>
       ) : resources.length === 0 ? (
-        <Card className="glass-card border-dashed border-2 border-white/10 bg-transparent py-20 text-center">
+        <Card className="bg-card border border-border border-dashed border-2 bg-transparent py-20 text-center">
           <CardContent className="flex flex-col items-center gap-4">
             <div className="w-20 h-20 rounded-3xl bg-primary/5 flex items-center justify-center mb-2">
               <Package className="h-10 w-10 text-primary/40" />
@@ -146,8 +146,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="group relative"
               >
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-primary/20 to-transparent rounded-[2rem] blur opacity-0 group-hover:opacity-100 transition duration-500" />
-                <Card className="glass-card relative overflow-hidden h-full flex flex-col border-white/10 rounded-[1.8rem] transition-all duration-300 group-hover:border-primary/30">
+                <Card className="bg-card border border-border relative overflow-hidden h-full flex flex-col rounded-[1.8rem] transition-all duration-300 group-hover:border-primary/30">
                   <div className="p-6 space-y-4">
                     <div className="flex items-start justify-between">
                       <div className={`p-3 rounded-2xl ${resource.is_active ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
@@ -157,7 +156,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="h-9 w-9 rounded-xl hover:bg-white/10"
+                          className="h-9 w-9 rounded-xl hover:bg-muted"
                           onClick={() => handleOpenDialog(resource)}
                         >
                           <Settings2 className="h-4 w-4" />
@@ -174,7 +173,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                     </div>
 
                     <div className="space-y-1">
-                      <h3 className="font-black text-xl tracking-tight group-hover:text-primary transition-colors">
+                      <h3 className="font-bold text-xl tracking-tight group-hover:text-primary transition-colors">
                         {resource.name}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 min-h-[2.5rem]">
@@ -184,16 +183,16 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
 
                     <div className="flex items-center gap-4 pt-2">
                       <div className="flex flex-col">
-                        <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">
+                        <span className="text-[11px] uppercase font-bold text-muted-foreground tracking-[0.06em]">
                           {t('resources.type', 'Type')}
                         </span>
                         <span className="text-sm font-medium capitalize">
                           {t(`resources.types.${resource.type}`, resource.type)}
                         </span>
                       </div>
-                      <div className="w-px h-8 bg-white/5" />
+                      <div className="w-px h-8 bg-muted" />
                       <div className="flex flex-col">
-                        <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">
+                        <span className="text-[11px] uppercase font-bold text-muted-foreground tracking-[0.06em]">
                           {t('resources.capacity', 'Capacity')}
                         </span>
                         <span className="text-sm font-medium">
@@ -203,10 +202,10 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                     </div>
 
                     <div className="pt-2 flex items-center justify-between">
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter border ${
+                      <span className={`text-[11px] px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter border ${
                         resource.is_active 
-                          ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
-                          : 'bg-muted/50 text-muted-foreground border-white/5'
+                          ? 'bg-success/12 text-success border-success/20' 
+                          : 'bg-muted/50 text-muted-foreground border-border'
                       }`}>
                         {resource.is_active ? t('common.active', 'Active') : t('common.inactive', 'Inactive')}
                       </span>
@@ -221,9 +220,9 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
 
       {/* Editor Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-md glass-card-heavy border-white/10 rounded-[2rem]">
+        <DialogContent className="max-w-md border-border rounded-card">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black tracking-tight">
+            <DialogTitle className="text-2xl font-bold tracking-tight">
               {editingResource ? t('resources.edit', 'Edit Resource') : t('resources.add', 'New Resource')}
             </DialogTitle>
           </DialogHeader>
@@ -235,7 +234,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="e.g. VIP Room 1, Tattoo Chair A"
-                className="glass-input rounded-2xl h-11"
+                className="rounded-2xl h-11"
               />
             </div>
 
@@ -246,10 +245,10 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                   value={formData.type} 
                   onValueChange={(val: any) => setFormData(prev => ({ ...prev, type: val }))}
                 >
-                  <SelectTrigger className="glass-input rounded-2xl h-11">
+                  <SelectTrigger className="rounded-2xl h-11">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="glass-card-heavy border-white/10">
+                  <SelectContent className="border-border">
                     <SelectItem value="room">{t('resources.types.room', 'Room')}</SelectItem>
                     <SelectItem value="equipment">{t('resources.types.equipment', 'Equipment')}</SelectItem>
                     <SelectItem value="other">{t('resources.types.other', 'Other')}</SelectItem>
@@ -264,7 +263,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                   min={1}
                   value={formData.capacity}
                   onChange={(e) => setFormData(prev => ({ ...prev, capacity: parseInt(e.target.value) || 1 }))}
-                  className="glass-input rounded-2xl h-11"
+                  className="rounded-2xl h-11"
                 />
               </div>
             </div>
@@ -275,14 +274,14 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                 value={formData.description || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder={t('resources.form.descPlaceholder', 'Optional details...')}
-                className="glass-input rounded-2xl resize-none h-24 pt-3"
+                className="rounded-2xl resize-none h-24 pt-3"
               />
             </div>
 
-            <div className="flex items-center justify-between p-4 rounded-[1.5rem] bg-white/5 border border-white/5">
+            <div className="flex items-center justify-between p-4 rounded-card bg-muted border border-border">
               <div className="space-y-0.5">
                 <Label className="text-sm font-bold">{t('resources.form.isActive', 'Available for booking')}</Label>
-                <p className="text-[10px] text-muted-foreground tracking-tight">
+                <p className="text-[11px] text-muted-foreground tracking-tight">
                   {t('resources.form.isActiveDesc', 'When disabled, this resource won\'t be used for auto-assignment.')}
                 </p>
               </div>

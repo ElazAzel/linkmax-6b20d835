@@ -60,7 +60,7 @@ export function GrowthAnalyticsCard({ pageId }: GrowthAnalyticsCardProps) {
 
 function Metric({ icon, label, value }: { icon: ReactNode; label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-border/60 bg-background/40 p-3">
+    <div className="rounded-xl border border-border/60 bg-muted/60 p-3">
       <div className="flex items-center gap-2 text-muted-foreground">{icon}<span className="truncate text-[11px]">{label}</span></div>
       <div className="mt-1 text-xl font-bold">{value}</div>
     </div>

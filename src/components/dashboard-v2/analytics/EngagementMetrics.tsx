@@ -45,8 +45,8 @@ export const EngagementMetrics = memo(function EngagementMetrics({
       value: `${ctr.toFixed(1)}%`,
       description: t('analytics.engagement.ctrDesc', 'Кликов на просмотр'),
       progress: Math.min(100, ctr * 5), // Scale for visualization
-      color: ctr >= 10 ? 'text-emerald-500' : ctr >= 5 ? 'text-amber-500' : 'text-red-500',
-      progressColor: ctr >= 10 ? 'bg-emerald-500' : ctr >= 5 ? 'bg-amber-500' : 'bg-red-500',
+      color: ctr >= 10 ? 'text-success' : ctr >= 5 ? 'text-warning' : 'text-destructive',
+      progressColor: ctr >= 10 ? 'bg-success' : ctr >= 5 ? 'bg-warning' : 'bg-destructive',
     },
     {
       id: 'session',
@@ -55,8 +55,8 @@ export const EngagementMetrics = memo(function EngagementMetrics({
       value: formatDuration(avgSessionDuration),
       description: t('analytics.engagement.sessionDesc', 'На странице'),
       progress: Math.min(100, (avgSessionDuration / 120) * 100), // 2min = 100%
-      color: avgSessionDuration >= 60 ? 'text-emerald-500' : 'text-amber-500',
-      progressColor: avgSessionDuration >= 60 ? 'bg-emerald-500' : 'bg-amber-500',
+      color: avgSessionDuration >= 60 ? 'text-success' : 'text-warning',
+      progressColor: avgSessionDuration >= 60 ? 'bg-success' : 'bg-warning',
     },
     {
       id: 'bounce',
@@ -65,8 +65,8 @@ export const EngagementMetrics = memo(function EngagementMetrics({
       value: `${bounceRate.toFixed(0)}%`,
       description: t('analytics.engagement.bounceDesc', 'Без взаимодействия'),
       progress: bounceRate,
-      color: bounceRate <= 50 ? 'text-emerald-500' : bounceRate <= 70 ? 'text-amber-500' : 'text-red-500',
-      progressColor: bounceRate <= 50 ? 'bg-emerald-500' : bounceRate <= 70 ? 'bg-amber-500' : 'bg-red-500',
+      color: bounceRate <= 50 ? 'text-success' : bounceRate <= 70 ? 'text-warning' : 'text-destructive',
+      progressColor: bounceRate <= 50 ? 'bg-success' : bounceRate <= 70 ? 'bg-warning' : 'bg-destructive',
       inverted: true,
     },
     {
@@ -76,8 +76,8 @@ export const EngagementMetrics = memo(function EngagementMetrics({
       value: `${returningVisitors.toFixed(0)}%`,
       description: t('analytics.engagement.returningDesc', 'Повторные визиты'),
       progress: returningVisitors,
-      color: returningVisitors >= 20 ? 'text-emerald-500' : 'text-muted-foreground',
-      progressColor: returningVisitors >= 20 ? 'bg-emerald-500' : 'bg-muted-foreground',
+      color: returningVisitors >= 20 ? 'text-success' : 'text-muted-foreground',
+      progressColor: returningVisitors >= 20 ? 'bg-success' : 'bg-muted-foreground',
     },
   ];
 
@@ -97,7 +97,7 @@ export const EngagementMetrics = memo(function EngagementMetrics({
                 <Icon className="h-4 w-4 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground">{metric.label}</span>
               </div>
-              <div className={cn("text-xl font-black", metric.color)}>
+              <div className={cn("text-xl font-bold", metric.color)}>
                 {metric.value}
               </div>
               <Progress 

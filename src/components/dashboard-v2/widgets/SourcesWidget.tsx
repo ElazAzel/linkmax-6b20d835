@@ -51,29 +51,29 @@ export const SourcesWidget = memo(function SourcesWidget({ className }: SourcesW
   }, [leads]);
 
   if (loading) {
-    return <Skeleton className={cn("h-64 rounded-[2.5rem] bg-white/5", className)} />;
+    return <Skeleton className={cn("h-64 rounded-card bg-muted", className)} />;
   }
 
   if (!leads.length || !sourceData.length) return null;
 
   const getSourceIcon = (source: string) => {
     switch (source) {
-      case 'instagram': return <Instagram className="h-3 w-3 text-pink-400" />;
-      case 'facebook': return <Facebook className="h-3 w-3 text-blue-400" />;
-      case 'google': return <Search className="h-3 w-3 text-red-400" />;
-      case 'direct': return <Globe className="h-3 w-3 text-emerald-400" />;
-      case 'ads': return <Tag className="h-3 w-3 text-amber-400" />;
+      case 'instagram': return <Instagram className="h-3 w-3 text-primary" />;
+      case 'facebook': return <Facebook className="h-3 w-3 text-info" />;
+      case 'google': return <Search className="h-3 w-3 text-destructive" />;
+      case 'direct': return <Globe className="h-3 w-3 text-success" />;
+      case 'ads': return <Tag className="h-3 w-3 text-warning" />;
       default: return <Tag className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getSourceColor = (source: string) => {
     switch (source) {
-      case 'instagram': return 'bg-pink-400';
-      case 'facebook': return 'bg-blue-400';
-      case 'google': return 'bg-red-400';
-      case 'direct': return 'bg-emerald-400';
-      case 'ads': return 'bg-amber-400';
+      case 'instagram': return 'bg-primary';
+      case 'facebook': return 'bg-info';
+      case 'google': return 'bg-destructive';
+      case 'direct': return 'bg-success';
+      case 'ads': return 'bg-warning';
       default: return 'bg-muted-foreground';
     }
   };
@@ -81,14 +81,14 @@ export const SourcesWidget = memo(function SourcesWidget({ className }: SourcesW
   const maxCount = Math.max(...sourceData.map(d => d[1]));
 
   return (
-    <Card className={cn("p-6 md:p-8 glass border-white/10 shadow-glass-lg rounded-[2.5rem] overflow-hidden content-glow", className)}>
+    <Card className={cn("p-6 md:p-8 bg-card border border-border shadow-md rounded-card overflow-hidden content-glow", className)}>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground/80">
+        <h3 className="text-sm font-bold uppercase tracking-[0.06em] text-muted-foreground">
           {t('crm.sources.title', 'Источники лидов')}
         </h3>
         <div className="flex -space-x-1">
           {sourceData.slice(0, 3).map(([source]) => (
-            <div key={source} className="h-5 w-5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center">
+            <div key={source} className="h-5 w-5 rounded-full border border-border bg-muted backdrop-blur-sm flex items-center justify-center">
               {getSourceIcon(source)}
             </div>
           ))}
@@ -101,13 +101,13 @@ export const SourcesWidget = memo(function SourcesWidget({ className }: SourcesW
             <div className="flex items-center justify-between text-xs font-bold">
               <div className="flex items-center gap-2">
                 <span className="capitalize">{source}</span>
-                <span className="text-xs text-muted-foreground opacity-60">
+                <span className="text-xs text-muted-foreground">
                   {Math.round((count / leads.length) * 100)}%
                 </span>
               </div>
               <span>{count}</span>
             </div>
-            <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(count / maxCount) * 100}%` }}
@@ -119,8 +119,8 @@ export const SourcesWidget = memo(function SourcesWidget({ className }: SourcesW
         ))}
       </div>
 
-      <div className="mt-6 pt-6 border-t border-white/5">
-        <p className="text-xs font-medium text-muted-foreground/60 leading-tight">
+      <div className="mt-6 pt-6 border-t border-border">
+        <p className="text-xs font-medium text-muted-foreground leading-tight">
           {t('crm.sources.footer', 'Статистика основана на последних полученных лидах с учетом UTM-меток и рефереров.')}
         </p>
       </div>

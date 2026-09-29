@@ -58,9 +58,9 @@ export const BlockPerformance = memo(function BlockPerformance({
 
   const getPerformanceColor = (level: 'high' | 'medium' | 'low') => {
     switch (level) {
-      case 'high': return 'text-emerald-500 bg-emerald-500/10';
-      case 'medium': return 'text-amber-500 bg-amber-500/10';
-      case 'low': return 'text-red-500 bg-red-500/10';
+      case 'high': return 'text-success bg-success/12';
+      case 'medium': return 'text-warning bg-warning/12';
+      case 'low': return 'text-destructive bg-destructive/12';
     }
   };
 

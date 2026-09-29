@@ -156,7 +156,7 @@ export const DigitalGoodsManager = memo(function DigitalGoodsManager({ className
   };
 
   return (
-    <Card className={cn('p-5 space-y-5 border-0 shadow-none bg-card/60 rounded-3xl', className)}>
+    <Card className={cn('p-5 space-y-5 border-0 shadow-none bg-card rounded-3xl', className)}>
       <div className="flex items-center gap-3">
         <div className="p-2 rounded-xl bg-primary/10 text-primary">
           <Package className="h-5 w-5" />

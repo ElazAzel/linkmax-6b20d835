@@ -68,6 +68,9 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         kaspi: '#f14635',
+        // Third-party share buttons (src/lib/design/brand-colors.ts).
+        telegram: '#2AABEE',
+        whatsapp: '#25D366',
         // Brand foundations for marketing surfaces (landing). Product UI uses
         // the semantic colors above.
         brand: {
@@ -89,6 +92,11 @@ export default {
           DEFAULT: 'hsl(var(--info))',
           foreground: 'hsl(var(--info-foreground))'
         },
+      },
+      // Soft status tints (DESIGN.md → Badge и статусы): bg-success/12 etc.
+      opacity: {
+        '12': '0.12',
+        '14': '0.14'
       },
       borderRadius: {
         '2xl': 'calc(var(--radius) + 0.5rem)',

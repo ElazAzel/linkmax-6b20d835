@@ -155,21 +155,18 @@ export function PublicationRitual({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-card/80 backdrop-blur-2xl border-white/10 shadow-2xl rounded-[32px] p-0 overflow-hidden isolate">
+      <DialogContent className="sm:max-w-md bg-card border-border shadow-2xl rounded-card p-0 overflow-hidden isolate">
         <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/20 blur-[100px] animate-pulse" />
-          <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-500/20 blur-[100px] animate-pulse delay-700" />
         </div>
 
         <div className="p-6 sm:p-8">
           <DialogHeader className="items-center text-center">
             <div className="relative mb-6">
-              <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full animate-pulse" />
-              <div className="relative h-20 w-20 rounded-3xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shadow-glass-lg transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <Sparkles className="h-10 w-10 text-white animate-bounce" />
+              <div className="bg-primary relative h-20 w-20 rounded-3xl flex items-center justify-center shadow-md transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <Sparkles className="h-10 w-10 text-primary-foreground" />
               </div>
             </div>
-            <DialogTitle className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
+            <DialogTitle className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">
               {t('ritual.title', 'Опубликовано! Твоя страница в сети')}
             </DialogTitle>
             <DialogDescription className="text-base text-muted-foreground mt-4 leading-relaxed max-w-[280px] mx-auto">
@@ -179,30 +176,29 @@ export function PublicationRitual({
 
           <div className="mt-8 space-y-6">
             <div className="group relative">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-blue-500/50 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000" />
-              <div className="relative flex items-center gap-2 bg-background/50 backdrop-blur-md border border-white/10 rounded-2xl p-2 pl-4">
+              <div className="relative flex items-center gap-2 bg-muted/60 backdrop-blur-md border border-border rounded-2xl p-2 pl-4">
                 <Input readOnly value={shareUrl} className="bg-transparent border-none text-sm font-semibold focus-visible:ring-0 px-0 h-10 select-all" />
-                <Button onClick={handleCopy} size="sm" variant="ghost" className={cn('h-11 rounded-xl px-5 gap-2 transition-all shrink-0', copied ? 'text-emerald-500 bg-emerald-500/10' : 'hover:bg-primary/10 text-primary')}>
+                <Button onClick={handleCopy} size="sm" variant="ghost" className={cn('h-11 rounded-xl px-5 gap-2 transition-all shrink-0', copied ? 'text-success bg-success/12' : 'hover:bg-primary/10 text-primary')}>
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  <span className="text-xs font-black uppercase tracking-widest">{copied ? t('common.copied', 'Готово') : t('common.copy', 'Копировать')}</span>
+                  <span className="text-xs font-bold uppercase tracking-[0.06em]">{copied ? t('common.copied', 'Готово') : t('common.copy', 'Копировать')}</span>
                 </Button>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col items-center justify-between gap-4 bg-white/5 border border-white/5 rounded-[24px] p-5 hover:bg-white/10 transition-colors">
+              <div className="flex flex-col items-center justify-between gap-4 bg-muted border border-border rounded-card p-5 hover:bg-muted transition-colors">
                 <div className="bg-white p-2.5 rounded-2xl shadow-lg transform hover:scale-105 transition-transform duration-300">
                   <QRCodeSVG id="ritual-qr-code" value={shareUrl} size={110} level="H" includeMargin={false} imageSettings={{ src: '/favicon.png', x: undefined, y: undefined, height: 24, width: 24, excavate: true }} />
                 </div>
-                <Button variant="ghost" size="sm" onClick={handleDownloadQR} className="w-full h-10 text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="sm" onClick={handleDownloadQR} className="w-full h-10 text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground hover:text-foreground">
                   <Download className="h-3.5 w-3.5 mr-1.5" />{t('ritual.downloadQR', 'Скачать QR')}
                 </Button>
               </div>
 
               <div className="flex flex-col gap-3">
-                <Button onClick={shareTelegram} className="h-12 w-full rounded-2xl bg-[#0088cc] hover:bg-[#0077b5] text-white font-bold gap-2 shadow-lg shadow-[#0088cc]/20"><Send className="h-4 w-4" />Telegram</Button>
-                <Button onClick={shareWhatsApp} className="h-12 w-full rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold gap-2 shadow-lg shadow-[#25D366]/20"><MessageCircle className="h-4 w-4" />WhatsApp</Button>
-                <Button variant="outline" className="h-12 w-full rounded-2xl border-white/10 glass font-bold gap-2" onClick={() => {
+                <Button onClick={shareTelegram} className="h-12 w-full rounded-2xl bg-telegram hover:bg-telegram/90 text-white font-semibold gap-2"><Send className="h-4 w-4" />Telegram</Button>
+                <Button onClick={shareWhatsApp} className="h-12 w-full rounded-2xl bg-whatsapp hover:bg-whatsapp/90 text-white font-semibold gap-2"><MessageCircle className="h-4 w-4" />WhatsApp</Button>
+                <Button variant="outline" className="h-12 w-full rounded-2xl border-border bg-card border font-bold gap-2" onClick={() => {
                   if (navigator.share) {
                     void navigator.share({ title: t('ritual.title', 'Опубликовано!'), text: getShareText(), url: shareUrl });
                     trackGrowth('share_clicked', { channel: 'native' });
@@ -214,19 +210,19 @@ export function PublicationRitual({
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-background/30 p-4 space-y-2">
+              <div className="rounded-2xl border border-border bg-muted/60 p-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm font-semibold"><Code2 className="h-4 w-4 text-primary" />{t('ritual.embedTitle', 'Встроить страницу')}</div>
                 <p className="text-xs text-muted-foreground">{t('ritual.embedHint', 'Добавьте мини-страницу в блог или магазин.')}</p>
                 <Button variant="outline" size="sm" className="w-full" onClick={() => void copySnippet(embedCode, 'embed_copied')}><Copy className="h-3.5 w-3.5 mr-2" />{t('ritual.copyEmbed', 'Скопировать embed')}</Button>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-background/30 p-4 space-y-2">
+              <div className="rounded-2xl border border-border bg-muted/60 p-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm font-semibold"><BadgeCheck className="h-4 w-4 text-primary" />{t('ritual.badgeTitle', 'Бейдж LinkMAX')}</div>
                 <p className="text-xs text-muted-foreground">{t('ritual.badgeHint', 'Оставьте внизу страницы и получите дополнительный referral-трафик.')}</p>
                 <Button variant="outline" size="sm" className="w-full" onClick={() => void copySnippet(badgeCode, 'link_copied')}><Copy className="h-3.5 w-3.5 mr-2" />{t('ritual.copyBadge', 'Скопировать бейдж')}</Button>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-background/30 p-4 space-y-3">
+            <div className="rounded-2xl border border-border bg-muted/60 p-4 space-y-3">
               <div>
                 <div className="text-sm font-semibold">{t('ritual.utmTitle', 'Ссылки для кампаний')}</div>
                 <p className="text-xs text-muted-foreground">{t('ritual.utmHint', 'Отдельные метки покажут, откуда пришли новые создатели.')}</p>
@@ -244,8 +240,8 @@ export function PublicationRitual({
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/5">
-            <p className="text-center text-xs font-black text-primary uppercase tracking-[0.2em] animate-pulse">🚀 {t('ritual.promo', 'Вернись завтра за первой статистикой!')}</p>
+          <div className="mt-8 pt-6 border-t border-border">
+            <p className="text-center text-xs font-bold text-primary uppercase tracking-[0.06em] animate-pulse">🚀 {t('ritual.promo', 'Вернись завтра за первой статистикой!')}</p>
           </div>
         </div>
       </DialogContent>

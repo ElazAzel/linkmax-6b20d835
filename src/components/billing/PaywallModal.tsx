@@ -91,7 +91,7 @@ export const PaywallModal = memo(function PaywallModal({
     <Dialog open={open} onOpenChange={handleDismiss}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-primary mb-1">
+          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.06em] font-semibold text-primary mb-1">
             <Sparkles className="w-3.5 h-3.5" />
             LinkMAX Pro
           </div>
