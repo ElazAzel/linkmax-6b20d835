@@ -5832,6 +5832,23 @@ export type Database = {
             Returns: Json
           }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
+      record_wallet_income: {
+        Args: {
+          p_amount: number
+          p_currency?: string
+          p_description: string
+          p_fee_amount?: number
+          p_gross_amount?: number
+          p_internal_ref?: string
+          p_metadata?: Json
+          p_related_entity_id?: string
+          p_related_entity_type?: string
+          p_type?: string
+          p_user_id: string
+          p_wallet_id?: string
+        }
+        Returns: Json
+      }
       refresh_page_review_summary: {
         Args: { p_page_id: string }
         Returns: undefined
