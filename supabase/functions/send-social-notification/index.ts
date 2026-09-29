@@ -199,12 +199,26 @@ serve(async (req: Request) => {
         if (!body.leadId) return json({ success: false, error: 'forbidden' }, 403);
         const { data: lead } = await supabase
           .from('leads')
-          .select('id, user_id')
+          .select('id, user_id, created_at, metadata')
           .eq('id', body.leadId)
           .maybeSingle();
         if (!lead || lead.user_id !== recipientId) {
           return json({ success: false, error: 'forbidden' }, 403);
         }
+        // Only a fresh lead, and only once: stops replaying old lead IDs to spam owners
+        const createdAt = new Date(lead.created_at as string).getTime();
+        const meta = (lead.metadata ?? {}) as Record<string, unknown>;
+        if (!Number.isFinite(createdAt) || Date.now() - createdAt > 15 * 60 * 1000 || meta.tg_lead_notified_at) {
+          return json({ success: false, error: 'already_sent_or_expired' }, 409);
+        }
+        const { data: claimed } = await supabase
+          .from('leads')
+          .update({ metadata: { ...meta, tg_lead_notified_at: new Date().toISOString() } })
+          .eq('id', lead.id)
+          .is('metadata->tg_lead_notified_at', null)
+          .select('id')
+          .maybeSingle();
+        if (!claimed) return json({ success: false, error: 'already_sent_or_expired' }, 409);
         break;
       }
     }
