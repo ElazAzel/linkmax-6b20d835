@@ -114,7 +114,8 @@ serve(async (req: Request) => {
             .eq('user_id', shp_user)
             .eq('description', billingDescription)
             .limit(1);
-        if (!existingBilling?.length) {
+        const alreadyProcessed = !!existingBilling?.length;
+        if (!alreadyProcessed) {
             const { error: billingError } = await supabase
                 .from('billing_history')
                 .insert({
@@ -129,7 +130,10 @@ serve(async (req: Request) => {
             if (billingError) console.error("Failed to record billing history", billingError);
         }
 
-        if (shp_type === 'subscription' || !shp_type) {
+        if ((shp_type === 'subscription' || !shp_type) && alreadyProcessed) {
+            // Replay of an already-applied payment: do not extend premium again
+            console.log(`Subscription payment ${invId} already applied, skipping`);
+        } else if (shp_type === 'subscription' || !shp_type) {
             const months = parseInt(shp_period || "0", 10);
             const endDate = new Date();
             endDate.setMonth(endDate.getMonth() + months);
