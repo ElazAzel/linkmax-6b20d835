@@ -155,7 +155,6 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
       <DashboardHeader
         title={t('dashboard.activity.title', 'Входящие')}
         subtitle={`${stats.total} ${t('dashboard.activity.totalLeads', 'заявок')}`}
-        onMenuClick={() => {}}
         actions={
           <div className="flex items-center gap-2">
             {isPremium && leads.length > 0 && activeTab === 'leads' && (

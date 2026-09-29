@@ -57,7 +57,7 @@ export function useUserProfile(userId: string | undefined) {
     }
   }, [userId]);
 
-  const handleUpdateTelegramNotifications = useCallback(async (enabled: boolean, chatId: string | null) => {
+  const handleUpdateTelegramNotifications = useCallback(async (enabled: boolean, chatId?: string | null) => {
     if (!userId) return;
 
     setSaving(true);
@@ -71,7 +71,7 @@ export function useUserProfile(userId: string | undefined) {
       setProfile(prev => prev ? {
         ...prev,
         telegram_notifications_enabled: enabled,
-        telegram_chat_id: chatId
+        telegram_chat_id: chatId === undefined ? prev.telegram_chat_id : chatId
       } : null);
       toast.success(enabled ? 'Telegram notifications enabled' : 'Telegram notifications disabled');
     } catch (error) {

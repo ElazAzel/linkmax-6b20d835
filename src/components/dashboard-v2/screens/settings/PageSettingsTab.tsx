@@ -28,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { PremiumFeatureGate } from '@/components/billing/PremiumFeatureGate';
 import type { Niche } from '@/lib/niches';
+import type { PageIntegrations } from '@/types/page';
 import { INDEXABLE_THRESHOLD } from '@/lib/seo/quality-score';
 
 const COUNTRY_OPTIONS = [
@@ -82,6 +83,8 @@ interface PageSettingsTabProps {
     onNicheChange: (niche: Niche) => void;
     onUpdateEntityFields?: (fields: { city?: string; profession?: string; entity_type?: string; contact_email?: string; contact_phone?: string; contact_whatsapp?: string; country_code?: string }) => void;
     onUpdateWebhooks?: (data: { webhook_url?: string; webhook_secret?: string }) => void;
+    integrations?: PageIntegrations;
+    onUpdateIntegrations?: (integrations: PageIntegrations) => void;
     onUpgradePage?: () => void;
     onOpenTheme?: () => void;
     onOpenTemplates?: () => void;
@@ -158,6 +161,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     qualityScore, avatarUrl, displayName, webhookUrl, webhookSecret,
     onUpdateSlug, onUpdateCustomDomain, onUpdateSeo, onUpdateBranding, onToggleIndexable,
     onNicheChange, onUpdateEntityFields, onUpdateWebhooks, onUpgradePage,
+    integrations, onUpdateIntegrations,
     onOpenTheme, onOpenTemplates, onOpenMarketplace, onOpenAIBuilder,
 }: PageSettingsTabProps) {
     const { t } = useTranslation();
@@ -721,6 +725,11 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 </PremiumFeatureGate>
             </div>
 
+            {/* Pixels & analytics — PublicPage loads them via TrackingScripts */}
+            {onUpdateIntegrations && (
+                <TrackingSettings integrations={integrations} onSave={onUpdateIntegrations} />
+            )}
+
             {/* Webhooks (PRO) */}
             <div className="space-y-2">
                 <div className="flex items-center gap-2 px-1">
@@ -766,3 +775,89 @@ export const PageSettingsTab = memo(function PageSettingsTab({
         </div>
     );
 });
+
+type TrackingField = 'fb_pixel' | 'tt_pixel' | 'ga4_id' | 'yandex_metrika';
+
+const TRACKING_FIELDS: Array<{
+    key: TrackingField;
+    label: string;
+    placeholder: string;
+    hintKey: string;
+    hint: string;
+    normalize: (value: string) => string;
+}> = [
+    { key: 'fb_pixel', label: 'Meta Pixel ID', placeholder: '1234567890', hintKey: 'settings.integrations.fbHint', hint: 'Events Manager → Источники данных → Pixel ID', normalize: (v) => v.replace(/\D/g, '') },
+    { key: 'tt_pixel', label: 'TikTok Pixel ID', placeholder: 'C1234567890', hintKey: 'settings.integrations.ttHint', hint: 'TikTok Ads → Assets → Events → Pixel Code', normalize: (v) => v.trim() },
+    { key: 'ga4_id', label: 'Google Analytics 4', placeholder: 'G-XXXXXXXXXX', hintKey: 'settings.integrations.ga4Hint', hint: 'GA4 → Admin → Data Streams → Measurement ID', normalize: (v) => v.trim().toUpperCase() },
+    { key: 'yandex_metrika', label: 'Яндекс Метрика', placeholder: '12345678', hintKey: 'settings.integrations.yandexHint', hint: 'Метрика → Настройки → Номер счётчика', normalize: (v) => v.replace(/\D/g, '') },
+];
+
+/**
+ * Tracking IDs of the active page. These fields only existed in an unused
+ * settings screen, so pixels could not be connected from the dashboard.
+ */
+function TrackingSettings({ integrations, onSave }: {
+    integrations?: PageIntegrations;
+    onSave: (integrations: PageIntegrations) => void;
+}) {
+    const { t } = useTranslation();
+    const [values, setValues] = useState<Record<TrackingField, string>>(() => ({
+        fb_pixel: integrations?.fb_pixel ?? '',
+        tt_pixel: integrations?.tt_pixel ?? '',
+        ga4_id: integrations?.ga4_id ?? '',
+        yandex_metrika: integrations?.yandex_metrika ?? '',
+    }));
+
+    // Another page became active → show its IDs.
+    useEffect(() => {
+        setValues({
+            fb_pixel: integrations?.fb_pixel ?? '',
+            tt_pixel: integrations?.tt_pixel ?? '',
+            ga4_id: integrations?.ga4_id ?? '',
+            yandex_metrika: integrations?.yandex_metrika ?? '',
+        });
+    }, [integrations?.fb_pixel, integrations?.tt_pixel, integrations?.ga4_id, integrations?.yandex_metrika]);
+
+    const commit = (key: TrackingField) => {
+        const value = values[key];
+        if ((integrations?.[key] ?? '') === value) return;
+        const next: PageIntegrations = { ...integrations };
+        if (value) next[key] = value;
+        else delete next[key];
+        onSave(next);
+        toast.success(t('common.saved', 'Сохранено'));
+    };
+
+    return (
+        <div className="space-y-2">
+            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                {t('settings.integrations.title', 'Пиксели и аналитика')}
+            </h3>
+            <Card className="p-4 space-y-5">
+                <p className="text-xs text-muted-foreground">
+                    {t('settings.integrations.description', 'Подключите пиксели для отслеживания конверсий. События PageView, Lead, Purchase и клики по блокам отправляются автоматически.')}
+                </p>
+                {TRACKING_FIELDS.map((field) => (
+                    <div key={field.key} className="space-y-1.5">
+                        <Label htmlFor={`tracking-${field.key}`} className="flex items-center gap-2">
+                            <span>{field.label}</span>
+                            {values[field.key] && <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden />}
+                        </Label>
+                        <Input
+                            id={`tracking-${field.key}`}
+                            value={values[field.key]}
+                            onChange={(e) => setValues((prev) => ({ ...prev, [field.key]: field.normalize(e.target.value) }))}
+                            onBlur={() => commit(field.key)}
+                            placeholder={field.placeholder}
+                            className="h-12 rounded-xl font-mono text-sm"
+                            inputMode={field.key === 'fb_pixel' || field.key === 'yandex_metrika' ? 'numeric' : 'text'}
+                            autoComplete="off"
+                            spellCheck={false}
+                        />
+                        <p className="text-[11px] text-muted-foreground">{t(field.hintKey, field.hint)}</p>
+                    </div>
+                ))}
+            </Card>
+        </div>
+    );
+}

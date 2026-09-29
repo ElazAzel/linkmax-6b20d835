@@ -692,7 +692,7 @@ function DashboardV2Inner() {
                   onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
                   telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
                   telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
-                  onTelegramChange={(enabled: boolean, chatId?: string) => dashboard.userProfile.updateTelegramNotifications(enabled, chatId || null)}
+                  onTelegramChange={(enabled: boolean, chatId?: string) => dashboard.userProfile.updateTelegramNotifications(enabled, chatId)}
                   niche={dashboard.pageData?.niche as Niche | undefined}
                   onNicheChange={dashboard.updateNiche}
                   onSignOut={dashboard.handleSignOut}

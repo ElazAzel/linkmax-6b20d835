@@ -1,7 +1,6 @@
 import { memo, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
-import { supabase } from '@/platform/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,13 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import Copy from 'lucide-react/dist/esm/icons/copy';
-import Download from 'lucide-react/dist/esm/icons/download';
-import Wallet from 'lucide-react/dist/esm/icons/wallet';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
-import { ActionCard } from '../common/ActionCard';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
-import { useAppError } from '@/hooks/useAppError';
 
 interface KaspiQRWidgetProps {
     ownerId: string;
@@ -24,8 +18,10 @@ interface KaspiQRWidgetProps {
 }
 
 /**
- * KaspiQRWidget - Quick payment generator for Dashboard v2
- * Integrates with process-transaction-fee for Q2 automated fee handling.
+ * KaspiQRWidget - Quick payment QR/link generator for Dashboard v2.
+ * The "Pay" button that called process-transaction-fee from the owner's
+ * browser was removed: that function is service-only (403 for users) and
+ * "simulating" a payment charged the owner a fee for money never received.
  */
 export const KaspiQRWidget = memo(function KaspiQRWidget({
     ownerId,
@@ -33,10 +29,8 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
     className
 }: KaspiQRWidgetProps) {
     const { t } = useTranslation();
-    const { handleError } = useAppError();
     const [amount, setAmount] = useState<number | ''>('');
     const [comment, setComment] = useState('');
-    const [isSimulating, setIsSimulating] = useState(false);
 
     const kaspiDeeplink = useMemo(() => {
         const params = new URLSearchParams();
@@ -44,37 +38,6 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
         if (comment) params.set('comment', comment);
         return `https://kaspi.kz/pay?${params.toString()}`;
     }, [amount, comment]);
-
-    const handleSimulatePayment = async () => {
-        if (!ownerId || !amount || amount <= 0) {
-            toast.error(t('kaspi.invalidAmount', 'Введите корректную сумму'));
-            return;
-        }
-
-        try {
-            setIsSimulating(true);
-            const { data, error } = await supabase.functions.invoke('process-transaction-fee', {
-                body: {
-                    userId: ownerId,
-                    amount: amount,
-                    currency: currency,
-                    source: 'Kaspi Dashboard',
-                    description: comment || 'Kaspi Payment via Dashboard',
-                }
-            });
-
-            if (error) throw error;
-
-            toast.success(t('kaspi.paymentSimulated', 'Платеж успешно симулирован, комиссия удержана!'));
-            setAmount('');
-            setComment('');
-        } catch (err: any) {
-            console.error('Error simulating payment:', err);
-            handleError(err, 'Ошибка при симуляции платежа');
-        } finally {
-            setIsSimulating(false);
-        }
-    };
 
     const handleCopyLink = () => {
         navigator.clipboard.writeText(kaspiDeeplink);
@@ -159,14 +122,6 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                                     >
                                         <Copy className="h-4 w-4" />
                                         {t('common.copy', 'Link')}
-                                    </Button>
-                                    <Button 
-                                        onClick={handleSimulatePayment} 
-                                        disabled={isSimulating} 
-                                        className="flex-1 h-12 rounded-2xl bg-kaspi hover:bg-kaspi/90 text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-kaspi/20 gap-2 border-none"
-                                    >
-                                        {isSimulating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wallet className="h-4 w-4" />}
-                                        {t('kaspi.pay', 'Pay')}
                                     </Button>
                                 </div>
                             </div>

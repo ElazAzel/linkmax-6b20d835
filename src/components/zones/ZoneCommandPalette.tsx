@@ -4,7 +4,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
     CommandDialog,
     CommandEmpty,
@@ -42,8 +42,14 @@ export function ZoneCommandPalette() {
     const { deals } = useZoneDeals(currentZoneId);
     const { tasks } = useZoneTasks(currentZoneId);
 
-    // Keyboard shortcut: Cmd+K / Ctrl+K
+    // Keyboard shortcut: Cmd+K / Ctrl+K — only on zone tabs. Elsewhere the
+    // dashboard/editor palettes own the shortcut (several dialogs opened at once).
+    const location = useLocation();
+    const tabParam = new URLSearchParams(location.search).get('tab');
+    const onZoneTab = location.pathname.startsWith('/dashboard/zone-') || !!tabParam?.startsWith('zone-');
+
     useEffect(() => {
+        if (!onZoneTab) return;
         const down = (e: KeyboardEvent) => {
             if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault();
@@ -52,7 +58,7 @@ export function ZoneCommandPalette() {
         };
         document.addEventListener('keydown', down);
         return () => document.removeEventListener('keydown', down);
-    }, []);
+    }, [onZoneTab]);
 
     const goTo = useCallback(
         (path: string) => {
@@ -65,18 +71,18 @@ export function ZoneCommandPalette() {
     // Navigation items
     const navItems = useMemo(
         () => [
-            { label: t('zones.nav.dashboard', 'Дашборд'), icon: LayoutDashboard, path: '/zone/dashboard' },
-            { label: t('zones.nav.deals', 'Сделки'), icon: HandCoins, path: '/zone/deals' },
-            { label: t('zones.nav.contacts', 'Контакты'), icon: User, path: '/zone/contacts' },
-            { label: t('zones.nav.tasks', 'Задачи'), icon: ListTodo, path: '/zone/tasks' },
-            { label: t('zones.nav.inbox', 'Входящие'), icon: MessageSquare, path: '/zone/inbox' },
-            { label: t('zones.nav.invoices', 'Счета'), icon: Receipt, path: '/zone/invoices' },
-            { label: t('zones.nav.calendar', 'Календарь'), icon: CalendarIcon, path: '/zone/calendar' },
-            { label: t('zones.nav.automations', 'Автоматизации'), icon: Zap, path: '/zone/automations' },
-            { label: t('zones.nav.products', 'Товары'), icon: Package, path: '/zone/products' },
-            { label: t('zones.nav.events', 'Мероприятия'), icon: Ticket, path: '/zone/events' },
-            { label: t('zones.nav.documents', 'Документы'), icon: FileText, path: '/zone/documents' },
-            { label: t('zones.nav.settings', 'Настройки'), icon: Settings, path: '/zone/settings' },
+            { label: t('zones.nav.dashboard', 'Дашборд'), icon: LayoutDashboard, path: '/dashboard/zone-dashboard' },
+            { label: t('zones.nav.deals', 'Сделки'), icon: HandCoins, path: '/dashboard/zone-deals' },
+            { label: t('zones.nav.contacts', 'Контакты'), icon: User, path: '/dashboard/zone-contacts' },
+            { label: t('zones.nav.tasks', 'Задачи'), icon: ListTodo, path: '/dashboard/zone-tasks' },
+            { label: t('zones.nav.inbox', 'Входящие'), icon: MessageSquare, path: '/dashboard/zone-inbox' },
+            { label: t('zones.nav.invoices', 'Счета'), icon: Receipt, path: '/dashboard/zone-invoices' },
+            { label: t('zones.nav.calendar', 'Календарь'), icon: CalendarIcon, path: '/dashboard/zone-calendar' },
+            { label: t('zones.nav.automations', 'Автоматизации'), icon: Zap, path: '/dashboard/zone-automations' },
+            { label: t('zones.nav.products', 'Товары'), icon: Package, path: '/dashboard/zone-products' },
+            { label: t('zones.nav.events', 'Мероприятия'), icon: Ticket, path: '/dashboard/zone-events' },
+            { label: t('zones.nav.documents', 'Документы'), icon: FileText, path: '/dashboard/zone-documents' },
+            { label: t('zones.nav.settings', 'Настройки'), icon: Settings, path: '/dashboard/zone-settings' },
         ],
         [t],
     );
@@ -96,7 +102,7 @@ export function ZoneCommandPalette() {
                             <CommandItem
                                 key={c.id}
                                 value={`contact ${c.name} ${c.email || ''} ${c.phone || ''}`}
-                                onSelect={() => goTo('/zone/contacts')}
+                                onSelect={() => goTo('/dashboard/zone-contacts')}
                             >
                                 <User className="mr-2 h-4 w-4 text-muted-foreground" />
                                 <div className="flex flex-col flex-1 min-w-0">
@@ -120,7 +126,7 @@ export function ZoneCommandPalette() {
                                 <CommandItem
                                     key={d.id}
                                     value={`deal ${d.title} ${d.contact?.name || ''}`}
-                                    onSelect={() => goTo('/zone/deals')}
+                                    onSelect={() => goTo('/dashboard/zone-deals')}
                                 >
                                     <HandCoins className="mr-2 h-4 w-4 text-muted-foreground" />
                                     <div className="flex flex-col flex-1 min-w-0">
@@ -152,7 +158,7 @@ export function ZoneCommandPalette() {
                                     <CommandItem
                                         key={tk.id}
                                         value={`task ${tk.title} ${tk.description || ''}`}
-                                        onSelect={() => goTo('/zone/tasks')}
+                                        onSelect={() => goTo('/dashboard/zone-tasks')}
                                     >
                                         <ListTodo className="mr-2 h-4 w-4 text-muted-foreground" />
                                         <div className="flex flex-col flex-1 min-w-0">
@@ -173,15 +179,15 @@ export function ZoneCommandPalette() {
                 {/* Quick Actions */}
                 <CommandSeparator />
                 <CommandGroup heading={t('zones.search.quickActions', 'Быстрые действия')}>
-                    <CommandItem onSelect={() => goTo('/zone/deals')}>
+                    <CommandItem onSelect={() => goTo('/dashboard/zone-deals')}>
                         <Plus className="mr-2 h-4 w-4" />
                         {t('zones.search.newDeal', 'Создать сделку')}
                     </CommandItem>
-                    <CommandItem onSelect={() => goTo('/zone/contacts')}>
+                    <CommandItem onSelect={() => goTo('/dashboard/zone-contacts')}>
                         <Plus className="mr-2 h-4 w-4" />
                         {t('zones.search.newContact', 'Добавить контакт')}
                     </CommandItem>
-                    <CommandItem onSelect={() => goTo('/zone/tasks')}>
+                    <CommandItem onSelect={() => goTo('/dashboard/zone-tasks')}>
                         <Plus className="mr-2 h-4 w-4" />
                         {t('zones.search.newTask', 'Создать задачу')}
                     </CommandItem>

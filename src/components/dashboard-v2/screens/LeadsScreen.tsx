@@ -98,8 +98,10 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
 
-            if (data) setLeads(data as unknown as Lead[]);
-            if (error) console.error('Error fetching leads', error);
+            // Supabase returns errors instead of throwing — a failed query
+            // used to render as an empty "no leads yet" list.
+            if (error) throw error;
+            setLeads((data ?? []) as unknown as Lead[]);
         } catch (e) {
             console.error("Error fetching leads", e);
             setLoadError(true);
@@ -272,7 +274,6 @@ export const LeadsScreen = memo(function LeadsScreen() {
     return (
         <div className="min-h-screen safe-area-top">
             <DashboardHeader
-                onMenuClick={() => {}}
                 title={t('dashboard.leads.title', 'Лиды (CRM)')}
                 actions={
                     <div className="flex gap-2">

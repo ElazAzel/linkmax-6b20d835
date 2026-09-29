@@ -15,6 +15,9 @@ import Contact from 'lucide-react/dist/esm/icons/contact';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
+import Wallet from 'lucide-react/dist/esm/icons/wallet';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import { useHasBusinessZone } from '@/contexts/ZoneContext';
@@ -71,6 +74,11 @@ const TABS: NavTab[] = [
 
 const MORE_ITEMS: NavTab[] = [
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
+  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
+  { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
+  { id: 'monetize', icon: Coins, labelKey: 'dashboard.nav.monetize', defaultLabel: 'Монетизация', path: '' },
+  { id: 'finance', icon: Wallet, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы', path: '' },
+  { id: 'team', icon: Users, labelKey: 'dashboard.nav.team', defaultLabel: 'Команда', path: '' },
   { id: 'zone-dashboard', icon: LayoutDashboard, labelKey: 'zones.nav.dashboard', defaultLabel: 'Дашборд', path: '' },
   { id: 'zone-deals', icon: Contact, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-contacts', icon: Contact, labelKey: 'zones.nav.contacts', defaultLabel: 'Контакты', path: '' },

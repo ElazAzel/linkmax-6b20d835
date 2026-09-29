@@ -56,11 +56,12 @@ export const TeamManagementScreen = memo(function TeamManagementScreen() {
         setIsInviting(false);
 
         if (success) {
-            toast.success(t('team.inviteSuccess', 'Приглашение отправлено'));
+            toast.success(t('team.memberAdded', 'Участник добавлен в команду'));
             setInviteEmail('');
             loadMembers();
         } else {
-            toast.error(String(error) || t('team.inviteError', 'Ошибка при отправке приглашения'));
+            // Raw error objects used to end up in the toast as "[object Object]".
+            toast.error(t(`team.inviteErrors.${error ?? 'unknown'}`, t('team.inviteError', 'Ошибка при отправке приглашения')));
         }
     }
 

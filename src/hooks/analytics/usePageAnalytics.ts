@@ -509,7 +509,27 @@ export function usePageAnalytics(externalPageId?: string | null, initialPeriod: 
       let staffStats: StaffStats[] = [];
       let personalStaffStats: StaffStats | undefined;
 
-      if (bookings) {
+      // The conversion query above selects only `id`, so staff_id and
+      // payment_amount were always undefined and every booking landed in
+      // "unassigned" with zero revenue. bookings.staff_id comes from a
+      // migration that may not be applied everywhere — fall back to
+      // revenue-only rows instead of losing the whole section.
+      let staffBookings: Array<{ staff_id?: string | null; payment_amount?: number | null }> | null = null;
+      if (bookings?.length) {
+        const bookingsQuery = (columns: string) => (supabase
+          .from('bookings')
+          .select(columns) as any)
+          .eq('owner_id', user.id)
+          .eq('page_id', pageId)
+          .gte('created_at', startDate.toISOString());
+        const withStaff = await bookingsQuery('staff_id, payment_amount');
+        staffBookings = withStaff.error
+          ? (await bookingsQuery('payment_amount')).data
+          : withStaff.data;
+      }
+
+      if (staffBookings) {
+        const bookings = staffBookings;
         let allStaff: any[] | null = null;
         try {
           const { data: ownedZones } = await supabase

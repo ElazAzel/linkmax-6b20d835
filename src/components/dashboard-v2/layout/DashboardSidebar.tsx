@@ -24,6 +24,9 @@ import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Contact from 'lucide-react/dist/esm/icons/contact';
+import Wallet from 'lucide-react/dist/esm/icons/wallet';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import Users from 'lucide-react/dist/esm/icons/users';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -81,6 +84,8 @@ const SECTIONS: SidebarSection[] = [
     items: [
       { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды' },
       { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События' },
+      { id: 'monetize', icon: Coins, labelKey: 'dashboard.nav.monetize', defaultLabel: 'Монетизация' },
+      { id: 'finance', icon: Wallet, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы' },
     ],
   },
   {
@@ -89,6 +94,7 @@ const SECTIONS: SidebarSection[] = [
     defaultTitle: 'Аккаунт',
     items: [
       { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор' },
+      { id: 'team', icon: Users, labelKey: 'dashboard.nav.team', defaultLabel: 'Команда' },
       { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
     ],
   },

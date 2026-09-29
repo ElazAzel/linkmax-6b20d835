@@ -37,6 +37,29 @@ describe('UserService', () => {
         });
     });
 
+    describe('updateTelegramNotifications', () => {
+        const captureUpdate = () => {
+            const update = vi.fn().mockReturnThis();
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                update,
+                eq: vi.fn().mockResolvedValue({ error: null }),
+            } as unknown as ReturnType<typeof supabase.from>);
+            return update;
+        };
+
+        it('keeps the linked chat when only the toggle changes', async () => {
+            const update = captureUpdate();
+            await UserService.updateTelegramNotifications('user-1', false);
+            expect(update).toHaveBeenCalledWith({ telegram_notifications_enabled: false });
+        });
+
+        it('stores the chat id after the bot is linked', async () => {
+            const update = captureUpdate();
+            await UserService.updateTelegramNotifications('user-1', true, '42');
+            expect(update).toHaveBeenCalledWith({ telegram_notifications_enabled: true, telegram_chat_id: '42' });
+        });
+    });
+
     describe('normalizeUsername', () => {
         it('should convert to lowercase and trim', () => {
             expect(UserService.normalizeUsername('  JohnDoe  ')).toBe('johndoe');

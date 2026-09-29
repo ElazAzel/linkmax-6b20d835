@@ -462,20 +462,23 @@ export async function updateEmailNotifications(
 }
 
 /**
- * Update Telegram notification settings
+ * Update Telegram notification settings.
+ * `chatId === undefined` keeps the linked chat: turning notifications off and
+ * on again must not force the user to re-link the bot.
  */
 export async function updateTelegramNotifications(
   userId: string,
   enabled: boolean,
-  chatId: string | null
+  chatId?: string | null
 ): Promise<ApiResult<boolean>> {
   try {
+    const update: { telegram_notifications_enabled: boolean; telegram_chat_id?: string | null } = {
+      telegram_notifications_enabled: enabled,
+    };
+    if (chatId !== undefined) update.telegram_chat_id = chatId;
     const { error } = await supabase
       .from('user_profiles')
-      .update({ 
-        telegram_notifications_enabled: enabled,
-        telegram_chat_id: chatId
-      })
+      .update(update)
       .eq('id', userId);
 
     if (error) {
