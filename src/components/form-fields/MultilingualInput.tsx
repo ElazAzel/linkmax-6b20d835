@@ -220,7 +220,7 @@ export function MultilingualInput({
               variant="ghost"
               size="sm"
               onClick={onMagicWand}
-              className="h-7 px-2 text-xs gap-1.5 text-violet-600 hover:text-violet-700 hover:bg-violet-50 dark:text-violet-400 dark:hover:text-violet-300 dark:hover:bg-violet-900/20"
+              className="h-7 px-2 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/12"
               title={magicWandTitle || t('ai.magicWand', 'Улучшить текст')}
             >
               <Wand2 className="h-3.5 w-3.5" />
@@ -287,7 +287,7 @@ export function MultilingualInput({
       </div>
 
       <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as LocaleCode)}>
-        <TabsList className={`grid w-full ${getGridCols()} glass-card backdrop-blur-md bg-muted/20 border-white/5`}>
+        <TabsList className={`grid w-full ${getGridCols()}`}>
           {activeLanguages.map((langCode) => {
             const lang = getLanguageInfo(langCode);
             const hasContent = !!(value as I18nText)[langCode]?.trim();
@@ -335,7 +335,6 @@ export function MultilingualInput({
                   onChange={(text) => handleChange(langCode, text)}
                   placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
                   type={type}
-                  variant="glass"
                   className={error ? 'border-destructive ring-destructive focus-visible:ring-destructive' : undefined}
                 />
               ) : (
@@ -347,7 +346,6 @@ export function MultilingualInput({
                     type === 'textarea' && 'min-h-[100px]',
                     error && 'border-destructive ring-destructive focus-visible:ring-destructive focus-visible:border-destructive'
                   )}
-                  variant="glass"
                 />
               )}
               {langCode === primaryLanguage && required && (

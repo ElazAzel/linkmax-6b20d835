@@ -103,8 +103,8 @@ const AutosaveIndicator = memo(function AutosaveIndicator({
 
     if (hasUnsavedChanges) {
         return (
-            <div className="flex items-center gap-1.5 text-xs text-amber-500">
-                <div className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+            <div className="flex items-center gap-1.5 text-xs text-warning">
+                <div className="h-1.5 w-1.5 rounded-full bg-warning animate-pulse" />
                 <span>{t('editor.unsaved', 'Не сохранено')}</span>
             </div>
         );
@@ -112,7 +112,7 @@ const AutosaveIndicator = memo(function AutosaveIndicator({
 
     if (lastSaved) {
         return (
-            <div className="flex items-center gap-1.5 text-xs text-emerald-500">
+            <div className="flex items-center gap-1.5 text-xs text-success">
                 <Check className="h-3 w-3" />
                 <span>{t('editor.saved', 'Сохранено')}</span>
             </div>
@@ -368,15 +368,13 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                 {shouldShowTabs && (
                     <div className="px-4 pb-2">
                         <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as EditorTab)}>
-                            <TabsList className="w-full h-10 p-0.5 bg-muted/40 rounded-xl gap-0.5">
+                            <TabsList className="w-full">
                                 {tabs.map((tab) => (
                                     <TabsTrigger
                                         key={tab.id}
                                         value={tab.id}
                                         className={cn(
-                                            "flex-1 h-9 gap-1.5 rounded-[10px] font-semibold text-sm transition-all",
-                                            "data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-foreground",
-                                            "data-[state=inactive]:text-muted-foreground"
+                                            "flex-1 gap-1.5 font-semibold",
                                         )}
                                     >
                                         {tab.icon}

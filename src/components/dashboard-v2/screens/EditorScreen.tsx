@@ -485,9 +485,9 @@ export const EditorScreen = memo(function EditorScreen({
             <h1 className="text-base md:text-lg font-semibold tracking-tight text-foreground truncate">
               {t('dashboard.editor.title', 'Редактор')}
             </h1>
-            <div className="flex items-center gap-1.5">
-              <div className={cn('h-1.5 w-1.5 rounded-full', isPublished ? 'bg-emerald-500' : 'bg-muted-foreground/40')} />
-              <p className="text-[11px] text-muted-foreground">
+            <div className="flex min-w-0 items-center gap-1.5">
+              <div className={cn('h-1.5 w-1.5 shrink-0 rounded-full', isPublished ? 'bg-success' : 'bg-muted-foreground')} />
+              <p className="truncate whitespace-nowrap text-[11px] text-muted-foreground">
                 {blockCount} {t('dashboard.editor.blocks', 'блоков')}
                 {!isPublished && ` · ${t('editor.draft', 'черновик')}`}
               </p>
