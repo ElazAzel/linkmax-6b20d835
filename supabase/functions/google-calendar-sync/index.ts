@@ -289,7 +289,40 @@ serve(async (req) => {
 
         // ─── Check availability (pull busy slots) ───
         if (action === "check_availability") {
-            const { time_min, time_max, staff_id, owner_id } = payload;
+            const { time_min, time_max, staff_id, owner_id } = payload ?? {};
+            const deny = (msg: string, status = 403) => new Response(JSON.stringify({ error: msg }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" }, status,
+            });
+            // Limit the queried window (public widgets only need a single day)
+            const tMin = Date.parse(time_min), tMax = Date.parse(time_max);
+            if (!Number.isFinite(tMin) || !Number.isFinite(tMax) || tMax <= tMin || tMax - tMin > 48 * 3600 * 1000) {
+                return deny("Invalid time range", 400);
+            }
+            if (!isTrustedServerCaller) {
+                const ownerTarget = owner_id || user?.id;
+                if (!ownerTarget) return deny("Forbidden");
+                const isSelf = !!user && user.id === ownerTarget;
+                if (!isSelf) {
+                    // Public check only for owners who publish a booking block with calendar sync on
+                    const { data: pages } = await supabaseAdmin
+                        .from("pages").select("id").eq("user_id", ownerTarget).eq("is_published", true);
+                    const pageIds = (pages ?? []).map((p: { id: string }) => p.id);
+                    let allowed = false;
+                    if (pageIds.length) {
+                        const { data: blocks } = await supabaseAdmin
+                            .from("blocks").select("content").in("page_id", pageIds).eq("type", "booking");
+                        allowed = (blocks ?? []).some((b: { content: Record<string, unknown> | null }) => b.content?.gcalSyncEnabled === true);
+                    }
+                    if (!allowed) return deny("Forbidden");
+                }
+                if (staff_id) {
+                    const { data: staff } = await supabaseAdmin
+                        .from("zone_staff").select("zone_id, zones!inner(owner_user_id)")
+                        .eq("id", staff_id).eq("gcal_sync_enabled", true).maybeSingle();
+                    const staffOwner = (staff as { zones?: { owner_user_id?: string } } | null)?.zones?.owner_user_id;
+                    if (!staff || staffOwner !== ownerTarget) return deny("Forbidden");
+                }
+            }
             const targetId = staff_id ? { staffId: staff_id } : { userId: owner_id || user?.id };
             const accessToken = await getAccessToken(supabaseAdmin, targetId, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 

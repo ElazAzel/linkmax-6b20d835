@@ -94,6 +94,20 @@ Deno.serve(async (req) => {
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
+    // For invited/removed notices, the recipient must be a member of this team
+    if (type === 'invited' || type === 'removed') {
+      const { data: targetMembership } = await supabaseAdmin
+        .from('team_members')
+        .select('id')
+        .eq('team_id', teamId)
+        .eq('user_id', targetUserId)
+        .maybeSingle();
+      if (!targetMembership || targetUserId === callerId) {
+        return new Response(JSON.stringify({ success: false, error: 'invalid_target' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    }
+
     // Derive inviter/actor name from caller's own profile — never trust body
     const { data: callerProfile } = await supabaseAdmin
       .from('user_profiles')

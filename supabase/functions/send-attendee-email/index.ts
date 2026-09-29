@@ -414,7 +414,7 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { registrationId, eventId, language = 'ru' }: AttendeeEmailRequest = await req.json();
+    const { registrationId, eventId, language = 'ru', attendeeEmail } = (await req.json()) as AttendeeEmailRequest & { attendeeEmail?: string };
 
     if (!registrationId || !eventId) {
       throw new Error("Missing required fields: registrationId, eventId");
@@ -460,6 +460,12 @@ const handler = async (req: Request): Promise<Response> => {
       isOrganizer = !!u?.user && u.user.id === eventData.owner_id;
     }
     if (!isOrganizer) {
+      if (
+        typeof attendeeEmail !== "string" ||
+        String(regData.attendee_email ?? "").trim().toLowerCase() !== attendeeEmail.trim().toLowerCase()
+      ) {
+        return new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } });
+      }
       const { data: claimed } = await supabase
         .from("event_registrations")
         .update({ attendee_email_sent_at: new Date().toISOString() })
@@ -524,7 +530,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("Email sent successfully:", emailResult?.id, "to:", regData.attendee_email);
+    console.log("Email sent successfully:", emailResult?.id);
 
     return new Response(
       JSON.stringify({ success: true, emailId: emailResult?.id }),

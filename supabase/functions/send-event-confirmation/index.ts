@@ -160,7 +160,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { registrationId, eventId }: EventConfirmationRequest = await req.json();
+    const { registrationId, eventId, attendeeEmail } = (await req.json()) as EventConfirmationRequest & { attendeeEmail?: string };
 
     if (!registrationId || !eventId) {
       throw new Error("Missing required fields");
@@ -176,11 +176,15 @@ const handler = async (req: Request): Promise<Response> => {
     // from the event row itself. This prevents IDOR-based PII harvesting.
     const { data: regRow, error: regRowError } = await supabase
       .from("event_registrations")
-      .select("id, event_id, owner_id")
+      .select("id, event_id, owner_id, attendee_email")
       .eq("id", registrationId)
       .maybeSingle();
 
-    if (regRowError || !regRow || regRow.event_id !== eventId) {
+    if (
+      regRowError || !regRow || regRow.event_id !== eventId ||
+      typeof attendeeEmail !== "string" ||
+      String(regRow.attendee_email ?? "").trim().toLowerCase() !== attendeeEmail.trim().toLowerCase()
+    ) {
       return new Response(
         JSON.stringify({ success: false, error: "not_found" }),
         { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
