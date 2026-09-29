@@ -524,7 +524,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("Email sent successfully:", emailResult?.id, "to:", regData.attendee_email);
+    console.log("Email sent successfully:", emailResult?.id);
 
     return new Response(
       JSON.stringify({ success: true, emailId: emailResult?.id }),
