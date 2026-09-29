@@ -3,6 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import X from 'lucide-react/dist/esm/icons/x';
 
 import { cn } from "@/lib/utils/utils";
+import { describedByFallback, hasChildType } from "@/lib/ui/overlay-a11y";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -12,12 +13,6 @@ const DialogPortal = DialogPrimitive.Portal;
 
 const DialogClose = DialogPrimitive.Close;
 
-function hasChildType(children: React.ReactNode, targetType: React.ElementType): boolean {
-  return React.Children.toArray(children).some((child) => {
-    if (!React.isValidElement(child)) return false;
-    return child.type === targetType || hasChildType(child.props.children, targetType);
-  });
-}
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -39,9 +34,7 @@ const DialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
   const hasTitle = hasChildType(children, DialogTitle);
-  const hasDescription = hasChildType(children, DialogDescription);
-  const descriptionProps =
-    !hasDescription && props['aria-describedby'] === undefined ? { 'aria-describedby': undefined } : {};
+  const descriptionProps = describedByFallback(children, DialogDescription, props['aria-describedby']);
 
   return (
     <DialogPortal>

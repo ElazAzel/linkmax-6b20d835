@@ -26,8 +26,12 @@ export async function submitPublicAnalyticsEvent(
   if (!baseUrl || !apiKey) return;
   if (Date.now() < disabledUntil) return;
 
+  // The legacy publishable key is a JWT. Sending it as the bearer token, like
+  // supabase.functions.invoke does, keeps anonymous events working even if the
+  // function is deployed with gateway JWT verification on.
   const headers: Record<string, string> = {
     apikey: apiKey,
+    Authorization: `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
   };
 
@@ -53,7 +57,8 @@ export async function submitPublicAnalyticsEvent(
   }
 
   if (!response.ok) {
-    if (response.status === 404 || response.status === 503) {
+    // Unavailable or rejected: back off instead of retrying every event.
+    if ([401, 403, 404, 503].includes(response.status) && !options.requireAuthentication) {
       disabledUntil = Date.now() + FAILURE_COOLDOWN_MS;
     }
     throw new Error(`Analytics ingestion failed with status ${response.status}`);

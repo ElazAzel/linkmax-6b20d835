@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 import type { Database } from '@/platform/supabase/types';
 
 export interface WidgetTemplate {
@@ -15,16 +16,32 @@ export interface WidgetTemplate {
     javascript: string;
 }
 
+// widget_templates may not be deployed. After the first "table missing"
+// answer we stop asking for the rest of the session; callers fall back to the
+// bundled templates when the list is empty.
+let widgetTemplatesMissing = false;
+
+export function resetWidgetTemplatesSchemaState(): void {
+    widgetTemplatesMissing = false;
+}
+
 export function useWidgetTemplates() {
     return useQuery({
         queryKey: ['widget_templates'],
         queryFn: async () => {
+            if (widgetTemplatesMissing) return [] as WidgetTemplate[];
             const { data, error } = await (supabase
                 .from('widget_templates' as any)
                 .select('*')
                 .order('id', { ascending: true }) as any);
 
-            if (error) throw error;
+            if (error) {
+                if (isMissingSchemaError(error)) {
+                    widgetTemplatesMissing = true;
+                    return [] as WidgetTemplate[];
+                }
+                throw error;
+            }
 
             return (data || []).map((t: any) => ({
                 id: t.id,
@@ -40,5 +57,6 @@ export function useWidgetTemplates() {
             })) as WidgetTemplate[];
         },
         staleTime: 1000 * 60 * 10, // 10 minutes
+        retry: false,
     });
 }

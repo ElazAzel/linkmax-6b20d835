@@ -88,7 +88,7 @@ export const BlockPerformance = memo(function BlockPerformance({
       {/* Chart */}
       {showChart && blocks.length > 2 && (
         <div className="h-32 mb-4">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height: 200 }}>
             <BarChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
               <XAxis
                 dataKey="name"

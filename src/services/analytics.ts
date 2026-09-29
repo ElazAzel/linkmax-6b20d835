@@ -9,6 +9,9 @@ import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
 import { session, storage } from '@/lib/storage';
 import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
+import { isFeatureSchemaMissing, noteFeatureSchemaError } from '@/lib/resilience/missing-schema';
+
+export const EXPERT_QUERIES_FEATURE = 'expert_queries';
 // trackViewContent, trackClickLink available from @/lib/analytics
 
 // ============================================
@@ -486,13 +489,14 @@ export async function logChatQuery(
   metadata: Record<string, unknown> = {}
 ): Promise<void> {
   if (!ANALYTICS_ENABLED) return;
+  if (isFeatureSchemaMissing(EXPERT_QUERIES_FEATURE)) return;
 
   try {
     const session_data = getOrCreateSession();
     const geo = await getGeoInfo().catch(() => null);
 
     // Using 'as any' until supabase types are re-generated with expert_queries table
-    await (supabase.from('expert_queries' as any) as any).insert({
+    const { error } = await (supabase.from('expert_queries' as any) as any).insert({
       page_id: pageId,
       query_text: queryText.substring(0, 500), // Cap length
       has_response: hasResponse,
@@ -506,6 +510,7 @@ export async function logChatQuery(
         timestamp: new Date().toISOString(),
       } as Json,
     });
+    if (error) noteFeatureSchemaError(EXPERT_QUERIES_FEATURE, error);
   } catch (err) {
     // Silent fail for analytics
     logger.debug('Expert Insights logging failed', { data: err });

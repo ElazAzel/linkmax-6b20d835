@@ -51,7 +51,7 @@ export const AnalyticsChart = memo(function AnalyticsChart({
         <h3 className="font-bold mb-4 text-sm">{title}</h3>
       )}
       <div className="h-48 min-h-[192px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height: 200 }}>
           <ChartComponent data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
             <defs>
               <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
