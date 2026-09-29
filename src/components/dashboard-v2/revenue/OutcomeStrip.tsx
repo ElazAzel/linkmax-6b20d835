@@ -20,13 +20,13 @@ export function OutcomeStrip({ summary }: OutcomeStripProps) {
   if (!summary.readiness.hasKit && summary.outcome.bookingCount === 0) {
     return (
       <Card
-        className="rounded-3xl border-primary/15 bg-gradient-to-br from-primary/10 to-violet-500/5 p-5"
+        className="bg-primary/10 rounded-3xl border-primary/15 p-5"
         data-testid="revenue-outcome-strip"
       >
-        <p className="text-xs font-bold uppercase tracking-wider text-primary">
+        <p className="text-xs font-bold uppercase tracking-[0.06em] text-primary">
           {t('outcomeHome.outcome.eyebrow', 'Результат')}
         </p>
-        <h2 className="mt-2 text-xl font-black">
+        <h2 className="mt-2 text-xl font-bold">
           {t('outcomeHome.empty.title', 'Начните принимать записи со своей страницы')}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -61,10 +61,10 @@ export function OutcomeStrip({ summary }: OutcomeStripProps) {
     <Card className="rounded-3xl border-border/10 p-5 md:p-6" data-testid="revenue-outcome-strip">
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-primary">
+          <p className="text-xs font-bold uppercase tracking-[0.06em] text-primary">
             {t('outcomeHome.outcome.eyebrow', 'Результат')}
           </p>
-          <h2 className="mt-1 text-xl font-black">
+          <h2 className="mt-1 text-xl font-bold">
             {t('outcomeHome.outcome.title', 'Что принесла страница')}
           </h2>
         </div>
@@ -79,7 +79,7 @@ export function OutcomeStrip({ summary }: OutcomeStripProps) {
         {metrics.map(({ id, icon: Icon, label, value }) => (
           <div key={id} className="rounded-2xl bg-muted/60 p-4">
             <Icon className="mb-3 h-5 w-5 text-primary" aria-hidden="true" />
-            <div className="text-2xl font-black tabular-nums">{value}</div>
+            <div className="text-2xl font-bold font-num">{value}</div>
             <div className="mt-1 text-xs text-muted-foreground">{label}</div>
           </div>
         ))}

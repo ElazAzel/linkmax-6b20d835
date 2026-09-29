@@ -10,6 +10,7 @@ import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import Copy from 'lucide-react/dist/esm/icons/copy';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
+import { QR_COLORS } from '@/lib/design/brand-colors';
 
 interface KaspiQRWidgetProps {
     ownerId: string;
@@ -45,8 +46,8 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
     };
 
     return (
-        <Card className={cn("glass border-white/10 shadow-glass overflow-hidden", className)}>
-            <CardHeader className="pb-4 border-b border-white/5">
+        <Card className={cn("bg-card border border-border shadow-sm overflow-hidden", className)}>
+            <CardHeader className="pb-4 border-b border-border">
                 <CardTitle className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="p-2.5 rounded-2xl bg-kaspi/10 text-kaspi shadow-inner">
@@ -54,7 +55,7 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                         </div>
                         <span className="text-sm font-bold tracking-tight">{t('dashboard.kaspi_qr', 'Kaspi QR')}</span>
                     </div>
-                    <Badge variant="secondary" className="bg-kaspi text-white border-none font-black text-xs tracking-[0.15em] py-1 px-3 rounded-full shadow-lg shadow-kaspi/20">
+                    <Badge variant="secondary" className="bg-kaspi text-white border-none font-bold text-xs tracking-[0.06em] py-1 px-3 rounded-full">
                         {t('dashboard.instant', 'МГНОВЕННО')}
                     </Badge>
                 </CardTitle>
@@ -62,7 +63,7 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
             <CardContent className="pt-6 space-y-5">
                 <div className="space-y-5">
                     <div className="space-y-2.5">
-                        <Label htmlFor="qr-amount" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.2em] opacity-70 pl-1">
+                        <Label htmlFor="qr-amount" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.06em] pl-1">
                             {t('kaspi.amount', 'Сумма')}
                         </Label>
                         <div className="flex gap-2.5">
@@ -72,16 +73,16 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value ? Number(e.target.value) : '')}
                                 placeholder="0"
-                                className="h-12 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-primary/20 transition-all font-bold text-base"
+                                className="h-12 bg-muted border-border rounded-2xl focus-visible:ring-primary/20 transition-all font-bold text-base"
                             />
-                            <div className="flex items-center px-4 text-xs font-bold text-muted-foreground bg-white/5 rounded-2xl border border-white/10 opacity-60">
+                            <div className="flex items-center px-4 text-xs font-bold text-muted-foreground bg-muted rounded-2xl border border-border">
                                 {currency}
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-2.5">
-                        <Label htmlFor="qr-comment" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.2em] opacity-70 pl-1">
+                        <Label htmlFor="qr-comment" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.06em] pl-1">
                             {t('kaspi.comment', 'Комментарий')}
                         </Label>
                         <Input
@@ -89,18 +90,17 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             placeholder={t('kaspi.commentPlaceholder', 'Назначение платежа')}
-                            className="h-12 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-primary/20 transition-all"
+                            className="h-12 bg-muted border-border rounded-2xl focus-visible:ring-primary/20 transition-all"
                         />
                     </div>
 
                     {amount && amount > 0 ? (
                         <div className="relative group/qr">
                             {/* Animated backdrop glow */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-kaspi via-kaspi/50 to-kaspi rounded-[2.5rem] blur opacity-20 group-hover/qr:opacity-40 transition duration-1000 group-hover/qr:duration-500" />
                             
-                            <div className="relative flex flex-col items-center justify-center p-6 rounded-[2rem] bg-card border border-white/10 shadow-glass-lg animate-in fade-in zoom-in duration-500 overflow-hidden">
+                            <div className="relative flex flex-col items-center justify-center p-6 rounded-card bg-card border border-border shadow-md animate-in fade-in zoom-in duration-500 overflow-hidden">
                                 {/* Scan line animation overlay */}
-                                <div className="absolute top-0 inset-x-0 h-[2px] bg-kaspi/20 shadow-[0_0_15px_rgba(235,25,36,0.5)] animate-scan-line z-10" />
+                                <div className="absolute top-0 inset-x-0 h-[2px] bg-kaspi/20 animate-scan-line z-10" />
 
                                 <div className="p-4 bg-white rounded-3xl shadow-inner border-4 border-kaspi/5 relative">
                                     <QRCodeSVG
@@ -108,17 +108,17 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                                         size={160}
                                         level="H"
                                         includeMargin
-                                        bgColor="#ffffff"
-                                        fgColor="#000000"
+                                        bgColor={QR_COLORS.background}
+                                        fgColor={QR_COLORS.foreground}
                                     />
                                     {/* Small Kaspi dot in corner */}
-                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-kaspi rounded-full border-2 border-white shadow-sm" />
+                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-kaspi rounded-full border-2 border-card" />
                                 </div>
                                 <div className="mt-6 flex gap-3 w-full">
                                     <Button 
                                         variant="outline" 
                                         onClick={handleCopyLink} 
-                                        className="flex-1 h-12 rounded-2xl border-white/10 glass hover:bg-white/10 font-black text-xs uppercase tracking-widest gap-2"
+                                        className="flex-1 h-12 rounded-2xl border-border bg-card border hover:bg-muted font-bold text-xs uppercase tracking-[0.06em] gap-2"
                                     >
                                         <Copy className="h-4 w-4" />
                                         {t('common.copy', 'Link')}
@@ -127,11 +127,11 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                             </div>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-16 px-6 rounded-[2rem] bg-white/[0.02] border border-dashed border-white/10 text-center group hover:border-kaspi/40 transition-all duration-500">
+                        <div className="flex flex-col items-center justify-center py-16 px-6 rounded-card bg-muted/40 border border-dashed border-border text-center group hover:border-kaspi/40 transition-all duration-500">
                             <div className="w-16 h-16 rounded-full bg-kaspi/5 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-kaspi/10 transition-all duration-500">
                                 <Smartphone className="h-8 w-8 text-kaspi opacity-20 group-hover:opacity-100 transition-opacity" />
                             </div>
-                            <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/60 max-w-[180px] leading-relaxed">
+                            <p className="text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground max-w-[180px] leading-relaxed">
                                 {t('kaspi.enter_amount', 'Введите сумму для генерации QR')}
                             </p>
                         </div>

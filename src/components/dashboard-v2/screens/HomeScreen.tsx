@@ -23,7 +23,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { StatusBadge } from '../common/StatusBadge';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { ActionCard } from '../common/ActionCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { getI18nText } from '@/lib/i18n-helpers';
@@ -301,13 +301,12 @@ export const HomeScreen = memo(function HomeScreen({
             {realLeadsCount > 0 && (
               <Button 
                 size="lg" 
-                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-lg group overflow-hidden relative"
+                className="w-full h-16 rounded-card bg-primary text-primary-foreground font-bold text-lg shadow-lg group overflow-hidden relative"
                 onClick={onOpenActivity}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
+                                <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
                 {t('dashboard.home.viewLeads', 'Смотреть заявки')}
-                <Badge className="ml-3 bg-white/20 text-white border-none">{realLeadsCount}</Badge>
+                <Badge className="ml-3 border-none bg-primary-foreground/20 text-primary-foreground font-num">{realLeadsCount}</Badge>
               </Button>
             )}
             
@@ -350,7 +349,7 @@ export const HomeScreen = memo(function HomeScreen({
             {/* Performance Hub / Metrics */}
             <div className="space-y-4 pt-2" data-testid="home-performance-region">
               <div className="flex items-center justify-between px-1">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">
                   {t('dashboard.home.performance', 'Эффективность')}
                 </h3>
                 <Button variant="ghost" size="sm" className="h-10 px-4 text-xs text-primary bg-primary/5 rounded-lg" onClick={onOpenInsights} aria-label={t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}>
@@ -365,16 +364,14 @@ export const HomeScreen = memo(function HomeScreen({
         )}
 
         {/* Primary Page Card */}
-        <Card className="p-5 md:p-8 space-y-6 bg-card border-border/10 shadow-sm relative overflow-hidden group rounded-[2.5rem] md:rounded-[3rem]">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-30 group-hover:opacity-50 transition-opacity duration-1000 -z-10" />
+        <Card className="p-5 md:p-8 space-y-6 bg-card border-border/10 shadow-sm relative overflow-hidden group rounded-card md:rounded-card">
           
           {/* Page Header */}
           <div className="flex items-center gap-6">
             <div className="relative group/avatar shrink-0">
-              <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-2xl blur-md opacity-20 group-hover/avatar:opacity-40 transition duration-1000 animate-pulse" />
               <Avatar className="h-20 w-20 md:h-24 md:w-24 rounded-2xl border-2 border-border/20 relative shadow-sm">
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-black bg-muted text-primary">
+                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-bold bg-muted text-primary">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -382,16 +379,16 @@ export const HomeScreen = memo(function HomeScreen({
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-3xl font-black tracking-tighter truncate text-foreground drop-shadow-sm">{name}</h2>
+                <h2 className="text-3xl font-bold tracking-tighter truncate text-foreground">{name}</h2>
                 {isPremium && (
-                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-lg shrink-0 font-black text-xs px-3 py-1 rounded-full">
+                  <Badge className="bg-warning text-warning-foreground border-none shadow-lg shrink-0 font-bold text-xs px-3 py-1 rounded-full">
                     <Crown className="h-3 w-3 mr-1.5" />
                     PRO
                   </Badge>
                 )}
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-bold text-muted-foreground/70 tracking-tight">lnkmx.my/{slug}</span>
+                <span className="text-sm font-bold text-muted-foreground tracking-tight">lnkmx.my/{slug}</span>
                 <StatusBadge status={isPublished ? 'published' : 'draft'} size="sm" />
               </div>
             </div>
@@ -404,7 +401,7 @@ export const HomeScreen = memo(function HomeScreen({
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-16 flex-1 rounded-2xl text-base font-black bg-muted hover:bg-accent transition-all border-border/10 group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-bold bg-muted hover:bg-accent transition-all border-border/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
                   <PenTool className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
@@ -412,7 +409,7 @@ export const HomeScreen = memo(function HomeScreen({
                 </Button>
                 <Button
                   size="lg"
-                  className="h-16 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/40 transition-all active:scale-[0.98] group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-bold bg-success hover:bg-success text-success-foreground shadow-lg hover:shadow-success/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
                   <Share2 className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
@@ -423,7 +420,7 @@ export const HomeScreen = memo(function HomeScreen({
               <>
                 <Button
                   size="lg"
-                  className="h-16 flex-1 rounded-2xl text-base font-black bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-primary/40 transition-all active:scale-[0.98] group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-primary/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
                   <PenTool className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
@@ -432,7 +429,7 @@ export const HomeScreen = memo(function HomeScreen({
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-16 flex-1 rounded-2xl text-base font-black bg-muted hover:bg-accent transition-all border-border/10 group/btn"
+                  className="h-16 flex-1 rounded-2xl text-base font-bold bg-muted hover:bg-accent transition-all border-border/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
                   <Share2 className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
@@ -444,7 +441,7 @@ export const HomeScreen = memo(function HomeScreen({
 
           {/* Secondary Actions */}
           <div className="flex gap-3">
-            <Button variant="ghost" className="flex-1 h-12 rounded-xl bg-muted border-none hover:bg-accent text-xs font-bold uppercase tracking-widest opacity-70 hover:opacity-100" onClick={onPreview}>
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl bg-muted border-none hover:bg-accent text-xs font-bold uppercase tracking-[0.06em] opacity-70 hover:opacity-100" onClick={onPreview}>
               <Eye className="h-4 w-4 mr-2" />
               {t('dashboard.home.preview', 'Предпросмотр')}
             </Button>
@@ -467,7 +464,7 @@ export const HomeScreen = memo(function HomeScreen({
 
         {/* Quick Actions Grid */}
         <div className="space-y-3">
-          <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+          <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
             {t('dashboard.home.quickActions', 'Быстрые действия')}
           </h3>
 
@@ -476,13 +473,13 @@ export const HomeScreen = memo(function HomeScreen({
             {!hasContent && (
               <ActionCard
                 icon={LayoutTemplate}
-                iconBg="bg-emerald-500/20"
-                iconColor="text-emerald-600"
+                iconBg="bg-success/12"
+                iconColor="text-success"
                 title={t('dashboard.home.templates', 'Шаблоны')}
                 description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
                 onClick={onOpenTemplates}
-                gradient="from-emerald-500/15 to-green-500/15"
-                border="border-emerald-500/20"
+                gradient="from-success/12 to-success/12"
+                border="border-success/20"
               />
             )}
 
@@ -490,48 +487,48 @@ export const HomeScreen = memo(function HomeScreen({
             {hasContent && onOpenVersions && (
               <ActionCard
                 icon={History}
-                iconBg="bg-blue-500/20"
-                iconColor="text-blue-600"
+                iconBg="bg-info/12"
+                iconColor="text-info"
                 title={t('dashboard.home.versions', 'История')}
                 description={t('dashboard.home.versionsDesc', 'Версии страницы')}
                 onClick={onOpenVersions}
-                gradient="from-blue-500/15 to-cyan-500/15"
-                border="border-blue-500/20"
+                gradient="from-info/12 to-info/12"
+                border="border-info/20"
               />
             )}
 
             <ActionCard
               icon={Store}
-              iconBg="bg-violet-500/20"
-              iconColor="text-violet-600"
+              iconBg="bg-primary/12"
+              iconColor="text-primary"
               title={t('dashboard.home.marketplace', 'Маркетплейс')}
               description={t('dashboard.home.marketplaceDesc', 'От сообщества')}
               onClick={onOpenMarketplace}
-              gradient="from-violet-500/15 to-purple-500/15"
-              border="border-violet-500/20"
+              gradient="from-primary/12 to-primary/12"
+              border="border-primary/20"
             />
 
             <ActionCard
               icon={Users}
-              iconBg="bg-pink-500/20"
-              iconColor="text-pink-600"
+              iconBg="bg-primary/12"
+              iconColor="text-primary"
               title={t('dashboard.home.gallery', 'Галерея')}
               description={t('dashboard.home.galleryDesc', 'Вдохновление')}
               onClick={() => navigate('/gallery')}
-              gradient="from-pink-500/15 to-rose-500/15"
-              border="border-pink-500/20"
+              gradient="from-primary/12 to-destructive/12"
+              border="border-primary/20"
             />
 
             {!isPremium && (
               <ActionCard
                 icon={Crown}
-                iconBg="bg-amber-500/20"
-                iconColor="text-amber-600"
+                iconBg="bg-warning/12"
+                iconColor="text-warning"
                 title={t('dashboard.home.premium', 'Premium')}
                 description={t('dashboard.home.premiumDesc', 'Больше возможностей')}
                 onClick={() => navigate('/pricing')}
-                gradient="from-amber-500/15 to-orange-500/15"
-                border="border-amber-500/20"
+                gradient="from-warning/12 to-warning/12"
+                border="border-warning/20"
               />
             )}
           </div>
@@ -543,10 +540,10 @@ export const HomeScreen = memo(function HomeScreen({
           // Lifecycle-aware nudge replaces static tip
           if (isPublished && viewCount > 0 && realLeadsCount === 0) {
             return (
-              <Card className="p-5 bg-gradient-to-br from-amber-500/5 to-orange-500/5 border-amber-500/10">
+              <Card className="bg-warning/12 p-5 border-warning/20">
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
-                    <AlertTriangle className="h-5 w-5 text-amber-600" />
+                  <div className="h-10 w-10 rounded-xl bg-warning/12 flex items-center justify-center shrink-0">
+                    <AlertTriangle className="h-5 w-5 text-warning" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.trafficNoLeads.title', 'Есть трафик, но нет заявок')}</h4>
@@ -560,10 +557,10 @@ export const HomeScreen = memo(function HomeScreen({
           }
           if (repeatCount > 0) {
             return (
-              <Card className="p-5 bg-gradient-to-br from-violet-500/5 to-purple-500/5 border-violet-500/10">
+              <Card className="p-5 border-primary/20">
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-violet-500/15 flex items-center justify-center shrink-0">
-                    <Repeat className="h-5 w-5 text-violet-600" />
+                  <div className="h-10 w-10 rounded-xl bg-primary/12 flex items-center justify-center shrink-0">
+                    <Repeat className="h-5 w-5 text-primary" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.repeatCustomers.title', 'Постоянные клиенты')}</h4>
@@ -577,10 +574,10 @@ export const HomeScreen = memo(function HomeScreen({
           }
           if (isPublished && realLeadsCount > 0) {
             return (
-              <Card className="p-5 bg-gradient-to-br from-emerald-500/5 to-green-500/5 border-emerald-500/10">
+              <Card className="bg-success/12 p-5 border-success/20">
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-emerald-500/15 flex items-center justify-center shrink-0">
-                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                  <div className="h-10 w-10 rounded-xl bg-success/12 flex items-center justify-center shrink-0">
+                    <TrendingUp className="h-5 w-5 text-success" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold mb-1">{t('lifecycle.hasLeads.title', 'Заявки поступают')}</h4>
@@ -593,7 +590,7 @@ export const HomeScreen = memo(function HomeScreen({
             );
           }
           return (
-            <Card className="p-5 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/10">
+            <Card className="p-5 border-primary/10">
               <div className="flex items-start gap-4">
                 <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
                   <Sparkles className="h-5 w-5 text-primary" />

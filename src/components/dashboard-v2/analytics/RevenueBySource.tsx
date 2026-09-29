@@ -14,11 +14,11 @@ export function RevenueBySource({ sources }: RevenueBySourceProps) {
   return (
     <Card className="overflow-hidden rounded-3xl border-border/10" data-testid="revenue-by-source">
       <div className="flex items-start gap-3 border-b border-border/60 p-5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-500/10">
-          <CircleDollarSign className="h-5 w-5 text-emerald-600" aria-hidden="true" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-success/12">
+          <CircleDollarSign className="h-5 w-5 text-success" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="font-black">{t('revenueInsights.sources.title', 'Выручка по источникам')}</h2>
+          <h2 className="font-bold">{t('revenueInsights.sources.title', 'Выручка по источникам')}</h2>
           <p className="text-xs text-muted-foreground">
             {t('revenueInsights.sources.description', 'Неизвестная атрибуция остаётся unknown и не распределяется искусственно.')}
           </p>
@@ -46,12 +46,12 @@ export function RevenueBySource({ sources }: RevenueBySourceProps) {
               {sources.map((source) => (
                 <tr key={`${source.source}:${source.currency}`}>
                   <td className="px-5 py-4 font-bold">{source.source}</td>
-                  <td className="px-3 py-4 text-right tabular-nums">{source.serviceViewed}</td>
-                  <td className="px-3 py-4 text-right tabular-nums">{source.bookingStarted}</td>
-                  <td className="px-3 py-4 text-right tabular-nums">{source.bookingCreated}</td>
-                  <td className="px-3 py-4 text-right tabular-nums">{source.bookingPaid}</td>
-                  <td className="px-3 py-4 text-right tabular-nums">{source.bookingCompleted}</td>
-                  <td className="px-5 py-4 text-right font-black tabular-nums">
+                  <td className="px-3 py-4 text-right font-num">{source.serviceViewed}</td>
+                  <td className="px-3 py-4 text-right font-num">{source.bookingStarted}</td>
+                  <td className="px-3 py-4 text-right font-num">{source.bookingCreated}</td>
+                  <td className="px-3 py-4 text-right font-num">{source.bookingPaid}</td>
+                  <td className="px-3 py-4 text-right font-num">{source.bookingCompleted}</td>
+                  <td className="px-5 py-4 text-right font-bold font-num">
                     {source.netCollectedAmount} {source.currency}
                   </td>
                 </tr>

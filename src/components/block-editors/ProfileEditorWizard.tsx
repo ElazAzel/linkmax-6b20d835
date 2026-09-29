@@ -560,7 +560,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
       </div>
 
       {/* Navigation */}
-      <div className="flex gap-3 px-5 py-4 pb-safe border-t border-border/10 bg-background/98">
+      <div className="flex gap-3 px-5 py-4 pb-safe border-t border-border/10 bg-background/95">
         {!isFirstStep && (
           <Button
             variant="outline"

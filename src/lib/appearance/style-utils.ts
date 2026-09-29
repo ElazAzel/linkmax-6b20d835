@@ -308,6 +308,9 @@ export function getPageThemeScope(theme?: Partial<PageTheme>): PageThemeScope {
   }
 
   const className = [
+    // Page base tokens (frozen): keeps a page identical in the app's editor
+    // and on its public URL, whatever the LinkMAX interface theme is.
+    'lm-page',
     'lm-typography',
     getAppearanceRootClass(t),
     `lm-anim-${t.animationStyle ?? 'gentle'}`,

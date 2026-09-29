@@ -103,7 +103,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
 
     if (experiments.length === 0) {
         return (
-            <Card className="p-12 text-center flex flex-col items-center justify-center space-y-4 glass-card">
+            <Card className="p-12 text-center flex flex-col items-center justify-center space-y-4 bg-card border border-border">
                 <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                     <FlaskConical className="h-8 w-8 text-primary" />
                 </div>
@@ -128,17 +128,17 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                         exit={{ opacity: 0, scale: 0.95 }}
                         layout
                     >
-                        <Card className="overflow-hidden glass-card border-white/10">
+                        <Card className="overflow-hidden bg-card border border-border">
                             {/* Header */}
-                            <div className="p-6 border-b border-white/5 flex flex-wrap items-center justify-between gap-4">
+                            <div className="p-6 border-b border-border flex flex-wrap items-center justify-between gap-4">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-bold text-lg">{exp.name}</h3>
                                         <Badge className={cn(
-                                            "uppercase text-xs font-black tracking-widest px-2 py-0.5",
-                                            exp.status === 'running' ? "bg-emerald-500 hover:bg-emerald-600" :
-                                                exp.status === 'ended' ? "bg-slate-500 hover:bg-slate-600" :
-                                                    "bg-amber-500 hover:bg-amber-600"
+                                            "uppercase text-xs font-bold tracking-[0.06em] px-2 py-0.5",
+                                            exp.status === 'running' ? "bg-success hover:bg-success" :
+                                                exp.status === 'ended' ? "bg-muted hover:bg-muted" :
+                                                    "bg-warning hover:bg-warning"
                                         )}>
                                             {t(`experiments.status.${exp.status}`, exp.status)}
                                         </Badge>
@@ -179,12 +179,12 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                     return (
                                         <div key={variant.id} className={cn(
                                             "relative p-5 rounded-2xl transition-all border",
-                                            isWinner ? "bg-emerald-500/10 border-emerald-500/30" :
+                                            isWinner ? "bg-success/12 border-success/30" :
                                                 isLeading ? "bg-primary/5 border-primary/20" :
-                                                    "bg-muted/5 border-white/5"
+                                                    "bg-muted/5 border-border"
                                         )}>
                                             {isWinner && (
-                                                <div className="absolute -top-3 -right-3 h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg">
+                                                <div className="absolute -top-3 -right-3 h-8 w-8 rounded-full bg-success flex items-center justify-center text-success-foreground shadow-lg">
                                                     <Trophy className="h-4 w-4" />
                                                 </div>
                                             )}
@@ -192,8 +192,8 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex items-center gap-2">
                                                     <div className={cn(
-                                                        "h-7 w-7 rounded-full flex items-center justify-center text-xs font-black",
-                                                        variant.variant_label === 'A' ? "bg-primary text-primary-foreground" : "bg-violet-500 text-white"
+                                                        "h-7 w-7 rounded-full flex items-center justify-center text-xs font-bold",
+                                                        variant.variant_label === 'A' ? "bg-primary text-primary-foreground" : "bg-primary text-primary-foreground"
                                                     )}>
                                                         {variant.variant_label}
                                                     </div>
@@ -202,7 +202,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                                     </span>
                                                 </div>
                                                 {isLeading && (
-                                                    <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 border-emerald-500/20 gap-1 h-5 text-xs font-black">
+                                                    <Badge variant="secondary" className="bg-success/12 text-success border-success/20 gap-1 h-5 text-xs font-bold">
                                                         <TrendingUp className="h-3 w-3" />
                                                         {t('experiments.leading', 'ЛИДИРУЕТ')}
                                                     </Badge>
@@ -211,15 +211,15 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
 
                                             <div className="grid grid-cols-3 gap-2 py-2">
                                                 <div className="text-center">
-                                                    <div className="text-lg font-black">{variant.stats.views}</div>
+                                                    <div className="text-lg font-bold">{variant.stats.views}</div>
                                                     <div className="text-xs uppercase text-muted-foreground font-bold tracking-tight">{t('analytics.views', 'Просмотры')}</div>
                                                 </div>
-                                                <div className="text-center border-x border-white/5">
-                                                    <div className="text-lg font-black">{variant.stats.clicks}</div>
+                                                <div className="text-center border-x border-border">
+                                                    <div className="text-lg font-bold">{variant.stats.clicks}</div>
                                                     <div className="text-xs uppercase text-muted-foreground font-bold tracking-tight">{t('analytics.clicks', 'Клики')}</div>
                                                 </div>
                                                 <div className="text-center">
-                                                    <div className="text-lg font-black text-primary">{variant.stats.ctr.toFixed(1)}%</div>
+                                                    <div className="text-lg font-bold text-primary">{variant.stats.ctr.toFixed(1)}%</div>
                                                     <div className="text-xs uppercase text-muted-foreground font-bold tracking-tight">CTR</div>
                                                 </div>
                                             </div>

@@ -190,7 +190,7 @@ export const StructureView = memo(function StructureView({
       <SheetContent 
         side="bottom" 
         hideCloseButton
-        className="h-[80vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl"
+        className="h-[80vh] rounded-t-[32px] p-0 bg-card/95 backdrop-blur-3xl"
       >
         {/* Handle */}
         <div className="flex justify-center pt-4 pb-2">

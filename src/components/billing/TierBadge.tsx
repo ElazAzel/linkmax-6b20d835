@@ -19,27 +19,27 @@ export function TierBadge({ tier, size = 'md', showIcon = true }: TierBadgeProps
     free: {
       label: 'BASIC',
       icon: Zap,
-      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',
+      className: 'bg-muted text-muted-foreground border-border',
     },
     starter: {
       label: 'STARTER',
       icon: Zap,
-      className: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+      className: 'bg-success/12 text-success border-success/30',
     },
     identity: {
       label: 'BASIC',
       icon: Zap,
-      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',
+      className: 'bg-muted text-muted-foreground border-border',
     },
     pro: {
       label: 'PRO',
       icon: Crown,
-      className: 'bg-violet-500/20 text-violet-600 dark:text-violet-400 border-violet-500/30',
+      className: 'bg-primary/12 text-primary border-primary/30',
     },
     business: {
       label: 'BUSINESS',
       icon: Crown,
-      className: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
+      className: 'bg-warning/12 text-warning border-warning/30',
     },
   };
 
@@ -81,7 +81,7 @@ export function RequiredTier({ tier, inline = false }: RequiredTierProps) {
   const config = {
     label: 'PRO',
     icon: Crown,
-    className: 'text-violet-500',
+    className: 'text-primary',
   };
 
   const Icon = config.icon;

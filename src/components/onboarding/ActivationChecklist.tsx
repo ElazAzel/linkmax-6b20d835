@@ -36,7 +36,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
   const activeIndex = steps.findIndex((step) => !step.completed);
 
   return (
-    <Card className="p-5 space-y-4 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/15">
+    <Card className="p-5 space-y-4 border-primary/15">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -66,7 +66,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
 
       {/* Progress bar + stepper */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">
           <span>{t('activation.progress', '{{done}} из {{total}}', { done: completedCount, total: totalCount })}</span>
           <span>{progress}%</span>
         </div>
@@ -75,11 +75,11 @@ export const ActivationChecklist = memo(function ActivationChecklist({
             const isCompleted = step.completed;
             const isActive = !isCompleted && index === activeIndex;
             return (
-              <div key={step.id} className="flex-1 h-2 rounded-full overflow-hidden bg-white/10 border border-white/10">
+              <div key={step.id} className="flex-1 h-2 rounded-full overflow-hidden bg-muted border border-border">
                 <div
                   className={cn(
                     'h-full w-full transition-colors',
-                    isCompleted ? 'bg-primary' : isActive ? 'bg-amber-400/90' : 'bg-transparent'
+                    isCompleted ? 'bg-primary' : isActive ? 'bg-warning/90' : 'bg-transparent'
                   )}
                 />
               </div>
@@ -98,17 +98,17 @@ export const ActivationChecklist = memo(function ActivationChecklist({
               key={step.id}
               className={cn(
                 'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-colors text-sm',
-                isCompleted ? 'text-muted-foreground bg-white/5' : 'bg-white/5',
+                isCompleted ? 'text-muted-foreground bg-muted' : 'bg-muted',
                 isActive && 'border border-primary/25 bg-primary/5'
               )}
             >
               <div className={cn(
-                'h-6 w-6 rounded-full flex items-center justify-center shrink-0 text-xs font-black',
+                'h-6 w-6 rounded-full flex items-center justify-center shrink-0 text-xs font-bold',
                 isCompleted
                   ? 'bg-primary/20 text-primary'
                   : isActive
-                  ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400'
-                  : 'bg-white/10 text-muted-foreground'
+                  ? 'bg-warning/12 text-warning'
+                  : 'bg-muted text-muted-foreground'
               )}>
                 {isCompleted ? <Check className="h-3.5 w-3.5" /> : index + 1}
               </div>
@@ -116,7 +116,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
                 {t(step.labelKey)}
               </span>
               {!isCompleted && step.action && (
-                <Button size="sm" variant={isActive ? 'default' : 'outline'} className="h-9 rounded-lg text-xs font-black uppercase tracking-wider" onClick={step.action}>
+                <Button size="sm" variant={isActive ? 'default' : 'outline'} className="h-9 rounded-lg text-xs font-bold uppercase tracking-[0.06em]" onClick={step.action}>
                   {t(step.ctaKey)}
                 </Button>
               )}
@@ -139,11 +139,11 @@ export const ActivationCelebration = memo(function ActivationCelebration({
   const { t } = useTranslation();
 
   return (
-    <Card className="p-5 bg-gradient-to-br from-emerald-500/10 to-primary/10 border-emerald-500/20">
+    <Card className="bg-success/12 p-5 border-success/20">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-emerald-500/15 flex items-center justify-center">
-            <PartyPopper className="h-5 w-5 text-emerald-600" />
+          <div className="h-10 w-10 rounded-xl bg-success/12 flex items-center justify-center">
+            <PartyPopper className="h-5 w-5 text-success" />
           </div>
           <div>
             <h3 className="font-bold text-sm">

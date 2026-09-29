@@ -72,11 +72,11 @@ async function copyText(value: string): Promise<void> {
 }
 
 const statusColors: Record<string, string> = {
-  confirmed: 'bg-green-500/20 text-green-500 border-green-500/30',
-  pending_payment: 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30',
-  cancelled: 'bg-red-500/20 text-red-500 border-red-500/30',
-  completed: 'bg-blue-500/20 text-blue-500 border-blue-500/30',
-  no_show: 'bg-orange-500/20 text-orange-600 border-orange-500/30',
+  confirmed: 'bg-success/12 text-success border-success/30',
+  pending_payment: 'bg-warning/12 text-warning border-warning/30',
+  cancelled: 'bg-destructive/12 text-destructive border-destructive/30',
+  completed: 'bg-info/12 text-info border-info/30',
+  no_show: 'bg-warning/12 text-warning border-warning/30',
 };
 
 export function BookingsPanel({ focusFilter }: BookingsPanelProps = {}) {
@@ -316,16 +316,16 @@ END:VCALENDAR`;
           <div className="text-lg font-bold text-primary">{stats.total}</div>
           <div className="text-xs text-muted-foreground">{t('bookings.total', 'Total')}</div>
         </div>
-        <div className="text-center p-2 rounded-lg bg-green-500/10">
-          <div className="text-lg font-bold text-green-500">{stats.upcoming}</div>
+        <div className="text-center p-2 rounded-lg bg-success/12">
+          <div className="text-lg font-bold text-success">{stats.upcoming}</div>
           <div className="text-xs text-muted-foreground">{t('bookings.upcoming', 'Upcoming')}</div>
         </div>
-        <div className="text-center p-2 rounded-lg bg-yellow-500/10">
-          <div className="text-lg font-bold text-yellow-500">{stats.today}</div>
+        <div className="text-center p-2 rounded-lg bg-warning/12">
+          <div className="text-lg font-bold text-warning">{stats.today}</div>
           <div className="text-xs text-muted-foreground">{t('bookings.today', 'Today')}</div>
         </div>
-        <div className="text-center p-2 rounded-lg bg-blue-500/10">
-          <div className="text-lg font-bold text-blue-500">{stats.confirmed}</div>
+        <div className="text-center p-2 rounded-lg bg-info/12">
+          <div className="text-lg font-bold text-info">{stats.confirmed}</div>
           <div className="text-xs text-muted-foreground">{t('bookings.confirmed', 'Confirmed')}</div>
         </div>
       </div>
@@ -381,7 +381,7 @@ END:VCALENDAR`;
                         <User className="h-3.5 w-3.5 text-muted-foreground" />
                         {booking.client_name}
                         {isRepeatCustomer(booking.client_phone, booking.client_email) && (
-                          <Badge variant="outline" className="h-5 px-1.5 bg-violet-500/15 text-violet-600 text-xs font-bold border-violet-500/20">
+                          <Badge variant="outline" className="h-5 px-1.5 bg-primary/12 text-primary text-xs font-bold border-primary/20">
                             <Repeat className="h-3 w-3 mr-0.5" />
                             {t('operator.repeat.badge', 'Повторный')}
                           </Badge>
@@ -437,7 +437,7 @@ END:VCALENDAR`;
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-7 px-2 text-xs border-blue-500/20 text-blue-600 hover:bg-blue-500/10"
+                        className="h-7 px-2 text-xs border-info/20 text-info hover:bg-info/12"
                         onClick={() => handleCreateReviewRequest(booking)}
                         disabled={reviewRequestBookingId === booking.id}
                         title={t('bookings.requestReviewTitle', 'Скопировать ссылку для отзыва')}

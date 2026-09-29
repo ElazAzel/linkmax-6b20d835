@@ -142,13 +142,13 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
       <div className="px-5 py-4">
         {/* Tab Switcher */}
         <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'page' | 'account')} className="w-full">
-          <TabsList className="w-full h-14 p-1.5 glass-nav rounded-[24px] mb-8 border-white/10 shadow-glass">
+          <TabsList className="w-full h-14 p-1.5 bg-muted rounded-card mb-8 border-border shadow-sm">
             <TabsTrigger
               value="page"
               className={cn(
-                "flex-1 h-11 rounded-[18px] transition-all duration-300 font-bold",
-                "data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]",
-                "data-[state=inactive]:text-muted-foreground/60 data-[state=inactive]:hover:text-muted-foreground"
+                "flex-1 h-11 rounded-control transition-all duration-300 font-bold",
+                "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]",
+                "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-muted-foreground"
               )}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -157,9 +157,9 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
             <TabsTrigger
               value="account"
               className={cn(
-                "flex-1 h-11 rounded-[18px] transition-all duration-300 font-bold",
-                "data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]",
-                "data-[state=inactive]:text-muted-foreground/60 data-[state=inactive]:hover:text-muted-foreground"
+                "flex-1 h-11 rounded-control transition-all duration-300 font-bold",
+                "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]",
+                "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-muted-foreground"
               )}
             >
               <User className="w-4 h-4 mr-2" />

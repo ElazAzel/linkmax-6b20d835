@@ -33,7 +33,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { EmptyState } from '../common/EmptyState';
+import { EmptyState } from '@/components/ui/states';
 // ErrorState removed - useLeads doesn't expose error
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { AddLeadDialog } from '@/components/crm/AddLeadDialog';
@@ -61,11 +61,11 @@ const STATUS_CONFIG_KEYS: Record<LeadStatus, {
   i18nKey: string;
   icon: React.ComponentType<{ className?: string }>;
 }> = {
-  new: { bg: 'bg-blue-500', text: 'text-white', i18nKey: 'crm.status.new', icon: Sparkles },
-  contacted: { bg: 'bg-amber-500', text: 'text-white', i18nKey: 'crm.status.contacted', icon: Send },
-  qualified: { bg: 'bg-purple-500', text: 'text-white', i18nKey: 'crm.status.qualified', icon: CheckCheck },
-  converted: { bg: 'bg-emerald-500', text: 'text-white', i18nKey: 'crm.status.converted', icon: CheckCheck },
-  lost: { bg: 'bg-gray-400', text: 'text-white', i18nKey: 'crm.status.lost', icon: X },
+  new: { bg: 'bg-info/12', text: 'text-info', i18nKey: 'crm.status.new', icon: Sparkles },
+  contacted: { bg: 'bg-warning/14', text: 'text-warning', i18nKey: 'crm.status.contacted', icon: Send },
+  qualified: { bg: 'bg-accent', text: 'text-accent-foreground', i18nKey: 'crm.status.qualified', icon: CheckCheck },
+  converted: { bg: 'bg-success/12', text: 'text-success', i18nKey: 'crm.status.converted', icon: CheckCheck },
+  lost: { bg: 'bg-muted', text: 'text-muted-foreground', i18nKey: 'crm.status.lost', icon: X },
 };
 
 const SOURCE_ICONS_KEYS: Record<string, { emoji: string; i18nKey: string }> = {
@@ -161,7 +161,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
               <Button
                 variant="outline"
                 size="sm"
-                className="h-11 w-11 rounded-2xl md:h-10 md:w-auto md:px-5 md:rounded-xl glass hover:bg-white/10 border-white/10"
+                className="h-11 w-11 rounded-2xl md:h-10 md:w-auto md:px-5 md:rounded-xl bg-card border border-border hover:bg-muted"
                 onClick={() => {
                   toast.promise(
                     (async () => {
@@ -176,13 +176,13 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   );
                 }}
               >
-                <span className="hidden md:inline font-bold uppercase tracking-widest text-xs">{t('dashboard.activity.export', 'Экспорт')}</span>
+                <span className="hidden md:inline font-bold uppercase tracking-[0.06em] text-xs">{t('dashboard.activity.export', 'Экспорт')}</span>
                 <span className="md:hidden font-bold">EX</span>
               </Button>
             )}
             <Button
               size="icon"
-              className="h-11 w-11 rounded-2xl md:h-10 md:w-10 md:rounded-xl bg-primary shadow-glass text-primary-foreground hover:scale-105 transition-transform"
+              className="h-11 w-11 rounded-2xl md:h-10 md:w-10 md:rounded-xl bg-primary shadow-sm text-primary-foreground hover:scale-105 transition-transform"
               onClick={() => setShowAddDialog(true)}
             >
               <Plus className="h-6 w-6 md:h-5 md:w-5" />
@@ -204,29 +204,29 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
       {/* Tabs */}
       <div className="px-5 pb-4">
         <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'leads' | 'bookings' | 'reviews')} className="w-full">
-          <TabsList className="grid grid-cols-3 h-12 bg-white/5 backdrop-blur-xl p-1 gap-1 border border-white/10 shadow-glass rounded-2xl">
+          <TabsList className="grid grid-cols-3 h-12 bg-muted backdrop-blur-xl p-1 gap-1 border border-border shadow-sm rounded-2xl">
             <TabsTrigger
               value="leads"
-              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-xs uppercase tracking-widest transition-all duration-300"
+              className="rounded-xl h-full data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md font-bold text-xs uppercase tracking-[0.06em] transition-all duration-300"
             >
               <MessageCircle className="h-4 w-4 mr-2" />
               {t('dashboard.activity.tabs.leads', 'Заявки')}
               {stats.new > 0 && (
-                <Badge className="ml-2 h-5 px-1.5 bg-blue-500 text-white text-xs font-black border-none ring-offset-0 animate-pulse">
+                <Badge className="ml-2 h-5 px-1.5 bg-info text-info-foreground text-xs font-bold border-none ring-offset-0 animate-pulse">
                   {stats.new}
                 </Badge>
               )}
             </TabsTrigger>
             <TabsTrigger
               value="bookings"
-              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-xs uppercase tracking-widest transition-all duration-300"
+              className="rounded-xl h-full data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md font-bold text-xs uppercase tracking-[0.06em] transition-all duration-300"
             >
               <Calendar className="h-4 w-4 mr-2" />
               {t('dashboard.activity.tabs.bookings', 'Записи')}
             </TabsTrigger>
             <TabsTrigger
               value="reviews"
-              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-xs uppercase tracking-widest transition-all duration-300"
+              className="rounded-xl h-full data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md font-bold text-xs uppercase tracking-[0.06em] transition-all duration-300"
             >
               <Star className="h-4 w-4 mr-2" />
               {t('dashboard.activity.tabs.reviews', 'Reviews')}
@@ -251,11 +251,11 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                 monthlyLeadCount >= 50
                   ? "bg-destructive/10 border border-destructive/20"
                   : monthlyLeadCount >= 40
-                    ? "bg-amber-500/10 border border-amber-500/20"
+                    ? "bg-warning/12 border border-warning/20"
                     : "bg-muted/50"
               )}>
                 <div className="flex items-center gap-2">
-                  {monthlyLeadCount >= 40 && <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />}
+                  {monthlyLeadCount >= 40 && <AlertTriangle className="h-4 w-4 text-warning shrink-0" />}
                   <span className={cn(
                     "font-medium",
                     monthlyLeadCount >= 50 ? "text-destructive" : ""
@@ -319,14 +319,13 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
             {/* Search */}
             <div className="px-5 pb-4">
               <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition duration-500" />
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <Input
                     placeholder={t('dashboard.activity.searchPlaceholder', 'Поиск по имени, телефону...')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-14 pl-12 rounded-2xl bg-white/5 border-white/10 focus:bg-white/10 focus:border-white/20 text-base shadow-glass-sm transition-all placeholder:text-muted-foreground/40"
+                    className="h-14 pl-12 rounded-2xl bg-muted border-border focus:bg-muted focus:border-border text-base shadow-sm transition-all placeholder:text-muted-foreground"
                   />
                 </div>
               </div>
@@ -353,7 +352,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   >
                     {Object.entries(groupedLeads).map(([date, dateLeads]) => (
                       <div key={date} className="mb-6">
-                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-1 sticky top-0 bg-background/95 backdrop-blur-sm py-2 z-10 shadow-sm">
+                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em] mb-3 px-1 sticky top-0 bg-background/95 backdrop-blur-sm py-2 z-10 shadow-sm">
                           {date}
                         </div>
                         <div className="space-y-2">
@@ -474,71 +473,64 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
     <button
       onClick={onClick}
       className={cn(
-        "w-full p-6 rounded-[2rem] glass transition-all duration-500 relative overflow-hidden group border-white/10",
-        "hover:scale-[1.01] hover:bg-white/10 active:scale-[0.98] shadow-glass-lg",
-        lead.status === 'new' && "shadow-blue-500/10 ring-2 ring-blue-500/20"
+        "w-full p-4 sm:p-5 rounded-card bg-card border border-border transition-colors relative overflow-hidden group",
+        "hover:border-primary/30 active:bg-muted shadow-sm",
+        lead.status === 'new' && "ring-2 ring-info/20"
       )}
     >
-      <div className={cn(
-        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-primary/5 via-transparent to-transparent -z-10",
-        lead.status === 'new' && "opacity-[0.05]"
-      )} />
-      
-      <div className="flex items-start gap-5">
+      <div className="flex items-start gap-3 sm:gap-4">
         <div className="relative shrink-0">
-          <Avatar className="h-14 w-14 rounded-2xl shadow-glass border border-white/20">
-            <AvatarFallback className={cn("rounded-2xl text-lg font-black", statusConfig.bg, statusConfig.text)}>
+          <Avatar className="h-11 w-11 sm:h-14 sm:w-14 rounded-full border border-border">
+            <AvatarFallback className={cn("rounded-full text-lg font-semibold", statusConfig.bg, statusConfig.text)}>
               {lead.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           {lead.status === 'new' && (
-            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-blue-500 border-2 border-white shadow-[0_0_10px_rgba(59,130,246,0.5)] animate-pulse" />
+            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-info border-2 border-card" />
           )}
         </div>
 
         <div className="flex-1 min-w-0 text-left pt-0.5">
           <div className="flex items-center justify-between gap-2 mb-1.5">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-lg font-black tracking-tight truncate text-foreground/90">{lead.name}</span>
+              <span className="text-base sm:text-lg font-semibold truncate text-foreground">{lead.name}</span>
               {isRepeat && (
-                <Badge className="h-5 px-2 bg-violet-500/10 text-violet-500 text-xs font-black uppercase tracking-wider border-violet-500/20 shrink-0 rounded-full">
+                <Badge className="h-5 px-2 bg-primary/12 text-primary text-xs font-bold uppercase tracking-[0.06em] border-primary/20 shrink-0 rounded-full">
                   <Repeat className="h-3 w-3 mr-1" />
                   {t('operator.repeat.badge', 'Повторный')}
                 </Badge>
               )}
               {lead.metadata?.intent === 'commercial' && (
-                <Badge className="h-5 px-2 bg-orange-500/10 text-orange-600 text-xs font-black uppercase tracking-wider border-orange-500/20 shrink-0 rounded-full animate-pulse">
+                <Badge className="h-5 px-2 bg-warning/12 text-warning text-xs font-bold uppercase tracking-[0.06em] border-warning/20 shrink-0 rounded-full animate-pulse">
                   🔥 {t('crm.chatbot.hot', 'Hot')}
                 </Badge>
               )}
             </div>
-            <div className="flex flex-col items-end gap-1 shrink-0">
-              <span className="text-xs font-black tabular-nums text-muted-foreground/60 uppercase tracking-widest">{formatTime(lead.created_at)}</span>
-              <ResponseTimeTag createdAt={lead.created_at} status={lead.status} />
-            </div>
+            <span className="shrink-0 text-xs font-num text-muted-foreground">{formatTime(lead.created_at)}</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-muted-foreground/70 mb-4 group-hover:text-foreground/70 transition-colors">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground mb-3 sm:mb-4">
+            <ResponseTimeTag createdAt={lead.created_at} status={lead.status} />
             {lead.phone && (
-              <span className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-lg border border-white/5">
-                <Phone className="h-3 w-3 text-primary/60" />
+              <span className="flex items-center gap-1.5 whitespace-nowrap font-num bg-muted px-2 py-1 rounded-lg border border-border">
+                <Phone className="h-3 w-3 text-primary" />
                 {lead.phone}
               </span>
             )}
             {lead.email && (
-              <span className="flex items-center gap-1.5 truncate bg-white/5 px-2 py-1 rounded-lg border border-white/5">
-                <Mail className="h-3 w-3 text-primary/60" />
+              <span className="flex items-center gap-1.5 truncate bg-muted px-2 py-1 rounded-lg border border-border">
+                <Mail className="h-3 w-3 text-primary" />
                 {lead.email}
               </span>
             )}
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-base border border-white/10 shadow-inner">
+              <span className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center text-base border border-border shadow-inner">
                 {sourceInfo.emoji}
               </span>
-              <span className="text-xs font-black uppercase tracking-widest text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors">
+              <span className="text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground group-hover:text-muted-foreground transition-colors">
                 {t(sourceInfo.i18nKey)}
               </span>
             </div>
@@ -546,46 +538,46 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
             {/* Quick actions for new leads */}
             {lead.status === 'new' && lead.phone ? (
               // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- pure event-stop wrapper; inner buttons handle interaction
-              <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+              <div className="flex flex-wrap items-center gap-2" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={handleWhatsAppReply}
-                  className="h-11 w-11 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-success/12 text-success border border-success/20 hover:bg-success/12 flex items-center justify-center transition-colors"
                   title="WhatsApp"
                 >
                   <MessageCircle className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleTelegramReply}
-                  className="h-11 w-11 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/20 hover:bg-blue-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-info/12 text-info border border-info/20 hover:bg-info/12 flex items-center justify-center transition-colors"
                   title="Telegram"
                 >
                   <Send className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleCallReply}
-                  className="h-11 w-11 rounded-xl bg-violet-500/10 text-violet-600 border border-violet-500/20 hover:bg-violet-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-primary/12 text-primary border border-primary/20 hover:bg-primary/12 flex items-center justify-center transition-colors"
                   title={t('crm.quickReply.call', 'Позвонить')}
                 >
                   <Phone className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleMarkContacted}
-                  className="h-11 px-4 rounded-xl bg-foreground/5 text-foreground/60 border border-foreground/10 hover:bg-foreground/10 flex items-center justify-center transition-all text-xs font-black uppercase tracking-widest"
+                  className="h-11 px-4 rounded-xl bg-muted text-foreground border border-border hover:bg-accent flex items-center justify-center transition-colors text-xs font-semibold"
                 >
-                  <CheckCheck className="h-4 w-4 mr-1.5 text-emerald-500" />
+                  <CheckCheck className="h-4 w-4 mr-1.5 text-success" />
                   {t('crm.quickReply.done', 'Готово')}
                 </button>
               </div>
             ) : (
-              <Badge className={cn("text-xs font-black uppercase tracking-widest h-10 px-4 rounded-xl shadow-glass-sm", statusConfig.bg, statusConfig.text, "border-none")}>
+              <Badge className={cn("h-8 gap-1.5 rounded-full border-none px-3 text-xs font-medium", statusConfig.bg, statusConfig.text)}>
                 {t(statusConfig.i18nKey)}
               </Badge>
             )}
           </div>
         </div>
 
-        <div className="self-center h-11 w-11 flex items-center justify-center rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1 group-hover:scale-110">
-          <ChevronRight className="h-5 w-5 text-primary/60" />
+        <div className="hidden sm:flex self-center h-11 w-11 items-center justify-center rounded-full bg-muted opacity-0 group-hover:opacity-100 transition-opacity">
+          <ChevronRight className="h-5 w-5 text-primary" />
         </div>
       </div>
     </button>

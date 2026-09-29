@@ -20,7 +20,7 @@ export const ViralReadinessCard = memo(function ViralReadinessCard({ pageData, c
   const nextDimension = result.dimensions.find((dimension) => !dimension.present);
 
   return (
-    <Card className="border-primary/15 bg-gradient-to-br from-primary/5 via-card to-card overflow-hidden">
+    <Card className="border-primary/15 overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -33,8 +33,8 @@ export const ViralReadinessCard = memo(function ViralReadinessCard({ pageData, c
             </p>
           </div>
           <div className="text-right shrink-0">
-            <div className="text-2xl font-black text-primary">{result.score}</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">/ 100</div>
+            <div className="text-2xl font-bold text-primary">{result.score}</div>
+            <div className="text-[11px] uppercase tracking-[0.06em] text-muted-foreground">/ 100</div>
           </div>
         </div>
         <Progress value={result.score} className="h-2" aria-label={`Viral readiness ${result.score}%`} />
@@ -42,12 +42,12 @@ export const ViralReadinessCard = memo(function ViralReadinessCard({ pageData, c
       <CardContent className="space-y-3">
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {result.dimensions.slice(0, compact ? 4 : result.dimensions.length).map((dimension) => (
-            <div key={dimension.key} className="rounded-xl border border-border/60 bg-background/40 p-2">
+            <div key={dimension.key} className="rounded-xl border border-border/60 bg-muted/60 p-2">
               <div className="flex items-center justify-between gap-1">
-                <span className="truncate text-[10px] uppercase tracking-wide text-muted-foreground">
+                <span className="truncate text-[11px] uppercase tracking-wide text-muted-foreground">
                   {t(`growth.readiness.dimensions.${dimension.key}`, dimension.key)}
                 </span>
-                {dimension.present ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" /> : <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-amber-500" />}
+                {dimension.present ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-success" /> : <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-warning" />}
               </div>
               <div className="mt-1 text-sm font-bold">{dimension.score}/{dimension.weight}</div>
             </div>

@@ -43,7 +43,7 @@ export function NextRevenueAction({ action, onNavigate }: NextRevenueActionProps
             <Sparkles className="h-5 w-5 text-primary" aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-primary">
+            <p className="text-xs font-bold uppercase tracking-[0.06em] text-primary">
               {t('outcomeHome.next.eyebrow', 'Следующий шаг')}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">

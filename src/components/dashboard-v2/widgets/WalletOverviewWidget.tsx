@@ -57,8 +57,8 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
     const pendingGMV = data?.pendingGMV || 0;
 
     return (
-        <Card className={cn("overflow-hidden glass border-white/10 shadow-glass", className)}>
-            <CardHeader className="pb-2 border-b border-white/5">
+        <Card className={cn("overflow-hidden bg-card border border-border shadow-sm", className)}>
+            <CardHeader className="pb-2 border-b border-border">
                 <CardTitle className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                         <div className="p-2.5 rounded-2xl bg-primary/10 text-primary">
@@ -70,30 +70,30 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
                 <div className="flex flex-col">
-                    <span className="text-4xl font-black tracking-tighter text-gradient pb-1">
+                    <span className="text-4xl font-num font-bold text-foreground pb-1">
                         {formatAmount(balance)} {getCurrencySymbol(currency)}
                     </span>
-                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-70">
+                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-[0.06em]">
                         {t('dashboard.fintech.net_balance', 'Доступно к выводу')}
                     </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-[1.5rem] glass-subtle border-white/5 space-y-2 group/stat">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-widest opacity-60">
+                    <div className="p-4 rounded-card bg-muted/60 border border-border space-y-2 group/stat">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-[0.06em]">
                             <TrendingUp className="h-3 w-3" />
                             {t('dashboard.fintech.gmv', 'Оборот')}
                         </div>
-                        <div className="text-base font-bold tabular-nums">
+                        <div className="text-base font-bold font-num">
                             {formatAmount(pendingGMV + balance)} {getCurrencySymbol(currency)}
                         </div>
                     </div>
-                    <div className="p-4 rounded-[1.5rem] glass-subtle border-white/5 space-y-2 group/stat">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-widest opacity-60">
+                    <div className="p-4 rounded-card bg-muted/60 border border-border space-y-2 group/stat">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-[0.06em]">
                             <Percent className="h-3 w-3" />
                             {t('dashboard.fintech.fees', 'Комиссия')}
                         </div>
-                        <div className="text-base font-bold text-destructive/80 tabular-nums">
+                        <div className="text-base font-bold text-destructive/80 font-num">
                             {formatAmount((pendingGMV + balance) * 0.07)} {getCurrencySymbol(currency)}
                         </div>
                     </div>
@@ -101,7 +101,7 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
 
                 <Button 
                     variant="secondary" 
-                    className="w-full h-12 rounded-2xl text-sm font-bold group bg-white/5 hover:bg-white/10 border-white/5 transition-all"
+                    className="w-full h-12 rounded-2xl text-sm font-bold group bg-muted hover:bg-muted border-border transition-all"
                     onClick={onViewFinance}
                 >
                     {t('dashboard.fintech.view_details', 'Детализация финансов')}

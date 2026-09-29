@@ -88,6 +88,8 @@ const PublicPage = lazy(() => import("./pages/PublicPage"));
 const PublicServicePage = lazy(() => import("./pages/PublicServicePage"));
 const PublicEventPage = lazy(() => import("./pages/PublicEventPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+// Living catalog of the design system (DESIGN.md). Static, no data; noindex.
+const DesignSystem = lazy(() => import("./pages/DesignSystem"));
 const Install = lazy(() => import("./pages/Install"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const Pricing = lazy(() => import("./pages/Pricing"));
@@ -199,6 +201,7 @@ const router = createBrowserRouter([
       { path: "terms", element: <Terms /> },
       { path: "privacy", element: <Privacy /> },
       { path: "sitemap", element: <SitemapPage /> },
+      { path: "design-system", element: <DesignSystem /> },
       { path: "payment-terms", element: <PaymentTerms /> },
       { path: "experts", element: <Experts /> },
       { path: "experts/city/:city", element: <Experts /> },

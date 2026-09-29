@@ -65,7 +65,7 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
   }, [pageId, t]);
 
   if (loading) {
-    return <Skeleton className={cn("h-64 rounded-[2.5rem] bg-white/5", className)} />;
+    return <Skeleton className={cn("h-64 rounded-card bg-muted", className)} />;
   }
 
   if (error || (!totalViews && !totalClicks && !totalLeads && activationSteps.length === 0)) return null;
@@ -75,14 +75,14 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
       label: t('metrics.funnel.views', 'Просмотры'),
       value: totalViews,
       icon: Eye,
-      color: 'bg-blue-500',
+      color: 'bg-info',
       width: 'w-full',
     },
     {
       label: t('metrics.funnel.clicks', 'Интерес (клики)'),
       value: totalClicks,
       icon: MousePointer2,
-      color: 'bg-purple-500',
+      color: 'bg-primary',
       width: totalViews > 0 ? `${Math.max((totalClicks / totalViews) * 100, 15)}%` : 'w-[15%]',
       percent: totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) : 0,
     },
@@ -90,19 +90,19 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
       label: t('metrics.funnel.leads', 'Заявки'),
       value: totalLeads,
       icon: MessageSquare,
-      color: 'bg-emerald-500',
+      color: 'bg-success',
       width: totalViews > 0 ? `${Math.max((totalLeads / totalViews) * 100, 10)}%` : 'w-[10%]',
       percent: totalViews > 0 ? ((totalLeads / totalViews) * 100).toFixed(1) : 0,
     },
   ];
 
   return (
-    <Card className={cn("p-6 md:p-8 glass border-white/10 shadow-glass-lg rounded-[2.5rem] overflow-hidden", className)}>
+    <Card className={cn("p-6 md:p-8 bg-card border border-border shadow-md rounded-card overflow-hidden", className)}>
       <div className="flex items-center justify-between mb-8">
-        <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground/80">
+        <h3 className="text-sm font-bold uppercase tracking-[0.06em] text-muted-foreground">
           {t('metrics.funnel.title', 'Воронка конверсии')}
         </h3>
-        <span className="text-xs font-bold text-muted-foreground bg-white/5 px-2 py-1 rounded-full border border-white/5">
+        <span className="text-xs font-bold text-muted-foreground bg-muted px-2 py-1 rounded-full border border-border">
           {t('metrics.funnel.last30Days', 'Последние 30 дней')}
         </span>
       </div>
@@ -112,27 +112,26 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
           <div key={idx} className="relative">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <div className={cn("h-6 w-6 rounded-md flex items-center justify-center text-white shadow-sm", step.color)}>
+                <div className={cn("h-6 w-6 rounded-md flex items-center justify-center text-primary-foreground", step.color)}>
                   <step.icon className="h-3.5 w-3.5" />
                 </div>
                 <span className="text-xs font-bold">{step.label}</span>
               </div>
-              <span className="text-sm font-black tracking-tight">{step.value}</span>
+              <span className="text-sm font-bold tracking-tight">{step.value}</span>
             </div>
 
-            <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
+            <div className="h-3 bg-muted rounded-full overflow-hidden border border-border">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: step.width }}
                 transition={{ duration: 1, delay: idx * 0.2, ease: "circOut" }}
                 className={cn("h-full rounded-full group relative", step.color)}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent" />
               </motion.div>
             </div>
 
             {idx > 0 && totalViews > 0 && (
-              <div className="absolute -top-4 right-0 text-xs font-black text-muted-foreground">
+              <div className="absolute -top-4 right-0 text-xs font-bold text-muted-foreground">
                 {step.percent}%
               </div>
             )}
@@ -141,8 +140,8 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
       </div>
 
       {activationSteps.length > 0 && (
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
-          <h4 className="text-xs font-black uppercase tracking-wider text-muted-foreground">
+        <div className="mt-8 rounded-2xl border border-border bg-muted p-4 space-y-2">
+          <h4 className="text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">
             {t('metrics.funnel.activationTitle', 'Онбординг-воронка: страница → блок → публикация → лид')}
           </h4>
           {activationSteps.map((step, idx) => {
@@ -150,7 +149,7 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
             const conversion = idx === 0 || base === 0 ? 100 : Math.round((step.value / base) * 100);
             return (
               <div key={step.label} className="flex items-center justify-between text-xs">
-                <span className="text-foreground/80">{idx + 1}. {step.label}</span>
+                <span className="text-foreground">{idx + 1}. {step.label}</span>
                 <span className="font-bold">{step.value} · {conversion}%</span>
               </div>
             );
@@ -158,8 +157,8 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
         </div>
       )}
 
-      <div className="mt-8 p-4 rounded-2xl bg-white/5 border border-white/5 text-[11px] leading-relaxed text-muted-foreground font-medium">
-        <strong className="text-foreground font-black block mb-1">
+      <div className="mt-8 p-4 rounded-2xl bg-muted border border-border text-[11px] leading-relaxed text-muted-foreground font-medium">
+        <strong className="text-foreground font-bold block mb-1">
           {t('metrics.funnel.insightTitle', 'Совет от LinkMAX AI')}
         </strong>
         {totalViews > 0 && totalLeads === 0

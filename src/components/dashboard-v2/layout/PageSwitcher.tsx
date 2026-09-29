@@ -52,7 +52,7 @@ function PageStatusBadge({ page }: { page: UserPage }) {
 
   if (page.isPrimaryPaid) {
     return (
-      <Badge variant="secondary" className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs px-1.5">
+      <Badge variant="secondary" className="bg-warning/12 text-warning border-warning/30 text-xs px-1.5">
         <Crown className="h-2.5 w-2.5 mr-0.5" />
         {t('dashboard.pageSwitcher.included', 'Incl.')}
       </Badge>
@@ -61,7 +61,7 @@ function PageStatusBadge({ page }: { page: UserPage }) {
 
   if (page.isPaid) {
     return (
-      <Badge variant="secondary" className="bg-violet-500/20 text-violet-600 border-violet-500/30 text-xs px-1.5">
+      <Badge variant="secondary" className="bg-primary/12 text-primary border-primary/30 text-xs px-1.5">
         <Sparkles className="h-2.5 w-2.5 mr-0.5" />
         {t('dashboard.pageSwitcher.addon', 'Add-on')}
       </Badge>
@@ -223,7 +223,7 @@ function MobilePageSwitcher({
             )}
             {!limits?.canCreate && !isPremium && (
               <Button
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500"
+                className="bg-warning w-full h-12 rounded-xl"
                 onClick={handleManage}
               >
                 <Crown className="h-4 w-4 mr-2" />
@@ -335,13 +335,13 @@ function DesktopPageSwitcher({
         {!limits?.canCreate && !isPremium && (
           <DropdownMenuItem
             onClick={onManagePages}
-            className="flex items-center gap-3 p-3 rounded-lg bg-amber-500/10"
+            className="flex items-center gap-3 p-3 rounded-lg bg-warning/12"
           >
-            <div className="h-8 w-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <Crown className="h-4 w-4 text-amber-600" />
+            <div className="h-8 w-8 rounded-lg bg-warning/12 flex items-center justify-center">
+              <Crown className="h-4 w-4 text-warning" />
             </div>
             <div className="flex-1">
-              <div className="text-sm font-medium text-amber-600">{t('dashboard.pageSwitcher.getMore', 'Get more pages')}</div>
+              <div className="text-sm font-medium text-warning">{t('dashboard.pageSwitcher.getMore', 'Get more pages')}</div>
               <div className="text-xs text-muted-foreground">{t('dashboard.pageSwitcher.upgradeDesc', 'Upgrade to Pro')}</div>
             </div>
           </DropdownMenuItem>

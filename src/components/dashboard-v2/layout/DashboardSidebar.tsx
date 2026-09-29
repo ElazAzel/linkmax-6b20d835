@@ -168,10 +168,9 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         onClick={() => handleItemClick(item.id)}
         className={cn(
           "w-full flex items-center gap-3 px-3 py-2.5 rounded-control transition-colors relative group",
-          "hover:bg-white/[0.07]",
           isActive
-            ? "bg-white/[0.10] text-white font-semibold"
-            : "text-white/60 hover:text-white",
+            ? "bg-accent text-accent-foreground font-semibold"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground",
           isZoneLocked && "opacity-50",
           collapsed && "justify-center px-0.5"
         )}
@@ -205,7 +204,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                   className={cn(
                     "text-xs h-5 px-1.5 ml-2 shrink-0 border-0",
                     item.badgeVariant === 'premium'
-                      ? "bg-amber-500/15 text-amber-600"
+                      ? "bg-warning/14 text-warning"
                       : "bg-primary/10 text-primary"
                   )}
                 >
@@ -237,7 +236,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
     <TooltipProvider>
     <motion.aside
       className={cn(
-        "app-sidebar hidden md:flex flex-col h-screen sticky top-0 border-r border-white/10 z-50",
+        "app-sidebar hidden md:flex flex-col h-screen sticky top-0 border-r border-border z-50",
       )}
       initial={false}
       animate={{ width: collapsed ? 80 : 256 }}
@@ -257,7 +256,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                 Link<span className="brand-wordmark-accent">MAX</span>
               </span>
               {isPremium && (
-                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs px-1.5 py-0 h-5">
+                <Badge variant="warning" className="text-xs px-1.5 py-0 h-5">
                   <Crown className="h-3 w-3 mr-1" />
                   PRO
                 </Badge>
@@ -269,7 +268,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 rounded-lg text-white/55 hover:bg-white/10 hover:text-white"
+          className="h-9 w-9 min-h-9 min-w-9 text-muted-foreground hover:bg-muted hover:text-foreground"
           onClick={() => onCollapsedChange?.(!collapsed)}
           aria-label={sidebarToggleLabel}
           title={sidebarToggleLabel}
@@ -282,7 +281,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         <Button 
           variant="outline" 
           className={cn(
-            "w-full justify-between h-10 border-white/10 bg-white/[0.06] text-white/65 hover:border-white/20 hover:bg-white/[0.10] hover:text-white",
+            "w-full justify-between h-10 border-border bg-muted text-muted-foreground shadow-none hover:bg-muted hover:text-foreground",
             collapsed && "justify-center px-0"
           )}
           onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
@@ -292,7 +291,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
             {!collapsed && <span>{t('common.search', 'Search')}</span>}
           </div>
           {!collapsed && (
-            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-white/10 bg-white/[0.06] px-1.5 font-mono text-xs font-medium text-white/50">
+            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border bg-card px-1.5 font-num text-xs font-medium text-muted-foreground">
               K
             </kbd>
           )}
@@ -312,9 +311,9 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         {/* Business Zone section (Pro + Business tier) */}
         {(isPremium || isBusinessTier) && hasBusinessZone && (
           <div className="mb-6">
-            <div className="mx-2 mb-4 h-px bg-white/10" />
+            <div className="mx-2 mb-4 h-px bg-border" />
             {!collapsed && (
-              <div className="text-[11px] font-medium text-white/40 px-3 mb-2 flex items-center justify-between">
+              <div className="text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground px-3 mb-2 flex items-center justify-between">
                 <span>{t(BUSINESS_SECTION.titleKey, BUSINESS_SECTION.defaultTitle)}</span>
               </div>
             )}
@@ -328,7 +327,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         {SECTIONS.map((section) => (
           <div key={section.id} className="mb-6">
             {/* Divider before section (except maybe the first one if preferred) */}
-            <div className="mx-2 mb-4 h-px bg-white/10" />
+            <div className="mx-2 mb-4 h-px bg-border" />
             
             <AnimatePresence>
               {!collapsed && (
@@ -338,7 +337,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="text-[11px] font-medium text-white/40 px-3 mb-2 flex items-center justify-between">
+                  <div className="text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground px-3 mb-2 flex items-center justify-between">
                     <span>{t(section.titleKey, section.defaultTitle)}</span>
                   </div>
                 </motion.div>
@@ -350,13 +349,13 @@ export const DashboardSidebar = memo(function DashboardSidebar({
             </div>
 
             {/* Divider when collapsed to separate sections visually */}
-            {collapsed && <div className="my-2 h-px bg-white/10 mx-2" />}
+            {collapsed && <div className="my-2 h-px bg-border mx-2" />}
           </div>
         ))}
       </ScrollArea>
 
       {/* Footer */}
-      <div className="p-3 border-t border-white/10 bg-transparent">
+      <div className="p-3 border-t border-border bg-transparent">
         <AnimatePresence>
           {!isPremium && !collapsed && (
             <motion.div
@@ -366,7 +365,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
               className="overflow-hidden"
             >
               <Button
-                className="w-full h-10 rounded-control bg-primary text-primary-foreground font-bold shadow-[0_12px_28px_-14px_hsl(var(--primary)/0.8)] hover:bg-primary/90"
+                className="w-full h-10"
                 onClick={() => navigate('/pricing')}
               >
                 <Crown className="h-4 w-4 mr-2" />
@@ -379,7 +378,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         <motion.button
           onClick={onSignOut}
           className={cn(
-            "w-full flex items-center gap-3 px-3 py-2.5 rounded-control text-white/55 hover:text-destructive hover:bg-destructive/10 transition-all",
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-control text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors",
             collapsed && "justify-center px-0.5"
           )}
           whileHover={{ scale: 1.02 }}

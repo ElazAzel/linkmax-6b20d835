@@ -874,7 +874,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
           </div>
 
           {/* Footer Actions */}
-          <div className="shrink-0 border-t border-border/10 px-5 py-5 pb-safe bg-background/98 backdrop-blur-xl">
+          <div className="shrink-0 border-t border-border/10 px-5 py-5 pb-safe bg-background/95 backdrop-blur-xl">
             <div className="flex gap-4">
               <Button
                 variant="outline"
@@ -901,7 +901,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
   // Desktop: Dialog
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-hidden flex flex-col bg-card/98 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl p-0">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-hidden flex flex-col bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl p-0">
         <DialogHeader className="p-6 pb-4 border-b border-border/10">
           <div className="flex items-center gap-4">
             <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">

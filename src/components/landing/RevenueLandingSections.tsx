@@ -316,7 +316,7 @@ export function RevenueLandingSections({ onStart, onPricing }: RevenueLandingSec
             <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-[0.98] tracking-[-0.04em] md:text-[48px]">
               {t('landing.revenue.final.title', 'Соберите понятный путь для клиента — остальное подключите по мере роста')}
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-white/78">
+            <p className="mt-4 max-w-2xl text-base leading-7 text-white/80">
               {t('landing.revenue.final.subtitle', 'Без карты и обязательной подписки. Создайте страницу, проверьте её на реальных клиентах и развивайте тот сценарий, который приносит вам работу.')}
             </p>
           </div>

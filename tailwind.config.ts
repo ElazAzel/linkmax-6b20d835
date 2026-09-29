@@ -68,6 +68,18 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         kaspi: '#f14635',
+        // Third-party share buttons (src/lib/design/brand-colors.ts).
+        telegram: '#2AABEE',
+        whatsapp: '#25D366',
+        // Brand foundations for marketing surfaces (landing). Product UI uses
+        // the semantic colors above.
+        brand: {
+          ink: 'hsl(var(--brand-ink))',
+          paper: 'hsl(var(--brand-paper))',
+          orange: 'hsl(var(--brand-orange))',
+          action: 'hsl(var(--brand-orange-action))',
+          sage: 'hsl(var(--brand-sage))',
+        },
         success: {
           DEFAULT: 'hsl(var(--success))',
           foreground: 'hsl(var(--success-foreground))'
@@ -81,12 +93,22 @@ export default {
           foreground: 'hsl(var(--info-foreground))'
         },
       },
+      // Soft status tints (DESIGN.md → Badge и статусы): bg-success/12 etc.
+      opacity: {
+        '12': '0.12',
+        '14': '0.14'
+      },
       borderRadius: {
         '2xl': 'calc(var(--radius) + 0.5rem)',
         xl: 'calc(var(--radius) + 0.25rem)',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 4px)',
-        sm: 'calc(var(--radius) - 8px)'
+        sm: 'calc(var(--radius) - 8px)',
+        // Named roles (DESIGN.md): controls, cards, bottom sheets, chips.
+        control: 'var(--radius-control)',
+        card: 'var(--radius-card)',
+        sheet: 'var(--radius-sheet)',
+        chip: 'var(--radius-chip)'
       },
       backdropBlur: {
         xs: '2px',
@@ -264,26 +286,14 @@ export default {
         'marquee': 'marquee 25s linear infinite',
         'marquee2': 'marquee2 25s linear infinite'
       },
+      // Font stacks come from CSS variables: the app (html.lm-app) uses Onest,
+      // pages keep Inter/Manrope (src/index.css page base).
+      // Only the first family is a variable; the fallbacks are the original
+      // stack, so pages render exactly as before even if web fonts fail.
       fontFamily: {
-        sans: [
-          'Inter',
-          'ui-sans-serif',
-          'system-ui',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'Segoe UI',
-          'Roboto',
-          'Helvetica Neue',
-          'Arial',
-          'sans-serif'
-        ],
-        heading: [
-          'Manrope',
-          'Inter',
-          'ui-sans-serif',
-          'system-ui',
-          'sans-serif'
-        ]
+        sans: ['var(--font-ui)', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        heading: ['var(--font-ui-heading)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        num: ['var(--font-num)', 'ui-monospace', 'monospace']
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.02em' }],

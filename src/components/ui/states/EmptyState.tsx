@@ -1,53 +1,65 @@
-import { memo, ReactNode, isValidElement } from 'react';
-import type { LucideIcon } from 'lucide-react';
+import { memo, isValidElement, type ComponentType, type ReactNode } from 'react';
+import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/utils';
 
-interface EmptyStateProps {
-  icon?: LucideIcon | ReactNode;
+type IconProp = ReactNode | ComponentType<{ className?: string }>;
+
+export interface EmptyStateProps {
   title: string;
   description?: string;
-  action?: {
-    label: string;
-    onClick?: () => void;
-  };
+  /** Lucide icon component or a ready element. Defaults to an inbox. */
+  icon?: IconProp;
+  action?: { label: string; onClick?: () => void };
+  /** @deprecated use `action` */
+  ctaLabel?: string;
+  /** @deprecated use `action` */
+  onCtaClick?: () => void;
+  /** `plain` sits inside an existing card; `card` draws its own surface. */
+  variant?: 'plain' | 'card';
   className?: string;
+  children?: ReactNode;
 }
 
+function renderStateIcon(icon: IconProp | undefined, fallback: ComponentType<{ className?: string }>, className: string) {
+  if (icon && isValidElement(icon)) return icon;
+  const isComponent =
+    typeof icon === 'function' || (icon !== null && typeof icon === 'object' && ('$$typeof' in icon || 'render' in icon));
+  const Icon = (isComponent ? icon : fallback) as ComponentType<{ className?: string }>;
+  return <Icon className={className} aria-hidden="true" />;
+}
+
+/** DESIGN.md → Состояния: icon, short title, one line of context, one action. */
 export const EmptyState = memo(function EmptyState({
-  icon: Icon,
   title,
   description,
+  icon,
   action,
+  ctaLabel,
+  onCtaClick,
+  variant = 'plain',
   className,
+  children,
 }: EmptyStateProps) {
-  const renderIcon = () => {
-    if (!Icon) return null;
-
-    if (isValidElement(Icon)) {
-      return Icon;
-    }
-
-    if (typeof Icon === 'function' || (Icon && typeof Icon === 'object' && '$$typeof' in Icon)) {
-      const IconComponent = Icon as LucideIcon;
-      return <IconComponent className="h-10 w-10 text-muted-foreground/60" />;
-    }
-
-    return null;
-  };
+  const resolvedAction = action ?? (ctaLabel && onCtaClick ? { label: ctaLabel, onClick: onCtaClick } : null);
 
   return (
-    <div className={cn('text-center py-16 px-6', className)}>
-      {Icon ? (
-        <div className="h-20 w-20 rounded-[28px] bg-muted/50 flex items-center justify-center mx-auto mb-5">
-          {renderIcon()}
-        </div>
-      ) : null}
-      <h3 className="font-bold text-lg mb-2">{title}</h3>
-      {description ? <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-6">{description}</p> : null}
-      {action ? (
-        <Button size="lg" className="h-12 px-6 rounded-2xl font-bold" onClick={action.onClick}>
-          {action.label}
+    <div
+      className={cn(
+        'flex flex-col items-center px-6 py-12 text-center',
+        variant === 'card' && 'rounded-card border border-border bg-card',
+        className,
+      )}
+    >
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+        {renderStateIcon(icon, Inbox, 'h-6 w-6')}
+      </div>
+      <h3 className="text-base font-semibold text-foreground">{title}</h3>
+      {description ? <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">{description}</p> : null}
+      {children}
+      {resolvedAction ? (
+        <Button className="mt-5" onClick={resolvedAction.onClick}>
+          {resolvedAction.label}
         </Button>
       ) : null}
     </div>

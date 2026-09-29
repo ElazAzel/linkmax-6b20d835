@@ -14,8 +14,15 @@
 
 ## 3. Стилизация
 
-- Используйте компоненты **Shadcn UI** из `@/components/ui/`.
-- Используйте **Tailwind CSS** для верстки и кастомных стилей.
+- **Перед любой правкой UI прочитайте `DESIGN.md` в корне репозитория** — это главный документ дизайн-системы (токены, компоненты, паттерны, чек-лист).
+- **Строгие зоны** (`dashboard-v2`, `crm`, `settings`, `billing`, `tokens`, `onboarding`): ноль hex, сырых палитровых классов (`emerald-500` и т. п.), `white/*`, glass-классов и `dark:`. Проверка `npm run quality:baseline` падает с указанием файла и строки. Состояния — только `@/components/ui/states`, цифры — `@/components/ui/stat-card`, статусы — `@/components/ui/status-badge`.
+- Используйте компоненты **Shadcn UI** из `@/components/ui/` — не создавайте локальные копии кнопок, карточек, пустых состояний и карточек статистики.
+- Используйте **Tailwind CSS** только с семантическими токенами (`bg-card`, `text-muted-foreground`, `border-border`, `text-success`). Нельзя: hex, `bg-white/10`, `text-emerald-500`, `rounded-[18px]`.
+- Токены меняются только в `src/design-system/tokens.ts` + `npm run tokens:build`.
+- **Не меняйте** значения токенов в `src/index.css` / `src/styles/quiet-bento.css` (`:root, .lm-page`): это страницы мастеров, изменение перекрасит все опубликованные страницы.
+- Новый маршрут интерфейса (не страница пользователя) — добавьте первый сегмент URL в `APP_FIRST_SEGMENTS` (`src/design-system/surface.ts`) и в скрипт в `index.html`.
+- Цифры (цены, время, счётчики) — класс `font-num`. Статусы — `<Badge variant="success|warning|info|destructive">`.
+- Тосты — только `import { toast } from 'sonner'`.
 - Избегайте "чистых" CSS файлов, если это не строго необходимо.
 
 ## 4. Производительность

@@ -136,19 +136,19 @@ export function ExperimentSetupDialog({
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <Label className="text-base font-bold">{t('experiments.setup.variants', 'Варианты и трафик')}</Label>
-                            <Badge variant="outline" className="text-xs font-black uppercase tracking-wider">
+                            <Badge variant="outline" className="text-xs font-bold uppercase tracking-[0.06em]">
                                 {variants.length} {t('experiments.setup.variantsCount', 'варианта')}
                             </Badge>
                         </div>
 
                         <div className="space-y-4">
                             {variants.map((v, i) => (
-                                <div key={i} className="p-4 rounded-2xl glass-subtle border border-white/5 space-y-3">
+                                <div key={i} className="p-4 rounded-2xl bg-muted/60 border border-border border space-y-3">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
                                             <div className={cn(
-                                                "h-6 w-6 rounded-full flex items-center justify-center text-xs font-black",
-                                                v.variant_label === 'A' ? "bg-primary text-primary-foreground" : "bg-violet-500 text-white"
+                                                "h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold",
+                                                v.variant_label === 'A' ? "bg-primary text-primary-foreground" : "bg-primary text-primary-foreground"
                                             )}>
                                                 {v.variant_label}
                                             </div>
@@ -158,7 +158,7 @@ export function ExperimentSetupDialog({
                                                     : t('experiments.setup.variantB', 'Вариант B')}
                                             </span>
                                         </div>
-                                        <span className="text-sm font-black text-primary">{v.traffic_weight}%</span>
+                                        <span className="text-sm font-bold text-primary">{v.traffic_weight}%</span>
                                     </div>
 
                                     <Slider

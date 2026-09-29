@@ -1647,7 +1647,12 @@
       "regional": "Mintaqaviy",
       "kaspiQr": "Kaspi QR vidjeti",
       "kaspiQrDesc": "Kaspi.kz QR-ni asboblar panelida ko'rsatish",
-      "telegramPaused": "Bot ulangan, bildirishnomalar o‘chiq"
+      "telegramPaused": "Bot ulangan, bildirishnomalar o‘chiq",
+      "interfaceTheme": "Interfeys mavzusi",
+      "interfaceThemeDesc": "Sahifangiz o‘z mavzusida qoladi",
+      "themeSystem": "Tizimdagidek",
+      "themeLight": "Yorug‘",
+      "themeDark": "Qorong‘i"
     },
     "activity": {
       "all": "Hammasi",

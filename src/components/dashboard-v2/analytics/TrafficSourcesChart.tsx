@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import type { TrafficSource } from '@/hooks/analytics/usePageAnalytics';
+import { THIRD_PARTY_BRAND as BRAND } from '@/lib/design/brand-colors';
 
 interface TrafficSourcesChartProps {
   sources: TrafficSource[];
@@ -15,21 +16,21 @@ interface TrafficSourcesChartProps {
 
 // Source icons/colors
 const sourceConfig: Record<string, { i18nKey: string; color: string; icon: string }> = {
-  instagram: { i18nKey: 'analytics.traffic.instagram', color: '#E1306C', icon: '📸' },
-  facebook: { i18nKey: 'analytics.traffic.facebook', color: '#4267B2', icon: '📘' },
-  twitter: { i18nKey: 'analytics.traffic.twitter', color: '#1DA1F2', icon: '🐦' },
-  tiktok: { i18nKey: 'analytics.traffic.tiktok', color: '#000000', icon: '🎵' },
-  youtube: { i18nKey: 'analytics.traffic.youtube', color: '#FF0000', icon: '📺' },
-  telegram: { i18nKey: 'analytics.traffic.telegram', color: '#0088cc', icon: '✈️' },
-  whatsapp: { i18nKey: 'analytics.traffic.whatsapp', color: '#25D366', icon: '💬' },
-  vkontakte: { i18nKey: 'analytics.traffic.vkontakte', color: '#4A76A8', icon: '🔵' },
-  linkedin: { i18nKey: 'analytics.traffic.linkedin', color: '#0077B5', icon: '💼' },
-  google: { i18nKey: 'analytics.traffic.google', color: '#4285F4', icon: '🔍' },
-  yandex: { i18nKey: 'analytics.traffic.yandex', color: '#FF0000', icon: '🔎' },
-  bing: { i18nKey: 'analytics.traffic.bing', color: '#00809D', icon: '🔍' },
+  instagram: { i18nKey: 'analytics.traffic.instagram', color: BRAND.instagram, icon: '📸' },
+  facebook: { i18nKey: 'analytics.traffic.facebook', color: BRAND.facebook, icon: '📘' },
+  twitter: { i18nKey: 'analytics.traffic.twitter', color: BRAND.twitter, icon: '🐦' },
+  tiktok: { i18nKey: 'analytics.traffic.tiktok', color: 'hsl(var(--foreground))', icon: '🎵' },
+  youtube: { i18nKey: 'analytics.traffic.youtube', color: BRAND.youtube, icon: '📺' },
+  telegram: { i18nKey: 'analytics.traffic.telegram', color: BRAND.telegram, icon: '✈️' },
+  whatsapp: { i18nKey: 'analytics.traffic.whatsapp', color: BRAND.whatsapp, icon: '💬' },
+  vkontakte: { i18nKey: 'analytics.traffic.vkontakte', color: BRAND.vkontakte, icon: '🔵' },
+  linkedin: { i18nKey: 'analytics.traffic.linkedin', color: BRAND.linkedin, icon: '💼' },
+  google: { i18nKey: 'analytics.traffic.google', color: BRAND.google, icon: '🔍' },
+  yandex: { i18nKey: 'analytics.traffic.yandex', color: BRAND.yandex, icon: '🔎' },
+  bing: { i18nKey: 'analytics.traffic.bing', color: BRAND.bing, icon: '🔍' },
   direct: { i18nKey: 'analytics.traffic.direct', color: 'hsl(var(--primary))', icon: '🔗' },
-  referral: { i18nKey: 'analytics.traffic.referral', color: '#9333EA', icon: '🔗' },
-  unknown: { i18nKey: 'analytics.traffic.unknown', color: '#6B7280', icon: '❓' },
+  referral: { i18nKey: 'analytics.traffic.referral', color: 'hsl(var(--chart-5))', icon: '🔗' },
+  unknown: { i18nKey: 'analytics.traffic.unknown', color: 'hsl(var(--muted-foreground))', icon: '❓' },
 };
 
 export const TrafficSourcesChart = memo(function TrafficSourcesChart({

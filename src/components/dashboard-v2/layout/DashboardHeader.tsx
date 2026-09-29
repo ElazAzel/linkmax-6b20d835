@@ -93,7 +93,7 @@ export const DashboardHeader = memo(function DashboardHeader({
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 bg-card/95 backdrop-blur-xl border-b border-border/70 pt-[env(safe-area-inset-top)] shadow-soft translate-z-0 md:rounded-card md:border",
+        "sticky top-0 z-40 bg-card border-b border-border/70 pt-[env(safe-area-inset-top)] shadow-soft translate-z-0 md:rounded-card md:border",
         className,
       )}
     >
@@ -112,7 +112,7 @@ export const DashboardHeader = memo(function DashboardHeader({
               </h1>
             )}
             {subtitle && (
-              <p className="text-[11px] md:text-xs text-muted-foreground/70 truncate">
+              <p className="text-[11px] md:text-xs text-muted-foreground truncate">
                 {subtitle}
               </p>
             )}
@@ -128,8 +128,8 @@ export const DashboardHeader = memo(function DashboardHeader({
           {trailing}
           {!hideLivePill && (
             <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary border border-border/60">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/70">
+              <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
                 {t('dashboard.header.live', 'Live')}
               </span>
             </div>

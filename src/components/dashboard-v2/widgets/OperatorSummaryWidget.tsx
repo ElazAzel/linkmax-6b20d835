@@ -284,11 +284,11 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
         {/* Post-service follow-up with rebook link */}
         {completedBookings.length > 0 && (
           <div className="space-y-2">
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider px-1">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
               {t('operator.followUp.title', 'Написать после визита')}
             </span>
             {completedBookings.slice(0, 3).map(b => (
-              <div key={b.id} className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+              <div key={b.id} className="flex items-center gap-3 p-3 rounded-xl bg-success/12 border border-success/20">
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-semibold block truncate">{b.client_name}</span>
                   <span className="text-xs text-muted-foreground">
@@ -298,14 +298,14 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
                 {b.client_phone && !sentFollowups.has(b.id) ? (
                   <Button
                     size="sm"
-                    className="h-8 rounded-lg px-3 bg-emerald-500 hover:bg-emerald-600 text-white shrink-0"
+                    className="h-8 rounded-lg px-3 bg-success hover:bg-success text-success-foreground shrink-0"
                     onClick={() => handleFollowUp(b.id, b.client_name, b.client_phone!)}
                   >
                     <MessageCircle className="h-3.5 w-3.5 mr-1" />
                     {t('operator.followUp.send', 'Написать')}
                   </Button>
                 ) : sentFollowups.has(b.id) ? (
-                  <Badge className="h-7 px-2 bg-emerald-500/15 text-emerald-600 text-xs border-0 shrink-0">
+                  <Badge className="h-7 px-2 bg-success/12 text-success text-xs border-0 shrink-0">
                     <CheckCircle className="h-3.5 w-3.5 mr-1" />
                     {t('operator.followUp.sent', 'Отправлено')}
                   </Badge>
@@ -318,15 +318,15 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
         {/* Rebook opportunities — clients due for return visit */}
         {rebookCandidates.length > 0 && (
           <div className="space-y-2">
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider px-1">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
               {t('operator.rebook.title', 'Пора вернуть клиента')}
             </span>
             {rebookCandidates.map((b, idx) => {
               const daysSince = differenceInDays(new Date(), parseISO(b.slot_date));
               return (
-                <div key={`${b.client_phone}-${idx}`} className="flex items-center gap-3 p-3 rounded-xl bg-violet-500/5 border border-violet-500/10">
-                  <div className="h-8 w-8 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
-                    <Repeat className="h-3.5 w-3.5 text-violet-500" />
+                <div key={`${b.client_phone}-${idx}`} className="flex items-center gap-3 p-3 rounded-xl bg-primary/12 border border-primary/20">
+                  <div className="h-8 w-8 rounded-lg bg-primary/12 flex items-center justify-center shrink-0">
+                    <Repeat className="h-3.5 w-3.5 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="text-sm font-semibold block truncate">{b.client_name}</span>
@@ -337,7 +337,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="h-8 rounded-lg px-3 border-violet-500/20 text-violet-600 hover:bg-violet-500/10 shrink-0"
+                    className="h-8 rounded-lg px-3 border-primary/20 text-primary hover:bg-primary/12 shrink-0"
                     onClick={() => handleRebookNudge(b.client_name, b.client_phone)}
                   >
                     <MessageCircle className="h-3.5 w-3.5 mr-1" />
@@ -356,7 +356,7 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
             <span className="text-muted-foreground">{t('operator.week.leads', 'За неделю:')}</span>
             <span className="font-bold">{weekStats.thisWeek}</span>
             {delta !== 0 && (
-              <span className={cn("flex items-center gap-0.5 font-bold", delta > 0 ? "text-emerald-600" : "text-destructive")}>
+              <span className={cn("flex items-center gap-0.5 font-bold", delta > 0 ? "text-success" : "text-destructive")}>
                 {delta > 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                 {delta > 0 ? '+' : ''}{delta}
               </span>
@@ -365,9 +365,9 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
 
           {repeatCount > 0 && (
             <div className="flex items-center gap-1.5 text-xs">
-              <Repeat className="h-3.5 w-3.5 text-violet-500" />
+              <Repeat className="h-3.5 w-3.5 text-primary" />
               <span className="text-muted-foreground">{t('operator.repeat.label', 'Повторных:')}</span>
-              <span className="font-bold text-violet-600">{repeatCount}</span>
+              <span className="font-bold text-primary">{repeatCount}</span>
             </div>
           )}
         </div>
@@ -376,10 +376,10 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
         {pageIsStale && (
           <Button variant="ghost" 
             onClick={onOpenEditor}
-            className="w-full h-auto flex items-center gap-3 p-3 rounded-xl bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 text-left font-normal whitespace-normal"
+            className="w-full h-auto flex items-center gap-3 p-3 rounded-xl bg-warning/12 hover:bg-warning/12 border border-warning/20 text-left font-normal whitespace-normal"
           >
-            <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
-            <span className="text-xs text-amber-700 font-medium">
+            <AlertTriangle className="h-4 w-4 text-warning shrink-0" />
+            <span className="text-xs text-warning font-medium">
               {t('operator.stale.page', 'Страница не обновлялась более 2 недель — обновите контент')}
             </span>
           </Button>

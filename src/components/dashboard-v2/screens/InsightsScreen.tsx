@@ -23,13 +23,12 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { StatCard } from '../common/StatCard';
+import { StatCard } from '@/components/ui/stat-card';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { EmptyState } from '../common/EmptyState';
+import { EmptyState, ErrorState } from '@/components/ui/states';
 import { SmartEmptyState } from '@/components/ui/smart-empty-state';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Edit3 from 'lucide-react/dist/esm/icons/edit-3';
-import { ErrorState } from '../common/ErrorState';
 import {
   AnalyticsChart,
   ConversionFunnel,
@@ -95,10 +94,10 @@ function RevenueInsightsContainer({ pageId, from, to }: RevenueInsightsContainer
   return (
     <section className="space-y-4" data-testid="revenue-insights">
       <div className="px-1">
-        <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
+        <p className="text-xs font-bold uppercase tracking-[0.06em] text-primary">
           {t('revenueInsights.eyebrow', 'Выручка и записи')}
         </p>
-        <h2 className="mt-1 text-xl font-black">
+        <h2 className="mt-1 text-xl font-bold">
           {t('revenueInsights.title', 'От источника до завершённого визита')}
         </h2>
       </div>
@@ -233,7 +232,7 @@ export const InsightsScreen = memo(function InsightsScreen({
         subtitle={t('dashboard.insights.subtitle', 'Статистика страницы')}
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={refresh} className="h-10 w-10 glass border-white/20 rounded-xl hover:bg-white/10 active:scale-95 transition-all">
+            <Button variant="ghost" size="icon" onClick={refresh} className="h-10 w-10 bg-card border border-border rounded-xl hover:bg-muted active:scale-95 transition-all">
               <RefreshCw className="h-4 w-4" />
             </Button>
             {isPremium && <AnalyticsExport analytics={analytics} period={period} />}
@@ -243,16 +242,16 @@ export const InsightsScreen = memo(function InsightsScreen({
 
       {/* Period Selector */}
       <div className="px-[var(--space-page-px)] pb-5">
-        <div className="flex gap-2 p-1.5 glass-subtle rounded-[1.5rem] border-white/10 shadow-inner">
+        <div className="flex gap-2 p-1.5 bg-muted/60 border border-border rounded-card shadow-inner">
           {(['7d', '30d', '90d', 'all'] as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => handlePeriodChange(p)}
               className={cn(
-                "flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-[0.15em] transition-smooth",
+                "flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-[0.06em] transition-smooth",
                 period === p
-                  ? "bg-white text-primary shadow-glass-lg scale-[1.02]"
-                  : "text-muted-foreground/50 hover:text-muted-foreground hover:bg-white/5"
+                  ? "bg-card text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-muted-foreground hover:bg-muted"
               )}
             >
               {t(
@@ -320,7 +319,7 @@ export const InsightsScreen = memo(function InsightsScreen({
               {/* Mobile: Select dropdown */}
               <div className="md:hidden">
                 <Select value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)}>
-                  <SelectTrigger className="h-12 w-full rounded-2xl bg-white/5 border-white/10" aria-label={t('analytics.tabs.label', 'Раздел аналитики')}>
+                  <SelectTrigger className="h-12 w-full rounded-2xl bg-muted border-border" aria-label={t('analytics.tabs.label', 'Раздел аналитики')}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -336,25 +335,25 @@ export const InsightsScreen = memo(function InsightsScreen({
               </div>
 
               {/* Desktop: TabsList */}
-              <TabsList className="hidden md:flex w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1 items-center gap-1 shadow-inner glass-subtle">
-                <TabsTrigger value="overview" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+              <TabsList className="hidden md:flex w-full h-12 bg-muted border border-border rounded-card p-1 items-center gap-1 shadow-inner bg-muted/60 border">
+                <TabsTrigger value="overview" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm transition-smooth">
                   <ChartBar className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.overview', 'Обзор')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="traffic" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="traffic" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm transition-smooth">
                   <Globe className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.traffic', 'Трафик')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="blocks" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="blocks" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm transition-smooth">
                   <Target className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.blocks', 'Блоки')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="funnel" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="funnel" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm transition-smooth">
                   <TrendingUp className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   <span>{t('analytics.tabs.funnel', 'Воронка')}</span>
                 </TabsTrigger>
                 {isPremium && (
-                  <TabsTrigger value="experiments" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <TabsTrigger value="experiments" className="flex-1 h-10 text-xs font-semibold rounded-xl data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm transition-smooth">
                     <FlaskConical className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                     <span>{t('analytics.tabs.experiments', 'Тесты')}</span>
                   </TabsTrigger>
@@ -372,17 +371,16 @@ export const InsightsScreen = memo(function InsightsScreen({
                   {/* Staff Performance Header for Specialists */}
                   {isStaffMember && analytics?.personalStaffStats && (
                     <motion.div variants={itemVariants} className="px-1">
-                      <div className="p-5 rounded-[2rem] bg-gradient-to-br from-primary/10 to-violet-500/5 border border-primary/20 shadow-glass-lg relative overflow-hidden group">
-                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 blur-[50px] rounded-full group-hover:bg-primary/20 transition-all duration-700" />
+                      <div className="bg-primary/10 p-5 rounded-card border border-primary/20 shadow-md relative overflow-hidden group">
                         <div className="flex items-center gap-4 relative z-10">
-                          <div className="h-14 w-14 rounded-2xl bg-white/50 backdrop-blur-xl flex items-center justify-center shadow-glass border border-white/20">
+                          <div className="h-14 w-14 rounded-2xl bg-card flex items-center justify-center shadow-sm border border-border">
                             <Sparkles className="h-7 w-7 text-primary animate-pulse" />
                           </div>
                           <div>
-                            <h3 className="text-sm font-black uppercase tracking-widest text-primary/70 mb-1">
+                            <h3 className="text-sm font-bold uppercase tracking-[0.06em] text-primary/70 mb-1">
                               {t('analytics.staff.yourStats', 'Ваш результат')}
                             </h3>
-                            <p className="text-xl font-black text-gradient">
+                            <p className="text-xl font-bold text-foreground">
                               {staffMemberName}, {t('analytics.staff.keepItUp', 'так держать!')}
                             </p>
                           </div>
@@ -390,16 +388,16 @@ export const InsightsScreen = memo(function InsightsScreen({
                         
                         <div className="grid grid-cols-2 gap-4 mt-6 relative z-10">
                           <div className="space-y-1">
-                            <p className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground opacity-60">
+                            <p className="text-[11px] font-bold uppercase tracking-tighter text-muted-foreground">
                               {t('analytics.staff.bookings', 'Записей')}
                             </p>
-                            <p className="text-2xl font-black tabular-nums">{analytics.personalStaffStats.bookings}</p>
+                            <p className="text-2xl font-bold font-num">{analytics.personalStaffStats.bookings}</p>
                           </div>
                           <div className="space-y-1">
-                            <p className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground opacity-60">
+                            <p className="text-[11px] font-bold uppercase tracking-tighter text-muted-foreground">
                               {t('analytics.staff.revenue', 'Прибыль')}
                             </p>
-                            <p className="text-2xl font-black tabular-nums">
+                            <p className="text-2xl font-bold font-num">
                               {analytics.personalStaffStats.revenue.toLocaleString()} ₸
                             </p>
                           </div>
@@ -413,7 +411,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={Eye}
                         value={stats.views}
                         label={t('dashboard.insights.views', 'Просмотры')}
-                        variant="glass"
                       />
                     </motion.div>
                     <motion.div variants={itemVariants}>
@@ -421,7 +418,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={MousePointerClick}
                         value={stats.clicks}
                         label={t('dashboard.insights.clicks', 'Клики')}
-                        variant="glass"
                       />
                     </motion.div>
                   </div>
@@ -432,7 +428,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={Users}
                         value={stats.uniqueVisitors}
                         label={t('dashboard.insights.uniqueVisitors', 'Уникальные')}
-                        variant="glass"
                       />
                     </motion.div>
                     <motion.div variants={itemVariants}>
@@ -440,7 +435,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={Target}
                         value={`${(stats.ctr || 0).toFixed(1)}%`}
                         label={t('dashboard.insights.ctr', 'CTR')}
-                        variant="glass"
                       />
                     </motion.div>
                   </div>
@@ -473,7 +467,7 @@ export const InsightsScreen = memo(function InsightsScreen({
 
                   {/* Chart */}
                   {stats.dailyData.length > 0 && (
-                    <motion.div variants={itemVariants} className="glass border-white/20 shadow-glass-lg rounded-[2.5rem] overflow-hidden p-4">
+                    <motion.div variants={itemVariants} className="bg-card border border-border shadow-md rounded-card overflow-hidden p-4">
                       <AnalyticsChart
                         data={stats.dailyData}
                         title={t('analytics.chart.title', 'Динамика за период')}
@@ -494,7 +488,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                         <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
                           <Sparkles className="h-4 w-4 text-primary" />
                         </div>
-                        <h2 className="text-sm font-black uppercase tracking-[0.2em] opacity-60">{t('dashboard.insights.aiInsights', 'Рекомендации')}</h2>
+                        <h2 className="text-sm font-bold uppercase tracking-[0.06em] opacity-60">{t('dashboard.insights.aiInsights', 'Рекомендации')}</h2>
                       </div>
 
                       <div className="space-y-3">
@@ -502,12 +496,12 @@ export const InsightsScreen = memo(function InsightsScreen({
                           <motion.div key={insight.id} variants={itemVariants} custom={i}>
                             <Card
                               className={cn(
-                                "p-6 border-white/20 glass transition-smooth hover:scale-[1.02] shadow-glass rounded-[2rem]",
+                                "p-6 border-border bg-card border transition-smooth hover:scale-[1.02] shadow-sm rounded-card",
                                 insight.impact === 'high'
-                                  ? "shadow-emerald-500/10 group/insight"
+                                  ? "shadow-success/20 group/insight"
                                   : insight.impact === 'medium'
-                                    ? "shadow-amber-500/10 group/insight"
-                                    : "shadow-blue-500/10 group/insight"
+                                    ? "shadow-warning/20 group/insight"
+                                    : "shadow-info/20 group/insight"
                               )}
                             >
                               <div className="flex items-start gap-5">
@@ -515,29 +509,29 @@ export const InsightsScreen = memo(function InsightsScreen({
                                   className={cn(
                                     "h-10 w-10 rounded-2xl flex items-center justify-center shrink-0 shadow-inner",
                                     insight.impact === 'high'
-                                      ? "bg-emerald-500/10"
+                                      ? "bg-success/12"
                                       : insight.impact === 'medium'
-                                        ? "bg-amber-500/10"
-                                        : "bg-blue-500/10"
+                                        ? "bg-warning/12"
+                                        : "bg-info/12"
                                   )}
                                 >
                                   <Sparkles
                                     className={cn(
                                       "h-5 w-5",
                                       insight.impact === 'high'
-                                        ? "text-emerald-500"
+                                        ? "text-success"
                                         : insight.impact === 'medium'
-                                          ? "text-amber-500"
-                                          : "text-blue-500"
+                                          ? "text-warning"
+                                          : "text-info"
                                     )}
                                   />
                                 </div>
 
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="font-black text-sm mb-1 tracking-tight">{insight.title}</h3>
-                                  <p className="text-xs text-muted-foreground/80 mb-4 leading-relaxed">{insight.description}</p>
+                                  <h3 className="font-bold text-sm mb-1 tracking-tight">{insight.title}</h3>
+                                  <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{insight.description}</p>
                                   {insight.action && (
-                                    <Button size="sm" variant="secondary" className="h-10 px-5 text-xs font-bold rounded-xl glass hover:bg-white/10 border-white/10" onClick={insight.action}>
+                                    <Button size="sm" variant="secondary" className="h-10 px-5 text-xs font-bold rounded-xl bg-card border border-border hover:bg-muted" onClick={insight.action}>
                                       {t('dashboard.insights.apply', 'Применить')}
                                       <ArrowRight className="h-3.5 w-3.5 ml-2 transition-transform group-hover/insight:translate-x-1" />
                                     </Button>
@@ -559,33 +553,33 @@ export const InsightsScreen = memo(function InsightsScreen({
                           <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
                             <Users className="h-4 w-4 text-primary" />
                           </div>
-                          <h2 className="text-sm font-black uppercase tracking-[0.2em] opacity-60">
+                          <h2 className="text-sm font-bold uppercase tracking-[0.06em] opacity-60">
                             {t('analytics.staff.teamBreakdown', 'Разбор по команде')}
                           </h2>
                         </div>
                       </div>
 
-                      <Card className="glass border-white/20 shadow-glass rounded-[2rem] overflow-hidden">
-                        <div className="divide-y divide-white/5">
+                      <Card className="bg-card border border-border shadow-sm rounded-card overflow-hidden">
+                        <div className="divide-y divide-border">
                           {analytics.staffStats.map((staff, i) => (
-                            <div key={staff.staffId} className="p-5 flex items-center gap-4 hover:bg-white/5 transition-colors group/staff">
-                              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-black text-primary border border-primary/20 shrink-0">
+                            <div key={staff.staffId} className="p-5 flex items-center gap-4 hover:bg-muted transition-colors group/staff">
+                              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-bold text-primary border border-primary/20 shrink-0">
                                 {staff.name.charAt(0).toUpperCase()}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between mb-1.5">
-                                  <span className="font-black text-sm truncate">{staff.name}</span>
-                                  <span className="text-xs font-black text-primary">{staff.revenue.toLocaleString()} ₸</span>
+                                  <span className="font-bold text-sm truncate">{staff.name}</span>
+                                  <span className="text-xs font-bold text-primary">{staff.revenue.toLocaleString()} ₸</span>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                  <div className="flex-1 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                                  <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
                                      <motion.div 
                                        initial={{ width: 0 }}
                                        animate={{ width: `${Math.min(100, (staff.bookings / (analytics.totalConversions || 1)) * 100)}%` }}
                                        className="h-full bg-primary"
                                      />
                                   </div>
-                                  <span className="text-[10px] font-black opacity-40 shrink-0">
+                                  <span className="text-[11px] font-bold opacity-40 shrink-0">
                                     {staff.bookings} {t('analytics.staff.units', 'записей')}
                                   </span>
                                 </div>
@@ -599,27 +593,27 @@ export const InsightsScreen = memo(function InsightsScreen({
 
                   {/* Devices */}
                   <motion.div variants={itemVariants} className="space-y-4 pt-2">
-                    <h2 className="text-sm font-black uppercase tracking-[0.2em] px-1 opacity-60">{t('dashboard.insights.devices', 'Устройства')}</h2>
+                    <h2 className="text-sm font-bold uppercase tracking-[0.06em] px-1 opacity-60">{t('dashboard.insights.devices', 'Устройства')}</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
-                        <Smartphone className="h-6 w-6 sm:h-5 sm:w-5 text-blue-500 group-hover/device:scale-110 transition-transform" />
+                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center bg-card border border-border shadow-sm rounded-3xl group/device hover:bg-muted transition-colors">
+                        <Smartphone className="h-6 w-6 sm:h-5 sm:w-5 text-info group-hover/device:scale-110 transition-transform" />
                         <div className="flex-1 sm:flex-none text-left sm:text-center">
-                          <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.mobile}%</div>
-                          <div className="text-xs uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.mobile', 'Телефон')}</div>
+                          <div className="text-2xl font-bold text-foreground font-num">{devicePercentages.mobile}%</div>
+                          <div className="text-xs uppercase font-bold tracking-[0.06em] text-muted-foreground">{t('dashboard.insights.mobile', 'Телефон')}</div>
                         </div>
                       </Card>
-                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
-                        <Monitor className="h-6 w-6 sm:h-5 sm:w-5 text-emerald-500 group-hover/device:scale-110 transition-transform" />
+                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center bg-card border border-border shadow-sm rounded-3xl group/device hover:bg-muted transition-colors">
+                        <Monitor className="h-6 w-6 sm:h-5 sm:w-5 text-success group-hover/device:scale-110 transition-transform" />
                         <div className="flex-1 sm:flex-none text-left sm:text-center">
-                          <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.desktop}%</div>
-                          <div className="text-xs uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.desktop', 'ПК')}</div>
+                          <div className="text-2xl font-bold text-foreground font-num">{devicePercentages.desktop}%</div>
+                          <div className="text-xs uppercase font-bold tracking-[0.06em] text-muted-foreground">{t('dashboard.insights.desktop', 'ПК')}</div>
                         </div>
                       </Card>
-                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
-                        <Globe className="h-6 w-6 sm:h-5 sm:w-5 text-violet-500 group-hover/device:scale-110 transition-transform" />
+                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center bg-card border border-border shadow-sm rounded-3xl group/device hover:bg-muted transition-colors">
+                        <Globe className="h-6 w-6 sm:h-5 sm:w-5 text-primary group-hover/device:scale-110 transition-transform" />
                         <div className="flex-1 sm:flex-none text-left sm:text-center">
-                          <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.tablet}%</div>
-                          <div className="text-xs uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.tablet', 'Планшет')}</div>
+                          <div className="text-2xl font-bold text-foreground font-num">{devicePercentages.tablet}%</div>
+                          <div className="text-xs uppercase font-bold tracking-[0.06em] text-muted-foreground">{t('dashboard.insights.tablet', 'Планшет')}</div>
                         </div>
                       </Card>
                     </div>
@@ -741,7 +735,7 @@ export const InsightsScreen = memo(function InsightsScreen({
 
                   {/* Premium gate for advanced funnel */}
                   {!isPremium && (
-                    <Card className="p-4 bg-gradient-to-r from-primary/5 to-violet-500/5 border-primary/20">
+                    <Card className="p-4 border-primary/20">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
                           <TrendingUp className="h-5 w-5 text-primary" />
