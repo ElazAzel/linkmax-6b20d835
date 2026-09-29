@@ -89,6 +89,15 @@ serve(async (req) => {
         });
       }
 
+      if (body.contact_id) {
+        const { data: c } = await supabaseAdmin.from('zone_contacts').select('id').eq('id', body.contact_id).eq('zone_id', zoneId).maybeSingle();
+        if (!c) return new Response(JSON.stringify({ error: 'contact_id not found' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 });
+      }
+      if (body.pipeline_id) {
+        const { data: pl } = await supabaseAdmin.from('zone_pipelines').select('id').eq('id', body.pipeline_id).eq('zone_id', zoneId).maybeSingle();
+        if (!pl) return new Response(JSON.stringify({ error: 'pipeline_id not found' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 });
+      }
+
       const { data, error } = await supabaseAdmin
         .from('zone_deals')
         .insert({
