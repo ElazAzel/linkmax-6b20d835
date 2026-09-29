@@ -5711,6 +5711,10 @@ export type Database = {
         }[]
       }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
+      invite_org_member_by_email: {
+        Args: { p_email: string; p_org_id: string; p_role?: string }
+        Returns: Json
+      }
       is_allowed_review_source: { Args: { p_source: string }; Returns: boolean }
       is_allowed_review_status: { Args: { p_status: string }; Returns: boolean }
       is_allowed_review_verification_status: {
