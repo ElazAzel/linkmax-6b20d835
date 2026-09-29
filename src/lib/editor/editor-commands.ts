@@ -18,6 +18,8 @@ export interface EditorContext {
   onInsertBlock: (blockType: string, position: number) => { success: boolean; blockId?: string };
   onInsertPreset: (preset: BlockPreset) => void;
   onDeleteBlock: (blockId: string) => void;
+  /** Deletes several blocks as one operation (one history entry). */
+  onDeleteBlocks?: (blockIds: string[]) => void;
   onDuplicateBlock: (blockId: string) => void;
   onEditBlock: (block: Block) => void;
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;

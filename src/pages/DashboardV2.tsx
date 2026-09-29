@@ -100,7 +100,6 @@ const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').t
 
 
 // Lazy load heavy components for better bundle splitting
-const BlockEditorV2 = lazy(() => import('@/components/editor/BlockEditorV2').then(m => ({ default: m.BlockEditorV2 })));
 const TemplateGallery = lazy(() => import('@/components/editor/TemplateGallery').then(m => ({ default: m.TemplateGallery })));
 const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarketplace').then(m => ({ default: m.TemplateMarketplace })));
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
@@ -395,6 +394,7 @@ function DashboardV2Inner() {
     onInsertBlock: dashboard.blockEditor.handleInsertBlock,
     onInsertPreset: dashboard.blockEditor.handleInsertPreset,
     onDeleteBlock: dashboard.blockEditor.handleDeleteBlock,
+    onDeleteBlocks: dashboard.blockEditor.handleDeleteBlocks,
     onDuplicateBlock: dashboard.blockEditor.handleDuplicateBlock,
     onEditBlock: dashboard.blockEditor.handleEditBlock,
     onUpdateBlock: dashboard.updateBlock,
@@ -867,17 +867,7 @@ function DashboardV2Inner() {
             />
           )}
 
-          {/* Block Editor Modal */}
-          {dashboard.blockEditor.editingBlock && (
-            <BlockEditorV2
-              block={dashboard.blockEditor.editingBlock}
-              isOpen={dashboard.blockEditor.editorOpen}
-              onClose={dashboard.blockEditor.closeEditor}
-              onSave={dashboard.blockEditor.handleSaveBlock}
-              enableAutosave={true}
-              onDelete={dashboard.blockEditor.handleDeleteBlock}
-            />
-          )}
+          {/* Block editing lives in the editor's BlockInspector (EditorScreen). */}
 
           {/* Template Gallery */}
           {templateGalleryOpen && (

@@ -2286,6 +2286,18 @@
       "designKitTitle": "Sahifaga koʻrinish bering",
       "designKitDesc": "Dizayn-kit bir tegishda maket, palitra va shriftlarni sozlaydi — kontent oʻzgarmaydi.",
       "designKitCta": "Uslub tanlash"
+    },
+    "inspector": {
+      "title": "Blok sozlamalari",
+      "emptyTitle": "Blokni tanlang",
+      "emptyHint": "Sahifadagi blokni bosing — uning sozlamalari shu yerda ochiladi, o'zgarishlar darhol ko'rinadi.",
+      "addBlock": "Blok qo'shish",
+      "theme": "Bezak",
+      "discard": "O'zgarishlarni bekor qilish",
+      "discardShort": "Bekor qilish",
+      "done": "Tayyor",
+      "expand": "Sozlamalarni ochish",
+      "collapse": "Sozlamalarni yig'ish"
     }
   },
   "errors": {
