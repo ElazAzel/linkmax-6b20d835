@@ -100,7 +100,7 @@ serve(async (req) => {
 
     // 2+3. Record the transaction and credit the balance atomically (idempotent by internal_ref)
     const md = (payload.metadata || {}) as Record<string, unknown>
-    const internalRef = (md.internal_ref ?? md.transaction_id ?? payload.transactionId ?? null) as string | null
+    const internalRef = (md.internal_ref ?? md.transaction_id ?? null) as string | null
     const { data: credit, error: txError } = await supabaseClient.rpc('record_wallet_income', {
       p_user_id: payload.userId,
       p_amount: netAmount,
