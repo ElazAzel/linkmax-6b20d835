@@ -52,21 +52,10 @@ export function useSetUserTier() {
 
   return useMutation({
     mutationFn: async ({ userId, tier }: { userId: string; tier: AdminPremiumTier }) => {
-      const updates: Record<string, unknown> = {
-        premium_tier: tier,
-        is_premium: tier === 'pro' || tier === 'business',
-      };
-
-      // Free and Starter are not paid subscriptions, so expiry/trial state should not linger.
-      if (tier === 'free' || tier === 'starter') {
-        updates.premium_expires_at = null;
-        updates.trial_ends_at = null;
-      }
-
-      const { error } = await supabase
-        .from('user_profiles')
-        .update(updates)
-        .eq('id', userId);
+      const { error } = await supabase.rpc('admin_set_user_tier' as never, {
+        p_target_user_id: userId,
+        p_tier: tier,
+      } as never);
 
       if (error) throw error;
       return tier;
