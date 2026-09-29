@@ -4,6 +4,7 @@ import X from 'lucide-react/dist/esm/icons/x';
 import * as React from "react";
 
 import { cn } from "@/lib/utils/utils";
+import { describedByFallback } from "@/lib/ui/overlay-a11y";
 
 const Sheet = SheetPrimitive.Root;
 
@@ -62,6 +63,7 @@ const SheetContent = React.forwardRef<
     <SheetPrimitive.Content
       ref={ref}
       className={cn(sheetVariants({ side }), className)}
+      {...describedByFallback(children, SheetDescription, props['aria-describedby'])}
       {...props}
     >
       {children}

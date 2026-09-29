@@ -475,11 +475,12 @@ export function usePageAnalytics(externalPageId?: string | null, initialPeriod: 
       const returningVisitorsPercent = uniqueVisitors > 0 ? (returningCount / uniqueVisitors) * 100 : 0;
 
       // Fetch conversions (leads + bookings + event_registrations)
-      const { data: leads } = await supabase
+      // leads has no page_id column: the page is stored in metadata.page_id.
+      const { count: leadsCount } = await supabase
         .from('leads')
-        .select('id')
+        .select('id', { count: 'exact', head: true })
         .eq('user_id', user.id)
-        .eq('page_id', pageId)
+        .eq('metadata->>page_id', pageId)
         .gte('created_at', startDate.toISOString());
 
       const { data: bookings } = await supabase
@@ -496,7 +497,7 @@ export function usePageAnalytics(externalPageId?: string | null, initialPeriod: 
         .eq('page_id', pageId)
         .gte('created_at', startDate.toISOString());
 
-      const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);
+      const totalConversions = (leadsCount || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);
 
       const viewEvents = pageViewEvents;
       const visitorCoverageCount = viewEvents.filter(e => !!getMetaString(e.metadata, 'visitorId', 'visitor_id')).length;

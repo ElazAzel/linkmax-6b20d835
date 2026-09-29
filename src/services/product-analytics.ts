@@ -336,14 +336,36 @@ async function upsertCreatorHealthScore(
  * session — otherwise every dashboard action sent a request that failed.
  */
 let productSchemaMissing = false;
+// Until the first insert answers, later events wait for it instead of
+// racing it: a burst of activation events otherwise produced one failing
+// request each before the flag was set.
+let productSchemaConfirmed = false;
+let productSchemaProbe: Promise<void> | null = null;
 
 /** Test hook. */
 export function resetProductAnalyticsSchemaState() {
   productSchemaMissing = false;
+  productSchemaConfirmed = false;
+  productSchemaProbe = null;
 }
 
 async function trackProductEvent(input: TrackProductEventInput): Promise<void> {
   if (productSchemaMissing) return;
+  if (!productSchemaConfirmed) {
+    if (productSchemaProbe) {
+      await productSchemaProbe;
+      if (productSchemaMissing) return;
+    } else {
+      productSchemaProbe = writeProductEvent(input).finally(() => {
+        productSchemaProbe = null;
+      });
+      return productSchemaProbe;
+    }
+  }
+  return writeProductEvent(input);
+}
+
+async function writeProductEvent(input: TrackProductEventInput): Promise<void> {
   try {
     const occurredAt = input.occurredAt ?? new Date().toISOString();
 
@@ -363,6 +385,7 @@ async function trackProductEvent(input: TrackProductEventInput): Promise<void> {
       logger.debug('Product analytics event insert failed', { data: error });
       return;
     }
+    productSchemaConfirmed = true;
 
     const state = await updateCreatorActivationState({ ...input, occurredAt });
     if (state) {

@@ -66,7 +66,7 @@ export const TrafficSourcesChart = memo(function TrafficSourcesChart({
       <Card className="p-4">
         <h3 className="font-bold mb-4">{t('analytics.sources.title', 'Источники трафика')}</h3>
         <div className="h-48">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height: 200 }}>
             <PieChart>
               <Pie
                 data={chartData}

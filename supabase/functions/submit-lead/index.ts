@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
 import { checkIpRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 import { sendMessage, isConfigured } from "../_shared/telegram.ts";
+import { buildLeadInsert, findFormField, LEAD_EMAIL_KEYS } from "../_shared/lead-insert.ts";
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -118,7 +119,7 @@ serve(async (req: Request) => {
         // 1. Fetch page owner info for limit check and notification
         const { data: pageData, error: pageError } = await supabase
             .from('pages')
-            .select('user_id, slug, title, content, webhook_url, webhook_secret')
+            .select('user_id, slug, title, webhook_url, webhook_secret')
             .eq('id', pageId)
             .single();
 
@@ -138,13 +139,13 @@ serve(async (req: Request) => {
         // 3. Insert lead into the leads table
         const { data: lead, error: insertError } = await supabase
             .from('leads')
-            .insert({
-                page_id: pageId,
-                block_id: blockId,
-                form_data: sanitizedFormData,
+            .insert(buildLeadInsert({
+                ownerId: pageData.user_id,
+                pageId,
+                blockId,
+                formData: sanitizedFormData,
                 metadata: sanitizedMetadata,
-                status: 'new'
-            })
+            }))
             .select()
             .single();
 
@@ -198,16 +199,17 @@ serve(async (req: Request) => {
         if (sanitizedFormData) {
             try {
                 // Find the email field (case-insensitive)
-                const emailField = Object.entries(sanitizedFormData).find(([key]) => 
-                    /^(email|почта|e-mail)$/i.test(key)
-                );
-                const leadEmail = emailField ? emailField[1] : null;
+                const leadEmail = findFormField(sanitizedFormData, LEAD_EMAIL_KEYS);
 
-                if (leadEmail) {
-                    // Find the block in page content to see if it has a sequenceId
-                    const blocks = (pageData.content || []) as any[];
-                    const currentBlock = blocks.find(b => b.id === blockId);
-                    const sequenceId = currentBlock?.content?.sequenceId;
+                if (leadEmail && isValidUUID(blockId)) {
+                    // The block's settings live in the blocks table (pages has no content column).
+                    const { data: blockRow } = await supabase
+                        .from('blocks')
+                        .select('content')
+                        .eq('id', blockId)
+                        .eq('page_id', pageId)
+                        .maybeSingle();
+                    const sequenceId = (blockRow?.content as { sequenceId?: string } | null)?.sequenceId;
 
                     if (sequenceId) {
                         console.log(`Subscribing lead ${lead.id} to sequence ${sequenceId}`);
