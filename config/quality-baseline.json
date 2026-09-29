@@ -4,7 +4,7 @@
   "eslintWarningsMax": 1230,
   "i18nHardcodedMax": 2365,
   "knipIssuesMax": 940,
-  "hexColorMax": 553,
-  "rawPaletteClassMax": 1467,
-  "whiteBlackAlphaMax": 405
+  "hexColorMax": 523,
+  "rawPaletteClassMax": 804,
+  "whiteBlackAlphaMax": 175
 }

@@ -81,6 +81,7 @@ const DESIGN_EXCLUDED = [
   /[\\/]lib[\\/]appearance[\\/]presets\.ts$/,
   /[\\/]lib[\\/]widget-templates\.ts$/,
   /[\\/]lib[\\/]avatar-frame-utils\.ts$/,
+  /[\\/]lib[\\/]design[\\/]brand-colors\.ts$/,
   /[\\/]integrations[\\/]supabase[\\/]types\.ts$/,
   /[\\/]platform[\\/]supabase[\\/]types\.ts$/,
 ];
@@ -102,6 +103,46 @@ const designMetrics = {
   whiteBlackAlpha: countOccurrences(/\b(?:bg|text|border|ring|from|via|to|fill|stroke|divide)-(?:white|black)\/(?:\[[^\]]+\]|\d{1,3})\b/g),
 };
 
+/*
+ * Strict design zones (DESIGN.md → Строгие зоны). Screens already moved to
+ * the design system must stay at zero literal colours, translucent
+ * white/black, glass surfaces and dead `dark:` variants. Every hit is
+ * reported with file and line.
+ */
+const STRICT_ZONES = [
+  'src/components/dashboard-v2/',
+  'src/components/crm/',
+  'src/components/settings/',
+  'src/components/billing/',
+  'src/components/tokens/',
+  'src/components/onboarding/',
+];
+const STRICT_EXCEPTIONS = [
+  // Editor chrome moves in stage 3; the watermark renders on masters' pages.
+  'src/components/dashboard-v2/panels/',
+  'src/components/dashboard-v2/screens/EditorScreen.tsx',
+  'src/components/billing/FreemiumWatermark.tsx',
+];
+const STRICT_RULES = [
+  ['hex colour', /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b(?![-\w])/],
+  ['raw palette class', new RegExp(`\\b(?:bg|text|border|ring|from|via|to|fill|stroke|outline|shadow|divide|decoration|accent|caret)-(?:${PALETTE})-\\d{2,3}\\b`)],
+  ['white/black alpha', /\b(?:bg|text|border|ring|from|via|to|fill|stroke|divide)-(?:white|black)\/(?:\[[^\]]+\]|\d{1,3})\b/],
+  ['glass surface', /(?:^|[\s"'`])(?:glass(?:-[a-z-]+)?|shadow-glass(?:-[a-z]+)?|bg-liquid-mesh)(?=[\s"'`])/],
+  ['dark: variant (app themes via tokens)', /(?:^|[\s"'`])(?:[a-z-]+:)*dark:[a-z]/],
+];
+const strictViolations = [];
+for (const filePath of collectSourceFiles(SOURCE_DIR)) {
+  const normalized = filePath.split('\\').join('/');
+  if (!STRICT_ZONES.some((zone) => normalized.startsWith(zone))) continue;
+  if (STRICT_EXCEPTIONS.some((exception) => normalized.startsWith(exception))) continue;
+  if (DESIGN_EXCLUDED.some((rule) => rule.test(filePath))) continue;
+  readFileSync(filePath, 'utf8').split(/\r?\n/).forEach((line, index) => {
+    for (const [label, pattern] of STRICT_RULES) {
+      if (pattern.test(line)) strictViolations.push(`${normalized}:${index + 1} ${label}`);
+    }
+  });
+}
+
 console.log('Quality baseline check');
 console.log(`- baseline file: ${BASELINE_PATH}`);
 console.log(`- any usages: ${metrics.any} (max: ${thresholds.anyMax})`);
@@ -120,6 +161,10 @@ for (const [metric, key, env, label] of DESIGN_KEYS) {
   if (Number.isFinite(max) && designMetrics[metric] > max) {
     violations.push(`${label} increased: ${designMetrics[metric]} > ${max} (use design tokens, see DESIGN.md)`);
   }
+}
+console.log(`- strict design zones: ${strictViolations.length} violation(s)`);
+for (const violation of strictViolations) {
+  violations.push(`strict design zone: ${violation} (see DESIGN.md → Строгие зоны)`);
 }
 if (metrics.any > thresholds.anyMax) {
   violations.push(`any usages increased: ${metrics.any} > ${thresholds.anyMax}`);

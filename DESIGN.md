@@ -71,6 +71,17 @@
 - Никаких hex, `bg-white/10`, `text-white/60`, `bg-black/…` в интерфейсе. Исключения: данные тем пользователей (`lib/appearance/presets.ts`, `lib/widget-templates.ts`, `lib/avatar-frame-utils.ts`) и фирменные цвета сторонних сервисов (Kaspi, WhatsApp, Telegram) — через токен Tailwind (`kaspi`) или константу.
 - Брендовые цвета для маркетинга: `brand-ink`, `brand-paper`, `brand-orange`, `brand-action`, `brand-sage`. В продуктовых экранах — только семантические.
 - Количество hex и сырых палитровых классов ограничено ratchet-проверкой (`npm run quality:baseline`): новые можно добавлять только вместо старых.
+- Фирменные цвета сторонних сервисов — только в `src/lib/design/brand-colors.ts` (соцсети, логотип Google, цвета QR) и в Tailwind-цветах `kaspi`, `telegram`, `whatsapp`.
+- Прозрачность цвета — только ступени шкалы: 5, 10, **12, 14**, 15, 20 … 95. Tailwind 3 молча не генерирует `bg-success/13` или `bg-card/82` — элемент остаётся без фона. Тест `opacity-scale.test.ts` это ловит.
+- **`dark:` в интерфейсе не пишем.** Тёмная тема интерфейса включается атрибутом `data-app-theme="dark"`, а вариант `dark:` срабатывает только от класса `.dark` (темы страниц мастеров). Токены уже тёмные — отдельные классы не нужны.
+- Тонированные карточки (`bg-primary/5` на `Card`) не используем: карточка — `bg-card`, выделение — рамкой (`border-primary/30`) или плашкой статуса. Тон `bg-<status>/12` — только для статусных плашек и подсказок.
+- Серый текст — `text-muted-foreground` без дополнительной прозрачности: `text-muted-foreground/60` и `opacity-60` на тексте не проходят контраст AA. Минимальный размер текста — 11 px.
+
+### Строгие зоны
+
+Экраны, уже переведённые на систему, проверяются жёстче: в них **0** hex, сырых палитровых классов, `white/*`/`black/*` с прозрачностью, glass-классов и `dark:`. Нарушение валит `npm run quality:baseline` с указанием файла и строки.
+
+Сейчас строгие зоны: `src/components/dashboard-v2/` (кроме `panels/` и `screens/EditorScreen.tsx` — хром редактора переделывается на этапе 3), `crm/`, `settings/`, `billing/` (кроме `FreemiumWatermark.tsx` — рисуется на страницах мастеров), `tokens/`, `onboarding/`. Список — `STRICT_ZONES` в `scripts/quality-baseline-check.mjs`; каждый следующий перенесённый раздел добавляется туда же.
 
 ---
 
@@ -143,7 +154,7 @@
 `default` — контейнер контента; `interactive` — вся карточка кликабельна; `solid` — выделенная (тариф); `borderless` — группировка без поверхности. Заголовок карточки — `CardTitle` (18–20 px), описание — `CardDescription`.
 
 ### Badge (`ui/badge.tsx`) и статусы
-`success` / `warning` / `info` — мягкие pill (тонированный фон, цветной текст); `default` — счётчики на акценте; `secondary` — нейтральные метки; `outline` — теги; `destructive` — ошибки. Статус заявки: «Новая» (`info` или `default`), «В работе» (`warning`), «Записан»/«Оплачено» (`success`), «Отменено» (`secondary`).
+Статус записи, заявки, страницы — `StatusBadge` (`ui/status-badge.tsx`): точка + слово, `tone="success|warning|info|destructive|neutral|accent"` или готовый `status="published|draft|…"`. `Badge`: `success` / `warning` / `info` — мягкие pill (тонированный фон, цветной текст); `default` — счётчики на акценте; `secondary` — нейтральные метки; `outline` — теги; `destructive` — ошибки. Статус заявки: «Новая» (`info` или `default`), «В работе» (`warning`), «Записан»/«Оплачено» (`success`), «Отменено» (`secondary`).
 
 ### Поля (`ui/input`, `ui/textarea`, `ui/select`, `ui/switch`)
 Высота 44 px, подпись над полем (`Label`), подсказка/ошибка под полем. Ошибка говорит, что не так и как исправить («Введите номер в формате +7 7XX XXX XX XX»).
@@ -151,8 +162,8 @@
 ### Состояния (`ui/states`)
 Единственные `EmptyState`, `LoadingState`, `ErrorState`. Пустое состояние: иконка 24 px, короткий заголовок, одна строка пояснения, одно действие («Добавить первую услугу»). Загрузка — скелетон формы будущего контента, а не спиннер на весь экран.
 
-### Карточка статистики
-Цифра — `font-num text-3xl font-semibold`, подпись — лейбл капсом, изменение — `text-success`/`text-destructive` со знаком, при наличии — спарклайн токеном `primary`.
+### Карточка статистики (`ui/stat-card.tsx`)
+`<StatCard label="Визиты" value={412} icon={Eye} change={18} hint="за 7 дней" />`, `compact` — для сетки 2×2 на телефоне. Цифра — `font-num text-3xl font-semibold`, подпись — лейбл капсом, изменение — `text-success`/`text-destructive` со знаком, при наличии — спарклайн токеном `primary`.
 
 ### Тосты
 Один стек — `sonner` (`import { toast } from 'sonner'`). `toast.success('Сохранено')`, `toast.error('Не удалось сохранить. Проверьте интернет и повторите.')`. Старый `useToast()` оставлен как совместимость и вызывает sonner.
@@ -202,12 +213,39 @@
 | одна главная кнопка на экран | три оранжевые кнопки рядом |
 | `rounded-control` / `rounded-card` | `rounded-[18px]`, `rounded-[2.5rem]` |
 | тост с понятным текстом ошибки | `toast.error(String(error))` |
+| `<StatusBadge tone="success">Оплачено</StatusBadge>` | `bg-emerald-500 text-white` на статусе |
+| `<StatCard label value change />` | самодельная карточка цифры с `glass` |
+| `EmptyState` / `ErrorState` / `LoadingState` из `@/components/ui/states` | свой вариант пустого состояния в экране |
+
+### Перенос экрана на систему: было → стало
+
+| Было | Стало |
+|---|---|
+| `emerald/green/lime/teal-*` | `success` |
+| `amber/yellow/orange-*` | `warning` |
+| `red/rose-*` | `destructive` |
+| `blue/sky/cyan/indigo-*` | `info` |
+| `violet/purple/pink/fuchsia-*`, декоративные градиенты | `primary` или `bg-accent text-accent-foreground`; в графиках — `chart-1…5` |
+| `slate/gray/zinc-*` | `muted-foreground` / `border` / `muted` |
+| тонированный фон `/5…/25` | `bg-<status>/12`, рамка `border-<status>/30` |
+| `bg-white/5`, `bg-white/10` | `bg-muted` |
+| `border-white/*` | `border-border` |
+| `text-white` на `bg-<status>` | `text-<status>-foreground` |
+| `glass`, `glass-card`, `shadow-glass*` | `bg-card border border-border shadow-sm` |
+| `bg-card/80`, `backdrop-blur` на карточке | `bg-card` |
+| `rounded-[2rem]` и т. п. | `rounded-card` / `rounded-control` / `rounded-sheet` |
+| `font-black`, `font-extrabold` | `font-bold` / `font-semibold` |
+| `uppercase tracking-widest` | `uppercase tracking-[0.06em]` (лейбл) |
+| `tabular-nums` | `font-num` |
+| `text-[8px]…text-[10px]` | `text-[11px]` минимум |
+| `<CardContent className="p-4">` | `<CardContent className="p-4 sm:p-4">` — база `CardContent` задаёт `sm:p-6 sm:pt-0` |
 
 ---
 
 ## 13. Чек-лист ревью UI
 
-- [ ] Только семантические токены, нет hex/`white/*`/сырой палитры (кроме разрешённых исключений).
+- [ ] Только семантические токены, нет hex/`white/*`/сырой палитры (кроме разрешённых исключений), нет `dark:`.
+- [ ] `npm run quality:baseline` зелёный (включая строгие зоны).
 - [ ] Экран проверен на 360 px и 1280 px, в светлой и тёмной теме.
 - [ ] Тап-зоны ≥ 44 px, у иконок-кнопок есть `aria-label`.
 - [ ] Цифры — `font-num`, статусы — Badge.

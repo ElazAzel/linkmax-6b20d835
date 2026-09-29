@@ -248,7 +248,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
                   <SelectTrigger className="rounded-2xl h-11">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="glass-card-heavy border-border">
+                  <SelectContent className="border-border">
                     <SelectItem value="room">{t('resources.types.room', 'Room')}</SelectItem>
                     <SelectItem value="equipment">{t('resources.types.equipment', 'Equipment')}</SelectItem>
                     <SelectItem value="other">{t('resources.types.other', 'Other')}</SelectItem>
