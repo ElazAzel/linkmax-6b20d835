@@ -280,9 +280,11 @@ export default {
       },
       // Font stacks come from CSS variables: the app (html.lm-app) uses Onest,
       // pages keep Inter/Manrope (src/index.css page base).
+      // Only the first family is a variable; the fallbacks are the original
+      // stack, so pages render exactly as before even if web fonts fail.
       fontFamily: {
-        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-heading)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-ui)', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        heading: ['var(--font-ui-heading)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         num: ['var(--font-num)', 'ui-monospace', 'monospace']
       },
       fontSize: {

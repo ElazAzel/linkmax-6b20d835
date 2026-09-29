@@ -144,6 +144,10 @@ exports[`page base isolation > page base values are frozen (update the snapshot 
     --shadow-xl: initial;
     --shadow-2xl: initial;
     --font-num: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    /* First family of Tailwind font-sans / font-heading (fallbacks live in
+       tailwind.config.ts and match the original stacks). */
+    --font-ui: 'Inter';
+    --font-ui-heading: 'Manrope', 'Inter';
     --radius-sheet: 1.75rem;
 
     /* Button elevation on pages: the original glow and hover lift. Defined

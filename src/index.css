@@ -273,6 +273,10 @@
     --shadow-xl: initial;
     --shadow-2xl: initial;
     --font-num: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    /* First family of Tailwind font-sans / font-heading (fallbacks live in
+       tailwind.config.ts and match the original stacks). */
+    --font-ui: 'Inter';
+    --font-ui-heading: 'Manrope', 'Inter';
     --radius-sheet: 1.75rem;
 
     /* Button elevation on pages: the original glow and hover lift. Defined
@@ -289,7 +293,7 @@
      the app's already-resolved text color and font from <body>. */
   .lm-page {
     color: hsl(var(--foreground));
-    font-family: var(--font-sans);
+    font-family: var(--font-ui), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
 
   .dark {

@@ -61,6 +61,8 @@ function block(selector: string, vars: Array<[string, string]>, extra: string[] 
 export const APP_ONLY_VARIABLES = [
   '--shadow-2xs', '--shadow-xs', '--shadow-sm', '--shadow', '--shadow-md',
   '--shadow-lg', '--shadow-xl', '--shadow-2xl', '--font-num',
+  '--font-ui', '--font-ui-heading',
+  '--button-shadow', '--button-shadow-hover', '--button-shadow-muted', '--button-lift', '--button-radius-compact',
 ];
 
 export function generateTokensCss(): string {
@@ -73,6 +75,9 @@ export function generateTokensCss(): string {
     ['--font-sans', fonts.sans],
     ['--font-heading', fonts.heading],
     ['--font-num', fonts.num],
+    // First family of Tailwind font-sans / font-heading.
+    ['--font-ui', "'Onest'"],
+    ['--font-ui-heading', "'Onest'"],
     // Buttons in the interface are flat and do not jump on hover.
     ['--button-shadow', '0 1px 2px hsl(216 20% 8% / 0.12)'],
     ['--button-shadow-hover', '0 4px 14px -4px hsl(var(--primary) / 0.45)'],
