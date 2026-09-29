@@ -6,6 +6,10 @@ import { cn } from "@/lib/utils/utils";
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
 
+// Recharts measures on mount; without a starting size it logs a
+// "width(-1) and height(-1)" warning for every chart, even in production.
+const CHART_INITIAL_DIMENSION = { width: 320, height: 200 };
+
 export type ChartConfig = {
   [k in string]: {
     label?: React.ReactNode;
@@ -51,7 +55,7 @@ const ChartContainer = React.forwardRef<
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
-        <RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
+        <RechartsPrimitive.ResponsiveContainer initialDimension={CHART_INITIAL_DIMENSION}>{children}</RechartsPrimitive.ResponsiveContainer>
       </div>
     </ChartContext.Provider>
   );

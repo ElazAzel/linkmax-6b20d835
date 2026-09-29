@@ -12,7 +12,8 @@ import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils/utils';
-import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
+import { isFeatureSchemaMissing, isMissingSchemaError, noteFeatureSchemaError } from '@/lib/resilience/missing-schema';
+import { EXPERT_QUERIES_FEATURE } from '@/services/analytics';
 
 interface ChatbotInsightsProps {
   pageId: string;
@@ -43,6 +44,10 @@ export const ChatbotInsights = ({ pageId }: ChatbotInsightsProps) => {
 
   useEffect(() => {
     const fetchStats = async () => {
+      if (isFeatureSchemaMissing(EXPERT_QUERIES_FEATURE)) {
+        setLoading(false);
+        return;
+      }
       try {
         const { data, error } = await (supabase.from('expert_queries' as any) as any)
           .select('query_text, has_response')
@@ -84,6 +89,7 @@ export const ChatbotInsights = ({ pageId }: ChatbotInsightsProps) => {
         });
       } catch (err: any) {
         // Suppress expected 404 related errors for this beta feature which may not have the backend yet
+        noteFeatureSchemaError(EXPERT_QUERIES_FEATURE, err);
         if (!isMissingSchemaError(err)) {
           console.error('Failed to fetch chatbot insights:', err);
         }

@@ -37,4 +37,17 @@ describe('product analytics without the product_events table', () => {
 
     expect(insert).toHaveBeenCalledTimes(2);
   });
+
+  it('sends one probe when a burst of events starts before the answer', async () => {
+    const insert = vi.fn().mockResolvedValue({ error: { code: 'PGRST205', message: 'missing' } });
+    vi.mocked(supabase.from).mockReturnValue({ insert } as never);
+
+    await Promise.all([
+      trackCurrentUserProductEvent('page_published'),
+      trackCurrentUserProductEvent('page_published'),
+      trackCurrentUserProductEvent('page_published'),
+    ]);
+
+    expect(insert).toHaveBeenCalledTimes(1);
+  });
 });

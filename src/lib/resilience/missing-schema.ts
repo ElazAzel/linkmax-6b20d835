@@ -30,3 +30,24 @@ export class FeatureUnavailableError extends Error {
     this.name = 'FeatureUnavailableError';
   }
 }
+
+/*
+ * Session-level memory of features whose tables are not deployed. After the
+ * first "missing" answer callers skip the request instead of sending one
+ * failing call per render or per visitor action.
+ */
+const missingFeatures = new Set<string>();
+
+export function isFeatureSchemaMissing(feature: string): boolean {
+  return missingFeatures.has(feature);
+}
+
+/** Remembers the feature as missing when `error` is a missing-schema error. */
+export function noteFeatureSchemaError(feature: string, error: unknown): void {
+  if (isMissingSchemaError(error)) missingFeatures.add(feature);
+}
+
+/** Test hook. */
+export function resetFeatureSchemaState(): void {
+  missingFeatures.clear();
+}

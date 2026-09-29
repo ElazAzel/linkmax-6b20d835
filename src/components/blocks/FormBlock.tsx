@@ -96,31 +96,34 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
           },
         });
 
-        if (error) {
-          console.error('Error creating lead:', error);
-        } else if (fnResponse && !fnResponse.success && fnResponse.error === 'inbound_limit_reached') {
+        if (fnResponse && !fnResponse.success && fnResponse.error === 'inbound_limit_reached') {
           toast.error(t('form.limitReached.customer', 'Форма временно недоступна.'));
           setIsSubmitting(false);
           return;
-        } else {
-          // Track lead event on success
-          trackLead();
+        }
+        // A failed submission must not look successful: keep the visitor's
+        // input and show an error instead of silently losing the lead.
+        if (error || (fnResponse && fnResponse.success === false)) {
+          throw error ?? new Error(String(fnResponse?.error ?? 'submit_failed'));
+        }
 
-          // Record in Fintech Ledger if it's a lead form with potential value
-          try {
-            await fintechService.recordPendingIncome({
-              userId: pageOwnerId,
-              amount: 0, // Forms usually don't have fixed price in Phase 1
-              description: `Лид из формы: ${name}`,
-              relatedEntityId: block.id,
-              relatedEntityType: 'lead',
-              metadata: {
-                form_data: formData
-              }
-            });
-          } catch (fintechErr) {
-            console.error('Failed to record fintech transaction for lead', fintechErr);
-          }
+        // Track lead event on success
+        trackLead();
+
+        // Record in Fintech Ledger if it's a lead form with potential value
+        try {
+          await fintechService.recordPendingIncome({
+            userId: pageOwnerId,
+            amount: 0, // Forms usually don't have fixed price in Phase 1
+            description: `Лид из формы: ${name}`,
+            relatedEntityId: block.id,
+            relatedEntityType: 'lead',
+            metadata: {
+              form_data: formData
+            }
+          });
+        } catch (fintechErr) {
+          console.error('Failed to record fintech transaction for lead', fintechErr);
         }
       }
 

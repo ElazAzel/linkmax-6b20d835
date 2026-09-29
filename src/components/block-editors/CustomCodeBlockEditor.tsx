@@ -23,9 +23,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { WIDGET_CATEGORIES, HARDCODED_WIDGET_TEMPLATES, type WidgetTemplate } from '@/lib/widget-templates';
 import { useWidgetTemplates } from '@/hooks/useWidgetTemplates';
+import { CustomCodeBlock } from '@/components/blocks/CustomCodeBlock';
+import type { CustomCodeBlock as CustomCodeBlockType } from '@/types/page';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -58,59 +60,6 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
 
   const filteredTemplates = widgetTemplates.filter(t => t.category === selectedCategory);
 
-  const previewContent = useMemo(() => {
-    const html = data.html || '';
-    const css = data.css || '';
-    const js = data.javascript || '';
-
-    let bodyContent = html;
-    let headContent = '';
-
-    const hasDoctype = html.toLowerCase().includes('<!doctype');
-    const hasHtmlTag = html.toLowerCase().includes('<html');
-
-    if (hasDoctype || hasHtmlTag) {
-      const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
-      if (headMatch) headContent = headMatch[1];
-
-      const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-      if (bodyMatch) bodyContent = bodyMatch[1];
-
-      const scriptMatches = html.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
-      if (scriptMatches && !js) {
-        const inlineScripts = scriptMatches
-          .map((script: string) => {
-            const contentMatch = script.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
-            return contentMatch ? contentMatch[1] : '';
-          })
-          .filter(Boolean);
-
-        if (inlineScripts.length > 0) {
-          bodyContent += `<script>${inlineScripts.join('\n')}</script>`;
-        }
-      }
-    }
-
-    return `<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; padding: 8px; font-family: system-ui, sans-serif; }
-    ${css}
-  </style>
-  ${headContent}
-</head>
-<body>
-  ${bodyContent}
-  ${js ? `<script>${js}</script>` : ''}
-</body>
-</html>`;
-  }, [data.html, data.css, data.javascript]);
-
-  // srcDoc used directly on the iframe element
 
   return (
     <div className="space-y-4">
@@ -339,15 +288,10 @@ function startGame() {
         </div>
 
         {showPreview && formData.html && (
+          // Same sandboxed renderer as the public page: no allow-same-origin,
+          // so preview code cannot read this origin's storage or session.
           <div className="border rounded-lg overflow-hidden bg-background">
-            <iframe
-              src="about:blank"
-              srcDoc={previewContent}
-              title="Preview"
-              className="w-full border-0"
-              style={{ height: '300px', minHeight: '100px' }}
-              sandbox="allow-scripts allow-same-origin allow-forms"
-            />
+            <CustomCodeBlock block={formData as CustomCodeBlockType} />
           </div>
         )}
 
