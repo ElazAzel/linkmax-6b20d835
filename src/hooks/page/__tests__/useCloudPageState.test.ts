@@ -199,4 +199,62 @@ describe('useCloudPageState', () => {
     expect(result.current.pageData?.city).toBe('Almaty');
     expect(updatePageEntityFields).toHaveBeenCalled();
   });
+
+  describe('block positions and bulk operations', () => {
+    const blocks = [
+      { id: 'p', type: 'profile' },
+      { id: 'a', type: 'text' },
+      { id: 'b', type: 'text' },
+      { id: 'c', type: 'text' },
+    ];
+
+    beforeEach(() => {
+      // Offline draft snapshots from earlier tests would be restored otherwise
+      localStorage.clear();
+      (useUserPage as any).mockReturnValue({
+        data: { pageData: { ...mockPageData, id: 'page-positions', blocks }, chatbotContext: '' },
+        isLoading: false,
+        refetch: vi.fn(),
+      });
+    });
+
+    it('inserts at a full-array index (duplicate lands right after the original)', () => {
+      const { result } = renderHook(() => useCloudPageState());
+      act(() => {
+        // duplicate of 'a' (index 1) is inserted at index 2
+        result.current.addBlock({ id: 'a-copy', type: 'text' } as any, 2);
+      });
+      expect(result.current.pageData?.blocks.map((b) => b.id)).toEqual(['p', 'a', 'a-copy', 'b', 'c']);
+    });
+
+    it('never inserts above the profile block and clamps to the end', () => {
+      const { result } = renderHook(() => useCloudPageState());
+      act(() => {
+        result.current.addBlock({ id: 'top', type: 'text' } as any, 0);
+        result.current.addBlock({ id: 'end', type: 'text' } as any, 999);
+      });
+      expect(result.current.pageData?.blocks.map((b) => b.id)).toEqual(['p', 'top', 'a', 'b', 'c', 'end']);
+    });
+
+    it('deleteBlocks removes every selected block but keeps the profile', () => {
+      const { result } = renderHook(() => useCloudPageState());
+      act(() => {
+        result.current.deleteBlocks(['a', 'c', 'p']);
+      });
+      expect(result.current.pageData?.blocks.map((b) => b.id)).toEqual(['p', 'b']);
+    });
+
+    it('publishes only the edited page after autosave', async () => {
+      mockMutateAsyncSave.mockResolvedValue({ dbPage: { id: 'page-positions' } });
+      mockMutateAsyncPublish.mockResolvedValue('test-page');
+      const { result } = renderHook(() => useCloudPageState());
+      act(() => {
+        result.current.updateBlock('a', { content: 'x' } as any);
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2100);
+      });
+      expect(mockMutateAsyncPublish).toHaveBeenCalledWith('page-positions');
+    });
+  });
 });

@@ -9,8 +9,9 @@ import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { useOrganizations } from '@/hooks/useOrganizations';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
-import { storage } from '@/lib/storage';
+import { useActivePageStore } from '@/store/useActivePageStore';
 import { sanitizeSlug, slugifyTitle, validateSlug } from '@/lib/utils/slug';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 
 // ============= Types =============
 
@@ -63,7 +64,6 @@ interface PageRow {
 
 // ============= Constants =============
 
-const ACTIVE_PAGE_KEY = 'active_page_id';
 const DEFAULT_PAGE_TITLE = 'My Page';
 
 // ============= Hook =============
@@ -74,15 +74,19 @@ export function useMultiPage() {
   const { currentOrg } = useOrganizations();
 
   const [pages, setPages] = useState<UserPage[]>([]);
-  const [activePageId, setActivePageId] = useState<string | null>(null);
+  // Shared across every hook instance (switcher, editor, settings)
+  const activePageId = useActivePageStore((state) => state.activePageId);
+  const setActivePageId = useActivePageStore((state) => state.setActivePageId);
   const [limits, setLimits] = useState<PageLimits | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Get active page from list
   const activePage = useMemo(() => {
-    if (!activePageId) return pages[0] || null;
-    return pages.find(p => p.id === activePageId) || pages[0] || null;
+    // Fallback: the primary (oldest) page — the list is sorted newest first
+    const primary = pages[pages.length - 1] || null;
+    if (!activePageId) return primary;
+    return pages.find(p => p.id === activePageId) || primary;
   }, [pages, activePageId]);
 
   // Load user pages (filtered by current organization)
@@ -97,22 +101,34 @@ export function useMultiPage() {
       setLoading(true);
       setError(null);
 
-      let query = supabase
-        .from('pages')
-        .select('id, user_id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, view_count, created_at, updated_at, editor_mode, grid_config, is_in_gallery, gallery_featured_at, gallery_likes, niche, preview_url, quality_score, is_indexable, last_snapshot_at, is_paid, is_primary_paid, page_type, integrations, favicon_url, hide_branding, organization_id, custom_domain, city, country_code, profession, entity_type, service_slugs, site_id, page_path, is_home')
-        .order('created_at', { ascending: false });
+      const BASE_COLUMNS = 'id, user_id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, view_count, created_at, updated_at, editor_mode, grid_config, is_in_gallery, gallery_featured_at, gallery_likes, niche, preview_url, quality_score, is_indexable, last_snapshot_at, is_paid, is_primary_paid, page_type, integrations, favicon_url, hide_branding, organization_id, custom_domain, city, country_code, profession, entity_type, service_slugs';
+      const buildQuery = (columns: string) => {
+        let query = supabase
+          .from('pages')
+          .select(columns)
+          .order('created_at', { ascending: false });
 
-      if (currentOrg?.id) {
-        if (currentOrg.name === 'Personal Organization') {
-          query = query.or(`organization_id.is.null,organization_id.eq.${currentOrg.id}`);
-        } else {
-          query = query.eq('organization_id', currentOrg.id);
-        }
-      } else {
+        // Always the user's own pages. Without this filter the "Personal
+        // Organization" branch (organization_id IS NULL) also returned other
+        // users' published pages through the public-read RLS policy.
         query = query.eq('user_id', user.id);
-      }
+        if (currentOrg?.id) {
+          if (currentOrg.name === 'Personal Organization') {
+            query = query.or(`organization_id.is.null,organization_id.eq.${currentOrg.id}`);
+          } else {
+            query = query.eq('organization_id', currentOrg.id);
+          }
+        }
+        return query;
+      };
 
-      const { data: pagesData, error: pagesError } = await query;
+      let { data: pagesData, error: pagesError } = await buildQuery(`${BASE_COLUMNS}, site_id, page_path, is_home`);
+      // Multi-page site columns come from a later migration. If the database
+      // does not have them yet, list the pages without them instead of
+      // showing "no pages".
+      if (pagesError && isMissingSchemaError(pagesError)) {
+        ({ data: pagesData, error: pagesError } = await buildQuery(BASE_COLUMNS));
+      }
 
       if (pagesError) {
         throw pagesError;
@@ -152,15 +168,14 @@ export function useMultiPage() {
         canCreate: userPages.length < maxPages,
       });
 
-      // Restore or reset active page when list changes (e.g. after org switch)
-      const savedActiveId = storage.get<string>(ACTIVE_PAGE_KEY);
+      // Keep the active page if it is still in the list (e.g. after org switch),
+      // otherwise fall back to the primary page — the oldest one, which is the
+      // user's main link-in-bio page (the list is sorted newest first).
+      const currentActiveId = useActivePageStore.getState().activePageId;
       if (userPages.length === 0) {
         setActivePageId(null);
-      } else if (savedActiveId && userPages.some(p => p.id === savedActiveId)) {
-        setActivePageId(savedActiveId);
-      } else {
-        setActivePageId(userPages[0].id);
-        storage.set(ACTIVE_PAGE_KEY, userPages[0].id);
+      } else if (!currentActiveId || !userPages.some(p => p.id === currentActiveId)) {
+        setActivePageId(userPages[userPages.length - 1].id);
       }
 
     } catch (err) {
@@ -169,7 +184,7 @@ export function useMultiPage() {
     } finally {
       setLoading(false);
     }
-  }, [user?.id, isPremium, currentOrg?.id, currentOrg?.name]);
+  }, [user?.id, isPremium, currentOrg?.id, currentOrg?.name, setActivePageId]);
 
   // Initial load
   useEffect(() => {
@@ -180,9 +195,8 @@ export function useMultiPage() {
   const switchPage = useCallback((pageId: string) => {
     if (pages.some(p => p.id === pageId)) {
       setActivePageId(pageId);
-      storage.set(ACTIVE_PAGE_KEY, pageId);
     }
-  }, [pages]);
+  }, [pages, setActivePageId]);
 
   // Create new page
   const createPage = useCallback(async (title: string, slug?: string): Promise<CreatePageResult> => {
@@ -313,7 +327,6 @@ export function useMultiPage() {
 
       if (newPage?.id) {
         setActivePageId(newPage.id);
-        storage.set(ACTIVE_PAGE_KEY, newPage.id);
       }
 
       return {
@@ -328,7 +341,82 @@ export function useMultiPage() {
         error: err instanceof Error ? err.message : 'Failed to create page',
       };
     }
-  }, [user?.id, limits, loadPages, currentOrg?.id]);
+  }, [user?.id, limits, loadPages, currentOrg?.id, setActivePageId]);
+
+  // Duplicate a page with its content and design. Previously "Duplicate"
+  // called createPage() and produced an empty page with only a profile block.
+  const duplicatePage = useCallback(async (sourcePageId: string): Promise<CreatePageResult> => {
+    if (!user?.id) return { success: false, error: 'not_authenticated' };
+    const source = pages.find(p => p.id === sourcePageId);
+    if (!source) return { success: false, error: 'page_not_found' };
+
+    const created = await createPage(`${source.title} (copy)`, `${source.slug}-copy`.slice(0, 30));
+    if (!created.success || !created.pageId) return created;
+    const newPageId = created.pageId;
+
+    try {
+      const [{ data: sourceRow, error: sourceError }, { data: sourceBlocks, error: blocksError }] = await Promise.all([
+        supabase
+          .from('pages')
+          .select('theme_settings, seo_meta, editor_mode, grid_config, niche, favicon_url, hide_branding')
+          .eq('id', sourcePageId)
+          .eq('user_id', user.id)
+          .maybeSingle(),
+        supabase
+          .from('blocks')
+          .select('type, position, title, content, style, schedule, is_premium')
+          .eq('page_id', sourcePageId)
+          .order('position', { ascending: true }),
+      ]);
+      if (sourceError) throw sourceError;
+      if (blocksError) throw blocksError;
+
+      if (sourceRow) {
+        const { error: pageUpdateError } = await supabase
+          .from('pages')
+          .update({
+            theme_settings: sourceRow.theme_settings,
+            seo_meta: sourceRow.seo_meta,
+            editor_mode: sourceRow.editor_mode,
+            grid_config: sourceRow.grid_config,
+            niche: sourceRow.niche,
+            favicon_url: sourceRow.favicon_url,
+            hide_branding: sourceRow.hide_branding,
+          })
+          .eq('id', newPageId)
+          .eq('user_id', user.id);
+        if (pageUpdateError) throw pageUpdateError;
+      }
+
+      // Event blocks are bound to one page's event record; copying them would
+      // make both pages edit the same event, so they are left out.
+      const copies = (sourceBlocks ?? [])
+        .filter(block => block.type !== 'event')
+        .map((block, index) => ({
+          page_id: newPageId,
+          type: block.type,
+          position: index,
+          title: block.title,
+          content: block.content,
+          style: block.style,
+          schedule: block.schedule,
+          is_premium: block.is_premium,
+        }));
+
+      if (copies.length > 0) {
+        const { error: clearError } = await supabase.from('blocks').delete().eq('page_id', newPageId);
+        if (clearError) throw clearError;
+        const { error: insertError } = await supabase.from('blocks').insert(copies);
+        if (insertError) throw insertError;
+      }
+
+      return created;
+    } catch (err) {
+      logger.error('Error copying page content', err, { context: 'useMultiPage', data: { sourcePageId, newPageId } });
+      // The page exists (with a profile block) — report partial success honestly
+      return { ...created, success: false, error: 'duplicate_content_failed' };
+    }
+  }, [user?.id, pages, createPage]);
 
   // Set primary paid page
   const setPrimaryPaidPage = useCallback(async (pageId: string): Promise<{ success: boolean; error?: string }> => {
@@ -505,6 +593,7 @@ export function useMultiPage() {
     loadPages,
     switchPage,
     createPage,
+    duplicatePage,
     deletePage,
     updatePageSlug,
     setPrimaryPaidPage,

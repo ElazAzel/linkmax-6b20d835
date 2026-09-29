@@ -84,6 +84,9 @@ export function BlockEditorV2({
     const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const formDataRef = useRef<Partial<Block>>(block ? { ...block } : {});
     const deferredFormData = useDeferredValue(formData);
+    // The shell header (size selector etc.) must reflect unsaved edits,
+    // otherwise the active size did not change after a click.
+    const shellBlock = useMemo(() => ({ ...block, ...formData }) as Block, [block, formData]);
     const currentBlockIdRef = useRef<string | null>(block ? block.id : null);
 
     // Perform save
@@ -252,7 +255,7 @@ export function BlockEditorV2({
     // Shell content
     const shellContent = (
         <BlockEditorShell
-            block={block}
+            block={shellBlock}
             blockTypeName={blockTypeName}
             blockIcon={
                 <Suspense fallback={<div className="h-5 w-5 bg-muted rounded-full" />}>

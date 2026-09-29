@@ -27,6 +27,5 @@ export * from './zones/useZoneContacts';
 export * from './zones/useZoneDeals';
 export * from './zones/useZoneTasks';
 export * from './editor/useBlockEditor';
-export * from './editor/useAutosaveBatcher';
 export * from './social/useSocialFeatures';
 export * from './social/useCollaboration';

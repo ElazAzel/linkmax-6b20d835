@@ -4,7 +4,9 @@ import { createBeautyPreset } from '@/domain/revenue-kits/beauty-v1';
 import { supabase } from '@/platform/supabase/client';
 import {
   applyRevenueKit,
+  isRevenueKitAvailable,
   loadRevenueKitDraft,
+  resetRevenueKitAvailability,
   saveRevenueKitDraft,
 } from '../revenue-kit';
 
@@ -15,6 +17,24 @@ vi.mock('@/platform/supabase/client', () => ({
 describe('revenue kit service', () => {
   beforeEach(() => {
     vi.mocked(supabase.rpc).mockReset();
+    resetRevenueKitAvailability();
+  });
+
+  it('maps a missing RPC to feature_unavailable', async () => {
+    vi.mocked(supabase.rpc).mockResolvedValueOnce({ data: null, error: { code: 'PGRST202', message: 'x' } } as never);
+    await expect(loadRevenueKitDraft('page-1')).resolves.toEqual({ ok: false, error: 'feature_unavailable' });
+  });
+
+  it('probes availability once and reports missing RPCs', async () => {
+    vi.mocked(supabase.rpc).mockResolvedValue({ data: null, error: { code: 'PGRST202', message: 'x' } } as never);
+    await expect(isRevenueKitAvailable()).resolves.toBe(false);
+    await expect(isRevenueKitAvailable()).resolves.toBe(false);
+    expect(supabase.rpc).toHaveBeenCalledTimes(1);
+  });
+
+  it('treats permission or data errors as available', async () => {
+    vi.mocked(supabase.rpc).mockResolvedValueOnce({ data: null, error: { code: '42501', message: 'denied' } } as never);
+    await expect(isRevenueKitAvailable()).resolves.toBe(true);
   });
 
   it('applies the complete draft with exact RPC fields and typed IDs', async () => {

@@ -10,7 +10,8 @@ import { logger } from '@/lib/utils/logger';
 export const pageQueryKeys = {
   publicPage: (slug: string) => ['page', 'public', slug] as const,
   publicPageByDomain: (domain: string) => ['page', 'public', 'domain', domain] as const,
-  userPage: (userId: string) => ['page', 'user', userId] as const,
+  // Prefix ['page','user',userId] still matches every page of the user for invalidation
+  userPage: (userId: string, pageId?: string | null) => ['page', 'user', userId, pageId ?? 'primary'] as const,
   allPages: ['page'] as const,
 };
 
@@ -49,12 +50,12 @@ export function usePublicPageByDomain(domain: string | undefined) {
 }
 
 // Hook for loading user's page with caching
-export function useUserPage(userId: string | undefined) {
+export function useUserPage(userId: string | undefined, pageId?: string | null) {
   return useQuery({
-    queryKey: pageQueryKeys.userPage(userId || ''),
+    queryKey: pageQueryKeys.userPage(userId || '', pageId),
     queryFn: async () => {
       if (!userId) return null;
-      const { data, chatbotContext, error } = await loadUserPage(userId);
+      const { data, chatbotContext, error } = await loadUserPage(userId, pageId);
       if (error) throw error;
       return { pageData: data, chatbotContext };
     },
@@ -94,7 +95,7 @@ export function useSavePageMutation(userId: string | undefined) {
       const updatedPageData = dbPage?.id ? { ...pageData, id: dbPage.id } : pageData;
       if (userId) {
         queryClient.setQueryData(
-          pageQueryKeys.userPage(userId),
+          pageQueryKeys.userPage(userId, updatedPageData.id),
           { pageData: updatedPageData, chatbotContext }
         );
       }
@@ -119,9 +120,9 @@ export function usePublishPageMutation(userId: string | undefined) {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (pageId?: string | null) => {
       if (!userId) throw new Error('User ID is required');
-      const { slug, error } = await publishPage(userId);
+      const { slug, error } = await publishPage(userId, pageId);
       if (error) throw error;
       return slug;
     },

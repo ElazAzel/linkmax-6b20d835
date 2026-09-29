@@ -1646,7 +1646,8 @@
       "verification": "Tekshirish",
       "regional": "Mintaqaviy",
       "kaspiQr": "Kaspi QR vidjeti",
-      "kaspiQrDesc": "Kaspi.kz QR-ni asboblar panelida ko'rsatish"
+      "kaspiQrDesc": "Kaspi.kz QR-ni asboblar panelida ko'rsatish",
+      "telegramPaused": "Bot ulangan, bildirishnomalar o‘chiq"
     },
     "activity": {
       "all": "Hammasi",
@@ -1903,11 +1904,17 @@
     "nav": {
       "activity": "Kiruvchi quti",
       "editor": "muharrir",
-      "home": "Uy",
+      "home": "Bosh sahifa",
       "insights": "Analitika",
-      "more": "Ko'proq",
+      "more": "Yana",
       "pages": "Sahifalar",
-      "settings": "Sozlamalar"
+      "settings": "Sozlamalar",
+      "menu": "Menyu",
+      "leads": "Lidlar",
+      "events": "Tadbirlar",
+      "monetize": "Monetizatsiya",
+      "finance": "Moliya",
+      "team": "Jamoa"
     },
     "onboardingComplete": "Xush kelibsiz! O'z sahifangizni yaratishni boshlang.",
     "pageSettings": {
@@ -1991,13 +1998,14 @@
       "deleted": "Sahifa oʻchirildi",
       "draft": "Qoralamalar",
       "duplicate": "Dublikat",
-      "duplicated": "Sahifaning nusxasi",
+      "duplicated": "Sahifa nusxalandi",
       "emptyDescription": "Birinchi sahifangizni yarating",
       "emptyTitle": "Hali sahifalar yoʻq",
       "errors": {
         "invalid_slug": "Noto'g'ri URL",
         "page_limit_exceeded": "Sahifa chegarasiga yetdi",
-        "slug_taken": "Bu URL allaqachon olingan"
+        "slug_taken": "Bu URL allaqachon olingan",
+        "duplicate_content_failed": "Sahifa yaratildi, lekin bloklar va mavzu nusxalanmadi"
       },
       "free": "Bepul",
       "freeLimits": "Ko'proq sahifalar uchun Pro-ga yangilang",
@@ -2104,7 +2112,8 @@
       "blocksReordered": "Bloklash tartibi o'zgartirildi",
       "redone": "Harakat takrorlandi",
       "undoHint": "Bekor qilish uchun bosing",
-      "undone": "Amal bekor qilindi"
+      "undone": "Amal bekor qilindi",
+      "blocksDeleted": "O‘chirilgan bloklar: {{count}}"
     },
     "howItWorks": "Bu qanday ishlaydi",
     "livePreview": "Ko‘rib chiqish",
@@ -2257,7 +2266,9 @@
       "edit": "Tahrirlash",
       "duplicate": "Nusxalash",
       "ai": "AI bilan yaxshilash",
-      "delete": "Oʻchirish"
+      "delete": "Oʻchirish",
+      "done": "Tayyor",
+      "drag": "Blokni sudrash"
     },
     "prePublish": {
       "title": "Dizaynni bir tegishda yaxshilash mumkin",
@@ -5350,7 +5361,8 @@
       "task": "Vazifalar"
     },
     "noResults": "Hech qanday natija topilmadi.",
-    "placeholder": "Qidiruv yoki buyruq..."
+    "placeholder": "Qidiruv yoki buyruq...",
+    "error": "Qidiruv amalga oshmadi. Qayta urinib ko‘ring."
   },
   "separatorBlock": {
     "color": "Rang (ixtiyoriy)",
@@ -5964,7 +5976,8 @@
     "kazakhSteppe": "Степь",
     "kazakhSteppeDesc": "Бирюза и золото",
     "paperInk": "Бумага и чернила",
-    "paperInkDesc": "Журнальная типографика"
+    "paperInkDesc": "Журнальная типографика",
+    "buttonStyle": "Tugmalar va havolalar"
   },
   "tier": {
     "blocksCount": "bloklar",
@@ -7722,7 +7735,8 @@
       "version_conflict": "This booking has already changed. Refresh the page and try again.",
       "slot_unavailable": "That time is no longer available. Choose another option.",
       "action_not_allowed": "This action is no longer available.",
-      "request_failed": "The booking could not be updated. Try again."
+      "request_failed": "The booking could not be updated. Try again.",
+      "feature_unavailable": "Onlayn yozilish hozir mavjud emas. Sahifa egasiga to‘g‘ridan-to‘g‘ri murojaat qiling."
     }
   },
   "publicBooking": {
@@ -7766,7 +7780,8 @@
       "service_unavailable": "There are no services available for booking right now.",
       "page_not_public": "This page has not been published yet.",
       "request_failed": "The booking could not be loaded. Try again.",
-      "invalid_response": "The booking service returned an invalid response. Try again."
+      "invalid_response": "The booking service returned an invalid response. Try again.",
+      "feature_unavailable": "Onlayn yozilish hozir mavjud emas. Sahifa egasiga to‘g‘ridan-to‘g‘ri murojaat qiling."
     }
   },
   "revenueKit": {
@@ -7836,7 +7851,9 @@
       "depositInvalid": "Check the deposit amount",
       "paymentInstructionsRequired": "Add payment instructions",
       "policyRequired": "Confirm the prices, schedule, and cancellation terms",
-      "publishFailed": "The page could not be published"
+      "publishFailed": "The page could not be published",
+      "feature_unavailable": "Yozilish ustasi hozircha mavjud emas. Sahifani muharrirda yig‘ing — hammasi saqlanadi.",
+      "request_failed": "Ma’lumotlarni yuklab bo‘lmadi. Qayta urinib ko‘ring."
     }
   },
   "outcomeHome": {
@@ -7961,7 +7978,8 @@
       "request_failed": "The booking could not be updated",
       "version_conflict": "The booking has changed. Refresh and try again.",
       "slot_not_started": "The appointment has not started yet.",
-      "payment_required": "Confirm the deposit first."
+      "payment_required": "Confirm the deposit first.",
+      "feature_unavailable": "Bu yozilish funksiyasi bazada hali yoqilmagan. Tuzatyapmiz."
     }
   },
   "revenueInsights": {
@@ -7994,5 +8012,55 @@
     "empty": "Avval matn yozing",
     "alreadyClean": "Matn allaqachon tabiiy o‘qiladi",
     "done": "Matn tirikroq bo‘ldi"
+  },
+  "team": {
+    "memberAdded": "A’zo jamoaga qo‘shildi",
+    "inviteErrors": {
+      "user_not_found": "Bu email bilan LinkMAX’da foydalanuvchi yo‘q",
+      "already_member": "Bu foydalanuvchi allaqachon jamoada",
+      "forbidden": "Faqat egasi va adminlar taklif qila oladi",
+      "unavailable": "Email orqali taklif tez orada ishlaydi",
+      "not_authenticated": "Hisobga kiring",
+      "invalid_role": "Noto‘g‘ri rol",
+      "unknown": "A’zoni qo‘shib bo‘lmadi"
+    }
+  },
+  "zoneDocs": {
+    "creator": {
+      "createDocument": "Yangi hujjat",
+      "documentTemplate": "Hujjat shabloni",
+      "selectTemplate": "Shablonni tanlang",
+      "noActiveTemplates": "Faol shablonlar yo‘q",
+      "documentTitle": "Hujjat nomi",
+      "linkToDeal": "Bitimga bog‘lash",
+      "noDeal": "Bitimsiz",
+      "linkToContact": "Kontaktga bog‘lash",
+      "noContact": "Kontaktsiz",
+      "cancel": "Bekor qilish",
+      "creating": "Yaratilmoqda…",
+      "create": "Yaratish"
+    },
+    "templatesSettings": {
+      "management": "Hujjat shablonlari",
+      "noDescription": "Tavsifsiz",
+      "noTemplates": "Hozircha shablonlar yo‘q",
+      "close": "Yopish",
+      "newTemplate": "Yangi shablon",
+      "templateName": "Shablon nomi",
+      "description": "Tavsif",
+      "templateContent": "Shablon matni",
+      "cancel": "Bekor qilish",
+      "save": "Saqlash",
+      "deleteTitle": "Shablon o‘chirilsinmi?",
+      "deleteDescription": "Shablon butunlay o‘chiriladi. Yaratilgan hujjatlar qoladi.",
+      "delete": "O‘chirish"
+    }
+  },
+  "developerSettings": {
+    "comingSoonTitle": "Ochiq API tez orada",
+    "comingSoonDescription": "Lidlar, bitimlar va tadbirlar uchun API kalitlari va REST API tayyorlanmoqda. Ishga tushganda kalitlar shu yerda paydo bo‘ladi.",
+    "webhookNowTitle": "Hozir ishlaydi: sahifa webhooki",
+    "webhookNowDescription": "Sahifadan har bir yangi arizada LinkMAX URL manzilingizga POST so‘rov yuboradi. Make, Zapier, n8n yoki o‘z serveringizni ulang.",
+    "openWebhookSettings": "Webhookni sozlash"
   }
 }

@@ -1,6 +1,13 @@
 /**
- * useEditorHistory - Undo/Redo system with 7-step history
- * Provides complete action history management for the editor
+ * useEditorHistory - Undo/Redo for the block editor.
+ *
+ * `onStateChange` is called only on undo/redo with the full blocks array to
+ * restore; the consumer must apply it to the page state (DashboardV2 wires it
+ * to the cloud page state). Recording an action does not call it — the page
+ * already holds the new state, and calling it caused an extra autosave.
+ *
+ * History lives in refs so callbacks never act on a stale snapshot (the undo
+ * button in a toast used to undo the *previous* action).
  */
 import { useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
@@ -24,7 +31,12 @@ interface UseEditorHistoryOptions {
   onStateChange?: (blocks: Block[]) => void;
 }
 
-const MAX_HISTORY_SIZE = 7;
+interface RecordOptions {
+  /** Show a toast with an Undo button (used for destructive actions). */
+  notify?: boolean;
+}
+
+const MAX_HISTORY_SIZE = 30;
 
 export type EditorHistoryType = ReturnType<typeof useEditorHistory>;
 
@@ -33,31 +45,64 @@ export function useEditorHistory(
   options: UseEditorHistoryOptions = {}
 ) {
   const { t } = useTranslation();
-  const { maxHistorySize = MAX_HISTORY_SIZE, onStateChange } = options;
-  
-  const [history, setHistory] = useState<HistoryAction[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(-1);
+  const { maxHistorySize = MAX_HISTORY_SIZE } = options;
+
+  // Latest callback without re-creating every function when it changes
+  const onStateChangeRef = useRef(options.onStateChange);
+  onStateChangeRef.current = options.onStateChange;
+
+  const historyRef = useRef<HistoryAction[]>([]);
+  const indexRef = useRef(-1);
   const [currentBlocks, setCurrentBlocks] = useState<Block[]>(initialBlocks);
-  
-  // Ref to track the last action for toast dismissal
+  // Bumped on every change so consumers re-render with fresh canUndo/canRedo
+  const [, setVersion] = useState(0);
+  const bump = useCallback(() => setVersion((v) => v + 1), []);
+
   const lastToastIdRef = useRef<string | number | undefined>(undefined);
-  const wasMergedRef = useRef(false);
 
-  // Can undo/redo
-  const canUndo = currentIndex >= 0;
-  const canRedo = currentIndex < history.length - 1;
+  const undo = useCallback(() => {
+    const action = historyRef.current[indexRef.current];
+    if (!action) return null;
 
-  // Record a new action
+    indexRef.current -= 1;
+    setCurrentBlocks(action.previousState);
+    onStateChangeRef.current?.(action.previousState);
+    bump();
+
+    toast.success(t('editor.history.undone', 'Действие отменено'), {
+      description: action.label,
+      duration: 2000,
+    });
+    return action;
+  }, [bump, t]);
+
+  const redo = useCallback(() => {
+    const action = historyRef.current[indexRef.current + 1];
+    if (!action) return null;
+
+    indexRef.current += 1;
+    setCurrentBlocks(action.newState);
+    onStateChangeRef.current?.(action.newState);
+    bump();
+
+    toast.success(t('editor.history.redone', 'Действие повторено'), {
+      description: action.label,
+      duration: 2000,
+    });
+    return action;
+  }, [bump, t]);
+
   const recordAction = useCallback((
     type: HistoryAction['type'],
     previousState: Block[],
     newState: Block[],
     label: string,
     blockId?: string,
-    blockType?: string
+    blockType?: string,
+    recordOptions: RecordOptions = {},
   ) => {
     const action: HistoryAction = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
       type,
       label,
       timestamp: Date.now(),
@@ -67,104 +112,47 @@ export function useEditorHistory(
       blockType,
     };
 
-    wasMergedRef.current = false;
-    
-    setHistory((prev) => {
-      // Remove any future history if we're not at the end
-      const newHistory = prev.slice(0, currentIndex + 1);
-      
-      // P5: Try to merge with last action (history compression)
-      if (newHistory.length > 0) {
-        const lastAction = newHistory[newHistory.length - 1];
-        if (shouldMergeActions(lastAction, action)) {
-          const merged = mergeActions(lastAction, action);
-          wasMergedRef.current = true;
-          return [...newHistory.slice(0, -1), merged].slice(-maxHistorySize);
-        }
-      }
-      
-      // Add new action and limit to max size
-      const updated = [...newHistory, action].slice(-maxHistorySize);
-      return updated;
-    });
-
-    // Only advance index if we didn't merge
-    if (!wasMergedRef.current) {
-      setCurrentIndex((prev) => Math.min(prev + 1, maxHistorySize - 1));
+    // Drop any redo branch
+    const history = historyRef.current.slice(0, indexRef.current + 1);
+    const last = history[history.length - 1];
+    if (last && shouldMergeActions(last, action)) {
+      history[history.length - 1] = mergeActions(last, action);
+    } else {
+      history.push(action);
     }
+    historyRef.current = history.slice(-maxHistorySize);
+    indexRef.current = historyRef.current.length - 1;
     setCurrentBlocks(newState);
-    onStateChange?.(newState);
+    bump();
 
-    // Show toast with undo option
-    if (lastToastIdRef.current) {
-      toast.dismiss(lastToastIdRef.current);
-    }
-
-    lastToastIdRef.current = toast(label, {
-      description: t('editor.history.undoHint', 'Нажмите чтобы отменить'),
-      action: {
-        label: t('editor.undo', 'Отменить'),
-        onClick: () => {
-          // Will trigger undo
-          undo();
+    if (recordOptions.notify) {
+      if (lastToastIdRef.current) toast.dismiss(lastToastIdRef.current);
+      lastToastIdRef.current = toast(label, {
+        action: {
+          label: t('editor.undo', 'Отменить'),
+          onClick: () => undo(),
         },
-      },
-      duration: 5000,
-    });
-  }, [currentIndex, maxHistorySize, onStateChange, t]);
+        duration: 5000,
+      });
+    }
+  }, [maxHistorySize, bump, t, undo]);
 
-  // Undo last action
-  const undo = useCallback(() => {
-    if (!canUndo) return null;
-
-    const action = history[currentIndex];
-    if (!action) return null;
-
-    setCurrentBlocks(action.previousState);
-    setCurrentIndex((prev) => prev - 1);
-    onStateChange?.(action.previousState);
-
-    toast.success(t('editor.history.undone', 'Действие отменено'), {
-      description: action.label,
-      duration: 2000,
-    });
-
-    return action;
-  }, [canUndo, history, currentIndex, onStateChange, t]);
-
-  // Redo action
-  const redo = useCallback(() => {
-    if (!canRedo) return null;
-
-    const nextIndex = currentIndex + 1;
-    const action = history[nextIndex];
-    if (!action) return null;
-
-    setCurrentBlocks(action.newState);
-    setCurrentIndex(nextIndex);
-    onStateChange?.(action.newState);
-
-    toast.success(t('editor.history.redone', 'Действие повторено'), {
-      description: action.label,
-      duration: 2000,
-    });
-
-    return action;
-  }, [canRedo, history, currentIndex, onStateChange, t]);
-
-  // Clear history
   const clearHistory = useCallback(() => {
-    setHistory([]);
-    setCurrentIndex(-1);
-  }, []);
+    historyRef.current = [];
+    indexRef.current = -1;
+    bump();
+  }, [bump]);
 
-  // Reset with new blocks (e.g., after loading)
   const resetWithBlocks = useCallback((blocks: Block[]) => {
     setCurrentBlocks(blocks);
     clearHistory();
   }, [clearHistory]);
 
-  // Helper methods for common operations
+  const blockLabel = useCallback(
+    (blockType: string) => t(`blocks.${blockType}`, blockType),
+    [t],
+  );
+
   const recordBlockAdd = useCallback((
     previousBlocks: Block[],
     newBlocks: Block[],
@@ -175,27 +163,29 @@ export function useEditorHistory(
       'add',
       previousBlocks,
       newBlocks,
-      t('editor.history.blockAdded', 'Блок добавлен: {{type}}', { type: t(`blocks.${blockType}`, blockType) }),
+      t('editor.history.blockAdded', 'Блок добавлен: {{type}}', { type: blockLabel(blockType) }),
       blockId,
       blockType
     );
-  }, [recordAction, t]);
+  }, [recordAction, blockLabel, t]);
 
   const recordBlockDelete = useCallback((
     previousBlocks: Block[],
     newBlocks: Block[],
     blockType: string,
-    blockId: string
+    blockId: string,
+    recordOptions?: RecordOptions,
   ) => {
     recordAction(
       'delete',
       previousBlocks,
       newBlocks,
-      t('editor.history.blockDeleted', 'Блок удалён: {{type}}', { type: t(`blocks.${blockType}`, blockType) }),
+      t('editor.history.blockDeleted', 'Блок удалён: {{type}}', { type: blockLabel(blockType) }),
       blockId,
-      blockType
+      blockType,
+      recordOptions,
     );
-  }, [recordAction, t]);
+  }, [recordAction, blockLabel, t]);
 
   const recordBlockUpdate = useCallback((
     previousBlocks: Block[],
@@ -207,11 +197,11 @@ export function useEditorHistory(
       'update',
       previousBlocks,
       newBlocks,
-      t('editor.history.blockUpdated', 'Блок изменён: {{type}}', { type: t(`blocks.${blockType}`, blockType) }),
+      t('editor.history.blockUpdated', 'Блок изменён: {{type}}', { type: blockLabel(blockType) }),
       blockId,
       blockType
     );
-  }, [recordAction, t]);
+  }, [recordAction, blockLabel, t]);
 
   const recordBlocksReorder = useCallback((
     previousBlocks: Block[],
@@ -225,28 +215,48 @@ export function useEditorHistory(
     );
   }, [recordAction, t]);
 
+  const recordBulkDelete = useCallback((
+    previousBlocks: Block[],
+    newBlocks: Block[],
+    count: number,
+  ) => {
+    recordAction(
+      'bulk',
+      previousBlocks,
+      newBlocks,
+      t('editor.history.blocksDeleted', 'Удалено блоков: {{count}}', { count }),
+      undefined,
+      undefined,
+      { notify: true },
+    );
+  }, [recordAction, t]);
+
+  const history = historyRef.current;
+  const currentIndex = indexRef.current;
+
   return {
     // Current state
     currentBlocks,
     history,
     currentIndex,
-    
+
     // Capabilities
-    canUndo,
-    canRedo,
+    canUndo: currentIndex >= 0,
+    canRedo: currentIndex < history.length - 1,
     historyLength: history.length,
-    
+
     // Actions
     undo,
     redo,
     clearHistory,
     resetWithBlocks,
-    
+
     // Recording helpers
     recordAction,
     recordBlockAdd,
     recordBlockDelete,
     recordBlockUpdate,
     recordBlocksReorder,
+    recordBulkDelete,
   };
 }

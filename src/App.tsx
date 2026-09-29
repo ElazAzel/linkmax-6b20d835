@@ -31,7 +31,6 @@ initPostHog();
 const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
 const PWAUpdatePrompt = lazy(() => import("@/components/pwa/PWAUpdatePrompt").then(m => ({ default: m.PWAUpdatePrompt })));
 const CookieConsent = lazy(() => import("@/components/legal/CookieConsent").then(m => ({ default: m.CookieConsent })));
-const CommandPalette = lazy(() => import("@/components/dashboard-v2/CommandPalette").then(m => ({ default: m.CommandPalette })));
 const PaymentTestModeBanner = lazy(() => import("@/components/PaymentTestModeBanner").then(m => ({ default: m.PaymentTestModeBanner })));
 
 const queryClient = new QueryClient({
@@ -194,7 +193,9 @@ const App = () => {
                   <Suspense fallback={null}>
                     <Toaster />
                     <Sonner />
-                    <CommandPalette />
+                    {/* Cmd+K lives in the dashboard (GlobalCommandPalette / editor / zone
+                        palettes). A second app-wide palette opened on top of them
+                        and pointed at routes that do not exist. */}
                   </Suspense>
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>

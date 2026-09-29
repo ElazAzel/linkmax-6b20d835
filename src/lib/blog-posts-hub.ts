@@ -1,7 +1,6 @@
 // SEO hub content built from Google Search Console data (Sep 2026).
 // Overrides for top-impression posts + new cluster posts.
 // Kept separate from blog-posts.ts so the hub strategy is easy to maintain.
-import type { BlogPost } from './blog-posts';
 import type { BlogPost } from './blog-post-types';
 
 const UPDATED = '2026-09-27';

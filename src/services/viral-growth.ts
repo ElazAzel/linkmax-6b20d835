@@ -2,6 +2,7 @@ import { supabase } from '@/platform/supabase/client';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { getGrowthSessionKey, getGrowthVisitorKey } from '@/lib/growth/visitor';
 import { logger } from '@/lib/utils/logger';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 
 const GROWTH_EVENT_NAMES = [
   'share_clicked',
@@ -59,13 +60,30 @@ function toPageGrowthLink(result: GrowthLinkRpcResult): PageGrowthLink {
   };
 }
 
+/**
+ * Growth RPCs/tables come from a migration that may not be applied. Once the
+ * database says they do not exist, stop calling them for this session — the
+ * public page otherwise sent a failing request on every visit.
+ */
+let growthSchemaMissing = false;
+
+function noteGrowthError(error: unknown) {
+  if (isMissingSchemaError(error)) growthSchemaMissing = true;
+}
+
+/** Test hook. */
+export function resetGrowthSchemaState() {
+  growthSchemaMissing = false;
+}
+
 export async function createPageGrowthLink(pageId: string, campaign = 'launch-kit'): Promise<PageGrowthLink | null> {
-  if (!pageId) return null;
+  if (!pageId || growthSchemaMissing) return null;
   const { data, error } = await supabase.rpc('create_page_growth_link' as any, {
     p_page_id: pageId,
     p_campaign: campaign,
   });
   if (error || !data) {
+    noteGrowthError(error);
     logger.debug('Page growth link creation failed', { data: error });
     return null;
   }
@@ -89,7 +107,7 @@ export async function recordGrowthEvent(input: {
   pageId?: string | null;
   metadata?: Record<string, unknown>;
 }): Promise<boolean> {
-  if (!/^[a-zA-Z0-9_-]{8,64}$/.test(input.code)) return false;
+  if (!/^[a-zA-Z0-9_-]{8,64}$/.test(input.code) || growthSchemaMissing) return false;
   const { data, error } = await supabase.rpc('record_page_growth_event' as any, {
     p_code: input.code,
     p_event_name: input.eventName,
@@ -99,27 +117,36 @@ export async function recordGrowthEvent(input: {
     p_metadata: input.metadata ?? {},
   });
   if (error) {
+    noteGrowthError(error);
     logger.debug('Page growth event failed', { data: error });
     return false;
   }
   return Boolean((data as { success?: boolean } | null)?.success ?? true);
 }
 
-export async function getGrowthMetrics(pageId: string): Promise<{
+export interface GrowthMetrics {
   shares: number;
   visits: number;
   signups: number;
   clones: number;
   invites: number;
-}> {
-  if (!pageId) return { shares: 0, visits: 0, signups: 0, clones: 0, invites: 0 };
+  /** false when growth tracking is not deployed to this database. */
+  available: boolean;
+}
+
+const EMPTY_GROWTH_METRICS: Omit<GrowthMetrics, 'available'> = { shares: 0, visits: 0, signups: 0, clones: 0, invites: 0 };
+
+export async function getGrowthMetrics(pageId: string): Promise<GrowthMetrics> {
+  if (!pageId) return { ...EMPTY_GROWTH_METRICS, available: true };
+  if (growthSchemaMissing) return { ...EMPTY_GROWTH_METRICS, available: false };
   const { data, error } = await supabase
     .from('page_growth_events' as any)
     .select('event_name')
     .eq('page_id', pageId);
   if (error) {
+    noteGrowthError(error);
     logger.debug('Page growth metrics fetch failed', { data: error });
-    return { shares: 0, visits: 0, signups: 0, clones: 0, invites: 0 };
+    return { ...EMPTY_GROWTH_METRICS, available: !growthSchemaMissing };
   }
   const rows = (data || []) as unknown as Array<{ event_name: string }>;
   const count = (name: string) => rows.filter((row) => row.event_name === name).length;
@@ -129,5 +156,6 @@ export async function getGrowthMetrics(pageId: string): Promise<{
     signups: count('referral_signup'),
     clones: count('template_cloned'),
     invites: count('team_invite_sent'),
+    available: true,
   };
 }

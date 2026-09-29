@@ -93,12 +93,34 @@ export function useDashboard(options?: UseDashboardOptions) {
     } as Partial<Block>);
   }, [cloudState]);
 
+  const editorHistory = options?.editorHistory;
+
+  // Reorder / inline update recorded in undo history. Undo/redo itself applies
+  // blocks through cloudState.reorderBlocks (exposed as setBlocks) so it does
+  // not record a new history entry.
+  const reorderBlocksWithHistory = useCallback((blocks: Block[]) => {
+    const previous = cloudState.pageData?.blocks ?? [];
+    cloudState.reorderBlocks(blocks);
+    editorHistory?.recordBlocksReorder(previous, blocks);
+  }, [cloudState, editorHistory]);
+
+  const updateBlockWithHistory = useCallback((id: string, updates: Partial<Block>) => {
+    const previous = cloudState.pageData?.blocks ?? [];
+    const target = previous.find((b) => b.id === id);
+    cloudState.updateBlock(id, updates);
+    if (target) {
+      const next = previous.map((b) => (b.id === id ? ({ ...b, ...updates } as Block) : b));
+      editorHistory?.recordBlockUpdate(previous, next, target.type, id);
+    }
+  }, [cloudState, editorHistory]);
+
   // Block editor (with history reference — passed from DashboardV2)
   const blockEditor = useBlockEditor({
     isPremium,
     addBlock: cloudState.addBlock,
     updateBlock: cloudState.updateBlock,
     deleteBlock: cloudState.deleteBlock,
+    deleteBlocks: cloudState.deleteBlocks,
     blocks: cloudState.pageData?.blocks || [],
     editorHistory: options?.editorHistory,
     playAdd: sounds.playAdd,
@@ -126,6 +148,12 @@ export function useDashboard(options?: UseDashboardOptions) {
     initialUsername: userProfile.profile?.username,
     onSaveSuccess: async () => {
       await userProfile.refresh();
+    },
+    onPrimarySlugChanged: (pageId, slug) => {
+      // The editor saves by slug; keep it in step with the renamed page
+      if (cloudState.pageData?.id === pageId) {
+        cloudState.updatePageDataPartial({ slug });
+      }
     },
   });
 
@@ -210,8 +238,9 @@ export function useDashboard(options?: UseDashboardOptions) {
     premiumLoading,
 
     // Block operations
-    updateBlock: cloudState.updateBlock,
-    reorderBlocks: cloudState.reorderBlocks,
+    updateBlock: updateBlockWithHistory,
+    reorderBlocks: reorderBlocksWithHistory,
+    setBlocks: cloudState.reorderBlocks,
     updatePageDataPartial: cloudState.updatePageDataPartial,
     updateNiche: cloudState.updateNiche,
     updateEntityFields: cloudState.updateEntityFields,
@@ -233,7 +262,8 @@ export function useDashboard(options?: UseDashboardOptions) {
     cloudState.loading,
     cloudState.saving,
     cloudState.saveStatus,
-    cloudState.updateBlock,
+    updateBlockWithHistory,
+    reorderBlocksWithHistory,
     cloudState.reorderBlocks,
     cloudState.updatePageDataPartial,
     cloudState.updateNiche,

@@ -128,7 +128,11 @@ export function RevenueKitWizard({
   const progress = ((stepIndex + 1) / REVENUE_KIT_STEPS.length) * 100;
   const canGoBack = stepIndex > 0;
   const isFinalStep = step === 'publish-distribute';
-  const shellError = validationError ?? (kit.error instanceof Error ? kit.error.message : null);
+  // Service errors arrive as codes (feature_unavailable, request_failed…);
+  // show text, not the raw code.
+  const shellError = validationError ?? (kit.error instanceof Error
+    ? t(`revenueKit.errors.${kit.error.message}`, t('revenueKit.errors.request_failed', 'Не удалось загрузить данные. Попробуйте ещё раз.'))
+    : null);
   const stepLabel = useMemo(() => t('revenueKit.progress', 'Шаг {{current}} из {{total}}', {
     current: stepIndex + 1,
     total: REVENUE_KIT_STEPS.length,
@@ -155,9 +159,10 @@ export function RevenueKitWizard({
       onPublished?.(result);
     } catch (error) {
       publishStarted.current = false;
+      const fallback = t('revenueKit.errors.publishFailed', 'Не удалось опубликовать страницу');
       setValidationError(error instanceof Error
-        ? error.message
-        : t('revenueKit.errors.publishFailed', 'Не удалось опубликовать страницу'));
+        ? t(`revenueKit.errors.${error.message}`, fallback)
+        : fallback);
     }
   };
 

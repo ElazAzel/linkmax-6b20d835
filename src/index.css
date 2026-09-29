@@ -1246,9 +1246,10 @@
    ============================================================ */
 
 /* 1. Override glass VARIABLES at the container level */
+/* No background override here: the canvas cell must show the block's own
+   background/gradient exactly like the public page (WYSIWYG). */
 [data-editor-block] {
   isolation: isolate;
-  background: hsl(var(--card)) !important;
   /* Make glass backgrounds opaque */
   --glass-bg: var(--card) !important;
   --glass-bg-subtle: var(--card) !important;
@@ -1268,17 +1269,16 @@
   --shadow-glass-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
 }
 
-/* 2. Force-kill all blur/filter on every descendant */
+/* 2. Kill backdrop blur on every descendant (performance on long pages).
+   Regular `filter` is left alone — blocks use it for real effects that the
+   public page shows too. */
 [data-editor-block],
 [data-editor-block] *,
 [data-editor-block] *::before,
 [data-editor-block] *::after {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  filter: none !important;
-  -webkit-filter: none !important;
   --tw-backdrop-blur: initial !important;
-  --tw-blur: initial !important;
 }
 
 /* 3. Force opaque backgrounds on glass utility classes */
@@ -1296,13 +1296,6 @@
   border-color: hsl(var(--border)) !important;
 }
 
-/* 4. Force opaque on ALL semi-transparent bg classes */
-[data-editor-block] [class*="bg-card"],
-[data-editor-block] [class*="bg-white"],
-[data-editor-block] [class*="bg-background"] {
-  background-color: hsl(var(--card)) !important;
-  background: hsl(var(--card)) !important;
-}
 
 /* 5. Kill backdrop-blur Tailwind utilities */
 [data-editor-block] [class*="backdrop-blur"] {

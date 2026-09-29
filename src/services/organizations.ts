@@ -3,6 +3,15 @@ import { logger } from '@/lib/utils/logger';
 
 export type OrganizationRole = 'owner' | 'admin' | 'editor' | 'viewer';
 
+export type InviteMemberError =
+    | 'not_authenticated'
+    | 'invalid_role'
+    | 'forbidden'
+    | 'user_not_found'
+    | 'already_member'
+    | 'unavailable'
+    | 'unknown';
+
 export interface Organization {
     id: string;
     name: string;
@@ -116,27 +125,31 @@ export const organizationsService = {
         return { data: data as Organization, error: null };
     },
 
-    async inviteMember(orgId: string, email: string, role: OrganizationRole = 'viewer'): Promise<{ success: boolean; error: unknown }> {
-        const { data: userData, error: userError } = await supabase
-            .from('user_profiles')
-            .select('id')
-            .eq('username', email)
-            .maybeSingle();
+    /**
+     * Adds an existing LinkMAX user to the organization by email.
+     * The lookup runs in the `invite_org_member_by_email` RPC: emails live in
+     * auth.users, which the client cannot query (the old code compared the
+     * email with user_profiles.username and never found anyone).
+     */
+    async inviteMember(orgId: string, email: string, role: OrganizationRole = 'viewer'): Promise<{ success: boolean; error: InviteMemberError | null }> {
+        const rpc = supabase.rpc.bind(supabase) as unknown as (
+            name: string,
+            args: Record<string, unknown>,
+        ) => Promise<{ data: unknown; error: { code?: string } | null }>;
+        const { data, error } = await rpc('invite_org_member_by_email', {
+            p_org_id: orgId,
+            p_email: email.trim(),
+            p_role: role === 'owner' ? 'admin' : role,
+        });
 
-        if (userError || !userData) {
-            return { success: false, error: 'User not found or email is not linked to an account' };
+        if (error) {
+            // PGRST202 / 42883: the function is not deployed to this database yet.
+            const missing = error.code === 'PGRST202' || error.code === '42883';
+            return { success: false, error: missing ? 'unavailable' : 'unknown' };
         }
 
-        const { error } = await supabase
-            .from('organization_members')
-            .insert({
-                org_id: orgId,
-                user_id: userData.id,
-                role,
-            });
-
-        if (error) return { success: false, error };
-
-        return { success: true, error: null };
+        const payload = data as { ok?: boolean; error?: InviteMemberError } | null;
+        if (payload?.ok) return { success: true, error: null };
+        return { success: false, error: payload?.error ?? 'unknown' };
     },
 };

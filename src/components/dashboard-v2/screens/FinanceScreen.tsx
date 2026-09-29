@@ -77,7 +77,6 @@ export const FinanceScreen = memo(function FinanceScreen() {
             <DashboardHeader
                 title={t('finance.title', 'Финансы')}
                 subtitle={t('finance.subtitle', 'История транзакций и кошелек')}
-                onMenuClick={() => {}}
             />
             
             <div className="px-4 py-6 space-y-6 pb-24">

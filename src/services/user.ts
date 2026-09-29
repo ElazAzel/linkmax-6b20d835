@@ -111,6 +111,9 @@ export type UserProfile = AppDatabase['public']['Tables']['user_profiles']['Row'
 export interface UpdateUsernameResult {
   success: boolean;
   error?: string;
+  /** The primary page whose slug now equals the username, if any. */
+  primaryPageId?: string;
+  slug?: string;
 }
 
 // ============= Validation =============
@@ -273,7 +276,32 @@ export async function updateUsername(
   }
 
   try {
-    // Update username in profile
+    // Only the primary (oldest) page follows the username. Updating every page
+    // of the user hit the unique slug constraint as soon as there were two
+    // pages, and the error was ignored while the UI said "updated".
+    const { data: primaryPage, error: primaryError } = await supabase
+      .from('pages')
+      .select('id, slug')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    if (primaryError) {
+      return { success: false, error: 'Failed to update username' };
+    }
+
+    if (primaryPage && primaryPage.slug !== normalizedUsername) {
+      const { data: slugOwner } = await supabase
+        .from('pages')
+        .select('id')
+        .eq('slug', normalizedUsername)
+        .neq('id', primaryPage.id)
+        .maybeSingle();
+      if (slugOwner) {
+        return { success: false, error: 'This username is already taken' };
+      }
+    }
+
     const { error: profileError } = await supabase.from('user_profiles').upsert({
       id: userId,
       username: normalizedUsername,
@@ -283,10 +311,18 @@ export async function updateUsername(
       return { success: false, error: 'Failed to update username' };
     }
 
-    // Sync page slug with new username
-    await supabase.from('pages').update({ slug: normalizedUsername }).eq('user_id', userId);
+    if (primaryPage && primaryPage.slug !== normalizedUsername) {
+      const { error: slugError } = await supabase
+        .from('pages')
+        .update({ slug: normalizedUsername })
+        .eq('id', primaryPage.id)
+        .eq('user_id', userId);
+      if (slugError) {
+        return { success: false, error: 'Username saved, but the page link could not be changed' };
+      }
+    }
 
-    return { success: true };
+    return { success: true, primaryPageId: primaryPage?.id, slug: normalizedUsername };
   } catch {
     return { success: false, error: 'Failed to update username' };
   }
@@ -388,7 +424,8 @@ export type StartProTrialResult =
 export async function startProTrial(): Promise<StartProTrialResult> {
   try {
     // Types regenerate async; cast until then.
-    const rpc = supabase.rpc as unknown as (name: string) => Promise<{ data: unknown; error: unknown }>;
+    // bind: an unbound supabase.rpc throws "reading 'rest'" (the trial button always failed).
+    const rpc = supabase.rpc.bind(supabase) as unknown as (name: string) => Promise<{ data: unknown; error: unknown }>;
     const { data, error } = await rpc('start_pro_trial');
     if (error) return { ok: false, error: 'unknown' };
     const payload = data as { ok?: boolean; trial_ends_at?: string; error?: string } | null;
@@ -426,20 +463,23 @@ export async function updateEmailNotifications(
 }
 
 /**
- * Update Telegram notification settings
+ * Update Telegram notification settings.
+ * `chatId === undefined` keeps the linked chat: turning notifications off and
+ * on again must not force the user to re-link the bot.
  */
 export async function updateTelegramNotifications(
   userId: string,
   enabled: boolean,
-  chatId: string | null
+  chatId?: string | null
 ): Promise<ApiResult<boolean>> {
   try {
+    const update: { telegram_notifications_enabled: boolean; telegram_chat_id?: string | null } = {
+      telegram_notifications_enabled: enabled,
+    };
+    if (chatId !== undefined) update.telegram_chat_id = chatId;
     const { error } = await supabase
       .from('user_profiles')
-      .update({ 
-        telegram_notifications_enabled: enabled,
-        telegram_chat_id: chatId
-      })
+      .update(update)
       .eq('id', userId);
 
     if (error) {

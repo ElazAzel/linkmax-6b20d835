@@ -38,6 +38,8 @@ import {
   PATTERN_PRESETS,
   FONT_PAIR_PRESETS,
   BLOCK_SHAPE_PRESETS,
+  BUTTON_STYLE_PRESETS,
+  type ButtonStyle,
   BLOCK_SHADOW_PRESETS,
   BLOCK_HOVER_PRESETS,
   DIVIDER_PRESETS,
@@ -529,6 +531,26 @@ export const ThemePanel = memo(function ThemePanel({
 
           {/* ============ Blocks tab ============ */}
           <TabsContent value="blocks" className="p-5 pt-0 space-y-6">
+            <PresetGrid
+              label={t('themes.buttonStyle', 'Кнопки и ссылки')}
+              items={BUTTON_STYLE_PRESETS}
+              current={currentTheme.buttonStyle ?? 'rounded'}
+              isPremium={isPremium}
+              onSelect={(v) => setBlockField('buttonStyle', v as ButtonStyle)}
+              onUpgrade={onUpgrade}
+              renderPreview={(v) => (
+                <div
+                  className="w-full h-8 bg-primary text-primary-foreground"
+                  style={{
+                    borderRadius: v === 'pill' ? 9999 : v === 'default' ? 8 : 14,
+                    backgroundImage: v === 'gradient'
+                      ? 'linear-gradient(135deg, hsl(var(--primary)), color-mix(in srgb, hsl(var(--primary)) 55%, #7c3aed))'
+                      : undefined,
+                  }}
+                />
+              )}
+            />
+
             <PresetGrid
               label={t('themes.blockShape', 'Форма блоков')}
               items={BLOCK_SHAPE_PRESETS}

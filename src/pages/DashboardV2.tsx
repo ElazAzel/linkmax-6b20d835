@@ -39,6 +39,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import { isCurrentUserFeatureFlagEnabled } from '@/services/feature-flags';
 import { isBeautyRevenueKitNiche, selectDashboardOnboardingWizard } from './dashboard-onboarding';
+import { isRevenueKitAvailable } from '@/services/revenue-kit';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
 const HomeScreen = lazy(() => import('@/components/dashboard-v2/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
@@ -152,19 +153,28 @@ function DashboardV2Inner() {
   // Editor history — created first so it can be passed to useDashboard
   const editorHistoryRef = useRef<ReturnType<typeof useEditorHistory> | null>(null);
 
-  // We need a stable reference for the first render
+  // Undo/redo applies the restored blocks to the page. The history is created
+  // before the dashboard, so the setter is filled in right after useDashboard.
+  const applyBlocksRef = useRef<((blocks: Block[]) => void) | null>(null);
   const editorHistory = useEditorHistory(
     [],
     {
-      onStateChange: (_blocks) => {
-        // Will be wired after dashboard is available
-      },
+      onStateChange: (blocks) => applyBlocksRef.current?.(blocks),
     }
   );
   editorHistoryRef.current = editorHistory;
 
   // Core state - with onPublish callback for automatic versioning + editorHistory
   const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
+  applyBlocksRef.current = dashboard.setBlocks;
+
+  // History belongs to one page: after switching pages, undo must not apply
+  // the previous page's blocks to the new one.
+  const historyPageId = dashboard.pageData?.id;
+  const resetHistory = editorHistory.resetWithBlocks;
+  useEffect(() => {
+    resetHistory([]);
+  }, [historyPageId, resetHistory]);
   const multiPage = useMultiPage();
   const { limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
@@ -184,11 +194,16 @@ function DashboardV2Inner() {
 
     let active = true;
     setBeautyKitFlag({ niche: revenueKitNiche, enabled: false, resolved: false });
-    void isCurrentUserFeatureFlagEnabled('beauty_revenue_kit_v1', {
-      niche: revenueKitNiche,
-      language: i18n.language,
-    }).then((enabled) => {
-      if (active) setBeautyKitFlag({ niche: revenueKitNiche, enabled, resolved: true });
+    // The flag alone is not enough: with the kit RPCs missing from the
+    // database the wizard opened on signup and failed on the first step.
+    void Promise.all([
+      isCurrentUserFeatureFlagEnabled('beauty_revenue_kit_v1', {
+        niche: revenueKitNiche,
+        language: i18n.language,
+      }),
+      isRevenueKitAvailable(),
+    ]).then(([flagEnabled, available]) => {
+      if (active) setBeautyKitFlag({ niche: revenueKitNiche, enabled: flagEnabled && available, resolved: true });
     });
 
     return () => { active = false; };
@@ -329,7 +344,7 @@ function DashboardV2Inner() {
   // Handle edit page (navigate to editor)
   const handleEditPage = useCallback((pageId: string) => {
     multiPage.switchPage(pageId);
-    handleTabChange('home');
+    handleTabChange('editor');
   }, [multiPage, handleTabChange]);
 
   // Handle page actions
@@ -543,6 +558,8 @@ function DashboardV2Inner() {
                   onInsertPreset={dashboard.blockEditor.handleInsertPreset}
                   onEditBlock={dashboard.blockEditor.handleEditBlock}
                   onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
+                  onDeleteBlocks={dashboard.blockEditor.handleDeleteBlocks}
+                  saveStatus={dashboard.saveStatus}
                   onUpdateBlock={dashboard.updateBlock}
                   onReorderBlocks={dashboard.reorderBlocks}
                   onPreview={() => dashboard.sharingState.handlePreview()}
@@ -587,7 +604,7 @@ function DashboardV2Inner() {
                   onDuplicatePage={async (id) => {
                     const page = multiPage.pages.find(p => p.id === id);
                     if (page) {
-                      const result = await multiPage.createPage(`${page.title} (copy)`, `${page.slug}-copy`);
+                      const result = await multiPage.duplicatePage(id);
                       if (result.success) {
                         toast.success(t('dashboard.pages.duplicated', 'Page duplicated'));
                       } else {
@@ -666,6 +683,9 @@ function DashboardV2Inner() {
             {currentTab === 'settings' && (
               <ScreenErrorBoundary screenName="Settings">
                 <SettingsScreen
+                  // Page fields are initialised from props once; remount per
+                  // page so a switch never shows (and saves) the previous page's values.
+                  key={dashboard.pageData?.id ?? 'no-page'}
                   usernameInput={dashboard.usernameState.usernameInput}
                   onUsernameChange={dashboard.usernameState.setUsernameInput}
                   onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
@@ -681,7 +701,7 @@ function DashboardV2Inner() {
                   onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
                   telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
                   telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
-                  onTelegramChange={(enabled: boolean, chatId?: string) => dashboard.userProfile.updateTelegramNotifications(enabled, chatId || null)}
+                  onTelegramChange={(enabled: boolean, chatId?: string) => dashboard.userProfile.updateTelegramNotifications(enabled, chatId)}
                   niche={dashboard.pageData?.niche as Niche | undefined}
                   onNicheChange={dashboard.updateNiche}
                   onSignOut={dashboard.handleSignOut}
@@ -707,7 +727,15 @@ function DashboardV2Inner() {
                   isIndexable={dashboard.pageData?.isIndexable}
                   faviconUrl={dashboard.pageData?.favicon_url}
                   hideBranding={dashboard.pageData?.hideBranding}
-                  onUpdateSlug={async (slug) => multiPage.updatePageSlug(multiPage.activePageId || '', slug)}
+                  onUpdateSlug={async (slug) => {
+                    const result = await multiPage.updatePageSlug(multiPage.activePageId || '', slug);
+                    // The editor saves by slug (upsert_user_page): without this the
+                    // next autosave wrote the old slug back or hit another page.
+                    if (result.success && dashboard.pageData?.id === multiPage.activePageId) {
+                      dashboard.updatePageDataPartial({ slug });
+                    }
+                    return result;
+                  }}
                   onUpdateCustomDomain={async (domain) => {
                     const result = await multiPage.updatePageCustomDomain(multiPage.activePageId || '', domain);
                     if (result.success) {
@@ -745,9 +773,7 @@ function DashboardV2Inner() {
                   onToggleIndexable={(indexable) => {
                     dashboard.updatePageDataPartial({ isIndexable: indexable });
                   }}
-                  onUpgradePage={() => {
-                    toast.info(t('common.comingSoon', 'Coming soon'));
-                  }}
+                  onUpgradePage={() => navigate('/pricing')}
                   city={dashboard.pageData?.city}
                   profession={dashboard.pageData?.profession}
                   entityType={dashboard.pageData?.entity_type}

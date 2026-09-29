@@ -3,7 +3,9 @@
  * P4: Block Editor Interaction OS
  * P5: Transform engine integration
  */
-import { memo, useState } from 'react';
+import { memo } from 'react';
+import { createPortal } from 'react-dom';
+import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,6 +22,7 @@ import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Clipboard from 'lucide-react/dist/esm/icons/clipboard';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Check from 'lucide-react/dist/esm/icons/check';
 import type { Block, BlockType } from '@/types/page';
 import { getTransformTargets, getTransformWarning } from '@/lib/editor/transform-engine';
 
@@ -34,6 +37,15 @@ interface BlockContextToolbarProps {
   onTransform?: (block: Block, toType: BlockType) => void;
   isFirst?: boolean;
   isLast?: boolean;
+  /**
+   * `inline` — small bar inside the top of the block (desktop).
+   * `dock` — full-width bar fixed above the bottom navigation with 44px
+   * targets (mobile). Rendered through a portal so transformed ancestors
+   * (dnd-kit, animations) cannot break `position: fixed`.
+   */
+  placement?: 'inline' | 'dock';
+  /** Deselect the block (shown as "Done" in the dock variant). */
+  onClose?: () => void;
 }
 
 export const BlockContextToolbar = memo(function BlockContextToolbar({
@@ -47,22 +59,40 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
   onTransform,
   isFirst = false,
   isLast = false,
+  placement = 'inline',
+  onClose,
 }: BlockContextToolbarProps) {
   const { t } = useTranslation();
   const isProfile = block.type === 'profile';
 
   const transformTargets = getTransformTargets(block.type as BlockType);
 
-  return (
-    <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-40 flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-card border border-border shadow-lg">
+  const isDock = placement === 'dock';
+  // min-h/min-w override the Button size minimums so both variants are exact
+  const btn = isDock
+    ? 'h-11 w-11 min-h-11 min-w-11 p-0 rounded-xl'
+    : 'h-8 w-8 min-h-8 min-w-8 p-0 rounded-lg';
+  const icon = isDock ? 'h-5 w-5' : 'h-3.5 w-3.5';
+
+  const bar = (
+    <div
+      role="toolbar"
+      aria-label={t('editor.blockToolbar.label', 'Действия с блоком')}
+      className={cn(
+        'z-50 flex items-center rounded-2xl bg-card border border-border shadow-lg',
+        isDock
+          ? 'fixed left-1/2 -translate-x-1/2 bottom-[calc(env(safe-area-inset-bottom)+88px)] w-[calc(100vw-1rem)] max-w-md justify-between px-2 py-1.5'
+          : 'absolute top-2 left-1/2 -translate-x-1/2 gap-0.5 px-1 py-1',
+      )}
+    >
       <Button
         size="sm"
         variant="ghost"
-        className="h-7 w-7 p-0"
+        className={btn}
         onClick={(e) => { e.stopPropagation(); onEdit(block); }}
         title={t('editor.edit', 'Edit')}
       >
-        <Edit2 className="h-3.5 w-3.5" />
+        <Edit2 className={icon} />
       </Button>
 
       {!isProfile && (
@@ -71,11 +101,11 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
             <Button
               size="sm"
               variant="ghost"
-              className="h-7 w-7 p-0"
+              className={btn}
               onClick={(e) => { e.stopPropagation(); onMoveUp(); }}
               title={t('editor.moveUp', 'Move up')}
             >
-              <ChevronUp className="h-3.5 w-3.5" />
+              <ChevronUp className={icon} />
             </Button>
           )}
 
@@ -83,32 +113,32 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
             <Button
               size="sm"
               variant="ghost"
-              className="h-7 w-7 p-0"
+              className={btn}
               onClick={(e) => { e.stopPropagation(); onMoveDown(); }}
               title={t('editor.moveDown', 'Move down')}
             >
-              <ChevronDown className="h-3.5 w-3.5" />
+              <ChevronDown className={icon} />
             </Button>
           )}
 
           <Button
             size="sm"
             variant="ghost"
-            className="h-7 w-7 p-0"
+            className={btn}
             onClick={(e) => { e.stopPropagation(); onCopy(block); }}
             title={t('editor.copy', 'Copy')}
           >
-            <Clipboard className="h-3.5 w-3.5" />
+            <Clipboard className={icon} />
           </Button>
 
           <Button
             size="sm"
             variant="ghost"
-            className="h-7 w-7 p-0"
+            className={btn}
             onClick={(e) => { e.stopPropagation(); onDuplicate(block.id); }}
             title={t('editor.duplicate', 'Duplicate')}
           >
-            <Copy className="h-3.5 w-3.5" />
+            <Copy className={icon} />
           </Button>
 
           {/* P5: Transform */}
@@ -118,11 +148,11 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="h-7 w-7 p-0"
+                  className={btn}
                   onClick={(e) => e.stopPropagation()}
                   title={t('editor.transform', 'Convert to...')}
                 >
-                  <RefreshCw className="h-3.5 w-3.5" />
+                  <RefreshCw className={icon} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="rounded-xl min-w-[160px]">
@@ -152,14 +182,27 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
           <Button
             size="sm"
             variant="ghost"
-            className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+            className={cn(btn, 'text-destructive hover:text-destructive')}
             onClick={(e) => { e.stopPropagation(); onDelete(block.id); }}
             title={t('editor.delete', 'Delete')}
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 className={icon} />
           </Button>
         </>
       )}
+
+      {isDock && onClose && (
+        <Button
+          size="sm"
+          className="h-11 min-h-11 px-4 rounded-xl gap-1.5"
+          onClick={(e) => { e.stopPropagation(); onClose(); }}
+        >
+          <Check className="h-4 w-4" />
+          {t('editor.blockToolbar.done', 'Готово')}
+        </Button>
+      )}
     </div>
   );
+
+  return isDock && typeof document !== 'undefined' ? createPortal(bar, document.body) : bar;
 });
