@@ -1,8 +1,6 @@
 /**
- * SmartActionDock — sticky-bottom 4-кнопочный док редактора.
- *
- * Это первая точка действия для пользователя: добавить блок, улучшить ИИ,
- * посмотреть превью, опубликовать. По мобильному стандарту 2026 — крупные
+ * SmartActionDock — нижний док редактора: добавить блок, оформление, ИИ.
+ * Превью и публикация — только в верхней панели (EditorTopBar), без дублей. По мобильному стандарту 2026 — крупные
  * tap-зоны (48–56px), gradient-emphasis на главном CTA.
  *
  * Десктоп: floating пилюля по центру, 56px.
@@ -14,21 +12,15 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import Eye from 'lucide-react/dist/esm/icons/eye';
-import Rocket from 'lucide-react/dist/esm/icons/rocket';
-import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Palette from 'lucide-react/dist/esm/icons/palette';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
-import { hapticLight, hapticSelection, hapticSuccess } from '@/platform/native/haptics';
+import { hapticLight, hapticSelection } from '@/platform/native/haptics';
 
 export interface SmartActionDockProps {
   onAddBlock: () => void;
   onAIImprove?: () => void;
   onCustomize?: () => void;
-  onPreview: () => void;
-  onPublish: () => void;
-  isPublished?: boolean;
   hasContent?: boolean;
   className?: string;
 }
@@ -37,9 +29,6 @@ export const SmartActionDock = memo(function SmartActionDock({
   onAddBlock,
   onAIImprove,
   onCustomize,
-  onPreview,
-  onPublish,
-  isPublished,
   hasContent,
   className,
 }: SmartActionDockProps) {
@@ -62,8 +51,7 @@ export const SmartActionDock = memo(function SmartActionDock({
       <div
         className={cn(
           'flex items-center gap-1 p-1.5 rounded-2xl',
-          'bg-card/95 backdrop-blur-xl border border-border/15',
-          'shadow-[0_12px_40px_-8px_rgba(0,0,0,0.25)]',
+          'bg-card border border-border shadow-lg',
         )}
       >
         {/* Primary: Add block */}
@@ -75,7 +63,7 @@ export const SmartActionDock = memo(function SmartActionDock({
           className={cn(
             'group flex items-center gap-2 h-12 rounded-xl px-4 transition-all',
             'bg-primary text-primary-foreground hover:bg-primary/90',
-            'active:scale-[0.97] shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.5)]',
+            'active:scale-[0.97]',
           )}
         >
           <Plus className="h-5 w-5" strokeWidth={2.5} />
@@ -116,45 +104,6 @@ export const SmartActionDock = memo(function SmartActionDock({
           </button>
         )}
 
-        {/* Preview */}
-        <button
-          type="button"
-          onClick={() => { hapticSelection(); onPreview(); }}
-          aria-label={t('editor.dock.preview', 'Превью')}
-          className={cn(
-            'flex items-center justify-center h-12 w-12 rounded-xl transition-colors',
-            'text-muted-foreground hover:text-foreground hover:bg-accent',
-            'active:scale-[0.95]',
-          )}
-        >
-          <Eye className="h-5 w-5" />
-        </button>
-
-        {/* Publish / Share */}
-        <button
-          type="button"
-          onClick={() => { hapticSuccess(); onPublish(); }}
-          aria-label={isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
-          className={cn(
-            'flex items-center gap-2 h-12 rounded-xl px-4 transition-all active:scale-[0.97]',
-            isPublished
-              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20'
-              : hasContent
-              ? 'bg-foreground text-background hover:bg-foreground/90'
-              : 'bg-muted text-muted-foreground hover:bg-accent',
-          )}
-        >
-          {isPublished ? (
-            <Share2 className="h-5 w-5" />
-          ) : (
-            <Rocket className="h-5 w-5" />
-          )}
-          <span className="text-sm font-semibold whitespace-nowrap">
-            {isPublished
-              ? t('editor.dock.share', 'Поделиться')
-              : t('editor.dock.publish', 'Опубликовать')}
-          </span>
-        </button>
       </div>
     </div>
   );

@@ -45,7 +45,8 @@ export const BulkActionBar = memo(function BulkActionBar({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-card border border-border shadow-lg"
+          // Above the phone bottom nav; centred without translate (framer-motion owns transform).
+          className="fixed inset-x-0 mx-auto w-fit max-w-[calc(100vw-1rem)] bottom-[calc(env(safe-area-inset-bottom)+88px)] md:bottom-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-card bg-card border border-border shadow-lg"
         >
           <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
             {selectedCount} {t('editor.selected', 'selected')}

@@ -2,6 +2,16 @@
 <html lang="ru">
 
 <head>
+  <script>
+    // Cancelled requests (navigation, auth lock, unmount) are expected: stop them before any crash reporter sees them.
+    window.addEventListener('unhandledrejection', function (e) {
+      var r = e.reason;
+      if (r && (r.name === 'AbortError' || String(r.message || '').indexOf('signal is aborted') !== -1)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    }, true);
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />

@@ -2286,6 +2286,18 @@
       "designKitTitle": "Give the page a look",
       "designKitDesc": "A design kit sets layout, palette and fonts in one tap — your content stays untouched.",
       "designKitCta": "Pick a style"
+    },
+    "inspector": {
+      "title": "Block settings",
+      "emptyTitle": "Select a block",
+      "emptyHint": "Tap a block on the page — its settings open here and changes show up right away.",
+      "addBlock": "Add block",
+      "theme": "Design",
+      "discard": "Discard changes",
+      "discardShort": "Discard",
+      "done": "Done",
+      "expand": "Expand settings",
+      "collapse": "Collapse settings"
     }
   },
   "errors": {

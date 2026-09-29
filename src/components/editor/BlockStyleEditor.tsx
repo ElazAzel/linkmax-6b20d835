@@ -53,8 +53,10 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
 
   const resetSection = useCallback(
     (keys: (keyof BlockStyle)[]) => {
+      // Explicit undefined: the draft merge and the block update are shallow
+      // merges, so a deleted key would come back from the saved style.
       const next: BlockStyle = { ...style };
-      keys.forEach((k) => delete next[k]);
+      keys.forEach((k) => { next[k] = undefined; });
       onChange({ ...formData, blockStyle: next } as Partial<Block>);
     },
     [formData, onChange, style]

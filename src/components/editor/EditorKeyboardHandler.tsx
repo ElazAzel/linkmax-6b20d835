@@ -25,6 +25,17 @@ function isInputFocused(): boolean {
   return false;
 }
 
+/**
+ * Focus inside the block inspector, a dialog or a menu: editor shortcuts must
+ * not act on the canvas (Delete used to remove the selected block while the
+ * owner was working in its settings).
+ */
+function isFocusInEditorPanel(): boolean {
+  const el = document.activeElement;
+  if (!el || el === document.body) return false;
+  return !!el.closest('[data-editor-inspector], [role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"]');
+}
+
 export function EditorKeyboardHandler({ context, enabled = true }: EditorKeyboardHandlerProps) {
   const {
     commandPaletteOpen,
@@ -50,6 +61,9 @@ export function EditorKeyboardHandler({ context, enabled = true }: EditorKeyboar
 
       // Skip all shortcuts during inline editing
       if (inlineEditingBlockId) return;
+
+      // Panels handle their own keys; only the palette shortcut stays global.
+      if (isFocusInEditorPanel() && !(meta && e.key === 'k')) return;
 
       // Cmd+K — always open palette
       if (meta && e.key === 'k') {
@@ -193,11 +207,16 @@ export function EditorKeyboardHandler({ context, enabled = true }: EditorKeyboar
       // Delete/Backspace — delete selected block(s)
       if (e.key === 'Delete' || e.key === 'Backspace') {
         if (selectedBlockIds.size > 0) {
-          for (const id of selectedBlockIds) {
+          const ids = [...selectedBlockIds].filter((id) => {
             const b = context.blocks.find((bl) => bl.id === id);
-            if (b && b.type !== 'profile') {
-              context.onDeleteBlock(id);
-            }
+            return b && b.type !== 'profile';
+          });
+          // One operation: per-block deletes after the first were dropped by
+          // the delete-in-progress guard, so only one block disappeared.
+          if (ids.length > 1 && context.onDeleteBlocks) {
+            context.onDeleteBlocks(ids);
+          } else if (ids.length > 0) {
+            context.onDeleteBlock(ids[0]);
           }
           clearSelection();
         } else if (selectedBlockId) {
