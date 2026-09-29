@@ -3,7 +3,7 @@
  * Mobile-first design with GridEditor and block editing capabilities
  * P5: Structure view, review modes, friction recovery, sections wired
  */
-import { memo, useCallback, useState, useMemo, useRef, lazy, Suspense } from 'react';
+import { memo, useCallback, useEffect, useState, useMemo, useRef, lazy, Suspense } from 'react';
 import { RenderContextProvider } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -33,6 +33,8 @@ import { storage } from '@/lib/storage';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
 import { useEditorStore } from '@/store/useEditorStore';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { BlockInspector } from '@/components/editor/inspector/BlockInspector';
 import { useAuth } from '@/hooks/user/useAuth';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
@@ -448,12 +450,35 @@ export const EditorScreen = memo(function EditorScreen({
     trackEditorAction('art_direction_applied', { recipe: `fix:${issueId}` });
   }, [onReorderBlocks]);
 
+  // Block inspector: next to the canvas on wide screens, a bottom sheet below.
+  const editingBlock = useEditorStore((state) => state.editingBlock);
+  const editorOpen = useEditorStore((state) => state.editorOpen);
+  const closeEditor = useEditorStore((state) => state.closeEditor);
+  const clearBlockSelection = useEditorStore((state) => state.clearSelection);
+  const isWide = useMediaQuery('(min-width: 1280px)');
+  const inspectedBlock = useMemo(
+    () => (editorOpen && editingBlock ? pageData?.blocks.find((b) => b.id === editingBlock.id) ?? null : null),
+    [editorOpen, editingBlock, pageData?.blocks],
+  );
+  const sheetOpen = !isWide && !!inspectedBlock;
+  const handleCloseInspector = useCallback(() => {
+    closeEditor();
+    clearBlockSelection();
+  }, [closeEditor, clearBlockSelection]);
+
+  // Keep the block being edited visible above the phone sheet.
+  useEffect(() => {
+    if (!sheetOpen || !inspectedBlock) return;
+    const node = document.querySelector(`[data-block-id="${inspectedBlock.id}"]`);
+    node?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }, [sheetOpen, inspectedBlock?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
 
   return (
-    <div className="min-h-screen safe-area-top">
+    <div className={cn('min-h-screen', sheetOpen && 'pb-[58dvh]')}>
       <EditorTopBar
         titleSlot={
           <div className="flex flex-col min-w-0">
@@ -585,6 +610,8 @@ export const EditorScreen = memo(function EditorScreen({
         return null;
       })()}
 
+      <div className={cn(isWide && 'mt-4 grid grid-cols-[minmax(0,1fr)_380px] items-start gap-6 px-4')}>
+      <div className="min-w-0">
       {/* Grid Editor */}
       <div
         className={cn('relative isolate mt-4 overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border bg-background text-foreground', themeScope.className)}
@@ -638,6 +665,29 @@ export const EditorScreen = memo(function EditorScreen({
           {t('editor.sections.picker.cta', '+ Секция (готовый шаблон)')}
         </button>
       </div>
+      </div>
+      {isWide && (
+        <BlockInspector
+          mode="docked"
+          block={inspectedBlock}
+          onUpdateBlock={onUpdateBlock}
+          onDeleteBlock={handleDeleteBlockWithFriction}
+          onClose={handleCloseInspector}
+          onAddBlock={triggerAddBlock}
+          onOpenTheme={onOpenTheme}
+        />
+      )}
+      </div>
+
+      {sheetOpen && (
+        <BlockInspector
+          mode="sheet"
+          block={inspectedBlock}
+          onUpdateBlock={onUpdateBlock}
+          onDeleteBlock={handleDeleteBlockWithFriction}
+          onClose={handleCloseInspector}
+        />
+      )}
 
       {sectionPickerOpen && (
         <Suspense fallback={null}>
@@ -722,16 +772,13 @@ export const EditorScreen = memo(function EditorScreen({
         </Suspense>
       )}
 
-      {/* Smart Action Dock — primary action surface */}
-      <SmartActionDock
+      {/* Smart Action Dock — hidden while the phone inspector sheet is open */}
+      {!sheetOpen && <SmartActionDock
         onAddBlock={triggerAddBlock}
         onCustomize={onOpenTheme}
         onAIImprove={onOpenAI}
-        onPreview={onPreview}
-        onPublish={handleShareWithGate}
-        isPublished={isPublished}
         hasContent={hasContent}
-      />
+      />}
     </div>
   );
 });

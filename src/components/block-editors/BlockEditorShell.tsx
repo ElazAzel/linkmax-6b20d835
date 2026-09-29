@@ -72,6 +72,8 @@ interface BlockEditorShellProps {
     footerActions?: ReactNode;
     /** Optional: delete handler */
     onDelete?: () => void;
+    /** Put the size selector on its own row (narrow containers such as the inspector). */
+    sizeSelectorOnOwnRow?: boolean;
 }
 
 // Autosave indicator component
@@ -225,9 +227,11 @@ export const BlockEditorShell = memo(function BlockEditorShell({
     onBlockUpdate,
     footerActions,
     onDelete,
+    sizeSelectorOnOwnRow = false,
 }: BlockEditorShellProps) {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
+    const sizeOnOwnRow = isMobile || sizeSelectorOnOwnRow;
     const [activeTab, setActiveTab] = useState<EditorTab>('content');
     const [showPreview, setShowPreview] = useState(false);
 
@@ -327,7 +331,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                     </div>
 
                     {/* Block Size Selector - hidden on mobile, shown below title */}
-                    {onBlockUpdate && block && !isMobile && (
+                    {onBlockUpdate && block && !sizeOnOwnRow && (
                         <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
                     )}
 
@@ -354,7 +358,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                 </div>
 
                 {/* Block Size Selector on mobile - separate row */}
-                {onBlockUpdate && block && isMobile && (
+                {onBlockUpdate && block && sizeOnOwnRow && (
                     <div className="px-4 pb-2 flex justify-center">
                         <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
                     </div>
