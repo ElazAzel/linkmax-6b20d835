@@ -1,6 +1,8 @@
 /* Font is loaded via HTML preload for better FCP */
 @import './styles/quiet-bento.css';
 @import './styles/public-appearance.css';
+/* LinkMAX interface tokens (html.lm-app) — generated from src/design-system/tokens.ts */
+@import './design-system/tokens.css';
 
 @tailwind base;
 @tailwind components;
@@ -120,12 +122,16 @@
 }
 
 /* ============================================
-   LIQUID GLASS DESIGN SYSTEM - Apple Style
+   PAGE BASE TOKENS — frozen.
+   Pages built by users (public page, editor canvas: .lm-page) read these.
+   The LinkMAX interface uses html.lm-app tokens (design-system/tokens.css).
+   Changing a value here restyles every master's page; see DESIGN.md.
    All colors MUST be HSL.
    ============================================ */
 
 @layer base {
-  :root {
+  :root,
+  .lm-page {
     /* LinkMAX brand foundations: landing and product share one palette. */
     --brand-ink: 216 20% 8%;
     --brand-paper: 60 22% 95%;
@@ -255,6 +261,35 @@
     --content-gap: clamp(1rem, 3vw, 2rem);
     --page-padding-x: clamp(1rem, 4vw, 2.5rem);
     --page-padding-y: clamp(1.5rem, 4vw, 3rem);
+
+    /* App-only tokens are neutralised on pages (shadows were never defined
+       for pages; defining them would restyle existing pages). */
+    --shadow-2xs: initial;
+    --shadow-xs: initial;
+    --shadow-sm: initial;
+    --shadow: initial;
+    --shadow-md: initial;
+    --shadow-lg: initial;
+    --shadow-xl: initial;
+    --shadow-2xl: initial;
+    --font-num: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --radius-sheet: 1.75rem;
+
+    /* Button elevation on pages: the original glow and hover lift. Defined
+       here (not only on :root) so a page's accent (--primary on .lm-page)
+       colors its own glow. The app overrides these in tokens.css. */
+    --button-shadow: 0 12px 26px -14px hsl(var(--primary) / 0.8);
+    --button-shadow-hover: 0 16px 30px -14px hsl(var(--primary) / 0.72);
+    --button-shadow-muted: 0 0 #0000;
+    --button-lift: -0.125rem;
+    --button-radius-compact: calc(var(--radius) + 0.25rem);
+  }
+
+  /* A page rendered inside the app (editor canvas, previews) must not inherit
+     the app's already-resolved text color and font from <body>. */
+  .lm-page {
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
   }
 
   .dark {
@@ -380,6 +415,12 @@
 }
 
 @layer utilities {
+  /* Numbers in stats, prices, tables: monospaced and column-aligned. */
+  .font-num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
   /* ========================================
      SEMANTIC TYPOGRAPHY ROLES
      Use these instead of ad-hoc text-* sizes

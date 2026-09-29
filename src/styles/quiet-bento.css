@@ -152,7 +152,8 @@
   color: hsl(var(--brand-canvas));
 }
 
-:root {
+:root,
+.lm-page {
   --surface-quiet: var(--brand-paper);
   --surface-raised: 40 33% 99%;
   --surface-sunk: 55 12% 91%;
@@ -251,9 +252,8 @@
 .qb-tile-tall { grid-row: span 2; }
 .qb-tile-large { grid-column: span 2; grid-row: span 2; }
 
-/* Utility helpers (без @layer — простые классы) */
-.rounded-card { border-radius: var(--radius-card); }
-.rounded-control { border-radius: var(--radius-control); }
+/* Utility helpers (без @layer — простые классы).
+   rounded-card / rounded-control / rounded-chip come from tailwind.config.ts. */
 .rounded-pill { border-radius: 9999px; }
 .shadow-soft { box-shadow: var(--shadow-soft); }
 .shadow-lift { box-shadow: var(--shadow-lift); }
@@ -262,42 +262,21 @@
 .bg-surface-sunk { background-color: hsl(var(--surface-sunk)); }
 .border-hairline { border-color: hsl(var(--hairline)); }
 
-/* Product shell. Semantic values are scoped so nested shared controls stay legible. */
+/* Product shell (DESIGN.md → Shell). Uses the app tokens directly: the
+   sidebar and bottom navigation are raised surfaces in light and dark. */
 .app-canvas {
-  background-color: hsl(var(--brand-paper));
-  color: hsl(var(--brand-ink));
-}
-
-.dark .app-canvas {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
 
 .app-sidebar,
 .app-bottom-nav {
-  --background: var(--brand-ink);
-  --foreground: 60 22% 95%;
-  --card: 216 16% 12%;
-  --card-foreground: 60 22% 95%;
-  --popover: 216 16% 12%;
-  --popover-foreground: 60 22% 95%;
-  --primary: var(--brand-orange);
-  --primary-foreground: var(--brand-ink);
-  --secondary: 216 14% 17%;
-  --secondary-foreground: 60 18% 92%;
-  --muted: 216 14% 15%;
-  --muted-foreground: 60 5% 66%;
-  --accent: 0 0% 100% / 0.08;
-  --accent-foreground: 0 0% 100%;
-  --border: 0 0% 100% / 0.13;
-  --input: 0 0% 100% / 0.16;
-  --ring: var(--brand-orange);
-  background-color: hsl(var(--brand-ink));
-  color: hsl(60 22% 95%);
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
 }
 
 .brand-wordmark {
-  color: hsl(60 22% 95%);
+  color: hsl(var(--foreground));
   font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
   font-weight: 800;
   letter-spacing: 0;

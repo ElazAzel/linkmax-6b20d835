@@ -1647,7 +1647,12 @@
       "regional": "Аймақтық",
       "kaspiQr": "Kaspi QR виджеті",
       "kaspiQrDesc": "Kaspi.kz QR-ді бақылау тақтасында көрсетіңіз",
-      "telegramPaused": "Бот байланған, хабарламалар өшірулі"
+      "telegramPaused": "Бот байланған, хабарламалар өшірулі",
+      "interfaceTheme": "Интерфейс тақырыбы",
+      "interfaceThemeDesc": "Сіздің бетіңіз өз тақырыбында қалады",
+      "themeSystem": "Жүйедегідей",
+      "themeLight": "Ашық",
+      "themeDark": "Қараңғы"
     },
     "activity": {
       "all": "Барлығы",

@@ -8,24 +8,18 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
+        /** Content container: lists, forms, stats. */
         default:
           "border border-border/75 bg-card shadow-soft hover:border-border",
-        glass:
-          "border border-border/65 bg-card/82 backdrop-blur-xl shadow-soft hover:bg-card/94 hover:shadow-lift hover:border-primary/20",
+        /** Emphasised container that already lifts (e.g. a pricing plan). */
         solid:
           "border border-border/70 bg-card shadow-soft hover:shadow-lift",
-        outline:
-          "border-2 border-border/60 bg-transparent hover:bg-card/40 hover:border-primary/40",
+        /** The whole card is one tap target (opens a screen or sheet). */
         interactive:
-          "border border-border/75 bg-card shadow-soft cursor-pointer hover:shadow-lift hover:border-primary/45 hover:-translate-y-0.5 active:scale-[0.99] active:translate-y-0",
-        premium:
-          "border border-primary/30 bg-card shadow-lift hover:border-primary/55 hover:-translate-y-0.5",
+          "border border-border/75 bg-card shadow-soft cursor-pointer hover:shadow-lift hover:border-primary/45 active:scale-[0.99]",
+        /** Layout-only grouping without a surface. */
         borderless:
           "border-0 bg-transparent shadow-none",
-        crisp:
-          "border border-border/50 bg-card shadow-sm",
-        elevated:
-          "border border-border/70 bg-card shadow-lift hover:border-primary/25 hover:-translate-y-0.5 active:translate-y-0",
       },
     },
     defaultVariants: {

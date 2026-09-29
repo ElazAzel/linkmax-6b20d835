@@ -25,6 +25,8 @@ import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import Globe from 'lucide-react/dist/esm/icons/globe';
+import Moon from 'lucide-react/dist/esm/icons/moon';
+import { AppThemeSwitcher } from '@/components/settings/AppThemeSwitcher';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -366,6 +368,18 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         label={t('dashboard.accountSettings.language', 'Language')}
                         rightElement={<LanguageSwitcher />}
                     />
+                    <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+                        <div className="flex items-center gap-3">
+                            <div className="h-11 w-11 rounded-2xl bg-muted flex items-center justify-center">
+                                <Moon className="h-5 w-5 text-foreground" />
+                            </div>
+                            <div>
+                                <div className="font-medium">{t('dashboard.accountSettings.interfaceTheme', 'Тема интерфейса')}</div>
+                                <p className="text-sm text-muted-foreground">{t('dashboard.accountSettings.interfaceThemeDesc', 'Ваша страница остаётся в своей теме')}</p>
+                            </div>
+                        </div>
+                        <AppThemeSwitcher />
+                    </div>
                 </Card>
             </div>
 

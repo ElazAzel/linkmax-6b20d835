@@ -1,0 +1,158 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`page base isolation > page base values are frozen (update the snapshot only on purpose) 1`] = `
+":root,
+  .lm-page {
+    /* LinkMAX brand foundations: landing and product share one palette. */
+    --brand-ink: 216 20% 8%;
+    --brand-paper: 60 22% 95%;
+    --brand-orange: 20 100% 50%;
+    --brand-orange-action: 20 100% 40%;
+    --brand-sage: 90 4% 45%;
+
+    --background: var(--brand-paper);
+    --foreground: var(--brand-ink);
+
+    /* Liquid Glass card - translucent white */
+    --card: 40 33% 99%;
+    --card-foreground: var(--brand-ink);
+
+    /* Popover/Dropdown - glass effect */
+    --popover: 40 33% 99%;
+    --popover-foreground: var(--brand-ink);
+
+    /* Primary actions use the accessible deep-orange companion of #ff5701. */
+    --primary: var(--brand-orange-action);
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Subtle frosted */
+    --secondary: 60 14% 91%;
+    --secondary-foreground: var(--brand-ink);
+
+    /* Muted - Soft gray glass */
+    --muted: 55 12% 91%;
+    --muted-foreground: var(--brand-sage);
+
+    /* Accent - Light glass tint */
+    --accent: 20 100% 95%;
+    --accent-foreground: 20 100% 30%;
+
+    /* Destructive - Soft red */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Success - Emerald */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning - Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Info - Sky */
+    --info: 203 87% 44%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 52 14% 81%;
+    --input: 52 14% 81%;
+    --ring: var(--brand-orange-action);
+
+    --radius: 1rem;
+
+    /* Sidebar - Frosted glass */
+    --sidebar-background: var(--brand-ink);
+    --sidebar-foreground: 60 22% 95%;
+    --sidebar-primary: var(--brand-orange);
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 100% / 0.08;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 100% / 0.12;
+    --sidebar-ring: var(--brand-orange);
+    --sidebar: var(--brand-ink);
+
+    /* Chart colors - Vibrant gradient palette */
+    --chart-1: 20 100% 45%;
+    --chart-2: 203 87% 44%;
+    --chart-3: 151 60% 36%;
+    --chart-4: 335 72% 48%;
+    --chart-5: 42 92% 46%;
+
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* ========================================
+       2026 LIVING CANVAS TOKENS
+       ======================================== */
+
+    /* Glass backgrounds with varying opacity */
+    --glass-bg: 40 33% 99% / 0.82;
+    --glass-bg-subtle: 40 33% 99% / 0.58;
+    --glass-bg-strong: 40 33% 99% / 0.94;
+
+    /* Blur Radius */
+    --glass-blur: 16px;
+    --glass-blur-sm: 8px;
+    --glass-blur-lg: 24px;
+    --glass-blur-xl: 40px;
+
+    /* Prismatic Border Effect */
+    --glass-border: 52 14% 81% / 0.72;
+    --glass-border-subtle: 52 14% 81% / 0.42;
+    --prismatic-blur: 15px;
+    --prismatic-glow: linear-gradient(135deg, hsl(var(--brand-orange) / 0.24), hsl(var(--brand-ink) / 0.12));
+
+    /* Enhanced Shadows - Editorial & Physical */
+    --shadow-glass:
+      0 0 0 1px hsl(var(--border) / 0.7),
+      0 8px 24px -14px hsl(var(--brand-ink) / 0.24),
+      0 2px 6px -3px hsl(var(--brand-ink) / 0.12);
+
+    --shadow-glass-lg:
+      0 0 0 1px hsl(var(--border) / 0.8),
+      0 18px 44px -18px hsl(var(--brand-ink) / 0.28),
+      0 6px 14px -8px hsl(var(--brand-orange) / 0.18);
+
+    --shadow-glass-xl:
+      0 0 0 1px hsl(var(--border) / 0.9),
+      0 28px 64px -24px hsl(var(--brand-ink) / 0.34),
+      0 10px 22px -12px hsl(var(--brand-orange) / 0.2);
+
+    /* Material simulation */
+    --grain-opacity: 0.04;
+    --radius: 1rem;
+
+    /* Typography */
+    --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
+    --text-primary: 1;
+    --text-secondary: 0.8;
+    --text-tertiary: 0.6;
+
+    /* Section spacing - responsive */
+    --section-gap: clamp(3rem, 8vw, 6rem);
+    --content-gap: clamp(1rem, 3vw, 2rem);
+    --page-padding-x: clamp(1rem, 4vw, 2.5rem);
+    --page-padding-y: clamp(1.5rem, 4vw, 3rem);
+
+    /* App-only tokens are neutralised on pages (shadows were never defined
+       for pages; defining them would restyle existing pages). */
+    --shadow-2xs: initial;
+    --shadow-xs: initial;
+    --shadow-sm: initial;
+    --shadow: initial;
+    --shadow-md: initial;
+    --shadow-lg: initial;
+    --shadow-xl: initial;
+    --shadow-2xl: initial;
+    --font-num: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --radius-sheet: 1.75rem;
+
+    /* Button elevation on pages: the original glow and hover lift. Defined
+       here (not only on :root) so a page's accent (--primary on .lm-page)
+       colors its own glow. The app overrides these in tokens.css. */
+    --button-shadow: 0 12px 26px -14px hsl(var(--primary) / 0.8);
+    --button-shadow-hover: 0 16px 30px -14px hsl(var(--primary) / 0.72);
+    --button-shadow-muted: 0 0 #0000;
+    --button-lift: -0.125rem;
+    --button-radius-compact: calc(var(--radius) + 0.25rem);
+  }"
+`;
