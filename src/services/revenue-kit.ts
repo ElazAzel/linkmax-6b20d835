@@ -3,6 +3,7 @@ import type {
   RevenueKitStep,
 } from '@/domain/revenue-kits/beauty-v1';
 import { supabase } from '@/platform/supabase/client';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 import type { Json } from '@/platform/supabase/types';
 
 export interface RevenueKitDraftRecord {
@@ -73,7 +74,33 @@ function isApplyResult(value: unknown): value is RevenueKitApplyResult {
 }
 
 function rpcError(error: { message?: string; code?: string } | null): string {
+  // Revenue kit RPCs come from migrations that may not be applied yet.
+  if (isMissingSchemaError(error)) return 'feature_unavailable';
   return error?.code || error?.message || 'request_failed';
+}
+
+let availabilityProbe: Promise<boolean> | null = null;
+
+/**
+ * Whether the revenue kit RPCs exist in this database. Checked once per
+ * session so onboarding does not open a wizard that cannot save a step.
+ * Network errors count as "available": the wizard handles them itself.
+ */
+export function isRevenueKitAvailable(): Promise<boolean> {
+  availabilityProbe ??= Promise.resolve(
+    supabase.rpc('get_revenue_kit_draft', {
+      p_page_id: '00000000-0000-0000-0000-000000000000',
+      p_kit_id: 'beauty-v1',
+    }),
+  )
+    .then(({ error }) => !isMissingSchemaError(error))
+    .catch(() => true);
+  return availabilityProbe;
+}
+
+/** Test hook. */
+export function resetRevenueKitAvailability() {
+  availabilityProbe = null;
 }
 
 export async function loadRevenueKitDraft(

@@ -402,30 +402,34 @@ function ColorPicker({
   onChange: (v: string) => void;
   full?: boolean;
 }) {
+  // The native picker covers only the swatch. It used to cover the whole
+  // control (absolute inset-0), so the hex field could not be clicked.
+  // <input type=color> needs #rrggbb; other formats keep the swatch but the
+  // picker starts from black.
+  const pickerValue = /^#[0-9a-f]{6}$/i.test(value) ? value : '#000000';
   return (
-    <label
+    <div
       className={cn(
-        'relative inline-flex items-center gap-2 h-10 px-2.5 rounded-xl bg-muted/30 border border-border/30 cursor-pointer',
+        'inline-flex items-center gap-2 h-11 px-2.5 rounded-xl bg-muted/30 border border-border/30',
         full && 'w-full'
       )}
     >
-      <span
-        className="h-6 w-6 rounded-md border border-border/40 shrink-0"
-        style={{ backgroundColor: value }}
-      />
+      <label className="relative h-7 w-7 shrink-0 cursor-pointer rounded-md border border-border/40 overflow-hidden">
+        <span className="absolute inset-0" style={{ backgroundColor: value }} />
+        <input
+          type="color"
+          value={pickerValue}
+          onChange={(e) => onChange(e.target.value)}
+          className="absolute inset-0 h-full w-full opacity-0 cursor-pointer"
+          aria-label="color"
+        />
+      </label>
       <Input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-7 px-1.5 text-xs bg-transparent border-0 focus-visible:ring-0"
+        className="h-8 px-1.5 text-xs bg-transparent border-0 focus-visible:ring-0"
       />
-      <input
-        type="color"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="absolute inset-0 opacity-0 cursor-pointer"
-        aria-label="color"
-      />
-    </label>
+    </div>
   );
 }

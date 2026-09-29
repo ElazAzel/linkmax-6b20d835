@@ -3,6 +3,7 @@
  * P4: Block Editor Interaction OS
  */
 import type { BlockType } from '@/types/page';
+import { getI18nText } from '@/lib/i18n-helpers';
 
 export interface InlineEditableField {
   /** Field path in block data (supports dot notation) */
@@ -25,25 +26,26 @@ export const INLINE_EDITABLE_FIELDS: Partial<Record<BlockType, InlineEditableFie
   text: [
     { field: 'content', type: 'text', primary: true, maxLength: 2000 },
   ],
+  // Field names must match the block types in src/types/blocks/* — button and
+  // link store their caption in `title` (inline edits used to write `label`,
+  // which nothing reads).
   button: [
-    { field: 'label', type: 'short', primary: true, maxLength: 50 },
+    { field: 'title', type: 'short', primary: true, maxLength: 50 },
     { field: 'url', type: 'short', maxLength: 500 },
   ],
   link: [
-    { field: 'label', type: 'short', primary: true, maxLength: 100 },
+    { field: 'title', type: 'short', primary: true, maxLength: 100 },
     { field: 'url', type: 'short', maxLength: 500 },
   ],
   messenger: [
-    { field: 'customLabel', type: 'short', primary: true, maxLength: 50 },
-    { field: 'username', type: 'short', maxLength: 100 },
+    { field: 'title', type: 'short', primary: true, maxLength: 50 },
   ],
   booking: [
     { field: 'title', type: 'short', primary: true, maxLength: 100 },
     { field: 'description', type: 'text', maxLength: 500 },
   ],
   testimonial: [
-    { field: 'text', type: 'text', primary: true, maxLength: 500 },
-    { field: 'author', type: 'short', maxLength: 50 },
+    { field: 'title', type: 'short', primary: true, maxLength: 100 },
   ],
   newsletter: [
     { field: 'title', type: 'short', primary: true, maxLength: 100 },
@@ -60,8 +62,7 @@ export const INLINE_EDITABLE_FIELDS: Partial<Record<BlockType, InlineEditableFie
     { field: 'title', type: 'short', primary: true, maxLength: 100 },
   ],
   map: [
-    { field: 'title', type: 'short', primary: true, maxLength: 100 },
-    { field: 'address', type: 'text', maxLength: 200 },
+    { field: 'address', type: 'text', primary: true, maxLength: 200 },
   ],
   countdown: [
     { field: 'title', type: 'short', primary: true, maxLength: 100 },
@@ -141,4 +142,28 @@ export function setFieldValue(
   
   current[parts[parts.length - 1]] = value;
   return result;
+}
+
+/**
+ * Read a field for inline editing as plain text in the given language.
+ * Multilingual values ({ ru, en, kk }) used to be shown as "[object Object]".
+ */
+export function readInlineText(raw: unknown, lang: string): string {
+  if (raw === null || raw === undefined) return '';
+  if (typeof raw === 'string' || typeof raw === 'number') return String(raw);
+  if (typeof raw === 'object' && !Array.isArray(raw)) {
+    return getI18nText(raw as Record<string, string | undefined>, lang);
+  }
+  return '';
+}
+
+/**
+ * Write edited text back without destroying other translations: multilingual
+ * values get only the current language replaced; plain strings stay strings.
+ */
+export function writeInlineText(raw: unknown, text: string, lang: string): unknown {
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+    return { ...(raw as Record<string, unknown>), [lang]: text };
+  }
+  return text;
 }

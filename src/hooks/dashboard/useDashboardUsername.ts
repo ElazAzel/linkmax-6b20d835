@@ -8,6 +8,8 @@ interface UseDashboardUsernameOptions {
   userId: string | undefined;
   initialUsername: string | null | undefined;
   onSaveSuccess: () => Promise<void>;
+  /** Called when the primary page slug changed along with the username. */
+  onPrimarySlugChanged?: (pageId: string, slug: string) => void;
 }
 
 /**
@@ -17,6 +19,7 @@ export function useDashboardUsername({
   userId,
   initialUsername,
   onSaveSuccess,
+  onPrimarySlugChanged,
 }: UseDashboardUsernameOptions) {
   const { t } = useTranslation();
   const [usernameInput, setUsernameInput] = useState('');
@@ -65,6 +68,9 @@ export function useDashboardUsername({
       }
 
       toast.success(t('toasts.username.updated'));
+      if (result.primaryPageId && result.slug) {
+        onPrimarySlugChanged?.(result.primaryPageId, result.slug);
+      }
       await onSaveSuccess();
       return true;
     } catch (error) {
@@ -74,7 +80,7 @@ export function useDashboardUsername({
     } finally {
       setSaving(false);
     }
-  }, [userId, usernameInput, onSaveSuccess, t]);
+  }, [userId, usernameInput, onSaveSuccess, onPrimarySlugChanged, t]);
 
   return {
     usernameInput,

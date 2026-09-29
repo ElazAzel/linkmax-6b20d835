@@ -257,7 +257,6 @@ export const HomeScreen = memo(function HomeScreen({
       <DashboardHeader
         title={t('dashboard.home.title', 'Главная')}
         subtitle={t('dashboard.home.subtitle', 'Обзор вашей страницы')}
-        onMenuClick={() => {}}
         actions={pageSwitcher}
       />
 
@@ -336,7 +335,7 @@ export const HomeScreen = memo(function HomeScreen({
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <WalletOverviewWidget 
-                onViewFinance={() => navigate('/finance')}
+                onViewFinance={() => navigate('/dashboard/finance')}
                 className="bg-card border-border/10 shadow-sm h-full"
               />
               

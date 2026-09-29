@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   CommandDialog,
@@ -23,16 +23,28 @@ import Settings from "lucide-react/dist/esm/icons/settings";
 import Receipt from "lucide-react/dist/esm/icons/receipt";
 import Mail from "lucide-react/dist/esm/icons/mail";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useActivePageStore } from "@/store/useActivePageStore";
 
 export function GlobalCommandPalette() {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedQuery = useDebounce(searchQuery, 300);
-  const { results, loading, search, clear } = useGlobalSearch();
+  const { results, loading, error, search, clear } = useGlobalSearch();
+  const setActivePageId = useActivePageStore((state) => state.setActivePageId);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  // One palette per screen: the editor tab and zone tabs have their own
+  // Cmd+K palettes; opening this one as well stacked several dialogs.
+  const location = useLocation();
+  const tabParam = new URLSearchParams(location.search).get("tab");
+  const ownsShortcut =
+    tabParam !== "editor" &&
+    !tabParam?.startsWith("zone-") &&
+    !location.pathname.startsWith("/dashboard/zone-");
+
   useEffect(() => {
+    if (!ownsShortcut) return;
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
@@ -41,7 +53,7 @@ export function GlobalCommandPalette() {
     };
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
+  }, [ownsShortcut]);
 
   useEffect(() => {
     if (debouncedQuery.length >= 2) {
@@ -53,6 +65,8 @@ export function GlobalCommandPalette() {
 
   const onSelect = (result: SearchResult) => {
     setOpen(false);
+    // Open the found page in the editor, not whichever page was active.
+    if (result.type === 'page') setActivePageId(result.id);
     navigate(result.url);
   };
 
@@ -86,6 +100,8 @@ export function GlobalCommandPalette() {
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground mr-2" />
               {t('common.loading', 'Loading...')}
             </div>
+          ) : error ? (
+            <span className="text-destructive">{t('search.error', 'Search failed. Try again.')}</span>
           ) : (
             t('search.noResults', 'No results found.')
           )}
@@ -106,19 +122,19 @@ export function GlobalCommandPalette() {
                 <Plus className="h-4 w-4 mr-2 text-primary" />
                 {t('search.actions.addSection', 'Добавить секцию')}
               </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/crm?sheet=lead'); }}>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/leads'); }}>
                 <Plus className="h-4 w-4 mr-2" />
                 {t('crm.createLead', 'Create Lead')}
               </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/crm?sheet=deal'); }}>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-deals'); }}>
                 <Plus className="h-4 w-4 mr-2 text-purple-500" />
                 {t('crm.createDeal', 'Create Deal')}
               </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/crm?tab=invoices'); }}>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-invoices'); }}>
                 <Receipt className="h-4 w-4 mr-2 text-blue-500" />
                 {t('crm.createInvoice', 'Create Invoice')}
               </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=automations&subtab=sequences'); }}>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-automations'); }}>
                 <Mail className="h-4 w-4 mr-2 text-green-500" />
                 {t('automations.startSequence', 'Manage Sequences')}
               </CommandItem>

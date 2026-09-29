@@ -348,7 +348,6 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
   return (
     <div className={cn('min-h-screen safe-area-top', className)}>
       <DashboardHeader
-        onMenuClick={() => {}}
         title={t('events.title', 'События')}
         subtitle={`${events.length} ${t('events.eventsCount', 'событий')}`}
       />

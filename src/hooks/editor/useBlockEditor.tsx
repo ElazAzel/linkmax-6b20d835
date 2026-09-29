@@ -22,6 +22,7 @@ interface UseBlockEditorOptions {
   addBlock: (block: Block, position?: number) => void;
   updateBlock: (id: string, updates: Partial<Block>) => void;
   deleteBlock: (id: string) => void;
+  deleteBlocks?: (ids: string[]) => void;
   blocks: Block[];
   editorHistory?: EditorHistoryType;
   playAdd?: () => void;
@@ -41,6 +42,7 @@ export function useBlockEditor({
   addBlock,
   updateBlock,
   deleteBlock,
+  deleteBlocks,
   blocks,
   editorHistory,
   playAdd,
@@ -293,6 +295,31 @@ export function useBlockEditor({
   );
 
   /**
+   * Delete several blocks at once (bulk selection) with one undo entry
+   */
+  const handleDeleteBlocks = useCallback(
+    (blockIds: string[]) => {
+      const ids = new Set(blockIds);
+      const removable = blocks.filter((b) => ids.has(b.id) && b.type !== 'profile');
+      if (removable.length === 0) return;
+
+      const previousBlocks = [...blocks];
+      const removedIds = new Set(removable.map((b) => b.id));
+      const newBlocks = blocks.filter((b) => !removedIds.has(b.id));
+
+      if (deleteBlocks) {
+        deleteBlocks([...removedIds]);
+      } else {
+        removable.forEach((b) => deleteBlock(b.id));
+      }
+      editorHistory?.recordBulkDelete(previousBlocks, newBlocks, removable.length);
+      playDelete?.();
+      trackEditorAction('block_deleted', { blockType: 'bulk', blockId: [...removedIds].join(','), position: -1 });
+    },
+    [blocks, deleteBlocks, deleteBlock, editorHistory, playDelete]
+  );
+
+  /**
    * Restore last deleted block
    */
   const undoLastDelete = useCallback(() => {
@@ -353,6 +380,7 @@ export function useBlockEditor({
     handleEditBlock,
     handleSaveBlock,
     handleDeleteBlock,
+    handleDeleteBlocks,
     handleDuplicateBlock,
     closeEditor,
     deletedBlocks,

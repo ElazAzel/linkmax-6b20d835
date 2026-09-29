@@ -37,6 +37,29 @@ describe('UserService', () => {
         });
     });
 
+    describe('updateTelegramNotifications', () => {
+        const captureUpdate = () => {
+            const update = vi.fn().mockReturnThis();
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                update,
+                eq: vi.fn().mockResolvedValue({ error: null }),
+            } as unknown as ReturnType<typeof supabase.from>);
+            return update;
+        };
+
+        it('keeps the linked chat when only the toggle changes', async () => {
+            const update = captureUpdate();
+            await UserService.updateTelegramNotifications('user-1', false);
+            expect(update).toHaveBeenCalledWith({ telegram_notifications_enabled: false });
+        });
+
+        it('stores the chat id after the bot is linked', async () => {
+            const update = captureUpdate();
+            await UserService.updateTelegramNotifications('user-1', true, '42');
+            expect(update).toHaveBeenCalledWith({ telegram_notifications_enabled: true, telegram_chat_id: '42' });
+        });
+    });
+
     describe('normalizeUsername', () => {
         it('should convert to lowercase and trim', () => {
             expect(UserService.normalizeUsername('  JohnDoe  ')).toBe('johndoe');
@@ -129,6 +152,8 @@ describe('UserService', () => {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 neq: vi.fn().mockReturnThis(),
+                order: vi.fn().mockReturnThis(),
+                limit: vi.fn().mockReturnThis(),
                 maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }), // available
                 upsert: vi.fn().mockResolvedValue({ error: null }), // profile update
                 update: vi.fn().mockReturnThis(), // page sync
@@ -136,6 +161,30 @@ describe('UserService', () => {
 
             const result = await UserService.updateUsername('u1', 'validuser');
             expect(result.success).toBe(true);
+        });
+
+        it('renames only the primary page slug, not every page of the user', async () => {
+            const pageUpdate: any = { eq: vi.fn() };
+            let eqCalls = 0;
+            pageUpdate.eq.mockImplementation(() => (++eqCalls < 2 ? pageUpdate : Promise.resolve({ error: null })));
+            const maybeSingle = vi.fn()
+                .mockResolvedValueOnce({ data: null, error: null }) // username availability
+                .mockResolvedValueOnce({ data: { id: 'primary', slug: 'old' }, error: null }) // primary page
+                .mockResolvedValueOnce({ data: null, error: null }); // slug not taken
+            vi.mocked(supabase.from).mockReturnValue({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                neq: vi.fn().mockReturnThis(),
+                order: vi.fn().mockReturnThis(),
+                limit: vi.fn().mockReturnThis(),
+                maybeSingle,
+                upsert: vi.fn().mockResolvedValue({ error: null }),
+                update: vi.fn().mockReturnValue(pageUpdate),
+            } as any);
+
+            const result = await UserService.updateUsername('u1', 'validuser');
+            expect(result).toMatchObject({ success: true, primaryPageId: 'primary', slug: 'validuser' });
+            expect(pageUpdate.eq).toHaveBeenCalledWith('id', 'primary');
         });
 
         it('should check premium status', async () => {

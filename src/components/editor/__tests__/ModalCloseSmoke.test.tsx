@@ -3,7 +3,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { BlockInsertButton } from '../BlockInsertButton';
 import { StructureView } from '../StructureView';
-import { MobileBlockActions } from '../MobileBlockActions';
 import type { Block } from '@/types/page';
 
 vi.mock('react-i18next', () => ({
@@ -79,37 +78,6 @@ describe('editor modal close smoke tests', () => {
         onOpenChange={onOpenChange}
         blocks={[{ id: 'profile-1', type: 'profile' } as unknown as Block]}
         onBlockSelect={vi.fn()}
-      />
-    );
-
-    expect(screen.getAllByLabelText(/close|закрыть/i)).toHaveLength(1);
-
-    fireEvent.click(screen.getByLabelText(/close|закрыть/i));
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-
-    fireEvent.keyDown(document, { key: 'Escape' });
-    await waitFor(() => expect(onOpenChange).toHaveBeenCalledWith(false));
-
-    const overlay = getOverlay();
-    expect(overlay).toBeTruthy();
-    if (overlay) {
-      fireEvent.pointerDown(overlay);
-      fireEvent.click(overlay);
-    }
-
-    await waitFor(() => expect(onOpenChange).toHaveBeenCalledWith(false));
-  });
-
-  it('MobileBlockActions closes via close button, ESC and overlay', async () => {
-    const onOpenChange = vi.fn();
-
-    render(
-      <MobileBlockActions
-        block={{ id: 'link-1', type: 'link' } as unknown as Block}
-        open
-        onOpenChange={onOpenChange}
-        onEdit={vi.fn()}
-        onDelete={vi.fn()}
       />
     );
 

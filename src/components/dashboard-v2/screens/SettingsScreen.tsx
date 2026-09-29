@@ -3,6 +3,7 @@
  * Clearly separates page-scoped and user-scoped settings
  */
 import { memo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import User from 'lucide-react/dist/esm/icons/user';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
@@ -92,7 +93,15 @@ interface SettingsScreenProps {
 
 export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreenProps) {
   const { t, i18n } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'page' | 'account'>('page');
+  // Deep links from the activation checklist and lead notifications:
+  // ?action=connect-telegram and ?highlight=telegram were ignored before.
+  const [searchParams] = useSearchParams();
+  const [focusTelegram] = useState<'highlight' | 'connect' | undefined>(() => {
+    if (searchParams.get('action') === 'connect-telegram') return 'connect';
+    if (searchParams.get('highlight') === 'telegram') return 'highlight';
+    return undefined;
+  });
+  const [activeTab, setActiveTab] = useState<'page' | 'account'>(focusTelegram ? 'account' : 'page');
 
   const {
     pageTitle,
@@ -197,6 +206,8 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               webhookUrl={props.webhookUrl}
               webhookSecret={props.webhookSecret}
               onUpdateWebhooks={props.onUpdateWebhooks}
+              integrations={props.integrations}
+              onUpdateIntegrations={props.onUpdateIntegrations}
             />
           </TabsContent>
 
@@ -216,6 +227,7 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               telegramEnabled={props.telegramEnabled}
               telegramChatId={props.telegramChatId}
               onTelegramChange={props.onTelegramChange}
+              focusTelegram={focusTelegram}
               onSignOut={props.onSignOut}
               onOpenFriends={props.onOpenFriends}
               onOpenSaveTemplate={props.onOpenSaveTemplate}

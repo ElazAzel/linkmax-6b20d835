@@ -2,7 +2,7 @@
 
 import { useNavigate } from 'react-router-dom';
 
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
@@ -60,6 +60,8 @@ interface AccountSettingsTabProps {
     telegramEnabled: boolean;
     telegramChatId: string;
     onTelegramChange: (enabled: boolean, chatId?: string) => void;
+    /** Scroll to Telegram; 'connect' also opens the bot linking flow. */
+    focusTelegram?: 'highlight' | 'connect';
 
     // Regional
     kaspiWidgetEnabled: boolean;
@@ -137,6 +139,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     telegramEnabled,
     telegramChatId,
     onTelegramChange,
+    focusTelegram,
     onSignOut,
     onOpenFriends,
     onOpenSaveTemplate,
@@ -177,7 +180,21 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
             setPasswordSaving(false);
         }
     }, [newPassword, confirmPassword, t]);
-    const [showTelegramVerification, setShowTelegramVerification] = useState(false);
+    // Deep links (activation checklist, lead notifications) open the Telegram
+    // setup directly: /dashboard/settings?action=connect-telegram
+    const [showTelegramVerification, setShowTelegramVerification] = useState(
+        focusTelegram === 'connect' && !telegramChatId,
+    );
+    const telegramRef = useRef<HTMLDivElement>(null);
+    const [telegramHighlighted, setTelegramHighlighted] = useState(false);
+
+    useEffect(() => {
+        if (!focusTelegram) return;
+        telegramRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTelegramHighlighted(true);
+        const timer = window.setTimeout(() => setTelegramHighlighted(false), 2400);
+        return () => window.clearTimeout(timer);
+    }, [focusTelegram]);
 
     return (
         <div className="space-y-6">
@@ -287,7 +304,14 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                             />
                         }
                     />
-                    <div className="p-4 space-y-3">
+                    <div
+                        ref={telegramRef}
+                        id="telegram-settings"
+                        className={cn(
+                            "p-4 space-y-3 transition-shadow duration-500",
+                            telegramHighlighted && "ring-2 ring-primary ring-inset",
+                        )}
+                    >
                         <div className="flex items-center gap-3">
                             <div className="h-11 w-11 rounded-2xl bg-blue-500/15 flex items-center justify-center">
                                 <MessageCircle className="h-5 w-5 text-blue-500" />
@@ -295,14 +319,23 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                             <div className="flex-1">
                                 <div className="font-medium">{t('dashboard.accountSettings.telegram', 'Telegram')}</div>
                                 <p className="text-sm text-muted-foreground">
-                                    {telegramEnabled
-                                        ? t('dashboard.accountSettings.connected', 'Connected')
-                                        : t('dashboard.accountSettings.notConnected', 'Not connected')}
+                                    {!telegramChatId
+                                        ? t('dashboard.accountSettings.notConnected', 'Not connected')
+                                        : telegramEnabled
+                                            ? t('dashboard.accountSettings.connected', 'Connected')
+                                            : t('dashboard.accountSettings.telegramPaused', 'Бот привязан, уведомления выключены')}
                                 </p>
                             </div>
-                            <Switch checked={telegramEnabled} onCheckedChange={(checked) => onTelegramChange(checked)} />
+                            <Switch
+                                checked={telegramEnabled}
+                                aria-label={t('dashboard.accountSettings.telegram', 'Telegram')}
+                                onCheckedChange={(checked) => {
+                                    onTelegramChange(checked);
+                                    if (checked && !telegramChatId) setShowTelegramVerification(true);
+                                }}
+                            />
                         </div>
-                        {telegramEnabled && showTelegramVerification && (
+                        {showTelegramVerification && (
                             <TelegramVerification
                                 onVerified={(chatId) => {
                                     onTelegramChange(true, chatId);

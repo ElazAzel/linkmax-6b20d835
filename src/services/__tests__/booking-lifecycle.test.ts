@@ -21,6 +21,27 @@ describe('booking lifecycle service', () => {
     vi.mocked(supabase.functions.invoke).mockReset().mockResolvedValue({ data: null, error: null });
   });
 
+  it('reports a missing booking RPC as unavailable, not as a retryable failure', async () => {
+    const availabilityInput = {
+      pageId: 'page-1',
+      blockId: 'booking-block-1',
+      fromDate: '2026-10-01',
+      toDate: '2026-10-01',
+      staffId: null,
+    };
+    vi.mocked(supabase.rpc).mockResolvedValueOnce({ data: null, error: { code: 'PGRST202', message: 'not found' } } as never);
+    await expect(loadPublicAvailability(availabilityInput)).rejects.toMatchObject({
+      code: 'feature_unavailable',
+      retryable: false,
+    });
+
+    vi.mocked(supabase.rpc).mockResolvedValueOnce({ data: null, error: { code: '08006', message: 'connection' } } as never);
+    await expect(loadPublicAvailability(availabilityInput)).rejects.toMatchObject({
+      code: 'request_failed',
+      retryable: true,
+    });
+  });
+
   it('sends only visitor-owned booking input and preserves decimal strings', async () => {
     vi.mocked(supabase.rpc).mockResolvedValueOnce({
       data: {

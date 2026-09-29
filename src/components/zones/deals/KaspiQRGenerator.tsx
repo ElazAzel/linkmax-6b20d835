@@ -1,10 +1,11 @@
 /**
- * KaspiQRGenerator - QR code generator for Kaspi payments
+ * KaspiQRGenerator - QR code generator for Kaspi payments.
+ * No "simulate payment" button: it charged the platform fee through a
+ * service-only function for money the owner never received.
  */
 import { memo, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
-import { supabase } from '@/platform/supabase/client';
 import {
   Dialog,
   DialogContent,
@@ -20,7 +21,6 @@ import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import Copy from 'lucide-react/dist/esm/icons/copy';
 import Download from 'lucide-react/dist/esm/icons/download';
 import { toast } from 'sonner';
-import { useAppError } from '@/hooks/useAppError';
 
 interface KaspiQRGeneratorProps {
   open: boolean;
@@ -28,7 +28,8 @@ interface KaspiQRGeneratorProps {
   defaultAmount?: number;
   dealTitle?: string;
   currency?: string;
-  ownerId: string;
+  /** Kept for callers; the generator no longer calls the backend. */
+  ownerId?: string;
 }
 
 export const KaspiQRGenerator = memo(function KaspiQRGenerator({
@@ -37,43 +38,10 @@ export const KaspiQRGenerator = memo(function KaspiQRGenerator({
   defaultAmount = 0,
   dealTitle = '',
   currency = 'KZT',
-  ownerId,
 }: KaspiQRGeneratorProps) {
   const { t } = useTranslation();
-  const { handleError } = useAppError();
   const [amount, setAmount] = useState(defaultAmount);
   const [comment, setComment] = useState(dealTitle);
-  const [isSimulating, setIsSimulating] = useState(false);
-
-  const handleSimulatePayment = async () => {
-    if (!ownerId || amount <= 0) {
-      toast.error(t('kaspi.invalidAmount', 'Invalid amount or missing owner ID'));
-      return;
-    }
-
-    try {
-      setIsSimulating(true);
-      const { data, error } = await supabase.functions.invoke('process-transaction-fee', {
-        body: {
-          userId: ownerId,
-          amount: amount,
-          currency: currency,
-          source: 'Kaspi Mock',
-          description: comment || dealTitle || 'Kaspi Payment',
-        }
-      });
-
-      if (error) throw error;
-
-      toast.success(t('kaspi.paymentSimulated', 'Payment successfully simulated and fee processed!'));
-      onOpenChange(false);
-    } catch (err: any) {
-      console.error('Error simulating payment:', err);
-      handleError(err, 'Failed to simulate payment');
-    } finally {
-      setIsSimulating(false);
-    }
-  };
 
   // Generate Kaspi Gold deeplink URL
   // Format: https://kaspi.kz/pay/[merchant]?amount=[amount]&comment=[comment]
@@ -207,16 +175,6 @@ export const KaspiQRGenerator = memo(function KaspiQRGenerator({
               {t('kaspi.downloadQR', 'Download QR')}
             </Button>
           </div>
-
-          {/* Sandbox Mock Button */}
-          <Button
-            variant="secondary"
-            className="w-full bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#0f172a] border border-[#cbd5e1] font-medium"
-            onClick={handleSimulatePayment}
-            disabled={isSimulating}
-          >
-            {isSimulating ? t('common.loading', 'Processing...') : t('kaspi.simulateMock', 'Simulate Payment (Sandbox)')}
-          </Button>
 
           {/* Kaspi Branding */}
           <p className="text-xs text-center text-muted-foreground">

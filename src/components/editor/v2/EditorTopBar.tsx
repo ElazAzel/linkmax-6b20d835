@@ -136,6 +136,32 @@ export const EditorTopBar = memo(function EditorTopBar({
 
       {/* Right: actions */}
       <div className="flex items-center gap-1.5 shrink-0">
+        {onUndo && (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t('editor.undo', 'Отменить')}
+            title={`${t('editor.undo', 'Отменить')} (⌘Z)`}
+            className="h-10 w-10 rounded-xl"
+            disabled={!canUndo}
+            onClick={() => onUndo()}
+          >
+            <Undo2 className="h-4 w-4" />
+          </Button>
+        )}
+        {onRedo && (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t('editor.redo', 'Повторить')}
+            title={`${t('editor.redo', 'Повторить')} (⌘⇧Z)`}
+            className="hidden md:inline-flex h-10 w-10 rounded-xl"
+            disabled={!canRedo}
+            onClick={() => onRedo()}
+          >
+            <Redo2 className="h-4 w-4" />
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="sm"

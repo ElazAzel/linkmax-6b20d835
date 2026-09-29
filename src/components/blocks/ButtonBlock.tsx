@@ -2,7 +2,8 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
-import { getBlockStyles, getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { getBlockStyles, getBlockInnerStyles } from '@/lib/blocks/block-styling';
+import { hasCustomBackground } from '@/lib/appearance/block-appearance';
 import type { ButtonBlock as ButtonBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 
@@ -29,11 +30,12 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
   // directly to the <button> so the paint stays on the button itself, not the row wrapper.
   const { style: containerStyle, className: containerClass, textEffectClass } = getBlockStyles(block.blockStyle);
   const { style: innerStyle } = getBlockInnerStyles(block.blockStyle);
-  const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
+  // Only a custom background replaces the accent fill. Any style at all (even
+  // just a font or alignment) used to strip it and leave a transparent button.
+  const hasCustomFill = hasCustomBackground(block.blockStyle);
 
   // Combine styles - new blockStyle takes precedence
   const combinedStyle = { ...legacyButtonStyle, ...containerStyle, ...innerStyle };
-  const hasAnyCustomStyle = hasLegacyBackground || hasBlockStyle;
 
   const widthClass = block.width === 'full' ? 'w-full' 
     : block.width === 'small' ? 'w-auto min-w-[100px]' 
@@ -53,7 +55,9 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
         onClick={handleClick}
         className={cn(
           widthClass,
-          "relative overflow-hidden font-medium tracking-tight rounded-card",
+          // Shape follows theme.buttonStyle (--lm-button-radius); an explicit
+          // block radius still wins through the inline style.
+          "relative overflow-hidden font-medium tracking-tight rounded-card [border-radius:var(--lm-button-radius,var(--radius-card))]",
           "shadow-soft hover:shadow-lift transition-all duration-200",
           "hover:-translate-y-px active:scale-[0.99]",
           "break-words hyphens-auto",
@@ -62,7 +66,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
           containerClass,
           hasLegacyBackground
             ? 'text-white drop-shadow-md'
-            : hasBlockStyle
+            : hasCustomFill
               ? ''
               : 'lm-accent-button-bg bg-primary text-primary-foreground'
         )}

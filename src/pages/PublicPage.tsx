@@ -36,7 +36,8 @@ import { recordGrowthEvent } from '@/services/viral-growth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
-import { getBackgroundStyle, getPublicPageCssVars, getAppearanceRootClass, getThemeBackgroundStyle } from '@/lib/appearance/style-utils';
+import { getBackgroundStyle, getPageThemeScope, getDividerClass, getThemeBackgroundStyle } from '@/lib/appearance/style-utils';
+import { usePageFonts } from '@/hooks/page/usePageFonts';
 import type { PageData, Block } from '@/types/page';
 import {
   Dialog,
@@ -56,12 +57,6 @@ const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (
 const ChatbotWidget = lazy(() => import('@/components/chat/ChatbotWidget').then(m => ({ default: m.ChatbotWidget })));
 const LanguageSwitcher = lazy(() => import('@/components/translation/LanguageSwitcher').then(m => ({ default: m.LanguageSwitcher })));
 const TrackingScripts = lazy(() => import('@/components/analytics/TrackingScripts').then(m => ({ default: m.TrackingScripts })));
-
-const FONT_FAMILY_MAP = {
-  sans: "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif",
-  serif: "ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif",
-  mono: "'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace",
-} as const;
 
 function getButtonStyleClass(buttonStyle?: PageData['theme']['buttonStyle']) {
   switch (buttonStyle) {
@@ -311,14 +306,17 @@ export default function PublicPage() {
     }
   };
 
+  // Load the theme's web fonts (only Inter/Manrope ship with index.html)
+  usePageFonts(pageData?.theme);
+
   const customBackground = pageData?.theme?.customBackground;
   const bgResult = getBackgroundStyle(customBackground);
-  const pageFontFamily = pageData?.theme?.fontFamily || 'sans';
   const pageAnimation = getAnimationConfig(pageData?.theme?.animationStyle);
   const buttonStyleClass = getButtonStyleClass(pageData?.theme?.buttonStyle);
   const iconStyleClass = getIconStyleClass(pageData?.theme?.iconStyle);
-  const appearanceVars = getPublicPageCssVars(pageData?.theme);
-  const appearanceRootClass = getAppearanceRootClass(pageData?.theme);
+  // One theme → CSS mapping shared with the editor canvas (WYSIWYG)
+  const themeScope = getPageThemeScope(pageData?.theme);
+  const dividerClass = getDividerClass(pageData?.theme);
   const themeBackgroundStyle = getThemeBackgroundStyle(pageData?.theme);
 
   return (
@@ -331,15 +329,13 @@ export default function PublicPage() {
         <motion.div
           key="content"
           className={cn(
-            'min-h-screen bg-background lm-typography relative',
-            appearanceRootClass,
+            'min-h-screen bg-background text-foreground relative',
+            themeScope.className,
           )}
           data-testid="public-page-root"
           style={{
-            ...appearanceVars,
+            ...themeScope.style,
             ...themeBackgroundStyle,
-            color: pageData?.theme?.textColor || 'inherit',
-            fontFamily: FONT_FAMILY_MAP[pageFontFamily],
           }}
           initial={{ opacity: 0, y: pageAnimation.y }}
           animate={{ opacity: 1, y: 0 }}
@@ -436,7 +432,8 @@ export default function PublicPage() {
                     isOwnerPremium={isOwnerPremium}
                     ownerTier={ownerTier}
                     isPreview={false}
-                    className={appearanceRootClass}
+                    className={dividerClass}
+                    animation={pageData?.theme?.animationStyle}
                   />
                 </SectionErrorBoundary>
 

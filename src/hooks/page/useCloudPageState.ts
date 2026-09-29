@@ -16,12 +16,15 @@ import { toast } from 'sonner';
 import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
 import { normalizeAppError } from '@/lib/errors/app-error-normalizer';
 import { saveDraft, loadDraft, clearDraft } from '@/pwa/offlineDraftCache';
+import { useActivePageStore } from '@/store/useActivePageStore';
 
 // Request versioning to prevent stale writes
 let saveRequestVersion = 0;
 
 interface UseCloudPageStateOptions {
   onPublish?: (pageData: PageData) => void;
+  /** Edit this page instead of the dashboard's active page. */
+  pageId?: string | null;
 }
 
 export function useCloudPageState(options?: UseCloudPageStateOptions) {
@@ -34,13 +37,18 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   const lastSaveVersionRef = useRef<number>(0);
   // Track if user has made local changes that shouldn't be overwritten by cache
   const hasLocalChangesRef = useRef<boolean>(false);
-  // Track initial load to only sync from cache once
-  const initialLoadDoneRef = useRef<boolean>(false);
+  // Id of the page currently loaded into local state. Cache updates for the same
+  // page are ignored (they would overwrite local edits); a different id means
+  // the user switched pages and we load the new one.
+  const loadedPageIdRef = useRef<string | null>(null);
   // P2.11: Track previous service_slugs snapshot for diff-based IndexNow
   const previousServiceSlugsRef = useRef<Record<string, ServiceSlugEntryRaw> | null>(null);
 
   // Use React Query for cached page loading
-  const { data: userData, isLoading: loading, refetch } = useUserPage(user?.id);
+  const storeActivePageId = useActivePageStore((state) => state.activePageId);
+  const setActivePageId = useActivePageStore((state) => state.setActivePageId);
+  const requestedPageId = options?.pageId !== undefined ? options.pageId : storeActivePageId;
+  const { data: userData, isLoading: loading, refetch } = useUserPage(user?.id, requestedPageId);
   const savePageMutation = useSavePageMutation(user?.id);
   const publishPageMutation = usePublishPageMutation(user?.id);
 
@@ -49,7 +57,9 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   useEffect(() => {
     const serverPage = userData?.pageData;
     const pageId = serverPage?.id;
-    if (serverPage && pageId && !initialLoadDoneRef.current) {
+    if (serverPage && pageId && loadedPageIdRef.current !== pageId) {
+      hasLocalChangesRef.current = false;
+      previousServiceSlugsRef.current = null;
       let nextPageData: PageData = serverPage;
       // Offline draft recovery: restore newer local snapshot if it exists
       try {
@@ -70,7 +80,12 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
       }
       setPageData(nextPageData);
       setChatbotContext(userData.chatbotContext || '');
-      initialLoadDoneRef.current = true;
+      loadedPageIdRef.current = pageId;
+      // Unknown/stale requested id fell back to the primary page — keep the
+      // shared store in sync so every consumer points at the same page.
+      if (options?.pageId === undefined && storeActivePageId !== pageId) {
+        setActivePageId(pageId);
+      }
       // P2.11: Seed previous service_slugs on initial load
       void (async () => {
         try {
@@ -87,12 +102,12 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         }
       })();
     }
-  }, [userData]);
+  }, [userData, options?.pageId, storeActivePageId, setActivePageId]);
 
   // Reset initial load flag when user changes (logout/login)
   useEffect(() => {
     if (!user) {
-      initialLoadDoneRef.current = false;
+      loadedPageIdRef.current = null;
       hasLocalChangesRef.current = false;
       setPageData(null);
     }
@@ -195,8 +210,8 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
           return;
         }
 
-        // Then auto-publish
-        await publishPageMutation.mutateAsync();
+        // Then auto-publish this page only
+        await publishPageMutation.mutateAsync(pageIdToUse);
 
         // P2.11: Diff-based IndexNow — only submit changed child URLs
         const slug = sanitizedData.slug;
@@ -266,7 +281,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         pageData,
         chatbotContext
       });
-      await publishPageMutation.mutateAsync();
+      await publishPageMutation.mutateAsync(pageData.id);
       setSaveStatus('saved');
       toast.success('Changes saved and published!');
     } catch (error) {
@@ -291,7 +306,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         pageData,
         chatbotContext
       });
-      const slug = await publishPageMutation.mutateAsync();
+      const slug = await publishPageMutation.mutateAsync(pageData.id);
       setSaveStatus('saved');
 
       // Call onPublish callback to save version
@@ -311,8 +326,12 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
       if (!prevData) return prevData;
       let newBlocks: Block[];
       if (typeof position === 'number') {
+        // `position` is an index into the full blocks array (callers use
+        // blocks.length / index + 1). It used to be offset by the profile
+        // block again, so duplicates and restored blocks landed one slot too low.
         const profileIndex = prevData.blocks.findIndex(b => b.type === 'profile');
-        const insertIndex = profileIndex >= 0 ? profileIndex + 1 + position : position;
+        const minIndex = profileIndex >= 0 ? profileIndex + 1 : 0;
+        const insertIndex = Math.min(Math.max(position, minIndex), prevData.blocks.length);
         newBlocks = [
           ...prevData.blocks.slice(0, insertIndex),
           block,
@@ -369,6 +388,28 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         void deleteEventBlock(blockToDelete.eventId, user?.id);
       }
 
+      autoSaveAndPublish(newPageData, chatbotContext);
+      return newPageData;
+    });
+  }, [chatbotContext, autoSaveAndPublish, user]);
+
+  // Delete several blocks in one state update (bulk selection). Calling
+  // deleteBlock in a loop was blocked by the per-operation guard after the first.
+  const deleteBlocks = useCallback((ids: string[]) => {
+    if (ids.length === 0) return;
+    const idSet = new Set(ids);
+    setPageData((prevData) => {
+      if (!prevData) return prevData;
+      const removed = prevData.blocks.filter((block) => idSet.has(block.id) && block.type !== 'profile');
+      if (removed.length === 0) return prevData;
+      const removedIds = new Set(removed.map((block) => block.id));
+      const newPageData = {
+        ...prevData,
+        blocks: prevData.blocks.filter((block) => !removedIds.has(block.id)),
+      };
+      for (const block of removed) {
+        if (block.type === 'event') void deleteEventBlock(block.eventId, user?.id);
+      }
       autoSaveAndPublish(newPageData, chatbotContext);
       return newPageData;
     });
@@ -451,7 +492,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     setPageData(newPageData);
 
     // Save to database
-    const { error } = await updatePageNiche(user.id, niche);
+    const { error } = await updatePageNiche(user.id, niche, pageData.id);
     if (error) {
       toast.error('Failed to update category');
       // Revert on error
@@ -475,7 +516,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     setPageData(newPageData as PageData);
 
     // Save to database
-    const { error } = await updatePageEntityFields(user.id, fields);
+    const { error } = await updatePageEntityFields(user.id, fields, pageData.id);
     if (error) {
       toast.error('Failed to update');
       setPageData(pageData);
@@ -485,11 +526,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   const refresh = useCallback(async () => {
     if (user?.id) {
       await queryClient.invalidateQueries({
-        queryKey: pageQueryKeys.userPage(user.id)
+        queryKey: pageQueryKeys.userPage(user.id, requestedPageId)
       });
       await refetch();
     }
-  }, [user?.id, queryClient, refetch]);
+  }, [user?.id, requestedPageId, queryClient, refetch]);
 
   return useMemo(() => ({
     pageData,
@@ -503,6 +544,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     addBlock,
     updateBlock,
     deleteBlock,
+    deleteBlocks,
     reorderBlocks,
     replaceBlocks,
     updateTheme,
@@ -523,6 +565,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     addBlock,
     updateBlock,
     deleteBlock,
+    deleteBlocks,
     reorderBlocks,
     replaceBlocks,
     updateTheme,

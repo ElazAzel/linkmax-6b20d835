@@ -99,7 +99,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
         type="button"
         onClick={handleClick}
         className={cn(
-          "qb-card qb-card-hover w-full flex items-center justify-between gap-3",
+          "qb-card qb-card-hover w-full flex items-center justify-between gap-3 [border-radius:var(--lm-button-radius,var(--radius-card))]",
           "min-h-[56px] py-3 px-4 sm:px-5",
           "active:scale-[0.99] transition-transform",
           getButtonClass(block.style),
@@ -126,7 +126,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
             />
           ) : (
             <FallbackIcon
-              className={cn("h-5 w-5 flex-shrink-0", hasAnyCustomStyle ? '' : 'lm-accent-link-text text-primary')}
+              className={cn("h-5 w-5 flex-shrink-0", hasLegacyBackground || blockStyleObj.color ? '' : 'lm-accent-link-text text-primary')}
               style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined}
             />
           )}

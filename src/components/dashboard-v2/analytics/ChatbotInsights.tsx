@@ -12,6 +12,7 @@ import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils/utils';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 
 interface ChatbotInsightsProps {
   pageId: string;
@@ -83,7 +84,7 @@ export const ChatbotInsights = ({ pageId }: ChatbotInsightsProps) => {
         });
       } catch (err: any) {
         // Suppress expected 404 related errors for this beta feature which may not have the backend yet
-        if (err?.code !== 'PGRST205') {
+        if (!isMissingSchemaError(err)) {
           console.error('Failed to fetch chatbot insights:', err);
         }
       } finally {

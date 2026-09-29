@@ -200,7 +200,6 @@ export const InsightsScreen = memo(function InsightsScreen({
       <div className="min-h-screen safe-area-top">
         <DashboardHeader 
           title={t('dashboard.insights.title', 'Аналитика')} 
-          onMenuClick={() => {}} 
         />
         <div className="px-5 py-6">
           <LoadingSkeleton variant="stats" />
@@ -214,7 +213,6 @@ export const InsightsScreen = memo(function InsightsScreen({
       <div className="min-h-screen safe-area-top">
         <DashboardHeader
           title={t('dashboard.insights.title', 'Аналитика')}
-          onMenuClick={() => {}}
         />
         <div className="px-[var(--space-page-px)] py-8">
           <ErrorState
@@ -233,7 +231,6 @@ export const InsightsScreen = memo(function InsightsScreen({
       <DashboardHeader
         title={t('dashboard.insights.title', 'Аналитика')}
         subtitle={t('dashboard.insights.subtitle', 'Статистика страницы')}
-        onMenuClick={() => {}}
         actions={
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" onClick={refresh} className="h-10 w-10 glass border-white/20 rounded-xl hover:bg-white/10 active:scale-95 transition-all">

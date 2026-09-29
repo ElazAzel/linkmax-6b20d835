@@ -1646,7 +1646,8 @@
       "verification": "Verification",
       "regional": "Regional",
       "kaspiQr": "Kaspi QR Widget",
-      "kaspiQrDesc": "Show Kaspi.kz QR on dashboard"
+      "kaspiQrDesc": "Show Kaspi.kz QR on dashboard",
+      "telegramPaused": "Bot linked, notifications off"
     },
     "activity": {
       "all": "All",
@@ -1907,7 +1908,13 @@
       "insights": "Analytics",
       "more": "More",
       "pages": "Pages",
-      "settings": "Settings"
+      "settings": "Settings",
+      "menu": "Menu",
+      "leads": "Leads",
+      "events": "Events",
+      "monetize": "Monetize",
+      "finance": "Finance",
+      "team": "Team"
     },
     "onboardingComplete": "Welcome! Start creating your page.",
     "pageSettings": {
@@ -1997,7 +2004,8 @@
       "errors": {
         "invalid_slug": "Incorrect URL",
         "page_limit_exceeded": "Page limit reached",
-        "slug_taken": "This URL is already taken"
+        "slug_taken": "This URL is already taken",
+        "duplicate_content_failed": "Page created, but its blocks and theme were not copied"
       },
       "free": "Free",
       "freeLimits": "Upgrade to Pro for more pages",
@@ -2104,7 +2112,8 @@
       "blocksReordered": "Block order changed",
       "redone": "Action repeated",
       "undoHint": "Click to cancel",
-      "undone": "Action canceled"
+      "undone": "Action canceled",
+      "blocksDeleted": "Blocks deleted: {{count}}"
     },
     "howItWorks": "How it works",
     "livePreview": "Preview",
@@ -2257,7 +2266,9 @@
       "edit": "Edit",
       "duplicate": "Duplicate",
       "ai": "Improve with AI",
-      "delete": "Delete"
+      "delete": "Delete",
+      "done": "Done",
+      "drag": "Drag block"
     },
     "prePublish": {
       "title": "One tap improves the design",
@@ -5350,7 +5361,8 @@
       "task": "Tasks"
     },
     "noResults": "No results found.",
-    "placeholder": "Search or command..."
+    "placeholder": "Search or command...",
+    "error": "Search failed. Try again."
   },
   "separatorBlock": {
     "color": "Color (optional)",
@@ -5964,7 +5976,8 @@
     "kazakhSteppe": "Steppe",
     "kazakhSteppeDesc": "Turquoise and gold",
     "paperInk": "Paper and ink",
-    "paperInkDesc": "Editorial typography"
+    "paperInkDesc": "Editorial typography",
+    "buttonStyle": "Buttons and links"
   },
   "tier": {
     "blocksCount": "blocks",
@@ -7722,7 +7735,8 @@
       "version_conflict": "This booking has already changed. Refresh the page and try again.",
       "slot_unavailable": "That time is no longer available. Choose another option.",
       "action_not_allowed": "This action is no longer available.",
-      "request_failed": "The booking could not be updated. Try again."
+      "request_failed": "The booking could not be updated. Try again.",
+      "feature_unavailable": "Online booking is unavailable right now. Please contact the page owner directly."
     }
   },
   "publicBooking": {
@@ -7766,7 +7780,8 @@
       "service_unavailable": "There are no services available for booking right now.",
       "page_not_public": "This page has not been published yet.",
       "request_failed": "The booking could not be loaded. Try again.",
-      "invalid_response": "The booking service returned an invalid response. Try again."
+      "invalid_response": "The booking service returned an invalid response. Try again.",
+      "feature_unavailable": "Online booking is unavailable right now. Please contact the page owner directly."
     }
   },
   "revenueKit": {
@@ -7836,7 +7851,9 @@
       "depositInvalid": "Check the deposit amount",
       "paymentInstructionsRequired": "Add payment instructions",
       "policyRequired": "Confirm the prices, schedule, and cancellation terms",
-      "publishFailed": "The page could not be published"
+      "publishFailed": "The page could not be published",
+      "feature_unavailable": "The booking setup wizard is not available yet. Build your page in the editor — nothing is lost.",
+      "request_failed": "Could not load data. Please try again."
     }
   },
   "outcomeHome": {
@@ -7961,7 +7978,8 @@
       "request_failed": "The booking could not be updated",
       "version_conflict": "The booking has changed. Refresh and try again.",
       "slot_not_started": "The appointment has not started yet.",
-      "payment_required": "Confirm the deposit first."
+      "payment_required": "Confirm the deposit first.",
+      "feature_unavailable": "This booking feature is not enabled in the database yet. We are on it."
     }
   },
   "revenueInsights": {
@@ -7994,5 +8012,55 @@
     "empty": "Write some text first",
     "alreadyClean": "The text already reads naturally",
     "done": "Text sounds more human now"
+  },
+  "team": {
+    "memberAdded": "Member added to the team",
+    "inviteErrors": {
+      "user_not_found": "No LinkMAX account uses this email",
+      "already_member": "This user is already on the team",
+      "forbidden": "Only the owner and admins can invite",
+      "unavailable": "Email invites are coming soon",
+      "not_authenticated": "Please sign in",
+      "invalid_role": "Invalid role",
+      "unknown": "Could not add the member"
+    }
+  },
+  "zoneDocs": {
+    "creator": {
+      "createDocument": "New document",
+      "documentTemplate": "Document template",
+      "selectTemplate": "Select a template",
+      "noActiveTemplates": "No active templates",
+      "documentTitle": "Document title",
+      "linkToDeal": "Link to a deal",
+      "noDeal": "No deal",
+      "linkToContact": "Link to a contact",
+      "noContact": "No contact",
+      "cancel": "Cancel",
+      "creating": "Creating…",
+      "create": "Create"
+    },
+    "templatesSettings": {
+      "management": "Document templates",
+      "noDescription": "No description",
+      "noTemplates": "No templates yet",
+      "close": "Close",
+      "newTemplate": "New template",
+      "templateName": "Template name",
+      "description": "Description",
+      "templateContent": "Template content",
+      "cancel": "Cancel",
+      "save": "Save",
+      "deleteTitle": "Delete template?",
+      "deleteDescription": "The template will be deleted permanently. Existing documents stay.",
+      "delete": "Delete"
+    }
+  },
+  "developerSettings": {
+    "comingSoonTitle": "Public API is coming soon",
+    "comingSoonDescription": "We are preparing API keys and a REST API for leads, deals and events. Your keys will appear here once it is live.",
+    "webhookNowTitle": "Available now: page webhook",
+    "webhookNowDescription": "LinkMAX sends a POST request to your URL for every new lead from your page. Connect Make, Zapier, n8n or your own server.",
+    "openWebhookSettings": "Set up webhook"
   }
 }
