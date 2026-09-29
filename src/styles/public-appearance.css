@@ -95,13 +95,18 @@
   /* no additional hover */
 }
 
-/* ============ Dividers between top-level blocks ============ */
-.lm-divider-hairline > * + * {
-  border-top: 1px solid rgba(16, 19, 24, 0.08);
-  padding-top: 12px;
-}
+/* ============ Dividers ============ */
+/* Applied on the block stack (GridBlocksRenderer root, via getDividerClass):
+ * between the profile, grid runs and sections, and between full-width cells
+ * inside a grid run. Colors derive from --foreground so dark themes work. */
+.lm-divider-hairline { --lm-divider-line: 1px solid hsl(var(--foreground) / 0.1); }
+.lm-divider-dotted { --lm-divider-line: 1px dotted hsl(var(--foreground) / 0.3); }
+.lm-divider-gradient,
+.lm-divider-ornament { --lm-divider-line: 1px solid hsl(var(--primary) / 0.35); }
+
+.lm-divider-hairline > * + *,
 .lm-divider-dotted > * + * {
-  border-top: 1px dotted rgba(16, 19, 24, 0.28);
+  border-top: var(--lm-divider-line);
   padding-top: 12px;
 }
 .lm-divider-gradient > * + * {
@@ -133,6 +138,20 @@
   opacity: 0.6;
 }
 
+/* Between full-width cells of a grid run (half-width neighbours are left alone) */
+.lm-divider-hairline [data-lm-grid] > [data-lm-wide]:not(:first-child)::before,
+.lm-divider-dotted [data-lm-grid] > [data-lm-wide]:not(:first-child)::before,
+.lm-divider-gradient [data-lm-grid] > [data-lm-wide]:not(:first-child)::before,
+.lm-divider-ornament [data-lm-grid] > [data-lm-wide]:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: -0.4rem;
+  border-top: var(--lm-divider-line);
+  pointer-events: none;
+}
+
 /* Accent color: expose to any child using bg-primary/text-primary via a light bridge */
 [style*="--lm-accent"] .lm-accent-bg { background-color: var(--lm-accent); color: var(--lm-accent-fg, #fff); }
 [style*="--lm-accent"] .lm-accent-text { color: var(--lm-accent); }
@@ -141,6 +160,8 @@
  * Each falls back to the base --lm-accent, then to the theme primary. */
 .lm-accent-button-bg {
   background-color: var(--lm-accent-button, var(--lm-accent, hsl(var(--primary))));
+  /* theme.buttonStyle = 'gradient' sets --lm-button-bg */
+  background-image: var(--lm-button-bg, none);
   color: var(--lm-accent-button-fg, var(--lm-accent-fg, hsl(var(--primary-foreground))));
 }
 .lm-accent-link-text {

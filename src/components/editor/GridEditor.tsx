@@ -63,6 +63,8 @@ import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import { SectionCompositionPicker } from './design/SectionCompositionPicker';
 import { getComposition, type CompositionDef } from '@/lib/design/composition';
+import { resolveBlockVariant } from '@/lib/design/block-variants';
+import { resolveBlockCellAppearance, SELF_STYLED_BLOCK_TYPES, TRANSPARENT_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion } from 'framer-motion';
@@ -207,8 +209,18 @@ function SortableGridBlockItem({
   const colSpanClass = inComposition ? '' : dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
   const rowSpanClass = inComposition ? '' : dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
   const compositionItemClass = composition?.itemClass?.(compositionIndex, compositionTotal) || '';
+  // Same variant + style resolution as the public GridBlocksRenderer, so the
+  // canvas shows theme shape/shadow, per-block radius/padding/colors and the
+  // chosen design variant exactly as visitors will see them.
+  const variant = resolveBlockVariant(block.type, (block as { designVariant?: string }).designVariant);
+  const mergedStyle = { ...(variant?.stylePatch || {}), ...(block.blockStyle || {}) } as NonNullable<Block['blockStyle']>;
+  const appearance = resolveBlockCellAppearance(block, mergedStyle);
+  const hasCustomBg = appearance.hasCustomBackground && !SELF_STYLED_BLOCK_TYPES.has(block.type);
+  const contentAlignment = mergedStyle.contentAlignment || 'center';
+  const alignmentClass =
+    contentAlignment === 'top' ? 'items-start' : contentAlignment === 'bottom' ? 'items-end' : 'items-center';
   const isFrameless =
-    block.type === 'separator' || block.type === 'socials' || !!composition?.naked;
+    TRANSPARENT_BLOCK_TYPES.has(block.type) || !!composition?.naked || !!variant?.naked;
 
   // Get block type label from manifest
   const manifest = BLOCK_MANIFEST[block.type as BlockType];
@@ -243,8 +255,7 @@ function SortableGridBlockItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative group transition-shadow duration-200 rounded-2xl border-0',
-        !isFrameless && 'bg-card',
+        'relative group transition-shadow duration-200 border-0 rounded-[var(--lm-block-radius,16px)]',
         colSpanClass,
         rowSpanClass,
         // Quiet hover: 1px outline + soft lift, no background tint
@@ -266,12 +277,24 @@ function SortableGridBlockItem({
       <div className="w-full h-full relative z-0">
         <div
           className={cn(
-            'pointer-events-none w-full h-full isolate rounded-2xl overflow-hidden',
-            isFrameless ? 'bg-transparent' : 'bg-card',
+            'pointer-events-none flex w-full h-full isolate overflow-hidden',
+            alignmentClass,
+            isFrameless ? 'bg-transparent' : hasCustomBg ? '' : 'qb-card',
+            !isFrameless && appearance.className,
+            variant?.className,
           )}
+          style={isFrameless ? undefined : appearance.style}
           data-editor-block
         >
-          <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
+          <div className={cn('relative w-full h-full', appearance.textEffectClass)}>
+            <BlockRenderer
+              block={block}
+              isPreview
+              isOwnerPremium={isPremium}
+              ownerTier={premiumTier}
+              containerStyled={!isFrameless}
+            />
+          </div>
         </div>
 
         {/* Click + Drag Overlay. Desktop: dnd-kit's PointerSensor

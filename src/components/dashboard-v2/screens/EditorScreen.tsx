@@ -27,7 +27,8 @@ import { AutoSaveIndicator, type SaveStatus } from '@/components/editor/AutoSave
 import { SmartActionDock } from '@/components/editor/v2/SmartActionDock';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
-import { getAppearanceRootClass, getBackgroundStyle, getPublicPageCssVars, getThemeBackgroundStyle } from '@/lib/appearance/style-utils';
+import { getBackgroundStyle, getPageThemeScope, getThemeBackgroundStyle } from '@/lib/appearance/style-utils';
+import { usePageFonts } from '@/hooks/page/usePageFonts';
 import { storage } from '@/lib/storage';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
@@ -164,8 +165,9 @@ export const EditorScreen = memo(function EditorScreen({
 
   // P5: Friction recovery
   const { signal: frictionSignal, pushEvent: pushFrictionEvent, dismiss: dismissFriction, accept: acceptFriction } = useFrictionRecovery();
-  const appearanceVars = useMemo(() => getPublicPageCssVars(pageData?.theme), [pageData?.theme]);
-  const appearanceRootClass = useMemo(() => getAppearanceRootClass(pageData?.theme), [pageData?.theme]);
+  // Same theme → CSS mapping as the public page, so the canvas is WYSIWYG
+  const themeScope = useMemo(() => getPageThemeScope(pageData?.theme), [pageData?.theme]);
+  usePageFonts(pageData?.theme);
   const themeBackgroundStyle = useMemo(() => getThemeBackgroundStyle(pageData?.theme), [pageData?.theme]);
   const customBackground = pageData?.theme?.customBackground;
   const background = useMemo(() => getBackgroundStyle(customBackground), [customBackground]);
@@ -585,8 +587,8 @@ export const EditorScreen = memo(function EditorScreen({
 
       {/* Grid Editor */}
       <div
-        className={cn('relative isolate mt-4 overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border', appearanceRootClass)}
-        style={{ ...appearanceVars, ...themeBackgroundStyle, color: pageData.theme?.textColor }}
+        className={cn('relative isolate mt-4 overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border bg-background text-foreground', themeScope.className)}
+        style={{ ...themeScope.style, ...themeBackgroundStyle }}
         data-testid="editor-appearance-preview"
       >
         <div
@@ -595,7 +597,8 @@ export const EditorScreen = memo(function EditorScreen({
           style={background.style}
         />
         {background.overlay && <div aria-hidden className="pointer-events-none absolute inset-0" style={background.overlay} />}
-        <div className="relative z-[1]">
+        {/* Same content width as the public page (PublicPage: max-w-2xl) */}
+        <div className="relative z-[1] mx-auto w-full max-w-2xl px-3 sm:px-4">
           <RenderContextProvider value="editor">
             <Suspense fallback={<EditorCanvasSkeleton />}>
               <GridEditor

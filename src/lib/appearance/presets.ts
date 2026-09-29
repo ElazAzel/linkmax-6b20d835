@@ -587,17 +587,20 @@ export interface FontPairPreset {
   isPremium: boolean;
 }
 
+// Most display families below have no Cyrillic glyphs. 'Inter' (loaded
+// globally, full Cyrillic) is the second family so Russian/Kazakh text keeps
+// a designed typeface instead of falling back to a random system font.
 export const FONT_PAIR_PRESETS: FontPairPreset[] = [
   { id: 'manrope-inter', name: 'Manrope + Inter', heading: "'Manrope', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif", isPremium: false },
   { id: 'inter-inter', name: 'Inter', heading: "'Inter', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif", isPremium: false },
-  { id: 'space-dm', name: 'Space Grotesk + DM Sans', heading: "'Space Grotesk', system-ui, sans-serif", body: "'DM Sans', system-ui, sans-serif", isPremium: false },
-  { id: 'instrument-work', name: 'Instrument Serif + Work Sans', heading: "'Instrument Serif', ui-serif, serif", body: "'Work Sans', system-ui, sans-serif", isPremium: true },
-  { id: 'cormorant-karla', name: 'Cormorant + Karla', heading: "'Cormorant Garamond', ui-serif, serif", body: "'Karla', system-ui, sans-serif", isPremium: true },
-  { id: 'syne-jakarta', name: 'Syne + Plus Jakarta', heading: "'Syne', system-ui, sans-serif", body: "'Plus Jakarta Sans', system-ui, sans-serif", isPremium: true },
-  { id: 'urbanist-epilogue', name: 'Urbanist + Epilogue', heading: "'Urbanist', system-ui, sans-serif", body: "'Epilogue', system-ui, sans-serif", isPremium: true },
-  { id: 'outfit-figtree', name: 'Outfit + Figtree', heading: "'Outfit', system-ui, sans-serif", body: "'Figtree', system-ui, sans-serif", isPremium: true },
-  { id: 'jetbrains-work', name: 'JetBrains Mono + Work Sans', heading: "'JetBrains Mono', ui-monospace, monospace", body: "'Work Sans', system-ui, sans-serif", isPremium: true },
-  { id: 'archivo-hind', name: 'Archivo Black + Hind', heading: "'Archivo Black', system-ui, sans-serif", body: "'Hind', system-ui, sans-serif", isPremium: true },
+  { id: 'space-dm', name: 'Space Grotesk + DM Sans', heading: "'Space Grotesk', 'Inter', system-ui, sans-serif", body: "'DM Sans', 'Inter', system-ui, sans-serif", isPremium: false },
+  { id: 'instrument-work', name: 'Instrument Serif + Work Sans', heading: "'Instrument Serif', ui-serif, serif", body: "'Work Sans', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'cormorant-karla', name: 'Cormorant + Karla', heading: "'Cormorant Garamond', ui-serif, serif", body: "'Karla', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'syne-jakarta', name: 'Syne + Plus Jakarta', heading: "'Syne', 'Inter', system-ui, sans-serif", body: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'urbanist-epilogue', name: 'Urbanist + Epilogue', heading: "'Urbanist', 'Inter', system-ui, sans-serif", body: "'Epilogue', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'outfit-figtree', name: 'Outfit + Figtree', heading: "'Outfit', 'Inter', system-ui, sans-serif", body: "'Figtree', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'jetbrains-work', name: 'JetBrains Mono + Work Sans', heading: "'JetBrains Mono', ui-monospace, monospace", body: "'Work Sans', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'archivo-hind', name: 'Archivo Black + Hind', heading: "'Archivo Black', 'Inter', system-ui, sans-serif", body: "'Hind', 'Inter', system-ui, sans-serif", isPremium: true },
 ];
 
 // ============= Block shape / shadow / hover / divider =============
@@ -607,6 +610,15 @@ export interface Preset<T extends string> {
   name: string;
   isPremium: boolean;
 }
+
+/** Shape of Button/Link blocks (theme.buttonStyle → --lm-button-radius). */
+export type ButtonStyle = 'default' | 'rounded' | 'pill' | 'gradient';
+export const BUTTON_STYLE_PRESETS: Preset<ButtonStyle>[] = [
+  { id: 'default', name: 'Square', isPremium: false },
+  { id: 'rounded', name: 'Rounded', isPremium: false },
+  { id: 'pill', name: 'Pill', isPremium: false },
+  { id: 'gradient', name: 'Gradient', isPremium: false },
+];
 
 export const BLOCK_SHAPE_PRESETS: Preset<BlockShape>[] = [
   { id: 'sharp', name: 'Sharp', isPremium: false },

@@ -129,6 +129,8 @@ describe('UserService', () => {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 neq: vi.fn().mockReturnThis(),
+                order: vi.fn().mockReturnThis(),
+                limit: vi.fn().mockReturnThis(),
                 maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }), // available
                 upsert: vi.fn().mockResolvedValue({ error: null }), // profile update
                 update: vi.fn().mockReturnThis(), // page sync
@@ -136,6 +138,30 @@ describe('UserService', () => {
 
             const result = await UserService.updateUsername('u1', 'validuser');
             expect(result.success).toBe(true);
+        });
+
+        it('renames only the primary page slug, not every page of the user', async () => {
+            const pageUpdate: any = { eq: vi.fn() };
+            let eqCalls = 0;
+            pageUpdate.eq.mockImplementation(() => (++eqCalls < 2 ? pageUpdate : Promise.resolve({ error: null })));
+            const maybeSingle = vi.fn()
+                .mockResolvedValueOnce({ data: null, error: null }) // username availability
+                .mockResolvedValueOnce({ data: { id: 'primary', slug: 'old' }, error: null }) // primary page
+                .mockResolvedValueOnce({ data: null, error: null }); // slug not taken
+            vi.mocked(supabase.from).mockReturnValue({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                neq: vi.fn().mockReturnThis(),
+                order: vi.fn().mockReturnThis(),
+                limit: vi.fn().mockReturnThis(),
+                maybeSingle,
+                upsert: vi.fn().mockResolvedValue({ error: null }),
+                update: vi.fn().mockReturnValue(pageUpdate),
+            } as any);
+
+            const result = await UserService.updateUsername('u1', 'validuser');
+            expect(result).toMatchObject({ success: true, primaryPageId: 'primary', slug: 'validuser' });
+            expect(pageUpdate.eq).toHaveBeenCalledWith('id', 'primary');
         });
 
         it('should check premium status', async () => {

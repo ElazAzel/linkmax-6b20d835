@@ -6,6 +6,8 @@ import { Block, BLOCK_SIZE_DIMENSIONS } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { getComposition, type CompositionDef } from '@/lib/design/composition';
 import { resolveBlockVariant } from '@/lib/design/block-variants';
+import { resolveBlockCellAppearance, SELF_STYLED_BLOCK_TYPES, TRANSPARENT_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
+import type { PageTheme } from '@/types/page';
 
 interface GridBlocksRendererProps {
   blocks: Block[];
@@ -15,6 +17,8 @@ interface GridBlocksRendererProps {
   ownerTier?: PremiumTier;
   isPreview?: boolean;
   className?: string;
+  /** Page theme animation: 'none' renders blocks without entrance motion. */
+  animation?: PageTheme['animationStyle'];
 }
 
 /**
@@ -34,6 +38,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   ownerTier,
   isPreview = false,
   className,
+  animation = 'gentle',
 }: GridBlocksRendererProps) {
   // Guard against undefined/null blocks
   const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
@@ -41,8 +46,18 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   const profileBlock = validBlocks.find(b => b.type === 'profile');
   const contentBlocks = validBlocks.filter(b => b.type !== 'profile');
 
-  // Block types that render as ambient layers (no card chrome)
-  const TRANSPARENT_BLOCKS = new Set(['separator', 'socials', 'spacer']);
+  const noMotion = animation === 'none';
+  const cellVariants = noMotion
+    ? { hidden: { opacity: 1 }, show: { opacity: 1 } }
+    : {
+        hidden: { opacity: 0, y: animation === 'energetic' ? 24 : 12, scale: animation === 'energetic' ? 0.96 : 0.99 },
+        show: {
+          opacity: 1, y: 0, scale: 1,
+          transition: animation === 'energetic'
+            ? { type: 'spring' as const, stiffness: 380, damping: 22 }
+            : { type: 'spring' as const, stiffness: 260, damping: 26 },
+        },
+      };
   // Block types that naturally need full width when size isn't explicitly set
   const NATURALLY_WIDE = new Set([
     'profile', 'heading', 'text', 'video', 'embed', 'faq',
@@ -78,94 +93,63 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
           : 'items-center';
 
     const isTransparent =
-      TRANSPARENT_BLOCKS.has(block.type) || !!composition?.naked || !!variant?.naked;
+      TRANSPARENT_BLOCK_TYPES.has(block.type) || !!composition?.naked || !!variant?.naked;
     const isSquare = !inComposition && dimensions.gridCols === 1 && dimensions.gridRows === 1;
     const isTall = !inComposition && dimensions.gridCols === 1 && dimensions.gridRows === 2;
 
-    // Translate BlockStyle into wrapper-level visuals so user customizations are visible.
+    // One resolver for the public grid and the editor canvas (block-appearance).
     // Variant style patches sit UNDER the user's explicit settings.
     const bs = { ...(variant?.stylePatch || {}), ...(block.blockStyle || {}) } as NonNullable<Block['blockStyle']>;
-    const wrapperStyle: React.CSSProperties = {};
-    const radiusMap: Record<string, string> = {
-      none: '0px', sm: '12px', md: '18px', lg: '28px', full: '9999px',
-    };
-    const borderWidthMap: Record<string, string> = { none: '0px', thin: '1px', medium: '2px', thick: '3px' };
-    const shadowMap: Record<string, string> = {
-      none: 'none',
-      sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-      md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-      lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-      xl: '0 20px 25px -5px rgb(0 0 0 / 0.15)',
-      glow: '0 0 24px hsl(var(--primary) / 0.45)',
-    };
-    if (bs?.backgroundColor) wrapperStyle.backgroundColor = bs.backgroundColor;
-    if (bs?.backgroundGradient) wrapperStyle.backgroundImage = bs.backgroundGradient;
-    wrapperStyle.borderRadius = bs?.borderRadius
-      ? radiusMap[bs.borderRadius]
-      : 'var(--lm-block-radius, 16px)';
-    if (bs?.borderWidth && bs.borderWidth !== 'none') {
-      wrapperStyle.borderWidth = borderWidthMap[bs.borderWidth];
-      wrapperStyle.borderStyle = 'solid';
-      wrapperStyle.borderColor = bs.borderColor || 'hsl(var(--border))';
-    }
-    wrapperStyle.boxShadow = bs?.shadow
-      ? shadowMap[bs.shadow]
-      : 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))';
-    const hoverClass =
-      bs?.hoverEffect === 'scale' ? 'hover:scale-[1.02]'
-      : bs?.hoverEffect === 'lift' ? 'hover:-translate-y-1'
-      : bs?.hoverEffect === 'glow' ? 'hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)]'
-      : bs?.hoverEffect === 'fade' ? 'hover:opacity-80'
-      : '';
-    const hasCustomBg = !!(bs?.backgroundColor || bs?.backgroundGradient);
+    const appearance = resolveBlockCellAppearance(block, bs);
+    const hasCustomBg = appearance.hasCustomBackground && !SELF_STYLED_BLOCK_TYPES.has(block.type);
+    const isWide = inComposition || dimensions.gridCols === 2;
 
     const itemClass = composition?.itemClass?.(opts?.index ?? 0, opts?.total ?? 1) || '';
 
+    // Entrance animation lives on the outer element; the card chrome and hover
+    // effects live on the inner one. framer-motion leaves an inline transform
+    // on the animated node, which used to cancel every CSS hover transform.
     return (
       <motion.div
         key={block.id}
-        className={cn(
-          'group relative flex overflow-hidden transition-all duration-300',
-          !isTransparent && 'block-card',
-          alignmentClass,
-          colSpanClass,
-          rowSpanClass,
-          // Unified BlockShell via Quiet Bento tokens (skip default bg if user set custom bg)
-          !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
-          isTransparent && 'bg-transparent',
-          hoverClass,
-          !isTransparent && isSquare && 'aspect-square',
-          !isTransparent && isTall && 'min-h-[280px]',
-          !isTransparent && !isSquare && !isTall && !inComposition && 'min-h-[120px]',
-          variant?.className,
-          itemClass,
-        )}
-        style={!isTransparent ? wrapperStyle : undefined}
-        variants={{
-          hidden: { opacity: 0, y: 12, scale: 0.99 },
-          show: {
-            opacity: 1, y: 0, scale: 1,
-            transition: { type: 'spring', stiffness: 260, damping: 26 },
-          },
-        }}
+        data-lm-cell
+        data-lm-wide={isWide ? '' : undefined}
+        className={cn('relative flex', colSpanClass, rowSpanClass, itemClass)}
+        variants={cellVariants}
       >
-        {/* Ambient hover sheen */}
-        {!isTransparent && !hasCustomBg && (
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
-          />
-        )}
-        <div className="relative w-full h-full">
-          <BlockRenderer
-            block={block}
-            isPreview={isPreview}
-            pageOwnerId={pageOwnerId}
-            pageId={pageId}
-            isOwnerPremium={isOwnerPremium}
-            ownerTier={ownerTier}
-            containerStyled={!isTransparent}
-          />
+        <div
+          className={cn(
+            'group relative flex w-full overflow-hidden transition-all duration-300',
+            !isTransparent && 'block-card',
+            alignmentClass,
+            !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
+            isTransparent && 'bg-transparent',
+            !isTransparent && appearance.className,
+            !isTransparent && isSquare && 'aspect-square',
+            !isTransparent && isTall && 'min-h-[280px]',
+            !isTransparent && !isSquare && !isTall && !inComposition && 'min-h-[120px]',
+            variant?.className,
+          )}
+          style={isTransparent ? undefined : appearance.style}
+        >
+          {/* Ambient hover sheen */}
+          {!isTransparent && !hasCustomBg && (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
+            />
+          )}
+          <div className={cn('relative w-full h-full', appearance.textEffectClass)}>
+            <BlockRenderer
+              block={block}
+              isPreview={isPreview}
+              pageOwnerId={pageOwnerId}
+              pageId={pageId}
+              isOwnerPremium={isOwnerPremium}
+              ownerTier={ownerTier}
+              containerStyled={!isTransparent}
+            />
+          </div>
         </div>
       </motion.div>
     );
@@ -201,10 +185,12 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
     runs.push({ kind: 'grid', blocks: [block] });
   }
 
-  const staggerVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.05, delayChildren: 0.04 } },
-  };
+  const staggerVariants = noMotion
+    ? { hidden: { opacity: 1 }, show: { opacity: 1 } }
+    : {
+        hidden: { opacity: 0 },
+        show: { opacity: 1, transition: { staggerChildren: animation === 'energetic' ? 0.03 : 0.05, delayChildren: 0.04 } },
+      };
 
   return (
     <div className={cn('space-y-6', className)}>
@@ -212,9 +198,9 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {profileBlock && (
         <motion.div
           className="w-full"
-          initial={{ opacity: 0, y: 16 }}
+          initial={noMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          transition={{ duration: noMotion ? 0 : 0.5, ease: 'easeOut' }}
         >
           <BlockRenderer
             block={profileBlock}
@@ -231,6 +217,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
         run.kind === 'grid' ? (
           <motion.div
             key={`grid-${runIndex}`}
+            data-lm-grid
             className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
             initial="hidden"
             animate="show"
