@@ -68,6 +68,12 @@ window.addEventListener('error', (event) => {
 });
 
 window.addEventListener('unhandledrejection', (event) => {
+  const reason = event.reason as { name?: string; message?: string } | undefined;
+  // Cancelled requests (navigation, unmount, auth lock) are expected, not crashes.
+  if (reason?.name === 'AbortError' || String(reason?.message ?? '').includes('signal is aborted')) {
+    event.preventDefault();
+    return;
+  }
   if (isChunkRuntimeError(event.reason)) {
     event.preventDefault();
     recoverFromStaleAssets('unhandledrejection');
