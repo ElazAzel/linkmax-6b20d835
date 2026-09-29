@@ -11,13 +11,11 @@ const badgeVariants = cva(
         default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
         secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        success: "border-transparent bg-success text-success-foreground hover:bg-success/80",
-        warning: "border-transparent bg-warning text-warning-foreground hover:bg-warning/80",
-        info: "border-transparent bg-info text-info-foreground hover:bg-info/80",
+        // Status pills (DESIGN.md → Status): tinted, readable on cards.
+        success: "border-transparent bg-success/12 text-success",
+        warning: "border-transparent bg-warning/14 text-warning",
+        info: "border-transparent bg-info/12 text-info",
         outline: "text-foreground",
-        premium: "border-foreground/15 bg-foreground text-background shadow-sm",
-        subtle: "border-transparent bg-primary/10 text-primary hover:bg-primary/15",
-        glass: "border-border/40 bg-card/60 backdrop-blur-sm text-foreground shadow-sm",
       },
     },
     defaultVariants: {
@@ -28,7 +26,7 @@ const badgeVariants = cva(
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
-  variant?: "default" | "secondary" | "destructive" | "success" | "warning" | "info" | "outline" | "premium" | "subtle" | "glass" | null | undefined;
+  variant?: "default" | "secondary" | "destructive" | "success" | "warning" | "info" | "outline" | null | undefined;
   className?: string;
 }
 

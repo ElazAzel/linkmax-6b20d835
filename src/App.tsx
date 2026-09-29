@@ -3,8 +3,11 @@ const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (
 
 import React, { Suspense, useEffect, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner, toast } from "sonner";
+import { toast } from "sonner";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/sonner";
+import { AppSurface } from "@/components/layout/AppSurface";
+import { APP_THEME_ATTRIBUTE, APP_THEME_STORAGE_KEY } from "@/design-system/surface";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
 import { queryRetryOptions, mutationRetryOptions } from "@/lib/resilience/retry-policy";
@@ -181,6 +184,17 @@ const App = () => {
 
   return (
     <HelmetProvider>
+      {/* App interface theme (light / dark / system). It only takes effect on
+          html.lm-app; pages built by users keep their own theme. */}
+      <ThemeProvider
+        attribute={APP_THEME_ATTRIBUTE}
+        storageKey={APP_THEME_STORAGE_KEY}
+        defaultTheme="system"
+        enableSystem
+        enableColorScheme={false}
+        disableTransitionOnChange
+      >
+      <AppSurface />
       <QueryClientProvider client={queryClient}>
           <TMAProvider>
             <AuthProvider>
@@ -191,8 +205,8 @@ const App = () => {
                 <TooltipProvider>
                   <SkipToMainContent />
                   <Suspense fallback={null}>
+                    {/* One toast stack for the whole app (sonner). */}
                     <Toaster />
-                    <Sonner />
                     {/* Cmd+K lives in the dashboard (GlobalCommandPalette / editor / zone
                         palettes). A second app-wide palette opened on top of them
                         and pointed at routes that do not exist. */}
@@ -217,6 +231,7 @@ const App = () => {
             </AuthProvider>
           </TMAProvider>
         </QueryClientProvider>
+      </ThemeProvider>
     </HelmetProvider>
   );
 };

@@ -1647,7 +1647,12 @@
       "regional": "Regional",
       "kaspiQr": "Kaspi QR Widget",
       "kaspiQrDesc": "Show Kaspi.kz QR on dashboard",
-      "telegramPaused": "Bot linked, notifications off"
+      "telegramPaused": "Bot linked, notifications off",
+      "interfaceTheme": "Interface theme",
+      "interfaceThemeDesc": "Your page keeps its own theme",
+      "themeSystem": "System",
+      "themeLight": "Light",
+      "themeDark": "Dark"
     },
     "activity": {
       "all": "All",

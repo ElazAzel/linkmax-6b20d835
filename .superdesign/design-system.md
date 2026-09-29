@@ -1,5 +1,7 @@
 # LinkMAX commercial landing design system
 
+> **Tokens, fonts and components now come from `DESIGN.md` (repository root) and `src/design-system/tokens.ts`.** Where this file lists colors, fonts or radii that differ from DESIGN.md, DESIGN.md wins. This file keeps the landing positioning and content rules.
+
 ## Product and audience
 
 LinkMAX is a mobile-first revenue page and operating layer for independent service professionals in Kazakhstan. The primary landing audience is solo beauty specialists who currently manage Instagram traffic, WhatsApp or Telegram conversations, scheduling, deposits and follow-up manually. Secondary audiences include tutors, photographers, coaches and other appointment-led solo businesses.

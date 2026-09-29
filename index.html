@@ -11,8 +11,27 @@
   <!-- Web fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Onest + JetBrains Mono: LinkMAX interface (DESIGN.md). Inter + Manrope: default fonts of user pages. -->
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" />
+    href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" />
+
+  <!-- Apply the interface surface and theme before first paint (no flash).
+       Keep the segment list in sync with src/design-system/surface.ts (tested). -->
+  <script>
+    (function () {
+      try {
+        var APP_FIRST_SEGMENTS = ["", "index", "ru", "en", "kk", "uz", "auth", "dashboard", "admin", "install", "join", "invites", ".lovable", "pricing", "gallery", "customers", "alternatives", "seo-landing", "experts", "terms", "privacy", "payment-terms", "sitemap", "blog", "for-masters", "for", "dlya", "для-репетиторов", "для-бьюти-мастеров", "taplink-alternative", "sayt-vizitka-dlya-uslug", "multilink", "link-in-bio-ru", "vizitka-onlayn", "design-system"];
+        var first = location.pathname.split("/")[1] || "";
+        try { first = decodeURIComponent(first); } catch (e) {}
+        if (APP_FIRST_SEGMENTS.indexOf(first) === -1) return;
+        var root = document.documentElement;
+        root.classList.add("lm-app");
+        var saved = localStorage.getItem("lm-app-theme");
+        var dark = saved === "dark" || ((!saved || saved === "system") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        root.setAttribute("data-app-theme", dark ? "dark" : "light");
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Primary SEO Meta Tags (client-side updates in SEOLandingHead) -->
   <title>LinkMAX — страницы, CRM и аналитика для микробизнеса</title>
@@ -68,10 +87,22 @@
   <style>
     /* Critical font fallback to prevent layout shift */
     body {
-      font-family: Inter, Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0;
-      background-color: #09090b;
-      color: #fafafa;
+      background-color: #ffffff;
+      color: #101419;
+    }
+
+    /* LinkMAX interface before the stylesheet loads (tokens: DESIGN.md) */
+    html.lm-app body {
+      font-family: Onest, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f4f4ef;
+      color: #101419;
+    }
+
+    html.lm-app[data-app-theme="dark"] body {
+      background-color: #111418;
+      color: #eff0ea;
     }
 
     /* Initial loading state to prevent FOUC */
@@ -107,7 +138,7 @@
     }
 
     .ssr-fallback a {
-      color: #0080ff;
+      color: #cc4400;
       text-decoration: underline;
     }
   </style>
@@ -115,7 +146,8 @@
   <!-- Preload dynamic components will be injected by Vite -->
 
   <!-- PWA Meta Tags -->
-  <meta name="theme-color" content="#8b5cf6" />
+  <meta name="theme-color" content="#f4f4ef" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -131,7 +163,7 @@
 
   <!-- ai-summary for SEO & AI Crawlers -->
   <meta name="ai-summary"
-    content="LinkMAX is the Business OS for the Solo-Economy. It combines an AI-powered Page Builder (Liquid Glass design), Business Zones (multi-tenant CRM workspaces), and a Fintech Core with a Step-by-Growth monetization model. Optimized for independent professionals to manage their entire digital enterprise in one place." />
+    content="LinkMAX is the Business OS for the Solo-Economy. It combines an AI-powered Page Builder, Business Zones (multi-tenant CRM workspaces), and a Fintech Core with a Step-by-Growth monetization model. Optimized for independent professionals to manage their entire digital enterprise in one place." />
 
   <!-- JSON-LD Schema for Landing Page -->
   <script type="application/ld+json">
@@ -146,7 +178,7 @@
       "applicationSubCategory": ["Website Builder", "CRM Software", "Analytics Platform", "Financial Software"],
       "operatingSystem": "Web, PWA",
       "featureList": [
-        "AI Page Builder (Liquid Glass Design)",
+        "AI Page Builder",
         "Business Zones (Multi-tenant Workspaces)",
         "Mini-CRM & Sales Pipeline (Kanban)",
         "Fintech Core (Ledger & Invoicing)",
@@ -207,7 +239,7 @@
   <a href="#root"
     class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded-md focus:text-sm focus:font-medium"
     style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"
-    onfocus="this.style.position='fixed';this.style.left='0.5rem';this.style.top='0.5rem';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';this.style.zIndex='9999';this.style.background='#8b5cf6';this.style.color='#fff';this.style.padding='0.5rem 1rem';this.style.borderRadius='0.375rem'"
+    onfocus="this.style.position='fixed';this.style.left='0.5rem';this.style.top='0.5rem';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';this.style.zIndex='9999';this.style.background='#cc4400';this.style.color='#fff';this.style.padding='0.5rem 1rem';this.style.borderRadius='0.375rem'"
     onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';this.style.overflow='hidden'">Skip
     to content</a>
 

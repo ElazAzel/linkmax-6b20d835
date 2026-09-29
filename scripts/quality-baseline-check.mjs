@@ -15,6 +15,9 @@ const loadBaseline = () => {
   return {
     anyMax: parsed.anyMax,
     consoleLogMax: parsed.consoleLogMax,
+    hexColorMax: parsed.hexColorMax,
+    rawPaletteClassMax: parsed.rawPaletteClassMax,
+    whiteBlackAlphaMax: parsed.whiteBlackAlphaMax,
   };
 };
 
@@ -64,12 +67,60 @@ const metrics = {
   consoleLog: countMatchingLines(/console\.log\(/),
 };
 
+/*
+ * Design ratchet (DESIGN.md → Color). Counts literal colors in interface
+ * code; the numbers may only go down. User theme data, third-party brand
+ * palettes and tests are excluded.
+ */
+const DESIGN_EXCLUDED = [
+  /[\\/]__tests__[\\/]/,
+  /\.test\.tsx?$/,
+  /[\\/]src[\\/]testing[\\/]/,
+  /[\\/]src[\\/]telegram[\\/]/,
+  /[\\/]src[\\/]design-system[\\/]/,
+  /[\\/]lib[\\/]appearance[\\/]presets\.ts$/,
+  /[\\/]lib[\\/]widget-templates\.ts$/,
+  /[\\/]lib[\\/]avatar-frame-utils\.ts$/,
+  /[\\/]integrations[\\/]supabase[\\/]types\.ts$/,
+  /[\\/]platform[\\/]supabase[\\/]types\.ts$/,
+];
+
+const countOccurrences = (pattern) => {
+  let matches = 0;
+  for (const filePath of collectSourceFiles(SOURCE_DIR)) {
+    if (DESIGN_EXCLUDED.some((rule) => rule.test(filePath))) continue;
+    const text = readFileSync(filePath, 'utf8');
+    matches += (text.match(pattern) ?? []).length;
+  }
+  return matches;
+};
+
+const PALETTE = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
+const designMetrics = {
+  hexColor: countOccurrences(/#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b(?![-\w])/g),
+  rawPaletteClass: countOccurrences(new RegExp(`\\b(?:bg|text|border|ring|from|via|to|fill|stroke|outline|shadow|divide|decoration|accent|caret)-(?:${PALETTE})-\\d{2,3}\\b`, 'g')),
+  whiteBlackAlpha: countOccurrences(/\b(?:bg|text|border|ring|from|via|to|fill|stroke|divide)-(?:white|black)\/(?:\[[^\]]+\]|\d{1,3})\b/g),
+};
+
 console.log('Quality baseline check');
 console.log(`- baseline file: ${BASELINE_PATH}`);
 console.log(`- any usages: ${metrics.any} (max: ${thresholds.anyMax})`);
 console.log(`- console.log usages: ${metrics.consoleLog} (max: ${thresholds.consoleLogMax})`);
 
+const DESIGN_KEYS = [
+  ['hexColor', 'hexColorMax', 'HEX_COLOR_MAX', 'hex colors'],
+  ['rawPaletteClass', 'rawPaletteClassMax', 'RAW_PALETTE_CLASS_MAX', 'raw palette classes'],
+  ['whiteBlackAlpha', 'whiteBlackAlphaMax', 'WHITE_BLACK_ALPHA_MAX', 'white/black alpha classes'],
+];
+
 const violations = [];
+for (const [metric, key, env, label] of DESIGN_KEYS) {
+  const max = Number(process.env[env] ?? baseline[key]);
+  console.log(`- ${label}: ${designMetrics[metric]}${Number.isFinite(max) ? ` (max: ${max})` : ' (no baseline yet)'}`);
+  if (Number.isFinite(max) && designMetrics[metric] > max) {
+    violations.push(`${label} increased: ${designMetrics[metric]} > ${max} (use design tokens, see DESIGN.md)`);
+  }
+}
 if (metrics.any > thresholds.anyMax) {
   violations.push(`any usages increased: ${metrics.any} > ${thresholds.anyMax}`);
 }

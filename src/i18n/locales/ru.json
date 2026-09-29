@@ -1647,7 +1647,12 @@
       "regional": "Региональный",
       "kaspiQr": "Каспи QR-виджет",
       "kaspiQrDesc": "Показать QR-код Kaspi.kz на панели управления",
-      "telegramPaused": "Бот привязан, уведомления выключены"
+      "telegramPaused": "Бот привязан, уведомления выключены",
+      "interfaceTheme": "Тема интерфейса",
+      "interfaceThemeDesc": "Ваша страница остаётся в своей теме",
+      "themeSystem": "Как в системе",
+      "themeLight": "Светлая",
+      "themeDark": "Тёмная"
     },
     "activity": {
       "all": "Все",
