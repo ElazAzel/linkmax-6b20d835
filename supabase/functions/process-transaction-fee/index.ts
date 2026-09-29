@@ -98,34 +98,26 @@ serve(async (req) => {
       wallet = newWallet!;
     }
 
-    // 2. Create the transaction record
-    const { data: transaction, error: txError } = await supabaseClient
-      .from('wallet_transactions')
-      .insert({
-        wallet_id: wallet!.id,
-        type: 'deposit',
-        status: 'completed',
-        gross_amount: grossAmount,
-        fee_amount: feeAmount,
-        net_amount: netAmount,
-        currency: payload.currency || 'KZT',
-        description: payload.description || `Payment via ${payload.source || 'Kaspi'}`,
-        metadata: payload.metadata || {},
-        completed_at: new Date().toISOString()
-      })
-      .select()
-      .single()
+    // 2+3. Record the transaction and credit the balance atomically (idempotent by internal_ref)
+    const md = (payload.metadata || {}) as Record<string, unknown>
+    const internalRef = (md.internal_ref ?? md.transaction_id ?? null) as string | null
+    const { data: credit, error: txError } = await supabaseClient.rpc('record_wallet_income', {
+      p_user_id: payload.userId,
+      p_amount: netAmount,
+      p_description: payload.description || `Payment via ${payload.source || 'Kaspi'}`,
+      p_internal_ref: internalRef ? String(internalRef) : null,
+      p_wallet_id: wallet!.id,
+      p_type: 'deposit',
+      p_gross_amount: grossAmount,
+      p_fee_amount: feeAmount,
+      p_currency: payload.currency || 'KZT',
+      p_metadata: md,
+    })
 
     if (txError) throw txError;
-
-    // 3. Update the wallet balance
-    const newBalance = Number(wallet!.balance) + netAmount;
-    const { error: updateError } = await supabaseClient
-      .from('user_wallets')
-      .update({ balance: newBalance, updated_at: new Date().toISOString() })
-      .eq('id', wallet!.id)
-
-    if (updateError) throw updateError;
+    if (credit && credit.success === false && !credit.duplicate) throw new Error(String(credit.error || 'credit_failed'));
+    const transaction = credit
+    const newBalance = credit?.new_balance ?? null
 
     return new Response(
       JSON.stringify({

@@ -1,6 +1,7 @@
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 export {
   prepareClientRevenueEvent,
 } from '@/lib/posthog';
@@ -329,7 +330,20 @@ async function upsertCreatorHealthScore(
   return score;
 }
 
+/**
+ * product_events / creator_* come from a migration that is not applied to
+ * every database. Once the table is reported missing, stop writing for this
+ * session — otherwise every dashboard action sent a request that failed.
+ */
+let productSchemaMissing = false;
+
+/** Test hook. */
+export function resetProductAnalyticsSchemaState() {
+  productSchemaMissing = false;
+}
+
 async function trackProductEvent(input: TrackProductEventInput): Promise<void> {
+  if (productSchemaMissing) return;
   try {
     const occurredAt = input.occurredAt ?? new Date().toISOString();
 
@@ -345,6 +359,7 @@ async function trackProductEvent(input: TrackProductEventInput): Promise<void> {
       });
 
     if (error) {
+      if (isMissingSchemaError(error)) productSchemaMissing = true;
       logger.debug('Product analytics event insert failed', { data: error });
       return;
     }
