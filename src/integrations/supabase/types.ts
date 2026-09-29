@@ -303,9 +303,11 @@ export type Database = {
           payment_method: string | null
           payment_status: string
           reminder_sent: boolean
+          resource_id: string | null
           slot_date: string
           slot_end_time: string | null
           slot_time: string
+          staff_id: string | null
           status: string
           updated_at: string
           user_id: string | null
@@ -328,9 +330,11 @@ export type Database = {
           payment_method?: string | null
           payment_status?: string
           reminder_sent?: boolean
+          resource_id?: string | null
           slot_date: string
           slot_end_time?: string | null
           slot_time: string
+          staff_id?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
@@ -353,9 +357,11 @@ export type Database = {
           payment_method?: string | null
           payment_status?: string
           reminder_sent?: boolean
+          resource_id?: string | null
           slot_date?: string
           slot_end_time?: string | null
           slot_time?: string
+          staff_id?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
@@ -373,6 +379,20 @@ export type Database = {
             columns: ["page_id"]
             isOneToOne: false
             referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "zone_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "zone_staff"
             referencedColumns: ["id"]
           },
         ]
@@ -4787,7 +4807,9 @@ export type Database = {
           capacity: number | null
           color: string | null
           created_at: string
+          description: string | null
           id: string
+          is_active: boolean
           name: string
           type: string
           updated_at: string
@@ -4797,7 +4819,9 @@ export type Database = {
           capacity?: number | null
           color?: string | null
           created_at?: string
+          description?: string | null
           id?: string
+          is_active?: boolean
           name: string
           type?: string
           updated_at?: string
@@ -4807,7 +4831,9 @@ export type Database = {
           capacity?: number | null
           color?: string | null
           created_at?: string
+          description?: string | null
           id?: string
+          is_active?: boolean
           name?: string
           type?: string
           updated_at?: string
