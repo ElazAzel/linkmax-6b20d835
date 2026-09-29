@@ -63,7 +63,7 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
             <CardContent className="pt-6 space-y-5">
                 <div className="space-y-5">
                     <div className="space-y-2.5">
-                        <Label htmlFor="qr-amount" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.06em] opacity-70 pl-1">
+                        <Label htmlFor="qr-amount" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.06em] pl-1">
                             {t('kaspi.amount', 'Сумма')}
                         </Label>
                         <div className="flex gap-2.5">
@@ -75,14 +75,14 @@ export const KaspiQRWidget = memo(function KaspiQRWidget({
                                 placeholder="0"
                                 className="h-12 bg-muted border-border rounded-2xl focus-visible:ring-primary/20 transition-all font-bold text-base"
                             />
-                            <div className="flex items-center px-4 text-xs font-bold text-muted-foreground bg-muted rounded-2xl border border-border opacity-60">
+                            <div className="flex items-center px-4 text-xs font-bold text-muted-foreground bg-muted rounded-2xl border border-border">
                                 {currency}
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-2.5">
-                        <Label htmlFor="qr-comment" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.06em] opacity-70 pl-1">
+                        <Label htmlFor="qr-comment" className="text-xs text-muted-foreground uppercase font-bold tracking-[0.06em] pl-1">
                             {t('kaspi.comment', 'Комментарий')}
                         </Label>
                         <Input

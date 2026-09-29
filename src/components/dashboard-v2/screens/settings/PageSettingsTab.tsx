@@ -310,7 +310,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <h2 className="text-lg font-bold tracking-tight text-gradient">{pageTitle || displayName}</h2>
+                            <h2 className="text-lg font-bold tracking-tight text-foreground">{pageTitle || displayName}</h2>
                             <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em]">lnkmx.my/{pageSlug}</p>
                         </div>
                     </div>
@@ -341,7 +341,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         </Label>
                         <div className="flex gap-2">
                             <div className="flex-1 relative group">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-bold opacity-60">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-bold">
                                     lnkmx.my/
                                 </span>
                                 <Input

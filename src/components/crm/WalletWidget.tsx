@@ -112,7 +112,7 @@ export const WalletWidget = () => {
                 <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10">
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em] mb-1">Доступно</p>
-                        <p className="text-2xl font-bold text-gradient" data-testid="wallet-balance">{balance.toLocaleString()} ₸</p>
+                        <p className="text-2xl font-bold text-foreground" data-testid="wallet-balance">{balance.toLocaleString()} ₸</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-success/12 border border-success/20">
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em] mb-1">В ожидании (GMV)</p>

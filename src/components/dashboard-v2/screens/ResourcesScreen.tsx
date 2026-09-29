@@ -97,7 +97,7 @@ export const ResourcesScreen = ({ zoneId }: ResourcesScreenProps) => {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gradient tracking-tight">
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">
             {t('resources.title', 'Resources Management')}
           </h1>
           <p className="text-muted-foreground mt-1 max-w-lg">

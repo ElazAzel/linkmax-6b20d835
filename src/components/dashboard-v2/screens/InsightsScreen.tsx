@@ -380,7 +380,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                             <h3 className="text-sm font-bold uppercase tracking-[0.06em] text-primary/70 mb-1">
                               {t('analytics.staff.yourStats', 'Ваш результат')}
                             </h3>
-                            <p className="text-xl font-bold text-gradient">
+                            <p className="text-xl font-bold text-foreground">
                               {staffMemberName}, {t('analytics.staff.keepItUp', 'так держать!')}
                             </p>
                           </div>
@@ -598,21 +598,21 @@ export const InsightsScreen = memo(function InsightsScreen({
                       <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center bg-card border border-border shadow-sm rounded-3xl group/device hover:bg-muted transition-colors">
                         <Smartphone className="h-6 w-6 sm:h-5 sm:w-5 text-info group-hover/device:scale-110 transition-transform" />
                         <div className="flex-1 sm:flex-none text-left sm:text-center">
-                          <div className="text-2xl font-bold text-gradient font-num">{devicePercentages.mobile}%</div>
+                          <div className="text-2xl font-bold text-foreground font-num">{devicePercentages.mobile}%</div>
                           <div className="text-xs uppercase font-bold tracking-[0.06em] text-muted-foreground">{t('dashboard.insights.mobile', 'Телефон')}</div>
                         </div>
                       </Card>
                       <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center bg-card border border-border shadow-sm rounded-3xl group/device hover:bg-muted transition-colors">
                         <Monitor className="h-6 w-6 sm:h-5 sm:w-5 text-success group-hover/device:scale-110 transition-transform" />
                         <div className="flex-1 sm:flex-none text-left sm:text-center">
-                          <div className="text-2xl font-bold text-gradient font-num">{devicePercentages.desktop}%</div>
+                          <div className="text-2xl font-bold text-foreground font-num">{devicePercentages.desktop}%</div>
                           <div className="text-xs uppercase font-bold tracking-[0.06em] text-muted-foreground">{t('dashboard.insights.desktop', 'ПК')}</div>
                         </div>
                       </Card>
                       <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center bg-card border border-border shadow-sm rounded-3xl group/device hover:bg-muted transition-colors">
                         <Globe className="h-6 w-6 sm:h-5 sm:w-5 text-primary group-hover/device:scale-110 transition-transform" />
                         <div className="flex-1 sm:flex-none text-left sm:text-center">
-                          <div className="text-2xl font-bold text-gradient font-num">{devicePercentages.tablet}%</div>
+                          <div className="text-2xl font-bold text-foreground font-num">{devicePercentages.tablet}%</div>
                           <div className="text-xs uppercase font-bold tracking-[0.06em] text-muted-foreground">{t('dashboard.insights.tablet', 'Планшет')}</div>
                         </div>
                       </Card>

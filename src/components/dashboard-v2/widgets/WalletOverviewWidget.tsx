@@ -70,17 +70,17 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
                 <div className="flex flex-col">
-                    <span className="text-4xl font-bold tracking-tighter text-gradient pb-1">
+                    <span className="text-4xl font-num font-bold text-foreground pb-1">
                         {formatAmount(balance)} {getCurrencySymbol(currency)}
                     </span>
-                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-[0.06em] opacity-70">
+                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-[0.06em]">
                         {t('dashboard.fintech.net_balance', 'Доступно к выводу')}
                     </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-card bg-muted/60 border border-border space-y-2 group/stat">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-[0.06em] opacity-60">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-[0.06em]">
                             <TrendingUp className="h-3 w-3" />
                             {t('dashboard.fintech.gmv', 'Оборот')}
                         </div>
@@ -89,7 +89,7 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
                         </div>
                     </div>
                     <div className="p-4 rounded-card bg-muted/60 border border-border space-y-2 group/stat">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-[0.06em] opacity-60">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-[0.06em]">
                             <Percent className="h-3 w-3" />
                             {t('dashboard.fintech.fees', 'Комиссия')}
                         </div>

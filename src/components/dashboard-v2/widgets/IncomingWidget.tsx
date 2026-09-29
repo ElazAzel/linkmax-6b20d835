@@ -137,14 +137,14 @@ export const IncomingWidget = memo(function IncomingWidget({
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-sm font-semibold truncate">{lead.name}</span>
+              <span className="block text-sm font-semibold truncate mb-0.5">{lead.name}</span>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
                 <ResponseTimeTag createdAt={lead.created_at} status={lead.status} />
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <MessageCircle className="h-3 w-3" />
-                <span>{t('home.incoming.lead', 'Заявка')}</span>
-                {lead.phone && <span>· {lead.phone}</span>}
+                <span className="inline-flex items-center gap-1">
+                  <MessageCircle className="h-3 w-3" />
+                  {t('home.incoming.lead', 'Заявка')}
+                </span>
+                {lead.phone && <span className="whitespace-nowrap font-num">{lead.phone}</span>}
               </div>
             </div>
             {lead.phone && (
