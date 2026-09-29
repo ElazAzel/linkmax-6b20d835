@@ -231,31 +231,22 @@ serve(async (req: Request) => {
                     if (!wallet) {
                         console.error("No wallet available to credit seller for digital sale", { invId, seller: purchase.seller_id });
                     } else {
-                        const { error: txErr } = await supabase.from('wallet_transactions').insert({
-                            wallet_id: wallet.id,
-                            user_id: purchase.seller_id,
-                            gross_amount: gross,
-                            fee_amount: feeAmount,
-                            net_amount: netAmount,
-                            type: 'payment',
-                            status: 'completed',
-                            description: `Digital goods sale (InvId: ${invId})`,
-                            related_entity_id: purchase.id,
-                            related_entity_type: 'digital_purchase',
-                            metadata: { internal_ref: invId, fee_rate: feeRate, gateway: 'robokassa' },
-                            completed_at: new Date().toISOString(),
-                        } as any);
-
-                        if (txErr) {
-                            console.error("Failed to record digital sale tx", txErr);
-                        } else {
-                            const { error: balErr } = await supabase
-                                .from('user_wallets')
-                                .update({ balance: Number(wallet.balance) + netAmount, updated_at: new Date().toISOString() })
-                                .eq('id', wallet.id);
-                            if (balErr) {
-                                console.error("Failed to update seller balance for digital sale", balErr);
-                            }
+                        const { data: credit, error: txErr } = await supabase.rpc('record_wallet_income', {
+                            p_user_id: purchase.seller_id,
+                            p_amount: netAmount,
+                            p_description: `Digital goods sale (InvId: ${invId})`,
+                            p_related_entity_type: 'digital_purchase',
+                            p_related_entity_id: purchase.id,
+                            p_internal_ref: invId,
+                            p_wallet_id: wallet.id,
+                            p_type: 'payment',
+                            p_gross_amount: gross,
+                            p_fee_amount: feeAmount,
+                            p_currency: 'KZT',
+                            p_metadata: { fee_rate: feeRate, gateway: 'robokassa' },
+                        });
+                        if (txErr || (credit && credit.success === false && !credit.duplicate)) {
+                            console.error("Failed to credit digital sale", txErr ?? credit);
                         }
                     }
 
@@ -319,41 +310,25 @@ serve(async (req: Request) => {
             }
 
             if (wallet) {
-                const { error: txError } = await supabase
-                    .from('wallet_transactions')
-                    .insert({
-                        wallet_id: wallet.id,
-                        user_id: shp_seller,
-                        gross_amount: grossAmount,
-                        fee_amount: feeAmount,
-                        net_amount: netAmount,
-                        type: 'payment',
-                        status: 'completed',
-                        description: `Offer purchase (InvId: ${invId})`,
-                        related_entity_id: shp_offer || null,
-                        related_entity_type: 'offer',
-                        metadata: {
-                            internal_ref: invId,
-                            fee_rate: feeRate,
-                            gateway: 'robokassa',
-                            kind: 'offer_purchase',
-                            offer_id: shp_offer,
-                        },
-                        completed_at: new Date().toISOString(),
-                    });
+                const { data: credit, error: txError } = await supabase.rpc('record_wallet_income', {
+                    p_user_id: shp_seller,
+                    p_amount: netAmount,
+                    p_description: `Offer purchase (InvId: ${invId})`,
+                    p_related_entity_type: 'offer',
+                    p_related_entity_id: shp_offer || null,
+                    p_internal_ref: invId,
+                    p_wallet_id: wallet.id,
+                    p_type: 'payment',
+                    p_gross_amount: grossAmount,
+                    p_fee_amount: feeAmount,
+                    p_currency: 'KZT',
+                    p_metadata: { fee_rate: feeRate, gateway: 'robokassa', kind: 'offer_purchase', offer_id: shp_offer },
+                });
 
-                if (txError) {
-                    console.error("Failed to record offer_purchase tx", txError);
+                if (txError || (credit && credit.success === false && !credit.duplicate)) {
+                    console.error("Failed to record offer_purchase tx", txError ?? credit);
                     return new Response("TX ERROR", { status: 500 });
                 }
-
-                await supabase
-                    .from('user_wallets')
-                    .update({
-                        balance: Number(wallet.balance) + netAmount,
-                        updated_at: new Date().toISOString(),
-                    })
-                    .eq('id', wallet.id);
 
                 try {
                     if (sellerProfile?.telegram_chat_id && sellerProfile?.telegram_notifications_enabled) {
@@ -446,40 +421,25 @@ serve(async (req: Request) => {
             if (wallet && await isAlreadyCredited(supabase, invId)) {
                 console.log("payment already credited, skipping", { invId });
             } else if (wallet) {
-                const { error: txError } = await supabase
-                    .from('wallet_transactions')
-                    .insert({
-                        wallet_id: wallet.id,
-                        user_id: shp_user,
-                        gross_amount: grossAmount,
-                        fee_amount: feeAmount,
-                        net_amount: netAmount,
-                        type: 'payment',
-                        status: 'completed',
-                        description: `Payment confirmed (InvId: ${invId})`,
-                        related_entity_id: shp_related_id || null,
-                        related_entity_type: 'payment',
-                        metadata: {
-                            internal_ref: invId,
-                            fee_rate: feeRate,
-                            gateway: 'robokassa'
-                        },
-                        completed_at: new Date().toISOString()
-                    });
+                const { data: credit, error: txError } = await supabase.rpc('record_wallet_income', {
+                    p_user_id: shp_user,
+                    p_amount: netAmount,
+                    p_description: `Payment confirmed (InvId: ${invId})`,
+                    p_related_entity_type: 'payment',
+                    p_related_entity_id: shp_related_id || null,
+                    p_internal_ref: invId,
+                    p_wallet_id: wallet.id,
+                    p_type: 'payment',
+                    p_gross_amount: grossAmount,
+                    p_fee_amount: feeAmount,
+                    p_currency: 'KZT',
+                    p_metadata: { fee_rate: feeRate, gateway: 'robokassa' },
+                });
 
-                if (txError) {
-                    console.error("Failed to record fintech transaction", txError);
+                if (txError || (credit && credit.success === false && !credit.duplicate)) {
+                    console.error("Failed to record fintech transaction", txError ?? credit);
                     return new Response("TX ERROR", { status: 500 });
                 }
-
-                // 3. Update wallet balance
-                await supabase
-                    .from('user_wallets')
-                    .update({
-                        balance: Number(wallet.balance) + netAmount,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('id', wallet.id);
 
                 // --- Phase 16: CRM Status Sync ---
                 if (shp_related_id) {

@@ -5559,6 +5559,64 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      get_my_full_page_by_id: {
+        Args: { p_page_id: string }
+        Returns: {
+          avatar_style: Json | null
+          avatar_url: string | null
+          city: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_whatsapp: string | null
+          country_code: string | null
+          created_at: string | null
+          custom_domain: string | null
+          description: string | null
+          editor_mode: string
+          entity_type: string | null
+          favicon_url: string | null
+          gallery_featured_at: string | null
+          gallery_likes: number | null
+          grid_config: Json | null
+          hide_branding: boolean | null
+          id: string
+          index_exclusion_reasons: string[] | null
+          integrations: Json | null
+          is_home: boolean
+          is_in_gallery: boolean | null
+          is_indexable: boolean | null
+          is_paid: boolean | null
+          is_primary_paid: boolean | null
+          is_published: boolean | null
+          last_indexnow_at: string | null
+          last_snapshot_at: string | null
+          niche: string | null
+          organization_id: string | null
+          page_path: string | null
+          page_type: string | null
+          preview_url: string | null
+          profession: string | null
+          quality_breakdown: Json | null
+          quality_score: number | null
+          seo_meta: Json | null
+          service_slugs: Json | null
+          site_id: string | null
+          slug: string
+          theme_settings: Json | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          view_count: number | null
+          webhook_secret: string | null
+          webhook_url: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "pages"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_page_search_diagnostics: {
         Args: { p_page_id: string }
         Returns: Json
@@ -5711,6 +5769,10 @@ export type Database = {
         }[]
       }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
+      invite_org_member_by_email: {
+        Args: { p_email: string; p_org_id: string; p_role?: string }
+        Returns: Json
+      }
       is_allowed_review_source: { Args: { p_source: string }; Returns: boolean }
       is_allowed_review_status: { Args: { p_status: string }; Returns: boolean }
       is_allowed_review_verification_status: {
@@ -5770,6 +5832,23 @@ export type Database = {
             Returns: Json
           }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
+      record_wallet_income: {
+        Args: {
+          p_amount: number
+          p_currency?: string
+          p_description: string
+          p_fee_amount?: number
+          p_gross_amount?: number
+          p_internal_ref?: string
+          p_metadata?: Json
+          p_related_entity_id?: string
+          p_related_entity_type?: string
+          p_type?: string
+          p_user_id: string
+          p_wallet_id?: string
+        }
+        Returns: Json
+      }
       refresh_page_review_summary: {
         Args: { p_page_id: string }
         Returns: undefined
