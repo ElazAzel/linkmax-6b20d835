@@ -228,6 +228,9 @@ serve(async (req: Request) => {
                         wallet = created;
                     }
 
+                    // A concurrent retry of this webhook was already credited:
+                    // do not notify the seller a second time.
+                    let duplicateCredit = false;
                     if (!wallet) {
                         console.error("No wallet available to credit seller for digital sale", { invId, seller: purchase.seller_id });
                     } else {
@@ -248,10 +251,10 @@ serve(async (req: Request) => {
                         if (txErr || (credit && credit.success === false && !credit.duplicate)) {
                             console.error("Failed to credit digital sale", txErr ?? credit);
                         }
+                        duplicateCredit = Boolean(credit?.duplicate);
                     }
 
-
-                    if (sellerProfile?.telegram_chat_id && sellerProfile?.telegram_notifications_enabled) {
+                    if (!duplicateCredit && sellerProfile?.telegram_chat_id && sellerProfile?.telegram_notifications_enabled) {
                         const lang = sellerProfile.telegram_language || 'ru';
                         const netTxt = netAmount.toLocaleString('ru-RU');
                         const text = lang === 'en'
@@ -328,6 +331,12 @@ serve(async (req: Request) => {
                 if (txError || (credit && credit.success === false && !credit.duplicate)) {
                     console.error("Failed to record offer_purchase tx", txError ?? credit);
                     return new Response("TX ERROR", { status: 500 });
+                }
+
+                // Parallel retry already credited this InvId: acknowledge
+                // without repeating notifications and status updates.
+                if (credit?.duplicate) {
+                    return new Response(`OK${invId}`, { status: 200 });
                 }
 
                 try {
@@ -439,6 +448,12 @@ serve(async (req: Request) => {
                 if (txError || (credit && credit.success === false && !credit.duplicate)) {
                     console.error("Failed to record fintech transaction", txError ?? credit);
                     return new Response("TX ERROR", { status: 500 });
+                }
+
+                // Parallel retry already credited this InvId: acknowledge
+                // without repeating notifications and status updates.
+                if (credit?.duplicate) {
+                    return new Response(`OK${invId}`, { status: 200 });
                 }
 
                 // --- Phase 16: CRM Status Sync ---

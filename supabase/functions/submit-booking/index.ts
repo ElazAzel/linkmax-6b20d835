@@ -17,6 +17,23 @@ function sanitize(str: unknown, maxLen = 500): string {
   return String(str ?? '').substring(0, maxLen).replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/**
+ * "Table / function / column does not exist". The booking lifecycle
+ * migrations (create_public_booking, bookings.staff_id, …) are not applied to
+ * every database; without a fallback every public booking failed.
+ */
+function isMissingSchemaError(error: unknown): boolean {
+  const code = (error as { code?: unknown } | null)?.code;
+  return typeof code === 'string'
+    && ['42P01', '42883', '42703', 'PGRST202', 'PGRST204', 'PGRST205'].includes(code);
+}
+
+function addMinutes(time: string, minutes: number): string {
+  const [h, m] = time.split(':').map(Number);
+  const total = (h * 60 + m + minutes) % (24 * 60);
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}:00`;
+}
+
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -161,15 +178,27 @@ serve(async (req: Request) => {
     }
 
     // Check for staff double booking
-    const { data: existingStaffBooking, error: checkError } = await supabase
-      .from('bookings')
-      .select('id')
-      .eq('page_id', pageId)
-      .eq('slot_date', sanitize(slotDate, 10))
-      .eq('slot_time', sanitize(slotTime, 8))
-      .eq('staff_id', staffId || null)
-      .neq('status', 'cancelled')
-      .maybeSingle();
+    const slotQuery = (withStaff: boolean) => {
+      let query = supabase
+        .from('bookings')
+        .select('id')
+        .eq('page_id', pageId)
+        .eq('slot_date', sanitize(slotDate, 10))
+        .eq('slot_time', sanitize(slotTime, 8))
+        .neq('status', 'cancelled');
+      if (withStaff) {
+        query = staffId && isValidUUID(staffId)
+          ? query.eq('staff_id', staffId)
+          : query.is('staff_id', null);
+      }
+      return query.limit(1).maybeSingle();
+    };
+    let { data: existingStaffBooking, error: checkError } = await slotQuery(true);
+    // bookings.staff_id may not exist yet: then the page has no per-staff
+    // schedule and any booking in the slot is a conflict.
+    if (checkError && isMissingSchemaError(checkError)) {
+      ({ data: existingStaffBooking, error: checkError } = await slotQuery(false));
+    }
 
     if (checkError) {
       console.error('Error checking double booking:', checkError);
@@ -243,6 +272,85 @@ serve(async (req: Request) => {
       p_attribution: attribution && typeof attribution === 'object' ? attribution : {},
       p_idempotency_key: mutationKey,
     });
+
+    if (createError && isMissingSchemaError(createError)) {
+      // Booking lifecycle RPC not deployed: create the booking directly with
+      // the columns every database has. Owner comes from the page, not the
+      // request; payment fields are never taken from the client.
+      const legacySlotTime = sanitize(slotTime, 8);
+      const { data: legacyBooking, error: legacyError } = await supabase
+        .from('bookings')
+        .insert({
+          page_id: pageId,
+          block_id: String(blockId),
+          owner_id: pageData.user_id,
+          slot_date: sanitize(slotDate, 10),
+          slot_time: legacySlotTime,
+          slot_end_time: addMinutes(legacySlotTime, Number(slotDuration) > 0 ? Number(slotDuration) : 60),
+          client_name: sanitize(clientName, 200),
+          client_phone: clientPhone ? sanitize(clientPhone, 40) : null,
+          client_email: clientEmail ? sanitize(clientEmail, 254) : null,
+          client_notes: sanitize(clientNotes, 1000) || null,
+        })
+        .select('id, status')
+        .single();
+
+      if (legacyError) {
+        console.error('Legacy booking insert failed:', legacyError);
+        if (legacyError.code === '23505') {
+          return new Response(
+            JSON.stringify({ success: false, error: 'slot_already_booked' }),
+            { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        throw legacyError;
+      }
+
+      // send-booking-notification depends on the same missing schema, so the
+      // lead and the owner's Telegram message are created here.
+      try {
+        await supabase.from('leads').insert({
+          user_id: pageData.user_id,
+          name: sanitize(clientName, 200),
+          phone: clientPhone ? sanitize(clientPhone, 40) : null,
+          email: clientEmail ? sanitize(clientEmail, 254) : null,
+          source: 'form',
+          status: 'new',
+          notes: `Запись на ${sanitize(slotDate, 10)} в ${legacySlotTime.slice(0, 5)}${clientNotes ? `\n\nКомментарий: ${sanitize(clientNotes, 1000)}` : ''}`,
+          metadata: {
+            booking_id: legacyBooking.id,
+            booking_date: sanitize(slotDate, 10),
+            booking_time: legacySlotTime,
+            source_type: 'booking',
+          },
+        });
+      } catch (leadErr) {
+        console.error('Legacy booking lead insert failed:', leadErr);
+      }
+
+      try {
+        const { data: owner } = await supabase
+          .from('user_profiles')
+          .select('telegram_chat_id, telegram_notifications_enabled')
+          .eq('id', pageData.user_id)
+          .maybeSingle();
+        if (isConfigured() && owner?.telegram_notifications_enabled && owner.telegram_chat_id) {
+          const contact = [clientPhone, clientEmail].filter(Boolean).map((v) => sanitize(v, 254)).join(', ');
+          await sendMessage(
+            owner.telegram_chat_id,
+            `📅 <b>Новая запись</b>\n\n${sanitize(clientName, 200)}\n${sanitize(slotDate, 10)} в ${legacySlotTime.slice(0, 5)}${contact ? `\n${contact}` : ''}`,
+            { parse_mode: 'HTML' },
+          );
+        }
+      } catch (notifyErr) {
+        console.error('Legacy booking notification failed:', notifyErr);
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, booking: { id: legacyBooking.id, status: legacyBooking.status } }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     if (createError) {
       console.error('Authoritative booking RPC failed:', createError);
