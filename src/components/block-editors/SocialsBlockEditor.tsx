@@ -19,6 +19,12 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import { Button } from '@/components/ui/button';
 import { Reorder, useDragControls } from 'framer-motion';
+import { useState } from 'react';
+import ImagePlus from 'lucide-react/dist/esm/icons/image-plus';
+import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
+import { MediaUpload } from '@/components/form-fields/MediaUpload';
+import { SocialIcon } from '@/components/icons/SocialIcon';
+import { SOCIAL_PLATFORMS, detectSocialPlatform, normalizePlatformId } from '@/lib/social/platforms';
 
 // Helper for drag handle
 const DragHandle = () => {
@@ -51,7 +57,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
       ...data,
       platforms: [
         ...platforms,
-        { id: crypto.randomUUID(), platform: 'instagram', url: '' }
+        { id: crypto.randomUUID(), url: '' }
       ]
     });
   };
@@ -61,6 +67,14 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
       ...data,
       platforms: platforms.filter((p) => p.id !== id)
     });
+  };
+
+  const [customIconOpen, setCustomIconOpen] = useState<Record<string, boolean>>({});
+
+  // The network follows the link: pasting t.me/… selects Telegram.
+  const handleUrlChange = (id: string, url: string) => {
+    const detected = detectSocialPlatform(url);
+    handleUpdatePlatform(id, detected ? { url, platform: detected, icon: undefined } : { url });
   };
 
   const handleUpdatePlatform = (id: string, updates: Partial<SocialPlatform>) => {
@@ -105,36 +119,84 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                 <div className="flex gap-2 items-start p-3 bg-muted/30 rounded-xl border border-border/10 group">
                   <DragHandle />
 
-                  <div className="flex-1 space-y-2">
-                    <Select
-                      value={item.platform}
-                      onValueChange={(value: string) => handleUpdatePlatform(item.id!, { platform: value })}
-                    >
-                      <SelectTrigger className="h-10">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="instagram">Instagram</SelectItem>
-                        <SelectItem value="tiktok">TikTok</SelectItem>
-                        <SelectItem value="youtube">YouTube</SelectItem>
-                        <SelectItem value="twitter">X (Twitter)</SelectItem>
-                        <SelectItem value="facebook">Facebook</SelectItem>
-                        <SelectItem value="linkedin">LinkedIn</SelectItem>
-                        <SelectItem value="telegram">Telegram</SelectItem>
-                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                        <SelectItem value="discord">Discord</SelectItem>
-                        <SelectItem value="twitch">Twitch</SelectItem>
-                        <SelectItem value="pinterest">Pinterest</SelectItem>
-                        <SelectItem value="website">Website</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-control border border-border bg-card text-foreground">
+                        <SocialIcon
+                          platformId={detectSocialPlatform(item.url) ?? normalizePlatformId(item.platform) ?? normalizePlatformId(item.icon)}
+                          url={item.url}
+                          customIconUrl={item.customIconUrl}
+                          className="h-5 w-5"
+                        />
+                      </span>
+                      <Input
+                        value={item.url}
+                        onChange={(e) => handleUrlChange(item.id!, e.target.value)}
+                        placeholder={t('socials.urlPlaceholder', 'Вставьте ссылку: instagram.com/…, t.me/…')}
+                        className="h-10 min-w-0"
+                        inputMode="url"
+                      />
+                    </div>
 
-                    <Input
-                      value={item.url}
-                      onChange={(e) => handleUpdatePlatform(item.id!, { url: e.target.value })}
-                      placeholder="https://"
-                      className="h-10"
-                    />
+                    <div className="flex items-center gap-2">
+                      <Select
+                        value={normalizePlatformId(item.platform) ?? normalizePlatformId(item.icon) ?? 'website'}
+                        onValueChange={(value: string) => handleUpdatePlatform(item.id!, { platform: value, icon: undefined })}
+                      >
+                        <SelectTrigger className="h-10 min-w-0 flex-1" aria-label={t('socials.network', 'Соцсеть')}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {SOCIAL_PLATFORMS.map((platform) => (
+                            <SelectItem key={platform.id} value={platform.id}>
+                              <span className="flex items-center gap-2">
+                                <SocialIcon platformId={platform.id} className="h-4 w-4" />
+                                {platform.label}
+                              </span>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        type="button"
+                        variant={item.customIconUrl || customIconOpen[item.id!] ? 'secondary' : 'outline'}
+                        size="icon"
+                        className="h-10 w-10 shrink-0"
+                        onClick={() => setCustomIconOpen((open) => ({ ...open, [item.id!]: !open[item.id!] }))}
+                        aria-label={t('socials.customIcon', 'Своя иконка')}
+                        aria-expanded={!!customIconOpen[item.id!]}
+                        title={t('socials.customIcon', 'Своя иконка')}
+                      >
+                        <ImagePlus className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    {customIconOpen[item.id!] ? (
+                      <div className="space-y-2 rounded-control border border-border bg-card p-3">
+                        <MediaUpload
+                          value={item.customIconUrl || ''}
+                          onChange={(url) => handleUpdatePlatform(item.id!, { customIconUrl: url || undefined })}
+                          accept="image/*"
+                          label={t('socials.customIcon', 'Своя иконка')}
+                          placeholder="https://…/icon.png"
+                        />
+                        {item.customIconUrl ? (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleUpdatePlatform(item.id!, { customIconUrl: undefined })}
+                          >
+                            <RotateCcw className="mr-2 h-4 w-4" />
+                            {t('socials.autoIcon', 'Вернуть автоматическую иконку')}
+                          </Button>
+                        ) : (
+                          <p className="text-xs text-muted-foreground">
+                            {t('socials.customIconHint', 'Квадратная картинка PNG или SVG, от 64×64. Без своей иконки ставится значок соцсети по ссылке.')}
+                          </p>
+                        )}
+                      </div>
+                    ) : null}
                   </div>
 
                   <Button
@@ -170,7 +232,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
       >
         <EditorField label={t('fields.layout', 'Layout')}>
           <Select
-            value={formData.layout || 'list'}
+            value={formData.layout || 'grid'}
             onValueChange={(value: string) => onChange({ ...formData, layout: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
@@ -178,10 +240,10 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="list">
-                <span className="flex items-center gap-2"><LayoutGrid className="h-4 w-4 rotate-90" /> {t('layouts.list', 'List')}</span>
+                <span className="flex items-center gap-2"><LayoutGrid className="h-4 w-4 rotate-90" /> {t('socials.layoutList', 'Список с названиями')}</span>
               </SelectItem>
               <SelectItem value="grid">
-                <span className="flex items-center gap-2"><LayoutGrid className="h-4 w-4" /> {t('layouts.grid', 'Grid')}</span>
+                <span className="flex items-center gap-2"><LayoutGrid className="h-4 w-4" /> {t('socials.layoutRow', 'Ряд иконок')}</span>
               </SelectItem>
             </SelectContent>
           </Select>
@@ -189,17 +251,16 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
         <EditorField label={t('fields.iconStyle', 'Icon Style')}>
           <Select
-            value={formData.iconStyle || 'brand'}
+            value={formData.iconStyle === 'brand' || formData.iconStyle === 'outline' ? formData.iconStyle : 'theme'}
             onValueChange={(value: string) => onChange({ ...formData, iconStyle: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="brand">{t('styles.brandColors', 'Brand Colors')}</SelectItem>
-              <SelectItem value="black">{t('styles.black', 'Black')}</SelectItem>
-              <SelectItem value="white">{t('styles.white', 'White')}</SelectItem>
-              <SelectItem value="outline">{t('styles.outline', 'Outline')}</SelectItem>
+              <SelectItem value="theme">{t('socials.styleTheme', 'Как на странице')}</SelectItem>
+              <SelectItem value="brand">{t('styles.brandColors', 'Цвета брендов')}</SelectItem>
+              <SelectItem value="outline">{t('styles.outline', 'Контур')}</SelectItem>
             </SelectContent>
           </Select>
         </EditorField>

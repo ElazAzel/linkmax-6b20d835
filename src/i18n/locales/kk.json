@@ -8079,5 +8079,15 @@
     "webhookNowTitle": "Қазір жұмыс істейді: бет вебхугы",
     "webhookNowDescription": "Беттен түскен әр жаңа өтінімде LinkMAX сіздің URL-ге POST сұрау жібереді. Make, Zapier, n8n немесе өз серверіңізді қосыңыз.",
     "openWebhookSettings": "Вебхукты баптау"
+  },
+  "socials": {
+    "urlPlaceholder": "Сілтемені қойыңыз: instagram.com/…, t.me/…",
+    "network": "Әлеуметтік желі",
+    "customIcon": "Өз белгішеңіз",
+    "autoIcon": "Автоматты белгішені қайтару",
+    "customIconHint": "PNG немесе SVG шаршы сурет, 64×64-тен бастап. Өз белгішеңіз болмаса, желі белгішесі сілтеме бойынша қойылады.",
+    "styleTheme": "Беттегідей",
+    "layoutList": "Атаулары бар тізім",
+    "layoutRow": "Белгішелер қатары"
   }
 }

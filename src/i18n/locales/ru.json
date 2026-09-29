@@ -8079,5 +8079,15 @@
     "webhookNowTitle": "Уже работает: вебхук страницы",
     "webhookNowDescription": "LinkMAX отправляет POST-запрос на ваш URL при каждой новой заявке со страницы. Подключите Make, Zapier, n8n или свой сервер.",
     "openWebhookSettings": "Настроить вебхук"
+  },
+  "socials": {
+    "urlPlaceholder": "Вставьте ссылку: instagram.com/…, t.me/…",
+    "network": "Соцсеть",
+    "customIcon": "Своя иконка",
+    "autoIcon": "Вернуть автоматическую иконку",
+    "customIconHint": "Квадратная картинка PNG или SVG, от 64×64. Без своей иконки ставится значок соцсети по ссылке.",
+    "styleTheme": "Как на странице",
+    "layoutList": "Список с названиями",
+    "layoutRow": "Ряд иконок"
   }
 }

@@ -1,28 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Instagram from 'lucide-react/dist/esm/icons/instagram';
-import Send from 'lucide-react/dist/esm/icons/send';
-import Youtube from 'lucide-react/dist/esm/icons/youtube';
-import Music from 'lucide-react/dist/esm/icons/music';
-import Twitter from 'lucide-react/dist/esm/icons/twitter';
-import Github from 'lucide-react/dist/esm/icons/github';
-import Linkedin from 'lucide-react/dist/esm/icons/linkedin';
-import Facebook from 'lucide-react/dist/esm/icons/facebook';
-import Globe from 'lucide-react/dist/esm/icons/globe';
-import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
-import Phone from 'lucide-react/dist/esm/icons/phone';
-import Mail from 'lucide-react/dist/esm/icons/mail';
-import Twitch from 'lucide-react/dist/esm/icons/twitch';
-import Dribbble from 'lucide-react/dist/esm/icons/dribbble';
-import Figma from 'lucide-react/dist/esm/icons/figma';
-import Slack from 'lucide-react/dist/esm/icons/slack';
-import Chrome from 'lucide-react/dist/esm/icons/chrome';
-import Rss from 'lucide-react/dist/esm/icons/rss';
-import Link2 from 'lucide-react/dist/esm/icons/link-2';
-import AtSign from 'lucide-react/dist/esm/icons/at-sign';
-import MapPin from 'lucide-react/dist/esm/icons/map-pin';
-import Calendar from 'lucide-react/dist/esm/icons/calendar';
-import Podcast from 'lucide-react/dist/esm/icons/podcast';
+import { SocialIcon, getBrandColor } from '@/components/icons/SocialIcon';
+import { detectSocialPlatform, getSocialPlatform, normalizePlatformId } from '@/lib/social/platforms';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
@@ -31,66 +10,6 @@ interface SocialsBlockProps {
   block: SocialsBlockType;
   onPlatformClick?: () => void;
 }
-
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  // Social Media
-  instagram: Instagram,
-  telegram: Send,
-  youtube: Youtube,
-  tiktok: Music,
-  twitter: Twitter,
-  x: Twitter,
-  github: Github,
-  linkedin: Linkedin,
-  facebook: Facebook,
-  threads: AtSign,
-  whatsapp: MessageCircle,
-  viber: Phone,
-  discord: MessageCircle,
-  snapchat: MessageCircle,
-  pinterest: Globe,
-  reddit: MessageCircle,
-  tumblr: Globe,
-  vk: Globe,
-  ok: Globe,
-  wechat: MessageCircle,
-  line: MessageCircle,
-  kakao: MessageCircle,
-
-  // Professional & Creative
-  twitch: Twitch,
-  dribbble: Dribbble,
-  behance: Globe,
-  figma: Figma,
-  medium: Globe,
-  devto: Globe,
-  stackoverflow: Globe,
-  producthunt: Globe,
-
-  // Communication
-  email: Mail,
-  mail: Mail,
-  phone: Phone,
-  slack: Slack,
-  skype: Phone,
-  zoom: Calendar,
-
-  // Content
-  spotify: Music,
-  soundcloud: Music,
-  applemusic: Music,
-  deezer: Music,
-  podcast: Podcast,
-  rss: Rss,
-
-  // Other
-  website: Globe,
-  globe: Globe,
-  link: Link2,
-  chrome: Chrome,
-  maps: MapPin,
-  location: MapPin,
-};
 
 export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatformClick }: SocialsBlockProps) {
   const { i18n } = useTranslation();
@@ -108,6 +27,9 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
       }
     }, 10);
   };
+
+  const iconStyle = block.iconStyle === 'brand' || block.iconStyle === 'outline' ? block.iconStyle : 'theme';
+  const isList = block.layout === 'list';
 
   const justifyClass = block.alignment === 'left' ? 'justify-start'
     : block.alignment === 'right' ? 'justify-end'
@@ -130,28 +52,53 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
           {title}
         </h3>
       )}
-      <div className={`flex items-center ${justifyClass} gap-2 flex-wrap`}>
+      <div
+        className={cn(
+          isList ? 'flex flex-col gap-2' : `flex items-center ${justifyClass} gap-2 flex-wrap`,
+        )}
+      >
         {validPlatforms.map((platform, index) => {
-          // Support both 'icon' and 'platform' fields (AI generates 'platform', factory uses 'icon')
-          const iconName = platform.icon || 'globe';
-          const iconKey = typeof iconName === 'string' ? iconName.toLowerCase() : 'globe';
-          const Icon = iconMap[iconKey] || Globe;
           const url = platform.url || '';
-
           if (!url) return null;
+
+          // The link decides the network; the stored choice is a fallback for
+          // unknown domains (older editors saved 'platform', templates 'icon').
+          const platformId = detectSocialPlatform(url)
+            ?? normalizePlatformId(platform.platform)
+            ?? normalizePlatformId(platform.icon);
+          const label = platform.name || getSocialPlatform(platformId)?.label || url.replace(/^https?:\/\//, '');
+          const brandColor = iconStyle === 'brand' && !platform.customIconUrl ? getBrandColor(platformId) : null;
 
           return (
             <button
-              key={index}
+              key={platform.id ?? index}
               onClick={() => handleClick(url)}
               className={cn(
-                "group relative w-12 h-12 rounded-control flex items-center justify-center",
-                "bg-surface-raised border border-hairline shadow-soft",
-                "transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5 active:scale-95"
+                'group relative flex items-center transition-all duration-200 active:scale-95',
+                isList
+                  ? 'h-12 w-full gap-3 rounded-control px-4 text-left'
+                  : 'h-12 w-12 justify-center rounded-control',
+                iconStyle === 'outline'
+                  ? 'border border-foreground/25 bg-transparent text-foreground hover:bg-foreground/5'
+                  : 'bg-surface-raised border border-hairline shadow-soft hover:shadow-lift hover:-translate-y-0.5',
               )}
-              aria-label={platform.name || iconKey}
+              aria-label={label}
             >
-              <Icon className="w-5 h-5 text-foreground/80 group-hover:text-primary transition-colors duration-200" />
+              <span
+                className={cn(
+                  'flex h-5 w-5 shrink-0 items-center justify-center',
+                  !brandColor && 'text-foreground/80 group-hover:text-primary transition-colors duration-200',
+                )}
+                style={brandColor ? { color: brandColor } : undefined}
+              >
+                <SocialIcon
+                  platformId={platformId}
+                  url={url}
+                  customIconUrl={platform.customIconUrl}
+                  className="h-5 w-5"
+                />
+              </span>
+              {isList ? <span className="min-w-0 truncate text-sm font-medium text-foreground">{label}</span> : null}
             </button>
           );
         })}

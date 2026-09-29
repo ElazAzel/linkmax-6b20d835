@@ -8079,5 +8079,15 @@
     "webhookNowTitle": "Available now: page webhook",
     "webhookNowDescription": "LinkMAX sends a POST request to your URL for every new lead from your page. Connect Make, Zapier, n8n or your own server.",
     "openWebhookSettings": "Set up webhook"
+  },
+  "socials": {
+    "urlPlaceholder": "Paste a link: instagram.com/…, t.me/…",
+    "network": "Network",
+    "customIcon": "Custom icon",
+    "autoIcon": "Use the automatic icon",
+    "customIconHint": "A square PNG or SVG, 64×64 or larger. Without it the network icon is picked from the link.",
+    "styleTheme": "Match the page",
+    "layoutList": "List with names",
+    "layoutRow": "Row of icons"
   }
 }
