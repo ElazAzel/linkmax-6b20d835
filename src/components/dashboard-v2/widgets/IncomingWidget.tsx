@@ -104,7 +104,7 @@ export const IncomingWidget = memo(function IncomingWidget({
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-bold">{t('home.incoming.title', 'Входящие')}</h3>
           {totalNew > 0 && (
-            <Badge className="h-5 px-1.5 bg-blue-500 text-white text-xs border-0">
+            <Badge className="h-5 px-1.5 bg-info text-info-foreground text-xs border-0">
               {totalNew}
             </Badge>
           )}
@@ -132,7 +132,7 @@ export const IncomingWidget = memo(function IncomingWidget({
             className="w-full flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors text-left"
           >
             <Avatar className="h-9 w-9 rounded-lg shrink-0">
-              <AvatarFallback className="rounded-lg text-xs font-bold bg-blue-500 text-white">
+              <AvatarFallback className="rounded-lg text-xs font-bold bg-info text-info-foreground">
                 {lead.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -150,7 +150,7 @@ export const IncomingWidget = memo(function IncomingWidget({
             {lead.phone && (
               <Button
                 size="sm"
-                className="h-8 w-8 rounded-lg p-0 bg-emerald-500 hover:bg-emerald-600 text-white shrink-0"
+                className="h-8 w-8 rounded-lg p-0 bg-success hover:bg-success text-success-foreground shrink-0"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleQuickReply(lead.phone!, lead.name);
@@ -169,7 +169,7 @@ export const IncomingWidget = memo(function IncomingWidget({
             className="w-full flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors text-left"
           >
             <Avatar className="h-9 w-9 rounded-lg shrink-0">
-              <AvatarFallback className="rounded-lg text-xs font-bold bg-amber-500 text-white">
+              <AvatarFallback className="rounded-lg text-xs font-bold bg-warning text-warning-foreground">
                 {booking.client_name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -180,7 +180,7 @@ export const IncomingWidget = memo(function IncomingWidget({
                 <span>{booking.slot_date} · {booking.slot_time}</span>
               </div>
             </div>
-            <Badge className="text-xs font-bold h-5 px-1.5 bg-amber-500 text-white border-0 shrink-0">
+            <Badge className="text-xs font-bold h-5 px-1.5 bg-warning text-warning-foreground border-0 shrink-0">
               {t('crm.bookingStatus.pending', 'Ожидает')}
             </Badge>
           </button>

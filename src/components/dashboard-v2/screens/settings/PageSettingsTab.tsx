@@ -100,10 +100,10 @@ const GooglePreview = memo(function GooglePreview({ title, slug, description }: 
     const displayDesc = description || t('dashboard.pageSettings.noDescription', 'Описание не задано');
 
     return (
-        <div className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/50 space-y-1">
+        <div className="p-3 bg-card rounded-control border border-border space-y-1">
             <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.googlePreview', 'Превью в Google')}</p>
-            <p className="text-sm text-blue-600 dark:text-blue-400 font-medium truncate">{displayTitle}</p>
-            <p className="text-xs text-green-700 dark:text-green-500">{displayUrl}</p>
+            <p className="text-sm text-info font-medium truncate">{displayTitle}</p>
+            <p className="text-xs text-success">{displayUrl}</p>
             <p className="text-xs text-muted-foreground line-clamp-2">{displayDesc}</p>
         </div>
     );
@@ -114,9 +114,9 @@ const SEOScoreBadge = memo(function SEOScoreBadge({ score }: { score?: number })
     const { t } = useTranslation();
     if (score === undefined || score === null) return null;
 
-    const color = score >= 70 ? 'text-green-600 bg-green-500/10 border-green-500/20' :
-                  score >= INDEXABLE_THRESHOLD ? 'text-amber-600 bg-amber-500/10 border-amber-500/20' :
-                  'text-red-600 bg-red-500/10 border-red-500/20';
+    const color = score >= 70 ? 'text-success bg-success/12 border-success/20' :
+                  score >= INDEXABLE_THRESHOLD ? 'text-warning bg-warning/12 border-warning/20' :
+                  'text-destructive bg-destructive/12 border-destructive/20';
     const label = score >= 70 ? t('seo.good', 'Хорошо') :
                   score >= INDEXABLE_THRESHOLD ? t('seo.average', 'Средне') :
                   t('seo.weak', 'Слабо');
@@ -142,12 +142,12 @@ const SEOTips = memo(function SEOTips({ city, profession, bio, seoTitle, seoDesc
     if (tips.length === 0) return null;
 
     return (
-        <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800 space-y-1">
-            <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 flex items-center gap-1">
+        <div className="p-3 bg-warning/12 rounded-xl border border-warning/30 space-y-1">
+            <p className="text-xs font-semibold text-warning flex items-center gap-1">
                 <AlertTriangle className="h-3 w-3" />
                 {t('seo.tips.title', 'Советы по улучшению')}
             </p>
-            <ul className="text-xs text-amber-600 dark:text-amber-400 space-y-0.5 list-disc list-inside">
+            <ul className="text-xs text-warning space-y-0.5 list-disc list-inside">
                 {tips.map((tip, i) => <li key={i}>{tip}</li>)}
             </ul>
         </div>
@@ -283,14 +283,14 @@ export const PageSettingsTab = memo(function PageSettingsTab({
         }
         if (isPaid) {
             return (
-                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 shadow-sm">
+                <Badge className="bg-warning/12 text-warning border-warning/30 shadow-sm">
                     <Sparkles className="w-3 h-3 mr-1" />
                     {t('dashboard.pageSettings.paidAddon', 'Paid Add-on')}
                 </Badge>
             );
         }
         return (
-            <Badge variant="secondary" className="glass-subtle border-white/10">
+            <Badge variant="secondary" className="bg-muted/60 border border-border">
                 {t('dashboard.pageSettings.freePage', 'Free')}
             </Badge>
         );
@@ -299,19 +299,19 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     return (
         <div className="space-y-6">
             {/* Current Page Info */}
-            <Card className="p-5 glass-card border-white/20 shadow-glass relative overflow-hidden group">
-                <div className="absolute inset-0 bg-liquid-mesh opacity-5 transition-opacity group-hover:opacity-10 -z-1" />
+            <Card className="p-5 bg-card border border-border shadow-sm relative overflow-hidden group">
+                <div className="absolute inset-0 opacity-5 transition-opacity group-hover:opacity-10 -z-1" />
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                        <Avatar className="h-14 w-14 rounded-2xl border-2 border-white/20 shadow-lg">
+                        <Avatar className="h-14 w-14 rounded-2xl border-2 border-border shadow-lg">
                             <AvatarImage src={avatarUrl} alt={displayName} />
                             <AvatarFallback className="rounded-2xl bg-primary/10 text-primary font-bold text-lg">
                                 {displayName.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <h2 className="text-lg font-black tracking-tight text-gradient">{pageTitle || displayName}</h2>
-                            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">lnkmx.my/{pageSlug}</p>
+                            <h2 className="text-lg font-bold tracking-tight text-gradient">{pageTitle || displayName}</h2>
+                            <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em]">lnkmx.my/{pageSlug}</p>
                         </div>
                     </div>
                     {getPageTypeBadge()}
@@ -319,7 +319,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 {!isPaid && isPremium && onUpgradePage && (
                     <Button
                         variant="outline"
-                        className="w-full h-12 rounded-xl border-primary/30 text-primary bg-primary/5 hover:bg-primary hover:text-white transition-all duration-300 font-bold"
+                        className="w-full h-12 rounded-xl border-primary/30 text-primary bg-primary/5 hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-bold"
                         onClick={onUpgradePage}
                     >
                         <Sparkles className="w-4 h-4 mr-2" />
@@ -330,12 +330,12 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
             {/* Domain / Slug */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.pageSettings.domain', 'Домен')}
                 </h3>
-                <Card className="p-4 space-y-4 glass-card border-white/10 shadow-glass">
+                <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
                     <div className="space-y-2">
-                        <Label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-muted-foreground/80">
+                        <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">
                             <Link2 className="w-4 h-4 text-primary" />
                             {t('dashboard.pageSettings.slug', 'URL страницы')}
                         </Label>
@@ -347,7 +347,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                                 <Input
                                     value={slugInput}
                                     onChange={(e) => { setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); setSlugError(null); }}
-                                    className="pl-[85px] h-12 rounded-xl bg-white/5 border-white/10 focus:border-primary/50 transition-all font-medium"
+                                    className="pl-[85px] h-12 rounded-xl bg-muted border-border focus:border-primary/50 transition-all font-medium"
                                     placeholder={t('dashboard.pageSettings.yourPagePlaceholder', 'your-page')}
                                 />
                             </div>
@@ -372,7 +372,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
             {/* Custom Domain (PRO) */}
             <div className="space-y-2">
                 <div className="flex items-center gap-2 px-1">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">
                         {t('dashboard.pageSettings.customDomain', 'Свой домен')}
                     </h3>
                     {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
@@ -431,7 +431,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
             {/* SEO + Search Visibility (merged) */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.pageSettings.searchVisibility', 'Поисковая видимость')}
                 </h3>
                 <Card className="p-4 space-y-4">
@@ -442,12 +442,12 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     <GooglePreview title={seoTitleInput || pageTitle} slug={pageSlug} description={seoDescInput} />
 
                     {/* AI Bot readiness */}
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-sm">
-                        <Bot className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                        <span className="text-blue-700 dark:text-blue-300 text-xs">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-info/12 border border-info/30 text-sm">
+                        <Bot className="h-4 w-4 text-info" />
+                        <span className="text-info text-xs">
                             {t('seo.aiBotReady', 'JSON-LD и Answer Block генерируются автоматически для AI-ботов')}
                         </span>
-                        <Check className="h-3.5 w-3.5 text-green-600 ml-auto" />
+                        <Check className="h-3.5 w-3.5 text-success ml-auto" />
                     </div>
 
                     {/* SEO Tips */}
@@ -501,7 +501,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
                     {/* Entity Fields inline */}
                     <div className="border-t pt-4 space-y-4">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em]">
                             {t('dashboard.pageSettings.entityFields', 'Данные для поиска')}
                         </p>
                         <div className="space-y-2">
@@ -608,7 +608,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
             {/* Category / Niche */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.pageSettings.category', 'Категория')}
                 </h3>
                 <Card className="p-4">
@@ -618,7 +618,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
             {/* AI Builder */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.pageSettings.aiBuilder', 'AI Builder')}
                 </h3>
                 <Card className="p-4">
@@ -639,7 +639,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
             {/* Branding */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.pageSettings.branding', 'Брендинг')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
@@ -657,8 +657,8 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                     </button>
                     <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenTemplates}>
-                        <div className="h-11 w-11 rounded-2xl bg-emerald-500/15 flex items-center justify-center">
-                            <LayoutTemplate className="w-5 h-5 text-emerald-600" />
+                        <div className="h-11 w-11 rounded-2xl bg-success/12 flex items-center justify-center">
+                            <LayoutTemplate className="w-5 h-5 text-success" />
                         </div>
                         <div className="flex-1">
                             <span className="font-medium">{t('dashboard.pageSettings.templates', 'Шаблоны')}</span>
@@ -667,8 +667,8 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                     </button>
                     <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenMarketplace}>
-                        <div className="h-11 w-11 rounded-2xl bg-violet-500/15 flex items-center justify-center">
-                            <Store className="w-5 h-5 text-violet-600" />
+                        <div className="h-11 w-11 rounded-2xl bg-primary/12 flex items-center justify-center">
+                            <Store className="w-5 h-5 text-primary" />
                         </div>
                         <div className="flex-1">
                             <span className="font-medium">{t('dashboard.pageSettings.marketplace', 'Маркетплейс')}</span>
@@ -682,11 +682,11 @@ export const PageSettingsTab = memo(function PageSettingsTab({
             {/* White-label (PRO) */}
             <div className="space-y-2">
                 <div className="flex items-center gap-2 px-1">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">White-label</h3>
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">White-label</h3>
                     {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                 </div>
                 <PremiumFeatureGate requiredTier="pro" outcomeKey="design">
-                    <Card className="p-4 space-y-4 glass-card border-white/10 shadow-glass">
+                    <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
                         <div className="space-y-2">
                             <Label className="flex items-center gap-2">
                                 <Sparkles className="w-4 h-4 text-primary" />
@@ -705,7 +705,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         <div className="flex items-center justify-between py-2">
                             <div className="space-y-1">
                                 <Label className="flex items-center gap-2 text-base">
-                                    <Crown className="w-4 h-4 text-amber-500" />
+                                    <Crown className="w-4 h-4 text-warning" />
                                     {t('freemium.watermarkEnabled', 'Убери логотип LinkMAX')}
                                 </Label>
                                 <p className="text-sm text-muted-foreground leading-snug max-w-[250px]">
@@ -736,11 +736,11 @@ export const PageSettingsTab = memo(function PageSettingsTab({
             {/* Webhooks (PRO) */}
             <div className="space-y-2">
                 <div className="flex items-center gap-2 px-1">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Webhooks</h3>
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">Webhooks</h3>
                     {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                 </div>
                 <PremiumFeatureGate requiredTier="pro" outcomeKey="generic">
-                    <Card className="p-4 space-y-4 glass-card border-white/10 shadow-glass">
+                    <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
                         <div className="space-y-2">
                             <Label className="flex items-center gap-2">
                                 <Sparkles className="w-4 h-4 text-primary" />
@@ -758,7 +758,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         </div>
                         <div className="space-y-2">
                             <Label className="flex items-center gap-2">
-                                <Check className="w-4 h-4 text-emerald-500" />
+                                <Check className="w-4 h-4 text-success" />
                                 Webhook Secret ({t('common.optional', 'необязательно')})
                             </Label>
                             <Input
@@ -833,7 +833,7 @@ function TrackingSettings({ integrations, onSave }: {
 
     return (
         <div className="space-y-2">
-            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                 {t('settings.integrations.title', 'Пиксели и аналитика')}
             </h3>
             <Card className="p-4 space-y-5">
@@ -844,7 +844,7 @@ function TrackingSettings({ integrations, onSave }: {
                     <div key={field.key} className="space-y-1.5">
                         <Label htmlFor={`tracking-${field.key}`} className="flex items-center gap-2">
                             <span>{field.label}</span>
-                            {values[field.key] && <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden />}
+                            {values[field.key] && <span className="h-2 w-2 rounded-full bg-success" aria-hidden />}
                         </Label>
                         <Input
                             id={`tracking-${field.key}`}

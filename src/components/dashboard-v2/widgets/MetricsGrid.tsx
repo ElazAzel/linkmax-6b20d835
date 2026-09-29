@@ -25,7 +25,7 @@ export const MetricsGrid = memo(function MetricsGrid({ pageId }: MetricsGridProp
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-24 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10" />
+          <Skeleton key={i} className="h-24 rounded-3xl bg-muted backdrop-blur-md border border-border" />
         ))}
       </div>
     );

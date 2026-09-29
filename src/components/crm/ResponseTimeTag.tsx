@@ -25,8 +25,8 @@ export function getUrgencyLevel(createdAt: string, status: string): UrgencyLevel
 }
 
 const URGENCY_STYLES: Record<UrgencyLevel, string> = {
-  fresh: 'bg-emerald-500/15 text-emerald-600 border-emerald-500/20',
-  warm: 'bg-amber-500/15 text-amber-600 border-amber-500/20',
+  fresh: 'bg-success/12 text-success border-success/20',
+  warm: 'bg-warning/12 text-warning border-warning/20',
   urgent: 'bg-destructive/15 text-destructive border-destructive/20',
   missed: 'bg-muted text-muted-foreground border-border/30',
 };

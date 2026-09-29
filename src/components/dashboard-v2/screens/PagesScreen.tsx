@@ -135,7 +135,7 @@ export const PagesScreen = memo(function PagesScreen({
     }
     if (page.isPaid) {
       return (
-        <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs">
+        <Badge className="bg-warning/12 text-warning border-warning/30 text-xs">
           <Sparkles className="w-3 h-3 mr-1" />
           {t('dashboard.pages.paidAddon', 'Add-on')}
         </Badge>
@@ -285,13 +285,13 @@ export const PagesScreen = memo(function PagesScreen({
             {filteredPages.map((page) => (
               <Card
                 key={page.id}
-                className="rounded-2xl border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+                className="min-w-0 rounded-card border-border hover:border-primary/30 transition-colors cursor-pointer"
                 onClick={() => onEditPage?.(page.id)}
               >
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-4">
+                <CardContent className="p-4 sm:p-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     {/* Cover Thumbnail */}
-                    <div className="w-16 h-16 rounded-xl bg-muted flex-shrink-0 overflow-hidden">
+                    <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-control bg-muted flex-shrink-0 overflow-hidden">
                       {page.coverUrl ? (
                         <img
                           src={page.coverUrl}
@@ -307,10 +307,9 @@ export const PagesScreen = memo(function PagesScreen({
 
                     {/* Info */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 mb-0.5">
-                            <h3 className="font-semibold truncate">
+                      <div className="min-w-0">
+                          <div className="flex min-w-0 items-center gap-2 mb-0.5">
+                            <h3 className="min-w-0 font-semibold truncate">
                               {page.title || t('dashboard.pages.untitled', 'Untitled')}
                             </h3>
                             {getPageTypeBadge(page)}
@@ -318,18 +317,18 @@ export const PagesScreen = memo(function PagesScreen({
                           <p className="text-sm text-muted-foreground truncate">
                             lnkmx.my/{page.slug}
                           </p>
-                        </div>
-                        <StatusBadge
-                          status={page.isPublished ? 'published' : 'draft'}
-                        />
                       </div>
 
-                      <div className="flex items-center justify-between mt-3">
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <div className="flex flex-wrap items-center justify-between gap-2 mt-3">
+                        <div className="flex flex-1 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                          <StatusBadge
+                            status={page.isPublished ? 'published' : 'draft'}
+                            size="sm"
+                          />
                           {page.viewCount !== undefined && (
                             <span className="flex items-center gap-1">
                               <Eye className="w-3 h-3" />
-                              {page.viewCount}
+                              <span className="font-num">{page.viewCount}</span>
                             </span>
                           )}
                           <span>{formatDate(page.updatedAt)}</span>
@@ -337,11 +336,11 @@ export const PagesScreen = memo(function PagesScreen({
 
                         {/* Quick Actions */}
                         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- pure event-stop wrapper; inner buttons handle interaction */}
-                        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                        <div className="ml-auto flex shrink-0 items-center gap-1" onClick={(e) => e.stopPropagation()}>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 rounded-lg"
+                            className="h-9 w-9 rounded-control"
                             onClick={() => onPreviewPage?.(page.id)}
                           >
                             <ExternalLink className="w-4 h-4" />
@@ -349,7 +348,7 @@ export const PagesScreen = memo(function PagesScreen({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 rounded-lg"
+                            className="h-9 w-9 rounded-control"
                             onClick={() => onSharePage?.(page.id)}
                           >
                             <Share2 className="w-4 h-4" />
@@ -359,7 +358,7 @@ export const PagesScreen = memo(function PagesScreen({
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 rounded-lg"
+                                className="h-9 w-9 rounded-control"
                               >
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
@@ -377,7 +376,7 @@ export const PagesScreen = memo(function PagesScreen({
                                 <>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem onClick={() => onUpgradePage(page.id)}>
-                                    <Sparkles className="w-4 h-4 mr-2 text-amber-500" />
+                                    <Sparkles className="w-4 h-4 mr-2 text-warning" />
                                     {t('dashboard.pages.upgradeToPaid', 'Upgrade to Paid')}
                                   </DropdownMenuItem>
                                 </>

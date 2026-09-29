@@ -185,11 +185,11 @@ export const LeadsScreen = memo(function LeadsScreen() {
     } as const;
 
     const statusConfig: Record<LeadStatus, { bg: string; text: string; icon: React.ComponentType<{className?: string}> }> = {
-        new: { bg: 'bg-blue-500', text: 'text-white', icon: Sparkles },
-        contacted: { bg: 'bg-amber-500', text: 'text-white', icon: Send },
-        qualified: { bg: 'bg-purple-500', text: 'text-white', icon: CheckCheck },
-        converted: { bg: 'bg-emerald-500', text: 'text-white', icon: CheckCircle },
-        lost: { bg: 'bg-gray-400', text: 'text-white', icon: X },
+        new: { bg: 'bg-info/12', text: 'text-info', icon: Sparkles },
+        contacted: { bg: 'bg-warning/14', text: 'text-warning', icon: Send },
+        qualified: { bg: 'bg-accent', text: 'text-accent-foreground', icon: CheckCheck },
+        converted: { bg: 'bg-success/12', text: 'text-success', icon: CheckCircle },
+        lost: { bg: 'bg-muted', text: 'text-muted-foreground', icon: X },
     };
 
     const handleExport = () => {
@@ -317,13 +317,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                         "h-11 px-4 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 flex-1 justify-center",
                                         isActive
                                             ? "bg-primary text-primary-foreground"
-                                            : "bg-white/5 text-muted-foreground hover:bg-white/10 border border-white/10"
+                                            : "bg-muted text-muted-foreground hover:bg-muted border border-border"
                                     )}
                                 >
                                     {t(f.labelKey, f.defaultLabel)}
                                     <Badge variant="secondary" className={cn(
                                         "h-5 min-w-[20px] px-1 rounded-md text-xs border-none",
-                                        isActive ? "bg-white/20 text-white" : "bg-white/10"
+                                        isActive ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted"
                                     )}>
                                         {count}
                                     </Badge>
@@ -351,7 +351,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 {/* Filter Sheet — secondary statuses */}
                 {filterSheetOpen && (
                     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- backdrop dismiss; Esc handled by sheet semantics
-                    <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={() => setFilterSheetOpen(false)}>
+                    <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end" onClick={() => setFilterSheetOpen(false)}>
                         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- inner panel only stops propagation */}
                         <div className="bg-background w-full rounded-t-3xl p-5 space-y-3 shadow-2xl" onClick={(e) => e.stopPropagation()}>
                             <div className="flex items-center justify-between">
@@ -373,11 +373,11 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             onClick={() => { setStatusFilter(s); setFilterSheetOpen(false); }}
                                             className={cn(
                                                 "h-12 px-4 rounded-2xl text-sm font-medium flex items-center justify-between transition-all",
-                                                isActive ? "bg-primary text-primary-foreground" : "bg-white/5 hover:bg-white/10 border border-white/10"
+                                                isActive ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted border border-border"
                                             )}
                                         >
                                             <span>{label}</span>
-                                            <Badge variant="secondary" className={cn("h-5 min-w-[20px] px-1.5 rounded-md text-xs border-none", isActive ? "bg-white/20 text-white" : "bg-white/10")}>
+                                            <Badge variant="secondary" className={cn("h-5 min-w-[20px] px-1.5 rounded-md text-xs border-none", isActive ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted")}>
                                                 {count}
                                             </Badge>
                                         </button>
@@ -393,7 +393,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         placeholder={t('dashboard.leads.search', 'Поиск по лидам...')}
-                        className="pl-11 h-12 rounded-2xl bg-white/5 border-white/10 shadow-glass-sm text-base"
+                        className="pl-11 h-12 rounded-2xl bg-muted border-border shadow-sm text-base"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -470,18 +470,18 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             return (
                                 <Card 
                                     key={lead.id} 
-                                    className="p-5 glass border-white/10 shadow-glass hover:bg-white/5 transition-all rounded-[2rem] active:scale-[0.98]"
+                                    className="p-5 bg-card border border-border shadow-sm hover:bg-muted transition-all rounded-card active:scale-[0.98]"
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="flex items-center gap-4">
-                                            <Avatar className="h-12 w-12 rounded-2xl shrink-0 border border-white/10 shadow-glass-sm">
-                                                <AvatarFallback className={cn("rounded-2xl text-base font-black shadow-inner", config.bg, config.text)}>
+                                            <Avatar className="h-12 w-12 rounded-2xl shrink-0 border border-border shadow-sm">
+                                                <AvatarFallback className={cn("rounded-full text-base font-semibold", config.bg, config.text)}>
                                                     {lead.name?.charAt(0)?.toUpperCase() || '?'}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div>
                                                 <span className="font-bold text-base block mb-0.5">{lead.name}</span>
-                                                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-muted-foreground/60">
+                                                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">
                                                     <Clock className="h-3 w-3" />
                                                     {new Date(lead.created_at).toLocaleDateString()}
                                                 </div>
@@ -491,19 +491,19 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                         {/* Status Dropdown */}
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Badge className={cn("cursor-pointer text-xs font-black uppercase tracking-widest h-9 px-4 rounded-xl shadow-glass-sm border-none", config.bg, config.text)}>
+                                                <Badge className={cn("cursor-pointer h-7 shrink-0 gap-1.5 rounded-full border-none px-2.5 text-xs font-medium", config.bg, config.text)}>
                                                     <StatusIcon className="h-3.5 w-3.5 mr-2" />
                                                     {t(`crm.status.${lead.status}`)}
                                                 </Badge>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end" className="glass-strong border-white/10 rounded-2xl min-w-[160px] p-2">
+                                            <DropdownMenuContent align="end" className="bg-card border border-border rounded-2xl min-w-[160px] p-2">
                                                 {(['new', 'contacted', 'qualified', 'converted', 'lost'] as LeadStatus[]).map(s => (
                                                     <DropdownMenuItem
                                                         key={s}
                                                         onClick={() => updateLeadStatus(lead.id, s)}
                                                         className={cn(
                                                             "rounded-xl py-2.5 px-3 text-xs font-bold transition-colors",
-                                                            lead.status === s ? "bg-primary/10 text-primary font-black" : "hover:bg-white/5"
+                                                            lead.status === s ? "bg-primary/10 text-primary font-bold" : "hover:bg-muted"
                                                         )}
                                                     >
                                                         {t(`crm.status.${s}`)}
@@ -516,31 +516,31 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                     {/* Contact Info */}
                                     <div className="space-y-2 mb-4 px-1">
                                         {lead.email && (
-                                            <div className="flex items-center gap-3 text-sm text-muted-foreground/80 font-medium">
+                                            <div className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
                                                 <Mail className="h-4 w-4 text-primary/40" />
                                                 <span className="truncate">{lead.email}</span>
                                             </div>
                                         )}
                                         {lead.phone && (
-                                            <div className="flex items-center gap-3 text-sm text-muted-foreground/80 font-medium">
-                                                <Phone className="h-4 w-4 text-emerald-500/40" />
+                                            <div className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
+                                                <Phone className="h-4 w-4 text-success" />
                                                 <span>{lead.phone}</span>
                                             </div>
                                         )}
                                         {lead.notes && (
-                                            <div className="mt-3 p-3 rounded-xl bg-white/5 border border-white/5">
-                                                <p className="text-xs text-muted-foreground/70 italic line-clamp-2 leading-relaxed">&ldquo;{lead.notes}&rdquo;</p>
+                                            <div className="mt-3 p-3 rounded-xl bg-muted border border-border">
+                                                <p className="text-xs text-muted-foreground italic line-clamp-2 leading-relaxed">&ldquo;{lead.notes}&rdquo;</p>
                                             </div>
                                         )}
                                     </div>
  
                                     {/* Quick Actions */}
-                                    <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                                    <div className="flex items-center gap-2 pt-4 border-t border-border">
                                         {lead.phone && (
                                             <Button
                                                 variant="secondary"
                                                 size="sm"
-                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
+                                                className="h-11 px-4 text-xs font-bold uppercase tracking-[0.06em] rounded-xl text-success bg-success/12 hover:bg-success/12 border border-success/20 flex-1 shadow-sm"
                                                 onClick={() => openWhatsApp(lead)}
                                             >
                                                 <MessageCircle className="h-4 w-4 mr-2" />
@@ -551,7 +551,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             <Button
                                                 variant="secondary"
                                                 size="sm"
-                                                className="h-11 px-4 text-xs font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
+                                                className="h-11 px-4 text-xs font-bold uppercase tracking-[0.06em] rounded-xl text-info bg-info/12 hover:bg-info/12 border border-info/20 flex-1 shadow-sm"
                                                 onClick={() => openTelegram(lead, telegramHref)}
                                             >
                                                 <Send className="h-4 w-4 mr-2" />
@@ -562,7 +562,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
+                                                className="h-11 w-11 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted"
                                                 onClick={() => openCall(lead)}
                                             >
                                                 <Phone className="h-5 w-5" />
@@ -572,7 +572,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
+                                                className="h-11 w-11 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted"
                                                 onClick={() => openEmail(lead)}
                                             >
                                                 <Mail className="h-5 w-5" />

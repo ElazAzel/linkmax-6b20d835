@@ -73,9 +73,9 @@ export function GlobalCommandPalette() {
   const getIcon = (type: string) => {
     switch (type) {
       case 'page': return <FileText className="h-4 w-4 mr-2 text-muted-foreground" />;
-      case 'contact': return <Users className="h-4 w-4 mr-2 text-blue-500" />;
-      case 'deal': return <Briefcase className="h-4 w-4 mr-2 text-purple-500" />;
-      case 'task': return <CheckSquare className="h-4 w-4 mr-2 text-green-500" />;
+      case 'contact': return <Users className="h-4 w-4 mr-2 text-info" />;
+      case 'deal': return <Briefcase className="h-4 w-4 mr-2 text-primary" />;
+      case 'task': return <CheckSquare className="h-4 w-4 mr-2 text-success" />;
       default: return null;
     }
   };
@@ -127,15 +127,15 @@ export function GlobalCommandPalette() {
                 {t('crm.createLead', 'Create Lead')}
               </CommandItem>
               <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-deals'); }}>
-                <Plus className="h-4 w-4 mr-2 text-purple-500" />
+                <Plus className="h-4 w-4 mr-2 text-primary" />
                 {t('crm.createDeal', 'Create Deal')}
               </CommandItem>
               <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-invoices'); }}>
-                <Receipt className="h-4 w-4 mr-2 text-blue-500" />
+                <Receipt className="h-4 w-4 mr-2 text-info" />
                 {t('crm.createInvoice', 'Create Invoice')}
               </CommandItem>
               <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-automations'); }}>
-                <Mail className="h-4 w-4 mr-2 text-green-500" />
+                <Mail className="h-4 w-4 mr-2 text-success" />
                 {t('automations.startSequence', 'Manage Sequences')}
               </CommandItem>
             </CommandGroup>

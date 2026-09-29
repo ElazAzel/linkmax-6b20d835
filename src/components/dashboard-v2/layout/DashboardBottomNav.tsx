@@ -149,7 +149,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                   <div className="relative">
                     <Icon className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isActive && "scale-110")} />
                     {badge && badge > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-medium border-2 border-background">
+                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[11px] font-medium border-2 border-background">
                         {badge > 99 ? '99+' : badge}
                       </span>
                     )}

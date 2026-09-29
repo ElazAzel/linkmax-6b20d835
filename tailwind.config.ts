@@ -68,6 +68,9 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         kaspi: '#f14635',
+        // Third-party share buttons (src/lib/design/brand-colors.ts).
+        telegram: '#2AABEE',
+        whatsapp: '#25D366',
         // Brand foundations for marketing surfaces (landing). Product UI uses
         // the semantic colors above.
         brand: {

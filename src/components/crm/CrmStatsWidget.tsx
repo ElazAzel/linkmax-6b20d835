@@ -19,7 +19,7 @@ export const CrmStatsWidget = memo(function CrmStatsWidget({ metrics, isLoading 
     return (
       <div className="grid grid-cols-3 gap-3 mb-6">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-24 rounded-3xl bg-white/5 animate-pulse border border-white/5" />
+          <div key={i} className="h-24 rounded-3xl bg-muted animate-pulse border border-border" />
         ))}
       </div>
     );
@@ -30,22 +30,22 @@ export const CrmStatsWidget = memo(function CrmStatsWidget({ metrics, isLoading 
       label: t('crm.metrics.conversion', 'Конверсия'),
       value: `${metrics.conversionRate.toFixed(1)}%`,
       icon: Target,
-      color: 'text-blue-500',
-      bg: 'bg-blue-500/10'
+      color: 'text-info',
+      bg: 'bg-info/12'
     },
     {
       label: t('crm.metrics.avgCheck', 'Средний чек'),
       value: `${Math.round(metrics.averageCheck).toLocaleString()}`,
       icon: TrendingUp,
-      color: 'text-emerald-500',
-      bg: 'bg-emerald-500/10'
+      color: 'text-success',
+      bg: 'bg-success/12'
     },
     {
       label: t('crm.metrics.pipeline', 'Прогноз'),
       value: `${Math.round(metrics.pipelineValue).toLocaleString()}`,
       icon: DollarSign,
-      color: 'text-amber-500',
-      bg: 'bg-amber-500/10'
+      color: 'text-warning',
+      bg: 'bg-warning/12'
     }
   ];
 
@@ -60,14 +60,14 @@ export const CrmStatsWidget = memo(function CrmStatsWidget({ metrics, isLoading 
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
           >
-            <Card className="p-4 rounded-[2rem] glass border-white/10 flex flex-col items-center justify-center text-center group hover:bg-white/5 transition-all duration-500 shadow-glass-sm">
+            <Card className="p-4 rounded-card bg-card border border-border flex flex-col items-center justify-center text-center group hover:bg-muted transition-all duration-500 shadow-sm">
               <div className={`p-2 rounded-xl ${stat.bg} ${stat.color} mb-2 group-hover:scale-110 transition-transform`}>
                 <Icon className="h-4 w-4" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-1">
+              <span className="text-[11px] font-bold uppercase tracking-[0.06em] text-muted-foreground mb-1">
                 {stat.label}
               </span>
-              <span className="text-sm font-black tabular-nums tracking-tighter">
+              <span className="text-sm font-bold font-num tracking-tighter">
                 {stat.value}
               </span>
             </Card>

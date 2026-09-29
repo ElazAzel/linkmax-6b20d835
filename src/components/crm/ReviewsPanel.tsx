@@ -36,11 +36,11 @@ const filterStatuses: Record<ReviewFilter, ReviewStatus[] | undefined> = {
 };
 
 const statusColors: Record<ReviewStatus, string> = {
-  pending: 'bg-amber-500/15 text-amber-600 border-amber-500/25',
-  published: 'bg-emerald-500/15 text-emerald-600 border-emerald-500/25',
-  hidden: 'bg-slate-500/15 text-slate-600 border-slate-500/25',
-  rejected: 'bg-red-500/15 text-red-600 border-red-500/25',
-  flagged: 'bg-orange-500/15 text-orange-600 border-orange-500/25',
+  pending: 'bg-warning/12 text-warning border-warning/25',
+  published: 'bg-success/12 text-success border-success/25',
+  hidden: 'bg-muted text-muted-foreground border-border',
+  rejected: 'bg-destructive/12 text-destructive border-destructive/25',
+  flagged: 'bg-warning/12 text-warning border-warning/25',
 };
 
 function formatReviewDate(value: string, locale: string): string {
@@ -147,16 +147,16 @@ export function ReviewsPanel() {
           <div className="text-lg font-bold text-primary">{stats.total}</div>
           <div className="text-xs text-muted-foreground">{t('reviews.owner.total', 'Total')}</div>
         </div>
-        <div className="text-center p-2 rounded-lg bg-amber-500/10">
-          <div className="text-lg font-bold text-amber-600">{stats.pending}</div>
+        <div className="text-center p-2 rounded-lg bg-warning/12">
+          <div className="text-lg font-bold text-warning">{stats.pending}</div>
           <div className="text-xs text-muted-foreground">{t('reviews.owner.pending', 'Pending')}</div>
         </div>
-        <div className="text-center p-2 rounded-lg bg-emerald-500/10">
-          <div className="text-lg font-bold text-emerald-600">{stats.published}</div>
+        <div className="text-center p-2 rounded-lg bg-success/12">
+          <div className="text-lg font-bold text-success">{stats.published}</div>
           <div className="text-xs text-muted-foreground">{t('reviews.owner.published', 'Live')}</div>
         </div>
-        <div className="text-center p-2 rounded-lg bg-slate-500/10">
-          <div className="text-lg font-bold text-slate-600">{stats.hidden + stats.rejected + stats.flagged}</div>
+        <div className="text-center p-2 rounded-lg bg-muted">
+          <div className="text-lg font-bold text-muted-foreground">{stats.hidden + stats.rejected + stats.flagged}</div>
           <div className="text-xs text-muted-foreground">{t('reviews.owner.closed', 'Closed')}</div>
         </div>
       </div>
@@ -210,7 +210,7 @@ export function ReviewsPanel() {
                         <Badge variant="outline" className={cn('text-xs', statusColors[review.status])}>
                           {t(`reviews.status.${review.status}`, review.status)}
                         </Badge>
-                        <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-600 border-blue-500/20">
+                        <Badge variant="outline" className="text-xs bg-info/12 text-info border-info/20">
                           <ShieldCheck className="h-3 w-3 mr-1" />
                           {t(`reviews.verification.${review.verificationStatus}`, 'Verified')}
                         </Badge>
@@ -221,7 +221,7 @@ export function ReviewsPanel() {
 
                       <div>
                         <div className="flex items-center gap-2">
-                          <div className="flex items-center text-amber-500" aria-label={t('reviews.owner.ratingLabel', '{{rating}} out of 5', { rating: review.rating })}>
+                          <div className="flex items-center text-warning" aria-label={t('reviews.owner.ratingLabel', '{{rating}} out of 5', { rating: review.rating })}>
                             {Array.from({ length: 5 }, (_, index) => (
                               <Star
                                 key={index}
@@ -272,7 +272,7 @@ export function ReviewsPanel() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-8 w-8 p-0 text-emerald-600 hover:bg-emerald-500/10"
+                          className="h-8 w-8 p-0 text-success hover:bg-success/12"
                           disabled={actionDisabled}
                           onClick={() => updateReviewStatus(review, 'published')}
                           title={t('reviews.owner.publish', 'Publish')}
@@ -284,7 +284,7 @@ export function ReviewsPanel() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-8 w-8 p-0 text-slate-600 hover:bg-slate-500/10"
+                          className="h-8 w-8 p-0 text-muted-foreground hover:bg-muted"
                           disabled={actionDisabled}
                           onClick={() => updateReviewStatus(review, 'hidden')}
                           title={t('reviews.owner.hide', 'Hide')}
@@ -296,7 +296,7 @@ export function ReviewsPanel() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-8 w-8 p-0 text-red-600 hover:bg-red-500/10"
+                          className="h-8 w-8 p-0 text-destructive hover:bg-destructive/12"
                           disabled={actionDisabled}
                           onClick={() => updateReviewStatus(review, 'rejected')}
                           title={t('reviews.owner.reject', 'Reject')}

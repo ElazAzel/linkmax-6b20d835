@@ -83,15 +83,15 @@ export const TeamManagementScreen = memo(function TeamManagementScreen() {
                 </div>
 
                 {currentOrg.name !== 'Personal Organization' && (
-                    <Card className="w-full md:w-96 glass-card border-white/10 overflow-hidden">
-                        <CardContent className="p-4">
+                    <Card className="w-full md:w-96 bg-card border border-border overflow-hidden">
+                        <CardContent className="p-4 sm:p-4">
                             <form onSubmit={handleInvite} className="flex gap-2">
                                 <Input
                                     placeholder="email@example.com"
                                     type="email"
                                     value={inviteEmail}
                                     onChange={(e) => setInviteEmail(e.target.value)}
-                                    className="bg-white/5 border-white/10"
+                                    className="bg-muted border-border"
                                     required
                                 />
                                     <Button type="submit" disabled={isInviting} size="sm" className="shrink-0">
@@ -104,7 +104,7 @@ export const TeamManagementScreen = memo(function TeamManagementScreen() {
                 )}
             </div>
 
-            <Card className="glass-card border-white/10">
+            <Card className="bg-card border border-border">
                 <CardHeader>
                     <CardTitle className="text-lg">{t('team.membersTitle', 'Участники команды')}</CardTitle>
                     <CardDescription>{t('team.membersDesc', 'Список всех активных участников и их права доступа')}</CardDescription>
@@ -113,13 +113,13 @@ export const TeamManagementScreen = memo(function TeamManagementScreen() {
                     {loading ? (
                         <div className="space-y-4 py-4">
                             {[1, 2, 3].map(i => (
-                                <div key={i} className="h-12 w-full bg-white/5 animate-pulse rounded-lg" />
+                                <div key={i} className="h-12 w-full bg-muted animate-pulse rounded-lg" />
                             ))}
                         </div>
                     ) : (
                         <Table>
                             <TableHeader>
-                                <TableRow className="hover:bg-transparent border-white/5">
+                                <TableRow className="hover:bg-transparent border-border">
                                     <TableHead>{t('team.user', 'Пользователь')}</TableHead>
                                     <TableHead>{t('team.role', 'Роль')}</TableHead>
                                     <TableHead>{t('team.joined', 'Дата вступления')}</TableHead>
@@ -128,10 +128,10 @@ export const TeamManagementScreen = memo(function TeamManagementScreen() {
                             </TableHeader>
                             <TableBody>
                                 {members.map((member) => (
-                                    <TableRow key={member.id} className="hover:bg-white/5 border-white/5">
+                                    <TableRow key={member.id} className="hover:bg-muted border-border">
                                         <TableCell>
                                             <div className="flex items-center gap-3">
-                                                <Avatar className="h-9 w-9 border border-white/10">
+                                                <Avatar className="h-9 w-9 border border-border">
                                                     <AvatarImage src={member.profile?.avatar_url || ''} />
                                                     <AvatarFallback>
                                                         {member.profile?.display_name?.charAt(0) || member.profile?.username?.charAt(0) || '?'}
@@ -176,7 +176,7 @@ export const TeamManagementScreen = memo(function TeamManagementScreen() {
             </Card>
 
             {currentOrg.name === 'Personal Organization' && (
-                <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex gap-4 items-start text-amber-500">
+                <div className="bg-warning/12 border border-warning/20 rounded-xl p-4 flex gap-4 items-start text-warning">
                     <Settings className="h-5 w-5 mt-0.5 shrink-0" />
                     <div className="space-y-1">
                         <p className="font-medium">{t('team.personalOrg', 'Личная организация')}</p>

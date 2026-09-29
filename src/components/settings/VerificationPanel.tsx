@@ -155,21 +155,21 @@ export function VerificationPanel() {
     switch (status) {
       case 'approved':
         return (
-          <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30">
+          <Badge className="bg-success/12 text-success border-success/30">
             <CheckCircle2 className="h-3 w-3 mr-1" />
             {t('verification.approved', 'Верифицирован')}
           </Badge>
         );
       case 'pending':
         return (
-          <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+          <Badge className="bg-warning/12 text-warning border-warning/30">
             <Clock className="h-3 w-3 mr-1" />
             {t('verification.pending', 'На рассмотрении')}
           </Badge>
         );
       case 'rejected':
         return (
-          <Badge className="bg-red-500/20 text-red-600 border-red-500/30">
+          <Badge className="bg-destructive/12 text-destructive border-destructive/30">
             <XCircle className="h-3 w-3 mr-1" />
             {t('verification.rejected', 'Отклонено')}
           </Badge>
@@ -199,16 +199,16 @@ export function VerificationPanel() {
   // Already verified
   if (isVerified) {
     return (
-      <Card className="border-emerald-500/30 bg-emerald-500/5">
+      <Card className="border-success/30 bg-success/12">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
-              <Shield className="h-6 w-6 text-emerald-500" />
+            <div className="h-12 w-12 rounded-full bg-success/12 flex items-center justify-center">
+              <Shield className="h-6 w-6 text-success" />
             </div>
             <div>
               <CardTitle className="flex items-center gap-2">
                 {t('verification.title', 'Верификация')}
-                <Badge className="bg-emerald-500 text-white">
+                <Badge className="bg-success text-success-foreground">
                   <CheckCircle2 className="h-3 w-3 mr-1" />
                   {t('verification.verified', 'Подтверждено')}
                 </Badge>
@@ -226,11 +226,11 @@ export function VerificationPanel() {
   // Pending verification
   if (status === 'pending') {
     return (
-      <Card className="border-amber-500/30 bg-amber-500/5">
+      <Card className="border-warning/30 bg-warning/12">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-amber-500/20 flex items-center justify-center">
-              <Clock className="h-6 w-6 text-amber-500" />
+            <div className="h-12 w-12 rounded-full bg-warning/12 flex items-center justify-center">
+              <Clock className="h-6 w-6 text-warning" />
             </div>
             <div>
               <CardTitle className="flex items-center gap-2">
@@ -267,11 +267,11 @@ export function VerificationPanel() {
       </CardHeader>
       <CardContent className="space-y-6">
         {status === 'rejected' && verificationData?.request?.admin_notes && (
-          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30">
+          <div className="p-4 rounded-lg bg-destructive/12 border border-destructive/30">
             <div className="flex items-start gap-2">
-              <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-red-600">{t('verification.rejectedReason', 'Причина отклонения:')}</p>
+                <p className="font-medium text-destructive">{t('verification.rejectedReason', 'Причина отклонения:')}</p>
                 <p className="text-sm text-muted-foreground mt-1">{verificationData.request.admin_notes}</p>
               </div>
             </div>

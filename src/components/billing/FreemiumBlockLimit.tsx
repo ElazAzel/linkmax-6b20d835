@@ -33,13 +33,13 @@ export const FreemiumBlockLimit = memo(function FreemiumBlockLimit({
   return (
     <Alert 
       variant={isAtLimit ? 'destructive' : 'default'} 
-      className={`mb-4 ${isNearLimit ? 'border-amber-500 bg-amber-500/10' : ''}`}
+      className={`mb-4 ${isNearLimit ? 'border-warning bg-warning/12' : ''}`}
     >
       <div className="flex items-start gap-3 w-full">
         {isAtLimit ? (
           <Lock className="h-4 w-4 mt-0.5 flex-shrink-0" />
         ) : (
-          <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0 text-amber-500" />
+          <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0 text-warning" />
         )}
         <div className="flex-1 space-y-2">
           <AlertDescription className="text-sm">
@@ -71,7 +71,7 @@ export const FreemiumBlockLimit = memo(function FreemiumBlockLimit({
             <Button
               size="sm"
               onClick={openPremiumPurchase}
-              className="mt-4 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 w-full font-bold shadow-lg shadow-primary/25 rounded-xl h-10"
+              className="bg-primary mt-4 w-full font-bold shadow-lg shadow-primary/25 rounded-xl h-10"
             >
               <Crown className="h-4 w-4 mr-2" />
               {t('freemium.upgradePro', 'Включить PRO')}

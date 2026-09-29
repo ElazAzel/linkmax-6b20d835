@@ -115,11 +115,11 @@ function SettingsItem({
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                     <span className="font-bold tracking-tight">{label}</span>
-                    {badge && <Badge className="text-xs font-black uppercase bg-primary text-primary-foreground">{badge}</Badge>}
+                    {badge && <Badge className="text-xs font-bold uppercase bg-primary text-primary-foreground">{badge}</Badge>}
                 </div>
-                {description && <p className="text-xs font-medium text-muted-foreground/70 truncate">{description}</p>}
+                {description && <p className="text-xs font-medium text-muted-foreground truncate">{description}</p>}
             </div>
-            {rightElement || (onClick && <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0 group-hover:translate-x-1 transition-transform" />)}
+            {rightElement || (onClick && <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 group-hover:translate-x-1 transition-transform" />)}
         </Wrapper>
     );
 }
@@ -201,10 +201,10 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     return (
         <div className="space-y-6">
             {/* Profile Card */}
-            <Card className="p-5 glass-card border-white/20 shadow-glass relative overflow-hidden group">
-                <div className="absolute inset-0 bg-liquid-mesh opacity-5 transition-opacity group-hover:opacity-10 -z-1" />
+            <Card className="p-5 bg-card border border-border shadow-sm relative overflow-hidden group">
+                <div className="absolute inset-0 opacity-5 transition-opacity group-hover:opacity-10 -z-1" />
                 <div className="flex items-center gap-4 mb-5">
-                    <Avatar className="h-16 w-16 rounded-2xl border-2 border-white/20 shadow-lg">
+                    <Avatar className="h-16 w-16 rounded-2xl border-2 border-border shadow-lg">
                         <AvatarImage src={avatarUrl || ''} alt={displayName} />
                         <AvatarFallback className="rounded-2xl text-xl font-bold bg-primary/10 text-primary">
                             {displayName.charAt(0)}
@@ -212,21 +212,21 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                     </Avatar>
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                            <h2 className="text-lg font-black tracking-tight text-gradient truncate">{displayName}</h2>
+                            <h2 className="text-lg font-bold tracking-tight text-gradient truncate">{displayName}</h2>
                             {isPremium && (
-                                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 shadow-sm animate-pulse-subtle">
+                                <Badge className="bg-warning/12 text-warning border-warning/30 shadow-sm animate-pulse-subtle">
                                     <Crown className="h-3 w-3 mr-1" />
                                     PRO
                                 </Badge>
                             )}
                         </div>
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">@{usernameInput}</p>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em]">@{usernameInput}</p>
                     </div>
                 </div>
 
                 {/* Username Input */}
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-muted-foreground/80 flex items-center gap-2 px-1">
+                    <label className="text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground flex items-center gap-2 px-1">
                         <Link2 className="h-3 w-3" />
                         {t('dashboard.accountSettings.username', 'Username')}
                     </label>
@@ -235,7 +235,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                             value={usernameInput}
                             onChange={(e) => onUsernameChange(e.target.value)}
                             placeholder="username"
-                            className="h-12 rounded-xl bg-white/5 border-white/10 focus:border-primary/50 transition-all font-medium"
+                            className="h-12 rounded-xl bg-muted border-border focus:border-primary/50 transition-all font-medium"
                         />
                         <Button
                             onClick={onUpdateUsername}
@@ -252,35 +252,35 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Account Section */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.account', 'Account')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
                     <SettingsItem
                         icon={Users}
-                        iconBg="bg-pink-500/15"
-                        iconColor="text-pink-500"
+                        iconBg="bg-primary/12"
+                        iconColor="text-primary"
                         label={t('dashboard.accountSettings.friends', 'Friends')}
                         onClick={onOpenFriends}
                     />
                     <SettingsItem
                         icon={LayoutTemplate}
-                        iconBg="bg-emerald-500/15"
-                        iconColor="text-emerald-500"
+                        iconBg="bg-success/12"
+                        iconColor="text-success"
                         label={t('dashboard.accountSettings.myTemplates', 'My Templates')}
                         onClick={onOpenMyTemplates}
                     />
                     <SettingsItem
                         icon={Save}
-                        iconBg="bg-blue-500/15"
-                        iconColor="text-blue-500"
+                        iconBg="bg-info/12"
+                        iconColor="text-info"
                         label={t('dashboard.accountSettings.saveTemplate', 'Save as Template')}
                         onClick={onOpenSaveTemplate}
                     />
                     <SettingsItem
                         icon={Shield}
-                        iconBg="bg-violet-500/15"
-                        iconColor="text-violet-500"
+                        iconBg="bg-primary/12"
+                        iconColor="text-primary"
                         label={t('dashboard.accountSettings.verification', 'Verification')}
                         onClick={() => setShowVerification(true)}
                     />
@@ -289,14 +289,14 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Notifications */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.notifications', 'Notifications')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
                     <SettingsItem
                         icon={Mail}
-                        iconBg="bg-blue-500/15"
-                        iconColor="text-blue-500"
+                        iconBg="bg-info/12"
+                        iconColor="text-info"
                         label={t('dashboard.accountSettings.emailNotifications', 'Email Notifications')}
                         description={t('dashboard.accountSettings.emailNotificationsDesc', 'About new leads')}
                         rightElement={
@@ -315,8 +315,8 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         )}
                     >
                         <div className="flex items-center gap-3">
-                            <div className="h-11 w-11 rounded-2xl bg-blue-500/15 flex items-center justify-center">
-                                <MessageCircle className="h-5 w-5 text-blue-500" />
+                            <div className="h-11 w-11 rounded-2xl bg-info/12 flex items-center justify-center">
+                                <MessageCircle className="h-5 w-5 text-info" />
                             </div>
                             <div className="flex-1">
                                 <div className="font-medium">{t('dashboard.accountSettings.telegram', 'Telegram')}</div>
@@ -357,14 +357,14 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Appearance */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.appearance', 'Appearance')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
                     <SettingsItem
                         icon={Globe} // Added Globe import which was missing in SettingsScreen but present here
-                        iconBg="bg-emerald-500/15"
-                        iconColor="text-emerald-500"
+                        iconBg="bg-success/12"
+                        iconColor="text-success"
                         label={t('dashboard.accountSettings.language', 'Language')}
                         rightElement={<LanguageSwitcher />}
                     />
@@ -385,14 +385,14 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Regional Settings */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.regional', 'Regional')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
                     <SettingsItem
                         icon={Globe}
-                        iconBg="bg-blue-500/15"
-                        iconColor="text-blue-500"
+                        iconBg="bg-info/12"
+                        iconColor="text-info"
                         label={t('dashboard.accountSettings.kaspiQr', 'Kaspi QR Widget')}
                         description={t('dashboard.accountSettings.kaspiQrDesc', 'Show Kaspi.kz QR on dashboard')}
                         rightElement={
@@ -407,14 +407,14 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Plan & Billing */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.planBilling', 'Plan & Billing')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
                     <SettingsItem
                         icon={Crown}
-                        iconBg={isPremium ? "bg-amber-500/15" : "bg-muted"}
-                        iconColor={isPremium ? "text-amber-500" : "text-muted-foreground"}
+                        iconBg={isPremium ? "bg-warning/12" : "bg-muted"}
+                        iconColor={isPremium ? "text-warning" : "text-muted-foreground"}
                         label={isPremium ? t('dashboard.accountSettings.proPlan', 'Pro Plan') : t('dashboard.accountSettings.freePlan', 'Free Plan')}
                         description={isPremium ? t('dashboard.accountSettings.manageSubscription', 'Manage subscription') : t('dashboard.accountSettings.upgradeForMore', 'Upgrade for more features')}
                         onClick={() => navigate('/pricing')}
@@ -422,8 +422,8 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                     {isPremium && (
                         <SettingsItem
                             icon={CreditCard}
-                            iconBg="bg-slate-500/15"
-                            iconColor="text-slate-500"
+                            iconBg="bg-muted"
+                            iconColor="text-muted-foreground"
                             label={t('dashboard.accountSettings.billingHistory', 'Billing History')}
                             description={t('dashboard.accountSettings.billingHistoryDesc', 'View past payments')}
                             onClick={() => navigate('/pricing')}
@@ -437,7 +437,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Device Accounts */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.deviceAccounts', 'Device Accounts')}
                 </h3>
                 <DeviceAccountSwitcher onAddAccount={() => navigate('/auth?method=email&mode=signin')} />
@@ -445,14 +445,14 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
             {/* Security */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.security', 'Security')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
                     <SettingsItem
                         icon={Lock}
-                        iconBg="bg-red-500/15"
-                        iconColor="text-red-500"
+                        iconBg="bg-destructive/12"
+                        iconColor="text-destructive"
                         label={t('dashboard.accountSettings.changePassword', 'Change Password')}
                         onClick={() => setShowChangePassword(true)}
                     />

@@ -67,7 +67,7 @@ export const FreemiumAILimit = memo(function FreemiumAILimit({
             <Button 
               size="sm" 
               onClick={openPremiumPurchase}
-              className="w-full h-9 rounded-lg font-bold bg-gradient-to-r from-violet-500 to-purple-600 shadow-md shadow-primary/20 hover:scale-[1.02] transition-transform"
+              className="bg-primary w-full h-9 rounded-lg font-bold shadow-md shadow-primary/20 hover:scale-[1.02] transition-transform"
             >
               <Crown className="h-4 w-4 mr-1.5" />
               {t('freemium.moreAIGenerations', '10 генераций в месяц с PRO')}

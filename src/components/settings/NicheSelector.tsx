@@ -20,7 +20,7 @@ export function NicheSelector({ value, onChange, disabled }: NicheSelectorProps)
         onValueChange={(val: string) => onChange(val as Niche)}
         disabled={disabled}
       >
-        <SelectTrigger className="bg-background/50">
+        <SelectTrigger className="bg-muted/60">
           <SelectValue>
             {value && (
               <span className="flex items-center gap-2">

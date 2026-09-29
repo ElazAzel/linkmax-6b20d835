@@ -43,12 +43,12 @@ const getStatusIcon = (status: string) => {
   switch (status) {
     case 'completed':
     case 'paid':
-      return <CheckCircle className="h-4 w-4 text-green-500" />;
+      return <CheckCircle className="h-4 w-4 text-success" />;
     case 'failed':
     case 'cancelled':
       return <XCircle className="h-4 w-4 text-destructive" />;
     default:
-      return <Clock className="h-4 w-4 text-amber-500" />;
+      return <Clock className="h-4 w-4 text-warning" />;
   }
 };
 
@@ -154,7 +154,7 @@ export const BillingHistorySheet = memo(function BillingHistorySheet({
               {records.map((record) => (
                 <div
                   key={record.id}
-                  className="p-4 rounded-xl border bg-card/50 hover:bg-card/80 transition-colors"
+                  className="p-4 rounded-xl border bg-card hover:bg-card transition-colors"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">

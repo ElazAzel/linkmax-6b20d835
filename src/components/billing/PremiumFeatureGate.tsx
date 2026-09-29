@@ -83,8 +83,8 @@ export function PremiumFeatureGate({
         {children}
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/95 backdrop-blur-md rounded-lg p-5 border border-primary/20 shadow-xl z-20 transition-all hover:bg-background/95">
-        <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-primary/20">
-          <TierIcon className="h-6 w-6 text-white" />
+        <div className="bg-primary h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20">
+          <TierIcon className="h-6 w-6 text-primary-foreground" />
         </div>
         <div className="space-y-1.5 text-center">
           <p className="text-base font-bold text-foreground max-w-[280px] leading-tight">
@@ -102,7 +102,7 @@ export function PremiumFeatureGate({
         {showUpgradeButton && (
           <Button
             size="default"
-            className="mt-1 w-full max-w-[260px] h-11 font-bold bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 shadow-md transition-transform hover:scale-[1.02] rounded-xl"
+            className="bg-primary mt-1 w-full max-w-[260px] h-11 font-bold shadow-md transition-transform hover:scale-[1.02] rounded-xl"
             onClick={(e) => {
               e.stopPropagation();
               navigate('/pricing');

@@ -459,7 +459,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
           <div className="flex items-center gap-2 mb-1">
             <h4 className="font-medium truncate">{reg.attendeeName}</h4>
             {reg.status === 'pending' && (
-              <Badge variant="outline" className="text-xs text-amber-600 border-amber-300">
+              <Badge variant="outline" className="text-xs text-warning border-warning/30">
                 {t('events.pendingApproval', 'Ожидает')}
               </Badge>
             )}
@@ -469,7 +469,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
               </Badge>
             )}
             {reg.ticketStatus === 'used' && (
-              <Badge className="text-xs bg-emerald-500/10 text-emerald-600">
+              <Badge className="text-xs bg-success/12 text-success">
                 <UserCheck className="h-3 w-3 mr-1" />
                 {t('events.checkedInLabel', 'Отмечен')}
               </Badge>
@@ -513,7 +513,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
             {reg.status === 'pending' && (
               <>
                 <DropdownMenuItem onClick={() => handleApprove(reg.id)}>
-                  <Check className="h-4 w-4 mr-2 text-emerald-600" />
+                  <Check className="h-4 w-4 mr-2 text-success" />
                   {t('events.approve', 'Подтвердить')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleReject(reg.id)}>
@@ -604,11 +604,11 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
               <div className="text-xs text-muted-foreground">{t('events.total', 'Всего')}</div>
             </Card>
             <Card className="p-2 text-center">
-              <div className="text-lg font-bold text-emerald-600">{stats.confirmed}</div>
+              <div className="text-lg font-bold text-success">{stats.confirmed}</div>
               <div className="text-xs text-muted-foreground">{t('events.confirmed', 'Подтв.')}</div>
             </Card>
             <Card className="p-2 text-center">
-              <div className="text-lg font-bold text-amber-600">{stats.pending}</div>
+              <div className="text-lg font-bold text-warning">{stats.pending}</div>
               <div className="text-xs text-muted-foreground">{t('events.pendingShort', 'Ожид.')}</div>
             </Card>
             <Card className="p-2 text-center">
@@ -633,7 +633,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
             >
               <QrCode className="h-4 w-4 mr-1.5" />
               {t('events.scanner', 'Сканер')}
-              {!isPremium && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
+              {!isPremium && <Crown className="h-3 w-3 ml-1 text-warning" />}
             </Button>
 
             <Button
@@ -650,7 +650,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
             >
               <Link2 className="h-4 w-4 mr-1.5" />
               {t('events.staffLink', 'Ссылка на вход')}
-              {!isPremium && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
+              {!isPremium && <Crown className="h-3 w-3 ml-1 text-warning" />}
             </Button>
 
 
@@ -674,9 +674,9 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem onClick={handleExportExcel}>
-                  <FileSpreadsheet className="h-4 w-4 mr-2 text-emerald-600" />
+                  <FileSpreadsheet className="h-4 w-4 mr-2 text-success" />
                   Excel (.xlsx)
-                  {!isPremium && <Crown className="h-3 w-3 ml-auto text-amber-500" />}
+                  {!isPremium && <Crown className="h-3 w-3 ml-auto text-warning" />}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleExportCSV}>
                   <FileText className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -686,7 +686,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
                 <DropdownMenuItem onClick={handleExportPDF}>
                   <BarChart3 className="h-4 w-4 mr-2 text-primary" />
                   {t('events.exportPdfWithCharts', 'PDF + Аналитика')}
-                  {!isPremium && <Crown className="h-3 w-3 ml-auto text-amber-500" />}
+                  {!isPremium && <Crown className="h-3 w-3 ml-auto text-warning" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
