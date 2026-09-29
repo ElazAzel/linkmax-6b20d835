@@ -248,7 +248,6 @@ serve(async (req: Request) => {
                         if (txErr || (credit && credit.success === false && !credit.duplicate)) {
                             console.error("Failed to credit digital sale", txErr ?? credit);
                         }
-                        }
                     }
 
 
