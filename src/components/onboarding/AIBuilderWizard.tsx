@@ -184,7 +184,7 @@ export function AIBuilderWizard({
 
   return (
     <Dialog open={open} onOpenChange={(value) => { if (!value) onClose(); }}>
-      <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[95vh] overflow-hidden p-0 gap-0 rounded-[24px] border-0 bg-card/98 backdrop-blur-3xl">
+      <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[95vh] overflow-hidden p-0 gap-0 rounded-[24px] border-0 bg-card/95 backdrop-blur-3xl">
         <DialogTitle className="sr-only">{t('algorithmBuilder.title', 'Конструктор страницы')}</DialogTitle>
         <DialogDescription className="sr-only">{t('algorithmBuilder.description', 'Создайте страницу по алгоритму')}</DialogDescription>
         <div className="px-6 pt-6">

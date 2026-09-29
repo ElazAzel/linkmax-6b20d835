@@ -33,7 +33,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { EmptyState } from '../common/EmptyState';
+import { EmptyState } from '@/components/ui/states';
 // ErrorState removed - useLeads doesn't expose error
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { AddLeadDialog } from '@/components/crm/AddLeadDialog';

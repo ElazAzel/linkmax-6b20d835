@@ -90,6 +90,11 @@ export default {
           foreground: 'hsl(var(--info-foreground))'
         },
       },
+      // Soft status tints (DESIGN.md → Badge и статусы): bg-success/12 etc.
+      opacity: {
+        '12': '0.12',
+        '14': '0.14'
+      },
       borderRadius: {
         '2xl': 'calc(var(--radius) + 0.5rem)',
         xl: 'calc(var(--radius) + 0.25rem)',

@@ -82,7 +82,7 @@ export function PremiumFeatureGate({
       <div className="opacity-50 pointer-events-none select-none">
         {children}
       </div>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/95 backdrop-blur-md rounded-lg p-5 border border-primary/20 shadow-xl z-20 transition-all hover:bg-background/98">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/95 backdrop-blur-md rounded-lg p-5 border border-primary/20 shadow-xl z-20 transition-all hover:bg-background/95">
         <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-primary/20">
           <TierIcon className="h-6 w-6 text-white" />
         </div>

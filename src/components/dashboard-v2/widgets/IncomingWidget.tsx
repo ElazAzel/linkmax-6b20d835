@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ResponseTimeTag } from '@/components/crm/ResponseTimeTag';
-import { EmptyState } from '@/components/dashboard-v2/common/EmptyState';
+import { EmptyState } from '@/components/ui/states';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import Phone from 'lucide-react/dist/esm/icons/phone';

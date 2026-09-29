@@ -30,10 +30,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { StatusBadge } from '../common/StatusBadge';
-import { EmptyState } from '@/components/ui/empty-state';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { SmartEmptyState } from '@/components/ui/smart-empty-state';
-import { LoadingState } from '@/components/ui/loading-state';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import SearchX from 'lucide-react/dist/esm/icons/search-x';

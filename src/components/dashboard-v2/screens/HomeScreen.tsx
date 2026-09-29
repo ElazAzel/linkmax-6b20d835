@@ -23,7 +23,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { StatusBadge } from '../common/StatusBadge';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { ActionCard } from '../common/ActionCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { getI18nText } from '@/lib/i18n-helpers';

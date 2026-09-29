@@ -23,13 +23,12 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { StatCard } from '../common/StatCard';
+import { StatCard } from '@/components/ui/stat-card';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { EmptyState } from '../common/EmptyState';
+import { EmptyState, ErrorState } from '@/components/ui/states';
 import { SmartEmptyState } from '@/components/ui/smart-empty-state';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Edit3 from 'lucide-react/dist/esm/icons/edit-3';
-import { ErrorState } from '../common/ErrorState';
 import {
   AnalyticsChart,
   ConversionFunnel,
@@ -413,7 +412,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={Eye}
                         value={stats.views}
                         label={t('dashboard.insights.views', 'Просмотры')}
-                        variant="glass"
                       />
                     </motion.div>
                     <motion.div variants={itemVariants}>
@@ -421,7 +419,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={MousePointerClick}
                         value={stats.clicks}
                         label={t('dashboard.insights.clicks', 'Клики')}
-                        variant="glass"
                       />
                     </motion.div>
                   </div>
@@ -432,7 +429,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={Users}
                         value={stats.uniqueVisitors}
                         label={t('dashboard.insights.uniqueVisitors', 'Уникальные')}
-                        variant="glass"
                       />
                     </motion.div>
                     <motion.div variants={itemVariants}>
@@ -440,7 +436,6 @@ export const InsightsScreen = memo(function InsightsScreen({
                         icon={Target}
                         value={`${(stats.ctr || 0).toFixed(1)}%`}
                         label={t('dashboard.insights.ctr', 'CTR')}
-                        variant="glass"
                       />
                     </motion.div>
                   </div>

@@ -16,8 +16,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { EmptyState, ErrorState } from '@/components/ui/states';
-import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
+import { StatCard } from '@/components/ui/stat-card';
+import { StatusBadge } from '@/components/ui/status-badge';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import { AppThemeSwitcher } from '@/components/settings/AppThemeSwitcher';
 import { colors, radius } from '@/design-system/tokens';
 
@@ -142,6 +145,16 @@ export default function DesignSystem() {
             <Badge variant="outline">Маникюр</Badge>
             <Badge>3</Badge>
           </div>
+          <p className="text-sm text-muted-foreground">Статус записи/заявки — <code>StatusBadge</code>: точка + слово, цвет никогда не единственный сигнал.</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <StatusBadge tone="info">Новая</StatusBadge>
+            <StatusBadge tone="warning">В работе</StatusBadge>
+            <StatusBadge tone="success">Оплачено</StatusBadge>
+            <StatusBadge tone="destructive">Отменено</StatusBadge>
+            <StatusBadge tone="neutral">Архив</StatusBadge>
+            <StatusBadge status="published" />
+            <StatusBadge status="draft" size="sm" />
+          </div>
         </Section>
 
         <Section id="forms" title="Поля ввода">
@@ -169,14 +182,13 @@ export default function DesignSystem() {
         </Section>
 
         <Section id="cards" title="Карточки и статистика">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Card>
-              <CardHeader>
-                <span className="text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground">Визиты за 7 дней</span>
-                <CardTitle className="font-num text-3xl">412</CardTitle>
-                <CardDescription className="text-success">+18% к прошлой неделе (пример)</CardDescription>
-              </CardHeader>
-            </Card>
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <StatCard label="Визиты" value={412} icon={Eye} change={18} hint="за 7 дней" />
+            <StatCard label="Заявки" value={23} change={-4} hint="за 7 дней" />
+            <StatCard label="Доход" value="184 500 ₸" icon={Wallet} />
+            <StatCard label="Конверсия" value="5,6%" compact change={0} />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
             <Card variant="interactive">
               <CardHeader>
                 <CardTitle className="text-lg">Интерактивная карточка</CardTitle>
@@ -195,14 +207,7 @@ export default function DesignSystem() {
         <Section id="states" title="Состояния: пусто, загрузка, ошибка">
           <div className="grid gap-4 lg:grid-cols-3">
             <Card><EmptyState icon={Inbox} title="Заявок пока нет" description="Поделитесь ссылкой на страницу — заявки появятся здесь." action={{ label: 'Скопировать ссылку' }} /></Card>
-            <Card>
-              <CardContent className="grid gap-3 p-6">
-                <Skeleton className="h-5 w-1/2" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-10 w-32" />
-              </CardContent>
-            </Card>
+            <LoadingState variant="skeleton-list" skeletonCount={3} />
             <Card><ErrorState title="Не удалось загрузить заявки" description="Проверьте интернет и повторите." retryLabel="Повторить" onRetry={() => undefined} /></Card>
           </div>
         </Section>

@@ -2,13 +2,14 @@
 
 exports[`UI state components visual snapshots > renders empty state with CTA > empty-state 1`] = `
 <div
-  class="rounded-2xl border border-border/60 bg-card/50 p-8 text-center"
+  class="flex flex-col items-center px-6 py-12 text-center"
 >
   <div
-    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted"
+    class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground"
   >
     <svg
-      class="lucide lucide-inbox h-6 w-6 text-muted-foreground"
+      aria-hidden="true"
+      class="lucide lucide-inbox h-6 w-6"
       fill="none"
       height="24"
       stroke="currentColor"
@@ -28,12 +29,12 @@ exports[`UI state components visual snapshots > renders empty state with CTA > e
     </svg>
   </div>
   <h3
-    class="text-lg font-semibold"
+    class="text-base font-semibold text-foreground"
   >
     No leads yet
   </h3>
   <p
-    class="mt-2 text-sm text-muted-foreground"
+    class="mt-1.5 max-w-sm text-sm text-muted-foreground"
   >
     Start by creating your first lead
   </p>
@@ -48,13 +49,15 @@ exports[`UI state components visual snapshots > renders empty state with CTA > e
 
 exports[`UI state components visual snapshots > renders error state with retry CTA > error-state 1`] = `
 <div
-  class="rounded-2xl border border-destructive/30 bg-destructive/5 p-8 text-center"
+  class="flex flex-col items-center px-6 py-12 text-center"
+  role="alert"
 >
   <div
-    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10"
+    class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive"
   >
     <svg
-      class="lucide lucide-circle-alert h-6 w-6 text-destructive"
+      aria-hidden="true"
+      class="lucide lucide-triangle-alert h-6 w-6"
       fill="none"
       height="24"
       stroke="currentColor"
@@ -65,32 +68,24 @@ exports[`UI state components visual snapshots > renders error state with retry C
       width="24"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
+      <path
+        d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
       />
-      <line
-        x1="12"
-        x2="12"
-        y1="8"
-        y2="12"
+      <path
+        d="M12 9v4"
       />
-      <line
-        x1="12"
-        x2="12.01"
-        y1="16"
-        y2="16"
+      <path
+        d="M12 17h.01"
       />
     </svg>
   </div>
   <h3
-    class="text-lg font-semibold"
+    class="text-base font-semibold text-foreground"
   >
     Failed to load
   </h3>
   <p
-    class="mt-2 text-sm text-muted-foreground"
+    class="mt-1.5 max-w-sm text-sm text-muted-foreground"
   >
     Please check your internet connection
   </p>
@@ -99,6 +94,7 @@ exports[`UI state components visual snapshots > renders error state with retry C
     class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-control font-semibold ring-offset-background transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none active:scale-[0.98] border border-border bg-card/80 hover:bg-accent/70 hover:text-accent-foreground hover:border-primary/45 hover:shadow-soft hover:[transform:translateY(var(--button-lift))] active:translate-y-0 h-10 min-h-[44px] px-5 py-2.5 text-sm mt-5"
   >
     <svg
+      aria-hidden="true"
       class="lucide lucide-refresh-cw mr-2 h-4 w-4"
       fill="none"
       height="24"
@@ -130,10 +126,11 @@ exports[`UI state components visual snapshots > renders error state with retry C
 
 exports[`UI state components visual snapshots > renders loading states variants > loading-skeleton-cards 1`] = `
 <div
+  aria-busy="true"
   class="grid grid-cols-1 gap-3"
 >
   <div
-    class="rounded-2xl border p-5 space-y-3"
+    class="space-y-3 rounded-card border border-border bg-card p-5"
   >
     <div
       class="animate-pulse rounded-md bg-muted h-5 w-2/5"
@@ -146,7 +143,7 @@ exports[`UI state components visual snapshots > renders loading states variants 
     />
   </div>
   <div
-    class="rounded-2xl border p-5 space-y-3"
+    class="space-y-3 rounded-card border border-border bg-card p-5"
   >
     <div
       class="animate-pulse rounded-md bg-muted h-5 w-2/5"
@@ -163,43 +160,54 @@ exports[`UI state components visual snapshots > renders loading states variants 
 
 exports[`UI state components visual snapshots > renders loading states variants > loading-skeleton-list 1`] = `
 <div
-  class="space-y-3"
+  aria-busy="true"
+  class="divide-y divide-border rounded-card border border-border bg-card"
 >
   <div
-    class="rounded-2xl border p-4 space-y-2"
+    class="flex items-center gap-3 p-4"
   >
     <div
-      class="animate-pulse rounded-md bg-muted h-4 w-1/3"
+      class="animate-pulse bg-muted h-10 w-10 shrink-0 rounded-full"
     />
     <div
-      class="animate-pulse rounded-md bg-muted h-3 w-2/3"
-    />
-    <div
-      class="animate-pulse rounded-md bg-muted h-3 w-1/2"
-    />
+      class="flex-1 space-y-2"
+    >
+      <div
+        class="animate-pulse rounded-md bg-muted h-4 w-1/3"
+      />
+      <div
+        class="animate-pulse rounded-md bg-muted h-3 w-2/3"
+      />
+    </div>
   </div>
   <div
-    class="rounded-2xl border p-4 space-y-2"
+    class="flex items-center gap-3 p-4"
   >
     <div
-      class="animate-pulse rounded-md bg-muted h-4 w-1/3"
+      class="animate-pulse bg-muted h-10 w-10 shrink-0 rounded-full"
     />
     <div
-      class="animate-pulse rounded-md bg-muted h-3 w-2/3"
-    />
-    <div
-      class="animate-pulse rounded-md bg-muted h-3 w-1/2"
-    />
+      class="flex-1 space-y-2"
+    >
+      <div
+        class="animate-pulse rounded-md bg-muted h-4 w-1/3"
+      />
+      <div
+        class="animate-pulse rounded-md bg-muted h-3 w-2/3"
+      />
+    </div>
   </div>
 </div>
 `;
 
 exports[`UI state components visual snapshots > renders loading states variants > loading-spinner 1`] = `
 <div
-  class="flex flex-col items-center justify-center gap-3 py-10 text-muted-foreground"
+  class="flex flex-col items-center justify-center gap-3 py-12 text-muted-foreground"
+  role="status"
 >
   <svg
-    class="lucide lucide-loader-circle h-6 w-6 animate-spin"
+    aria-hidden="true"
+    class="lucide lucide-loader-circle h-6 w-6 animate-spin text-primary"
     fill="none"
     height="24"
     stroke="currentColor"

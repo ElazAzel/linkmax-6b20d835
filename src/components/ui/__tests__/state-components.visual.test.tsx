@@ -1,8 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { LoadingState } from '../loading-state';
-import { EmptyState } from '../empty-state';
-import { ErrorState } from '../error-state';
+import { LoadingState, EmptyState, ErrorState } from '../states';
 
 describe('UI state components visual snapshots', () => {
   it('renders loading states variants', () => {
