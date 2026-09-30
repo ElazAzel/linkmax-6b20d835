@@ -24,6 +24,7 @@ import Receipt from "lucide-react/dist/esm/icons/receipt";
 import Mail from "lucide-react/dist/esm/icons/mail";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useActivePageStore } from "@/store/useActivePageStore";
+import { OFFICE_TABS } from './office-navigation';
 
 export function GlobalCommandPalette() {
   const [open, setOpen] = useState(false);
@@ -141,10 +142,12 @@ export function GlobalCommandPalette() {
             </CommandGroup>
             
             <CommandGroup heading={t('search.groups.navigation', 'Navigation')}>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard'); }}>
-                <Layout className="h-4 w-4 mr-2" />
-                {t('nav.dashboard', 'Dashboard')}
-              </CommandItem>
+              {OFFICE_TABS.map(({ id, icon: Icon, path, labelKey, defaultLabel }) => (
+                <CommandItem key={id} onSelect={() => { setOpen(false); navigate(path); }}>
+                  <Icon className="mr-2 h-4 w-4" aria-hidden="true" />
+                  {t(labelKey, defaultLabel)}
+                </CommandItem>
+              ))}
               <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=insights'); }}>
                 <BarChart3 className="h-4 w-4 mr-2" />
                 {t('nav.insights', 'Insights')}

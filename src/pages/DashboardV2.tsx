@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { useDashboard } from '@/hooks/dashboard/useDashboard';
 import { useMultiPage } from '@/hooks/page/useMultiPage';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
-import { useLeads } from '@/hooks/crm/useLeads';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { usePageVersions } from '@/hooks/page/usePageVersions';
 import { EditorCommandPalette } from '@/components/editor/EditorCommandPalette';
@@ -42,7 +41,8 @@ import { isBeautyRevenueKitNiche, selectDashboardOnboardingWizard } from './dash
 import { isRevenueKitAvailable } from '@/services/revenue-kit';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
-const HomeScreen = lazy(() => import('@/components/dashboard-v2/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
+const OfficeScreen = lazy(() => import('@/components/dashboard-v2/office/OfficeScreen').then(m => ({ default: m.OfficeScreen })));
+const OffersScreen = lazy(() => import('@/components/dashboard-v2/office/OffersScreen').then(m => ({ default: m.OffersScreen })));
 const PagesScreen = lazy(() => import('@/components/dashboard-v2/screens/PagesScreen').then(m => ({ default: m.PagesScreen })));
 const EditorScreen = lazy(() => import('@/components/dashboard-v2/screens/EditorScreen').then(m => ({ default: m.EditorScreen })));
 const ActivityScreen = lazy(() => import('@/components/dashboard-v2/screens/ActivityScreen').then(m => ({ default: m.ActivityScreen })));
@@ -123,10 +123,10 @@ import type { Block, PageData, PageTheme } from '@/types/page';
 
 type PageSeo = PageData['seo'];
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'developers' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
+type TabId = 'home' | 'clients' | 'calendar' | 'offers' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'developers' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
 
 const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-analytics', 'zone-resources'];
-const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'finance', 'monetize', 'settings', 'developers', 'events', 'leads', 'team', ...ZONE_TABS];
+const ALL_TABS = ['home', 'clients', 'calendar', 'offers', 'editor', 'pages', 'activity', 'insights', 'finance', 'monetize', 'settings', 'developers', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
   const navigate = useNavigate();
@@ -176,7 +176,6 @@ function DashboardV2Inner() {
   }, [historyPageId, resetHistory]);
   const multiPage = useMultiPage();
   const { limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
-  const { leads } = useLeads();
 
   const revenueKitNiche = dashboard.onboardingState.signupContext.revenueKitNiche;
   const [beautyKitFlag, setBeautyKitFlag] = useState(() => ({
@@ -522,26 +521,33 @@ function DashboardV2Inner() {
             {/* Home Screen */}
             {currentTab === 'home' && (
               <ScreenErrorBoundary screenName="Home">
-                <HomeScreen
-                  pageData={dashboard.pageData}
-                  loading={dashboard.loading}
-                  isPremium={dashboard.isPremium}
-                  realLeadsCount={leads.length}
-                  onOpenEditor={() => handleTabChange('editor')}
-                  onPreview={() => dashboard.sharingState.handlePreview()}
-                  onShare={() => dashboard.sharingState.handleShare()}
-                  onOpenTemplates={() => setTemplateGalleryOpen(true)}
-                  onOpenMarketplace={() => setShowMarketplace(true)}
+                <OfficeScreen
+                  view="today"
                   pageSwitcher={pageSwitcherElement}
-                  onOpenVersions={() => setShowVersions(true)}
-                  onOpenInsights={() => handleTabChange('insights')}
-                  onOpenActivity={() => handleTabChange('activity')}
-                  telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
-                  kaspiWidgetEnabled={dashboard.userProfile.profile?.kaspi_widget_enabled ?? false}
                   onNavigate={handleTabChange}
-                  outcomeHomeEnabled={outcomeHomeEnabled}
-                  onOpenRevenueKit={() => setShowRevenueKit(true)}
                 />
+              </ScreenErrorBoundary>
+            )}
+
+            {(currentTab === 'clients' || currentTab === 'calendar') && (
+              <ScreenErrorBoundary screenName={currentTab}>
+                <OfficeScreen view={currentTab} onNavigate={handleTabChange} />
+              </ScreenErrorBoundary>
+            )}
+
+            {currentTab === 'offers' && (
+              <ScreenErrorBoundary screenName="Offers">
+                {pageSwitcherElement}
+                <OffersScreen pageData={dashboard.pageData} loading={dashboard.loading}
+                  onOpenPage={() => handleTabChange('editor')}
+                  onEditBlock={(block) => {
+                    handleTabChange('editor');
+                    dashboard.blockEditor.handleEditBlock(block);
+                  }}
+                  onInsertBlock={(type) => {
+                    handleTabChange('editor');
+                    dashboard.blockEditor.handleInsertBlock(type, dashboard.pageData?.blocks.length ?? 0);
+                  }} />
               </ScreenErrorBoundary>
             )}
 

@@ -9,6 +9,7 @@ import UserRound from 'lucide-react/dist/esm/icons/user-round';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ErrorState } from '@/components/ui/states';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,6 +38,8 @@ interface BookingDetailDrawerProps {
   open: boolean;
   detail: BookingOwnerDetail | null;
   loading?: boolean;
+  error?: boolean;
+  onRetry?: () => void;
   pending?: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirmDeposit: (amount: string, method: BookingPaymentMethod) => void | Promise<void>;
@@ -48,7 +51,6 @@ interface BookingDetailDrawerProps {
 
 const SHEET_SIDE = 'right';
 const DECIMAL_INPUT_MODE = 'decimal';
-const CURRENCY_SYMBOL = '₸';
 const DETAIL_SEPARATOR = ' · ';
 const PAYMENT_METHODS = {
   cash: 'cash',
@@ -67,6 +69,8 @@ export function BookingDetailDrawer({
   open,
   detail,
   loading = false,
+  error = false,
+  onRetry,
   pending = false,
   onOpenChange,
   onConfirmDeposit,
@@ -78,6 +82,7 @@ export function BookingDetailDrawer({
   const { t } = useTranslation();
   const [amount, setAmount] = useState('0.00');
   const [method, setMethod] = useState<BookingPaymentMethod>('cash');
+  const currency = detail?.payment.currency === 'KZT' ? '₸' : detail?.payment.currency;
 
   useEffect(() => {
     if (!detail) return;
@@ -99,6 +104,7 @@ export function BookingDetailDrawer({
         </SheetHeader>
 
         {loading && !detail && <div className="mt-8 h-32 animate-pulse rounded-2xl bg-muted" />}
+        {error && <ErrorState title={t('digitalOffice.detailError', 'Не удалось загрузить запись')} onRetry={onRetry} />}
 
         {detail && (
           <div className="mt-6 space-y-5" data-testid="booking-detail-drawer">
@@ -133,10 +139,10 @@ export function BookingDetailDrawer({
                 {t('bookingDetail.payment', 'Оплата')}
               </h3>
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div><span className="text-muted-foreground">{t('bookingDetail.total', 'Стоимость')}</span><div className="font-bold">{detail.payment.totalAmount} {CURRENCY_SYMBOL}</div></div>
-                <div><span className="text-muted-foreground">{t('bookingDetail.paid', 'Получено')}</span><div className="font-bold">{detail.payment.paidAmount} {CURRENCY_SYMBOL}</div></div>
-                <div><span className="text-muted-foreground">{t('bookingDetail.deposit', 'Предоплата')}</span><div className="font-bold">{detail.payment.depositRequiredAmount} {CURRENCY_SYMBOL}</div></div>
-                <div><span className="text-muted-foreground">{t('bookingDetail.refunded', 'Возвращено')}</span><div className="font-bold">{detail.payment.refundedAmount} {CURRENCY_SYMBOL}</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.total', 'Стоимость')}</span><div className="font-num font-bold">{detail.payment.totalAmount} {currency}</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.paid', 'Получено')}</span><div className="font-num font-bold">{detail.payment.paidAmount} {currency}</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.deposit', 'Предоплата')}</span><div className="font-num font-bold">{detail.payment.depositRequiredAmount} {currency}</div></div>
+                <div><span className="text-muted-foreground">{t('bookingDetail.refunded', 'Возвращено')}</span><div className="font-num font-bold">{detail.payment.refundedAmount} {currency}</div></div>
               </div>
             </section>
 
@@ -164,19 +170,19 @@ export function BookingDetailDrawer({
                 </div>
                 {detail.status === 'pending_payment' ? (
                   <div className="grid gap-2 sm:grid-cols-2">
-                    <Button disabled={pending} onClick={() => onConfirmDeposit(amount, method)}>
+                    <Button disabled={pending || error} onClick={() => onConfirmDeposit(amount, method)}>
                       {t('bookingDetail.actions.confirmDeposit', 'Подтвердить предоплату')}
                     </Button>
-                    <Button disabled={pending} variant="secondary" onClick={onWaivePayment}>
+                    <Button disabled={pending || error} variant="secondary" onClick={onWaivePayment}>
                       {t('bookingDetail.actions.waive', 'Без предоплаты')}
                     </Button>
                   </div>
                 ) : (
                   <div className="grid gap-2 sm:grid-cols-2">
-                    <Button disabled={pending} onClick={() => onComplete(amount, method)}>
+                    <Button disabled={pending || error} onClick={() => onComplete(amount, method)}>
                       {t('bookingDetail.actions.complete', 'Завершить визит')}
                     </Button>
-                    <Button disabled={pending} variant="secondary" onClick={onNoShow}>
+                    <Button disabled={pending || error} variant="secondary" onClick={onNoShow}>
                       {t('bookingDetail.actions.noShow', 'Клиент не пришёл')}
                     </Button>
                   </div>
@@ -187,7 +193,7 @@ export function BookingDetailDrawer({
             {(detail.status === 'pending_payment' || detail.status === 'confirmed') && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button disabled={pending} variant="destructive" className="w-full">
+                  <Button disabled={pending || error} variant="destructive" className="w-full">
                     {t('bookingDetail.actions.cancel', 'Отменить запись')}
                   </Button>
                 </AlertDialogTrigger>

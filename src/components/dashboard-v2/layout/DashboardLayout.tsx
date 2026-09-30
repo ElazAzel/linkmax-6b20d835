@@ -12,6 +12,9 @@ import { DashboardBottomNav } from './DashboardBottomNav';
 import { cn } from '@/lib/utils/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlobalCommandPalette } from './GlobalCommandPalette';
+import { useTranslation } from 'react-i18next';
+import Menu from 'lucide-react/dist/esm/icons/menu';
+import { Button } from '@/components/ui/button';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -34,6 +37,8 @@ export const DashboardLayout = memo(function DashboardLayout({
 }: DashboardLayoutProps) {
   const isMobile = useIsMobile();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <div className="app-canvas min-h-screen flex overflow-hidden translate-z-0">
@@ -58,6 +63,15 @@ export const DashboardLayout = memo(function DashboardLayout({
           isMobile && "pb-24 h-auto"
         )}
       >
+        {isMobile && (
+          <div className="flex min-h-12 items-center justify-between border-b border-border bg-card px-4">
+            <span className="text-sm font-semibold">LinkMAX</span>
+            <Button variant="ghost" size="icon" aria-label={t('digitalOffice.navigation.menu', 'Меню')}
+              aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
+              <Menu className="h-5 w-5" aria-hidden="true" />
+            </Button>
+          </div>
+        )}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -82,6 +96,8 @@ export const DashboardLayout = memo(function DashboardLayout({
           activityBadge={activityBadge}
           isPremium={isPremium}
           isBusinessTier={isBusinessTier}
+          menuOpen={menuOpen}
+          onMenuOpenChange={setMenuOpen}
         />
       )}
     </div>

@@ -1,15 +1,13 @@
 /**
  * DashboardBottomNav - Mobile bottom navigation (5 tabs max)
  * iOS-style with haptic feedback
- * Last tab is "More" which opens a sheet with zone tabs + settings
+ * Five office tabs; the header menu opens secondary tools and settings.
  */
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Home from 'lucide-react/dist/esm/icons/home';
-import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
+import { OFFICE_TABS } from './office-navigation';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
-import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
 import Settings from 'lucide-react/dist/esm/icons/settings';
 import Contact from 'lucide-react/dist/esm/icons/contact';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
@@ -39,40 +37,15 @@ interface DashboardBottomNavProps {
   activityBadge?: number;
   isPremium?: boolean;
   isBusinessTier?: boolean;
+  menuOpen?: boolean;
+  onMenuOpenChange?: (open: boolean) => void;
 }
 
-const TABS: NavTab[] = [
-  {
-    id: 'home',
-    icon: Home,
-    labelKey: 'dashboard.nav.home',
-    defaultLabel: 'Главная',
-    path: '/dashboard/home',
-  },
-  {
-    id: 'editor',
-    icon: PenTool,
-    labelKey: 'dashboard.nav.editor',
-    defaultLabel: 'Редактор',
-    path: '/dashboard/home?tab=editor',
-  },
-  {
-    id: 'activity',
-    icon: Inbox,
-    labelKey: 'dashboard.nav.activity',
-    defaultLabel: 'Входящие',
-    path: '/dashboard/activity',
-  },
-  {
-    id: 'insights',
-    icon: BarChart3,
-    labelKey: 'dashboard.nav.insights',
-    defaultLabel: 'Аналитика',
-    path: '/dashboard/insights',
-  },
-];
+const TABS: NavTab[] = OFFICE_TABS;
 
 const MORE_ITEMS: NavTab[] = [
+  { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', path: '' },
+  { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика', path: '' },
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
   { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
   { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
@@ -87,21 +60,20 @@ const MORE_ITEMS: NavTab[] = [
   { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки', path: '' },
 ];
 
-// Tabs that count as "more" active
-const MORE_TAB_IDS = MORE_ITEMS.map(i => i.id);
-
 export const DashboardBottomNav = memo(function DashboardBottomNav({
   activeTab,
   onTabChange,
   activityBadge,
   isPremium = false,
   isBusinessTier = false,
+  menuOpen,
+  onMenuOpenChange,
 }: DashboardBottomNavProps) {
   const { t } = useTranslation();
   const haptic = useHapticFeedback();
-  const [moreOpen, setMoreOpen] = useState(false);
-
-  const isMoreActive = MORE_TAB_IDS.includes(activeTab);
+  const [internalMenuOpen, setInternalMenuOpen] = useState(false);
+  const moreOpen = menuOpen ?? internalMenuOpen;
+  const setMoreOpen = onMenuOpenChange ?? setInternalMenuOpen;
   const hasBusinessZone = useHasBusinessZone();
   const canUseBusinessZone = isPremium || isBusinessTier;
   // Business Zone stays out of the way: only the entry point until a zone exists,
@@ -121,7 +93,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
     haptic.lightTap();
     setMoreOpen(false);
     onTabChange(item.id);
-  }, [onTabChange, haptic]);
+  }, [onTabChange, haptic, setMoreOpen]);
 
   return (
     <>
@@ -154,35 +126,20 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                       </span>
                     )}
                   </div>
-                  <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isActive ? "font-medium" : "font-normal")}>
+                  <span className={cn("text-[11px] leading-tight max-w-full px-0.5 text-center text-wrap", isActive ? "font-medium" : "font-normal")}>
                     {label}
                   </span>
                 </button>
               );
             })}
 
-            {/* More button */}
-            <button
-              onClick={() => { haptic.lightTap(); setMoreOpen(true); }}
-              aria-label={t('dashboard.nav.menu', 'Меню')}
-              aria-expanded={moreOpen}
-              className={cn(
-                "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
-                isMoreActive ? "text-primary" : "text-muted-foreground"
-              )}
-            >
-              <MoreHorizontal className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isMoreActive && "scale-110")} />
-              <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isMoreActive ? "font-medium" : "font-normal")}>
-                {t('dashboard.nav.menu', 'Меню')}
-              </span>
-            </button>
           </div>
         </div>
       </nav>
 
       {/* More Sheet */}
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent side="bottom" className="rounded-t-2xl px-4 pb-8">
+        <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-2xl px-4 pb-8">
           <SheetHeader>
             <SheetTitle className="text-left">{t('dashboard.nav.menu', 'Меню')}</SheetTitle>
           </SheetHeader>
