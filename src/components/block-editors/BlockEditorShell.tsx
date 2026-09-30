@@ -301,7 +301,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
     }, [activeTab, shouldShowTabs, children, contentTab, styleTab, advancedTab]);
 
     return (
-        <div className="flex flex-col h-full bg-background">
+        <div className="flex flex-col h-full min-h-0 bg-background">
             {/* Header */}
             <div className="shrink-0 bg-background/80 backdrop-blur-2xl border-b border-border/10">
                 {/* Title row */}
@@ -395,7 +395,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
             </div>
 
             {/* Content area with optional preview */}
-            <div className="flex-1 flex overflow-hidden">
+            <div className="flex-1 min-h-0 flex overflow-hidden">
                 {/* Editor content */}
                 <div className={cn(
                     "flex-1 overflow-hidden",
