@@ -345,8 +345,8 @@ export function BlockEditorV2({
     if (isMobile) {
         return (
             <>
-                <Drawer open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
-                    <DrawerContent className="h-[96vh] max-h-[96vh] bg-background border-t-0 rounded-t-[32px]">
+                <Drawer open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()} shouldScaleBackground={false} repositionInputs={false}>
+                    <DrawerContent className="mt-0 h-[94dvh] max-h-[94dvh] overflow-hidden bg-background border-t-0 rounded-t-[32px] pb-[env(safe-area-inset-bottom)]">
                         {shellContent}
                     </DrawerContent>
                 </Drawer>
