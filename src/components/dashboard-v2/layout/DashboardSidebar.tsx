@@ -10,8 +10,7 @@ import { useHasBusinessZone } from '@/contexts/ZoneContext';
 
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
-import Home from 'lucide-react/dist/esm/icons/home';
-import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
+import { OFFICE_TABS } from './office-navigation';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
@@ -61,11 +60,7 @@ interface DashboardSidebarProps {
   onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-const MAIN_ITEMS: SidebarItem[] = [
-  { id: 'editor', icon: PenTool, labelKey: 'dashboard.nav.editor', defaultLabel: 'Редактор' },
-  { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
-  { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },
-];
+const MAIN_ITEMS: SidebarItem[] = OFFICE_TABS;
 
 const SECTIONS: SidebarSection[] = [
   {
@@ -82,6 +77,8 @@ const SECTIONS: SidebarSection[] = [
     titleKey: 'dashboard.sidebar.zone',
     defaultTitle: 'Бизнес-инструменты',
     items: [
+      { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
+      { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },
       { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды' },
       { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События' },
       { id: 'monetize', icon: Coins, labelKey: 'dashboard.nav.monetize', defaultLabel: 'Монетизация' },
@@ -93,7 +90,6 @@ const SECTIONS: SidebarSection[] = [
     titleKey: 'dashboard.sidebar.account',
     defaultTitle: 'Аккаунт',
     items: [
-      { id: 'home', icon: Home, labelKey: 'dashboard.nav.home', defaultLabel: 'Обзор' },
       { id: 'team', icon: Users, labelKey: 'dashboard.nav.team', defaultLabel: 'Команда' },
       { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
     ],

@@ -65,7 +65,7 @@ interface AIBuilderWizardProps {
   signupContext?: { from?: string; refSlug?: string; desiredSlug?: string };
 }
 
-type Step = 'goal' | 'niche' | 'description' | 'generating' | 'complete';
+type Step = 'offer' | 'goal' | 'niche' | 'description' | 'generating' | 'complete';
 const STEPS: Step[] = ['goal', 'niche', 'description', 'generating', 'complete'];
 const MAX_REGENERATE_RETRIES = 2;
 
@@ -77,12 +77,14 @@ export function AIBuilderWizard({
   open,
   onClose,
   onComplete,
+  isOnboarding = false,
   initialNiche,
   pageId,
   signupContext,
 }: AIBuilderWizardProps) {
   const { t } = useTranslation();
-  const [step, setStep] = useState<Step>('goal');
+  const [step, setStep] = useState<Step>(isOnboarding ? 'offer' : 'goal');
+  const [entryStep, setEntryStep] = useState<'offer' | 'goal'>(isOnboarding ? 'offer' : 'goal');
   const [selectedGoal, setSelectedGoal] = useState<OnboardingGoal | null>(null);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<AlgorithmicTemplate | null>(null);
@@ -105,7 +107,8 @@ export function AIBuilderWizard({
       startTrackedForOpenRef.current = false;
       return;
     }
-    setStep('goal');
+    setStep(isOnboarding ? 'offer' : 'goal');
+    setEntryStep(isOnboarding ? 'offer' : 'goal');
     setSelectedGoal(null);
     setSelectedNiche(initialNiche ?? null);
     setSelectedTemplate(null);
@@ -116,7 +119,7 @@ export function AIBuilderWizard({
       trackWizardStarted(pageId);
       startTrackedForOpenRef.current = true;
     }
-  }, [initialNiche, open, pageId]);
+  }, [initialNiche, isOnboarding, open, pageId]);
 
   const selectNiche = useCallback((niche: Niche) => {
     setSelectedNiche(niche);
@@ -188,9 +191,19 @@ export function AIBuilderWizard({
         <DialogTitle className="sr-only">{t('algorithmBuilder.title', 'Конструктор страницы')}</DialogTitle>
         <DialogDescription className="sr-only">{t('algorithmBuilder.description', 'Создайте страницу по алгоритму')}</DialogDescription>
         <div className="px-6 pt-6">
-          <Progress value={getStepProgress(step)} className="h-1.5 rounded-full" />
-          <div className="mt-2 text-xs text-muted-foreground">{t('aiBuilder.step', 'Шаг')} {STEPS.indexOf(step) + 1}/{STEPS.length}</div>
+          <Progress value={getStepProgress(step === 'offer' ? 'goal' : step)} className="h-1.5 rounded-full" />
+          <div className="mt-2 text-xs text-muted-foreground">{t('aiBuilder.step', 'Шаг')} {STEPS.indexOf(step === 'offer' ? 'goal' : step) + 1}/{STEPS.length}</div>
         </div>
+
+        {step === 'offer' && <div className="space-y-4 p-6 pt-4">
+          <h2 className="text-2xl font-semibold">{t('digitalOffice.offerQuestion', 'Что вы предлагаете клиентам?')}</h2>
+          <p className="text-sm text-muted-foreground">{t('digitalOffice.offerHint', 'Опишите услугу и свою цену. Оформление страницы можно доработать позже.')}</p>
+          <Textarea aria-label={t('digitalOffice.offerQuestion', 'Что вы предлагаете клиентам?')}
+            value={userInfo.services} onChange={(event) => setUserInfo((previous) => ({ ...previous, services: event.target.value }))}
+            placeholder={t('digitalOffice.offerPlaceholder', 'Например: индивидуальное занятие английским — 8 000 ₸')} className="min-h-28" />
+          <Button className="w-full" disabled={!userInfo.services.trim()} onClick={() => handleSelectGoal('sales')}>{t('digitalOffice.offerContinue', 'Продолжить')}</Button>
+          <Button variant="ghost" className="w-full" onClick={() => { setEntryStep('goal'); setStep('goal'); }}>{t('digitalOffice.changeGoal', 'Другая задача страницы')}</Button>
+        </div>}
 
         {step === 'goal' && (
           <div className="p-6 pt-4 text-center sm:text-left">
@@ -209,7 +222,7 @@ export function AIBuilderWizard({
 
         {step === 'niche' && (
           <div className="p-6 pt-4">
-            <div className="mb-6 flex items-center gap-3"><Button variant="ghost" size="icon" onClick={() => setStep('goal')}><ArrowLeft className="h-5 w-5" /></Button><div><h2 className="text-xl font-bold">{t('aiBuilder.nicheTitle', 'Выберите сферу')}</h2><p className="text-sm text-muted-foreground">{t('aiBuilder.nicheDesc', 'Подберём структуру под вашу деятельность')}</p></div></div>
+            <div className="mb-6 flex items-center gap-3"><Button variant="ghost" size="icon" aria-label={t('common.back', 'Назад')} onClick={() => setStep(entryStep)}><ArrowLeft className="h-5 w-5" /></Button><div><h2 className="text-xl font-bold">{t('aiBuilder.nicheTitle', 'Выберите сферу')}</h2><p className="text-sm text-muted-foreground">{t('aiBuilder.nicheDesc', 'Подберём структуру под вашу деятельность')}</p></div></div>
             <ScrollArea className="max-h-[55vh]"><div className="grid grid-cols-2 gap-3 pb-4 px-1 sm:grid-cols-3">
               {NICHES.map((niche) => <button key={niche} onClick={() => selectNiche(niche)} className="flex flex-col items-center gap-2 rounded-3xl border-2 border-border/50 bg-card p-4 transition-all hover:scale-[1.02] hover:border-primary/40"><span className="text-3xl">{NICHE_ICONS[niche]}</span><p className="text-center text-xs font-semibold">{t(`niches.${niche}`, niche)}</p></button>)}
             </div></ScrollArea>
@@ -218,13 +231,22 @@ export function AIBuilderWizard({
 
         {step === 'description' && (
           <div className="flex flex-col p-6 pt-4">
-            <div className="mb-6 flex items-center gap-3"><Button variant="ghost" size="icon" onClick={() => setStep(initialNiche ? 'goal' : 'niche')}><ArrowLeft className="h-5 w-5" /></Button><div><h2 className="text-xl font-bold">{t('algorithmBuilder.descriptionTitle', 'Заполните основу страницы')}</h2><p className="text-sm text-muted-foreground">{t('algorithmBuilder.descriptionHint', 'Алгоритм извлечёт услуги, контакты, цены и ссылки')}</p></div></div>
+            <div className="mb-6 flex items-center gap-3"><Button variant="ghost" size="icon" aria-label={t('common.back', 'Назад')} onClick={() => setStep(initialNiche ? entryStep : 'niche')}><ArrowLeft className="h-5 w-5" /></Button><div><h2 className="text-xl font-bold">{t('algorithmBuilder.descriptionTitle', 'Заполните основу страницы')}</h2><p className="text-sm text-muted-foreground">{t('algorithmBuilder.descriptionHint', 'Алгоритм извлечёт услуги, контакты, цены и ссылки')}</p></div></div>
             <ScrollArea className="max-h-[60vh]"><div className="space-y-4 pr-2">
               {selectedTemplate && <div className="rounded-2xl border border-border/50 bg-muted/20 p-4"><div className="mb-2 flex items-center gap-2"><LayoutTemplate className="h-4 w-4 text-primary" /><p className="text-sm font-bold">{selectedTemplate.name}</p></div><p className="mb-3 text-xs text-muted-foreground">{selectedTemplate.description} · {templateBlockTypes.length} блоков</p><div className="flex flex-wrap gap-1.5">{templateBlockTypes.map((type) => <span key={type} className="rounded-full bg-primary/10 px-2 py-1 text-[11px] font-medium text-primary">{type}</span>)}</div></div>}
               <div className="space-y-4 rounded-card border border-border/50 bg-muted/30 p-5 shadow-inner">
                 <div className="space-y-2"><Label>{t('aiBuilder.name', 'Имя или название')}</Label><Input value={userInfo.name} onChange={(event) => setUserInfo((p) => ({ ...p, name: event.target.value }))} placeholder={t('aiBuilder.namePlaceholder', 'Например, LinkMAX Studio')} className="h-14 rounded-2xl bg-background/80 text-lg" autoFocus /></div>
                 <div className="space-y-2"><Label>{t('aiBuilder.descStep.label', 'О вас и вашем предложении')}</Label><Textarea value={userInfo.bio} onChange={(event) => setUserInfo((p) => ({ ...p, bio: event.target.value }))} placeholder={t('aiBuilder.descStep.placeholder', 'Коротко расскажите, чем вы полезны')} className="min-h-[100px] rounded-2xl bg-background/80 text-base" /></div>
-                <Collapsible open={showMoreDetails} onOpenChange={setShowMoreDetails}><CollapsibleTrigger asChild><button type="button" className="flex items-center gap-2 text-sm font-semibold text-primary"><ChevronDown className={cn('h-4 w-4 transition-transform', showMoreDetails && 'rotate-180')} />{t('algorithmBuilder.moreDetails', 'Добавить услуги, контакты и ссылки')}</button></CollapsibleTrigger><CollapsibleContent className="space-y-4 pt-3"><Textarea value={userInfo.services} onChange={(event) => setUserInfo((p) => ({ ...p, services: event.target.value }))} placeholder={t('aiBuilder.servicesPlaceholder', 'Маникюр — 5000 тг\nПедикюр — 7000 тг')} /><Input value={userInfo.contacts} onChange={(event) => setUserInfo((p) => ({ ...p, contacts: event.target.value }))} placeholder={t('aiBuilder.contactsPlaceholder', 'Instagram @nick, t.me/user, +77001234567')} /><Input value={userInfo.socials} onChange={(event) => setUserInfo((p) => ({ ...p, socials: event.target.value }))} placeholder={t('algorithmBuilder.socialsPlaceholder', 'Instagram: @brand')} /><Input value={userInfo.mediaLinks} onChange={(event) => setUserInfo((p) => ({ ...p, mediaLinks: event.target.value }))} placeholder={t('algorithmBuilder.mediaPlaceholder', 'Ссылки на видео или изображения через запятую')} /></CollapsibleContent></Collapsible>
+                {isOnboarding && <div className="space-y-2"><Label htmlFor="office-services">{t('digitalOffice.offerQuestion', 'Что вы предлагаете клиентам?')}</Label><Textarea id="office-services" value={userInfo.services} onChange={(event) => setUserInfo((p) => ({ ...p, services: event.target.value }))} /></div>}
+                <Collapsible open={showMoreDetails} onOpenChange={setShowMoreDetails}>
+                  <CollapsibleTrigger asChild><button type="button" className="flex min-h-11 items-center gap-2 text-sm font-semibold text-primary"><ChevronDown className={cn('h-4 w-4 transition-transform', showMoreDetails && 'rotate-180')} />{t('algorithmBuilder.moreDetails', 'Добавить услуги, контакты и ссылки')}</button></CollapsibleTrigger>
+                  <CollapsibleContent className="space-y-4 pt-3">
+                    {!isOnboarding && <Textarea value={userInfo.services} onChange={(event) => setUserInfo((p) => ({ ...p, services: event.target.value }))} placeholder={t('aiBuilder.servicesPlaceholder', 'Маникюр — 5000 тг\nПедикюр — 7000 тг')} />}
+                    <Input value={userInfo.contacts} onChange={(event) => setUserInfo((p) => ({ ...p, contacts: event.target.value }))} placeholder={t('aiBuilder.contactsPlaceholder', 'Instagram @nick, t.me/user, +77001234567')} />
+                    <Input value={userInfo.socials} onChange={(event) => setUserInfo((p) => ({ ...p, socials: event.target.value }))} placeholder={t('algorithmBuilder.socialsPlaceholder', 'Instagram: @brand')} />
+                    <Input value={userInfo.mediaLinks} onChange={(event) => setUserInfo((p) => ({ ...p, mediaLinks: event.target.value }))} placeholder={t('algorithmBuilder.mediaPlaceholder', 'Ссылки на видео или изображения через запятую')} />
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
               {generationError && <p className="text-sm text-destructive">{generationError}</p>}
               <Button disabled={!userInfo.name.trim()} onClick={() => void runGeneration()} className="h-16 w-full rounded-card text-xl font-bold"><Wand2 className="mr-3 h-6 w-6" />{t('algorithmBuilder.generate', 'Собрать страницу')}</Button>
