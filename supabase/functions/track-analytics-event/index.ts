@@ -57,11 +57,13 @@ function isAuthenticatedEditorEvent(eventType: string) {
 
 async function hasAuthenticatedUser(supabaseUrl: string, apiKey: string, authorization: string | null) {
   if (!authorization?.startsWith("Bearer ")) return false;
+  const token = authorization.slice(7).trim();
+  if (!token) return false;
   const authClient = createClient(supabaseUrl, apiKey, {
-    global: { headers: { Authorization: authorization } },
+    auth: { persistSession: false, autoRefreshToken: false },
   });
-  const { data: { user } } = await authClient.auth.getUser();
-  return Boolean(user);
+  const { data, error } = await authClient.auth.getUser(token);
+  return !error && Boolean(data?.user);
 }
 
 async function checkRateLimit(supabase: ReturnType<typeof createClient>, ipAddress: string) {
@@ -96,7 +98,8 @@ serve(async (req: Request) => {
     const eventType = typeof payload.eventType === "string" ? payload.eventType : "";
     if (!ALLOWED_EVENT_TYPES.has(eventType) && !isNamespacedEvent(eventType)) return jsonResponse({ error: "Unsupported event type" }, 400);
     if (isAuthenticatedEditorEvent(eventType) && !await hasAuthenticatedUser(supabaseUrl, publishableKey, req.headers.get("authorization"))) {
-      return jsonResponse({ error: "Authentication required" }, 401);
+      // Analytics is best-effort: drop editor events without a valid session silently.
+      return new Response(null, { status: 204, headers: corsHeaders });
     }
     if (pageId && !UUID_RE.test(pageId)) return jsonResponse({ error: "Invalid page id" }, 400);
     if (!pageId && !MARKETING_EVENT_TYPES.has(eventType) && !eventType.startsWith("auth:") && !isAuthenticatedEditorEvent(eventType)) {
