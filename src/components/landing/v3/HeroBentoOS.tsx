@@ -75,7 +75,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
             {t('landing.revenue.hero.eyebrow', 'Для специалистов и сервисного бизнеса')}
           </div>
 
-          <h1 data-testid="landing-hero-title" className="mt-6 max-w-2xl break-words font-["Space_Grotesk",sans-serif] text-[38px] font-semibold leading-[1] sm:leading-[0.96] tracking-[-0.04em] text-white sm:text-6xl lg:text-[78px] lg:leading-[0.9]">
+          <h1 data-testid="landing-hero-title" className="mt-6 max-w-2xl break-words font-['Space_Grotesk',sans-serif] text-[38px] font-semibold leading-[1] sm:leading-[0.96] tracking-[-0.04em] text-white sm:text-6xl lg:text-[78px] lg:leading-[0.9]">
             {t('landing.revenue.hero.title', 'Клиент выбирает, записывается и оплачивает — по одной ссылке')}
           </h1>
           <p data-testid="landing-hero-description" className="mt-5 max-w-xl text-base leading-6 sm:leading-7 text-white/[0.72] sm:text-lg">
