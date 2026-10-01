@@ -144,13 +144,13 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
               </div>
             </div>
 
-            <div className="py-5">
+            <div className="min-w-0 py-5">
               <div className="text-xl font-semibold leading-tight tracking-[-0.03em] sm:text-2xl">
                 {t('landing.revenue.preview.headline', 'Всё, что нужно клиенту до и после покупки')}
               </div>
-              <div className="mt-3 grid gap-2">
+              <div className="mt-3 grid min-w-0 grid-cols-1 gap-2">
                 {previewBlocks.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 rounded-2xl bg-white px-3 py-3">
+                  <div key={item.id} className="flex min-w-0 items-center gap-3 rounded-2xl bg-white px-3 py-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#101318] text-white">
                       <item.icon className="h-4 w-4" />
                     </div>
