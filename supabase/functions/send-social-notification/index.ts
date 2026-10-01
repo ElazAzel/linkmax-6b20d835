@@ -188,6 +188,16 @@ serve(async (req: Request) => {
         if (!sub || sub.owner_id !== recipientId) {
           return json({ success: false, error: 'forbidden' }, 403);
         }
+        // Only a fresh subscription, and only once per subscription
+        const { data: claimedSub } = await supabase
+          .from('newsletter_subscriptions')
+          .update({ owner_notified_at: new Date().toISOString() })
+          .eq('id', sub.id)
+          .is('owner_notified_at', null)
+          .gte('created_at', new Date(Date.now() - 15 * 60 * 1000).toISOString())
+          .select('id')
+          .maybeSingle();
+        if (!claimedSub) return json({ success: false, error: 'already_sent_or_expired' }, 409);
         if (sub.page_id) {
           const { data: page } = await supabase
             .from('pages').select('title').eq('id', sub.page_id).maybeSingle();
