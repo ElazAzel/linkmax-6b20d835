@@ -127,7 +127,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           </form>
         </div>
 
-        <div className="relative lg:min-h-[560px]" aria-hidden="true">
+        <div className="relative min-w-0 lg:min-h-[560px]" aria-hidden="true">
           <div className="relative w-full rounded-[28px] lg:absolute lg:right-4 lg:top-8 lg:w-[78%] lg:rounded-[34px] border border-white/[0.12] bg-[#f6f6f1] p-4 text-[#101318] shadow-[0_30px_100px_rgba(0,0,0,0.42)] sm:p-5">
             <div className="flex items-center justify-between border-b border-[#d9d7cc] pb-4">
               <div className="flex items-center gap-3">
