@@ -1576,6 +1576,7 @@ export type Database = {
           email: string
           id: string
           owner_id: string
+          owner_notified_at: string | null
           page_id: string | null
           status: string
           subscribed_at: string
@@ -1587,6 +1588,7 @@ export type Database = {
           email: string
           id?: string
           owner_id: string
+          owner_notified_at?: string | null
           page_id?: string | null
           status?: string
           subscribed_at?: string
@@ -1598,6 +1600,7 @@ export type Database = {
           email?: string
           id?: string
           owner_id?: string
+          owner_notified_at?: string | null
           page_id?: string | null
           status?: string
           subscribed_at?: string
