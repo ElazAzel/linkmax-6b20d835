@@ -62,7 +62,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-[#101318] px-4 pb-12 pt-24 text-white sm:px-6 sm:pt-28 lg:px-8 lg:pb-16">
+    <section className="relative overflow-hidden bg-[#101318] px-4 pb-10 pt-24 text-white sm:px-6 sm:pt-28 lg:px-8 lg:pb-16">
       <div className="pointer-events-none absolute inset-0 opacity-80">
         <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#ff5701]/[0.18] blur-3xl" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
@@ -70,22 +70,22 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
 
       <div className="relative mx-auto grid min-w-0 max-w-[1120px] gap-8 lg:grid-cols-[0.94fr_1.06fr] lg:items-center">
         <div className="min-w-0 max-w-2xl">
-          <div data-testid="landing-hero-badge" className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-white/[0.76]">
+          <div data-testid="landing-hero-badge" className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-[11px] font-semibold uppercase leading-4 tracking-[0.12em] sm:text-xs sm:tracking-[0.16em] text-white/[0.76]">
             <span className="h-2 w-2 rounded-full bg-[#ff5701]" />
             {t('landing.revenue.hero.eyebrow', 'Для специалистов и сервисного бизнеса')}
           </div>
 
-          <h1 data-testid="landing-hero-title" className="mt-6 max-w-2xl break-words text-[40px] font-semibold leading-[0.96] tracking-[-0.04em] text-white sm:text-6xl lg:text-[78px] lg:leading-[0.9]">
+          <h1 data-testid="landing-hero-title" className="mt-6 max-w-2xl break-words font-["Space_Grotesk",sans-serif] text-[38px] font-semibold leading-[1] sm:leading-[0.96] tracking-[-0.04em] text-white sm:text-6xl lg:text-[78px] lg:leading-[0.9]">
             {t('landing.revenue.hero.title', 'Клиент выбирает, записывается и оплачивает — по одной ссылке')}
           </h1>
-          <p data-testid="landing-hero-description" className="mt-6 max-w-xl text-base leading-7 text-white/[0.72] sm:text-lg">
+          <p data-testid="landing-hero-description" className="mt-5 max-w-xl text-base leading-6 sm:leading-7 text-white/[0.72] sm:text-lg">
             {t(
               'landing.revenue.hero.subtitle',
               'LinkMAX помогает пройти весь путь без лишней переписки: понять услугу, выбрать время, оставить заявку и вернуться снова.'
             )}
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-8 w-full max-w-[360px] sm:max-w-2xl">
+          <form onSubmit={handleSubmit} className="mt-7 w-full sm:max-w-2xl">
             <div className="flex flex-col gap-2 rounded-[22px] border border-white/[0.12] bg-white p-2 shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:flex-row">
               <div className="flex h-[52px] min-w-0 flex-1 items-center rounded-[16px] bg-[#f6f6f1] px-4 text-left">
                 <span className="shrink-0 text-sm font-semibold text-[#6f746d]">{slugPrefix}</span>
@@ -127,8 +127,8 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           </form>
         </div>
 
-        <div className="relative min-h-[430px] lg:min-h-[560px]" aria-hidden="true">
-          <div className="absolute right-0 top-2 w-[78%] rounded-[34px] border border-white/[0.12] bg-[#f6f6f1] p-4 text-[#101318] shadow-[0_30px_100px_rgba(0,0,0,0.42)] sm:p-5 lg:right-4 lg:top-8">
+        <div className="relative lg:min-h-[560px]" aria-hidden="true">
+          <div className="relative w-full rounded-[28px] lg:absolute lg:right-4 lg:top-8 lg:w-[78%] lg:rounded-[34px] border border-white/[0.12] bg-[#f6f6f1] p-4 text-[#101318] shadow-[0_30px_100px_rgba(0,0,0,0.42)] sm:p-5">
             <div className="flex items-center justify-between border-b border-[#d9d7cc] pb-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#101318] text-sm font-black text-white">
@@ -145,7 +145,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
             </div>
 
             <div className="py-5">
-              <div className="text-2xl font-semibold tracking-[-0.03em]">
+              <div className="text-xl font-semibold leading-tight tracking-[-0.03em] sm:text-2xl">
                 {t('landing.revenue.preview.headline', 'Всё, что нужно клиенту до и после покупки')}
               </div>
               <div className="mt-3 grid gap-2">
@@ -168,7 +168,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
             </div>
           </div>
 
-          <div className="absolute left-0 top-14 w-[54%] rounded-[26px] border border-white/[0.12] bg-white/[0.92] p-4 text-[#101318] shadow-[0_20px_70px_rgba(0,0,0,0.30)] backdrop-blur lg:top-24">
+          <div className="absolute left-0 top-14 hidden w-[54%] lg:block rounded-[26px] border border-white/[0.12] bg-white/[0.92] p-4 text-[#101318] shadow-[0_20px_70px_rgba(0,0,0,0.30)] backdrop-blur lg:top-24">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[#6f746d]">
               <Sparkles className="h-4 w-4 text-[#ff5701]" />
               {t('landing.revenue.preview.aiLabel', 'Страница готова')}
@@ -179,7 +179,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
             </div>
           </div>
 
-          <div className="absolute bottom-8 left-4 w-[64%] rounded-[26px] border border-white/[0.12] bg-[#101318]/[0.88] p-4 text-white shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur lg:bottom-14">
+          <div className="absolute bottom-8 left-4 hidden w-[64%] lg:block rounded-[26px] border border-white/[0.12] bg-[#101318]/[0.88] p-4 text-white shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur lg:bottom-14">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/[0.54]">
               {t('landing.revenue.preview.inboxLabel', 'Следующий шаг')}
             </div>
