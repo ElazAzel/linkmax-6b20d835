@@ -308,7 +308,7 @@ serve(async (req) => {
         } else {
           const errorResult = await emailResponse.json();
           console.error(`Failed to send digest to user ${user.id}:`, (errorResult as { name?: string })?.name ?? 'send_failed');
-          errors.push(`${userEmail}: ${errorResult.message}`);
+          errors.push(`${user.id}: send_failed`);
         }
       } catch (userError) {
         console.error(`Error processing user ${user.id}:`, userError);
