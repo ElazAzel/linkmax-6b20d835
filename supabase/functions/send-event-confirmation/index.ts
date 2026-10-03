@@ -186,8 +186,8 @@ const handler = async (req: Request): Promise<Response> => {
       String(regRow.attendee_email ?? "").trim().toLowerCase() !== attendeeEmail.trim().toLowerCase()
     ) {
       return new Response(
-        JSON.stringify({ success: false, error: "not_found" }),
-        { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -200,8 +200,8 @@ const handler = async (req: Request): Promise<Response> => {
     const ownerId = eventOwnerRow?.owner_id as string | undefined;
     if (!ownerId || (regRow.owner_id && regRow.owner_id !== ownerId)) {
       return new Response(
-        JSON.stringify({ success: false, error: "not_found" }),
-        { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -217,8 +217,8 @@ const handler = async (req: Request): Promise<Response> => {
       .maybeSingle();
     if (!claimed) {
       return new Response(
-        JSON.stringify({ success: false, error: "already_sent_or_expired" }),
-        { status: 409, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 

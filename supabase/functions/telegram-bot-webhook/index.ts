@@ -630,17 +630,24 @@ serve(async (req: Request) => {
         }
       } else if (data?.startsWith('set_active_page:')) {
         const pageId = data.split(':')[1];
-        await setActivePageId(supabase, chatIdStr, pageId);
-        
-        const { data: page } = await supabase.from('pages').select('title').eq('id', pageId).single();
-        responseText = m.active_page_set(page?.title || 'Untitled');
-        replyMarkup = getMainKeyboard(lang);
+        const ownerProfile = await getUserProfile(supabase, chatIdStr, telegramUserId);
+        const { data: page } = ownerProfile
+          ? await supabase.from('pages').select('id, title').eq('id', pageId).eq('user_id', ownerProfile.id).maybeSingle()
+          : { data: null };
+        if (page) {
+          await setActivePageId(supabase, chatIdStr, page.id);
+          responseText = m.active_page_set(page.title || 'Untitled');
+          replyMarkup = getMainKeyboard(lang);
+        }
       } else if (data === 'toggle_publish') {
         const activePageId = await getActivePageId(supabase, chatIdStr);
-        if (activePageId) {
-          const { data: page } = await supabase.from('pages').select('status').eq('id', activePageId).single();
-          const newStatus = page?.status === 'published' ? 'draft' : 'published';
-          await supabase.from('pages').update({ status: newStatus }).eq('id', activePageId);
+        const ownerProfile = await getUserProfile(supabase, chatIdStr, telegramUserId);
+        const { data: page } = activePageId && ownerProfile
+          ? await supabase.from('pages').select('status').eq('id', activePageId).eq('user_id', ownerProfile.id).maybeSingle()
+          : { data: null };
+        if (activePageId && ownerProfile && page) {
+          const newStatus = page.status === 'published' ? 'draft' : 'published';
+          await supabase.from('pages').update({ status: newStatus }).eq('id', activePageId).eq('user_id', ownerProfile.id);
           
           responseText = m.status_updated(newStatus);
           // Edit message to show success
