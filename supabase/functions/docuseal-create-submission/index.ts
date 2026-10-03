@@ -103,6 +103,21 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Signer must be a known contact of this zone (or a zone member) — no arbitrary recipients.
+    const { data: knownContact } = await supabase
+      .from('zone_contacts')
+      .select('id')
+      .eq('zone_id', doc.zone_id)
+      .ilike('email', signerEmail)
+      .limit(1)
+      .maybeSingle();
+    if (!knownContact) {
+      return new Response(JSON.stringify({ error: 'signer_not_in_zone_contacts' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // Create DocuSeal submission
     const dsRes = await fetch(`${DOCUSEAL_BASE_URL}/submissions`, {
       method: 'POST',
