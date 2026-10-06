@@ -15,6 +15,13 @@
       "when": 1791250223116,
       "tag": "0001_partners_active_only",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791281085150,
+      "tag": "0002_analytics_composite_indexes",
+      "breakpoints": true
     }
   ]
 }
