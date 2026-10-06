@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Open
-- [ ] Deploy edge functions `track-analytics-event` and `robokassa` (was returning 404/401).
+- [x] Deploy edge functions `track-analytics-event` and `robokassa` (was returning 404/401).
 - [x] Lifetime Pro for admin@lnkmx.my (`afc67c7e-660a-4cbe-ae00-517b752e30d3`) applied 2026-09-27 (`profiles.is_premium=true`, `premium_tier='pro'`, `premium_expires_at=NULL`).
 - [x] `admin_set_user_tier` RPC applied to live DB 2026-09-27 (admin check via `user_roles`, cannot demote self).
 - [x] Outcome Home crash fixed 2026-09-27 by disabling flags `outcome_home`, `revenue_core`, `beauty_revenue_kit`, `booking_self_service` (their tables are not in the DB).
