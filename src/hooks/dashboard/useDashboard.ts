@@ -66,7 +66,10 @@ export function useDashboard(options?: UseDashboardOptions) {
       } catch { /* non-critical */ }
     };
     updateLastSeen();
-    const interval = setInterval(updateLastSeen, 3 * 60 * 1000); // every 3 min
+    // every 10 min, and only while the tab is visible
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') updateLastSeen();
+    }, 10 * 60 * 1000);
     return () => clearInterval(interval);
   }, [user?.id]);
 
