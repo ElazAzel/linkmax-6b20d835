@@ -8,6 +8,13 @@
       "when": 1791250087193,
       "tag": "0000_close_anon_analytics_insert",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791250223116,
+      "tag": "0001_partners_active_only",
+      "breakpoints": true
     }
   ]
 }

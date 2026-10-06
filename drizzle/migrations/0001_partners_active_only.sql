@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "Partners are viewable by everyone" ON public.partners;
+CREATE POLICY "Active partners are viewable by everyone" ON public.partners FOR SELECT USING (is_active = true OR public.has_role(auth.uid(), 'admin'));
