@@ -6,7 +6,6 @@
     "vitest.config.ts",
     "eslint.config.js"
   ],
-  "exclude": ["src/telegram/**"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",

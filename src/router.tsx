@@ -13,11 +13,12 @@ export const getRouter = () => {
     }),
     mutationCache: new MutationCache({
       onError: (error) => reportBackendFailure(error),
+      onSuccess: () => reportBackendSuccess(),
     }),
     defaultOptions: {
       queries: {
         staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 30,
+        gcTime: 1000 * 60 * 10,
         refetchOnWindowFocus: false,
         ...queryRetryOptions,
       },
