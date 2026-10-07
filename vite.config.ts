@@ -1,97 +1,32 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
+// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
+// or the app will break with duplicate plugins:
+//   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
+//     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
+//     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
+// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { visualizer } from "rollup-plugin-visualizer";
-import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
 
-// Plugin to make CSS non-render-blocking in production
-function nonBlockingCssPlugin() {
-  return {
-    name: 'non-blocking-css',
-    enforce: 'post' as const,
-    transformIndexHtml(html: string) {
-      // Convert <link rel="stylesheet"> to non-blocking pattern
-      return html.replace(
-        /<link rel="stylesheet" crossorigin href="(\/assets\/[^"]+\.css)">/g,
-        '<link rel="stylesheet" href="$1" media="print" onload="this.media=\'all\'">' +
-        '<noscript><link rel="stylesheet" href="$1"></noscript>'
-      );
-    },
-  };
-}
+const sentryEnabled = process.env.NODE_ENV === "production" && !!process.env.SENTRY_AUTH_TOKEN;
 
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-    hmr: {
-      // Keep local HMR on the Vite port; deployments behind a TLS proxy can
-      // override it with VITE_HMR_CLIENT_PORT without changing the config.
-      clientPort: Number(process.env.VITE_HMR_CLIENT_PORT ?? 8080),
-    },
+export default defineConfig({
+  tanstackStart: {
+    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
+    // nitro/vite builds from this
+    server: { entry: "server" },
   },
-  plugins: [
-    react({
-      // React Compiler preparation (2026 Standard)
-      // When the package 'babel-plugin-react-compiler' is installed, 
-      // it enables automatic memoization.
-    }),
-    mode === 'development' && componentTagger(),
-    mode === 'production' && nonBlockingCssPlugin(),
-    // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
-    mode === 'production' && !!process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      sourcemaps: {
-        filesToDeleteAfterUpload: ["./dist/**/*.map"],
-      },
-    }),
-    // The SDK bundler treats Windows absolute paths as npm specifiers. The
-    // Windows prebuild generator uses a relative entrypoint instead; Linux
-    // and CI use the official Vite plugin.
-    process.platform !== 'win32' && mcpPlugin(),
-    process.env.ANALYZE === 'true' && visualizer({
-      filename: "stats.html",
-      gzipSize: true,
-      brotliSize: true,
-    }),
-  ].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
+  vite: {
+    plugins: [
+      // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
+      ...(sentryEnabled
+        ? [
+            sentryVitePlugin({
+              org: process.env.SENTRY_ORG,
+              project: process.env.SENTRY_PROJECT,
+              authToken: process.env.SENTRY_AUTH_TOKEN,
+            }),
+          ]
+        : []),
+    ],
   },
-  build: {
-    // 2026 Performance Standards
-    modulePreload: {
-      polyfill: true, // Ensure module preload works on older mobile browsers
-    },
-    cssCodeSplit: true, // Split CSS into smaller chunks for faster FCP
-    target: 'esnext', // Target modern browsers for smaller bundle size
-    minify: 'esbuild',
-    sourcemap: !!process.env.SENTRY_AUTH_TOKEN,
-    chunkSizeWarningLimit: 1200,
-    rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'index.html'),
-        telegram: path.resolve(__dirname, 'tg.html'),
-      },
-      output: {
-        // NOTE: React/Router intentionally NOT manually chunked — Vite's default
-        // module preload must manage their execution order to avoid
-        // initialization race conditions (see Runtime Stability standard).
-        manualChunks: {
-          'vendor-motion': ['framer-motion'],
-          'vendor-charts': ['recharts'],
-          'vendor-supabase': ['@supabase/supabase-js'],
-          'vendor-i18n': ['i18next'],
-          'vendor-validation': ['zod'],
-        },
-      },
-    },
-  },
-}));
+});

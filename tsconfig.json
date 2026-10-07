@@ -1,48 +1,35 @@
 {
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "eslint.config.js"
+  ],
   "compilerOptions": {
+    "target": "ES2022",
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "vitest/globals", "node"],
+
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": false,
+    "resolveJsonModule": true,
     "allowJs": true,
     "esModuleInterop": true,
-    "incremental": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "downlevelIteration": true,
-    "target": "es2020",
     "noEmit": true,
-    "noImplicitAny": true,
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "plugins": [],
-    "resolveJsonModule": true,
+
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "types": [
-      "node"
-    ]
-  },
-  "exclude": [
-    "node_modules",
-    "pages_vite_backup",
-    "tmp_backup",
-    "src/pages_vite_backup",
-    "e2e",
-    "scripts",
-    "compare_locales.ts",
-    "src/main.vite.tsx",
-    "src/app"
-  ],
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ]
+    "noImplicitAny": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }
