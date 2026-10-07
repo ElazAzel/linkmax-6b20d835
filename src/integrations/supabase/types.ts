@@ -294,6 +294,7 @@ export type Database = {
           client_phone: string | null
           completed_at: string | null
           confirmed_at: string | null
+          contact_id: string | null
           created_at: string
           followup_sent_at: string | null
           id: string
@@ -321,6 +322,7 @@ export type Database = {
           client_phone?: string | null
           completed_at?: string | null
           confirmed_at?: string | null
+          contact_id?: string | null
           created_at?: string
           followup_sent_at?: string | null
           id?: string
@@ -348,6 +350,7 @@ export type Database = {
           client_phone?: string | null
           completed_at?: string | null
           confirmed_at?: string | null
+          contact_id?: string | null
           created_at?: string
           followup_sent_at?: string | null
           id?: string
@@ -367,6 +370,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "bookings_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "bookings_page_id_fkey"
             columns: ["page_id"]
@@ -508,6 +518,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      contacts: {
+        Row: {
+          created_at: string
+          email_norm: string | null
+          first_seen_at: string
+          id: string
+          last_seen_at: string
+          name: string | null
+          owner_id: string
+          phone_norm: string | null
+          source: string | null
+          telegram: string | null
+          utm: Json
+          whatsapp: string | null
+        }
+        Insert: {
+          created_at?: string
+          email_norm?: string | null
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          name?: string | null
+          owner_id: string
+          phone_norm?: string | null
+          source?: string | null
+          telegram?: string | null
+          utm?: Json
+          whatsapp?: string | null
+        }
+        Update: {
+          created_at?: string
+          email_norm?: string | null
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          name?: string | null
+          owner_id?: string
+          phone_norm?: string | null
+          source?: string | null
+          telegram?: string | null
+          utm?: Json
+          whatsapp?: string | null
+        }
+        Relationships: []
       }
       crm_automations: {
         Row: {
@@ -719,6 +774,7 @@ export type Database = {
           amount: number
           buyer_email: string
           buyer_user_id: string | null
+          contact_id: string | null
           created_at: string
           currency: string
           download_limit: number
@@ -739,6 +795,7 @@ export type Database = {
           amount?: number
           buyer_email: string
           buyer_user_id?: string | null
+          contact_id?: string | null
           created_at?: string
           currency?: string
           download_limit?: number
@@ -759,6 +816,7 @@ export type Database = {
           amount?: number
           buyer_email?: string
           buyer_user_id?: string | null
+          contact_id?: string | null
           created_at?: string
           currency?: string
           download_limit?: number
@@ -775,6 +833,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "digital_purchases_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "digital_purchases_product_id_fkey"
             columns: ["product_id"]
@@ -848,6 +913,7 @@ export type Database = {
           attendee_name: string
           attendee_phone: string | null
           block_id: string
+          contact_id: string | null
           created_at: string
           currency: string | null
           event_id: string
@@ -871,6 +937,7 @@ export type Database = {
           attendee_name: string
           attendee_phone?: string | null
           block_id: string
+          contact_id?: string | null
           created_at?: string
           currency?: string | null
           event_id: string
@@ -894,6 +961,7 @@ export type Database = {
           attendee_name?: string
           attendee_phone?: string | null
           block_id?: string
+          contact_id?: string | null
           created_at?: string
           currency?: string | null
           event_id?: string
@@ -911,6 +979,13 @@ export type Database = {
           utm_json?: Json | null
         }
         Relationships: [
+          {
+            foreignKeyName: "event_registrations_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "event_registrations_event_id_fkey"
             columns: ["event_id"]
@@ -1524,6 +1599,7 @@ export type Database = {
       leads: {
         Row: {
           automation_sent_count: number | null
+          contact_id: string | null
           created_at: string
           email: string | null
           id: string
@@ -1539,6 +1615,7 @@ export type Database = {
         }
         Insert: {
           automation_sent_count?: number | null
+          contact_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -1554,6 +1631,7 @@ export type Database = {
         }
         Update: {
           automation_sent_count?: number | null
+          contact_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -1567,7 +1645,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "leads_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       newsletter_subscriptions: {
         Row: {
@@ -5952,6 +6038,17 @@ export type Database = {
           p_zone_id: string
         }
         Returns: Json
+      }
+      upsert_contact: {
+        Args: {
+          p_email: string
+          p_name: string
+          p_owner_id: string
+          p_phone: string
+          p_source?: string
+          p_utm?: Json
+        }
+        Returns: string
       }
       upsert_telegram_account: {
         Args: {
