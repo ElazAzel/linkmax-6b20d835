@@ -24,3 +24,10 @@
 - [x] Fixed `publishPage` to work when a user has multiple pages (was 406).
 - [x] Set `verify_jwt = false` for the `robokassa` function (auth validated in code).
 - [x] Prepared `admin_set_user_tier` RPC and updated `UserTierManager.tsx` to use it (bypasses the trigger guard after admin check).
+
+## Micro-Business OS (план 2026-10-07)
+- [x] Шаг 1: аудит, docs/CURRENT_ARCHITECTURE, DOMAIN_MODEL, DECISIONS, MIGRATION_PLAN
+- [x] Шаг 2a: таблица contacts, склейка по телефону/почте, привязка заявок
+- [ ] Шаг 2b: привязка записей, регистраций, покупок к клиенту
+- [ ] Шаг 3: история клиента в карточке заявки
+- [ ] Шаг 4: CRM Lite (стадии, заметки, задачи)
