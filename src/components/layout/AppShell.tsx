@@ -114,11 +114,12 @@ export const AppShell = () => {
     initPostHog();
     // Last successful data lives in localStorage: show it when the backend is down.
     hydrateQueryCache(queryClient);
-    persistQueryCache(queryClient);
+    const stopPersist = persistQueryCache(queryClient);
     // Network back -> refetch active queries.
-    startNetworkHealthWatch(() => {
+    const stopWatch = startNetworkHealthWatch(() => {
       void queryClient.refetchQueries({ type: 'active' });
     });
+    return () => { stopPersist(); stopWatch(); };
   }, [queryClient]);
 
   // Defer non-critical init until user interacts or after 8s
