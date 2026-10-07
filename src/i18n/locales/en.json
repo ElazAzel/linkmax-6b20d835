@@ -1568,7 +1568,17 @@
     "item3": "Quick replies and communication history",
     "title": "Mini CRM",
     "description": "All requests from the form automatically go into the CRM. Statuses: new → in progress → completed. No more Excel.",
-    "desc": "All applications in one place. Statuses, history, Telegram notifications."
+    "desc": "All applications in one place. Statuses, history, Telegram notifications.",
+    "timeline": {
+      "title": "Client history",
+      "revenue": "Revenue",
+      "kind": {
+        "lead": "Lead",
+        "booking": "Booking",
+        "event": "Event",
+        "purchase": "Purchase"
+      }
+    }
   },
   "currency": {
     "names": {

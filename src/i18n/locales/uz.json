@@ -1568,7 +1568,17 @@
     "item3": "Tez javoblar va aloqa tarixi",
     "title": "Mini CRM",
     "description": "Shakldagi barcha so'rovlar avtomatik ravishda CRM-ga tushadi. Holatlar: yangi → davom etmoqda → tugallangan. Endi Excel yo'q.",
-    "desc": "Barcha ilovalar bir joyda. Statuslar, tarix, Telegram xabarnomalari."
+    "desc": "Barcha ilovalar bir joyda. Statuslar, tarix, Telegram xabarnomalari.",
+    "timeline": {
+      "title": "Mijoz tarixi",
+      "revenue": "Daromad",
+      "kind": {
+        "lead": "Ariza",
+        "booking": "Yozilish",
+        "event": "Tadbir",
+        "purchase": "Xarid"
+      }
+    }
   },
   "currency": {
     "names": {
