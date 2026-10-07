@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import { loadEnv } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // Unit tests never talk to Supabase, but modules create the client on import.
