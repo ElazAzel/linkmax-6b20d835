@@ -5594,6 +5594,16 @@ export type Database = {
         }
       }
       get_auth_user_email: { Args: never; Returns: string }
+      get_contact_timeline: {
+        Args: { p_contact_id: string }
+        Returns: {
+          amount: number
+          currency: string
+          happened_at: string
+          kind: string
+          title: string
+        }[]
+      }
       get_digital_product_public: {
         Args: { _product_id: string }
         Returns: {
