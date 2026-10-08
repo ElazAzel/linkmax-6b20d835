@@ -9,27 +9,1893 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as Char91indexChar93RouteImport } from './routes/[index]'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as CustomersRouteImport } from './routes/customers'
+import { Route as Demo_nailsRouteImport } from './routes/demo_nails'
+import { Route as DesignSystemRouteImport } from './routes/design-system'
+import { Route as EnRouteImport } from './routes/en'
+import { Route as ForMastersRouteImport } from './routes/for-masters'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as InstallRouteImport } from './routes/install'
+import { Route as KkRouteImport } from './routes/kk'
+import { Route as LinkInBioRuRouteImport } from './routes/link-in-bio-ru'
+import { Route as MultilinkRouteImport } from './routes/multilink'
+import { Route as PaymentTermsRouteImport } from './routes/payment-terms'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RuRouteImport } from './routes/ru'
+import { Route as SaytVizitkaDlyaUslugRouteImport } from './routes/sayt-vizitka-dlya-uslug'
+import { Route as SeoLandingRouteImport } from './routes/seo-landing'
+import { Route as SitemapRouteImport } from './routes/sitemap'
+import { Route as TaplinkAlternativeRouteImport } from './routes/taplink-alternative'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as UzRouteImport } from './routes/uz'
+import { Route as VizitkaOnlaynRouteImport } from './routes/vizitka-onlayn'
+import { Route as Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074RouteImport } from './routes/для-бьюти-мастеров'
+import { Route as Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074RouteImport } from './routes/для-репетиторов'
+import { Route as SlugIndexRouteImport } from './routes/$slug/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminLanguageAlgorithmsRouteImport } from './routes/admin/language-algorithms'
+import { Route as AdminTranslationsRouteImport } from './routes/admin/translations'
+import { Route as AlternativesIndexRouteImport } from './routes/alternatives/index'
+import { Route as AlternativesCompetitorRouteImport } from './routes/alternatives/$competitor'
+import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as CollabCollabSlugRouteImport } from './routes/collab/$collabSlug'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardActivityRouteImport } from './routes/dashboard/activity'
+import { Route as DashboardDevelopersRouteImport } from './routes/dashboard/developers'
+import { Route as DashboardFinanceRouteImport } from './routes/dashboard/finance'
+import { Route as DashboardHomeRouteImport } from './routes/dashboard/home'
+import { Route as DashboardInsightsRouteImport } from './routes/dashboard/insights'
+import { Route as DashboardLeadsRouteImport } from './routes/dashboard/leads'
+import { Route as DashboardMonetizeRouteImport } from './routes/dashboard/monetize'
+import { Route as DashboardPagesRouteImport } from './routes/dashboard/pages'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardSmartLinksRouteImport } from './routes/dashboard/smart-links'
+import { Route as DashboardTeamRouteImport } from './routes/dashboard/team'
+import { Route as DashboardZoneAnalyticsRouteImport } from './routes/dashboard/zone-analytics'
+import { Route as DashboardZoneAutomationsRouteImport } from './routes/dashboard/zone-automations'
+import { Route as DashboardZoneCalendarRouteImport } from './routes/dashboard/zone-calendar'
+import { Route as DashboardZoneContactsRouteImport } from './routes/dashboard/zone-contacts'
+import { Route as DashboardZoneDashboardRouteImport } from './routes/dashboard/zone-dashboard'
+import { Route as DashboardZoneDealsRouteImport } from './routes/dashboard/zone-deals'
+import { Route as DashboardZoneDocumentsRouteImport } from './routes/dashboard/zone-documents'
+import { Route as DashboardZoneEventsRouteImport } from './routes/dashboard/zone-events'
+import { Route as DashboardZoneInboxRouteImport } from './routes/dashboard/zone-inbox'
+import { Route as DashboardZoneInvoicesRouteImport } from './routes/dashboard/zone-invoices'
+import { Route as DashboardZoneProductsRouteImport } from './routes/dashboard/zone-products'
+import { Route as DashboardZoneSettingsRouteImport } from './routes/dashboard/zone-settings'
+import { Route as DashboardZoneTasksRouteImport } from './routes/dashboard/zone-tasks'
+import { Route as DlyaLandingSlugRouteImport } from './routes/dlya/$landingSlug'
+import { Route as ExpertsIndexRouteImport } from './routes/experts/index'
+import { Route as ForLandingSlugRouteImport } from './routes/for/$landingSlug'
+import { Route as FromSlugRouteImport } from './routes/from/$slug'
+import { Route as GoodsIdRouteImport } from './routes/goods/$id'
+import { Route as InvitesTokenRouteImport } from './routes/invites/$token'
+import { Route as JoinInviteCodeRouteImport } from './routes/join/$inviteCode'
+import { Route as PCompressedRouteImport } from './routes/p/$compressed'
+import { Route as PurchaseTokenRouteImport } from './routes/purchase/$token'
+import { Route as RCodeRouteImport } from './routes/r/$code'
+import { Route as SSlugRouteImport } from './routes/s/$slug'
+import { Route as TeamSlugRouteImport } from './routes/team/$slug'
+import { Route as SlugEventsEventIdRouteImport } from './routes/$slug/events/$eventId'
+import { Route as SlugPPagePathRouteImport } from './routes/$slug/p/$pagePath'
+import { Route as SlugServicesServiceSlugRouteImport } from './routes/$slug/services/$serviceSlug'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable/oauth/consent'
+import { Route as AdminTemplatesIdRouteImport } from './routes/admin/templates/$id'
+import { Route as AdminTemplatesNewRouteImport } from './routes/admin/templates/new'
+import { Route as BookingManageTokenRouteImport } from './routes/booking/manage/$token'
+import { Route as DashboardEventsIndexRouteImport } from './routes/dashboard/events/index'
+import { Route as EventsCheckinTokenRouteImport } from './routes/events/checkin/$token'
+import { Route as ExpertsTagIndexRouteImport } from './routes/experts/$tag/index'
+import { Route as ExpertsTagCityRouteImport } from './routes/experts/$tag/$city'
+import { Route as ExpertsCityCityRouteImport } from './routes/experts/city/$city'
+import { Route as ReviewRequestTokenRouteImport } from './routes/review/request/$token'
+import { Route as DashboardEventsEventIdIndexRouteImport } from './routes/dashboard/events/$eventId/index'
+import { Route as DashboardEventsEventIdScannerRouteImport } from './routes/dashboard/events/$eventId/scanner'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const Char91indexChar93Route = Char91indexChar93RouteImport.update({
+  id: '/index',
+  path: '/index',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Demo_nailsRoute = Demo_nailsRouteImport.update({
+  id: '/demo_nails',
+  path: '/demo_nails',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignSystemRoute = DesignSystemRouteImport.update({
+  id: '/design-system',
+  path: '/design-system',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnRoute = EnRouteImport.update({
+  id: '/en',
+  path: '/en',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForMastersRoute = ForMastersRouteImport.update({
+  id: '/for-masters',
+  path: '/for-masters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstallRoute = InstallRouteImport.update({
+  id: '/install',
+  path: '/install',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KkRoute = KkRouteImport.update({
+  id: '/kk',
+  path: '/kk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LinkInBioRuRoute = LinkInBioRuRouteImport.update({
+  id: '/link-in-bio-ru',
+  path: '/link-in-bio-ru',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MultilinkRoute = MultilinkRouteImport.update({
+  id: '/multilink',
+  path: '/multilink',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentTermsRoute = PaymentTermsRouteImport.update({
+  id: '/payment-terms',
+  path: '/payment-terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuRoute = RuRouteImport.update({
+  id: '/ru',
+  path: '/ru',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SaytVizitkaDlyaUslugRoute = SaytVizitkaDlyaUslugRouteImport.update({
+  id: '/sayt-vizitka-dlya-uslug',
+  path: '/sayt-vizitka-dlya-uslug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeoLandingRoute = SeoLandingRouteImport.update({
+  id: '/seo-landing',
+  path: '/seo-landing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaplinkAlternativeRoute = TaplinkAlternativeRouteImport.update({
+  id: '/taplink-alternative',
+  path: '/taplink-alternative',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UzRoute = UzRouteImport.update({
+  id: '/uz',
+  path: '/uz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VizitkaOnlaynRoute = VizitkaOnlaynRouteImport.update({
+  id: '/vizitka-onlayn',
+  path: '/vizitka-onlayn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route =
+  Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074RouteImport.update(
+    {
+      id: '/для-бьюти-мастеров',
+      path: '/для-бьюти-мастеров',
+      getParentRoute: () => rootRouteImport,
+    } as any,
+  )
+const Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route =
+  Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074RouteImport.update(
+    {
+      id: '/для-репетиторов',
+      path: '/для-репетиторов',
+      getParentRoute: () => rootRouteImport,
+    } as any,
+  )
+const SlugIndexRoute = SlugIndexRouteImport.update({
+  id: '/$slug/',
+  path: '/$slug/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLanguageAlgorithmsRoute = AdminLanguageAlgorithmsRouteImport.update({
+  id: '/admin/language-algorithms',
+  path: '/admin/language-algorithms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTranslationsRoute = AdminTranslationsRouteImport.update({
+  id: '/admin/translations',
+  path: '/admin/translations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlternativesIndexRoute = AlternativesIndexRouteImport.update({
+  id: '/alternatives/',
+  path: '/alternatives/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlternativesCompetitorRoute = AlternativesCompetitorRouteImport.update({
+  id: '/alternatives/$competitor',
+  path: '/alternatives/$competitor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/auth/',
+  path: '/auth/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollabCollabSlugRoute = CollabCollabSlugRouteImport.update({
+  id: '/collab/$collabSlug',
+  path: '/collab/$collabSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardActivityRoute = DashboardActivityRouteImport.update({
+  id: '/dashboard/activity',
+  path: '/dashboard/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardDevelopersRoute = DashboardDevelopersRouteImport.update({
+  id: '/dashboard/developers',
+  path: '/dashboard/developers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardFinanceRoute = DashboardFinanceRouteImport.update({
+  id: '/dashboard/finance',
+  path: '/dashboard/finance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardHomeRoute = DashboardHomeRouteImport.update({
+  id: '/dashboard/home',
+  path: '/dashboard/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardInsightsRoute = DashboardInsightsRouteImport.update({
+  id: '/dashboard/insights',
+  path: '/dashboard/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardLeadsRoute = DashboardLeadsRouteImport.update({
+  id: '/dashboard/leads',
+  path: '/dashboard/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardMonetizeRoute = DashboardMonetizeRouteImport.update({
+  id: '/dashboard/monetize',
+  path: '/dashboard/monetize',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardPagesRoute = DashboardPagesRouteImport.update({
+  id: '/dashboard/pages',
+  path: '/dashboard/pages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/dashboard/settings',
+  path: '/dashboard/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardSmartLinksRoute = DashboardSmartLinksRouteImport.update({
+  id: '/dashboard/smart-links',
+  path: '/dashboard/smart-links',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardTeamRoute = DashboardTeamRouteImport.update({
+  id: '/dashboard/team',
+  path: '/dashboard/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneAnalyticsRoute = DashboardZoneAnalyticsRouteImport.update({
+  id: '/dashboard/zone-analytics',
+  path: '/dashboard/zone-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneAutomationsRoute =
+  DashboardZoneAutomationsRouteImport.update({
+    id: '/dashboard/zone-automations',
+    path: '/dashboard/zone-automations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DashboardZoneCalendarRoute = DashboardZoneCalendarRouteImport.update({
+  id: '/dashboard/zone-calendar',
+  path: '/dashboard/zone-calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneContactsRoute = DashboardZoneContactsRouteImport.update({
+  id: '/dashboard/zone-contacts',
+  path: '/dashboard/zone-contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneDashboardRoute = DashboardZoneDashboardRouteImport.update({
+  id: '/dashboard/zone-dashboard',
+  path: '/dashboard/zone-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneDealsRoute = DashboardZoneDealsRouteImport.update({
+  id: '/dashboard/zone-deals',
+  path: '/dashboard/zone-deals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneDocumentsRoute = DashboardZoneDocumentsRouteImport.update({
+  id: '/dashboard/zone-documents',
+  path: '/dashboard/zone-documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneEventsRoute = DashboardZoneEventsRouteImport.update({
+  id: '/dashboard/zone-events',
+  path: '/dashboard/zone-events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneInboxRoute = DashboardZoneInboxRouteImport.update({
+  id: '/dashboard/zone-inbox',
+  path: '/dashboard/zone-inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneInvoicesRoute = DashboardZoneInvoicesRouteImport.update({
+  id: '/dashboard/zone-invoices',
+  path: '/dashboard/zone-invoices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneProductsRoute = DashboardZoneProductsRouteImport.update({
+  id: '/dashboard/zone-products',
+  path: '/dashboard/zone-products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneSettingsRoute = DashboardZoneSettingsRouteImport.update({
+  id: '/dashboard/zone-settings',
+  path: '/dashboard/zone-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardZoneTasksRoute = DashboardZoneTasksRouteImport.update({
+  id: '/dashboard/zone-tasks',
+  path: '/dashboard/zone-tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DlyaLandingSlugRoute = DlyaLandingSlugRouteImport.update({
+  id: '/dlya/$landingSlug',
+  path: '/dlya/$landingSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpertsIndexRoute = ExpertsIndexRouteImport.update({
+  id: '/experts/',
+  path: '/experts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForLandingSlugRoute = ForLandingSlugRouteImport.update({
+  id: '/for/$landingSlug',
+  path: '/for/$landingSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FromSlugRoute = FromSlugRouteImport.update({
+  id: '/from/$slug',
+  path: '/from/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoodsIdRoute = GoodsIdRouteImport.update({
+  id: '/goods/$id',
+  path: '/goods/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvitesTokenRoute = InvitesTokenRouteImport.update({
+  id: '/invites/$token',
+  path: '/invites/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinInviteCodeRoute = JoinInviteCodeRouteImport.update({
+  id: '/join/$inviteCode',
+  path: '/join/$inviteCode',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PCompressedRoute = PCompressedRouteImport.update({
+  id: '/p/$compressed',
+  path: '/p/$compressed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PurchaseTokenRoute = PurchaseTokenRouteImport.update({
+  id: '/purchase/$token',
+  path: '/purchase/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RCodeRoute = RCodeRouteImport.update({
+  id: '/r/$code',
+  path: '/r/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SSlugRoute = SSlugRouteImport.update({
+  id: '/s/$slug',
+  path: '/s/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamSlugRoute = TeamSlugRouteImport.update({
+  id: '/team/$slug',
+  path: '/team/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlugEventsEventIdRoute = SlugEventsEventIdRouteImport.update({
+  id: '/$slug/events/$eventId',
+  path: '/$slug/events/$eventId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlugPPagePathRoute = SlugPPagePathRouteImport.update({
+  id: '/$slug/p/$pagePath',
+  path: '/$slug/p/$pagePath',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlugServicesServiceSlugRoute = SlugServicesServiceSlugRouteImport.update({
+  id: '/$slug/services/$serviceSlug',
+  path: '/$slug/services/$serviceSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTemplatesIdRoute = AdminTemplatesIdRouteImport.update({
+  id: '/admin/templates/$id',
+  path: '/admin/templates/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTemplatesNewRoute = AdminTemplatesNewRouteImport.update({
+  id: '/admin/templates/new',
+  path: '/admin/templates/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingManageTokenRoute = BookingManageTokenRouteImport.update({
+  id: '/booking/manage/$token',
+  path: '/booking/manage/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardEventsIndexRoute = DashboardEventsIndexRouteImport.update({
+  id: '/dashboard/events/',
+  path: '/dashboard/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsCheckinTokenRoute = EventsCheckinTokenRouteImport.update({
+  id: '/events/checkin/$token',
+  path: '/events/checkin/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpertsTagIndexRoute = ExpertsTagIndexRouteImport.update({
+  id: '/experts/$tag/',
+  path: '/experts/$tag/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpertsTagCityRoute = ExpertsTagCityRouteImport.update({
+  id: '/experts/$tag/$city',
+  path: '/experts/$tag/$city',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpertsCityCityRoute = ExpertsCityCityRouteImport.update({
+  id: '/experts/city/$city',
+  path: '/experts/city/$city',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewRequestTokenRoute = ReviewRequestTokenRouteImport.update({
+  id: '/review/request/$token',
+  path: '/review/request/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardEventsEventIdIndexRoute =
+  DashboardEventsEventIdIndexRouteImport.update({
+    id: '/dashboard/events/$eventId/',
+    path: '/dashboard/events/$eventId/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DashboardEventsEventIdScannerRoute =
+  DashboardEventsEventIdScannerRouteImport.update({
+    id: '/dashboard/events/$eventId/scanner',
+    path: '/dashboard/events/$eventId/scanner',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/customers': typeof CustomersRoute
+  '/demo_nails': typeof Demo_nailsRoute
+  '/design-system': typeof DesignSystemRoute
+  '/en': typeof EnRoute
+  '/for-masters': typeof ForMastersRoute
+  '/gallery': typeof GalleryRoute
+  '/index': typeof Char91indexChar93Route
+  '/install': typeof InstallRoute
+  '/kk': typeof KkRoute
+  '/link-in-bio-ru': typeof LinkInBioRuRoute
+  '/multilink': typeof MultilinkRoute
+  '/payment-terms': typeof PaymentTermsRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/ru': typeof RuRoute
+  '/sayt-vizitka-dlya-uslug': typeof SaytVizitkaDlyaUslugRoute
+  '/seo-landing': typeof SeoLandingRoute
+  '/sitemap': typeof SitemapRoute
+  '/taplink-alternative': typeof TaplinkAlternativeRoute
+  '/terms': typeof TermsRoute
+  '/uz': typeof UzRoute
+  '/vizitka-onlayn': typeof VizitkaOnlaynRoute
+  '/для-бьюти-мастеров': typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
+  '/для-репетиторов': typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  '/admin/language-algorithms': typeof AdminLanguageAlgorithmsRoute
+  '/admin/translations': typeof AdminTranslationsRoute
+  '/alternatives/$competitor': typeof AlternativesCompetitorRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/collab/$collabSlug': typeof CollabCollabSlugRoute
+  '/dashboard/activity': typeof DashboardActivityRoute
+  '/dashboard/developers': typeof DashboardDevelopersRoute
+  '/dashboard/finance': typeof DashboardFinanceRoute
+  '/dashboard/home': typeof DashboardHomeRoute
+  '/dashboard/insights': typeof DashboardInsightsRoute
+  '/dashboard/leads': typeof DashboardLeadsRoute
+  '/dashboard/monetize': typeof DashboardMonetizeRoute
+  '/dashboard/pages': typeof DashboardPagesRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/smart-links': typeof DashboardSmartLinksRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/dashboard/zone-analytics': typeof DashboardZoneAnalyticsRoute
+  '/dashboard/zone-automations': typeof DashboardZoneAutomationsRoute
+  '/dashboard/zone-calendar': typeof DashboardZoneCalendarRoute
+  '/dashboard/zone-contacts': typeof DashboardZoneContactsRoute
+  '/dashboard/zone-dashboard': typeof DashboardZoneDashboardRoute
+  '/dashboard/zone-deals': typeof DashboardZoneDealsRoute
+  '/dashboard/zone-documents': typeof DashboardZoneDocumentsRoute
+  '/dashboard/zone-events': typeof DashboardZoneEventsRoute
+  '/dashboard/zone-inbox': typeof DashboardZoneInboxRoute
+  '/dashboard/zone-invoices': typeof DashboardZoneInvoicesRoute
+  '/dashboard/zone-products': typeof DashboardZoneProductsRoute
+  '/dashboard/zone-settings': typeof DashboardZoneSettingsRoute
+  '/dashboard/zone-tasks': typeof DashboardZoneTasksRoute
+  '/dlya/$landingSlug': typeof DlyaLandingSlugRoute
+  '/for/$landingSlug': typeof ForLandingSlugRoute
+  '/from/$slug': typeof FromSlugRoute
+  '/goods/$id': typeof GoodsIdRoute
+  '/invites/$token': typeof InvitesTokenRoute
+  '/join/$inviteCode': typeof JoinInviteCodeRoute
+  '/p/$compressed': typeof PCompressedRoute
+  '/purchase/$token': typeof PurchaseTokenRoute
+  '/r/$code': typeof RCodeRoute
+  '/s/$slug': typeof SSlugRoute
+  '/team/$slug': typeof TeamSlugRoute
+  '/$slug/': typeof SlugIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/alternatives/': typeof AlternativesIndexRoute
+  '/auth/': typeof AuthIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/experts/': typeof ExpertsIndexRoute
+  '/$slug/events/$eventId': typeof SlugEventsEventIdRoute
+  '/$slug/p/$pagePath': typeof SlugPPagePathRoute
+  '/$slug/services/$serviceSlug': typeof SlugServicesServiceSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/admin/templates/$id': typeof AdminTemplatesIdRoute
+  '/admin/templates/new': typeof AdminTemplatesNewRoute
+  '/booking/manage/$token': typeof BookingManageTokenRoute
+  '/events/checkin/$token': typeof EventsCheckinTokenRoute
+  '/experts/$tag/$city': typeof ExpertsTagCityRoute
+  '/experts/city/$city': typeof ExpertsCityCityRoute
+  '/review/request/$token': typeof ReviewRequestTokenRoute
+  '/dashboard/events/': typeof DashboardEventsIndexRoute
+  '/experts/$tag/': typeof ExpertsTagIndexRoute
+  '/dashboard/events/$eventId/scanner': typeof DashboardEventsEventIdScannerRoute
+  '/dashboard/events/$eventId/': typeof DashboardEventsEventIdIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/customers': typeof CustomersRoute
+  '/demo_nails': typeof Demo_nailsRoute
+  '/design-system': typeof DesignSystemRoute
+  '/en': typeof EnRoute
+  '/for-masters': typeof ForMastersRoute
+  '/gallery': typeof GalleryRoute
+  '/index': typeof Char91indexChar93Route
+  '/install': typeof InstallRoute
+  '/kk': typeof KkRoute
+  '/link-in-bio-ru': typeof LinkInBioRuRoute
+  '/multilink': typeof MultilinkRoute
+  '/payment-terms': typeof PaymentTermsRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/ru': typeof RuRoute
+  '/sayt-vizitka-dlya-uslug': typeof SaytVizitkaDlyaUslugRoute
+  '/seo-landing': typeof SeoLandingRoute
+  '/sitemap': typeof SitemapRoute
+  '/taplink-alternative': typeof TaplinkAlternativeRoute
+  '/terms': typeof TermsRoute
+  '/uz': typeof UzRoute
+  '/vizitka-onlayn': typeof VizitkaOnlaynRoute
+  '/для-бьюти-мастеров': typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
+  '/для-репетиторов': typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  '/admin/language-algorithms': typeof AdminLanguageAlgorithmsRoute
+  '/admin/translations': typeof AdminTranslationsRoute
+  '/alternatives/$competitor': typeof AlternativesCompetitorRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/collab/$collabSlug': typeof CollabCollabSlugRoute
+  '/dashboard/activity': typeof DashboardActivityRoute
+  '/dashboard/developers': typeof DashboardDevelopersRoute
+  '/dashboard/finance': typeof DashboardFinanceRoute
+  '/dashboard/home': typeof DashboardHomeRoute
+  '/dashboard/insights': typeof DashboardInsightsRoute
+  '/dashboard/leads': typeof DashboardLeadsRoute
+  '/dashboard/monetize': typeof DashboardMonetizeRoute
+  '/dashboard/pages': typeof DashboardPagesRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/smart-links': typeof DashboardSmartLinksRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/dashboard/zone-analytics': typeof DashboardZoneAnalyticsRoute
+  '/dashboard/zone-automations': typeof DashboardZoneAutomationsRoute
+  '/dashboard/zone-calendar': typeof DashboardZoneCalendarRoute
+  '/dashboard/zone-contacts': typeof DashboardZoneContactsRoute
+  '/dashboard/zone-dashboard': typeof DashboardZoneDashboardRoute
+  '/dashboard/zone-deals': typeof DashboardZoneDealsRoute
+  '/dashboard/zone-documents': typeof DashboardZoneDocumentsRoute
+  '/dashboard/zone-events': typeof DashboardZoneEventsRoute
+  '/dashboard/zone-inbox': typeof DashboardZoneInboxRoute
+  '/dashboard/zone-invoices': typeof DashboardZoneInvoicesRoute
+  '/dashboard/zone-products': typeof DashboardZoneProductsRoute
+  '/dashboard/zone-settings': typeof DashboardZoneSettingsRoute
+  '/dashboard/zone-tasks': typeof DashboardZoneTasksRoute
+  '/dlya/$landingSlug': typeof DlyaLandingSlugRoute
+  '/for/$landingSlug': typeof ForLandingSlugRoute
+  '/from/$slug': typeof FromSlugRoute
+  '/goods/$id': typeof GoodsIdRoute
+  '/invites/$token': typeof InvitesTokenRoute
+  '/join/$inviteCode': typeof JoinInviteCodeRoute
+  '/p/$compressed': typeof PCompressedRoute
+  '/purchase/$token': typeof PurchaseTokenRoute
+  '/r/$code': typeof RCodeRoute
+  '/s/$slug': typeof SSlugRoute
+  '/team/$slug': typeof TeamSlugRoute
+  '/$slug': typeof SlugIndexRoute
+  '/admin': typeof AdminIndexRoute
+  '/alternatives': typeof AlternativesIndexRoute
+  '/auth': typeof AuthIndexRoute
+  '/blog': typeof BlogIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/experts': typeof ExpertsIndexRoute
+  '/$slug/events/$eventId': typeof SlugEventsEventIdRoute
+  '/$slug/p/$pagePath': typeof SlugPPagePathRoute
+  '/$slug/services/$serviceSlug': typeof SlugServicesServiceSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/admin/templates/$id': typeof AdminTemplatesIdRoute
+  '/admin/templates/new': typeof AdminTemplatesNewRoute
+  '/booking/manage/$token': typeof BookingManageTokenRoute
+  '/events/checkin/$token': typeof EventsCheckinTokenRoute
+  '/experts/$tag/$city': typeof ExpertsTagCityRoute
+  '/experts/city/$city': typeof ExpertsCityCityRoute
+  '/review/request/$token': typeof ReviewRequestTokenRoute
+  '/dashboard/events': typeof DashboardEventsIndexRoute
+  '/experts/$tag': typeof ExpertsTagIndexRoute
+  '/dashboard/events/$eventId/scanner': typeof DashboardEventsEventIdScannerRoute
+  '/dashboard/events/$eventId': typeof DashboardEventsEventIdIndexRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/customers': typeof CustomersRoute
+  '/demo_nails': typeof Demo_nailsRoute
+  '/design-system': typeof DesignSystemRoute
+  '/en': typeof EnRoute
+  '/for-masters': typeof ForMastersRoute
+  '/gallery': typeof GalleryRoute
+  '/index': typeof Char91indexChar93Route
+  '/install': typeof InstallRoute
+  '/kk': typeof KkRoute
+  '/link-in-bio-ru': typeof LinkInBioRuRoute
+  '/multilink': typeof MultilinkRoute
+  '/payment-terms': typeof PaymentTermsRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/ru': typeof RuRoute
+  '/sayt-vizitka-dlya-uslug': typeof SaytVizitkaDlyaUslugRoute
+  '/seo-landing': typeof SeoLandingRoute
+  '/sitemap': typeof SitemapRoute
+  '/taplink-alternative': typeof TaplinkAlternativeRoute
+  '/terms': typeof TermsRoute
+  '/uz': typeof UzRoute
+  '/vizitka-onlayn': typeof VizitkaOnlaynRoute
+  '/для-бьюти-мастеров': typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
+  '/для-репетиторов': typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  '/admin/language-algorithms': typeof AdminLanguageAlgorithmsRoute
+  '/admin/translations': typeof AdminTranslationsRoute
+  '/alternatives/$competitor': typeof AlternativesCompetitorRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/collab/$collabSlug': typeof CollabCollabSlugRoute
+  '/dashboard/activity': typeof DashboardActivityRoute
+  '/dashboard/developers': typeof DashboardDevelopersRoute
+  '/dashboard/finance': typeof DashboardFinanceRoute
+  '/dashboard/home': typeof DashboardHomeRoute
+  '/dashboard/insights': typeof DashboardInsightsRoute
+  '/dashboard/leads': typeof DashboardLeadsRoute
+  '/dashboard/monetize': typeof DashboardMonetizeRoute
+  '/dashboard/pages': typeof DashboardPagesRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/smart-links': typeof DashboardSmartLinksRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/dashboard/zone-analytics': typeof DashboardZoneAnalyticsRoute
+  '/dashboard/zone-automations': typeof DashboardZoneAutomationsRoute
+  '/dashboard/zone-calendar': typeof DashboardZoneCalendarRoute
+  '/dashboard/zone-contacts': typeof DashboardZoneContactsRoute
+  '/dashboard/zone-dashboard': typeof DashboardZoneDashboardRoute
+  '/dashboard/zone-deals': typeof DashboardZoneDealsRoute
+  '/dashboard/zone-documents': typeof DashboardZoneDocumentsRoute
+  '/dashboard/zone-events': typeof DashboardZoneEventsRoute
+  '/dashboard/zone-inbox': typeof DashboardZoneInboxRoute
+  '/dashboard/zone-invoices': typeof DashboardZoneInvoicesRoute
+  '/dashboard/zone-products': typeof DashboardZoneProductsRoute
+  '/dashboard/zone-settings': typeof DashboardZoneSettingsRoute
+  '/dashboard/zone-tasks': typeof DashboardZoneTasksRoute
+  '/dlya/$landingSlug': typeof DlyaLandingSlugRoute
+  '/for/$landingSlug': typeof ForLandingSlugRoute
+  '/from/$slug': typeof FromSlugRoute
+  '/goods/$id': typeof GoodsIdRoute
+  '/invites/$token': typeof InvitesTokenRoute
+  '/join/$inviteCode': typeof JoinInviteCodeRoute
+  '/p/$compressed': typeof PCompressedRoute
+  '/purchase/$token': typeof PurchaseTokenRoute
+  '/r/$code': typeof RCodeRoute
+  '/s/$slug': typeof SSlugRoute
+  '/team/$slug': typeof TeamSlugRoute
+  '/$slug/': typeof SlugIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/alternatives/': typeof AlternativesIndexRoute
+  '/auth/': typeof AuthIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/experts/': typeof ExpertsIndexRoute
+  '/$slug/events/$eventId': typeof SlugEventsEventIdRoute
+  '/$slug/p/$pagePath': typeof SlugPPagePathRoute
+  '/$slug/services/$serviceSlug': typeof SlugServicesServiceSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/admin/templates/$id': typeof AdminTemplatesIdRoute
+  '/admin/templates/new': typeof AdminTemplatesNewRoute
+  '/booking/manage/$token': typeof BookingManageTokenRoute
+  '/events/checkin/$token': typeof EventsCheckinTokenRoute
+  '/experts/$tag/$city': typeof ExpertsTagCityRoute
+  '/experts/city/$city': typeof ExpertsCityCityRoute
+  '/review/request/$token': typeof ReviewRequestTokenRoute
+  '/dashboard/events/': typeof DashboardEventsIndexRoute
+  '/experts/$tag/': typeof ExpertsTagIndexRoute
+  '/dashboard/events/$eventId/scanner': typeof DashboardEventsEventIdScannerRoute
+  '/dashboard/events/$eventId/': typeof DashboardEventsEventIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths:
+    | '/'
+    | '/customers'
+    | '/demo_nails'
+    | '/design-system'
+    | '/en'
+    | '/for-masters'
+    | '/gallery'
+    | '/index'
+    | '/install'
+    | '/kk'
+    | '/link-in-bio-ru'
+    | '/multilink'
+    | '/payment-terms'
+    | '/pricing'
+    | '/privacy'
+    | '/ru'
+    | '/sayt-vizitka-dlya-uslug'
+    | '/seo-landing'
+    | '/sitemap'
+    | '/taplink-alternative'
+    | '/terms'
+    | '/uz'
+    | '/vizitka-onlayn'
+    | '/для-бьюти-мастеров'
+    | '/для-репетиторов'
+    | '/admin/language-algorithms'
+    | '/admin/translations'
+    | '/alternatives/$competitor'
+    | '/auth/callback'
+    | '/blog/$slug'
+    | '/collab/$collabSlug'
+    | '/dashboard/activity'
+    | '/dashboard/developers'
+    | '/dashboard/finance'
+    | '/dashboard/home'
+    | '/dashboard/insights'
+    | '/dashboard/leads'
+    | '/dashboard/monetize'
+    | '/dashboard/pages'
+    | '/dashboard/settings'
+    | '/dashboard/smart-links'
+    | '/dashboard/team'
+    | '/dashboard/zone-analytics'
+    | '/dashboard/zone-automations'
+    | '/dashboard/zone-calendar'
+    | '/dashboard/zone-contacts'
+    | '/dashboard/zone-dashboard'
+    | '/dashboard/zone-deals'
+    | '/dashboard/zone-documents'
+    | '/dashboard/zone-events'
+    | '/dashboard/zone-inbox'
+    | '/dashboard/zone-invoices'
+    | '/dashboard/zone-products'
+    | '/dashboard/zone-settings'
+    | '/dashboard/zone-tasks'
+    | '/dlya/$landingSlug'
+    | '/for/$landingSlug'
+    | '/from/$slug'
+    | '/goods/$id'
+    | '/invites/$token'
+    | '/join/$inviteCode'
+    | '/p/$compressed'
+    | '/purchase/$token'
+    | '/r/$code'
+    | '/s/$slug'
+    | '/team/$slug'
+    | '/$slug/'
+    | '/admin/'
+    | '/alternatives/'
+    | '/auth/'
+    | '/blog/'
+    | '/dashboard/'
+    | '/experts/'
+    | '/$slug/events/$eventId'
+    | '/$slug/p/$pagePath'
+    | '/$slug/services/$serviceSlug'
+    | '/.lovable/oauth/consent'
+    | '/admin/templates/$id'
+    | '/admin/templates/new'
+    | '/booking/manage/$token'
+    | '/events/checkin/$token'
+    | '/experts/$tag/$city'
+    | '/experts/city/$city'
+    | '/review/request/$token'
+    | '/dashboard/events/'
+    | '/experts/$tag/'
+    | '/dashboard/events/$eventId/scanner'
+    | '/dashboard/events/$eventId/'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to:
+    | '/'
+    | '/customers'
+    | '/demo_nails'
+    | '/design-system'
+    | '/en'
+    | '/for-masters'
+    | '/gallery'
+    | '/index'
+    | '/install'
+    | '/kk'
+    | '/link-in-bio-ru'
+    | '/multilink'
+    | '/payment-terms'
+    | '/pricing'
+    | '/privacy'
+    | '/ru'
+    | '/sayt-vizitka-dlya-uslug'
+    | '/seo-landing'
+    | '/sitemap'
+    | '/taplink-alternative'
+    | '/terms'
+    | '/uz'
+    | '/vizitka-onlayn'
+    | '/для-бьюти-мастеров'
+    | '/для-репетиторов'
+    | '/admin/language-algorithms'
+    | '/admin/translations'
+    | '/alternatives/$competitor'
+    | '/auth/callback'
+    | '/blog/$slug'
+    | '/collab/$collabSlug'
+    | '/dashboard/activity'
+    | '/dashboard/developers'
+    | '/dashboard/finance'
+    | '/dashboard/home'
+    | '/dashboard/insights'
+    | '/dashboard/leads'
+    | '/dashboard/monetize'
+    | '/dashboard/pages'
+    | '/dashboard/settings'
+    | '/dashboard/smart-links'
+    | '/dashboard/team'
+    | '/dashboard/zone-analytics'
+    | '/dashboard/zone-automations'
+    | '/dashboard/zone-calendar'
+    | '/dashboard/zone-contacts'
+    | '/dashboard/zone-dashboard'
+    | '/dashboard/zone-deals'
+    | '/dashboard/zone-documents'
+    | '/dashboard/zone-events'
+    | '/dashboard/zone-inbox'
+    | '/dashboard/zone-invoices'
+    | '/dashboard/zone-products'
+    | '/dashboard/zone-settings'
+    | '/dashboard/zone-tasks'
+    | '/dlya/$landingSlug'
+    | '/for/$landingSlug'
+    | '/from/$slug'
+    | '/goods/$id'
+    | '/invites/$token'
+    | '/join/$inviteCode'
+    | '/p/$compressed'
+    | '/purchase/$token'
+    | '/r/$code'
+    | '/s/$slug'
+    | '/team/$slug'
+    | '/$slug'
+    | '/admin'
+    | '/alternatives'
+    | '/auth'
+    | '/blog'
+    | '/dashboard'
+    | '/experts'
+    | '/$slug/events/$eventId'
+    | '/$slug/p/$pagePath'
+    | '/$slug/services/$serviceSlug'
+    | '/.lovable/oauth/consent'
+    | '/admin/templates/$id'
+    | '/admin/templates/new'
+    | '/booking/manage/$token'
+    | '/events/checkin/$token'
+    | '/experts/$tag/$city'
+    | '/experts/city/$city'
+    | '/review/request/$token'
+    | '/dashboard/events'
+    | '/experts/$tag'
+    | '/dashboard/events/$eventId/scanner'
+    | '/dashboard/events/$eventId'
+  id:
+    | '__root__'
+    | '/'
+    | '/customers'
+    | '/demo_nails'
+    | '/design-system'
+    | '/en'
+    | '/for-masters'
+    | '/gallery'
+    | '/index'
+    | '/install'
+    | '/kk'
+    | '/link-in-bio-ru'
+    | '/multilink'
+    | '/payment-terms'
+    | '/pricing'
+    | '/privacy'
+    | '/ru'
+    | '/sayt-vizitka-dlya-uslug'
+    | '/seo-landing'
+    | '/sitemap'
+    | '/taplink-alternative'
+    | '/terms'
+    | '/uz'
+    | '/vizitka-onlayn'
+    | '/для-бьюти-мастеров'
+    | '/для-репетиторов'
+    | '/admin/language-algorithms'
+    | '/admin/translations'
+    | '/alternatives/$competitor'
+    | '/auth/callback'
+    | '/blog/$slug'
+    | '/collab/$collabSlug'
+    | '/dashboard/activity'
+    | '/dashboard/developers'
+    | '/dashboard/finance'
+    | '/dashboard/home'
+    | '/dashboard/insights'
+    | '/dashboard/leads'
+    | '/dashboard/monetize'
+    | '/dashboard/pages'
+    | '/dashboard/settings'
+    | '/dashboard/smart-links'
+    | '/dashboard/team'
+    | '/dashboard/zone-analytics'
+    | '/dashboard/zone-automations'
+    | '/dashboard/zone-calendar'
+    | '/dashboard/zone-contacts'
+    | '/dashboard/zone-dashboard'
+    | '/dashboard/zone-deals'
+    | '/dashboard/zone-documents'
+    | '/dashboard/zone-events'
+    | '/dashboard/zone-inbox'
+    | '/dashboard/zone-invoices'
+    | '/dashboard/zone-products'
+    | '/dashboard/zone-settings'
+    | '/dashboard/zone-tasks'
+    | '/dlya/$landingSlug'
+    | '/for/$landingSlug'
+    | '/from/$slug'
+    | '/goods/$id'
+    | '/invites/$token'
+    | '/join/$inviteCode'
+    | '/p/$compressed'
+    | '/purchase/$token'
+    | '/r/$code'
+    | '/s/$slug'
+    | '/team/$slug'
+    | '/$slug/'
+    | '/admin/'
+    | '/alternatives/'
+    | '/auth/'
+    | '/blog/'
+    | '/dashboard/'
+    | '/experts/'
+    | '/$slug/events/$eventId'
+    | '/$slug/p/$pagePath'
+    | '/$slug/services/$serviceSlug'
+    | '/.lovable/oauth/consent'
+    | '/admin/templates/$id'
+    | '/admin/templates/new'
+    | '/booking/manage/$token'
+    | '/events/checkin/$token'
+    | '/experts/$tag/$city'
+    | '/experts/city/$city'
+    | '/review/request/$token'
+    | '/dashboard/events/'
+    | '/experts/$tag/'
+    | '/dashboard/events/$eventId/scanner'
+    | '/dashboard/events/$eventId/'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  CustomersRoute: typeof CustomersRoute
+  Demo_nailsRoute: typeof Demo_nailsRoute
+  DesignSystemRoute: typeof DesignSystemRoute
+  EnRoute: typeof EnRoute
+  ForMastersRoute: typeof ForMastersRoute
+  GalleryRoute: typeof GalleryRoute
+  Char91indexChar93Route: typeof Char91indexChar93Route
+  InstallRoute: typeof InstallRoute
+  KkRoute: typeof KkRoute
+  LinkInBioRuRoute: typeof LinkInBioRuRoute
+  MultilinkRoute: typeof MultilinkRoute
+  PaymentTermsRoute: typeof PaymentTermsRoute
+  PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
+  RuRoute: typeof RuRoute
+  SaytVizitkaDlyaUslugRoute: typeof SaytVizitkaDlyaUslugRoute
+  SeoLandingRoute: typeof SeoLandingRoute
+  SitemapRoute: typeof SitemapRoute
+  TaplinkAlternativeRoute: typeof TaplinkAlternativeRoute
+  TermsRoute: typeof TermsRoute
+  UzRoute: typeof UzRoute
+  VizitkaOnlaynRoute: typeof VizitkaOnlaynRoute
+  Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route: typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
+  Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route: typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  AdminLanguageAlgorithmsRoute: typeof AdminLanguageAlgorithmsRoute
+  AdminTranslationsRoute: typeof AdminTranslationsRoute
+  AlternativesCompetitorRoute: typeof AlternativesCompetitorRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  CollabCollabSlugRoute: typeof CollabCollabSlugRoute
+  DashboardActivityRoute: typeof DashboardActivityRoute
+  DashboardDevelopersRoute: typeof DashboardDevelopersRoute
+  DashboardFinanceRoute: typeof DashboardFinanceRoute
+  DashboardHomeRoute: typeof DashboardHomeRoute
+  DashboardInsightsRoute: typeof DashboardInsightsRoute
+  DashboardLeadsRoute: typeof DashboardLeadsRoute
+  DashboardMonetizeRoute: typeof DashboardMonetizeRoute
+  DashboardPagesRoute: typeof DashboardPagesRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardSmartLinksRoute: typeof DashboardSmartLinksRoute
+  DashboardTeamRoute: typeof DashboardTeamRoute
+  DashboardZoneAnalyticsRoute: typeof DashboardZoneAnalyticsRoute
+  DashboardZoneAutomationsRoute: typeof DashboardZoneAutomationsRoute
+  DashboardZoneCalendarRoute: typeof DashboardZoneCalendarRoute
+  DashboardZoneContactsRoute: typeof DashboardZoneContactsRoute
+  DashboardZoneDashboardRoute: typeof DashboardZoneDashboardRoute
+  DashboardZoneDealsRoute: typeof DashboardZoneDealsRoute
+  DashboardZoneDocumentsRoute: typeof DashboardZoneDocumentsRoute
+  DashboardZoneEventsRoute: typeof DashboardZoneEventsRoute
+  DashboardZoneInboxRoute: typeof DashboardZoneInboxRoute
+  DashboardZoneInvoicesRoute: typeof DashboardZoneInvoicesRoute
+  DashboardZoneProductsRoute: typeof DashboardZoneProductsRoute
+  DashboardZoneSettingsRoute: typeof DashboardZoneSettingsRoute
+  DashboardZoneTasksRoute: typeof DashboardZoneTasksRoute
+  DlyaLandingSlugRoute: typeof DlyaLandingSlugRoute
+  ForLandingSlugRoute: typeof ForLandingSlugRoute
+  FromSlugRoute: typeof FromSlugRoute
+  GoodsIdRoute: typeof GoodsIdRoute
+  InvitesTokenRoute: typeof InvitesTokenRoute
+  JoinInviteCodeRoute: typeof JoinInviteCodeRoute
+  PCompressedRoute: typeof PCompressedRoute
+  PurchaseTokenRoute: typeof PurchaseTokenRoute
+  RCodeRoute: typeof RCodeRoute
+  SSlugRoute: typeof SSlugRoute
+  TeamSlugRoute: typeof TeamSlugRoute
+  SlugIndexRoute: typeof SlugIndexRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AlternativesIndexRoute: typeof AlternativesIndexRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  ExpertsIndexRoute: typeof ExpertsIndexRoute
+  SlugEventsEventIdRoute: typeof SlugEventsEventIdRoute
+  SlugPPagePathRoute: typeof SlugPPagePathRoute
+  SlugServicesServiceSlugRoute: typeof SlugServicesServiceSlugRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  AdminTemplatesIdRoute: typeof AdminTemplatesIdRoute
+  AdminTemplatesNewRoute: typeof AdminTemplatesNewRoute
+  BookingManageTokenRoute: typeof BookingManageTokenRoute
+  EventsCheckinTokenRoute: typeof EventsCheckinTokenRoute
+  ExpertsTagCityRoute: typeof ExpertsTagCityRoute
+  ExpertsCityCityRoute: typeof ExpertsCityCityRoute
+  ReviewRequestTokenRoute: typeof ReviewRequestTokenRoute
+  DashboardEventsIndexRoute: typeof DashboardEventsIndexRoute
+  ExpertsTagIndexRoute: typeof ExpertsTagIndexRoute
+  DashboardEventsEventIdScannerRoute: typeof DashboardEventsEventIdScannerRoute
+  DashboardEventsEventIdIndexRoute: typeof DashboardEventsEventIdIndexRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/index': {
+      id: '/index'
+      path: '/index'
+      fullPath: '/index'
+      preLoaderRoute: typeof Char91indexChar93RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo_nails': {
+      id: '/demo_nails'
+      path: '/demo_nails'
+      fullPath: '/demo_nails'
+      preLoaderRoute: typeof Demo_nailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/design-system': {
+      id: '/design-system'
+      path: '/design-system'
+      fullPath: '/design-system'
+      preLoaderRoute: typeof DesignSystemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en': {
+      id: '/en'
+      path: '/en'
+      fullPath: '/en'
+      preLoaderRoute: typeof EnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-masters': {
+      id: '/for-masters'
+      path: '/for-masters'
+      fullPath: '/for-masters'
+      preLoaderRoute: typeof ForMastersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/install': {
+      id: '/install'
+      path: '/install'
+      fullPath: '/install'
+      preLoaderRoute: typeof InstallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kk': {
+      id: '/kk'
+      path: '/kk'
+      fullPath: '/kk'
+      preLoaderRoute: typeof KkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/link-in-bio-ru': {
+      id: '/link-in-bio-ru'
+      path: '/link-in-bio-ru'
+      fullPath: '/link-in-bio-ru'
+      preLoaderRoute: typeof LinkInBioRuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/multilink': {
+      id: '/multilink'
+      path: '/multilink'
+      fullPath: '/multilink'
+      preLoaderRoute: typeof MultilinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-terms': {
+      id: '/payment-terms'
+      path: '/payment-terms'
+      fullPath: '/payment-terms'
+      preLoaderRoute: typeof PaymentTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ru': {
+      id: '/ru'
+      path: '/ru'
+      fullPath: '/ru'
+      preLoaderRoute: typeof RuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sayt-vizitka-dlya-uslug': {
+      id: '/sayt-vizitka-dlya-uslug'
+      path: '/sayt-vizitka-dlya-uslug'
+      fullPath: '/sayt-vizitka-dlya-uslug'
+      preLoaderRoute: typeof SaytVizitkaDlyaUslugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seo-landing': {
+      id: '/seo-landing'
+      path: '/seo-landing'
+      fullPath: '/seo-landing'
+      preLoaderRoute: typeof SeoLandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/taplink-alternative': {
+      id: '/taplink-alternative'
+      path: '/taplink-alternative'
+      fullPath: '/taplink-alternative'
+      preLoaderRoute: typeof TaplinkAlternativeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/uz': {
+      id: '/uz'
+      path: '/uz'
+      fullPath: '/uz'
+      preLoaderRoute: typeof UzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vizitka-onlayn': {
+      id: '/vizitka-onlayn'
+      path: '/vizitka-onlayn'
+      fullPath: '/vizitka-onlayn'
+      preLoaderRoute: typeof VizitkaOnlaynRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/для-бьюти-мастеров': {
+      id: '/для-бьюти-мастеров'
+      path: '/для-бьюти-мастеров'
+      fullPath: '/для-бьюти-мастеров'
+      preLoaderRoute: typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/для-репетиторов': {
+      id: '/для-репетиторов'
+      path: '/для-репетиторов'
+      fullPath: '/для-репетиторов'
+      preLoaderRoute: typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug/': {
+      id: '/$slug/'
+      path: '/$slug'
+      fullPath: '/$slug/'
+      preLoaderRoute: typeof SlugIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/language-algorithms': {
+      id: '/admin/language-algorithms'
+      path: '/admin/language-algorithms'
+      fullPath: '/admin/language-algorithms'
+      preLoaderRoute: typeof AdminLanguageAlgorithmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/translations': {
+      id: '/admin/translations'
+      path: '/admin/translations'
+      fullPath: '/admin/translations'
+      preLoaderRoute: typeof AdminTranslationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alternatives/': {
+      id: '/alternatives/'
+      path: '/alternatives'
+      fullPath: '/alternatives/'
+      preLoaderRoute: typeof AlternativesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alternatives/$competitor': {
+      id: '/alternatives/$competitor'
+      path: '/alternatives/$competitor'
+      fullPath: '/alternatives/$competitor'
+      preLoaderRoute: typeof AlternativesCompetitorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collab/$collabSlug': {
+      id: '/collab/$collabSlug'
+      path: '/collab/$collabSlug'
+      fullPath: '/collab/$collabSlug'
+      preLoaderRoute: typeof CollabCollabSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/activity': {
+      id: '/dashboard/activity'
+      path: '/dashboard/activity'
+      fullPath: '/dashboard/activity'
+      preLoaderRoute: typeof DashboardActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/developers': {
+      id: '/dashboard/developers'
+      path: '/dashboard/developers'
+      fullPath: '/dashboard/developers'
+      preLoaderRoute: typeof DashboardDevelopersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/finance': {
+      id: '/dashboard/finance'
+      path: '/dashboard/finance'
+      fullPath: '/dashboard/finance'
+      preLoaderRoute: typeof DashboardFinanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/home': {
+      id: '/dashboard/home'
+      path: '/dashboard/home'
+      fullPath: '/dashboard/home'
+      preLoaderRoute: typeof DashboardHomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/insights': {
+      id: '/dashboard/insights'
+      path: '/dashboard/insights'
+      fullPath: '/dashboard/insights'
+      preLoaderRoute: typeof DashboardInsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/leads': {
+      id: '/dashboard/leads'
+      path: '/dashboard/leads'
+      fullPath: '/dashboard/leads'
+      preLoaderRoute: typeof DashboardLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/monetize': {
+      id: '/dashboard/monetize'
+      path: '/dashboard/monetize'
+      fullPath: '/dashboard/monetize'
+      preLoaderRoute: typeof DashboardMonetizeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/pages': {
+      id: '/dashboard/pages'
+      path: '/dashboard/pages'
+      fullPath: '/dashboard/pages'
+      preLoaderRoute: typeof DashboardPagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/dashboard/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/smart-links': {
+      id: '/dashboard/smart-links'
+      path: '/dashboard/smart-links'
+      fullPath: '/dashboard/smart-links'
+      preLoaderRoute: typeof DashboardSmartLinksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/team': {
+      id: '/dashboard/team'
+      path: '/dashboard/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-analytics': {
+      id: '/dashboard/zone-analytics'
+      path: '/dashboard/zone-analytics'
+      fullPath: '/dashboard/zone-analytics'
+      preLoaderRoute: typeof DashboardZoneAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-automations': {
+      id: '/dashboard/zone-automations'
+      path: '/dashboard/zone-automations'
+      fullPath: '/dashboard/zone-automations'
+      preLoaderRoute: typeof DashboardZoneAutomationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-calendar': {
+      id: '/dashboard/zone-calendar'
+      path: '/dashboard/zone-calendar'
+      fullPath: '/dashboard/zone-calendar'
+      preLoaderRoute: typeof DashboardZoneCalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-contacts': {
+      id: '/dashboard/zone-contacts'
+      path: '/dashboard/zone-contacts'
+      fullPath: '/dashboard/zone-contacts'
+      preLoaderRoute: typeof DashboardZoneContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-dashboard': {
+      id: '/dashboard/zone-dashboard'
+      path: '/dashboard/zone-dashboard'
+      fullPath: '/dashboard/zone-dashboard'
+      preLoaderRoute: typeof DashboardZoneDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-deals': {
+      id: '/dashboard/zone-deals'
+      path: '/dashboard/zone-deals'
+      fullPath: '/dashboard/zone-deals'
+      preLoaderRoute: typeof DashboardZoneDealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-documents': {
+      id: '/dashboard/zone-documents'
+      path: '/dashboard/zone-documents'
+      fullPath: '/dashboard/zone-documents'
+      preLoaderRoute: typeof DashboardZoneDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-events': {
+      id: '/dashboard/zone-events'
+      path: '/dashboard/zone-events'
+      fullPath: '/dashboard/zone-events'
+      preLoaderRoute: typeof DashboardZoneEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-inbox': {
+      id: '/dashboard/zone-inbox'
+      path: '/dashboard/zone-inbox'
+      fullPath: '/dashboard/zone-inbox'
+      preLoaderRoute: typeof DashboardZoneInboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-invoices': {
+      id: '/dashboard/zone-invoices'
+      path: '/dashboard/zone-invoices'
+      fullPath: '/dashboard/zone-invoices'
+      preLoaderRoute: typeof DashboardZoneInvoicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-products': {
+      id: '/dashboard/zone-products'
+      path: '/dashboard/zone-products'
+      fullPath: '/dashboard/zone-products'
+      preLoaderRoute: typeof DashboardZoneProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-settings': {
+      id: '/dashboard/zone-settings'
+      path: '/dashboard/zone-settings'
+      fullPath: '/dashboard/zone-settings'
+      preLoaderRoute: typeof DashboardZoneSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/zone-tasks': {
+      id: '/dashboard/zone-tasks'
+      path: '/dashboard/zone-tasks'
+      fullPath: '/dashboard/zone-tasks'
+      preLoaderRoute: typeof DashboardZoneTasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dlya/$landingSlug': {
+      id: '/dlya/$landingSlug'
+      path: '/dlya/$landingSlug'
+      fullPath: '/dlya/$landingSlug'
+      preLoaderRoute: typeof DlyaLandingSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experts/': {
+      id: '/experts/'
+      path: '/experts'
+      fullPath: '/experts/'
+      preLoaderRoute: typeof ExpertsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for/$landingSlug': {
+      id: '/for/$landingSlug'
+      path: '/for/$landingSlug'
+      fullPath: '/for/$landingSlug'
+      preLoaderRoute: typeof ForLandingSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/from/$slug': {
+      id: '/from/$slug'
+      path: '/from/$slug'
+      fullPath: '/from/$slug'
+      preLoaderRoute: typeof FromSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goods/$id': {
+      id: '/goods/$id'
+      path: '/goods/$id'
+      fullPath: '/goods/$id'
+      preLoaderRoute: typeof GoodsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invites/$token': {
+      id: '/invites/$token'
+      path: '/invites/$token'
+      fullPath: '/invites/$token'
+      preLoaderRoute: typeof InvitesTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join/$inviteCode': {
+      id: '/join/$inviteCode'
+      path: '/join/$inviteCode'
+      fullPath: '/join/$inviteCode'
+      preLoaderRoute: typeof JoinInviteCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/p/$compressed': {
+      id: '/p/$compressed'
+      path: '/p/$compressed'
+      fullPath: '/p/$compressed'
+      preLoaderRoute: typeof PCompressedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/purchase/$token': {
+      id: '/purchase/$token'
+      path: '/purchase/$token'
+      fullPath: '/purchase/$token'
+      preLoaderRoute: typeof PurchaseTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/r/$code': {
+      id: '/r/$code'
+      path: '/r/$code'
+      fullPath: '/r/$code'
+      preLoaderRoute: typeof RCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$slug': {
+      id: '/s/$slug'
+      path: '/s/$slug'
+      fullPath: '/s/$slug'
+      preLoaderRoute: typeof SSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team/$slug': {
+      id: '/team/$slug'
+      path: '/team/$slug'
+      fullPath: '/team/$slug'
+      preLoaderRoute: typeof TeamSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug/events/$eventId': {
+      id: '/$slug/events/$eventId'
+      path: '/$slug/events/$eventId'
+      fullPath: '/$slug/events/$eventId'
+      preLoaderRoute: typeof SlugEventsEventIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug/p/$pagePath': {
+      id: '/$slug/p/$pagePath'
+      path: '/$slug/p/$pagePath'
+      fullPath: '/$slug/p/$pagePath'
+      preLoaderRoute: typeof SlugPPagePathRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug/services/$serviceSlug': {
+      id: '/$slug/services/$serviceSlug'
+      path: '/$slug/services/$serviceSlug'
+      fullPath: '/$slug/services/$serviceSlug'
+      preLoaderRoute: typeof SlugServicesServiceSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/templates/$id': {
+      id: '/admin/templates/$id'
+      path: '/admin/templates/$id'
+      fullPath: '/admin/templates/$id'
+      preLoaderRoute: typeof AdminTemplatesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/templates/new': {
+      id: '/admin/templates/new'
+      path: '/admin/templates/new'
+      fullPath: '/admin/templates/new'
+      preLoaderRoute: typeof AdminTemplatesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking/manage/$token': {
+      id: '/booking/manage/$token'
+      path: '/booking/manage/$token'
+      fullPath: '/booking/manage/$token'
+      preLoaderRoute: typeof BookingManageTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/events/': {
+      id: '/dashboard/events/'
+      path: '/dashboard/events'
+      fullPath: '/dashboard/events/'
+      preLoaderRoute: typeof DashboardEventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/checkin/$token': {
+      id: '/events/checkin/$token'
+      path: '/events/checkin/$token'
+      fullPath: '/events/checkin/$token'
+      preLoaderRoute: typeof EventsCheckinTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experts/$tag/': {
+      id: '/experts/$tag/'
+      path: '/experts/$tag'
+      fullPath: '/experts/$tag/'
+      preLoaderRoute: typeof ExpertsTagIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experts/$tag/$city': {
+      id: '/experts/$tag/$city'
+      path: '/experts/$tag/$city'
+      fullPath: '/experts/$tag/$city'
+      preLoaderRoute: typeof ExpertsTagCityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experts/city/$city': {
+      id: '/experts/city/$city'
+      path: '/experts/city/$city'
+      fullPath: '/experts/city/$city'
+      preLoaderRoute: typeof ExpertsCityCityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review/request/$token': {
+      id: '/review/request/$token'
+      path: '/review/request/$token'
+      fullPath: '/review/request/$token'
+      preLoaderRoute: typeof ReviewRequestTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/events/$eventId/': {
+      id: '/dashboard/events/$eventId/'
+      path: '/dashboard/events/$eventId'
+      fullPath: '/dashboard/events/$eventId/'
+      preLoaderRoute: typeof DashboardEventsEventIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/events/$eventId/scanner': {
+      id: '/dashboard/events/$eventId/scanner'
+      path: '/dashboard/events/$eventId/scanner'
+      fullPath: '/dashboard/events/$eventId/scanner'
+      preLoaderRoute: typeof DashboardEventsEventIdScannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  CustomersRoute: CustomersRoute,
+  Demo_nailsRoute: Demo_nailsRoute,
+  DesignSystemRoute: DesignSystemRoute,
+  EnRoute: EnRoute,
+  ForMastersRoute: ForMastersRoute,
+  GalleryRoute: GalleryRoute,
+  Char91indexChar93Route: Char91indexChar93Route,
+  InstallRoute: InstallRoute,
+  KkRoute: KkRoute,
+  LinkInBioRuRoute: LinkInBioRuRoute,
+  MultilinkRoute: MultilinkRoute,
+  PaymentTermsRoute: PaymentTermsRoute,
+  PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
+  RuRoute: RuRoute,
+  SaytVizitkaDlyaUslugRoute: SaytVizitkaDlyaUslugRoute,
+  SeoLandingRoute: SeoLandingRoute,
+  SitemapRoute: SitemapRoute,
+  TaplinkAlternativeRoute: TaplinkAlternativeRoute,
+  TermsRoute: TermsRoute,
+  UzRoute: UzRoute,
+  VizitkaOnlaynRoute: VizitkaOnlaynRoute,
+  Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route:
+    Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route,
+  Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route:
+    Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route,
+  AdminLanguageAlgorithmsRoute: AdminLanguageAlgorithmsRoute,
+  AdminTranslationsRoute: AdminTranslationsRoute,
+  AlternativesCompetitorRoute: AlternativesCompetitorRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  CollabCollabSlugRoute: CollabCollabSlugRoute,
+  DashboardActivityRoute: DashboardActivityRoute,
+  DashboardDevelopersRoute: DashboardDevelopersRoute,
+  DashboardFinanceRoute: DashboardFinanceRoute,
+  DashboardHomeRoute: DashboardHomeRoute,
+  DashboardInsightsRoute: DashboardInsightsRoute,
+  DashboardLeadsRoute: DashboardLeadsRoute,
+  DashboardMonetizeRoute: DashboardMonetizeRoute,
+  DashboardPagesRoute: DashboardPagesRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardSmartLinksRoute: DashboardSmartLinksRoute,
+  DashboardTeamRoute: DashboardTeamRoute,
+  DashboardZoneAnalyticsRoute: DashboardZoneAnalyticsRoute,
+  DashboardZoneAutomationsRoute: DashboardZoneAutomationsRoute,
+  DashboardZoneCalendarRoute: DashboardZoneCalendarRoute,
+  DashboardZoneContactsRoute: DashboardZoneContactsRoute,
+  DashboardZoneDashboardRoute: DashboardZoneDashboardRoute,
+  DashboardZoneDealsRoute: DashboardZoneDealsRoute,
+  DashboardZoneDocumentsRoute: DashboardZoneDocumentsRoute,
+  DashboardZoneEventsRoute: DashboardZoneEventsRoute,
+  DashboardZoneInboxRoute: DashboardZoneInboxRoute,
+  DashboardZoneInvoicesRoute: DashboardZoneInvoicesRoute,
+  DashboardZoneProductsRoute: DashboardZoneProductsRoute,
+  DashboardZoneSettingsRoute: DashboardZoneSettingsRoute,
+  DashboardZoneTasksRoute: DashboardZoneTasksRoute,
+  DlyaLandingSlugRoute: DlyaLandingSlugRoute,
+  ForLandingSlugRoute: ForLandingSlugRoute,
+  FromSlugRoute: FromSlugRoute,
+  GoodsIdRoute: GoodsIdRoute,
+  InvitesTokenRoute: InvitesTokenRoute,
+  JoinInviteCodeRoute: JoinInviteCodeRoute,
+  PCompressedRoute: PCompressedRoute,
+  PurchaseTokenRoute: PurchaseTokenRoute,
+  RCodeRoute: RCodeRoute,
+  SSlugRoute: SSlugRoute,
+  TeamSlugRoute: TeamSlugRoute,
+  SlugIndexRoute: SlugIndexRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AlternativesIndexRoute: AlternativesIndexRoute,
+  AuthIndexRoute: AuthIndexRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  ExpertsIndexRoute: ExpertsIndexRoute,
+  SlugEventsEventIdRoute: SlugEventsEventIdRoute,
+  SlugPPagePathRoute: SlugPPagePathRoute,
+  SlugServicesServiceSlugRoute: SlugServicesServiceSlugRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  AdminTemplatesIdRoute: AdminTemplatesIdRoute,
+  AdminTemplatesNewRoute: AdminTemplatesNewRoute,
+  BookingManageTokenRoute: BookingManageTokenRoute,
+  EventsCheckinTokenRoute: EventsCheckinTokenRoute,
+  ExpertsTagCityRoute: ExpertsTagCityRoute,
+  ExpertsCityCityRoute: ExpertsCityCityRoute,
+  ReviewRequestTokenRoute: ReviewRequestTokenRoute,
+  DashboardEventsIndexRoute: DashboardEventsIndexRoute,
+  ExpertsTagIndexRoute: ExpertsTagIndexRoute,
+  DashboardEventsEventIdScannerRoute: DashboardEventsEventIdScannerRoute,
+  DashboardEventsEventIdIndexRoute: DashboardEventsEventIdIndexRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
