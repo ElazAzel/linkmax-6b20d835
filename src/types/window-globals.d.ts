@@ -1,4 +1,3 @@
-/// <reference types="vite/client" />
 
 export type FBQ = {
     (type: string, name?: string, parameters?: Record<string, unknown>): void;
