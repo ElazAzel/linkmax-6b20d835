@@ -7,6 +7,9 @@
 /* LinkMAX interface tokens (html.lm-app) — generated from src/design-system/tokens.ts */
 @import './design-system/tokens.css';
 
+@custom-variant tall (@media (min-height: 800px));
+@custom-variant short (@media (max-height: 600px));
+
 /* Tailwind v3 compatibility: v4 defaults border color to currentColor. */
 @layer base {
   *, ::after, ::before, ::backdrop, ::file-selector-button {
