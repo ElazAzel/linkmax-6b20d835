@@ -89,7 +89,7 @@ describe('page base isolation', () => {
 
 describe('app surface routing', () => {
   it('keeps the index.html boot list in sync with surface.ts', () => {
-    const html = read('index.html');
+    const html = read('src/routes/__root.tsx');
     const match = html.match(/var APP_FIRST_SEGMENTS = (\[[^\]]*\]);/);
     expect(match).not.toBeNull();
     expect(JSON.parse(match![1])).toEqual([...APP_FIRST_SEGMENTS]);
