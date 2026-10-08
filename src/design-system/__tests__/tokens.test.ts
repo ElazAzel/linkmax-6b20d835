@@ -69,7 +69,7 @@ describe('design tokens', () => {
 });
 
 describe('page base isolation', () => {
-  const indexCss = read('src/index.css');
+  const indexCss = read('src/styles.css');
   const pageBase = indexCss.slice(indexCss.indexOf(':root,\n  .lm-page {'));
 
   it('the page base is declared for :root and .lm-page', () => {
@@ -89,7 +89,7 @@ describe('page base isolation', () => {
 
 describe('app surface routing', () => {
   it('keeps the index.html boot list in sync with surface.ts', () => {
-    const html = read('index.html');
+    const html = read('src/routes/__root.tsx');
     const match = html.match(/var APP_FIRST_SEGMENTS = (\[[^\]]*\]);/);
     expect(match).not.toBeNull();
     expect(JSON.parse(match![1])).toEqual([...APP_FIRST_SEGMENTS]);

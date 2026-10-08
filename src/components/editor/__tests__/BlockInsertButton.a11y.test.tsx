@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { BlockInsertButton } from '../BlockInsertButton';
 
-vi.mock('react-router-dom', () => ({
+vi.mock('@/lib/router-compat', () => ({
   useNavigate: () => vi.fn(),
 }));
 

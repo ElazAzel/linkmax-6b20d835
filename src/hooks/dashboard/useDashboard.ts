@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 import { useCallback, useEffect, useRef, useMemo } from 'react';
 
 import { toast } from 'sonner';

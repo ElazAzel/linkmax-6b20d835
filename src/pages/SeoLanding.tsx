@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "@/lib/router-compat";
 import { Helmet } from "react-helmet-async";
 import { AISearchOptimizer } from "@/components/seo/AISearchOptimizer";
 import { FAQSchema } from "@/components/seo/FAQSchema";

@@ -1,6 +1,6 @@
 import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from '@/lib/router-compat';
 import { describe, expect, it } from 'vitest';
 
 import { SimplePricingSection } from '../SimplePricingSection';

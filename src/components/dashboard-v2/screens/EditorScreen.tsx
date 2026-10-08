@@ -6,7 +6,7 @@
 import { memo, useCallback, useEffect, useState, useMemo, useRef, lazy, Suspense } from 'react';
 import { RenderContextProvider } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-compat';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';

@@ -3,7 +3,7 @@
  * Entry point for the redesigned dashboard experience
  */
 import { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from '@/lib/router-compat';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 

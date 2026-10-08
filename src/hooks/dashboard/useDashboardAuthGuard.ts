@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 import { useAuth } from '@/hooks/user/useAuth';
 import { supabase } from '@/platform/supabase/client';
 import { storage } from '@/lib/storage';

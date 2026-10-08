@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';

@@ -3,7 +3,7 @@
  * Clearly separates page-scoped and user-scoped settings
  */
 import { memo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import User from 'lucide-react/dist/esm/icons/user';
 import FileText from 'lucide-react/dist/esm/icons/file-text';

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from '@/lib/router-compat';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';

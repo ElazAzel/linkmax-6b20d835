@@ -5,7 +5,7 @@
 
 import { useState, useMemo, useCallback, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from '@/lib/router-compat';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Heart from 'lucide-react/dist/esm/icons/heart';

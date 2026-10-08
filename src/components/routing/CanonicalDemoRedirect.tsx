@@ -1,7 +1,7 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from '@/lib/router-compat';
 
 export function CanonicalDemoRedirect() {
   const { search } = useLocation();
 
-  return <Navigate to={{ pathname: '/demo-nails', search }} replace />;
+  return <Navigate to={`/demo-nails${search}`} replace />;
 }
