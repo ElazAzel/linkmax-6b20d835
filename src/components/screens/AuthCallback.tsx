@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router-compat";
 import { supabase } from "@/platform/supabase/client";
 import { readOAuthParams } from "@/services/auth-redirects";
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 /**
  * DashboardSidebar - Desktop sidebar navigation
  * Collapsible with section groups, powered by Framer Motion

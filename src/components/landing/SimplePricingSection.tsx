@@ -1,5 +1,5 @@
 'use client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 
 import { useState } from 'react';
 

@@ -10,7 +10,7 @@ const trackMarketingEventMock = vi.fn();
 const trackOnceMock = vi.fn();
 const observerRefs: Array<React.RefObject<HTMLDivElement | null>> = [];
 
-vi.mock('react-router-dom', () => ({
+vi.mock('@/lib/router-compat', () => ({
   useNavigate: () => navigateMock,
 }));
 

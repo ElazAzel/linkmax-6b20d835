@@ -69,7 +69,7 @@ describe('design tokens', () => {
 });
 
 describe('page base isolation', () => {
-  const indexCss = read('src/index.css');
+  const indexCss = read('src/styles.css');
   const pageBase = indexCss.slice(indexCss.indexOf(':root,\n  .lm-page {'));
 
   it('the page base is declared for :root and .lm-page', () => {

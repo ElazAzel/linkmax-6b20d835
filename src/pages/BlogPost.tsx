@@ -1,4 +1,4 @@
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from '@/lib/router-compat';
 import { Helmet } from 'react-helmet-async';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import { Button } from '@/components/ui/button';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import type { ReactNode } from 'react';
 import Mail from 'lucide-react/dist/esm/icons/mail';

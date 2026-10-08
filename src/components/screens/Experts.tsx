@@ -1,5 +1,5 @@
 'use client';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from '@/lib/router-compat';
 /**
  * Experts Directory Page
  * /experts - Main directory of all public profiles

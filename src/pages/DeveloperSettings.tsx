@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router-compat";
 import { Helmet } from "react-helmet-async";
 import Code2 from "lucide-react/dist/esm/icons/code-2";
 import Webhook from "lucide-react/dist/esm/icons/webhook";

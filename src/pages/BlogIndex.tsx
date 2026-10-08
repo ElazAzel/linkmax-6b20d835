@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-compat';
 import { Helmet } from 'react-helmet-async';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { Card } from '@/components/ui/card';

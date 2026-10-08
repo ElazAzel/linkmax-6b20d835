@@ -1,6 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-compat';
 import { supabase } from '@/platform/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';

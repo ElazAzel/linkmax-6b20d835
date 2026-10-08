@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from '@/lib/router-compat';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
