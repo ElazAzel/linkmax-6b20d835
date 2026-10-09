@@ -13,7 +13,7 @@ import X from 'lucide-react/dist/esm/icons/x';
 
 interface SimplePricingSectionProps {
   isVisible: boolean;
-  sectionRef: React.RefObject<HTMLDivElement>;
+  sectionRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSectionProps) {

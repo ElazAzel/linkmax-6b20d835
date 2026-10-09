@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes, useLocation } from '@/lib/router-compat';
+import { MemoryRouter, Route, Routes } from '@/testing/router';
+import { useLocation } from '@/lib/router-compat';
 import { describe, expect, it } from 'vitest';
 
 import { CanonicalDemoRedirect } from '../CanonicalDemoRedirect';

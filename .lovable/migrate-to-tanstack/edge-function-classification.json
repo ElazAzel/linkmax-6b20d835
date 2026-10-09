@@ -1,0 +1,327 @@
+{
+ "found": 64,
+ "migrated": 0,
+ "left_on_supabase": 64,
+ "functions": [
+  {
+   "name": "ai-content-generator",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "api-deals",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "api-leads",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "auth-telegram-web",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "broadcast-update",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "calendar-feed",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "chatbot-stream",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "cleanup-orphaned-media",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "create-lead",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "create-offer-checkout",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "create-payment-session",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "currency-rates",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "digital-goods-checkout",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "digital-goods-download",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "docuseal-create-submission",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "docuseal-webhook",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "gcal-callback",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "generate-sitemap",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "get-paddle-price",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "google-calendar-sync",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "google-forms-parser",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "google-search-console-submit",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "health-check",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "language-upload",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "mcp",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "notify-indexnow",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "payments-webhook",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "pixel-proxy",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "process-crm-automations",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "process-email-sequences",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "process-notifications",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "process-transaction-fee",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "public-experts",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "resolve-domain",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "retry-failed-indexing",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "robokassa-webhook",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "robokassa",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "run-zone-automations",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "seed-demo-accounts",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "seed-demo-nails",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-attendee-email",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-booking-notification",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-booking-reminder",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-collab-notification",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-event-confirmation",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-friend-notification",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-social-notification",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-team-notification",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-trial-ending-notification",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-weekly-digest",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-weekly-motivation",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "send-zone-notification",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "seo-ssr",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "smartlink-redirect",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "submit-booking",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "submit-lead",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "telegram-bot-webhook",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "telegram-password-reset",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "track-analytics-event",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "translate-content",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "upload-user-media",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "validate-telegram-miniapp",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "validate-telegram",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  },
+  {
+   "name": "verify-domain",
+   "decision": "left_on_supabase",
+   "reason": "Deployed Lovable Cloud function with stable URL used by webhooks, cron, MCP, Cloudflare SEO worker or supabase.functions.invoke; no behavior change needed for the framework switch."
+  }
+ ]
+}

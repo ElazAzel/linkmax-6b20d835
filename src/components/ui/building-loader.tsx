@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from "react";
+import { forwardRef, useMemo, type ReactElement } from "react";
 import { cn } from "@/lib/utils/utils";
 
 /**
@@ -95,7 +95,7 @@ const CleanUp = () => (
   </div>
 );
 
-const RENDERERS: Record<Variant, () => JSX.Element> = {
+const RENDERERS: Record<Variant, () => ReactElement> = {
   1: AssembleStack,
   2: MagnetSnap,
   3: GridFill,
