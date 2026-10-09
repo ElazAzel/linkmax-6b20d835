@@ -16,6 +16,10 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    // CommonJS packages without proper ESM named exports must be bundled for SSR.
+    ssr: {
+      noExternal: ["react-helmet-async"],
+    },
     plugins: [
       // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
       ...(sentryEnabled

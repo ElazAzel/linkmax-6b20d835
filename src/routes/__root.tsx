@@ -1,5 +1,5 @@
 // ported from main.tsx: i18n must initialise before any component renders
-import "@/i18n/config";
+import { i18nReady } from "@/i18n/config";
 
 import { useEffect, type ReactNode } from "react";
 import type { QueryClient } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import {
   Link,
   Scripts,
   useRouter,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { AppShell } from "@/components/layout/AppShell";
@@ -71,6 +72,10 @@ const ORG_LD = {
 };
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  // Wait for the active locale chunk so neither SSR nor first paint shows raw keys.
+  beforeLoad: async () => {
+    await i18nReady;
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -193,7 +198,7 @@ function NotFoundBoundary() {
   return <NotFound />;
 }
 
-function RootErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function RootErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
 
   useEffect(() => {

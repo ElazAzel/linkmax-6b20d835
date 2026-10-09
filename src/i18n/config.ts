@@ -312,7 +312,7 @@ i18n.on('languageChanged', (lng) => {
     });
   }
 
-  document.documentElement.lang = lng;
+  if (typeof document !== 'undefined') document.documentElement.lang = lng;
 });
 
 // Set initial HTML lang

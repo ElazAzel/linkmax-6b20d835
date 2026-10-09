@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from '@/lib/router-compat';
+import { MemoryRouter } from '@/testing/router';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { PageData } from '@/types/page';

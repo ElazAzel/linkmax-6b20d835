@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetTitle } from '../sheet';
 import { Drawer, DrawerContent, DrawerTitle } from '../drawer';
 
 const missingDescription = (spy: ReturnType<typeof vi.spyOn>) =>
-  spy.mock.calls.some((args) => String(args[0]).includes('Missing `Description`'));
+  spy.mock.calls.some((args: unknown[]) => String(args[0]).includes('Missing `Description`'));
 
 describe('sheet and drawer without a description', () => {
   afterEach(() => vi.restoreAllMocks());

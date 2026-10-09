@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from '@/lib/router-compat';
+import { MemoryRouter } from '@/testing/router';
 import { describe, expect, it, vi } from 'vitest';
 
 import { BookingLifecycleError, type BookingManagementContext } from '@/services/booking-lifecycle';
