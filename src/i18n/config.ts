@@ -189,6 +189,9 @@ const i18nInitPromise = i18n
   .init({
     resources: {},
     partialBundledLanguages: true,
+    // Synchronous init: the async default schedules setTimeout at module load,
+    // which Cloudflare Workers forbid in global scope.
+    initAsync: false,
 
     supportedLngs: ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'],
     nonExplicitSupportedLngs: true,
@@ -266,7 +269,9 @@ export const i18nReady: Promise<void> = i18nInitPromise
     await loadLazyLocale('ru');
   })
   .then(() => {
-    // Warm fallbacks without blocking first paint
+    // Warm fallbacks without blocking first paint (browser only; timers are
+    // not allowed in Worker global scope).
+    if (typeof window === 'undefined') return;
     const activeLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language || detectedLang);
     _ric(() => {
       FALLBACK_WARMUP.filter((l) => l !== activeLang).forEach((l) => {
