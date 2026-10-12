@@ -194,7 +194,7 @@ Deno.serve(async (req) => {
             embed_src: embedSrc,
             template_id: body.docuseal_template_id,
           },
-          ...(body.metadata ?? {}),
+
         },
       })
       .select('*')
