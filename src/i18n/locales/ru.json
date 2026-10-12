@@ -8089,5 +8089,9 @@
     "webhookNowTitle": "Уже работает: вебхук страницы",
     "webhookNowDescription": "LinkMAX отправляет POST-запрос на ваш URL при каждой новой заявке со страницы. Подключите Make, Zapier, n8n или свой сервер.",
     "openWebhookSettings": "Настроить вебхук"
+  },
+  "payment": {
+    "more_details": "Подробнее",
+    "test_mode_banner": "Все платежи в превью идут в тестовом режиме."
   }
 }

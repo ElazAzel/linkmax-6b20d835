@@ -7968,5 +7968,9 @@
     "empty": "Write some text first",
     "alreadyClean": "The text already reads naturally",
     "done": "Text sounds more human now"
+  },
+  "payment": {
+    "more_details": "More details",
+    "test_mode_banner": ""
   }
 }

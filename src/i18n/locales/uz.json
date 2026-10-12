@@ -8089,5 +8089,9 @@
     "webhookNowTitle": "Hozir ishlaydi: sahifa webhooki",
     "webhookNowDescription": "Sahifadan har bir yangi arizada LinkMAX URL manzilingizga POST so‘rov yuboradi. Make, Zapier, n8n yoki o‘z serveringizni ulang.",
     "openWebhookSettings": "Webhookni sozlash"
+  },
+  "payment": {
+    "more_details": "Batafsil",
+    "test_mode_banner": "Oldindan ko‘rishda barcha to‘lovlar test rejimida."
   }
 }
