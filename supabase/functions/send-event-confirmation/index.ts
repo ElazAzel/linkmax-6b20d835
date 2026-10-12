@@ -160,7 +160,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { registrationId, eventId, attendeeEmail } = (await req.json()) as EventConfirmationRequest & { attendeeEmail?: string };
+    const { registrationId, eventId, attendeeEmail, notifyToken } = (await req.json()) as EventConfirmationRequest & { attendeeEmail?: string; notifyToken?: string };
 
     if (!registrationId || !eventId) {
       throw new Error("Missing required fields");
@@ -171,18 +171,18 @@ const handler = async (req: Request): Promise<Response> => {
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // SECURITY: never trust a client-supplied ownerId. Resolve the registration
-    // first, ensure it belongs to the supplied event, and derive the organizer
-    // from the event row itself. This prevents IDOR-based PII harvesting.
+    // SECURITY: the caller must prove it created this registration via the
+    // per-registration notify_token returned only to the inserting client.
     const { data: regRow, error: regRowError } = await supabase
       .from("event_registrations")
-      .select("id, event_id, owner_id, attendee_email")
+      .select("id, event_id, owner_id, attendee_email, notify_token")
       .eq("id", registrationId)
       .maybeSingle();
 
     if (
       regRowError || !regRow || regRow.event_id !== eventId ||
       typeof attendeeEmail !== "string" ||
+      typeof notifyToken !== "string" || regRow.notify_token !== notifyToken ||
       String(regRow.attendee_email ?? "").trim().toLowerCase() !== attendeeEmail.trim().toLowerCase()
     ) {
       return new Response(

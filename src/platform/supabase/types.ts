@@ -1182,6 +1182,7 @@ export type Database = {
         Row: {
           answers_json: Json | null
           attendee_email: string
+          notify_token: string
           attendee_name: string
           attendee_phone: string | null
           block_id: string
@@ -1203,6 +1204,7 @@ export type Database = {
         Insert: {
           answers_json?: Json | null
           attendee_email: string
+          notify_token?: string
           attendee_name: string
           attendee_phone?: string | null
           block_id: string
@@ -1224,6 +1226,7 @@ export type Database = {
         Update: {
           answers_json?: Json | null
           attendee_email?: string
+          notify_token?: string
           attendee_name?: string
           attendee_phone?: string | null
           block_id?: string

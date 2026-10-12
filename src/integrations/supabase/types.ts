@@ -918,6 +918,7 @@ export type Database = {
           currency: string | null
           event_id: string
           id: string
+          notify_token: string
           organizer_notified_at: string | null
           owner_id: string
           page_id: string
@@ -942,6 +943,7 @@ export type Database = {
           currency?: string | null
           event_id: string
           id?: string
+          notify_token?: string
           organizer_notified_at?: string | null
           owner_id: string
           page_id: string
@@ -966,6 +968,7 @@ export type Database = {
           currency?: string | null
           event_id?: string
           id?: string
+          notify_token?: string
           organizer_notified_at?: string | null
           owner_id?: string
           page_id?: string
