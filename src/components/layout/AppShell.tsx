@@ -18,6 +18,7 @@ import { BuildingLoader } from "@/components/ui/building-loader";
 import { Outlet } from "@tanstack/react-router";
 import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { ClientOnly } from "@tanstack/react-router";
 import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
 import { TMAProvider } from "@/platform/tma/TMAProvider";
 import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
@@ -189,8 +190,12 @@ export const AppShell = () => {
                   </Suspense>
                   <RouteWebVitalsMonitor />
                   <RouteErrorBoundary>
-                    <BackendStatusBanner />
-                    <PaymentTestModeBanner />
+                    <ClientOnly fallback={null}>
+                      <BackendStatusBanner />
+                      <Suspense fallback={null}>
+                        <PaymentTestModeBanner />
+                      </Suspense>
+                    </ClientOnly>
                     <div id="main-content" className="outline-none" tabIndex={-1}>
                       <Suspense fallback={<PageLoader />}>
                         <Outlet />

@@ -8089,5 +8089,9 @@
     "webhookNowTitle": "Available now: page webhook",
     "webhookNowDescription": "LinkMAX sends a POST request to your URL for every new lead from your page. Connect Make, Zapier, n8n or your own server.",
     "openWebhookSettings": "Set up webhook"
+  },
+  "payment": {
+    "more_details": "More details",
+    "test_mode_banner": "All payments in preview run in test mode."
   }
 }

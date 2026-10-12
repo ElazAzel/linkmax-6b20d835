@@ -8089,5 +8089,9 @@
     "webhookNowTitle": "Қазір жұмыс істейді: бет вебхугы",
     "webhookNowDescription": "Беттен түскен әр жаңа өтінімде LinkMAX сіздің URL-ге POST сұрау жібереді. Make, Zapier, n8n немесе өз серверіңізді қосыңыз.",
     "openWebhookSettings": "Вебхукты баптау"
+  },
+  "payment": {
+    "more_details": "Толығырақ",
+    "test_mode_banner": "Алдын ала қарауда барлық төлемдер тест режимінде."
   }
 }
