@@ -314,7 +314,7 @@ export const EventBlock = memo(function EventBlock({
           payment_status: 'none',
           utm_json: Object.keys(utmParams).length > 0 ? utmParams : {},
         })
-        .select('id')
+        .select('id, notify_token')
         .single();
 
       if (error) {
@@ -372,6 +372,7 @@ export const EventBlock = memo(function EventBlock({
             eventId: block.eventId,
             ownerId: pageOwnerId,
             attendeeEmail: email.trim(),
+            notifyToken: registration?.notify_token,
           },
         }).catch(err => console.warn('Notification send failed:', err));
       }
