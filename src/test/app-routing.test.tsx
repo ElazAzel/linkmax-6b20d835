@@ -1,6 +1,11 @@
 import { QueryClient } from "@tanstack/react-query";
-import { createRouter, rootRouteId } from "@tanstack/react-router";
-import { describe, expect, it } from "vitest";
+import { createRouter, createRootRouteWithContext, rootRouteId } from "@tanstack/react-router";
+import { describe, expect, it, vi } from "vitest";
+
+// Route matching needs the real file tree, not SSR document/providers/startup.
+vi.mock('@/routes/__root', () => ({
+  Route: createRootRouteWithContext<{ queryClient: QueryClient }>()({}),
+}));
 
 import { routeTree } from "@/routeTree.gen";
 

@@ -4,38 +4,38 @@ exports[`page base isolation > page base values are frozen (update the snapshot 
 ":root,
   .lm-page {
     /* LinkMAX brand foundations: landing and product share one palette. */
-    --brand-ink: 216 20% 8%;
-    --brand-paper: 60 22% 95%;
-    --brand-orange: 20 100% 50%;
-    --brand-orange-action: 20 100% 40%;
-    --brand-sage: 90 4% 45%;
+    --brand-ink: 0 0% 12.1569%;
+    --brand-paper: 0 0% 95.2941%;
+    --brand-orange: 202.562 100% 47.451%;
+    --brand-orange-action: 202.562 100% 47.451%;
+    --brand-sage: 0 0% 40%;
 
     --background: var(--brand-paper);
     --foreground: var(--brand-ink);
 
     /* Liquid Glass card - translucent white */
-    --card: 40 33% 99%;
+    --card: 0 0% 98.4314%;
     --card-foreground: var(--brand-ink);
 
     /* Popover/Dropdown - glass effect */
-    --popover: 40 33% 99%;
+    --popover: 0 0% 98.4314%;
     --popover-foreground: var(--brand-ink);
 
     /* Primary actions use the accessible deep-orange companion of #ff5701. */
     --primary: var(--brand-orange-action);
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: var(--brand-ink);
 
     /* Secondary - Subtle frosted */
-    --secondary: 60 14% 91%;
+    --secondary: 0 0% 91%;
     --secondary-foreground: var(--brand-ink);
 
     /* Muted - Soft gray glass */
-    --muted: 55 12% 91%;
+    --muted: 0 0% 91%;
     --muted-foreground: var(--brand-sage);
 
     /* Accent - Light glass tint */
-    --accent: 20 100% 95%;
-    --accent-foreground: 20 100% 30%;
+    --accent: 203 100% 93%;
+    --accent-foreground: 203 100% 27%;
 
     /* Destructive - Soft red */
     --destructive: 0 72% 51%;
@@ -53,8 +53,8 @@ exports[`page base isolation > page base values are frozen (update the snapshot 
     --info: 203 87% 44%;
     --info-foreground: 0 0% 100%;
 
-    --border: 52 14% 81%;
-    --input: 52 14% 81%;
+    --border: 0 0% 85%;
+    --input: 0 0% 76%;
     --ring: var(--brand-orange-action);
 
     --radius: 1rem;
@@ -122,7 +122,7 @@ exports[`page base isolation > page base values are frozen (update the snapshot 
     --radius: 1rem;
 
     /* Typography */
-    --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
+    --font-heading: 'Inter', system-ui, sans-serif;
     --text-primary: 1;
     --text-secondary: 0.8;
     --text-tertiary: 0.6;
@@ -147,7 +147,7 @@ exports[`page base isolation > page base values are frozen (update the snapshot 
     /* First family of Tailwind font-sans / font-heading (fallbacks live in
        tailwind.config.ts and match the original stacks). */
     --font-ui: 'Inter';
-    --font-ui-heading: 'Manrope', 'Inter';
+    --font-ui-heading: 'Inter';
     --radius-sheet: 1.75rem;
 
     /* Button elevation on pages: the original glow and hover lift. Defined

@@ -5,6 +5,67 @@
  */
 
 /* ============ Pattern backgrounds ============ */
+.lm-page-width {
+  box-sizing: border-box;
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+@media (min-width: 520px) {
+  .lm-page-width { max-width: 375px; }
+}
+.lm-block-stack { container-type: inline-size; }
+.lm-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: calc((100cqw - 16px) * 0.28125);
+  gap: 16px;
+}
+.lm-auto-run { min-width: 0; }
+.lm-owned-surface[data-lm-type="image"] [data-testid="block-renderer-wrapper"] .qb-card,
+.lm-owned-surface[data-lm-type="form"] [data-testid="block-renderer-wrapper"] > div {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: inherit;
+}
+.lm-fixed-cell .lm-tile-content,
+.lm-fixed-cell [data-testid="block-renderer-wrapper"],
+.lm-fixed-cell [data-testid="block-renderer-wrapper"] > div,
+.lm-fixed-cell[data-lm-type="image"] [data-testid="block-renderer-wrapper"] > div > div:first-child,
+.lm-fixed-cell[data-lm-type="link"] [data-testid="block-renderer-wrapper"] > div > button,
+.lm-fixed-cell[data-lm-type="button"] [data-testid="block-renderer-wrapper"] > div > button {
+  height: 100%;
+  min-height: 0;
+}
+.lm-fixed-cell[data-lm-type="image"] [data-testid="block-renderer-wrapper"] > div > div:first-child {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+}
+.lm-profile-card {
+  border-radius: var(--lm-block-radius, 24px);
+  background: hsl(var(--card));
+  margin-top: 32px;
+}
+.lm-profile-card > [data-lm-socials] { padding: 0 16px 16px; }
+.lm-social-control { background: #000; color: #fff; }
+.lm-social-control::after { content: ''; position: absolute; inset: -4px; border-radius: inherit; }
+.lm-profile-compact .lm-profile-body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+  padding: 16px;
+}
+.lm-profile-compact .lm-profile-avatar { grid-column: 1; grid-row: 1; margin-top: -48px; }
+.lm-profile-compact .lm-profile-copy { display: contents; }
+.lm-profile-compact .lm-profile-name { grid-column: 2; grid-row: 1; justify-content: flex-start; text-align: left; }
+.lm-profile-compact .lm-profile-name h1 { font-size: 20px; }
+.lm-profile-compact .lm-profile-bio,
+.lm-profile-compact .lm-profile-badges { grid-column: 1 / -1; margin: 0; text-align: left; justify-content: flex-start; }
+
 /* All use CSS variables --lm-pattern-color and --lm-pattern-scale (fallback 1). */
 
 .lm-pattern-dots {

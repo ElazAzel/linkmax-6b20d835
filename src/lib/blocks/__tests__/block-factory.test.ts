@@ -10,6 +10,15 @@ if (typeof crypto === 'undefined') {
 }
 
 describe('block-factory', () => {
+    it('lets a new profile use compact V2 presentation while retaining explicit author overrides', () => {
+        const defaults = createBlock('profile');
+        expect(defaults).not.toHaveProperty('avatarPosition');
+        expect(defaults).not.toHaveProperty('avatarFrame');
+        expect(defaults).toMatchObject({ avatarSize: 'medium', shadowStyle: 'none' });
+        expect(createBlock('profile', { avatarPosition: 'right', avatarFrame: 'gradient', shadowStyle: 'glow' })).toMatchObject({
+            avatarPosition: 'right', avatarFrame: 'gradient', shadowStyle: 'glow',
+        });
+    });
     it('should create a profile block with default values', () => {
         const block = createBlock('profile') as any;
         expect(block.type).toBe('profile');

@@ -155,11 +155,11 @@
 :root,
 .lm-page {
   --surface-quiet: var(--brand-paper);
-  --surface-raised: 40 33% 99%;
-  --surface-sunk: 55 12% 91%;
-  --surface-glass: 40 33% 99% / 0.82;
+  --surface-raised: 0 0% 98.4314%;
+  --surface-sunk: 0 0% 91%;
+  --surface-glass: 0 0% 98.4314% / 0.92;
 
-  --radius-card: 1.25rem;
+  --radius-card: 24px;
   --radius-control: 0.875rem;
   --radius-chip: 999px;
 
@@ -170,14 +170,14 @@
     0 2px 4px hsl(var(--brand-ink) / 0.07),
     0 18px 44px -18px hsl(var(--brand-ink) / 0.32);
 
-  --hairline: 52 14% 81%;
+  --hairline: 0 0% 85%;
 }
 
 .dark {
-  --surface-quiet: var(--brand-ink);
-  --surface-raised: 216 16% 12%;
-  --surface-sunk: 216 16% 10%;
-  --surface-glass: 216 16% 12% / 0.78;
+  --surface-quiet: 0 0% 8%;
+  --surface-raised: 0 0% 12%;
+  --surface-sunk: 0 0% 10%;
+  --surface-glass: 0 0% 12% / 0.78;
 
   --shadow-soft:
     0 1px 2px hsl(0 0% 0% / 0.4),

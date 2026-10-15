@@ -21,6 +21,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils/utils';
 import { PaidContentSettings } from './PaidContentSettings';
 import type { BlockStyle } from '@/types/page';
+import { getManifestEntry } from '@/lib/blocks/block-manifest';
 
 export interface BaseBlockEditorProps {
   formData: any;
@@ -88,7 +89,8 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
     const [advancedOpen, setAdvancedOpen] = useState(false);
 
     // Validation logic
-    const validationError = options?.validate?.(formData);
+    const validate = options?.validate ?? getManifestEntry(formData.type)?.editing.validate;
+    const validationError = validate?.(formData);
 
     const handleChange = (updates: Partial<BaseBlockEditorProps['formData']>) => {
       onChange(updates as any); // Cast only here because of generic P
@@ -126,7 +128,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
       >
         {validationError && (
           <Alert variant="destructive" className="rounded-xl">
-            <AlertDescription>{validationError}</AlertDescription>
+            <AlertDescription>{t(validationError, validationError)}</AlertDescription>
           </Alert>
         )}
 

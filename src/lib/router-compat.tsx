@@ -1,7 +1,7 @@
 /**
  * Router-compat shim — bridges @/lib/router-compat v6 call sites to
  * @tanstack/react-router without hand-rewriting every component.
- * This is the same load-bearing pattern used in Klar's dev-copy migration.
+ * Keeps the existing screens compatible with file-based SSR routes.
  */
 import {
   useNavigate as tsNavigate,
@@ -64,7 +64,7 @@ export function useLocation() {
   return useMemo(
     () => ({
       pathname: loc.pathname,
-      search: loc.searchStr ? `?${loc.searchStr}` : "",
+      search: loc.searchStr ? (loc.searchStr.startsWith('?') ? loc.searchStr : `?${loc.searchStr}`) : "",
       hash: loc.hash ?? "",
       state: (loc.state ?? null) as unknown,
       key: loc.pathname + (loc.searchStr ?? ""),
@@ -145,8 +145,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
 // ---------- Navigate ----------
 
 export function Navigate({ to, replace, state }: { to: string; replace?: boolean; state?: unknown }) {
-  const { pathname, search, hash } = parseTo(to);
-  return <TSNavigate to={pathname as never} search={search as never} hash={hash} state={state as never} replace={replace} />;
+  const target = useMemo(() => parseTo(to), [to]);
+  return useMemo(() => <TSNavigate to={target.pathname as never} search={target.search as never} hash={target.hash} state={state as never} replace={replace} />, [target, state, replace]);
 }
 
 // ---------- Outlet ----------

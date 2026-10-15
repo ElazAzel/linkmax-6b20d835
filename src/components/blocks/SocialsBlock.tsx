@@ -26,6 +26,7 @@ import Podcast from 'lucide-react/dist/esm/icons/podcast';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
+import { BLOCK_RADIUS, BLOCK_SHADOW } from '@/lib/appearance/block-appearance';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
@@ -130,10 +131,10 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
           {title}
         </h3>
       )}
-      <div className={`flex items-center ${justifyClass} gap-2 flex-wrap`}>
+      <div className={`flex items-center ${justifyClass} gap-3 flex-wrap`}>
         {validPlatforms.map((platform, index) => {
           // Support both 'icon' and 'platform' fields (AI generates 'platform', factory uses 'icon')
-          const iconName = platform.icon || 'globe';
+          const iconName = platform.icon || platform.platform || 'globe';
           const iconKey = typeof iconName === 'string' ? iconName.toLowerCase() : 'globe';
           const Icon = iconMap[iconKey] || Globe;
           const url = platform.url || '';
@@ -142,16 +143,23 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
 
           return (
             <button
+              type="button"
               key={index}
               onClick={() => handleClick(url)}
               className={cn(
-                "group relative w-12 h-12 rounded-control flex items-center justify-center",
-                "bg-surface-raised border border-hairline shadow-soft",
-                "transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5 active:scale-95"
+                "lm-social-control group relative w-9 h-9 rounded-full flex items-center justify-center",
+                "transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
               )}
               aria-label={platform.name || iconKey}
+              style={{
+                color: block.blockStyle?.textColor,
+                backgroundColor: block.blockStyle?.backgroundColor,
+                backgroundImage: block.blockStyle?.backgroundGradient,
+                borderRadius: block.blockStyle?.borderRadius ? BLOCK_RADIUS[block.blockStyle.borderRadius] : undefined,
+                boxShadow: block.blockStyle?.shadow ? BLOCK_SHADOW[block.blockStyle.shadow] : undefined,
+              }}
             >
-              <Icon className="w-5 h-5 text-foreground/80 group-hover:text-primary transition-colors duration-200" />
+              <Icon className="w-[18px] h-[18px]" />
             </button>
           );
         })}

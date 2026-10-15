@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils/utils';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { hasCustomBlockContainer } from '@/lib/blocks/block-styling';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
+import { getImagePlacementStyle } from '@/lib/appearance/image-placement';
 
 interface ImageBlockProps {
   block: ImageBlockType;
@@ -104,6 +105,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
                 hasLink && 'transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-90'
               )}
               loading="lazy"
+              style={getImagePlacementStyle(block)}
             />
           )}
 

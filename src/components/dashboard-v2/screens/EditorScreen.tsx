@@ -94,6 +94,9 @@ interface EditorScreenProps {
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => { success: boolean; blockId?: string; error?: string };
   onPreview: () => void;
   onShare: () => void;
+  onPublish?: () => void;
+  publishing?: boolean;
+  hasUnpublishedChanges?: boolean;
   onOpenTemplates: () => void;
   onOpenAI: () => void;
   onOpenTheme: () => void;
@@ -127,6 +130,9 @@ export const EditorScreen = memo(function EditorScreen({
   onInsertPreset,
   onPreview,
   onShare,
+  onPublish = onShare,
+  publishing = false,
+  hasUnpublishedChanges = true,
   onOpenTemplates,
   onOpenAI,
   onOpenTheme,
@@ -147,6 +153,7 @@ export const EditorScreen = memo(function EditorScreen({
   const [artDirectionOpen, setArtDirectionOpen] = useState(false);
   const [designHealthOpen, setDesignHealthOpen] = useState(false);
   const [prePublishOpen, setPrePublishOpen] = useState(false);
+  useEffect(() => { if (deepLinkAction === 'order') setStructureOpen(true); }, [deepLinkAction]);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
@@ -426,8 +433,8 @@ export const EditorScreen = memo(function EditorScreen({
       trackEditorAction('art_direction_applied', { recipe: 'pre-publish-gate' });
       return;
     }
-    onShare();
-  }, [designReport, onShare, pageData?.blocks]);
+    onPublish();
+  }, [designReport, onPublish, pageData?.blocks]);
 
   const handleFixAllAndPublish = useCallback(() => {
     if (!pageData) return;
@@ -441,8 +448,8 @@ export const EditorScreen = memo(function EditorScreen({
     if (Object.keys(themePatch).length > 0) onApplyTheme?.(themePatch);
     trackEditorAction('art_direction_applied', { recipe: 'fix-all' });
     setPrePublishOpen(false);
-    onShare();
-  }, [designReport, onApplyTheme, onReorderBlocks, onShare, pageData]);
+    onPublish();
+  }, [designReport, onApplyTheme, onReorderBlocks, onPublish, pageData]);
 
   // Phase 6: apply a single design-health fix (design fields only).
   const handleApplyDesignFix = useCallback((nextBlocks: Block[], issueId: string) => {
@@ -505,7 +512,10 @@ export const EditorScreen = memo(function EditorScreen({
         }}
         isPublished={isPublished}
         onPreview={onPreview}
-        onShare={handleShareWithGate}
+        onShare={onShare}
+        onPublish={handleShareWithGate}
+        publishing={publishing}
+        hasUnpublishedChanges={hasUnpublishedChanges}
         designScore={designReport.score}
         canUndo={canUndo}
         canRedo={canRedo}
@@ -625,7 +635,7 @@ export const EditorScreen = memo(function EditorScreen({
         />
         {background.overlay && <div aria-hidden className="pointer-events-none absolute inset-0" style={background.overlay} />}
         {/* Same content width as the public page (PublicPage: max-w-2xl) */}
-        <div className="relative z-[1] mx-auto w-full max-w-2xl px-3 sm:px-4">
+          <div className="relative z-[1] w-full">
           <RenderContextProvider value="editor">
             <Suspense fallback={<EditorCanvasSkeleton />}>
               <GridEditor
@@ -723,7 +733,7 @@ export const EditorScreen = memo(function EditorScreen({
             report={designReport}
             onFixAll={handleFixAllAndPublish}
             onOpenDetails={() => { setPrePublishOpen(false); setDesignHealthOpen(true); }}
-            onPublishAnyway={() => { setPrePublishOpen(false); onShare(); }}
+            onPublishAnyway={() => { setPrePublishOpen(false); onPublish(); }}
           />
         </Suspense>
       )}

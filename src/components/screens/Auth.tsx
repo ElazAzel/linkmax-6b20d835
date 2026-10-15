@@ -139,7 +139,7 @@ export const Auth = memo(function Auth() {
   }, [fromSource, nicheParam, refSlug, desiredSlug]);
 
   // Persistence for deep-linking
-  const hashParams = new URL(window.location.href).hash.substring(1);
+  const hashParams = typeof window === 'undefined' ? '' : window.location.hash.substring(1);
   const hashSearchParams = new URLSearchParams(hashParams);
   const returnTo = searchParams.get('returnTo') || hashSearchParams.get('returnTo');
   const safeReturnTo = returnTo ? getSafeReturnTo(returnTo, '') || undefined : undefined;
@@ -535,7 +535,7 @@ export const Auth = memo(function Auth() {
   // Авторизованный пользователь не видит экран входа вообще —
   // useEffect выше уже редиректит в кабинет/билдер.
   if (user && authMode !== 'update-password') {
-    return <div className="min-h-screen bg-[hsl(var(--brand-ink))]" aria-hidden="true" />;
+    return <div className="min-h-screen bg-background text-foreground" aria-hidden="true" />;
   }
 
   return (
@@ -553,13 +553,13 @@ export const Auth = memo(function Auth() {
           { hreflang: 'x-default', href: canonical },
         ]}
       />
-      <div className="min-h-screen bg-[hsl(var(--brand-ink))] flex items-center justify-center p-4 relative overflow-x-hidden pb-safe">
-        <div className="absolute inset-x-0 top-0 h-1 bg-[hsl(var(--brand-orange))]" aria-hidden="true" />
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 relative overflow-x-hidden pb-safe">
+        <div className="absolute inset-x-0 top-0 h-1 bg-primary" aria-hidden="true" />
 
         <div className="w-full max-w-md space-y-6">
           {/* Referral Banner */}
           {refCode && (
-            <Card className="border-border bg-card p-4 shadow-lift animate-fade-in">
+            <Card className="border-border bg-card p-4 shadow-sm animate-fade-in">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-control bg-primary/12 flex items-center justify-center">
                   <Gift className="h-5 w-5 text-primary" />
@@ -577,19 +577,19 @@ export const Auth = memo(function Auth() {
           {/* Logo */}
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
-              <div className="h-16 w-16 rounded-card bg-card border border-white/15 shadow-lift flex items-center justify-center animate-scale-in">
+              <div className="h-16 w-16 rounded-card bg-card border border-border shadow-sm flex items-center justify-center animate-scale-in">
                 <img src="/favicon.png" alt="LinkMAX — business OS for experts and small businesses" className="h-10 w-10 object-contain" />
               </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-[var(--font-heading)] text-white animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-2xl sm:text-3xl font-bold font-[var(--font-heading)] text-foreground animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
               {t('auth.title', 'Добро пожаловать в LinkMAX')}
             </h1>
 
-            <p className="text-sm sm:text-base text-white/60 mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
+            <p className="text-sm sm:text-base text-muted-foreground mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
               {t('auth.subtitle', 'AI-страница для бизнеса за 2 минуты')}
             </p>
             <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <div className="app-sidebar inline-flex rounded-full">
+              <div className="inline-flex rounded-full bg-card">
                 <LanguageSwitcher />
               </div>
             </div>
@@ -598,7 +598,7 @@ export const Auth = memo(function Auth() {
           {authMode === 'update-password' ? (
 
 
-            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border bg-card shadow-sm animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
                 <CardDescription>
@@ -608,8 +608,8 @@ export const Auth = memo(function Auth() {
               <CardContent className="space-y-4">
                 {passwordUpdated ? (
                   <div className="space-y-4 text-center">
-                    <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
-                      <Check className="h-8 w-8 text-green-500" />
+                    <div className="h-16 w-16 mx-auto rounded-full bg-success/15 flex items-center justify-center">
+                      <Check className="h-8 w-8 text-success" />
                     </div>
                     <h3 className="text-lg font-semibold">{t('auth.passwordUpdated', 'Password Updated')}</h3>
                     <p className="text-sm text-muted-foreground">
@@ -634,7 +634,7 @@ export const Auth = memo(function Auth() {
                         type="password"
                         placeholder="••••••••"
                         required
-                        className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                        className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                       />
                     </div>
                     <div className="space-y-2">
@@ -647,13 +647,13 @@ export const Auth = memo(function Auth() {
                         type="password"
                         placeholder="••••••••"
                         required
-                        className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                        className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                       />
-                      <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
+                      <p className="text-xs text-muted-foreground mt-2 bg-muted/20  p-2 rounded-lg">
                         {t('auth.passwordHint')}
                       </p>
                     </div>
-                    <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
+                    <Button type="submit" className="w-full h-12 rounded-xl shadow-sm transition-all duration-300 " disabled={isLoading}>
                       {isLoading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -667,7 +667,7 @@ export const Auth = memo(function Auth() {
             </Card>
           ) : (
             /* Auth Card - Liquid Glass — Optimized for conversion */
-            <Card className="border border-border bg-card shadow-lift animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border bg-card shadow-sm animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center">
@@ -708,7 +708,7 @@ export const Auth = memo(function Auth() {
                 {/* PRIMARY: Google OAuth — biggest, fastest path */}
                 <Button
                   type="button"
-                  className="w-full gap-3 h-14 rounded-2xl bg-white text-gray-900 hover:bg-white/90 border border-border/30 shadow-glass-lg font-semibold text-base transition-all duration-300 hover:scale-[1.01]"
+                  className="w-full gap-3 h-14 rounded-2xl bg-white text-gray-900 hover:bg-white/90 border border-border shadow-sm font-semibold text-base transition-all duration-300 "
                   onClick={handleGoogleSignIn}
                   disabled={isOAuthLoading !== null || isLoading}
                   data-testid="google-signin-primary"
@@ -748,17 +748,17 @@ export const Auth = memo(function Auth() {
                   <>
                     <div className="relative py-1">
                       <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-border/30" />
+                        <span className="w-full border-t border-border" />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-card/60 backdrop-blur-xl px-3 text-muted-foreground">{t('common.or', 'или')}</span>
+                        <span className="bg-card  px-3 text-muted-foreground">{t('common.or', 'или')}</span>
                       </div>
                     </div>
 
                     {signupEmailSent ? (
                       <div className="space-y-4 pt-3 text-center">
-                        <div className="h-14 w-14 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
-                          <Mail className="h-7 w-7 text-green-500" />
+                        <div className="h-14 w-14 mx-auto rounded-full bg-success/15 flex items-center justify-center">
+                          <Mail className="h-7 w-7 text-success" />
                         </div>
                         <h3 className="text-lg font-semibold">{t('auth.checkEmail')}</h3>
                         <p className="text-sm text-muted-foreground">
@@ -780,7 +780,7 @@ export const Auth = memo(function Auth() {
                           placeholder="your@email.com"
                           required
                           onFocus={() => trackFieldFocus('email', 'signin')}
-                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                          className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                         />
                       </div>
                       <div className="space-y-2">
@@ -801,27 +801,27 @@ export const Auth = memo(function Auth() {
                           data-testid="access-password-input"
                           required
                           onFocus={() => trackFieldFocus('password', 'signin')}
-                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                          className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                         />
                       </div>
-                      <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg" disabled={isLoading || isOAuthLoading !== null}>
+                      <Button type="submit" className="w-full h-12 rounded-xl shadow-sm" disabled={isLoading || isOAuthLoading !== null}>
                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('auth.signIn')}
                       </Button>
                     </form>
                     )}
 
                     {authMode !== 'signin' && <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as 'signin' | 'signup'); trackAuthEvent('auth_tab_switch', { tab: v }); }} className="w-full">
-                      <TabsList className="grid w-full grid-cols-2 h-11 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
-                        <TabsTrigger value="signup" data-testid="signup-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass text-xs sm:text-sm">{t('auth.signUp')}</TabsTrigger>
-                        <TabsTrigger value="signin" data-testid="signin-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass text-xs sm:text-sm">{t('auth.signIn')}</TabsTrigger>
+                      <TabsList className="grid w-full grid-cols-2 h-11 bg-muted  rounded-2xl p-1">
+                        <TabsTrigger value="signup" data-testid="signup-tab" className="rounded-xl data-[state=active]:bg-card data-[state=active]: data-[state=active]:shadow-sm text-xs sm:text-sm">{t('auth.signUp')}</TabsTrigger>
+                        <TabsTrigger value="signin" data-testid="signin-tab" className="rounded-xl data-[state=active]:bg-card data-[state=active]: data-[state=active]:shadow-sm text-xs sm:text-sm">{t('auth.signIn')}</TabsTrigger>
                       </TabsList>
 
                   <TabsContent value="signin">
                     {authMode === 'reset' ? (
                       resetEmailSent ? (
                         <div className="space-y-4 pt-4 text-center">
-                          <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
-                            <Mail className="h-8 w-8 text-green-500" />
+                          <div className="h-16 w-16 mx-auto rounded-full bg-success/15 flex items-center justify-center">
+                            <Mail className="h-8 w-8 text-success" />
                           </div>
                           <h3 className="text-lg font-semibold">{t('auth.checkEmail', 'Check your email')}</h3>
                           <p className="text-sm text-muted-foreground">
@@ -852,10 +852,10 @@ export const Auth = memo(function Auth() {
                               placeholder="your@email.com"
                               required
                               onFocus={() => trackFieldFocus('email', 'reset')}
-                              className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                              className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                             />
                           </div>
-                          <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
+                          <Button type="submit" className="w-full h-12 rounded-xl shadow-sm transition-all duration-300 " disabled={isLoading}>
                             {isLoading ? (
                               <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -865,7 +865,7 @@ export const Auth = memo(function Auth() {
                           </Button>
                           <div className="relative py-2">
                             <div className="absolute inset-0 flex items-center">
-                              <span className="w-full border-t border-border/30" />
+                              <span className="w-full border-t border-border" />
                             </div>
                             <div className="relative flex justify-center text-xs">
                               <span className="bg-card px-2 text-muted-foreground">{t('common.or', 'or')}</span>
@@ -903,7 +903,7 @@ export const Auth = memo(function Auth() {
                               value={telegramChatId}
                               onChange={(e) => setTelegramChatId(e.target.value.replace(/\D/g, ''))}
                               placeholder="123456789"
-                              className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30"
+                              className="h-12 rounded-xl bg-card  border-border"
                             />
                             <Button onClick={handleTelegramResetRequest} className="w-full h-12 rounded-xl" disabled={isLoading}>
                               {isLoading ? t('auth.telegram.sending', 'Sending...') : t('auth.telegram.getCode', 'Get code')}
@@ -916,14 +916,14 @@ export const Auth = memo(function Auth() {
                               onChange={(e) => setResetToken(e.target.value.toUpperCase())}
                               placeholder="XXXXXX"
                               maxLength={6}
-                              className="h-12 rounded-xl bg-card/40 text-center text-xl tracking-widest font-mono"
+                              className="h-12 rounded-xl bg-card text-center text-xl tracking-widest font-mono"
                             />
                             <Input
                               name="new-password"
                               type="password"
                               placeholder={t('auth.telegram.newPassword', 'New password')}
                               required
-                              className="h-12 rounded-xl bg-card/40"
+                              className="h-12 rounded-xl bg-card"
                             />
                             <Button type="submit" className="w-full h-12 rounded-xl" disabled={isLoading}>
                               {isLoading ? t('auth.telegram.saving', 'Saving...') : t('auth.telegram.savePassword', 'Save password')}
@@ -950,7 +950,7 @@ export const Auth = memo(function Auth() {
                             placeholder="your@email.com"
                             required
                             onFocus={() => trackFieldFocus('email', 'signin')}
-                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                            className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                           />
                         </div>
                         <div className="space-y-2">
@@ -972,10 +972,10 @@ export const Auth = memo(function Auth() {
                             placeholder="••••••••"
                             required
                             onFocus={() => trackFieldFocus('password', 'signin')}
-                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                            className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                           />
                         </div>
-                        <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
+                        <Button type="submit" className="w-full h-12 rounded-xl shadow-sm transition-all duration-300 " disabled={isLoading || isOAuthLoading !== null}>
                           {isLoading ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -990,8 +990,8 @@ export const Auth = memo(function Auth() {
                   <TabsContent value="signup">
                     {signupEmailSent ? (
                       <div className="space-y-4 pt-4 text-center">
-                        <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
-                          <Mail className="h-8 w-8 text-green-500" />
+                        <div className="h-16 w-16 mx-auto rounded-full bg-success/15 flex items-center justify-center">
+                          <Mail className="h-8 w-8 text-success" />
                         </div>
                         <h3 className="text-lg font-semibold">{t('auth.checkEmail', 'Check your email')}</h3>
                         <p className="text-sm text-muted-foreground">
@@ -1017,7 +1017,7 @@ export const Auth = memo(function Auth() {
                             placeholder="your@email.com"
                             required
                             onFocus={() => trackFieldFocus('email', 'signup')}
-                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                            className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                           />
                         </div>
                         <div className="space-y-2">
@@ -1030,9 +1030,9 @@ export const Auth = memo(function Auth() {
                             placeholder="••••••••"
                             required
                             onFocus={() => trackFieldFocus('password', 'signup')}
-                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                            className="h-12 rounded-xl bg-card  border-border focus:border-primary/50"
                           />
-                          <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
+                          <p className="text-xs text-muted-foreground mt-2 bg-muted/20  p-2 rounded-lg">
                             {t('auth.passwordHint')}
                           </p>
                         </div>
@@ -1055,7 +1055,7 @@ export const Auth = memo(function Auth() {
                             </PrivacyLink>
                           </label>
                         </div>
-                        <Button type="submit" data-testid="signup-button" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
+                        <Button type="submit" data-testid="signup-button" className="w-full h-12 rounded-xl shadow-sm transition-all duration-300 " disabled={isLoading || isOAuthLoading !== null}>
                           {isLoading ? t('common.loading', 'Loading...') : t('auth.signUp')}
                         </Button>
                       </form>
@@ -1079,11 +1079,11 @@ export const Auth = memo(function Auth() {
                     {t('auth.moreOptions', 'Другие способы входа')}
                   </button>
                 ) : (
-                  <div className="space-y-2 pt-2 border-t border-border/20">
+                  <div className="space-y-2 pt-2 border-t border-border">
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full gap-2 h-11 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 hover:bg-card/60 text-sm"
+                      className="w-full gap-2 h-11 rounded-xl bg-card  border-border hover:bg-card text-sm"
                       onClick={handleAppleSignIn}
                       disabled={isOAuthLoading !== null || isLoading}
                     >
@@ -1112,7 +1112,7 @@ export const Auth = memo(function Auth() {
 
           {/* Back to home */}
           <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <Button variant="ghost" onClick={() => navigate('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
+            <Button variant="ghost" onClick={() => navigate('/')} className="rounded-xl hover:bg-card ">
               {t('auth.backToHome', 'На главную')}
             </Button>
           </div>

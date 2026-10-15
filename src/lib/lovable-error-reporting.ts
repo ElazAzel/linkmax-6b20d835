@@ -25,7 +25,7 @@ declare global {
 }
 
 export function reportLovableError(error: unknown, context: Record<string, unknown> = {}) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || import.meta.env.VITE_RUNTIME_MODE === "standalone") return;
   window.__lovableEvents?.captureException?.(
     error,
     {

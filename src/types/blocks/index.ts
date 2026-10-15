@@ -5,6 +5,7 @@ import { ProductBlock, CatalogBlock, PricingBlock, BookingBlock } from './commer
 import { NewsletterBlock, TestimonialBlock, CountdownBlock, ShoutoutBlock } from './marketing';
 import { CustomCodeBlock, FormBlock, DownloadBlock, ScratchBlock } from './advanced';
 import { CommunityBlock, EventBlock } from './community';
+import { AudioBlock } from './audio';
 
 export * from './base';
 export * from './content';
@@ -13,6 +14,7 @@ export * from './commerce';
 export * from './marketing';
 export * from './advanced';
 export * from './community';
+export * from './audio';
 
 export type Block = (
     | ProfileBlock
@@ -23,6 +25,7 @@ export type Block = (
     | ImageBlock
     | ProductBlock
     | VideoBlock
+    | AudioBlock
     | CarouselBlock
     | CustomCodeBlock
     | MessengerBlock

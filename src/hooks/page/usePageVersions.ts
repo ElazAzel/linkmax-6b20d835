@@ -7,7 +7,7 @@ import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { toast } from 'sonner';
 import type { Block, PageTheme } from '@/types/page';
-import type { Json } from '@/platform/supabase/types';
+
 
 export interface PageVersion {
   id: string;
@@ -50,7 +50,7 @@ export function usePageVersions(onRestore?: (blocks: Block[], theme?: PageTheme,
         id: row.id,
         versionId: row.version_id,
         publishedAt: row.published_at,
-        blocks: row.blocks_json as unknown as Block[],
+        blocks: (row.blocks_json || []).map((block: Block & { content?: Block }) => block.content && typeof block.content === 'object' && 'type' in block.content ? block.content : block) as Block[],
         theme: row.theme_json as unknown as PageTheme | undefined,
         seo: row.seo_json as unknown as { title?: string; description?: string } | undefined,
       }));
@@ -63,61 +63,13 @@ export function usePageVersions(onRestore?: (blocks: Block[], theme?: PageTheme,
     }
   }, []);
 
-  const saveVersion = useCallback(async (
-    pageId: string,
-    blocks: Block[],
-    theme?: PageTheme,
-    seo?: object
-  ): Promise<boolean> => {
+  // Compatibility with the existing onPublish callback: publication already
+  // created history in its transaction. Never insert or prune history here.
+  const saveVersion = useCallback(async (pageId: string): Promise<boolean> => {
     if (!pageId) return false;
-
-    try {
-      // Generate content hash for deduplication
-      const jsonSlice = JSON.stringify(blocks).slice(0, 100);
-      // Use encodeURIComponent to handle non-Latin1 chars (Cyrillic etc.)
-      const contentHash = btoa(encodeURIComponent(jsonSlice));
-      const versionId = `v-${Date.now()}`;
-
-      // Insert new version
-      const { error: insertError } = await (supabase as any)
-        .from('page_snapshots')
-        .insert({
-          page_id: pageId,
-          version_id: versionId,
-          blocks_json: JSON.parse(JSON.stringify(blocks)) as Json,
-          theme_json: theme ? (JSON.parse(JSON.stringify(theme)) as Json) : null,
-          seo_json: seo ? (JSON.parse(JSON.stringify(seo)) as Json) : null,
-          content_hash: contentHash,
-          published_at: new Date().toISOString(),
-        });
-
-      if (insertError) throw insertError;
-
-      // Clean up old versions (keep only MAX_VERSIONS)
-      const { data: allVersions } = await (supabase as any)
-        .from('page_snapshots')
-        .select('id, published_at')
-        .eq('page_id', pageId)
-        .order('published_at', { ascending: false });
-
-      if (allVersions && allVersions.length > MAX_VERSIONS) {
-        const toDelete = allVersions.slice(MAX_VERSIONS).map((v: any) => v.id);
-        await (supabase as any)
-          .from('page_snapshots')
-          .delete()
-          .in('id', toDelete);
-      }
-
-      // Refresh versions list
-      await fetchVersions(pageId);
-
-      return true;
-    } catch (err) {
-      logger.error('Failed to save version', err, { context: 'usePageVersions' });
-      return false;
-    }
+    await fetchVersions(pageId);
+    return true;
   }, [fetchVersions]);
-
   const restoreVersion = useCallback((version: PageVersion) => {
     if (onRestore) {
       onRestore(version.blocks, version.theme, version.seo);

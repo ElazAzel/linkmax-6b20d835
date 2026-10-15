@@ -159,7 +159,7 @@ export function BlockInspector({
   const shell = (
     <BlockEditorShell
       block={shellBlock}
-      blockTypeName={t(`blockEditor.${block.type}`, block.type)}
+      blockTypeName={t(BLOCK_MANIFEST[block.type].labelKey, block.type)}
       blockIcon={
         <Suspense fallback={<span className="h-5 w-5 rounded-full bg-muted" />}>
           <BlockIcon className="h-5 w-5 text-primary" />
@@ -234,7 +234,7 @@ export function BlockInspector({
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
-          className="flex h-6 w-full shrink-0 items-center justify-center text-muted-foreground"
+          className="flex h-11 w-full shrink-0 items-center justify-center text-muted-foreground"
           aria-label={expanded
             ? t('editor.inspector.collapse', 'Свернуть настройки')
             : t('editor.inspector.expand', 'Развернуть настройки')}

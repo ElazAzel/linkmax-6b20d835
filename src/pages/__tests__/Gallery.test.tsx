@@ -6,6 +6,7 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from '@/testing/router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import Gallery from '../Gallery';
 
 // Mock i18next specific for Gallery
 vi.mock('react-i18next', () => ({
@@ -75,9 +76,8 @@ const createTestQueryClient = () =>
     },
   });
 
-const renderGallery = async () => {
+const renderGallery = () => {
   const queryClient = createTestQueryClient();
-  const Gallery = (await import('../Gallery')).default;
 
   return render(
     <QueryClientProvider client={queryClient}>
@@ -96,12 +96,12 @@ describe('Gallery', () => {
   });
 
   it('renders gallery header', async () => {
-    await renderGallery();
-    expect(document.body).toBeTruthy();
+    renderGallery();
+    expect(await screen.findByRole('heading', { level: 1, name: 'gallery.title' })).toBeInTheDocument();
   });
 
-  it('has no horizontal overflow', async () => {
-    await renderGallery();
-    expect(document.body).toBeTruthy();
+  it('renders published pages', async () => {
+    renderGallery();
+    expect(await screen.findByRole('main')).toHaveTextContent('Test Page');
   });
 });

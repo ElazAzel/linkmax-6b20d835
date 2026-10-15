@@ -1,11 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { loadPageBySlug, loadPageByCustomDomain, loadUserPage, savePage, publishPage } from '@/services/database';
+import { useQuery, useMutation, useQueryClient, type QueryClient } from '@tanstack/react-query';
+import { loadPageBySlug, loadPageByCustomDomain, loadUserPage } from '@/services/database';
 import type { PageData } from '@/types/page';
-import { toast } from 'sonner';
-import { useTranslation } from 'react-i18next';
-import { useAppError } from '@/hooks/useAppError';
-import { logger } from '@/lib/utils/logger';
-
+import { loadPageDraft, savePageDraft, publishPageDraft, draftError, type PageDraft } from '@/services/page-drafts';
+import { loadDraft } from '@/pwa/offlineDraftCache';
+import { pageDraftCacheKey, type LocalPageDraft } from '@/lib/page-draft-cache';
 // Query keys for cache management
 export const pageQueryKeys = {
   publicPage: (slug: string) => ['page', 'public', slug] as const,
@@ -55,9 +53,29 @@ export function useUserPage(userId: string | undefined, pageId?: string | null) 
     queryKey: pageQueryKeys.userPage(userId || '', pageId),
     queryFn: async () => {
       if (!userId) return null;
+      if (pageId) {
+        try {
+          const draft = await loadPageDraft(pageId);
+          return { pageData: draft.snapshot, chatbotContext: draft.chatbot_context, draft, draftError: null };
+        } catch (error) {
+          const problem = draftError(error);
+          if (problem.kind === 'access') throw problem;
+          const local = loadDraft<LocalPageDraft>(pageDraftCacheKey(userId, pageId))?.data;
+          if (local?.pageData?.id === pageId) return { pageData: local.pageData, chatbotContext: local.chatbotContext, draft: null, draftError: problem };
+        }
+      }
       const { data, chatbotContext, error } = await loadUserPage(userId, pageId);
       if (error) throw error;
-      return { pageData: data, chatbotContext };
+            if (!data?.id) return { pageData: data, chatbotContext, draft: null, draftError: null };
+      try {
+        const draft = await loadPageDraft(data.id);
+        return { pageData: { ...data, ...draft.snapshot }, chatbotContext: draft.chatbot_context, draft, draftError: null };
+      } catch (error) {
+        const problem = draftError(error);
+        if (problem.kind === 'access') throw problem;
+        // Published content is a read-only seed for a usable local draft.
+        return { pageData: data, chatbotContext, draft: null, draftError: problem };
+      }
     },
     enabled: !!userId,
     staleTime: 2 * 60 * 1000, // 2 minutes
@@ -66,82 +84,42 @@ export function useUserPage(userId: string | undefined, pageId?: string | null) 
   });
 }
 
-// Hook for saving user's page with cache update (not invalidation)
+type CachedUserPage = { pageData: PageData | null; chatbotContext?: string; draft: PageDraft | null; draftError: unknown };
+export function synchronizeDraftCache(queryClient: QueryClient, userId: string, draft: PageDraft) {
+  queryClient.setQueriesData<CachedUserPage>({ queryKey: ['page', 'user', userId] }, old => {
+    if (old?.pageData?.id !== draft.page_id) return old;
+    if (old.draft && (old.draft.revision > draft.revision || (old.draft.revision === draft.revision && old.draft.base_published_revision > draft.base_published_revision))) return old;
+    return { pageData: draft.snapshot, chatbotContext: draft.chatbot_context, draft, draftError: null };
+  });
+}
+
 export function useSavePageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
-  const { t } = useTranslation();
-  const { handleError } = useAppError();
-
   return useMutation({
-    mutationFn: async ({
-      pageData,
-      chatbotContext
-    }: {
-      pageData: PageData;
-      chatbotContext?: string;
-    }): Promise<{ dbPage: { id: string; slug: string; is_published: boolean } | null; pageData: PageData; chatbotContext?: string }> => {
+    mutationFn: async ({ pageData, chatbotContext, revision, basePublishedRevision }: {
+      pageData: PageData; chatbotContext?: string; revision: number; basePublishedRevision: number;
+    }) => {
       if (!userId) throw new Error('User ID is required');
-      const { data, error } = await savePage(pageData, userId, chatbotContext);
-      if (error) throw error;
-      return {
-        dbPage: data ? { id: data.id, slug: data.slug, is_published: data.is_published ?? false } : null,
-        pageData,
-        chatbotContext
-      };
-    },
-    onSuccess: ({ dbPage, pageData, chatbotContext }) => {
-      // Update cache directly instead of invalidating to preserve local state
-      // Also update pageData with the saved id if available
-      const updatedPageData = dbPage?.id ? { ...pageData, id: dbPage.id } : pageData;
-      if (userId) {
-        queryClient.setQueryData(
-          pageQueryKeys.userPage(userId, updatedPageData.id),
-          { pageData: updatedPageData, chatbotContext }
-        );
-      }
-      // Invalidate public page cache if published
-      if (dbPage?.slug && dbPage?.is_published) {
-        queryClient.invalidateQueries({
-          queryKey: pageQueryKeys.publicPage(dbPage.slug)
-        });
-      }
-    },
-    onError: (error: Error) => {
-      logger.error('Error saving page', error, { context: 'usePageCache' });
-      logger.error('Error details', error, { context: 'usePageCache', data: { details: JSON.stringify(error, null, 2) } });
-      handleError(error, t('toasts.page.saveError'));
+      const draft = await savePageDraft(pageData, revision, basePublishedRevision, chatbotContext);
+      synchronizeDraftCache(queryClient, userId, draft);
+      return { draft, dbPage: { id: draft.page_id, slug: pageData.slug, is_published: pageData.isPublished }, pageData, chatbotContext };
     },
   });
 }
 
-// Hook for publishing page with cache update
 export function usePublishPageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
-  const { t } = useTranslation();
-
   return useMutation({
-    mutationFn: async (pageId?: string | null) => {
+    mutationFn: async ({ pageId, revision, basePublishedRevision }: { pageId: string; revision: number; basePublishedRevision: number }): Promise<PageDraft> => {
       if (!userId) throw new Error('User ID is required');
-      const { slug, error } = await publishPage(userId, pageId);
-      if (error) throw error;
-      return slug;
+      return publishPageDraft(pageId, revision, basePublishedRevision);
     },
-    onSuccess: (slug) => {
-      // Don't invalidate user cache to preserve local state
-      // Only invalidate public page cache
-      if (slug) {
-        queryClient.invalidateQueries({
-          queryKey: pageQueryKeys.publicPage(slug)
-        });
-      }
-    },
-    onError: (error) => {
-      logger.error('Error publishing page', error, { context: 'usePageCache' });
-      toast.error(t('toasts.page.publishError'));
+    onSuccess: (draft) => {
+      if (userId) synchronizeDraftCache(queryClient, userId, draft);
+      void queryClient.invalidateQueries({ queryKey: ['page', 'public'] });
     },
   });
 }
-
 // Utility to prefetch public page (useful for link hovers)
 export function usePrefetchPublicPage() {
   const queryClient = useQueryClient();

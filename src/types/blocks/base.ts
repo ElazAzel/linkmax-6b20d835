@@ -63,14 +63,16 @@ export type BlockSizePreset =
     | 'wide'        // 2x1 (was 'full' logic)
     | 'tall'        // 1x2
     | 'large'       // 2x2
+    | 'xl'          // 2x4
     | 'full'        // Legacy alias for 'wide'
     | 'half';       // Legacy alias for 'small'
 
-export const BLOCK_SIZE_DIMENSIONS: Record<BlockSizePreset, { gridCols: 1 | 2; gridRows: 1 | 2 }> = {
+export const BLOCK_SIZE_DIMENSIONS: Record<BlockSizePreset, { gridCols: 1 | 2; gridRows: 1 | 2 | 4 }> = {
     'small': { gridCols: 1, gridRows: 1 },
     'wide': { gridCols: 2, gridRows: 1 },
     'tall': { gridCols: 1, gridRows: 2 },
     'large': { gridCols: 2, gridRows: 2 },
+    'xl': { gridCols: 2, gridRows: 4 },
     // Legacy mapping
     'full': { gridCols: 2, gridRows: 1 },
     'half': { gridCols: 1, gridRows: 1 },
@@ -102,4 +104,4 @@ export interface BlockGridProps {
 
 }
 
-export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event';
+export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'audio' | 'carousel' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event';

@@ -68,6 +68,7 @@ const BLOCK_COLORS: Record<string, string> = {
   socials: 'bg-pink-500',
   messenger: 'bg-green-500',
   video: 'bg-rose-500',
+  audio: 'bg-violet-500',
   carousel: 'bg-violet-500',
   before_after: 'bg-cyan-600',
   map: 'bg-green-600',
@@ -92,8 +93,13 @@ const BLOCK_COLORS: Record<string, string> = {
 // Exclude 'profile' since it's auto-added and not insertable
 // Built lazily: isBlockPremium reads the manifest + promo window at call time.
 function buildManifestBlocks() {
+  const coreOrder: string[] = ['button', 'image', 'video', 'audio', 'download', 'text', 'form', 'carousel'];
   return Object.values(BLOCK_MANIFEST)
     .filter((entry) => entry.type !== 'profile')
+    .sort((a, b) => {
+      const rank = (type: string) => coreOrder.includes(type) ? coreOrder.indexOf(type) : coreOrder.length;
+      return rank(a.type) - rank(b.type);
+    })
     .map((entry) => ({
       type: entry.type,
       labelKey: entry.labelKey,

@@ -8,7 +8,7 @@ import { generateTokensCss, APP_ONLY_VARIABLES } from '../generate-css';
 import { APP_FIRST_SEGMENTS, isAppSurfacePath } from '../surface';
 import { colors, type ColorScheme } from '../tokens';
 
-const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8');
+const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8').replace(/\r\n/g, '\n');
 const hsl = (triplet: string) => `hsl(${triplet})`;
 
 describe('design tokens', () => {
@@ -42,7 +42,7 @@ describe('design tokens', () => {
     ['warning', 'card', AA_BODY],
     ['destructive', 'card', AA_BODY],
     ['info', 'card', AA_BODY],
-    ['primary', 'card', AA_BODY],
+    ['primaryText', 'card', AA_BODY],
     // Field borders need non-text contrast.
     ['input', 'card', 1.3],
   ];
@@ -62,7 +62,7 @@ describe('design tokens', () => {
 
   it('large numbers in the accent color stay readable on the background', () => {
     for (const mode of ['light', 'dark'] as const) {
-      const ratio = contrastRatio(hsl(colors[mode].primary), hsl(colors[mode].background)) ?? 0;
+      const ratio = contrastRatio(hsl(colors[mode].primaryText), hsl(colors[mode].background)) ?? 0;
       expect(ratio).toBeGreaterThanOrEqual(AA_LARGE);
     }
   });

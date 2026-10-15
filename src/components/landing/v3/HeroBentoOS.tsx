@@ -62,23 +62,23 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-[#101318] px-4 pb-10 pt-24 text-white sm:px-6 sm:pt-28 lg:px-8 lg:pb-16">
+    <section className="relative overflow-hidden bg-background px-4 pb-10 pt-24 text-foreground sm:px-6 sm:pt-28 lg:px-8 lg:pb-16">
       <div className="pointer-events-none absolute inset-0 opacity-80">
-        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#ff5701]/[0.18] blur-3xl" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
+        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-primary/[0.18] blur-3xl" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-card/10" />
       </div>
 
       <div className="relative mx-auto grid min-w-0 max-w-[1120px] gap-8 lg:grid-cols-[0.94fr_1.06fr] lg:items-center">
         <div className="min-w-0 max-w-2xl">
-          <div data-testid="landing-hero-badge" className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-[11px] font-semibold uppercase leading-4 tracking-[0.12em] sm:text-xs sm:tracking-[0.16em] text-white/[0.76]">
-            <span className="h-2 w-2 rounded-full bg-[#ff5701]" />
+          <div data-testid="landing-hero-badge" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] font-semibold uppercase leading-4 tracking-[0.12em] sm:text-xs sm:tracking-[0.16em] text-muted-foreground">
+            <span className="h-2 w-2 rounded-full bg-primary" />
             {t('landing.revenue.hero.eyebrow', 'Для специалистов и сервисного бизнеса')}
           </div>
 
-          <h1 data-testid="landing-hero-title" className="mt-6 max-w-2xl break-words font-['Space_Grotesk',sans-serif] text-[38px] font-semibold leading-[1] sm:leading-[0.96] tracking-[-0.04em] text-white sm:text-6xl lg:text-[78px] lg:leading-[0.9]">
+          <h1 data-testid="landing-hero-title" className="mt-6 max-w-2xl break-words font-sans text-[38px] font-semibold leading-[1] sm:leading-[0.96] tracking-[-0.04em] text-foreground sm:text-6xl lg:text-[78px] lg:leading-[0.9]">
             {t('landing.revenue.hero.title', 'Клиент выбирает, записывается и оплачивает — по одной ссылке')}
           </h1>
-          <p data-testid="landing-hero-description" className="mt-5 max-w-xl text-base leading-6 sm:leading-7 text-white/[0.72] sm:text-lg">
+          <p data-testid="landing-hero-description" className="mt-5 max-w-xl text-base leading-6 sm:leading-7 text-muted-foreground sm:text-lg">
             {t(
               'landing.revenue.hero.subtitle',
               'LinkMAX помогает пройти весь путь без лишней переписки: понять услугу, выбрать время, оставить заявку и вернуться снова.'
@@ -86,18 +86,18 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-7 w-full sm:max-w-2xl">
-            <div className="flex flex-col gap-2 rounded-[22px] border border-white/[0.12] bg-white p-2 shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:flex-row">
-              <div className="flex h-[52px] min-w-0 flex-1 items-center rounded-[16px] bg-[#f6f6f1] px-4 text-left">
-                <span className="shrink-0 text-sm font-semibold text-[#6f746d]">{slugPrefix}</span>
+            <div className="flex flex-col gap-2 rounded-card border border-border bg-card p-2 shadow-sm sm:flex-row">
+              <div className="flex h-[52px] min-w-0 flex-1 items-center rounded-[16px] bg-background px-4 text-left">
+                <span className="shrink-0 text-sm font-semibold text-muted-foreground">{slugPrefix}</span>
                 {!slug && (
-                  <span className="pointer-events-none ml-1 text-base font-semibold text-[#a0a59d]" aria-hidden="true">
+                  <span className="pointer-events-none ml-1 text-base font-semibold text-muted-foreground" aria-hidden="true">
                     {slugHint}
                   </span>
                 )}
                 <input
                   value={slug}
                   onChange={(event) => handleSlugChange(event.target.value)}
-                  className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[#101318] outline-none"
+                  className="min-w-0 flex-1 bg-transparent text-base font-semibold text-foreground outline-none"
                   aria-label={t('landing.short.slugAria', 'Короткий адрес страницы')}
                   maxLength={30}
                 />
@@ -105,22 +105,22 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
               <Button
                 type="submit"
                 data-testid="landing-hero-primary-cta"
-                className="h-[52px] rounded-[16px] bg-[#ff5701] px-6 text-base font-semibold text-white shadow-[0_10px_24px_rgba(255,87,1,0.28)] transition-transform hover:-translate-y-0.5 hover:bg-[#e64e00]"
+                className="h-[52px] rounded-[16px] bg-primary px-6 text-base font-semibold text-primary-foreground shadow-sm transition-transform hover:-translate-y-0.5 hover:bg-primary"
               >
                 {t('landing.revenue.hero.cta', 'Создать бесплатно')}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
-            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-white/[0.66]">
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#ff5701]" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                 {t('landing.short.free', 'Бесплатный старт')}
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#ff5701]" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                 {t('landing.short.noCode', 'без кода')}
               </span>
-              <button type="button" data-testid="landing-hero-secondary-cta" onClick={onExamples} className="font-semibold text-white underline-offset-4 hover:underline">
+              <button type="button" data-testid="landing-hero-secondary-cta" onClick={onExamples} className="font-semibold text-foreground underline-offset-4 hover:underline">
                 {t('landing.short.examples', 'посмотреть примеры')}
               </button>
             </div>
@@ -128,18 +128,18 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
         </div>
 
         <div className="relative min-w-0 lg:min-h-[560px]" aria-hidden="true">
-          <div className="relative w-full rounded-[28px] lg:absolute lg:right-4 lg:top-8 lg:w-[78%] lg:rounded-[34px] border border-white/[0.12] bg-[#f6f6f1] p-4 text-[#101318] shadow-[0_30px_100px_rgba(0,0,0,0.42)] sm:p-5">
-            <div className="flex items-center justify-between border-b border-[#d9d7cc] pb-4">
+          <div className="relative w-full rounded-card lg:absolute lg:right-4 lg:top-8 lg:w-[78%] lg:rounded-card border border-border bg-background p-4 text-foreground shadow-md sm:p-5">
+            <div className="flex items-center justify-between border-b border-border pb-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#101318] text-sm font-black text-white">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground text-sm font-black text-background">
                   {t('landing.short.preview.initials', 'LM')}
                 </div>
                 <div>
                   <div className="text-sm font-bold">{t('landing.revenue.preview.name', 'Сервис Марии')}</div>
-                  <div className="text-xs font-medium text-[#6f746d]">{t('landing.revenue.preview.slug', 'lnkmx.my/maria')}</div>
+                  <div className="text-xs font-medium text-muted-foreground">{t('landing.revenue.preview.slug', 'lnkmx.my/maria')}</div>
                 </div>
               </div>
-              <div className="rounded-full bg-[#ff5701] px-3 py-1 text-xs font-bold text-white">
+              <div className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">
                 {t('landing.short.preview.live', 'online')}
               </div>
             </div>
@@ -150,43 +150,43 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
               </div>
               <div className="mt-3 grid min-w-0 grid-cols-1 gap-2">
                 {previewBlocks.map((item) => (
-                  <div key={item.id} className="flex min-w-0 items-center gap-3 rounded-2xl bg-white px-3 py-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#101318] text-white">
+                  <div key={item.id} className="flex min-w-0 items-center gap-3 rounded-2xl bg-card px-3 py-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background">
                       <item.icon className="h-4 w-4" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-bold">{item.title}</div>
-                      <div className="truncate text-xs font-medium text-[#6f746d]">{item.body}</div>
+                      <div className="truncate text-xs font-medium text-muted-foreground">{item.body}</div>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-[#101318]/40" />
+                    <ArrowRight className="h-4 w-4 text-foreground/40" />
                   </div>
                 ))}
               </div>
-              <div className="mt-4 rounded-2xl bg-[#ff5701] px-4 py-3 text-center text-sm font-bold text-white">
+              <div className="mt-4 rounded-2xl bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground">
                 {t('landing.revenue.preview.cta', 'Выбрать услугу и время')}
               </div>
             </div>
           </div>
 
-          <div className="absolute left-0 top-14 hidden w-[54%] lg:block rounded-[26px] border border-white/[0.12] bg-white/[0.92] p-4 text-[#101318] shadow-[0_20px_70px_rgba(0,0,0,0.30)] backdrop-blur lg:top-24">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[#6f746d]">
-              <Sparkles className="h-4 w-4 text-[#ff5701]" />
+          <div className="absolute left-0 top-14 hidden w-[54%] lg:block rounded-card border border-border bg-card/95 p-4 text-foreground shadow-[0_20px_70px_rgba(0,0,0,0.30)] backdrop-blur lg:top-24">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              <Sparkles className="h-4 w-4 text-primary" />
               {t('landing.revenue.preview.aiLabel', 'Страница готова')}
             </div>
             <div className="mt-3 text-4xl font-semibold tracking-[-0.06em]">7</div>
-            <div className="mt-1 text-sm font-medium leading-5 text-[#4f554e]">
+            <div className="mt-1 text-sm font-medium leading-5 text-muted-foreground">
               {t('landing.revenue.preview.aiBody', 'блоков уже собраны: предложение, цены, запись, отзывы и контакты')}
             </div>
           </div>
 
-          <div className="absolute bottom-8 left-4 hidden w-[64%] lg:block rounded-[26px] border border-white/[0.12] bg-[#101318]/[0.88] p-4 text-white shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur lg:bottom-14">
-            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/[0.54]">
+          <div className="absolute bottom-8 left-4 hidden w-[64%] lg:block rounded-card border border-border bg-foreground/[0.88] p-4 text-background shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur lg:bottom-14">
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-background">
               {t('landing.revenue.preview.inboxLabel', 'Следующий шаг')}
             </div>
             <div className="mt-3 text-base font-semibold">{t('landing.revenue.preview.inboxName', 'Напомнить клиенту о повторной записи')}</div>
-            <div className="mt-3 flex items-center justify-between rounded-2xl bg-white/10 px-3 py-2 text-sm font-semibold">
+            <div className="mt-3 flex items-center justify-between rounded-2xl bg-card/10 px-3 py-2 text-sm font-semibold">
               <span>{t('landing.revenue.preview.inboxStatus', 'в рабочем списке')}</span>
-              <span className="text-[#ff5701]">{t('landing.revenue.preview.inboxTime', 'сегодня')}</span>
+              <span className="text-background">{t('landing.revenue.preview.inboxTime', 'сегодня')}</span>
             </div>
           </div>
         </div>
@@ -194,7 +194,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
 
       <div className="relative mx-auto mt-8 flex max-w-[1120px] flex-wrap gap-2">
         {useCases.map((item) => (
-          <span key={item.id} className="rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5 text-sm font-semibold text-white/[0.72]">
+          <span key={item.id} className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-semibold text-muted-foreground">
             {item.label}
           </span>
         ))}

@@ -22,10 +22,10 @@ vi.mock('@/hooks/ui/use-mobile', () => ({
 }));
 
 describe('BlockInsertButton a11y', () => {
-  it('renders add-block trigger as native button', () => {
+  it('renders add-block trigger as native button', async () => {
     renderWithProviders(<BlockInsertButton onInsert={vi.fn()} />);
 
-    const trigger = screen.getByRole('button');
+    const trigger = await screen.findByRole('button');
     expect(trigger).toBeInTheDocument();
     expect(trigger.tagName).toBe('BUTTON');
   });

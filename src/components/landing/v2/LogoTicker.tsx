@@ -23,13 +23,13 @@ export const LogoTicker = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="border-y border-[#ded9c9] bg-white">
+    <section className="border-y border-border bg-card">
       <div className="mx-auto max-w-[1200px] px-4 py-8 sm:py-10 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#ff5701]">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
             {t('landingV1.ticker.title', 'Подходит для этих ниш и форматов услуг')}
           </p>
-          <p className="max-w-md text-sm leading-6 text-[#62675f]">
+          <p className="max-w-md text-sm leading-6 text-muted-foreground">
             {t('landing.v5.badge', 'Операционный контур для услуг, экспертов и небольших команд')}
           </p>
         </div>
@@ -38,10 +38,10 @@ export const LogoTicker = () => {
           {niches.map((item, index) => (
             <div
               key={`${item.key}-${index}`}
-              className="flex min-h-[84px] sm:min-h-[96px] flex-col justify-between rounded-[18px] border border-[#ded9c9] bg-[#f6f6f1] p-4 transition-colors hover:border-[#ff5701]/40 hover:bg-[#fff3ec]"
+              className="flex min-h-[84px] sm:min-h-[96px] flex-col justify-between rounded-card border border-border bg-background p-4 transition-colors hover:border-primary/40 hover:bg-accent"
             >
-              <item.Icon className="h-5 w-5 text-[#ff5701]" />
-              <span className="text-sm font-semibold leading-5 text-[#101318]">
+              <item.Icon className="h-5 w-5 text-primary" />
+              <span className="text-sm font-semibold leading-5 text-foreground">
                 {t(item.key, item.fallback)}
               </span>
             </div>

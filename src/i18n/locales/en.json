@@ -1044,7 +1044,8 @@
     "socials": "Social networks",
     "testimonial": "Reviews",
     "text": "Text",
-    "video": "Video"
+    "video": "Video",
+    "audio": "Audio"
   },
   "blocks": {
     "addFailed": "Failed to add block",
@@ -8093,5 +8094,62 @@
   "payment": {
     "more_details": "More details",
     "test_mode_banner": "All payments in preview run in test mode."
+  },
+  "audioBlock": {
+    "label": "Audio",
+    "source": "Source",
+    "file": "MP3 / WAV file",
+    "musicLink": "Music link",
+    "cover": "Cover",
+    "fileHint": "MP3 or WAV, up to 50 MB.",
+    "externalHint": "The music service opens from a separate card.",
+    "addSource": "Choose an audio file or music link.",
+    "playbackError": "Unable to play this audio. Check the file or link.",
+    "tooLarge": "The file exceeds 50 MB.",
+    "invalidFormat": "Choose an MP3 or WAV audio file.",
+    "emptyFile": "The file is empty.",
+    "invalidUrl": "Enter a valid HTTP or HTTPS link."
+  },
+  "pageV2": {
+    "navigation": {
+      "page": "My page",
+      "overview": "Overview",
+      "add": "Add",
+      "business": "Business",
+      "label": "Dashboard navigation"
+    },
+    "actions": {
+      "block": "Add block",
+      "theme": "Appearance",
+      "order": "Reorder blocks",
+      "templates": "Templates",
+      "ai": "AI assistant"
+    },
+    "firstPage": {
+      "title": "Create your first page",
+      "hint": "Add a profile and three tiles, then publish your page."
+    },
+    "draft": {
+      "publishing": "Publishing…",
+      "previewHint": "Only visible to you. Your public page updates when you publish.",
+      "download": "Download my draft",
+      "reload": "Open server version",
+      "conflict": "A newer version was saved in another tab. Download your changes before opening the server version.",
+      "unavailable": "Server saving is not available yet. Your changes are saved on this device.",
+      "access": "You no longer have permission to edit this page. Download your changes.",
+      "network": "Unable to save to the server. Your changes are saved on this device; retry when connected.",
+      "publishFirst": "Publish your page first."
+    }
+  },
+  "imagePlacement": {
+    "title": "Crop and position",
+    "x": "Horizontal position",
+    "y": "Vertical position",
+    "zoom": "Zoom",
+    "rotate": "Rotate 90°",
+    "flipX": "Flip horizontally",
+    "flipY": "Flip vertically",
+    "reset": "Reset framing",
+    "hint": "The original stays unchanged. Adjust its position or choose Fit in the scale settings."
   }
 }

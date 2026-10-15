@@ -15,6 +15,8 @@ const STORAGE_KEYS = {
 interface UseDashboardSharingOptions {
   onPublish: () => Promise<string | null>;
   onSave: () => Promise<void>;
+  onPreview?: () => void;
+  publishedSlug?: string;
   onQuestComplete?: (questKey: string) => void;
   onSaveVersion?: () => Promise<void>;
 }
@@ -22,13 +24,13 @@ interface UseDashboardSharingOptions {
 /**
  * Hook to manage sharing, preview, referral dialog, and install prompt logic
  */
-export function useDashboardSharing({ onPublish, onSave, onQuestComplete, onSaveVersion }: UseDashboardSharingOptions) {
+export function useDashboardSharing({ onPublish, onPreview, publishedSlug, onQuestComplete, onSaveVersion }: UseDashboardSharingOptions) {
   const { t } = useTranslation();
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState('');
 
-  const handleShare = useCallback(async () => {
+  const handlePublish = useCallback(async () => {
     const slug = await onPublish();
     if (!slug) return;
 
@@ -73,13 +75,20 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete, onSave
     }
   }, [onPublish, onQuestComplete, onSaveVersion, t]);
 
-  const handlePreview = useCallback(async () => {
-    await onSave();
-    const slug = await onPublish();
-    if (slug) {
-      window.open(`/${slug}`, '_blank');
+  const handleShare = useCallback(async () => {
+    if (!publishedSlug) {
+      toast.info(t('pageV2.draft.publishFirst', 'Сначала опубликуйте страницу.'));
+      return;
     }
-  }, [onSave, onPublish]);
+    const url = getPublicPageUrl(publishedSlug);
+    setPublishedUrl(url);
+    const copied = await copyToClipboard(url);
+    if (copied) toast.success(t('toasts.sharing.linkCopied'));
+    else toast.error(t('toasts.sharing.copyError'));
+    setShowShareDialog(true);
+  }, [publishedSlug, t]);
+
+  const handlePreview = useCallback(async () => { onPreview?.(); }, [onPreview]);
 
   const closeInstallPrompt = useCallback(() => {
     setShowInstallPrompt(false);
@@ -94,6 +103,7 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete, onSave
     showShareDialog,
     publishedUrl,
     handleShare,
+    handlePublish,
     handlePreview,
     closeInstallPrompt,
     closeShareDialog,
