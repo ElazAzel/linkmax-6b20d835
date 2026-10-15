@@ -60,7 +60,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 flex w-full max-w-[480px] flex-col gap-2 sm:flex-row">
-          <label className="flex h-14 flex-1 items-center rounded-full bg-background/10 px-5 text-left focus-within:ring-2 focus-within:ring-background/40">
+          <label className="flex h-14 w-full items-center rounded-full bg-background/10 sm:flex-1 px-5 text-left focus-within:ring-2 focus-within:ring-background/40">
             <span className="shrink-0 text-sm text-background/50">{t('landing.short.slugPrefix', 'lnkmx.my/')}</span>
             <input
               value={slug}
@@ -70,7 +70,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
               className="min-w-0 flex-1 bg-transparent text-sm text-background outline-none placeholder:text-background/35"
             />
           </label>
-          <button type="submit" className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-background px-6 text-sm font-semibold text-foreground transition-opacity hover:opacity-90">
+          <button type="submit" className="inline-flex h-14 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-background px-6 text-sm font-semibold text-foreground transition-opacity hover:opacity-90">
             {t('landing.short.ctaPrimary', 'Создать бесплатно')}
             <ArrowRight className="h-4 w-4" />
           </button>
