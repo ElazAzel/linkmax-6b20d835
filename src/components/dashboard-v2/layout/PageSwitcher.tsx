@@ -155,18 +155,18 @@ function MobilePageSwitcher({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="h-auto p-2 gap-2">
-          <Avatar className="h-8 w-8 rounded-lg">
+        <Button variant="ghost" className="h-auto max-w-full p-2 gap-2">
+          <Avatar className="h-8 w-8 shrink-0 rounded-lg">
             <AvatarImage src={activePage?.previewUrl} alt={activePage?.title} />
             <AvatarFallback className="rounded-lg bg-primary/10 text-primary text-sm font-bold">
               {activePage?.title?.charAt(0)?.toUpperCase() || '?'}
             </AvatarFallback>
           </Avatar>
-          <div className="hidden sm:block text-left">
-            <div className="text-sm font-medium">{activePage?.title || t('dashboard.pageSwitcher.select', 'Select page')}</div>
-            <div className="text-xs text-muted-foreground">/{activePage?.slug || ''}</div>
+          <div className="hidden min-w-0 sm:block text-left">
+            <div className="truncate text-sm font-medium">{activePage?.title || t('dashboard.pageSwitcher.select', 'Select page')}</div>
+            <div className="truncate text-xs text-muted-foreground">/{activePage?.slug || ''}</div>
           </div>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" className="h-[80vh] rounded-t-3xl">
@@ -260,18 +260,18 @@ function DesktopPageSwitcher({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-auto py-2 px-3 gap-3">
-          <Avatar className="h-8 w-8 rounded-lg">
+        <Button variant="ghost" className="h-auto max-w-full py-2 px-3 gap-3">
+          <Avatar className="h-8 w-8 shrink-0 rounded-lg">
             <AvatarImage src={activePage?.previewUrl} alt={activePage?.title} />
             <AvatarFallback className="rounded-lg bg-primary/10 text-primary text-sm font-bold">
               {activePage?.title?.charAt(0)?.toUpperCase() || '?'}
             </AvatarFallback>
           </Avatar>
-          <div className="text-left">
-            <div className="text-sm font-medium">{activePage?.title || t('dashboard.pageSwitcher.select', 'Select page')}</div>
-            <div className="text-xs text-muted-foreground">/{activePage?.slug || ''}</div>
+          <div className="min-w-0 text-left">
+            <div className="truncate text-sm font-medium">{activePage?.title || t('dashboard.pageSwitcher.select', 'Select page')}</div>
+            <div className="truncate text-xs text-muted-foreground">/{activePage?.slug || ''}</div>
           </div>
-          <ChevronDown className="h-4 w-4 text-muted-foreground ml-1" />
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground ml-1" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-72 rounded-xl p-2">
@@ -297,7 +297,7 @@ function DesktopPageSwitcher({
               activePage?.id === page.id && "bg-primary/10"
             )}
           >
-            <Avatar className="h-8 w-8 rounded-lg">
+            <Avatar className="h-8 w-8 shrink-0 rounded-lg">
               <AvatarImage src={page.previewUrl} alt={page.title} />
               <AvatarFallback className="rounded-lg bg-muted text-xs font-bold">
                 {page.title.charAt(0).toUpperCase()}

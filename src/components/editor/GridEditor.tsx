@@ -127,6 +127,8 @@ interface GridEditorProps {
   pageNiche?: string;
   /** Block ID that was just inserted — gets a one-time appear animation + ring */
   recentlyAddedBlockId?: string | null;
+  reordering?: boolean;
+  onReorderingChange?: (reordering: boolean) => void;
 }
 
 interface SortableGridBlockItemProps {
@@ -486,11 +488,15 @@ export const GridEditor = memo(function GridEditor({
   onInsertPreset,
   pageNiche,
   recentlyAddedBlockId,
+  reordering,
+  onReorderingChange,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [reorderMode, setReorderMode] = useState(false);
+  const [localReorderMode, setLocalReorderMode] = useState(false);
+  const reorderMode = reordering ?? localReorderMode;
+  const setReorderMode = (next: boolean) => { setLocalReorderMode(next); onReorderingChange?.(next); };
   const [experimentBlock, setExperimentBlock] = useState<Block | null>(null);
   const [sectionDialogOpen, setSectionDialogOpen] = useState(false);
   const [sectionNameInput, setSectionNameInput] = useState('');
@@ -872,18 +878,20 @@ export const GridEditor = memo(function GridEditor({
 
   return (
     <div className="lm-page-width lm-block-stack py-4 space-y-4 pb-32 md:pb-24">
-      {contentBlocks.length > 1 && <div className="flex justify-end pb-6">
-        <Button type="button" variant="secondary" size="sm" aria-pressed={reorderMode} onClick={() => { setReorderMode(value => !value); clearSelection(); }}>
+      {contentBlocks.length > 1 && !onReorderingChange && <div className="flex justify-end pb-6">
+        <Button type="button" variant="secondary" size="sm" aria-pressed={reorderMode} onClick={() => { setReorderMode(!reorderMode); clearSelection(); }}>
           {reorderMode ? t('common.done', 'Готово') : t('pageV2.actions.order', 'Порядок блоков')}
         </Button>
       </div>}
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
         <div className="lm-profile-card relative isolate" data-onboarding="profile-block" data-editor-block>
-          <BlockRenderer block={profileBlock} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
-          <button type="button" className="absolute top-2 right-2 h-11 w-11 rounded-full bg-card shadow-sm flex items-center justify-center" onClick={() => onEditBlock(profileBlock)} aria-label={t('common.edit')}>
-            <Edit2 className="h-4 w-4" />
-          </button>
+          <div className="relative" data-block-id={profileBlock.id}>
+            <div className="pointer-events-none"><BlockRenderer block={profileBlock} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} /></div>
+            <button type="button" className="absolute inset-0 rounded-card focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onEditBlock(profileBlock)} aria-label={t('common.edit')}>
+              <span className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full bg-card shadow-sm"><Edit2 className="h-4 w-4" /></span>
+            </button>
+          </div>
           {profileSocials && (
             <div className="relative" data-lm-socials>
               <BlockRenderer block={profileSocials} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />

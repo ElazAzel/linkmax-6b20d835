@@ -540,6 +540,7 @@ function DashboardV2Inner() {
               <ScreenErrorBoundary screenName="Editor">
                 {dashboard.pageData && <EditorScreen
                   pageData={dashboard.pageData}
+                  pageSwitcher={pageSwitcherElement}
                   loading={dashboard.loading}
                   isPremium={dashboard.isPremium}
                   currentTier={dashboard.isPremium ? 'pro' : 'identity'}

@@ -36,7 +36,7 @@ export const DashboardLayout = memo(function DashboardLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="app-canvas min-h-screen flex overflow-hidden translate-z-0">
+    <div className="app-canvas min-h-screen flex overflow-hidden">
       <GlobalCommandPalette />
       {!isMobile && (
         <DashboardSidebar

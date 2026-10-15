@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Palette from 'lucide-react/dist/esm/icons/palette';
+import ArrowUpDown from 'lucide-react/dist/esm/icons/arrow-up-down';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { hapticLight, hapticSelection } from '@/platform/native/haptics';
@@ -22,6 +23,9 @@ export interface SmartActionDockProps {
   onAIImprove?: () => void;
   onCustomize?: () => void;
   hasContent?: boolean;
+  onToggleOrder?: () => void;
+  reordering?: boolean;
+  inline?: boolean;
   className?: string;
 }
 
@@ -30,6 +34,9 @@ export const SmartActionDock = memo(function SmartActionDock({
   onAIImprove,
   onCustomize,
   hasContent,
+  onToggleOrder,
+  reordering = false,
+  inline = false,
   className,
 }: SmartActionDockProps) {
   const { t } = useTranslation();
@@ -40,18 +47,18 @@ export const SmartActionDock = memo(function SmartActionDock({
       role="toolbar"
       aria-label={t('editor.dock.label', 'Действия редактора')}
       className={cn(
-        'fixed z-40 left-1/2 -translate-x-1/2',
+        inline ? 'sticky top-24 z-30 mx-auto w-fit max-w-full' : 'fixed z-40 left-1/2 -translate-x-1/2',
         // mobile: над BottomNav (BottomNav примерно 80px + safe-area)
-        isMobile
+        !inline && (isMobile
           ? 'bottom-[calc(env(safe-area-inset-bottom)+88px)] w-[calc(100vw-1rem)] max-w-md'
-          : 'bottom-6 w-auto',
+          : 'bottom-6 w-auto'),
         className,
       )}
     >
       <div
         className={cn(
-          'flex items-center gap-1 p-1.5 rounded-2xl',
-          'bg-card border border-border shadow-lg',
+          'flex items-center justify-center gap-1 rounded-full p-1.5',
+          'bg-card border border-border shadow-sm',
         )}
       >
         {/* Primary: Add block */}
@@ -61,13 +68,13 @@ export const SmartActionDock = memo(function SmartActionDock({
           aria-label={t('editor.dock.add', 'Добавить блок')}
           data-onboarding="add-block"
           className={cn(
-            'group flex items-center gap-2 h-12 rounded-xl px-4 transition-all',
+            'group flex min-w-0 flex-1 items-center justify-center gap-2 h-12 rounded-full px-4 transition-all',
             'bg-primary text-primary-foreground hover:bg-primary/90',
             'active:scale-[0.97]',
           )}
         >
-          <Plus className="h-5 w-5" strokeWidth={2.5} />
-          <span className="text-sm font-semibold whitespace-nowrap">
+          <Plus className="h-5 w-5 shrink-0" strokeWidth={2.5} />
+          <span className="min-w-0 truncate text-sm font-semibold">
             {t('editor.dock.add', 'Блок')}
           </span>
         </button>
@@ -80,12 +87,23 @@ export const SmartActionDock = memo(function SmartActionDock({
             aria-label={t('editor.dock.customize', 'Оформление страницы')}
             title={t('editor.dock.customize', 'Оформление страницы')}
             className={cn(
-              'flex items-center justify-center h-12 w-12 rounded-xl transition-colors',
+              'flex items-center justify-center h-12 w-12 shrink-0 rounded-full transition-colors',
               'text-muted-foreground hover:text-foreground hover:bg-accent',
               'active:scale-[0.95]',
             )}
           >
             <Palette className="h-5 w-5" />
+          </button>
+        )}
+
+        {onToggleOrder && (
+          <button type="button" onClick={() => { hapticSelection(); onToggleOrder(); }}
+            aria-label={t('pageV2.actions.order', 'Порядок блоков')}
+            aria-pressed={reordering}
+            title={t('pageV2.actions.order', 'Порядок блоков')}
+            className={cn('flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors',
+              reordering ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent hover:text-foreground')}>
+            <ArrowUpDown className="h-5 w-5" />
           </button>
         )}
 
@@ -95,7 +113,7 @@ export const SmartActionDock = memo(function SmartActionDock({
             onClick={() => { hapticSelection(); onAIImprove(); }}
             aria-label={t('editor.dock.ai', 'AI-улучшение')}
             className={cn(
-              'flex items-center justify-center h-12 w-12 rounded-xl transition-colors',
+              'flex items-center justify-center h-12 w-12 shrink-0 rounded-full transition-colors',
               'text-muted-foreground hover:text-foreground hover:bg-accent',
               'active:scale-[0.95]',
             )}
