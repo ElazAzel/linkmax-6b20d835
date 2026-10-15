@@ -8,6 +8,7 @@
  * the block to how it was when it was opened.
  */
 import { Suspense, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
 import Plus from 'lucide-react/dist/esm/icons/plus';
@@ -159,7 +160,7 @@ export function BlockInspector({
   const shell = (
     <BlockEditorShell
       block={shellBlock}
-      blockTypeName={t(`blockEditor.${block.type}`, block.type)}
+      blockTypeName={t(manifest?.labelKey ?? `blockTypes.${block.type}`, block.type)}
       blockIcon={
         <Suspense fallback={<span className="h-5 w-5 rounded-full bg-muted" />}>
           <BlockIcon className="h-5 w-5 text-primary" />
@@ -218,7 +219,10 @@ export function BlockInspector({
     );
   }
 
-  return (
+  // Portal: a transformed ancestor (page transitions, translate-z-0 on the
+  // dashboard layout) would make `fixed` relative to it and push the footer
+  // below the screen.
+  return createPortal(
     <>
       <section
         data-editor-inspector
@@ -227,7 +231,7 @@ export function BlockInspector({
         aria-label={t('editor.inspector.title', 'Настройки блока')}
         className={cn(
           'fixed inset-x-0 bottom-0 z-[60] flex flex-col overflow-hidden rounded-t-sheet border-t border-border bg-card shadow-lg',
-          'transition-[height] duration-200 ease-out motion-reduce:transition-none',
+          'pb-[env(safe-area-inset-bottom)] transition-[height] duration-200 ease-out motion-reduce:transition-none',
           expanded ? 'h-[88dvh]' : 'h-[55dvh]',
         )}
       >
@@ -245,6 +249,7 @@ export function BlockInspector({
         <div className="min-h-0 flex-1">{shell}</div>
       </section>
       {deleteDialog}
-    </>
+    </>,
+    document.body,
   );
 }

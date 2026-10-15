@@ -94,8 +94,8 @@ export const EditorTopBar = memo(function EditorTopBar({
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 h-14 flex items-center justify-between gap-2 px-3 md:px-6',
-        'bg-background/85 backdrop-blur-md border-b border-border/10',
+        'sticky top-0 z-40 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between gap-2 px-3 md:px-6',
+        'bg-card border-b border-border',
         'pt-[env(safe-area-inset-top)]',
         className,
       )}
@@ -110,8 +110,8 @@ export const EditorTopBar = memo(function EditorTopBar({
         <OfflineBadge />
       </div>
 
-      {/* Center: health (desktop, hidden on small mobile) */}
-      <div className="hidden xs:flex items-center justify-center gap-1.5 shrink-0">
+      {/* Center: health — from 640px; on phones it lives in the ⋯ menu (design health). */}
+      <div className="hidden sm:flex items-center justify-center gap-1.5 shrink-0">
         <PageHealthMeter {...health} />
         {designScore !== null && hasContent && (
           <button
@@ -122,7 +122,7 @@ export const EditorTopBar = memo(function EditorTopBar({
             className={cn(
               'inline-flex items-center gap-1 h-7 rounded-full px-2 text-[11px] font-semibold transition-colors',
               designScore >= 80
-                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20'
+                ? 'bg-success/12 text-success hover:bg-success/12'
                 : designScore >= 50
                   ? 'bg-primary/10 text-primary hover:bg-primary/20'
                   : 'bg-destructive/10 text-destructive hover:bg-destructive/20',
@@ -178,16 +178,17 @@ export const EditorTopBar = memo(function EditorTopBar({
 
         <Button
           size="sm"
+          aria-label={isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
           className={cn(
-            'h-10 rounded-xl font-semibold text-sm px-3 md:px-4 gap-1.5',
+            'h-10 rounded-control font-semibold text-sm px-3 md:px-4 gap-1.5',
             !isPublished
-              ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.4)]'
-              : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20',
+              ? 'bg-primary hover:bg-primary/90 text-primary-foreground'
+              : 'bg-success/12 text-success hover:bg-success/20 border border-success/30',
           )}
           onClick={onShare}
         >
           <Share2 className="h-4 w-4" />
-          <span>
+          <span className="hidden sm:inline">
             {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
           </span>
         </Button>
@@ -281,12 +282,12 @@ export const EditorTopBar = memo(function EditorTopBar({
                   <MousePointerClick
                     className={cn(
                       'h-4 w-4 mr-2',
-                      reviewMode === 'cta_contact' ? 'text-emerald-500' : 'text-muted-foreground',
+                      reviewMode === 'cta_contact' ? 'text-success' : 'text-muted-foreground',
                     )}
                   />
                   {t('editor.cta', 'Только CTA')}
                   {reviewMode === 'cta_contact' && (
-                    <span className="ml-auto text-[10px] text-emerald-500 font-bold">ON</span>
+                    <span className="ml-auto text-[10px] text-success font-bold">ON</span>
                   )}
                 </DropdownMenuItem>
               </>

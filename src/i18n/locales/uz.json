@@ -8079,5 +8079,15 @@
     "webhookNowTitle": "Hozir ishlaydi: sahifa webhooki",
     "webhookNowDescription": "Sahifadan har bir yangi arizada LinkMAX URL manzilingizga POST so‘rov yuboradi. Make, Zapier, n8n yoki o‘z serveringizni ulang.",
     "openWebhookSettings": "Webhookni sozlash"
+  },
+  "socials": {
+    "urlPlaceholder": "Havolani qo'ying: instagram.com/…, t.me/…",
+    "network": "Ijtimoiy tarmoq",
+    "customIcon": "O'z ikonkangiz",
+    "autoIcon": "Avtomatik ikonkani qaytarish",
+    "customIconHint": "Kvadrat PNG yoki SVG, 64×64 dan. O'z ikonkangiz bo'lmasa, tarmoq ikonkasi havoladan olinadi.",
+    "styleTheme": "Sahifadagidek",
+    "layoutList": "Nomlari bilan ro'yxat",
+    "layoutRow": "Ikonkalar qatori"
   }
 }

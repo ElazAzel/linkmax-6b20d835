@@ -12,7 +12,9 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-control border border-border/60 bg-secondary p-1 text-muted-foreground",
+      // min-h, not h: a fixed height with border + padding left 30px for 36px triggers,
+      // so the active pill hung below the track.
+      "inline-flex min-h-10 h-auto items-center justify-center gap-1 rounded-control border border-border bg-muted p-1 text-muted-foreground",
       className,
     )}
     {...props}

@@ -82,6 +82,7 @@ const DESIGN_EXCLUDED = [
   /[\\/]lib[\\/]widget-templates\.ts$/,
   /[\\/]lib[\\/]avatar-frame-utils\.ts$/,
   /[\\/]lib[\\/]design[\\/]brand-colors\.ts$/,
+  /[\\/]lib[\\/]social[\\/]brand-icon-data\.ts$/,
   /[\\/]integrations[\\/]supabase[\\/]types\.ts$/,
   /[\\/]platform[\\/]supabase[\\/]types\.ts$/,
 ];

@@ -31,8 +31,14 @@ export interface SocialsBlock {
         url: string;
         icon?: string;
         platform?: string; // For compatibility with Editor
+        /** Owner-provided icon image; replaces the automatic brand icon. */
+        customIconUrl?: string;
     }>;
     alignment?: 'left' | 'center' | 'right';
+    /** 'theme' (default): icons in the page text colour; 'brand': brand colours; 'outline'. */
+    iconStyle?: 'theme' | 'brand' | 'outline' | 'black' | 'white';
+    /** 'grid' (default): a row of icons; 'list': rows with icon and name. */
+    layout?: 'grid' | 'list';
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
