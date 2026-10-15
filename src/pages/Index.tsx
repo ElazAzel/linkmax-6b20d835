@@ -1,12 +1,11 @@
 import { lazy, Suspense, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';
-import { LogoTicker } from '@/components/landing/v2/LogoTicker';
 import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
-import { RevenueLandingSections } from '@/components/landing/RevenueLandingSections';
+import { KornerSections } from '@/components/landing/v3/KornerSections';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLandingAnalytics';
@@ -85,7 +84,7 @@ export default function Index() {
         <AISearchOptimizer pageType={LANDING_PAGE_TYPE} entityName={seoImageAlt} entityCategory={LANDING_ENTITY_CATEGORY} />
       </Suspense>
 
-      <div className="min-h-screen overflow-x-hidden bg-[#f6f6f1] text-[#101318] selection:bg-[#ff5701] selection:text-white">
+      <div style={{ fontFamily: "Onest, Inter, system-ui, sans-serif" }} className="landing-onest min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
@@ -99,12 +98,8 @@ export default function Index() {
             />
           </div>
 
-          <div className="relative z-10 border-b border-[#ded9c9] bg-white">
-            <LogoTicker />
-          </div>
-
           <div ref={revenueSectionRef}>
-            <RevenueLandingSections
+            <KornerSections
               onStart={() => handleCreatePage('revenue_flow_cta')}
               onPricing={() => handleNav('/pricing', 'pricing', 'revenue_pricing_cta')}
             />
@@ -126,12 +121,12 @@ function SimpleFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#f6f6f1] px-4 pb-8 pt-4 text-center text-xs text-[#62675f] sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-[#ded9c9] pt-5">
+    <footer className="bg-background px-4 pb-8 pt-4 text-center text-xs text-muted-foreground sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-border pt-5">
         <span>{t('landing.short.footer.copyright', '© {{year}} LinkMAX', { year })}</span>
-        <a href="/privacy" className="hover:text-[#101318]">{t('landing.short.footer.privacy', 'Privacy')}</a>
-        <a href="/terms" className="hover:text-[#101318]">{t('landing.short.footer.terms', 'Terms')}</a>
-        <a href="/payment-terms" className="hover:text-[#101318]">{t('landing.short.footer.payments', 'Payments')}</a>
+        <a href="/privacy" className="hover:text-foreground">{t('landing.short.footer.privacy', 'Privacy')}</a>
+        <a href="/terms" className="hover:text-foreground">{t('landing.short.footer.terms', 'Terms')}</a>
+        <a href="/payment-terms" className="hover:text-foreground">{t('landing.short.footer.payments', 'Payments')}</a>
       </div>
     </footer>
   );

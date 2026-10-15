@@ -33,6 +33,12 @@ const result = spawnSync(
   {
     encoding: 'utf8',
     maxBuffer: 1024 * 1024 * 64,
+    // Knip evaluates Vite config factories to inspect imports. This origin is
+    // confined to that analysis subprocess; actual builds still require theirs.
+    env: {
+      ...process.env,
+      VITE_APP_DOMAIN: process.env.VITE_APP_DOMAIN || 'https://analysis.linkmax.invalid',
+    },
   },
 );
 

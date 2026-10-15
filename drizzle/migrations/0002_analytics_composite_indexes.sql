@@ -1,0 +1,2 @@
+CREATE INDEX IF NOT EXISTS idx_analytics_page_created ON public.analytics (page_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_analytics_page_type_created ON public.analytics (page_id, event_type, created_at);

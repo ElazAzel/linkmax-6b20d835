@@ -1,0 +1,8 @@
+{
+  "customizations": [
+    { "token": "tailwind.config.ts theme (colors, fonts, radii, keyframes, animations, tailwindcss-animate)", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css (@config ../tailwind.legacy.config.ts)" },
+    { "token": "quiet-bento.css, public-appearance.css, design-system/tokens.css imports", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "custom @layer base/utilities rules and @keyframes (shimmer, grid-morph, text-*, glass-shimmer, lm-load-*)", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "v3 default border color", "source": "tailwind v3 preflight", "reappliedIn": "src/styles.css" }
+  ]
+}

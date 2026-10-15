@@ -307,18 +307,6 @@ export function MultilingualInput({
                 {isPrimary && (
                   <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-accent-foreground rounded-full" title="Required" />
                 )}
-                {!isPrimary && allowAddLanguages && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveLanguage(langCode);
-                    }}
-                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-destructive text-destructive-foreground rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                  >
-                    <X className="h-2.5 w-2.5" />
-                  </button>
-                )}
               </TabsTrigger>
             );
           })}
@@ -329,6 +317,11 @@ export function MultilingualInput({
 
           return (
             <TabsContent key={langCode} value={langCode} className="mt-2">
+                {langCode !== primaryLanguage && allowAddLanguages && <div className="mb-2 flex justify-end">
+                  <Button type="button" variant="ghost" size="sm" className="min-h-11 text-muted-foreground" onClick={() => handleRemoveLanguage(langCode)} aria-label={`${t('actions.delete', 'Удалить')}: ${lang.name}`}>
+                    <X className="mr-1 h-3.5 w-3.5" aria-hidden="true" />{t('actions.delete', 'Удалить')}: {lang.name}
+                  </Button>
+                </div>}
               {enableRichText ? (
                 <RichTextEditor
                   value={(value as I18nText)[langCode] || ''}

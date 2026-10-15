@@ -130,64 +130,25 @@ describe('pagesService', () => {
         });
     });
 
-    describe('savePage (create/update)', () => {
-        it('should save page successfully', async () => {
-            const mockPageData = {
-                id: 'page-123',
-                title: 'Test Page',
-                slug: 'test-page'
-            };
-
-            const mockFrom = vi.mocked(supabase.from);
-            const mockRpc = vi.mocked(supabase.rpc);
-            
-            // getUserSlug -> user_profiles maybeSingle
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: { username: 'test-user-slug' }, error: null })
-            } as any);
-
-            // savePage -> upsert_user_page
-            mockRpc.mockResolvedValueOnce({ data: 'page-123', error: null } as any);
-            // savePage -> save_page_blocks
-            mockRpc.mockResolvedValueOnce({ data: null, error: null } as any);
-            
-            // savePage -> fetch final page via get_my_full_page RPC
-            mockRpc.mockResolvedValueOnce({ data: [mockPageData], error: null } as any);
-
-            const pageInput = { blocks: [], theme: 'light' } as any;
+    describe('savePage legacy adapter', () => {
+        it('writes only a private draft with CAS', async () => {
+            const rpc = vi.mocked(supabase.rpc);
+            rpc.mockResolvedValueOnce({ data: { revision: 2, base_published_revision: 1 }, error: null } as any);
+            rpc.mockResolvedValueOnce({ data: { revision: 3 }, error: null } as any);
+            const pageInput = { id: 'page-123', blocks: [], theme: {} } as any;
             const result = await pagesService.savePage(pageInput, 'test-user-id');
-
             expect(result.error).toBeNull();
-            expect(result.data).toEqual(mockPageData);
-            expect(supabase.rpc).toHaveBeenCalledWith('upsert_user_page', expect.any(Object));
+            expect(rpc).toHaveBeenLastCalledWith('save_page_draft', expect.objectContaining({ p_expected_revision: 2, p_base_published_revision: 1 }));
+            expect(supabase.from).not.toHaveBeenCalled();
         });
-
-        it('should handle creation error gracefully', async () => {
-            const mockFrom = vi.mocked(supabase.from);
-            const mockRpc = vi.mocked(supabase.rpc);
-            
-            // getUserSlug -> user_profiles maybeSingle
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: { username: 'test-user-slug' }, error: null })
-            } as any);
-
-            const dbError = new Error('Database error');
-            // savePage -> upsert_user_page fails
-            mockRpc.mockResolvedValueOnce({ data: null, error: dbError } as any);
-
-            const pageInput = { blocks: [] } as any;
-            const result = await pagesService.savePage(pageInput, 'test-user-id');
-
-            expect(result.data).toBeNull();
-            expect(result.error).toEqual(dbError);
-            expect(logger.error).toHaveBeenCalled();
+        it('missing migration never falls back to public writes', async () => {
+            vi.mocked(supabase.rpc).mockResolvedValueOnce({ data: null, error: { code: 'PGRST202' } } as any);
+            const result = await pagesService.savePage({ id: 'page-123', blocks: [] } as any, 'test-user-id');
+            expect(result.error?.message).toContain('migration');
+            expect(supabase.from).not.toHaveBeenCalled();
+            expect(supabase.rpc).toHaveBeenCalledTimes(1);
         });
     });
-
     describe('loadUserPage', () => {
         it('should fetch a page for the current user', async () => {
             const mockPageData = { id: 'page-123', slug: 'test-page', blocks: [] };
@@ -216,51 +177,15 @@ describe('pagesService', () => {
             expect(mockRpc).toHaveBeenCalledWith('get_my_full_page', { p_user_id: 'test-user-id' });
         });
     });
-    describe('publishPage', () => {
-        it('publishes only the given page and returns its slug', async () => {
-            const mockFrom = vi.mocked(supabase.from);
-            const chain = {
-                update: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                select: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: { slug: 'test-slug' }, error: null }),
-            };
-            mockFrom.mockReturnValueOnce(chain as any);
-
+    describe('publishPage legacy adapter', () => {
+        it('requires a reviewed editor draft and never writes public state', async () => {
             const result = await pagesService.publishPage('test-user-id', 'page-2');
-
-            expect(result.error).toBeNull();
-            expect(result.slug).toEqual('test-slug');
-            expect(chain.update).toHaveBeenCalledWith({ is_published: true });
-            expect(chain.eq).toHaveBeenCalledWith('id', 'page-2');
-            expect(chain.eq).toHaveBeenCalledWith('user_id', 'test-user-id');
-        });
-
-        it('without a page id publishes only the primary page, not every page', async () => {
-            const mockFrom = vi.mocked(supabase.from);
-            const lookup = {
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                order: vi.fn().mockReturnThis(),
-                limit: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'primary-page' }, error: null }),
-            };
-            const update = {
-                update: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                select: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: { slug: 'main' }, error: null }),
-            };
-            mockFrom.mockReturnValueOnce(lookup as any).mockReturnValueOnce(update as any);
-
-            const result = await pagesService.publishPage('test-user-id');
-
-            expect(result.slug).toBe('main');
-            expect(lookup.order).toHaveBeenCalledWith('created_at', { ascending: true });
-            expect(update.eq).toHaveBeenCalledWith('id', 'primary-page');
+            expect(result.error?.message).toContain('Publish');
+            expect(result.slug).toBeNull();
+            expect(supabase.from).not.toHaveBeenCalled();
+            expect(supabase.rpc).not.toHaveBeenCalled();
         });
     });
-
     describe('loadUserPage with a page id', () => {
         it('uses the full-row RPC for a secondary page', async () => {
             const mockFrom = vi.mocked(supabase.from);
@@ -313,7 +238,7 @@ describe('pagesService', () => {
         it('should load public page by slug', async () => {
             const mockPage = { id: 'p1', slug: 's1', is_published: true, view_count: 5 };
             const mockFrom = vi.mocked(supabase.from);
-            
+
             mockFrom.mockReturnValueOnce({
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),

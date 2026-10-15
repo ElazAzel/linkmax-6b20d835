@@ -76,8 +76,8 @@ export function generateTokensCss(): string {
     ['--font-heading', fonts.heading],
     ['--font-num', fonts.num],
     // First family of Tailwind font-sans / font-heading.
-    ['--font-ui', "'Onest'"],
-    ['--font-ui-heading', "'Onest'"],
+    ['--font-ui', fonts.sans],
+    ['--font-ui-heading', fonts.heading],
     // Buttons in the interface are flat and do not jump on hover.
     ['--button-shadow', '0 1px 2px hsl(216 20% 8% / 0.12)'],
     ['--button-shadow-hover', '0 4px 14px -4px hsl(var(--primary) / 0.45)'],
@@ -92,5 +92,6 @@ export function generateTokensCss(): string {
     '',
     block('html.lm-app', [...shared, ...schemeVars(colors.light, 'light')], ['color-scheme: light;']),
     block('html.lm-app[data-app-theme="dark"]', schemeVars(colors.dark, 'dark'), ['color-scheme: dark;']),
+    'html.lm-app .text-primary { color: hsl(var(--primary-text)); }\nhtml.lm-app .lm-page .text-primary { color: hsl(var(--primary)); }\n',
   ].join('\n');
 }

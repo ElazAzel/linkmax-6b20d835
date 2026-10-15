@@ -1,6 +1,6 @@
 'use client';
 
-import { Link, LinkProps, useLocation } from 'react-router-dom';
+import { Link, LinkProps, useLocation } from '@/lib/router-compat';
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils/utils';
 

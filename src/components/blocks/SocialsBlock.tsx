@@ -5,6 +5,7 @@ import { detectSocialPlatform, getSocialPlatform, normalizePlatformId } from '@/
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
+import { BLOCK_RADIUS, BLOCK_SHADOW } from '@/lib/appearance/block-appearance';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
@@ -30,6 +31,16 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
 
   const iconStyle = block.iconStyle === 'brand' || block.iconStyle === 'outline' ? block.iconStyle : 'theme';
   const isList = block.layout === 'list';
+
+  // Author colors and shape from the block inspector win over the theme defaults.
+  const blockStyle = block.blockStyle;
+  const authorStyle = blockStyle ? {
+    color: blockStyle.textColor,
+    backgroundColor: blockStyle.backgroundColor,
+    backgroundImage: blockStyle.backgroundGradient,
+    borderRadius: blockStyle.borderRadius ? BLOCK_RADIUS[blockStyle.borderRadius] : undefined,
+    boxShadow: blockStyle.shadow ? BLOCK_SHADOW[blockStyle.shadow] : undefined,
+  } : undefined;
 
   const justifyClass = block.alignment === 'left' ? 'justify-start'
     : block.alignment === 'right' ? 'justify-end'
@@ -71,6 +82,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
 
           return (
             <button
+              type="button"
               key={platform.id ?? index}
               onClick={() => handleClick(url)}
               className={cn(
@@ -83,6 +95,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
                   : 'bg-surface-raised border border-hairline shadow-soft hover:shadow-lift hover:-translate-y-0.5',
               )}
               aria-label={label}
+              style={authorStyle}
             >
               <span
                 className={cn(

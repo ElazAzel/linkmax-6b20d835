@@ -1,4 +1,4 @@
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Link, Navigate } from '@/lib/router-compat';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { Helmet } from 'react-helmet-async';

@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@/lib/router-compat';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -422,7 +422,7 @@ export default function PublicPage() {
                 <SiteHeaderNav ownerUserId={pageData?.userId} currentPageId={pageData?.id} />
               </SectionErrorBoundary>
 
-              <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+              <div className="lm-page-width py-4">
                 {/* Grid Blocks - Same layout as editor */}
                 <SectionErrorBoundary name="page-blocks">
                   <GridBlocksRenderer

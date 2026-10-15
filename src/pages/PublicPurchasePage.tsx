@@ -3,7 +3,7 @@
  * Shows purchase state and issues short-lived signed download URLs.
  */
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import Download from 'lucide-react/dist/esm/icons/download';

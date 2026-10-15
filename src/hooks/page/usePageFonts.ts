@@ -5,10 +5,8 @@ import { getFontPair } from '@/lib/appearance/presets';
 /**
  * Loads the web fonts of the page's font pair.
  *
- * index.html only ships Inter and Manrope, so 13 of the 15 families offered
- * in the theme panel silently fell back to system fonts. Each family gets its
- * own <link>: the css2 API rejects the whole request if one family lacks a
- * requested weight, so weights are listed per family.
+ * Font faces and licenses are served from LinkMAX assets, including authored
+ * theme choices. A new family can be vendored with scripts/vendor-fonts.mjs.
  */
 const GOOGLE_FONT_WEIGHTS: Record<string, string> = {
   'Space Grotesk': '400;500;600;700',
@@ -28,7 +26,7 @@ const GOOGLE_FONT_WEIGHTS: Record<string, string> = {
   Hind: '400;500;600;700',
 };
 
-/** Families already loaded globally by index.html. */
+/** Families loaded by the SSR document. */
 const PRELOADED = new Set(['Inter', 'Manrope']);
 
 /** First quoted family of a CSS font stack: "'Syne', system-ui" → "Syne". */
@@ -39,9 +37,8 @@ export function primaryFamily(stack: string | undefined): string | null {
 }
 
 export function googleFontsHref(family: string): string | null {
-  const weights = GOOGLE_FONT_WEIGHTS[family];
-  if (!weights) return null;
-  return `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family).replace(/%20/g, '+')}:wght@${weights}&display=swap`;
+  if (!GOOGLE_FONT_WEIGHTS[family]) return null;
+  return `/fonts/${encodeURIComponent(family).replace(/%20/g, '+')}/font.css`;
 }
 
 export function getPageFontHrefs(theme?: Partial<PageTheme> | null): string[] {

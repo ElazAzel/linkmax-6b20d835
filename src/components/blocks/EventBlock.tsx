@@ -314,7 +314,7 @@ export const EventBlock = memo(function EventBlock({
           payment_status: 'none',
           utm_json: Object.keys(utmParams).length > 0 ? utmParams : {},
         })
-        .select('id')
+        .select('id, notify_token')
         .single();
 
       if (error) {
@@ -371,6 +371,8 @@ export const EventBlock = memo(function EventBlock({
             registrationId,
             eventId: block.eventId,
             ownerId: pageOwnerId,
+            attendeeEmail: email.trim(),
+            notifyToken: registration?.notify_token,
           },
         }).catch(err => console.warn('Notification send failed:', err));
       }
@@ -381,6 +383,7 @@ export const EventBlock = memo(function EventBlock({
           body: {
             registrationId: registration.id,
             eventId: block.eventId,
+            attendeeEmail: email.trim(),
             language: i18n.language,
           },
         }).catch(err => console.warn('Attendee email send failed:', err));

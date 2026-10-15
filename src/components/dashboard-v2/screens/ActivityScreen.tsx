@@ -49,7 +49,7 @@ import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMonthlyInboundCount } from '@/hooks/dashboard/useMonthlyInboundCount';
 import { useAuth } from '@/hooks/user/useAuth';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from '@/lib/router-compat';
 
 interface ActivityScreenProps {
   isPremium: boolean;

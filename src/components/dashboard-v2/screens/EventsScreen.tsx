@@ -1,6 +1,6 @@
 'use client';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 import { csvRow } from '@/lib/export/csv-safe';
 
 /**

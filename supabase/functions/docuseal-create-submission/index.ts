@@ -103,6 +103,39 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Signer must be a known contact of this zone (or a zone member) — no arbitrary recipients.
+    const { data: knownContact } = await supabase
+      .from('zone_contacts')
+      .select('id')
+      .eq('zone_id', doc.zone_id)
+      .ilike('email', signerEmail)
+      .limit(1)
+      .maybeSingle();
+    if (!knownContact) {
+      return new Response(JSON.stringify({ error: 'signer_not_in_zone_contacts' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Bound caller-supplied content: only short scalar field values, no metadata overrides.
+    const safeFields: { name: string; default_value: string }[] = [];
+    if (body.fields && typeof body.fields === 'object') {
+      for (const [name, value] of Object.entries(body.fields).slice(0, 50)) {
+        if (typeof name !== 'string' || name.length > 100) continue;
+        if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') continue;
+        safeFields.push({ name, default_value: String(value).slice(0, 2000) });
+      }
+    }
+    const templateId = Number(body.docuseal_template_id);
+    if (!Number.isInteger(templateId) || templateId <= 0) {
+      return new Response(JSON.stringify({ error: 'invalid template' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    const signerName = body.signer_name ? String(body.signer_name).slice(0, 200) : undefined;
+
     // Create DocuSeal submission
     const dsRes = await fetch(`${DOCUSEAL_BASE_URL}/submissions`, {
       method: 'POST',
@@ -111,23 +144,20 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        template_id: body.docuseal_template_id,
-        send_email: body.send_email ?? false,
+        template_id: templateId,
+        send_email: body.send_email === true,
         submitters: [
           {
             email: body.signer_email,
-            name: body.signer_name ?? undefined,
+            name: signerName,
             role: 'First Party',
-            fields: body.fields
-              ? Object.entries(body.fields).map(([name, value]) => ({ name, default_value: value }))
-              : undefined,
+            fields: safeFields.length ? safeFields : undefined,
           },
         ],
         metadata: {
           document_id: body.document_id,
           zone_id: doc.zone_id,
           requested_by: userId,
-          ...(body.metadata ?? {}),
         },
       }),
     });
@@ -164,7 +194,7 @@ Deno.serve(async (req) => {
             embed_src: embedSrc,
             template_id: body.docuseal_template_id,
           },
-          ...(body.metadata ?? {}),
+
         },
       })
       .select('*')

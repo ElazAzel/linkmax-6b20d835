@@ -12,7 +12,7 @@ interface SlotSelectionStepProps {
   selectedSlot: PublicBookingSlot | null;
   loading: boolean;
   error: string | null;
-  errorRef: RefObject<HTMLDivElement>;
+  errorRef: RefObject<HTMLDivElement | null>;
   onDateChange: (date: string) => void;
   onSelect: (slot: PublicBookingSlot) => void;
   onContinue: () => void;

@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
+import { useNavigate } from '@/lib/router-compat';
 /**
  * DashboardSidebar - Desktop sidebar navigation
  * Collapsible with section groups, powered by Framer Motion
@@ -11,6 +12,7 @@ import { useHasBusinessZone } from '@/contexts/ZoneContext';
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
 import { OFFICE_TABS } from './office-navigation';
+import { BUSINESS_TAB_IDS, PAGE_V2_TABS } from './page-v2-navigation';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
@@ -60,7 +62,7 @@ interface DashboardSidebarProps {
   onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-const MAIN_ITEMS: SidebarItem[] = OFFICE_TABS;
+const MAIN_ITEMS: SidebarItem[] = LINKMAX_UI_V2 ? PAGE_V2_TABS : OFFICE_TABS;
 
 const SECTIONS: SidebarSection[] = [
   {
@@ -136,6 +138,10 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const hasBusinessZone = useHasBusinessZone();
+  const businessContext = BUSINESS_TAB_IDS.includes(activeTab) || activeTab.startsWith('zone-');
+  const showBusinessNavigation = !LINKMAX_UI_V2 || businessContext;
+  const visibleSections = !LINKMAX_UI_V2 ? SECTIONS : businessContext
+    ? SECTIONS.filter(section => section.id === 'business-tools') : [];
 
   const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-analytics', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-resources'];
 
@@ -235,7 +241,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         "app-sidebar hidden md:flex flex-col h-screen sticky top-0 border-r border-border z-50",
       )}
       initial={false}
-      animate={{ width: collapsed ? 80 : 256 }}
+      animate={{ width: collapsed ? 80 : LINKMAX_UI_V2 ? 232 : 256 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       {/* Header */}
@@ -295,7 +301,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
       </div>
 
       <OrganizationSwitcher collapsed={collapsed} />
-      <Suspense fallback={null}><ZoneSwitcherSlot collapsed={collapsed} /></Suspense>
+      {showBusinessNavigation && <Suspense fallback={null}><ZoneSwitcherSlot collapsed={collapsed} /></Suspense>}
 
       {/* Navigation */}
       <ScrollArea className="flex-1 px-3">
@@ -305,7 +311,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         </div>
 
         {/* Business Zone section (Pro + Business tier) */}
-        {(isPremium || isBusinessTier) && hasBusinessZone && (
+        {showBusinessNavigation && (isPremium || isBusinessTier) && hasBusinessZone && (
           <div className="mb-6">
             <div className="mx-2 mb-4 h-px bg-border" />
             {!collapsed && (
@@ -320,7 +326,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         )}
 
         {/* Sections */}
-        {SECTIONS.map((section) => (
+        {visibleSections.map((section) => (
           <div key={section.id} className="mb-6">
             {/* Divider before section (except maybe the first one if preferred) */}
             <div className="mx-2 mb-4 h-px bg-border" />

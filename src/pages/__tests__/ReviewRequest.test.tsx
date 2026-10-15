@@ -1,7 +1,7 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from '@/testing/router';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
@@ -48,17 +48,19 @@ async function renderReviewRequest(path = '/review/request/rv_token') {
   });
   const ReviewRequest = (await import('../ReviewRequest')).default;
 
-  return render(
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={[path]}>
-          <Routes>
-            <Route path="/review/request/:token" element={<ReviewRequest />} />
-          </Routes>
-        </MemoryRouter>
-      </QueryClientProvider>
-    </HelmetProvider>,
-  );
+  await act(async () => {
+    render(
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <MemoryRouter initialEntries={[path]}>
+            <Routes>
+              <Route path="/review/request/:token" element={<ReviewRequest />} />
+            </Routes>
+          </MemoryRouter>
+        </QueryClientProvider>
+      </HelmetProvider>,
+    );
+  });
 }
 
 describe('ReviewRequest page', () => {

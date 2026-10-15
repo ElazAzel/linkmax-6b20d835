@@ -104,11 +104,14 @@ serve(async (req: Request) => {
     // Server-side premium status check
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('is_premium, premium_tier, trial_ends_at')
+      .select('is_premium, premium_tier, trial_ends_at, premium_expires_at')
       .eq('id', user.id)
       .single();
 
-    const isPremiumUser = profile?.is_premium || 
+    // A null premium_expires_at means lifetime/no expiry
+    const premiumActive = !!profile?.is_premium &&
+      (!profile?.premium_expires_at || new Date(profile.premium_expires_at) > new Date());
+    const isPremiumUser = premiumActive ||
       (profile?.trial_ends_at && new Date(profile.trial_ends_at) > new Date());
 
     if (!isPremiumUser) {

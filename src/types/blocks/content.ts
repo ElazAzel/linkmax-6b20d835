@@ -118,6 +118,8 @@ export interface ImageBlock {
     url: string;
     alt: string | I18nText | MultilingualString;
     caption?: string | I18nText | MultilingualString;
+    /** Non-destructive framing; the original uploaded file remains unchanged. */
+    imagePlacement?: { x?: number; y?: number; zoom?: number; rotation?: number; flipX?: boolean; flipY?: boolean };
     link?: string;
     style?: 'polaroid' | 'vignette' | 'circle' | 'default' | 'banner';
     scale?: 'cover' | 'contain' | 'fill' | 'tile';

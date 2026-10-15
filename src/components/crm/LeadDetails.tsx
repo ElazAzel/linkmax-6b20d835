@@ -59,6 +59,7 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { generateSmartDraft } from '@/lib/chat/expert-engine';
 import { cn } from '@/lib/utils/utils';
+import { ContactTimeline } from './ContactTimeline';
 
 interface LeadDetailsProps {
   lead: Lead;
@@ -207,6 +208,9 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
           </Badge>
         </div>
       </Card>
+
+      <ContactTimeline contactId={(lead as { contact_id?: string | null }).contact_id} />
+
 
       {/* Form Data / Metadata - Compact */}
       {lead.metadata && Object.keys(lead.metadata).length > 0 && (

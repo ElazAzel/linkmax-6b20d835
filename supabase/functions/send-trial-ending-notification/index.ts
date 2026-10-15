@@ -141,7 +141,7 @@ serve(async (req: Request): Promise<Response> => {
           emailHtml
         );
 
-        console.log(`Email sent to ${authUser.email}:`, emailResponse);
+        console.log(`Trial email sent for user ${profile.id}`);
         emailsSent.push(authUser.email);
       } catch (emailError: any) {
         console.error(`Failed to send email to ${authUser.email}:`, emailError);

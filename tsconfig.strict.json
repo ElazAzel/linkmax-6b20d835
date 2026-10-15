@@ -11,6 +11,6 @@
         "src/repositories/**/*",
         "src/services/**/*",
         "src/types/**/*",
-        "src/vite-env.d.ts"
+        "src/types/window-globals.d.ts"
     ]
 }

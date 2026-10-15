@@ -4,7 +4,7 @@
  * Self-contained: fetches its own site + page list via hooks.
  */
 import { memo, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import FileText from 'lucide-react/dist/esm/icons/file-text';

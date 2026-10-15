@@ -7,7 +7,7 @@
  * с основного домена (lnkmx.my/s/foo).
  */
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@/lib/router-compat';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 

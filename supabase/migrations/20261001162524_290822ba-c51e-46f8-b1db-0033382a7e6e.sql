@@ -1,0 +1,1 @@
+ALTER TABLE public.newsletter_subscriptions ADD COLUMN IF NOT EXISTS owner_notified_at timestamptz;

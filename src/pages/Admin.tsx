@@ -1,5 +1,5 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
 import { supabase } from '@/platform/supabase/client';

@@ -11,6 +11,7 @@
  * Всё что не критично — скрыто в overflow-меню.
  */
 import { memo } from 'react';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { useTranslation } from 'react-i18next';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
@@ -46,6 +47,9 @@ export interface EditorTopBarProps {
   isPublished: boolean;
   onPreview: () => void;
   onShare: () => void;
+  onPublish?: () => void;
+  publishing?: boolean;
+  hasUnpublishedChanges?: boolean;
 
   // Overflow actions
   canUndo?: boolean;
@@ -53,6 +57,7 @@ export interface EditorTopBarProps {
   onUndo?: () => void;
   onRedo?: () => void;
   onOpenStructure?: () => void;
+  onOpenSections?: () => void;
   onOpenVersions?: () => void;
   onOpenTemplates?: () => void;
   onOpenArtDirection?: () => void;
@@ -73,11 +78,15 @@ export const EditorTopBar = memo(function EditorTopBar({
   isPublished,
   onPreview,
   onShare,
+  onPublish = onShare,
+  publishing = false,
+  hasUnpublishedChanges = true,
   canUndo,
   canRedo,
   onUndo,
   onRedo,
   onOpenStructure,
+  onOpenSections,
   onOpenVersions,
   onOpenTemplates,
   onOpenArtDirection,
@@ -94,8 +103,9 @@ export const EditorTopBar = memo(function EditorTopBar({
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between gap-2 px-3 md:px-6',
-        'bg-card border-b border-border',
+        LINKMAX_UI_V2
+          ? 'sticky top-0 z-40 flex min-h-20 items-center justify-between gap-2 border-b border-border bg-card px-4 py-3 sm:rounded-card sm:border'
+          : 'sticky top-0 z-40 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between gap-2 px-3 md:px-6 bg-card border-b border-border',
         'pt-[env(safe-area-inset-top)]',
         className,
       )}
@@ -111,7 +121,7 @@ export const EditorTopBar = memo(function EditorTopBar({
       </div>
 
       {/* Center: health — from 640px; on phones it lives in the ⋯ menu (design health). */}
-      <div className="hidden sm:flex items-center justify-center gap-1.5 shrink-0">
+      {!LINKMAX_UI_V2 && <div className="hidden sm:flex items-center justify-center gap-1.5 shrink-0">
         <PageHealthMeter {...health} />
         {designScore !== null && hasContent && (
           <button
@@ -132,11 +142,11 @@ export const EditorTopBar = memo(function EditorTopBar({
             {designScore}
           </button>
         )}
-      </div>
+      </div>}
 
       {/* Right: actions */}
       <div className="flex items-center gap-1.5 shrink-0">
-        {onUndo && (
+        {!LINKMAX_UI_V2 && onUndo && (
           <Button
             variant="ghost"
             size="icon"
@@ -149,7 +159,7 @@ export const EditorTopBar = memo(function EditorTopBar({
             <Undo2 className="h-4 w-4" />
           </Button>
         )}
-        {onRedo && (
+        {!LINKMAX_UI_V2 && onRedo && (
           <Button
             variant="ghost"
             size="icon"
@@ -185,11 +195,13 @@ export const EditorTopBar = memo(function EditorTopBar({
               ? 'bg-primary hover:bg-primary/90 text-primary-foreground'
               : 'bg-success/12 text-success hover:bg-success/20 border border-success/30',
           )}
-          onClick={onShare}
+          onClick={onPublish}
+          disabled={publishing || (isPublished && !hasUnpublishedChanges)}
+          aria-busy={publishing}
         >
           <Share2 className="h-4 w-4" />
           <span className="hidden sm:inline">
-            {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
+            {publishing ? t('pageV2.draft.publishing', 'Публикация…') : t('editor.publish', 'Опубликовать')}
           </span>
         </Button>
 
@@ -205,6 +217,8 @@ export const EditorTopBar = memo(function EditorTopBar({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={6} className="w-56">
+            {LINKMAX_UI_V2 && <div className="border-b border-border px-2 py-3"><PageHealthMeter {...health} /></div>}
+            {isPublished && <DropdownMenuItem onClick={onShare}><Share2 className="h-4 w-4 mr-2" />{t('editor.share', 'Поделиться')}</DropdownMenuItem>}
             <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground/70">
               {t('editor.topbar.history', 'История')}
             </DropdownMenuLabel>
@@ -233,6 +247,12 @@ export const EditorTopBar = memo(function EditorTopBar({
               <DropdownMenuItem onClick={onOpenTemplates}>
                 <LayoutTemplate className="h-4 w-4 mr-2" />
                 {t('editor.templates', 'Шаблоны')}
+              </DropdownMenuItem>
+            )}
+            {onOpenSections && (
+              <DropdownMenuItem onClick={onOpenSections}>
+                <LayoutTemplate className="h-4 w-4 mr-2" />
+                {t('editor.sections.picker.cta', '+ Секция (готовый шаблон)')}
               </DropdownMenuItem>
             )}
             {hasContent && onOpenStructure && (

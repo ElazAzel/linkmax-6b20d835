@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from '@/lib/router-compat';
 import { useQuery } from '@tanstack/react-query';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import CalendarCheck from 'lucide-react/dist/esm/icons/calendar-check';

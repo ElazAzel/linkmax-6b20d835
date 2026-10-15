@@ -1044,7 +1044,8 @@
     "socials": "Social networks",
     "testimonial": "Reviews",
     "text": "Text",
-    "video": "Video"
+    "video": "Video",
+    "audio": "Audio"
   },
   "blocks": {
     "addFailed": "Failed to add block",
@@ -1568,7 +1569,17 @@
     "item3": "Quick replies and communication history",
     "title": "Mini CRM",
     "description": "All requests from the form automatically go into the CRM. Statuses: new → in progress → completed. No more Excel.",
-    "desc": "All applications in one place. Statuses, history, Telegram notifications."
+    "desc": "All applications in one place. Statuses, history, Telegram notifications.",
+    "timeline": {
+      "title": "Client history",
+      "revenue": "Revenue",
+      "kind": {
+        "lead": "Lead",
+        "booking": "Booking",
+        "event": "Event",
+        "purchase": "Purchase"
+      }
+    }
   },
   "currency": {
     "names": {
@@ -7489,6 +7500,62 @@
       "a3": "LinkMAX is not limited to a list of links. It includes leads, bookings, invoices, mini CRM, analytics, and a business workspace.",
       "q4": "What happens after sign-up?",
       "a4": "You enter the page creation wizard. If you entered a short address on the landing page, it is passed into the signup flow."
+    },
+    "k": {
+      "mock": {
+        "s1": "Manicure + gel",
+        "s2": "Brow shaping",
+        "s3": "Lash extensions",
+        "bio": "Nails & brows · Almaty",
+        "book": "Book now"
+      },
+      "hero": {
+        "sub": "A page with services, online booking, payments, tickets and digital products. Leads land straight in Telegram and WhatsApp.",
+        "examples": "See example pages"
+      },
+      "card": {
+        "lead": "New lead",
+        "leadBody": "Aigerim, WhatsApp · 2 min ago",
+        "pay": "Payment received",
+        "booking": "Booking confirmed",
+        "bookingBody": "Fri, 2:00 PM · Manicure",
+        "ticket": "Ticket sold",
+        "ticketBody": "Workshop · 1 seat"
+      },
+      "f": {
+        "booking": "Online booking",
+        "bookingBody": "Services with price and duration, free slots, staff and rooms. A taken slot can never be sold twice.",
+        "leads": "Leads to your messenger",
+        "leadsBody": "Every lead arrives in Telegram instantly.",
+        "pay": "Payments",
+        "payBody": "Deposits and service payments right from the page.",
+        "events": "Events and tickets",
+        "eventsBody": "Registration, QR tickets and a scanner link for your helpers.",
+        "digital": "Digital products",
+        "digitalBody": "Guides, courses and files delivered after payment.",
+        "crm": "Client card",
+        "crmBody": "Leads, bookings and purchases build each client's history. Stages, notes and total revenue in one place.",
+        "ai": "On-page assistant",
+        "aiBody": "Answers visitors about your services and prices.",
+        "themes": "25 design themes",
+        "themesBody": "Looks great on a phone, no designer needed.",
+        "title": "Everything you need to sell, in one link",
+        "sub": "Not just a list of links. Your page takes bookings, payments and leads on its own."
+      },
+      "s1": "Pick your address",
+      "s1b": "lnkmx.my/yourname in 10 seconds.",
+      "s2": "Add services",
+      "s2b": "Prices, schedule, contacts, payments.",
+      "s3": "Put the link in your bio",
+      "s3b": "Instagram, Telegram, WhatsApp, 2GIS.",
+      "s": {
+        "title": "Launch in 5 minutes"
+      },
+      "cta": {
+        "title": "Start taking clients today",
+        "sub": "Free. No card. Go Pro when you need more.",
+        "pricing": "Pricing"
+      }
     }
   },
   "upgradeBenefits": {
@@ -8079,6 +8146,67 @@
     "webhookNowTitle": "Available now: page webhook",
     "webhookNowDescription": "LinkMAX sends a POST request to your URL for every new lead from your page. Connect Make, Zapier, n8n or your own server.",
     "openWebhookSettings": "Set up webhook"
+  },
+  "payment": {
+    "more_details": "More details",
+    "test_mode_banner": "All payments in preview run in test mode."
+  },
+  "audioBlock": {
+    "label": "Audio",
+    "source": "Source",
+    "file": "MP3 / WAV file",
+    "musicLink": "Music link",
+    "cover": "Cover",
+    "fileHint": "MP3 or WAV, up to 50 MB.",
+    "externalHint": "The music service opens from a separate card.",
+    "addSource": "Choose an audio file or music link.",
+    "playbackError": "Unable to play this audio. Check the file or link.",
+    "tooLarge": "The file exceeds 50 MB.",
+    "invalidFormat": "Choose an MP3 or WAV audio file.",
+    "emptyFile": "The file is empty.",
+    "invalidUrl": "Enter a valid HTTP or HTTPS link."
+  },
+  "pageV2": {
+    "navigation": {
+      "page": "My page",
+      "overview": "Overview",
+      "add": "Add",
+      "business": "Business",
+      "label": "Dashboard navigation"
+    },
+    "actions": {
+      "block": "Add block",
+      "theme": "Appearance",
+      "order": "Reorder blocks",
+      "templates": "Templates",
+      "ai": "AI assistant"
+    },
+    "firstPage": {
+      "title": "Create your first page",
+      "hint": "Add a profile and three tiles, then publish your page."
+    },
+    "draft": {
+      "publishing": "Publishing…",
+      "previewHint": "Only visible to you. Your public page updates when you publish.",
+      "download": "Download my draft",
+      "reload": "Open server version",
+      "conflict": "A newer version was saved in another tab. Download your changes before opening the server version.",
+      "unavailable": "Server saving is not available yet. Your changes are saved on this device.",
+      "access": "You no longer have permission to edit this page. Download your changes.",
+      "network": "Unable to save to the server. Your changes are saved on this device; retry when connected.",
+      "publishFirst": "Publish your page first."
+    }
+  },
+  "imagePlacement": {
+    "title": "Crop and position",
+    "x": "Horizontal position",
+    "y": "Vertical position",
+    "zoom": "Zoom",
+    "rotate": "Rotate 90°",
+    "flipX": "Flip horizontally",
+    "flipY": "Flip vertically",
+    "reset": "Reset framing",
+    "hint": "The original stays unchanged. Adjust its position or choose Fit in the scale settings."
   },
   "socials": {
     "urlPlaceholder": "Paste a link: instagram.com/…, t.me/…",

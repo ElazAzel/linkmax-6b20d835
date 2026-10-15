@@ -1,0 +1,3 @@
+# Keep vendored, checksum-verified font resources byte-for-byte.
+public/fonts/**/OFL.txt -text
+public/fonts/**/*.woff2 -text

@@ -119,11 +119,11 @@ serve(async (req: Request) => {
         // 1. Fetch page owner info for limit check and notification
         const { data: pageData, error: pageError } = await supabase
             .from('pages')
-            .select('user_id, slug, title, webhook_url, webhook_secret')
+            .select('user_id, slug, title, webhook_url, webhook_secret, is_published')
             .eq('id', pageId)
             .single();
 
-        if (pageError || !pageData?.user_id) {
+        if (pageError || !pageData?.user_id || pageData.is_published !== true) {
             throw new Error('Page not found');
         }
 

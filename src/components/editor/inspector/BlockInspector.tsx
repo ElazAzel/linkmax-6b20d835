@@ -238,7 +238,7 @@ export function BlockInspector({
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
-          className="flex h-6 w-full shrink-0 items-center justify-center text-muted-foreground"
+          className="flex h-11 w-full shrink-0 items-center justify-center text-muted-foreground"
           aria-label={expanded
             ? t('editor.inspector.collapse', 'Свернуть настройки')
             : t('editor.inspector.expand', 'Развернуть настройки')}

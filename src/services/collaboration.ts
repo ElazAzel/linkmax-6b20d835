@@ -432,15 +432,7 @@ export async function removeMemberFromTeam(
     .eq('id', memberId)
     .maybeSingle();
 
-  const { error } = await supabase
-    .from('team_members')
-    .delete()
-    .eq('team_id', teamId)
-    .eq('user_id', memberId);
-
-  if (error) return { success: false, error: normalizeAppError(error).safeMessage };
-
-  // Send notification if member has Telegram enabled
+  // Send notification before removal (server checks membership) if member has Telegram enabled
   if (memberProfile?.telegram_notifications_enabled && memberProfile?.telegram_chat_id) {
     try {
       await supabase.functions.invoke('send-team-notification', {
@@ -454,6 +446,14 @@ export async function removeMemberFromTeam(
       logger.error('Failed to send removal notification', e, { context: 'collaboration' });
     }
   }
+
+  const { error } = await supabase
+    .from('team_members')
+    .delete()
+    .eq('team_id', teamId)
+    .eq('user_id', memberId);
+
+  if (error) return { success: false, error: normalizeAppError(error).safeMessage };
 
   return { success: true };
 }

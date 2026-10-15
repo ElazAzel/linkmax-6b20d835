@@ -42,7 +42,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { BlockInsertButton } from './BlockInsertButton';
-import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
 import { InlineTextEditor } from './InlineTextEditor';
 import { BulkActionBar } from './BulkActionBar';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
@@ -59,12 +58,11 @@ import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
-import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
-import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
+import type { Block, GridConfig, BlockType } from '@/types/page';
 import { SectionCompositionPicker } from './design/SectionCompositionPicker';
 import { getComposition, type CompositionDef } from '@/lib/design/composition';
 import { resolveBlockVariant } from '@/lib/design/block-variants';
-import { resolveBlockCellAppearance, SELF_STYLED_BLOCK_TYPES, TRANSPARENT_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
+import { resolveBlockCellAppearance, resolveBlockLayout, resolveProfileComposition, SELF_STYLED_BLOCK_TYPES, TRANSPARENT_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion } from 'framer-motion';
@@ -80,7 +78,7 @@ function InsertBetweenDivider({
   isMobile: boolean;
 }) {
   return (
-    <div className="relative group/divider py-1 col-span-2">
+    <div className="absolute -top-2 inset-x-0 z-40 -translate-y-1/2 group/divider">
       <div className={cn(
         "flex items-center gap-2 transition-all duration-300",
         isMobile ? "opacity-100" : "opacity-0 group-hover/divider:opacity-100"
@@ -129,6 +127,8 @@ interface GridEditorProps {
   pageNiche?: string;
   /** Block ID that was just inserted — gets a one-time appear animation + ring */
   recentlyAddedBlockId?: string | null;
+  reordering?: boolean;
+  onReorderingChange?: (reordering: boolean) => void;
 }
 
 interface SortableGridBlockItemProps {
@@ -141,6 +141,7 @@ interface SortableGridBlockItemProps {
   premiumTier?: PremiumTier;
   isDragging?: boolean;
   isMobile?: boolean;
+  reorderMode?: boolean;
   isSelected?: boolean;
   isMultiSelected?: boolean;
   isDimmed?: boolean;
@@ -159,6 +160,7 @@ interface SortableGridBlockItemProps {
   composition?: CompositionDef;
   compositionIndex?: number;
   compositionTotal?: number;
+  insertBefore?: React.ReactNode;
 }
 
 function SortableGridBlockItem({
@@ -170,6 +172,7 @@ function SortableGridBlockItem({
   isPremium,
   premiumTier,
   isMobile = false,
+  reorderMode = false,
   isSelected = false,
   isMultiSelected = false,
   isDimmed = false,
@@ -186,9 +189,11 @@ function SortableGridBlockItem({
   composition,
   compositionIndex = 0,
   compositionTotal = 1,
+  insertBefore,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const clearSelection = useEditorStore((state) => state.clearSelection);
+  const selectBlocks = useEditorStore((state) => state.setSelectedBlockIds);
   // On phones the block inspector sheet already holds the block's actions.
   const inspectorOpen = useEditorStore((state) => state.editorOpen);
   const {
@@ -198,18 +203,16 @@ function SortableGridBlockItem({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: block.id });
+  } = useSortable({ id: block.id, disabled: !reorderMode });
 
+  const layout = resolveBlockLayout(block);
   const style = {
+    ...(composition ? {} : layout.style),
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
-  const blockSize = block.blockSize || 'small';
-  const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
   const inComposition = !!composition;
-  const colSpanClass = inComposition ? '' : dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-  const rowSpanClass = inComposition ? '' : dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
   const compositionItemClass = composition?.itemClass?.(compositionIndex, compositionTotal) || '';
   // Same variant + style resolution as the public GridBlocksRenderer, so the
   // canvas shows theme shape/shadow, per-block radius/padding/colors and the
@@ -222,7 +225,7 @@ function SortableGridBlockItem({
   const alignmentClass =
     contentAlignment === 'top' ? 'items-start' : contentAlignment === 'bottom' ? 'items-end' : 'items-center';
   const isFrameless =
-    TRANSPARENT_BLOCK_TYPES.has(block.type) || !!composition?.naked || !!variant?.naked;
+    TRANSPARENT_BLOCK_TYPES.has(block.type) || SELF_STYLED_BLOCK_TYPES.has(block.type) || !!composition?.naked || !!variant?.naked;
 
   // Get block type label from manifest
   const manifest = BLOCK_MANIFEST[block.type as BlockType];
@@ -255,18 +258,18 @@ function SortableGridBlockItem({
       ref={setRefs}
       style={style}
       data-block-id={block.id}
+      data-lm-type={block.type}
+      data-lm-auto={layout.autoHeight ? '' : undefined}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
         // scroll-mt: scrollIntoView lands below the sticky editor top bar.
-        'relative group scroll-mt-20 transition-shadow duration-200 border-0 rounded-[var(--lm-block-radius,16px)]',
-        colSpanClass,
-        rowSpanClass,
+        'relative group min-w-0 min-h-0 scroll-mt-20 transition-shadow duration-200 border-0 rounded-[var(--lm-block-radius,24px)]',
+        !inComposition && !layout.autoHeight && 'lm-fixed-cell',
+        !isFrameless && 'lm-owned-surface',
         // Quiet hover: 1px outline + soft lift, no background tint
         !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
         isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
-        !isFrameless && !inComposition && 'min-h-[140px]',
-        !isFrameless && !inComposition && dimensions.gridRows === 2 && 'min-h-[296px]',
         compositionItemClass,
         // P4: Selection ring
         selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
@@ -277,20 +280,22 @@ function SortableGridBlockItem({
         isDimmed && 'opacity-30 pointer-events-none',
       )}
     >
+      {insertBefore}
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
         <div
           className={cn(
-            'pointer-events-none flex w-full h-full isolate overflow-hidden',
+            'pointer-events-none flex w-full h-full min-w-0 min-h-0 isolate',
+            !layout.autoHeight && 'overflow-hidden',
             alignmentClass,
             isFrameless ? 'bg-transparent' : hasCustomBg ? '' : 'qb-card',
             !isFrameless && appearance.className,
             variant?.className,
           )}
-          style={isFrameless ? undefined : appearance.style}
+          style={appearance.style}
           data-editor-block
         >
-          <div className={cn('relative w-full h-full', appearance.textEffectClass)}>
+          <div className={cn('lm-tile-content relative w-full', !layout.autoHeight && 'h-full', appearance.textEffectClass)}>
             <BlockRenderer
               block={block}
               isPreview
@@ -308,24 +313,26 @@ function SortableGridBlockItem({
             made the page almost impossible to scroll. */}
         <button
           type="button"
-          {...attributes}
-          {...(isMobile ? {} : listeners)}
+          {...(reorderMode ? attributes : {})}
+          {...(reorderMode && !isMobile ? listeners : {})}
           className={cn(
             'absolute inset-0 z-20 h-auto min-h-0 rounded-2xl bg-transparent p-0 shadow-none outline-none transition-colors active:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-            !isMobile && 'touch-none',
-            isMobile ? 'cursor-pointer' : isDragging ? 'cursor-grabbing' : 'cursor-grab',
+            reorderMode && !isMobile && 'touch-none',
+            reorderMode ? isDragging ? 'cursor-grabbing' : 'cursor-grab' : 'cursor-pointer',
           )}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            if (reorderMode) { selectBlocks(new Set([block.id])); return; }
             onBlockClick?.(block, e);
           }}
           onDoubleClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            onBlockDoubleClick?.(block);
+            if (!reorderMode) onBlockDoubleClick?.(block);
           }}
           onKeyDown={(e) => {
+            if (reorderMode && !isMobile) listeners?.onKeyDown?.(e);
             if (e.key === 'Escape') {
               e.currentTarget.blur();
             }
@@ -359,7 +366,7 @@ function SortableGridBlockItem({
       )}
 
       {/* Mobile drag handle — visible, 44px, the only touch drag source */}
-      {isMobile && !isDragging && block.type !== 'profile' && (
+      {reorderMode && isMobile && !isDragging && block.type !== 'profile' && (
         <button
           type="button"
           {...listeners}
@@ -407,17 +414,15 @@ function SortableGridBlockItem({
 
 // Drag overlay component
 function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block; isPremium?: boolean; premiumTier?: PremiumTier }) {
-  const blockSize = block.blockSize || 'small';
-  const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
-  const widthClass = dimensions.gridCols === 2 ? 'w-full md:w-[600px]' : 'w-full md:w-[300px]';
+  const layout = resolveBlockLayout(block);
 
   return (
     <div
       className={cn(
         'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-visible cursor-grabbing',
-        widthClass,
-        dimensions.gridRows === 2 ? 'h-[296px]' : 'h-[140px]'
+        'w-full',
       )}
+      style={layout.autoHeight ? undefined : { aspectRatio: `${layout.columns} / ${layout.rows}` }}
     >
       <div className="w-full h-full overflow-hidden opacity-80" data-editor-block>
         <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
@@ -483,10 +488,15 @@ export const GridEditor = memo(function GridEditor({
   onInsertPreset,
   pageNiche,
   recentlyAddedBlockId,
+  reordering,
+  onReorderingChange,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [localReorderMode, setLocalReorderMode] = useState(false);
+  const reorderMode = reordering ?? localReorderMode;
+  const setReorderMode = (next: boolean) => { setLocalReorderMode(next); onReorderingChange?.(next); };
   const [experimentBlock, setExperimentBlock] = useState<Block | null>(null);
   const [sectionDialogOpen, setSectionDialogOpen] = useState(false);
   const [sectionNameInput, setSectionNameInput] = useState('');
@@ -509,8 +519,7 @@ export const GridEditor = memo(function GridEditor({
     reviewMode,
   } = useEditorStore();
 
-  const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
-  const contentBlocks = blocks.filter(b => b.type !== 'profile');
+  const { profile: profileBlock, socials: profileSocials, content: contentBlocks } = resolveProfileComposition(blocks);
 
   // P5: Derive sections for rendering
   const sections = useMemo(() => getSections(blocks), [blocks]);
@@ -563,11 +572,11 @@ export const GridEditor = memo(function GridEditor({
 
       if (oldIndex !== -1 && newIndex !== -1) {
         const reorderedContent = arrayMove(contentBlocks, oldIndex, newIndex);
-        const newBlocks = profileBlock ? [profileBlock, ...reorderedContent] : reorderedContent;
+        const newBlocks = profileBlock ? [profileBlock, ...(profileSocials ? [profileSocials] : []), ...reorderedContent] : reorderedContent;
         onReorderBlocks?.(newBlocks);
       }
     }
-  }, [contentBlocks, profileBlock, onReorderBlocks]);
+  }, [contentBlocks, profileBlock, profileSocials, onReorderBlocks]);
 
   const [insertSheetOpen, setInsertSheetOpen] = useState(false);
   const [insertPosition, setInsertPosition] = useState(blocks.length);
@@ -733,10 +742,10 @@ export const GridEditor = memo(function GridEditor({
 
   // Build canvas runs: composed sections (WYSIWYG) + legacy bento grid groups
   const canvasRuns = useMemo(() => {
-    const profileOffset = profileBlock ? 1 : 0;
+    const profileOffset = (profileBlock ? 1 : 0) + (profileSocials ? 1 : 0);
 
     type Run =
-      | { kind: 'grid'; key: string; nodes: React.ReactNode[] }
+      | { kind: 'grid'; key: string; nodes: React.ReactNode[]; autoHeight?: boolean }
       | {
           kind: 'section';
           key: string;
@@ -765,6 +774,7 @@ export const GridEditor = memo(function GridEditor({
         isPremium={isPremium}
         premiumTier={premiumTier}
         isMobile={isMobile}
+        reorderMode={reorderMode}
         isSelected={selectedBlockIds.size <= 1 && selectedBlockIds.has(block.id)}
         isMultiSelected={selectedBlockIds.size > 1 && selectedBlockIds.has(block.id)}
         isDimmed={reviewDimmedIds.has(block.id)}
@@ -777,16 +787,19 @@ export const GridEditor = memo(function GridEditor({
         isLast={index === contentBlocks.length - 1}
         onMoveUp={index > 0 ? () => {
           const reordered = arrayMove(contentBlocks, index, index - 1);
-          onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+          onReorderBlocks?.(profileBlock ? [profileBlock, ...(profileSocials ? [profileSocials] : []), ...reordered] : reordered);
         } : undefined}
         onMoveDown={index < contentBlocks.length - 1 ? () => {
           const reordered = arrayMove(contentBlocks, index, index + 1);
-          onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+          onReorderBlocks?.(profileBlock ? [profileBlock, ...(profileSocials ? [profileSocials] : []), ...reordered] : reordered);
         } : undefined}
         isRecentlyAdded={recentlyAddedBlockId === block.id}
         composition={composition}
         compositionIndex={compositionIndex}
         compositionTotal={compositionTotal}
+        insertBefore={!composition ? (
+          <InsertBetweenDivider position={index + profileOffset} onOpenInsert={openInsertSheet} isMobile={isMobile} />
+        ) : undefined}
       />
     );
 
@@ -816,19 +829,10 @@ export const GridEditor = memo(function GridEditor({
       // Collapsed section: only keep the header
       if (blockSectionId && collapsedSections.has(blockSectionId)) {
         if (header) {
-          runs.push({ kind: 'grid', key: `grid-collapsed-${blockSectionId}`, nodes: [header] });
+          runs.push({ kind: 'grid', key: `grid-collapsed-${blockSectionId}`, nodes: [header], autoHeight: true });
         }
         return;
       }
-
-      const divider = (
-        <InsertBetweenDivider
-          key={`divider-${block.id}`}
-          position={index + profileOffset}
-          onOpenInsert={openInsertSheet}
-          isMobile={isMobile}
-        />
-      );
 
       const last = runs[runs.length - 1];
 
@@ -854,31 +858,46 @@ export const GridEditor = memo(function GridEditor({
         return;
       }
 
-      if (last?.kind === 'grid') {
-        if (header) last.nodes.push(header);
-        last.nodes.push(divider, renderBlock(block, index));
+      const autoHeight = resolveBlockLayout(block).autoHeight;
+      if (header) runs.push({ kind: 'grid', key: `header-${block.id}`, nodes: [header], autoHeight: true });
+      if (last?.kind === 'grid' && !last.autoHeight && !autoHeight && !header) {
+        last.nodes.push(renderBlock(block, index));
         return;
       }
 
       runs.push({
         kind: 'grid',
         key: `grid-${block.id}`,
-        nodes: header ? [header, divider, renderBlock(block, index)] : [divider, renderBlock(block, index)],
+        nodes: [renderBlock(block, index)],
+        autoHeight,
       });
     });
 
     return runs;
-  }, [contentBlocks, profileBlock, isPremium, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, handleTransform, handleCopyBlock, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId, openInsertSheet]);
+  }, [contentBlocks, profileBlock, profileSocials, isPremium, isMobile, reorderMode, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, handleTransform, handleCopyBlock, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks, recentlyAddedBlockId, openInsertSheet]);
 
   return (
-    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-5 pb-32 md:pb-24 bg-surface-quiet rounded-card">
+    <div className="lm-page-width lm-block-stack py-4 space-y-4 pb-32 md:pb-24">
+      {contentBlocks.length > 1 && !onReorderingChange && <div className="flex justify-end pb-6">
+        <Button type="button" variant="secondary" size="sm" aria-pressed={reorderMode} onClick={() => { setReorderMode(!reorderMode); clearSelection(); }}>
+          {reorderMode ? t('common.done', 'Готово') : t('pageV2.actions.order', 'Порядок блоков')}
+        </Button>
+      </div>}
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
-        <div className="relative isolate qb-card overflow-hidden" data-onboarding="profile-block" data-editor-block>
-          <InlineProfileEditor
-            block={profileBlock}
-            onUpdate={(updates) => onUpdateBlock(profileBlock.id, updates)}
-          />
+        <div className="lm-profile-card relative isolate" data-onboarding="profile-block" data-editor-block>
+          <div className="relative" data-block-id={profileBlock.id}>
+            <div className="pointer-events-none"><BlockRenderer block={profileBlock} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} /></div>
+            <button type="button" className="absolute inset-0 rounded-card focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onEditBlock(profileBlock)} aria-label={t('common.edit')}>
+              <span className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full bg-card shadow-sm"><Edit2 className="h-4 w-4" /></span>
+            </button>
+          </div>
+          {profileSocials && (
+            <div className="relative" data-lm-socials>
+              <BlockRenderer block={profileSocials} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
+              <button type="button" className="absolute inset-0 rounded-card focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onEditBlock(profileSocials)} aria-label={t('blockEditor.socials', 'Социальные сети')} />
+            </div>
+          )}
         </div>
       )}
 
@@ -899,7 +918,7 @@ export const GridEditor = memo(function GridEditor({
               run.kind === 'grid' ? (
                 <div
                   key={run.key}
-                  className="grid grid-cols-2 xs:grid-cols-2 gap-2.5 sm:gap-3.5 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
+                  className={run.autoHeight ? 'lm-auto-run' : 'lm-tile-grid'}
                 >
                   {run.nodes}
                 </div>

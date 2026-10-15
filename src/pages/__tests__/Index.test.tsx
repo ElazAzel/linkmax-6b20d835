@@ -10,7 +10,7 @@ const trackMarketingEventMock = vi.fn();
 const trackOnceMock = vi.fn();
 const observerRefs: Array<React.RefObject<HTMLDivElement | null>> = [];
 
-vi.mock('react-router-dom', () => ({
+vi.mock('@/lib/router-compat', () => ({
   useNavigate: () => navigateMock,
 }));
 
@@ -66,8 +66,8 @@ vi.mock('@/components/landing/v2/DynamicIslandNav', () => ({
   ),
 }));
 
-vi.mock('@/components/landing/RevenueLandingSections', () => ({
-  RevenueLandingSections: ({ onStart, onPricing }: { onStart: () => void; onPricing: () => void }) => (
+vi.mock('@/components/landing/v3/KornerSections', () => ({
+  KornerSections: ({ onStart, onPricing }: { onStart: () => void; onPricing: () => void }) => (
     <div>
       <button onClick={onStart}>revenue-start</button>
       <button onClick={onPricing}>revenue-pricing</button>

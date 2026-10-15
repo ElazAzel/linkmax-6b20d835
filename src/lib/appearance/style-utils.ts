@@ -100,11 +100,10 @@ export function getThemeBackgroundStyle(theme?: Partial<PageTheme>): CSSProperti
  */
 export function getPublicPageCssVars(theme?: Partial<PageTheme>): CSSProperties {
   const t = theme ?? {};
-  const font = getFontPair(t.fontPair);
-  const shape = t.blockShape ?? 'rounded';
+  const font = getFontPair(t.fontPair ?? 'inter-inter');
   const shadow = t.blockShadow ?? 'sm';
   const vars: Record<string, string> = {
-    '--lm-block-radius': BLOCK_SHAPE_RADIUS[shape],
+    '--lm-block-radius': t.blockShape ? BLOCK_SHAPE_RADIUS[t.blockShape] : '24px',
     '--lm-block-shadow': BLOCK_SHADOW_CSS[shadow],
     '--lm-heading-font': font.heading,
     '--lm-body-font': font.body,
@@ -141,7 +140,8 @@ export function getPublicPageCssVars(theme?: Partial<PageTheme>): CSSProperties 
 export function getContrastForeground(color: string): string {
   const L = getRelativeLuminance(color);
   if (L === null) return '#0b0b0b';
-  return L > 0.5 ? '#0b0b0b' : '#ffffff';
+  const darkL = getRelativeLuminance('#0b0b0b') ?? 0;
+  return (L + 0.05) / (darkL + 0.05) >= 1.05 / (L + 0.05) ? '#0b0b0b' : '#ffffff';
 }
 
 /** Returns a WCAG contrast ratio when both values are parseable colors. */

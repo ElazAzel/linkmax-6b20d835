@@ -1044,7 +1044,8 @@
     "socials": "Ijtimoiy tarmoqlar",
     "testimonial": "Sharhlar",
     "text": "Matn",
-    "video": "Video"
+    "video": "Video",
+    "audio": "Audio"
   },
   "blocks": {
     "addFailed": "Blok qo‘shib bo‘lmadi",
@@ -1568,7 +1569,17 @@
     "item3": "Tez javoblar va aloqa tarixi",
     "title": "Mini CRM",
     "description": "Shakldagi barcha so'rovlar avtomatik ravishda CRM-ga tushadi. Holatlar: yangi → davom etmoqda → tugallangan. Endi Excel yo'q.",
-    "desc": "Barcha ilovalar bir joyda. Statuslar, tarix, Telegram xabarnomalari."
+    "desc": "Barcha ilovalar bir joyda. Statuslar, tarix, Telegram xabarnomalari.",
+    "timeline": {
+      "title": "Mijoz tarixi",
+      "revenue": "Daromad",
+      "kind": {
+        "lead": "Ariza",
+        "booking": "Yozilish",
+        "event": "Tadbir",
+        "purchase": "Xarid"
+      }
+    }
   },
   "currency": {
     "names": {
@@ -8079,6 +8090,67 @@
     "webhookNowTitle": "Hozir ishlaydi: sahifa webhooki",
     "webhookNowDescription": "Sahifadan har bir yangi arizada LinkMAX URL manzilingizga POST so‘rov yuboradi. Make, Zapier, n8n yoki o‘z serveringizni ulang.",
     "openWebhookSettings": "Webhookni sozlash"
+  },
+  "payment": {
+    "more_details": "Batafsil",
+    "test_mode_banner": "Oldindan ko‘rishda barcha to‘lovlar test rejimida."
+  },
+  "audioBlock": {
+    "label": "Audio",
+    "source": "Manba",
+    "file": "MP3 / WAV fayli",
+    "musicLink": "Musiqa havolasi",
+    "cover": "Muqova",
+    "fileHint": "MP3 yoki WAV, 50 MB gacha.",
+    "externalHint": "Musiqa xizmati alohida kartadan ochiladi.",
+    "addSource": "Audiofayl yoki musiqa havolasini kiriting.",
+    "playbackError": "Audioni ijro etib bo‘lmadi. Fayl yoki havolani tekshiring.",
+    "tooLarge": "Fayl hajmi 50 MB dan katta.",
+    "invalidFormat": "MP3 yoki WAV audiofaylini tanlang.",
+    "emptyFile": "Fayl bo‘sh.",
+    "invalidUrl": "To‘g‘ri HTTP yoki HTTPS havolasini kiriting."
+  },
+  "pageV2": {
+    "navigation": {
+      "page": "Mening sahifam",
+      "overview": "Umumiy",
+      "add": "Qo‘shish",
+      "business": "Biznes",
+      "label": "Kabinet navigatsiyasi"
+    },
+    "actions": {
+      "block": "Blok qo‘shish",
+      "theme": "Bezatish",
+      "order": "Bloklar tartibi",
+      "templates": "Andozalar",
+      "ai": "AI yordamchi"
+    },
+    "firstPage": {
+      "title": "Birinchi sahifangizni yarating",
+      "hint": "Profil va uchta karta qo‘shing, so‘ng sahifani chop eting."
+    },
+    "draft": {
+      "publishing": "Chop etilmoqda…",
+      "previewHint": "Faqat sizga ko‘rinadi. Chop etganda ochiq sahifa yangilanadi.",
+      "download": "Qoralamani yuklab olish",
+      "reload": "Serverdagi nusxani ochish",
+      "conflict": "Boshqa varaqda yangi nusxa saqlandi. Server nusxasini ochishdan oldin o‘zgarishlarni yuklab oling.",
+      "unavailable": "Serverga saqlash hozircha mavjud emas. O‘zgarishlar ushbu qurilmada saqlanadi.",
+      "access": "Sahifani tahrirlash huquqingiz yo‘q. O‘zgarishlarni yuklab oling.",
+      "network": "Serverga saqlanmadi. O‘zgarishlar ushbu qurilmada saqlangan; ulanish tiklanganda qayta urining.",
+      "publishFirst": "Avval sahifangizni chop eting."
+    }
+  },
+  "imagePlacement": {
+    "title": "Qirqish va joylashuv",
+    "x": "Gorizontal joylashuv",
+    "y": "Vertikal joylashuv",
+    "zoom": "Masshtab",
+    "rotate": "90° burish",
+    "flipX": "Gorizontal akslantirish",
+    "flipY": "Vertikal akslantirish",
+    "reset": "Qirqishni tiklash",
+    "hint": "Asl nusxa saqlanadi. Joylashuvni o‘zgartiring yoki masshtab sozlamalarida Sig‘dirishni tanlang."
   },
   "socials": {
     "urlPlaceholder": "Havolani qo'ying: instagram.com/…, t.me/…",

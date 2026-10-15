@@ -57,6 +57,16 @@ serve(async (req: Request) => {
       }
     }
 
+    // Ensure caller-supplied deal/contact belong to this zone
+    if (deal_id) {
+      const { data: d } = await supabase.from("zone_deals").select("id").eq("id", deal_id).eq("zone_id", zone_id).maybeSingle();
+      if (!d) return createErrorResponse("Forbidden", 403);
+    }
+    if (contact_id) {
+      const { data: c } = await supabase.from("zone_contacts").select("id").eq("id", contact_id).eq("zone_id", zone_id).maybeSingle();
+      if (!c) return createErrorResponse("Forbidden", 403);
+    }
+
     const { data: automations, error: autoError } = await supabase
       .from("zone_automations")
       .select("*")
@@ -87,6 +97,7 @@ serve(async (req: Request) => {
             .from("zone_deals")
             .select("assigned_to")
             .eq("id", deal_id)
+            .eq("zone_id", zone_id)
             .single();
           assignedTo = deal?.assigned_to ?? null;
         }
@@ -139,6 +150,7 @@ serve(async (req: Request) => {
           .from("zone_deals")
           .select("title, value_amount, contact_id, currency")
           .eq("id", deal_id)
+            .eq("zone_id", zone_id)
           .single();
 
         if (deal) {
@@ -190,11 +202,11 @@ serve(async (req: Request) => {
           let zoneName = "Zone";
 
           if (contact_id) {
-            const { data: contact } = await supabase.from("zone_contacts").select("first_name, last_name").eq("id", contact_id).single();
+            const { data: contact } = await supabase.from("zone_contacts").select("first_name, last_name").eq("id", contact_id).eq("zone_id", zone_id).single();
             if (contact) contactName = `${contact.first_name || ""} ${contact.last_name || ""}`.trim() || "Client";
           }
           if (deal_id) {
-            const { data: deal } = await supabase.from("zone_deals").select("title").eq("id", deal_id).single();
+            const { data: deal } = await supabase.from("zone_deals").select("title").eq("id", deal_id).eq("zone_id", zone_id).single();
             if (deal) dealTitle = deal.title || "";
           }
           const { data: zone } = await supabase.from("zones").select("name").eq("id", zone_id).single();

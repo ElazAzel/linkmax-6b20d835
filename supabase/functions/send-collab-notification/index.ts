@@ -59,7 +59,7 @@ serve(async (req) => {
     const targetId = type === 'request' ? targetUserId : callerId;
     const { data: collab } = await supabase
       .from('collaborations')
-      .select('id')
+      .select('id, message')
       .eq('requester_id', requesterId)
       .eq('target_id', targetId)
       .maybeSingle();
@@ -103,7 +103,11 @@ serve(async (req) => {
     switch (type) {
       case 'request':
         text = `🤝 *Запрос на коллаборацию!*\n\n👤 *От:* ${requesterName}`;
-        if (message) text += `\n💬 *Сообщение:* ${String(message).slice(0, 500)}`;
+        {
+          // Use the stored request message, never request-body text; strip Markdown control chars
+          const stored = String((collab as { message?: string | null }).message ?? '').replace(/[*_`\[\]()~>#+=|{}]/g, '').slice(0, 300);
+          if (stored) text += `\n💬 *Сообщение:* ${stored}`;
+        }
         text += `\n\nОткройте приложение, чтобы принять или отклонить.`;
         break;
       case 'accepted':

@@ -3,7 +3,7 @@
  * Pro-only feature with camera access, torch toggle, recent scans
  */
 import { useState, useEffect, useCallback, useRef, memo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';

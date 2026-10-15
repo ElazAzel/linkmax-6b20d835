@@ -3,7 +3,7 @@
  * Entry point for the redesigned dashboard experience
  */
 import { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from '@/lib/router-compat';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDashboard } from '@/hooks/dashboard/useDashboard';
 import { useMultiPage } from '@/hooks/page/useMultiPage';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
+import { useLeads } from '@/hooks/crm/useLeads';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { usePageVersions } from '@/hooks/page/usePageVersions';
 import { EditorCommandPalette } from '@/components/editor/EditorCommandPalette';
@@ -41,8 +42,7 @@ import { isBeautyRevenueKitNiche, selectDashboardOnboardingWizard } from './dash
 import { isRevenueKitAvailable } from '@/services/revenue-kit';
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
-const OfficeScreen = lazy(() => import('@/components/dashboard-v2/office/OfficeScreen').then(m => ({ default: m.OfficeScreen })));
-const OffersScreen = lazy(() => import('@/components/dashboard-v2/office/OffersScreen').then(m => ({ default: m.OffersScreen })));
+const HomeScreen = lazy(() => import('@/components/dashboard-v2/screens/HomeScreen').then(m => ({ default: m.HomeScreen })));
 const PagesScreen = lazy(() => import('@/components/dashboard-v2/screens/PagesScreen').then(m => ({ default: m.PagesScreen })));
 const EditorScreen = lazy(() => import('@/components/dashboard-v2/screens/EditorScreen').then(m => ({ default: m.EditorScreen })));
 const ActivityScreen = lazy(() => import('@/components/dashboard-v2/screens/ActivityScreen').then(m => ({ default: m.ActivityScreen })));
@@ -118,15 +118,22 @@ const ThemePanel = lazy(() => import('@/components/dashboard-v2/panels').then(m 
 const CreatePageDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.CreatePageDialog })));
 const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.PageVersionsDialog })));
 
+import { pageV2TabHref, getPageV2Tab } from '@/components/dashboard-v2/layout/page-v2-navigation';
+import { QuickCreateSheet } from '@/components/dashboard-v2/layout/QuickCreateSheet';
+import { DraftStatusBanner } from '@/components/editor/DraftStatusBanner';
+import { DraftPreviewDialog } from '@/components/editor/DraftPreviewDialog';
+const BusinessScreen = lazy(() => import('@/components/dashboard-v2/screens/BusinessScreen').then(m => ({ default: m.BusinessScreen })));
+const OfficeScreen = lazy(() => import('@/components/dashboard-v2/office/OfficeScreen').then(m => ({ default: m.OfficeScreen })));
+const OffersScreen = lazy(() => import('@/components/dashboard-v2/office/OffersScreen').then(m => ({ default: m.OffersScreen })));
 import type { Niche } from '@/lib/niches';
 import type { Block, PageData, PageTheme } from '@/types/page';
 
 type PageSeo = PageData['seo'];
 
-type TabId = 'home' | 'clients' | 'calendar' | 'offers' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'developers' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
+type TabId = 'business' | 'clients' | 'calendar' | 'offers' | 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'developers' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics' | 'zone-resources';
 
 const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-analytics', 'zone-resources'];
-const ALL_TABS = ['home', 'clients', 'calendar', 'offers', 'editor', 'pages', 'activity', 'insights', 'finance', 'monetize', 'settings', 'developers', 'events', 'leads', 'team', ...ZONE_TABS];
+const ALL_TABS = ['business', 'clients', 'calendar', 'offers', 'home', 'editor', 'pages', 'activity', 'insights', 'finance', 'monetize', 'settings', 'developers', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
   const navigate = useNavigate();
@@ -164,7 +171,9 @@ function DashboardV2Inner() {
   editorHistoryRef.current = editorHistory;
 
   // Core state - with onPublish callback for automatic versioning + editorHistory
-  const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
+  const [showDraftPreview, setShowDraftPreview] = useState(false);
+  const [quickCreateOpen, setQuickCreateOpen] = useState(false);
+  const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory, onPreview: () => setShowDraftPreview(true) });
   applyBlocksRef.current = dashboard.setBlocks;
 
   // History belongs to one page: after switching pages, undo must not apply
@@ -176,6 +185,7 @@ function DashboardV2Inner() {
   }, [historyPageId, resetHistory]);
   const multiPage = useMultiPage();
   const { limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
+  const { leads } = useLeads();
 
   const revenueKitNiche = dashboard.onboardingState.signupContext.revenueKitNiche;
   const [beautyKitFlag, setBeautyKitFlag] = useState(() => ({
@@ -238,18 +248,7 @@ function DashboardV2Inner() {
     if (location.pathname.startsWith('/dashboard/events')) {
       return 'events';
     }
-    // First check query params
-    const tabParam = searchParams.get('tab') as TabId;
-    if (tabParam && ALL_TABS.includes(tabParam)) {
-      return tabParam;
-    }
-    // Fall back to pathname
-    const pathParts = location.pathname.split('/');
-    const lastPart = pathParts[pathParts.length - 1];
-    if (ALL_TABS.includes(lastPart)) {
-      return lastPart as TabId;
-    }
-    return 'home';
+    return getPageV2Tab(searchParams.toString(), location.pathname, ALL_TABS) as TabId;
   }, [searchParams, location.pathname]);
 
   const activationAction = searchParams.get('action');
@@ -313,13 +312,8 @@ function DashboardV2Inner() {
 
   // Handle tab change - navigate to the proper route
   const handleTabChange = useCallback((tabId: string) => {
-    if (tabId === 'home') {
-      navigate('/dashboard/home');
-    } else if (tabId === 'editor') {
-      navigate('/dashboard/home?tab=editor');
-    } else {
-      navigate(`/dashboard/${tabId}`);
-    }
+    if (tabId === 'add') { setQuickCreateOpen(true); return; }
+    navigate(pageV2TabHref(tabId));
   }, [navigate]);
 
   // Handle page switch
@@ -433,23 +427,6 @@ function DashboardV2Inner() {
     return <LoadingState />;
   }
 
-  if (!dashboard.pageData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center p-6">
-          <h2 className="text-xl font-bold mb-2">{t('dashboard.errors.loadFailed', 'Loading failed')}</h2>
-          <p className="text-muted-foreground mb-4">{t('dashboard.errors.loadFailedDesc', 'Could not load page data')}</p>
-          <Button
-            onClick={() => window.location.reload()}
-            className="rounded-xl"
-          >
-            {t('common.retry', 'Try again')}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   // Convert pages for PagesScreen
   const pagesForScreen = multiPage.pages.map(p => ({
     id: p.id,
@@ -518,44 +495,52 @@ function DashboardV2Inner() {
           onSignOut={dashboard.handleSignOut}
         >
           <Suspense fallback={<ScreenLoader />}>
+            <DraftStatusBanner error={dashboard.draftError} pageData={dashboard.pageData}
+              onRetry={() => { void (dashboard.pageData ? dashboard.saveDraft() : dashboard.refreshDraft()).catch(() => undefined); }}
+              onReload={() => { void dashboard.reloadServerDraft().catch(() => undefined); }} />
+            {!dashboard.loading && !dashboard.pageData && !dashboard.draftError && <div className="m-4 rounded-3xl bg-card p-6">
+              <h1 className="text-xl font-semibold">{t('pageV2.firstPage.title', 'Создайте свою первую страницу')}</h1>
+              <p className="mt-2 text-sm text-muted-foreground">{t('pageV2.firstPage.hint', 'Добавьте профиль и три плитки, затем опубликуйте страницу.')}</p>
+              <Button className="mt-4" onClick={() => setShowCreatePage(true)}>{t('dashboard.pages.createPage', 'Создать страницу')}</Button>
+            </div>}
+            {currentTab === 'business' && <BusinessScreen onNavigate={handleTabChange} />}
+            {(currentTab === 'clients' || currentTab === 'calendar') && <OfficeScreen view={currentTab} onNavigate={handleTabChange} />}
+            {currentTab === 'offers' && <OffersScreen pageData={dashboard.pageData} loading={dashboard.loading}
+              onOpenPage={() => handleTabChange('editor')}
+              onEditBlock={block => { handleTabChange('editor'); setSelectedBlockId(block.id); }}
+              onInsertBlock={type => { dashboard.blockEditor.handleInsertBlock(type, dashboard.pageData?.blocks.length ?? 0); handleTabChange('editor'); }} />}
             {/* Home Screen */}
             {currentTab === 'home' && (
               <ScreenErrorBoundary screenName="Home">
-                <OfficeScreen
-                  view="today"
+                <HomeScreen
+                  pageData={dashboard.pageData}
+                  loading={dashboard.loading}
+                  isPremium={dashboard.isPremium}
+                  realLeadsCount={leads.length}
+                  onOpenEditor={() => handleTabChange('editor')}
+                  onPreview={() => dashboard.sharingState.handlePreview()}
+                  onShare={() => dashboard.sharingState.handleShare()}
+                  onOpenTemplates={() => setTemplateGalleryOpen(true)}
+                  onOpenMarketplace={() => setShowMarketplace(true)}
                   pageSwitcher={pageSwitcherElement}
+                  onOpenVersions={() => setShowVersions(true)}
+                  onOpenInsights={() => handleTabChange('insights')}
+                  onOpenActivity={() => handleTabChange('activity')}
+                  telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
+                  kaspiWidgetEnabled={dashboard.userProfile.profile?.kaspi_widget_enabled ?? false}
                   onNavigate={handleTabChange}
+                  outcomeHomeEnabled={outcomeHomeEnabled}
+                  onOpenRevenueKit={() => setShowRevenueKit(true)}
                 />
-              </ScreenErrorBoundary>
-            )}
-
-            {(currentTab === 'clients' || currentTab === 'calendar') && (
-              <ScreenErrorBoundary screenName={currentTab}>
-                <OfficeScreen view={currentTab} onNavigate={handleTabChange} />
-              </ScreenErrorBoundary>
-            )}
-
-            {currentTab === 'offers' && (
-              <ScreenErrorBoundary screenName="Offers">
-                {pageSwitcherElement}
-                <OffersScreen pageData={dashboard.pageData} loading={dashboard.loading}
-                  onOpenPage={() => handleTabChange('editor')}
-                  onEditBlock={(block) => {
-                    handleTabChange('editor');
-                    dashboard.blockEditor.handleEditBlock(block);
-                  }}
-                  onInsertBlock={(type) => {
-                    handleTabChange('editor');
-                    dashboard.blockEditor.handleInsertBlock(type, dashboard.pageData?.blocks.length ?? 0);
-                  }} />
               </ScreenErrorBoundary>
             )}
 
             {/* Editor Screen — persisted, hidden via CSS to preserve state */}
             <div style={{ display: currentTab === 'editor' ? 'block' : 'none' }}>
               <ScreenErrorBoundary screenName="Editor">
-                <EditorScreen
+                {dashboard.pageData && <EditorScreen
                   pageData={dashboard.pageData}
+                  pageSwitcher={pageSwitcherElement}
                   loading={dashboard.loading}
                   isPremium={dashboard.isPremium}
                   currentTier={dashboard.isPremium ? 'pro' : 'identity'}
@@ -566,6 +551,9 @@ function DashboardV2Inner() {
                   onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
                   onDeleteBlocks={dashboard.blockEditor.handleDeleteBlocks}
                   saveStatus={dashboard.saveStatus}
+                    onPublish={() => { void dashboard.sharingState.handlePublish().catch(() => undefined); }}
+                    publishing={dashboard.saving}
+                    hasUnpublishedChanges={dashboard.hasUnpublishedChanges}
                   onUpdateBlock={dashboard.updateBlock}
                   onReorderBlocks={dashboard.reorderBlocks}
                   onPreview={() => dashboard.sharingState.handlePreview()}
@@ -584,7 +572,7 @@ function DashboardV2Inner() {
                   onOpenVersions={() => setShowVersions(true)}
                   deepLinkAction={activationAction}
                   recentlyAddedBlockId={dashboard.blockEditor.recentlyAddedBlockId}
-                />
+                />}
               </ScreenErrorBoundary>
             </div>
 
@@ -925,6 +913,7 @@ function DashboardV2Inner() {
 
           {/* AI Builder Wizard (onboarding + settings) */}
           {dashboard.onboardingState.showAIBuilderWizard
+            && dashboard.pageData
             && onboardingSelectionReady
             && onboardingSelection.kind === 'ai-builder' && (
             <AIBuilderWizard
@@ -939,6 +928,7 @@ function DashboardV2Inner() {
           )}
 
           {dashboard.onboardingState.showAIBuilderWizard
+            && dashboard.pageData
             && onboardingSelectionReady
             && onboardingSelection.kind === 'beauty-revenue-kit' && (
             <Dialog
@@ -964,7 +954,7 @@ function DashboardV2Inner() {
             </Dialog>
           )}
 
-          {showRevenueKit && (
+          {showRevenueKit && dashboard.pageData && (
             <Dialog open onOpenChange={setShowRevenueKit}>
               <DialogContent className="max-w-4xl p-0 sm:p-4">
                 <RevenueKitWizard
@@ -989,7 +979,7 @@ function DashboardV2Inner() {
           {showAchievements && <AchievementsPanel onClose={() => setShowAchievements(false)} />}
           {showFriends && <FriendsPanel onClose={() => setShowFriends(false)} />}
 
-          {showSaveTemplate && (
+          {showSaveTemplate && dashboard.pageData && (
             <SaveTemplateDialog
               open={showSaveTemplate}
               onClose={() => setShowSaveTemplate(false)}
@@ -999,7 +989,7 @@ function DashboardV2Inner() {
             />
           )}
 
-          {showMyTemplates && (
+          {showMyTemplates && dashboard.pageData && (
             <MyTemplatesPanel
               open={showMyTemplates}
               onOpenChange={setShowMyTemplates}
@@ -1041,6 +1031,14 @@ function DashboardV2Inner() {
             />
           )}
 
+          <QuickCreateSheet open={quickCreateOpen} onOpenChange={setQuickCreateOpen} onAction={action => {
+            handleTabChange('editor');
+            if (action === 'theme') setShowTheme(true);
+            else if (action === 'templates') setTemplateGalleryOpen(true);
+            else if (action === 'ai') dashboard.aiState.openAIBuilder();
+            else navigate(pageV2TabHref('editor') + '&action=' + (action === 'order' ? 'order' : 'add-block'));
+          }} />
+          <DraftPreviewDialog open={showDraftPreview} onOpenChange={setShowDraftPreview} pageData={dashboard.pageData} isOwnerPremium={dashboard.isPremium} ownerTier={dashboard.currentTier} pageOwnerId={dashboard.pageData?.userId} />
           {/* Theme Panel */}
           {showTheme && (
             <ThemePanel

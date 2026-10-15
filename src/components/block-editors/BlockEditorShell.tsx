@@ -28,7 +28,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
-import type { Block } from '@/types/page';
+import type { Block, BlockSizePreset } from '@/types/page';
+import { getManifestEntry } from '@/lib/blocks/block-manifest';
 
 // Tab configuration
 export type EditorTab = 'content' | 'style' | 'advanced';
@@ -162,15 +163,16 @@ const BlockSizeSelector = memo(function BlockSizeSelector({
     block: Block;
     onBlockUpdate: (updates: Partial<Block>) => void;
 }) {
-    const { t } = useTranslation();
-    const sizes = [
-        { value: 'small', icon: <Square className="h-3.5 w-3.5" />, label: t('blockSize.small', '1×1') },
-        { value: 'wide', icon: <RectangleHorizontal className="h-3.5 w-3.5" />, label: t('blockSize.wide', '2×1') },
-        { value: 'tall', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: t('blockSize.tall', '1×2') },
-        { value: 'large', icon: <Grid2x2 className="h-3.5 w-3.5" />, label: t('blockSize.large', '2×2') },
+    const sizes: { value: BlockSizePreset; icon: ReactNode; label: string }[] = [
+        { value: 'small', icon: <Square className="h-3.5 w-3.5" />, label: 'XS 1×1' },
+        { value: 'wide', icon: <RectangleHorizontal className="h-3.5 w-3.5" />, label: 'S 2×1' },
+        { value: 'tall', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: 'M 1×2' },
+        { value: 'large', icon: <Grid2x2 className="h-3.5 w-3.5" />, label: 'L 2×2' },
+        { value: 'xl', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: 'XL 2×4' },
     ];
 
-    const currentSize = block.blockSize || 'small';
+    const allowedSizes = getManifestEntry(block.type)?.editing.allowedSizes;
+    if (allowedSizes && allowedSizes.length === 1) return null;
     const isActive = (value: string) => {
         // Handle legacy values
         if (value === 'small') return !block.blockSize || block.blockSize === 'small' || block.blockSize === 'half';
@@ -181,14 +183,16 @@ const BlockSizeSelector = memo(function BlockSizeSelector({
     return (
         <TooltipProvider delayDuration={300}>
             <div className="flex items-center gap-0.5 p-1 rounded-xl bg-muted/50 border border-border/30">
-                {sizes.map((size) => (
+                {sizes.filter(size => !allowedSizes || allowedSizes.includes(size.value)).map((size) => (
                     <Tooltip key={size.value}>
                         <TooltipTrigger asChild>
                             <button
                                 type="button"
-                                onClick={() => onBlockUpdate({ blockSize: size.value as any })}
+                                aria-label={size.label}
+                                aria-pressed={isActive(size.value)}
+                                onClick={() => onBlockUpdate({ blockSize: size.value })}
                                 className={cn(
-                                    "relative h-8 w-8 rounded-lg flex items-center justify-center transition-all duration-200",
+                                    "relative h-11 w-11 rounded-lg flex items-center justify-center transition-all duration-200",
                                     "hover:bg-muted active:scale-95",
                                     isActive(size.value)
                                         ? "bg-primary text-primary-foreground shadow-sm"
@@ -301,7 +305,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
     }, [activeTab, shouldShowTabs, children, contentTab, styleTab, advancedTab]);
 
     return (
-        <div className="flex flex-col h-full bg-background">
+        <div className="flex flex-col h-full min-h-0 bg-background">
             {/* Header */}
             <div className="shrink-0 bg-background/80 backdrop-blur-2xl border-b border-border/10">
                 {/* Title row */}
@@ -310,7 +314,8 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                         variant="ghost"
                         size="icon"
                         onClick={onClose}
-                        className="h-9 w-9 rounded-xl hover:bg-muted/60 active:scale-95 transition-all shrink-0"
+                        aria-label={t('common.close', 'Закрыть')}
+                        className="h-11 w-11 rounded-xl hover:bg-muted/60 active:scale-95 transition-all shrink-0"
                     >
                         <ChevronLeft className="h-5 w-5" />
                     </Button>
@@ -393,7 +398,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
             </div>
 
             {/* Content area with optional preview */}
-            <div className="flex-1 flex overflow-hidden">
+            <div className="flex-1 min-h-0 flex overflow-hidden">
                 {/* Editor content */}
                 <div className={cn(
                     "flex-1 overflow-hidden",

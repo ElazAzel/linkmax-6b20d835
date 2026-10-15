@@ -2,16 +2,17 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
+import { CONTENT_SECURITY_POLICY } from '../content-security-policy';
 
 const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8');
 
 /*
  * Blocks embed third-party players and maps in iframes. If the embed host is
- * missing from the CSP frame-src in index.html, the block renders blank on
+ * missing from the SSR document CSP, the block renders blank on
  * every public page without any error the owner can see.
  */
 describe('CSP frame-src', () => {
-  const csp = read('index.html').match(/http-equiv="Content-Security-Policy"\s+content="([^"]+)"/)?.[1] ?? '';
+  const csp = CONTENT_SECURITY_POLICY;
   const frameSrc = csp.split(';').map((part) => part.trim()).find((part) => part.startsWith('frame-src')) ?? '';
 
   it.each([

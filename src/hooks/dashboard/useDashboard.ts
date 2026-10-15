@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-compat';
 import { useCallback, useEffect, useRef, useMemo } from 'react';
 
 import { toast } from 'sonner';
@@ -25,6 +25,7 @@ import type { Niche } from '@/lib/niches';
 import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
 
 interface UseDashboardOptions {
+  onPreview?: () => void;
   onPublish?: (pageData: PageData) => void;
   editorHistory?: EditorHistoryType;
 }
@@ -66,7 +67,10 @@ export function useDashboard(options?: UseDashboardOptions) {
       } catch { /* non-critical */ }
     };
     updateLastSeen();
-    const interval = setInterval(updateLastSeen, 3 * 60 * 1000); // every 3 min
+    // every 10 min, and only while the tab is visible
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') updateLastSeen();
+    }, 10 * 60 * 1000);
     return () => clearInterval(interval);
   }, [user?.id]);
 
@@ -131,6 +135,8 @@ export function useDashboard(options?: UseDashboardOptions) {
 
   // Sharing state
   const sharingState = useDashboardSharing({
+    onPreview: options?.onPreview,
+    publishedSlug: cloudState.pageData?.isPublished ? cloudState.pageData.slug : undefined,
     onPublish: cloudState.publish,
     onSave: cloudState.save,
   });
@@ -226,6 +232,11 @@ export function useDashboard(options?: UseDashboardOptions) {
     loading: cloudState.loading,
     saving: cloudState.saving,
     saveStatus: cloudState.saveStatus,
+    draftError: cloudState.draftError,
+    hasUnpublishedChanges: cloudState.hasUnpublishedChanges,
+    saveDraft: cloudState.save,
+    reloadServerDraft: cloudState.reloadServerDraft,
+    refreshDraft: cloudState.refresh,
 
     // Profile
     profileBlock,
@@ -262,6 +273,11 @@ export function useDashboard(options?: UseDashboardOptions) {
     cloudState.loading,
     cloudState.saving,
     cloudState.saveStatus,
+    cloudState.draftError,
+    cloudState.hasUnpublishedChanges,
+    cloudState.save,
+    cloudState.reloadServerDraft,
+    cloudState.refresh,
     updateBlockWithHistory,
     reorderBlocksWithHistory,
     cloudState.reorderBlocks,

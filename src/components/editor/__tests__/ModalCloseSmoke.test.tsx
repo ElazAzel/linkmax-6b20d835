@@ -12,7 +12,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('react-router-dom', () => ({
+vi.mock('@/lib/router-compat', () => ({
   useNavigate: () => vi.fn(),
 }));
 

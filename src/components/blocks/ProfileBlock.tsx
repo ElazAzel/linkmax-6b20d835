@@ -7,6 +7,7 @@ import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS, getVerific
 import { getLucideIcon, CheckCircle2 } from '@/lib/utils/icon-utils';
 import { cn } from '@/lib/utils/utils';
 import { VerifiedBadge } from './VerifiedBadge';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { NAME_ANIMATION_CSS, getNameAnimationClass, type NameAnimationType } from '@/lib/profile-frame-system';
 import {
   getAvatarShapeStyle,
@@ -103,7 +104,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
     .slice(0, 2);
 
   const getAvatarSize = () => {
-    const size = block.avatarSize || 'large';
+    const size = block.avatarSize || 'medium';
     switch (size) {
       case 'small': return 'h-16 w-16';
       case 'medium': return 'h-24 w-24';
@@ -114,7 +115,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   };
 
   const getFrameSize = () => {
-    const size = block.avatarSize || 'large';
+    const size = block.avatarSize || 'medium';
     switch (size) {
       case 'small': return 'h-[72px] w-[72px]';
       case 'medium': return 'h-[104px] w-[104px]';
@@ -150,7 +151,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
 
   const getCoverHeight = () => coverHeightClass(block.coverHeight);
 
-  const frameStyle: ProfileFrameStyle = block.avatarFrame || 'default';
+  const frameStyle: ProfileFrameStyle = block.avatarFrame || 'none';
   const hasGradientFrame = isGradientFrame(frameStyle);
 
   // Get icon component dynamically
@@ -196,9 +197,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   const hasCoverMedia = !!(block.coverImage || block.coverVideo);
 
   return (
-    <div className={`relative flex min-w-0 flex-col overflow-visible ${getPositionClass()}`}>
+    <div className={cn('relative flex min-w-0 flex-col overflow-visible', getPositionClass(), LINKMAX_UI_V2 && !block.avatarPosition && 'lm-profile-compact')}>
       {hasCoverMedia && (
-        <div ref={coverRef} className={`relative w-full ${getCoverHeight()} overflow-hidden`}>
+        <div ref={coverRef} className={`relative w-full rounded-t-[var(--lm-block-radius,24px)] ${getCoverHeight()} overflow-hidden`}>
           {block.coverVideo ? (
             <video
               src={block.coverVideo}
@@ -227,9 +228,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
         </div>
       )}
 
-      <div className={`flex min-w-0 flex-col ${getPositionClass()} gap-4 px-4 py-5 sm:p-6 ${hasCoverMedia ? '-mt-16' : ''}`}>
+      <div className={`lm-profile-body flex min-w-0 flex-col w-full ${getPositionClass()} gap-4 p-4 ${hasCoverMedia ? '-mt-16' : ''}`}>
         {/* Outer container for positioning icon - no animation here */}
-        <div className="relative">
+        <div className="lm-profile-avatar relative">
           {/* Status ring - outer glow */}
           {drawStatusRing && (
             <span
@@ -252,8 +253,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
               getFrameSize(),
             )}
             style={{
-              ...getShadowStyles(block.shadowStyle || 'glass'),
+              ...getShadowStyles(block.shadowStyle || 'none'),
               ...getFrameStyles(frameStyle),
+              ...(!block.avatarFrame ? { border: '4px solid hsl(var(--card))' } : {}),
               ...avatarShapeStyle,
             }}
           >
@@ -308,10 +310,10 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           )}
         </div>
 
-        <div className="w-full min-w-0 text-center space-y-2 overflow-visible">
+        <div className="lm-profile-copy w-full min-w-0 text-center space-y-2 overflow-visible">
           <style>{NAME_ANIMATION_CSS}</style>
           <div className={cn(
-            "flex min-w-0 items-center justify-center gap-2",
+            "lm-profile-name flex min-w-0 items-center justify-center gap-2",
             block.nameAnimation === 'ticker' ? "overflow-hidden w-full" : "overflow-visible"
           )}>
             <h1 className={cn(
@@ -325,12 +327,12 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           </div>
 
           {bio && (
-            <p className="mx-auto text-[15px] text-muted-foreground max-w-md whitespace-pre-line break-words leading-relaxed [text-wrap:pretty]">{parseRichText(bio)}</p>
+            <p className="lm-profile-bio mx-auto text-[15px] text-muted-foreground max-w-md whitespace-pre-line break-words leading-relaxed [text-wrap:pretty]">{parseRichText(bio)}</p>
           )}
 
           {/* Profile badge row (city / status / emoji / custom) */}
           {block.badges && block.badges.length > 0 && (
-            <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+            <div className="lm-profile-badges flex flex-wrap items-center justify-center gap-1.5 pt-1">
               {block.badges.map((b) => {
                 const Icon = b.icon ? getLucideIcon(b.icon) : null;
                 return (

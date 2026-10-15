@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from '@/lib/router-compat';
 import { resolvePageGrowthLink } from '@/services/viral-growth';
 import { rememberGrowthReferralCode } from '@/lib/growth/visitor';
 

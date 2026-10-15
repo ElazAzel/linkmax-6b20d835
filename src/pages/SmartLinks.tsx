@@ -6,7 +6,7 @@
  * фича свежая (P1) и требует изолированного цикла обкатки.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate } from '@/lib/router-compat';
 import { toast } from 'sonner';
 import { Loader2, Copy, ExternalLink, Trash2, Plus, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/hooks/user/useAuth';

@@ -5,6 +5,11 @@ import { getPageFontHrefs, primaryFamily } from '../usePageFonts';
 const PRELOADED = new Set(['Inter', 'Manrope']);
 
 describe('usePageFonts', () => {
+  it('serves authored font choices from LinkMAX resources', () => {
+    const hrefs = getPageFontHrefs({ fontPair: FONT_PAIR_PRESETS.find(pair => pair.heading.includes('Syne'))!.id });
+    expect(hrefs.length).toBeGreaterThan(0);
+    expect(hrefs.every(href => href.startsWith('/fonts/'))).toBe(true);
+  });
   it('knows how to load every family offered in the theme panel', () => {
     for (const pair of FONT_PAIR_PRESETS) {
       for (const stack of [pair.heading, pair.body]) {

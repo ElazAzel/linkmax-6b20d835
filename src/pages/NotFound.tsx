@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from '@/lib/router-compat';
 import { logger } from '@/lib/utils/logger';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';

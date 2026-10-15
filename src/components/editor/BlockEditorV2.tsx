@@ -39,9 +39,10 @@ import type { Block } from '@/types/page';
 import { BLOCK_MANIFEST, getBlockIcon } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
 import { mergeBlockDraft } from '@/lib/editor/block-draft';
+import { getPageThemeScope } from '@/lib/appearance/style-utils';
 
 // Lazy load BlockRenderer for Preview
-const BlockRenderer = lazy(() => import('./BlockRenderer').then(m => ({ default: m.BlockRenderer })));
+const GridBlocksRenderer = lazy(() => import('../blocks/GridBlocksRenderer').then(m => ({ default: m.GridBlocksRenderer })));
 
 interface BlockEditorV2Props {
     block: Block | null;
@@ -201,7 +202,7 @@ export function BlockEditorV2({
         onChange: handleFormChange,
     };
 
-    const blockTypeName = t(`blockEditor.${block.type}`, block.type);
+    const blockTypeName = t(BLOCK_MANIFEST[block.type].labelKey, block.type);
 
     // Manifest-driven editor rendering
     const renderEditor = () => {
@@ -230,15 +231,17 @@ export function BlockEditorV2({
     };
 
     // Live Preview Component
+    const previewScope = getPageThemeScope();
     const previewComponent = (
-        <div className="flex flex-col h-full bg-muted/10">
-            <div className="flex-1 flex items-center justify-center p-4">
-                <div className="w-full max-w-[320px] bg-background rounded-[2rem] shadow-xl overflow-hidden border border-border/10">
-                    <div className="p-4">
+        <div className={cn(previewScope.className, 'flex flex-col h-full bg-background')} style={previewScope.style}>
+            <div className="flex-1 flex items-center justify-center py-4">
+                <div className="lm-page-width bg-background">
+                    <div>
                         <Suspense fallback={<div className="h-20 bg-muted animate-pulse rounded-xl" />}>
-                            <BlockRenderer
-                                block={deferredFormData as Block}
+                            <GridBlocksRenderer
+                                blocks={[deferredFormData as Block]}
                                 isPreview={true}
+                                animation="none"
                             />
                         </Suspense>
                     </div>
@@ -345,9 +348,9 @@ export function BlockEditorV2({
     if (isMobile) {
         return (
             <>
-                <Drawer open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
-                    <DrawerContent className="h-[96vh] max-h-[96vh] bg-background border-t-0 rounded-t-[32px]">
-                        {shellContent}
+                <Drawer open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()} shouldScaleBackground={false}>
+                    <DrawerContent className="mt-0 h-[94dvh] max-h-[94dvh] overflow-hidden bg-background border-t-0 rounded-t-[32px]">
+                        <div className="flex-1 min-h-0 flex flex-col">{shellContent}</div>
                     </DrawerContent>
                 </Drawer>
                 {unsavedDialog}

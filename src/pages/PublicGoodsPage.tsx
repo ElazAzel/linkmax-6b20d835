@@ -3,7 +3,7 @@
  * Never exposes the file: the server issues a purchase token instead.
  */
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import Package from 'lucide-react/dist/esm/icons/package';

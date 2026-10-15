@@ -24,6 +24,9 @@ interface FileUploadProps {
   label?: string;
   placeholder?: string;
   maxSizeMB?: number;
+  validateFile?: (file: File) => string | null;
+  bucket?: string;
+  getContentType?: (file: File) => string;
 }
 
 const formatFileSize = (bytes: number): string => {
@@ -63,7 +66,10 @@ export function FileUpload({
   accept = '*/*',
   label,
   placeholder = 'https://example.com/file.pdf',
-  maxSizeMB = 50
+  maxSizeMB = 50,
+  validateFile,
+  bucket = 'user-media',
+  getContentType,
 }: FileUploadProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -79,6 +85,12 @@ export function FileUpload({
       return;
     }
 
+    const validationError = validateFile?.(file);
+    if (validationError) {
+      toast.error(t(validationError));
+      return;
+    }
+
     // Validate file size
     if (file.size > maxSizeMB * 1024 * 1024) {
       toast.error(t('upload.fileTooLarge', `File size must be less than ${maxSizeMB}MB`));
@@ -88,22 +100,20 @@ export function FileUpload({
     setUploading(true);
     setUploadProgress(0);
 
+    let progressInterval: ReturnType<typeof setInterval> | undefined;
     try {
-      const fileExt = file.name.split('.').pop();
       const safeFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const fileName = `${Date.now()}-${safeFileName}`;
       const filePath = `${user.id}/files/${fileName}`;
 
       // Simulate progress for better UX
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setUploadProgress(prev => Math.min(prev + 10, 90));
       }, 200);
 
       const { error: uploadError } = await supabase.storage
-        .from('user-media')
-        .upload(filePath, file);
-
-      clearInterval(progressInterval);
+        .from(bucket)
+        .upload(filePath, file, { contentType: getContentType?.(file) || file.type || undefined });
 
       if (uploadError) {
         throw uploadError;
@@ -112,7 +122,7 @@ export function FileUpload({
       setUploadProgress(100);
 
       const { data: { publicUrl } } = supabase.storage
-        .from('user-media')
+        .from(bucket)
         .getPublicUrl(filePath);
 
       onChange(publicUrl);
@@ -126,13 +136,14 @@ export function FileUpload({
       console.error('Upload error:', error);
       toast.error(t('upload.error', 'Failed to upload file'));
     } finally {
+      clearInterval(progressInterval);
       setUploading(false);
       setUploadProgress(0);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
     }
-  }, [user, maxSizeMB, onChange, onFileInfoChange, t]);
+  }, [user, maxSizeMB, validateFile, bucket, getContentType, onChange, onFileInfoChange, t]);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

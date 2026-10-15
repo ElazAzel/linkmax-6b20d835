@@ -3,10 +3,11 @@
  * Mobile-first design with GridEditor and block editing capabilities
  * P5: Structure view, review modes, friction recovery, sections wired
  */
-import { memo, useCallback, useEffect, useState, useMemo, useRef, lazy, Suspense } from 'react';
+import { memo, useCallback, useEffect, useState, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
 import { RenderContextProvider } from '@/contexts/RenderContext';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
+import { Link } from '@/lib/router-compat';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
@@ -78,6 +79,7 @@ function openInsertSheet(position?: number) {
 
 interface EditorScreenProps {
   pageData: PageData | null;
+  pageSwitcher?: ReactNode;
   loading: boolean;
   isPremium: boolean;
   currentTier?: FreeTier;
@@ -94,6 +96,9 @@ interface EditorScreenProps {
   onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => { success: boolean; blockId?: string; error?: string };
   onPreview: () => void;
   onShare: () => void;
+  onPublish?: () => void;
+  publishing?: boolean;
+  hasUnpublishedChanges?: boolean;
   onOpenTemplates: () => void;
   onOpenAI: () => void;
   onOpenTheme: () => void;
@@ -112,6 +117,7 @@ interface EditorScreenProps {
 
 export const EditorScreen = memo(function EditorScreen({
   pageData,
+  pageSwitcher,
   loading,
   isPremium,
   currentTier = 'identity',
@@ -127,6 +133,9 @@ export const EditorScreen = memo(function EditorScreen({
   onInsertPreset,
   onPreview,
   onShare,
+  onPublish = onShare,
+  publishing = false,
+  hasUnpublishedChanges = true,
   onOpenTemplates,
   onOpenAI,
   onOpenTheme,
@@ -143,10 +152,12 @@ export const EditorScreen = memo(function EditorScreen({
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
   const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
+  const [reordering, setReordering] = useState(false);
   const [sectionPickerOpen, setSectionPickerOpen] = useState(false);
   const [artDirectionOpen, setArtDirectionOpen] = useState(false);
   const [designHealthOpen, setDesignHealthOpen] = useState(false);
   const [prePublishOpen, setPrePublishOpen] = useState(false);
+  useEffect(() => { if (deepLinkAction === 'order') setStructureOpen(true); }, [deepLinkAction]);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   const { user } = useAuth();
@@ -426,8 +437,8 @@ export const EditorScreen = memo(function EditorScreen({
       trackEditorAction('art_direction_applied', { recipe: 'pre-publish-gate' });
       return;
     }
-    onShare();
-  }, [designReport, onShare, pageData?.blocks]);
+    onPublish();
+  }, [designReport, onPublish, pageData?.blocks]);
 
   const handleFixAllAndPublish = useCallback(() => {
     if (!pageData) return;
@@ -441,8 +452,8 @@ export const EditorScreen = memo(function EditorScreen({
     if (Object.keys(themePatch).length > 0) onApplyTheme?.(themePatch);
     trackEditorAction('art_direction_applied', { recipe: 'fix-all' });
     setPrePublishOpen(false);
-    onShare();
-  }, [designReport, onApplyTheme, onReorderBlocks, onShare, pageData]);
+    onPublish();
+  }, [designReport, onApplyTheme, onReorderBlocks, onPublish, pageData]);
 
   // Phase 6: apply a single design-health fix (design fields only).
   const handleApplyDesignFix = useCallback((nextBlocks: Block[], issueId: string) => {
@@ -455,7 +466,7 @@ export const EditorScreen = memo(function EditorScreen({
   const editorOpen = useEditorStore((state) => state.editorOpen);
   const closeEditor = useEditorStore((state) => state.closeEditor);
   const clearBlockSelection = useEditorStore((state) => state.clearSelection);
-  const isWide = useMediaQuery('(min-width: 1280px)');
+  const isWide = useMediaQuery('(min-width: 1024px)');
   const inspectedBlock = useMemo(
     () => (editorOpen && editingBlock ? pageData?.blocks.find((b) => b.id === editingBlock.id) ?? null : null),
     [editorOpen, editingBlock, pageData?.blocks],
@@ -464,6 +475,12 @@ export const EditorScreen = memo(function EditorScreen({
   const handleCloseInspector = useCallback(() => {
     closeEditor();
     clearBlockSelection();
+  }, [closeEditor, clearBlockSelection]);
+
+  const handleToggleOrder = useCallback(() => {
+    closeEditor();
+    clearBlockSelection();
+    setReordering(value => !value);
   }, [closeEditor, clearBlockSelection]);
 
   // Keep the block being edited visible above the phone sheet.
@@ -478,13 +495,13 @@ export const EditorScreen = memo(function EditorScreen({
   }
 
   return (
-    <div className={cn('min-h-screen', sheetOpen && 'pb-[58dvh]')}>
+    <div data-page-editor-workspace className={cn('min-h-screen', sheetOpen && 'pb-[58dvh]')}>
       <EditorTopBar
         titleSlot={
           <div className="flex flex-col min-w-0">
-            <h1 className="text-base md:text-lg font-semibold tracking-tight text-foreground truncate">
-              {t('dashboard.editor.title', 'Редактор')}
-            </h1>
+            {pageSwitcher ? <div className="max-w-[min(44vw,240px)] [&_button]:max-w-full">{pageSwitcher}</div> : <h1 className="text-base md:text-lg font-semibold tracking-tight text-foreground truncate">
+              {t('pageV2.navigation.page', 'Моя страница')}
+            </h1>}
             <div className="flex min-w-0 items-center gap-1.5">
               <div className={cn('h-1.5 w-1.5 shrink-0 rounded-full', isPublished ? 'bg-success' : 'bg-muted-foreground')} />
               <p className="truncate whitespace-nowrap text-[11px] text-muted-foreground">
@@ -505,13 +522,17 @@ export const EditorScreen = memo(function EditorScreen({
         }}
         isPublished={isPublished}
         onPreview={onPreview}
-        onShare={handleShareWithGate}
+        onShare={onShare}
+        onPublish={handleShareWithGate}
+        publishing={publishing}
+        hasUnpublishedChanges={hasUnpublishedChanges}
         designScore={designReport.score}
         canUndo={canUndo}
         canRedo={canRedo}
         onUndo={handleUndoWithFriction}
         onRedo={handleRedoWithFriction}
         onOpenStructure={() => setStructureOpen(true)}
+        onOpenSections={() => setSectionPickerOpen(true)}
         onOpenVersions={onOpenVersions}
         onOpenTemplates={onOpenTemplates}
         onOpenArtDirection={() => setArtDirectionOpen(true)}
@@ -523,7 +544,7 @@ export const EditorScreen = memo(function EditorScreen({
       />
 
       {/* Quiet inline banner — celebration / friction / intelligence / tip / onboarding (max 1) */}
-      {(() => {
+      {!LINKMAX_UI_V2 && (() => {
         if (activation.showCelebration) {
           return (
             <div className="mx-4 mt-4 animate-fade-in zoom-in-95 duration-500">
@@ -610,11 +631,13 @@ export const EditorScreen = memo(function EditorScreen({
         return null;
       })()}
 
-      <div className={cn(isWide && 'mt-4 grid grid-cols-[minmax(0,1fr)_380px] items-start gap-6 px-4')}>
+      <div className={cn('mt-4', isWide && 'grid grid-cols-[minmax(0,1fr)_340px] items-start gap-6')}>
       <div className="min-w-0">
+      {isWide && <SmartActionDock inline onAddBlock={triggerAddBlock} onCustomize={onOpenTheme}
+        onAIImprove={onOpenAI} hasContent={hasContent} onToggleOrder={handleToggleOrder} reordering={reordering} />}
       {/* Grid Editor */}
       <div
-        className={cn('relative isolate mt-4 overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border bg-background text-foreground', themeScope.className)}
+        className={cn('relative isolate mt-4 bg-background text-foreground', !LINKMAX_UI_V2 && 'overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border', themeScope.className)}
         style={{ ...themeScope.style, ...themeBackgroundStyle }}
         data-testid="editor-appearance-preview"
       >
@@ -625,7 +648,7 @@ export const EditorScreen = memo(function EditorScreen({
         />
         {background.overlay && <div aria-hidden className="pointer-events-none absolute inset-0" style={background.overlay} />}
         {/* Same content width as the public page (PublicPage: max-w-2xl) */}
-        <div className="relative z-[1] mx-auto w-full max-w-2xl px-3 sm:px-4">
+          <div className="relative z-[1] w-full">
           <RenderContextProvider value="editor">
             <Suspense fallback={<EditorCanvasSkeleton />}>
               <GridEditor
@@ -634,6 +657,8 @@ export const EditorScreen = memo(function EditorScreen({
                 currentTier={currentTier}
                 premiumTier={premiumTier}
                 gridConfig={pageData.gridConfig}
+                reordering={reordering}
+                onReorderingChange={setReordering}
                 pageNiche={pageData.niche}
                 onInsertBlock={handleInsertBlockWithFriction}
                 onEditBlock={onEditBlock}
@@ -651,7 +676,7 @@ export const EditorScreen = memo(function EditorScreen({
       </div>
 
       {/* Sprint 2: Section picker — append ready-made groups of blocks */}
-      <div className="mx-4 mt-3 mb-2 flex justify-center">
+      {!LINKMAX_UI_V2 && <div className="mx-4 mt-3 mb-2 flex justify-center">
         <button
           type="button"
           onClick={() => setSectionPickerOpen(true)}
@@ -664,7 +689,7 @@ export const EditorScreen = memo(function EditorScreen({
           <LayoutTemplate className="h-4 w-4" />
           {t('editor.sections.picker.cta', '+ Секция (готовый шаблон)')}
         </button>
-      </div>
+      </div>}
       </div>
       {isWide && (
         <BlockInspector
@@ -723,7 +748,7 @@ export const EditorScreen = memo(function EditorScreen({
             report={designReport}
             onFixAll={handleFixAllAndPublish}
             onOpenDetails={() => { setPrePublishOpen(false); setDesignHealthOpen(true); }}
-            onPublishAnyway={() => { setPrePublishOpen(false); onShare(); }}
+            onPublishAnyway={() => { setPrePublishOpen(false); onPublish(); }}
           />
         </Suspense>
       )}
@@ -773,9 +798,11 @@ export const EditorScreen = memo(function EditorScreen({
       )}
 
       {/* Smart Action Dock — hidden while the phone inspector sheet is open */}
-      {!sheetOpen && <SmartActionDock
+      {!isWide && !sheetOpen && <SmartActionDock
         onAddBlock={triggerAddBlock}
         onCustomize={onOpenTheme}
+        onToggleOrder={handleToggleOrder}
+        reordering={reordering}
         onAIImprove={onOpenAI}
         hasContent={hasContent}
       />}

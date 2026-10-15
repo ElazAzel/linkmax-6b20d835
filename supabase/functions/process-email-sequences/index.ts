@@ -137,7 +137,7 @@ serve(async (req) => {
             sent = res.ok;
             if (!sent) errorMsg = JSON.stringify(resData);
           } else {
-            console.log(`Simulation: Sending email to ${sub.lead.email}`);
+            console.log(`Simulation: email for subscription ${sub.id}`);
             sent = true;
           }
 

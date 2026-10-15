@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { BlockInspector } from '../BlockInspector';
@@ -24,23 +24,29 @@ describe('BlockInspector', () => {
   });
 
   it('opens the block editor and discards changes back to the opened state', async () => {
+    vi.useFakeTimers();
     const onUpdateBlock = vi.fn();
-    render(<BlockInspector mode="docked" block={button} onUpdateBlock={onUpdateBlock} onClose={vi.fn()} />);
+    const { unmount } = render(<BlockInspector mode="docked" block={button} onUpdateBlock={onUpdateBlock} onClose={vi.fn()} />);
+    try {
+      const discard = screen.getByRole('button', { name: /Отменить изменения/ });
+      expect(discard).toBeDisabled();
 
-    const discard = screen.getByRole('button', { name: /Отменить изменения/ });
-    expect(discard).toBeDisabled();
+      fireEvent.click(screen.getByRole('button', { name: 'S 2×1' }));
+      expect(discard).toBeEnabled();
+      expect(onUpdateBlock).not.toHaveBeenCalled();
 
-    // Size selector in the header edits the block through the same draft.
-    const sizeButtons = (await screen.findAllByRole('button')).filter((b) => b.className.includes('h-8 w-8'));
-    fireEvent.click(sizeButtons[1]); // 2×1
+      // Drive the preview deadline explicitly, independent of CI scheduling.
+      await act(async () => { await vi.advanceTimersByTimeAsync(200); });
+      expect(onUpdateBlock).toHaveBeenCalledExactlyOnceWith('b1', expect.objectContaining({ blockSize: 'wide' }));
 
-    await waitFor(() => expect(onUpdateBlock).toHaveBeenCalledWith('b1', expect.objectContaining({ blockSize: 'wide' })));
-    expect(discard).toBeEnabled();
-
-    fireEvent.click(discard);
-    const revert = onUpdateBlock.mock.calls.at(-1)?.[1] as Record<string, unknown>;
-    expect(revert.title).toBe('Записаться');
-    expect('blockSize' in revert && revert.blockSize === undefined).toBe(true);
+      fireEvent.click(discard);
+      const revert = onUpdateBlock.mock.calls.at(-1)?.[1] as Record<string, unknown>;
+      expect(revert.title).toBe('Записаться');
+      expect('blockSize' in revert && revert.blockSize === undefined).toBe(true);
+    } finally {
+      unmount();
+      vi.useRealTimers();
+    }
   });
 
   it('closes via Готово', () => {
@@ -48,5 +54,13 @@ describe('BlockInspector', () => {
     render(<BlockInspector mode="docked" block={button} onUpdateBlock={vi.fn()} onClose={onClose} />);
     fireEvent.click(screen.getByRole('button', { name: /Готово/ }));
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it('offers the XL tile preset through the existing draft editor', async () => {
+    const onUpdateBlock = vi.fn();
+    render(<BlockInspector mode="docked" block={button} onUpdateBlock={onUpdateBlock} onClose={vi.fn()} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'XL 2×4' }));
+    fireEvent.click(screen.getByRole('button', { name: /Готово/ }));
+    await waitFor(() => expect(onUpdateBlock).toHaveBeenCalledWith('b1', expect.objectContaining({ blockSize: 'xl' })));
   });
 });

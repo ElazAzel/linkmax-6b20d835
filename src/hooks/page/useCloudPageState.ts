@@ -1,326 +1,203 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/user/useAuth';
-import { logger } from '@/lib/utils/logger';
-import { useUserPage, useSavePageMutation, usePublishPageMutation, pageQueryKeys } from '@/hooks/page/usePageCache';
-import { updatePageNiche, updatePageEntityFields } from '@/services/pages';
-import { deleteEventBlock, syncEventBlock } from '@/services/events';
-import { ensureBlockIds, deduplicateBlocks } from '@/lib/blocks/block-utils';
-import { supabase } from '@/platform/supabase/client';
-import { computeQualityScore } from '@/lib/seo/quality-score';
-import { notifyIndexNow } from '@/lib/seo/indexnow-client';
-import type { ServiceSlugEntryRaw } from '@/lib/seo/indexnow-client';
+import { useUserPage, useSavePageMutation, usePublishPageMutation, pageQueryKeys, synchronizeDraftCache } from '@/hooks/page/usePageCache';
+import { draftError, loadPageDraft, reloadPageDraft, type PageDraftError } from '@/services/page-drafts';
 import type { PageData, Block, EditorMode } from '@/types/page';
 import type { Niche } from '@/lib/niches';
-import { toast } from 'sonner';
 import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
-import { normalizeAppError } from '@/lib/errors/app-error-normalizer';
-import { saveDraft, loadDraft, clearDraft } from '@/pwa/offlineDraftCache';
+import { saveDraft, loadDraft } from '@/pwa/offlineDraftCache';
 import { useActivePageStore } from '@/store/useActivePageStore';
+import { pageDraftCacheKey, type LocalPageDraft } from '@/lib/page-draft-cache';
 
-// Request versioning to prevent stale writes
-let saveRequestVersion = 0;
-
-interface UseCloudPageStateOptions {
-  onPublish?: (pageData: PageData) => void;
-  /** Edit this page instead of the dashboard's active page. */
-  pageId?: string | null;
+type LocalDraft = LocalPageDraft;
+interface Session extends LocalDraft {
+  sequence: number; queue: Promise<unknown>; timer?: ReturnType<typeof setTimeout>; error?: PageDraftError;
 }
+interface UseCloudPageStateOptions { onPublish?: (pageData: PageData) => void; pageId?: string | null }
 
 export function useCloudPageState(options?: UseCloudPageStateOptions) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [pageData, setPageData] = useState<PageData | null>(null);
-  const [chatbotContext, setChatbotContext] = useState<string>('');
+  const [chatbotContext, setChatbotContext] = useState('');
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
-  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const lastSaveVersionRef = useRef<number>(0);
-  // Track if user has made local changes that shouldn't be overwritten by cache
-  const hasLocalChangesRef = useRef<boolean>(false);
-  // Id of the page currently loaded into local state. Cache updates for the same
-  // page are ignored (they would overwrite local edits); a different id means
-  // the user switched pages and we load the new one.
-  const loadedPageIdRef = useRef<string | null>(null);
-  // P2.11: Track previous service_slugs snapshot for diff-based IndexNow
-  const previousServiceSlugsRef = useRef<Record<string, ServiceSlugEntryRaw> | null>(null);
-
-  // Use React Query for cached page loading
-  const storeActivePageId = useActivePageStore((state) => state.activePageId);
-  const setActivePageId = useActivePageStore((state) => state.setActivePageId);
+  const [error, setError] = useState<PageDraftError | null>(null);
+  const [dirty, setDirty] = useState(false);
+  const sessions = useRef(new Map<string, Session>());
+  const active = useRef<string | null>(null);
+  const storeActivePageId = useActivePageStore(state => state.activePageId);
+  const setActivePageId = useActivePageStore(state => state.setActivePageId);
   const requestedPageId = options?.pageId !== undefined ? options.pageId : storeActivePageId;
-  const { data: userData, isLoading: loading, refetch } = useUserPage(user?.id, requestedPageId);
+  const { data: userData, isLoading: loading, error: queryError, refetch } = useUserPage(user?.id, requestedPageId);
   const savePageMutation = useSavePageMutation(user?.id);
   const publishPageMutation = usePublishPageMutation(user?.id);
-
-  // Update local state when cached data loads - ONLY on initial load
-  // This prevents cache updates from overwriting local changes
-  useEffect(() => {
-    const serverPage = userData?.pageData;
-    const pageId = serverPage?.id;
-    if (serverPage && pageId && loadedPageIdRef.current !== pageId) {
-      hasLocalChangesRef.current = false;
-      previousServiceSlugsRef.current = null;
-      let nextPageData: PageData = serverPage;
-      // Offline draft recovery: restore newer local snapshot if it exists
-      try {
-        const draft = loadDraft<PageData>(pageId);
-        const serverUpdatedAt = serverPage.updatedAt
-          ? new Date(serverPage.updatedAt).getTime()
-          : 0;
-        if (draft && draft.savedAt > serverUpdatedAt + 1000) {
-          nextPageData = draft.data;
-          toast.info('Восстановлены несохранённые правки');
-          hasLocalChangesRef.current = true;
-        } else if (draft) {
-          // Server is newer — drop stale draft
-          clearDraft(pageId);
-        }
-      } catch {
-        // ignore
-      }
-      setPageData(nextPageData);
-      setChatbotContext(userData.chatbotContext || '');
-      loadedPageIdRef.current = pageId;
-      // Unknown/stale requested id fell back to the primary page — keep the
-      // shared store in sync so every consumer points at the same page.
-      if (options?.pageId === undefined && storeActivePageId !== pageId) {
-        setActivePageId(pageId);
-      }
-      // P2.11: Seed previous service_slugs on initial load
-      void (async () => {
-        try {
-          const { data: row } = await supabase
-            .from('pages')
-            .select('service_slugs')
-            .eq('id', pageId)
-            .maybeSingle();
-          if (row?.service_slugs) {
-            previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
-          }
-        } catch {
-          // Non-critical
-        }
-      })();
-    }
-  }, [userData, options?.pageId, storeActivePageId, setActivePageId]);
-
-  // Reset initial load flag when user changes (logout/login)
-  useEffect(() => {
-    if (!user) {
-      loadedPageIdRef.current = null;
-      hasLocalChangesRef.current = false;
-      setPageData(null);
-    }
-  }, [user]);
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (autoSaveTimerRef.current) {
-        clearTimeout(autoSaveTimerRef.current);
-      }
-    };
+  const keyFor = useCallback((id: string) => pageDraftCacheKey(user?.id ?? '', id), [user?.id]);
+  // A render for a new selection must never expose or act on the prior page,
+  // even before the session-switch effect runs or when the new query fails.
+  const selectedDataId = !queryError && userData?.pageData?.id;
+  const selectedKey = user && selectedDataId && (!requestedPageId || requestedPageId === selectedDataId)
+    ? keyFor(selectedDataId) : null;
+  const selected = useRef<string | null>(null);
+  selected.current = selectedKey;
+  const queryProblem = useMemo(() => queryError ? draftError(queryError) : null, [queryError]);
+  const visiblePageData = selectedKey && pageData?.id && keyFor(pageData.id) === selectedKey ? pageData : null;
+  const persistLocal = useCallback((key: string, session: Session) => {
+    const { pageData: data, chatbotContext: context, revision, base, dirty: unsaved, publishedDraftRevision } = session;
+    saveDraft<LocalDraft>(key, { pageData: data, chatbotContext: context, revision, base, dirty: unsaved, publishedDraftRevision });
   }, []);
 
+  // Serialize within a page, but never share counters or queues between tabs/pages.
+  // Each queued operation uses the revision acknowledged by the prior operation.
+  const persist = useCallback((key: string, session: Session, data: PageData, context: string, sequence: number) => {
+    const task = session.queue.catch(() => undefined).then(async () => {
+      if (session.error?.kind === 'conflict' || session.error?.kind === 'access') throw session.error;
+      if (active.current === key) { setSaveStatus('saving'); setError(null); }
+      const result = await savePageMutation.mutateAsync({ pageData: data, chatbotContext: context, revision: session.revision, basePublishedRevision: session.base });
+      session.revision = result.draft.revision;
+      session.base = result.draft.base_published_revision;
+      session.error = undefined;
+      if (sequence === session.sequence) session.dirty = false;
+      persistLocal(key, session);
+      if (active.current === key && sequence === session.sequence) { setSaveStatus('saved'); setError(null); }
+      return result;
+    }).catch(problem => {
+      session.error = draftError(problem);
+      if (active.current === key) { setError(session.error); setSaveStatus('error'); }
+      throw session.error;
+    });
+    session.queue = task;
+    return task;
+  }, [savePageMutation, persistLocal]);
+
   const autoSaveAndPublish = useCallback((data: PageData, context: string) => {
-    if (!user) return;
+    if (!user || !data.id) return;
+    const key = keyFor(data.id);
+    const session = sessions.current.get(key);
+    if (!session || selected.current !== key) return;
+    session.pageData = data; session.chatbotContext = context; session.dirty = true;
+    const sequence = ++session.sequence;
+    persistLocal(key, session);
+    setSaveStatus('pending'); setDirty(true);
+    clearTimeout(session.timer);
+    session.timer = setTimeout(() => { void persist(key, session, data, context, sequence).catch(() => undefined); }, 1000);
+  }, [user, keyFor, persist, persistLocal]);
 
-    // Increment version for this save request
-    saveRequestVersion++;
-    const thisRequestVersion = saveRequestVersion;
-
-    // Set pending status immediately
-    setSaveStatus('pending');
-
-    // Persist offline draft snapshot immediately (survives refresh/crash)
-    if (data.id) {
-      saveDraft(data.id, data);
+  useEffect(() => {
+    if (!selectedKey) {
+      active.current = null;
+      setPageData(null); setChatbotContext(''); setDirty(false);
+      setError(null); setSaveStatus(queryProblem ? 'error' : 'idle');
+      return;
     }
-
-    // Clear existing timer
-    if (autoSaveTimerRef.current) {
-      clearTimeout(autoSaveTimerRef.current);
+    const data = userData?.pageData;
+    if (!data?.id || !userData) return;
+    const key = keyFor(data.id);
+    if (active.current === key) return;
+    let session = sessions.current.get(key);
+    if (!session) {
+      const local = loadDraft<LocalDraft>(key)?.data;
+      const remote = userData.draft;
+      const recovered = local?.pageData?.id === data.id && (local.dirty || !remote);
+      session = { pageData: recovered ? local.pageData : data, chatbotContext: recovered ? local.chatbotContext : userData.chatbotContext || '',
+        revision: recovered ? local.revision : remote?.revision ?? 0, base: recovered ? local.base : remote?.base_published_revision ?? 0,
+        dirty: recovered ? local.dirty : false, publishedDraftRevision: remote?.published_draft_revision ?? local?.publishedDraftRevision ?? 0,
+        sequence: 0, queue: Promise.resolve(), error: userData.draftError ?? undefined };
+      if (recovered && remote && (local.revision !== remote.revision || local.base !== remote.base_published_revision)) {
+        session.error = draftError({ code: '40001' });
+      }
+      sessions.current.set(key, session);
     }
+    active.current = key;
+    setPageData(session.pageData); setChatbotContext(session.chatbotContext);
+    setError(session.error ?? null); setSaveStatus(session.error ? 'error' : session.dirty ? 'pending' : 'idle');
+    setDirty(session.dirty || session.revision !== (session.publishedDraftRevision ?? 0));
+    if (options?.pageId === undefined && storeActivePageId !== data.id) setActivePageId(data.id);
+    if (session.dirty && !session.error) {
+      const current = session;
+      current.timer = setTimeout(() => { void persist(key, current, current.pageData, current.chatbotContext, current.sequence).catch(() => undefined); }, 1000);
+    }
+  }, [user, userData, selectedKey, queryProblem, keyFor, options?.pageId, storeActivePageId, setActivePageId, persist]);
 
-    // Debounce auto-save and publish with longer delay for stability
-    autoSaveTimerRef.current = setTimeout(async () => {
-      // Check if this request is still the latest
-      if (thisRequestVersion !== saveRequestVersion) {
-        // Stale request - a newer save was triggered, skip this one
-        return;
+  useEffect(() => {
+    const pending = sessions.current;
+    return () => { for (const session of pending.values()) clearTimeout(session.timer); };
+  }, []);
+
+  // Reconnect retries never discard the CAS token stored with local recovery.
+  useEffect(() => {
+    const retry = () => {
+      for (const [key, session] of sessions.current) if (session.dirty && session.error?.kind !== 'conflict') {
+        clearTimeout(session.timer);
+        void persist(key, session, session.pageData, session.chatbotContext, session.sequence).catch(() => undefined);
       }
-
-      try {
-        setSaveStatus('saving');
-
-        // Ensure block integrity before saving
-        const sanitizedData = {
-          ...data,
-          blocks: deduplicateBlocks(ensureBlockIds(data.blocks)),
-        };
-
-        // Save first with retry logic
-        let retries = 2;
-        let lastError: unknown = null;
-        let savedPageId: string | undefined;
-
-        while (retries > 0) {
-          // Check again before each retry
-          if (thisRequestVersion !== saveRequestVersion) {
-            return;
-          }
-
-          try {
-            const result = await savePageMutation.mutateAsync({
-              pageData: sanitizedData,
-              chatbotContext: context
-            });
-            // Get pageId from the saved result
-            savedPageId = result.dbPage?.id;
-            lastSaveVersionRef.current = thisRequestVersion;
-            break;
-          } catch (err) {
-            lastError = err;
-            retries--;
-            if (retries > 0) {
-              await new Promise(r => setTimeout(r, 1000)); // Increased backoff
-            }
-          }
-        }
-
-        if (retries === 0 && lastError) {
-          throw lastError;
-        }
-
-        // Use saved pageId or fallback to data.id
-        const pageIdToUse = savedPageId || data.id;
-
-        // Sync event blocks after page is saved (now we have pageId)
-        if (pageIdToUse && user?.id) {
-          const eventBlocks = sanitizedData.blocks.filter((b) => b.type === 'event');
-          for (const block of eventBlocks) {
-            if (block.type === 'event') {
-              void syncEventBlock(block, pageIdToUse, user.id);
-            }
-          }
-        }
-
-        // Final stale check before publish
-        if (thisRequestVersion !== saveRequestVersion) {
-          return;
-        }
-
-        // Then auto-publish this page only
-        await publishPageMutation.mutateAsync(pageIdToUse);
-
-        // P2.11: Diff-based IndexNow — only submit changed child URLs
-        const slug = sanitizedData.slug;
-        const pageIdForIndexing = savedPageId || sanitizedData.id;
-        if (slug && pageIdForIndexing) {
-          const { score } = computeQualityScore(sanitizedData);
-          void (async () => {
-            try {
-              const { data: pageRow } = await supabase
-                .from('pages')
-                .select('service_slugs')
-                .eq('id', pageIdForIndexing)
-                .maybeSingle();
-              const currentSvcSlugs = pageRow?.service_slugs as unknown as Record<string, ServiceSlugEntryRaw> | null;
-              const previousSvcSlugs = previousServiceSlugsRef.current;
-              
-              await notifyIndexNow(
-                slug, score, !!sanitizedData.isPublished,
-                pageIdForIndexing, 'update',
-                currentSvcSlugs, previousSvcSlugs,
-              );
-              
-              // Update snapshot for next diff
-              previousServiceSlugsRef.current = currentSvcSlugs;
-            } catch {
-              // Fallback: send without diff (treats as first snapshot)
-              await notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
-            }
-          })();
-        }
-
-        // Invalidate server diagnostics so SearchReadinessCard refetches
-        if (pageIdForIndexing) {
-          queryClient.invalidateQueries({
-            queryKey: ['search-diagnostics', pageIdForIndexing],
-          });
-        }
-        
-        // Final check after all async ops
-        if (thisRequestVersion === saveRequestVersion) {
-          setSaveStatus('saved');
-          // Server confirmed — clear local offline snapshot
-          if (pageIdToUse) clearDraft(pageIdToUse);
-        }
-      } catch (error) {
-        // Only set error if this is still the active request
-        if (thisRequestVersion === saveRequestVersion) {
-          const normalized = normalizeAppError(error);
-          setSaveStatus('error');
-          logger.error('Auto-save/publish error normalized:', normalized, { context: 'useCloudPageState' });
-        }
-      }
-    }, 2000); // Slightly more conservative debounce
-  }, [user, savePageMutation, publishPageMutation, queryClient]);
+    };
+    window.addEventListener('online', retry);
+    return () => window.removeEventListener('online', retry);
+  }, [persist]);
 
   const save = useCallback(async () => {
-    if (!user || !pageData) return;
-
-    // Clear any pending auto-save
-    if (autoSaveTimerRef.current) {
-      clearTimeout(autoSaveTimerRef.current);
-    }
-
-    try {
-      setSaveStatus('saving');
-      await savePageMutation.mutateAsync({
-        pageData,
-        chatbotContext
-      });
-      await publishPageMutation.mutateAsync(pageData.id);
-      setSaveStatus('saved');
-      toast.success('Changes saved and published!');
-    } catch (error) {
-      setSaveStatus('error');
-      const normalized = normalizeAppError(error);
-      toast.error(normalized.safeMessage);
-      throw error;
-    }
-  }, [user, pageData, chatbotContext, savePageMutation, publishPageMutation]);
+    const key = active.current;
+    const session = key ? sessions.current.get(key) : undefined;
+    if (!key || !session || selected.current !== key) return;
+    clearTimeout(session.timer);
+    await persist(key, session, session.pageData, session.chatbotContext, session.sequence);
+  }, [persist]);
 
   const publish = useCallback(async () => {
-    if (!user || !pageData) return null;
+    const key = active.current;
+    const session = key ? sessions.current.get(key) : undefined;
+    if (!key || !session || selected.current !== key) return null;
+    clearTimeout(session.timer);
+    const data = session.pageData;
+    const sequence = session.sequence;
+    await persist(key, session, data, session.chatbotContext, sequence);
+    const task = session.queue.then(async () => {
+      if (selected.current !== key) return null;
+      // An edit made while saving must not be accidentally included by Publish.
+      if (session.sequence !== sequence) throw new Error('The draft changed while publishing. Publish again to include the latest changes.');
+      const result = await publishPageMutation.mutateAsync({ pageId: data.id, revision: session.revision, basePublishedRevision: session.base });
+      session.base = result.base_published_revision;
+      session.publishedDraftRevision = session.revision;
+      session.pageData = { ...session.pageData, isPublished: true };
+      persistLocal(key, session);
+      if (active.current === key) { setSaveStatus(session.sequence === sequence ? 'saved' : 'pending'); setDirty(session.sequence !== sequence); setPageData(session.pageData); }
+      options?.onPublish?.(data);
+      return result.slug ?? data.slug ?? null;
+    }).catch(problem => {
+      session.error = draftError(problem);
+      if (active.current === key) { setError(session.error); setSaveStatus('error'); }
+      throw session.error;
+    });
+    session.queue = task;
+    return task;
+  }, [persist, publishPageMutation, persistLocal, options]);
 
-    // Clear any pending auto-save
-    if (autoSaveTimerRef.current) {
-      clearTimeout(autoSaveTimerRef.current);
+  const updateChatbotContext = useCallback((context: string) => {
+    setChatbotContext(context);
+    if (pageData) autoSaveAndPublish(pageData, context);
+  }, [pageData, autoSaveAndPublish]);
+
+  const reloadServerDraft = useCallback(async () => {
+    const key = active.current;
+    const session = key ? sessions.current.get(key) : undefined;
+    if (!key || !session || selected.current !== key) return;
+    clearTimeout(session.timer);
+    await session.queue.catch(() => undefined);
+    const latest = await loadPageDraft(session.pageData.id);
+    const remote = await reloadPageDraft(session.pageData.id, latest.revision, latest.base_published_revision);
+    if (user?.id) synchronizeDraftCache(queryClient, user.id, remote);
+    // Explicit reload keeps a recovery copy before replacing conflicted content.
+    persistLocal(`${key}:conflict-backup`, session);
+    Object.assign(session, { pageData: remote.snapshot, chatbotContext: remote.chatbot_context,
+      revision: remote.revision, base: remote.base_published_revision,
+      publishedDraftRevision: remote.published_draft_revision ?? 0, dirty: false, error: undefined });
+    persistLocal(key, session);
+    if (active.current === key) {
+      setPageData(session.pageData); setChatbotContext(session.chatbotContext); setError(null); setSaveStatus('saved');
+      setDirty(session.revision !== session.publishedDraftRevision);
     }
-
-    try {
-      setSaveStatus('saving');
-      await savePageMutation.mutateAsync({
-        pageData,
-        chatbotContext
-      });
-      const slug = await publishPageMutation.mutateAsync(pageData.id);
-      setSaveStatus('saved');
-
-      // Call onPublish callback to save version
-      if (options?.onPublish) {
-        options.onPublish(pageData);
-      }
-
-      return slug;
-    } catch (error) {
-      setSaveStatus('error');
-      throw error;
-    }
-  }, [user, pageData, chatbotContext, savePageMutation, publishPageMutation, options]);
-
+  }, [persistLocal, queryClient, user?.id]);
   const addBlock = useCallback((block: Block, position?: number) => {
     setPageData((prevData) => {
       if (!prevData) return prevData;
@@ -346,14 +223,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         blocks: newBlocks,
       };
 
-      if (block.type === 'event') {
-        void syncEventBlock(block, prevData.id, user?.id);
-      }
 
       autoSaveAndPublish(newPageData, chatbotContext);
       return newPageData;
     });
-  }, [chatbotContext, autoSaveAndPublish, user]);
+  }, [chatbotContext, autoSaveAndPublish]);
 
   const updateBlock = useCallback((id: string, updates: Partial<Block>) => {
     setPageData((prevData) => {
@@ -365,33 +239,25 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         ),
       };
 
-      const updatedBlock = newPageData.blocks.find(b => b.id === id);
-      if (updatedBlock?.type === 'event') {
-        void syncEventBlock(updatedBlock, prevData.id, user?.id);
-      }
 
       autoSaveAndPublish(newPageData, chatbotContext);
       return newPageData;
     });
-  }, [chatbotContext, autoSaveAndPublish, user]);
+  }, [chatbotContext, autoSaveAndPublish]);
 
   const deleteBlock = useCallback((id: string) => {
     setPageData((prevData) => {
       if (!prevData) return prevData;
-      const blockToDelete = prevData.blocks.find((block) => block.id === id);
       const newPageData = {
         ...prevData,
         blocks: prevData.blocks.filter(block => block.id !== id),
       };
 
-      if (blockToDelete?.type === 'event') {
-        void deleteEventBlock(blockToDelete.eventId, user?.id);
-      }
 
       autoSaveAndPublish(newPageData, chatbotContext);
       return newPageData;
     });
-  }, [chatbotContext, autoSaveAndPublish, user]);
+  }, [chatbotContext, autoSaveAndPublish]);
 
   // Delete several blocks in one state update (bulk selection). Calling
   // deleteBlock in a loop was blocked by the per-operation guard after the first.
@@ -407,13 +273,10 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         ...prevData,
         blocks: prevData.blocks.filter((block) => !removedIds.has(block.id)),
       };
-      for (const block of removed) {
-        if (block.type === 'event') void deleteEventBlock(block.eventId, user?.id);
-      }
       autoSaveAndPublish(newPageData, chatbotContext);
       return newPageData;
     });
-  }, [chatbotContext, autoSaveAndPublish, user]);
+  }, [chatbotContext, autoSaveAndPublish]);
 
   const reorderBlocks = useCallback((blocks: Block[]) => {
     setPageData((prevData) => {
@@ -443,7 +306,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     };
     setPageData(newPageData);
 
-    // Auto-save and publish
+    // Save the private draft
     autoSaveAndPublish(newPageData, chatbotContext);
   }, [pageData, chatbotContext, autoSaveAndPublish]);
 
@@ -455,7 +318,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     };
     setPageData(newPageData);
 
-    // Auto-save and publish
+    // Save the private draft
     autoSaveAndPublish(newPageData, chatbotContext);
   }, [pageData, chatbotContext, autoSaveAndPublish]);
 
@@ -468,7 +331,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     };
     setPageData(newPageData);
 
-    // Auto-save and publish
+    // Save the private draft
     autoSaveAndPublish(newPageData, chatbotContext);
   }, [pageData, chatbotContext, autoSaveAndPublish]);
 
@@ -485,44 +348,12 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   }, [chatbotContext, autoSaveAndPublish]);
 
   const updateNiche = useCallback(async (niche: Niche) => {
-    if (!user || !pageData) return;
+    updatePageDataPartial({ niche });
+  }, [updatePageDataPartial]);
 
-    // Update local state immediately
-    const newPageData = { ...pageData, niche };
-    setPageData(newPageData);
-
-    // Save to database
-    const { error } = await updatePageNiche(user.id, niche, pageData.id);
-    if (error) {
-      toast.error('Failed to update category');
-      // Revert on error
-      setPageData(pageData);
-    }
-  }, [user, pageData]);
-
-  const updateEntityFields = useCallback(async (fields: {
-    city?: string;
-    profession?: string;
-    entity_type?: string;
-    contact_email?: string;
-    contact_phone?: string;
-    contact_whatsapp?: string;
-    country_code?: string;
-  }) => {
-    if (!user || !pageData) return;
-
-    // Update local state immediately
-    const newPageData = { ...pageData, ...fields };
-    setPageData(newPageData as PageData);
-
-    // Save to database
-    const { error } = await updatePageEntityFields(user.id, fields, pageData.id);
-    if (error) {
-      toast.error('Failed to update');
-      setPageData(pageData);
-    }
-  }, [user, pageData]);
-
+  const updateEntityFields = useCallback(async (fields: Pick<Partial<PageData>, 'city' | 'profession' | 'contact_email' | 'contact_phone' | 'contact_whatsapp' | 'country_code'> & { entity_type?: string }) => {
+    updatePageDataPartial(fields as Partial<PageData>);
+  }, [updatePageDataPartial]);
   const refresh = useCallback(async () => {
     if (user?.id) {
       await queryClient.invalidateQueries({
@@ -533,12 +364,16 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   }, [user?.id, requestedPageId, queryClient, refetch]);
 
   return useMemo(() => ({
-    pageData,
-    chatbotContext,
-    setChatbotContext,
+    pageData: visiblePageData,
+    chatbotContext: visiblePageData ? chatbotContext : '',
+    setChatbotContext: updateChatbotContext,
     loading,
     saving: savePageMutation.isPending || publishPageMutation.isPending,
-    saveStatus,
+    saveStatus: queryProblem ? 'error' as const : saveStatus,
+    draftError: queryProblem ?? error,
+    conflict: (queryProblem ?? error)?.kind === 'conflict',
+    hasUnpublishedChanges: !!visiblePageData && dirty,
+    reloadServerDraft,
     save,
     publish,
     addBlock,
@@ -554,12 +389,17 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     updateEntityFields,
     refresh,
   }), [
-    pageData,
+    visiblePageData,
+    queryProblem,
     chatbotContext,
     loading,
     savePageMutation.isPending,
     publishPageMutation.isPending,
     saveStatus,
+    error,
+    updateChatbotContext,
+    dirty,
+    reloadServerDraft,
     save,
     publish,
     addBlock,

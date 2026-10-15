@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 // Mock i18next
 vi.mock('react-i18next', () => ({
+  initReactI18next: { type: '3rdParty', init: vi.fn() },
   useTranslation: () => ({
     t: (key: string, defaultValue?: string | object) => {
       if (typeof defaultValue === 'string') return defaultValue;
@@ -62,6 +63,7 @@ Object.defineProperty(window, 'open', {
   value: vi.fn(),
   writable: true,
 });
+Object.defineProperty(window, 'scrollTo', { value: vi.fn(), writable: true });
 Object.defineProperty(window, 'location', {
   value: {
     ...window.location,
