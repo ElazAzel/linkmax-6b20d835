@@ -26,7 +26,7 @@ export function AutoSaveIndicator({ status, className }: AutoSaveIndicatorProps)
     }
   }, [status]);
 
-  const displayStatus = showSaved ? 'saved' : status;
+  const displayStatus = showSaved && (status === 'saved' || status === 'idle') ? 'saved' : status;
 
   const getIcon = () => {
     switch (displayStatus) {
@@ -62,6 +62,8 @@ export function AutoSaveIndicator({ status, className }: AutoSaveIndicatorProps)
 
   return (
     <div 
+      role="status"
+      aria-live="polite"
       className={cn(
         "flex items-center gap-1.5 text-xs transition-all duration-300",
         displayStatus === 'saved' && "text-green-500",
@@ -72,7 +74,7 @@ export function AutoSaveIndicator({ status, className }: AutoSaveIndicatorProps)
       )}
     >
       {getIcon()}
-      {text && <span className="hidden sm:inline">{text}</span>}
+      {text && <span className="sr-only sm:not-sr-only">{text}</span>}
     </div>
   );
 }

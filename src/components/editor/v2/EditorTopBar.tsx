@@ -46,6 +46,9 @@ export interface EditorTopBarProps {
   isPublished: boolean;
   onPreview: () => void;
   onShare: () => void;
+  onPublish?: () => void;
+  publishing?: boolean;
+  hasUnpublishedChanges?: boolean;
 
   // Overflow actions
   canUndo?: boolean;
@@ -73,6 +76,9 @@ export const EditorTopBar = memo(function EditorTopBar({
   isPublished,
   onPreview,
   onShare,
+  onPublish = onShare,
+  publishing = false,
+  hasUnpublishedChanges = true,
   canUndo,
   canRedo,
   onUndo,
@@ -184,11 +190,13 @@ export const EditorTopBar = memo(function EditorTopBar({
               ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.4)]'
               : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20',
           )}
-          onClick={onShare}
+          onClick={onPublish}
+          disabled={publishing || (isPublished && !hasUnpublishedChanges)}
+          aria-busy={publishing}
         >
           <Share2 className="h-4 w-4" />
           <span>
-            {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
+            {publishing ? t('pageV2.draft.publishing', 'Публикация…') : t('editor.publish', 'Опубликовать')}
           </span>
         </Button>
 
@@ -204,6 +212,7 @@ export const EditorTopBar = memo(function EditorTopBar({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={6} className="w-56">
+            {isPublished && <DropdownMenuItem onClick={onShare}><Share2 className="h-4 w-4 mr-2" />{t('editor.share', 'Поделиться')}</DropdownMenuItem>}
             <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground/70">
               {t('editor.topbar.history', 'История')}
             </DropdownMenuLabel>

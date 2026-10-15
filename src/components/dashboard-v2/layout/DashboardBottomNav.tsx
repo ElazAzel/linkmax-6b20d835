@@ -1,37 +1,10 @@
-/**
- * DashboardBottomNav - Mobile bottom navigation (5 tabs max)
- * iOS-style with haptic feedback
- * Last tab is "More" which opens a sheet with zone tabs + settings
- */
-import { memo, useCallback, useState } from 'react';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
+import { LegacyBottomNav } from './LegacyBottomNav';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Home from 'lucide-react/dist/esm/icons/home';
-import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
-import Inbox from 'lucide-react/dist/esm/icons/inbox';
-import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
-import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
-import Settings from 'lucide-react/dist/esm/icons/settings';
-import Contact from 'lucide-react/dist/esm/icons/contact';
-import Calendar from 'lucide-react/dist/esm/icons/calendar';
-import FileText from 'lucide-react/dist/esm/icons/file-text';
-import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
-import Wallet from 'lucide-react/dist/esm/icons/wallet';
-import Coins from 'lucide-react/dist/esm/icons/coins';
-import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
-import { useHasBusinessZone } from '@/contexts/ZoneContext';
-
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-
-interface NavTab {
-  id: string;
-  icon: React.ComponentType<{ className?: string }>;
-  labelKey: string;
-  defaultLabel: string;
-  path: string;
-  badge?: number;
-}
+import { PAGE_V2_TABS, BUSINESS_TAB_IDS } from './page-v2-navigation';
 
 interface DashboardBottomNavProps {
   activeTab: string;
@@ -41,175 +14,23 @@ interface DashboardBottomNavProps {
   isBusinessTier?: boolean;
 }
 
-const TABS: NavTab[] = [
-  {
-    id: 'home',
-    icon: Home,
-    labelKey: 'dashboard.nav.home',
-    defaultLabel: 'Главная',
-    path: '/dashboard/home',
-  },
-  {
-    id: 'editor',
-    icon: PenTool,
-    labelKey: 'dashboard.nav.editor',
-    defaultLabel: 'Редактор',
-    path: '/dashboard/home?tab=editor',
-  },
-  {
-    id: 'activity',
-    icon: Inbox,
-    labelKey: 'dashboard.nav.activity',
-    defaultLabel: 'Входящие',
-    path: '/dashboard/activity',
-  },
-  {
-    id: 'insights',
-    icon: BarChart3,
-    labelKey: 'dashboard.nav.insights',
-    defaultLabel: 'Аналитика',
-    path: '/dashboard/insights',
-  },
-];
-
-const MORE_ITEMS: NavTab[] = [
-  { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
-  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
-  { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
-  { id: 'monetize', icon: Coins, labelKey: 'dashboard.nav.monetize', defaultLabel: 'Монетизация', path: '' },
-  { id: 'finance', icon: Wallet, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы', path: '' },
-  { id: 'team', icon: Users, labelKey: 'dashboard.nav.team', defaultLabel: 'Команда', path: '' },
-  { id: 'zone-dashboard', icon: LayoutDashboard, labelKey: 'zones.nav.dashboard', defaultLabel: 'Дашборд', path: '' },
-  { id: 'zone-deals', icon: Contact, labelKey: 'zones.nav.deals', defaultLabel: 'Сделки', path: '' },
-  { id: 'zone-contacts', icon: Contact, labelKey: 'zones.nav.contacts', defaultLabel: 'Контакты', path: '' },
-  { id: 'zone-tasks', icon: Calendar, labelKey: 'zones.nav.tasks', defaultLabel: 'Задачи', path: '' },
-  { id: 'zone-invoices', icon: FileText, labelKey: 'zones.nav.invoices', defaultLabel: 'Финансы', path: '' },
-  { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки', path: '' },
-];
-
-// Tabs that count as "more" active
-const MORE_TAB_IDS = MORE_ITEMS.map(i => i.id);
-
-export const DashboardBottomNav = memo(function DashboardBottomNav({
-  activeTab,
-  onTabChange,
-  activityBadge,
-  isPremium = false,
-  isBusinessTier = false,
-}: DashboardBottomNavProps) {
+export const DashboardBottomNav = memo(function DashboardBottomNav({ activeTab, onTabChange, activityBadge }: DashboardBottomNavProps) {
   const { t } = useTranslation();
   const haptic = useHapticFeedback();
-  const [moreOpen, setMoreOpen] = useState(false);
-
-  const isMoreActive = MORE_TAB_IDS.includes(activeTab);
-  const hasBusinessZone = useHasBusinessZone();
-  const canUseBusinessZone = isPremium || isBusinessTier;
-  // Business Zone stays out of the way: only the entry point until a zone exists,
-  // the full set of zone tabs once the user actually works in one.
-  const visibleMoreItems = MORE_ITEMS.filter((item) => {
-    if (!item.id.startsWith('zone-')) return true;
-    if (!canUseBusinessZone) return false;
-    return hasBusinessZone || item.id === 'zone-dashboard';
-  });
-
-  const handleTabClick = useCallback((tab: NavTab) => {
-    haptic.lightTap();
-    onTabChange(tab.id);
-  }, [onTabChange, haptic]);
-
-  const handleMoreItemClick = useCallback((item: NavTab) => {
-    haptic.lightTap();
-    setMoreOpen(false);
-    onTabChange(item.id);
-  }, [onTabChange, haptic]);
-
-  return (
-    <>
-      <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pt-3 pointer-events-none">
-        <div className="app-bottom-nav overflow-hidden pointer-events-auto rounded-card border border-border shadow-lg">
-          <div className="grid grid-cols-5 h-[4.25rem]">
-            {TABS.map((tab) => {
-              const isActive = activeTab === tab.id;
-              const Icon = tab.icon;
-              const badge = tab.id === 'activity' ? activityBadge : undefined;
-
-              const label = t(tab.labelKey, tab.defaultLabel);
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTabClick(tab)}
-                  aria-label={label}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={cn(
-                    "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
-                    isActive ? "text-primary" : "text-muted-foreground"
-                  )}
-                  data-testid={`${tab.id}-tab`}
-                >
-                  <div className="relative">
-                    <Icon className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isActive && "scale-110")} />
-                    {badge && badge > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[11px] font-medium border-2 border-background">
-                        {badge > 99 ? '99+' : badge}
-                      </span>
-                    )}
-                  </div>
-                  <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isActive ? "font-medium" : "font-normal")}>
-                    {label}
-                  </span>
-                </button>
-              );
-            })}
-
-            {/* More button */}
-            <button
-              onClick={() => { haptic.lightTap(); setMoreOpen(true); }}
-              aria-label={t('dashboard.nav.menu', 'Меню')}
-              aria-expanded={moreOpen}
-              className={cn(
-                "relative flex flex-col items-center justify-center gap-1 transition-colors duration-200 active:scale-95 min-w-0 h-full",
-                isMoreActive ? "text-primary" : "text-muted-foreground"
-              )}
-            >
-              <MoreHorizontal className={cn("h-[18px] w-[18px] shrink-0 transition-transform", isMoreActive && "scale-110")} />
-              <span className={cn("text-[11px] leading-none max-w-full px-0.5 truncate", isMoreActive ? "font-medium" : "font-normal")}>
-                {t('dashboard.nav.menu', 'Меню')}
-              </span>
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* More Sheet */}
-      <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent side="bottom" className="rounded-t-2xl px-4 pb-8">
-          <SheetHeader>
-            <SheetTitle className="text-left">{t('dashboard.nav.menu', 'Меню')}</SheetTitle>
-          </SheetHeader>
-          <div className="grid grid-cols-3 gap-3 mt-4">
-            {visibleMoreItems.map(item => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleMoreItemClick(item)}
-                  className={cn(
-                    "flex flex-col items-center gap-2 p-4 rounded-xl transition-all active:scale-95",
-                    isActive ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground hover:bg-muted"
-                  )}
-                  data-testid={`${item.id}-tab`}
-                >
-                  <Icon className="h-6 w-6" />
-                  <span className="text-xs font-medium text-center whitespace-normal break-words text-wrap leading-tight max-w-[5.5rem]">
-                    {t(item.labelKey, item.defaultLabel)}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </SheetContent>
-      </Sheet>
-    </>
-  );
+  if (!LINKMAX_UI_V2) return <LegacyBottomNav activeTab={activeTab} onTabChange={onTabChange} activityBadge={activityBadge} />;
+  return <nav aria-label={t('pageV2.navigation.label', 'Навигация кабинета')} className="fixed bottom-0 inset-x-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pointer-events-none">
+    <div className="app-bottom-nav mx-auto grid h-[4.25rem] max-w-lg grid-cols-5 overflow-hidden rounded-3xl border border-border bg-card shadow-lg pointer-events-auto">
+      {PAGE_V2_TABS.map(tab => {
+        const Icon = tab.icon;
+        const active = tab.id === activeTab || (tab.id === 'business' && (BUSINESS_TAB_IDS.includes(activeTab) || activeTab.startsWith('zone-')));
+        const label = t(tab.labelKey, tab.defaultLabel);
+        return <button key={tab.id} type="button" onClick={() => { haptic.lightTap(); onTabChange(tab.id); }} aria-label={label} aria-current={active ? 'page' : undefined} data-testid={tab.id + '-tab'} className={cn('relative flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary', active ? 'text-primary font-semibold' : 'text-muted-foreground')}>
+          <span className={cn('relative flex h-8 w-8 items-center justify-center', tab.id === 'add' && 'rounded-full bg-primary text-primary-foreground')}><Icon className="h-[19px] w-[19px]" aria-hidden="true" />
+            {tab.id === 'business' && Boolean(activityBadge && activityBadge > 0) && <span className="absolute right-0 top-0 h-2 w-2 rounded-full bg-primary" />}
+          </span>
+          <span className="w-full truncate text-center text-[10px] leading-tight">{label}</span>
+        </button>;
+      })}
+    </div>
+  </nav>;
 });

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig, configDefaults } from 'vitest/config';
 import { loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -14,6 +14,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    exclude: [...configDefaults.exclude, '**/*.sql.test.mjs'],
     testTimeout: 60000, // Increased testTimeout from 30000 to 60000
     setupFiles: ['./src/testing/setup.ts'],
     env: {

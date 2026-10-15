@@ -25,6 +25,7 @@ import type { Niche } from '@/lib/niches';
 import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
 
 interface UseDashboardOptions {
+  onPreview?: () => void;
   onPublish?: (pageData: PageData) => void;
   editorHistory?: EditorHistoryType;
 }
@@ -134,6 +135,8 @@ export function useDashboard(options?: UseDashboardOptions) {
 
   // Sharing state
   const sharingState = useDashboardSharing({
+    onPreview: options?.onPreview,
+    publishedSlug: cloudState.pageData?.isPublished ? cloudState.pageData.slug : undefined,
     onPublish: cloudState.publish,
     onSave: cloudState.save,
   });
@@ -229,6 +232,11 @@ export function useDashboard(options?: UseDashboardOptions) {
     loading: cloudState.loading,
     saving: cloudState.saving,
     saveStatus: cloudState.saveStatus,
+    draftError: cloudState.draftError,
+    hasUnpublishedChanges: cloudState.hasUnpublishedChanges,
+    saveDraft: cloudState.save,
+    reloadServerDraft: cloudState.reloadServerDraft,
+    refreshDraft: cloudState.refresh,
 
     // Profile
     profileBlock,
@@ -265,6 +273,11 @@ export function useDashboard(options?: UseDashboardOptions) {
     cloudState.loading,
     cloudState.saving,
     cloudState.saveStatus,
+    cloudState.draftError,
+    cloudState.hasUnpublishedChanges,
+    cloudState.save,
+    cloudState.reloadServerDraft,
+    cloudState.refresh,
     updateBlockWithHistory,
     reorderBlocksWithHistory,
     cloudState.reorderBlocks,

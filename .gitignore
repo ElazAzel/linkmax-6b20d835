@@ -69,6 +69,10 @@ supabase/migrations_backup/
 
 
 # Agent/tool artifacts
+.superpowers/
+.output/
+.wrangler/
+design-qa.md
 .gemini/
 .jules/
 .Jules/

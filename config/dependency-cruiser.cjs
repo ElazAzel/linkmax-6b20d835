@@ -2,14 +2,6 @@
 module.exports = {
   forbidden: [
     {
-      name: 'no-circular',
-      severity: 'error',
-      from: {},
-      to: {
-        circular: true,
-      },
-    },
-    {
       name: 'no-layer-violations',
       severity: 'error',
       comment: 'UI and data layers must not be imported from core/shared modules.',

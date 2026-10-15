@@ -23,6 +23,7 @@ import Eye from 'lucide-react/dist/esm/icons/eye';
 import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import { AppThemeSwitcher } from '@/components/settings/AppThemeSwitcher';
 import { colors, radius } from '@/design-system/tokens';
+import { PageCompositionSample } from '@/components/blocks/PageCompositionSample';
 
 const kebab = (key: string) => key.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 
@@ -52,13 +53,16 @@ export default function DesignSystem() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-8">
           <div className="grid">
             <span className="brand-wordmark text-lg">Link<span className="brand-wordmark-accent">MAX</span></span>
-            <span className="text-xs text-muted-foreground">Дизайн-система «Тёплый мастер» · DESIGN.md</span>
+            <span className="text-xs text-muted-foreground">LinkMAX V2 · DESIGN.md</span>
           </div>
           <AppThemeSwitcher />
         </div>
       </header>
 
       <main className="mx-auto grid max-w-6xl gap-12 px-4 py-8 sm:px-8">
+        <Section id="page-composition" title="Page composition" note="Local sample: changes stay in this view. Preview and editor share the same page geometry.">
+          <PageCompositionSample />
+        </Section>
         <Section id="colors" title="Цвет" note="Семантические токены интерфейса. В коде — только классы вида bg-card, text-muted-foreground, text-success.">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {COLOR_ROLES.map((role) => {
@@ -79,7 +83,7 @@ export default function DesignSystem() {
           </div>
         </Section>
 
-        <Section id="type" title="Типографика" note="Onest для интерфейса и заголовков, JetBrains Mono для цифр (font-num).">
+        <Section id="type" title="Типографика" note="SF / Golos Text / Inter для интерфейса, Inter для страниц, JetBrains Mono для цифр (font-num).">
           <Card>
             <CardContent className="grid gap-4 p-5 sm:p-6">
               <p className="text-3xl font-semibold tracking-tight">Страница, на которую записываются</p>

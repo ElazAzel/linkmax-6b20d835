@@ -9,6 +9,47 @@
 import type { CSSProperties } from 'react';
 import type { Block, BlockStyle, BlockFontFamily } from '@/types/page';
 import { toHslTriplet } from './style-utils';
+import { BLOCK_SIZE_DIMENSIONS, type BlockSizePreset } from '@/types/blocks/base';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
+
+/** Content that must remain usable at its natural height, regardless of tile preset. */
+const AUTO_HEIGHT_TYPES = new Set([
+  'profile', 'text', 'socials', 'separator', 'form', 'newsletter', 'faq',
+  'booking', 'pricing', 'catalog', 'product', 'event', 'community',
+  'custom_code', 'video', 'audio', 'carousel', 'testimonial', 'shoutout',
+  'scratch', 'countdown', 'map', 'messenger', 'download',
+]);
+
+export function resolveBlockLayout(block: { type: string; blockSize?: string }) {
+  const autoHeight = AUTO_HEIGHT_TYPES.has(block.type);
+  const size = block.blockSize as BlockSizePreset | undefined;
+  const dimensions = size && Object.hasOwn(BLOCK_SIZE_DIMENSIONS, size)
+    ? BLOCK_SIZE_DIMENSIONS[size] : LINKMAX_UI_V2 ? BLOCK_SIZE_DIMENSIONS.small : BLOCK_SIZE_DIMENSIONS.full;
+  const columns = autoHeight ? 2 : dimensions.gridCols;
+  const rows = autoHeight ? 1 : dimensions.gridRows;
+  return {
+    columns, rows, autoHeight,
+    style: { gridColumn: `span ${columns}`, gridRow: `span ${rows}` } as CSSProperties,
+  };
+}
+
+/** Each auto-height block owns a separate run so it cannot enlarge tile tracks. */
+export function splitBlockLayoutRuns<T extends { type: string; blockSize?: string }>(blocks: T[]): T[][] {
+  const runs: T[][] = [];
+  for (const block of blocks) {
+    const last = runs.at(-1);
+    if (!last || resolveBlockLayout(block).autoHeight || resolveBlockLayout(last[0]).autoHeight) runs.push([block]);
+    else last.push(block);
+  }
+  return runs;
+}
+
+export function resolveProfileComposition<T extends { type: string }>(blocks: T[]) {
+  const profile = blocks.find(block => block.type === 'profile');
+  const adjacent = profile ? blocks[blocks.indexOf(profile) + 1] : undefined;
+  const socials = LINKMAX_UI_V2 && adjacent?.type === 'socials' ? adjacent : undefined;
+  return { profile, socials, content: blocks.filter(block => block !== profile && block !== socials) };
+}
 
 export const getFontClass = (font?: BlockFontFamily): string => {
   switch (font) {
@@ -129,20 +170,15 @@ export function resolveBlockCellAppearance(
   if (!selfStyled) {
     if (bs.backgroundColor) style.backgroundColor = bs.backgroundColor;
     if (bs.backgroundGradient) style.backgroundImage = bs.backgroundGradient;
-    style.borderRadius = bs.borderRadius ? BLOCK_RADIUS[bs.borderRadius] : 'var(--lm-block-radius, 16px)';
+    style.borderRadius = bs.borderRadius ? BLOCK_RADIUS[bs.borderRadius] : 'var(--lm-block-radius, 24px)';
     style.boxShadow = bs.shadow ? BLOCK_SHADOW[bs.shadow] : 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))';
-    if (bs.borderWidth && bs.borderWidth !== 'none') {
+    if (bs.borderWidth) {
       style.borderWidth = BLOCK_BORDER_WIDTH[bs.borderWidth];
       style.borderStyle = 'solid';
       style.borderColor = bs.borderColor || 'hsl(var(--border))';
     }
-    if (bs.padding && bs.padding !== 'none') style.padding = BLOCK_PADDING[bs.padding];
+    if (bs.padding) style.padding = BLOCK_PADDING[bs.padding];
     if (bs.hoverEffect && bs.hoverEffect !== 'none') classes.push(BLOCK_HOVER_CLASS[bs.hoverEffect]);
-  } else {
-    // The cell still follows the theme shape so the card around a button
-    // matches its neighbours.
-    style.borderRadius = 'var(--lm-block-radius, 16px)';
-    style.boxShadow = 'var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08))';
   }
 
   if (bs.textColor) {

@@ -1,0 +1,55 @@
+import { createElement, type ReactNode } from 'react';
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { beforeEach, expect, it, vi } from 'vitest';
+import { useCloudPageState } from '../useCloudPageState';
+import { loadPageDraft, reloadPageDraft, savePageDraft, publishPageDraft, type PageDraft } from '@/services/page-drafts';
+import { loadDraft } from '@/pwa/offlineDraftCache';
+import { pageDraftCacheKey, type LocalPageDraft } from '@/lib/page-draft-cache';
+import type { PageData } from '@/types/page';
+vi.mock('@/hooks/user/useAuth', () => ({ useAuth: () => ({user: {id:'owner'}}) }));
+vi.mock('@/services/database', () => ({loadUserPage:vi.fn(),loadPageBySlug:vi.fn(),loadPageByCustomDomain:vi.fn()}));
+vi.mock('@/services/page-drafts', async importOriginal => ({...await importOriginal<typeof import('@/services/page-drafts')>(),loadPageDraft:vi.fn(),reloadPageDraft:vi.fn(),savePageDraft:vi.fn(),publishPageDraft:vi.fn()}));
+const snapshot = {id:'page',slug:'page',blocks:[],theme:{backgroundColor:'white',textColor:'#1F1F1F',buttonStyle:'rounded',fontFamily:'sans'},seo:{title:'',description:'',keywords:[]}} as PageData;
+let remote: PageDraft;
+beforeEach(() => {
+ localStorage.clear(); vi.clearAllMocks();
+ remote={page_id:'page',snapshot,revision:0,base_published_revision:0,published_draft_revision:0,chatbot_context:'',updated_at:''};
+ vi.mocked(loadPageDraft).mockImplementation(async()=>remote);
+ vi.mocked(savePageDraft).mockImplementation(async(data,revision,base,context)=>remote={...remote,snapshot:data,revision:revision+1,base_published_revision:base,chatbot_context:context??''});
+ vi.mocked(publishPageDraft).mockImplementation(async()=>remote={...remote,snapshot:{...remote.snapshot,isPublished:true},base_published_revision:1,published_draft_revision:remote.revision});
+});
+it.each([false,true])('retains acknowledged state after remount (publish=%s)',async publish => {
+ const client=new QueryClient({defaultOptions:{queries:{retry:false}}});
+ const wrapper=({children}:{children:ReactNode})=>createElement(QueryClientProvider,{client},children);
+ const first=renderHook(()=>useCloudPageState({pageId:'page'}),{wrapper});
+ await waitFor(()=>expect(first.result.current.pageData?.id).toBe('page'));
+ act(()=>first.result.current.updateTheme({backgroundColor:'red'}));
+ await act(async()=>{await first.result.current.save(); if(publish) await first.result.current.publish();});
+ first.unmount();
+ const second=renderHook(()=>useCloudPageState({pageId:'page'}),{wrapper});
+ await waitFor(()=>expect(second.result.current.pageData?.theme.backgroundColor).toBe('red'));
+ expect(second.result.current.conflict).toBe(false);
+ expect(second.result.current.hasUnpublishedChanges).toBe(!publish);
+ expect(second.result.current.pageData?.isPublished).toBe(publish?true:undefined);
+ expect(loadPageDraft).toHaveBeenCalledTimes(1);
+ second.unmount();client.clear();
+});
+
+it('explicit reload preserves the local backup and synchronizes recovered baseline', async()=>{
+ const client=new QueryClient({defaultOptions:{queries:{retry:false}}});
+ const wrapper=({children}:{children:ReactNode})=>createElement(QueryClientProvider,{client},children);
+ const hook=renderHook(()=>useCloudPageState({pageId:'page'}),{wrapper});
+ await waitFor(()=>expect(hook.result.current.pageData?.id).toBe('page'));
+ act(()=>hook.result.current.updateTheme({backgroundColor:'local'}));
+ remote={...remote,revision:2};
+ const recovered={...remote,revision:3,base_published_revision:5,published_draft_revision:3,snapshot:{...snapshot,theme:{...snapshot.theme,backgroundColor:'external'}}};
+ vi.mocked(reloadPageDraft).mockResolvedValue(recovered);
+ await act(async()=>{await hook.result.current.reloadServerDraft();});
+ expect(reloadPageDraft).toHaveBeenCalledWith('page',2,0);
+ expect(hook.result.current.pageData?.theme.backgroundColor).toBe('external');
+ expect(loadDraft<LocalPageDraft>(pageDraftCacheKey('owner','page')+':conflict-backup')?.data.pageData.theme.backgroundColor).toBe('local');
+ await act(async()=>{await hook.result.current.save();});
+ expect(savePageDraft).toHaveBeenLastCalledWith(recovered.snapshot,3,5,'');
+ hook.unmount();client.clear();
+});

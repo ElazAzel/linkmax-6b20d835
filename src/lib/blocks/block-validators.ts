@@ -112,7 +112,20 @@ export function validateVideoBlock(formData: VideoBlockData): string | null {
 }
 
 export function validateImageBlock(formData: ImageBlockData): string | null {
-  return validateUrl(formData.url, 'Image URL') || validateRequired(formData.alt, 'Alt text');
+  return validateImageUrl(formData.url, 'Image URL') || validateRequired(formData.alt, 'Alt text');
+}
+
+function validateImageUrl(value: unknown, fieldName: string): string | null {
+  const url = normalizeToString(value).trim();
+  if (!url) return `${fieldName} is required`;
+  // A single leading slash is a local asset; backslashes/control characters
+  // could reinterpret it as a network-path reference in browser URL parsing.
+  if (url.startsWith('/') && !url.startsWith('//') && !url.includes('\\') && ![...url].some(char => char.charCodeAt(0) <= 32)) return null;
+  try {
+    const parsed = new URL(url);
+    if (['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password) return null;
+  } catch { /* Return the same validation error for malformed assets. */ }
+  return `${fieldName} must be a valid URL`;
 }
 
 export function validateCarouselBlock(formData: CarouselBlockData): string | null {
@@ -122,7 +135,7 @@ export function validateCarouselBlock(formData: CarouselBlockData): string | nul
   // Validate each image
   for (let i = 0; i < formData.images.length; i++) {
     const image = formData.images[i];
-    const urlError = validateUrl(image.url, `Image ${i + 1} URL`);
+    const urlError = validateImageUrl(image.url, `Image ${i + 1} URL`);
     if (urlError) return urlError;
   }
 

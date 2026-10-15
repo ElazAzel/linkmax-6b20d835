@@ -6,6 +6,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useUserPage, useSavePageMutation, usePublishPageMutation } from '@/hooks/page/usePageCache';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { loadDraft, saveDraft } from '@/pwa/offlineDraftCache';
+import { pageDraftCacheKey } from '@/lib/page-draft-cache';
+import { useActivePageStore } from '@/store/useActivePageStore';
+import { usePageVersions } from '../usePageVersions';
 
 // Mock dependencies
 vi.mock('@/hooks/user/useAuth', () => ({
@@ -72,10 +76,12 @@ describe('useCloudPageState', () => {
   beforeEach(async () => {
     vi.useFakeTimers();
     vi.clearAllMocks();
+    localStorage.clear();
+    useActivePageStore.setState({ activePageId: null });
 
     (useAuth as any).mockReturnValue({ user: mockUser });
     (useQueryClient as any).mockReturnValue({ invalidateQueries: vi.fn() });
-    
+
     (useUserPage as any).mockReturnValue({
       data: { pageData: mockPageData, chatbotContext: 'hello' },
       isLoading: false,
@@ -108,8 +114,125 @@ describe('useCloudPageState', () => {
     expect(result.current.chatbotContext).toBe('hello');
   });
 
+  it('persists immediately and sends a private save at exactly 1000ms', async () => {
+    mockMutateAsyncSave.mockResolvedValue({ draft: { revision: 1, base_published_revision: 0 } });
+    const { result } = renderHook(() => useCloudPageState());
+    act(() => result.current.updateTheme({ backgroundColor: 'red' }));
+    const local = loadDraft<any>(pageDraftCacheKey(mockUser.id, mockPageData.id));
+    expect(local?.data.pageData.theme.backgroundColor).toBe('red');
+    await act(async () => { await vi.advanceTimersByTimeAsync(999); });
+    expect(mockMutateAsyncSave).not.toHaveBeenCalled();
+    await act(async () => { await vi.advanceTimersByTimeAsync(1); });
+    expect(mockMutateAsyncSave).toHaveBeenCalledWith(expect.objectContaining({ revision: 0, basePublishedRevision: 0 }));
+    expect(mockMutateAsyncPublish).not.toHaveBeenCalled();
+  });
+
+  it('explicit Publish uses the revision acknowledged by private save', async () => {
+    mockMutateAsyncSave.mockResolvedValue({ draft: { revision: 7, base_published_revision: 3 } });
+    mockMutateAsyncPublish.mockResolvedValue({ base_published_revision: 4, slug: 'test-page' });
+    const { result } = renderHook(() => useCloudPageState());
+    await act(async () => { expect(await result.current.publish()).toBe('test-page'); });
+    expect(mockMutateAsyncPublish).toHaveBeenCalledWith({ pageId: 'page-123', revision: 7, basePublishedRevision: 3 });
+    expect(result.current.hasUnpublishedChanges).toBe(false);
+  });
+
+  it('missing RPC retains local draft and exposes actionable unavailable error', async () => {
+    mockMutateAsyncSave.mockRejectedValue({ code: 'PGRST202', message: 'missing function' });
+    const { result } = renderHook(() => useCloudPageState());
+    act(() => result.current.updateTheme({ backgroundColor: 'offline' }));
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+    expect(result.current.draftError?.kind).toBe('unavailable');
+    expect(result.current.saveStatus).toBe('error');
+    expect(loadDraft<any>(pageDraftCacheKey(mockUser.id, mockPageData.id))?.data.dirty).toBe(true);
+    expect(mockMutateAsyncPublish).not.toHaveBeenCalled();
+  });
+
+  it('recovers local changes with their original CAS token and detects remote conflict', async () => {
+    saveDraft(pageDraftCacheKey(mockUser.id, mockPageData.id), { pageData: { ...mockPageData, city: 'Local' }, chatbotContext: 'local', revision: 2, base: 1, dirty: true });
+    vi.mocked(useUserPage).mockReturnValue({ data: { pageData: mockPageData, chatbotContext: '', draft: { revision: 3, base_published_revision: 1 } }, isLoading: false, refetch: vi.fn() } as any);
+    const { result } = renderHook(() => useCloudPageState());
+    expect(result.current.pageData?.city).toBe('Local');
+    expect(result.current.conflict).toBe(true);
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+    expect(mockMutateAsyncSave).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { code: '42501', message: 'Access denied' },
+    { code: 'PGRST116', message: 'Page deleted' },
+    { message: 'Network unavailable' },
+  ])('gates failed selected page without losing the previous session: %s', async problem => {
+    const aData = { pageData: mockPageData, chatbotContext: 'hello' };
+    const refetch = vi.fn();
+    const { result, rerender } = renderHook(({ id }) => useCloudPageState({ pageId: id }), { initialProps: { id: 'page-123' } });
+    act(() => result.current.updateTheme({ backgroundColor: 'local-A' }));
+    vi.mocked(useUserPage).mockReturnValue({ data: undefined, isLoading: true, refetch } as any);
+    rerender({ id: 'page-B' });
+    expect(result.current.pageData).toBeNull();
+    await act(async () => { await result.current.save(); await result.current.publish(); });
+    expect(mockMutateAsyncSave).not.toHaveBeenCalled();
+    expect(mockMutateAsyncPublish).not.toHaveBeenCalled();
+    vi.mocked(useUserPage).mockReturnValue({ data: undefined, error: problem, isLoading: false, refetch } as any);
+    rerender({ id: 'page-B' });
+    expect(result.current.pageData).toBeNull();
+    expect(result.current.draftError?.message).toBeTruthy();
+    await act(async () => { await result.current.save(); await result.current.publish(); });
+    expect(mockMutateAsyncSave).not.toHaveBeenCalled();
+    expect(mockMutateAsyncPublish).not.toHaveBeenCalled();
+    await act(async () => { await result.current.refresh(); });
+    expect(refetch).toHaveBeenCalled();
+    vi.mocked(useUserPage).mockReturnValue({ data: aData, isLoading: false, refetch } as any);
+    rerender({ id: 'page-123' });
+    expect(result.current.pageData?.theme.backgroundColor).toBe('local-A');
+    expect(result.current.draftError).toBeNull();
+    expect(loadDraft<any>(pageDraftCacheKey(mockUser.id, mockPageData.id))?.data.pageData.theme.backgroundColor).toBe('local-A');
+    mockMutateAsyncSave.mockResolvedValue({ draft: { revision: 1, base_published_revision: 0 } });
+    await act(async () => { await result.current.save(); });
+    expect(mockMutateAsyncSave).toHaveBeenCalledWith(expect.objectContaining({ pageData: expect.objectContaining({ id: 'page-123', theme: { backgroundColor: 'local-A' } }) }));
+  });
+
+  it('does not cancel an independent page save when switching pages', async () => {
+    mockMutateAsyncSave.mockResolvedValue({ draft: { revision: 1, base_published_revision: 0 } });
+    const { result, rerender } = renderHook(({ id }) => useCloudPageState({ pageId: id }), { initialProps: { id: 'page-123' } });
+    act(() => result.current.updateTheme({ backgroundColor: 'first' }));
+    vi.mocked(useUserPage).mockReturnValue({ data: { pageData: { ...mockPageData, id: 'second' }, chatbotContext: '' }, isLoading: false, refetch: vi.fn() } as any);
+    rerender({ id: 'second' });
+    act(() => result.current.updateTheme({ backgroundColor: 'second' }));
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+    expect(mockMutateAsyncSave.mock.calls.map(([input]) => input.pageData.id)).toEqual(['page-123', 'second']);
+  });
+
+  it('serializes pending writes without losing edits made during a save', async () => {
+    let resolveFirst!: (value: unknown) => void;
+    mockMutateAsyncSave.mockImplementationOnce(() => new Promise(resolve => { resolveFirst = resolve; }));
+    mockMutateAsyncSave.mockResolvedValue({ draft: { revision: 2, base_published_revision: 0 } });
+    const { result } = renderHook(() => useCloudPageState());
+    act(() => result.current.updateTheme({ backgroundColor: 'first' }));
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+    act(() => result.current.updateTheme({ backgroundColor: 'second' }));
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+    expect(mockMutateAsyncSave).toHaveBeenCalledTimes(1);
+    await act(async () => { resolveFirst({ draft: { revision: 1, base_published_revision: 0 } }); });
+    expect(mockMutateAsyncSave).toHaveBeenLastCalledWith(expect.objectContaining({ revision: 1, pageData: expect.objectContaining({ theme: { backgroundColor: 'second' } }) }));
+    expect(result.current.pageData?.theme.backgroundColor).toBe('second');
+  });
+
+  it('restores history into the private draft without publishing', async () => {
+    mockMutateAsyncSave.mockResolvedValue({ draft: { revision: 1, base_published_revision: 0 } });
+    const { result } = renderHook(() => {
+      const editor = useCloudPageState();
+      const versions = usePageVersions((blocks, theme) => editor.updatePageDataPartial({ blocks, ...(theme ? { theme } : {}) }));
+      return { editor, versions };
+    });
+    act(() => result.current.versions.restoreVersion({ id: 'v1', versionId: 'draft-1', publishedAt: '', blocks: [{ id: 'restored', type: 'text', content: 'old content' }] as any }));
+    expect(result.current.editor.pageData?.blocks[0].id).toBe('restored');
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+    expect(mockMutateAsyncSave).toHaveBeenCalled();
+    expect(mockMutateAsyncPublish).not.toHaveBeenCalled();
+  });
+
   it('should update block and trigger auto-save', async () => {
-    mockMutateAsyncSave.mockResolvedValue({ dbPage: { id: 'page-123' } });
+    mockMutateAsyncSave.mockResolvedValue({ dbPage: { id: 'page-123' }, draft: { revision: 1, base_published_revision: 0 } });
     mockMutateAsyncPublish.mockResolvedValue('test-page');
 
     const { result } = renderHook(() => useCloudPageState());
@@ -122,19 +245,17 @@ describe('useCloudPageState', () => {
     expect(result.current.saveStatus).toBe('pending');
 
     // Fast-forward 2 seconds for the debounce
-    act(() => {
-      vi.advanceTimersByTime(2000);
-    });
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
 
     // Now it should be 'saving' or 'saved'
     // Since we await mutations in the hook, we might need more act wraps or waitFor
-    
+
     // Check if mutateAsync was called
     expect(mockMutateAsyncSave).toHaveBeenCalled();
   });
 
   it('should handle manual save correctly', async () => {
-    mockMutateAsyncSave.mockResolvedValue({ dbPage: { id: 'page-123' } });
+    mockMutateAsyncSave.mockResolvedValue({ dbPage: { id: 'page-123' }, draft: { revision: 1, base_published_revision: 0 } });
     mockMutateAsyncPublish.mockResolvedValue('test-page');
 
     const { result } = renderHook(() => useCloudPageState());
@@ -144,8 +265,8 @@ describe('useCloudPageState', () => {
     });
 
     expect(mockMutateAsyncSave).toHaveBeenCalled();
-    expect(mockMutateAsyncPublish).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith('Changes saved and published!');
+    expect(mockMutateAsyncPublish).not.toHaveBeenCalled();
+
     expect(result.current.saveStatus).toBe('saved');
   });
 
@@ -183,7 +304,7 @@ describe('useCloudPageState', () => {
     });
 
     expect(result.current.pageData?.niche).toBe('realestate');
-    expect(updatePageNiche).toHaveBeenCalled();
+    expect(updatePageNiche).not.toHaveBeenCalled();
   });
 
   it('should update entity fields successfully', async () => {
@@ -197,7 +318,7 @@ describe('useCloudPageState', () => {
     });
 
     expect(result.current.pageData?.city).toBe('Almaty');
-    expect(updatePageEntityFields).toHaveBeenCalled();
+    expect(updatePageEntityFields).not.toHaveBeenCalled();
   });
 
   describe('block positions and bulk operations', () => {
@@ -244,8 +365,8 @@ describe('useCloudPageState', () => {
       expect(result.current.pageData?.blocks.map((b) => b.id)).toEqual(['p', 'b']);
     });
 
-    it('publishes only the edited page after autosave', async () => {
-      mockMutateAsyncSave.mockResolvedValue({ dbPage: { id: 'page-positions' } });
+    it('never publishes after autosave', async () => {
+      mockMutateAsyncSave.mockResolvedValue({ dbPage: { id: 'page-positions' }, draft: { revision: 1, base_published_revision: 0 } });
       mockMutateAsyncPublish.mockResolvedValue('test-page');
       const { result } = renderHook(() => useCloudPageState());
       act(() => {
@@ -254,7 +375,7 @@ describe('useCloudPageState', () => {
       await act(async () => {
         await vi.advanceTimersByTimeAsync(2100);
       });
-      expect(mockMutateAsyncPublish).toHaveBeenCalledWith('page-positions');
+      expect(mockMutateAsyncPublish).not.toHaveBeenCalled();
     });
   });
 });

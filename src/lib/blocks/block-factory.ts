@@ -22,13 +22,11 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     bio: 'Tell people about yourself',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
     verified: false,
-    avatarFrame: 'default',
     coverImage: '',
     coverGradient: 'none',
     coverHeight: 'medium',
-    avatarSize: 'large',
-    avatarPosition: 'center',
-    shadowStyle: 'soft',
+    avatarSize: 'medium',
+    shadowStyle: 'none',
     ...overrides,
   }),
 
@@ -124,6 +122,16 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
       animation: 'slide-up',
       hoverEffect: 'lift',
     },
+    ...overrides,
+  }),
+
+  audio: (id, overrides) => ({
+    id,
+    type: 'audio',
+    title: '',
+    sourceType: 'file',
+    fileUrl: '',
+    blockSize: DEFAULT_BLOCK_SIZE,
     ...overrides,
   }),
 

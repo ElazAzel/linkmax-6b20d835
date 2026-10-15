@@ -12,6 +12,7 @@ import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import type { BlockType } from '@/types/blocks/base';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { isBlocksFreePromoActive } from '@/lib/promo/free-blocks-promo';
+import { getBlockEditingConfig, type BlockEditingConfig } from './block-editing';
 
 // ============= Manifest Types =============
 
@@ -35,6 +36,7 @@ export interface BlockEditorComponentProps {
 export type BlockCategory = 'basic' | 'media' | 'interactive' | 'commerce' | 'social' | 'advanced';
 
 export interface BlockManifestEntry {
+  editing: BlockEditingConfig;
   type: BlockType;
   category: BlockCategory;
   isPremium: boolean;
@@ -52,7 +54,18 @@ export interface BlockManifestEntry {
 
 // ============= The Manifest =============
 
-export const BLOCK_MANIFEST: Record<BlockType, BlockManifestEntry> = {
+const BASE_MANIFEST: Record<BlockType, Omit<BlockManifestEntry, 'editing'>> = {
+  audio: {
+    type: 'audio',
+    category: 'media',
+    isPremium: false,
+    icon: 'Music',
+    labelKey: 'blockTypes.audio',
+    renderer: lazy(() => import('@/components/blocks/AudioBlock').then(m => ({ default: m.AudioBlock }))),
+    editor: lazy(() => import('@/components/block-editors/AudioBlockEditor').then(m => ({ default: m.AudioBlockEditor }))),
+    renderMode: 'trackable',
+    rendererPropsKeys: ['onClick'],
+  },
   // === Basic (Free) ===
   profile: {
     type: 'profile',
@@ -354,6 +367,10 @@ export const BLOCK_MANIFEST: Record<BlockType, BlockManifestEntry> = {
     renderMode: 'simple',
   },
 };
+
+export const BLOCK_MANIFEST = Object.fromEntries(Object.values(BASE_MANIFEST).map(entry => [entry.type, {
+  ...entry, editing: getBlockEditingConfig(entry.type),
+}])) as Record<BlockType, BlockManifestEntry>;
 
 // ============= Compile-time completeness check =============
 // If a BlockType is missing from BLOCK_MANIFEST, this line will error.

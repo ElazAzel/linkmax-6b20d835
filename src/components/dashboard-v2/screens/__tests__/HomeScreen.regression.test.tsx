@@ -64,7 +64,7 @@ const pageData = {
 } as PageData;
 
 describe('HomeScreen trust baseline', () => {
-  it('renders one performance region and one next-action region without unsupported uplift claims', () => {
+  it('renders one performance region and one next-action region without unsupported uplift claims', async () => {
     const noop = vi.fn();
 
     render(
@@ -86,6 +86,7 @@ describe('HomeScreen trust baseline', () => {
       </MemoryRouter>,
     );
 
+    await screen.findByTestId('home-performance-region');
     expect(screen.getAllByTestId('home-performance-region')).toHaveLength(1);
     expect(screen.getAllByTestId('home-next-action-region')).toHaveLength(1);
     expect(screen.getAllByText('25')).toHaveLength(1);

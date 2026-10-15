@@ -1,10 +1,10 @@
 import { supabase } from '@/platform/supabase/client';
 import type { AppDatabase } from '@/platform/supabase/extended-types';
-import type { PageData, Block, ProfileBlock, PageTheme, GridConfig, PageExperiment } from '@/types/page';
+import type { PageData, Block, PageTheme, GridConfig, PageExperiment } from '@/types/page';
 import { createDefaultPageData } from '@/lib/constants';
-import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
+
 import { logger } from '@/lib/utils/logger';
-import type { Json } from '@/platform/supabase/types';
+
 import { isMissingTableError } from './reviews';
 import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 
@@ -143,38 +143,6 @@ function mapExperimentData(experiments: RawExperiment[]): PageExperiment[] {
 /**
  * Get user's slug from their profile or generate one
  */
-async function getUserSlug(userId: string): Promise<string> {
-  // Try to get username from profile
-  const { data: profile } = await supabase
-    .from('user_profiles')
-    .select('username')
-    .eq('id', userId)
-    .maybeSingle();
-
-  if (profile?.username) {
-    return profile.username;
-  }
-
-  // Check for existing page slug
-  const { data: existingPage } = await supabase
-    .from('pages')
-    .select('slug')
-    .eq('user_id', userId)
-    .maybeSingle();
-
-  if (existingPage?.slug) {
-    return existingPage.slug;
-  }
-
-  // Generate new unique slug
-  const baseSlug = `user-${userId.slice(0, 8)}`;
-  const { data: generatedSlug } = await supabase.rpc('generate_unique_slug', {
-    base_slug: baseSlug.toLowerCase().replace(/[^a-z0-9]/g, ''),
-  });
-
-  return generatedSlug || baseSlug;
-}
-
 /**
  * Deduplicate blocks by id (keep first occurrence)
  */
@@ -204,33 +172,23 @@ function convertDbBlocksToBlocks(dbBlocks: DbBlock[]): Block[] {
 /**
  * Extract title from block (handles multilingual strings)
  */
-function extractBlockTitle(block: Block, lang: SupportedLanguage = 'ru'): string | null {
-  if (!('title' in block) && !('name' in block)) return null;
-
-  const rawTitle = 'title' in block ? block.title : ('name' in block ? (block as ProfileBlock).name : null);
-  if (!rawTitle) return null;
-
-  if (typeof rawTitle === 'string') return rawTitle;
-  return getI18nText(rawTitle, lang);
-}
-
 /**
  * Check if block is currently scheduled to be visible (pure function)
  */
 export function isBlockScheduledVisible(schedule?: BlockSchedule, now: Date = new Date()): boolean {
   if (!schedule) return true;
-  
+
   const { startDate, endDate } = schedule;
   const currentTime = now.getTime();
-  
+
   if (startDate && new Date(startDate).getTime() > currentTime) {
     return false;
   }
-  
+
   if (endDate && new Date(endDate).getTime() < currentTime) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -459,151 +417,15 @@ export async function fetchExpertDirectoryProfiles(
 /**
  * Save page to database with atomic operations
  */
-export async function savePage(
-  pageData: PageData,
-  userId: string,
-  chatbotContext?: string
-): Promise<SavePageResult> {
+/** @deprecated Use savePageDraft with an explicit revision in editor sessions. */
+export async function savePage(pageData: PageData, _userId: string, chatbotContext?: string): Promise<SavePageResult> {
   try {
-    // Always target the page currently being edited. Only fall back to the
-    // account username slug when the page has no slug of its own yet.
-    const ownSlug = typeof pageData.slug === 'string' ? pageData.slug.trim() : '';
-    const slug = ownSlug.length > 0 ? ownSlug : await getUserSlug(userId);
-
-
-    // Extract profile block data
-    const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;
-    const profileName = profileBlock ? extractBlockTitle(profileBlock) : 'My Page';
-    const profileBio = profileBlock?.bio;
-    const bioText = typeof profileBio === 'string' ? profileBio : (profileBio ? getI18nText(profileBio, 'ru') : undefined);
-
-    // Upsert page atomically
-    let { data: pageId, error: upsertError } = await supabase.rpc('upsert_user_page', {
-      p_user_id: userId,
-      p_slug: slug,
-      p_title: profileName || 'My Page',
-      p_description: (bioText ?? '') as string,
-      p_avatar_url: (profileBlock?.avatar ?? '') as string,
-      p_avatar_style: { type: 'default', color: '#000000' } as unknown as Json,
-      p_theme_settings: pageData.theme as unknown as Json,
-      p_seo_meta: pageData.seo as unknown as Json,
-      p_editor_mode: pageData.editorMode || 'linear',
-      p_grid_config: (pageData.gridConfig ?? null) as unknown as Json,
-      p_integrations: (pageData.integrations ?? null) as unknown as Json,
-      p_favicon_url: (pageData.favicon_url ?? '') as string,
-      p_hide_branding: pageData.hideBranding || false,
-      p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : (null as unknown as string),
-      p_webhook_url: (pageData.webhook_url ?? null) as unknown as string,
-      p_webhook_secret: (pageData.webhook_secret ?? null) as unknown as string,
-    });
-
-    // Fallback for legacy RPC if the new one with webhooks parameters is not yet deployed
-    if (upsertError && (upsertError.code === 'PGRST202' || upsertError.message?.includes('p_webhook_url'))) {
-      logger.info('Retrying with legacy upsert_user_page RPC (fallback)');
-      const fallbackResult = await supabase.rpc('upsert_user_page', {
-        p_user_id: userId,
-        p_slug: slug,
-        p_title: profileName || 'My Page',
-        p_description: bioText || '',
-        p_avatar_url: profileBlock?.avatar || '',
-        p_avatar_style: { type: 'default', color: '#000000' } as unknown as Json,
-        p_theme_settings: pageData.theme as unknown as Json,
-        p_seo_meta: pageData.seo as unknown as Json,
-        p_editor_mode: pageData.editorMode || 'linear',
-        p_grid_config: (pageData.gridConfig || null) as unknown as Json,
-        p_integrations: (pageData.integrations || null) as unknown as Json,
-        p_favicon_url: pageData.favicon_url || undefined,
-        p_hide_branding: pageData.hideBranding || false,
-        p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : undefined,
-      });
-      pageId = fallbackResult.data;
-      upsertError = fallbackResult.error;
-    }
-
-    if (upsertError) {
-      logger.error('Error upserting page', upsertError, { context: 'pages', data: { userId, slug } });
-      return { data: null, error: wrapError(upsertError) };
-    }
-
-    if (typeof pageData.isIndexable === 'boolean') {
-      const { error: visibilityError } = await supabase
-        .from('pages')
-        .update({ is_indexable: pageData.isIndexable })
-        .eq('id', pageId as string)
-        .eq('user_id', userId);
-
-      if (visibilityError) {
-        logger.error('Error saving search visibility', visibilityError, { context: 'pages', data: { pageId, userId } });
-        return { data: null, error: wrapError(visibilityError) };
-      }
-    }
-
-    // Prepare blocks for atomic save
-    const blocksData = pageData.blocks.map((block, index) => ({
-      type: block.type,
-      position: index,
-      title: extractBlockTitle(block),
-      content: JSON.parse(JSON.stringify(block)),
-      style: {},
-      schedule: 'schedule' in block ? block.schedule : null,
-    }));
-
-    // Save blocks atomically
-    const { error: blocksError } = await supabase.rpc('save_page_blocks', {
-      p_page_id: pageId as string,
-      p_blocks: JSON.parse(JSON.stringify(blocksData)) as Json,
-      p_is_premium: pageData.isPremium || false,
-    });
-
-    if (blocksError) {
-      logger.error('Error saving blocks', blocksError, { context: 'pages', data: { pageId } });
-      return { data: null, error: wrapError(blocksError) };
-    }
-
-    // Save preview_url if provided
-    if (pageData.previewUrl !== undefined) {
-      await supabase
-        .from('pages')
-        .update({ preview_url: pageData.previewUrl || null })
-        .eq('id', pageId as string);
-    }
-
-    // Save chatbot context if provided
-    if (chatbotContext !== undefined) {
-      await supabase.from('private_page_data').upsert(
-        {
-          page_id: pageId as string,
-          chatbot_context: (chatbotContext || null) as unknown as string,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'page_id' }
-      );
-    }
-
-    // Fetch and return the saved page via SECURITY DEFINER RPC so the owner
-    // gets back sensitive columns (webhook_*, contact_*) that are revoked
-    // from direct SELECT for the authenticated role.
-    const { data: pageRows, error: fetchError } = await (supabase
-      .rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>)('get_my_full_page', { p_user_id: userId });
-
-    if (fetchError) {
-      return { data: null, error: wrapError(fetchError) };
-    }
-
-    const page = Array.isArray(pageRows)
-      ? (pageRows as unknown as DbPage[]).find((p) => p.id === pageId) ?? (pageRows as unknown as DbPage[])[0]
-      : (pageRows as unknown as DbPage);
-
-    return { data: (page ?? null) as unknown as DbPage, error: null };
-  } catch (error) {
-    logger.error('Error saving page', error, { context: 'pages', data: { userId } });
-    return { data: null, error: wrapError(error) };
-  }
+    const { loadPageDraft, savePageDraft } = await import('./page-drafts');
+    const draft = await loadPageDraft(pageData.id);
+    await savePageDraft(pageData, draft.revision, draft.base_published_revision, chatbotContext);
+    return { data: null, error: null };
+  } catch (error) { return { data: null, error: wrapError(error) }; }
 }
-
-/**
- * Load public page by slug
- */
 export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
   try {
     const { data: page, error: pageError } = await supabase
@@ -813,7 +635,7 @@ export async function loadUserPage(userId: string, pageId?: string | null): Prom
 
     if (!ownerRow) {
       return {
-        data: createDefaultPageData(userId),
+        data: null,
         chatbotContext: null,
         error: null,
       };
@@ -893,41 +715,10 @@ export async function loadUserPage(userId: string, pageId?: string | null): Prom
  * Previously this updated `is_published` for every page of the user, so each
  * autosave re-published draft sub-pages the owner had hidden.
  */
-export async function publishPage(userId: string, pageId?: string | null): Promise<PublishPageResult> {
-  try {
-    let targetId = pageId ?? null;
-    if (!targetId) {
-      // Legacy callers without an id: publish only the primary (oldest) page.
-      const { data: primary, error: primaryError } = await supabase
-        .from('pages')
-        .select('id')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: true })
-        .limit(1)
-        .maybeSingle();
-      if (primaryError) return { slug: null, error: wrapError(primaryError) };
-      targetId = primary?.id ?? null;
-    }
-    if (!targetId) return { slug: null, error: new Error('Page not found') };
-
-    const { data, error } = await supabase
-      .from('pages')
-      .update({ is_published: true })
-      .eq('id', targetId)
-      .eq('user_id', userId)
-      .select('slug')
-      .maybeSingle();
-
-    if (error) return { slug: null, error: wrapError(error) };
-    if (!data) return { slug: null, error: new Error('Page not found') };
-
-    return { slug: data.slug, error: null };
-  } catch (error) {
-    return { slug: null, error: wrapError(error) };
-  }
+/** @deprecated Publication requires the revision reviewed in the editor. */
+export async function publishPage(_userId: string, _pageId?: string | null): Promise<PublishPageResult> {
+  return { slug: null, error: new Error('Open the page editor and use Publish to publish the reviewed private draft.') };
 }
-
-
 /**
  * Update page niche
  */

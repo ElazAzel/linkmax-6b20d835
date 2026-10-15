@@ -76,7 +76,7 @@ describe('resolveBlockCellAppearance', () => {
   });
 
   it('falls back to the theme block shape when no radius is set', () => {
-    expect(resolveBlockCellAppearance({ type: 'faq' }).style.borderRadius).toBe('var(--lm-block-radius, 16px)');
+    expect(resolveBlockCellAppearance({ type: 'faq' }).style.borderRadius).toBe('var(--lm-block-radius, 24px)');
   });
 
   it('does not paint the user background twice for self-styled blocks', () => {
@@ -90,7 +90,7 @@ describe('page fonts', () => {
     expect(primaryFamily("'Space Grotesk', system-ui")).toBe('Space Grotesk');
     const hrefs = getPageFontHrefs({ fontPair: 'space-dm' });
     expect(hrefs).toHaveLength(2);
-    expect(hrefs[0]).toContain('family=Space+Grotesk');
+    expect(hrefs[0]).toBe('/fonts/Space+Grotesk/font.css');
     expect(getPageFontHrefs({ fontPair: 'manrope-inter' })).toEqual([]);
     expect(getPageFontHrefs({})).toEqual([]);
   });

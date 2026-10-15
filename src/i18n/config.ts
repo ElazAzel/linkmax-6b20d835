@@ -123,6 +123,14 @@ async function loadLazyLocale(lang: string): Promise<void> {
   try {
     const data = await importer();
     const merged = mergeNamespaces(data);
+    if (['ru', 'kk', 'en', 'uz'].includes(normalized)) {
+      const [{ officeResources }, { officeOffersResources }] = await Promise.all([
+        import('./office-resources'), import('./office-offers'),
+      ]);
+      const locale = normalized as keyof typeof officeResources;
+      merged.translation = deepMerge(merged.translation,
+        deepMerge(officeResources[locale], officeOffersResources[locale]));
+    }
     i18n.addResourceBundle(normalized, 'translation', merged.translation, true, true);
     loadedLazyLocales.add(normalized);
   } catch (e) {

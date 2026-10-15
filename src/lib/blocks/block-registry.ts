@@ -21,6 +21,7 @@ export const FREE_BLOCK_TYPES = [
   'socials',
   'messenger',
   'image',
+  'audio',
   'map',
   'faq',
   'booking',
@@ -99,6 +100,7 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
   messenger: { type: 'messenger', category: 'basic', isPremium: false, icon: 'message-circle', labelKey: 'blockTypes.messenger' },
 
   // Media
+  audio: { type: 'audio', category: 'media', isPremium: false, icon: 'music', labelKey: 'blockTypes.audio' },
   image: { type: 'image', category: 'media', isPremium: false, icon: 'image', labelKey: 'blockTypes.image' },
   video: { type: 'video', category: 'media', isPremium: true, icon: 'video', labelKey: 'blockTypes.video' },
   carousel: { type: 'carousel', category: 'media', isPremium: true, icon: 'images', labelKey: 'blockTypes.carousel' },

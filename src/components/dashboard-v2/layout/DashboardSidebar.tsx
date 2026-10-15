@@ -1,3 +1,4 @@
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { useNavigate } from '@/lib/router-compat';
 /**
  * DashboardSidebar - Desktop sidebar navigation
@@ -10,6 +11,7 @@ import { useHasBusinessZone } from '@/contexts/ZoneContext';
 
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
+import { PAGE_V2_TABS } from './page-v2-navigation';
 import Home from 'lucide-react/dist/esm/icons/home';
 import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
@@ -61,9 +63,9 @@ interface DashboardSidebarProps {
   onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-const MAIN_ITEMS: SidebarItem[] = [
+const MAIN_ITEMS: SidebarItem[] = LINKMAX_UI_V2 ? PAGE_V2_TABS : [
   { id: 'editor', icon: PenTool, labelKey: 'dashboard.nav.editor', defaultLabel: 'Редактор' },
-  { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
+  { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие' },
   { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },
 ];
 

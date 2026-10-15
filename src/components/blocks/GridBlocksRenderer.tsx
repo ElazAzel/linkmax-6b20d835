@@ -2,11 +2,11 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { cn } from '@/lib/utils/utils';
-import { Block, BLOCK_SIZE_DIMENSIONS } from '@/types/page';
+import { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { getComposition, type CompositionDef } from '@/lib/design/composition';
 import { resolveBlockVariant } from '@/lib/design/block-variants';
-import { resolveBlockCellAppearance, SELF_STYLED_BLOCK_TYPES, TRANSPARENT_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
+import { resolveBlockCellAppearance, resolveBlockLayout, resolveProfileComposition, splitBlockLayoutRuns, SELF_STYLED_BLOCK_TYPES, TRANSPARENT_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
 import type { PageTheme } from '@/types/page';
 
 interface GridBlocksRendererProps {
@@ -43,8 +43,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   // Guard against undefined/null blocks
   const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
 
-  const profileBlock = validBlocks.find(b => b.type === 'profile');
-  const contentBlocks = validBlocks.filter(b => b.type !== 'profile');
+  const { profile: profileBlock, socials: profileSocials, content: contentBlocks } = resolveProfileComposition(validBlocks);
 
   const noMotion = animation === 'none';
   const cellVariants = noMotion
@@ -58,14 +57,6 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             : { type: 'spring' as const, stiffness: 260, damping: 26 },
         },
       };
-  // Block types that naturally need full width when size isn't explicitly set
-  const NATURALLY_WIDE = new Set([
-    'profile', 'heading', 'text', 'video', 'embed', 'faq',
-    'testimonials', 'reviews', 'form', 'newsletter', 'contacts',
-    'services', 'service', 'events', 'event', 'gallery', 'carousel',
-    'pricing', 'map', 'countdown', 'cta', 'share',
-  ]);
-
   const renderCell = (
     block: Block,
     opts?: { index?: number; total?: number; composition?: CompositionDef },
@@ -73,18 +64,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
     const composition = opts?.composition;
     const variant = resolveBlockVariant(block.type, (block as any).designVariant);
 
-    // Resolve span: explicit blockSize wins; otherwise infer from block type
-    const explicitSize = block.blockSize;
-    const dimensions = explicitSize
-      ? BLOCK_SIZE_DIMENSIONS[explicitSize] || BLOCK_SIZE_DIMENSIONS['small']
-      : NATURALLY_WIDE.has(block.type)
-        ? BLOCK_SIZE_DIMENSIONS['wide']
-        : BLOCK_SIZE_DIMENSIONS['small'];
-
-    // Inside a composition the shell owns the grid, so spans/aspect are dropped
+    const layout = resolveBlockLayout(block);
     const inComposition = !!composition;
-    const colSpanClass = inComposition ? '' : dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-    const rowSpanClass = inComposition ? '' : dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
 
     const contentAlignment = block.blockStyle?.contentAlignment || 'center';
     const alignmentClass =
@@ -93,16 +74,14 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
           : 'items-center';
 
     const isTransparent =
-      TRANSPARENT_BLOCK_TYPES.has(block.type) || !!composition?.naked || !!variant?.naked;
-    const isSquare = !inComposition && dimensions.gridCols === 1 && dimensions.gridRows === 1;
-    const isTall = !inComposition && dimensions.gridCols === 1 && dimensions.gridRows === 2;
+      TRANSPARENT_BLOCK_TYPES.has(block.type) || SELF_STYLED_BLOCK_TYPES.has(block.type) || !!composition?.naked || !!variant?.naked;
 
     // One resolver for the public grid and the editor canvas (block-appearance).
     // Variant style patches sit UNDER the user's explicit settings.
     const bs = { ...(variant?.stylePatch || {}), ...(block.blockStyle || {}) } as NonNullable<Block['blockStyle']>;
     const appearance = resolveBlockCellAppearance(block, bs);
     const hasCustomBg = appearance.hasCustomBackground && !SELF_STYLED_BLOCK_TYPES.has(block.type);
-    const isWide = inComposition || dimensions.gridCols === 2;
+    const isWide = inComposition || layout.columns === 2;
 
     const itemClass = composition?.itemClass?.(opts?.index ?? 0, opts?.total ?? 1) || '';
 
@@ -114,23 +93,24 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
         key={block.id}
         data-lm-cell
         data-lm-wide={isWide ? '' : undefined}
-        className={cn('relative flex', colSpanClass, rowSpanClass, itemClass)}
+        data-lm-auto={layout.autoHeight ? '' : undefined}
+        data-lm-type={block.type}
+        className={cn('relative flex min-w-0 min-h-0', !isTransparent && 'lm-owned-surface', !inComposition && !layout.autoHeight && 'lm-fixed-cell', itemClass)}
+        style={inComposition ? undefined : layout.style}
         variants={cellVariants}
       >
         <div
           className={cn(
-            'group relative flex w-full overflow-hidden transition-all duration-300',
+            'group relative flex w-full min-w-0 min-h-0 transition-all duration-300',
+            !layout.autoHeight && 'overflow-hidden',
             !isTransparent && 'block-card',
             alignmentClass,
             !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
             isTransparent && 'bg-transparent',
             !isTransparent && appearance.className,
-            !isTransparent && isSquare && 'aspect-square',
-            !isTransparent && isTall && 'min-h-[280px]',
-            !isTransparent && !isSquare && !isTall && !inComposition && 'min-h-[120px]',
             variant?.className,
           )}
-          style={isTransparent ? undefined : appearance.style}
+          style={appearance.style}
         >
           {/* Ambient hover sheen */}
           {!isTransparent && !hasCustomBg && (
@@ -139,7 +119,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
               className="pointer-events-none absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(120%_80%_at_0%_0%,hsl(var(--primary)/0.05),transparent_60%)]"
             />
           )}
-          <div className={cn('relative w-full h-full', appearance.textEffectClass)}>
+          <div className={cn('lm-tile-content relative w-full', !layout.autoHeight && 'h-full', appearance.textEffectClass)}>
             <BlockRenderer
               block={block}
               isPreview={isPreview}
@@ -193,11 +173,11 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       };
 
   return (
-    <div className={cn('space-y-6', className)}>
+    <div className={cn('lm-block-stack space-y-4', className)}>
       {/* Profile Block — always full bleed */}
       {profileBlock && (
         <motion.div
-          className="w-full"
+          className="lm-profile-card w-full"
           initial={noMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: noMotion ? 0 : 0.5, ease: 'easeOut' }}
@@ -210,22 +190,24 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             isOwnerPremium={isOwnerPremium}
             ownerTier={ownerTier}
           />
+          {profileSocials && <div data-lm-socials><BlockRenderer block={profileSocials} isPreview={isPreview} pageOwnerId={pageOwnerId} pageId={pageId} isOwnerPremium={isOwnerPremium} ownerTier={ownerTier} /></div>}
         </motion.div>
       )}
 
       {runs.map((run, runIndex) =>
         run.kind === 'grid' ? (
-          <motion.div
-            key={`grid-${runIndex}`}
-            data-lm-grid
-            className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense auto-rows-[minmax(0,auto)]"
-            initial="hidden"
-            animate="show"
-            viewport={{ once: true }}
-            variants={staggerVariants}
-          >
-            {run.blocks.map((block) => renderCell(block))}
-          </motion.div>
+          splitBlockLayoutRuns(run.blocks).map((group, groupIndex) => (
+            <motion.div
+              key={`grid-${runIndex}-${groupIndex}`}
+              data-lm-grid
+              className={resolveBlockLayout(group[0]).autoHeight ? 'lm-auto-run' : 'lm-tile-grid'}
+              initial="hidden"
+              animate="show"
+              variants={staggerVariants}
+            >
+              {group.map((block) => renderCell(block))}
+            </motion.div>
+          ))
         ) : (
           <section
             key={`sec-${runIndex}`}

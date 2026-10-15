@@ -12,6 +12,7 @@ import { logger } from '@/lib/utils/logger';
 import { useActivePageStore } from '@/store/useActivePageStore';
 import { sanitizeSlug, slugifyTitle, validateSlug } from '@/lib/utils/slug';
 import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
+import { duplicatePageDraft } from '@/services/duplicate-page-draft';
 
 // ============= Types =============
 
@@ -199,7 +200,7 @@ export function useMultiPage() {
   }, [pages, setActivePageId]);
 
   // Create new page
-  const createPage = useCallback(async (title: string, slug?: string): Promise<CreatePageResult> => {
+  const createPage = useCallback(async (title: string, slug?: string, options?: { activate?: boolean }): Promise<CreatePageResult> => {
     if (!user?.id) {
       return { success: false, error: 'not_authenticated' };
     }
@@ -243,8 +244,8 @@ export function useMultiPage() {
             title: normalizedTitle,
             slug: candidateSlug,
             theme_settings: {
-              backgroundColor: 'hsl(0 0% 100%)',
-              textColor: 'hsl(224 71% 4%)',
+              backgroundColor: '#F3F3F3',
+              textColor: '#1F1F1F',
               buttonStyle: 'rounded',
               fontFamily: 'sans',
             },
@@ -254,6 +255,7 @@ export function useMultiPage() {
               keywords: [],
             },
             editor_mode: 'grid',
+            is_published: false,
           })
           .select('id, slug')
           .single();
@@ -325,7 +327,7 @@ export function useMultiPage() {
 
       void loadPages();
 
-      if (newPage?.id) {
+      if (newPage?.id && options?.activate !== false) {
         setActivePageId(newPage.id);
       }
 
@@ -350,65 +352,13 @@ export function useMultiPage() {
     const source = pages.find(p => p.id === sourcePageId);
     if (!source) return { success: false, error: 'page_not_found' };
 
-    const created = await createPage(`${source.title} (copy)`, `${source.slug}-copy`.slice(0, 30));
+    const created = await createPage(`${source.title} (copy)`, `${source.slug}-copy`.slice(0, 30), { activate: false });
     if (!created.success || !created.pageId) return created;
     const newPageId = created.pageId;
 
     try {
-      const [{ data: sourceRow, error: sourceError }, { data: sourceBlocks, error: blocksError }] = await Promise.all([
-        supabase
-          .from('pages')
-          .select('theme_settings, seo_meta, editor_mode, grid_config, niche, favicon_url, hide_branding')
-          .eq('id', sourcePageId)
-          .eq('user_id', user.id)
-          .maybeSingle(),
-        supabase
-          .from('blocks')
-          .select('type, position, title, content, style, schedule, is_premium')
-          .eq('page_id', sourcePageId)
-          .order('position', { ascending: true }),
-      ]);
-      if (sourceError) throw sourceError;
-      if (blocksError) throw blocksError;
-
-      if (sourceRow) {
-        const { error: pageUpdateError } = await supabase
-          .from('pages')
-          .update({
-            theme_settings: sourceRow.theme_settings,
-            seo_meta: sourceRow.seo_meta,
-            editor_mode: sourceRow.editor_mode,
-            grid_config: sourceRow.grid_config,
-            niche: sourceRow.niche,
-            favicon_url: sourceRow.favicon_url,
-            hide_branding: sourceRow.hide_branding,
-          })
-          .eq('id', newPageId)
-          .eq('user_id', user.id);
-        if (pageUpdateError) throw pageUpdateError;
-      }
-
-      // Event blocks are bound to one page's event record; copying them would
-      // make both pages edit the same event, so they are left out.
-      const copies = (sourceBlocks ?? [])
-        .filter(block => block.type !== 'event')
-        .map((block, index) => ({
-          page_id: newPageId,
-          type: block.type,
-          position: index,
-          title: block.title,
-          content: block.content,
-          style: block.style,
-          schedule: block.schedule,
-          is_premium: block.is_premium,
-        }));
-
-      if (copies.length > 0) {
-        const { error: clearError } = await supabase.from('blocks').delete().eq('page_id', newPageId);
-        if (clearError) throw clearError;
-        const { error: insertError } = await supabase.from('blocks').insert(copies);
-        if (insertError) throw insertError;
-      }
+      await duplicatePageDraft(sourcePageId, newPageId);
+      setActivePageId(newPageId);
 
       return created;
     } catch (err) {
@@ -416,7 +366,7 @@ export function useMultiPage() {
       // The page exists (with a profile block) — report partial success honestly
       return { ...created, success: false, error: 'duplicate_content_failed' };
     }
-  }, [user?.id, pages, createPage]);
+  }, [user?.id, pages, createPage, setActivePageId]);
 
   // Set primary paid page
   const setPrimaryPaidPage = useCallback(async (pageId: string): Promise<{ success: boolean; error?: string }> => {

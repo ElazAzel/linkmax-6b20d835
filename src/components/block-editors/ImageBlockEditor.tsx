@@ -1,6 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
+import { ImagePlacementControls } from './ImagePlacementControls';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
@@ -55,6 +56,10 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
         </EditorField>
       </EditorSection>
 
+      <EditorSection title={t('imagePlacement.title', 'Кадрирование и положение')} defaultOpen={false}>
+        <ImagePlacementControls value={formData.imagePlacement} onChange={imagePlacement => onChange({ ...formData, imagePlacement })} />
+      </EditorSection>
+
       {/* Link Settings */}
       <EditorSection
         title={t('editor.sections.link', 'Interaction')}
@@ -103,7 +108,7 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
 
         <EditorField label={t('fields.imageScale', 'Image Scale')}>
           <Select
-            value={formData.scale || 'cover'}
+            value={formData.scale || 'contain'}
             onValueChange={(value: any) => onChange({ ...formData, scale: value })}
             modal={false}
           >

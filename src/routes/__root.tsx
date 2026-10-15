@@ -18,8 +18,9 @@ import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import { startClientBootstrap } from "@/lib/client-bootstrap";
 
-const CSP =
-  "default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.supabase.co https://va.vercel-scripts.com https://cdn.gpteng.co https://cdn.tailwindcss.com https://connect.facebook.net https://*.tiktok.com https://*.googletagmanager.com https://*.google-analytics.com https://*.doubleclick.net https://*.rudderstack.com https://mc.yandex.ru https://api.locize.app https://challenges.cloudflare.com https://telegram.org https://*.posthog.com https://*.i.posthog.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https: http:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://ai.gateway.lovable.dev https://vitals.vercel-analytics.com https://o4506071217143808.ingest.us.sentry.io https://www.facebook.com https://*.tiktok.com https://*.google-analytics.com https://*.googletagmanager.com https://*.rudderstack.com https://mc.yandex.ru https://api.locize.app https://*.doubleclick.net https://challenges.cloudflare.com https://*.posthog.com https://*.i.posthog.com; frame-src 'self' blob: https://www.youtube.com https://player.vimeo.com https://maps.google.com https://www.google.com https://mc.yandex.ru https://challenges.cloudflare.com https://oauth.telegram.org;";
+import { CONTENT_SECURITY_POLICY as CSP } from "@/lib/security/content-security-policy";
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
+import { colors, fonts } from "@/design-system/tokens";
 
 // Cancelled requests are expected: stop them before any crash reporter sees them.
 const ABORT_GUARD = `window.addEventListener('unhandledrejection',function(e){var r=e.reason;if(r&&(r.name==='AbortError'||String(r.message||'').indexOf('signal is aborted')!==-1)){e.preventDefault();e.stopImmediatePropagation();}},true);`;
@@ -28,7 +29,7 @@ const ABORT_GUARD = `window.addEventListener('unhandledrejection',function(e){va
 // Keep the segment list in sync with src/design-system/surface.ts (tested).
 const THEME_BOOTSTRAP = `(function(){try{var APP_FIRST_SEGMENTS = ["","index","ru","en","kk","uz","auth","dashboard","admin","install","join","invites",".lovable","pricing","gallery","customers","alternatives","seo-landing","experts","terms","privacy","payment-terms","sitemap","blog","for-masters","for","dlya","для-репетиторов","для-бьюти-мастеров","taplink-alternative","sayt-vizitka-dlya-uslug","multilink","link-in-bio-ru","vizitka-onlayn","design-system"]; var first=location.pathname.split("/")[1]||"";try{first=decodeURIComponent(first);}catch(e){}if(APP_FIRST_SEGMENTS.indexOf(first)===-1)return;var root=document.documentElement;root.classList.add("lm-app");var saved=localStorage.getItem("lm-app-theme");var dark=saved==="dark"||((!saved||saved==="system")&&window.matchMedia("(prefers-color-scheme: dark)").matches);root.setAttribute("data-app-theme",dark?"dark":"light");}catch(e){}})();`;
 
-const CRITICAL_CSS = `body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;background-color:#ffffff;color:#101419}html.lm-app body{font-family:Onest,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background-color:#f4f4ef;color:#101419}html.lm-app[data-app-theme="dark"] body{background-color:#111418;color:#eff0ea}`;
+const CRITICAL_CSS = `body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;background-color:#f3f3f3;color:#1f1f1f}html.lm-app body{font-family:${fonts.sans};background-color:hsl(${colors.light.background});color:hsl(${colors.light.foreground})}html.lm-app[data-app-theme="dark"] body{background-color:hsl(${colors.dark.background});color:hsl(${colors.dark.foreground})}`;
 
 const SOFTWARE_LD = {
   "@context": "https://schema.org",
@@ -131,17 +132,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap",
-      },
+      { rel: "stylesheet", href: "/fonts/global.css" },
       { rel: "alternate", hrefLang: "ru", href: "https://lnkmx.my/?lang=ru" },
       { rel: "alternate", hrefLang: "en", href: "https://lnkmx.my/?lang=en" },
       { rel: "alternate", hrefLang: "kk", href: "https://lnkmx.my/?lang=kk" },
       { rel: "alternate", hrefLang: "x-default", href: "https://lnkmx.my/" },
-      { rel: "dns-prefetch", href: "https://ai.gateway.lovable.dev" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/favicon.png" },
       { rel: "manifest", href: "/manifest.json" },
@@ -162,7 +157,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang="ru" data-linkmax-ui={LINKMAX_UI_V2 ? 'v2' : 'v1'} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -192,7 +187,7 @@ function NotFoundBoundary() {
   useEffect(() => {
     // Managed OAuth endpoints are served by the platform, not the app.
     if (typeof window !== "undefined" && window.location.pathname.startsWith("/~oauth")) {
-      window.location.href = window.location.href;
+      window.location.reload();
     }
   }, []);
   return <NotFound />;
