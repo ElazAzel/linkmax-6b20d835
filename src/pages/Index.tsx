@@ -4,9 +4,8 @@ import { useNavigate } from '@/lib/router-compat';
 
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';
-import { LogoTicker } from '@/components/landing/v2/LogoTicker';
 import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
-import { RevenueLandingSections } from '@/components/landing/RevenueLandingSections';
+import { KornerSections } from '@/components/landing/v3/KornerSections';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLandingAnalytics';
@@ -85,7 +84,7 @@ export default function Index() {
         <AISearchOptimizer pageType={LANDING_PAGE_TYPE} entityName={seoImageAlt} entityCategory={LANDING_ENTITY_CATEGORY} />
       </Suspense>
 
-      <div className="min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
+      <div style={{ fontFamily: "Onest, Inter, system-ui, sans-serif" }} className="landing-onest min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
@@ -99,12 +98,8 @@ export default function Index() {
             />
           </div>
 
-          <div className="relative z-10 border-b border-border bg-card">
-            <LogoTicker />
-          </div>
-
           <div ref={revenueSectionRef}>
-            <RevenueLandingSections
+            <KornerSections
               onStart={() => handleCreatePage('revenue_flow_cta')}
               onPricing={() => handleNav('/pricing', 'pricing', 'revenue_pricing_cta')}
             />

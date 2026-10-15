@@ -7500,6 +7500,62 @@
       "a3": "LinkMAX is not limited to a list of links. It includes leads, bookings, invoices, mini CRM, analytics, and a business workspace.",
       "q4": "What happens after sign-up?",
       "a4": "You enter the page creation wizard. If you entered a short address on the landing page, it is passed into the signup flow."
+    },
+    "k": {
+      "mock": {
+        "s1": "Manicure + gel",
+        "s2": "Brow shaping",
+        "s3": "Lash extensions",
+        "bio": "Nails & brows · Almaty",
+        "book": "Book now"
+      },
+      "hero": {
+        "sub": "A page with services, online booking, payments, tickets and digital products. Leads land straight in Telegram and WhatsApp.",
+        "examples": "See example pages"
+      },
+      "card": {
+        "lead": "New lead",
+        "leadBody": "Aigerim, WhatsApp · 2 min ago",
+        "pay": "Payment received",
+        "booking": "Booking confirmed",
+        "bookingBody": "Fri, 2:00 PM · Manicure",
+        "ticket": "Ticket sold",
+        "ticketBody": "Workshop · 1 seat"
+      },
+      "f": {
+        "booking": "Online booking",
+        "bookingBody": "Services with price and duration, free slots, staff and rooms. A taken slot can never be sold twice.",
+        "leads": "Leads to your messenger",
+        "leadsBody": "Every lead arrives in Telegram instantly.",
+        "pay": "Payments",
+        "payBody": "Deposits and service payments right from the page.",
+        "events": "Events and tickets",
+        "eventsBody": "Registration, QR tickets and a scanner link for your helpers.",
+        "digital": "Digital products",
+        "digitalBody": "Guides, courses and files delivered after payment.",
+        "crm": "Client card",
+        "crmBody": "Leads, bookings and purchases build each client's history. Stages, notes and total revenue in one place.",
+        "ai": "On-page assistant",
+        "aiBody": "Answers visitors about your services and prices.",
+        "themes": "25 design themes",
+        "themesBody": "Looks great on a phone, no designer needed.",
+        "title": "Everything you need to sell, in one link",
+        "sub": "Not just a list of links. Your page takes bookings, payments and leads on its own."
+      },
+      "s1": "Pick your address",
+      "s1b": "lnkmx.my/yourname in 10 seconds.",
+      "s2": "Add services",
+      "s2b": "Prices, schedule, contacts, payments.",
+      "s3": "Put the link in your bio",
+      "s3b": "Instagram, Telegram, WhatsApp, 2GIS.",
+      "s": {
+        "title": "Launch in 5 minutes"
+      },
+      "cta": {
+        "title": "Start taking clients today",
+        "sub": "Free. No card. Go Pro when you need more.",
+        "pricing": "Pricing"
+      }
     }
   },
   "upgradeBenefits": {
