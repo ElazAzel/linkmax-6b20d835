@@ -84,7 +84,7 @@ export default function Index() {
         <AISearchOptimizer pageType={LANDING_PAGE_TYPE} entityName={seoImageAlt} entityCategory={LANDING_ENTITY_CATEGORY} />
       </Suspense>
 
-      <div style={{ fontFamily: "Onest, Inter, system-ui, sans-serif" }} className="min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
+      <div style={{ fontFamily: "Onest, Inter, system-ui, sans-serif" }} className="landing-onest min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
