@@ -487,6 +487,11 @@ export const EditorScreen = memo(function EditorScreen({
     clearBlockSelection();
   }, [closeEditor, clearBlockSelection]);
 
+  const handleAddBelow = useCallback((blockId: string) => {
+    const index = pageData?.blocks.findIndex((b) => b.id === blockId) ?? -1;
+    openInsertSheet(index >= 0 ? index + 1 : undefined);
+  }, [pageData?.blocks]);
+
   const handleToggleOrder = useCallback(() => {
     closeEditor();
     clearBlockSelection();
@@ -647,13 +652,18 @@ export const EditorScreen = memo(function EditorScreen({
         return null;
       })()}
 
-      <div className={cn('mt-4', isWide && 'grid grid-cols-[minmax(0,1fr)_340px] items-start gap-6')}>
+      <div className={cn('mt-4', isWide && 'grid grid-cols-[minmax(0,1fr)_380px] items-start gap-6')}>
       <div className="min-w-0">
-      {isWide && <SmartActionDock inline onAddBlock={triggerAddBlock} onCustomize={onOpenTheme}
-        onAIImprove={onOpenAI} hasContent={hasContent} onToggleOrder={handleToggleOrder} reordering={reordering} />}
       {/* Grid Editor */}
       <div
-        className={cn('relative isolate mt-4 bg-background text-foreground', !LINKMAX_UI_V2 && 'overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border', themeScope.className)}
+        className={cn(
+          'relative isolate mt-4 bg-background text-foreground',
+          !LINKMAX_UI_V2 && 'overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border',
+          // Desktop: the page is phone-width (as published), so frame it as a
+          // phone screen instead of a thin strip in an empty column.
+          LINKMAX_UI_V2 && isWide && 'mx-auto w-full max-w-[407px] overflow-hidden rounded-[36px] border border-border/60 shadow-[0_24px_60px_-28px_rgb(0_0_0/0.35)]',
+          themeScope.className,
+        )}
         style={{ ...themeScope.style, ...themeBackgroundStyle }}
         data-testid="editor-appearance-preview"
       >
@@ -691,6 +701,9 @@ export const EditorScreen = memo(function EditorScreen({
         </div>
       </div>
 
+      {isWide && <SmartActionDock inline onAddBlock={triggerAddBlock} onCustomize={onOpenTheme}
+        onAIImprove={onOpenAI} hasContent={hasContent} onToggleOrder={handleToggleOrder} reordering={reordering} />}
+
       {/* Sprint 2: Section picker — append ready-made groups of blocks */}
       {!LINKMAX_UI_V2 && <div className="mx-4 mt-3 mb-2 flex justify-center">
         <button
@@ -714,6 +727,7 @@ export const EditorScreen = memo(function EditorScreen({
           onUpdateBlock={onUpdateBlock}
           onDeleteBlock={handleDeleteBlockWithFriction}
           onClose={handleCloseInspector}
+          onAddBelow={handleAddBelow}
           onAddBlock={triggerAddBlock}
           onOpenTheme={onOpenTheme}
         />
@@ -727,6 +741,7 @@ export const EditorScreen = memo(function EditorScreen({
           onUpdateBlock={onUpdateBlock}
           onDeleteBlock={handleDeleteBlockWithFriction}
           onClose={handleCloseInspector}
+          onAddBelow={handleAddBelow}
         />
       )}
 

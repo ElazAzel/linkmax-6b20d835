@@ -237,15 +237,13 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     id,
     type: 'testimonial',
     blockSize: DEFAULT_BLOCK_SIZE,
-    title: 'What People Say',
+    title: { ru: 'Отзывы', en: 'Reviews', kk: 'Пікірлер' },
     testimonials: [
       { name: 'Алина К.', text: 'Отличный сервис! Очень рекомендую.', rating: 5, role: 'Клиент' },
       { name: 'Дмитрий М.', text: 'Профессиональный подход к делу.', rating: 5, role: 'Клиент' },
     ],
     blockStyle: {
       padding: 'lg',
-      borderRadius: 'lg',
-      backgroundGradient: 'linear-gradient(135deg, hsl(var(--muted)), hsl(var(--muted)/0.5))',
       animation: 'scale-in',
     },
     ...overrides,

@@ -103,7 +103,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
             <div className="p-2 rounded-xl bg-primary/10 text-primary shadow-sm shadow-primary/20">
               <MessageCircle className="h-5 w-5" />
             </div>
-            <h3 className="font-bold text-lg text-gradient leading-tight">{title}</h3>
+            <h3 className="font-semibold text-lg text-foreground leading-tight">{title}</h3>
           </div>
         )}
 

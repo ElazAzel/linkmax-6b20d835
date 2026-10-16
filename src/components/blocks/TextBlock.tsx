@@ -26,7 +26,7 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
 
   // Granular override detection — only strip DEFAULT visuals for the specific
   // field the user overrode. This preserves the built-in quote card / heading
-  // gradient when the user only tweaks unrelated properties (e.g. font).
+  // colour when the user only tweaks unrelated properties (e.g. font).
   const bs = block.blockStyle;
   const hasBgOverride = !!(bs?.backgroundColor || bs?.backgroundGradient);
   const hasBorderOverride = !!(bs?.borderWidth && bs.borderWidth !== 'none');
@@ -38,8 +38,9 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
       return (
         <h2
           className={cn(
-            "text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight break-words hyphens-auto leading-[1.1]",
-            !hasTextColorOverride && "text-gradient bg-[length:200%_auto] animate-gradient-x",
+            "text-2xl sm:text-3xl font-bold tracking-tight break-words hyphens-auto leading-[1.15]",
+            // Solid theme colour by default; a gradient is a text effect the owner picks.
+            !hasTextColorOverride && "text-foreground",
             alignmentClass,
             textEffectClass,
             containerClass

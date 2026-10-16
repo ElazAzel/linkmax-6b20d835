@@ -1011,10 +1011,10 @@
     "videoTitle": "Video"
   },
   "blockSize": {
-    "large": "2G—2",
-    "small": "1G—1",
-    "tall": "1G—2",
-    "wide": "2G—1"
+    "large": "2×2",
+    "small": "1×1",
+    "tall": "1×2",
+    "wide": "2×1"
   },
   "blockTypes": {
     "avatar": "Avatar",
@@ -2324,7 +2324,8 @@
         "action": "Havola"
       },
       "close": "Sozlamalarni yopish",
-      "toolsLabel": "Blok vositalari"
+      "toolsLabel": "Blok vositalari",
+      "addBelow": "Pastga blok qoʻshish"
     },
     "insertShort": {
       "socials": "Ijtimoiy tarmoqlar",
@@ -2338,7 +2339,19 @@
       "more": "Yana",
       "business": "Savdo va band qilish"
     },
-    "sizeHint": "Sahifadagi plitka o‘lchami — o‘zgarishlar yuqorida darhol ko‘rinadi."
+    "sizeHint": "Sahifadagi plitka o‘lchami — o‘zgarishlar yuqorida darhol ko‘rinadi.",
+    "insert": {
+      "here": "Blokni shu yerga qoʻshish",
+      "addBelow": "Pastga blok qoʻshish"
+    },
+    "size": {
+      "title": "Blok oʻlchami",
+      "small": "Kvadrat, yarim kenglik",
+      "wide": "Toʻliq kenglik",
+      "tall": "Baland, yarim kenglik",
+      "large": "Katta kvadrat",
+      "xl": "Toʻliq ekran"
+    }
   },
   "errors": {
     "createYourPage": "O'z sahifangizni yaratmoqchimisiz?",
@@ -2808,7 +2821,7 @@
     "verifiedPosition": "Belgining joylashuvi",
     "videoUrl": "Video URL",
     "videoUrlHint": "YouTube va Vimeo URL manzillarini qo'llab-quvvatlaydi",
-    "whatPeopleSay": "Odamlar nima deydi",
+    "whatPeopleSay": "Sharhlar",
     "width": "Kengligi"
   },
   "finance": {
@@ -6377,7 +6390,7 @@
   "wizard": {
     "avatar": {
       "description": "Avatar qo'shing - bu odamlar sizni tanib olishga yordam beradi",
-      "hint": "Tavsiya etiladi: kvadrat fotosurat kamida 400G—400px",
+      "hint": "Tavsiya etiladi: kvadrat fotosurat kamida 400×400px",
       "size": "Avatar hajmi",
       "title": "Sizning suratingiz"
     },

@@ -26,6 +26,7 @@ import {
   sortableKeyboardCoordinates,
   useSortable,
   rectSortingStrategy,
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
@@ -69,37 +70,31 @@ import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion } from 'framer-motion';
 
 // ─── Insert-Between Divider ────────────────────────────────────────
+// Desktop only, on hover. Phones insert from the dock or from the block
+// inspector ("Добавить блок ниже"): a 44px "+" between every pair of blocks
+// buried the page under controls.
 function InsertBetweenDivider({
   position,
   onOpenInsert,
-  isMobile,
 }: {
   position: number;
   onOpenInsert: (position: number) => void;
-  isMobile: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="absolute -top-2 inset-x-0 z-40 -translate-y-1/2 group/divider">
-      <div className={cn(
-        "flex items-center gap-2 transition-all duration-300",
-        isMobile ? "opacity-100" : "opacity-0 group-hover/divider:opacity-100"
-      )}>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="flex items-center gap-2 opacity-0 transition-opacity duration-200 group-hover/divider:opacity-100 focus-within:opacity-100">
+        <div className="flex-1 h-px bg-foreground/15" />
         <Button
           variant="ghost"
           type="button"
           onClick={() => onOpenInsert(position)}
-          className={cn(
-            "shrink-0 p-0 flex items-center justify-center rounded-full transition-all duration-300",
-            "bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
-            "active:scale-95 hover:scale-110",
-            isMobile ? "h-11 w-11" : "h-7 w-7"
-          )}
-          aria-label="Insert block here"
+          className="h-7 w-7 shrink-0 rounded-full bg-foreground p-0 text-background shadow-sm hover:bg-foreground/85 hover:text-background active:scale-95"
+          aria-label={t('editor.insert.here', 'Добавить блок сюда')}
         >
-          <Plus className={isMobile ? "h-5 w-5" : "h-4 w-4"} strokeWidth={3} />
+          <Plus className="h-4 w-4" strokeWidth={2.5} />
         </Button>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <div className="flex-1 h-px bg-foreground/15" />
       </div>
     </div>
   );
@@ -204,12 +199,16 @@ function SortableGridBlockItem({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: block.id, disabled: !reorderMode });
+  // Desktop: always draggable by the hover grip; phones drag only in the
+  // "order" mode, so a swipe over the canvas keeps scrolling the page.
+  } = useSortable({ id: block.id, disabled: isMobile && !reorderMode });
 
   const layout = resolveBlockLayout(block);
   const style = {
     ...(composition ? {} : layout.style),
-    transform: CSS.Transform.toString(transform),
+    // Translate only: blocks differ in height, and the scale part of the
+    // sortable transform stretched neighbours while dragging.
+    transform: CSS.Translate.toString(transform),
     transition,
   };
 
@@ -366,16 +365,36 @@ function SortableGridBlockItem({
         </button>
       )}
 
-      {/* Mobile drag handle — visible, 44px, the only touch drag source */}
+      {/* Mobile drag handle — 44px, on the right edge so it never covers the
+          block's own text or icons; the only touch drag source */}
       {reorderMode && isMobile && !isDragging && block.type !== 'profile' && (
         <button
           type="button"
           {...listeners}
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          className="absolute bottom-1 right-1 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full bg-background/90 text-foreground/70 border border-border/20 shadow-sm touch-none cursor-grab active:cursor-grabbing"
+          className="absolute -right-2 top-1/2 z-40 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border/60 bg-card text-foreground shadow-md touch-none cursor-grab active:cursor-grabbing"
           aria-label={t('editor.blockToolbar.drag', 'Перетащить блок')}
         >
           <GripVertical className="h-5 w-5" />
+        </button>
+      )}
+
+      {/* Desktop hover grip: drag a block without switching to the order mode */}
+      {!reorderMode && !isMobile && !isDragging && block.type !== 'profile' && (
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          className={cn(
+            'absolute -left-3 top-1/2 z-40 inline-flex h-9 w-6 -translate-y-1/2 items-center justify-center rounded-lg border border-border/60 bg-card text-muted-foreground shadow-sm',
+            'cursor-grab touch-none opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100 active:cursor-grabbing',
+            selected && 'opacity-100',
+          )}
+          aria-label={t('editor.blockToolbar.drag', 'Перетащить блок')}
+          title={t('editor.blockToolbar.drag', 'Перетащить блок')}
+        >
+          <GripVertical className="h-4 w-4" />
         </button>
       )}
 
@@ -558,6 +577,13 @@ export const GridEditor = memo(function GridEditor({
   );
 
   const activeBlock = activeId ? contentBlocks.find(b => b.id === activeId) : null;
+
+  // A page of full-width rows sorts as a list (neighbours shift by the dragged
+  // block's real height); half-width tiles need the grid strategy.
+  const sortingStrategy = useMemo(
+    () => (contentBlocks.every((b) => resolveBlockLayout(b).columns === 2) ? verticalListSortingStrategy : rectSortingStrategy),
+    [contentBlocks],
+  );
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -798,8 +824,8 @@ export const GridEditor = memo(function GridEditor({
         composition={composition}
         compositionIndex={compositionIndex}
         compositionTotal={compositionTotal}
-        insertBefore={!composition ? (
-          <InsertBetweenDivider position={index + profileOffset} onOpenInsert={openInsertSheet} isMobile={isMobile} />
+        insertBefore={!composition && !isMobile && !reorderMode ? (
+          <InsertBetweenDivider position={index + profileOffset} onOpenInsert={openInsertSheet} />
         ) : undefined}
       />
     );
@@ -915,7 +941,7 @@ export const GridEditor = memo(function GridEditor({
       >
         <SortableContext
           items={contentBlocks.map(b => b.id)}
-          strategy={rectSortingStrategy}
+          strategy={sortingStrategy}
         >
           <div className="space-y-4">
             {canvasRuns.map((run) =>

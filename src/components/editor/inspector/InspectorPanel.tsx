@@ -8,6 +8,7 @@ import Link from 'lucide-react/dist/esm/icons/link';
 import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { localizeValidationMessage } from '@/lib/blocks/validation-messages';
@@ -30,28 +31,33 @@ type Tool = 'image' | 'text' | 'font' | 'appearance' | 'action' | 'content';
 interface Props {
   block: Block;
   title: string;
-  icon: ReactNode;
   editorBody: ReactNode;
   onChange: (patch: Partial<Block>) => void;
   onClose: () => void;
   onDelete?: () => void;
+  /** Open the block picker right below this block. */
+  onAddBelow?: () => void;
   footer: ReactNode;
 }
 
 /** One inspector for pages of every age. Existing specialised fields stay in Advanced. */
-export function InspectorPanel({ block, title, icon, editorBody, onChange, onClose, onDelete, footer }: Props) {
+export function InspectorPanel({ block, title, editorBody, onChange, onClose, onDelete, onAddBelow, footer }: Props) {
   const { t } = useTranslation();
   const quick = ['image', 'link', 'button', 'text'].includes(block.type);
-  const tools: Tool[] = block.type === 'image' ? ['image', 'text', 'font', 'appearance', 'action']
-    : quick ? ['text', 'font', 'appearance', ...(block.type === 'text' ? [] : ['action' as const])]
-    : block.type === 'profile' ? ['content'] : ['content', 'font', 'appearance'];
+  // The first tab holds everything a block says and where it leads (title and
+  // URL together); look and font come after.
+  const tools: Tool[] = block.type === 'image' ? ['image', 'text', 'appearance', 'font']
+    : quick ? ['text', 'appearance', 'font']
+    : block.type === 'profile' ? ['content'] : ['content', 'appearance', 'font'];
+  const hasAction = quick && block.type !== 'text';
   const [tool, setTool] = useState<Tool>(tools[0]);
   const [advanced, setAdvanced] = useState(false);
   const [touched, setTouched] = useState(false);
   const change = (patch: Partial<Block>) => { setTouched(true); onChange(patch); };
   const active = tools.includes(tool) ? tool : tools[0];
   const labels = {
-    image: t('editor.inspector.tools.image'), text: t('editor.inspector.tools.text'),
+    image: t('editor.inspector.tools.image'),
+    text: hasAction && block.type !== 'image' ? t('editor.tabs.content') : t('editor.inspector.tools.text'),
     font: t('editor.inspector.tools.font'), appearance: t('editor.inspector.tools.appearance'),
     action: t('editor.inspector.tools.action'), content: t('editor.tabs.content'),
   };
@@ -76,10 +82,13 @@ export function InspectorPanel({ block, title, icon, editorBody, onChange, onClo
           <div className="pt-4"><ImagePlacementControls value={block.type === 'image' ? block.imagePlacement : undefined} onChange={imagePlacement => change({ imagePlacement } as Partial<Block>)} /></div>
         </details>
       </div>;
-      case 'text': return <MultilingualInput label={fieldLabel}
-        value={migrateToMultilingual(data[textField] as Parameters<typeof migrateToMultilingual>[0])}
-        onChange={value => change({ [textField]: value } as Partial<Block>)}
-        type={block.type === 'image' || block.type === 'text' ? 'textarea' : 'input'} />;
+      case 'text': return <div className="space-y-5">
+        <MultilingualInput label={fieldLabel}
+          value={migrateToMultilingual(data[textField] as Parameters<typeof migrateToMultilingual>[0])}
+          onChange={value => change({ [textField]: value } as Partial<Block>)}
+          type={block.type === 'image' || block.type === 'text' ? 'textarea' : 'input'} />
+        {hasAction && panel('action')}
+      </div>;
       case 'font': return <div className="space-y-3">
         <Label htmlFor={`inspector-font-${block.id}`}>{labels.font}</Label>
         <Select value={block.blockStyle?.fontFamily || 'sans'} onValueChange={(fontFamily: string) => change({ blockStyle: { ...block.blockStyle, fontFamily: fontFamily as BlockFontFamily } } as Partial<Block>)}>
@@ -105,9 +114,9 @@ export function InspectorPanel({ block, title, icon, editorBody, onChange, onClo
     <div className="shrink-0 border-b border-border">
       <div className="flex items-center gap-2 px-3 py-2">
         <Button variant="ghost" size="icon" onClick={onClose} aria-label={t('editor.inspector.close')} className="h-11 w-11 shrink-0 rounded-full"><ChevronDown className="h-5 w-5" /></Button>
-        <span className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent sm:flex">{icon}</span>
         <h2 className="min-w-0 flex-1 truncate text-sm font-semibold">{title}</h2>
         {quick && <Button variant="ghost" size="icon" onClick={() => setAdvanced(value => !value)} aria-label={advancedLabel} aria-pressed={advanced} title={advancedLabel} className="h-11 w-11 shrink-0 rounded-full"><MoreHorizontal className="h-5 w-5" /></Button>}
+        {onAddBelow && <Button variant="ghost" size="icon" onClick={onAddBelow} aria-label={t('editor.inspector.addBelow', 'Добавить блок ниже')} title={t('editor.inspector.addBelow', 'Добавить блок ниже')} className="h-11 w-11 shrink-0 rounded-full"><Plus className="h-5 w-5" /></Button>}
         {onDelete && <Button variant="ghost" onClick={onDelete} className="h-11 shrink-0 gap-1.5 rounded-full px-3 text-destructive hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-4 w-4" />{t('common.delete')}</Button>}
       </div>
       {getBlockEditingConfig(block.type).allowedSizes.length > 1 && <div className="flex justify-center px-3 pb-2"><BlockSizeSelector block={block} onBlockUpdate={change} /></div>}

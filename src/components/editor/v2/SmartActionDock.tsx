@@ -3,7 +3,7 @@
  * Превью и публикация — только в верхней панели (EditorTopBar), без дублей. По мобильному стандарту 2026 — крупные
  * tap-зоны (48–56px), gradient-emphasis на главном CTA.
  *
- * Десктоп: floating пилюля по центру, 56px.
+ * Десктоп: пилюля прилипает к низу колонки холста, 56px.
  * Мобайл: full-width, h-16, поднимается над DashboardBottomNav (BottomNav сам
  * добавит safe-area). Канвас должен иметь pb >= 128px чтобы док не закрывал
  * контент.
@@ -47,7 +47,8 @@ export const SmartActionDock = memo(function SmartActionDock({
       role="toolbar"
       aria-label={t('editor.dock.label', 'Действия редактора')}
       className={cn(
-        inline ? 'sticky top-24 z-30 mx-auto w-fit max-w-full' : 'fixed z-40 left-1/2 -translate-x-1/2',
+        // Inline (desktop): pinned to the bottom of the canvas column, under the blocks.
+        inline ? 'sticky bottom-6 z-30 mx-auto mt-2 w-fit max-w-full' : 'fixed z-40 left-1/2 -translate-x-1/2',
         // mobile: над BottomNav (BottomNav примерно 80px + safe-area)
         !inline && (isMobile
           ? 'bottom-[calc(env(safe-area-inset-bottom)+88px)] w-[calc(100vw-1rem)] max-w-md'

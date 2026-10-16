@@ -603,7 +603,7 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
             </motion.div>
 
             <div className="space-y-1">
-              <h3 className="text-2xl font-black text-gradient tracking-tight">
+              <h3 className="text-2xl font-bold text-foreground tracking-tight">
                 {confirmation.status === 'pending_payment'
                   ? t('booking.confirmation.pendingTitle', 'Заявка создана')
                   : t('booking.confirmation.title', 'Вы записаны!')}
@@ -760,7 +760,7 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
           <div className="p-2 rounded-xl bg-primary/10 text-primary shadow-sm shadow-primary/20">
             <CalendarDays className="h-5 w-5" />
           </div>
-          <h3 className="font-bold text-lg text-gradient">
+          <h3 className="font-semibold text-lg text-foreground">
             {blockTitle || t('booking.title', 'Записаться')}
           </h3>
         </div>
@@ -915,7 +915,7 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
                     months: "w-full",
                     month: "w-full space-y-2",
                     caption: "flex justify-center pt-1 relative items-center mb-2",
-                    caption_label: "text-sm font-black text-gradient uppercase tracking-widest",
+                    caption_label: "text-sm font-semibold text-foreground uppercase tracking-widest",
                     nav: "space-x-1 flex items-center",
                     nav_button: "h-9 w-9 bg-white/10 p-0 opacity-50 hover:opacity-100 rounded-xl hover:bg-white/20 transition-all active:scale-95",
                     table: "w-full border-collapse",
@@ -1100,7 +1100,7 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
         <DialogContent className="sm:max-w-md qb-card border-hairline shadow-2xl p-0 overflow-hidden">
           <div className="p-6 pb-4 border-b border-hairline">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gradient">
+              <DialogTitle className="flex items-center gap-3 text-xl font-bold text-foreground">
                 <div className="p-2 rounded-xl bg-primary/10 text-primary">
                   <CheckCircle2 className="h-6 w-6" />
                 </div>

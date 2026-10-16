@@ -99,7 +99,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
       </div>
 
       <div className="w-full min-w-0 space-y-1.5 overflow-visible">
-        <h3 className="text-xl font-bold text-gradient leading-tight break-words hyphens-auto overflow-visible">{name}</h3>
+        <h3 className="text-xl font-bold text-foreground leading-tight break-words hyphens-auto overflow-visible">{name}</h3>
         {subtitle && (
           <p className="text-sm font-medium text-muted-foreground/80 break-words hyphens-auto">{subtitle}</p>
         )}

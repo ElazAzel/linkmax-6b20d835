@@ -20,12 +20,12 @@ import Grid2x2 from 'lucide-react/dist/esm/icons/grid-2x2';
 import RectangleHorizontal from 'lucide-react/dist/esm/icons/rectangle-horizontal';
 import RectangleVertical from 'lucide-react/dist/esm/icons/rectangle-vertical';
 import Square from 'lucide-react/dist/esm/icons/square';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import type { Block, BlockSizePreset } from '@/types/page';
@@ -163,12 +163,13 @@ export const BlockSizeSelector = memo(function BlockSizeSelector({
     block: Block;
     onBlockUpdate: (updates: Partial<Block>) => void;
 }) {
-    const sizes: { value: BlockSizePreset; icon: ReactNode; label: string }[] = [
-        { value: 'small', icon: <Square className="h-3.5 w-3.5" />, label: 'XS 1×1' },
-        { value: 'wide', icon: <RectangleHorizontal className="h-3.5 w-3.5" />, label: 'S 2×1' },
-        { value: 'tall', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: 'M 1×2' },
-        { value: 'large', icon: <Grid2x2 className="h-3.5 w-3.5" />, label: 'L 2×2' },
-        { value: 'xl', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: 'XL 2×4' },
+    const { t } = useTranslation();
+    const sizes: { value: BlockSizePreset; icon: ReactNode; short: string; label: string }[] = [
+        { value: 'small', icon: <Square className="h-4 w-4" />, short: '1×1', label: t('editor.size.small', 'Квадрат, полширины') },
+        { value: 'wide', icon: <RectangleHorizontal className="h-4 w-4" />, short: '2×1', label: t('editor.size.wide', 'На всю ширину') },
+        { value: 'tall', icon: <RectangleVertical className="h-4 w-4" />, short: '1×2', label: t('editor.size.tall', 'Высокий, полширины') },
+        { value: 'large', icon: <Grid2x2 className="h-4 w-4" />, short: '2×2', label: t('editor.size.large', 'Большой квадрат') },
+        { value: 'xl', icon: <Smartphone className="h-4 w-4" />, short: '2×4', label: t('editor.size.xl', 'Во весь экран') },
     ];
 
     const allowedSizes = getManifestEntry(block.type)?.editing.allowedSizes;
@@ -180,35 +181,30 @@ export const BlockSizeSelector = memo(function BlockSizeSelector({
         return block.blockSize === value;
     };
 
+    // Visible size captions: five bare outline icons read as decoration.
     return (
-        <TooltipProvider delayDuration={300}>
-            <div className="flex items-center gap-0.5 p-1 rounded-xl bg-muted/50 border border-border/30">
-                {sizes.filter(size => !allowedSizes || allowedSizes.includes(size.value)).map((size) => (
-                    <Tooltip key={size.value}>
-                        <TooltipTrigger asChild>
-                            <button
-                                type="button"
-                                aria-label={size.label}
-                                aria-pressed={isActive(size.value)}
-                                onClick={() => onBlockUpdate({ blockSize: size.value })}
-                                className={cn(
-                                    "relative h-11 w-11 rounded-lg flex items-center justify-center transition-all duration-200",
-                                    "hover:bg-muted active:scale-95",
-                                    isActive(size.value)
-                                        ? "bg-primary text-primary-foreground shadow-sm"
-                                        : "text-muted-foreground"
-                                )}
-                            >
-                                {size.icon}
-                            </button>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom" className="text-xs">
-                            {size.label}
-                        </TooltipContent>
-                    </Tooltip>
-                ))}
-            </div>
-        </TooltipProvider>
+        <div role="group" aria-label={t('editor.size.title', 'Размер блока')} className="flex w-full max-w-sm items-stretch gap-1 rounded-2xl bg-muted/60 p-1">
+            {sizes.filter(size => !allowedSizes || allowedSizes.includes(size.value)).map((size) => (
+                <button
+                    key={size.value}
+                    type="button"
+                    aria-label={`${size.label} (${size.short})`}
+                    title={size.label}
+                    aria-pressed={isActive(size.value)}
+                    onClick={() => onBlockUpdate({ blockSize: size.value })}
+                    className={cn(
+                        "flex h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium tabular-nums transition-colors duration-150",
+                        "active:scale-95",
+                        isActive(size.value)
+                            ? "bg-card text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                    )}
+                >
+                    {size.icon}
+                    <span>{size.short}</span>
+                </button>
+            ))}
+        </div>
     );
 });
 
