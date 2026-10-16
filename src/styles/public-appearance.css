@@ -46,26 +46,12 @@
 .lm-profile-card {
   border-radius: var(--lm-block-radius, 24px);
   background: hsl(var(--card));
-  margin-top: 32px;
+  box-shadow: var(--lm-block-shadow, 0 1px 3px rgb(0 0 0 / 0.08));
+  overflow: hidden;
 }
-.lm-profile-card > [data-lm-socials] { padding: 0 16px 16px; }
+.lm-profile-card > [data-lm-socials] { padding: 0 20px 20px; }
 .lm-social-control { background: #000; color: #fff; }
 .lm-social-control::after { content: ''; position: absolute; inset: -4px; border-radius: inherit; }
-.lm-profile-compact .lm-profile-body {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  width: 100%;
-  gap: 16px;
-  padding: 16px;
-}
-.lm-profile-compact .lm-profile-avatar { grid-column: 1; grid-row: 1; margin-top: -48px; }
-.lm-profile-compact .lm-profile-copy { display: contents; }
-.lm-profile-compact .lm-profile-name { grid-column: 2; grid-row: 1; justify-content: flex-start; text-align: left; }
-.lm-profile-compact .lm-profile-name h1 { font-size: 20px; }
-.lm-profile-compact .lm-profile-bio,
-.lm-profile-compact .lm-profile-badges { grid-column: 1 / -1; margin: 0; text-align: left; justify-content: flex-start; }
-
 /* All use CSS variables --lm-pattern-color and --lm-pattern-scale (fallback 1). */
 
 .lm-pattern-dots {
