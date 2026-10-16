@@ -25,7 +25,7 @@ describe('compact tools for existing and newly created pages', () => {
     const update = vi.fn();
     render(<BlockInspector mode="docked" block={legacyImage} onUpdateBlock={update} onClose={vi.fn()} />);
     expect(screen.getByRole('tab', { name: 'Фото' })).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByRole('button', { name: 'S 2×1' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: /\(2×1\)/ })).toHaveAttribute('aria-pressed', 'true');
     expect(await screen.findByDisplayValue('https://example.com/old.jpg')).toBeInTheDocument();
     expect(update).not.toHaveBeenCalled();
   });
@@ -56,16 +56,25 @@ describe('compact tools for existing and newly created pages', () => {
   it('offers the same tools to a new image without a saved size or style', () => {
     render(<BlockInspector mode="docked" block={{ id: 'new-image', type: 'image', url: '' } as Block} onUpdateBlock={vi.fn()} onClose={vi.fn()} />);
     expect(screen.getByRole('tablist', { name: 'Инструменты блока' })).toBeInTheDocument();
-    expect(within(screen.getByRole('tablist', { name: 'Инструменты блока' })).getAllByRole('tab').map(tab => tab.textContent)).toEqual(['Фото', 'Текст', 'Шрифт', 'Вид', 'Ссылка']);
+    expect(within(screen.getByRole('tablist', { name: 'Инструменты блока' })).getAllByRole('tab').map(tab => tab.textContent)).toEqual(['Фото', 'Текст', 'Вид', 'Шрифт']);
     fireEvent.mouseDown(screen.getByRole('tab', { name: 'Шрифт' }), { button: 0, ctrlKey: false });
     expect(screen.getByRole('combobox', { name: 'Шрифт' })).toBeInTheDocument();
+  });
+
+  it('adds a block right below the edited one and closes the settings', () => {
+    const addBelow = vi.fn(); const close = vi.fn();
+    render(<BlockInspector mode="sheet" block={legacyImage} onUpdateBlock={vi.fn()} onClose={close} onAddBelow={addBelow} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Добавить блок ниже' }));
+    expect(close).toHaveBeenCalledOnce();
+    expect(addBelow).toHaveBeenCalledExactlyOnceWith('old-image');
   });
 
   it('shows localized validation after editing an invalid URL and clears it when corrected', () => {
     render(<BlockInspector mode="docked"
       block={{ id: 'validation-button', type: 'button', title: { ru: 'Записаться' }, url: 'https://example.com' } as Block}
       onUpdateBlock={vi.fn()} onClose={vi.fn()} />);
-    fireEvent.mouseDown(screen.getByRole('tab', { name: 'Ссылка' }), { button: 0, ctrlKey: false });
+    // Title and URL share the first tab.
+    expect(screen.getByRole('tab', { name: 'Содержание' })).toHaveAttribute('aria-selected', 'true');
     const input = screen.getByRole('textbox', { name: 'Ссылка' });
     fireEvent.change(input, { target: { value: 'not-a-url' } });
     expect(screen.getByRole('status')).toHaveTextContent('нужна ссылка, начиная с https://');

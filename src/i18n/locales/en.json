@@ -1011,10 +1011,10 @@
     "videoTitle": "Video"
   },
   "blockSize": {
-    "large": "2Г—2",
-    "small": "1Г—1",
-    "tall": "1Г—2",
-    "wide": "2Г—1"
+    "large": "2×2",
+    "small": "1×1",
+    "tall": "1×2",
+    "wide": "2×1"
   },
   "blockTypes": {
     "avatar": "Avatar",
@@ -2324,7 +2324,8 @@
         "action": "Link"
       },
       "close": "Close settings",
-      "toolsLabel": "Block tools"
+      "toolsLabel": "Block tools",
+      "addBelow": "Add a block below"
     },
     "insertShort": {
       "socials": "Socials",
@@ -2338,7 +2339,19 @@
       "more": "More",
       "business": "Sales & booking"
     },
-    "sizeHint": "Tile size on the page — changes show above right away."
+    "sizeHint": "Tile size on the page — changes show above right away.",
+    "insert": {
+      "here": "Add a block here",
+      "addBelow": "Add a block below"
+    },
+    "size": {
+      "title": "Block size",
+      "small": "Square, half width",
+      "wide": "Full width",
+      "tall": "Tall, half width",
+      "large": "Large square",
+      "xl": "Full screen"
+    }
   },
   "errors": {
     "createYourPage": "Want to create your own page?",
@@ -2808,7 +2821,7 @@
     "verifiedPosition": "Icon position",
     "videoUrl": "Video URL",
     "videoUrlHint": "Supports YouTube and Vimeo URLs",
-    "whatPeopleSay": "What People Say",
+    "whatPeopleSay": "Reviews",
     "width": "Width"
   },
   "finance": {
@@ -6377,7 +6390,7 @@
   "wizard": {
     "avatar": {
       "description": "Add an avatar - it will help people recognize you",
-      "hint": "Recommended: square photo at least 400Г—400px",
+      "hint": "Recommended: square photo at least 400×400px",
       "size": "Avatar size",
       "title": "Your photo"
     },

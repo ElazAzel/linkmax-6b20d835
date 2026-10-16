@@ -82,7 +82,8 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
         'z-50 flex items-center rounded-2xl bg-card border border-border shadow-lg',
         isDock
           ? 'fixed left-1/2 -translate-x-1/2 bottom-[calc(env(safe-area-inset-bottom)+88px)] w-[calc(100vw-1rem)] max-w-md justify-between px-2 py-1.5'
-          : 'absolute top-2 left-1/2 -translate-x-1/2 gap-0.5 px-1 py-1',
+          // Above the block, so the selected content stays readable.
+          : 'absolute bottom-full left-1/2 mb-1.5 -translate-x-1/2 gap-0.5 px-1 py-1',
       )}
     >
       <Button

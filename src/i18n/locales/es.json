@@ -1009,10 +1009,10 @@
     "videoTitle": "Video"
   },
   "blockSize": {
-    "large": "2Г—2",
-    "small": "1Г—1",
-    "tall": "1Г—2",
-    "wide": "2Г—1"
+    "large": "2×2",
+    "small": "1×1",
+    "tall": "1×2",
+    "wide": "2×1"
   },
   "blockTypes": {
     "avatar": "Avatar",
@@ -6279,7 +6279,7 @@
   "wizard": {
     "avatar": {
       "description": "Add an avatar - it will help people recognize you",
-      "hint": "Recommended: square photo at least 400Г—400px",
+      "hint": "Recommended: square photo at least 400×400px",
       "size": "Avatar size",
       "title": "Your photo"
     },

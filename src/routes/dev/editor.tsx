@@ -5,12 +5,13 @@ import { EditorScreen } from "@/components/dashboard-v2/screens/EditorScreen";
 import { fetchPublicPageSnapshot } from "@/lib/seo/public-page-snapshot";
 import { createBlock } from "@/lib/blocks/block-factory";
 import { createDefaultPageData } from "@/lib/constants";
+import { createTemplateBlock, HARDCODED_TEMPLATES } from "@/data/templates";
 import { useEditorStore } from "@/store/useEditorStore";
 import type { Block, PageData } from "@/types/page";
 
 /**
  * Dev-only editor playground: the real EditorScreen on an in-memory copy of a
- * published page (?slug=...), so the editor can be checked in a browser
+ * published page (?slug=...) or a built-in template (?template=barber), so the editor can be checked in a browser
  * without signing in. Nothing is saved. Production builds render 404.
  */
 export const Route = createFileRoute("/dev/editor")({
@@ -25,7 +26,15 @@ function EditorPlayground() {
   const setEditorOpen = useEditorStore((s) => s.setEditorOpen);
 
   useEffect(() => {
-    const slug = new URLSearchParams(window.location.search).get("slug") || "elazart";
+    const params = new URLSearchParams(window.location.search);
+    const template = HARDCODED_TEMPLATES.find((t) => t.id === params.get("template"));
+    if (template) {
+      // Offline fixture: a full page from a built-in template, no network.
+      const blocks = template.blocks.map((b) => createTemplateBlock(b.type, b.overrides));
+      setPage({ ...createDefaultPageData("playground"), blocks });
+      return;
+    }
+    const slug = params.get("slug") || "elazart";
     void fetchPublicPageSnapshot(slug).then((snapshot) => {
       setPage(snapshot.status === "ok" ? snapshot.page : createDefaultPageData("playground"));
     });

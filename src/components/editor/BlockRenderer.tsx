@@ -13,6 +13,7 @@ import { BlockErrorBoundary } from '@/components/editor/BlockErrorBoundary';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
 import { useRenderContext } from '@/contexts/RenderContext';
+import { SELF_STYLED_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
 
 // Helper function to check if block should be visible based on schedule
 function isBlockVisible(block: Block): boolean {
@@ -120,10 +121,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
 
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
-  // Leaf blocks (button, link, text) apply container styles to their own element
+  // Leaf blocks (button, link, text, product) apply container styles to their own element
   // so the paint stays on the button/link/quote instead of the full-width row wrapper.
-  const SELF_STYLED_TYPES = new Set(['button', 'link', 'text']);
-  const isSelfStyled = SELF_STYLED_TYPES.has(block.type as string);
+  const isSelfStyled = SELF_STYLED_BLOCK_TYPES.has(block.type as string);
   const { style: bsStyle, className: bsClass } = (isSelfStyled || containerStyled)
     ? { style: {} as React.CSSProperties, className: '' }
     : getBlockStyles(block.blockStyle);

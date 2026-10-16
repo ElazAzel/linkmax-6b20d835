@@ -35,7 +35,7 @@ import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
 import { BUSINESS_BLOCK_TYPES, useBusinessFeatures } from '@/lib/features';
 import { BLOCK_PRESETS, type BlockPreset, getPresetsForType } from '@/lib/editor/editor-presets';
-import { AnimatedBlockIcon } from '@/components/editor/AnimatedBlockIcon';
+import { getLucideIcon } from '@/lib/utils/icon-utils';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
 
@@ -59,39 +59,6 @@ type BlockTier = 'free' | 'pro';
 /** The everyday blocks, shown first (about one screen on a phone). */
 const PRIMARY_BLOCK_TYPES = ['button', 'link', 'text', 'image', 'carousel', 'video', 'audio', 'download', 'socials', 'messenger', 'form', 'custom_code'] as const;
 
-// Color mapping by block type for the insert panel icons
-const BLOCK_COLORS: Record<string, string> = {
-  profile: 'bg-cyan-500',
-  text: 'bg-slate-500',
-  link: 'bg-blue-500',
-  button: 'bg-red-500',
-  image: 'bg-emerald-500',
-  separator: 'bg-gray-400',
-  avatar: 'bg-cyan-500',
-  socials: 'bg-pink-500',
-  messenger: 'bg-green-500',
-  video: 'bg-rose-500',
-  audio: 'bg-violet-500',
-  carousel: 'bg-violet-500',
-  before_after: 'bg-cyan-600',
-  map: 'bg-green-600',
-  faq: 'bg-blue-400',
-  form: 'bg-purple-500',
-  scratch: 'bg-red-400',
-  countdown: 'bg-orange-400',
-  custom_code: 'bg-slate-600',
-  product: 'bg-amber-500',
-  catalog: 'bg-teal-500',
-  pricing: 'bg-lime-500',
-  download: 'bg-indigo-500',
-  booking: 'bg-fuchsia-500',
-  shoutout: 'bg-orange-500',
-  community: 'bg-indigo-400',
-  event: 'bg-emerald-600',
-  testimonial: 'bg-yellow-500',
-  newsletter: 'bg-sky-500',
-};
-
 // Derive block list from manifest (single source of truth)
 // Exclude 'profile' since it's auto-added and not insertable
 // Built lazily: isBlockPremium reads the manifest + promo window at call time.
@@ -107,7 +74,6 @@ function buildManifestBlocks() {
       type: entry.type,
       labelKey: entry.labelKey,
       icon: entry.icon,
-      color: BLOCK_COLORS[entry.type] || 'bg-muted',
       // Respect the free-blocks promo: gating comes from isBlockPremium, not the raw manifest flag
       tier: (isBlockPremium(entry.type) ? 'pro' : 'free') as BlockTier,
     }));
@@ -119,6 +85,16 @@ let manifestBlocksCache: ManifestBlock[] | null = null;
 function getManifestBlocks(): ManifestBlock[] {
   if (!manifestBlocksCache) manifestBlocksCache = buildManifestBlocks();
   return manifestBlocksCache;
+}
+
+/** Calm monochrome tile: the colour belongs to the page, not to the picker. */
+function BlockTileIcon({ icon }: { icon: string }) {
+  const Icon = getLucideIcon(icon);
+  return (
+    <span className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-border/70 bg-card text-foreground shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
+      <Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
+    </span>
+  );
 }
 
 export const BlockInsertButton = memo(function BlockInsertButton({
@@ -298,20 +274,15 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           isLocked && 'opacity-40 cursor-not-allowed'
         )}
       >
-        <span className={cn(
-          'relative flex h-14 w-14 items-center justify-center rounded-[18px] text-white shadow-sm overflow-hidden',
-          block.color
-        )}>
-          <AnimatedBlockIcon type={block.type} icon={block.icon} className="h-7 w-7" />
-        </span>
+        <BlockTileIcon icon={block.icon} />
         <span lang={i18n.language} className="line-clamp-2 w-full hyphens-auto break-words text-center text-[11px] font-semibold leading-tight text-foreground sm:text-xs">
           {label}
         </span>
         {block.tier === 'pro' && (
           <span
             className={cn(
-              'absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full shadow-sm',
-              isLocked ? 'bg-muted text-muted-foreground' : 'bg-amber-400 text-white',
+              'absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full',
+              isLocked ? 'bg-muted text-muted-foreground' : 'bg-foreground text-background',
             )}
             aria-label="PRO"
           >
@@ -343,8 +314,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     const blockTier = (isBlockPremium(preset.blockType) ? 'pro' : 'free') as BlockTier;
     const isLocked = !canUseBlock(blockTier);
-    const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
-
     return (
       <button
         key={preset.id}
@@ -358,16 +327,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           isFeatured && "ring-1 ring-primary/20 bg-primary/5"
         )}
       >
-        <div className={cn(
-          "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md overflow-hidden",
-          color
-        )}>
-          <AnimatedBlockIcon
-            type={preset.blockType}
-            icon={manifest.icon}
-            className="h-6 w-6"
-          />
-        </div>
+        <BlockTileIcon icon={manifest.icon} />
 
         <div className="flex flex-col items-center gap-0.5">
           <span className="text-[10px] font-semibold uppercase tracking-wide text-primary/70">

@@ -44,7 +44,7 @@ function TestimonialBlockEditorComponent({ formData, onChange }: BaseBlockEditor
         label={t('fields.title', 'Title')}
         value={migrateToMultilingual(formData.title)}
         onChange={(value) => onChange({ ...formData, title: value })}
-        placeholder={t('fields.whatPeopleSay', 'What People Say')}
+        placeholder={t('fields.whatPeopleSay', 'Отзывы')}
       />
 
       <ArrayFieldList label={t('fields.testimonials', 'Testimonials')} items={testimonials} onAdd={addTestimonial}>

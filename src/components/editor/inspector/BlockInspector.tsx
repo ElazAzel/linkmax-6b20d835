@@ -30,8 +30,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { InspectorPanel } from './InspectorPanel';
 
 import { useLiveBlockDraft } from '@/hooks/editor/useLiveBlockDraft';
-import { BLOCK_MANIFEST, getBlockIcon } from '@/lib/blocks/block-manifest';
-import { getLucideIcon } from '@/lib/utils/icon-utils';
+import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { cn } from '@/lib/utils/utils';
 import type { BlockType } from '@/types/blocks/base';
 import type { Block } from '@/types/page';
@@ -45,6 +44,8 @@ interface BlockInspectorProps {
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;
   onDeleteBlock?: (id: string) => void;
   onClose: () => void;
+  /** Open the block picker right below the edited block. */
+  onAddBelow?: (blockId: string) => void;
   /** Empty docked state actions. */
   onAddBlock?: () => void;
   onOpenTheme?: () => void;
@@ -69,6 +70,7 @@ function BlockInspectorSession({
   onUpdateBlock,
   onDeleteBlock,
   onClose,
+  onAddBelow,
   onAddBlock,
   onOpenTheme,
 }: BlockInspectorProps) {
@@ -138,7 +140,6 @@ function BlockInspectorSession({
 
   const manifest = BLOCK_MANIFEST[block.type as BlockType];
   const EditorComponent = manifest?.editor;
-  const BlockIcon = getLucideIcon(getBlockIcon(block.type as BlockType));
 
   const editorBody: ReactNode = EditorComponent ? (
     <Suspense fallback={<EditorFallback />}>
@@ -175,9 +176,9 @@ function BlockInspectorSession({
 
   const shell = (
     <InspectorPanel block={shellBlock} title={t(manifest?.labelKey ?? `blockTypes.${block.type}`, block.type)}
-      icon={<Suspense fallback={<span className="h-5 w-5 rounded-full bg-muted" />}><BlockIcon className="h-5 w-5 text-primary" /></Suspense>}
       editorBody={editorBody} onChange={change} onClose={handleDone} footer={footer}
-      onDelete={onDeleteBlock ? () => setConfirmDelete(true) : undefined} />
+      onDelete={onDeleteBlock ? () => setConfirmDelete(true) : undefined}
+      onAddBelow={onAddBelow ? () => { handleDone(); onAddBelow(block.id); } : undefined} />
   );
 
   const deleteDialog = onDeleteBlock ? (

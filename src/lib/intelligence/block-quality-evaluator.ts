@@ -15,15 +15,22 @@ const WEAK_LABELS = new Set([
   'click', 'press', 'tap', 'go', 'submit', 'send',
 ]);
 
-function isWeakLabel(label?: string): boolean {
-  if (!label) return true;
-  return WEAK_LABELS.has(label.toLowerCase().trim());
+// Labels can be multilingual objects ({ ru, en, kk }) on template pages.
+function isWeakLabel(label?: unknown): boolean {
+  const values = typeof label === 'string'
+    ? [label]
+    : label && typeof label === 'object'
+      ? Object.values(label as Record<string, unknown>).filter((v): v is string => typeof v === 'string')
+      : [];
+  const filled = values.map((v) => v.toLowerCase().trim()).filter(Boolean);
+  if (filled.length === 0) return true;
+  return filled.every((v) => WEAK_LABELS.has(v));
 }
 
 function textLength(val: unknown): number {
   if (typeof val === 'string') return val.trim().length;
   if (val && typeof val === 'object' && 'ru' in (val as any)) {
-    return Math.max(...Object.values(val as Record<string, string>).map(v => (v || '').trim().length));
+    return Math.max(0, ...Object.values(val as Record<string, unknown>).map(v => (typeof v === 'string' ? v.trim().length : 0)));
   }
   return 0;
 }

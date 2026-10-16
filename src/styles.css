@@ -391,6 +391,12 @@
     @apply border-border;
   }
 
+  /* A broken image must not print its alt text over the card (screen readers
+     still read it); the container's muted background stays as the placeholder. */
+  img {
+    color: transparent;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
     -webkit-text-size-adjust: 100%;

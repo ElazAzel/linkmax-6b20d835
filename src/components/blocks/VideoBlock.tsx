@@ -98,7 +98,7 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
     >
       {title && (
         <CardHeader className="p-4 sm:p-5 pb-2">
-          <CardTitle className="text-base sm:text-lg font-semibold truncate text-gradient">{title}</CardTitle>
+          <CardTitle className="text-base sm:text-lg font-semibold truncate text-foreground">{title}</CardTitle>
         </CardHeader>
       )}
       <CardContent className="p-0">

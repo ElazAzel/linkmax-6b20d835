@@ -81,7 +81,7 @@ export const CountdownBlock = React.memo(function CountdownBlock({ block }: Coun
   );
 
   return (
-    <div className="w-full space-y-2 sm:space-y-3">
+    <div className="w-full space-y-2 py-4 sm:space-y-3">
       {title && (
         <h3 className="text-lg sm:text-xl font-semibold text-center break-words leading-snug">{title}</h3>
       )}
