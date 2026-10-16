@@ -20,6 +20,7 @@ import { extractEntityLinks } from '@/lib/seo/entity-linking';
 import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts as generateEnhancedKeyFacts } from '@/lib/seo/key-facts';
 import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
+import { canonicalSocialUrl } from '@/lib/blocks/safe-href';
 
 interface CrawlerFriendlyContentProps {
   blocks: Block[];
@@ -89,7 +90,8 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
       >
         {/* Main heading - H1 */}
         <header id="about">
-          <h1 itemProp="name">{profile.name || `Page @${slug}`}</h1>
+          {/* The server-rendered profile owns the page's only <h1>. */}
+          <p itemProp="name"><strong>{profile.name || `Page @${slug}`}</strong></p>
           {answerBlock.niche && (
             <p itemProp="jobTitle" className="role">{answerBlock.niche}</p>
           )}
@@ -317,8 +319,8 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
             <ul>
               {(socialsBlock.platforms || []).filter(p => p && p.url).map((platform, i) => (
                 <li key={i}>
-                  <a href={platform.url} rel="noopener noreferrer me" itemProp="sameAs">
-                    {getI18nText(platform.name as Parameters<typeof getI18nText>[0], language) || platform.url}
+                  <a href={canonicalSocialUrl(platform.url)} rel="noopener noreferrer me" itemProp="sameAs">
+                    {getI18nText(platform.name as Parameters<typeof getI18nText>[0], language) || canonicalSocialUrl(platform.url)}
                   </a>
                 </li>
               ))}

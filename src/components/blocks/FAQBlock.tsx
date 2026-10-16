@@ -34,21 +34,19 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
     >
       {title && <SectionHeader icon={<HelpCircle className="h-4 w-4" />} title={title} />}
 
-      <Accordion type="single" collapsible className="w-full space-y-2">
-        {block.items.map((item) => {
+      <Accordion type="single" collapsible className="w-full divide-y divide-border/60 px-5 py-1">
+        {block.items.map((item, index) => {
           const question = getI18nText(item.question, currentLang);
           const answer = getI18nText(item.answer, currentLang);
+          // Seeded and AI-made pages store items without ids; Radix needs a value to open one.
+          const value = item.id || `faq-${index}`;
 
           return (
-            <AccordionItem
-              key={item.id}
-              value={item.id}
-              className="qb-card px-5 transition-shadow data-[state=open]:shadow-lift"
-            >
-              <AccordionTrigger className="text-left text-sm font-medium hover:no-underline py-4 gap-3 text-foreground data-[state=open]:text-primary">
+            <AccordionItem key={value} value={value} className="border-0">
+              <AccordionTrigger className="gap-3 py-4 text-left text-[15px] font-semibold text-foreground hover:no-underline">
                 {question}
               </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground pb-4 leading-relaxed">
+              <AccordionContent className="pb-4 text-sm leading-relaxed text-muted-foreground">
                 {answer}
               </AccordionContent>
             </AccordionItem>

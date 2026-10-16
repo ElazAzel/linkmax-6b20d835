@@ -4,6 +4,7 @@ import type { PageData } from '@/types/page';
 import { loadPageDraft, savePageDraft, publishPageDraft, draftError, type PageDraft } from '@/services/page-drafts';
 import { loadDraft } from '@/pwa/offlineDraftCache';
 import { pageDraftCacheKey, type LocalPageDraft } from '@/lib/page-draft-cache';
+import { ensureBlockIds } from '@/lib/blocks/block-ids';
 // Query keys for cache management
 export const pageQueryKeys = {
   publicPage: (slug: string) => ['page', 'public', slug] as const,
@@ -49,6 +50,11 @@ export function usePublicPageByDomain(domain: string | undefined) {
   });
 }
 
+// Drafts copied from published rows inherit their missing block ids.
+function withBlockIds<T extends { blocks?: PageData['blocks'] }>(page: T): T {
+  return Array.isArray(page?.blocks) ? { ...page, blocks: ensureBlockIds(page.blocks) } : page;
+}
+
 // Hook for loading user's page with caching
 export function useUserPage(userId: string | undefined, pageId?: string | null) {
   return useQuery({
@@ -58,7 +64,7 @@ export function useUserPage(userId: string | undefined, pageId?: string | null) 
       if (pageId) {
         try {
           const draft = await loadPageDraft(pageId);
-          return { pageData: draft.snapshot, chatbotContext: draft.chatbot_context, draft, draftError: null };
+          return { pageData: withBlockIds(draft.snapshot), chatbotContext: draft.chatbot_context, draft, draftError: null };
         } catch (error) {
           const problem = draftError(error);
           if (problem.kind === 'access') throw problem;
@@ -71,7 +77,7 @@ export function useUserPage(userId: string | undefined, pageId?: string | null) 
             if (!data?.id) return { pageData: data, chatbotContext, draft: null, draftError: null };
       try {
         const draft = await loadPageDraft(data.id);
-        return { pageData: { ...data, ...draft.snapshot }, chatbotContext: draft.chatbot_context, draft, draftError: null };
+        return { pageData: withBlockIds({ ...data, ...draft.snapshot }), chatbotContext: draft.chatbot_context, draft, draftError: null };
       } catch (error) {
         const problem = draftError(error);
         if (problem.kind === 'access') throw problem;

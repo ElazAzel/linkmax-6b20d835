@@ -102,8 +102,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Операционная система для микробизнеса. Конструктор страниц, CRM, аналитика и AI-генерация в одном месте.",
       },
       { property: "og:image", content: "https://lnkmx.my/og-image.png" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
+      // Profiles bring their own image of unknown size; only the site card is 1200×630.
+      ...(matches.some((m) => (m.routeId as string) === "/$slug/")
+        ? []
+        : [
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+          ]),
       { property: "og:image:alt", content: "LinkMAX - The Micro-Business OS" },
       { property: "og:site_name", content: "LinkMAX" },
       { property: "og:locale", content: "ru_RU" },

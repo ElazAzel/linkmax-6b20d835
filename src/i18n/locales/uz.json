@@ -5207,7 +5207,15 @@
     "strong": "Kuchli",
     "sunset": "Quyosh botishi",
     "verified": "Tasdiqlangan",
-    "xlarge": "Juda katta"
+    "xlarge": "Juda katta",
+    "statusRingLabel": {
+      "none": "Yo‘q",
+      "online": "Onlayn",
+      "busy": "Band",
+      "away": "Uzoqda",
+      "offline": "Oflayn",
+      "live": "Efirda"
+    }
   },
   "profileEditor": {
     "avatar": "Avatar",
@@ -8330,5 +8338,14 @@
     "tile": "Plitka",
     "caption": "Izoh",
     "add": "Plitka qoʻshish"
+  },
+  "growth": {
+    "clone": {
+      "button": "Nusxa yaratish",
+      "saving": "Saqlanmoqda…",
+      "success": "Nusxa shablonlaringizga saqlandi",
+      "error": "Nusxani saqlab bo‘lmadi",
+      "authRedirect": "Kiring — nusxa shablonlaringizga saqlanadi."
+    }
   }
 }

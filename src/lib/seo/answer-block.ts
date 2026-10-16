@@ -168,7 +168,7 @@ export function generateAnswerBlock(
   });
 
   return {
-    summary,
+    summary: enrichWithBio(summary, name, bio),
     entityType,
     niche,
     location,
@@ -302,6 +302,28 @@ interface SummaryParams {
   contact?: string;
   hasBooking: boolean;
   language: 'ru' | 'en' | 'kk';
+}
+
+const plainBio = (bio: string) => bio
+  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  .replace(/[*_`#>]+/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+/**
+ * Most pages have no detectable niche or services, which leaves "Name from
+ * City." as the whole summary. Lead with the owner's own bio instead.
+ */
+function enrichWithBio(summary: string, name: string | undefined, bio: string | undefined): string {
+  if (!bio || summary.length >= 120) return summary;
+  const text = plainBio(bio);
+  if (!text) return summary;
+  const lead = name && !text.startsWith(name) ? `${name} — ` : '';
+  const full = `${lead}${text}`;
+  if (full.length <= 300) return full;
+  const cut = full.slice(0, 299);
+  const sentenceEnd = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('! '), cut.lastIndexOf('? '));
+  return sentenceEnd > 120 ? cut.slice(0, sentenceEnd + 1) : `${cut.slice(0, cut.lastIndexOf(' '))}…`;
 }
 
 /**

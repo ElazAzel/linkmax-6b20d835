@@ -6,6 +6,7 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_RADIUS, BLOCK_SHADOW } from '@/lib/appearance/block-appearance';
+import { canonicalSocialUrl } from '@/lib/blocks/safe-href';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
@@ -69,7 +70,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
         )}
       >
         {validPlatforms.map((platform, index) => {
-          const url = platform.url || '';
+          const url = canonicalSocialUrl(platform.url || '');
           if (!url) return null;
 
           // The link decides the network; the stored choice is a fallback for

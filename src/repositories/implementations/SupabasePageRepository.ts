@@ -21,6 +21,7 @@ import type {
 import { createDefaultPageData, DEFAULT_THEME, DEFAULT_SEO } from '@/lib/constants';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { Json } from '@/platform/supabase/types';
+import { ensureBlockIds } from '@/lib/blocks/block-ids';
 
 // ============= Helpers =============
 
@@ -54,7 +55,7 @@ function deduplicateBlocks(blocks: DbBlock[]): DbBlock[] {
 function convertDbBlocksToBlocks(dbBlocks: DbBlock[]): Block[] {
   const sorted = [...dbBlocks].sort((a, b) => a.position - b.position);
   const unique = deduplicateBlocks(sorted);
-  return unique.map((block) => block.content as unknown as Block);
+  return ensureBlockIds(unique.map((block) => block.content as unknown as Block));
 }
 
 function extractBlockTitle(block: Block, lang: SupportedLanguage = 'ru'): string | null {

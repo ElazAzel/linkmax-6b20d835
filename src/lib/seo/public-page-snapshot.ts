@@ -4,6 +4,7 @@
  * The client still loads the page through usePublicPage, which counts the view.
  */
 import type { Block, GridConfig, PageData, PageTheme } from '@/types/page';
+import { ensureBlockIds } from '@/lib/blocks/block-ids';
 
 /** PageData plus the page-record fields SEO falls back to. */
 export type PublicPageData = PageData & {
@@ -63,7 +64,7 @@ const SLUG_RE = /^[\p{L}\p{N}._-]{1,64}$/u;
 
 export function snapshotBlocks(rows: SnapshotBlockRow[] | null | undefined): Block[] {
   const seen = new Set<string>();
-  return [...(rows || [])]
+  const blocks = [...(rows || [])]
     .filter((row) => !row.deleted_at && row.content && typeof row.content === 'object')
     .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
     .map((row) => row.content as Block)
@@ -73,6 +74,7 @@ export function snapshotBlocks(rows: SnapshotBlockRow[] | null | undefined): Blo
       seen.add(block.id);
       return true;
     });
+  return ensureBlockIds(blocks);
 }
 
 export function snapshotRowToPageData(row: SnapshotPageRow): PublicPageData {

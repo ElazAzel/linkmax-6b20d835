@@ -23,7 +23,7 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={cn('h-3 w-3', i < rating ? 'fill-primary text-primary' : 'text-muted-foreground/30')}
+          className={cn('h-3.5 w-3.5', i < rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30')}
         />
       ))}
     </div>
@@ -39,7 +39,9 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
     >
       {title && <SectionHeader icon={<Quote className="h-4 w-4" />} title={title} />}
 
-      <div className="flex gap-3 overflow-x-auto pb-4 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
+      {/* One flat list inside the block's own card: every review is visible on
+          any device (the old swipe row hid the rest behind a hidden scrollbar). */}
+      <ul className="divide-y divide-border/60 px-5 py-2">
         {block.testimonials?.filter(Boolean).map((testimonial, index) => {
           if (!testimonial) return null;
           const name = getI18nText(testimonial.name, currentLang) || '';
@@ -47,36 +49,29 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
           const role = getI18nText(testimonial.role, currentLang);
 
           return (
-            <div
-              key={index}
-              className="qb-card qb-card-hover flex-shrink-0 w-[85%] min-w-[280px] max-w-[340px] p-5 snap-start"
-            >
-              <div className="flex items-start gap-4">
-                <Avatar className="h-11 w-11 flex-shrink-0">
+            <li key={(testimonial as { id?: string }).id ?? index} className="py-4 first:pt-1 last:pb-1">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10 flex-shrink-0">
                   <AvatarImage src={testimonial.avatar} alt={name} />
-                  <AvatarFallback className="text-xs font-medium bg-primary/10 text-primary">
+                  <AvatarFallback className="bg-muted text-xs font-semibold text-foreground">
                     {name?.[0] || '?'}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <div className="min-w-0">
-                      <div className="font-medium text-sm truncate text-foreground">{name}</div>
-                      {role && (
-                        <div className="text-xs text-muted-foreground truncate">{role}</div>
-                      )}
-                    </div>
-                    {testimonial.rating && renderStars(testimonial.rating)}
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    "{text}"
-                  </p>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-sm font-semibold text-foreground">{name}</div>
+                  {role && <div className="truncate text-xs text-muted-foreground">{role}</div>}
                 </div>
+                {testimonial.rating ? renderStars(testimonial.rating) : null}
               </div>
-            </div>
+              {text && (
+                <p className="mt-2.5 text-[15px] leading-relaxed text-foreground/85">
+                  "{text}"
+                </p>
+              )}
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 });

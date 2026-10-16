@@ -144,7 +144,7 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
           >
             <Button
               onClick={() => setIsOpen(true)}
-              className="h-14 w-14 rounded-full shadow-2xl bg-primary/90 hover:bg-primary backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95"
+              className="h-14 w-14 rounded-full shadow-[0_12px_32px_-8px_rgb(0_0_0/0.35)] bg-foreground text-background hover:bg-foreground/90 border border-white/10 transition-all hover:scale-110 active:scale-95"
               size="icon"
             >
               <MessageCircle className="h-6 w-6 text-primary-foreground" />

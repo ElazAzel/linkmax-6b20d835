@@ -7,6 +7,7 @@ import { logger } from '@/lib/utils/logger';
 
 import { isMissingTableError } from './reviews';
 import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
+import { ensureBlockIds } from '@/lib/blocks/block-ids';
 
 // ============= Block & Page Value Objects =============
 
@@ -166,7 +167,7 @@ function convertDbBlocksToBlocks(dbBlocks: DbBlock[]): Block[] {
   const sorted = [...dbBlocks].sort((a, b) => a.position - b.position);
   const activeOnly = sorted.filter((block) => !block.deleted_at);
   const unique = deduplicateBlocks(activeOnly);
-  return unique.map((block) => block.content as unknown as Block);
+  return ensureBlockIds(unique.map((block) => block.content as unknown as Block));
 }
 
 /**

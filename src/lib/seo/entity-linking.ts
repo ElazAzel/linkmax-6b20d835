@@ -5,6 +5,7 @@
 
 import type { Block, SocialsBlock, LinkBlock } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
+import { canonicalSocialUrl } from '@/lib/blocks/safe-href';
 
 // Known social platforms for sameAs extraction
 const SOCIAL_PLATFORMS: Record<string, string> = {
@@ -63,8 +64,9 @@ export function extractEntityLinks(
   const socialsBlock = validBlocks.find(b => b.type === 'socials') as SocialsBlock | undefined;
   if (socialsBlock?.platforms) {
     for (const platform of (socialsBlock.platforms || []).filter(p => p != null && typeof p === 'object')) {
-      if (platform.url && isValidUrl(platform.url)) {
-        result.sameAs.push(normalizeUrl(platform.url));
+      const url = platform.url ? canonicalSocialUrl(platform.url) : '';
+      if (url && isValidUrl(url)) {
+        result.sameAs.push(normalizeUrl(url));
       }
     }
   }
