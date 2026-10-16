@@ -1,0 +1,125 @@
+/*
+ * Insert-sheet block tiles: each block type has its own endless micro-motion,
+ * a glare sweeps across the tiles in turn, and the tile turns ink-black on
+ * hover/focus. Transform/opacity only (GPU), staggered by --lm-tile-delay.
+ * Everything stops for prefers-reduced-motion.
+ */
+.lm-tile {
+  --lm-tile-delay: 0s;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.lm-tile::after {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -60%;
+  width: 45%;
+  transform: translateX(0) rotate(18deg);
+  background: linear-gradient(90deg, transparent, hsl(var(--background) / 0.85), transparent);
+  opacity: 0;
+  pointer-events: none;
+  animation: lm-tile-glare 6s ease-in-out infinite;
+  animation-delay: var(--lm-tile-delay);
+}
+/* Hover only with a real pointer: on touch screens :hover sticks after a tap. */
+@media (hover: hover) {
+  button:hover > .lm-tile {
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+    border-color: hsl(var(--foreground));
+    transform: translateY(-2px) rotate(-3deg);
+    box-shadow: 0 10px 22px -12px hsl(var(--foreground) / 0.55);
+  }
+  button:hover > .lm-tile .lm-motion { animation-duration: 0.9s; }
+}
+button:focus-visible > .lm-tile {
+  background-color: hsl(var(--foreground));
+  color: hsl(var(--background));
+  border-color: hsl(var(--foreground));
+}
+button:active > .lm-tile { transform: scale(0.94); }
+
+@keyframes lm-tile-glare {
+  0%, 78% { transform: translateX(0) rotate(18deg); opacity: 0; }
+  80% { opacity: 1; }
+  92%, 100% { transform: translateX(420%) rotate(18deg); opacity: 0; }
+}
+
+.lm-motion {
+  display: inline-flex;
+  animation-duration: 2.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-delay: var(--lm-tile-delay);
+  transform-origin: center;
+  will-change: transform;
+}
+.lm-motion[data-motion="tap"] { animation-name: lm-m-tap; }
+.lm-motion[data-motion="swing"] { animation-name: lm-m-swing; }
+.lm-motion[data-motion="breathe"] { animation-name: lm-m-breathe; }
+.lm-motion[data-motion="zoom"] { animation-name: lm-m-zoom; animation-duration: 3.4s; }
+.lm-motion[data-motion="slide"] { animation-name: lm-m-slide; }
+.lm-motion[data-motion="pulse"] { animation-name: lm-m-pulse; animation-duration: 1.8s; }
+.lm-motion[data-motion="drop"] { animation-name: lm-m-drop; animation-duration: 1.9s; }
+.lm-motion[data-motion="orbit"] { animation-name: lm-m-orbit; animation-duration: 6s; animation-timing-function: linear; }
+.lm-motion[data-motion="bubble"] { animation-name: lm-m-bubble; animation-duration: 3s; }
+.lm-motion[data-motion="write"] { animation-name: lm-m-write; animation-duration: 2.2s; }
+.lm-motion[data-motion="stretch"] { animation-name: lm-m-stretch; animation-duration: 2s; }
+.lm-motion[data-motion="ping"] { animation-name: lm-m-pulse; animation-duration: 2.4s; }
+.lm-motion[data-motion="pin"] { animation-name: lm-m-pin; animation-duration: 1.6s; transform-origin: bottom center; }
+.lm-motion[data-motion="wobble"] { animation-name: lm-m-wobble; animation-duration: 2.8s; }
+.lm-motion[data-motion="tick"] { animation-name: lm-m-orbit; animation-duration: 8s; animation-timing-function: steps(12); }
+.lm-motion[data-motion="float"] { animation-name: lm-m-float; animation-duration: 3.2s; }
+
+/* Expanding ring behind avatar/profile icons */
+.lm-motion[data-motion="ping"] { position: relative; }
+.lm-motion[data-motion="ping"]::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1.5px solid currentColor;
+  opacity: 0;
+  animation: lm-m-ring 2.4s ease-out infinite;
+  animation-delay: var(--lm-tile-delay);
+}
+
+/* Audio: a tiny equalizer instead of a static note */
+.lm-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 20px; }
+.lm-eq > span {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  transform-origin: bottom;
+  animation: lm-m-eq 1.1s ease-in-out infinite;
+}
+.lm-eq > span:nth-child(2) { animation-delay: -0.35s; }
+.lm-eq > span:nth-child(3) { animation-delay: -0.7s; }
+.lm-eq > span:nth-child(4) { animation-delay: -0.2s; }
+
+@keyframes lm-m-tap { 0%, 60%, 100% { transform: translate(0, 0) scale(1); } 70% { transform: translate(1px, 2px) scale(0.86); } 80% { transform: translate(0, 0) scale(1.06); } }
+@keyframes lm-m-swing { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-14deg); } 75% { transform: rotate(14deg); } }
+@keyframes lm-m-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(0.9, 1.12); } }
+@keyframes lm-m-zoom { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.14) rotate(-4deg); } }
+@keyframes lm-m-slide { 0%, 100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+@keyframes lm-m-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.16); } }
+@keyframes lm-m-drop { 0% { transform: translateY(-4px); opacity: 0.3; } 45% { transform: translateY(1px); opacity: 1; } 60% { transform: translateY(-1px); } 75%, 100% { transform: translateY(0); opacity: 1; } }
+@keyframes lm-m-orbit { to { transform: rotate(360deg); } }
+@keyframes lm-m-bubble { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-3px) rotate(-6deg); } }
+@keyframes lm-m-write { 0%, 100% { transform: translateX(0) rotate(0deg); } 30% { transform: translateX(-2px) rotate(-5deg); } 60% { transform: translateX(2px) rotate(4deg); } }
+@keyframes lm-m-stretch { 0%, 100% { transform: scaleX(0.6); } 50% { transform: scaleX(1.25); } }
+@keyframes lm-m-ring { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes lm-m-pin { 0%, 100% { transform: translateY(0) scale(1, 1); } 40% { transform: translateY(-5px) scale(0.95, 1.05); } 60% { transform: translateY(0) scale(1.08, 0.92); } }
+@keyframes lm-m-wobble { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-12deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(3deg); } }
+@keyframes lm-m-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes lm-m-eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lm-tile::after,
+  .lm-motion,
+  .lm-motion::before,
+  .lm-eq > span { animation: none !important; }
+}

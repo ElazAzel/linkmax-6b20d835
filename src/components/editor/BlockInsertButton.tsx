@@ -1,7 +1,7 @@
 'use client';
 
 import { useNavigate } from '@/lib/router-compat';
-import { memo, useState, useMemo, useCallback, useEffect } from 'react';
+import { memo, useState, useMemo, useCallback, useEffect, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Search from 'lucide-react/dist/esm/icons/search';
@@ -87,12 +87,37 @@ function getManifestBlocks(): ManifestBlock[] {
   return manifestBlocksCache;
 }
 
-/** Calm monochrome tile: the colour belongs to the page, not to the picker. */
-function BlockTileIcon({ icon }: { icon: string }) {
+/** Endless micro-motion per block type (keyframes in styles/block-tile-motion.css). */
+const TILE_MOTION: Record<string, string> = {
+  button: 'tap', link: 'swing', text: 'breathe', image: 'zoom', carousel: 'slide', video: 'pulse',
+  download: 'drop', socials: 'orbit', messenger: 'bubble', form: 'write', custom_code: 'breathe',
+  separator: 'stretch', avatar: 'ping', profile: 'ping', before_after: 'slide', map: 'pin', faq: 'wobble',
+  countdown: 'tick', testimonial: 'bubble', scratch: 'wobble', product: 'float', catalog: 'zoom',
+  pricing: 'pulse', booking: 'tap', shoutout: 'wobble', community: 'ping', event: 'float', newsletter: 'bubble',
+};
+
+/** Stable per-type stagger so the tiles do not move in lockstep. */
+function tileDelay(type: string): string {
+  let hash = 0;
+  for (const char of type) hash = (hash * 31 + char.charCodeAt(0)) % 997;
+  return `${-(hash % 12) * 0.45}s`;
+}
+
+/** Monochrome tile with a living icon: ink on white, inverts on hover. */
+function BlockTileIcon({ type, icon }: { type: string; icon: string }) {
   const Icon = getLucideIcon(icon);
   return (
-    <span className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-border/70 bg-card text-foreground shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
-      <Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
+    <span
+      className="lm-tile flex h-14 w-14 items-center justify-center rounded-[18px] border border-border/70 bg-card text-foreground shadow-[0_1px_2px_rgb(0_0_0/0.04)]"
+      style={{ '--lm-tile-delay': tileDelay(type) } as CSSProperties}
+    >
+      {type === 'audio' ? (
+        <span className="lm-eq" aria-hidden><span /><span /><span /><span /></span>
+      ) : (
+        <span className="lm-motion" data-motion={TILE_MOTION[type] ?? 'float'} aria-hidden>
+          <Icon className="h-6 w-6" strokeWidth={1.75} />
+        </span>
+      )}
     </span>
   );
 }
@@ -274,7 +299,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           isLocked && 'opacity-40 cursor-not-allowed'
         )}
       >
-        <BlockTileIcon icon={block.icon} />
+        <BlockTileIcon type={block.type} icon={block.icon} />
         <span lang={i18n.language} className="line-clamp-2 w-full hyphens-auto break-words text-center text-[11px] font-semibold leading-tight text-foreground sm:text-xs">
           {label}
         </span>
@@ -327,7 +352,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           isFeatured && "ring-1 ring-primary/20 bg-primary/5"
         )}
       >
-        <BlockTileIcon icon={manifest.icon} />
+        <BlockTileIcon type={preset.blockType} icon={manifest.icon} />
 
         <div className="flex flex-col items-center gap-0.5">
           <span className="text-[10px] font-semibold uppercase tracking-wide text-primary/70">
