@@ -64,7 +64,7 @@ export const FAQSection = () => {
                 key={faq.q}
                 className={cn(
                   'overflow-hidden rounded-card border bg-card transition-all',
-                  isOpen ? 'border-primary shadow-[0_16px_40px_rgba(16,19,24,0.10)]' : 'border-border'
+                  isOpen ? 'border-foreground/15 shadow-[0_16px_40px_rgba(16,19,24,0.10)]' : 'border-border'
                 )}
               >
                 <button
@@ -75,7 +75,7 @@ export const FAQSection = () => {
                 >
                   <span className="pr-2 text-sm font-semibold text-foreground sm:text-base">{faq.q}</span>
                   <ChevronDown
-                    className={cn('h-5 w-5 shrink-0 text-primary transition-transform duration-200', isOpen && 'rotate-180')}
+                    className={cn('h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200', isOpen && 'rotate-180')}
                   />
                 </button>
                 <div className={cn('grid transition-all duration-200 ease-out', isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0')}>
