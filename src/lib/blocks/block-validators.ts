@@ -211,6 +211,24 @@ export function validateDownloadBlock(formData: DownloadBlockData): string | nul
   );
 }
 
+const hasText = (value: unknown) => !!(typeof value === 'string' ? value.trim() : value && typeof value === 'object'
+  && Object.values(value as Record<string, unknown>).some((v) => typeof v === 'string' && v.trim()));
+const optionalUrl = (value: unknown) => (typeof value === 'string' && value.trim() ? validateUrl(value) : null);
+
+export function validateCardBlock(formData: { title?: unknown; url?: unknown }): string | null {
+  return (hasText(formData.title) ? null : 'Title is required') || optionalUrl(formData.url);
+}
+
+export function validateTilesBlock(formData: { items?: Array<{ url?: unknown }> }): string | null {
+  const items = Array.isArray(formData.items) ? formData.items : [];
+  if (items.length === 0) return 'Add at least one tile';
+  for (const item of items) {
+    const error = optionalUrl(item?.url);
+    if (error) return error;
+  }
+  return null;
+}
+
 export function validateNewsletterBlock(formData: NewsletterBlockData): string | null {
   return validateRequired(formData.title, 'Title');
 }

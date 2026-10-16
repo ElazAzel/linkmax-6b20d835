@@ -57,7 +57,7 @@ interface BlockInsertButtonProps {
 type BlockTier = 'free' | 'pro';
 
 /** The everyday blocks, shown first (about one screen on a phone). */
-const PRIMARY_BLOCK_TYPES = ['button', 'link', 'text', 'image', 'carousel', 'video', 'audio', 'download', 'socials', 'messenger', 'form', 'custom_code'] as const;
+const PRIMARY_BLOCK_TYPES = ['card', 'tiles', 'button', 'link', 'text', 'image', 'carousel', 'video', 'audio', 'download', 'socials', 'messenger', 'form', 'custom_code'] as const;
 
 // Derive block list from manifest (single source of truth)
 // Exclude 'profile' since it's auto-added and not insertable
@@ -89,7 +89,7 @@ function getManifestBlocks(): ManifestBlock[] {
 
 /** Endless micro-motion per block type (keyframes in styles/block-tile-motion.css). */
 const TILE_MOTION: Record<string, string> = {
-  button: 'tap', link: 'swing', text: 'breathe', image: 'zoom', carousel: 'slide', video: 'pulse',
+  card: 'float', tiles: 'zoom', button: 'tap', link: 'swing', text: 'breathe', image: 'zoom', carousel: 'slide', video: 'pulse',
   download: 'drop', socials: 'orbit', messenger: 'bubble', form: 'write', custom_code: 'breathe',
   separator: 'stretch', avatar: 'ping', profile: 'ping', before_after: 'slide', map: 'pin', faq: 'wobble',
   countdown: 'tick', testimonial: 'bubble', scratch: 'wobble', product: 'float', catalog: 'zoom',

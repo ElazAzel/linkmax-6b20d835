@@ -17,7 +17,7 @@ const AUTO_HEIGHT_TYPES = new Set([
   'profile', 'text', 'socials', 'separator', 'form', 'newsletter', 'faq',
   'booking', 'pricing', 'catalog', 'product', 'event', 'community',
   'custom_code', 'video', 'audio', 'carousel', 'testimonial', 'shoutout',
-  'scratch', 'countdown', 'map', 'messenger', 'download',
+  'scratch', 'countdown', 'map', 'messenger', 'download', 'card', 'tiles',
 ]);
 
 export function resolveBlockLayout(block: { type: string; blockSize?: string }) {
@@ -136,7 +136,8 @@ export const BLOCK_HOVER_CLASS: Record<NonNullable<BlockStyle['hoverEffect']>, s
 export const SELF_STYLED_BLOCK_TYPES = new Set(['button', 'link', 'text', 'product']);
 
 /** Blocks rendered without card chrome. */
-export const TRANSPARENT_BLOCK_TYPES = new Set(['separator', 'socials', 'spacer']);
+// Tiles are a bare grid of pictures, like Korner's tile sections.
+export const TRANSPARENT_BLOCK_TYPES = new Set(['separator', 'socials', 'spacer', 'tiles']);
 
 export function hasCustomBackground(style?: BlockStyle): boolean {
   return !!(style?.backgroundColor || style?.backgroundGradient);

@@ -1045,7 +1045,9 @@
     "testimonial": "Отзывы",
     "text": "Текст",
     "video": "Видео",
-    "audio": "Аудио"
+    "audio": "Аудио",
+    "card": "Карточка",
+    "tiles": "Плитки"
   },
   "blocks": {
     "addFailed": "Не удалось добавить блок.",
@@ -1500,7 +1502,9 @@
     "verify": "Проверять",
     "view": "Вид",
     "yes": "Да",
-    "deleteConfirmTitle": "Удалить блок?"
+    "deleteConfirmTitle": "Удалить блок?",
+    "moveUp": "Выше",
+    "moveDown": "Ниже"
   },
   "chat": {
     "lead": {
@@ -8280,5 +8284,23 @@
       "product_name": "Название товара",
       "price": "Цена"
     }
+  },
+  "cardBlock": {
+    "text": "Текст",
+    "photo": "Фото",
+    "photoPosition": "Где фото",
+    "right": "Справа",
+    "top": "Сверху",
+    "buttonStyle": "Кнопка",
+    "solid": "Залитая",
+    "outline": "Контур"
+  },
+  "tilesBlock": {
+    "heading": "Заголовок над плитками",
+    "columns": "Колонки",
+    "shape": "Форма",
+    "tile": "Плитка",
+    "caption": "Подпись",
+    "add": "Добавить плитку"
   }
 }

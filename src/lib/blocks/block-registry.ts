@@ -26,6 +26,8 @@ export const FREE_BLOCK_TYPES = [
   'faq',
   'booking',
   'form',
+  'card',
+  'tiles',
 ] as const;
 
 /**
@@ -98,6 +100,7 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
   avatar: { type: 'avatar', category: 'basic', isPremium: false, icon: 'user-circle', labelKey: 'blockTypes.avatar' },
   socials: { type: 'socials', category: 'basic', isPremium: false, icon: 'share-2', labelKey: 'blockTypes.socials' },
   messenger: { type: 'messenger', category: 'basic', isPremium: false, icon: 'message-circle', labelKey: 'blockTypes.messenger' },
+  card: { type: 'card', category: 'basic', isPremium: false, icon: 'layout-panel-left', labelKey: 'blockTypes.card' },
 
   // Media
   audio: { type: 'audio', category: 'media', isPremium: false, icon: 'music', labelKey: 'blockTypes.audio' },
@@ -105,6 +108,7 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
   video: { type: 'video', category: 'media', isPremium: true, icon: 'video', labelKey: 'blockTypes.video' },
   carousel: { type: 'carousel', category: 'media', isPremium: true, icon: 'images', labelKey: 'blockTypes.carousel' },
   before_after: { type: 'before_after', category: 'media', isPremium: true, icon: 'columns', labelKey: 'blockTypes.beforeAfter' },
+  tiles: { type: 'tiles', category: 'media', isPremium: false, icon: 'layout-grid', labelKey: 'blockTypes.tiles' },
 
   // Interactive
   map: { type: 'map', category: 'interactive', isPremium: false, icon: 'map-pin', labelKey: 'blockTypes.map' },

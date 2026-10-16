@@ -4,7 +4,7 @@ import { createBlock } from '../block-factory';
 
 describe('shared block editing contract', () => {
   it('retains every block and gives each editor explicit tools, sizes and validation', () => {
-    expect(Object.keys(BLOCK_MANIFEST)).toHaveLength(29);
+    expect(Object.keys(BLOCK_MANIFEST)).toHaveLength(31);
     for (const entry of Object.values(BLOCK_MANIFEST)) {
       expect(createBlock(entry.type).type).toBe(entry.type);
       expect(entry.editing.tools).toContain('appearance');

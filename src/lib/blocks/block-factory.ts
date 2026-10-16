@@ -233,6 +233,34 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     ...overrides,
   }),
 
+  card: (id, overrides) => ({
+    id,
+    type: 'card',
+    blockSize: DEFAULT_BLOCK_SIZE,
+    title: { ru: 'Запишитесь на консультацию', en: 'Book a consultation', kk: 'Кеңеске жазылыңыз' },
+    text: { ru: 'Коротко о том, что получит клиент и почему стоит нажать.', en: 'In short: what the client gets and why it is worth a tap.', kk: 'Клиент не алатыны және неге басу керегі туралы қысқаша.' },
+    image: '',
+    imagePosition: 'right',
+    buttonText: { ru: 'Записаться', en: 'Book', kk: 'Жазылу' },
+    url: '',
+    buttonStyle: 'solid',
+    ...overrides,
+  }),
+
+  tiles: (id, overrides) => ({
+    id,
+    type: 'tiles',
+    blockSize: DEFAULT_BLOCK_SIZE,
+    title: '',
+    columns: 2,
+    aspect: 'square',
+    items: [
+      { id: `${id}-1`, title: { ru: 'Портфолио', en: 'Portfolio', kk: 'Портфолио' }, image: '', url: '' },
+      { id: `${id}-2`, title: { ru: 'Отзывы', en: 'Reviews', kk: 'Пікірлер' }, image: '', url: '' },
+    ],
+    ...overrides,
+  }),
+
   testimonial: (id, overrides) => ({
     id,
     type: 'testimonial',

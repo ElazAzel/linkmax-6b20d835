@@ -1045,7 +1045,9 @@
     "testimonial": "Пікірлер",
     "text": "Мәтін",
     "video": "Бейне",
-    "audio": "Аудио"
+    "audio": "Аудио",
+    "card": "Карточка",
+    "tiles": "Тақтайшалар"
   },
   "blocks": {
     "addFailed": "Блок қосу мүмкін болмады",
@@ -1500,7 +1502,9 @@
     "verify": "Тексеру",
     "view": "Көру",
     "yes": "Иә",
-    "deleteConfirmTitle": "Блокты жою керек пе?"
+    "deleteConfirmTitle": "Блокты жою керек пе?",
+    "moveUp": "Жоғары",
+    "moveDown": "Төмен"
   },
   "chat": {
     "lead": {
@@ -8280,5 +8284,23 @@
       "product_name": "Тауар атауы",
       "price": "Баға"
     }
+  },
+  "cardBlock": {
+    "text": "Мәтін",
+    "photo": "Фото",
+    "photoPosition": "Фото орны",
+    "right": "Оң жақта",
+    "top": "Жоғарыда",
+    "buttonStyle": "Батырма",
+    "solid": "Толтырылған",
+    "outline": "Контур"
+  },
+  "tilesBlock": {
+    "heading": "Тақтайшалар үстіндегі тақырып",
+    "columns": "Бағандар",
+    "shape": "Пішін",
+    "tile": "Тақтайша",
+    "caption": "Жазу",
+    "add": "Тақтайша қосу"
   }
 }

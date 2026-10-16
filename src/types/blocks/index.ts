@@ -6,6 +6,7 @@ import { NewsletterBlock, TestimonialBlock, CountdownBlock, ShoutoutBlock } from
 import { CustomCodeBlock, FormBlock, DownloadBlock, ScratchBlock } from './advanced';
 import { CommunityBlock, EventBlock } from './community';
 import { AudioBlock } from './audio';
+import { CardBlock, TilesBlock } from './showcase';
 
 export * from './base';
 export * from './content';
@@ -15,6 +16,7 @@ export * from './marketing';
 export * from './advanced';
 export * from './community';
 export * from './audio';
+export * from './showcase';
 
 export type Block = (
     | ProfileBlock
@@ -46,4 +48,6 @@ export type Block = (
     | BookingBlock
     | CommunityBlock
     | EventBlock
+    | CardBlock
+    | TilesBlock
 ) & BlockGridProps;

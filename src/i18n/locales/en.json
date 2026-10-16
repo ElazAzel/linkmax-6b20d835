@@ -1045,7 +1045,9 @@
     "testimonial": "Reviews",
     "text": "Text",
     "video": "Video",
-    "audio": "Audio"
+    "audio": "Audio",
+    "card": "Card",
+    "tiles": "Tiles"
   },
   "blocks": {
     "addFailed": "Failed to add block",
@@ -1500,7 +1502,9 @@
     "verify": "Verify",
     "view": "View",
     "yes": "Yes",
-    "deleteConfirmTitle": "Delete block?"
+    "deleteConfirmTitle": "Delete block?",
+    "moveUp": "Move up",
+    "moveDown": "Move down"
   },
   "chat": {
     "lead": {
@@ -8280,5 +8284,23 @@
       "product_name": "Product name",
       "price": "Price"
     }
+  },
+  "cardBlock": {
+    "text": "Text",
+    "photo": "Photo",
+    "photoPosition": "Photo position",
+    "right": "Right",
+    "top": "Top",
+    "buttonStyle": "Button",
+    "solid": "Filled",
+    "outline": "Outline"
+  },
+  "tilesBlock": {
+    "heading": "Heading above the tiles",
+    "columns": "Columns",
+    "shape": "Shape",
+    "tile": "Tile",
+    "caption": "Caption",
+    "add": "Add a tile"
   }
 }

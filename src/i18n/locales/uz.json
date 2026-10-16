@@ -1045,7 +1045,9 @@
     "testimonial": "Sharhlar",
     "text": "Matn",
     "video": "Video",
-    "audio": "Audio"
+    "audio": "Audio",
+    "card": "Karta",
+    "tiles": "Plitkalar"
   },
   "blocks": {
     "addFailed": "Blok qo‘shib bo‘lmadi",
@@ -1500,7 +1502,9 @@
     "verify": "Tasdiqlash",
     "view": "Ko'rish",
     "yes": "Ha",
-    "deleteConfirmTitle": "Blok oʻchirilsinmi?"
+    "deleteConfirmTitle": "Blok oʻchirilsinmi?",
+    "moveUp": "Yuqoriga",
+    "moveDown": "Pastga"
   },
   "chat": {
     "lead": {
@@ -8280,5 +8284,23 @@
       "product_name": "Mahsulot nomi",
       "price": "Narx"
     }
+  },
+  "cardBlock": {
+    "text": "Matn",
+    "photo": "Rasm",
+    "photoPosition": "Rasm joyi",
+    "right": "Oʻngda",
+    "top": "Tepada",
+    "buttonStyle": "Tugma",
+    "solid": "Toʻldirilgan",
+    "outline": "Kontur"
+  },
+  "tilesBlock": {
+    "heading": "Plitkalar ustidagi sarlavha",
+    "columns": "Ustunlar",
+    "shape": "Shakl",
+    "tile": "Plitka",
+    "caption": "Izoh",
+    "add": "Plitka qoʻshish"
   }
 }

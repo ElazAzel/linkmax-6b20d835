@@ -125,6 +125,19 @@ describe('public page snapshot', () => {
 });
 
 describe('profile markdown (llms.txt)', () => {
+  it('lists card and tile links for crawlers', () => {
+    const md = buildProfileMarkdown({ ...page, blocks: [
+      ...page.blocks,
+      { id: 'card-1', type: 'card', title: { ru: 'Шоурум' }, text: 'Алматы, Аль-Фараби 116', url: 'https://example.com/book' },
+      { id: 'tiles-1', type: 'tiles', title: 'Пресса', items: [{ id: '1', title: 'ELLE', url: 'https://elle.kz/a' }, { id: '2', title: 'Bad', url: 'javascript:alert(1)' }] },
+    ] as unknown as Block[] });
+    expect(md).toContain('- [Шоурум](https://example.com/book)');
+    expect(md).toContain('  Алматы, Аль-Фараби 116');
+    expect(md).toContain('### Пресса');
+    expect(md).toContain('- [ELLE](https://elle.kz/a)');
+    expect(md).not.toContain('javascript:');
+  });
+
   it('contains only owner-published facts', () => {
     const md = buildProfileMarkdown(page);
     expect(md).toContain('# Ильяс Азелханов');
