@@ -218,7 +218,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           ) : (
             <img
               src={block.coverImage}
-              alt="Cover"
+              alt=""
               className="absolute inset-0 w-full h-full object-cover"
               style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
             />
@@ -293,7 +293,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
               style={{ backgroundColor: statusRing.color }}
             >
               <span className={cn('w-1.5 h-1.5 rounded-full bg-white/90', statusRing.pulse && 'animate-pulse')} />
-              {statusRing.label}
+              {t(`profile.statusRing.${statusRing.value}`, statusRing.label)}
             </div>
           )}
 

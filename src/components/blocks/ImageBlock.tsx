@@ -7,6 +7,7 @@ import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { hasCustomBlockContainer } from '@/lib/blocks/block-styling';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
 import { getImagePlacementStyle } from '@/lib/appearance/image-placement';
+import { imageAltText } from '@/lib/blocks/safe-href';
 
 interface ImageBlockProps {
   block: ImageBlockType;
@@ -15,7 +16,7 @@ interface ImageBlockProps {
 
 export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: ImageBlockProps) {
   const { i18n } = useTranslation();
-  const alt = getI18nText(block.alt, i18n.language as SupportedLanguage);
+  const alt = imageAltText(getI18nText(block.alt, i18n.language as SupportedLanguage), block.link);
   const caption = getI18nText(block.caption, i18n.language as SupportedLanguage);
 
   const isBanner = block.style === 'banner';
@@ -89,12 +90,12 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
                 backgroundPosition: 'center'
               }}
               role="img"
-              aria-label={alt || 'Image'}
+              aria-label={alt || undefined}
             />
           ) : (
             <img
               src={block.url}
-              alt={alt || 'Image'}
+              alt={alt}
               className={cn(
                 "w-full h-full",
                 // Default to cover if not specified

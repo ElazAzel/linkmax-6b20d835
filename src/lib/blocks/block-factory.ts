@@ -83,7 +83,7 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     type: 'image',
     blockSize: DEFAULT_BLOCK_SIZE,
     url: 'https://images.unsplash.com/photo-1497215842964-222b430dc094?w=800',
-    alt: 'Beautiful workspace',
+    alt: '',
     style: 'default',
     blockStyle: {
       padding: 'none',

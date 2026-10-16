@@ -8,6 +8,7 @@ import type { MessengerBlock as MessengerBlockType } from '@/types/page';
 import { supabase } from '@/platform/supabase/client';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { messengerPhoneDigits, whatsappHref } from '@/lib/blocks/messenger-links';
 
 interface MessengerBlockProps {
   block: MessengerBlockType;
@@ -29,12 +30,11 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
     return icons[platform] || '💬';
   };
 
-  const getMessengerUrl = (platform: string, username: string, message?: string) => {
-    const encodedMessage = message ? encodeURIComponent(message) : '';
+  const getMessengerUrl = (platform: string, username: string, message?: unknown) => {
     const urls: Record<string, string> = {
-      whatsapp: `https://wa.me/${username}${message ? `?text=${encodedMessage}` : ''}`,
-      telegram: `https://t.me/${username}`,
-      viber: `viber://chat?number=${username}`,
+      whatsapp: whatsappHref(username, message, i18n.language) ?? '#',
+      telegram: `https://t.me/${username.replace(/^@+/, '')}`,
+      viber: `viber://chat?number=%2B${messengerPhoneDigits(username)}`,
       wechat: `weixin://dl/chat?${username}`,
     };
     return urls[platform] || '#';
@@ -50,7 +50,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
     return names[platform] || platform;
   };
 
-  const handleMessengerClick = async (platform: string, username: string, message?: string) => {
+  const handleMessengerClick = async (platform: string, username: string, message?: unknown) => {
     // Track analytics click
     onClick?.();
 
@@ -130,7 +130,9 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
                 </div>
                 {messenger.username && (
                   <div className="text-xs text-muted-foreground/60 truncate font-medium mt-0.5">
-                    {messenger.username}
+                    {messenger.platform === 'whatsapp' || messenger.platform === 'viber'
+                      ? `+${messengerPhoneDigits(messenger.username)}`
+                      : messenger.username.replace(/^@*/, '@')}
                   </div>
                 )}
               </div>

@@ -31,6 +31,27 @@ const LANGUAGES = ['ru', 'en', 'kk'] as const;
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 const QUALITY_THRESHOLD = 25;
 
+/** pages.title may hold a multilingual JSON string ({"ru": "...", "en": "..."}). */
+function displayTitle(raw: string | null | undefined, fallback: string): string {
+  const value = (raw ?? '').trim();
+  if (value.startsWith('{')) {
+    try {
+      const parsed = JSON.parse(value) as Record<string, unknown>;
+      const pick = [parsed.ru, parsed.en, parsed.kk, ...Object.values(parsed)]
+        .find((v): v is string => typeof v === 'string' && v.trim() !== '');
+      if (pick) return pick.trim();
+    } catch { /* plain title */ }
+  }
+  return value || fallback;
+}
+
+// Untouched template pages ("Your Name", stock avatar) are not worth indexing.
+const PLACEHOLDER_TITLES = new Set(['your name', 'ваше имя', 'сіздің атыңыз']);
+const STOCK_AVATAR_RE = /images\.unsplash\.com\/photo-1472099645785/;
+function isPlaceholderPage(page: { title: string | null; slug: string }): boolean {
+  return PLACEHOLDER_TITLES.has(displayTitle(page.title, '').toLowerCase());
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -311,6 +332,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
     .single();
 
   const page = pageData as PageData | null;
+  if (page) page.title = displayTitle(page.title, '@' + page.slug);
 
   if (!page || pageError) {
     const c = { ru: 'Страница не найдена', en: 'Page Not Found', kk: 'Бет табылмады' };
@@ -869,6 +891,7 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
   for (const page of pages) {
     if (!page.slug || RESERVED_SLUGS.has(page.slug.toLowerCase())) continue;
     if (page.is_indexable === false) continue;
+    if (isPlaceholderPage(page)) continue;
     const lastmod = page.updated_at ? new Date(page.updated_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
     const escapedSlug = escapeXml(page.slug);
     xml += `  <url><loc>${BASE_URL}/${escapedSlug}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority>
@@ -877,8 +900,8 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
       xml += `    <xhtml:link rel="alternate" hreflang="${lang}" href="${BASE_URL}/${escapedSlug}?lang=${lang}"/>\n`;
     }
     xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}/${escapedSlug}"/>\n`;
-    if (page.avatar_url) {
-      xml += `    <image:image><image:loc>${escapeXml(page.avatar_url)}</image:loc><image:title>${escapeXml(page.title || page.slug)}</image:title></image:image>\n`;
+    if (page.avatar_url && !STOCK_AVATAR_RE.test(page.avatar_url)) {
+      xml += `    <image:image><image:loc>${escapeXml(page.avatar_url)}</image:loc><image:title>${escapeXml(displayTitle(page.title, page.slug))}</image:title></image:image>\n`;
     }
     xml += `  </url>\n`;
 

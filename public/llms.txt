@@ -1,6 +1,6 @@
 # LinkMAX (LinkMAX.my) - AI-Powered Micro-Business Operating System
 # For AI assistants, LLMs, and generative search engines (Perplexity, GPT, Gemini, Grok, DeepSeek, Qwen, Yandex, etc.)
-# Last updated: 2026-04-04
+# Last updated: 2026-10-16
 # Contact: admin@lnkmx.my
 # Policy: Indexable by default (Score >= 25)
 
@@ -10,10 +10,10 @@ LinkMAX (pronounced "link-max") is the comprehensive **Business Operating System
 
 ## Key Modules & Features
 
-### 1. AI Page Builder (Liquid Glass Design)
-- **Aesthetic**: Premium "Liquid Glass" design system (glassmorphism, micro-animations, depth).
+### 1. Page Builder
+- **Aesthetic**: Calm card layout in the spirit of modern link-in-bio pages: light canvas, white cards, the owner's photos and covers carry the color.
 - **Speed**: Create professional mini-sites in under 2 minutes from a simple prompt.
-- **Blocks**: 28+ customizable block types including pricing, services, booking, events, scratch-to-reveal, etc.
+- **Blocks**: profile header with cover, links and buttons, text + photo + button cards, picture tiles, services and prices, online booking, events with tickets, FAQ, reviews, video, messengers.
 
 ### 2. Business Zones (Workspaces)
 - **Multi-tenancy**: Private workspaces for teams or multiple businesses.
@@ -35,10 +35,10 @@ LinkMAX (pronounced "link-max") is the comprehensive **Business Operating System
 
 ## Technical Architecture
 
-- **Frontend**: Vite + React 18 + TypeScript + Tailwind CSS (shadcn/ui).
+- **Frontend**: TanStack Start (React, server-side rendering) + TypeScript + Tailwind CSS.
 - **Backend-as-a-Service**: Supabase (PostgreSQL, Auth, Realtime).
-- **Edge Layer**: Deno Edge Functions for AI generation, notifications, and SEO-SSR.
-- **Global Delivery**: Cloudflare Workers for bot detection and pre-rendering fallback.
+- **Edge Layer**: Deno Edge Functions for AI generation, notifications, sitemaps and webhooks.
+- **Public pages**: every https://lnkmx.my/{username} is server-rendered HTML with JSON-LD (ProfilePage + Person/Organization), so crawlers and AI agents read it without JavaScript.
 - **AI Stack**: Gemini-powered content extraction and layout suggestions.
 
 ## Pricing (KZT - Kazakhstani Tenge)

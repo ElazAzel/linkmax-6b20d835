@@ -10,6 +10,7 @@ import { buildProfileSeoDescription, buildProfileSeoTitle } from '@/lib/seo/prof
 import { generateAnswerBlock, type AnswerBlockData } from '@/lib/seo/answer-block';
 import { generateGEOSchemas, type GEOSchemas } from '@/lib/seo/geo-schemas';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
+import { canonicalSocialUrl } from '@/lib/blocks/safe-href';
 
 export type SeoLanguage = 'ru' | 'en' | 'kk';
 
@@ -50,9 +51,7 @@ export function normalizeSameAs(urls: Array<string | undefined | null>): string[
   const out: string[] = [];
   for (const raw of urls) {
     if (!raw) continue;
-    let url = raw.trim();
-    const tgWeb = url.match(/^https?:\/\/web\.telegram\.org\/[^#]*#@?([A-Za-z0-9_]{3,})/i);
-    if (tgWeb) url = `https://t.me/${tgWeb[1]}`;
+    const url = canonicalSocialUrl(raw);
     if (!/^https?:\/\//i.test(url)) continue;
     const key = url.replace(/\/+$/, '').toLowerCase();
     if (seen.has(key)) continue;
@@ -60,6 +59,31 @@ export function normalizeSameAs(urls: Array<string | undefined | null>): string[
     out.push(url);
   }
   return out;
+}
+
+/**
+ * Link previews are wide cards: a cover beats a square avatar, and a still
+ * image beats a GIF (Telegram, WhatsApp and LinkedIn show only its first frame
+ * or nothing). Falls back to the first image when every candidate is a GIF.
+ */
+export function pickOgImage(candidates: Array<string | undefined | null>): string | undefined {
+  const urls = candidates.map((u) => (typeof u === 'string' ? u.trim() : '')).filter((u) => /^https?:\/\//i.test(u));
+  return urls.find((u) => !/\.gif(\?|#|$)/i.test(u)) ?? urls[0];
+}
+
+/** pages.title can hold a multilingual JSON string ({"ru": "...", "en": "..."}). */
+function multilingualText(value: unknown, language: string): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const raw = value.trim();
+  if (!raw.startsWith('{')) return raw || undefined;
+  try {
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    const pick = [parsed[language], parsed.ru, parsed.en, ...Object.values(parsed)]
+      .find((v): v is string => typeof v === 'string' && v.trim() !== '');
+    return pick?.trim();
+  } catch {
+    return raw;
+  }
 }
 
 function clamp(text: string, max: number): string {
@@ -81,7 +105,7 @@ export function computePublicPageSeo(
 
   const profile = extractProfileFromBlocks(blocks, language);
   // Pages without a profile block still carry a title/description/avatar on the record.
-  if (!profile.name) profile.name = page.title || page.seo?.title;
+  if (!profile.name) profile.name = multilingualText(page.title, language) || page.seo?.title;
   if (!profile.bio) profile.bio = page.description || page.seo?.description;
   if (!profile.avatar) profile.avatar = page.avatar_url || page.avatarUrl;
   profile.bio = toPlainText(profile.bio) || undefined;
@@ -100,7 +124,12 @@ export function computePublicPageSeo(
   meta.title = ownTitle || smartTitle || meta.title;
   if (!/linkmax/i.test(meta.title) && meta.title.length <= 58) meta.title = `${meta.title} | LinkMAX`;
   meta.description = clamp(ownDesc || smartDesc || toPlainText(meta.description), 170);
-  meta.ogImage = page.seo?.image || profile.avatar || page.previewUrl || `${getAppDomain()}/og-image.png`;
+  meta.ogImage = pickOgImage([
+    page.seo?.image,
+    (blocks.find((b) => b.type === 'profile') as { coverImage?: string } | undefined)?.coverImage,
+    profile.avatar,
+    page.previewUrl,
+  ]) || `${getAppDomain()}/og-image.png`;
   // The DB flag decides indexability; the client heuristic must not noindex a page mid-hydration.
   meta.robots = page.isIndexable === false
     ? 'noindex, follow'

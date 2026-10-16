@@ -6,6 +6,7 @@
  * dismisses it for the session.
  */
 import { memo, useMemo, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils/utils';
 import { session } from '@/lib/storage';
 import Phone from 'lucide-react/dist/esm/icons/phone';
@@ -13,6 +14,7 @@ import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import Send from 'lucide-react/dist/esm/icons/send';
 import X from 'lucide-react/dist/esm/icons/x';
 import type { Block } from '@/types/page';
+import { whatsappHref } from '@/lib/blocks/messenger-links';
 
 interface Contact {
   label: string;
@@ -27,7 +29,7 @@ interface Props {
 
 const DISMISS_KEY = 'lnkmx:sticky-cta-dismissed';
 
-function extractContacts(blocks: Block[] | undefined): Contact[] {
+function extractContacts(blocks: Block[] | undefined, language: string): Contact[] {
   if (!blocks?.length) return [];
   const out: Contact[] = [];
   const seen = new Set<string>();
@@ -39,13 +41,13 @@ function extractContacts(blocks: Block[] | undefined): Contact[] {
 
   for (const b of blocks) {
     if (b.type === 'messenger') {
-      const list = (b as { messengers?: Array<{ platform: string; username: string; message?: string }> }).messengers ?? [];
+      const list = (b as { messengers?: Array<{ platform: string; username: string; message?: unknown }> }).messengers ?? [];
       for (const m of list) {
         const u = (m.username || '').replace(/\s+/g, '').replace(/^@/, '');
         if (!u) continue;
         if (m.platform === 'whatsapp') {
-          const digits = u.replace(/[^\d]/g, '');
-          if (digits) push({ label: 'WhatsApp', icon: MessageCircle, href: `https://wa.me/${digits}${m.message ? `?text=${encodeURIComponent(m.message)}` : ''}` });
+          const href = whatsappHref(u, m.message, language);
+          if (href) push({ label: 'WhatsApp', icon: MessageCircle, href });
         } else if (m.platform === 'telegram') {
           push({ label: 'Telegram', icon: Send, href: `https://t.me/${u}` });
         }
@@ -63,7 +65,8 @@ function extractContacts(blocks: Block[] | undefined): Contact[] {
 }
 
 export const StickyContactCTA = memo(function StickyContactCTA({ blocks, pageId }: Props) {
-  const contacts = useMemo(() => extractContacts(blocks), [blocks]);
+  const { i18n } = useTranslation();
+  const contacts = useMemo(() => extractContacts(blocks, i18n.language), [blocks, i18n.language]);
   const [dismissed, setDismissed] = useState(false);
   const dismissKey = `${DISMISS_KEY}:${pageId ?? 'global'}`;
 

@@ -5207,7 +5207,15 @@
     "strong": "Strong",
     "sunset": "Sunset",
     "verified": "Verified",
-    "xlarge": "Very big"
+    "xlarge": "Very big",
+    "statusRing": {
+      "none": "None",
+      "online": "Online",
+      "busy": "Busy",
+      "away": "Away",
+      "offline": "Offline",
+      "live": "Live"
+    }
   },
   "profileEditor": {
     "avatar": "Avatar",
@@ -8330,5 +8338,14 @@
     "tile": "Tile",
     "caption": "Caption",
     "add": "Add a tile"
+  },
+  "growth": {
+    "clone": {
+      "button": "Make a copy",
+      "saving": "Saving…",
+      "success": "Copy saved to your templates",
+      "error": "Could not save the copy",
+      "authRedirect": "Sign in and the copy will be saved to your templates."
+    }
   }
 }

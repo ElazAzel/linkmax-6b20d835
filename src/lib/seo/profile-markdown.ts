@@ -5,11 +5,11 @@
 import type { Block, PageData } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { computePublicPageSeo, normalizeSameAs, toPlainText, type SeoLanguage } from '@/lib/seo/public-page-seo';
+import { PLACEHOLDER_ALTS } from '@/lib/blocks/safe-href';
 
 type AnyBlock = Block & Record<string, unknown>;
 
 /** Template alt texts that say nothing about the linked project. */
-const PLACEHOLDER_ALTS = new Set(['beautiful workspace', 'image', 'photo', 'изображение', 'фото']);
 
 function text(value: unknown, language: SeoLanguage): string {
   if (value == null) return '';

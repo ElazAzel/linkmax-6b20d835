@@ -19,6 +19,8 @@ import type {
   LinkBlock,
 } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
+import { canonicalSocialUrl } from '@/lib/blocks/safe-href';
+import { messengerMessageText, messengerPhoneDigits } from '@/lib/blocks/messenger-links';
 
 export interface AiContactAction {
   /** Stable identifier of channel: phone, whatsapp, telegram, email, web */
@@ -75,26 +77,28 @@ const sanitizeUsername = (raw: string): string => raw.replace(/^@+/, '').trim();
 const buildMessengerHref = (
   platform: MessengerBlock['messengers'][number]['platform'],
   username: string,
-  message?: string
+  message: unknown,
+  language: string,
 ): { href: string; display: string } => {
   const u = sanitizeUsername(username);
-  const enc = message ? encodeURIComponent(message) : '';
+  const text = messengerMessageText(message, language);
+  const enc = text ? encodeURIComponent(text) : '';
   switch (platform) {
     case 'whatsapp': {
-      const phone = u.replace(PHONE_DIGITS_RE, '');
+      // wa.me takes international digits only: no "+", no local "8…" prefix.
+      const phone = messengerPhoneDigits(u);
       const href = `https://wa.me/${phone}${enc ? `?text=${enc}` : ''}`;
       return { href, display: `+${phone}` };
     }
     case 'telegram': {
       // Telegram supports @username and phone
       const isPhone = /^\+?\d{6,}$/.test(u);
-      const href = isPhone
-        ? `https://t.me/+${u.replace(PHONE_DIGITS_RE, '')}`
-        : `https://t.me/${u}`;
-      return { href, display: isPhone ? `+${u.replace(PHONE_DIGITS_RE, '')}` : `@${u}` };
+      const digits = u.replace(/\D/g, '');
+      const href = isPhone ? `https://t.me/+${digits}` : `https://t.me/${u}`;
+      return { href, display: isPhone ? `+${digits}` : `@${u}` };
     }
     case 'viber': {
-      const phone = u.replace(PHONE_DIGITS_RE, '');
+      const phone = messengerPhoneDigits(u);
       return { href: `viber://chat?number=%2B${phone}`, display: `+${phone}` };
     }
     case 'wechat':
@@ -155,7 +159,7 @@ export function extractAiCta(
   if (messengerBlock?.messengers?.length) {
     for (const m of messengerBlock.messengers) {
       if (!m?.username) continue;
-      const { href, display } = buildMessengerHref(m.platform, m.username, m.message);
+      const { href, display } = buildMessengerHref(m.platform, m.username, m.message, language);
       push({
         type: m.platform,
         label: PLATFORM_LABEL[m.platform],
@@ -192,11 +196,12 @@ export function extractAiCta(
   if (socialsBlock?.platforms?.length) {
     for (const p of socialsBlock.platforms) {
       if (!p?.url) continue;
-      const type = detectChannelFromUrl(p.url);
+      const socialUrl = canonicalSocialUrl(p.url);
+      const type = detectChannelFromUrl(socialUrl);
       // Push only direct-contact channels here (skip generic web socials — they'd dilute the CTA list)
       if (type === 'web') continue;
-      const href = ensureProtocol(p.url);
-      push({ type, label: PLATFORM_LABEL[type], href, display: p.url });
+      const href = ensureProtocol(socialUrl);
+      push({ type, label: PLATFORM_LABEL[type], href, display: socialUrl });
     }
   }
 
