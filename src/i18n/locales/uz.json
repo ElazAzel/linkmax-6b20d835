@@ -7605,6 +7605,33 @@
         "title": "Bugunoq mijozlarni qabul qilishni boshlang",
         "sub": "Bepul. Karta kerak emas. Ko‘proq imkoniyat kerak bo‘lsa, Pro’ga o‘ting.",
         "pricing": "Tariflar"
+      },
+      "mock2": {
+        "bio": "Kattalar uchun ingliz tili · onlayn",
+        "s1": "Sinov darsi",
+        "s2": "60 daqiqalik dars",
+        "s3": "Suhbat klubi",
+        "free": "Bepul"
+      },
+      "mock3": {
+        "bio": "Erkaklar soch turmagi · Astana",
+        "s1": "Soch olish",
+        "s2": "Soqol",
+        "s3": "Soch va soqol"
+      },
+      "demo": {
+        "chat1": "Yangi ariza: manikyur",
+        "chat2": "Aygerim · +7 701 ··· 45",
+        "chat3": "Jum, 14:00 — tasdiqlaysizmi?",
+        "t1": "Instagramdan ariza",
+        "t2": "Jumaga yozilish",
+        "t3": "To‘lov 12 000 ₸",
+        "t4": "Qayta tashrif",
+        "ask": "Manikyur qancha turadi?"
+      },
+      "gallery": {
+        "title": "Bitta havola — har qanday ish uchun",
+        "sub": "Ustalar, o‘qituvchilar, maslahatchilar va studiyalar sahifani bir kechada yig‘ishadi."
       }
     }
   },

@@ -7605,6 +7605,33 @@
         "title": "Start taking clients today",
         "sub": "Free. No card. Go Pro when you need more.",
         "pricing": "Pricing"
+      },
+      "mock2": {
+        "bio": "English for adults · online",
+        "s1": "Trial lesson",
+        "s2": "60-minute lesson",
+        "s3": "Speaking club",
+        "free": "Free"
+      },
+      "mock3": {
+        "bio": "Men's haircuts · Astana",
+        "s1": "Haircut",
+        "s2": "Beard",
+        "s3": "Haircut and beard"
+      },
+      "demo": {
+        "chat1": "New request: manicure",
+        "chat2": "Aigerim · +7 701 ··· 45",
+        "chat3": "Fri, 14:00 — confirm?",
+        "t1": "Request from Instagram",
+        "t2": "Booked for Friday",
+        "t3": "Paid 12,000 ₸",
+        "t4": "Repeat visit",
+        "ask": "How much is a manicure?"
+      },
+      "gallery": {
+        "title": "One link for any business",
+        "sub": "Masters, tutors, consultants and studios build their page in one evening."
       }
     }
   },
