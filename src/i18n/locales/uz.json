@@ -1045,7 +1045,9 @@
     "testimonial": "Sharhlar",
     "text": "Matn",
     "video": "Video",
-    "audio": "Audio"
+    "audio": "Audio",
+    "card": "Karta",
+    "tiles": "Plitkalar"
   },
   "blocks": {
     "addFailed": "Blok qo‘shib bo‘lmadi",
@@ -1500,7 +1502,9 @@
     "verify": "Tasdiqlash",
     "view": "Ko'rish",
     "yes": "Ha",
-    "deleteConfirmTitle": "Blok oʻchirilsinmi?"
+    "deleteConfirmTitle": "Blok oʻchirilsinmi?",
+    "moveUp": "Yuqoriga",
+    "moveDown": "Pastga"
   },
   "chat": {
     "lead": {
@@ -1665,7 +1669,8 @@
       "themeLight": "Yorug‘",
       "themeDark": "Qorong‘i",
       "businessTools": "Biznes vositalari",
-      "businessToolsDesc": "Savdo, band qilish, CRM, moliya va jamoa. O‘chirilganda kabinet oddiy sahifa konstruktori bo‘lib qoladi."
+      "businessToolsDesc": "Savdo, band qilish, CRM, moliya va jamoa. O‘chirilganda kabinet oddiy sahifa konstruktori bo‘lib qoladi.",
+      "deviceAccounts": "Ushbu qurilmadagi akkauntlar"
     },
     "activity": {
       "all": "Hammasi",
@@ -1760,8 +1765,8 @@
       "gallery": "Galereya",
       "galleryDesc": "Ilhom",
       "leads": "ilovalar",
-      "marketplace": "Bozor",
-      "marketplaceDesc": "Jamiyatdan",
+      "marketplace": "Hamjamiyat shablonlari",
+      "marketplaceDesc": "Boshqa mualliflar sahifalari",
       "myPage": "Mening sahifam",
       "performance": "Ishlash",
       "premium": "Premium",
@@ -1775,7 +1780,7 @@
       "templatesDesc": "Tayyor sahifalar",
       "tip": "Maslahat",
       "tipContent": "Mijoz murojaat qilishdan oldin qaror qila olishi uchun narxlarni qoʻshing",
-      "title": "Uy",
+      "title": "Umumiy koʻrinish",
       "versions": "Hikoya",
       "versionsDesc": "Sahifa versiyalari",
       "views": "ko'rishlar"
@@ -4900,8 +4905,8 @@
       "title": "Takroriy mijozlar"
     },
     "trafficNoLeads": {
-      "hint": "Murojaatlarni qabul qilish uchun forma yoki bandlov blokini qoʻshing",
-      "title": "Trafik, lekin hech qanday sabab yo'q"
+      "hint": "Arizalarni qabul qilish uchun shakl yoki yozilish qoʻshing",
+      "title": "Koʻrishlar bor, arizalar yoʻq"
     }
   },
   "mapBlock": {
@@ -8280,5 +8285,23 @@
       "product_name": "Mahsulot nomi",
       "price": "Narx"
     }
+  },
+  "cardBlock": {
+    "text": "Matn",
+    "photo": "Rasm",
+    "photoPosition": "Rasm joyi",
+    "right": "Oʻngda",
+    "top": "Tepada",
+    "buttonStyle": "Tugma",
+    "solid": "Toʻldirilgan",
+    "outline": "Kontur"
+  },
+  "tilesBlock": {
+    "heading": "Plitkalar ustidagi sarlavha",
+    "columns": "Ustunlar",
+    "shape": "Shakl",
+    "tile": "Plitka",
+    "caption": "Izoh",
+    "add": "Plitka qoʻshish"
   }
 }

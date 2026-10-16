@@ -20,7 +20,7 @@ const destinations = [
 export function BusinessScreen({ onNavigate }: { onNavigate: (id: string) => void }) {
   const { t } = useTranslation();
   return <div className="space-y-5 p-4 md:p-0">
-    <DashboardHeader title={t('pageV2.navigation.business', 'Бизнес')} hideLivePill />
+    <DashboardHeader title={t('pageV2.navigation.business', 'Бизнес')} />
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {destinations.map(([id, key, fallback]) => <Button key={id} variant="secondary" onClick={() => onNavigate(id)} className="h-auto min-h-16 justify-start whitespace-normal rounded-3xl px-4 py-4 text-left">{t(key, fallback)}</Button>)}
     </div>

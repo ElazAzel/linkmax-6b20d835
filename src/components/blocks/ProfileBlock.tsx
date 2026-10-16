@@ -195,9 +195,13 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   const drawStatusRing = showStatusRing && (block.avatarFrame || 'default') === 'default';
   const patternStyle = getCoverPatternStyle(block.coverPattern);
   const hasCoverMedia = !!(block.coverImage || block.coverVideo);
+  // Korner-style header (V2 default): cover on top of the card, an 80px avatar
+  // overlapping its edge (inside the card without a cover), name and bio
+  // left-aligned, the verification mark next to the name.
+  const compact = LINKMAX_UI_V2 && !block.avatarPosition;
 
   return (
-    <div className={cn('relative flex min-w-0 flex-col overflow-visible', getPositionClass(), LINKMAX_UI_V2 && !block.avatarPosition && 'lm-profile-compact')}>
+    <div className={cn('relative flex min-w-0 flex-col overflow-visible', getPositionClass(), compact && 'lm-profile-compact')}>
       {hasCoverMedia && (
         <div ref={coverRef} className={`relative w-full rounded-t-[var(--lm-block-radius,24px)] ${getCoverHeight()} overflow-hidden`}>
           {block.coverVideo ? (
@@ -228,7 +232,12 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
         </div>
       )}
 
-      <div className={`lm-profile-body flex min-w-0 flex-col w-full ${getPositionClass()} gap-4 p-4 ${hasCoverMedia ? '-mt-16' : ''}`}>
+      <div className={cn(
+        'lm-profile-body flex min-w-0 flex-col w-full',
+        compact
+          ? cn('items-start gap-3 px-5 pb-5', hasCoverMedia ? '-mt-11' : 'pt-5')
+          : cn(getPositionClass(), 'gap-4 p-4', hasCoverMedia && '-mt-16'),
+      )}>
         {/* Outer container for positioning icon - no animation here */}
         <div className="lm-profile-avatar relative">
           {/* Status ring - outer glow */}
@@ -250,7 +259,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           <div
             className={cn(
               "flex items-center justify-center",
-              getFrameSize(),
+              compact ? 'h-[88px] w-[88px]' : getFrameSize(),
             )}
             style={{
               ...getShadowStyles(block.shadowStyle || 'none'),
@@ -260,9 +269,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
             }}
           >
             {/* Avatar - NO animation, NO shadow - completely static */}
-            <Avatar className={cn(getAvatarSize(), 'bg-background')} style={avatarShapeStyle}>
+            <Avatar className={cn(compact ? 'h-20 w-20' : getAvatarSize(), 'bg-background')} style={avatarShapeStyle}>
               <AvatarImage src={block.avatar} alt={name} className="object-cover" />
-              <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
+              <AvatarFallback className={cn('text-2xl font-semibold', compact ? 'bg-foreground text-background' : 'bg-primary text-primary-foreground')}>
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -289,7 +298,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           )}
 
           {/* Platform verification badge - shows based on actual verification + premium status */}
-          {showPlatformBadge && (
+          {showPlatformBadge && !compact && (
             <div className={cn("absolute z-10", getVerificationPositionClasses(block.verifiedPosition || 'bottom-right'))}>
               <VerifiedBadge
                 isVerified={isOwnerVerified}
@@ -310,29 +319,34 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           )}
         </div>
 
-        <div className="lm-profile-copy w-full min-w-0 text-center space-y-2 overflow-visible">
+        <div className={cn('lm-profile-copy w-full min-w-0 space-y-2 overflow-visible', compact ? 'text-left' : 'text-center')}>
           <style>{NAME_ANIMATION_CSS}</style>
           <div className={cn(
-            "lm-profile-name flex min-w-0 items-center justify-center gap-2",
+            "lm-profile-name flex min-w-0 items-center gap-2",
+            compact ? "justify-start" : "justify-center",
             block.nameAnimation === 'ticker' ? "overflow-hidden w-full" : "overflow-visible"
           )}>
             <h1 className={cn(
-              "max-w-full text-[1.75rem] sm:text-3xl font-bold tracking-tight leading-[1.1] [text-wrap:balance] break-words hyphens-auto transition-all duration-300 overflow-visible",
+              "max-w-full font-bold tracking-tight leading-[1.1] [text-wrap:balance] break-words hyphens-auto transition-all duration-300 overflow-visible",
+              compact ? "text-2xl" : "text-[1.75rem] sm:text-3xl",
               block.nameAnimation === 'none' && "hover:text-primary",
               (block.nameAnimation && block.nameAnimation !== 'none' && !['shine','ticker','underline-draw','glitch','rainbow-slow'].includes(block.nameAnimation)) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
               getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
             )}>
               {name}
             </h1>
+            {showPlatformBadge && compact && (
+              <VerifiedBadge isVerified={isOwnerVerified} isPremium={isPremiumUser} size="sm" />
+            )}
           </div>
 
           {bio && (
-            <p className="lm-profile-bio mx-auto text-[15px] text-muted-foreground max-w-md whitespace-pre-line break-words leading-relaxed [text-wrap:pretty]">{parseRichText(bio)}</p>
+            <p className={cn('lm-profile-bio text-[15px] text-muted-foreground whitespace-pre-line break-words leading-relaxed [text-wrap:pretty]', compact ? 'max-w-none' : 'mx-auto max-w-md')}>{parseRichText(bio)}</p>
           )}
 
           {/* Profile badge row (city / status / emoji / custom) */}
           {block.badges && block.badges.length > 0 && (
-            <div className="lm-profile-badges flex flex-wrap items-center justify-center gap-1.5 pt-1">
+            <div className={cn('lm-profile-badges flex flex-wrap items-center gap-1.5 pt-1', compact ? 'justify-start' : 'justify-center')}>
               {block.badges.map((b) => {
                 const Icon = b.icon ? getLucideIcon(b.icon) : null;
                 return (

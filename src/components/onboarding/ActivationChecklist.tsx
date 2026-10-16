@@ -79,7 +79,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
                 <div
                   className={cn(
                     'h-full w-full transition-colors',
-                    isCompleted ? 'bg-primary' : isActive ? 'bg-warning/90' : 'bg-transparent'
+                    isCompleted ? 'bg-primary' : isActive ? 'bg-primary/40' : 'bg-transparent'
                   )}
                 />
               </div>
@@ -107,7 +107,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
                 isCompleted
                   ? 'bg-primary/20 text-primary'
                   : isActive
-                  ? 'bg-warning/12 text-warning'
+                  ? 'bg-primary/12 text-primary'
                   : 'bg-muted text-muted-foreground'
               )}>
                 {isCompleted ? <Check className="h-3.5 w-3.5" /> : index + 1}
@@ -116,7 +116,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
                 {t(step.labelKey)}
               </span>
               {!isCompleted && step.action && (
-                <Button size="sm" variant={isActive ? 'default' : 'outline'} className="h-9 rounded-lg text-xs font-bold uppercase tracking-[0.06em]" onClick={step.action}>
+                <Button size="sm" variant={isActive ? 'default' : 'outline'} className="h-9 rounded-full px-4 text-sm font-semibold" onClick={step.action}>
                   {t(step.ctaKey)}
                 </Button>
               )}

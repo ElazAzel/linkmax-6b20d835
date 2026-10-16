@@ -132,12 +132,12 @@
     "progress": "{{done}} из {{total}}",
     "steps": {
       "createPage": "Создайте свою визитную карточку",
-      "addBlock": "Продемонстрируйте свои услуги",
+      "addBlock": "Покажите свои услуги",
       "addServices": "Добавьте услуги с ценами",
       "addContact": "Добавьте кнопку связи",
-      "publish": "Запуск в мир",
+      "publish": "Опубликуйте страницу",
       "connectTelegram": "Включить мгновенные уведомления",
-      "firstLead": "Получите свой первый лид",
+      "firstLead": "Получите первую заявку",
       "firstBooking": "Получите первую запись",
       "firstConversion": "Получите первый отклик",
       "firstVisitor": "Получите первого посетителя"
@@ -148,8 +148,8 @@
       "addServices": "Добавить",
       "addContact": "Добавить",
       "publish": "Публиковать",
-      "connectTelegram": "Соединять",
-      "promotePage": "Продвигать"
+      "connectTelegram": "Подключить",
+      "promotePage": "Продвинуть"
     },
     "tips": {
       "addBlock": "Добавьте первый блок — ссылку, товар или видео",
@@ -944,7 +944,7 @@
   "blockEditor": {
     "advancedSettings": "Дополнительные настройки",
     "alignment": "Выравнивание",
-    "appearDate": "Появление",
+    "appearDate": "Показ с даты",
     "backgroundColor": "Цвет фона",
     "blockSize": "Размер блока",
     "blockStyle": "Цвет и шрифт блока",
@@ -1045,7 +1045,9 @@
     "testimonial": "Отзывы",
     "text": "Текст",
     "video": "Видео",
-    "audio": "Аудио"
+    "audio": "Аудио",
+    "card": "Карточка",
+    "tiles": "Плитки"
   },
   "blocks": {
     "addFailed": "Не удалось добавить блок.",
@@ -1410,7 +1412,7 @@
     "and": "И",
     "apply": "Применять",
     "back": "Назад",
-    "backHome": "Дом",
+    "backHome": "На главную",
     "cancel": "Отмена",
     "close": "Закрывать",
     "collapse": "Крах",
@@ -1424,7 +1426,7 @@
     },
     "copied": "Скопировано",
     "copy": "Копировать",
-    "create": "Создавать",
+    "create": "Создать",
     "created": "созданный",
     "creating": "Создание...",
     "cta": {
@@ -1457,7 +1459,7 @@
     "friend": "Друг",
     "generate": "Генерировать",
     "generating": "Создание...",
-    "goHome": "Дом",
+    "goHome": "На главную",
     "guide": "Гид",
     "hide": "Скрывать",
     "language": "Язык",
@@ -1489,18 +1491,20 @@
     "skip": "Пропускать",
     "status": "Статус",
     "success": "Успешно",
-    "toHome": "Дом",
+    "toHome": "На главную",
     "undo": "Отмена",
     "unknownUser": "Неизвестный",
     "untitled": "Без названия",
-    "update": "Обновлять",
+    "update": "Обновить",
     "upgrade": "Обновите до PRO",
     "upload": "Скачать",
     "user": "Пользователь",
     "verify": "Проверять",
     "view": "Вид",
     "yes": "Да",
-    "deleteConfirmTitle": "Удалить блок?"
+    "deleteConfirmTitle": "Удалить блок?",
+    "moveUp": "Выше",
+    "moveDown": "Ниже"
   },
   "chat": {
     "lead": {
@@ -1624,17 +1628,17 @@
   },
   "dashboard": {
     "accountSettings": {
-      "account": "Счет",
+      "account": "Аккаунт",
       "achievements": "Достижения",
       "achievementsDesc": "Ваш прогресс",
       "apiAccess": "API-доступ",
-      "appearance": "Появление",
+      "appearance": "Оформление",
       "billingHistory": "История платежей",
       "changePassword": "Изменить пароль",
       "connectTelegram": "Подключить Телеграм",
       "connected": "Подключено",
       "emailNotifications": "Уведомления по электронной почте",
-      "emailNotificationsDesc": "О новых приложениях",
+      "emailNotificationsDesc": "О новых заявках",
       "freePlan": "Бесплатный план",
       "friends": "Друзья",
       "language": "Язык",
@@ -1647,14 +1651,14 @@
       "saveTemplate": "Сохранить как шаблон",
       "security": "Безопасность",
       "signOut": "Выйти",
-      "telegram": "Телеграмма",
+      "telegram": "Telegram",
       "title": "Настройки учетной записи",
       "tokens": "Токены",
       "tokensDesc": "Баланс и история",
       "upgradeForMore": "Обновите, чтобы получить больше",
       "user": "Пользователь",
       "username": "Имя пользователя",
-      "verification": "Проверка",
+      "verification": "Верификация",
       "regional": "Региональный",
       "kaspiQr": "Каспи QR-виджет",
       "kaspiQrDesc": "Показать QR-код Kaspi.kz на панели управления",
@@ -1665,7 +1669,8 @@
       "themeLight": "Светлая",
       "themeDark": "Тёмная",
       "businessTools": "Бизнес-инструменты",
-      "businessToolsDesc": "Продажи, запись, CRM, финансы и команда. Выключено — кабинет остаётся простым конструктором страниц."
+      "businessToolsDesc": "Продажи, запись, CRM, финансы и команда. Выключено — кабинет остаётся простым конструктором страниц.",
+      "deviceAccounts": "Аккаунты на устройстве"
     },
     "activity": {
       "all": "Все",
@@ -1752,7 +1757,7 @@
       "wallet": "Ваш кошелек"
     },
     "header": {
-      "live": "Живая платформа"
+      "live": "Опубликована"
     },
     "home": {
       "blocks": "блоки",
@@ -1760,10 +1765,10 @@
       "gallery": "Галерея",
       "galleryDesc": "Вдохновение",
       "leads": "приложения",
-      "marketplace": "Торговая площадка",
-      "marketplaceDesc": "От сообщества",
+      "marketplace": "Шаблоны сообщества",
+      "marketplaceDesc": "Страницы других авторов",
       "myPage": "Моя страница",
-      "performance": "Производительность",
+      "performance": "Статистика",
       "premium": "Премиум",
       "premiumDesc": "Больше возможностей",
       "preview": "Предварительный просмотр",
@@ -1775,7 +1780,7 @@
       "templatesDesc": "Готовые страницы",
       "tip": "Совет",
       "tipContent": "Добавьте цены, чтобы клиент мог принять решение до обращения",
-      "title": "Дом",
+      "title": "Обзор",
       "versions": "История",
       "versionsDesc": "Версии страницы",
       "views": "просмотры"
@@ -1970,7 +1975,7 @@
       "indexable": "Индексация поисковыми системами",
       "indexableHint": "Показать страницу в Google и других поисковых системах",
       "invalidDomain": "Неверный формат домена",
-      "marketplace": "Торговая площадка",
+      "marketplace": "Шаблоны сообщества",
       "marketplaceDesc": "Шаблоны сообществ",
       "paidAddon": "Добавлять. оплаченный",
       "primaryPaid": "Базовая платная",
@@ -2012,7 +2017,7 @@
     },
     "pages": {
       "all": "Все",
-      "create": "Создавать",
+      "create": "Создать",
       "createFirst": "Создать страницу",
       "createSuccess": "Страница создана!",
       "delete": "Удалить",
@@ -2044,7 +2049,7 @@
       "subtitle": "Управление страницами",
       "title": "Страницы",
       "untitled": "Без названия",
-      "upgrade": "Обновлять",
+      "upgrade": "Перейти на PRO",
       "upgradeToPaid": "Сделать это платным"
     },
     "seo": {
@@ -2052,14 +2057,14 @@
       "title": "Личный кабинет ЛинМАКС"
     },
     "settings": {
-      "account": "Счет",
+      "account": "Аккаунт",
       "achievements": "Достижения",
       "achievementsDesc": "Ваш прогресс",
-      "appearance": "Появление",
+      "appearance": "Оформление",
       "connectTelegram": "Подключить Телеграм",
       "connected": "Подключено",
       "emailNotifications": "Уведомления по электронной почте",
-      "emailNotificationsDesc": "О новых приложениях",
+      "emailNotificationsDesc": "О новых заявках",
       "friends": "Друзья",
       "getPremium": "Получить Премиум",
       "language": "Язык интерфейса",
@@ -2071,29 +2076,29 @@
       "premiumBenefits": "Все блоки, CRM, аналитика и многое другое",
       "saveTemplate": "Сохранить как шаблон",
       "signOut": "Выйти",
-      "telegramNotifications": "Телеграмма",
+      "telegramNotifications": "Telegram",
       "title": "Настройки",
       "tokens": "Токены",
       "tokensDesc": "Баланс и история",
       "upgradeToPremium": "Обновите до Премиум",
       "username": "Имя пользователя",
-      "verification": "Проверка"
+      "verification": "Верификация"
     },
     "settingsTabs": {
-      "account": "Счет",
+      "account": "Аккаунт",
       "page": "Страница"
     },
     "sidebar": {
-      "account": "Счет",
+      "account": "Аккаунт",
       "achievements": "Достижения",
       "design": "Дизайн",
-      "marketplace": "Торговая площадка",
+      "marketplace": "Шаблоны сообщества",
       "operations": "Работа",
       "signOut": "Выйти",
       "templates": "Шаблоны",
       "tokens": "Токены",
       "tools": "Инструменты",
-      "upgrade": "Обновлять",
+      "upgrade": "Перейти на PRO",
       "zone": "Бизнес-инструменты"
     },
     "templateApplied": "Шаблон применен!",
@@ -2155,7 +2160,7 @@
     "section": "Раздел",
     "sectionName": "Название раздела:",
     "sections": {
-      "appearance": "Появление",
+      "appearance": "Оформление",
       "content": "Содержание",
       "effects": "Эффекты",
       "icon": "Икона",
@@ -2572,7 +2577,7 @@
     "pendingTab": "Ожидал",
     "published": "Опубликовано",
     "recentScans": "Последние сканы",
-    "refresh": "Обновлять",
+    "refresh": "Обновить",
     "regStatus": {
       "cancelled": "Отменено",
       "confirmed": "Подтвержденный",
@@ -3030,7 +3035,7 @@
     "allNiches": "Все",
     "allPages": "Все страницы",
     "alreadyLiked": "Вы уже добавили эту страницу в закладки",
-    "create": "Создавать",
+    "create": "Создать",
     "createPage": "Создать страницу",
     "empty": "Будьте здесь первым!",
     "emptyDescription": "Эта категория ждет свою звезду. Создайте страницу и поднимитесь в начало.",
@@ -3103,7 +3108,7 @@
     "tryAnotherFilter": "Попробуйте другой фильтр",
     "unlike": "не нравится",
     "untitled": "Без названия",
-    "useTemplate": "Создавать",
+    "useTemplate": "Использовать",
     "viewPage": "Открыть",
     "views": "просмотры",
     "badge": "Примеры",
@@ -3501,7 +3506,7 @@
       "title": "Создайте страницу, ведущую к приложению, за 2 минуты."
     },
     "floatingCta": {
-      "create": "Создавать"
+      "create": "Создать"
     },
     "forWhom": {
       "beauty": {
@@ -4102,7 +4107,7 @@
       "desc": "A/B-тесты, тепловые карты и подробная аналитика в Pro",
       "title": "Расширенная воронка"
     },
-    "refresh": "Обновлять",
+    "refresh": "Обновить",
     "shares": "Репосты",
     "sources": {
       "noData": "Нет информации об источниках",
@@ -4128,7 +4133,7 @@
       "instagram": "Инстаграм",
       "linkedin": "LinkedIn",
       "referral": "Направление",
-      "telegram": "Телеграмма",
+      "telegram": "Telegram",
       "tiktok": "ТикТок",
       "twitter": "Твиттер/Х",
       "unknown": "Другой",
@@ -4657,7 +4662,7 @@
       "subtitle": "Бесплатно. Без карты. Никакого кода.",
       "title": "Создать страницу за 2 минуты"
     },
-    "floatingCta": "Создавать",
+    "floatingCta": "Создать",
     "footer": {
       "about": "О нас",
       "blog": "Блог",
@@ -4706,7 +4711,7 @@
       "title": "Как это работает"
     },
     "nav": {
-      "create": "Создавать",
+      "create": "Создать",
       "examples": "Примеры",
       "login": "Авторизоваться",
       "pricing": "Тарифы"
@@ -4764,37 +4769,37 @@
     "results": {
       "badge": "Для кого",
       "business": {
-        "cta": "Создавать",
+        "cta": "Создать",
         "problem": "Сайт дорогой, соцсети не дают полной картины",
         "solution": "Каталог, карта и запись на одной странице.",
         "title": "Малый бизнес"
       },
       "creators": {
-        "cta": "Создавать",
+        "cta": "Создать",
         "problem": "Подписчики не знают, где купить ваш продукт",
         "solution": "Курсы, мерч и ссылки на одной странице",
         "title": "Блогеры и создатели"
       },
       "education": {
-        "cta": "Создавать",
+        "cta": "Создать",
         "problem": "Родители хотят увидеть программу перед регистрацией",
         "solution": "Расписание, цены и отзывы в одном месте",
         "title": "Репетиторы и тренеры"
       },
       "events": {
-        "cta": "Создавать",
+        "cta": "Создать",
         "problem": "Информация разрознена, люди не могут зарегистрироваться",
         "solution": "Дата, место, программа и форма в одном месте",
         "title": "Организаторы"
       },
       "freelancers": {
-        "cta": "Создавать",
+        "cta": "Создать",
         "problem": "«Какова цена?» - в каждом сообщении",
         "solution": "Цена и форма заявки - клиент видит цены сразу",
         "title": "Фрилансеры"
       },
       "health": {
-        "cta": "Создавать",
+        "cta": "Создать",
         "problem": "Клиенты звонят, чтобы узнать цены.",
         "solution": "Цена и онлайн-бронирование – меньше звонков",
         "title": "Салоны и мастера"
@@ -4901,7 +4906,7 @@
     },
     "trafficNoLeads": {
       "hint": "Добавьте форму или запись, чтобы принимать обращения",
-      "title": "Трафик, но нет лидов"
+      "title": "Есть просмотры, но нет заявок"
     }
   },
   "mapBlock": {
@@ -4941,7 +4946,7 @@
     "crm": "CRM",
     "crmDesc": "Ведущий менеджмент",
     "galleryDesc": "Общественные работы",
-    "marketplace": "Торговая площадка",
+    "marketplace": "Шаблоны сообщества",
     "marketplaceDesc": "Шаблоны сообществ",
     "more": "Меню",
     "moreOptions": "Меню",
@@ -5271,7 +5276,7 @@
     "detailsHint": "Чем больше деталей, тем лучше результат.",
     "detailsPlaceholder": "Что ты делаешь? Какие услуги вы предоставляете?",
     "detailsTitle": "Расскажите нам о себе",
-    "generate": "Создавать",
+    "generate": "Сгенерировать",
     "generatingDescription": "Подбираем блоки и контент специально для вас",
     "generatingTitle": "ИИ создает страницу",
     "namePlaceholder": "Как тебя зовут?",
@@ -5538,7 +5543,7 @@
       "connected": "Подключено",
       "email": "Почта",
       "identityNotFound": "Личность не найдена или уже отключена",
-      "link": "Соединять",
+      "link": "Подключить",
       "linkFailed": "Не удалось подключить аккаунт",
       "linkFailedReason": "Не удалось привязать аккаунт: {{reason}}",
       "primaryIdentity": "Основной метод входа невозможно отменить. Ручное связывание также должно быть включено в настройках Supabase.",
@@ -5590,13 +5595,13 @@
     "telegramError": "Не удалось подключиться к Телеграму.",
     "telegramHelp": "Получить идентификатор от",
     "telegramInvalidId": "Invalid Chat ID. Make sure to send /start to @userinfobot",
-    "telegramLabel": "Телеграмма",
+    "telegramLabel": "Telegram",
     "telegramNotifications": "Уведомления в телеграмме",
     "telegramVerify": "Проверять",
     "templates": "Шаблоны",
     "upgradeToUnlock": "Обновите, чтобы получить доступ ко всем функциям",
     "username": "Имя пользователя",
-    "verification": "Проверка",
+    "verification": "Верификация",
     "verificationApproved": "Аккаунт подтвержден",
     "verificationDesc": "Подтвердите свою личность, чтобы получить бейдж",
     "verificationPending": "Заявка на рассмотрении",
@@ -5814,10 +5819,10 @@
   "teams": {
     "alreadyMember": "Вы уже являетесь членом этой команды",
     "avatar": "Команда Аватара",
-    "backHome": "Дом",
+    "backHome": "На главную",
     "createLink": "Создать ссылку",
     "createLinkHint": "Создайте ссылку-приглашение, чтобы добавить участников",
-    "createNew": "Создавать",
+    "createNew": "Создать",
     "createTeam": "Создать команду",
     "createTeamButton": "Создать команду",
     "createTeamDesc": "Соберите единомышленников для совместной работы",
@@ -5933,7 +5938,7 @@
     "generating": "Создание...",
     "loadError": "Ошибка загрузки шаблонов.",
     "makePublic": "Сделать это общедоступным",
-    "marketplace": "Торговая площадка",
+    "marketplace": "Шаблоны сообщества",
     "marketplaceDesc": "Шаблоны сообщества — готовы к использованию",
     "myTemplates": "Мои шаблоны",
     "name": "Имя",
@@ -5978,7 +5983,7 @@
     "subjectPlaceholder": "Здравствуйте, {lead_name}!",
     "title": "Шаблоны",
     "unknownAuthor": "Неизвестный автор",
-    "update": "Обновлять",
+    "update": "Обновить",
     "updateBlocks": "Обновить блоки",
     "updateBlocksDesc": "Заменить блоки текущей страницей",
     "updateError": "Ошибка обновления",
@@ -6140,7 +6145,7 @@
     "loading": "Загрузка LinkMAX...",
     "nav_bookings": "Бронирование",
     "nav_crm": "лиды",
-    "nav_home": "Дом",
+    "nav_home": "Главная",
     "nav_more": "Более",
     "nav_page": "Страница",
     "nav_payments": "nav_pays",
@@ -6367,7 +6372,7 @@
     "rejectedReason": "Причина отказа:",
     "submit": "Отправить на проверку",
     "submitted": "Запрос на подтверждение отправлен",
-    "title": "Проверка",
+    "title": "Верификация",
     "type": "Тип проверки",
     "uploading": "Загрузка...",
     "verified": "Проверено",
@@ -8280,5 +8285,23 @@
       "product_name": "Название товара",
       "price": "Цена"
     }
+  },
+  "cardBlock": {
+    "text": "Текст",
+    "photo": "Фото",
+    "photoPosition": "Где фото",
+    "right": "Справа",
+    "top": "Сверху",
+    "buttonStyle": "Кнопка",
+    "solid": "Залитая",
+    "outline": "Контур"
+  },
+  "tilesBlock": {
+    "heading": "Заголовок над плитками",
+    "columns": "Колонки",
+    "shape": "Форма",
+    "tile": "Плитка",
+    "caption": "Подпись",
+    "add": "Добавить плитку"
   }
 }

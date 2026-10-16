@@ -67,6 +67,8 @@ import User from 'lucide-react/dist/esm/icons/user';
 import UserCircle from 'lucide-react/dist/esm/icons/user-circle';
 import Users from 'lucide-react/dist/esm/icons/users';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import LayoutPanelLeft from 'lucide-react/dist/esm/icons/layout-panel-left';
+import LayoutGrid from 'lucide-react/dist/esm/icons/layout-grid';
 import Utensils from 'lucide-react/dist/esm/icons/utensils';
 import Verified from 'lucide-react/dist/esm/icons/verified';
 import Video from 'lucide-react/dist/esm/icons/video';
@@ -144,6 +146,8 @@ const ICON_MAP: Record<string, ComponentType<LucideProps>> = {
   UserCircle,
   Users,
   Share2,
+  LayoutPanelLeft,
+  LayoutGrid,
   Utensils,
   Verified,
   Video,

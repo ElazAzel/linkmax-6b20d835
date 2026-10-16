@@ -63,6 +63,23 @@ function blockLines(block: AnyBlock, language: SeoLanguage): string[] {
         return [`- ${name}${price}`];
       });
     }
+    case 'card': {
+      const title = text(block.title, language);
+      const body = text(block.text, language);
+      const url = safeUrl(block.url);
+      if (!title) return [];
+      return [url ? `- [${title}](${url})` : `- ${title}`, ...(body ? [`  ${body}`] : [])];
+    }
+    case 'tiles': {
+      const heading = text(block.title, language);
+      const items = Array.isArray(block.items) ? block.items as unknown as Array<Record<string, unknown>> : [];
+      const lines = items.flatMap((item) => {
+        const caption = text(item.title, language);
+        const url = safeUrl(item.url);
+        return caption && url ? [`- [${caption}](${url})`] : caption ? [`- ${caption}`] : [];
+      });
+      return lines.length ? [...(heading ? ['', `### ${heading}`, ''] : []), ...lines] : [];
+    }
     default:
       return [];
   }

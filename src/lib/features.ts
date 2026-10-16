@@ -18,6 +18,15 @@ export const BUSINESS_BLOCK_TYPES: ReadonlySet<string> = new Set([
   'product', 'catalog', 'pricing', 'booking', 'event', 'community', 'newsletter', 'shoutout', 'scratch',
 ]);
 
+/**
+ * Korner-style card/tiles blocks. Offered in the insert sheet only after the
+ * blocks_type_check migration (20261016120000) is applied to the database:
+ * before that a page containing them cannot be saved. Pages that already
+ * have them keep rendering either way.
+ */
+export const SHOWCASE_BLOCK_TYPES: ReadonlySet<string> = new Set(['card', 'tiles']);
+export const SHOWCASE_BLOCKS_ENABLED = import.meta.env.VITE_LINKMAX_SHOWCASE_BLOCKS === 'true';
+
 /** Dashboard tabs that belong to the business area. */
 export const BUSINESS_DASHBOARD_TABS: ReadonlySet<string> = new Set([
   'business', 'clients', 'calendar', 'offers', 'activity', 'finance', 'monetize', 'leads', 'events', 'team',

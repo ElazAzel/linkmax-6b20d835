@@ -86,7 +86,7 @@ export function OfficeScreen({ view, onNavigate, pageSwitcher }: OfficeScreenPro
         {view === 'clients' && clients.length > 0 && <Button variant="outline" size="icon" onClick={exportClients} aria-label={t('digitalOffice.export', 'Экспорт клиентов')}><Download className="h-4 w-4" aria-hidden="true" /></Button>}
         <Button variant="ghost" size="icon" onClick={() => { void query.refetch(); }} disabled={query.isFetching} aria-label={t('digitalOffice.refresh', 'Обновить')}><RefreshCw className="h-4 w-4" aria-hidden="true" /></Button>
         <Button onClick={() => onNavigate('offers')} aria-label={t('digitalOffice.offersAction', 'Добавить предложение')}><Plus className="h-4 w-4" aria-hidden="true" /><span className="hidden sm:inline">{t('digitalOffice.offersAction', 'Добавить предложение')}</span></Button>
-      </>} hideLivePill bottomSlot={view === 'today' && pageSwitcher ? <div className="p-3 md:hidden">{pageSwitcher}</div> : undefined} />
+      </>} bottomSlot={view === 'today' && pageSwitcher ? <div className="p-3 md:hidden">{pageSwitcher}</div> : undefined} />
     {query.isPending && <LoadingState variant="skeleton-cards" skeletonCount={3} />}
     {query.isError && <ErrorState variant="card"
       title={query.error.message === 'feature_unavailable' ? t('digitalOffice.unavailable', 'Работа с записями пока недоступна') : t('digitalOffice.loadError', 'Не удалось загрузить рабочее место')}

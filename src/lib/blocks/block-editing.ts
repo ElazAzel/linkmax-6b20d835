@@ -21,6 +21,7 @@ const validation: Partial<Record<BlockType, BlockEditingConfig['validate']>> = {
   scratch: adapt(validators.validateScratchBlock), map: adapt(validators.validateMapBlock),
   avatar: adapt(validators.validateAvatarBlock), separator: adapt(validators.validateSeparatorBlock),
   catalog: adapt(validators.validateCatalogBlock),
+  card: adapt(validators.validateCardBlock), tiles: adapt(validators.validateTilesBlock),
   audio: value => {
     const block = value as { sourceType?: string; fileUrl?: string; externalUrl?: string };
     return getSafeAudioUrl(block.sourceType === 'external' ? block.externalUrl : block.fileUrl) ? null : 'audioBlock.invalidUrl';

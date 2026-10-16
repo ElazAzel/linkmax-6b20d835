@@ -46,8 +46,6 @@ export interface DashboardHeaderProps {
   /** Show back arrow instead of menu */
   showBack?: boolean;
   onBack?: () => void;
-  /** Hide live status pill on desktop */
-  hideLivePill?: boolean;
   className?: string;
 }
 
@@ -63,7 +61,6 @@ export const DashboardHeader = memo(function DashboardHeader({
   bottomSlot,
   showBack,
   onBack,
-  hideLivePill,
   className,
 }: DashboardHeaderProps) {
   const { t } = useTranslation();
@@ -126,14 +123,6 @@ export const DashboardHeader = memo(function DashboardHeader({
         <div className="flex items-center gap-2 md:gap-3 shrink-0">
           {actions}
           {trailing}
-          {!hideLivePill && (
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary border border-border/60">
-              <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-                {t('dashboard.header.live', 'Live')}
-              </span>
-            </div>
-          )}
         </div>
       </div>
 

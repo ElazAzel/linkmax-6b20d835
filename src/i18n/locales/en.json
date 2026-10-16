@@ -1045,7 +1045,9 @@
     "testimonial": "Reviews",
     "text": "Text",
     "video": "Video",
-    "audio": "Audio"
+    "audio": "Audio",
+    "card": "Card",
+    "tiles": "Tiles"
   },
   "blocks": {
     "addFailed": "Failed to add block",
@@ -1500,7 +1502,9 @@
     "verify": "Verify",
     "view": "View",
     "yes": "Yes",
-    "deleteConfirmTitle": "Delete block?"
+    "deleteConfirmTitle": "Delete block?",
+    "moveUp": "Move up",
+    "moveDown": "Move down"
   },
   "chat": {
     "lead": {
@@ -1665,7 +1669,8 @@
       "themeLight": "Light",
       "themeDark": "Dark",
       "businessTools": "Business tools",
-      "businessToolsDesc": "Sales, booking, CRM, finance and team. Off keeps the cabinet a simple page builder."
+      "businessToolsDesc": "Sales, booking, CRM, finance and team. Off keeps the cabinet a simple page builder.",
+      "deviceAccounts": "Accounts on this device"
     },
     "activity": {
       "all": "All",
@@ -1760,8 +1765,8 @@
       "gallery": "Gallery",
       "galleryDesc": "Inspiration",
       "leads": "applications",
-      "marketplace": "Marketplace",
-      "marketplaceDesc": "From the community",
+      "marketplace": "Community templates",
+      "marketplaceDesc": "Pages by other creators",
       "myPage": "My page",
       "performance": "Performance",
       "premium": "Premium",
@@ -1775,7 +1780,7 @@
       "templatesDesc": "Ready pages",
       "tip": "Advice",
       "tipContent": "Add prices so clients can decide before contacting you",
-      "title": "Home",
+      "title": "Overview",
       "versions": "Story",
       "versionsDesc": "Page versions",
       "views": "views"
@@ -4901,7 +4906,7 @@
     },
     "trafficNoLeads": {
       "hint": "Add a form or booking block to accept enquiries",
-      "title": "Traffic but no leads"
+      "title": "Views but no requests"
     }
   },
   "mapBlock": {
@@ -8280,5 +8285,23 @@
       "product_name": "Product name",
       "price": "Price"
     }
+  },
+  "cardBlock": {
+    "text": "Text",
+    "photo": "Photo",
+    "photoPosition": "Photo position",
+    "right": "Right",
+    "top": "Top",
+    "buttonStyle": "Button",
+    "solid": "Filled",
+    "outline": "Outline"
+  },
+  "tilesBlock": {
+    "heading": "Heading above the tiles",
+    "columns": "Columns",
+    "shape": "Shape",
+    "tile": "Tile",
+    "caption": "Caption",
+    "add": "Add a tile"
   }
 }
