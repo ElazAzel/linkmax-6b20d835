@@ -258,10 +258,10 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
   // Build canonical URL for SEO
   const canonicalUrl = useMemo(() => {
     if (slug) {
-      return getPublicPageUrl(slug);
+      return getPublicPageUrl(slug, pagePath);
     }
     return typeof window !== 'undefined' ? window.location.href : getAppDomain();
-  }, [slug]);
+  }, [slug, pagePath]);
   // Share the clean canonical address (same on server and client, no tracking params).
   const currentUrl = canonicalUrl;
 

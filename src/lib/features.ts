@@ -24,7 +24,7 @@ export const BUSINESS_DASHBOARD_TABS: ReadonlySet<string> = new Set([
 ]);
 
 export function isBusinessFeaturesEnabled(): boolean {
-  if (typeof window === 'undefined') return BUSINESS_FEATURES_DEFAULT;
+  if (BUSINESS_FEATURES_DEFAULT || typeof window === 'undefined') return BUSINESS_FEATURES_DEFAULT;
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored === 'on') return true;

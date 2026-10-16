@@ -58,7 +58,12 @@ const EditorFallback = () => (
   </div>
 );
 
-export function BlockInspector({
+export function BlockInspector(props: BlockInspectorProps) {
+  // The draft and the selected input language belong to one block editing session.
+  return <BlockInspectorSession key={props.block?.id} {...props} />;
+}
+
+function BlockInspectorSession({
   mode,
   block,
   onUpdateBlock,

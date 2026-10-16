@@ -500,8 +500,7 @@ export const EditorScreen = memo(function EditorScreen({
     const timer = window.setTimeout(() => {
       const node = document.querySelector(`[data-block-id="${inspectedBlock.id}"]`);
       if (!node) return;
-      const top = node.getBoundingClientRect().top + window.scrollY - 84;
-      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      node.scrollIntoView({ block: 'start', behavior: 'smooth' });
     }, 220);
     return () => window.clearTimeout(timer);
   }, [sheetOpen, inspectedBlock?.id]); // eslint-disable-line react-hooks/exhaustive-deps

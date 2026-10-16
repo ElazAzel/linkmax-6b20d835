@@ -34,6 +34,7 @@ describe('the working page editor workspace', () => {
   });
 
   it('retains the business workspace destinations in their own context', () => {
+    setBusinessFeaturesEnabled(true);
     const navigate = vi.fn();
     render(<DashboardSidebar activeTab="business" onTabChange={navigate} isPremium onSignOut={vi.fn()} />);
     fireEvent.click(screen.getByRole('button', { name: 'Сделки' }));

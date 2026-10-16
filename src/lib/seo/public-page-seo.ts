@@ -13,6 +13,11 @@ import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 export type SeoLanguage = 'ru' | 'en' | 'kk';
 
+export function normalizeSeoLanguage(value: unknown): SeoLanguage {
+  const code = typeof value === 'string' ? value.toLowerCase().split('-')[0] : 'ru';
+  return code === 'en' ? 'en' : code === 'kk' || code === 'kz' ? 'kk' : 'ru';
+}
+
 export interface PublicPageSeo {
   profile: ExtractedProfile;
   qualityGate: QualityGateResult;

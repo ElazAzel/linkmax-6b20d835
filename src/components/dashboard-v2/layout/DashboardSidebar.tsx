@@ -13,7 +13,7 @@ const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'
 
 import { OFFICE_TABS } from './office-navigation';
 import { BUSINESS_TAB_IDS, PAGE_V2_TABS } from './page-v2-navigation';
-import { useBusinessFeatures } from '@/lib/features';
+import { isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
@@ -140,11 +140,14 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const navigate = useNavigate();
   const hasBusinessZone = useHasBusinessZone();
   const businessEnabled = useBusinessFeatures();
-  const mainItems = businessEnabled ? MAIN_ITEMS : MAIN_ITEMS.filter(item => item.id !== 'business');
+  const mainItems = businessEnabled ? MAIN_ITEMS : MAIN_ITEMS.filter(item => !isBusinessDashboardTab(item.id));
   const businessContext = BUSINESS_TAB_IDS.includes(activeTab) || activeTab.startsWith('zone-');
-  const showBusinessNavigation = !LINKMAX_UI_V2 || businessContext;
-  const visibleSections = !LINKMAX_UI_V2 ? SECTIONS : businessContext
+  const showBusinessNavigation = businessEnabled && (!LINKMAX_UI_V2 || businessContext);
+  const contextSections = !LINKMAX_UI_V2 ? SECTIONS : businessContext
     ? SECTIONS.filter(section => section.id === 'business-tools') : [];
+  const visibleSections = contextSections
+    .map(section => ({ ...section, items: section.items.filter(item => businessEnabled || !isBusinessDashboardTab(item.id)) }))
+    .filter(section => section.items.length > 0);
 
   const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-analytics', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-resources'];
 

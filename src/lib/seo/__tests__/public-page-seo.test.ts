@@ -94,6 +94,23 @@ describe('public page snapshot', () => {
     expect(result.map((b) => b.id)).toEqual(['a', 'b']);
   });
 
+  it('requests tombstone metadata and excludes removed content from published snapshots', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(new Response(JSON.stringify([{
+      id: 'page-1', slug: 'alice', is_published: true, theme_settings: {},
+      blocks: [
+        { position: 0, deleted_at: null, content: { id: 'visible', type: 'text', content: { ru: 'Visible text' } } },
+        { position: 1, deleted_at: '2026-10-15T10:00:00Z', content: { id: 'removed', type: 'text', content: { ru: 'Removed private text' } } },
+      ],
+    }]), { status: 200 }));
+    const snapshot = await fetchPublicPageSnapshot('alice', { fetchImpl });
+    const requestUrl = new URL(String(fetchImpl.mock.calls[0][0]));
+    expect(requestUrl.searchParams.get('select')).toContain('blocks(position,deleted_at,content)');
+    expect(snapshot.status).toBe('ok');
+    if (snapshot.status !== 'ok') throw new Error('Expected a public page');
+    expect(snapshot.page.blocks.map(block => block.id)).toEqual(['visible']);
+    expect(buildProfileMarkdown(snapshot.page)).not.toContain('Removed private text');
+  });
+
   it('reports missing pages and rejects impossible slugs without a request', async () => {
     const fetchImpl = vi.fn().mockResolvedValue(new Response('[]', { status: 200 }));
     expect(await fetchPublicPageSnapshot('../etc', { fetchImpl })).toEqual({ status: 'missing' });

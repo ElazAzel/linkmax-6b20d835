@@ -55,7 +55,7 @@ const PAGE_COLUMNS = [
   'id', 'user_id', 'slug', 'title', 'description', 'avatar_url', 'theme_settings', 'seo_meta',
   'is_published', 'is_indexable', 'created_at', 'updated_at', 'grid_config', 'niche', 'preview_url',
   'integrations', 'favicon_url', 'hide_branding', 'organization_id', 'custom_domain', 'city',
-  'profession', 'entity_type', 'blocks(position,content)',
+  'profession', 'entity_type', 'blocks(position,deleted_at,content)',
 ].join(',');
 
 /** Slugs are user-chosen; anything outside this shape cannot be a page. */
