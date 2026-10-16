@@ -175,6 +175,7 @@ export type Database = {
           click_count: number | null
           content: Json
           created_at: string | null
+          deleted_at: string | null
           id: string
           is_premium: boolean | null
           page_id: string
@@ -188,6 +189,7 @@ export type Database = {
           click_count?: number | null
           content?: Json
           created_at?: string | null
+          deleted_at?: string | null
           id?: string
           is_premium?: boolean | null
           page_id: string
@@ -201,6 +203,7 @@ export type Database = {
           click_count?: number | null
           content?: Json
           created_at?: string | null
+          deleted_at?: string | null
           id?: string
           is_premium?: boolean | null
           page_id?: string
@@ -2007,6 +2010,51 @@ export type Database = {
           },
         ]
       }
+      page_drafts: {
+        Row: {
+          base_published_revision: number
+          chatbot_context: string
+          page_id: string
+          published_draft_revision: number
+          revision: number
+          snapshot: Json
+          updated_at: string
+        }
+        Insert: {
+          base_published_revision: number
+          chatbot_context?: string
+          page_id: string
+          published_draft_revision?: number
+          revision?: number
+          snapshot: Json
+          updated_at?: string
+        }
+        Update: {
+          base_published_revision?: number
+          chatbot_context?: string
+          page_id?: string
+          published_draft_revision?: number
+          revision?: number
+          snapshot?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_drafts_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: true
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_drafts_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: true
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_likes: {
         Row: {
           created_at: string | null
@@ -2198,6 +2246,7 @@ export type Database = {
           page_type: string | null
           preview_url: string | null
           profession: string | null
+          published_revision: number
           quality_breakdown: Json | null
           quality_score: number | null
           seo_meta: Json | null
@@ -2247,6 +2296,7 @@ export type Database = {
           page_type?: string | null
           preview_url?: string | null
           profession?: string | null
+          published_revision?: number
           quality_breakdown?: Json | null
           quality_score?: number | null
           seo_meta?: Json | null
@@ -2296,6 +2346,7 @@ export type Database = {
           page_type?: string | null
           preview_url?: string | null
           profession?: string | null
+          published_revision?: number
           quality_breakdown?: Json | null
           quality_score?: number | null
           seo_meta?: Json | null
@@ -5481,6 +5532,10 @@ export type Database = {
         Args: { p_owner_id: string }
         Returns: number
       }
+      can_manage_organization_pages: {
+        Args: { p_org_id: string; p_user_id: string }
+        Returns: boolean
+      }
       can_moderate_review: {
         Args: { p_review_id: string; p_user_id: string }
         Returns: boolean
@@ -5666,6 +5721,7 @@ export type Database = {
           page_type: string | null
           preview_url: string | null
           profession: string | null
+          published_revision: number
           quality_breakdown: Json | null
           quality_score: number | null
           seo_meta: Json | null
@@ -5724,6 +5780,7 @@ export type Database = {
           page_type: string | null
           preview_url: string | null
           profession: string | null
+          published_revision: number
           quality_breakdown: Json | null
           quality_score: number | null
           seo_meta: Json | null
@@ -5923,6 +5980,7 @@ export type Database = {
       leave_zone: { Args: { p_zone_id: string }; Returns: Json }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       like_template: { Args: { p_template_id: string }; Returns: undefined }
+      load_page_draft: { Args: { p_page_id: string }; Returns: Json }
       mcp_create_user_page: {
         Args: { p_description?: string; p_slug: string; p_title?: string }
         Returns: {
@@ -5959,6 +6017,14 @@ export type Database = {
             }
             Returns: Json
           }
+      publish_page_draft: {
+        Args: {
+          p_base_published_revision: number
+          p_expected_revision: number
+          p_page_id: string
+        }
+        Returns: Json
+      }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
       record_wallet_income: {
         Args: {
@@ -6002,6 +6068,14 @@ export type Database = {
           ticket_code: string
         }[]
       }
+      reload_page_draft: {
+        Args: {
+          p_base_published_revision: number
+          p_expected_revision: number
+          p_page_id: string
+        }
+        Returns: Json
+      }
       remove_zone_member: {
         Args: { p_member_user_id: string; p_zone_id: string }
         Returns: Json
@@ -6015,6 +6089,16 @@ export type Database = {
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }
         Returns: undefined
+      }
+      save_page_draft: {
+        Args: {
+          p_base_published_revision: number
+          p_chatbot_context?: string
+          p_expected_revision: number
+          p_page_id: string
+          p_snapshot: Json
+        }
+        Returns: Json
       }
       set_primary_paid_page: {
         Args: { p_page_id: string; p_user_id: string }
