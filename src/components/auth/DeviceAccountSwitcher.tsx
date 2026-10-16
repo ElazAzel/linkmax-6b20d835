@@ -61,7 +61,9 @@ export function DeviceAccountSwitcher({ className, onAddAccount, compact = false
 
   const accountPendingRemoval = deviceAccounts.find((account) => account.userId === accountToRemove);
 
-  if (!hasAccounts && !onAddAccount) return null;
+  // On the sign-in screen (compact) a first-time visitor has no saved accounts:
+  // an empty "accounts on this device" box with one button only confused them.
+  if (!hasAccounts && (!onAddAccount || compact)) return null;
 
   return (
     <div className={cn('overflow-hidden rounded-2xl border border-border/70 bg-card/80', className)}>
