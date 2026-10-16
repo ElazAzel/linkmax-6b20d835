@@ -12,8 +12,8 @@ export function PublicProfileHeadSync({ page, matchId }: { page: PageData; match
 
   useEffect(() => {
     const head = buildPublicPageHead(page, { language });
-    (router as unknown as { updateMatch: (id: string, fn: (m: Record<string, unknown>) => Record<string, unknown>) => void })
-      .updateMatch(matchId, (match) => ({ ...match, meta: head.meta, links: head.links, headScripts: head.scripts }));
+    const r = router as unknown as { updateMatch?: (id: string, fn: (m: Record<string, unknown>) => Record<string, unknown>) => void };
+    r.updateMatch?.(matchId, (match) => ({ ...match, meta: head.meta, links: head.links, headScripts: head.scripts }));
   }, [router, matchId, page, language]);
 
   return null;
