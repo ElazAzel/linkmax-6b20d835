@@ -39,6 +39,11 @@ interface SchemaContext {
   answerBlock: AnswerBlockData;
   sameAs: string[];
   language: 'ru' | 'en' | 'kk';
+  /** Canonical URL when it differs from the default slug URL. */
+  pageUrl?: string;
+  /** Real page timestamps; without them the schema omits the dates. */
+  dateModified?: string;
+  dateCreated?: string;
 }
 
 /**
@@ -48,8 +53,7 @@ export function generateGEOSchemas(
   blocks: Block[],
   context: SchemaContext
 ): GEOSchemas {
-  const pageUrl = getPublicPageUrl(context.slug);
-  const now = new Date().toISOString();
+  const pageUrl = context.pageUrl || getPublicPageUrl(context.slug);
 
   // Guard against undefined/null blocks
   const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
@@ -64,7 +68,7 @@ export function generateGEOSchemas(
   graph.push(mainEntity);
 
   // 2. WebPage/ProfilePage — with SpeakableSpecification for voice assistants
-  const webPage = generateWebPage(context, pageUrl, now);
+  const webPage = generateWebPage(context, pageUrl);
   graph.push(webPage);
 
   // 3. Breadcrumb
@@ -271,16 +275,16 @@ function generateMainEntity(
 function generateWebPage(
   context: SchemaContext,
   pageUrl: string,
-  now: string
 ): object {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
     '@id': `${pageUrl}#webpage`,
-    name: `${context.name} | lnkmx`,
+    name: `${context.name} | LinkMAX`,
     description: context.answerBlock.summary,
     url: pageUrl,
-    dateModified: now,
+    ...(context.dateModified ? { dateModified: context.dateModified } : {}),
+    ...(context.dateCreated ? { dateCreated: context.dateCreated } : {}),
     inLanguage: context.language,
     mainEntity: {
       '@id': `${pageUrl}#main`,
@@ -288,14 +292,15 @@ function generateWebPage(
     isPartOf: {
       '@type': 'WebSite',
       '@id': `${getAppDomain()}#website`,
-      name: 'lnkmx',
+      name: 'LinkMAX',
       url: getAppDomain(),
     },
-    provider: {
+    publisher: {
       '@type': 'Organization',
-      name: 'lnkmx',
+      '@id': `${getAppDomain()}#organization`,
+      name: 'LinkMAX',
       url: getAppDomain(),
-      logo: `${getAppDomain()}/favicon.jpg`,
+      logo: `${getAppDomain()}/favicon.png`,
     },
     speakable: {
       '@type': 'SpeakableSpecification',
@@ -313,7 +318,7 @@ function generateBreadcrumb(context: SchemaContext, pageUrl: string): object {
     {
       '@type': 'ListItem',
       position: 1,
-      name: 'lnkmx',
+      name: 'LinkMAX',
       item: getAppDomain(),
     },
     {

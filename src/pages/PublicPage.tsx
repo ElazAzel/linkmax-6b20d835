@@ -94,7 +94,14 @@ function getAnimationConfig(animationStyle?: PageData['theme']['animationStyle']
   }
 }
 
-export default function PublicPage() {
+interface PublicPageProps {
+  /** Server snapshot of the page (src/routes/$slug/index.tsx) — rendered during SSR. */
+  initialPage?: PageData | null;
+  /** The route head already emits title, canonical and JSON-LD; skip the client copies. */
+  headManagedByRoute?: boolean;
+}
+
+export default function PublicPage({ initialPage = null, headManagedByRoute = false }: PublicPageProps = {}) {
   const { t } = useTranslation();
   const { compressed, slug, pagePath } = useParams<{ compressed?: string; slug?: string; pagePath?: string }>();
   // Sprint 1: Multi-Page — when /:slug/p/:pagePath is hit, resolve to the sub-page's actual slug.
@@ -139,7 +146,6 @@ export default function PublicPage() {
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
   const [enhancementsReady, setEnhancementsReady] = useState(false);
   const [cloningPage, setCloningPage] = useState(false);
-  const currentUrl = window.location.href;
 
   const visitorId = useMemo(() => getVisitorId(), []);
 
@@ -184,7 +190,11 @@ export default function PublicPage() {
   }, []);
 
   // Use React Query for slug-based pages (with caching)
-  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(effectiveSlug);
+  // The server snapshot shows real content at once; the client query still runs (and counts the view).
+  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(
+    effectiveSlug,
+    !pagePath && initialPage && initialPage.slug === slug ? initialPage : undefined,
+  );
 
   // Use React Query for custom domain based pages
   const { data: domainPageData, isLoading: isLoadingDomain, error: domainError } = usePublicPageByDomain(customDomain || undefined);
@@ -248,10 +258,12 @@ export default function PublicPage() {
   // Build canonical URL for SEO
   const canonicalUrl = useMemo(() => {
     if (slug) {
-      return getPublicPageUrl(slug);
+      return getPublicPageUrl(slug, pagePath);
     }
-    return window.location.href;
-  }, [slug]);
+    return typeof window !== 'undefined' ? window.location.href : getAppDomain();
+  }, [slug, pagePath]);
+  // Share the clean canonical address (same on server and client, no tracking params).
+  const currentUrl = canonicalUrl;
 
   const handleShare = async () => {
     const canNativeShare = 'share' in navigator;
@@ -337,7 +349,7 @@ export default function PublicPage() {
             ...themeScope.style,
             ...themeBackgroundStyle,
           }}
-          initial={{ opacity: 0, y: pageAnimation.y }}
+          initial={initialPage ? false : { opacity: 0, y: pageAnimation.y }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: pageAnimation.duration }}
@@ -352,7 +364,8 @@ export default function PublicPage() {
             <div aria-hidden style={{ ...bgResult.overlay, position: 'fixed' }} />
           )}
           <div className="relative z-[1]">
-          {/* Enhanced Auto-SEO with Schema.org and Quality Gate */}
+          {/* Enhanced Auto-SEO with Schema.org and Quality Gate (client-only routes) */}
+          {!headManagedByRoute && <>
           <EnhancedSEOHead
             pageData={pageData}
             pageUrl={canonicalUrl}
@@ -391,6 +404,7 @@ export default function PublicPage() {
             citationAuthor={pageData.seo?.title || pageData.slug || 'User Profile'}
             citationDate={pageData?.updatedAt || undefined}
           />
+          </>}
 
           {/* Crawler-friendly content for no-JS fallback */}
           <CrawlerFriendlyContent
@@ -399,11 +413,13 @@ export default function PublicPage() {
             updatedAt={pageData?.updatedAt || new Date().toISOString()}
           />
 
-          {/* GEO Enhanced Content - visible to crawlers even with JS enabled */}
-          <GEOEnhancedContent
-            blocks={displayBlocks}
-            slug={slug || ''}
-          />
+          {/* GEO Enhanced Content — hidden copy for crawlers; not needed once the real page is server-rendered */}
+          {!headManagedByRoute && (
+            <GEOEnhancedContent
+              blocks={displayBlocks}
+              slug={slug || ''}
+            />
+          )}
 
           <AnalyticsProvider pageId={pageData?.id} enabled={!!slug}>
             <div>
@@ -433,7 +449,8 @@ export default function PublicPage() {
                     ownerTier={ownerTier}
                     isPreview={false}
                     className={dividerClass}
-                    animation={pageData?.theme?.animationStyle}
+                    // Server-rendered content must be visible before JS: no entrance fade.
+                    animation={initialPage ? 'none' : pageData?.theme?.animationStyle}
                   />
                 </SectionErrorBoundary>
 
@@ -442,46 +459,35 @@ export default function PublicPage() {
                 </SectionErrorBoundary>
 
 
-                {/* Share Section - Mobile Optimized. Force readable contrast independent of page theme textColor. */}
-                <div className="mt-6 sm:mt-8 space-y-3 [color:hsl(var(--foreground))]">
-                  <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                    <Button variant="outline" onClick={handleShare} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
+                {/* Share: one quiet row, the clone offer as a small link. Readable contrast regardless of page theme. */}
+                <div className="mt-8 space-y-3 [color:hsl(var(--foreground))]">
+                  <div className="flex items-center justify-center gap-2">
+                    <Button variant="outline" onClick={handleShare} className={cn("h-11 px-5 !text-foreground !bg-background", buttonStyleClass)}>
                       <Share2 className={cn("h-4 w-4 mr-2", iconStyleClass)} />
                       {t('share.shareLink', 'Поделиться')}
                     </Button>
-                    <Button variant="outline" onClick={() => setShowQR(true)} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
-                      <QrCode className={cn("h-4 w-4 mr-2", iconStyleClass)} />
-                      {t('share.qrCode', 'QR-код')}
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setShowQR(true)}
+                      aria-label={t('share.qrCode', 'QR-код')}
+                      title={t('share.qrCode', 'QR-код')}
+                      className={cn("h-11 w-11 !text-foreground !bg-background", buttonStyleClass)}
+                    >
+                      <QrCode className="h-4 w-4" />
                     </Button>
-                    {pageData.viralSettings?.cloneable !== false && (
-                      <Button variant="outline" onClick={() => void handleClonePage()} disabled={cloningPage} className={cn("w-full sm:w-auto !text-foreground !bg-background", buttonStyleClass)}>
-                        <Copy className={cn("h-4 w-4 mr-2", iconStyleClass)} />
-                        {cloningPage ? t('growth.clone.saving', 'Сохраняем…') : t('growth.clone.button', 'Создать копию')}
-                      </Button>
-                    )}
                   </div>
-                  <div className="flex gap-2 justify-center">
-                    <a
-                      href={`https://wa.me/?text=${encodeURIComponent(currentUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={t('share.whatsapp', 'Поделиться в WhatsApp')}
-                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
-                      onClick={() => pageData?.id && trackShare(pageData.id, 'whatsapp')}
+                  {pageData.viralSettings?.cloneable !== false && (
+                    <button
+                      type="button"
+                      onClick={() => void handleClonePage()}
+                      disabled={cloningPage}
+                      className="mx-auto flex min-h-11 items-center gap-1.5 px-3 text-xs text-muted-foreground underline-offset-4 hover:underline disabled:opacity-60"
                     >
-                      WhatsApp
-                    </a>
-                    <a
-                      href={`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={t('share.telegram', 'Поделиться в Telegram')}
-                      className={cn("flex-1 sm:flex-none inline-flex items-center justify-center h-10 px-4 text-sm font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors", buttonStyleClass)}
-                      onClick={() => pageData?.id && trackShare(pageData.id, 'telegram')}
-                    >
-                      Telegram
-                    </a>
-                  </div>
+                      <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                      {cloningPage ? t('growth.clone.saving', 'Сохраняем…') : t('growth.clone.button', 'Создать копию')}
+                    </button>
+                  )}
                 </div>
 
 

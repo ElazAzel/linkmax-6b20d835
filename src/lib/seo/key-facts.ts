@@ -199,7 +199,7 @@ export function generateKeyFacts(
     const platformNames = (socialsBlock.platforms || [])
       .filter((p: any) => p != null && typeof p === 'object')
       .slice(0, 4)
-      .map((p: any) => p.name || p.url?.split('/')[2]?.replace('www.', ''))
+      .map((p: any) => getI18nText(p.name, language) || p.url?.split('/')[2]?.replace('www.', ''))
       .filter(Boolean)
       .join(', ');
 

@@ -22,6 +22,8 @@ import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import BriefcaseBusiness from 'lucide-react/dist/esm/icons/briefcase-business';
+import { setBusinessFeaturesEnabled, useBusinessFeatures } from '@/lib/features';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import Globe from 'lucide-react/dist/esm/icons/globe';
@@ -152,6 +154,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     onKaspiWidgetChange,
 }: AccountSettingsTabProps) {
     const { t } = useTranslation();
+    const businessEnabled = useBusinessFeatures();
     const navigate = useNavigate();
     const [showVerification, setShowVerification] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
@@ -380,11 +383,25 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         </div>
                         <AppThemeSwitcher />
                     </div>
+                    <SettingsItem
+                        icon={BriefcaseBusiness}
+                        iconBg="bg-muted"
+                        iconColor="text-foreground"
+                        label={t('dashboard.accountSettings.businessTools', 'Бизнес-инструменты')}
+                        description={t('dashboard.accountSettings.businessToolsDesc', 'Продажи, запись, CRM, финансы и команда. Выключено — кабинет остаётся простым конструктором страниц.')}
+                        rightElement={
+                            <Switch
+                                checked={businessEnabled}
+                                onCheckedChange={setBusinessFeaturesEnabled}
+                                aria-label={t('dashboard.accountSettings.businessTools', 'Бизнес-инструменты')}
+                            />
+                        }
+                    />
                 </Card>
             </div>
 
             {/* Regional Settings */}
-            <div className="space-y-2">
+            {businessEnabled && <div className="space-y-2">
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
                     {t('dashboard.accountSettings.regional', 'Regional')}
                 </h3>
@@ -403,7 +420,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         }
                     />
                 </Card>
-            </div>
+            </div>}
 
             {/* Plan & Billing */}
             <div className="space-y-2">

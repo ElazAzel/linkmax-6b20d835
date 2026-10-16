@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import type { PageLimits } from '@/hooks/page/useMultiPage';
-import { sanitizeSlug, validateSlug } from '@/lib/utils/slug';
+import { sanitizeSlug, slugifyTitle, slugWhileTyping, validateSlug } from '@/lib/utils/slug';
 
 interface CreatePageDialogProps {
   open: boolean;
@@ -40,11 +40,14 @@ export const CreatePageDialog = memo(function CreatePageDialog({
   const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
+  // Until the owner edits the address it follows the title (transliterated).
+  const [slugEdited, setSlugEdited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const canCreate = limits?.canCreate ?? true;
-  const sanitizedSlug = useMemo(() => sanitizeSlug(slug), [slug]);
+  const autoSlug = useMemo(() => slugifyTitle(title), [title]);
+  const sanitizedSlug = useMemo(() => sanitizeSlug(slugEdited ? slug : autoSlug), [slug, slugEdited, autoSlug]);
   const slugValidation = useMemo(() => {
     if (!sanitizedSlug) return { valid: true };
     return validateSlug(sanitizedSlug);
@@ -54,6 +57,7 @@ export const CreatePageDialog = memo(function CreatePageDialog({
     if (open) {
       setTitle('');
       setSlug('');
+      setSlugEdited(false);
       setError(null);
       setLoading(false);
     }
@@ -65,7 +69,7 @@ export const CreatePageDialog = memo(function CreatePageDialog({
       return;
     }
 
-    if (sanitizedSlug) {
+    if (slugEdited && sanitizedSlug) {
       if (!slugValidation.valid) {
         setError(t('dashboard.createPage.invalidSlug', 'URL must be 3-30 characters, lowercase letters, numbers, and hyphens only'));
         return;
@@ -76,7 +80,8 @@ export const CreatePageDialog = memo(function CreatePageDialog({
     setError(null);
 
     try {
-      const result = await onCreatePage(title.trim(), sanitizedSlug || undefined);
+      // An automatic address may be taken: let the server add a suffix instead of failing.
+      const result = await onCreatePage(title.trim(), slugEdited ? sanitizedSlug || undefined : undefined);
 
       if (result.success) {
         setTitle('');
@@ -100,12 +105,13 @@ export const CreatePageDialog = memo(function CreatePageDialog({
   };
 
   const handleSlugChange = (value: string) => {
-    // Sanitize slug input
-    const sanitized = sanitizeSlug(value);
-    setSlug(sanitized);
+    // Keep a trailing hyphen while typing; the final address is sanitized on submit.
+    const lenient = slugWhileTyping(value);
+    setSlugEdited(true);
+    setSlug(lenient);
   };
 
-  const canSubmit = Boolean(title.trim()) && slugValidation.valid && !loading;
+  const canSubmit = Boolean(title.trim()) && (!slugEdited || slugValidation.valid) && !loading;
 
   // Show upgrade prompt if can't create
   if (!canCreate && !isPremium) {
@@ -178,8 +184,11 @@ export const CreatePageDialog = memo(function CreatePageDialog({
             <Label htmlFor="title">{t('dashboard.createPage.titleLabel', 'Page title')}</Label>
             <Input
               id="title"
+              autoFocus
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && canSubmit) void handleCreate(); }}
+              enterKeyHint="go"
               placeholder={t('dashboard.createPage.titlePlaceholder', 'My awesome page')}
               className="rounded-xl"
             />
@@ -191,7 +200,11 @@ export const CreatePageDialog = memo(function CreatePageDialog({
               <span className="text-sm text-muted-foreground">lnkmx.my/</span>
               <Input
                 id="slug"
-                value={slug}
+                value={slugEdited ? slug : autoSlug}
+                inputMode="url"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 onChange={(e) => handleSlugChange(e.target.value)}
                 placeholder={t('dashboard.createPage.slugPlaceholder', 'my-page')}
                 className="rounded-xl flex-1"
@@ -200,7 +213,7 @@ export const CreatePageDialog = memo(function CreatePageDialog({
             <p className="text-xs text-muted-foreground">
               {t('dashboard.createPage.slugHint', '3-30 characters, lowercase letters, numbers, and hyphens only')}
             </p>
-            {!!sanitizedSlug && !slugValidation.valid && (
+            {slugEdited && !!sanitizedSlug && !slugValidation.valid && (
               <p className="text-xs text-destructive">
                 {t('dashboard.createPage.invalidSlug', 'URL must be 3-30 characters, lowercase letters, numbers, and hyphens only')}
               </p>

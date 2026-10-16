@@ -8,7 +8,7 @@ import { ArrayFieldItem } from '@/components/form-fields/ArrayFieldItem';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
-import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { useEditorPageInfo } from '@/contexts/EditorPageContext';
 import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
 import { AIButton } from '@/components/form-fields/AIButton';
 import { toast } from 'sonner';
@@ -16,8 +16,8 @@ import { toast } from 'sonner';
 function MessengerBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
-  const { pageData } = useDashboard();
-  const niche = pageData?.niche || 'general';
+  const pageInfo = useEditorPageInfo();
+  const niche = pageInfo.niche;
   const messengers = formData.messengers || [];
 
   const handleMagicWandMessage = (index: number) => {

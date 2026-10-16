@@ -23,8 +23,8 @@ export function getBaseUrl(): string {
 /**
  * Generate a public page URL from a slug
  */
-export function getPublicPageUrl(slug: string): string {
-  return `${getAppDomain()}/${slug}`;
+export function getPublicPageUrl(slug: string, pagePath?: string): string {
+  return `${getAppDomain()}/${slug}${pagePath ? `/p/${encodeURIComponent(pagePath)}` : ''}`;
 }
 
 /**

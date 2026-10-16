@@ -9,7 +9,7 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { validateProductBlock } from '@/lib/blocks/block-validators';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual, getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { useEditorPageInfo } from '@/contexts/EditorPageContext';
 import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
 import { toast } from 'sonner';
 import { AIButton } from '@/components/form-fields/AIButton';
@@ -20,8 +20,8 @@ import Palette from 'lucide-react/dist/esm/icons/palette';
 function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();
   const [aiLoading, setAiLoading] = useState(false);
-  const { pageData } = useDashboard();
-  const niche = pageData?.niche || 'general';
+  const pageInfo = useEditorPageInfo();
+  const niche = pageInfo.niche;
   const currentLang = i18n.language as SupportedLanguage;
 
   const handleMagicWandName = () => {

@@ -35,6 +35,7 @@ import { Route as VizitkaOnlaynRouteImport } from './routes/vizitka-onlayn'
 import { Route as Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074RouteImport } from './routes/для-бьюти-мастеров'
 import { Route as Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074RouteImport } from './routes/для-репетиторов'
 import { Route as SlugIndexRouteImport } from './routes/$slug/index'
+import { Route as SlugLlmsDottxtRouteImport } from './routes/$slug/llms[.]txt'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLanguageAlgorithmsRouteImport } from './routes/admin/language-algorithms'
 import { Route as AdminTranslationsRouteImport } from './routes/admin/translations'
@@ -73,6 +74,7 @@ import { Route as DashboardZoneInvoicesRouteImport } from './routes/dashboard/zo
 import { Route as DashboardZoneProductsRouteImport } from './routes/dashboard/zone-products'
 import { Route as DashboardZoneSettingsRouteImport } from './routes/dashboard/zone-settings'
 import { Route as DashboardZoneTasksRouteImport } from './routes/dashboard/zone-tasks'
+import { Route as DevEditorRouteImport } from './routes/dev/editor'
 import { Route as DlyaLandingSlugRouteImport } from './routes/dlya/$landingSlug'
 import { Route as ExpertsIndexRouteImport } from './routes/experts/index'
 import { Route as ForLandingSlugRouteImport } from './routes/for/$landingSlug'
@@ -235,6 +237,11 @@ const Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Ch
 const SlugIndexRoute = SlugIndexRouteImport.update({
   id: '/$slug/',
   path: '/$slug/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlugLlmsDottxtRoute = SlugLlmsDottxtRouteImport.update({
+  id: '/$slug/llms.txt',
+  path: '/$slug/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -428,6 +435,11 @@ const DashboardZoneTasksRoute = DashboardZoneTasksRouteImport.update({
   path: '/dashboard/zone-tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevEditorRoute = DevEditorRouteImport.update({
+  id: '/dev/editor',
+  path: '/dev/editor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DlyaLandingSlugRoute = DlyaLandingSlugRouteImport.update({
   id: '/dlya/$landingSlug',
   path: '/dlya/$landingSlug',
@@ -592,6 +604,7 @@ export interface FileRoutesByFullPath {
   '/vizitka-onlayn': typeof VizitkaOnlaynRoute
   '/для-бьюти-мастеров': typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
   '/для-репетиторов': typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  '/$slug/llms.txt': typeof SlugLlmsDottxtRoute
   '/admin/language-algorithms': typeof AdminLanguageAlgorithmsRoute
   '/admin/translations': typeof AdminTranslationsRoute
   '/alternatives/$competitor': typeof AlternativesCompetitorRoute
@@ -625,6 +638,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/zone-products': typeof DashboardZoneProductsRoute
   '/dashboard/zone-settings': typeof DashboardZoneSettingsRoute
   '/dashboard/zone-tasks': typeof DashboardZoneTasksRoute
+  '/dev/editor': typeof DevEditorRoute
   '/dlya/$landingSlug': typeof DlyaLandingSlugRoute
   '/for/$landingSlug': typeof ForLandingSlugRoute
   '/from/$slug': typeof FromSlugRoute
@@ -685,6 +699,7 @@ export interface FileRoutesByTo {
   '/vizitka-onlayn': typeof VizitkaOnlaynRoute
   '/для-бьюти-мастеров': typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
   '/для-репетиторов': typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  '/$slug/llms.txt': typeof SlugLlmsDottxtRoute
   '/admin/language-algorithms': typeof AdminLanguageAlgorithmsRoute
   '/admin/translations': typeof AdminTranslationsRoute
   '/alternatives/$competitor': typeof AlternativesCompetitorRoute
@@ -718,6 +733,7 @@ export interface FileRoutesByTo {
   '/dashboard/zone-products': typeof DashboardZoneProductsRoute
   '/dashboard/zone-settings': typeof DashboardZoneSettingsRoute
   '/dashboard/zone-tasks': typeof DashboardZoneTasksRoute
+  '/dev/editor': typeof DevEditorRoute
   '/dlya/$landingSlug': typeof DlyaLandingSlugRoute
   '/for/$landingSlug': typeof ForLandingSlugRoute
   '/from/$slug': typeof FromSlugRoute
@@ -779,6 +795,7 @@ export interface FileRoutesById {
   '/vizitka-onlayn': typeof VizitkaOnlaynRoute
   '/для-бьюти-мастеров': typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
   '/для-репетиторов': typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  '/$slug/llms.txt': typeof SlugLlmsDottxtRoute
   '/admin/language-algorithms': typeof AdminLanguageAlgorithmsRoute
   '/admin/translations': typeof AdminTranslationsRoute
   '/alternatives/$competitor': typeof AlternativesCompetitorRoute
@@ -812,6 +829,7 @@ export interface FileRoutesById {
   '/dashboard/zone-products': typeof DashboardZoneProductsRoute
   '/dashboard/zone-settings': typeof DashboardZoneSettingsRoute
   '/dashboard/zone-tasks': typeof DashboardZoneTasksRoute
+  '/dev/editor': typeof DevEditorRoute
   '/dlya/$landingSlug': typeof DlyaLandingSlugRoute
   '/for/$landingSlug': typeof ForLandingSlugRoute
   '/from/$slug': typeof FromSlugRoute
@@ -874,6 +892,7 @@ export interface FileRouteTypes {
     | '/vizitka-onlayn'
     | '/для-бьюти-мастеров'
     | '/для-репетиторов'
+    | '/$slug/llms.txt'
     | '/admin/language-algorithms'
     | '/admin/translations'
     | '/alternatives/$competitor'
@@ -907,6 +926,7 @@ export interface FileRouteTypes {
     | '/dashboard/zone-products'
     | '/dashboard/zone-settings'
     | '/dashboard/zone-tasks'
+    | '/dev/editor'
     | '/dlya/$landingSlug'
     | '/for/$landingSlug'
     | '/from/$slug'
@@ -967,6 +987,7 @@ export interface FileRouteTypes {
     | '/vizitka-onlayn'
     | '/для-бьюти-мастеров'
     | '/для-репетиторов'
+    | '/$slug/llms.txt'
     | '/admin/language-algorithms'
     | '/admin/translations'
     | '/alternatives/$competitor'
@@ -1000,6 +1021,7 @@ export interface FileRouteTypes {
     | '/dashboard/zone-products'
     | '/dashboard/zone-settings'
     | '/dashboard/zone-tasks'
+    | '/dev/editor'
     | '/dlya/$landingSlug'
     | '/for/$landingSlug'
     | '/from/$slug'
@@ -1060,6 +1082,7 @@ export interface FileRouteTypes {
     | '/vizitka-onlayn'
     | '/для-бьюти-мастеров'
     | '/для-репетиторов'
+    | '/$slug/llms.txt'
     | '/admin/language-algorithms'
     | '/admin/translations'
     | '/alternatives/$competitor'
@@ -1093,6 +1116,7 @@ export interface FileRouteTypes {
     | '/dashboard/zone-products'
     | '/dashboard/zone-settings'
     | '/dashboard/zone-tasks'
+    | '/dev/editor'
     | '/dlya/$landingSlug'
     | '/for/$landingSlug'
     | '/from/$slug'
@@ -1154,6 +1178,7 @@ export interface RootRouteChildren {
   VizitkaOnlaynRoute: typeof VizitkaOnlaynRoute
   Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route: typeof Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route
   Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route: typeof Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route
+  SlugLlmsDottxtRoute: typeof SlugLlmsDottxtRoute
   AdminLanguageAlgorithmsRoute: typeof AdminLanguageAlgorithmsRoute
   AdminTranslationsRoute: typeof AdminTranslationsRoute
   AlternativesCompetitorRoute: typeof AlternativesCompetitorRoute
@@ -1187,6 +1212,7 @@ export interface RootRouteChildren {
   DashboardZoneProductsRoute: typeof DashboardZoneProductsRoute
   DashboardZoneSettingsRoute: typeof DashboardZoneSettingsRoute
   DashboardZoneTasksRoute: typeof DashboardZoneTasksRoute
+  DevEditorRoute: typeof DevEditorRoute
   DlyaLandingSlugRoute: typeof DlyaLandingSlugRoute
   ForLandingSlugRoute: typeof ForLandingSlugRoute
   FromSlugRoute: typeof FromSlugRoute
@@ -1404,6 +1430,13 @@ declare module '@tanstack/react-router' {
       path: '/$slug'
       fullPath: '/$slug/'
       preLoaderRoute: typeof SlugIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug/llms.txt': {
+      id: '/$slug/llms.txt'
+      path: '/$slug/llms.txt'
+      fullPath: '/$slug/llms.txt'
+      preLoaderRoute: typeof SlugLlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -1672,6 +1705,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardZoneTasksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dev/editor': {
+      id: '/dev/editor'
+      path: '/dev/editor'
+      fullPath: '/dev/editor'
+      preLoaderRoute: typeof DevEditorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dlya/$landingSlug': {
       id: '/dlya/$landingSlug'
       path: '/dlya/$landingSlug'
@@ -1892,6 +1932,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char1044Char1083Char1103Char1041Char1100Char1102Char1090Char1080Char1052Char1072Char1089Char1090Char1077Char1088Char1086Char1074Route,
   Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route:
     Char1044Char1083Char1103Char1056Char1077Char1087Char1077Char1090Char1080Char1090Char1086Char1088Char1086Char1074Route,
+  SlugLlmsDottxtRoute: SlugLlmsDottxtRoute,
   AdminLanguageAlgorithmsRoute: AdminLanguageAlgorithmsRoute,
   AdminTranslationsRoute: AdminTranslationsRoute,
   AlternativesCompetitorRoute: AlternativesCompetitorRoute,
@@ -1925,6 +1966,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardZoneProductsRoute: DashboardZoneProductsRoute,
   DashboardZoneSettingsRoute: DashboardZoneSettingsRoute,
   DashboardZoneTasksRoute: DashboardZoneTasksRoute,
+  DevEditorRoute: DevEditorRoute,
   DlyaLandingSlugRoute: DlyaLandingSlugRoute,
   ForLandingSlugRoute: ForLandingSlugRoute,
   FromSlugRoute: FromSlugRoute,

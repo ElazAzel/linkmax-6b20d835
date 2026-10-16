@@ -49,6 +49,18 @@ describe('BlockInspector', () => {
     }
   });
 
+  it('shows the next block translation when switching directly between blocks', async () => {
+    const props = { mode: 'docked' as const, onUpdateBlock: vi.fn(), onClose: vi.fn() };
+    const first = { ...button, title: { ru: 'Russian A' } } as unknown as Block;
+    const second = { ...button, id: 'b2', title: { en: 'English B' } } as unknown as Block;
+    const { rerender } = render(<BlockInspector {...props} block={first} />);
+    await act(async () => { await vi.dynamicImportSettled(); });
+    expect(await screen.findByDisplayValue('Russian A')).toHaveValue('Russian A');
+    rerender(<BlockInspector {...props} block={second} />);
+    expect(await screen.findByDisplayValue('English B')).toHaveValue('English B');
+    expect(screen.queryByDisplayValue('Russian A')).not.toBeInTheDocument();
+  });
+
   it('closes via Готово', () => {
     const onClose = vi.fn();
     render(<BlockInspector mode="docked" block={button} onUpdateBlock={vi.fn()} onClose={onClose} />);

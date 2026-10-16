@@ -5,7 +5,7 @@ import { useNavigate } from '@/lib/router-compat';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { FAQSection } from '@/components/landing/v2/FAQSection';
 import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
-import { KornerSections } from '@/components/landing/v3/KornerSections';
+import { LandingSections } from '@/components/landing/v3/LandingSections';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLandingAnalytics';
@@ -99,7 +99,7 @@ export default function Index() {
           </div>
 
           <div ref={revenueSectionRef}>
-            <KornerSections
+            <LandingSections
               onStart={() => handleCreatePage('revenue_flow_cta')}
               onPricing={() => handleNav('/pricing', 'pricing', 'revenue_pricing_cta')}
             />

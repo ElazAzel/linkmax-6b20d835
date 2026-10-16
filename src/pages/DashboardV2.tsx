@@ -119,6 +119,7 @@ const CreatePageDialogLazy = lazy(() => import('@/components/dashboard-v2/dialog
 const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.PageVersionsDialog })));
 
 import { pageV2TabHref, getPageV2Tab } from '@/components/dashboard-v2/layout/page-v2-navigation';
+import { isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
 import { QuickCreateSheet } from '@/components/dashboard-v2/layout/QuickCreateSheet';
 import { DraftStatusBanner } from '@/components/editor/DraftStatusBanner';
 import { DraftPreviewDialog } from '@/components/editor/DraftPreviewDialog';
@@ -243,13 +244,15 @@ function DashboardV2Inner() {
   const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
 
   // Current tab from URL - support both query params and pathname
+  const businessEnabled = useBusinessFeatures();
   const currentTab = useMemo((): TabId => {
     // Check for events routes first
-    if (location.pathname.startsWith('/dashboard/events')) {
-      return 'events';
-    }
-    return getPageV2Tab(searchParams.toString(), location.pathname, ALL_TABS) as TabId;
-  }, [searchParams, location.pathname]);
+    const tab = location.pathname.startsWith('/dashboard/events')
+      ? 'events'
+      : getPageV2Tab(searchParams.toString(), location.pathname, ALL_TABS);
+    // Hidden business areas (Settings → «Бизнес-инструменты») open the page editor instead.
+    return (!businessEnabled && isBusinessDashboardTab(tab) ? 'editor' : tab) as TabId;
+  }, [searchParams, location.pathname, businessEnabled]);
 
   const activationAction = searchParams.get('action');
 
@@ -327,11 +330,13 @@ function DashboardV2Inner() {
     if (result.success) {
       toast.success(t('dashboard.pages.createSuccess', 'Page created!'));
       setShowCreatePage(false);
+      // The new page is already active: start building it right away.
+      handleTabChange('editor');
     } else {
       toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to create page'));
     }
     return { success: result.success, error: result.error };
-  }, [multiPage, t]);
+  }, [multiPage, t, handleTabChange]);
 
   // Handle edit page (navigate to editor)
   const handleEditPage = useCallback((pageId: string) => {
