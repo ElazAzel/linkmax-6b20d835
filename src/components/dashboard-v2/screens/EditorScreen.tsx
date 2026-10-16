@@ -5,6 +5,8 @@
  */
 import { memo, useCallback, useEffect, useState, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
 import { RenderContextProvider } from '@/contexts/RenderContext';
+import { EditorPageProvider, type EditorPageInfo } from '@/contexts/EditorPageContext';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
 import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { Link } from '@/lib/router-compat';
@@ -148,7 +150,7 @@ export const EditorScreen = memo(function EditorScreen({
   deepLinkAction,
   recentlyAddedBlockId,
 }: EditorScreenProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
   const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
@@ -461,6 +463,14 @@ export const EditorScreen = memo(function EditorScreen({
     trackEditorAction('art_direction_applied', { recipe: `fix:${issueId}` });
   }, [onReorderBlocks]);
 
+  // Facts block editors use for writing suggestions (see EditorPageContext).
+  const profileName = (pageData?.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined)?.name;
+  const pageInfo = useMemo<EditorPageInfo>(() => ({
+    niche: pageData?.niche || 'general',
+    city: pageData?.city || '',
+    profileName: getI18nText(profileName, i18n.language),
+  }), [pageData?.niche, pageData?.city, profileName, i18n.language]);
+
   // Block inspector: next to the canvas on wide screens, a bottom sheet below.
   const editingBlock = useEditorStore((state) => state.editingBlock);
   const editorOpen = useEditorStore((state) => state.editorOpen);
@@ -483,11 +493,17 @@ export const EditorScreen = memo(function EditorScreen({
     setReordering(value => !value);
   }, [closeEditor, clearBlockSelection]);
 
-  // Keep the block being edited visible above the phone sheet.
+  // Keep the block being edited visible above the phone sheet. Wait for the
+  // insert sheet to close: its focus return would cancel an immediate scroll.
   useEffect(() => {
     if (!sheetOpen || !inspectedBlock) return;
-    const node = document.querySelector(`[data-block-id="${inspectedBlock.id}"]`);
-    node?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    const timer = window.setTimeout(() => {
+      const node = document.querySelector(`[data-block-id="${inspectedBlock.id}"]`);
+      if (!node) return;
+      const top = node.getBoundingClientRect().top + window.scrollY - 84;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }, 220);
+    return () => window.clearTimeout(timer);
   }, [sheetOpen, inspectedBlock?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading || !pageData) {
@@ -495,7 +511,8 @@ export const EditorScreen = memo(function EditorScreen({
   }
 
   return (
-    <div data-page-editor-workspace className={cn('min-h-screen', sheetOpen && 'pb-[58dvh]')}>
+    <EditorPageProvider value={pageInfo}>
+    <div data-page-editor-workspace className={cn('min-h-screen', sheetOpen && 'pb-[78dvh]')}>
       <EditorTopBar
         titleSlot={
           <div className="flex flex-col min-w-0">
@@ -505,7 +522,7 @@ export const EditorScreen = memo(function EditorScreen({
             <div className="flex min-w-0 items-center gap-1.5">
               <div className={cn('h-1.5 w-1.5 shrink-0 rounded-full', isPublished ? 'bg-success' : 'bg-muted-foreground')} />
               <p className="truncate whitespace-nowrap text-[11px] text-muted-foreground">
-                {blockCount} {t('dashboard.editor.blocks', 'блоков')}
+                {t('dashboard.editor.blocksCount', '{{count}} блоков', { count: blockCount })}
                 {!isPublished && ` · ${t('editor.draft', 'черновик')}`}
               </p>
               <AutoSaveIndicator status={saveStatus} />
@@ -807,5 +824,6 @@ export const EditorScreen = memo(function EditorScreen({
         hasContent={hasContent}
       />}
     </div>
+    </EditorPageProvider>
   );
 });

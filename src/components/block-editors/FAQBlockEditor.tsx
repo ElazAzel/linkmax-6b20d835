@@ -12,7 +12,7 @@ import type { FAQItem } from '@/types/page';
 import { createMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
-import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { useEditorPageInfo } from '@/contexts/EditorPageContext';
 import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
 import { toast } from 'sonner';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
@@ -22,8 +22,8 @@ function FAQBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
-  const { pageData } = useDashboard();
-  const niche = pageData?.niche || 'general';
+  const pageInfo = useEditorPageInfo();
+  const niche = pageInfo.niche;
 
   const items: FAQItem[] = formData.items || [];
 

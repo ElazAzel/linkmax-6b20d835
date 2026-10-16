@@ -7,3 +7,6 @@
 - Tailwind v4 reads the legacy theme via `@config "../tailwind.legacy.config.ts"` in `src/styles.css`. Why: preserves the existing design tokens without a full token rewrite.
 - Existing backend functions stay as Lovable Cloud edge functions (stable URLs for webhooks, cron, MCP, SEO worker); new app-internal server logic uses `createServerFn`. Why: moving them would change external URLs.
 - CommonJS-only packages that break SSR are listed in `vite.ssr.noExternal` in `vite.config.ts`. Why: Vite SSR cannot read their named exports.
+- Public profiles (`/$slug/`) load a REST snapshot in the route loader and render SEO head + page content on the server (`src/lib/seo/public-page-*.ts`); `/{slug}/llms.txt` is its markdown twin. Why: AI crawlers do not run JS, so the first HTML must carry the profile and JSON-LD.
+- Business tools (sales blocks, CRM, finance, team, zones) are hidden unless `VITE_LINKMAX_BUSINESS=true` or Settings → «Бизнес-инструменты» is on (`src/lib/features.ts`); hide, never delete. Why: the cabinet stays a focused page builder.
+- `/dev/editor?slug=…` (dev builds only) mounts the real EditorScreen on an in-memory copy of a published page. Why: check the editor on a phone width without signing in; nothing is saved.

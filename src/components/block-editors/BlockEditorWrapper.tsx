@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { 
   Crown, 
-  Info, 
   Calendar as CalendarIcon, 
   X, 
   ChevronDown, 
@@ -22,6 +21,7 @@ import { cn } from '@/lib/utils/utils';
 import { PaidContentSettings } from './PaidContentSettings';
 import type { BlockStyle } from '@/types/page';
 import { getManifestEntry } from '@/lib/blocks/block-manifest';
+import { localizeValidationMessage } from '@/lib/blocks/validation-messages';
 
 export interface BaseBlockEditorProps {
   formData: any;
@@ -43,7 +43,6 @@ export function BlockEditorWrapper({
   children,
   isPremium = false,
   description,
-  hint,
 }: BlockEditorWrapperProps) {
   const { t } = useTranslation();
 
@@ -58,13 +57,7 @@ export function BlockEditorWrapper({
         </div>
       )}
 
-      {hint && !isPremium && (
-        <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-primary/5 border border-primary/10">
-          <Info className="h-4 w-4 text-primary shrink-0" />
-          <span className="text-xs text-muted-foreground">{hint}</span>
-        </div>
-      )}
-
+      {/* Editor hints are not shown: the phone sheet keeps its height for the fields. */}
       {children}
     </div>
   );
@@ -91,6 +84,11 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
     // Validation logic
     const validate = options?.validate ?? getManifestEntry(formData.type)?.editing.validate;
     const validationError = validate?.(formData);
+    // A freshly added block is empty on purpose: complain only after the owner edits it.
+    const initialFormData = useRef(formData);
+    const blockId = (formData as { id?: string }).id;
+    if ((initialFormData.current as { id?: string }).id !== blockId) initialFormData.current = formData;
+    const touched = formData !== initialFormData.current;
 
     const handleChange = (updates: Partial<BaseBlockEditorProps['formData']>) => {
       onChange(updates as any); // Cast only here because of generic P
@@ -126,14 +124,15 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
         description={options?.description}
         hint={options?.hint}
       >
-        {validationError && (
-          <Alert variant="destructive" className="rounded-xl">
-            <AlertDescription>{t(validationError, validationError)}</AlertDescription>
-          </Alert>
-        )}
-
         {/* Main block content editor */}
         <Component {...props} onChange={handleChange} />
+
+        {/* Below the fields, so typing never shifts the input under the finger. */}
+        {validationError && touched && (
+          <Alert role="status" className="rounded-xl border-amber-500/30 bg-amber-500/10 text-foreground">
+            <AlertDescription>{localizeValidationMessage(validationError, t)}</AlertDescription>
+          </Alert>
+        )}
 
         {/* Advanced Settings Toggle */}
         <button

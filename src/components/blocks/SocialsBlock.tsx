@@ -77,7 +77,8 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
           const platformId = detectSocialPlatform(url)
             ?? normalizePlatformId(platform.platform)
             ?? normalizePlatformId(platform.icon);
-          const label = platform.name || getSocialPlatform(platformId)?.label || url.replace(/^https?:\/\//, '');
+          // Templates and translation saved names as { ru, en, kk } objects.
+          const label = getI18nText(platform.name as Parameters<typeof getI18nText>[0], i18n.language as SupportedLanguage) || getSocialPlatform(platformId)?.label || url.replace(/^https?:\/\//, '');
           const brandColor = iconStyle === 'brand' && !platform.customIconUrl ? getBrandColor(platformId) : null;
 
           return (

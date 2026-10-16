@@ -1663,7 +1663,9 @@
       "interfaceThemeDesc": "Сіздің бетіңіз өз тақырыбында қалады",
       "themeSystem": "Жүйедегідей",
       "themeLight": "Ашық",
-      "themeDark": "Қараңғы"
+      "themeDark": "Қараңғы",
+      "businessTools": "Бизнес құралдары",
+      "businessToolsDesc": "Сату, жазылу, CRM, қаржы және команда. Өшірулі болса — кабинет қарапайым бет құрастырушы болып қалады."
     },
     "activity": {
       "all": "Барлығы",
@@ -1720,7 +1722,11 @@
     },
     "editor": {
       "blocks": "блоктар",
-      "title": "Редактор"
+      "title": "Редактор",
+      "blocksCount_one": "{{count}} блок",
+      "blocksCount_few": "{{count}} блок",
+      "blocksCount_many": "{{count}} блок",
+      "blocksCount_other": "{{count}} блок"
     },
     "errors": {
       "loadFailed": "Жүктеу қатесі",
@@ -2168,7 +2174,8 @@
     "tabs": {
       "advanced": "қосу.",
       "content": "Мазмұны",
-      "style": "Стиль"
+      "style": "Стиль",
+      "size": "Өлшем"
     },
     "templates": "Үлгілер",
     "trafficSplit": "Трафиктің бөлінуі",
@@ -2309,7 +2316,20 @@
       "done": "Дайын",
       "expand": "Баптауларды ашу",
       "collapse": "Баптауларды жию"
-    }
+    },
+    "insertShort": {
+      "socials": "Әлеуметтік желілер",
+      "messenger": "Мессенджер",
+      "faq": "Сұрақтар",
+      "separator": "Бөлгіш",
+      "before_after": "Дейін/кейін"
+    },
+    "insertGroups": {
+      "primary": "Негізгі",
+      "more": "Тағы",
+      "business": "Сату және жазылу"
+    },
+    "sizeHint": "Беттегі плитка өлшемі — өзгерістер бірден жоғарыда көрінеді."
   },
   "errors": {
     "createYourPage": "Өз парақшаңызды жасағыңыз келе ме?",
@@ -3155,7 +3175,7 @@
   },
   "hints": {
     "bioLinks": "Кеңес: сілтемелерді [text](url) пішімінде қосыңыз",
-    "richTextVisual": "Сілтемелерді қосу үшін рџ”— түймешігін пайдаланыңыз. Жол үзілімдері сақталады."
+    "richTextVisual": "Сілтемені өрістің үстіндегі тізбек түймесі қосады. Жол үзілімдері сақталады."
   },
   "home": {
     "incoming": {
@@ -4820,7 +4840,9 @@
     "showMoreLanguages": "Ещё {{count}} языков",
     "translating": "Аударма...",
     "translationError": "Автоматты аударма қатесі",
-    "uiLanguage": "Интерфейс тілі"
+    "uiLanguage": "Интерфейс тілі",
+    "languagesShort": "Тілдер",
+    "otherLanguages": "Басқа тілдер"
   },
   "layouts": {
     "grid": "Тор",
@@ -8161,5 +8183,23 @@
     "styleTheme": "Беттегідей",
     "layoutList": "Атаулары бар тізім",
     "layoutRow": "Белгішелер қатары"
+  },
+  "validation": {
+    "fieldRequired": "{{field}}: өрісті толтырыңыз",
+    "fieldUrl": "{{field}}: https:// деп басталатын сілтеме керек",
+    "fieldNumber": "{{field}}: сан енгізіңіз",
+    "fieldMin": "{{field}}: кемінде {{min}}",
+    "fieldMax": "{{field}}: ең көбі {{max}}",
+    "fieldItems": "{{field}}: кемінде бір элемент қосыңыз",
+    "field": {
+      "title": "Тақырып",
+      "url": "Сілтеме",
+      "video_url": "Бейне сілтемесі",
+      "image_url": "Сурет",
+      "alt_text": "Сурет сипаттамасы",
+      "file_url": "Файл",
+      "product_name": "Тауар атауы",
+      "price": "Баға"
+    }
   }
 }

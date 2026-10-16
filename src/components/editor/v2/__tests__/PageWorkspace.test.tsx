@@ -1,8 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DashboardSidebar } from '@/components/dashboard-v2/layout/DashboardSidebar';
 import { EditorTopBar } from '../EditorTopBar';
 import { SmartActionDock } from '../SmartActionDock';
+import { setBusinessFeaturesEnabled } from '@/lib/features';
 
 vi.mock('@/lib/router-compat', () => ({ useNavigate: () => vi.fn() }));
 vi.mock('@/contexts/ZoneContext', () => ({ useHasBusinessZone: () => true }));
@@ -14,8 +15,16 @@ vi.mock('@/hooks/ui/use-mobile', () => ({ useIsMobile: () => false }));
 vi.mock('@/platform/native/haptics', () => ({ hapticLight: vi.fn(), hapticSelection: vi.fn() }));
 
 describe('the working page editor workspace', () => {
+  afterEach(() => setBusinessFeaturesEnabled(false));
+
+  it('hides the business area until business tools are switched on', () => {
+    render(<DashboardSidebar activeTab="editor" onTabChange={vi.fn()} isPremium onSignOut={vi.fn()} />);
+    expect(screen.queryByRole('button', { name: 'Бизнес' })).not.toBeInTheDocument();
+  });
+
   it('shows one clear navigation while editing, with business tools behind Business', () => {
     const navigate = vi.fn();
+    setBusinessFeaturesEnabled(true);
     render(<DashboardSidebar activeTab="editor" onTabChange={navigate} isPremium onSignOut={vi.fn()} />);
     expect(screen.getAllByRole('button', { name: 'Настройки' })).toHaveLength(1);
     expect(screen.queryByRole('button', { name: 'Лиды' })).not.toBeInTheDocument();

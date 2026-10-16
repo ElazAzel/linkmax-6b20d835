@@ -232,7 +232,8 @@ export function BlockInspector({
         className={cn(
           'fixed inset-x-0 bottom-0 z-[60] flex flex-col overflow-hidden rounded-t-sheet border-t border-border bg-card shadow-lg',
           'pb-[env(safe-area-inset-bottom)] transition-[height] duration-200 ease-out motion-reduce:transition-none',
-          expanded ? 'h-[88dvh]' : 'h-[55dvh]',
+          // Tall by default so the fields are readable on a phone; the edited block stays visible above.
+          expanded ? 'h-[94dvh]' : 'h-[76dvh]',
         )}
       >
         <button

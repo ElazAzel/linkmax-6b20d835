@@ -61,6 +61,7 @@ const SOFTWARE_LD = {
 const ORG_LD = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://lnkmx.my#organization",
   name: "LinkMAX",
   url: "https://lnkmx.my/",
   logo: "https://lnkmx.my/favicon.png",
@@ -77,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   beforeLoad: async () => {
     await i18nReady;
   },
-  head: () => ({
+  head: ({ matches }) => ({
     meta: [
       { charSet: "utf-8" },
       {
@@ -145,7 +146,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       { children: ABORT_GUARD },
       { children: THEME_BOOTSTRAP },
-      { type: "application/ld+json", children: JSON.stringify(SOFTWARE_LD) },
+      // A profile page describes its owner (route JSON-LD); the app itself is only the publisher.
+      ...(matches.some((m) => (m.routeId as string) === "/$slug/")
+        ? []
+        : [{ type: "application/ld+json", children: JSON.stringify(SOFTWARE_LD) }]),
       { type: "application/ld+json", children: JSON.stringify(ORG_LD) },
     ],
   }),

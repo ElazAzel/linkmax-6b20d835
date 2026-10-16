@@ -14,7 +14,7 @@ interface Props {
   onPricing: () => void;
 }
 
-export function KornerSections({ onStart, onPricing }: Props) {
+export function LandingSections({ onStart, onPricing }: Props) {
   const { t } = useTranslation();
 
   const features = [
