@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 import { BLOCK_MANIFEST, isBlockPremium } from '@/lib/blocks/block-manifest';
 import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
-import { BUSINESS_BLOCK_TYPES, useBusinessFeatures } from '@/lib/features';
+import { BUSINESS_BLOCK_TYPES, SHOWCASE_BLOCK_TYPES, SHOWCASE_BLOCKS_ENABLED, useBusinessFeatures } from '@/lib/features';
 import { BLOCK_PRESETS, type BlockPreset, getPresetsForType } from '@/lib/editor/editor-presets';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 import type { Niche } from '@/lib/niches';
@@ -171,7 +171,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const MANIFEST_BLOCKS = getManifestBlocks();
-  const visibleBlocks = MANIFEST_BLOCKS.filter(block => businessEnabled || !BUSINESS_BLOCK_TYPES.has(block.type));
+  const visibleBlocks = MANIFEST_BLOCKS.filter(block =>
+    (businessEnabled || !BUSINESS_BLOCK_TYPES.has(block.type)) && (SHOWCASE_BLOCKS_ENABLED || !SHOWCASE_BLOCK_TYPES.has(block.type)));
   const blockLabel = (block: ManifestBlock) => t(`editor.insertShort.${block.type}`, t(block.labelKey, block.type));
   const filteredBlocks = visibleBlocks.filter(block =>
     !normalizedQuery ||
