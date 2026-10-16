@@ -166,12 +166,12 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                   <>
                     <div className="flex items-baseline gap-2">
                       <span className="text-4xl font-bold">
-                        {pricingPlans[billingPeriod].monthlyKzt.toLocaleString()}₸
+                        {pricingPlans[billingPeriod].monthlyKzt.toLocaleString('ru-RU')}₸
                       </span>
                       <span className="text-muted-foreground text-sm">/{t('landing.pricing.month', 'мес')}</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {t('landing.pricing.total', 'Итого')}: {pricingPlans[billingPeriod].totalKzt.toLocaleString()}₸ {t('landing.pricing.billedOnce', 'единоразово')}
+                      {t('landing.pricing.total', 'Итого')}: {pricingPlans[billingPeriod].totalKzt.toLocaleString('ru-RU')}₸ {t('landing.pricing.billedOnce', 'единоразово')}
                     </p>
                     <p className="text-xs text-muted-foreground/70">
                       ≈ ${pricingPlans[billingPeriod].monthlyUsd.toFixed(2)}/{t('landing.pricing.month', 'мес')}
@@ -189,7 +189,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                       {t('landing.pricing.total', 'Итого')}: ${pricingPlans[billingPeriod].totalUsd} {t('landing.pricing.billedOnce', 'единоразово')}
                     </p>
                     <p className="text-xs text-muted-foreground/70">
-                      ≈ {pricingPlans[billingPeriod].monthlyKzt.toLocaleString()}₸/{t('landing.pricing.month', 'мес')}
+                      ≈ {pricingPlans[billingPeriod].monthlyKzt.toLocaleString('ru-RU')}₸/{t('landing.pricing.month', 'мес')}
                     </p>
                   </>
                 )}

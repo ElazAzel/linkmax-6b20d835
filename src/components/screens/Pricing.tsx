@@ -185,7 +185,7 @@ export const Pricing = memo(function Pricing() {
                     </div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-3xl font-bold">
-                        {key === 'pro' ? (isKztPrimary ? `${plan.pricesKzt[billingPeriod].toLocaleString()}₸` : `$${plan.pricesUsd[billingPeriod]}`) : '0₸'}
+                        {key === 'pro' ? (isKztPrimary ? `${plan.pricesKzt[billingPeriod].toLocaleString('ru-RU')}₸` : `$${plan.pricesUsd[billingPeriod]}`) : '0₸'}
                       </span>
                       <span className="text-muted-foreground text-sm">/{t('pricing.month', 'мес')}</span>
                     </div>

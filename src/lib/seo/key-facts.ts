@@ -166,7 +166,7 @@ export function generateKeyFacts(
       facts.push({
         category: 'services',
         label: labels.priceFrom,
-        value: `${minPrice.toLocaleString()} ${currency}`,
+        value: `${minPrice.toLocaleString('ru-RU')} ${currency}`,
         schemaProperty: 'priceRange',
       });
     }

@@ -41,7 +41,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
 
   const formatPrice = (price: number, currency: string = 'KZT') => {
     const symbol = currencySymbols[currency] || currency;
-    return `${price.toLocaleString()} ${symbol}`;
+    return `${price.toLocaleString('ru-RU')} ${symbol}`;
   };
 
   // Group items by category

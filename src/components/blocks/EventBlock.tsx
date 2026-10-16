@@ -12,6 +12,7 @@ import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
 import Download from 'lucide-react/dist/esm/icons/download';
 import { format } from 'date-fns';
+import { useHydrated } from '@tanstack/react-router';
 import { ru, kk } from 'date-fns/locale';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -67,6 +68,8 @@ export const EventBlock = memo(function EventBlock({
 
   const language = i18n.language as SupportedLanguage;
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
+  // The server formats in UTC; show the visitor's local time only after hydration.
+  const hydrated = useHydrated();
   const title = getI18nText(block.title, language);
   const description = getI18nText(block.description, language);
 
@@ -456,9 +459,9 @@ export const EventBlock = memo(function EventBlock({
             {block.startAt && (
               <div className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4" />
-                <span className="break-words">
-                  {format(new Date(block.startAt), 'dd MMMM yyyy, HH:mm', { locale })}
-                </span>
+                <time dateTime={block.startAt} className="break-words">
+                  {hydrated ? format(new Date(block.startAt), 'dd MMMM yyyy, HH:mm', { locale }) : null}
+                </time>
               </div>
             )}
             {block.locationValue && (

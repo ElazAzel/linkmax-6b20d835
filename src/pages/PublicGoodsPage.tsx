@@ -109,7 +109,7 @@ export default function PublicGoodsPage() {
         <div className="text-3xl font-black tracking-tight">
           {isFree
             ? t('digitalGoods.free', 'Бесплатно')
-            : `${Number(product.price).toLocaleString()} ${product.currency}`}
+            : `${Number(product.price).toLocaleString('ru-RU')} ${product.currency}`}
         </div>
 
         <div className="space-y-1.5">
