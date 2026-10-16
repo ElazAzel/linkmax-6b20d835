@@ -2,6 +2,7 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
+import { preparePageV2CloudSql } from '../../../scripts/prepare-page-v2-cloud.mjs';
 
 // Real PostgreSQL execution, with a deliberately minimal Cloud surrogate schema.
 const db = new PGlite();
@@ -42,7 +43,15 @@ before(async () => {
   const events = readFileSync(new URL('../../../supabase/migrations/20260123115026_97ee7680-fb9b-4057-a2d1-c7023e11faf8.sql', import.meta.url),'utf8');
   const eventStart = events.indexOf('CREATE TABLE IF NOT EXISTS public.events');
   await db.exec(events.slice(eventStart, events.indexOf(');',eventStart)+2));
-  await db.exec(readFileSync(new URL('../../../supabase/migrations/20261013114410_page_v2_drafts.sql', import.meta.url),'utf8'));
+
+  await db.exec(`grant select on pages, blocks to anon, authenticated; alter table blocks enable row level security;
+    create policy "Anyone can view blocks of published pages" on blocks for select using (true);
+    create policy "Users can view own blocks" on blocks for select to authenticated using (exists(select 1 from pages where pages.id=blocks.page_id and pages.user_id=auth.uid()));`);
+  await db.exec(`create schema storage;
+    create function storage.foldername(text) returns text[] language sql as $$select string_to_array($1,'/')$$;
+    create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+    create table storage.objects(bucket_id text,name text);`);
+  await db.exec(preparePageV2CloudSql());
 });
 after(async () => db.close());
 test('private saves enforce CAS and do not change public content', async () => {
@@ -118,4 +127,40 @@ test('recovery rejects unauthorized callers and keeps backups private',async()=>
  const latest=await call('load_page_draft',[page]);
  const unchanged=await call('reload_page_draft',[page,latest.revision,latest.base_published_revision]);
  assert.deepEqual(unchanged,latest);
+});
+
+test('publish rejects null revisions without changing the publication', async () => {
+  await as(owner);
+  const current = await call('load_page_draft',[page]);
+  for (const [revision, base] of [[null,null],[null,current.base_published_revision],[current.revision,null]]) {
+    await assert.rejects(call('publish_page_draft',[page,revision,base]), /draft_conflict/);
+  }
+  const after = await call('load_page_draft',[page]);
+  assert.equal(after.base_published_revision,current.base_published_revision);
+});
+
+test('a page owner cannot overwrite another page block through its UUID', async () => {
+  const foreignPage='cccccccc-cccc-4ccc-8ccc-cccccccccccc';
+  const foreignBlock='dddddddd-dddd-4ddd-8ddd-dddddddddddd';
+  await db.exec('reset role');
+  await db.query('insert into pages(id,user_id,slug) values($1,$2,$3)',[foreignPage,other,'other-page']);
+  await db.query('insert into blocks(id,page_id,type,position,content) values($1,$2,$3,0,$4)',[foreignBlock,foreignPage,'text',{id:'foreign-authored',type:'text',content:'Preserved'}]);
+  await as(owner);
+  await assert.rejects(call('save_page_blocks',[page,[{id:foreignBlock,type:'text',position:0,content:{type:'text',content:'Overwritten'}}],false]), /block_page_mismatch/);
+  await db.exec('reset role');
+  const stored=(await db.query('select page_id,content from blocks where id=$1',[foreignBlock])).rows[0];
+  assert.equal(stored.page_id,foreignPage);
+  assert.equal(stored.content.content,'Preserved');
+});
+
+test('soft-deleted content stays private while the owner retains recovery access', async () => {
+  const removed='ffffffff-ffff-4fff-8fff-ffffffffffff';
+  await db.exec('reset role');
+  await db.query('insert into blocks(id,page_id,type,position,content,deleted_at) values($1,$2,$3,99,$4,now())',[removed,page,'text',{content:'Removed'}]);
+  await as(null,'anon');
+  assert.equal((await db.query('select id from blocks where id=$1',[removed])).rows.length,0);
+  await as(other);
+  assert.equal((await db.query('select id from blocks where id=$1',[removed])).rows.length,0);
+  await as(owner);
+  assert.equal((await db.query('select id from blocks where id=$1',[removed])).rows.length,1);
 });
