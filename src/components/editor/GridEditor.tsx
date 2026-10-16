@@ -56,6 +56,7 @@ import { canCreateSection, createSection, getSections, type SectionMeta } from '
 import { BlockContextToolbar } from './BlockContextToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
 import type { Block, GridConfig, BlockType } from '@/types/page';
@@ -264,7 +265,7 @@ function SortableGridBlockItem({
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
         // scroll-mt: scrollIntoView lands below the sticky editor top bar.
-        'relative group min-w-0 min-h-0 scroll-mt-20 transition-shadow duration-200 border-0 rounded-[var(--lm-block-radius,24px)]',
+        'relative group min-w-0 min-h-0 scroll-mt-[84px] transition-shadow duration-200 border-0 rounded-[var(--lm-block-radius,24px)]',
         !inComposition && !layout.autoHeight && 'lm-fixed-cell',
         !isFrameless && 'lm-owned-surface',
         // Quiet hover: 1px outline + soft lift, no background tint
@@ -803,13 +804,16 @@ export const GridEditor = memo(function GridEditor({
       />
     );
 
+    // The canvas mirrors the public page: section rows only while arranging blocks.
+    const showSectionHeaders = !LINKMAX_UI_V2 || reorderMode;
+
     contentBlocks.forEach((block, index) => {
       const blockSectionId = (block as any).sectionId as string | undefined;
       const blockComposition = getComposition((block as any).composition);
       const startsNewSection = !!blockSectionId && blockSectionId !== currentSectionId;
 
       let header: React.ReactNode = null;
-      if (startsNewSection && blockSectionId) {
+      if (startsNewSection && blockSectionId && showSectionHeaders) {
         const meta = sectionMeta.get(blockSectionId);
         const section = sections.find(sct => sct.id === blockSectionId);
         header = (
@@ -827,7 +831,7 @@ export const GridEditor = memo(function GridEditor({
       currentSectionId = blockSectionId;
 
       // Collapsed section: only keep the header
-      if (blockSectionId && collapsedSections.has(blockSectionId)) {
+      if (showSectionHeaders && blockSectionId && collapsedSections.has(blockSectionId)) {
         if (header) {
           runs.push({ kind: 'grid', key: `grid-collapsed-${blockSectionId}`, nodes: [header], autoHeight: true });
         }
@@ -886,7 +890,7 @@ export const GridEditor = memo(function GridEditor({
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
         <div className="lm-profile-card relative isolate" data-onboarding="profile-block" data-editor-block>
-          <div className="relative" data-block-id={profileBlock.id}>
+          <div className="relative scroll-mt-[84px]" data-block-id={profileBlock.id}>
             <div className="pointer-events-none"><BlockRenderer block={profileBlock} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} /></div>
             <button type="button" className="absolute inset-0 rounded-card focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onEditBlock(profileBlock)} aria-label={t('common.edit')}>
               <span className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full bg-card shadow-sm"><Edit2 className="h-4 w-4" /></span>

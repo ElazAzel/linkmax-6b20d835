@@ -64,6 +64,13 @@ const ALL_LANGUAGES: Record<LocaleCode, { name: string; flag: string }> = {
 // Default languages - English is mandatory, others are optional
 const DEFAULT_LANGUAGE_CODES: LocaleCode[] = ['en', 'ru', 'kk'];
 
+/** The interface language, unless the text exists only in another language. */
+export function pickPrimaryLanguage(value: MultilingualString | I18nText | undefined, uiLanguage: LocaleCode): LocaleCode {
+  const filled = Object.keys(value || {}).filter(k => (value as I18nText)[k]?.trim());
+  if (filled.length === 0 || filled.includes(uiLanguage)) return uiLanguage;
+  return filled[0];
+}
+
 // Recommended languages for quick add (most popular)
 const RECOMMENDED_LANGUAGES: LocaleCode[] = ['de', 'fr', 'es', 'tr', 'uz', 'uk', 'zh', 'ar'];
 
@@ -77,7 +84,7 @@ interface MultilingualInputProps {
   enableRichText?: boolean;
   /** Allow adding more languages beyond the default - now true by default */
   allowAddLanguages?: boolean;
-  /** Primary language (required field) - English is default */
+  /** Language edited by default. Defaults to the interface language (or the one that has text). */
   primaryLanguage?: LocaleCode;
   /** Show compact mode with fewer default tabs */
   compact?: boolean;
@@ -96,13 +103,19 @@ export function MultilingualInput({
   required = false,
   enableRichText = false,
   allowAddLanguages = true,
-  primaryLanguage = 'en',
+  primaryLanguage: primaryLanguageProp,
   compact = false,
   onMagicWand,
   magicWandTitle,
   error,
 }: MultilingualInputProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  // One field in the owner's language by default; other languages are opt-in.
+  const [primaryLanguage] = useState<LocaleCode>(() =>
+    primaryLanguageProp ?? pickPrimaryLanguage(value, (i18n.language || 'ru').split('-')[0]),
+  );
+  const [showLanguages, setShowLanguages] = useState(false);
+  const otherFilledCount = Object.keys(value || {}).filter(k => k !== primaryLanguage && (value as I18nText)[k]?.trim()).length;
 
   // Determine active languages from value + defaults
   // In compact mode, only show languages that have content + primary
@@ -113,7 +126,7 @@ export function MultilingualInput({
     // Always include primary language (English)
     const defaultsToShow = compact
       ? [primaryLanguage]
-      : DEFAULT_LANGUAGE_CODES;
+      : [primaryLanguage, ...DEFAULT_LANGUAGE_CODES];
     const combined = new Set([...defaultsToShow, ...existingLangs]);
     return Array.from(combined);
   });
@@ -139,11 +152,12 @@ export function MultilingualInput({
   const handleAddLanguage = (langCode: LocaleCode) => {
     setActiveLanguages(prev => [...prev, langCode]);
     setActiveTab(langCode);
+    setShowLanguages(true);
     setLanguagePickerOpen(false);
   };
 
   const handleRemoveLanguage = (langCode: LocaleCode) => {
-    // Can't remove primary language (English is mandatory)
+    // The primary language keeps its field.
     if (langCode === primaryLanguage) return;
 
     setActiveLanguages(prev => prev.filter(l => l !== langCode));
@@ -194,6 +208,30 @@ export function MultilingualInput({
 
   const InputComponent = type === 'textarea' ? Textarea : Input;
 
+  const renderField = (langCode: LocaleCode, langName?: string) => (
+    enableRichText ? (
+      <RichTextEditor
+        value={(value as I18nText)[langCode] || ''}
+        onChange={(text) => handleChange(langCode, text)}
+        placeholder={placeholder ? (langName ? `${placeholder} (${langName})` : placeholder) : undefined}
+        type={type}
+        className={error ? 'border-destructive ring-destructive focus-visible:ring-destructive' : undefined}
+      />
+    ) : (
+      <InputComponent
+        value={(value as I18nText)[langCode] || ''}
+        onChange={(e) => handleChange(langCode, e.target.value)}
+        placeholder={placeholder ? (langName ? `${placeholder} (${langName})` : placeholder) : undefined}
+        aria-label={label}
+        className={cn(
+          type === 'textarea' && 'min-h-[100px]',
+          error && 'border-destructive ring-destructive focus-visible:ring-destructive focus-visible:border-destructive'
+        )}
+      />
+    )
+  );
+
+
   const getLanguageInfo = (code: LocaleCode) =>
     ALL_LANGUAGES[code] || { name: code.toUpperCase(), flag: '🏳️' };
 
@@ -227,6 +265,24 @@ export function MultilingualInput({
               <span className="hidden sm:inline">{t('ai.magic', 'Магия')}</span>
             </Button>
           )}
+          {!showLanguages ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowLanguages(true)}
+              className="h-7 px-2 text-xs gap-1.5 text-muted-foreground"
+              aria-expanded={false}
+              title={t('language.otherLanguages', 'Другие языки')}
+            >
+              <Languages className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>{t('language.languagesShort', 'Языки')}</span>
+              {otherFilledCount > 0 && (
+                <span className="rounded-full bg-muted px-1.5 text-[10px] font-semibold text-foreground">+{otherFilledCount}</span>
+              )}
+            </Button>
+          ) : (
+          <>
           <Button
             type="button"
             variant="ghost"
@@ -283,9 +339,12 @@ export function MultilingualInput({
               </PopoverContent>
             </Popover>
           )}
+          </>
+          )}
         </div>
       </div>
 
+      {!showLanguages ? renderField(primaryLanguage) : (
       <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as LocaleCode)}>
         <TabsList className={`grid w-full ${getGridCols()}`}>
           {activeLanguages.map((langCode) => {
@@ -305,7 +364,7 @@ export function MultilingualInput({
                   <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-primary rounded-full" />
                 )}
                 {isPrimary && (
-                  <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-accent-foreground rounded-full" title="Required" />
+                  <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-accent-foreground rounded-full" aria-hidden="true" />
                 )}
               </TabsTrigger>
             );
@@ -322,34 +381,12 @@ export function MultilingualInput({
                     <X className="mr-1 h-3.5 w-3.5" aria-hidden="true" />{t('actions.delete', 'Удалить')}: {lang.name}
                   </Button>
                 </div>}
-              {enableRichText ? (
-                <RichTextEditor
-                  value={(value as I18nText)[langCode] || ''}
-                  onChange={(text) => handleChange(langCode, text)}
-                  placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
-                  type={type}
-                  className={error ? 'border-destructive ring-destructive focus-visible:ring-destructive' : undefined}
-                />
-              ) : (
-                <InputComponent
-                  value={(value as I18nText)[langCode] || ''}
-                  onChange={(e) => handleChange(langCode, e.target.value)}
-                  placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
-                  className={cn(
-                    type === 'textarea' && 'min-h-[100px]',
-                    error && 'border-destructive ring-destructive focus-visible:ring-destructive focus-visible:border-destructive'
-                  )}
-                />
-              )}
-              {langCode === primaryLanguage && required && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t('fields.requiredEnglish', 'Required field (English is mandatory)')}
-                </p>
-              )}
+              {renderField(langCode, lang.name)}
             </TabsContent>
           );
         })}
       </Tabs>
+      )}
 
       {enableRichText && !error && (
         <p className="text-xs text-muted-foreground">

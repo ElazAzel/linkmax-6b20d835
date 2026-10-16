@@ -66,8 +66,8 @@ vi.mock('@/components/landing/v2/DynamicIslandNav', () => ({
   ),
 }));
 
-vi.mock('@/components/landing/v3/KornerSections', () => ({
-  KornerSections: ({ onStart, onPricing }: { onStart: () => void; onPricing: () => void }) => (
+vi.mock('@/components/landing/v3/LandingSections', () => ({
+  LandingSections: ({ onStart, onPricing }: { onStart: () => void; onPricing: () => void }) => (
     <div>
       <button onClick={onStart}>revenue-start</button>
       <button onClick={onPricing}>revenue-pricing</button>

@@ -1663,7 +1663,9 @@
       "interfaceThemeDesc": "Your page keeps its own theme",
       "themeSystem": "System",
       "themeLight": "Light",
-      "themeDark": "Dark"
+      "themeDark": "Dark",
+      "businessTools": "Business tools",
+      "businessToolsDesc": "Sales, booking, CRM, finance and team. Off keeps the cabinet a simple page builder."
     },
     "activity": {
       "all": "All",
@@ -1720,7 +1722,11 @@
     },
     "editor": {
       "blocks": "blocks",
-      "title": "Editor"
+      "title": "Editor",
+      "blocksCount_one": "{{count}} block",
+      "blocksCount_few": "{{count}} blocks",
+      "blocksCount_many": "{{count}} blocks",
+      "blocksCount_other": "{{count}} blocks"
     },
     "errors": {
       "loadFailed": "Loading error",
@@ -2168,7 +2174,8 @@
     "tabs": {
       "advanced": "Add.",
       "content": "Content",
-      "style": "Style"
+      "style": "Style",
+      "size": "Size"
     },
     "templates": "Templates",
     "trafficSplit": "Traffic split",
@@ -2308,8 +2315,30 @@
       "discardShort": "Discard",
       "done": "Done",
       "expand": "Expand settings",
-      "collapse": "Collapse settings"
-    }
+      "collapse": "Collapse settings",
+      "tools": {
+        "image": "Image",
+        "text": "Text",
+        "font": "Font",
+        "appearance": "Style",
+        "action": "Link"
+      },
+      "close": "Close settings",
+      "toolsLabel": "Block tools"
+    },
+    "insertShort": {
+      "socials": "Socials",
+      "messenger": "Messenger",
+      "faq": "FAQ",
+      "separator": "Divider",
+      "before_after": "Before/after"
+    },
+    "insertGroups": {
+      "primary": "Essentials",
+      "more": "More",
+      "business": "Sales & booking"
+    },
+    "sizeHint": "Tile size on the page — changes show above right away."
   },
   "errors": {
     "createYourPage": "Want to create your own page?",
@@ -3155,7 +3184,7 @@
   },
   "hints": {
     "bioLinks": "Tip: add links in [text](url) format",
-    "richTextVisual": "Use the рџ”— button to add links. Line breaks are preserved."
+    "richTextVisual": "Add a link with the chain button above the field. Line breaks are preserved."
   },
   "home": {
     "incoming": {
@@ -4820,7 +4849,9 @@
     "showMoreLanguages": "Ещё {{count}} языков",
     "translating": "Translation...",
     "translationError": "Auto translation error",
-    "uiLanguage": "Interface language"
+    "uiLanguage": "Interface language",
+    "languagesShort": "Languages",
+    "otherLanguages": "Other languages"
   },
   "layouts": {
     "grid": "Grid",
@@ -8217,5 +8248,23 @@
     "styleTheme": "Match the page",
     "layoutList": "List with names",
     "layoutRow": "Row of icons"
+  },
+  "validation": {
+    "fieldRequired": "{{field}} is required",
+    "fieldUrl": "{{field}}: enter a link starting with https://",
+    "fieldNumber": "{{field}}: enter a number",
+    "fieldMin": "{{field}}: at least {{min}}",
+    "fieldMax": "{{field}}: at most {{max}}",
+    "fieldItems": "{{field}}: add at least one item",
+    "field": {
+      "title": "Title",
+      "url": "Link",
+      "video_url": "Video link",
+      "image_url": "Image",
+      "alt_text": "Image description",
+      "file_url": "File",
+      "product_name": "Product name",
+      "price": "Price"
+    }
   }
 }

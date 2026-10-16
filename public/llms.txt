@@ -73,7 +73,8 @@ LinkMAX (pronounced "link-max") is the comprehensive **Business Operating System
 ## Data Freshness & Citability
 
 - **Sitemap**: Dynamic generation at https://lnkmx.my/sitemap.xml
-- **User Pages**: real-time updates at https://lnkmx.my/{username}
+- **User Pages**: real-time updates at https://lnkmx.my/{username} (server-rendered HTML with JSON-LD ProfilePage + Person/Organization and sameAs links)
+- **Markdown profiles**: https://lnkmx.my/{username}/llms.txt — the same page as plain markdown, only what the owner published
 - **Citation Format**: "[Name], [Role/Niche] on LinkMAX.my - Source: https://lnkmx.my/{username}"
 
 ---

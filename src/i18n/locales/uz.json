@@ -1663,7 +1663,9 @@
       "interfaceThemeDesc": "Sahifangiz o‘z mavzusida qoladi",
       "themeSystem": "Tizimdagidek",
       "themeLight": "Yorug‘",
-      "themeDark": "Qorong‘i"
+      "themeDark": "Qorong‘i",
+      "businessTools": "Biznes vositalari",
+      "businessToolsDesc": "Savdo, band qilish, CRM, moliya va jamoa. O‘chirilganda kabinet oddiy sahifa konstruktori bo‘lib qoladi."
     },
     "activity": {
       "all": "Hammasi",
@@ -1720,7 +1722,11 @@
     },
     "editor": {
       "blocks": "bloklar",
-      "title": "muharrir"
+      "title": "muharrir",
+      "blocksCount_one": "{{count}} ta blok",
+      "blocksCount_few": "{{count}} ta blok",
+      "blocksCount_many": "{{count}} ta blok",
+      "blocksCount_other": "{{count}} ta blok"
     },
     "errors": {
       "loadFailed": "Yuklashda xato",
@@ -2168,7 +2174,8 @@
     "tabs": {
       "advanced": "Qo'shish.",
       "content": "Tarkib",
-      "style": "Uslub"
+      "style": "Uslub",
+      "size": "O‘lcham"
     },
     "templates": "Shablonlar",
     "trafficSplit": "Trafik bo'linishi",
@@ -2308,8 +2315,30 @@
       "discardShort": "Bekor qilish",
       "done": "Tayyor",
       "expand": "Sozlamalarni ochish",
-      "collapse": "Sozlamalarni yig'ish"
-    }
+      "collapse": "Sozlamalarni yig'ish",
+      "tools": {
+        "image": "Rasm",
+        "text": "Matn",
+        "font": "Shrift",
+        "appearance": "Uslub",
+        "action": "Havola"
+      },
+      "close": "Sozlamalarni yopish",
+      "toolsLabel": "Blok vositalari"
+    },
+    "insertShort": {
+      "socials": "Ijtimoiy tarmoqlar",
+      "messenger": "Messenjer",
+      "faq": "Savol-javob",
+      "separator": "Ajratgich",
+      "before_after": "Oldin/keyin"
+    },
+    "insertGroups": {
+      "primary": "Asosiy",
+      "more": "Yana",
+      "business": "Savdo va band qilish"
+    },
+    "sizeHint": "Sahifadagi plitka o‘lchami — o‘zgarishlar yuqorida darhol ko‘rinadi."
   },
   "errors": {
     "createYourPage": "O'z sahifangizni yaratmoqchimisiz?",
@@ -4820,7 +4849,9 @@
     "showMoreLanguages": "yana {{count}} ta til",
     "translating": "Tarjima...",
     "translationError": "Avtomatik tarjima xatosi",
-    "uiLanguage": "Interfeys tili"
+    "uiLanguage": "Interfeys tili",
+    "languagesShort": "Tillar",
+    "otherLanguages": "Boshqa tillar"
   },
   "layouts": {
     "grid": "To‘r",
@@ -7500,6 +7531,62 @@
       "a3": "LinkMAX faqat havolalar ro?yxati emas. Ichida arizalar, bron, invoyslar, mini CRM, analitika va biznes uchun ish zonasi bor.",
       "q4": "Ro?yxatdan o?tgandan keyin nima bo?ladi?",
       "a4": "Sahifa yaratish ustasiga o?tasiz. Agar landingda qisqa manzil ko?rsatilgan bo?lsa, u signup flow ichiga uzatiladi."
+    },
+    "k": {
+      "mock": {
+        "s1": "Manikyur + gel",
+        "s2": "Qosh shaklini tuzatish",
+        "s3": "Kiprik uzaytirish",
+        "bio": "Tirnoq va qosh · Olmaota",
+        "book": "Band qilish"
+      },
+      "hero": {
+        "sub": "Xizmatlar, onlayn band qilish, to‘lovlar, chiptalar va raqamli mahsulotlar uchun sahifa. So‘rovlar to‘g‘ridan-to‘g‘ri Telegram va WhatsApp’ga keladi.",
+        "examples": "Sahifa namunalarini ko‘rish"
+      },
+      "card": {
+        "lead": "Yangi so‘rov",
+        "leadBody": "Aygerim, WhatsApp · 2 daqiqa oldin",
+        "pay": "To‘lov olindi",
+        "booking": "Band qilish tasdiqlandi",
+        "bookingBody": "Juma, 14:00 · Manikyur",
+        "ticket": "Chipta sotildi",
+        "ticketBody": "Mahorat darsi · 1 o‘rin"
+      },
+      "f": {
+        "booking": "Onlayn band qilish",
+        "bookingBody": "Narxi va davomiyligi ko‘rsatilgan xizmatlar, bo‘sh vaqtlar, xodimlar va xonalar. Band vaqtni ikkinchi marta sotib bo‘lmaydi.",
+        "leads": "So‘rovlar messenjerga keladi",
+        "leadsBody": "Har bir so‘rov Telegram’ga darhol keladi.",
+        "pay": "To‘lovlar",
+        "payBody": "Oldindan to‘lov va xizmat haqini sahifadan bevosita qabul qiling.",
+        "events": "Tadbirlar va chiptalar",
+        "eventsBody": "Ro‘yxatdan o‘tish, QR-chiptalar va yordamchilaringiz uchun skaner havolasi.",
+        "digital": "Raqamli mahsulotlar",
+        "digitalBody": "To‘lovdan keyin qo‘llanmalar, kurslar va fayllar yetkaziladi.",
+        "crm": "Mijoz kartasi",
+        "crmBody": "So‘rovlar, band qilishlar va xaridlar har bir mijoz tarixini shakllantiradi. Bosqichlar, qaydlar va jami tushum bir joyda.",
+        "ai": "Sahifadagi yordamchi",
+        "aiBody": "Tashrif buyuruvchilarning xizmatlaringiz va narxlaringiz haqidagi savollariga javob beradi.",
+        "themes": "25 ta dizayn mavzusi",
+        "themesBody": "Telefonda chiroyli ko‘rinadi, dizayner kerak emas.",
+        "title": "Savdo uchun kerakli hamma narsa bitta havolada",
+        "sub": "Shunchaki havolalar ro‘yxati emas. Sahifangiz band qilish, to‘lov va so‘rovlarni o‘zi qabul qiladi."
+      },
+      "s1": "Manzilingizni tanlang",
+      "s1b": "lnkmx.my/yourname — 10 soniyada.",
+      "s2": "Xizmatlarni qo‘shing",
+      "s2b": "Narxlar, jadval, kontaktlar, to‘lovlar.",
+      "s3": "Havolani profilingizga joylang",
+      "s3b": "Instagram, Telegram, WhatsApp, 2GIS.",
+      "s": {
+        "title": "5 daqiqada ishga tushiring"
+      },
+      "cta": {
+        "title": "Bugunoq mijozlarni qabul qilishni boshlang",
+        "sub": "Bepul. Karta kerak emas. Ko‘proq imkoniyat kerak bo‘lsa, Pro’ga o‘ting.",
+        "pricing": "Tariflar"
+      }
     }
   },
   "upgradeBenefits": {
@@ -8161,5 +8248,23 @@
     "styleTheme": "Sahifadagidek",
     "layoutList": "Nomlari bilan ro'yxat",
     "layoutRow": "Ikonkalar qatori"
+  },
+  "validation": {
+    "fieldRequired": "{{field}} maydonini to‘ldiring",
+    "fieldUrl": "{{field}}: https:// bilan boshlanadigan havola kiriting",
+    "fieldNumber": "{{field}}: son kiriting",
+    "fieldMin": "{{field}}: kamida {{min}}",
+    "fieldMax": "{{field}}: ko‘pi bilan {{max}}",
+    "fieldItems": "{{field}}: kamida bitta element qo‘shing",
+    "field": {
+      "title": "Sarlavha",
+      "url": "Havola",
+      "video_url": "Video havolasi",
+      "image_url": "Rasm",
+      "alt_text": "Rasm tavsifi",
+      "file_url": "Fayl",
+      "product_name": "Mahsulot nomi",
+      "price": "Narx"
+    }
   }
 }

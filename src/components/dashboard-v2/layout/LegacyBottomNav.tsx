@@ -21,6 +21,7 @@ import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import { useHasBusinessZone } from '@/contexts/ZoneContext';
+import { isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
@@ -101,12 +102,15 @@ export const LegacyBottomNav = memo(function LegacyBottomNav({
   const haptic = useHapticFeedback();
   const [moreOpen, setMoreOpen] = useState(false);
 
+  const businessEnabled = useBusinessFeatures();
+  const tabs = TABS.filter(tab => businessEnabled || !isBusinessDashboardTab(tab.id));
   const isMoreActive = MORE_TAB_IDS.includes(activeTab);
   const hasBusinessZone = useHasBusinessZone();
   const canUseBusinessZone = isPremium || isBusinessTier;
   // Business Zone stays out of the way: only the entry point until a zone exists,
   // the full set of zone tabs once the user actually works in one.
   const visibleMoreItems = MORE_ITEMS.filter((item) => {
+    if (!businessEnabled && isBusinessDashboardTab(item.id)) return false;
     if (!item.id.startsWith('zone-')) return true;
     if (!canUseBusinessZone) return false;
     return hasBusinessZone || item.id === 'zone-dashboard';
@@ -127,8 +131,8 @@ export const LegacyBottomNav = memo(function LegacyBottomNav({
     <>
       <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pt-3 pointer-events-none">
         <div className="app-bottom-nav overflow-hidden pointer-events-auto rounded-card border border-border shadow-lg">
-          <div className="grid grid-cols-5 h-[4.25rem]">
-            {TABS.map((tab) => {
+          <div className="grid h-[4.25rem]" style={{ gridTemplateColumns: `repeat(${tabs.length + 1}, minmax(0, 1fr))` }}>
+            {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               const Icon = tab.icon;
               const badge = tab.id === 'activity' ? activityBadge : undefined;

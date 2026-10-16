@@ -1663,7 +1663,9 @@
       "interfaceThemeDesc": "Ваша страница остаётся в своей теме",
       "themeSystem": "Как в системе",
       "themeLight": "Светлая",
-      "themeDark": "Тёмная"
+      "themeDark": "Тёмная",
+      "businessTools": "Бизнес-инструменты",
+      "businessToolsDesc": "Продажи, запись, CRM, финансы и команда. Выключено — кабинет остаётся простым конструктором страниц."
     },
     "activity": {
       "all": "Все",
@@ -1720,7 +1722,11 @@
     },
     "editor": {
       "blocks": "блоки",
-      "title": "Редактор"
+      "title": "Редактор",
+      "blocksCount_one": "{{count}} блок",
+      "blocksCount_few": "{{count}} блока",
+      "blocksCount_many": "{{count}} блоков",
+      "blocksCount_other": "{{count}} блока"
     },
     "errors": {
       "loadFailed": "Ошибка загрузки",
@@ -2168,7 +2174,8 @@
     "tabs": {
       "advanced": "Добавлять.",
       "content": "Содержание",
-      "style": "Стиль"
+      "style": "Стиль",
+      "size": "Размер"
     },
     "templates": "Шаблоны",
     "trafficSplit": "Разделение трафика",
@@ -2308,8 +2315,30 @@
       "discardShort": "Отменить",
       "done": "Готово",
       "expand": "Развернуть настройки",
-      "collapse": "Свернуть настройки"
-    }
+      "collapse": "Свернуть настройки",
+      "tools": {
+        "image": "Фото",
+        "text": "Текст",
+        "font": "Шрифт",
+        "appearance": "Вид",
+        "action": "Ссылка"
+      },
+      "close": "Закрыть настройки",
+      "toolsLabel": "Инструменты блока"
+    },
+    "insertShort": {
+      "socials": "Соцсети",
+      "messenger": "Мессенджер",
+      "faq": "Вопросы",
+      "separator": "Разделитель",
+      "before_after": "До/после"
+    },
+    "insertGroups": {
+      "primary": "Основные",
+      "more": "Ещё",
+      "business": "Продажи и запись"
+    },
+    "sizeHint": "Размер плитки на странице — изменения сразу видны выше."
   },
   "errors": {
     "createYourPage": "Хотите создать свою страницу?",
@@ -2661,7 +2690,7 @@
     "buyLink": "Ссылка на покупку",
     "caption": "Подпись",
     "captionPlaceholder": "Добавьте подпись к изображению...",
-    "center": "Центрировано",
+    "center": "По центру",
     "contactForm": "Форма обратной связи",
     "contactMe": "Свяжитесь со мной",
     "content": "Содержание",
@@ -2708,7 +2737,7 @@
     "introAudio": "Аудио приветствие",
     "introVideo": "Видеопоздравление (максимум 30 сек.)",
     "layout": "Макет",
-    "left": "Левый",
+    "left": "Слева",
     "link": "Связь",
     "linkHint": "Сделать изображение кликабельным",
     "mediumWidth": "Средний",
@@ -2743,7 +2772,7 @@
     "requiredField": "Обязательное поле",
     "requiredPrimary": "Обязательное поле для основного языка",
     "requiredRussian": "Обязательное поле для русского языка",
-    "right": "Верно",
+    "right": "Справа",
     "role": "Роль",
     "scale": "Масштабирование",
     "scratchPrizePlaceholder": "🎉Скидки 20% вы не получите!",
@@ -3155,7 +3184,7 @@
   },
   "hints": {
     "bioLinks": "Совет: добавляйте ссылки в формате [текст](url).",
-    "richTextVisual": "Для добавления ссылок используйте кнопку «Ü» — переносы строк сохраняются."
+    "richTextVisual": "Ссылку в тексте добавляет кнопка со значком ссылки над полем. Переносы строк сохраняются."
   },
   "home": {
     "incoming": {
@@ -4820,7 +4849,9 @@
     "showMoreLanguages": "Ещё {{count}} языков",
     "translating": "Перевод...",
     "translationError": "Ошибка автоматического перевода",
-    "uiLanguage": "Язык интерфейса"
+    "uiLanguage": "Язык интерфейса",
+    "languagesShort": "Языки",
+    "otherLanguages": "Перевести на другие языки"
   },
   "layouts": {
     "grid": "Сетка",
@@ -8217,5 +8248,23 @@
     "styleTheme": "Как на странице",
     "layoutList": "Список с названиями",
     "layoutRow": "Ряд иконок"
+  },
+  "validation": {
+    "fieldRequired": "{{field}}: заполните поле",
+    "fieldUrl": "{{field}}: нужна ссылка, начиная с https://",
+    "fieldNumber": "{{field}}: введите число",
+    "fieldMin": "{{field}}: не меньше {{min}}",
+    "fieldMax": "{{field}}: не больше {{max}}",
+    "fieldItems": "{{field}}: добавьте хотя бы один элемент",
+    "field": {
+      "title": "Заголовок",
+      "url": "Ссылка",
+      "video_url": "Ссылка на видео",
+      "image_url": "Изображение",
+      "alt_text": "Описание изображения",
+      "file_url": "Файл",
+      "product_name": "Название товара",
+      "price": "Цена"
+    }
   }
 }

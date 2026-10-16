@@ -19,7 +19,6 @@ import { generateSectionAnchors, SECTION_LABELS } from '@/lib/seo/anchors';
 import { extractEntityLinks } from '@/lib/seo/entity-linking';
 import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts as generateEnhancedKeyFacts } from '@/lib/seo/key-facts';
-import { generateAutoFAQ, extractFAQContext, hasUserFAQ } from '@/lib/seo/auto-faq';
 import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
 
 interface CrawlerFriendlyContentProps {
@@ -42,7 +41,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
   let entityLinks: ReturnType<typeof extractEntityLinks> = { sameAs: [], knowsAbout: [] };
   let answerBlock: ReturnType<typeof generateAnswerBlock> = { summary: '', entityType: 'Person', services: [] };
   let keyFacts: ReturnType<typeof generateEnhancedKeyFacts> = [];
-  let autoFAQItems: Array<{ question: string; answer: string }> = [];
+  const autoFAQItems: Array<{ question: string; answer: string }> = [];
   let faqBlock: FAQBlock | undefined;
   let eventBlocks: EventBlock[] = [];
   let pricingBlock: PricingBlock | undefined;
@@ -56,9 +55,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
     keyFacts = generateEnhancedKeyFacts(validBlocks, answerBlock, profile.name, language);
     aiCta = extractAiCta(validBlocks, slug, language);
 
-    const shouldGenerateAutoFAQ = !hasUserFAQ(validBlocks);
-    const faqContext = extractFAQContext(validBlocks, profile.name, answerBlock.niche, answerBlock.location, language);
-    autoFAQItems = shouldGenerateAutoFAQ ? generateAutoFAQ(faqContext, language, 5) : [];
+    // No auto-generated FAQ: answers the owner never wrote are unverifiable claims for AI engines.
 
     faqBlock = validBlocks.find(b => b.type === 'faq') as FAQBlock | undefined;
     eventBlocks = validBlocks.filter(b => b.type === 'event') as EventBlock[];
@@ -321,7 +318,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
               {(socialsBlock.platforms || []).filter(p => p && p.url).map((platform, i) => (
                 <li key={i}>
                   <a href={platform.url} rel="noopener noreferrer me" itemProp="sameAs">
-                    {platform.name || platform.url}
+                    {getI18nText(platform.name as Parameters<typeof getI18nText>[0], language) || platform.url}
                   </a>
                 </li>
               ))}
