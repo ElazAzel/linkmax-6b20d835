@@ -66,7 +66,8 @@ async function hasAuthenticatedUser(supabaseUrl: string, apiKey: string, authori
   return !error && Boolean(data?.user);
 }
 
-async function checkRateLimit(supabase: ReturnType<typeof createClient>, ipAddress: string) {
+// deno-lint-ignore no-explicit-any
+async function checkRateLimit(supabase: any, ipAddress: string) {
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_SECONDS * 1000).toISOString();
   const endpoint = "track-analytics-event";
   await supabase.from("rate_limits").delete().lt("window_start", windowStart);
