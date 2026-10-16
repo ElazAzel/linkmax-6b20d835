@@ -444,7 +444,7 @@ export const HomeScreen = memo(function HomeScreen({
 
           {/* Secondary Actions */}
           <div className="flex gap-3">
-            <Button variant="ghost" className="flex-1 h-12 rounded-xl bg-muted border-none hover:bg-accent text-xs font-bold uppercase tracking-[0.06em] opacity-70 hover:opacity-100" onClick={onPreview}>
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl bg-muted border-none hover:bg-accent text-sm font-semibold" onClick={onPreview}>
               <Eye className="h-4 w-4 mr-2" />
               {t('dashboard.home.preview', 'Предпросмотр')}
             </Button>

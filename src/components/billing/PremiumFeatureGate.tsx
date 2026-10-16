@@ -5,13 +5,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Crown from 'lucide-react/dist/esm/icons/crown';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { useFreemiumLimits, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { hasTierAccess } from '@/domain/billing/tiers';
-import { UpgradeBenefits } from './UpgradeBenefits';
 
 interface PremiumFeatureGateProps {
   requiredTier: FreeTier;
@@ -77,41 +75,35 @@ export function PremiumFeatureGate({
     );
   }
 
+  // A locked feature is one quiet row in the normal flow. The old overlay sat
+  // absolutely on top of the (shorter) locked fields, spilled over the next
+  // sections and repeated the full benefits list in every gate.
   return (
-    <div className="relative">
-      <div className="opacity-50 pointer-events-none select-none">
-        {children}
+    <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background">
+        <Lock className="h-4 w-4" aria-hidden />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold leading-snug text-foreground">
+          {feature || t(`freemium.gate.${outcomeKey}`, 'Эта функция приносит больше кликов и заявок в PRO.')}
+        </p>
+        <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+          <TierIcon className="h-3 w-3" aria-hidden />
+          {t('premium.requiresTier', 'Требуется тариф {{tier}}', { tier: tierNames[requiredTier] })}
+        </p>
       </div>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/95 backdrop-blur-md rounded-lg p-5 border border-primary/20 shadow-xl z-20 transition-all hover:bg-background/95">
-        <div className="bg-primary h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20">
-          <TierIcon className="h-6 w-6 text-primary-foreground" />
-        </div>
-        <div className="space-y-1.5 text-center">
-          <p className="text-base font-bold text-foreground max-w-[280px] leading-tight">
-            {t(`freemium.gate.${outcomeKey}`, 'Эта функция приносит больше кликов и заявок в PRO.')}
-          </p>
-          <p className="text-xs text-muted-foreground font-medium">
-            {t('premium.requiresTier', 'Требуется тариф {{tier}}', {
-              tier: tierNames[requiredTier]
-            })}
-          </p>
-        </div>
-
-        <UpgradeBenefits className="max-w-md" />
-
-        {showUpgradeButton && (
-          <Button
-            size="default"
-            className="bg-primary mt-1 w-full max-w-[260px] h-11 font-bold shadow-md transition-transform hover:scale-[1.02] rounded-xl"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate('/pricing');
-            }}
-          >
-            {t('freemium.upgradePro', 'Включить PRO')}
-          </Button>
-        )}
-      </div>
+      {showUpgradeButton && (
+        <Button
+          size="sm"
+          className="h-9 shrink-0 rounded-full px-4 font-semibold"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate('/pricing');
+          }}
+        >
+          {t('freemium.upgradeShort', 'PRO')}
+        </Button>
+      )}
     </div>
   );
 }

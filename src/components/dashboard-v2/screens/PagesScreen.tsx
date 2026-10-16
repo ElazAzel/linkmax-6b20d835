@@ -406,16 +406,6 @@ export const PagesScreen = memo(function PagesScreen({
         )}
       </div>
 
-      {/* Mobile FAB */}
-      <div className="fixed bottom-28 right-4 sm:hidden">
-        <Button
-          onClick={onCreatePage}
-          size="lg"
-          className="h-14 w-14 rounded-full shadow-lg"
-        >
-          <Plus className="w-6 h-6" />
-        </Button>
-      </div>
     </div>
   );
 });

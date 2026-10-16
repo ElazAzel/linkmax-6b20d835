@@ -14,7 +14,6 @@ import Crown from 'lucide-react/dist/esm/icons/crown';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Coins from 'lucide-react/dist/esm/icons/coins';
 import Trophy from 'lucide-react/dist/esm/icons/trophy';
-import Users from 'lucide-react/dist/esm/icons/users';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import Save from 'lucide-react/dist/esm/icons/save';
 import Shield from 'lucide-react/dist/esm/icons/shield';
@@ -145,7 +144,6 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     onTelegramChange,
     focusTelegram,
     onSignOut,
-    onOpenFriends,
     onOpenSaveTemplate,
     onOpenMyTemplates,
     onOpenTokens,
@@ -259,13 +257,6 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                     {t('dashboard.accountSettings.account', 'Account')}
                 </h3>
                 <Card className="divide-y divide-border/50 overflow-hidden">
-                    <SettingsItem
-                        icon={Users}
-                        iconBg="bg-primary/12"
-                        iconColor="text-primary"
-                        label={t('dashboard.accountSettings.friends', 'Friends')}
-                        onClick={onOpenFriends}
-                    />
                     <SettingsItem
                         icon={LayoutTemplate}
                         iconBg="bg-success/12"
@@ -455,7 +446,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
             {/* Device Accounts */}
             <div className="space-y-2">
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
-                    {t('dashboard.accountSettings.deviceAccounts', 'Device Accounts')}
+                    {t('dashboard.accountSettings.deviceAccounts', 'Аккаунты на устройстве')}
                 </h3>
                 <DeviceAccountSwitcher onAddAccount={() => navigate('/auth?method=email&mode=signin')} />
             </div>

@@ -40,7 +40,7 @@ export function OffersScreen({ pageData, loading, onEditBlock, onInsertBlock, on
     return amount;
   };
   return <div className="space-y-5 p-4 md:p-0" data-testid="office-offers">
-    <DashboardHeader title={t('digitalOffice.navigation.offers', 'Предложения')} hideLivePill
+    <DashboardHeader title={t('digitalOffice.navigation.offers', 'Предложения')}
       actions={<Button onClick={() => onInsertBlock('pricing')}><Plus className="mr-2 h-4 w-4" aria-hidden="true" />{t(key + 'addService', 'Добавить услугу')}</Button>} />
     <div><h2 className="text-xl font-semibold">{t(key + 'title', 'Что вы предлагаете клиентам?')}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{t(key + 'description', 'Начните с услуги: укажите, что получит клиент, сколько это стоит и сколько времени займёт.')}</p></div>

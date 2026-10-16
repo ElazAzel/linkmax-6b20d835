@@ -306,7 +306,8 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         </Button>
       </div>
 
-      <OrganizationSwitcher collapsed={collapsed} />
+      {/* Organizations belong to the business tools. */}
+      {businessEnabled && <OrganizationSwitcher collapsed={collapsed} />}
       {showBusinessNavigation && <Suspense fallback={null}><ZoneSwitcherSlot collapsed={collapsed} /></Suspense>}
 
       {/* Navigation */}
