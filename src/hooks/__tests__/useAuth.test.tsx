@@ -4,6 +4,7 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderToString } from 'react-dom/server';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from '@/hooks/user/useAuth';
 
@@ -113,6 +114,21 @@ describe('useAuth', () => {
 
             expect(result.current.user?.id).toBe('user-123');
             expect(result.current.session).toBe(mockSession);
+        });
+    });
+
+    describe('server render', () => {
+        it('renders no saved device accounts on the first pass, then loads them after mount', async () => {
+            window.localStorage.setItem('inkmax_v2_device_auth_accounts', JSON.stringify([
+                { userId: 'u1', email: 'a@b.kz', accessToken: 'x', refreshToken: 'y', lastUsedAt: 1 },
+            ]));
+            const Count = () => <span>{useAuth().deviceAccounts.length}</span>;
+
+            // The server has no localStorage: the first render must match it, or /auth fails to hydrate.
+            expect(renderToString(wrapper({ children: <Count /> }))).toContain('<span>0</span>');
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+            await waitFor(() => expect(result.current.deviceAccounts).toHaveLength(1));
         });
     });
 

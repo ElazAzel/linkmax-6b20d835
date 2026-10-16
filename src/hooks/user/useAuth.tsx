@@ -37,9 +37,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [deviceAccounts, setDeviceAccounts] = useState<DeviceAccount[]>(() => getDeviceAccounts());
+  // Saved accounts live in localStorage: read them after mount, never during
+  // the first render, or /auth hydrates a list the server never rendered (#418).
+  const [deviceAccounts, setDeviceAccounts] = useState<DeviceAccount[]>([]);
 
   useEffect(() => {
+    setDeviceAccounts(getDeviceAccounts());
+
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
