@@ -31,6 +31,7 @@ import type { PageData, ProfileBlock } from '@/types/page';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { SearchReadinessCard } from '@/components/dashboard-v2/widgets/SearchReadinessCard';
 import { KaspiQRWidget } from '@/components/dashboard-v2/widgets/KaspiQRWidget';
+import { useBusinessFeatures } from '@/lib/features';
 import { MetricsGrid } from '@/components/dashboard-v2/widgets/MetricsGrid';
 import { ConversionFunnelWidget } from '@/components/dashboard-v2/widgets/ConversionFunnelWidget';
 import { SourcesWidget } from '@/components/dashboard-v2/widgets/SourcesWidget';
@@ -131,6 +132,8 @@ export const HomeScreen = memo(function HomeScreen({
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  // Revenue, leads, wallet and Kaspi widgets belong to the business tools (Settings).
+  const businessEnabled = useBusinessFeatures();
   const { user } = useAuth();
   const gapDetectedRef = useRef(false);
 
@@ -261,7 +264,7 @@ export const HomeScreen = memo(function HomeScreen({
       />
 
       <div className="px-4 md:px-5 py-6 space-y-6">
-        {outcomeHomeEnabled && pageData.id && (
+        {businessEnabled && outcomeHomeEnabled && pageData.id && (
           <RevenueOutcomeHomeContainer
             pageId={pageData.id}
             onNavigate={handleOutcomeNavigate}
@@ -294,7 +297,7 @@ export const HomeScreen = memo(function HomeScreen({
         )}
 
         {/* Operational lead feed; quantitative performance lives in one region below. */}
-        {isPublished && (realLeadsCount > 0 || pageData.niche === 'expert') && (
+        {businessEnabled && isPublished && (realLeadsCount > 0 || pageData.niche === 'expert') && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <ViralReadinessCard pageData={pageData} compact />
 
@@ -321,7 +324,7 @@ export const HomeScreen = memo(function HomeScreen({
         {/* --- SUPPLEMENTARY WIDGETS --- */}
         {isPublished && (
           <div className="space-y-6">
-            {!outcomeExperienceActive && (
+            {businessEnabled && !outcomeExperienceActive && (
               <OperatorSummaryWidget
                 pageId={pageData?.id}
                 pageSlug={slug}
@@ -332,7 +335,7 @@ export const HomeScreen = memo(function HomeScreen({
               />
             )}
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {businessEnabled && <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <WalletOverviewWidget 
                 onViewFinance={() => navigate('/dashboard/finance')}
                 className="bg-card border-border/10 shadow-sm h-full"
@@ -344,7 +347,7 @@ export const HomeScreen = memo(function HomeScreen({
                   className="bg-card border-border/10 shadow-sm h-full"
                 />
               )}
-            </div>
+            </div>}
 
             {/* Performance Hub / Metrics */}
             <div className="space-y-4 pt-2" data-testid="home-performance-region">
@@ -357,7 +360,7 @@ export const HomeScreen = memo(function HomeScreen({
                 </Button>
               </div>
               <MetricsGrid pageId={pageData?.id} />
-              <ConversionFunnelWidget pageId={pageData?.id} />
+              {businessEnabled && <ConversionFunnelWidget pageId={pageData?.id} />}
               <SourcesWidget className="mt-1" />
             </div>
           </div>

@@ -20,7 +20,6 @@ import { extractProfileFromBlocks } from '@/lib/seo-utils';
 import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts } from '@/lib/seo/key-facts';
-import { generateAutoFAQ, extractFAQContext, hasUserFAQ } from '@/lib/seo/auto-faq';
 import { extractEntityLinks } from '@/lib/seo/entity-linking';
 import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
 
@@ -42,7 +41,7 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
   let answerBlock: ReturnType<typeof generateAnswerBlock> = { summary: '', entityType: 'Person', services: [] };
   let keyFacts: ReturnType<typeof generateKeyFacts> = [];
   let entityLinks: ReturnType<typeof extractEntityLinks> = { sameAs: [], knowsAbout: [] };
-  let autoFAQItems: Array<{ question: string; answer: string }> = [];
+  const autoFAQItems: Array<{ question: string; answer: string }> = [];
   let pricingBlock: PricingBlock | undefined;
   let faqBlock: FAQBlock | undefined;
   let eventBlocks: EventBlock[] = [];
@@ -55,9 +54,7 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
     entityLinks = extractEntityLinks(validBlocks, language);
     aiCta = extractAiCta(validBlocks, slug, language);
 
-    const shouldGenerateAutoFAQ = !hasUserFAQ(validBlocks);
-    const faqContext = extractFAQContext(validBlocks, profile.name, answerBlock.niche, answerBlock.location, language);
-    autoFAQItems = shouldGenerateAutoFAQ ? generateAutoFAQ(faqContext, language, 3) : [];
+    // No auto-generated FAQ: answers the owner never wrote are unverifiable claims for AI engines.
     
     pricingBlock = validBlocks.find(b => b.type === 'pricing') as PricingBlock | undefined;
     faqBlock = validBlocks.find(b => b.type === 'faq') as FAQBlock | undefined;

@@ -101,21 +101,14 @@ export const EditorSection = memo(function EditorSection({
   // Non-collapsible variant
   if (!collapsible) {
     return (
-      <div className="space-y-4">
-        <div className={cn("flex items-center gap-3", compact && "gap-2")}>
-          {icon && (
-            <div className={cn(
-              "rounded-xl bg-primary/10 flex items-center justify-center shrink-0",
-              compact ? "h-8 w-8" : "h-10 w-10"
-            )}>
-              {icon}
-            </div>
-          )}
+      <div className="space-y-3">
+        {/* Always-open sections get a quiet label: the fields matter, not the frame. */}
+        <div className="flex items-center gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className={cn("font-bold", compact ? "text-sm" : "text-base")}>{title}</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{title}</h3>
               {badge}
-              {showProgress && <ProgressBadge filled={filledCount} total={totalCount} />}
+              {showProgress && filledCount === totalCount && <ProgressBadge filled={filledCount} total={totalCount} />}
             </div>
             {description && (
               <p className="text-xs text-muted-foreground mt-0.5">{description}</p>

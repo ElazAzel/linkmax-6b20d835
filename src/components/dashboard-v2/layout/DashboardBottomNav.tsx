@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import { PAGE_V2_TABS, BUSINESS_TAB_IDS } from './page-v2-navigation';
+import { useBusinessFeatures } from '@/lib/features';
 
 interface DashboardBottomNavProps {
   activeTab: string;
@@ -17,10 +18,12 @@ interface DashboardBottomNavProps {
 export const DashboardBottomNav = memo(function DashboardBottomNav({ activeTab, onTabChange, activityBadge }: DashboardBottomNavProps) {
   const { t } = useTranslation();
   const haptic = useHapticFeedback();
+  const businessEnabled = useBusinessFeatures();
+  const tabs = businessEnabled ? PAGE_V2_TABS : PAGE_V2_TABS.filter(tab => tab.id !== 'business');
   if (!LINKMAX_UI_V2) return <LegacyBottomNav activeTab={activeTab} onTabChange={onTabChange} activityBadge={activityBadge} />;
   return <nav aria-label={t('pageV2.navigation.label', 'Навигация кабинета')} className="fixed bottom-0 inset-x-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pointer-events-none">
-    <div className="app-bottom-nav mx-auto grid h-[4.25rem] max-w-lg grid-cols-5 overflow-hidden rounded-3xl border border-border bg-card shadow-lg pointer-events-auto">
-      {PAGE_V2_TABS.map(tab => {
+    <div className="app-bottom-nav mx-auto grid h-[4.25rem] max-w-lg overflow-hidden rounded-3xl border border-border bg-card shadow-lg pointer-events-auto" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
+      {tabs.map(tab => {
         const Icon = tab.icon;
         const active = tab.id === activeTab || (tab.id === 'business' && (BUSINESS_TAB_IDS.includes(activeTab) || activeTab.startsWith('zone-')));
         const label = t(tab.labelKey, tab.defaultLabel);

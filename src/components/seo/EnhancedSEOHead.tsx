@@ -10,21 +10,10 @@
  * - Version tracking for stable URLs
  */
 
-import { buildProfileSeoTitle, buildProfileSeoDescription } from '@/lib/seo/profile-title';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PageData } from '@/types/page';
-import {
-  evaluateQualityGate,
-  extractProfileFromBlocks,
-  generatePageMeta,
-} from '@/lib/seo-utils';
-import { extractEntityLinks } from '@/lib/seo/entity-linking';
-import { generateSectionAnchors } from '@/lib/seo/anchors';
-import { generateAnswerBlock } from '@/lib/seo/answer-block';
-import { generateEnhancedKeyFacts } from '@/lib/seo';
-import { generateGEOSchemas, generateJsonLdGraph } from '@/lib/seo/geo-schemas';
-import { generateAutoFAQ, extractFAQContext, hasUserFAQ } from '@/lib/seo/auto-faq';
+import { computePublicPageSeo } from '@/lib/seo/public-page-seo';
 
 interface EnhancedSEOHeadProps {
   pageData: PageData;
@@ -85,110 +74,25 @@ const addJsonLd = (id: string, data: object | string) => {
 export function EnhancedSEOHead({
   pageData,
   pageUrl,
-  updatedAt,
   isNewAccount = false,
 }: EnhancedSEOHeadProps) {
   const { i18n } = useTranslation();
   const rawLang = (i18n.language || 'ru').split('-')[0];
   const language = (['ru', 'en', 'kk'].includes(rawLang) ? rawLang : 'ru') as 'ru' | 'en' | 'kk';
-  const slug = pageData.slug || '';
 
-  // Memoize all SEO computations - wrapped in try-catch for safety
+  // Same computation as the SSR route head, so the browser never disagrees with crawlers.
   const seoData = useMemo(() => {
     try {
-      const safeBlocks = (pageData.blocks || []).filter((b): b is NonNullable<typeof b> => b != null && typeof b === 'object' && 'type' in b);
-      const profile = extractProfileFromBlocks(safeBlocks, language);
-      // Fall back to page-level metadata (title/description/avatar set on the page record itself)
-      // so pages without a dedicated profile/avatar block still get correct title/description/og.
-      const pageTitleFallback = (pageData as any).title || (pageData.seo as any)?.title;
-      const pageDescFallback = (pageData as any).description || (pageData.seo as any)?.description;
-      const pageAvatarFallback = (pageData as any).avatar_url || (pageData as any).avatarUrl;
-      if (!profile.name && pageTitleFallback) profile.name = pageTitleFallback;
-      if (!profile.bio && pageDescFallback) profile.bio = pageDescFallback;
-      if (!profile.avatar && pageAvatarFallback) profile.avatar = pageAvatarFallback;
-
-      const qualityGate = evaluateQualityGate(
-        safeBlocks,
-        profile.name,
-        profile.bio,
-        isNewAccount
-      );
-      const meta = generatePageMeta(profile, safeBlocks, slug, qualityGate, language);
-      if (language === 'ru') {
-        const seoInput = {
-          name: profile.name,
-          profession: (pageData as any).profession,
-          city: (pageData as any).city,
-          bio: profile.bio,
-          blocks: safeBlocks as Array<{ type?: string }>,
-        };
-        const smartTitle = buildProfileSeoTitle(seoInput);
-        const smartDesc = buildProfileSeoDescription(seoInput);
-        if (smartTitle && !(pageData.seo as any)?.title) meta.title = smartTitle;
-        if (smartDesc && !(pageData.seo as any)?.description) meta.description = smartDesc;
-      }
-      // Authoritative source of indexability is the DB flag, not the client heuristic.
-      // If the page is explicitly opted out, respect it; otherwise allow indexing so
-      // search engines don't see a spurious noindex while blocks are still hydrating.
-      if (pageData.isIndexable === false) {
-        meta.robots = 'noindex, follow';
-      } else {
-        meta.robots = 'index, follow, max-image-preview:large, max-snippet:-1';
-      }
-
-      // Generate Answer Block for AEO
-      const answerBlock = generateAnswerBlock(safeBlocks, slug, language);
-
-      // Generate enhanced Key Facts
-      const keyFacts = generateEnhancedKeyFacts(safeBlocks, answerBlock, profile.name, language);
-
-      // Generate GEO Schemas with combined graph
-      const geoSchemas = generateGEOSchemas(safeBlocks, {
-        slug,
-        name: profile.name || '',
-        bio: profile.bio,
-        avatar: profile.avatar,
-        answerBlock,
-        sameAs: profile.sameAs,
-        language,
-      });
-
-      // Generate auto FAQ if needed
-      const shouldGenerateAutoFAQ = !hasUserFAQ(safeBlocks);
-      const faqContext = extractFAQContext(safeBlocks, profile.name, answerBlock.niche, answerBlock.location, language);
-      const autoFAQ = shouldGenerateAutoFAQ ? generateAutoFAQ(faqContext, language, 5) : [];
-
-      // Entity links for structured data
-      const entityLinks = extractEntityLinks(safeBlocks, language);
-
-      return {
-        profile,
-        qualityGate,
-        meta,
-        answerBlock,
-        keyFacts,
-        geoSchemas,
-        autoFAQ,
-        entityLinks,
-      };
+      return computePublicPageSeo(pageData, { language, pageUrl, isNewAccount });
     } catch (err) {
       console.warn('SEO computation error, using fallback:', err);
-      const fallbackProfile = { type: 'Person' as const, sameAs: [] };
-      return {
-        profile: fallbackProfile as ReturnType<typeof extractProfileFromBlocks>,
-        qualityGate: { score: 0, shouldIndex: false, reasons: [] },
-        meta: { title: slug || 'Profile', description: '', canonical: pageUrl, robots: 'noindex', ogImage: '' },
-        answerBlock: { summary: '', entityType: 'Person' as const, services: [] },
-        keyFacts: [],
-        geoSchemas: { mainEntity: {}, webPage: {}, breadcrumb: {}, graph: [] },
-        autoFAQ: [],
-        entityLinks: { sameAs: [], knowsAbout: [] },
-      };
+      return null;
     }
-  }, [pageData.blocks, pageData.isIndexable, slug, language, updatedAt, isNewAccount, pageUrl]);
+  }, [pageData, language, pageUrl, isNewAccount]);
 
   useEffect(() => {
-    const { meta, geoSchemas, qualityGate, answerBlock } = seoData;
+    if (!seoData) return;
+    const { meta, qualityGate, answerBlock, jsonLd } = seoData;
 
     // Set document title
     document.title = meta.title;
@@ -235,7 +139,7 @@ export function EnhancedSEOHead({
     setLinkTag('alternate', meta.canonical, 'x-default');
 
     // Add combined JSON-LD graph (all schemas in one)
-    addJsonLd('schema-graph', generateJsonLdGraph(geoSchemas));
+    addJsonLd('schema-graph', jsonLd);
 
     // Page quality indicator (for internal use)
     setMetaTag('page-quality-score', String(qualityGate.score));

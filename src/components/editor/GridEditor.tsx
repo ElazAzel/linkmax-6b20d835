@@ -56,6 +56,7 @@ import { canCreateSection, createSection, getSections, type SectionMeta } from '
 import { BlockContextToolbar } from './BlockContextToolbar';
 import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getBlockEmptyHint } from '@/lib/blocks/block-utils';
 import type { Block, GridConfig, BlockType } from '@/types/page';
@@ -803,13 +804,16 @@ export const GridEditor = memo(function GridEditor({
       />
     );
 
+    // The canvas mirrors the public page: section rows only while arranging blocks.
+    const showSectionHeaders = !LINKMAX_UI_V2 || reorderMode;
+
     contentBlocks.forEach((block, index) => {
       const blockSectionId = (block as any).sectionId as string | undefined;
       const blockComposition = getComposition((block as any).composition);
       const startsNewSection = !!blockSectionId && blockSectionId !== currentSectionId;
 
       let header: React.ReactNode = null;
-      if (startsNewSection && blockSectionId) {
+      if (startsNewSection && blockSectionId && showSectionHeaders) {
         const meta = sectionMeta.get(blockSectionId);
         const section = sections.find(sct => sct.id === blockSectionId);
         header = (
@@ -827,7 +831,7 @@ export const GridEditor = memo(function GridEditor({
       currentSectionId = blockSectionId;
 
       // Collapsed section: only keep the header
-      if (blockSectionId && collapsedSections.has(blockSectionId)) {
+      if (showSectionHeaders && blockSectionId && collapsedSections.has(blockSectionId)) {
         if (header) {
           runs.push({ kind: 'grid', key: `grid-collapsed-${blockSectionId}`, nodes: [header], autoHeight: true });
         }

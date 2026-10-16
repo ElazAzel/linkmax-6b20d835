@@ -14,8 +14,10 @@ export const pageQueryKeys = {
 };
 
 // Hook for loading public pages by slug with caching
-export function usePublicPage(slug: string | undefined) {
+export function usePublicPage(slug: string | undefined, placeholder?: PageData) {
   return useQuery({
+    // Server snapshot: render it immediately, still fetch the live page.
+    placeholderData: placeholder,
     queryKey: pageQueryKeys.publicPage(slug || ''),
     queryFn: async () => {
       if (!slug) return null;

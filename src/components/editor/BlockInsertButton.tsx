@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 import { BLOCK_MANIFEST, isBlockPremium } from '@/lib/blocks/block-manifest';
 import { FreemiumBlockLimit } from '@/components/billing/FreemiumBlockLimit';
 
-import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
+import { BUSINESS_BLOCK_TYPES, useBusinessFeatures } from '@/lib/features';
 import { BLOCK_PRESETS, type BlockPreset, getPresetsForType } from '@/lib/editor/editor-presets';
 import { AnimatedBlockIcon } from '@/components/editor/AnimatedBlockIcon';
 import type { Niche } from '@/lib/niches';
@@ -55,6 +55,9 @@ interface BlockInsertButtonProps {
 }
 
 type BlockTier = 'free' | 'pro';
+
+/** The everyday blocks, shown first (about one screen on a phone). */
+const PRIMARY_BLOCK_TYPES = ['button', 'link', 'text', 'image', 'carousel', 'video', 'audio', 'download', 'socials', 'messenger', 'form', 'custom_code'] as const;
 
 // Color mapping by block type for the insert panel icons
 const BLOCK_COLORS: Record<string, string> = {
@@ -126,14 +129,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   className,
   currentTier = 'identity',
   pageNiche,
-  existingBlocks = [],
   isOpen: externalIsOpen,
   onOpenChange,
   hideTrigger = false,
   renderSheet = true,
 }: BlockInsertButtonProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isMobile = useIsMobile();
+  const businessEnabled = useBusinessFeatures();
   const navigate = useNavigate();
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -153,15 +156,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   }, [setIsOpen]);
 
   const isAtBlockLimit = !isPremium && currentBlockCount >= FREE_LIMITS.maxBlocks;
-  const remainingBlocks = isPremium ? Infinity : FREE_LIMITS.maxBlocks - currentBlockCount;
-
-  const recommendations = useMemo(() => {
-    return getRecommendedBlocks(pageNiche, existingBlocks);
-  }, [pageNiche, existingBlocks]);
-
-  const recommendedBlockTypes = useMemo(() => {
-    return new Set(recommendations.filter(r => r.isRelevant).map(r => r.block));
-  }, [recommendations]);
 
   const tierLevel = (tier: FreeTier | BlockTier): number => {
     switch (tier) {
@@ -176,8 +170,12 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const MANIFEST_BLOCKS = getManifestBlocks();
-  const filteredBlocks = MANIFEST_BLOCKS.filter(block =>
+  const visibleBlocks = MANIFEST_BLOCKS.filter(block => businessEnabled || !BUSINESS_BLOCK_TYPES.has(block.type));
+  const blockLabel = (block: ManifestBlock) => t(`editor.insertShort.${block.type}`, t(block.labelKey, block.type));
+  const filteredBlocks = visibleBlocks.filter(block =>
+    !normalizedQuery ||
     t(block.labelKey, block.type).toLowerCase().includes(normalizedQuery) ||
+    blockLabel(block).toLowerCase().includes(normalizedQuery) ||
     block.type.replace(/_/g, ' ').includes(normalizedQuery)
   );
 
@@ -185,42 +183,33 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     if (!searchQuery) return [];
     const query = searchQuery.toLowerCase();
     return BLOCK_PRESETS.filter(preset =>
-      t(preset.labelKey).toLowerCase().includes(query) ||
-      preset.keywords.some(k => k.toLowerCase().includes(query))
+      (businessEnabled || !BUSINESS_BLOCK_TYPES.has(preset.blockType)) && (
+        t(preset.labelKey).toLowerCase().includes(query) ||
+        preset.keywords.some(k => k.toLowerCase().includes(query))
+      )
     );
-  }, [searchQuery, t]);
+  }, [businessEnabled, searchQuery, t]);
 
   const featuredPresets = useMemo(() => {
-    if (searchQuery || pageNiche !== 'expert') return [];
+    if (searchQuery || pageNiche !== 'expert' || !businessEnabled) return [];
     return BLOCK_PRESETS.filter(p =>
       ['expert_consultation_cta', 'expert_guide_buy', 'expert_telegram_join'].includes(p.id)
     );
-  }, [pageNiche, searchQuery]);
+  }, [businessEnabled, pageNiche, searchQuery]);
 
-  const { recommendedBlocks, otherBlocks } = useMemo(() => {
-    if (searchQuery) {
-      return { recommendedBlocks: [] as ManifestBlock[], otherBlocks: filteredBlocks };
-    }
-
-    const recommended: ManifestBlock[] = [];
-    const others: ManifestBlock[] = [];
-
-    filteredBlocks.forEach(block => {
-      if (recommendedBlockTypes.has(block.type as BlockType)) {
-        recommended.push(block);
-      } else {
-        others.push(block);
-      }
-    });
-
-    recommended.sort((a, b) => {
-      const scoreA = recommendations.find(r => r.block === a.type)?.score || 0;
-      const scoreB = recommendations.find(r => r.block === b.type)?.score || 0;
-      return scoreB - scoreA;
-    });
-
-    return { recommendedBlocks: recommended.slice(0, 6), otherBlocks: others };
-  }, [filteredBlocks, recommendedBlockTypes, recommendations, searchQuery]);
+  // Korner-style grouping: the everyday blocks first, all on one screen.
+  const groups = useMemo(() => {
+    if (normalizedQuery) return [{ id: 'results', titleKey: '', title: '', blocks: filteredBlocks }];
+    const byId = (ids: readonly string[]) => ids
+      .map(id => filteredBlocks.find(block => block.type === id))
+      .filter((block): block is ManifestBlock => !!block);
+    const placed = new Set<string>([...PRIMARY_BLOCK_TYPES, ...BUSINESS_BLOCK_TYPES]);
+    return [
+      { id: 'primary', titleKey: 'editor.insertGroups.primary', title: 'Основные', blocks: byId(PRIMARY_BLOCK_TYPES) },
+      { id: 'more', titleKey: 'editor.insertGroups.more', title: 'Ещё', blocks: filteredBlocks.filter(block => !placed.has(block.type)) },
+      { id: 'business', titleKey: 'editor.insertGroups.business', title: 'Продажи и запись', blocks: byId([...BUSINESS_BLOCK_TYPES]) },
+    ].filter(group => group.blocks.length > 0);
+  }, [filteredBlocks, normalizedQuery]);
 
   const closeSheet = useCallback(() => {
     setSearchQuery('');
@@ -285,27 +274,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     });
   };
 
-  const getReasonTooltip = (blockType: string): string | null => {
-    const rec = recommendations.find(r => r.block === blockType);
-    return rec ? t(rec.reason, '') : null;
-  };
-
-  const renderBlockItem = (block: ManifestBlock, showRelevantBadge: boolean = false) => {
+  const renderBlockItem = (block: ManifestBlock) => {
     const isLocked = !canUseBlock(block.tier);
-    const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
-    const marker = showRelevantBadge && !isLocked
-      ? {
-          icon: Sparkles,
-          label: t('recommendations.relevant', 'Актуально'),
-          className: 'bg-emerald-500 text-white',
-        }
-      : block.tier === 'pro'
-        ? {
-            icon: isLocked ? Lock : Crown,
-            label: 'PRO',
-            className: isLocked ? 'bg-muted text-muted-foreground' : 'bg-amber-500 text-white',
-          }
-        : null;
+    const label = blockLabel(block);
 
     const blockButton = (
       <button
@@ -322,64 +293,42 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         data-testid={`add-block-option-${block.type}`}
         aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
         className={cn(
-          "relative flex min-h-[132px] flex-col items-center justify-center gap-3 rounded-2xl border border-transparent bg-card/40 p-4 transition-all",
-          "hover:border-border hover:bg-muted/50 hover:shadow-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-          isLocked && "opacity-40 cursor-not-allowed"
+          'relative flex min-h-[92px] min-w-0 flex-col items-center justify-start gap-2 rounded-2xl px-1 pb-2 pt-2.5 transition-transform',
+          'hover:bg-muted/60 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+          isLocked && 'opacity-40 cursor-not-allowed'
         )}
       >
-        <div className={cn(
-          "w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg overflow-hidden",
+        <span className={cn(
+          'relative flex h-14 w-14 items-center justify-center rounded-[18px] text-white shadow-sm overflow-hidden',
           block.color
         )}>
-          <AnimatedBlockIcon 
-            type={block.type} 
-            icon={block.icon} 
-            className="h-8 w-8" 
-          />
-        </div>
-
-        <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
-          {t(block.labelKey, block.type)}
+          <AnimatedBlockIcon type={block.type} icon={block.icon} className="h-7 w-7" />
         </span>
-
-        {marker && (
-          <div className="absolute -top-2 left-2">
-            <Badge
-              variant="default"
-              className={cn('border-0 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', marker.className)}
-            >
-              <marker.icon className="mr-1 h-2.5 w-2.5" />
-              {marker.label}
-            </Badge>
-          </div>
-        )}
-
-        {isLocked && (
-          <>
-            <div className="absolute top-2 right-2">
-              <Lock className="h-4 w-4 text-muted-foreground" aria-hidden />
-            </div>
-            <span className="absolute bottom-1 inset-x-2 text-[10px] font-semibold uppercase tracking-wide text-primary/80">
-              {t('pricing.availableOnPro', 'Доступно на Pro')}
-            </span>
-          </>
+        <span lang={i18n.language} className="line-clamp-2 w-full hyphens-auto break-words text-center text-[11px] font-semibold leading-tight text-foreground sm:text-xs">
+          {label}
+        </span>
+        {block.tier === 'pro' && (
+          <span
+            className={cn(
+              'absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full shadow-sm',
+              isLocked ? 'bg-muted text-muted-foreground' : 'bg-amber-400 text-white',
+            )}
+            aria-label="PRO"
+          >
+            {isLocked ? <Lock className="h-3 w-3" aria-hidden /> : <Crown className="h-3 w-3" aria-hidden />}
+          </span>
         )}
       </button>
     );
 
-    const proHint = isLocked
-      ? t('pricing.proHint', 'Откройте этот блок на тарифе Pro — без ограничений на типы блоков.')
-      : reasonTooltip;
-
-    if (proHint && !isMobile) {
+    if (isLocked && !isMobile) {
       return (
         <Tooltip key={block.type}>
-
           <TooltipTrigger asChild>
             {blockButton}
           </TooltipTrigger>
           <TooltipContent side="bottom" className="max-w-[220px]">
-            <p className="text-xs">{proHint}</p>
+            <p className="text-xs">{t('pricing.proHint', 'Откройте этот блок на тарифе Pro — без ограничений на типы блоков.')}</p>
           </TooltipContent>
         </Tooltip>
       );
@@ -403,7 +352,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         onClick={() => handleInsertPresetClick(preset)}
         disabled={isLocked}
         className={cn(
-          "relative flex flex-col items-center gap-2 rounded-3xl p-4 transition-all",
+          "relative flex flex-col items-center gap-2 rounded-2xl p-3 transition-all",
           "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           isLocked && "opacity-40 cursor-not-allowed",
           isFeatured && "ring-1 ring-primary/20 bg-primary/5"
@@ -413,25 +362,25 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md overflow-hidden",
           color
         )}>
-          <AnimatedBlockIcon 
-            type={preset.blockType} 
-            icon={manifest.icon} 
-            className="h-6 w-6" 
+          <AnimatedBlockIcon
+            type={preset.blockType}
+            icon={manifest.icon}
+            className="h-6 w-6"
           />
         </div>
 
         <div className="flex flex-col items-center gap-0.5">
-          <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-primary/70">
             {t(manifest.labelKey)}
           </span>
-          <span className="text-xs font-bold text-center leading-tight">
+          <span className="text-xs font-semibold text-center leading-tight">
             {t(preset.labelKey)}
           </span>
         </div>
 
         {isFeatured && (
           <div className="absolute -top-1 -right-1">
-            <Badge className="h-4 w-4 p-0 flex items-center justify-center rounded-full bg-primary animate-pulse">
+            <Badge className="h-4 w-4 p-0 flex items-center justify-center rounded-full bg-primary">
               <Sparkles className="h-2.5 w-2.5 text-white" />
             </Badge>
           </div>
@@ -439,6 +388,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       </button>
     );
   };
+
+  const gridClass = 'grid grid-cols-4 gap-x-1 gap-y-2 sm:grid-cols-5 lg:grid-cols-6';
 
   return (
     <div className={cn("flex items-center justify-center", className)}>
@@ -465,120 +416,99 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             side="bottom"
             hideCloseButton
             data-testid="add-block-sheet"
-            className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[24px] outline-none flex flex-col overflow-hidden"
+            className="max-h-[88dvh] p-0 bg-background border-t-0 rounded-t-[28px] outline-none flex flex-col overflow-hidden pb-[env(safe-area-inset-bottom)]"
           >
-            <div className="flex-1 overflow-y-auto">
-              <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/10">
-                <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-                <div className="flex justify-center pt-4 pb-2">
-                  <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
-                </div>
+            <div className="flex-1 overflow-y-auto overscroll-contain">
+              <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+                <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+                  <div className="flex justify-center pt-3 pb-1">
+                    <div className="w-10 h-1.5 rounded-full bg-muted-foreground/25" />
+                  </div>
 
-                <SheetHeader className="px-0 pt-2 pb-4">
-                  <div className="flex items-center justify-between">
-                    <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
-                    <SheetClose asChild>
-                      <button
-                        type="button"
-                        data-testid="add-block-sheet-close"
-                        className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
-                        aria-label={t('common.close', 'Close')}
-                      >
-                        <X className="h-6 w-6 text-muted-foreground" />
-                      </button>
-                    </SheetClose>
-                  </div>
-                  <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
-                </SheetHeader>
+                  <SheetHeader className="px-0 pt-1 pb-3 text-left">
+                    <div className="flex items-center justify-between gap-3">
+                      <SheetTitle className="text-xl font-bold">{t('editor.addBlock', 'Добавить блок')}</SheetTitle>
+                      <SheetClose asChild>
+                        <button
+                          type="button"
+                          data-testid="add-block-sheet-close"
+                          className="-mr-2 flex h-11 w-11 items-center justify-center rounded-full hover:bg-muted transition-colors active:scale-90"
+                          aria-label={t('common.close', 'Close')}
+                        >
+                          <X className="h-5 w-5 text-muted-foreground" />
+                        </button>
+                      </SheetClose>
+                    </div>
+                    <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
+                  </SheetHeader>
 
-                <div className="pb-5 bg-background">
-                  <div className="mb-4">
-                    <FreemiumBlockLimit currentBlocks={currentBlockCount} isPremium={isPremium} />
+                  <div className="pb-3">
+                    {!isPremium && Number.isFinite(FREE_LIMITS.maxBlocks) && (
+                      <div className="mb-3">
+                        <FreemiumBlockLimit currentBlocks={currentBlockCount} isPremium={isPremium} />
+                      </div>
+                    )}
+                    <div className="relative">
+                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden />
+                      <Input
+                        data-testid="add-block-search"
+                        // On phones the keyboard would cover the grid; focus only where it does not.
+                        autoFocus={!isMobile}
+                        type="search"
+                        enterKeyHint="search"
+                        placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 h-11 text-base rounded-xl bg-muted/50 border-transparent"
+                      />
+                    </div>
                   </div>
-                  <div className="relative">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
-                    <Input
-                      data-testid="add-block-search"
-                      autoFocus
-                      placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-14 h-14 text-lg rounded-2xl bg-background border-border/30 font-medium"
-                    />
-                  </div>
-                </div>
                 </div>
               </div>
 
-              <div className="mx-auto w-full max-w-6xl px-5 py-5 sm:px-8">
-              {/* Featured Presets (Expert only) */}
-              {featuredPresets.length > 0 && (
-                <div className="mb-8">
-                  <div className="flex items-center gap-2 mb-4 px-1">
-                    <Badge variant="outline" className="h-5 bg-primary/10 text-primary border-primary/20 text-[10px] font-black uppercase">
-                      {t('expert.presets_badge', 'Эксперт')}
-                    </Badge>
-                    <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
+              <div className="mx-auto w-full max-w-3xl px-3 pb-6 pt-1 sm:px-5">
+                {featuredPresets.length > 0 && (
+                  <section className="mb-5">
+                    <h3 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                       {t('expert.featured_presets', 'Готовые решения')}
                     </h3>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                    {featuredPresets.map(preset => renderPresetItem(preset, true))}
-                  </div>
-                </div>
-              )}
+                    <div className="grid grid-cols-3 gap-2">
+                      {featuredPresets.map(preset => renderPresetItem(preset, true))}
+                    </div>
+                  </section>
+                )}
 
-              {recommendedBlocks.length > 0 && !searchQuery && (
-                <div className="mb-8">
-                  <div className="flex items-center gap-2 mb-4 px-1">
-                    <Sparkles className="h-4 w-4 text-emerald-500" />
-                    <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
-                      {t('recommendations.title', 'Рекомендовано для вас')}
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                    <TooltipProvider delayDuration={300}>
-                      {recommendedBlocks.map((block) => renderBlockItem(block, true))}
-                    </TooltipProvider>
-                  </div>
-                </div>
-              )}
-
-              {searchQuery && filteredPresets.length > 0 && (
-                <div className="mb-8">
-                  <div className="flex items-center gap-2 mb-4 px-1">
-                    <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
+                {searchQuery && filteredPresets.length > 0 && (
+                  <section className="mb-5">
+                    <h3 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                       {t('editor.presets_tab', 'Готовые блоки')}
                     </h3>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                    {filteredPresets.map(preset => renderPresetItem(preset))}
-                  </div>
-                </div>
-              )}
-
-              {otherBlocks.length > 0 && (
-                <div>
-                  {(recommendedBlocks.length > 0 || featuredPresets.length > 0) && !searchQuery && (
-                    <div className="flex items-center gap-2 mb-4 px-1 pt-4 border-t border-border/10">
-                      <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
-                        {t('recommendations.allBlocks', 'Все блоки')}
-                      </h3>
+                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                      {filteredPresets.map(preset => renderPresetItem(preset))}
                     </div>
-                  )}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                    <TooltipProvider delayDuration={300}>
-                      {otherBlocks.map((block) => renderBlockItem(block, false))}
-                    </TooltipProvider>
-                  </div>
-                </div>
-              )}
+                  </section>
+                )}
 
-              {filteredBlocks.length === 0 && filteredPresets.length === 0 && (
-                <div className="text-center py-16">
-                  <p className="text-lg text-muted-foreground font-bold">{t('common.noResults', 'Ничего не найдено')}</p>
-                </div>
-              )}
+                <TooltipProvider delayDuration={300}>
+                  {groups.map(group => (
+                    <section key={group.id} className="mb-4" aria-label={group.title ? t(group.titleKey, group.title) : undefined}>
+                      {group.title && groups.length > 1 && (
+                        <h3 className="mb-1 px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          {t(group.titleKey, group.title)}
+                        </h3>
+                      )}
+                      <div className={gridClass}>
+                        {group.blocks.map(block => renderBlockItem(block))}
+                      </div>
+                    </section>
+                  ))}
+                </TooltipProvider>
+
+                {filteredBlocks.length === 0 && filteredPresets.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-base text-muted-foreground font-semibold">{t('common.noResults', 'Ничего не найдено')}</p>
+                  </div>
+                )}
               </div>
             </div>
           </SheetContent>

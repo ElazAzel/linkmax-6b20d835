@@ -32,7 +32,7 @@ import type { Block, BlockSizePreset } from '@/types/page';
 import { getManifestEntry } from '@/lib/blocks/block-manifest';
 
 // Tab configuration
-export type EditorTab = 'content' | 'style' | 'advanced';
+export type EditorTab = 'content' | 'style' | 'advanced' | 'size';
 
 interface TabConfig {
     id: EditorTab;
@@ -240,7 +240,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
     const [showPreview, setShowPreview] = useState(false);
 
     // Tab configuration
-    const tabs: TabConfig[] = useMemo(() => {
+    const baseTabs: TabConfig[] = useMemo(() => {
         const result: TabConfig[] = [];
 
         if (contentTab) {
@@ -269,6 +269,15 @@ export const BlockEditorShell = memo(function BlockEditorShell({
 
         return result;
     }, [contentTab, styleTab, advancedTab, t]);
+
+    // On phones the size picker is a tab (like Korner's tile editor), not an extra row:
+    // the fields stay on the first screen of the sheet.
+    const allowedSizes = block ? getManifestEntry(block.type)?.editing.allowedSizes : undefined;
+    const sizeApplicable = !!(onBlockUpdate && block) && allowedSizes?.length !== 1;
+    const sizeAsTab = isMobile && sizeApplicable && useTabs && baseTabs.length > 1;
+    const tabs: TabConfig[] = useMemo(() => (sizeAsTab
+        ? [...baseTabs, { id: 'size' as const, label: t('editor.tabs.size', 'Размер'), icon: <Grid2x2 className="h-4 w-4" /> }]
+        : baseTabs), [baseTabs, sizeAsTab, t]);
 
     // Show tabs only if we have multiple tabs and useTabs is true
     const shouldShowTabs = useTabs && tabs.length > 1;
@@ -299,17 +308,26 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                 return styleTab;
             case 'advanced':
                 return advancedTab;
+            case 'size':
+                return block && onBlockUpdate ? (
+                    <div className="flex flex-col items-center gap-3 py-2">
+                        <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
+                        <p className="text-center text-xs text-muted-foreground">
+                            {t('editor.sizeHint', 'Размер плитки на странице — изменения сразу видны выше.')}
+                        </p>
+                    </div>
+                ) : null;
             default:
                 return contentTab || children;
         }
-    }, [activeTab, shouldShowTabs, children, contentTab, styleTab, advancedTab]);
+    }, [activeTab, shouldShowTabs, children, contentTab, styleTab, advancedTab, block, onBlockUpdate, t]);
 
     return (
         <div className="flex flex-col h-full min-h-0 bg-background">
             {/* Header */}
             <div className="shrink-0 bg-background/80 backdrop-blur-2xl border-b border-border/10">
                 {/* Title row */}
-                <div className="flex items-center gap-3 px-4 py-3">
+                <div className="flex items-center gap-3 px-4 py-2">
                     <Button
                         variant="ghost"
                         size="icon"
@@ -363,7 +381,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                 </div>
 
                 {/* Block Size Selector on mobile - separate row */}
-                {onBlockUpdate && block && sizeOnOwnRow && (
+                {onBlockUpdate && block && sizeOnOwnRow && !sizeAsTab && (
                     <div className="px-4 pb-2 flex justify-center">
                         <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
                     </div>

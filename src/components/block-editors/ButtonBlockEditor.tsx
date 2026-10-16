@@ -9,7 +9,7 @@ import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { AlignmentButton } from './EditorUtils';
 import { getRandomSuggestion, type SuggestionContext } from '@/lib/intelligence/writing-algorithm';
-import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { useEditorPageInfo } from '@/contexts/EditorPageContext';
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2';
 import Square from 'lucide-react/dist/esm/icons/square';
 import Minus from 'lucide-react/dist/esm/icons/minus';
@@ -26,13 +26,13 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
   const data = formData as any;
   const handleChange = (updates: any) => onChange(updates);
 
-  const { pageData } = useDashboard();
-  const currentNiche = pageData?.niche || 'general';
+  const pageInfo = useEditorPageInfo();
+  const currentNiche = pageInfo.niche;
 
   const handleMagicWand = () => {
     const context: SuggestionContext = {
-      city: pageData?.city || '',
-      company_name: (pageData?.blocks.find(b => b.type === 'profile') as any)?.name || '',
+      city: pageInfo.city,
+      company_name: pageInfo.profileName,
     };
 
     const suggestion = getRandomSuggestion(currentNiche, 'button', context);
