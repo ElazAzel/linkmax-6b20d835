@@ -1,31 +1,23 @@
 import { useEffect } from 'react';
-import { Navigate, useParams } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import Index from '@/pages/Index';
+import { changeLanguageLoaded } from '@/i18n/config';
 
-const SUPPORTED = ['ru', 'en', 'kk', 'uz'] as const;
-type Lang = (typeof SUPPORTED)[number];
+export type HomeLocale = 'ru' | 'en' | 'kk' | 'uz';
 
 /**
- * Renders the homepage for /:lang routes (e.g. /ru, /en, /kk, /uz).
+ * Renders the homepage for the locale routes (/ru, /en, /kk, /uz).
  * Switches i18n language to match the URL segment so the page renders
  * in the requested locale — boosts indexability per language.
  */
-export default function LocaleIndex() {
-  const { lang } = useParams<{ lang: string }>();
+export default function LocaleIndex({ lang }: { lang: HomeLocale }) {
   const { i18n } = useTranslation();
 
-  const isSupported = SUPPORTED.includes(lang as Lang);
-
   useEffect(() => {
-    if (isSupported && i18n.language !== lang) {
-      i18n.changeLanguage(lang);
+    if (i18n.language !== lang) {
+      void changeLanguageLoaded(lang);
     }
-  }, [lang, isSupported, i18n]);
-
-  if (!isSupported) {
-    return <Navigate to="/" replace />;
-  }
+  }, [lang, i18n]);
 
   return <Index />;
 }

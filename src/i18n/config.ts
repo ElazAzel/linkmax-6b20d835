@@ -147,11 +147,19 @@ const normalizeLanguage = (lng: string): string => {
   return 'en';
 };
 
+// The server has no per-request locale, so SSR HTML is always Russian.
+const SSR_LANGUAGE = 'ru';
+// Homepage locale routes (/en, /kk, …) rendered by LocaleIndex.
+const HOME_LOCALE_PATH = /^\/(ru|en|kk|uz)\/?$/;
+
 // Custom language detector
 const customLanguageDetector = {
   name: 'customDetector',
   lookup() {
-    if (typeof window === 'undefined') return 'ru';
+    if (typeof window === 'undefined') return SSR_LANGUAGE;
+    const pathLang = HOME_LOCALE_PATH.exec(window.location.pathname)?.[1];
+    if (pathLang) return pathLang;
+
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang') || params.get('lng');
     if (urlLang) {
@@ -189,6 +197,15 @@ const customLanguageDetector = {
 const languageDetectorPlugin = new LanguageDetector();
 languageDetectorPlugin.addDetector(customLanguageDetector);
 
+// Read before init: init caches its language to storage and would overwrite it.
+const preferredLanguage = normalizeLanguage(customLanguageDetector.lookup());
+
+// A page hydrating server HTML must render its first pass in the SSR language,
+// otherwise React discards the server tree. The visitor's language is applied
+// after hydration by applyPreferredLanguage(). Client-only roots (Telegram
+// Mini App) have no SSR payload and start in the preferred language.
+const hydratingSsr = typeof window !== 'undefined' && '$_TSR' in window;
+
 // Initialize i18n with no bundled resources — the detected locale is fetched
 // as a separate chunk and awaited via `i18nReady` before the app renders.
 const i18nInitPromise = i18n
@@ -196,6 +213,7 @@ const i18nInitPromise = i18n
   .use(initReactI18next)
   .init({
     resources: {},
+    lng: hydratingSsr ? SSR_LANGUAGE : undefined,
     partialBundledLanguages: true,
     // Synchronous init: the async default schedules setTimeout at module load,
     // which Cloudflare Workers forbid in global scope.
@@ -289,6 +307,29 @@ export const i18nReady: Promise<void> = i18nInitPromise
   });
 
 syncDbLocale(detectedLang);
+
+/**
+ * Switch a hydrated SSR page from the server language to the visitor's own.
+ * Call once after hydration. The locale chunk loads first, so the page goes
+ * straight from Russian to the full target locale without missing keys.
+ */
+export async function applyPreferredLanguage(): Promise<void> {
+  if (!hydratingSsr || preferredLanguage === SSR_LANGUAGE) return;
+  await loadLazyLocale(preferredLanguage);
+  // Something else (a locale route, the switcher) already chose a language.
+  if (normalizeLanguage(i18n.language) !== SSR_LANGUAGE) return;
+  await i18n.changeLanguage(preferredLanguage);
+}
+
+/**
+ * Change the UI language after its locale chunk is in the store. Switching
+ * first renders the new language with missing keys (Russian fallbacks).
+ */
+export async function changeLanguageLoaded(lang: string): Promise<void> {
+  const normalized = normalizeLanguage(lang);
+  await loadLazyLocale(normalized);
+  await i18n.changeLanguage(normalized);
+}
 
 
 // Development diagnostics (lazy-loaded)
