@@ -58,31 +58,6 @@ const ChatbotWidget = lazy(() => import('@/components/chat/ChatbotWidget').then(
 const LanguageSwitcher = lazy(() => import('@/components/translation/LanguageSwitcher').then(m => ({ default: m.LanguageSwitcher })));
 const TrackingScripts = lazy(() => import('@/components/analytics/TrackingScripts').then(m => ({ default: m.TrackingScripts })));
 
-function getButtonStyleClass(buttonStyle?: PageData['theme']['buttonStyle']) {
-  switch (buttonStyle) {
-    case 'pill':
-      return 'rounded-full';
-    case 'gradient':
-      return 'rounded-xl border-transparent bg-gradient-to-r from-violet-500 via-indigo-500 to-sky-500 text-white hover:opacity-90';
-    case 'default':
-      return 'rounded-md';
-    default:
-      // Use the CSS var driven radius when a theme preset is active; fallback to rounded-xl.
-      return 'rounded-xl [border-radius:var(--lm-block-radius,theme(borderRadius.xl))]';
-  }
-}
-
-function getIconStyleClass(iconStyle?: PageData['theme']['iconStyle']) {
-  switch (iconStyle) {
-    case 'square':
-      return 'rounded-none';
-    case 'duotone':
-      return 'rounded-lg bg-primary/10 text-primary p-1';
-    default:
-      return 'rounded-full bg-primary/10 p-1';
-  }
-}
-
 function getAnimationConfig(animationStyle?: PageData['theme']['animationStyle']) {
   switch (animationStyle) {
     case 'none':
@@ -324,8 +299,6 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
   const customBackground = pageData?.theme?.customBackground;
   const bgResult = getBackgroundStyle(customBackground);
   const pageAnimation = getAnimationConfig(pageData?.theme?.animationStyle);
-  const buttonStyleClass = getButtonStyleClass(pageData?.theme?.buttonStyle);
-  const iconStyleClass = getIconStyleClass(pageData?.theme?.iconStyle);
   // One theme → CSS mapping shared with the editor canvas (WYSIWYG)
   const themeScope = getPageThemeScope(pageData?.theme);
   const dividerClass = getDividerClass(pageData?.theme);
@@ -462,8 +435,8 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
                 {/* Share: one quiet row, the clone offer as a small link. Readable contrast regardless of page theme. */}
                 <div className="mt-8 space-y-3 [color:hsl(var(--foreground))]">
                   <div className="flex items-center justify-center gap-2">
-                    <Button variant="outline" onClick={handleShare} className={cn("h-11 px-5 !text-foreground !bg-background", buttonStyleClass)}>
-                      <Share2 className={cn("h-4 w-4 mr-2", iconStyleClass)} />
+                    <Button variant="outline" onClick={handleShare} className="h-11 rounded-full border-black/10 px-5 font-medium !text-foreground !bg-background shadow-[0_1px_3px_rgb(0_0_0/0.08)] hover:!bg-muted">
+                      <Share2 className="mr-2 h-4 w-4" />
                       {t('share.shareLink', 'Поделиться')}
                     </Button>
                     <Button
@@ -472,7 +445,7 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
                       onClick={() => setShowQR(true)}
                       aria-label={t('share.qrCode', 'QR-код')}
                       title={t('share.qrCode', 'QR-код')}
-                      className={cn("h-11 w-11 !text-foreground !bg-background", buttonStyleClass)}
+                      className="h-11 w-11 rounded-full border-black/10 !text-foreground !bg-background shadow-[0_1px_3px_rgb(0_0_0/0.08)] hover:!bg-muted"
                     >
                       <QrCode className="h-4 w-4" />
                     </Button>
