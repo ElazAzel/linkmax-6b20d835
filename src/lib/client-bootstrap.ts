@@ -7,6 +7,7 @@ import {
   recoverFromStaleAssets,
 } from "@/lib/utils/runtime-recovery";
 import { PushService } from "@/lib/notifications/push-service";
+import { applyPreferredLanguage } from "@/i18n/config";
 
 let started = false;
 
@@ -15,6 +16,9 @@ export function startClientBootstrap(): void {
   started = true;
 
   validateEnv();
+
+  // SSR HTML is Russian; hydration has finished, so show the visitor's language.
+  void applyPreferredLanguage();
 
   const ric: (cb: () => void) => number =
     typeof window.requestIdleCallback === "function"

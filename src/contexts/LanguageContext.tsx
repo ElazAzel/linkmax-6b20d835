@@ -2,7 +2,7 @@ import { guardedTranslate } from '@/lib/translation-guard';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { LocaleCode } from '@/i18n/config';
+import { changeLanguageLoaded, LocaleCode } from '@/i18n/config';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { isI18nText, isMultilingualString } from '@/lib/i18n-helpers';
@@ -120,7 +120,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const setCurrentLanguage = useCallback((lang: LocaleCode) => {
     const normalizedLang = (lang as string) === "kz" ? ('kk' as LocaleCode) : lang;
     setCurrentLanguageState(normalizedLang);
-    i18n.changeLanguage(normalizedLang);
+    void changeLanguageLoaded(normalizedLang);
     storage.setRaw('i18nextLng', normalizedLang);
   }, [i18n]);
 

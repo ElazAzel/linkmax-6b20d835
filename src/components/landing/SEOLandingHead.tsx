@@ -113,7 +113,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     setLinkTag('alternate', `${domain}/`, 'x-default');
 
     // Update html lang attribute
-    document.documentElement.lang = ['ru','en','kk','uz'].includes(language) ? language : 'ru';
+    document.documentElement.lang = language || 'ru';
 
     // OG Image
     const ogImageUrl = `${domain}/og-image.png`;

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import Globe from 'lucide-react/dist/esm/icons/globe';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Languages from 'lucide-react/dist/esm/icons/languages';
@@ -115,21 +115,6 @@ export function LanguageSwitcher({
   const browserLanguage = languageContext?.browserLanguage;
   const targetTranslationLanguages = languageContext?.targetTranslationLanguages ?? ['en'];
   const [showTranslationSettings, setShowTranslationSettings] = useState(false);
-
-  // Show browser language notification on first load
-  useEffect(() => {
-    if (browserLanguage && languageContext) {
-      const hasShownNotification = storage.get<boolean>('browserLangNotificationShown');
-      if (!hasShownNotification && browserLanguage !== 'en') {
-        // Auto-set browser language as current language on first visit
-        const storedLang = storage.getRaw('i18nextLng');
-        if (!storedLang) {
-          languageContext.setCurrentLanguage(browserLanguage);
-        }
-        storage.set('browserLangNotificationShown', true);
-      }
-    }
-  }, [browserLanguage, languageContext]);
 
   // Filter and organize languages
   const { visibleLanguages, moreLanguages, filteredLanguages } = useMemo(() => {

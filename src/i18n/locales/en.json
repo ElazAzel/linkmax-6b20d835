@@ -7306,6 +7306,7 @@
       "subtitle": "LinkMAX brings services, links, bookings, payments, and leads into one page. No code and no long setup.",
       "slugPrefix": "lnkmx.my/",
       "slugHint": "yourname",
+      "ctaPrimary": "Create for free",
       "slugAria": "Short page address",
       "create": "Create page",
       "free": "Free start",
