@@ -2315,7 +2315,16 @@
       "discardShort": "Discard",
       "done": "Done",
       "expand": "Expand settings",
-      "collapse": "Collapse settings"
+      "collapse": "Collapse settings",
+      "tools": {
+        "image": "Image",
+        "text": "Text",
+        "font": "Font",
+        "appearance": "Style",
+        "action": "Link"
+      },
+      "close": "Close settings",
+      "toolsLabel": "Block tools"
     },
     "insertShort": {
       "socials": "Socials",

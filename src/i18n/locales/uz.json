@@ -2315,7 +2315,16 @@
       "discardShort": "Bekor qilish",
       "done": "Tayyor",
       "expand": "Sozlamalarni ochish",
-      "collapse": "Sozlamalarni yig'ish"
+      "collapse": "Sozlamalarni yig'ish",
+      "tools": {
+        "image": "Rasm",
+        "text": "Matn",
+        "font": "Shrift",
+        "appearance": "Uslub",
+        "action": "Havola"
+      },
+      "close": "Sozlamalarni yopish",
+      "toolsLabel": "Blok vositalari"
     },
     "insertShort": {
       "socials": "Ijtimoiy tarmoqlar",

@@ -27,8 +27,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BlockEditorShell } from '@/components/block-editors/BlockEditorShell';
-import { BlockStyleEditor } from '@/components/editor/BlockStyleEditor';
+import { InspectorPanel } from './InspectorPanel';
+
 import { useLiveBlockDraft } from '@/hooks/editor/useLiveBlockDraft';
 import { BLOCK_MANIFEST, getBlockIcon } from '@/lib/blocks/block-manifest';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
@@ -73,7 +73,7 @@ function BlockInspectorSession({
   onOpenTheme,
 }: BlockInspectorProps) {
   const { t } = useTranslation();
-  const { draft, dirty, change, flush, discard } = useLiveBlockDraft(block, onUpdateBlock);
+  const { draft, dirty, change, flush, discard, cancelPending } = useLiveBlockDraft(block, onUpdateBlock);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -81,6 +81,18 @@ function BlockInspectorSession({
   useEffect(() => {
     setExpanded(false);
   }, [block?.id]);
+
+  useEffect(() => {
+    if (!block) return;
+    const handleSave = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+        event.preventDefault();
+        flush();
+      }
+    };
+    window.addEventListener('keydown', handleSave);
+    return () => window.removeEventListener('keydown', handleSave);
+  }, [block, flush]);
 
   const handleDone = useCallback(() => {
     flush();
@@ -140,7 +152,6 @@ function BlockInspectorSession({
     <p className="text-sm text-muted-foreground">{t('blockEditor.notAvailable')}</p>
   );
 
-  const styleTab = block.type !== 'profile' ? <BlockStyleEditor formData={draft} onChange={change} /> : undefined;
 
   const footer = (
     <div className="flex gap-2">
@@ -163,27 +174,10 @@ function BlockInspectorSession({
   );
 
   const shell = (
-    <BlockEditorShell
-      block={shellBlock}
-      blockTypeName={t(manifest?.labelKey ?? `blockTypes.${block.type}`, block.type)}
-      blockIcon={
-        <Suspense fallback={<span className="h-5 w-5 rounded-full bg-muted" />}>
-          <BlockIcon className="h-5 w-5 text-primary" />
-        </Suspense>
-      }
-      useTabs={!!styleTab}
-      contentTab={styleTab ? editorBody : undefined}
-      styleTab={styleTab}
-      onSave={flush}
-      onClose={handleDone}
-      onBlockUpdate={change}
-      enablePreview={false}
-      footerActions={footer}
-      sizeSelectorOnOwnRow
-      onDelete={onDeleteBlock ? () => setConfirmDelete(true) : undefined}
-    >
-      {!styleTab && editorBody}
-    </BlockEditorShell>
+    <InspectorPanel block={shellBlock} title={t(manifest?.labelKey ?? `blockTypes.${block.type}`, block.type)}
+      icon={<Suspense fallback={<span className="h-5 w-5 rounded-full bg-muted" />}><BlockIcon className="h-5 w-5 text-primary" /></Suspense>}
+      editorBody={editorBody} onChange={change} onClose={handleDone} footer={footer}
+      onDelete={onDeleteBlock ? () => setConfirmDelete(true) : undefined} />
   );
 
   const deleteDialog = onDeleteBlock ? (
@@ -200,6 +194,7 @@ function BlockInspectorSession({
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             onClick={() => {
+              cancelPending();
               onDeleteBlock(block.id);
               onClose();
             }}

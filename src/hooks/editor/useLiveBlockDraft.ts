@@ -77,5 +77,12 @@ export function useLiveBlockDraft(
     setDirty(false);
   }, []);
 
-  return { draft, dirty, change, flush, discard };
+  // A removed block must not be re-applied by the unmount flush.
+  const cancelPending = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = null;
+    pendingRef.current = null;
+  }, []);
+
+  return { draft, dirty, change, flush, discard, cancelPending };
 }
