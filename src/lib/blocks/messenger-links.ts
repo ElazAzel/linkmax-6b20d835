@@ -5,8 +5,11 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
  * often typed in the local "8 7xx …" form; WhatsApp only finds them as "7 7xx …".
  */
 export function messengerPhoneDigits(raw: string): string {
-  const digits = (raw || '').replace(/\D/g, '');
-  return digits.length === 11 && digits.startsWith('8') ? `7${digits.slice(1)}` : digits;
+  const value = (raw || '').trim();
+  const digits = value.replace(/\D/g, '');
+  // "+8…" is already international (e.g. +852 Hong Kong): keep it as typed.
+  const localForm = !value.startsWith('+') && digits.length === 11 && digits.startsWith('8');
+  return localForm ? `7${digits.slice(1)}` : digits;
 }
 
 /** The prefilled message: blocks store it either as text or as { ru, en, kk }. */

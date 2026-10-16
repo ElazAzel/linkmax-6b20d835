@@ -5208,7 +5208,7 @@
     "sunset": "Күннің батуы",
     "verified": "Тексерілді",
     "xlarge": "Өте үлкен",
-    "statusRing": {
+    "statusRingLabel": {
       "none": "Жоқ",
       "online": "Онлайн",
       "busy": "Бос емес",

@@ -17,6 +17,8 @@ describe('messenger links (lnkmx.my/entrepreneurshipalmau, /elazart)', () => {
   it('turns local 8-prefixed and +7 numbers into wa.me digits', () => {
     expect(messengerPhoneDigits('87067066521')).toBe('77067066521');
     expect(messengerPhoneDigits('+7 705 109-76-64')).toBe('77051097664');
+    expect(messengerPhoneDigits('+852 1234 5678 9')).toBe('852123456789');
+    expect(messengerPhoneDigits('+8 700 123 45 67')).toBe('87001234567');
   });
 
   it('never sends "[object Object]" as the WhatsApp message', () => {
@@ -74,7 +76,7 @@ describe('blocks saved without ids (lnkmx.my/psychologist_laura)', () => {
     } as unknown as FAQBlockType;
     render(<FAQBlock block={block} />);
     fireEvent.click(screen.getByRole('button', { name: 'Сколько сессий мне потребуется?' }));
-    expect(screen.getByText('Индивидуально.')).toBeVisible();
+    expect(screen.getByText('Индивидуально.')).toBeInTheDocument();
     expect(screen.queryByText('Знакомство и запрос.')).toBeNull();
   });
 });

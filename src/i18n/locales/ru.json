@@ -5208,7 +5208,7 @@
     "sunset": "Закат",
     "verified": "Проверено",
     "xlarge": "Очень большой",
-    "statusRing": {
+    "statusRingLabel": {
       "none": "Нет",
       "online": "Онлайн",
       "busy": "Занят",

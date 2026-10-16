@@ -293,7 +293,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
               style={{ backgroundColor: statusRing.color }}
             >
               <span className={cn('w-1.5 h-1.5 rounded-full bg-white/90', statusRing.pulse && 'animate-pulse')} />
-              {t(`profile.statusRing.${statusRing.value}`, statusRing.label)}
+              {t(`profile.statusRingLabel.${statusRing.value}`, statusRing.label)}
             </div>
           )}
 

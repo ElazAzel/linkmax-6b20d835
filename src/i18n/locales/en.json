@@ -5208,7 +5208,7 @@
     "sunset": "Sunset",
     "verified": "Verified",
     "xlarge": "Very big",
-    "statusRing": {
+    "statusRingLabel": {
       "none": "None",
       "online": "Online",
       "busy": "Busy",
