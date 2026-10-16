@@ -156,7 +156,7 @@ const PreviewToggle = memo(function PreviewToggle({
 });
 
 // Block size selector component
-const BlockSizeSelector = memo(function BlockSizeSelector({
+export const BlockSizeSelector = memo(function BlockSizeSelector({
     block,
     onBlockUpdate,
 }: {
