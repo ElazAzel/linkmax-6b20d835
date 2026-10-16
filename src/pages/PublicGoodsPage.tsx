@@ -14,6 +14,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { getLocale } from '@/lib/utils/format';
 
 interface PublicProduct {
   id: string;
@@ -28,7 +29,7 @@ interface PublicProduct {
 
 export default function PublicGoodsPage() {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [product, setProduct] = useState<PublicProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
@@ -109,7 +110,7 @@ export default function PublicGoodsPage() {
         <div className="text-3xl font-black tracking-tight">
           {isFree
             ? t('digitalGoods.free', 'Бесплатно')
-            : `${Number(product.price).toLocaleString()} ${product.currency}`}
+            : `${Number(product.price).toLocaleString(getLocale(i18n.language))} ${product.currency}`}
         </div>
 
         <div className="space-y-1.5">

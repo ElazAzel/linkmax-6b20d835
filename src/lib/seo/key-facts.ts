@@ -8,6 +8,7 @@
 import type { Block, PricingBlock, SocialsBlock, BookingBlock, EventBlock } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { AnswerBlockData } from './answer-block';
+import { getLocale } from '@/lib/utils/format';
 
 export interface KeyFact {
   /** Fact category for grouping */
@@ -166,7 +167,7 @@ export function generateKeyFacts(
       facts.push({
         category: 'services',
         label: labels.priceFrom,
-        value: `${minPrice.toLocaleString()} ${currency}`,
+        value: `${minPrice.toLocaleString(getLocale(language))} ${currency}`,
         schemaProperty: 'priceRange',
       });
     }
