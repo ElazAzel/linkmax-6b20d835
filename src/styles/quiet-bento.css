@@ -283,5 +283,5 @@
 }
 
 .brand-wordmark-accent {
-  color: hsl(var(--brand-orange));
+  color: hsl(var(--muted-foreground));
 }

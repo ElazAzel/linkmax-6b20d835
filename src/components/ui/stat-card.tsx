@@ -44,7 +44,7 @@ export const StatCard = memo(function StatCard({
   return (
     <div className={cn('rounded-card border border-border bg-card', compact ? 'p-3.5' : 'p-5', className)}>
       <div className="flex items-center justify-between gap-2">
-        <span className="truncate text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground">{label}</span>
+        <span className="truncate text-xs font-medium text-muted-foreground">{label}</span>
         {icon ? (
           <span
             className={cn(
@@ -58,7 +58,7 @@ export const StatCard = memo(function StatCard({
       </div>
       <div
         className={cn(
-          'font-num font-semibold leading-tight text-foreground',
+          'tabular-nums font-semibold leading-tight text-foreground',
           compact ? 'mt-1.5 text-xl' : 'mt-2 text-3xl',
         )}
       >
@@ -69,7 +69,7 @@ export const StatCard = memo(function StatCard({
           {change !== undefined ? (
             <span
               className={cn(
-                'inline-flex items-center gap-0.5 font-num font-medium',
+                'inline-flex items-center gap-0.5 tabular-nums font-medium',
                 change > 0 ? 'text-success' : change < 0 ? 'text-destructive' : 'text-muted-foreground',
               )}
             >

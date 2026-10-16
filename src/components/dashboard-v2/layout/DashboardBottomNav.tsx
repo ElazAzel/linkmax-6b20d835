@@ -19,7 +19,9 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({ activeTab, 
   const { t } = useTranslation();
   const haptic = useHapticFeedback();
   const businessEnabled = useBusinessFeatures();
-  const tabs = businessEnabled ? PAGE_V2_TABS : PAGE_V2_TABS.filter(tab => tab.id !== 'business');
+  // In the editor the floating dock already adds blocks and opens theme, order
+  // and AI; a second "Добавить" right under it only duplicated the dock.
+  const tabs = PAGE_V2_TABS.filter(tab => (businessEnabled || tab.id !== 'business') && !(tab.id === 'add' && activeTab === 'editor'));
   if (!LINKMAX_UI_V2) return <LegacyBottomNav activeTab={activeTab} onTabChange={onTabChange} activityBadge={activityBadge} />;
   return <nav aria-label={t('pageV2.navigation.label', 'Навигация кабинета')} className="fixed bottom-0 inset-x-0 z-50 px-2 pb-2 safe-area-bottom md:hidden pointer-events-none">
     <div className="app-bottom-nav mx-auto grid h-[4.25rem] max-w-lg overflow-hidden rounded-3xl border border-border bg-card shadow-lg pointer-events-auto" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
