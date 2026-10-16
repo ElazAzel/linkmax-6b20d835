@@ -10,6 +10,9 @@
   isolation: isolate;
   overflow: hidden;
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  /* Always on (phones have no hover): tiles take turns flipping to ink. */
+  animation: lm-tile-pop 7s ease-in-out infinite;
+  animation-delay: calc(var(--lm-tile-delay) * 1.4);
 }
 .lm-tile::after {
   content: "";
@@ -26,6 +29,7 @@
 /* Hover only with a real pointer: on touch screens :hover sticks after a tap. */
 @media (hover: hover) {
   button:hover > .lm-tile {
+    animation: none;
     background-color: hsl(var(--foreground));
     color: hsl(var(--background));
     border-color: hsl(var(--foreground));
@@ -35,11 +39,17 @@
   button:hover > .lm-tile .lm-motion { animation-duration: 0.9s; }
 }
 button:focus-visible > .lm-tile {
+  animation: none;
   background-color: hsl(var(--foreground));
   color: hsl(var(--background));
   border-color: hsl(var(--foreground));
 }
 button:active > .lm-tile { transform: scale(0.94); }
+
+@keyframes lm-tile-pop {
+  0%, 84%, 100% { background-color: hsl(var(--card)); color: hsl(var(--foreground)); transform: none; box-shadow: 0 1px 2px rgb(0 0 0 / 0.04); }
+  88%, 94% { background-color: hsl(var(--foreground)); color: hsl(var(--background)); transform: translateY(-2px) rotate(-4deg) scale(1.04); box-shadow: 0 10px 22px -12px hsl(var(--foreground) / 0.55); }
+}
 
 @keyframes lm-tile-glare {
   0%, 78% { transform: translateX(0) rotate(18deg); opacity: 0; }
@@ -118,6 +128,7 @@ button:active > .lm-tile { transform: scale(0.94); }
 @keyframes lm-m-eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
 
 @media (prefers-reduced-motion: reduce) {
+  .lm-tile,
   .lm-tile::after,
   .lm-motion,
   .lm-motion::before,
