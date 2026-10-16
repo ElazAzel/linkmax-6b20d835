@@ -30,6 +30,7 @@ const currencySymbols: Record<string, string> = {
 };
 
 import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
+import { getLocale } from '@/lib/utils/format';
 
 export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogBlockProps) {
   const { t, i18n } = useTranslation();
@@ -41,7 +42,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
 
   const formatPrice = (price: number, currency: string = 'KZT') => {
     const symbol = currencySymbols[currency] || currency;
-    return `${price.toLocaleString('ru-RU')} ${symbol}`;
+    return `${price.toLocaleString(getLocale(i18n.language))} ${symbol}`;
   };
 
   // Group items by category

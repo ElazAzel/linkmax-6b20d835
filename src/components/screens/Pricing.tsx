@@ -27,6 +27,7 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { useCurrencyRate, BASE_PRICES_USD, FIXED_PRICES_KZT, getTotalPriceKzt } from '@/hooks/useCurrencyRate';
 import { useAuth } from '@/hooks/user/useAuth';
 import { activateStarterTier } from '@/services/user';
+import { getLocale } from '@/lib/utils/format';
 
 type BillingPeriod = 3 | 6 | 12;
 
@@ -185,7 +186,7 @@ export const Pricing = memo(function Pricing() {
                     </div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-3xl font-bold">
-                        {key === 'pro' ? (isKztPrimary ? `${plan.pricesKzt[billingPeriod].toLocaleString('ru-RU')}₸` : `$${plan.pricesUsd[billingPeriod]}`) : '0₸'}
+                        {key === 'pro' ? (isKztPrimary ? `${plan.pricesKzt[billingPeriod].toLocaleString(getLocale(i18n.language))}₸` : `$${plan.pricesUsd[billingPeriod]}`) : '0₸'}
                       </span>
                       <span className="text-muted-foreground text-sm">/{t('pricing.month', 'мес')}</span>
                     </div>

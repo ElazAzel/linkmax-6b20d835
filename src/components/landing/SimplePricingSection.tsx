@@ -10,6 +10,7 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import X from 'lucide-react/dist/esm/icons/x';
+import { getLocale } from '@/lib/utils/format';
 
 interface SimplePricingSectionProps {
   isVisible: boolean;
@@ -166,12 +167,12 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                   <>
                     <div className="flex items-baseline gap-2">
                       <span className="text-4xl font-bold">
-                        {pricingPlans[billingPeriod].monthlyKzt.toLocaleString('ru-RU')}₸
+                        {pricingPlans[billingPeriod].monthlyKzt.toLocaleString(getLocale(i18n.language))}₸
                       </span>
                       <span className="text-muted-foreground text-sm">/{t('landing.pricing.month', 'мес')}</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {t('landing.pricing.total', 'Итого')}: {pricingPlans[billingPeriod].totalKzt.toLocaleString('ru-RU')}₸ {t('landing.pricing.billedOnce', 'единоразово')}
+                      {t('landing.pricing.total', 'Итого')}: {pricingPlans[billingPeriod].totalKzt.toLocaleString(getLocale(i18n.language))}₸ {t('landing.pricing.billedOnce', 'единоразово')}
                     </p>
                     <p className="text-xs text-muted-foreground/70">
                       ≈ ${pricingPlans[billingPeriod].monthlyUsd.toFixed(2)}/{t('landing.pricing.month', 'мес')}
@@ -189,7 +190,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                       {t('landing.pricing.total', 'Итого')}: ${pricingPlans[billingPeriod].totalUsd} {t('landing.pricing.billedOnce', 'единоразово')}
                     </p>
                     <p className="text-xs text-muted-foreground/70">
-                      ≈ {pricingPlans[billingPeriod].monthlyKzt.toLocaleString('ru-RU')}₸/{t('landing.pricing.month', 'мес')}
+                      ≈ {pricingPlans[billingPeriod].monthlyKzt.toLocaleString(getLocale(i18n.language))}₸/{t('landing.pricing.month', 'мес')}
                     </p>
                   </>
                 )}
