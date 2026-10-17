@@ -31,6 +31,16 @@ interface SearchReadinessCardProps {
   pageData: PageData;
 }
 
+/** «1 услуга», «2 услуги», «5 услуг»; after «из N» the genitive plural fits only 1 → «услуги». */
+function servicesWord(n: number, afterFrom = false): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (afterFrom) return mod10 === 1 && mod100 !== 11 ? 'услуги' : 'услуг';
+  if (mod10 === 1 && mod100 !== 11) return 'услуга';
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'услуги';
+  return 'услуг';
+}
+
 export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData }: SearchReadinessCardProps) {
   const { t } = useTranslation();
   // 1. Client-side preview (instant, on every keystroke)
@@ -163,14 +173,14 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         {childCount > 0 && isIndexable && (
           <Badge variant="outline" className="text-xs gap-1 border-primary/30 text-primary bg-primary/5">
             {childSummary
-              ? `${childSummary.eligible} из ${childSummary.total - childSummary.removed} услуг в поиске`
-              : `${childCount} ${childCount === 1 ? 'услуга' : 'услуг'}`
+              ? `${childSummary.eligible} из ${childSummary.total - childSummary.removed} ${servicesWord(childSummary.total - childSummary.removed, true)} в поиске`
+              : `${childCount} ${servicesWord(childCount)}`
             }
           </Badge>
         )}
         {childSummary && childSummary.excluded_thin > 0 && (
           <Badge variant="outline" className="text-xs gap-1 border-warning/30 text-warning bg-warning/12">
-            {childSummary.excluded_thin} услуг без описания
+            {childSummary.excluded_thin} {servicesWord(childSummary.excluded_thin)} без описания
           </Badge>
         )}
         {lastIndexNow && (

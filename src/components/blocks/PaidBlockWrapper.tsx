@@ -29,7 +29,7 @@ interface PaidBlockWrapperProps {
 // Store unlocked blocks in session
 const unlockedBlocks = new Set<string>();
 
-export const PaidBlockWrapper = memo(function PaidBlockWrapper({
+const PaidBlockGate = memo(function PaidBlockGate({
   blockId,
   blockStyle,
   pageOwnerId,
@@ -198,4 +198,14 @@ export const PaidBlockWrapper = memo(function PaidBlockWrapper({
       </div>
     </Card>
   );
+});
+
+/**
+ * Only paid blocks mount the gate: it loads the visitor's token balance, and
+ * mounting it for every block sent one balance request per block per page load.
+ */
+export const PaidBlockWrapper = memo(function PaidBlockWrapper(props: PaidBlockWrapperProps) {
+  const paid = !!props.blockStyle?.isPaidContent && (props.blockStyle?.paidContentPrice || 0) > 0;
+  if (!paid) return <>{props.children}</>;
+  return <PaidBlockGate {...props} />;
 });

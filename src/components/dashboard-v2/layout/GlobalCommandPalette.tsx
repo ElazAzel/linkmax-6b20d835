@@ -25,6 +25,7 @@ import Mail from "lucide-react/dist/esm/icons/mail";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useActivePageStore } from "@/store/useActivePageStore";
 import { OFFICE_TABS } from './office-navigation';
+import { isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
 
 export function GlobalCommandPalette() {
   const [open, setOpen] = useState(false);
@@ -34,6 +35,7 @@ export function GlobalCommandPalette() {
   const setActivePageId = useActivePageStore((state) => state.setActivePageId);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const businessEnabled = useBusinessFeatures();
 
   // One palette per screen: the editor tab and zone tabs have their own
   // Cmd+K palettes; opening this one as well stacked several dialogs.
@@ -104,13 +106,13 @@ export function GlobalCommandPalette() {
           ) : error ? (
             <span className="text-destructive">{t('search.error', 'Search failed. Try again.')}</span>
           ) : (
-            t('search.noResults', 'No results found.')
+            t('search.noResults', 'Ничего не найдено')
           )}
         </CommandEmpty>
 
         {searchQuery.length === 0 && (
           <>
-            <CommandGroup heading={t('search.groups.quickActions', 'Quick Actions')}>
+            <CommandGroup heading={t('search.groups.quickActions', 'Быстрые действия')}>
               <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=pages&action=new-subpage'); }}>
                 <Plus className="h-4 w-4 mr-2" />
                 {t('search.actions.newSubPage', 'Добавить страницу сайта')}
@@ -123,38 +125,48 @@ export function GlobalCommandPalette() {
                 <Plus className="h-4 w-4 mr-2 text-primary" />
                 {t('search.actions.addSection', 'Добавить секцию')}
               </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/leads'); }}>
-                <Plus className="h-4 w-4 mr-2" />
-                {t('crm.createLead', 'Create Lead')}
-              </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-deals'); }}>
-                <Plus className="h-4 w-4 mr-2 text-primary" />
-                {t('crm.createDeal', 'Create Deal')}
-              </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-invoices'); }}>
-                <Receipt className="h-4 w-4 mr-2 text-info" />
-                {t('crm.createInvoice', 'Create Invoice')}
-              </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-automations'); }}>
-                <Mail className="h-4 w-4 mr-2 text-success" />
-                {t('automations.startSequence', 'Manage Sequences')}
-              </CommandItem>
+              {businessEnabled && (
+                <>
+                  <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-deals'); }}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    {t('crm.createDeal', 'Создать сделку')}
+                  </CommandItem>
+                  <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-invoices'); }}>
+                    <Receipt className="h-4 w-4 mr-2" />
+                    {t('crm.createInvoice', 'Выставить счёт')}
+                  </CommandItem>
+                  <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/zone-automations'); }}>
+                    <Mail className="h-4 w-4 mr-2" />
+                    {t('automations.startSequence', 'Цепочки сообщений')}
+                  </CommandItem>
+                </>
+              )}
             </CommandGroup>
             
-            <CommandGroup heading={t('search.groups.navigation', 'Navigation')}>
-              {OFFICE_TABS.map(({ id, icon: Icon, path, labelKey, defaultLabel }) => (
+            <CommandGroup heading={t('search.groups.navigation', 'Разделы')}>
+              {/* Only places that open: hidden business areas used to be listed
+                  here and silently landed in the editor. */}
+              {(businessEnabled ? OFFICE_TABS : OFFICE_TABS.filter(({ id }) => !isBusinessDashboardTab(id) && id !== 'home')).map(({ id, icon: Icon, path, labelKey, defaultLabel }) => (
                 <CommandItem key={id} onSelect={() => { setOpen(false); navigate(path); }}>
                   <Icon className="mr-2 h-4 w-4" aria-hidden="true" />
                   {t(labelKey, defaultLabel)}
                 </CommandItem>
               ))}
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=insights'); }}>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/home?tab=home'); }}>
                 <BarChart3 className="h-4 w-4 mr-2" />
-                {t('nav.insights', 'Insights')}
+                {t('pageV2.navigation.overview', 'Обзор')}
               </CommandItem>
-              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard?tab=settings'); }}>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/home?tab=insights'); }}>
+                <BarChart3 className="h-4 w-4 mr-2" />
+                {t('dashboard.nav.insights', 'Аналитика')}
+              </CommandItem>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/home?tab=leads'); }}>
+                <Mail className="h-4 w-4 mr-2" />
+                {t('dashboard.nav.leads', 'Заявки')}
+              </CommandItem>
+              <CommandItem onSelect={() => { setOpen(false); navigate('/dashboard/home?tab=settings'); }}>
                 <Settings className="h-4 w-4 mr-2" />
-                {t('nav.settings', 'Settings')}
+                {t('dashboard.nav.settings', 'Настройки')}
               </CommandItem>
             </CommandGroup>
           </>

@@ -250,11 +250,11 @@ serve(async (req: Request) => {
                 }
 
                 if (lang === 'ru') {
-                    text = `🔔 <b>Новая заявка!</b>\n\nСтраница: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть в CRM</a>`;
+                    text = `🔔 <b>Новая заявка!</b>\n\nСтраница: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard/home?tab=leads">Открыть заявки</a>`;
                 } else if (lang === 'en') {
-                    text = `🔔 <b>New Lead!</b>\n\nPage: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">View in CRM</a>`;
+                    text = `🔔 <b>New Lead!</b>\n\nPage: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard/home?tab=leads">Open leads</a>`;
                 } else if (lang === 'kk') {
-                    text = `🔔 <b>Жаңа өтінім!</b>\n\nПарақ: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard">CRM-де көру</a>`;
+                    text = `🔔 <b>Жаңа өтінім!</b>\n\nПарақ: ${pageName}\n${formDetails}\n\n👉 <a href="https://lnkmx.my/dashboard/home?tab=leads">Өтінімдерді ашу</a>`;
                 }
 
                 try {

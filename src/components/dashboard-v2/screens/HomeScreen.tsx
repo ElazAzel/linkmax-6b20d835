@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@/lib/router-compat';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Globe from 'lucide-react/dist/esm/icons/globe';
 import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
@@ -65,6 +66,8 @@ interface HomeScreenProps {
   onOpenEditor: () => void;
   onPreview: () => void;
   onShare: () => void;
+  /** Publishes the draft; falls back to share when not provided. */
+  onPublish?: () => void;
   onOpenTemplates: () => void;
   onOpenMarketplace: () => void;
   pageSwitcher?: ReactNode;
@@ -117,6 +120,7 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenEditor,
   onPreview,
   onShare,
+  onPublish,
   onOpenTemplates,
   onOpenMarketplace,
   pageSwitcher,
@@ -162,6 +166,7 @@ export const HomeScreen = memo(function HomeScreen({
     pageData,
     onOpenEditor,
     onShare,
+    onPublish,
     pageId: pageData?.id,
     leadsCount: realLeadsCount,
     telegramChatId,
@@ -319,9 +324,9 @@ export const HomeScreen = memo(function HomeScreen({
                 <Button
                   size="lg"
                   className="h-16 flex-1 rounded-2xl text-base font-bold bg-success hover:bg-success text-success-foreground shadow-lg hover:shadow-success/40 transition-all active:scale-[0.98] group/btn"
-                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); (onPublish ?? onShare)(); }}
                 >
-                  <Share2 className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
+                  <Globe className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
                   {t('dashboard.home.publish', 'Опубликовать')}
                 </Button>
               </>
@@ -388,6 +393,22 @@ export const HomeScreen = memo(function HomeScreen({
         {/* Celebration card when all steps complete */}
         {activation.showCelebration && (
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
+        )}
+
+        {/* Form submissions: open to everyone (the form block is), not only with business tools. */}
+        {!businessEnabled && realLeadsCount > 0 && onNavigate && (
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-14 w-full justify-between rounded-2xl text-base font-semibold"
+            onClick={() => onNavigate('leads')}
+          >
+            <span className="flex items-center gap-3">
+              <MessageSquare className="h-5 w-5 shrink-0" />
+              {t('dashboard.home.viewLeads', 'Смотреть заявки')}
+            </span>
+            <Badge variant="secondary" className="tabular-nums">{realLeadsCount}</Badge>
+          </Button>
         )}
 
         {/* Operational lead feed; quantitative performance lives in one region below. */}

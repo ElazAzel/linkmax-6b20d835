@@ -27,9 +27,13 @@ export const BUSINESS_BLOCK_TYPES: ReadonlySet<string> = new Set([
 export const SHOWCASE_BLOCK_TYPES: ReadonlySet<string> = new Set(['card', 'tiles']);
 export const SHOWCASE_BLOCKS_ENABLED = import.meta.env.VITE_LINKMAX_SHOWCASE_BLOCKS === 'true';
 
-/** Dashboard tabs that belong to the business area. */
+/**
+ * Dashboard tabs that belong to the business area. 'leads' is not one: the
+ * form block is offered to everyone, so its submissions must be readable
+ * without business tools.
+ */
 export const BUSINESS_DASHBOARD_TABS: ReadonlySet<string> = new Set([
-  'business', 'clients', 'calendar', 'offers', 'activity', 'finance', 'monetize', 'leads', 'events', 'team',
+  'business', 'clients', 'calendar', 'offers', 'activity', 'finance', 'monetize', 'events', 'team',
 ]);
 
 export function isBusinessFeaturesEnabled(): boolean {

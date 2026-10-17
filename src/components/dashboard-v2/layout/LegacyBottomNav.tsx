@@ -75,7 +75,7 @@ const TABS: NavTab[] = [
 
 const MORE_ITEMS: NavTab[] = [
   { id: 'pages', icon: FileText, labelKey: 'dashboard.nav.pages', defaultLabel: 'Страницы', path: '' },
-  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
+  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Заявки', path: '' },
   { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
   { id: 'monetize', icon: Coins, labelKey: 'dashboard.nav.monetize', defaultLabel: 'Монетизация', path: '' },
   { id: 'finance', icon: Wallet, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы', path: '' },

@@ -439,6 +439,9 @@ export const InsightsScreen = memo(function InsightsScreen({
                     </motion.div>
                   </div>
 
+                  {/* «Качество данных» (Visitor ID / Session ID coverage) was a
+                      debug panel; it is shown in dev builds only. */}
+                  {import.meta.env.DEV && (
                   <motion.div variants={itemVariants}>
                     <Card className="p-4 border-border/40">
                       <div className="flex items-center justify-between mb-3">
@@ -464,6 +467,7 @@ export const InsightsScreen = memo(function InsightsScreen({
                       </div>
                     </Card>
                   </motion.div>
+                  )}
 
                   {/* Chart */}
                   {stats.dailyData.length > 0 && (

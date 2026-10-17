@@ -167,20 +167,20 @@ export function PublicationRitual({
               </div>
             </div>
             <DialogTitle className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">
-              {t('ritual.title', 'Опубликовано! Твоя страница в сети')}
+              {t('ritual.title', 'Опубликовано! Страница в сети')}
             </DialogTitle>
             <DialogDescription className="text-base text-muted-foreground mt-4 leading-relaxed max-w-[280px] mx-auto">
-              {t('ritual.subtitle', 'Скопируй короткую ссылку, QR или embed-код и запусти первый круг трафика.')}
+              {t('ritual.subtitle', 'Поделитесь ссылкой или QR-кодом — так придут первые посетители.')}
             </DialogDescription>
           </DialogHeader>
 
           <div className="mt-8 space-y-6">
             <div className="group relative">
               <div className="relative flex items-center gap-2 bg-muted/60 backdrop-blur-md border border-border rounded-2xl p-2 pl-4">
-                <Input readOnly value={shareUrl} className="bg-transparent border-none text-sm font-semibold focus-visible:ring-0 px-0 h-10 select-all" />
-                <Button onClick={handleCopy} size="sm" variant="ghost" className={cn('h-11 rounded-xl px-5 gap-2 transition-all shrink-0', copied ? 'text-success bg-success/12' : 'hover:bg-primary/10 text-primary')}>
+                <Input readOnly value={shareUrl.replace(/^https?:\/\//, '')} aria-label={shareUrl} className="min-w-0 bg-transparent border-none text-sm font-semibold focus-visible:ring-0 px-0 h-10 select-all" />
+                <Button onClick={handleCopy} size="sm" variant="ghost" aria-label={t('common.copy', 'Копировать')} className={cn('h-11 rounded-xl px-3 sm:px-5 gap-2 transition-all shrink-0', copied ? 'text-success bg-success/12' : 'hover:bg-primary/10 text-primary')}>
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  <span className="text-xs font-bold uppercase tracking-[0.06em]">{copied ? t('common.copied', 'Готово') : t('common.copy', 'Копировать')}</span>
+                  <span className="hidden text-xs font-semibold sm:inline">{copied ? t('common.copied', 'Готово') : t('common.copy', 'Копировать')}</span>
                 </Button>
               </div>
             </div>
@@ -205,7 +205,7 @@ export function PublicationRitual({
                   } else {
                     void handleCopy();
                   }
-                }}><Share2 className="h-4 w-4" />{t('ritual.shareMore', 'Еще...')}</Button>
+                }}><Share2 className="h-4 w-4" />{t('ritual.shareMore', 'Ещё')}</Button>
               </div>
             </div>
 
@@ -217,7 +217,7 @@ export function PublicationRitual({
               </div>
               <div className="rounded-2xl border border-border bg-muted/60 p-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm font-semibold"><BadgeCheck className="h-4 w-4 text-primary" />{t('ritual.badgeTitle', 'Бейдж LinkMAX')}</div>
-                <p className="text-xs text-muted-foreground">{t('ritual.badgeHint', 'Оставьте внизу страницы и получите дополнительный referral-трафик.')}</p>
+                <p className="text-xs text-muted-foreground">{t('ritual.badgeHint', 'Оставьте бейдж внизу страницы — он приводит новых посетителей.')}</p>
                 <Button variant="outline" size="sm" className="w-full" onClick={() => void copySnippet(badgeCode, 'link_copied')}><Copy className="h-3.5 w-3.5 mr-2" />{t('ritual.copyBadge', 'Скопировать бейдж')}</Button>
               </div>
             </div>
@@ -241,7 +241,7 @@ export function PublicationRitual({
           </div>
 
           <div className="mt-8 pt-6 border-t border-border">
-            <p className="text-center text-xs font-bold text-primary uppercase tracking-[0.06em] animate-pulse">🚀 {t('ritual.promo', 'Вернись завтра за первой статистикой!')}</p>
+            <p className="text-center text-xs text-muted-foreground">{t('ritual.promo', 'Первая статистика появится завтра')}</p>
           </div>
         </div>
       </DialogContent>

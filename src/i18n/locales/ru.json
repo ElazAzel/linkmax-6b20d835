@@ -1778,7 +1778,7 @@
       "marketplaceDesc": "Страницы других авторов",
       "myPage": "Моя страница",
       "performance": "Статистика",
-      "premium": "Premium",
+      "premium": "Тариф PRO",
       "premiumDesc": "Больше возможностей",
       "preview": "Предпросмотр",
       "publish": "Опубликовать",
@@ -1990,8 +1990,8 @@
       "primaryPaid": "Базовая платная",
       "seo": "SEO",
       "seoDescPlaceholder": "Краткое описание для поисковой выдачи",
-      "seoDescription": "Meta description",
-      "seoTitle": "Meta title",
+      "seoDescription": "SEO-описание",
+      "seoTitle": "SEO-заголовок",
       "seoTitlePlaceholder": "Заголовок для поисковиков",
       "slug": "Адрес страницы",
       "slugHint": "Публичная ссылка на страницу изменится",
@@ -2089,7 +2089,7 @@
       "title": "Настройки",
       "tokens": "Токены",
       "tokensDesc": "Баланс и история",
-      "upgradeToPremium": "Перейти на Premium",
+      "upgradeToPremium": "Перейти на PRO",
       "username": "Имя пользователя",
       "verification": "Верификация"
     },
@@ -2960,7 +2960,7 @@
       "ai": "Больше AI — больше готовых текстов, чтобы начать продавать.",
       "export": "Выгрузите список клиентов и работайте с ним.",
       "domain": "Свой домен вызывает доверие. Вы выглядите как настоящий бренд.",
-      "generic": "В PRO эта функция приносит больше кликов и заявок."
+      "generic": "Эта функция доступна на тарифе PRO."
     }
   },
   "friction": {

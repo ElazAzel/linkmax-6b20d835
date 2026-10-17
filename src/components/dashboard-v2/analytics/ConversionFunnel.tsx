@@ -109,9 +109,6 @@ export const ConversionFunnel = memo(function ConversionFunnel({
           <h3 className="font-bold text-lg tracking-tight">{t('analytics.funnel.title', 'Воронка конверсии')}</h3>
           <p className="text-xs text-muted-foreground">{t('analytics.funnel.subtitle', 'Путь посетителя до покупки')}</p>
         </div>
-        <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10">
-          PRO Insights
-        </Badge>
       </div>
 
       <motion.div
@@ -146,7 +143,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
                     <span className="text-lg font-bold">{stage.count.toLocaleString()}</span>
                     <div className="flex flex-col items-end">
                       <span className="text-xs text-muted-foreground uppercase font-bold leading-none mb-1">
-                        {index === 0 ? 'Base' : 'Conv.'}
+                        {index === 0 ? t('analytics.funnel.base', 'База') : t('analytics.funnel.conv', 'Конв.')}
                       </span>
                       <Badge variant="outline" className={cn("text-xs font-bold h-5", stage.textColor, "bg-muted/60 backdrop-blur-sm")}>
                         {stage.percentage}%
@@ -201,8 +198,8 @@ export const ConversionFunnel = memo(function ConversionFunnel({
           </div>
 
           <div className="text-right">
-            <p className="text-xs text-muted-foreground font-bold uppercase tracking-[0.06em] mb-1">
-              Efficiency
+            <p className="text-xs text-muted-foreground font-medium mb-1">
+              {t('analytics.funnel.efficiency', 'Эффективность')}
             </p>
             <div className="flex items-center gap-1 justify-end">
               {[1, 2, 3, 4, 5].map((s) => {

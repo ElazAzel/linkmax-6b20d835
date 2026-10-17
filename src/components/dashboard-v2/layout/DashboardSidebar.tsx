@@ -12,7 +12,7 @@ import { useHasBusinessZone } from '@/contexts/ZoneContext';
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
 import { OFFICE_TABS } from './office-navigation';
-import { BUSINESS_TAB_IDS, PAGE_V2_TABS } from './page-v2-navigation';
+import { BUSINESS_TAB_IDS, OVERVIEW_TAB_IDS, PAGE_V2_TABS } from './page-v2-navigation';
 import { isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
@@ -82,7 +82,7 @@ const SECTIONS: SidebarSection[] = [
     items: [
       { id: 'activity', icon: Inbox, labelKey: 'dashboard.nav.activity', defaultLabel: 'Входящие', badgeVariant: 'default' },
       { id: 'insights', icon: BarChart3, labelKey: 'dashboard.nav.insights', defaultLabel: 'Аналитика' },
-      { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды' },
+      { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Заявки' },
       { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События' },
       { id: 'monetize', icon: Coins, labelKey: 'dashboard.nav.monetize', defaultLabel: 'Монетизация' },
       { id: 'finance', icon: Wallet, labelKey: 'dashboard.nav.finance', defaultLabel: 'Финансы' },
@@ -165,7 +165,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   };
 
   const renderItem = (item: SidebarItem) => {
-    const isActive = activeTab === item.id;
+    const isActive = activeTab === item.id || (LINKMAX_UI_V2 && item.id === 'home' && OVERVIEW_TAB_IDS.includes(activeTab));
     const isZoneLocked = ZONE_ITEM_IDS.includes(item.id) && !isPremium && !isBusinessTier;
     const Icon = item.icon;
     const badge = item.id === 'activity' ? activityBadge : item.badge;
