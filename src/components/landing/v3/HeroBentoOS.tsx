@@ -45,7 +45,7 @@ export function HeroBentoOS({ onStart, onExamples }: HeroBentoOSProps) {
     <section className="lm-hero relative isolate overflow-hidden bg-background">
       <div aria-hidden className="lm-hero-glow pointer-events-none absolute inset-0 -z-10" />
 
-      <div className="mx-auto grid max-w-[1240px] items-center gap-y-4 px-4 pb-16 pt-28 sm:px-6 sm:pt-36 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-x-10 lg:pb-24 lg:pt-36">
+      <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,1fr)] items-center gap-y-4 px-4 pb-16 pt-28 sm:px-6 sm:pt-36 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-x-10 lg:pb-24 lg:pt-36">
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
         <p
           data-testid="landing-hero-badge"

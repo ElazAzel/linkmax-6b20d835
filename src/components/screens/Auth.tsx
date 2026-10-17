@@ -72,6 +72,10 @@ export const Auth = memo(function Auth() {
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
   const authSchema = createAuthSchema(t);
+  const signInSchema = z.object({
+    email: z.string().trim().email(t('auth.validation.email', 'Please enter a valid email address')).max(255),
+    password: z.string().min(1, t('auth.validation.passwordRequired', 'Введите пароль')),
+  });
   const canonical = `${getAppDomain()}/auth`;
   const seoTitle = t('auth.seo.title', 'Sign in to LinkMAX');
   const seoDescription = t(
@@ -311,7 +315,9 @@ export const Auth = memo(function Auth() {
     const formData = new FormData(e.currentTarget);
     const email = formData.get('access-email') as string;
     const password = formData.get('access-password') as string;
-    const validation = authSchema.safeParse({ email, password });
+    // Signing in only needs a valid email and a password: the strength rules
+    // are for new accounts and used to lock out people with older passwords.
+    const validation = signInSchema.safeParse({ email, password });
 
     if (!validation.success) {
       toast.error(validation.error.errors[0].message);
@@ -330,13 +336,36 @@ export const Auth = memo(function Auth() {
       return;
     }
 
+    const wrongCredentials = () => {
+      toast.error(t('auth.invalidCredentials', 'Неверный email или пароль'));
+      playError();
+      setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_signin', stage: 'submit', error: 'invalid_credentials' });
+    };
+
+    // Sign-in failed: either a new person or a mistyped password. Only a
+    // password that would be accepted for a new account is tried as a signup.
+    const strong = authSchema.safeParse({ email, password });
+    if (!strong.success) {
+      wrongCredentials();
+      return;
+    }
+
     session.set(NEW_USER_BUILDER_SESSION_KEY, true);
-    const signUpResult = await signUp(validation.data.email, validation.data.password);
+    const signUpResult = await signUp(strong.data.email, strong.data.password);
     if (signUpResult.error) {
       session.remove(NEW_USER_BUILDER_SESSION_KEY);
       handleError(signUpResult.error, t('messages.failedToSignIn'));
       playError();
       setIsLoading(false);
+      return;
+    }
+
+    // Supabase answers a signup for an existing email with a user that has no
+    // identities (to hide which emails exist). That person mistyped a password.
+    if (signUpResult.data?.user && signUpResult.data.user.identities?.length === 0) {
+      session.remove(NEW_USER_BUILDER_SESSION_KEY);
+      wrongCredentials();
       return;
     }
 

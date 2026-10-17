@@ -61,3 +61,22 @@ export function openExternal(value: unknown): boolean {
   window.open(/^[a-z][a-z0-9+.-]*:/i.test(raw) ? raw : href, '_blank', 'noopener,noreferrer');
   return true;
 }
+
+const URL_FIELDS = ['url', 'link', 'buyLink', 'fileUrl', 'telegramLink'] as const;
+const BARE_DOMAIN = /^(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,}(?:[/?#]\S*)?$/i;
+
+/**
+ * "dikidi.net/glow" → "https://dikidi.net/glow" for the link fields of a
+ * block, the way Korner and Taplink accept links typed without a scheme.
+ * Returns only the fields that changed.
+ */
+export function withUrlSchemes(block: Record<string, unknown>): Record<string, string> {
+  const updates: Record<string, string> = {};
+  for (const key of URL_FIELDS) {
+    const value = block[key];
+    if (typeof value !== 'string') continue;
+    const trimmed = value.trim();
+    if (BARE_DOMAIN.test(trimmed)) updates[key] = `https://${trimmed}`;
+  }
+  return updates;
+}

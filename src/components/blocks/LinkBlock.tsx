@@ -8,6 +8,8 @@ import Youtube from 'lucide-react/dist/esm/icons/youtube';
 import Facebook from 'lucide-react/dist/esm/icons/facebook';
 import Linkedin from 'lucide-react/dist/esm/icons/linkedin';
 import Globe from 'lucide-react/dist/esm/icons/globe';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Mail from 'lucide-react/dist/esm/icons/mail';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/blocks/block-utils';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
@@ -55,13 +57,16 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
     setFaviconLoaded(false);
   }, [block.url, block.faviconUrl, block.customIconUrl]);
 
+  const isPhone = /^tel:/i.test(block.url || '');
+  const isMail = /^mailto:/i.test(block.url || '');
   const FallbackIcon = block.icon && iconMap[block.icon.toLowerCase()]
     ? iconMap[block.icon.toLowerCase()]
-    : Link2;
+    : isPhone ? Phone : isMail ? Mail : Link2;
 
   const handleClick = createBlockClickHandler(block.url, onClick);
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
-  const shouldShowFavicon = faviconSrc && !faviconError;
+  // tel:/mailto: have no site to take a favicon from (it used to show a globe)
+  const shouldShowFavicon = !isPhone && !isMail && faviconSrc && !faviconError;
 
   const handleFaviconError = () => {
     if (!faviconError && domain && faviconSrc === getGoogleFaviconUrl(domain)) {
@@ -141,6 +146,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
             {title}
           </span>
         </div>
+        {!isPhone && !isMail && (
         <ExternalLink
           className={cn(
             "h-4 w-4 flex-shrink-0 ml-2",
@@ -149,6 +155,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           )}
           style={blockStyleObj.color ? { color: blockStyleObj.color, opacity: 0.8 } : undefined}
         />
+        )}
       </button>
     </div>
   );

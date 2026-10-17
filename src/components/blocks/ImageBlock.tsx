@@ -66,7 +66,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
     return (
       <div className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-hairline bg-muted/40 text-muted-foreground">
         <ImageOff className="h-6 w-6" aria-hidden="true" />
-        <span className="text-xs">{t('blocks.image.unavailable', 'Изображение не загрузилось')}</span>
+        <span className="text-xs">{t('blocks.imageUnavailable', 'Изображение не загрузилось')}</span>
       </div>
     );
   }

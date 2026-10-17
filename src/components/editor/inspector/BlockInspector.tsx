@@ -34,6 +34,7 @@ import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { cn } from '@/lib/utils/utils';
 import type { BlockType } from '@/types/blocks/base';
 import type { Block } from '@/types/page';
+import { withUrlSchemes } from '@/lib/blocks/safe-href';
 
 export type BlockInspectorMode = 'docked' | 'sheet';
 
@@ -98,8 +99,12 @@ function BlockInspectorSession({
 
   const handleDone = useCallback(() => {
     flush();
+    if (block) {
+      const schemes = withUrlSchemes({ ...block, ...draft } as Record<string, unknown>);
+      if (Object.keys(schemes).length > 0) onUpdateBlock(block.id, schemes as Partial<Block>);
+    }
     onClose();
-  }, [flush, onClose]);
+  }, [block, draft, flush, onClose, onUpdateBlock]);
 
   const shellBlock = useMemo(() => (block ? ({ ...block, ...draft } as Block) : null), [block, draft]);
 
@@ -177,8 +182,9 @@ function BlockInspectorSession({
   const shell = (
     <InspectorPanel block={shellBlock} title={t(manifest?.labelKey ?? `blockTypes.${block.type}`, block.type)}
       editorBody={editorBody} onChange={change} onClose={handleDone} footer={footer}
-      onDelete={onDeleteBlock ? () => setConfirmDelete(true) : undefined}
-      onAddBelow={onAddBelow ? () => { handleDone(); onAddBelow(block.id); } : undefined} />
+      // The profile header cannot be removed; offering Delete did nothing.
+      onDelete={onDeleteBlock && block.type !== 'profile' ? () => setConfirmDelete(true) : undefined}
+      onAddBelow={onAddBelow && block.type !== 'profile' ? () => { handleDone(); onAddBelow(block.id); } : undefined} />
   );
 
   const deleteDialog = onDeleteBlock ? (

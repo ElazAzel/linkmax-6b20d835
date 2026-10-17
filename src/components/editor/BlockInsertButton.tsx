@@ -222,10 +222,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     closeSheet();
     // Run callback after state update propagates
     setTimeout(() => {
+      // The editor confirms the add itself; a second toast here stacked over the dock.
       callback();
-      toast.success(t('editor.blockAdded', 'Блок добавлен'));
     }, 50);
-  }, [closeSheet, t]);
+  }, [closeSheet]);
 
   const handleInsert = (blockType: string, blockTier: BlockTier) => {
     if (!canUseBlock(blockTier)) {

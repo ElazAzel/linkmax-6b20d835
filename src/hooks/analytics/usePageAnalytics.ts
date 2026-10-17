@@ -5,6 +5,14 @@ import { useAuth } from '@/hooks/user/useAuth';
 import { subDays, subMonths, format, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval } from 'date-fns';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
+import { ru, kk, enUS } from 'date-fns/locale';
+import i18nInstance from '@/i18n/config';
+
+// Chart labels follow the interface language ("10 окт", not "10 Oct").
+const chartLocale = () => {
+  const lang = i18nInstance.language || 'ru';
+  return lang.startsWith('kk') ? kk : lang.startsWith('en') ? enUS : ru;
+};
 
 export interface AnalyticsEvent {
   id: string;
@@ -660,7 +668,7 @@ function generateDailyData(events: AnalyticsEvent[], start: Date, end: Date): Ti
     });
 
     return {
-      date: format(day, 'dd MMM'),
+      date: format(day, 'dd MMM', { locale: chartLocale() }),
       views: dayEvents.filter(isPageViewEvent).length,
       clicks: dayEvents.filter(e => e.event_type === 'click').length,
       shares: dayEvents.filter(e => e.event_type === 'share').length,
@@ -682,7 +690,7 @@ function generateWeeklyData(events: AnalyticsEvent[], start: Date, end: Date): T
     });
 
     return {
-      date: format(weekStart, 'dd MMM'),
+      date: format(weekStart, 'dd MMM', { locale: chartLocale() }),
       views: weekEvents.filter(isPageViewEvent).length,
       clicks: weekEvents.filter(e => e.event_type === 'click').length,
       shares: weekEvents.filter(e => e.event_type === 'share').length,
@@ -705,7 +713,7 @@ function generateMonthlyData(events: AnalyticsEvent[], start: Date, end: Date): 
     });
 
     return {
-      date: format(monthStart, 'MMM yyyy'),
+      date: format(monthStart, 'MMM yyyy', { locale: chartLocale() }),
       views: monthEvents.filter(isPageViewEvent).length,
       clicks: monthEvents.filter(e => e.event_type === 'click').length,
       shares: monthEvents.filter(e => e.event_type === 'share').length,

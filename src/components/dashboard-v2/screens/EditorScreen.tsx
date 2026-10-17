@@ -3,7 +3,7 @@
  * Mobile-first design with GridEditor and block editing capabilities
  * P5: Structure view, review modes, friction recovery, sections wired
  */
-import { memo, useCallback, useEffect, useState, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
+import { memo, useCallback, useEffect, useState, useMemo, lazy, Suspense, type ReactNode } from 'react';
 import { RenderContextProvider } from '@/contexts/RenderContext';
 import { EditorPageProvider, type EditorPageInfo } from '@/contexts/EditorPageContext';
 import { getI18nText } from '@/lib/i18n-helpers';
@@ -423,24 +423,14 @@ export const EditorScreen = memo(function EditorScreen({
     [pageData?.blocks, pageData?.theme],
   );
 
-  const designGateSeen = useRef(false);
-
   const handleApplyThemeFix = useCallback((patch: Partial<import('@/types/page').PageTheme>, issueId: string) => {
     onApplyTheme?.(patch);
     trackEditorAction('art_direction_applied', { recipe: `theme-fix:${issueId}` });
   }, [onApplyTheme]);
 
-  /** Publish, but first offer a one-tap design review when quality is low. */
-  const handleShareWithGate = useCallback(() => {
-    const contentCount = (pageData?.blocks || []).filter((b) => b.type !== 'profile').length;
-    if (!designGateSeen.current && contentCount >= 2 && designReport.score < 70 && designReport.issues.length > 0) {
-      designGateSeen.current = true;
-      setPrePublishOpen(true);
-      trackEditorAction('art_direction_applied', { recipe: 'pre-publish-gate' });
-      return;
-    }
-    onPublish();
-  }, [designReport, onPublish, pageData?.blocks]);
+  /** Publish in one tap. A design score used to block the first publish
+   * with a red number and jargon; suggestions stay in the design review. */
+  const handleShareWithGate = onPublish;
 
   const handleFixAllAndPublish = useCallback(() => {
     if (!pageData) return;

@@ -25,7 +25,9 @@ describe('compact tools for existing and newly created pages', () => {
     const update = vi.fn();
     render(<BlockInspector mode="docked" block={legacyImage} onUpdateBlock={update} onClose={vi.fn()} />);
     expect(screen.getByRole('tab', { name: 'Фото' })).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByRole('button', { name: /\(2×1\)/ })).toHaveAttribute('aria-pressed', 'true');
+    // A legacy full-size image shows at its own aspect ratio now.
+    expect(screen.getByRole('button', { name: /По размеру фото/ })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: /\(2×1\)/ })).toHaveAttribute('aria-pressed', 'false');
     expect(await screen.findByDisplayValue('https://example.com/old.jpg')).toBeInTheDocument();
     expect(update).not.toHaveBeenCalled();
   });

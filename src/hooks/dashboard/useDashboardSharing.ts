@@ -67,12 +67,8 @@ export function useDashboardSharing({ onPublish, onPreview, publishedSlug, onQue
       setTimeout(() => setShowShareDialog(true), 500);
     }
 
-    // Show install prompt for first-time publishers
-    const hasSeenInstallPrompt = storage.get<boolean>(STORAGE_KEYS.INSTALL_PROMPT_SHOWN);
-    if (!hasSeenInstallPrompt && newCount === 1) {
-      setTimeout(() => setShowInstallPrompt(true), 2000);
-      storage.set(STORAGE_KEYS.INSTALL_PROMPT_SHOWN, true);
-    }
+    // The install prompt used to open 2 s later on top of the share dialog;
+    // it no longer piggybacks on publishing.
   }, [onPublish, onQuestComplete, onSaveVersion, t]);
 
   const handleShare = useCallback(async () => {
@@ -82,10 +78,19 @@ export function useDashboardSharing({ onPublish, onPreview, publishedSlug, onQue
     }
     const url = getPublicPageUrl(publishedSlug);
     setPublishedUrl(url);
+    // Sharing an already published page is a plain share, not the
+    // "Опубликовано!" celebration with confetti it used to open every time.
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function' && window.matchMedia?.('(pointer: coarse)').matches) {
+      try {
+        await navigator.share({ url });
+        return;
+      } catch (error) {
+        if ((error as DOMException)?.name === 'AbortError') return;
+      }
+    }
     const copied = await copyToClipboard(url);
     if (copied) toast.success(t('toasts.sharing.linkCopied'));
     else toast.error(t('toasts.sharing.copyError'));
-    setShowShareDialog(true);
   }, [publishedSlug, t]);
 
   const handlePreview = useCallback(async () => { onPreview?.(); }, [onPreview]);

@@ -16,7 +16,7 @@ describe('CSP frame-src', () => {
   const frameSrc = csp.split(';').map((part) => part.trim()).find((part) => part.startsWith('frame-src')) ?? '';
 
   it.each([
-    ['src/components/blocks/VideoBlock.tsx'],
+    ['src/lib/blocks/video-embed.ts'],
     ['src/components/blocks/MapBlock.tsx'],
   ])('allows every embed host used by %s', (file) => {
     const hosts = [...read(file).matchAll(/`https:\/\/([a-z0-9.-]+)\//g)].map((match) => `https://${match[1]}`);

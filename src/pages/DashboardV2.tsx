@@ -555,6 +555,7 @@ function DashboardV2Inner() {
                   onEditBlock={dashboard.blockEditor.handleEditBlock}
                   onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
                   onDeleteBlocks={dashboard.blockEditor.handleDeleteBlocks}
+                  onDuplicateBlock={dashboard.blockEditor.handleDuplicateBlock}
                   saveStatus={dashboard.saveStatus}
                     onPublish={() => { void dashboard.sharingState.handlePublish().catch(() => undefined); }}
                     publishing={dashboard.saving}

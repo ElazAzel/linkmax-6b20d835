@@ -24,7 +24,8 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { cn } from '@/lib/utils/utils';
@@ -169,7 +170,7 @@ export const ThemePanel = memo(function ThemePanel({
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-md p-0 overflow-y-auto">
+      <SheetContent side="right" hideCloseButton className="w-full sm:max-w-md p-0 overflow-y-auto">
         <SheetHeader className="p-5 border-b border-border/50 sticky top-0 bg-background/95 backdrop-blur-xl z-10">
           <div className="flex items-center justify-between gap-2">
             <SheetTitle className="flex items-center gap-2">
@@ -218,6 +219,12 @@ export const ThemePanel = memo(function ThemePanel({
             >
               {t('themes.reset', 'Сброс')}
             </Button>
+            {/* The sheet's own X sat under this sticky header and could not be tapped */}
+            <SheetClose asChild>
+              <Button type="button" variant="ghost" size="icon" className="h-9 w-9" aria-label={t('common.close', 'Закрыть')}>
+                <X className="h-4 w-4" />
+              </Button>
+            </SheetClose>
             </div>
           </div>
         </SheetHeader>
