@@ -126,6 +126,9 @@ export const BlockPerformance = memo(function BlockPerformance({
       {/* Block list */}
       <div className="space-y-2">
         {blocks.slice(0, 5).map((block, index) => {
+          const typeLabel = (type: string) => blockTypeI18nKeys[type]
+            ? t(blockTypeI18nKeys[type], type)
+            : t(`blockTypes.${type}`, type);
           const level = getPerformanceLevel(block.ctr);
           const colorClass = getPerformanceColor(level);
 
@@ -140,9 +143,10 @@ export const BlockPerformance = memo(function BlockPerformance({
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium truncate">{block.blockTitle}</span>
+                  {/* Untitled blocks reported their type id ("text") as the title. */}
+                  <span className="text-sm font-medium truncate">{block.blockTitle && block.blockTitle !== block.blockType ? block.blockTitle : typeLabel(block.blockType)}</span>
                   <Badge variant="outline" className="text-xs px-1.5">
-                    {t(blockTypeI18nKeys[block.blockType] || '', block.blockType)}
+                    {typeLabel(block.blockType)}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-3 mt-0.5">

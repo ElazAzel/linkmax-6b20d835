@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
-import { PAGE_V2_TABS, BUSINESS_TAB_IDS } from './page-v2-navigation';
+import { PAGE_V2_TABS, BUSINESS_TAB_IDS, OVERVIEW_TAB_IDS } from './page-v2-navigation';
 import { useBusinessFeatures } from '@/lib/features';
 
 interface DashboardBottomNavProps {
@@ -27,7 +27,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({ activeTab, 
     <div className="app-bottom-nav mx-auto grid h-[4.25rem] max-w-lg overflow-hidden rounded-3xl border border-border bg-card shadow-lg pointer-events-auto" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
       {tabs.map(tab => {
         const Icon = tab.icon;
-        const active = tab.id === activeTab || (tab.id === 'business' && (BUSINESS_TAB_IDS.includes(activeTab) || activeTab.startsWith('zone-')));
+        const active = tab.id === activeTab || (tab.id === 'home' && OVERVIEW_TAB_IDS.includes(activeTab)) || (tab.id === 'business' && (BUSINESS_TAB_IDS.includes(activeTab) || activeTab.startsWith('zone-')));
         const label = t(tab.labelKey, tab.defaultLabel);
         return <button key={tab.id} type="button" onClick={() => { haptic.lightTap(); onTabChange(tab.id); }} aria-label={label} aria-current={active ? 'page' : undefined} data-testid={tab.id + '-tab'} className={cn('relative flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary', active ? 'text-primary font-semibold' : 'text-muted-foreground')}>
           <span className={cn('relative flex h-8 w-8 items-center justify-center', tab.id === 'add' && 'rounded-full bg-primary text-primary-foreground')}><Icon className="h-[19px] w-[19px]" aria-hidden="true" />

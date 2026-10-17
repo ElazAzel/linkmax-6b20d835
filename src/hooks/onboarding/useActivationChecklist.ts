@@ -6,6 +6,7 @@ import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { storage } from '@/lib/storage';
 import { trackActivationEvent } from '@/lib/activation-events';
 import type { PageData } from '@/types/page';
+import { useBusinessFeatures } from '@/lib/features';
 
 const STORAGE_KEY = 'activation_checklist_dismissed';
 const CELEBRATION_KEY = 'activation_celebration_shown';
@@ -23,6 +24,8 @@ interface UseActivationChecklistOptions {
   pageData: PageData | null;
   onOpenEditor: () => void;
   onShare: () => void;
+  /** Publishes the page; the publish step used to only copy the link. */
+  onPublish?: () => void;
   pageId?: string;
   leadsCount?: number;
   telegramChatId?: string;
@@ -33,6 +36,7 @@ export function useActivationChecklist({
   pageData,
   onOpenEditor,
   onShare,
+  onPublish,
   pageId,
   leadsCount = 0,
   telegramChatId,
@@ -41,6 +45,8 @@ export function useActivationChecklist({
   const [celebrationDismissed, setCelebrationDismissed] = useState(
     () => !!storage.get(CELEBRATION_KEY)
   );
+
+  const businessEnabled = useBusinessFeatures();
 
   const steps = useMemo((): ActivationStep[] => {
     if (!pageData) return [];
@@ -51,20 +57,30 @@ export function useActivationChecklist({
     const hasFirstLead = leadsCount >= 1;
     const isTelegramConnected = !!telegramChatId;
 
-    // Service Sales Workflow checks: услуги с ценой + контактная кнопка/мессенджер
-    const hasPricingWithItems = pageData.blocks.some(
-      (b) =>
-        b.type === 'pricing' &&
-        Array.isArray((b as any)?.content?.items) &&
-        (b as any).content.items.length > 0
-    );
+    // Blocks are flat ({ type, items, url }); this used to read b.content.*,
+    // so these two steps never completed.
+    const field = (b: unknown, key: string): unknown => {
+      const rec = b as Record<string, unknown>;
+      const content = rec.content as Record<string, unknown> | undefined;
+      return rec[key] ?? content?.[key];
+    };
+    const hasPricingWithItems = pageData.blocks.some((b) =>
+      (b.type === 'pricing' || b.type === 'catalog') && Array.isArray(field(b, 'items')) && (field(b, 'items') as unknown[]).length > 0
+    ) || pageData.blocks.some((b) => b.type === 'product' && !!field(b, 'name'));
+    const CONTACT_URL = /(wa\.me|whatsapp|t\.me|telegram|instagram|tel:|mailto:)/;
     const hasContactChannel = pageData.blocks.some((b) => {
-      if (b.type === 'socials') return true;
-      if (b.type === 'link') {
-        const url = String((b as any)?.content?.url || '').toLowerCase();
-        return /(wa\.me|whatsapp|t\.me|telegram|instagram|tel:|mailto:)/.test(url);
+      if (b.type === 'socials') {
+        const platforms = field(b, 'platforms');
+        return Array.isArray(platforms) && platforms.some((p) => !!(p as { url?: string })?.url);
       }
-      return false;
+      if (b.type === 'messenger') {
+        const messengers = field(b, 'messengers');
+        return Array.isArray(messengers) && messengers.some((m) => !!(m as { username?: string })?.username);
+      }
+      if (b.type === 'link' || b.type === 'button') {
+        return CONTACT_URL.test(String(field(b, 'url') || '').toLowerCase());
+      }
+      return b.type === 'form';
     });
 
     const items: ActivationStep[] = [
@@ -84,14 +100,14 @@ export function useActivationChecklist({
         ctaKey: 'activation.cta.addBlock',
         href: '/dashboard/home?tab=editor&action=add-block',
       },
-      {
+      ...(businessEnabled ? [{
         id: 'add-services',
         labelKey: 'activation.steps.addServices',
         completed: hasPricingWithItems,
         action: onOpenEditor,
         ctaKey: 'activation.cta.addServices',
         href: '/dashboard/home?tab=editor&action=add-pricing',
-      },
+      }] : []),
       {
         id: 'add-contact',
         labelKey: 'activation.steps.addContact',
@@ -104,7 +120,7 @@ export function useActivationChecklist({
         id: 'publish',
         labelKey: 'activation.steps.publish',
         completed: isPublished,
-        action: onShare,
+        action: onPublish ?? onShare,
         ctaKey: 'activation.cta.publish',
         href: '/dashboard/home?tab=editor&action=publish',
       },
@@ -132,7 +148,7 @@ export function useActivationChecklist({
     });
 
     return items;
-  }, [pageData, leadsCount, telegramChatId, onOpenEditor, onShare, onNavigate]);
+  }, [pageData, leadsCount, telegramChatId, onOpenEditor, onShare, onPublish, onNavigate, businessEnabled]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;

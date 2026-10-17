@@ -219,7 +219,8 @@ export const SitePagesManager = memo(function SitePagesManager() {
   return (
     <Card className="border-0 shadow-none bg-muted/30">
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between gap-3">
+        {/* Wraps at 390px: the actions used to run off the card's right edge. */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <CardTitle className="text-base font-medium">
             {t('dashboard.sitePages.title', 'Страницы сайта')}
           </CardTitle>
@@ -233,7 +234,7 @@ export const SitePagesManager = memo(function SitePagesManager() {
               {t('dashboard.sitePages.upgrade', 'Обновить до Pro')}
             </Button>
           ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <SiteTemplateGallery
               siteId={site.id}
               userId={userId}

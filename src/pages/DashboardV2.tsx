@@ -525,6 +525,7 @@ function DashboardV2Inner() {
                   onOpenEditor={() => handleTabChange('editor')}
                   onPreview={() => dashboard.sharingState.handlePreview()}
                   onShare={() => dashboard.sharingState.handleShare()}
+                  onPublish={() => { void dashboard.sharingState.handlePublish().catch(() => undefined); }}
                   onOpenTemplates={() => setTemplateGalleryOpen(true)}
                   onOpenMarketplace={() => setShowMarketplace(true)}
                   pageSwitcher={pageSwitcherElement}
@@ -643,8 +644,18 @@ function DashboardV2Inner() {
                   blocks={dashboard.pageData?.blocks || []}
                   isPremium={dashboard.isPremium}
                   revenueOutcomesEnabled={outcomeHomeEnabled}
-                  onApplyInsight={(_action) => {
-                    handleTabChange('home');
+                  onApplyInsight={(action) => {
+                    // «Применить» used to just open Overview. Now it does the
+                    // suggested change in the editor.
+                    const blocks = dashboard.pageData?.blocks ?? [];
+                    if (action.type === 'add') {
+                      const raw = String(action.data?.blockType ?? '');
+                      const blockType = raw === 'contact_form' ? 'form' : raw;
+                      if (blockType) dashboard.blockEditor.handleInsertBlock(blockType, blocks.length);
+                    } else if (action.type === 'duplicate' && action.blockId) {
+                      dashboard.blockEditor.handleDuplicateBlock(action.blockId);
+                    }
+                    handleTabChange('editor');
                   }}
                 />
               </ScreenErrorBoundary>
@@ -682,6 +693,16 @@ function DashboardV2Inner() {
             {/* Settings Screen */}
             {currentTab === 'settings' && (
               <ScreenErrorBoundary screenName="Settings">
+                {/* Page settings (SEO, city, branding) save to the draft; without
+                    this bar they silently never reached the live page. */}
+                {dashboard.pageData?.isPublished && dashboard.hasUnpublishedChanges && (
+                  <div className="sticky top-0 z-30 mx-auto flex max-w-3xl items-center justify-between gap-3 border-b border-border bg-background/95 px-4 py-2.5 text-sm backdrop-blur">
+                    <span className="text-muted-foreground">{t('dashboard.settings.unpublished', 'Изменения сохранены в черновик')}</span>
+                    <Button size="sm" className="rounded-full" disabled={dashboard.saving} onClick={() => { void dashboard.sharingState.handlePublish().catch(() => undefined); }}>
+                      {t('dashboard.home.publish', 'Опубликовать')}
+                    </Button>
+                  </div>
+                )}
                 <SettingsScreen
                   // Page fields are initialised from props once; remount per
                   // page so a switch never shows (and saves) the previous page's values.
@@ -829,11 +850,11 @@ function DashboardV2Inner() {
             {/* Zone Screens - Business tier only */}
             {currentTab.startsWith('zone-') && !canUseBusinessZone() && (
               <div className="flex flex-col items-center justify-center py-24 px-6 text-center">
-                <Crown className="h-12 w-12 text-amber-500 mb-4" />
-                <h2 className="text-xl font-bold mb-2">{t('dashboard.zone.businessOnly', 'Business Plan Required')}</h2>
-                <p className="text-muted-foreground mb-6 max-w-md">{t('dashboard.zone.businessOnlyDesc', 'Zone features are available on the Business plan. Upgrade to manage teams, deals, and more.')}</p>
+                <Crown className="h-12 w-12 text-foreground/70 mb-4" />
+                <h2 className="text-xl font-bold mb-2">{t('dashboard.zone.businessOnly', 'Нужен тариф Business')}</h2>
+                <p className="text-muted-foreground mb-6 max-w-md">{t('dashboard.zone.businessOnlyDesc', 'Команда, сделки и рабочие зоны доступны на тарифе Business.')}</p>
                 <Button onClick={() => navigate('/pricing')} className="rounded-xl">
-                  {t('dashboard.zone.upgrade', 'Upgrade to Business')}
+                  {t('dashboard.zone.upgrade', 'Перейти на Business')}
                 </Button>
               </div>
             )}
