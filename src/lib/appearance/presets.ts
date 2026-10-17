@@ -587,20 +587,21 @@ export interface FontPairPreset {
   isPremium: boolean;
 }
 
-// Most display families below have no Cyrillic glyphs. 'Inter' (loaded
-// globally, full Cyrillic) is the second family so Russian/Kazakh text keeps
-// a designed typeface instead of falling back to a random system font.
+// Every family here covers Cyrillic and Kazakh letters. The ids are stored in
+// page themes, so they stay; the fonts behind the Latin-only pairs were swapped
+// for close Cyrillic equivalents (one typeface draws both alphabets, instead
+// of Latin in the display font and Cyrillic in a fallback).
 export const FONT_PAIR_PRESETS: FontPairPreset[] = [
   { id: 'manrope-inter', name: 'Manrope + Inter', heading: "'Manrope', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif", isPremium: false },
   { id: 'inter-inter', name: 'Inter', heading: "'Inter', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif", isPremium: false },
-  { id: 'space-dm', name: 'Space Grotesk + DM Sans', heading: "'Space Grotesk', 'Inter', system-ui, sans-serif", body: "'DM Sans', 'Inter', system-ui, sans-serif", isPremium: false },
-  { id: 'instrument-work', name: 'Instrument Serif + Work Sans', heading: "'Instrument Serif', ui-serif, serif", body: "'Work Sans', 'Inter', system-ui, sans-serif", isPremium: true },
-  { id: 'cormorant-karla', name: 'Cormorant + Karla', heading: "'Cormorant Garamond', ui-serif, serif", body: "'Karla', 'Inter', system-ui, sans-serif", isPremium: true },
-  { id: 'syne-jakarta', name: 'Syne + Plus Jakarta', heading: "'Syne', 'Inter', system-ui, sans-serif", body: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif", isPremium: true },
-  { id: 'urbanist-epilogue', name: 'Urbanist + Epilogue', heading: "'Urbanist', 'Inter', system-ui, sans-serif", body: "'Epilogue', 'Inter', system-ui, sans-serif", isPremium: true },
-  { id: 'outfit-figtree', name: 'Outfit + Figtree', heading: "'Outfit', 'Inter', system-ui, sans-serif", body: "'Figtree', 'Inter', system-ui, sans-serif", isPremium: true },
-  { id: 'jetbrains-work', name: 'JetBrains Mono + Work Sans', heading: "'JetBrains Mono', ui-monospace, monospace", body: "'Work Sans', 'Inter', system-ui, sans-serif", isPremium: true },
-  { id: 'archivo-hind', name: 'Archivo Black + Hind', heading: "'Archivo Black', 'Inter', system-ui, sans-serif", body: "'Hind', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'space-dm', name: 'Onest + Golos', heading: "'Onest', 'Inter', system-ui, sans-serif", body: "'Golos Text', 'Inter', system-ui, sans-serif", isPremium: false },
+  { id: 'instrument-work', name: 'Lora + Commissioner', heading: "'Lora', ui-serif, serif", body: "'Commissioner', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'cormorant-karla', name: 'Cormorant + Golos', heading: "'Cormorant Garamond', ui-serif, serif", body: "'Golos Text', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'syne-jakarta', name: 'Unbounded + Onest', heading: "'Unbounded', 'Inter', system-ui, sans-serif", body: "'Onest', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'urbanist-epilogue', name: 'Montserrat + Commissioner', heading: "'Montserrat', 'Inter', system-ui, sans-serif", body: "'Commissioner', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'outfit-figtree', name: 'Nunito + Golos', heading: "'Nunito', 'Inter', system-ui, sans-serif", body: "'Golos Text', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'jetbrains-work', name: 'JetBrains Mono + Commissioner', heading: "'JetBrains Mono', ui-monospace, monospace", body: "'Commissioner', 'Inter', system-ui, sans-serif", isPremium: true },
+  { id: 'archivo-hind', name: 'Rubik + Golos', heading: "'Rubik', 'Inter', system-ui, sans-serif", body: "'Golos Text', 'Inter', system-ui, sans-serif", isPremium: true },
 ];
 
 // ============= Block shape / shadow / hover / divider =============

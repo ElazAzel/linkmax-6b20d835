@@ -52,7 +52,7 @@ describe('getPageThemeScope', () => {
 
   it('uses the legacy font setting only when no font pair is chosen', () => {
     expect(vars(getPageThemeScope({ fontFamily: 'serif' }).style)['--lm-body-font']).toContain('serif');
-    expect(vars(getPageThemeScope({ fontFamily: 'serif', fontPair: 'space-dm' }).style)['--lm-body-font']).toContain('DM Sans');
+    expect(vars(getPageThemeScope({ fontFamily: 'serif', fontPair: 'space-dm' }).style)['--lm-body-font']).toContain('Golos Text');
   });
 
   it('keeps the divider off the page root (it belongs on the block stack)', () => {
@@ -90,7 +90,7 @@ describe('page fonts', () => {
     expect(primaryFamily("'Space Grotesk', system-ui")).toBe('Space Grotesk');
     const hrefs = getPageFontHrefs({ fontPair: 'space-dm' });
     expect(hrefs).toHaveLength(2);
-    expect(hrefs[0]).toBe('/fonts/Space+Grotesk/font.css');
+    expect(hrefs).toEqual(['/fonts/Onest/font.css', '/fonts/Golos+Text/font.css']);
     expect(getPageFontHrefs({ fontPair: 'manrope-inter' })).toEqual([]);
     expect(getPageFontHrefs({})).toEqual([]);
   });
