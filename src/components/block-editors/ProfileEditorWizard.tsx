@@ -1,20 +1,19 @@
 /**
  * ProfileEditorWizard - Step-by-step wizard for editing profile block
- * Steps: Cover → Avatar → Name/Bio → Style
+ * Steps: Name/Bio → Photo → Cover. The name used to come third, after a
+ * cover upload and an avatar-size picker; the header layout is fixed now.
  */
 import { memo, useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from 'lucide-react/dist/esm/icons/image';
 import User from 'lucide-react/dist/esm/icons/user';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
-import Palette from 'lucide-react/dist/esm/icons/palette';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Camera from 'lucide-react/dist/esm/icons/camera';
 import Upload from 'lucide-react/dist/esm/icons/upload';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,9 +34,9 @@ interface ProfileEditorWizardProps {
   onComplete?: () => void;
 }
 
-type WizardStep = 'cover' | 'avatar' | 'info' | 'style';
+type WizardStep = 'cover' | 'avatar' | 'info';
 
-const STEPS: WizardStep[] = ['cover', 'avatar', 'info', 'style'];
+const STEPS: WizardStep[] = ['info', 'avatar', 'cover'];
 
 const COVER_GRADIENTS = [
   { value: 'none', label: 'gradients.none', preview: 'bg-muted' },
@@ -46,13 +45,6 @@ const COVER_GRADIENTS = [
   { value: 'primary', label: 'gradients.primary', preview: 'bg-gradient-to-b from-primary/60 to-primary/20' },
   { value: 'sunset', label: 'gradients.sunset', preview: 'bg-gradient-to-br from-orange-500/50 via-pink-500/50 to-purple-600/50' },
   { value: 'ocean', label: 'gradients.ocean', preview: 'bg-gradient-to-br from-blue-500/50 via-cyan-500/50 to-teal-500/50' },
-];
-
-const AVATAR_SIZES = [
-  { value: 'small', label: 'avatarSizes.small', size: 'h-16 w-16' },
-  { value: 'medium', label: 'avatarSizes.medium', size: 'h-24 w-24' },
-  { value: 'large', label: 'avatarSizes.large', size: 'h-32 w-32' },
-  { value: 'xlarge', label: 'avatarSizes.xlarge', size: 'h-40 w-40' },
 ];
 
 export const ProfileEditorWizard = memo(function ProfileEditorWizard({
@@ -64,7 +56,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
   const { user } = useAuth();
   const currentLang = i18n.language as SupportedLanguage;
   
-  const [currentStep, setCurrentStep] = useState<WizardStep>('cover');
+  const [currentStep, setCurrentStep] = useState<WizardStep>('info');
   const [isUploading, setIsUploading] = useState(false);
   const [cropperOpen, setCropperOpen] = useState(false);
   const [cropperImage, setCropperImage] = useState('');
@@ -367,33 +359,6 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
         </p>
       </div>
 
-      {/* Size selector */}
-      <div className="space-y-3">
-        <Label>{t('wizard.avatar.size', 'Размер аватара')}</Label>
-        <div className="grid grid-cols-4 gap-2">
-          {AVATAR_SIZES.map((size) => (
-            <button
-              key={size.value}
-              type="button"
-              onClick={() => onChange({ ...formData, avatarSize: size.value as any })}
-              className={cn(
-                "flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all",
-                formData.avatarSize === size.value 
-                  ? "border-primary bg-primary/5" 
-                  : "border-border/20 hover:border-border/50"
-              )}
-            >
-              <div className={cn("rounded-full bg-muted", 
-                size.value === 'small' && 'h-6 w-6',
-                size.value === 'medium' && 'h-8 w-8',
-                size.value === 'large' && 'h-10 w-10',
-                size.value === 'xlarge' && 'h-12 w-12'
-              )} />
-              <span className="text-xs font-medium">{t(size.label)}</span>
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 
@@ -453,77 +418,6 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
     </div>
   );
 
-  const renderStyleStep = () => (
-    <div className="space-y-6">
-      <div className="text-center">
-        <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Palette className="h-7 w-7 text-primary" />
-        </div>
-        <h2 className="text-xl font-black">{t('wizard.style.title', 'Финальные штрихи')}</h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          {t('wizard.style.description', 'Настройте внешний вид профиля')}
-        </p>
-      </div>
-
-      {/* Preview card */}
-      <div className="border border-border/20 rounded-2xl overflow-hidden bg-card">
-        {/* Mini cover */}
-        <div className={cn(
-          "h-20 w-full relative",
-          formData.coverImage ? '' : 'bg-muted'
-        )}>
-          {formData.coverImage && (
-            <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
-          )}
-        </div>
-        
-        {/* Avatar + info */}
-        <div className="flex items-center gap-4 p-4 -mt-8">
-          <Avatar className="h-16 w-16 ring-4 ring-background">
-            <AvatarImage src={formData.avatar} alt="" />
-            <AvatarFallback className="bg-primary text-primary-foreground text-lg font-black">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0 pt-6">
-            <h3 className="font-bold truncate">{nameValue || t('wizard.preview.name', 'Ваше имя')}</h3>
-            <p className="text-sm text-muted-foreground truncate">{bioValue || t('wizard.preview.bio', 'О себе')}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick style options */}
-      <div className="space-y-3">
-        <Label>{t('wizard.style.position', 'Позиция аватара')}</Label>
-        <div className="grid grid-cols-3 gap-2">
-          {['left', 'center', 'right'].map((pos) => (
-            <button
-              key={pos}
-              type="button"
-              onClick={() => onChange({ ...formData, avatarPosition: pos as any })}
-              className={cn(
-                "py-3 rounded-xl border-2 text-sm font-medium transition-all",
-                formData.avatarPosition === pos 
-                  ? "border-primary bg-primary/5" 
-                  : "border-border/20 hover:border-border/50"
-              )}
-            >
-              {t(`fields.${pos}`, pos)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Success message */}
-      <div className="flex items-center gap-3 p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
-        <Sparkles className="h-5 w-5 text-green-600" />
-        <p className="text-sm text-green-700 dark:text-green-400">
-          {t('wizard.style.ready', 'Отлично! Ваш профиль готов к публикации')}
-        </p>
-      </div>
-    </div>
-  );
-
   return (
     <div className="flex flex-col h-full">
       {/* Progress steps */}
@@ -556,7 +450,6 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
         {currentStep === 'cover' && renderCoverStep()}
         {currentStep === 'avatar' && renderAvatarStep()}
         {currentStep === 'info' && renderInfoStep()}
-        {currentStep === 'style' && renderStyleStep()}
       </div>
 
       {/* Navigation */}

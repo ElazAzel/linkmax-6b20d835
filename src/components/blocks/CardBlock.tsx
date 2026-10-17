@@ -13,7 +13,11 @@ interface CardBlockProps {
   onClick?: () => void;
 }
 
-/** Korner-style card: copy and one button, the photo beside it or on top. */
+/**
+ * Korner-style card: the photo across the whole card on top (cropped to
+ * 4:3), then copy and one button. The old "photo on the right" option left a
+ * small square thumbnail, so saved cards render this way too.
+ */
 export const CardBlock = memo(function CardBlock({ block, isPreview, onClick }: CardBlockProps) {
   const { i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
@@ -21,15 +25,11 @@ export const CardBlock = memo(function CardBlock({ block, isPreview, onClick }: 
   const text = getI18nText(block.text, lang);
   const buttonText = getI18nText(block.buttonText, lang);
   const href = getSafeHref(block.url);
-  const top = block.imagePosition === 'top';
   const outline = block.buttonStyle === 'outline';
 
   const photo = (
     <div
-      className={cn(
-        'relative shrink-0 overflow-hidden bg-muted',
-        top ? 'aspect-[16/9] w-full rounded-[calc(var(--lm-block-radius,24px)-8px)]' : 'aspect-square w-[38%] max-w-[148px] self-center rounded-2xl',
-      )}
+      className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-t-[var(--lm-block-radius,24px)] bg-muted"
     >
       {block.image ? (
         <img src={block.image} alt={title} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
@@ -44,9 +44,9 @@ export const CardBlock = memo(function CardBlock({ block, isPreview, onClick }: 
   // Without a button label the whole card is the link.
   const wholeCardLink = !!href && !buttonText;
   const body = (
-    <div className={cn('flex w-full min-w-0 gap-4 p-4 text-left sm:p-5', top ? 'flex-col' : 'flex-row items-stretch')}>
-      {top && (block.image || isPreview) && photo}
-      <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
+    <div className="flex w-full min-w-0 flex-col text-left">
+      {(block.image || isPreview) && photo}
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 p-4 sm:p-5">
         {title && <h3 className="break-words text-lg font-bold leading-snug tracking-tight text-foreground [text-wrap:balance]">{title}</h3>}
         {text && <p className="whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground">{text}</p>}
         {buttonText && (
@@ -74,7 +74,6 @@ export const CardBlock = memo(function CardBlock({ block, isPreview, onClick }: 
           )
         )}
       </div>
-      {!top && (block.image || isPreview) && photo}
     </div>
   );
 

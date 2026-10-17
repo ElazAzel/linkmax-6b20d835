@@ -1,5 +1,4 @@
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { ImagePlacementControls } from './ImagePlacementControls';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
@@ -8,15 +7,10 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { validateImageBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { EditorSection, EditorField } from './EditorSection';
-import { AlignmentButton } from './EditorUtils';
 import Image from 'lucide-react/dist/esm/icons/image';
 const ImageIcon = Image;
 import Link from 'lucide-react/dist/esm/icons/link';
 import Palette from 'lucide-react/dist/esm/icons/palette';
-import AlignLeft from 'lucide-react/dist/esm/icons/align-left';
-import AlignCenter from 'lucide-react/dist/esm/icons/align-center';
-import AlignRight from 'lucide-react/dist/esm/icons/align-right';
-import Type from 'lucide-react/dist/esm/icons/type';
 
 function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
@@ -83,82 +77,19 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
 
       {/* Style & Alt Text */}
       <EditorSection
-        title={t('editor.sections.style', 'Style & SEO')}
+        title={t('editor.sections.imageSeo', 'Описание для поиска')}
         icon={<Palette className="h-5 w-5 text-primary" />}
         defaultOpen={false}
       >
-        <EditorField label={t('fields.imageStyle', 'Image Style')}>
-          <Select
-            value={formData.style || 'default'}
-            onValueChange={(value: string) => onChange({ ...formData, style: value })}
-            modal={false}
-          >
-            <SelectTrigger className="h-12 rounded-xl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">{t('imageStyles.default', 'Default - Rounded Corners')}</SelectItem>
-              <SelectItem value="banner">{t('imageStyles.banner', 'Banner - Full Width')}</SelectItem>
-              <SelectItem value="polaroid">{t('imageStyles.polaroid', 'Polaroid - Vintage Frame')}</SelectItem>
-              <SelectItem value="vignette">{t('imageStyles.vignette', 'Vignette - Soft Edges')}</SelectItem>
-              <SelectItem value="circle">{t('imageStyles.circle', 'Circle - Round Crop')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </EditorField>
-
-        <EditorField label={t('fields.imageScale', 'Image Scale')}>
-          <Select
-            value={formData.scale || 'contain'}
-            onValueChange={(value: any) => onChange({ ...formData, scale: value })}
-            modal={false}
-          >
-            <SelectTrigger className="h-12 rounded-xl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="cover">{t('imageScales.cover', 'Fill (Cover)')}</SelectItem>
-              <SelectItem value="contain">{t('imageScales.contain', 'Fit (Contain)')}</SelectItem>
-              <SelectItem value="fill">{t('imageScales.fill', 'Stretch')}</SelectItem>
-              <SelectItem value="tile">{t('imageScales.tile', 'Tile')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </EditorField>
-
-        <EditorField label={t('fields.alignment', 'Alignment')}>
-          <div className="flex gap-2 p-1 bg-muted/30 rounded-xl">
-            <AlignmentButton
-              value="left"
-              current={formData.alignment || 'center'}
-              icon={<AlignLeft className="h-5 w-5" />}
-              label={t('fields.left', 'Left')}
-              onClick={(v) => onChange({ ...formData, alignment: v })}
-            />
-            <AlignmentButton
-              value="center"
-              current={formData.alignment || 'center'}
-              icon={<AlignCenter className="h-5 w-5" />}
-              label={t('fields.center', 'Center')}
-              onClick={(v) => onChange({ ...formData, alignment: v })}
-            />
-            <AlignmentButton
-              value="right"
-              current={formData.alignment || 'center'}
-              icon={<AlignRight className="h-5 w-5" />}
-              label={t('fields.right', 'Right')}
-              onClick={(v) => onChange({ ...formData, alignment: v })}
-            />
-          </div>
-        </EditorField>
-
         <EditorField
-          label={t('fields.altText', 'Alt Text')}
-          hint="Important for SEO and accessibility"
+          label={t('fields.altText', 'Описание фото')}
+          hint={t('fields.altHint', 'Помогает поиску и незрячим посетителям')}
         >
           <MultilingualInput
             label=""
             value={migrateToMultilingual(formData.alt)}
             onChange={(value) => onChange({ ...formData, alt: value })}
-            placeholder={t('fields.altPlaceholder', 'Image description for accessibility')}
+            placeholder={t('fields.altPlaceholder', 'Что на фото')}
           />
         </EditorField>
       </EditorSection>
@@ -167,6 +98,6 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
 }
 
 export const ImageBlockEditor = withBlockEditor(ImageBlockEditorComponent, {
-  hint: 'Add images with different styles: Banner (full width), Polaroid, Vignette, Circle, or Default. Add a link to make the image clickable.',
+  hint: 'Фото занимает всю ширину блока. Добавьте ссылку, чтобы фото открывало её.',
   validate: validateImageBlock,
 });

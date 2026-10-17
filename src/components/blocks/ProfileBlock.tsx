@@ -195,10 +195,11 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   const drawStatusRing = showStatusRing && (block.avatarFrame || 'default') === 'default';
   const patternStyle = getCoverPatternStyle(block.coverPattern);
   const hasCoverMedia = !!(block.coverImage || block.coverVideo);
-  // Korner-style header (V2 default): cover on top of the card, an 80px avatar
-  // overlapping its edge (inside the card without a cover), name and bio
-  // left-aligned, the verification mark next to the name.
-  const compact = LINKMAX_UI_V2 && !block.avatarPosition;
+  // Korner-style header for every page, old and new: cover on top of the
+  // card, an 80px round avatar on the left with the name beside it, the bio
+  // full width below. It used to apply only to profiles without a saved
+  // avatarPosition, so every older page kept the large centred layout.
+  const compact = LINKMAX_UI_V2;
 
   return (
     <div className={cn('relative flex min-w-0 flex-col overflow-visible', getPositionClass(), compact && 'lm-profile-compact')}>
@@ -235,7 +236,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
       <div className={cn(
         'lm-profile-body flex min-w-0 flex-col w-full',
         compact
-          ? cn('items-start gap-3 px-5 pb-5', hasCoverMedia ? '-mt-11' : 'pt-5')
+          ? cn('lm-profile-row grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 px-5 pb-5', hasCoverMedia ? '-mt-10 items-end' : 'pt-5 items-center')
           : cn(getPositionClass(), 'gap-4 p-4', hasCoverMedia && '-mt-16'),
       )}>
         {/* Outer container for positioning icon - no animation here */}
@@ -286,8 +287,8 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
             </div>
           )}
 
-          {/* Status label chip */}
-          {showStatusRing && statusRing.value !== 'none' && (
+          {/* Status label chip (in the Korner layout it sits by the name) */}
+          {showStatusRing && statusRing.value !== 'none' && !compact && (
             <div
               className="absolute -bottom-1 left-1/2 -translate-x-1/2 translate-y-full mt-1 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium text-white shadow"
               style={{ backgroundColor: statusRing.color }}
@@ -319,16 +320,18 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           )}
         </div>
 
-        <div className={cn('lm-profile-copy w-full min-w-0 space-y-2 overflow-visible', compact ? 'text-left' : 'text-center')}>
+        {/* In the Korner layout the copy's children join the grid: the name sits
+            beside the avatar, bio and badges span the full width below. */}
+        <div className={cn('lm-profile-copy w-full min-w-0 overflow-visible', compact ? 'contents text-left' : 'space-y-2 text-center')}>
           <style>{NAME_ANIMATION_CSS}</style>
           <div className={cn(
             "lm-profile-name flex min-w-0 items-center gap-2",
-            compact ? "justify-start" : "justify-center",
+            compact ? "flex-wrap justify-start text-left" : "justify-center",
             block.nameAnimation === 'ticker' ? "overflow-hidden w-full" : "overflow-visible"
           )}>
             <h1 className={cn(
               "max-w-full font-bold tracking-tight leading-[1.1] [text-wrap:balance] break-words hyphens-auto transition-all duration-300 overflow-visible",
-              compact ? "text-2xl" : "text-[1.75rem] sm:text-3xl",
+              compact ? "text-[22px] leading-tight" : "text-[1.75rem] sm:text-3xl",
               block.nameAnimation === 'none' && "hover:text-primary",
               (block.nameAnimation && block.nameAnimation !== 'none' && !['shine','ticker','underline-draw','glitch','rainbow-slow'].includes(block.nameAnimation)) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
               getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
@@ -338,15 +341,24 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
             {showPlatformBadge && compact && (
               <VerifiedBadge isVerified={isOwnerVerified} isPremium={isPremiumUser} size="sm" />
             )}
+            {compact && showStatusRing && (
+              <span
+                className="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium text-white"
+                style={{ backgroundColor: statusRing.color }}
+              >
+                <span className={cn('h-1.5 w-1.5 rounded-full bg-white/90', statusRing.pulse && 'animate-pulse')} />
+                {t(`profile.statusRingLabel.${statusRing.value}`, statusRing.label)}
+              </span>
+            )}
           </div>
 
           {bio && (
-            <p className={cn('lm-profile-bio text-[15px] text-muted-foreground whitespace-pre-line break-words leading-relaxed [text-wrap:pretty]', compact ? 'max-w-none' : 'mx-auto max-w-md')}>{parseRichText(bio)}</p>
+            <p className={cn('lm-profile-bio text-[15px] text-muted-foreground whitespace-pre-line break-words leading-relaxed [text-wrap:pretty]', compact ? 'col-span-2 max-w-none text-left' : 'mx-auto max-w-md')}>{parseRichText(bio)}</p>
           )}
 
           {/* Profile badge row (city / status / emoji / custom) */}
           {block.badges && block.badges.length > 0 && (
-            <div className={cn('lm-profile-badges flex flex-wrap items-center gap-1.5 pt-1', compact ? 'justify-start' : 'justify-center')}>
+            <div className={cn('lm-profile-badges flex flex-wrap items-center gap-1.5', compact ? 'col-span-2 justify-start' : 'justify-center pt-1')}>
               {block.badges.map((b) => {
                 const Icon = b.icon ? getLucideIcon(b.icon) : null;
                 return (
@@ -371,7 +383,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
 
         {/* Proof of Human - Video/Audio Greeting */}
         {(block.introVideo || block.introAudio) && (
-          <div className="w-full max-w-md mx-auto space-y-3 mt-4">
+          <div className={cn('w-full max-w-md mx-auto space-y-3', compact ? 'col-span-2' : 'mt-4')}>
             {block.introVideo && (
               <div className="relative rounded-xl overflow-hidden bg-muted/50 border border-border/50">
                 <video

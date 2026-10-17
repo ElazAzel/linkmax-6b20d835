@@ -148,27 +148,25 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
       role="button"
       tabIndex={0}
     >
-      <div className="flex gap-3 p-4">
-        {/* Compact image */}
-        {block.image && (
-          <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-muted">
-            <img
-              src={block.image}
-              alt={name}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="flex-1 min-w-0 flex flex-col justify-between">
+      {/* The photo spans the card (cropped to 4:3); it used to be an 80px thumbnail. */}
+      {block.image && (
+        <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
+          <img
+            src={block.image}
+            alt={name}
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      )}
+      <div className="flex flex-col gap-2 p-4">
+        <div className="min-w-0">
           <div>
-            <h3 className="font-semibold text-foreground text-sm leading-tight break-words hyphens-auto">
+            <h3 className="font-semibold text-foreground text-base leading-snug break-words hyphens-auto">
               {name}
             </h3>
             {description && (
-              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed break-words hyphens-auto">
+              <p className="text-sm text-muted-foreground mt-1 leading-relaxed line-clamp-3 break-words hyphens-auto">
                 {description}
               </p>
             )}
@@ -176,7 +174,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
 
           {/* Price and action hint */}
           <div className="flex items-center justify-between gap-2 mt-2">
-            <span className="text-primary font-bold text-base break-words">
+            <span className="text-foreground font-bold text-base tabular-nums break-words">
               {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
             </span>
 
