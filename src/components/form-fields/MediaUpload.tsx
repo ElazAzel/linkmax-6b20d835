@@ -227,7 +227,7 @@ export function MediaUpload({
                   <Upload className="h-6 w-6" />
                   <span>{t('upload.click', 'Click to upload')}</span>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>{isPremium ? t('upload.autoCompressPro', 'Auto-compressed, max 30MB (GIF supported)') : t('upload.autoCompressFree', 'Auto-compressed, max 10MB (GIF supported)')}</span>
+                    <span>{isPremium ? t('upload.autoCompressPro', 'Сожмём автоматически, до 30 МБ, GIF тоже') : t('upload.autoCompressFree', 'Сожмём автоматически, до 10 МБ, GIF тоже')}</span>
                     <Badge variant="secondary" className="gap-1 text-xs">
                       <Sparkles className="h-3 w-3" />
                       GIF

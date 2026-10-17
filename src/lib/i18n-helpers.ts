@@ -159,8 +159,10 @@ export function createMultilingualString(initialValue = ''): MultilingualString 
 export function migrateToMultilingual(value: string | MultilingualString | undefined): MultilingualString {
   if (!value) return createMultilingualString();
   if (isMultilingualString(value)) return value;
-  // Put the original value in all language fields so it shows regardless of selected language
-  return { ru: value, en: value, kk: value };
+  // The text goes in once; other languages fall back to it when rendered.
+  // Copying it into en/kk froze a stale copy: after the owner edited the
+  // Russian text, English and Kazakh visitors kept seeing the old one.
+  return { ru: value, en: '', kk: '' };
 }
 
 /**

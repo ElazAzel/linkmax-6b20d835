@@ -7,6 +7,8 @@ import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_RADIUS, BLOCK_SHADOW } from '@/lib/appearance/block-appearance';
 import { canonicalSocialUrl, externalLinkProps } from '@/lib/blocks/safe-href';
+import { EmptyBlockHint } from '@/components/blocks/shells/EmptyBlockHint';
+import { useRenderContext } from '@/contexts/RenderContext';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
@@ -14,7 +16,8 @@ interface SocialsBlockProps {
 }
 
 export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatformClick }: SocialsBlockProps) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const renderMode = useRenderContext();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
 
@@ -41,8 +44,10 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
       platform != null && typeof platform === 'object'
   );
 
-  if (validPlatforms.length === 0) {
-    return null;
+  if (!validPlatforms.some((platform) => !!canonicalSocialUrl(platform.url || ''))) {
+    // Owners see what to fill in; it used to shrink to a bare title in the editor.
+    if (renderMode === 'live') return null;
+    return <EmptyBlockHint>{t('blocks.socials.emptyHint', 'Добавьте ссылки на соцсети')}</EmptyBlockHint>;
   }
 
   return (

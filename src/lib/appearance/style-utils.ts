@@ -287,6 +287,12 @@ export function getPageThemeScope(theme?: Partial<PageTheme>): PageThemeScope {
     style['--ring'] = accentTriplet;
     const fg = toHslTriplet(getContrastForeground(accent));
     if (fg) style['--primary-foreground'] = fg;
+  } else {
+    // No accent chosen: monochrome CTAs in the page's own text colour (Korner
+    // style) instead of the app's brand blue on buttons, prices and dots.
+    style['--primary'] = 'var(--foreground)';
+    style['--primary-foreground'] = 'var(--background)';
+    style['--ring'] = 'var(--foreground)';
   }
 
   const background = t.backgroundColor;

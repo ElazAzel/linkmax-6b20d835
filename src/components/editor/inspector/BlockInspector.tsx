@@ -62,7 +62,9 @@ const EditorFallback = () => (
 
 export function BlockInspector(props: BlockInspectorProps) {
   // The draft and the selected input language belong to one block editing session.
-  return <BlockInspectorSession key={props.block?.id} {...props} />;
+  // Keyed by type too: after «Преобразовать в…» the old draft (with the old
+  // type) won over the new block and the next edit reverted the transform.
+  return <BlockInspectorSession key={props.block ? `${props.block.id}:${props.block.type}` : undefined} {...props} />;
 }
 
 function BlockInspectorSession({
@@ -239,8 +241,10 @@ function BlockInspectorSession({
         className={cn(
           'fixed inset-x-0 bottom-0 z-[60] flex flex-col overflow-hidden rounded-t-sheet border-t border-border bg-card shadow-lg',
           'pb-[env(safe-area-inset-bottom)] transition-[height] duration-200 ease-out motion-reduce:transition-none',
-          // Tall by default so the fields are readable on a phone; the edited block stays visible above.
-          expanded ? 'h-[94dvh]' : 'h-[76dvh]',
+          // Compact by default: at 76dvh only ~120px of the edited block showed
+          // above the sheet. The block is scrolled to the top on selection
+          // (GridEditor); the handle expands the sheet for long forms.
+          expanded ? 'h-[94dvh]' : 'h-[58dvh]',
         )}
       >
         <button

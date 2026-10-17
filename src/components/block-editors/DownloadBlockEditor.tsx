@@ -33,7 +33,7 @@ function DownloadBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
           label={t('fields.title', 'Title')}
           value={migrateToMultilingual(formData.title)}
           onChange={(value) => onChange({ ...formData, title: value })}
-          placeholder="Download My File"
+          placeholder="Прайс-лист"
           required
         />
 
@@ -42,7 +42,7 @@ function DownloadBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
           value={migrateToMultilingual(formData.description)}
           onChange={(value) => onChange({ ...formData, description: value })}
           type="textarea"
-          placeholder="Brief description of the file"
+          placeholder="Коротко о файле"
         />
 
         <MultilingualInput

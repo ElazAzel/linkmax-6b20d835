@@ -138,7 +138,7 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
         label={`${t('fields.title', 'Title')} (${t('fields.optional', 'optional')})`}
         value={migrateToMultilingual(formData.title)}
         onChange={(value) => onChange({ ...formData, title: value })}
-        placeholder="Custom Widget"
+        placeholder="Мой виджет"
       />
 
       <Tabs defaultValue="html" className="w-full">

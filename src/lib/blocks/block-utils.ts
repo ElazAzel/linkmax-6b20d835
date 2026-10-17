@@ -257,6 +257,8 @@ export const INCOMPLETE_BY_DEFAULT_TYPES = new Set<string>([
   'custom_code',
   'community',
   'shoutout',
+  'socials',
+  'messenger',
 ]);
 
 /**
