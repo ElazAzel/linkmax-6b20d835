@@ -32,22 +32,62 @@ export class FeatureUnavailableError extends Error {
 }
 
 /*
- * Session-level memory of features whose tables are not deployed. After the
- * first "missing" answer callers skip the request instead of sending one
- * failing call per render or per visitor action.
+ * Memory of features whose tables are not deployed. After the first
+ * "missing" answer callers skip the request instead of sending one failing
+ * call per render or per visitor action. It is kept in localStorage for a
+ * day, so a reload does not print the same 404 in every visitor's console
+ * again; once the migration lands the feature comes back within a day.
  */
+const STORAGE_KEY = 'lnkmx:missing-schema';
+const TTL_MS = 24 * 60 * 60 * 1000;
 const missingFeatures = new Set<string>();
+let loaded = false;
+
+function readStored(): Record<string, number> {
+  try {
+    if (typeof window === 'undefined') return {};
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Record<string, number>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function loadStored(): void {
+  if (loaded) return;
+  loaded = true;
+  const now = Date.now();
+  for (const [feature, at] of Object.entries(readStored())) {
+    if (typeof at === 'number' && now - at < TTL_MS) missingFeatures.add(feature);
+  }
+}
 
 export function isFeatureSchemaMissing(feature: string): boolean {
+  loadStored();
   return missingFeatures.has(feature);
 }
 
 /** Remembers the feature as missing when `error` is a missing-schema error. */
 export function noteFeatureSchemaError(feature: string, error: unknown): void {
-  if (isMissingSchemaError(error)) missingFeatures.add(feature);
+  if (!isMissingSchemaError(error)) return;
+  missingFeatures.add(feature);
+  try {
+    if (typeof window === 'undefined') return;
+    const stored = readStored();
+    stored[feature] = Date.now();
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+  } catch {
+    /* storage blocked: the in-memory flag still covers this session */
+  }
 }
 
 /** Test hook. */
 export function resetFeatureSchemaState(): void {
   missingFeatures.clear();
+  loaded = false;
+  try {
+    if (typeof window !== 'undefined') window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
 }

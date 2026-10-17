@@ -236,11 +236,13 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
       <div className={cn(
         'lm-profile-body flex min-w-0 flex-col w-full',
         compact
-          ? cn('lm-profile-row grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 px-5 pb-5', hasCoverMedia ? '-mt-10 items-end' : 'pt-5 items-center')
+          // Only the avatar overlaps the cover; the name starts below it and
+          // wraps downwards, so a long name never runs onto the picture.
+          ? cn('lm-profile-row relative z-[1] grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 px-5 pb-5', hasCoverMedia ? 'items-start' : 'pt-5 items-center')
           : cn(getPositionClass(), 'gap-4 p-4', hasCoverMedia && '-mt-16'),
       )}>
         {/* Outer container for positioning icon - no animation here */}
-        <div className="lm-profile-avatar relative">
+        <div className={cn('lm-profile-avatar relative', compact && hasCoverMedia && '-mt-10')}>
           {/* Status ring - outer glow */}
           {drawStatusRing && (
             <span
@@ -326,15 +328,19 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           <style>{NAME_ANIMATION_CSS}</style>
           <div className={cn(
             "lm-profile-name flex min-w-0 items-center gap-2",
-            compact ? "flex-wrap justify-start text-left" : "justify-center",
+            compact ? cn("flex-wrap justify-start text-left", hasCoverMedia && "pt-3") : "justify-center",
             block.nameAnimation === 'ticker' ? "overflow-hidden w-full" : "overflow-visible"
           )}>
             <h1 className={cn(
               "max-w-full font-bold tracking-tight leading-[1.1] [text-wrap:balance] break-words hyphens-auto transition-all duration-300 overflow-visible",
-              compact ? "text-[22px] leading-tight" : "text-[1.75rem] sm:text-3xl",
-              block.nameAnimation === 'none' && "hover:text-primary",
-              (block.nameAnimation && block.nameAnimation !== 'none' && !['shine','ticker','underline-draw','glitch','rainbow-slow'].includes(block.nameAnimation)) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
-              getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
+              // Long names (organisations) get a smaller size so words do not break mid-word.
+              compact ? (name.length > 22 ? "text-[19px] leading-snug" : "text-[22px] leading-tight") : "text-[1.75rem] sm:text-3xl",
+              // The Korner header keeps the name plain and solid: shine and
+              // gradient effects made parts of it transparent on covers.
+              compact && "text-foreground",
+              !compact && block.nameAnimation === 'none' && "hover:text-primary",
+              !compact && (block.nameAnimation && block.nameAnimation !== 'none' && !['shine','ticker','underline-draw','glitch','rainbow-slow'].includes(block.nameAnimation)) && "text-gradient bg-[length:200%_auto] animate-gradient-x",
+              !compact && getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
             )}>
               {name}
             </h1>

@@ -2,7 +2,7 @@ import { supabase } from '@/platform/supabase/client';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { getGrowthSessionKey, getGrowthVisitorKey } from '@/lib/growth/visitor';
 import { logger } from '@/lib/utils/logger';
-import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
+import { isFeatureSchemaMissing, noteFeatureSchemaError, resetFeatureSchemaState } from '@/lib/resilience/missing-schema';
 
 const GROWTH_EVENT_NAMES = [
   'share_clicked',
@@ -65,19 +65,20 @@ function toPageGrowthLink(result: GrowthLinkRpcResult): PageGrowthLink {
  * database says they do not exist, stop calling them for this session — the
  * public page otherwise sent a failing request on every visit.
  */
-let growthSchemaMissing = false;
+const GROWTH_FEATURE = 'page_growth';
+const growthSchemaMissing = () => isFeatureSchemaMissing(GROWTH_FEATURE);
 
 function noteGrowthError(error: unknown) {
-  if (isMissingSchemaError(error)) growthSchemaMissing = true;
+  noteFeatureSchemaError(GROWTH_FEATURE, error);
 }
 
 /** Test hook. */
 export function resetGrowthSchemaState() {
-  growthSchemaMissing = false;
+  resetFeatureSchemaState();
 }
 
 export async function createPageGrowthLink(pageId: string, campaign = 'launch-kit'): Promise<PageGrowthLink | null> {
-  if (!pageId || growthSchemaMissing) return null;
+  if (!pageId || growthSchemaMissing()) return null;
   const { data, error } = await supabase.rpc('create_page_growth_link' as any, {
     p_page_id: pageId,
     p_campaign: campaign,
@@ -107,7 +108,7 @@ export async function recordGrowthEvent(input: {
   pageId?: string | null;
   metadata?: Record<string, unknown>;
 }): Promise<boolean> {
-  if (!/^[a-zA-Z0-9_-]{8,64}$/.test(input.code) || growthSchemaMissing) return false;
+  if (!/^[a-zA-Z0-9_-]{8,64}$/.test(input.code) || growthSchemaMissing()) return false;
   const { data, error } = await supabase.rpc('record_page_growth_event' as any, {
     p_code: input.code,
     p_event_name: input.eventName,
@@ -138,7 +139,7 @@ const EMPTY_GROWTH_METRICS: Omit<GrowthMetrics, 'available'> = { shares: 0, visi
 
 export async function getGrowthMetrics(pageId: string): Promise<GrowthMetrics> {
   if (!pageId) return { ...EMPTY_GROWTH_METRICS, available: true };
-  if (growthSchemaMissing) return { ...EMPTY_GROWTH_METRICS, available: false };
+  if (growthSchemaMissing()) return { ...EMPTY_GROWTH_METRICS, available: false };
   const { data, error } = await supabase
     .from('page_growth_events' as any)
     .select('event_name')
@@ -146,7 +147,7 @@ export async function getGrowthMetrics(pageId: string): Promise<GrowthMetrics> {
   if (error) {
     noteGrowthError(error);
     logger.debug('Page growth metrics fetch failed', { data: error });
-    return { ...EMPTY_GROWTH_METRICS, available: !growthSchemaMissing };
+    return { ...EMPTY_GROWTH_METRICS, available: !growthSchemaMissing() };
   }
   const rows = (data || []) as unknown as Array<{ event_name: string }>;
   const count = (name: string) => rows.filter((row) => row.event_name === name).length;
