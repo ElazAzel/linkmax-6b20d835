@@ -9,21 +9,16 @@ import { getFontPair } from '@/lib/appearance/presets';
  * theme choices. A new family can be vendored with scripts/vendor-fonts.mjs.
  */
 const GOOGLE_FONT_WEIGHTS: Record<string, string> = {
-  'Space Grotesk': '400;500;600;700',
-  'DM Sans': '400;500;700',
-  'Instrument Serif': '400',
-  'Work Sans': '400;500;600;700',
+  'Golos Text': '400..900',
+  Onest: '100..900',
   'Cormorant Garamond': '400;500;600;700',
-  Karla: '400;500;700',
-  Syne: '400;600;700',
-  'Plus Jakarta Sans': '400;500;600;700',
-  Urbanist: '400;600;700',
-  Epilogue: '400;500;700',
-  Outfit: '400;500;600;700',
-  Figtree: '400;500;600;700',
   'JetBrains Mono': '400;500;700',
-  'Archivo Black': '400',
-  Hind: '400;500;600;700',
+  Lora: '400..700',
+  Commissioner: '100..900',
+  Unbounded: '200..900',
+  Montserrat: '100..900',
+  Nunito: '200..1000',
+  Rubik: '300..900',
 };
 
 /** Families loaded by the SSR document. */
