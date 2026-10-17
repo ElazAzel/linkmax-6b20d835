@@ -8,7 +8,9 @@ export function getImagePlacementStyle(block: { scale?: string; imagePlacement?:
   const zoom = finite(p.zoom, 1, 1, 3);
   const rotation = [0, 90, 180, 270].includes(p.rotation ?? 0) ? p.rotation ?? 0 : 0;
   return {
-    objectFit: block.scale === 'fill' ? 'fill' : block.scale === 'cover' ? 'cover' : 'contain',
+    // Images always fill their frame: cropped in a tile, natural height otherwise
+    // (where cover crops nothing). Letterboxing "contain"/"fill" are retired.
+    objectFit: 'cover',
     objectPosition: `${x}% ${y}%`,
     transformOrigin: `${x}% ${y}%`,
     transform: `rotate(${rotation}deg) scale(${p.flipX ? -zoom : zoom}, ${p.flipY ? -zoom : zoom})`,

@@ -52,17 +52,6 @@ function CardBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
       <EditorField label={t('cardBlock.photo', 'Фото')}>
         <MediaUpload value={formData.image || ''} onChange={(image) => set({ image })} accept="image/*" />
       </EditorField>
-      <EditorField label={t('cardBlock.photoPosition', 'Где фото')}>
-        <Segmented
-          label={t('cardBlock.photoPosition', 'Где фото')}
-          value={(formData.imagePosition as 'right' | 'top') || 'right'}
-          onChange={(imagePosition) => set({ imagePosition })}
-          options={[
-            { value: 'right', label: t('cardBlock.right', 'Справа') },
-            { value: 'top', label: t('cardBlock.top', 'Сверху') },
-          ]}
-        />
-      </EditorField>
       <MultilingualInput
         label={t('fields.buttonText', 'Текст кнопки')}
         value={migrateToMultilingual(formData.buttonText)}

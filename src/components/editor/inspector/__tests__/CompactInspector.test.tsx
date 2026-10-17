@@ -89,7 +89,7 @@ describe('compact tools for existing and newly created pages', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Дополнительные настройки' }));
     await act(async () => { await vi.dynamicImportSettled(); });
     expect(screen.getByRole('button', { name: 'Кадрирование и положение' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Стиль и SEO' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Описание для поиска' })).toBeInTheDocument();
   });
 
   it('shows a readable delete action and only deletes after explicit confirmation', () => {

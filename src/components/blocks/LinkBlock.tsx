@@ -59,9 +59,9 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
 
   const isPhone = /^tel:/i.test(block.url || '');
   const isMail = /^mailto:/i.test(block.url || '');
-  const FallbackIcon = block.icon && iconMap[block.icon.toLowerCase()]
-    ? iconMap[block.icon.toLowerCase()]
-    : isPhone ? Phone : isMail ? Mail : Link2;
+  // tel:/mailto: win over the factory's default "globe" icon
+  const FallbackIcon = isPhone ? Phone : isMail ? Mail
+    : block.icon && iconMap[block.icon.toLowerCase()] ? iconMap[block.icon.toLowerCase()] : Link2;
 
   const handleClick = createBlockClickHandler(block.url, onClick);
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);

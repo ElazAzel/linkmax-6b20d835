@@ -3,7 +3,8 @@ import { getImagePlacementStyle } from '../image-placement';
 
 describe('image placement', () => {
   it('keeps legacy images entirely visible unless the author chooses cropping', () => {
-    expect(getImagePlacementStyle({})).toMatchObject({ objectFit: 'contain', objectPosition: '50% 50%' });
+    expect(getImagePlacementStyle({})).toMatchObject({ objectFit: 'cover', objectPosition: '50% 50%' });
+    expect(getImagePlacementStyle({ scale: 'contain' }).objectFit).toBe('cover');
     expect(getImagePlacementStyle({ scale: 'cover' }).objectFit).toBe('cover');
   });
   it('combines non-destructive crop, position, rotation and reflection', () => {

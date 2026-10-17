@@ -5,13 +5,12 @@
  * imports. Page generation itself is entirely local: niche recipes, parsers,
  * block factory and layout rules are the only generation dependencies.
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Check from 'lucide-react/dist/esm/icons/check';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
-import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import Send from 'lucide-react/dist/esm/icons/send';
@@ -96,11 +95,6 @@ export function AIBuilderWizard({
   const [retryCount, setRetryCount] = useState(0);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const startTrackedForOpenRef = useRef(false);
-
-  const templateBlockTypes = useMemo(
-    () => selectedTemplate?.blocks.map((block) => block.type) ?? [],
-    [selectedTemplate],
-  );
 
   useEffect(() => {
     if (!open) {
@@ -233,7 +227,7 @@ export function AIBuilderWizard({
           <div className="flex flex-col p-6 pt-4">
             <div className="mb-6 flex items-center gap-3"><Button variant="ghost" size="icon" aria-label={t('common.back', 'Назад')} onClick={() => setStep(initialNiche ? entryStep : 'niche')}><ArrowLeft className="h-5 w-5" /></Button><div><h2 className="text-xl font-bold">{t('algorithmBuilder.descriptionTitle', 'Заполните основу страницы')}</h2><p className="text-sm text-muted-foreground">{t('algorithmBuilder.descriptionHint', 'Алгоритм извлечёт услуги, контакты, цены и ссылки')}</p></div></div>
             <ScrollArea className="max-h-[60vh]"><div className="space-y-4 pr-2">
-              {selectedTemplate && <div className="rounded-2xl border border-border/50 bg-muted/20 p-4"><div className="mb-2 flex items-center gap-2"><LayoutTemplate className="h-4 w-4 text-primary" /><p className="text-sm font-bold">{selectedTemplate.name}</p></div><p className="mb-3 text-xs text-muted-foreground">{selectedTemplate.description} · {templateBlockTypes.length} блоков</p><div className="flex flex-wrap gap-1.5">{templateBlockTypes.map((type) => <span key={type} className="rounded-full bg-primary/10 px-2 py-1 text-[11px] font-medium text-primary">{type}</span>)}</div></div>}
+              {/* The raw block-type chips ("profile", "catalog") were removed: the page is built from what is typed below. */}
               <div className="space-y-4 rounded-card border border-border/50 bg-muted/30 p-5 shadow-inner">
                 <div className="space-y-2"><Label>{t('aiBuilder.name', 'Имя или название')}</Label><Input value={userInfo.name} onChange={(event) => setUserInfo((p) => ({ ...p, name: event.target.value }))} placeholder={t('aiBuilder.namePlaceholder', 'Например, LinkMAX Studio')} className="h-14 rounded-2xl bg-background/80 text-lg" autoFocus /></div>
                 <div className="space-y-2"><Label>{t('aiBuilder.descStep.label', 'О вас и вашем предложении')}</Label><Textarea value={userInfo.bio} onChange={(event) => setUserInfo((p) => ({ ...p, bio: event.target.value }))} placeholder={t('aiBuilder.descStep.placeholder', 'Коротко расскажите, чем вы полезны')} className="min-h-[100px] rounded-2xl bg-background/80 text-base" /></div>
@@ -241,10 +235,10 @@ export function AIBuilderWizard({
                 <Collapsible open={showMoreDetails} onOpenChange={setShowMoreDetails}>
                   <CollapsibleTrigger asChild><button type="button" className="flex min-h-11 items-center gap-2 text-sm font-semibold text-primary"><ChevronDown className={cn('h-4 w-4 transition-transform', showMoreDetails && 'rotate-180')} />{t('algorithmBuilder.moreDetails', 'Добавить услуги, контакты и ссылки')}</button></CollapsibleTrigger>
                   <CollapsibleContent className="space-y-4 pt-3">
-                    {!isOnboarding && <Textarea value={userInfo.services} onChange={(event) => setUserInfo((p) => ({ ...p, services: event.target.value }))} placeholder={t('aiBuilder.servicesPlaceholder', 'Маникюр — 5000 тг\nПедикюр — 7000 тг')} />}
-                    <Input value={userInfo.contacts} onChange={(event) => setUserInfo((p) => ({ ...p, contacts: event.target.value }))} placeholder={t('aiBuilder.contactsPlaceholder', 'Instagram @nick, t.me/user, +77001234567')} />
-                    <Input value={userInfo.socials} onChange={(event) => setUserInfo((p) => ({ ...p, socials: event.target.value }))} placeholder={t('algorithmBuilder.socialsPlaceholder', 'Instagram: @brand')} />
-                    <Input value={userInfo.mediaLinks} onChange={(event) => setUserInfo((p) => ({ ...p, mediaLinks: event.target.value }))} placeholder={t('algorithmBuilder.mediaPlaceholder', 'Ссылки на видео или изображения через запятую')} />
+                    {!isOnboarding && <div className="space-y-2"><Label htmlFor="builder-services">{t('algorithmBuilder.servicesLabel', 'Услуги и цены — каждая с новой строки')}</Label><Textarea id="builder-services" value={userInfo.services} onChange={(event) => setUserInfo((p) => ({ ...p, services: event.target.value }))} placeholder={t('algorithmBuilder.servicesExample', 'Маникюр с покрытием — 8000\nПедикюр — 10000')} /></div>}
+                    <div className="space-y-2"><Label htmlFor="builder-contacts">{t('algorithmBuilder.contactsLabel', 'Как с вами связаться')}</Label><Input id="builder-contacts" value={userInfo.contacts} onChange={(event) => setUserInfo((p) => ({ ...p, contacts: event.target.value }))} placeholder={t('algorithmBuilder.contactsExample', '+7 701 123 45 67, @telegram, ул. Абая 10')} /></div>
+                    <div className="space-y-2"><Label htmlFor="builder-socials">{t('algorithmBuilder.socialsLabel', 'Соцсети')}</Label><Input id="builder-socials" value={userInfo.socials} onChange={(event) => setUserInfo((p) => ({ ...p, socials: event.target.value }))} placeholder={t('algorithmBuilder.socialsExample', 'instagram.com/brand, tiktok.com/@brand')} /></div>
+                    <div className="space-y-2"><Label htmlFor="builder-media">{t('algorithmBuilder.mediaLabel', 'Видео или фото (необязательно)')}</Label><Input id="builder-media" value={userInfo.mediaLinks} onChange={(event) => setUserInfo((p) => ({ ...p, mediaLinks: event.target.value }))} placeholder={t('algorithmBuilder.mediaExample', 'Ссылка на YouTube или фото')} /></div>
                   </CollapsibleContent>
                 </Collapsible>
               </div>

@@ -30,54 +30,50 @@ export interface ParsedSocial {
 // PRICE & SERVICE EXTRACTION
 // ----------------------------------------------------------------------
 
+const CURRENCY_ALIASES: Array<[RegExp, string]> = [
+    [/^(?:тг|тенге|kzt|₸)$/i, 'KZT'],
+    [/^(?:руб|рублей|р|rub|₽)$/i, 'RUB'],
+    [/^(?:\$|usd|долл)$/i, 'USD'],
+    [/^(?:€|eur|евро)$/i, 'EUR'],
+];
+
+// "60 минут", "5 сессий", "10 занятий", "2 часа" are quantities, not prices.
+const QUANTITY_UNIT = /^(?:мин|минут|минуты|min|час|часа|часов|ч|h|сесси|сеанс|заняти|урок|встреч|дн|день|дня|недел|месяц|мес|шт|раз|человек|чел|%)/i;
+
 /**
- * Advanced price extraction
- * Looks for common currency symbols and patterns: 15000, 15 000 тг, $100, 500руб
+ * The price in one service line: "Маникюр — 8 000 тг", "Консультация 60 минут 15000",
+ * "$100 session". Numbers followed by a duration or count are skipped; a number
+ * with a currency wins, otherwise the largest remaining number.
  */
 export function extractPrice(text: string): { price: number; currency: string; remainder: string } {
     if (!text) return { price: 0, currency: '', remainder: '' };
 
-    // Common currency patterns
-    const currencyMap: Record<string, string> = {
-        'тг': 'KZT', 'kzt': 'KZT', '₸': 'KZT',
-        'руб': 'RUB', 'rub': 'RUB', '₽': 'RUB',
-        '$': 'USD', 'usd': 'USD',
-        '€': 'EUR', 'eur': 'EUR'
-    };
-
-    // Regex to find things like: "15 000 тг", "$100", "500руб", "15000"
-    // Capture group 1: currency symbol before (e.g. $)
-    // Capture group 2: number (can have spaces or commas)
-    // Capture group 3: currency symbol after (e.g. тг, руб)
-    const priceRegex = /([$€₸₽]?)(\s*\d+(?:[.,\s]\d+)*\s*)([a-zA-Zа-яА-ЯёЁ]+|[$€₸₽]?)/i;
-    const match = text.match(priceRegex);
-
-    if (match) {
-        const fullMatch = match[0];
-        const preSymbol = match[1]?.trim().toLowerCase();
-        const numStr = match[2]?.replace(/[\s,]/g, '') || '0';
-        const postSymbol = match[3]?.trim().toLowerCase();
-
-        // Safe parse
-        const parsedPrice = parseFloat(numStr);
-        if (!isNaN(parsedPrice) && parsedPrice > 0) {
-            // Decide currency
-            let currencyLabel = 'KZT'; // Default
-            for (const [key, val] of Object.entries(currencyMap)) {
-                if (preSymbol === key || postSymbol === key) {
-                    currencyLabel = val;
-                    break;
-                }
-            }
-
-            // Remove the found price from the original string to leave just the description
-            const remainder = text.replace(fullMatch, '').trim().replace(/[-—:.,]$/, '').trim();
-
-            return { price: parsedPrice, currency: currencyLabel, remainder };
-        }
+    const tokenRegex = /([$€₸₽])?\s*(\d{1,3}(?:[ \u00a0.,]\d{3})+|\d+)([.,]\d{1,2}(?!\d))?\s*([a-zA-Zа-яА-ЯёЁ]+\.?|[$€₸₽])?/g;
+    type Candidate = { price: number; currency: string; match: string; hasCurrency: boolean };
+    const candidates: Candidate[] = [];
+    let m: RegExpExecArray | null;
+    while ((m = tokenRegex.exec(text)) !== null) {
+        const pre = m[1] ?? '';
+        const unit = (m[4] ?? '').replace(/\.$/, '');
+        if (unit && QUANTITY_UNIT.test(unit) && !pre) continue;
+        // "9.99" / "12,50": the fraction is its own group, thousands separators are dropped
+        const value = Number(m[2].replace(/[ \u00a0.,]/g, '')) + (m[3] ? Number(`0.${m[3].slice(1)}`) : 0);
+        if (!Number.isFinite(value) || value <= 0) continue;
+        const alias = CURRENCY_ALIASES.find(([re]) => re.test(pre) || (unit && re.test(unit)));
+        // A trailing word that is not a currency stays in the remainder.
+        const match = alias || !unit ? m[0] : m[0].slice(0, m[0].lastIndexOf(unit));
+        candidates.push({ price: value, currency: alias?.[1] ?? 'KZT', match: match.trim(), hasCurrency: Boolean(alias) });
     }
+    if (candidates.length === 0) return { price: 0, currency: '', remainder: text.trim() };
 
-    return { price: 0, currency: '', remainder: text };
+    const best = candidates.find((c) => c.hasCurrency)
+        ?? candidates.reduce((a, b) => (b.price > a.price ? b : a));
+    const remainder = text.replace(best.match, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\s*[-—–:,]\s*$/, '')
+        .replace(/^\s*[-—–:,]\s*/, '')
+        .trim();
+    return { price: best.price, currency: best.currency, remainder };
 }
 
 /**
@@ -99,7 +95,7 @@ export function extractServicesPipeline(text: string): ParsedService[] {
 
         // Step 2: Split title and description
         // usually separated by a dash or colon
-        let title = textWithoutPrice;
+        let title = textWithoutPrice.replace(/\s+от$/i, '').trim();
         let description = '';
 
         const splitMatch = textWithoutPrice.match(/^(.*?)\s*[-—:]\s*(.*)$/);
@@ -166,6 +162,15 @@ export function extractContactsPipeline(text: string): ParsedMessenger[] {
         if (!results.find(r => r.platform === 'telegram' && r.username === atTgMatch![1])) {
             results.push({ platform: 'telegram', username: atTgMatch![1] });
         }
+    }
+
+    // A bare "@handle" in the contacts field is how people here write Telegram.
+    if (!results.some(r => r.platform === 'telegram')) {
+        // ...unless it is labelled as another network ("Instagram @nick").
+        const bare = text.replace(/[\w.-]+@[\w.-]+\.\w+/g, ' ')
+            .replace(/(?:instagram|inst|insta|инста|инстаграм|tiktok|тикток)[:\s]*@[\w.]+/gi, ' ')
+            .match(/(?:^|[\s,;(])@([a-zA-Z][a-zA-Z0-9_]{4,31})\b/);
+        if (bare) results.push({ platform: 'telegram', username: bare[1] });
     }
 
     return results;
@@ -245,7 +250,7 @@ export function extractSocialsPipeline(text: string): ParsedSocial[] {
     for (const [shortcut, platform] of Object.entries(SOCIAL_PLATFORMS)) {
         if (results.find(r => r.platform === platform)) continue;
 
-        const domainRegex = new RegExp(`${shortcut}\\.com\\/([a-zA-Z0-9_.]+)`, 'gi');
+        const domainRegex = new RegExp(`${shortcut}\\.com\\/(@?[a-zA-Z0-9_.]+)`, 'gi');
         let domainMatch;
         while ((domainMatch = domainRegex.exec(text)) !== null) {
             const baseUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
@@ -291,27 +296,35 @@ export function extractLocation(text: string): { location: string; remainder: st
     if (!text) return { location: '', remainder: '' };
 
     // Simple heuristic regex: looks for "г. ", "ул. ", "проспект", "street", "city" followed by words
-    const locationRegex = /(?:г\.|ул\.|пр-т\.|город|улица|проспект|street|city|region)[:\s]+([^,\n]{2,50})(?:[,.\n]|$)/i;
+    const locationRegex = /(?:^|[\s(])(?:г\.|ул\.|пр-т\.?|пр\.|мкр\.?|микрорайон|бульвар|б-р|город|улица|проспект|жк|street|st\.|ave\.?|city)\s*[:\s]?\s*[«"]?[А-ЯA-Zа-яa-z0-9]/i;
     const match = text.match(locationRegex);
 
     if (match) {
         // Find the whole line or segment containing the match to pull out a decent address string
-        const lines = text.split(/[\n;]/);
-        let foundLine = '';
-        const remainderLines = [];
-
-        for (const line of lines) {
-            if (line.match(locationRegex)) {
-                foundLine = line.trim();
+        // Contacts are usually typed on one line: "+7 701…, @tg, ул. Абая 10".
+        const parts = text.split(/[\n;,]/);
+        const found: string[] = [];
+        const rest: string[] = [];
+        let inAddress = false;
+        for (const raw of parts) {
+            const part = raw.trim();
+            if (!part) continue;
+            if (locationRegex.test(part) || /^(?:адрес|локация|место)\b/i.test(part)) {
+                found.push(part);
+                inAddress = true;
+            } else if (inAddress && /^(?:\d+[а-яa-z]?|д\.?\s*\d+|офис|оф\.|кв\.|этаж|блок|кабинет)/i.test(part)) {
+                // "ул. Абая, 10, офис 5" continues the address
+                found.push(part);
             } else {
-                remainderLines.push(line);
+                inAddress = false;
+                rest.push(part);
             }
         }
 
-        if (foundLine) {
+        if (found.length > 0) {
             return {
-                location: foundLine.replace(/^(?:Адрес|Локация|Место)[:\s-]*/i, '').trim(),
-                remainder: remainderLines.join('\n').trim()
+                location: found.join(', ').replace(/^(?:Адрес|Локация|Место)[:\s-]*/i, '').trim(),
+                remainder: rest.join(', ').trim()
             };
         }
     }

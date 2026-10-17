@@ -239,7 +239,7 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     title: { ru: 'Запишитесь на консультацию', en: 'Book a consultation', kk: 'Кеңеске жазылыңыз' },
     text: { ru: 'Коротко о том, что получит клиент и почему стоит нажать.', en: 'In short: what the client gets and why it is worth a tap.', kk: 'Клиент не алатыны және неге басу керегі туралы қысқаша.' },
     image: '',
-    imagePosition: 'right',
+    imagePosition: 'top',
     buttonText: { ru: 'Записаться', en: 'Book', kk: 'Жазылу' },
     url: '',
     buttonStyle: 'solid',

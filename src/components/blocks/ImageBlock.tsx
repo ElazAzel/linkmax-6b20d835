@@ -25,34 +25,16 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
   const alt = imageAltText(getI18nText(block.alt, i18n.language as SupportedLanguage), block.link);
   const caption = getI18nText(block.caption, i18n.language as SupportedLanguage);
 
-  const isBanner = block.style === 'banner';
   const hasLink = Boolean(block.link);
   // When the user paints their own container (bg/border/radius/shadow) via
   // the style panel, drop our default decorative frame so we don't render
   // two nested frames.
   const isNaked = hasCustomBlockContainer(block.blockStyle);
 
-  const getImageClass = () => {
-    if (isNaked && block.style !== 'polaroid' && block.style !== 'vignette' && block.style !== 'circle') {
-      return '';
-    }
-    switch (block.style) {
-      case 'polaroid':
-        return 'p-3 sm:p-4 bg-white/5  border border-hairline shadow-soft rotate-[-2deg] hover:rotate-0 transition-all duration-500 rounded-sm hover:shadow-lift';
-      case 'vignette':
-        return 'relative rounded-2xl shadow-soft after:absolute after:inset-0 after:shadow-[inset_0_0_100px_rgba(0,0,0,0.4)] after:pointer-events-none after:rounded-2xl';
-      case 'circle':
-        return 'rounded-full aspect-square object-cover shadow-lift border-2 border-hairline';
-      case 'banner':
-        return 'w-full rounded-2xl qb-card border-hairline shadow-lift';
-      default:
-        return 'rounded-2xl shadow-soft border border-hairline transition-all duration-300 hover:shadow-lift qb-card';
-    }
-  };
-
-  const alignmentClass = block.alignment === 'left' ? 'items-start'
-    : block.alignment === 'right' ? 'items-end'
-      : 'items-center';
+  // Every image spans the block: cropped to fill a tile, or full width at its
+  // own aspect ratio. Circle, polaroid, letterboxed "contain", stretch and
+  // tile modes left narrow or framed pictures, so old values render this way.
+  const imageClass = isNaked ? '' : 'rounded-2xl qb-card border border-hairline';
 
   const handleClick = () => {
     if (block.link) {
@@ -73,16 +55,13 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
     );
   }
 
-  const isFullWidth = isBanner || block.scale === 'fill' || block.scale === 'cover';
-  const containerClass = isFullWidth ? 'w-full' : 'w-full max-w-md';
 
   return (
-    <div className={cn("w-full flex flex-col", alignmentClass)}>
+    <div className="w-full flex flex-col">
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when interactive */}
       <div
         className={cn(
-          "relative group",
-          containerClass,
+          "relative group w-full",
           hasLink && 'cursor-pointer'
         )}
         onClick={hasLink ? handleClick : undefined}
@@ -92,39 +71,20 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
       >
         <div className={cn(
           "relative overflow-hidden h-full w-full",
-          getImageClass(),
+          imageClass,
           hasLink && 'hover:shadow-lg transition-shadow duration-300'
         )}>
-          {block.scale === 'tile' ? (
-            <div
-              className="w-full h-full min-h-[200px]"
-              style={{
-                backgroundImage: `url(${block.url})`,
-                backgroundRepeat: 'repeat',
-                backgroundSize: '150px auto', // Default tile size
-                backgroundPosition: 'center'
-              }}
-              role="img"
-              aria-label={alt || undefined}
-            />
-          ) : (
-            <img
-              src={block.url}
-              alt={alt}
-              className={cn(
-                "w-full h-full",
-                // Default to cover if not specified
-                block.scale === 'contain' ? 'object-contain' :
-                  block.scale === 'fill' ? 'object-fill' :
-                    'object-cover', // cover is default
-                block.style === 'circle' && 'aspect-square',
-                hasLink && 'transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-90'
-              )}
-              loading="lazy"
-              onError={() => setFailed(true)}
-              style={getImagePlacementStyle(block)}
-            />
-          )}
+          <img
+            src={block.url}
+            alt={alt}
+            className={cn(
+              "block w-full h-full object-cover",
+              hasLink && 'transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-90'
+            )}
+            loading="lazy"
+            onError={() => setFailed(true)}
+            style={getImagePlacementStyle(block)}
+          />
 
           {/* Link indicator overlay */}
           {hasLink && (
@@ -132,7 +92,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
               {/* Gradient overlay on hover */}
               <div className={cn(
                 "absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none",
-                block.style === 'circle' ? 'rounded-full' : 'rounded-xl sm:rounded-2xl'
+                'rounded-xl sm:rounded-2xl'
               )} />
 
               {/* External link icon */}

@@ -1,4 +1,5 @@
 import { createBlock } from './block-factory';
+import { generateBlockId } from './block-utils';
 import type {
     Block,
     CatalogItem,
@@ -12,7 +13,6 @@ import type {
     ImageBlock,
     MapBlock,
     ButtonBlock,
-    SeparatorBlock
 } from '@/types/page';
 import {
     extractServicesPipeline,
@@ -43,36 +43,6 @@ function hydrateProfileBlock(block: any, userInfo: UserInfo) {
     // Store extracted CTA inside block temp data so pipeline can process it later
     if (url) block.__extractedCta = url;
 
-    // Advanced Animation Heuristic for Creatives
-    const creativeKeywords = /(дизайн|арт|фото|видео|креатив|маркетинг|seo|копирайт|художник|design|art|photo|video|creator|marketing)/i;
-    if (remainder.match(creativeKeywords)) {
-        block.nameAnimation = 'typing';
-        block.avatarFrame = 'gradient';
-    }
-}
-
-function hydrateCatalogOrPricingBlock(block: any, parsedServices: any[], goal?: string) {
-    block.title = goal === 'sales' ? 'Каталог товаров' : 'Мои услуги';
-    const items = parsedServices.map((srv, i) => ({
-        id: `item-${Date.now()}-${i}`,
-        name: srv.title,
-        description: srv.description,
-        price: srv.price,
-    })) as any[];
-    block.items = items;
-}
-
-function hydrateMessengerBlock(block: any, parsedContacts: any[], rawContacts: string, goal?: string) {
-    block.title = goal === 'leads' ? 'Записаться / Связаться' : 'Связаться со мной';
-    if (parsedContacts.length > 0) {
-        block.messengers = parsedContacts.map((c: any) => ({
-            platform: c.platform,
-            username: c.username,
-        }));
-    } else if (rawContacts) {
-        // Fallback string if regex failed
-        block.messengers = [{ platform: 'whatsapp', username: rawContacts }];
-    }
 }
 
 function hydrateSocialsBlock(block: any, parsedSocials: any[], rawSocials: string) {
@@ -102,8 +72,7 @@ function createSmartMediaBlock(url: string, title: string = 'Мои матери
         videoBlock.title = title;
         videoBlock.url = url;
         videoBlock.platform = url.includes('vimeo') ? 'vimeo' : 'youtube';
-        videoBlock.blockStyle = { padding: 'md', animation: 'fade-in' }; // Premium defaults
-        return videoBlock as Block;
+                return videoBlock as Block;
     }
 
     if (isImage) {
@@ -111,7 +80,7 @@ function createSmartMediaBlock(url: string, title: string = 'Мои матери
         imageBlock.url = url;
         imageBlock.alt = title;
         imageBlock.style = 'default';
-        imageBlock.blockStyle = { padding: 'md', animation: 'fade-in' };
+        (imageBlock as ImageBlock & { blockSize?: string }).blockSize = 'full';
         return imageBlock as Block;
     }
 
@@ -129,259 +98,123 @@ function createSmartMediaBlock(url: string, title: string = 'Мои матери
  */
 function createFeatureListBlock(parsedServices: any[]): Block {
     const textBlock = createBlock('text') as TextBlock;
-
-    // Create an elegant bulleted list instead of a catalog
-    const content = '### Мои навыки и преимущества\n\n' + parsedServices.map(srv => {
-        let line = `✨ **${srv.title}**`;
-        if (srv.description) line += `  \n_${srv.description}_`;
-        return line;
-    }).join('\n\n');
-
-    textBlock.content = content;
+    textBlock.content = '## Чем я могу помочь\n' + parsedServices
+        .map((srv) => `- **${srv.title}**${srv.description ? ` — ${srv.description}` : ''}`)
+        .join('\n');
     textBlock.style = 'paragraph';
-    textBlock.blockStyle = { padding: 'lg', animation: 'fade-in' };
     return textBlock as Block;
 }
 
 // ============== ALGORITHM PIPELINE ==============
 
+const SERVICE_TITLE_SALES = 'Каталог';
+const SERVICE_TITLE = 'Услуги и цены';
+
 /**
- * Advanced deterministic hydration algorithm.
- * Uses strategy patterns, NLP extraction pipelines, and smart layouting
- * to build a rich premium page layout from raw user input.
+ * Builds a page only from what the person typed. It used to start from a
+ * niche recipe and leave every block it could not fill with factory filler:
+ * "Напишите что-нибудь интересное…", "Товар 1 / 1000 ₸", an English form,
+ * a generic FAQ, an empty booking widget and dashed separators.
+ *
+ * Order: profile → main link → offer → services → contacts → socials →
+ * address → media. Contacts always get a block (empty ones stay hidden from
+ * visitors and prompt the owner in the editor).
  */
 export function generateBlocksFromTemplate(
-    templateBlocks: any[],
+    _templateBlocks: unknown[],
     userInfo: UserInfo
 ): Block[] {
-    // 1. Data Normalization Pipeline
-    const parsedServices = extractServicesPipeline(userInfo.services);
+    const blocks: Block[] = [];
+    const push = (block: Block) => blocks.push({ ...block, id: generateBlockId(block.type) } as Block);
 
-    // Extract address from contacts
-    const { location: extractedAddress, remainder: remainderContacts } = extractLocation(userInfo.contacts);
-    const parsedContacts = extractContactsPipeline(remainderContacts || userInfo.contacts);
+    // Profile
+    const profile = createBlock('profile') as any;
+    profile.avatar = '';
+    hydrateProfileBlock(profile, userInfo);
+    if (!userInfo.name?.trim()) profile.name = '';
+    if (!profile.bio || profile.bio === 'Tell people about yourself') profile.bio = '';
+    const ctaUrl: string | undefined = profile.__extractedCta;
+    delete profile.__extractedCta;
+    push(profile as Block);
 
-    const parsedSocials = extractSocialsPipeline(userInfo.socials);
-
-    // Check if services have prices. This dictates if we use Catalog or Text List
-    const hasPrices = parsedServices.some((s: any) => s.price > 0);
-
-    // Track state to avoid duplicate injections
-    const state = {
-        injectedProfile: false,
-        injectedServices: parsedServices.length === 0 && !userInfo.services,
-        injectedContacts: parsedContacts.length === 0 && !userInfo.contacts,
-        injectedSocials: parsedSocials.length === 0 && !userInfo.socials,
-        injectedAddress: !extractedAddress, // if no address found, treat as done
-        injectedDiscount: false
-    };
-
-    let ctaUrlToInject: string | null = null;
-    let discountToInject: string | null = null;
-
-    // Check for Gamification Discounts in Services
-    const { discountText, remainder: remainderServices } = extractDiscount(userInfo.services);
-    if (discountText) {
-        discountToInject = discountText;
-    } else {
-        // Search bio as fallback
-        const { discountText: discountBio } = extractDiscount(userInfo.bio);
-        if (discountBio) discountToInject = discountBio;
+    // Main link from the bio
+    if (ctaUrl) {
+        const cta = createBlock('button') as ButtonBlock;
+        cta.title = userInfo.goal === 'leads' ? 'Записаться' : 'Подробнее';
+        cta.url = ctaUrl;
+        cta.width = 'full';
+        push(cta as Block);
     }
 
-    // 2. Base Block Generation
-    const blocks: Block[] = templateBlocks.map((blockData: any, index: number) => {
-        const blockType = blockData.type || 'text';
-        const baseBlock = createBlock(blockType);
-        const overrides = blockData.overrides || {};
-        return {
-            ...baseBlock,
-            ...overrides,
-            ...blockData,
-            id: `${blockType}-${Date.now()}-${index}`,
-        } as Block;
-    });
-
-    // 3. Hydration Loop (Strategy Pattern)
-    for (const block of blocks) {
-        // Profile
-        if (!state.injectedProfile && (block.type === 'profile' || block.type === 'avatar')) {
-            hydrateProfileBlock(block, userInfo);
-            state.injectedProfile = true;
-            if ((block as any).__extractedCta) ctaUrlToInject = (block as any).__extractedCta;
-        } else if (!state.injectedProfile && block.type === 'text' && (block as any).content === '') {
-            (block as any).content = `# ${userInfo.name}\n${userInfo.bio}`;
-            state.injectedProfile = true;
-        }
-
-        // Services
-        if (!state.injectedServices && (block.type === 'catalog' || block.type === 'pricing')) {
-            if (hasPrices) {
-                hydrateCatalogOrPricingBlock(block, parsedServices, userInfo.goal);
-            } else {
-                // Convert existing block to Text list
-                const featureListText = (createFeatureListBlock(parsedServices) as any).content;
-                (block as any).type = 'text';
-                (block as any).content = featureListText;
-            }
-            state.injectedServices = true;
-        }
-
-        // Contacts
-        if (!state.injectedContacts && block.type === 'messenger') {
-            hydrateMessengerBlock(block, parsedContacts, remainderContacts || userInfo.contacts, userInfo.goal);
-            state.injectedContacts = true;
-        } else if (!state.injectedContacts && block.type === 'form') {
-            (block as any).title = userInfo.goal === 'leads' ? 'Оставить заявку на запись' : 'Оставить заявку';
-            state.injectedContacts = true;
-        }
-
-        // Socials
-        if (!state.injectedSocials && block.type === 'socials') {
-            hydrateSocialsBlock(block, parsedSocials, userInfo.socials);
-            state.injectedSocials = true;
-        }
-
-        // Address
-        if (!state.injectedAddress && block.type === 'map') {
-            (block as any).address = extractedAddress;
-            state.injectedAddress = true;
-        }
+    // Offer ("Скидка 10% на первый визит")
+    const { discountText } = extractDiscount(userInfo.services);
+    const offer = discountText || extractDiscount(userInfo.bio).discountText;
+    if (offer) {
+        const text = createBlock('text') as TextBlock;
+        text.content = `🎁 **${offer}**`;
+        push(text as Block);
     }
 
-    // 4. Smart Fallbacks (Appending missing crucial blocks)
-    // Profile fallback
-    if ((userInfo.name || userInfo.bio) && !state.injectedProfile) {
-        const profileBlock = createBlock('profile');
-        hydrateProfileBlock(profileBlock, userInfo);
-        if ((profileBlock as any).__extractedCta) ctaUrlToInject = (profileBlock as any).__extractedCta;
-
-        // Advanced Profile styling
-        (profileBlock as any).blockStyle = { padding: 'md', animation: 'fade-in' };
-        (profileBlock as any).blockSize = 'wide';
-
-        blocks.unshift({ ...profileBlock, id: `profile-fallback-${Date.now()}` } as Block);
-    }
-
-    // CTA Insertion right after profile
-    if (ctaUrlToInject) {
-        const ctaBlock = createBlock('button') as ButtonBlock;
-        ctaBlock.title = 'Подробнее';
-        ctaBlock.url = ctaUrlToInject;
-        ctaBlock.width = 'full';
-        ctaBlock.blockStyle = { padding: 'md', animation: 'scale-in', hoverEffect: 'glow' };
-        (ctaBlock as any).blockSize = 'wide';
-
-        // Find profile index to insert right after
-        const profileIndex = blocks.findIndex(b => b.type === 'profile' || b.type === 'avatar');
-        if (profileIndex >= 0) {
-            blocks.splice(profileIndex + 1, 0, { ...ctaBlock, id: `cta-fallback-${Date.now()}` });
+    // Services
+    const services = extractServicesPipeline(extractDiscount(userInfo.services).remainder || userInfo.services)
+        .filter((s) => s.title || s.price > 0);
+    if (services.length > 0) {
+        if (services.some((s) => s.price > 0)) {
+            const sales = userInfo.goal === 'sales';
+            const block = createBlock(sales ? 'catalog' : 'pricing') as CatalogBlock | PricingBlock;
+            block.title = sales ? SERVICE_TITLE_SALES : SERVICE_TITLE;
+            const currency = services.find((s) => s.currency)?.currency || 'KZT';
+            (block as any).currency = currency;
+            (block as any).items = services.map((srv, i) => ({
+                id: `item-${i + 1}`,
+                name: srv.title || `Услуга ${i + 1}`,
+                description: srv.description,
+                price: srv.price,
+                currency: srv.currency || currency,
+            })) as Array<CatalogItem & PricingItem>;
+            push(block as Block);
         } else {
-            blocks.unshift({ ...ctaBlock, id: `cta-fallback-${Date.now()}` });
+            push(createFeatureListBlock(services));
         }
     }
 
-    // Gamification (Scratch Block)
-    if (discountToInject && !state.injectedDiscount) {
-        const scratchBlock = createBlock('scratch') as any; // Type may need to be loose if scratch isn't universally typed yet
-        scratchBlock.type = 'scratch';
-        scratchBlock.title = 'Ваш бонус';
-        scratchBlock.content = discountToInject;
-        scratchBlock.blockStyle = { animation: 'scale-in', padding: 'md' };
-        scratchBlock.blockSize = 'wide';
-        // Add right after CTA or Profile
-        blocks.push({ ...scratchBlock, id: `scratch-fallback-${Date.now()}` } as Block);
-        state.injectedDiscount = true;
+    // Contacts
+    const { location: address, remainder: contactsRest } = extractLocation(userInfo.contacts);
+    const contacts = extractContactsPipeline(contactsRest || userInfo.contacts);
+    const chats = contacts.filter((c) => c.platform !== 'email');
+    const messenger = createBlock('messenger') as MessengerBlock;
+    messenger.title = userInfo.goal === 'leads' ? 'Записаться' : 'Связаться со мной';
+    messenger.messengers = chats.length > 0
+        ? chats.map((c) => ({ platform: c.platform as 'whatsapp' | 'telegram', username: c.username }))
+        : [{ platform: 'whatsapp', username: '' }];
+    push(messenger as Block);
+    const email = contacts.find((c) => c.platform === 'email');
+    if (email) {
+        const link = createBlock('link') as any;
+        link.title = 'Написать на почту';
+        link.url = `mailto:${email.username}`;
+        push(link as Block);
     }
 
-    // Services fallback
-    if (!state.injectedServices && parsedServices.length > 0) {
-        if (hasPrices) {
-            const catalogBlock = createBlock('catalog') as CatalogBlock;
-            catalogBlock.title = 'Каталог услуг';
-            hydrateCatalogOrPricingBlock(catalogBlock, parsedServices);
-            catalogBlock.blockStyle = { animation: 'fade-in', padding: 'md' };
-            (catalogBlock as any).blockSize = 'wide';
-            blocks.push({ ...catalogBlock, id: `catalog-fallback-${Date.now()}` } as Block);
-        } else {
-            const featureList = createFeatureListBlock(parsedServices) as any;
-            featureList.blockSize = 'wide';
-            blocks.push({ ...featureList, id: `features-fallback-${Date.now()}` });
-        }
+    // Socials
+    const socials = extractSocialsPipeline(userInfo.socials);
+    if (socials.length > 0) {
+        const block = createBlock('socials') as SocialsBlock;
+        block.title = '';
+        hydrateSocialsBlock(block, socials, userInfo.socials);
+        push(block as Block);
     }
 
-    // Contacts fallback (Small Grid Pair 1)
-    if (!state.injectedContacts && (parsedContacts.length > 0 || remainderContacts)) {
-        const messengerBlock = createBlock('messenger') as MessengerBlock;
-        hydrateMessengerBlock(messengerBlock, parsedContacts, remainderContacts || userInfo.contacts);
-        messengerBlock.blockStyle = { animation: 'fade-in', padding: 'md', shadow: 'sm', hoverEffect: 'lift' };
-        (messengerBlock as any).blockSize = 'small'; // Responsive grid
-        blocks.push({ ...messengerBlock, id: `messenger-fallback-${Date.now()}` } as Block);
+    // Address
+    if (address) {
+        const map = createBlock('map') as MapBlock;
+        map.address = address;
+        push(map as Block);
     }
 
-    // Map fallback (Small Grid Pair 2)
-    if (extractedAddress && !state.injectedAddress) {
-        const mapBlock = createBlock('map') as MapBlock;
-        mapBlock.address = extractedAddress;
-        mapBlock.blockStyle = { animation: 'fade-in', padding: 'md', borderRadius: 'lg', shadow: 'sm', hoverEffect: 'lift' };
-        (mapBlock as any).blockSize = 'small'; // Responsive grid paired with messenger naturally
-        
-        // If goal is leads/sales, make it wide to emphasize physical location
-        if (userInfo.goal === 'leads' || userInfo.goal === 'sales') {
-            (mapBlock as any).blockSize = 'wide';
-        }
-        
-        blocks.push({ ...mapBlock, id: `map-fallback-${Date.now()}` } as Block);
-        state.injectedAddress = true;
-    }
+    // Media
+    const urls = (userInfo.mediaLinks || '').split(/[\s,]+/).map((u) => u.trim()).filter((u) => /^https?:\/\//i.test(u));
+    urls.forEach((url, i) => push(createSmartMediaBlock(url, urls.length > 1 ? `Материал ${i + 1}` : 'Мои материалы')));
 
-    // Socials fallback
-    if (!state.injectedSocials && (parsedSocials.length > 0 || userInfo.socials)) {
-        const socialsBlock = createBlock('socials') as SocialsBlock;
-        socialsBlock.title = 'Мои соцсети';
-        hydrateSocialsBlock(socialsBlock, parsedSocials, userInfo.socials);
-        socialsBlock.blockStyle = { animation: 'fade-in', padding: 'md', shadow: 'sm', hoverEffect: 'lift' };
-        (socialsBlock as any).blockSize = 'small'; // Leaves room for other small blocks in row
-        blocks.push({ ...socialsBlock, id: `socials-fallback-${Date.now()}` } as Block);
-    }
-
-    // Smart Media Links fallback
-    if (userInfo.mediaLinks) {
-        // Split by commas and create blocks
-        const urls = userInfo.mediaLinks.split(',').map(s => s.trim()).filter(Boolean);
-        urls.forEach((url, i) => {
-            const mediaBlock = createSmartMediaBlock(url, urls.length > 1 ? `Материал ${i + 1}` : 'Мои материалы');
-            if (mediaBlock.type !== 'video' && mediaBlock.type !== 'image') {
-                (mediaBlock as any).blockSize = 'small';
-            } else {
-                (mediaBlock as any).blockSize = 'wide';
-            }
-            blocks.push({ ...mediaBlock, id: `media-fallback-${Date.now()}-${i}` });
-        });
-    }
-
-    // 5. Layouting & Auto-Separators (Rhythm and Polish)
-    // Avoid double separators, ensure flow.
-    const heavyBlocks = ['catalog', 'pricing', 'form', 'map', 'video'];
-    const polishedBlocks: Block[] = [];
-
-    for (let i = 0; i < blocks.length; i++) {
-        const currentBlock = blocks[i];
-        polishedBlocks.push(currentBlock);
-
-        // If current and next blocks are heavy, insert a smart separator
-        if (heavyBlocks.includes(currentBlock.type) && i < blocks.length - 1) {
-            const nextBlock = blocks[i + 1];
-            if (heavyBlocks.includes(nextBlock.type) || nextBlock.type === 'messenger' || nextBlock.type === 'text') {
-                const separatorBlock = createBlock('separator') as SeparatorBlock;
-                separatorBlock.variant = 'dashed';
-                separatorBlock.width = 'half';
-                separatorBlock.spacing = 'lg';
-                separatorBlock.id = `auto-separator-${Date.now()}-${i}`;
-                polishedBlocks.push(separatorBlock as Block);
-            }
-        }
-    }
-
-    return polishedBlocks;
+    return blocks;
 }
