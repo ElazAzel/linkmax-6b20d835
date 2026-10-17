@@ -5,7 +5,6 @@ import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Ticket from 'lucide-react/dist/esm/icons/ticket';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
 import Users from 'lucide-react/dist/esm/icons/users';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
@@ -59,7 +58,6 @@ export const EventBlock = memo(function EventBlock({
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [showPrompt, setShowPrompt] = useState(true);
   const [formValues, setFormValues] = useState<Record<string, FormValue>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [ticketCode, setTicketCode] = useState<string | null>(null);
@@ -106,9 +104,8 @@ export const EventBlock = memo(function EventBlock({
   const handleOpen = useCallback(() => {
     onBlockClick(block.id, block.type, title + ' (Open)');
     setIsOpen(true);
-    setShowPrompt(!user);
     setEventError(null);
-  }, [user, block.id, block.type, title, onBlockClick]);
+  }, [block.id, block.type, title, onBlockClick]);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -133,9 +130,8 @@ export const EventBlock = memo(function EventBlock({
     const params = new URLSearchParams(window.location.search);
     if (params.get('event') === block.eventId) {
       setIsOpen(true);
-      setShowPrompt(!user);
     }
-  }, [block.eventId, user]);
+  }, [block.eventId]);
 
   const saveDraft = useCallback(() => {
     storage.set(draftKey, { updatedAt: Date.now(), data: formValues });
@@ -600,29 +596,6 @@ export const EventBlock = memo(function EventBlock({
               <div className="space-y-6 py-2">
                 {description && (
                   <p className="text-sm text-muted-foreground">{description}</p>
-                )}
-
-                {!user && showPrompt && (
-                  <div className="rounded-xl border border-border/60 p-4 space-y-3">
-                    <h4 className="font-semibold">
-                      {t('event.promptTitle', 'Хотите хранить билеты в одном месте?')}
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      {t(
-                        'event.promptText',
-                        'Зарегистрируйтесь, чтобы видеть все билеты в профиле и создать свой личный сайт за пару кликов.'
-                      )}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <Button onClick={handlePromptSignup}>
-                        <ArrowRight className="h-4 w-4 mr-2" />
-                        {t('event.promptSignup', 'Зарегистрироваться')}
-                      </Button>
-                      <Button variant="outline" onClick={() => setShowPrompt(false)}>
-                        {t('event.promptContinue', 'Продолжить без регистрации')}
-                      </Button>
-                    </div>
-                  </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">

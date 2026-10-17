@@ -5,27 +5,11 @@ import type { VideoBlock as VideoBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
 import { hasCustomBlockContainer } from '@/lib/blocks/block-styling';
+import { getVideoEmbedUrl, isVerticalVideo } from '@/lib/blocks/video-embed';
 
 interface VideoBlockProps {
   block: VideoBlockType;
   onClick?: () => void;
-}
-
-function getVideoEmbedUrl(url: string, platform: 'youtube' | 'vimeo'): string | null {
-  try {
-    if (platform === 'youtube') {
-      const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\\/\s]{11})/);
-      const videoId = videoIdMatch ? videoIdMatch[1] : null;
-      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-    } else if (platform === 'vimeo') {
-      const videoIdMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-      const videoId = videoIdMatch ? videoIdMatch[1] : null;
-      return videoId ? `https://player.vimeo.com/video/${videoId}` : null;
-    }
-  } catch (error) {
-    console.error('Error parsing video URL:', error);
-  }
-  return null;
 }
 
 export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: VideoBlockProps) {
@@ -38,7 +22,8 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
     '16:9': 'aspect-video',
     '4:3': 'aspect-[4/3]',
     '1:1': 'aspect-square',
-  }[block.aspectRatio || '16:9'];
+    '9:16': 'aspect-[9/16] max-h-[80vh] mx-auto',
+  }[isVerticalVideo(block.url) ? '9:16' : block.aspectRatio || '16:9'];
 
   if (!embedUrl) {
     return (

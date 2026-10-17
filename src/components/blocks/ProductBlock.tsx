@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import ShoppingCart from 'lucide-react/dist/esm/icons/shopping-cart';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
-import Coins from 'lucide-react/dist/esm/icons/coins';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getLocale } from '@/lib/utils/format';
 import type { ProductBlock as ProductBlockType } from '@/types/page';
@@ -24,12 +22,10 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
-import { useAuth } from '@/hooks/user/useAuth';
-import { useTokens } from '@/hooks/user/useTokens';
-import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
-import { toast } from 'sonner';
 import { trackPurchase } from '@/lib/analytics';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
+import { getSafeHref, openExternal } from '@/lib/blocks/safe-href';
+import { contactMessageHref, usePageContacts } from '@/lib/blocks/page-contacts';
 
 interface ProductBlockProps {
   block: ProductBlockType;
@@ -41,68 +37,24 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
   const { t, i18n } = useTranslation();
   const isMobile = useIsMobile();
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [isPurchasing, setIsPurchasing] = useState(false);
-  const { user } = useAuth();
-  const tokens = useTokens();
+  const contacts = usePageContacts();
 
   const name = getI18nText(block.name, i18n.language as SupportedLanguage);
   const description = getI18nText(block.description, i18n.language as SupportedLanguage);
   const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage);
 
-  // Check if this product uses token payment (price in KZT = tokens)
-  const tokenPrice = block.currency === 'KZT' ? block.price : null;
-  const hasEnoughTokens = tokenPrice ? (tokens.balance?.balance || 0) >= tokenPrice : true;
+  // Visitors buy through the owner's own link, or write to the owner to order.
+  // The old fallback sold the item for Linkkon tokens, which asked anonymous
+  // visitors to sign in to LinkMAX and showed "Купить токены" on every KZT price.
+  const buyHref = getSafeHref(block.buyLink);
+  const chat = contacts.find((c) => c.platform !== 'phone') ?? contacts[0];
+  const orderHref = !buyHref && chat
+    ? contactMessageHref(chat, t('product.orderMessage', { name, defaultValue: 'Здравствуйте! Хочу заказать «{{name}}»' }))
+    : undefined;
 
-  const handleBuy = async () => {
-    // If product has a direct buy link, use it
-    if (block.buyLink) {
-      if (block.price) {
-        trackPurchase(block.price, block.currency);
-      }
-      window.open(block.buyLink, '_blank', 'noopener,noreferrer');
-      return;
-    }
-
-    // Token-based purchase (KZT = Linkkon tokens)
-    if (tokenPrice) {
-      if (!user) {
-        toast.error(t('product.authRequired', 'Необходима авторизация для покупки'));
-        return;
-      }
-
-      if (!hasEnoughTokens) {
-        const deficit = tokenPrice - (tokens.balance?.balance || 0);
-        toast.info(t('product.notEnoughTokens', { count: Math.ceil(deficit), defaultValue: `Недостаточно токенов. Нужно еще ${Math.ceil(deficit)} Linkkon.` }));
-        redirectToTokenPurchase(deficit, name);
-        return;
-      }
-
-      // Process token purchase
-      setIsPurchasing(true);
-      try {
-        const success = await tokens.purchaseMarketplaceItem(
-          block.id ? block.id.split('-')[0] : null, // seller id from block owner
-          'product',
-          block.id || `product-${Date.now()}`,
-          tokenPrice,
-          t('product.purchaseDescription', 'Покупка товара: {{name}}', { name })
-        );
-
-        if (success) {
-          toast.success(t('product.purchaseSuccess', '🎉 Вы успешно приобрели "{{name}}"!', { name }));
-
-          // Track purchase event
-          if (tokenPrice) {
-            trackPurchase(tokenPrice, 'KZT'); // Assuming 1 token = 1 KZT roughly for tracking, or just track tokens
-          }
-
-          tokens.refresh();
-          setIsDetailOpen(false);
-        }
-      } finally {
-        setIsPurchasing(false);
-      }
-    }
+  const handleBuy = () => {
+    if (block.price) trackPurchase(block.price, block.currency);
+    openExternal(buyHref ?? orderHref);
   };
 
   const getCurrencySymbol = (currency: string) => {
@@ -147,12 +99,10 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
 
       {/* Product Info */}
       <div className="space-y-3">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="min-w-0 text-xl font-bold text-foreground leading-tight break-words hyphens-auto">{name}</h3>
-          <span className="text-xl font-bold text-primary break-words text-right">
-            {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
-          </span>
-        </div>
+        {/* The name is already the drawer/dialog title */}
+        <p className="text-xl font-bold text-foreground tabular-nums">
+          {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
+        </p>
 
         {description && (
           <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
@@ -162,38 +112,14 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
       </div>
 
       {/* Buy Button */}
-      {(block.buyLink || tokenPrice) && (
+      {(buyHref || orderHref) && (
         <Button
           onClick={handleBuy}
-          disabled={isPurchasing}
-          className={cn(
-            "w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-soft hover:shadow-lift transition-all",
-            !hasEnoughTokens && tokenPrice && "bg-primary shadow-primary/20",
-            "active:scale-[0.98]"
-          )}
+          className="w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-soft hover:shadow-lift transition-all active:scale-[0.98]"
         >
-          {isPurchasing ? (
-            <>
-              <Loader2 className="h-5 w-5 animate-spin" />
-              {t('product.purchasing', 'Покупка...')}
-            </>
-          ) : !hasEnoughTokens && tokenPrice ? (
-            <>
-              <MessageCircle className="h-5 w-5" />
-              {t('actions.buyTokens', 'Купить токены')}
-            </>
-          ) : tokenPrice ? (
-            <>
-              <Coins className="h-5 w-5" />
-              {t('actions.buyForTokens', 'Купить за')} {tokenPrice} Linkkon
-            </>
-          ) : (
-            <>
-              <ShoppingCart className="h-5 w-5" />
-              {buttonText || t('actions.buy', 'Купить')}
-              <ExternalLink className="h-4 w-4 ml-auto opacity-60" />
-            </>
-          )}
+          {buyHref ? <ShoppingCart className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+          {buttonText || (buyHref ? t('actions.buy', 'Купить') : t('product.order', 'Заказать'))}
+          <ExternalLink className="h-4 w-4 ml-auto opacity-60" />
         </Button>
       )}
     </div>

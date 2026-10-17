@@ -6,7 +6,7 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_RADIUS, BLOCK_SHADOW } from '@/lib/appearance/block-appearance';
-import { canonicalSocialUrl } from '@/lib/blocks/safe-href';
+import { canonicalSocialUrl, openExternal } from '@/lib/blocks/safe-href';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
@@ -22,12 +22,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
     if (onPlatformClick) {
       onPlatformClick();
     }
-    // Small delay to ensure tracking request is sent
-    setTimeout(() => {
-      if (url) {
-        window.open(url, '_blank', 'noopener,noreferrer');
-      }
-    }, 10);
+    if (url) openExternal(canonicalSocialUrl(url));
   };
 
   const iconStyle = block.iconStyle === 'brand' || block.iconStyle === 'outline' ? block.iconStyle : 'theme';

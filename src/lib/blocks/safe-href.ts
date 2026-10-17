@@ -47,3 +47,17 @@ export function imageAltText(alt: string | undefined, link?: string): string {
     return '';
   }
 }
+
+/**
+ * Open an owner-typed link in a new tab. "instagram.com/x" without a scheme
+ * used to resolve against the page and land on a 404; unsafe schemes are
+ * dropped. Opens synchronously so mobile popup blockers see the user's tap.
+ */
+export function openExternal(value: unknown): boolean {
+  const href = getSafeHref(value);
+  if (!href || typeof window === 'undefined') return false;
+  // Keep a valid link exactly as the owner typed it (no added trailing slash).
+  const raw = String(value).trim();
+  window.open(/^[a-z][a-z0-9+.-]*:/i.test(raw) ? raw : href, '_blank', 'noopener,noreferrer');
+  return true;
+}

@@ -6,6 +6,7 @@ import { Block } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { getComposition, type CompositionDef } from '@/lib/design/composition';
 import { resolveBlockVariant } from '@/lib/design/block-variants';
+import { isBlockShownToVisitors } from '@/lib/blocks/block-visibility';
 import { resolveBlockCellAppearance, resolveBlockLayout, resolveProfileComposition, splitBlockLayoutRuns, SELF_STYLED_BLOCK_TYPES, TRANSPARENT_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
 import type { PageTheme } from '@/types/page';
 
@@ -41,7 +42,10 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   animation = 'gentle',
 }: GridBlocksRendererProps) {
   // Guard against undefined/null blocks
-  const validBlocks = (blocks || []).filter((b): b is Block => b != null && typeof b === 'object' && 'type' in b);
+  // Visitors skip blocks that are scheduled out or left empty; filtering here
+  // (not inside BlockRenderer) keeps them from leaving an empty card behind.
+  const validBlocks = (blocks || []).filter((b): b is Block =>
+    b != null && typeof b === 'object' && 'type' in b && (isPreview || isBlockShownToVisitors(b)));
 
   const { profile: profileBlock, socials: profileSocials, content: contentBlocks } = resolveProfileComposition(validBlocks);
 

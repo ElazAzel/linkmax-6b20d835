@@ -13,17 +13,8 @@ import { BlockErrorBoundary } from '@/components/editor/BlockErrorBoundary';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
 import { useRenderContext } from '@/contexts/RenderContext';
+import { isBlockScheduledNow } from '@/lib/blocks/block-visibility';
 import { SELF_STYLED_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
-
-// Helper function to check if block should be visible based on schedule
-function isBlockVisible(block: Block): boolean {
-  if (!block.schedule) return true;
-  const now = new Date();
-  const { startDate, endDate } = block.schedule;
-  if (startDate && now < new Date(startDate)) return false;
-  if (endDate && now > new Date(endDate)) return false;
-  return true;
-}
 
 interface BlockRendererProps {
   block: Block;
@@ -112,7 +103,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
     }
   }, [block, isPreview, onBlockClick, i18n.language]);
 
-  if (!isPreview && !isBlockVisible(block)) {
+  if (!isPreview && !isBlockScheduledNow(block)) {
     return null;
   }
 

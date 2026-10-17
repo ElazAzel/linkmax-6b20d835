@@ -11,6 +11,8 @@ import Star from 'lucide-react/dist/esm/icons/star';
 import Tag from 'lucide-react/dist/esm/icons/tag';
 import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 import { dispatchBookingOfferingSelection } from '@/lib/revenue/booking-offering-events';
+import { openExternal } from '@/lib/blocks/safe-href';
+import { contactMessageHref, usePageContacts } from '@/lib/blocks/page-contacts';
 
 interface PricingBlockProps {
   block: PricingBlockType;
@@ -25,6 +27,8 @@ const currencySymbols: Record<string, string> = {
 export const PricingBlock = React.memo(function PricingBlock({ block }: PricingBlockProps) {
   const { t, i18n } = useTranslation();
   const { onBlockClick } = useAnalytics();
+  const contacts = usePageContacts();
+  const chat = contacts.find((c) => c.platform !== 'phone');
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
 
   const title = block.title ? getI18nText(block.title, currentLang) : '';
@@ -50,13 +54,20 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
     >
-      {title && <SectionHeader icon={<Tag className="h-4 w-4" />} title={title} />}
+      {title && <SectionHeader className="px-5 pt-4 mb-1" icon={<Tag className="h-4 w-4" />} title={title} />}
 
-      <div className="space-y-2">
-        {block.items.map((item) => {
+      {/* One flat list inside the block's own card: rows used to be cards
+          inside the card, truncated to one line, and looked tappable even
+          when a tap did nothing. */}
+      <ul className="divide-y divide-border/60 px-5 py-2">
+        {block.items.map((item, index) => {
           const name = getI18nText(item.name, currentLang);
           const description = item.description ? getI18nText(item.description, currentLang) : '';
           const period = item.period ? getI18nText(item.period, currentLang) : '';
+          const orderHref = !item.serviceOfferingId && chat
+            ? contactMessageHref(chat, t('blocks.pricing.orderMessage', { name, defaultValue: 'Здравствуйте! Хочу записаться: «{{name}}»' }))
+            : undefined;
+          const interactive = Boolean(item.serviceOfferingId || orderHref);
           const handle = () => {
             onBlockClick(block.id, block.type, `${title} - ${name}`);
             if (item.serviceOfferingId) {
@@ -64,45 +75,48 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
                 serviceOfferingId: item.serviceOfferingId,
                 pricingBlockId: block.id,
               });
+            } else if (orderHref) {
+              openExternal(orderHref);
             }
           };
 
           return (
-            <div
-              key={item.id}
-              onClick={handle}
-              onKeyDown={(event) => handleKeyboardActivation(event, handle)}
-              role="button"
-              tabIndex={0}
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when interactive
+            <li
+              key={item.id || `item-${index}`}
+              onClick={interactive ? handle : undefined}
+              onKeyDown={interactive ? (event) => handleKeyboardActivation(event, handle) : undefined}
+              role={interactive ? 'button' : undefined}
+              tabIndex={interactive ? 0 : undefined}
               className={cn(
-                'qb-card qb-card-hover flex items-center justify-between gap-3 p-4 cursor-pointer active:scale-[0.99] transition-transform',
-                item.featured && 'ring-2 ring-primary/60'
+                '-mx-2 flex items-start justify-between gap-4 px-2 py-3',
+                interactive && 'cursor-pointer rounded-lg transition-colors hover:bg-foreground/[0.03] active:bg-foreground/[0.06]'
               )}
             >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-semibold text-sm truncate tracking-tight">{name}</h4>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <h4 className="text-sm font-semibold leading-snug tracking-tight break-words">{name}</h4>
                   {item.featured && (
-                    <Badge variant="default" className="text-[10px] h-5 px-2">
-                      <Star className="h-2.5 w-2.5 mr-0.5 fill-current" />
+                    <Badge variant="secondary" className="h-5 px-2 text-[10px] font-medium">
+                      <Star className="mr-0.5 h-2.5 w-2.5 fill-current" />
                       {t('blocks.pricing.hit', 'Хит')}
                     </Badge>
                   )}
                 </div>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{description}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground line-clamp-3 break-words">{description}</p>
                 )}
               </div>
-              <div className="text-right flex-shrink-0">
-                <span className="text-base font-semibold text-primary whitespace-nowrap tracking-tight">
+              <div className="flex-shrink-0 text-right">
+                <span className="whitespace-nowrap text-sm font-semibold tabular-nums tracking-tight text-foreground">
                   {formatPrice(item.price, item.currency || block.currency || 'KZT')}
                 </span>
                 {period && <p className="text-xs text-muted-foreground">{period}</p>}
               </div>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 });

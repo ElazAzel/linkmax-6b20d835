@@ -12,6 +12,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import type { CarouselBlock as CarouselBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
+import { openExternal } from '@/lib/blocks/safe-href';
 
 interface CarouselBlockProps {
   block: CarouselBlockType;
@@ -29,10 +30,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
   const handleImageClick = (link?: string) => {
     if (link) {
       onClick?.();
-      // Delay to ensure tracking request is sent before navigation
-      setTimeout(() => {
-        window.open(link, '_blank', 'noopener,noreferrer');
-      }, 15);
+      openExternal(link);
     }
   };
 

@@ -13,6 +13,7 @@ import Heart from 'lucide-react/dist/esm/icons/heart';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import { openExternal } from '@/lib/blocks/safe-href';
 
 interface CommunityBlockProps {
   block: CommunityBlockType;
@@ -59,7 +60,7 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
 
   const handleJoin = () => {
     if (block.telegramLink) {
-      window.open(block.telegramLink, '_blank', 'noopener,noreferrer');
+      openExternal(block.telegramLink);
     }
   };
 

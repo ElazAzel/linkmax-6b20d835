@@ -51,6 +51,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { usePageExperiments } from '@/hooks/page/usePageExperiments';
 import { getVisitorId } from '@/services/analytics';
 import { supabase } from '@/platform/supabase/client';
+import { extractPageContacts, PageContactsProvider } from '@/lib/blocks/page-contacts';
 
 const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
 
@@ -77,7 +78,7 @@ interface PublicPageProps {
 }
 
 export default function PublicPage({ initialPage = null, headManagedByRoute = false }: PublicPageProps = {}) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { compressed, slug, pagePath } = useParams<{ compressed?: string; slug?: string; pagePath?: string }>();
   // Sprint 1: Multi-Page — when /:slug/p/:pagePath is hit, resolve to the sub-page's actual slug.
   const [resolvedSubSlug, setResolvedSubSlug] = useState<string | null>(null);
@@ -229,6 +230,7 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
 
   // Use translated blocks if available, otherwise original resolved blocks
   const displayBlocks = translatedBlocks || experimentalBlocks || [];
+  const pageContacts = useMemo(() => extractPageContacts(displayBlocks as Block[], i18n.language), [displayBlocks, i18n.language]);
 
   // Build canonical URL for SEO
   const canonicalUrl = useMemo(() => {
@@ -395,6 +397,7 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
           )}
 
           <AnalyticsProvider pageId={pageData?.id} enabled={!!slug}>
+            <PageContactsProvider value={pageContacts}>
             <div>
               {/* Language Switcher - Top Right */}
               <div className="fixed top-4 right-4 z-50">
@@ -507,6 +510,7 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
                     pageSlug={slug} 
                     blocks={displayBlocks as Block[]} 
                     seo={pageData.seo} 
+                    hideOnMobile={pageContacts.length > 0}
                   />
                 </Suspense>
               )}
@@ -518,6 +522,7 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
                 </Suspense>
               )}
             </div>
+            </PageContactsProvider>
           </AnalyticsProvider>
           </div>
         </motion.div>

@@ -131,11 +131,11 @@ export function SectionHeader({ icon, title, className }: SectionHeaderProps) {
   return (
     <div className={cn('flex items-center gap-2.5 px-1 mb-3', className)}>
       {icon && (
-        <span className="inline-flex h-7 w-7 items-center justify-center rounded-control bg-primary/10 text-primary">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-control bg-foreground/[0.06] text-foreground/70">
           {icon}
         </span>
       )}
-      <h3 className="text-sm font-medium tracking-tight text-foreground">{title}</h3>
+      <h3 className="text-[15px] font-semibold tracking-tight text-foreground">{title}</h3>
     </div>
   );
 }
