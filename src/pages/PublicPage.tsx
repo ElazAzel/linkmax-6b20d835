@@ -52,6 +52,7 @@ import { usePageExperiments } from '@/hooks/page/usePageExperiments';
 import { getVisitorId } from '@/services/analytics';
 import { supabase } from '@/platform/supabase/client';
 import { extractPageContacts, PageContactsProvider } from '@/lib/blocks/page-contacts';
+import { withPageHeader } from '@/lib/blocks/page-header';
 
 const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
 
@@ -418,7 +419,7 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
                 {/* Grid Blocks - Same layout as editor */}
                 <SectionErrorBoundary name="page-blocks">
                   <GridBlocksRenderer
-                    blocks={displayBlocks}
+                    blocks={withPageHeader(displayBlocks as Block[], pageData)}
                     pageOwnerId={pageData?.userId}
                     pageId={pageData?.id}
                     isOwnerPremium={isOwnerPremium}
