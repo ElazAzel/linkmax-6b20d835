@@ -193,7 +193,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
               <SelectContent>
                 <SelectItem value="none">{t('blockStyle.none', 'Нет')}</SelectItem>
                 <SelectItem value="shimmer">Shimmer</SelectItem>
-                <SelectItem value="glow">Glow</SelectItem>
+                <SelectItem value="glow">{t('blockStyle.hover.glow', 'Свечение')}</SelectItem>
                 <SelectItem value="pulse">Pulse</SelectItem>
                 <SelectItem value="blink">Blink</SelectItem>
                 <SelectItem value="rainbow">Rainbow</SelectItem>
@@ -247,7 +247,7 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
                 <SelectItem value="md">M</SelectItem>
                 <SelectItem value="lg">L</SelectItem>
                 <SelectItem value="xl">XL</SelectItem>
-                <SelectItem value="glow">Glow</SelectItem>
+                <SelectItem value="glow">{t('blockStyle.hover.glow', 'Свечение')}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
@@ -329,10 +329,10 @@ export const BlockStyleEditor = memo(function BlockStyleEditor({ formData, onCha
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">{t('blockStyle.none', 'Нет')}</SelectItem>
-              <SelectItem value="scale">Scale</SelectItem>
-              <SelectItem value="lift">Lift</SelectItem>
-              <SelectItem value="glow">Glow</SelectItem>
-              <SelectItem value="fade">Fade</SelectItem>
+              <SelectItem value="scale">{t('blockStyle.hover.scale', 'Увеличение')}</SelectItem>
+              <SelectItem value="lift">{t('blockStyle.hover.lift', 'Подъём')}</SelectItem>
+              <SelectItem value="glow">{t('blockStyle.hover.glow', 'Свечение')}</SelectItem>
+              <SelectItem value="fade">{t('blockStyle.hover.fade', 'Затухание')}</SelectItem>
             </SelectContent>
           </Select>
         </Field>

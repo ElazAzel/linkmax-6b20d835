@@ -39,24 +39,12 @@ interface BlockEditorWrapperProps {
 /**
  * Wrapper component for block editors
  */
-export function BlockEditorWrapper({
-  children,
-  isPremium = false,
-  description,
-}: BlockEditorWrapperProps) {
-  const { t } = useTranslation();
+export function BlockEditorWrapper({ children }: BlockEditorWrapperProps) {
 
   return (
     <div className="space-y-4">
-      {isPremium && (
-        <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
-          <Crown className="h-4 w-4 text-amber-500 shrink-0" />
-          <span className="text-sm text-amber-600 font-medium">
-            {description || t('blockEditor.premiumFeature', 'Premium')}
-          </span>
-        </div>
-      )}
-
+      {/* No «Premium» banner: these blocks are free now, and its text was
+          hard-coded English in several editors. */}
       {/* Editor hints are not shown: the phone sheet keeps its height for the fields. */}
       {children}
     </div>

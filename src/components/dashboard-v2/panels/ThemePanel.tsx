@@ -68,9 +68,10 @@ export const ThemePanel = memo(function ThemePanel({
   const [activeTab, setActiveTab] = useState('themes');
   const importInputRef = useRef<HTMLInputElement>(null);
 
-  const activeThemeId = currentTheme.themePreset
-    ?? THEME_PRESETS.find(p => p.theme.backgroundColor === currentTheme.backgroundColor)?.id
-    ?? 'warm-paper';
+  // No preset applied → nothing is ticked (it used to tick «Тёплая бумага»
+  // while the page showed the app's default colours).
+  const activeThemeId: string | undefined = currentTheme.themePreset
+    ?? THEME_PRESETS.find(p => p.theme.backgroundColor === currentTheme.backgroundColor)?.id;
 
   const handleSelectTheme = (preset: ThemePreset) => {
     if (preset.isPremium && !isPremium) {

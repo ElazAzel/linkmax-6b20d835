@@ -137,7 +137,7 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
             variant="ghost"
             className={btn}
             onClick={(e) => { e.stopPropagation(); onDuplicate(block.id); }}
-            title={t('editor.duplicate', 'Duplicate')}
+            title={t('editor.duplicate', 'Дублировать')}
           >
             <Copy className={icon} />
           </Button>
@@ -151,7 +151,8 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
                   variant="ghost"
                   className={btn}
                   onClick={(e) => e.stopPropagation()}
-                  title={t('editor.transform', 'Convert to...')}
+                  title={t('editor.transform', 'Преобразовать в…')}
+                  aria-label={t('editor.transform', 'Преобразовать в…')}
                 >
                   <RefreshCw className={icon} />
                 </Button>
@@ -169,7 +170,7 @@ export const BlockContextToolbar = memo(function BlockContextToolbar({
                       }}
                       className="rounded-lg py-2 px-3"
                     >
-                      <span className="flex-1">{t(`blocks.${target}`, target)}</span>
+                      <span className="flex-1">{t(`blockTypes.${target}`, target)}</span>
                       {isLossy && (
                         <AlertTriangle className="h-3 w-3 text-amber-500 ml-2 shrink-0" />
                       )}

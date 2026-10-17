@@ -251,6 +251,15 @@ function SortableGridBlockItem({
     }
   }, [isRecentlyAdded]);
 
+  // Phone: the inspector sheet covers the lower part of the screen, so the
+  // selected block moves to the top where it stays visible while editing.
+  useEffect(() => {
+    if (!selected || !wrapperRef.current) return;
+    if (typeof window === 'undefined' || !window.matchMedia('(max-width: 767px)').matches) return;
+    const node = wrapperRef.current;
+    requestAnimationFrame(() => node.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }, [selected]);
+
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -337,7 +346,7 @@ function SortableGridBlockItem({
               e.currentTarget.blur();
             }
           }}
-          aria-label={`Edit ${block.type} block`}
+          aria-label={t('editor.editBlock', 'Изменить блок')}
         />
       </div>
 
@@ -357,7 +366,7 @@ function SortableGridBlockItem({
             e.stopPropagation();
             onEdit(block);
           }}
-          className="absolute top-2 left-2 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/95 backdrop-blur-md text-[10px] font-bold text-white shadow-md hover:bg-amber-500 transition-all animate-fade-in"
+          className="absolute bottom-2 right-2 z-30 flex items-center gap-1.5 rounded-full bg-foreground px-2.5 py-1 text-[11px] font-medium text-background shadow-md transition-opacity hover:opacity-90 animate-fade-in"
           aria-label={t(emptyHint.hintKey, emptyHint.hintLabel)}
         >
           <Edit2 className="h-3 w-3" />

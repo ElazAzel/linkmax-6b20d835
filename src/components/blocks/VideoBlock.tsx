@@ -4,6 +4,7 @@ import type { VideoBlock as VideoBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
 import { useRenderContext } from '@/contexts/RenderContext';
+import { EmptyBlockHint } from '@/components/blocks/shells/EmptyBlockHint';
 import { getVideoEmbedUrl, isVerticalVideo } from '@/lib/blocks/video-embed';
 
 interface VideoBlockProps {
@@ -31,6 +32,10 @@ export const VideoBlock = memo(function VideoBlockComponent({ block }: VideoBloc
   if (!embedUrl) {
     // Visitors never see a broken-link message; the owner does.
     if (renderMode === 'live') return null;
+    // A new block has no link yet: a hint, not a red error.
+    if (!(block.url || '').trim()) {
+      return <EmptyBlockHint>{t('blocks.video.emptyHint', 'Вставьте ссылку на YouTube или Vimeo')}</EmptyBlockHint>;
+    }
     return (
       <div className="w-full p-4 sm:p-5">
         <p className="text-sm font-medium text-destructive">

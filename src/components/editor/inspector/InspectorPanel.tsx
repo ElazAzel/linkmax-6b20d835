@@ -94,8 +94,8 @@ export function InspectorPanel({ block, title, editorBody, onChange, onClose, on
         <Select value={block.blockStyle?.fontFamily || 'sans'} onValueChange={(fontFamily: string) => change({ blockStyle: { ...block.blockStyle, fontFamily: fontFamily as BlockFontFamily } } as Partial<Block>)}>
           <SelectTrigger id={`inspector-font-${block.id}`} aria-label={labels.font}><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="sans">Inter</SelectItem><SelectItem value="serif">Georgia</SelectItem>
-            <SelectItem value="mono">Mono</SelectItem><SelectItem value="display">Display</SelectItem><SelectItem value="rounded">Rounded</SelectItem>
+            <SelectItem value="sans">{t("blockStyle.font.sans", "Без засечек")}</SelectItem><SelectItem value="serif">{t("blockStyle.font.serif", "С засечками")}</SelectItem>
+            <SelectItem value="mono">{t("blockStyle.font.mono", "Моноширинный")}</SelectItem><SelectItem value="display">{t("blockStyle.font.display", "Как заголовки темы")}</SelectItem><SelectItem value="rounded">{t("blockStyle.font.rounded", "Скруглённый")}</SelectItem>
           </SelectContent>
         </Select>
       </div>;

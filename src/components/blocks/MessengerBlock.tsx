@@ -8,6 +8,8 @@ import type { MessengerBlock as MessengerBlockType } from '@/types/page';
 import { supabase } from '@/platform/supabase/client';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { SectionHeader } from '@/components/blocks/shells/BlockShell';
+import { EmptyBlockHint } from '@/components/blocks/shells/EmptyBlockHint';
+import { useRenderContext } from '@/contexts/RenderContext';
 import { messengerPhoneDigits, whatsappHref } from '@/lib/blocks/messenger-links';
 
 interface MessengerBlockProps {
@@ -17,7 +19,8 @@ interface MessengerBlockProps {
 }
 
 export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId, onClick }: MessengerBlockProps) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const renderMode = useRenderContext();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   const getMessengerUrl = (platform: string, username: string, message?: unknown) => {
@@ -59,7 +62,9 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
   const messengers = (block.messengers || []).filter((m) => (m.username || '').trim());
 
   if (messengers.length === 0) {
-    return null;
+    // Owners see what to fill in; it used to collapse to a 2px strip in the editor.
+    if (renderMode === 'live') return null;
+    return <EmptyBlockHint icon={<MessageCircle className="h-4 w-4" aria-hidden />}>{t('blocks.messenger.emptyHint', 'Добавьте WhatsApp или Telegram')}</EmptyBlockHint>;
   }
 
   return (

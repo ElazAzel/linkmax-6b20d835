@@ -24,36 +24,20 @@ interface TransformMapping {
  * Transform compatibility matrix
  * Each entry defines valid targets and how fields map between types.
  */
+// Only conversions that keep the owner's content. Button and Link share
+// { title, url }. The old map pointed at fields these blocks do not have
+// (label, customLabel), so button → messenger made an empty block, and
+// text → FAQ / FAQ → text / newsletter → form threw the content away.
 const TRANSFORM_MAP: Partial<Record<BlockType, TransformMapping>> = {
   button: {
-    targets: ['link', 'messenger'],
-    fieldMap: { label: 'label', url: 'url', blockSize: 'blockSize' },
-    lossyFields: ['variant', 'animation', 'icon'],
+    targets: ['link'],
+    fieldMap: { title: 'title', url: 'url', blockSize: 'blockSize' },
+    lossyFields: [],
   },
   link: {
     targets: ['button'],
-    fieldMap: { title: 'label', url: 'url', blockSize: 'blockSize' },
-    lossyFields: ['description', 'imageUrl', 'thumbnailUrl'],
-  },
-  messenger: {
-    targets: ['button'],
-    fieldMap: { customLabel: 'label', url: 'url', blockSize: 'blockSize' },
-    lossyFields: ['platform', 'icon'],
-  },
-  text: {
-    targets: ['faq'],
-    fieldMap: { content: 'content', blockSize: 'blockSize' },
-    lossyFields: ['alignment', 'fontSize'],
-  },
-  faq: {
-    targets: ['text'],
-    fieldMap: { blockSize: 'blockSize' },
-    lossyFields: ['questions', 'answers'],
-  },
-  newsletter: {
-    targets: ['form'],
-    fieldMap: { blockSize: 'blockSize' },
-    lossyFields: ['placeholder', 'buttonText'],
+    fieldMap: { title: 'title', url: 'url', blockSize: 'blockSize' },
+    lossyFields: [],
   },
 };
 
