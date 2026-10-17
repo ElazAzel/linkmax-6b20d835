@@ -34,12 +34,19 @@ describe('LinkMAX V2 tile contracts', () => {
 
   it('isolates auto-height content from fixed grid rows while retaining order', () => {
     expect(appearance).toHaveProperty('splitBlockLayoutRuns', expect.any(Function));
-    const split = (appearance as unknown as { splitBlockLayoutRuns: (blocks: { id: string; type: string }[]) => { id: string }[][] }).splitBlockLayoutRuns;
+    const split = (appearance as unknown as { splitBlockLayoutRuns: (blocks: { id: string; type: string; blockSize?: string }[]) => { id: string }[][] }).splitBlockLayoutRuns;
     const result = split([
-      { id: 'photo', type: 'image' }, { id: 'link', type: 'link' },
-      { id: 'form', type: 'form' }, { id: 'faq', type: 'faq' }, { id: 'last', type: 'image' },
+      { id: 'photo', type: 'image', blockSize: 'small' }, { id: 'link', type: 'link' },
+      { id: 'form', type: 'form' }, { id: 'faq', type: 'faq' }, { id: 'last', type: 'image', blockSize: 'small' },
     ]);
     expect(result.map(run => run.map(block => block.id))).toEqual([['photo', 'link'], ['form'], ['faq'], ['last']]);
+  });
+
+  it('keeps an image at the default size at its own aspect ratio instead of a tile row', () => {
+    expect(appearance.resolveBlockLayout({ type: 'image' }).autoHeight).toBe(true);
+    expect(appearance.resolveBlockLayout({ type: 'image', blockSize: 'full' }).autoHeight).toBe(true);
+    expect(appearance.resolveBlockLayout({ type: 'image', blockSize: 'wide' }).autoHeight).toBe(false);
+    expect(appearance.resolveBlockLayout({ type: 'before_after' }).autoHeight).toBe(true);
   });
 
   it('does not add a second frame around a self-styled link', () => {

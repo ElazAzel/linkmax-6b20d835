@@ -186,24 +186,34 @@ export const EditorTopBar = memo(function EditorTopBar({
           </span>
         </Button>
 
-        <Button
-          size="sm"
-          aria-label={isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
-          className={cn(
-            'h-10 rounded-control font-semibold text-sm px-3 md:px-4 gap-1.5',
-            !isPublished
-              ? 'bg-primary hover:bg-primary/90 text-primary-foreground'
-              : 'bg-success/12 text-success hover:bg-success/20 border border-success/30',
-          )}
-          onClick={onPublish}
-          disabled={publishing || (isPublished && !hasUnpublishedChanges)}
-          aria-busy={publishing}
-        >
-          <Share2 className="h-4 w-4" />
-          <span className="hidden sm:inline">
-            {publishing ? t('pageV2.draft.publishing', 'Публикация…') : t('editor.publish', 'Опубликовать')}
-          </span>
-        </Button>
+        {/* Nothing new to publish: the page is live, so the button shares it
+            instead of sitting disabled in a colour nobody can read. */}
+        {isPublished && !hasUnpublishedChanges ? (
+          <Button
+            size="sm"
+            variant="outline"
+            aria-label={t('editor.share', 'Поделиться')}
+            className="h-10 rounded-control gap-1.5 px-3 text-sm font-semibold md:px-4"
+            onClick={onShare}
+          >
+            <Share2 className="h-4 w-4" />
+            <span className="hidden sm:inline">{t('editor.share', 'Поделиться')}</span>
+          </Button>
+        ) : (
+          <Button
+            size="sm"
+            aria-label={t('editor.publish', 'Опубликовать')}
+            className="h-10 rounded-control gap-1.5 bg-primary px-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 md:px-4"
+            onClick={onPublish}
+            disabled={publishing}
+            aria-busy={publishing}
+          >
+            <Share2 className="h-4 w-4" />
+            <span className={cn(isPublished ? 'inline' : 'hidden sm:inline')}>
+              {publishing ? t('pageV2.draft.publishing', 'Публикация…') : t('editor.publish', 'Опубликовать')}
+            </span>
+          </Button>
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

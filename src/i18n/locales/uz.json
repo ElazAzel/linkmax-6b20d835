@@ -892,14 +892,16 @@
       "passwordLowercase": "Password must contain at least one lowercase letter",
       "passwordMin": "Password must be at least 8 characters",
       "passwordNumber": "Password must contain at least one number",
-      "passwordUppercase": "Password must contain at least one uppercase letter"
+      "passwordUppercase": "Password must contain at least one uppercase letter",
+      "passwordRequired": "Parolni kiriting"
     },
     "welcomeBack": "Welcome back",
     "heroTitle": "Create your lnkmx.my page",
     "heroSubtitle": "AI builds your site in 2 minutes. Free forever.",
     "continueWithEmail": "Continue with Email",
     "moreOptions": "More sign-in options",
-    "createWithGoogle": "Google bilan yaratish"
+    "createWithGoogle": "Google bilan yaratish",
+    "invalidCredentials": "Email yoki parol noto'g'ri"
   },
   "automations": {
     "startSequence": "Ketma-ketlikni boshqarish"
@@ -1182,7 +1184,8 @@
       "hit": "Urish",
       "newItem": "Yangi xizmat",
       "title": "Sarlavha",
-      "titlePlaceholder": "Mening xizmatlarim"
+      "titlePlaceholder": "Mening xizmatlarim",
+      "orderMessage": "Assalomu alaykum! «{{name}}» xizmatiga yozilmoqchiman"
     },
     "proOnly": "Bu blok faqat PRO da mavjud",
     "product": "Mahsulot",
@@ -1203,7 +1206,8 @@
     },
     "subtitle": "Surang va tashlab. Har qanday qurilmada ishlaydi.",
     "title": "28+ aqlli bloklar",
-    "desc": "Oddiy havolalardan murakkab shakllar va bronlash tizimlariga."
+    "desc": "Oddiy havolalardan murakkab shakllar va bronlash tizimlariga.",
+    "imageUnavailable": "Rasm yuklanmadi"
   },
   "booking": {
     "addDetails": "Elektron pochta yoki sharh qo'shing",
@@ -1517,7 +1521,12 @@
       "successMsg": "Tez orada siz bilan bog'lanamiz",
       "error": "Taqdim etish xatosi",
       "intentHeader": "Sizni qiziqtirganga oʻxshaydi: {{intent}}"
-    }
+    },
+    "open": "Chatni ochish",
+    "status": "Darhol javob beradi",
+    "greeting": "Assalomu alaykum!",
+    "intro": "Ushbu sahifadagi ma'lumotlar asosida xizmatlar, narxlar va yozilish haqidagi savollarga javob beraman.",
+    "footer": "Javoblar ushbu sahifa asosida · LinkMAX"
   },
   "cookies": {
     "accept": "Qabul qiling",
@@ -2355,7 +2364,9 @@
       "wide": "Toʻliq kenglik",
       "tall": "Baland, yarim kenglik",
       "large": "Katta kvadrat",
-      "xl": "Toʻliq ekran"
+      "xl": "Toʻliq ekran",
+      "natural": "Rasm o'lchami bo'yicha",
+      "naturalShort": "Rasm"
     }
   },
   "errors": {
@@ -2372,7 +2383,13 @@
     "subscription": "Obuna xatosi",
     "tryAgain": "Sahifani yangilab koʻring",
     "unauthorized": "Avtorizatsiya talab qilinadi",
-    "updateFailed": "Yangilash xatosi"
+    "updateFailed": "Yangilash xatosi",
+    "unknown": "Nimadir xato ketdi. Qaytadan urinib ko'ring.",
+    "auth": "Kirib bo'lmadi. Ma'lumotlarni tekshirib, qaytadan urinib ko'ring.",
+    "network": "Aloqa yo'q. Internetni tekshiring.",
+    "validation": "Kiritilgan ma'lumotlarni tekshiring.",
+    "rateLimit": "Urinishlar juda ko'p. Biroz kuting.",
+    "payment": "To'lov amalga oshmadi. Qaytadan urinib ko'ring."
   },
   "event": {
     "addToCalendar": "Kalendarga qo'shish",
@@ -5167,7 +5184,9 @@
     "purchaseDescription": "Tovarlarni xarid qilish: {{name}}",
     "purchaseSuccess": "Siz muvaffaqiyatli xarid qildingiz",
     "purchasing": "Sotib olish...",
-    "tapToView": "Batafsil →"
+    "tapToView": "Batafsil →",
+    "order": "Buyurtma berish",
+    "orderMessage": "Assalomu alaykum! «{{name}}» buyurtma bermoqchiman"
   },
   "profile": {
     "addBio": "Tavsif qo'shing",
@@ -6062,7 +6081,31 @@
     "kazakhSteppeDesc": "Бирюза и золото",
     "paperInk": "Бумага и чернила",
     "paperInkDesc": "Журнальная типографика",
-    "buttonStyle": "Tugmalar va havolalar"
+    "buttonStyle": "Tugmalar va havolalar",
+    "warmPaper": "Iliq qog'oz",
+    "warmPaperDesc": "Krem fon, yumshoq ohanglar",
+    "editorialMono": "Jurnal",
+    "editorialMonoDesc": "Oq-qora jurnal tipografikasi",
+    "cleanWhite": "Toza oq",
+    "cleanWhiteDesc": "Oq fon, aniq tuzilma",
+    "midnight": "Yarim tun",
+    "midnightDesc": "Chuqur qorong'i fon",
+    "noirGold": "Nuar va oltin",
+    "noirGoldDesc": "Oltin urg'uli qorong'i fon",
+    "sunsetBlaze": "Yorqin shafaq",
+    "sunsetBlazeDesc": "Iliq to'q sariq va pushti ohanglar",
+    "oceanDeep": "Chuqur okean",
+    "oceanDeepDesc": "Sokin ko'k ohanglar",
+    "forestMoss": "O'rmon moxi",
+    "forestMossDesc": "Tabiiy yashil ohanglar",
+    "blushLavender": "Lavanda",
+    "blushLavenderDesc": "Nozik pushti va binafsha ohanglar",
+    "terracottaSage": "Terrakota va shalfey",
+    "terracottaSageDesc": "Loy va o't ohanglari",
+    "neonMint": "Neon yalpiz",
+    "neonMintDesc": "Qorong'i fon, yorqin yalpiz rangi",
+    "brutalistPop": "Brutalizm",
+    "brutalistPopDesc": "Kontrast ranglar va qalin chegaralar"
   },
   "tier": {
     "blocksCount": "bloklar",
@@ -8346,6 +8389,23 @@
       "success": "Nusxa shablonlaringizga saqlandi",
       "error": "Nusxani saqlab bo‘lmadi",
       "authRedirect": "Kiring — nusxa shablonlaringizga saqlanadi."
+    },
+    "analytics": {
+      "title": "Virusli o'sish",
+      "subtitle": "Qisqa va referal havolalar orqali o'tishlar hamda sahifa nusxalari.",
+      "shares": "Ulashishlar",
+      "visits": "Taklif orqali o'tishlar",
+      "signups": "Ro'yxatdan o'tishlar",
+      "clones": "Nusxalar",
+      "kFactor": "K-faktor"
     }
+  },
+  "publicPage": {
+    "contact": {
+      "call": "Qo'ng'iroq qilish",
+      "region": "Tezkor aloqa",
+      "hide": "Yashirish"
+    },
+    "poweredBy": "LinkMAX'da yaratilgan"
   }
 }

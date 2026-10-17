@@ -22,9 +22,7 @@ export const FreemiumWatermark = memo(function FreemiumWatermark({ show, slug }:
         className="inline-flex items-center gap-2 rounded-full bg-foreground/5 px-4 py-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
       >
         <Crown className="h-3.5 w-3.5" />
-        <span>
-          {t('publicPage.poweredBy', 'Powered by')} <strong className="font-semibold">LinkMAX</strong>
-        </span>
+        <span>{t('publicPage.poweredBy', 'Сделано на LinkMAX')}</span>
       </a>
     </div>
   );

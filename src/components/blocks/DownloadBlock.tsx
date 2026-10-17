@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { openExternal } from '@/lib/blocks/safe-href';
 
 interface DownloadBlockProps {
   block: DownloadBlockType;
@@ -18,10 +19,7 @@ export const DownloadBlock = memo(function DownloadBlock({ block, onClick }: Dow
   
   const handleDownload = () => {
     if (onClick) onClick();
-    // Small delay to ensure tracking request is sent
-    setTimeout(() => {
-      window.open(block.fileUrl, '_blank', 'noopener,noreferrer');
-    }, 10);
+    openExternal(block.fileUrl);
   };
 
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);

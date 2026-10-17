@@ -97,7 +97,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           <div>
             <h3 className="font-bold text-sm tracking-tight">{t('seo.readiness.title', 'Видимость в поиске')}</h3>
             <p className={cn(
-              'text-xs font-bold uppercase tracking-[0.06em] opacity-80',
+              'text-xs font-medium',
               color === 'emerald' && 'text-success',
               color === 'amber' && 'text-warning',
               color === 'red' && 'text-destructive',
@@ -106,15 +106,15 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
             </p>
           </div>
         </div>
-        <div className="text-right">
+        <div className="shrink-0 text-right">
           <div className="flex items-baseline justify-end gap-0.5">
-            <span className="text-2xl font-bold tracking-tighter font-num">{displayScore}</span>
+            <span className="text-2xl font-bold tracking-tight tabular-nums">{displayScore}</span>
             <span className="text-xs text-muted-foreground font-bold opacity-40">/100</span>
           </div>
           <div className="flex items-center gap-1.5 justify-end">
             {diagLoading && <RefreshCw className="h-3 w-3 text-muted-foreground animate-spin" />}
             <span className={cn(
-              'text-xs font-bold uppercase tracking-[0.06em]',
+              'whitespace-nowrap text-[11px] font-medium',
               hasServerData && !isServerStale ? 'text-success' : 'text-muted-foreground'
             )}>
               {sourceLabel}

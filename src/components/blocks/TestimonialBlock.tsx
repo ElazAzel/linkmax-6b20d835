@@ -37,7 +37,7 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
     >
-      {title && <SectionHeader icon={<Quote className="h-4 w-4" />} title={title} />}
+      {title && <SectionHeader className="px-5 pt-4 mb-1" icon={<Quote className="h-4 w-4" />} title={title} />}
 
       {/* One flat list inside the block's own card: every review is visible on
           any device (the old swipe row hid the rest behind a hidden scrollbar). */}

@@ -53,7 +53,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     blockSize: DEFAULT_BLOCK_SIZE,
     title: 'Нажмите меня',
     url: '',
-    background: { type: 'gradient', value: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)))' },
     hoverEffect: 'glow',
     blockStyle: {
       padding: 'md',

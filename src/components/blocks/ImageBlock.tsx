@@ -1,13 +1,15 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import ImageOff from 'lucide-react/dist/esm/icons/image-off';
+import { useRenderContext } from '@/contexts/RenderContext';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { hasCustomBlockContainer } from '@/lib/blocks/block-styling';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
 import { getImagePlacementStyle } from '@/lib/appearance/image-placement';
-import { imageAltText } from '@/lib/blocks/safe-href';
+import { imageAltText, openExternal } from '@/lib/blocks/safe-href';
 
 interface ImageBlockProps {
   block: ImageBlockType;
@@ -15,7 +17,11 @@ interface ImageBlockProps {
 }
 
 export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: ImageBlockProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const renderMode = useRenderContext();
+  const [failed, setFailed] = useState(false);
+  // A corrected URL gets a fresh try (editing keeps the same component).
+  useEffect(() => setFailed(false), [block.url]);
   const alt = imageAltText(getI18nText(block.alt, i18n.language as SupportedLanguage), block.link);
   const caption = getI18nText(block.caption, i18n.language as SupportedLanguage);
 
@@ -51,12 +57,21 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
   const handleClick = () => {
     if (block.link) {
       onClick?.();
-      // Delay to ensure tracking request is sent before navigation
-      setTimeout(() => {
-        window.open(block.link, '_blank', 'noopener,noreferrer');
-      }, 15);
+      openExternal(block.link);
     }
   };
+
+  // A missing or broken image: visitors see nothing instead of the browser's
+  // broken-image box; the owner sees a calm placeholder to fix it.
+  if (!block.url || failed) {
+    if (renderMode === 'live') return null;
+    return (
+      <div className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-hairline bg-muted/40 text-muted-foreground">
+        <ImageOff className="h-6 w-6" aria-hidden="true" />
+        <span className="text-xs">{t('blocks.imageUnavailable', 'Изображение не загрузилось')}</span>
+      </div>
+    );
+  }
 
   const isFullWidth = isBanner || block.scale === 'fill' || block.scale === 'cover';
   const containerClass = isFullWidth ? 'w-full' : 'w-full max-w-md';
@@ -106,6 +121,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
                 hasLink && 'transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-90'
               )}
               loading="lazy"
+              onError={() => setFailed(true)}
               style={getImagePlacementStyle(block)}
             />
           )}

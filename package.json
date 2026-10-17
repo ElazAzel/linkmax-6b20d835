@@ -63,7 +63,8 @@
     "test:db": "node --test \"src/services/__tests__/*.sql.test.mjs\""
   },
   "overrides": {
-    "rolldown": "1.2.1"
+    "rolldown": "1.2.1",
+    "react-is": "19.2.0"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",

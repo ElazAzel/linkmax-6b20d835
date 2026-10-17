@@ -21,8 +21,10 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
     : block.alignment === 'right' ? 'justify-end' 
     : 'justify-center';
 
-  // Legacy background system
-  const hasLegacyBackground = block.background && block.background.value;
+  // Legacy background system. The old factory saved a gradient built from
+  // theme variables (one of them never defined) on every new button; that
+  // means "use the accent", not a custom fill.
+  const hasLegacyBackground = Boolean(block.background?.value) && !/var\(--primary/.test(block.background?.value ?? '');
   const isImageBackground = block.background?.type === 'image';
   const legacyButtonStyle = hasLegacyBackground ? getBackgroundStyle(block.background) : {};
 
@@ -41,7 +43,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
     : block.width === 'small' ? 'w-auto min-w-[100px]' 
     : block.width === 'large' ? 'w-full sm:w-auto sm:min-w-[360px] sm:max-w-lg'
     : block.width === 'auto' ? 'w-auto'
-    : 'w-full sm:w-auto sm:min-w-[280px] sm:max-w-md';
+    : 'w-full';
 
   const sizeClass = block.size === 'xs' ? 'px-4 py-2 text-xs'
     : block.size === 'sm' ? 'px-5 py-3 text-sm'

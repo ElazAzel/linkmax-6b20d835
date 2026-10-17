@@ -10,9 +10,8 @@
   isolation: isolate;
   overflow: hidden;
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  /* Always on (phones have no hover): tiles take turns flipping to ink. */
-  animation: lm-tile-pop 7s ease-in-out infinite;
-  animation-delay: calc(var(--lm-tile-delay) * 1.4);
+  /* Tiles no longer flip to ink on a loop: it read as a glitch. The icons
+     keep their own micro-motion; the tile reacts to hover and press only. */
 }
 .lm-tile::after {
   content: "";
@@ -23,8 +22,6 @@
   background: linear-gradient(90deg, transparent, hsl(var(--background) / 0.85), transparent);
   opacity: 0;
   pointer-events: none;
-  animation: lm-tile-glare 6s ease-in-out infinite;
-  animation-delay: var(--lm-tile-delay);
 }
 /* Hover only with a real pointer: on touch screens :hover sticks after a tap. */
 @media (hover: hover) {
@@ -46,16 +43,7 @@ button:focus-visible > .lm-tile {
 }
 button:active > .lm-tile { transform: scale(0.94); }
 
-@keyframes lm-tile-pop {
-  0%, 84%, 100% { background-color: hsl(var(--card)); color: hsl(var(--foreground)); transform: none; box-shadow: 0 1px 2px rgb(0 0 0 / 0.04); }
-  88%, 94% { background-color: hsl(var(--foreground)); color: hsl(var(--background)); transform: translateY(-2px) rotate(-4deg) scale(1.04); box-shadow: 0 10px 22px -12px hsl(var(--foreground) / 0.55); }
-}
 
-@keyframes lm-tile-glare {
-  0%, 78% { transform: translateX(0) rotate(18deg); opacity: 0; }
-  80% { opacity: 1; }
-  92%, 100% { transform: translateX(420%) rotate(18deg); opacity: 0; }
-}
 
 .lm-motion {
   display: inline-flex;

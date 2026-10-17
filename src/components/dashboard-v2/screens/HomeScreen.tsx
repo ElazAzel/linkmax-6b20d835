@@ -272,117 +272,23 @@ export const HomeScreen = memo(function HomeScreen({
           />
         )}
 
-        {/* Activation Checklist — ABOVE page card for visibility */}
-        {!outcomeExperienceActive && activation.isVisible && !checklistDismissed && (
-          <ActivationChecklist
-            steps={activation.steps}
-            completedCount={activation.completedCount}
-            totalCount={activation.totalCount}
-            progress={activation.progress}
-            canDismiss={activation.canDismiss}
-            onDismiss={() => {
-              activation.dismiss();
-              setChecklistDismissed(true);
-            }}
-            onStepClick={(step) => {
-              activation.handleStepClick(step);
-              navigate(step.href);
-            }}
-          />
-        )}
-
-        {/* Celebration card when all steps complete */}
-        {activation.showCelebration && (
-          <ActivationCelebration onDismiss={activation.dismissCelebration} />
-        )}
-
-        {/* Operational lead feed; quantitative performance lives in one region below. */}
-        {businessEnabled && isPublished && (realLeadsCount > 0 || pageData.niche === 'expert') && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <ViralReadinessCard pageData={pageData} compact />
-
-            {realLeadsCount > 0 && (
-              <Button 
-                size="lg" 
-                className="w-full h-16 rounded-card bg-primary text-primary-foreground font-bold text-lg shadow-lg group overflow-hidden relative"
-                onClick={onOpenActivity}
-              >
-                                <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
-                {t('dashboard.home.viewLeads', 'Смотреть заявки')}
-                <Badge className="ml-3 border-none bg-primary-foreground/20 text-primary-foreground font-num">{realLeadsCount}</Badge>
-              </Button>
-            )}
-            
-            <IncomingWidget
-              pageId={pageData.id}
-              onOpenActivity={onOpenActivity}
-              onShare={onShare}
-            />
-          </div>
-        )}
-
-        {/* --- SUPPLEMENTARY WIDGETS --- */}
-        {isPublished && (
-          <div className="space-y-6">
-            {businessEnabled && !outcomeExperienceActive && (
-              <OperatorSummaryWidget
-                pageId={pageData?.id}
-                pageSlug={slug}
-                pageNiche={pageData?.niche}
-                pageUpdatedAt={pageData?.updatedAt}
-                onOpenActivity={onOpenActivity}
-                onOpenEditor={onOpenEditor}
-              />
-            )}
-            
-            {businessEnabled && <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <WalletOverviewWidget 
-                onViewFinance={() => navigate('/dashboard/finance')}
-                className="bg-card border-border/10 shadow-sm h-full"
-              />
-              
-              {kaspiWidgetEnabled && (
-                <KaspiQRWidget
-                  ownerId={pageData?.userId || ''}
-                  className="bg-card border-border/10 shadow-sm h-full"
-                />
-              )}
-            </div>}
-
-            {/* Performance Hub / Metrics */}
-            <div className="space-y-4 pt-2" data-testid="home-performance-region">
-              <div className="flex items-center justify-between px-1">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">
-                  {t('dashboard.home.performance', 'Эффективность')}
-                </h3>
-                <Button variant="ghost" size="sm" className="h-10 px-4 text-xs text-primary bg-primary/5 rounded-lg" onClick={onOpenInsights} aria-label={t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}>
-                  {t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}
-                </Button>
-              </div>
-              <MetricsGrid pageId={pageData?.id} />
-              {businessEnabled && <ConversionFunnelWidget pageId={pageData?.id} />}
-              <SourcesWidget className="mt-1" />
-            </div>
-          </div>
-        )}
-
-        {/* Primary Page Card */}
+        {/* Primary Page Card: what the page is and the one main action, first */}
         <Card className="p-5 md:p-8 space-y-6 bg-card border-border/10 shadow-sm relative overflow-hidden group rounded-card md:rounded-card">
           
           {/* Page Header */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <div className="relative group/avatar shrink-0">
-              <Avatar className="h-20 w-20 md:h-24 md:w-24 rounded-2xl border-2 border-border/20 relative shadow-sm">
+              <Avatar className="h-16 w-16 md:h-20 md:w-20 rounded-2xl border-2 border-border/20 relative shadow-sm">
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-bold bg-muted text-primary">
+                <AvatarFallback className="rounded-2xl text-xl md:text-2xl font-bold bg-muted text-foreground">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>
             
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-3xl font-bold tracking-tighter truncate text-foreground">{name}</h2>
+              <div className="mb-1.5 flex items-center gap-2">
+                <h2 className="line-clamp-2 break-words text-xl font-bold leading-tight tracking-tight text-foreground md:text-2xl">{name}</h2>
                 {isPremium && (
                   <Badge className="bg-warning text-warning-foreground border-none shadow-lg shrink-0 font-bold text-xs px-3 py-1 rounded-full">
                     <Crown className="h-3 w-3 mr-1.5" />
@@ -390,8 +296,8 @@ export const HomeScreen = memo(function HomeScreen({
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-bold text-muted-foreground tracking-tight">lnkmx.my/{slug}</span>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span className="truncate text-sm font-medium text-muted-foreground">lnkmx.my/{slug}</span>
                 <StatusBadge status={isPublished ? 'published' : 'draft'} size="sm" />
               </div>
             </div>
@@ -460,6 +366,100 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </Card>
 
+        {/* Activation Checklist */}
+        {!outcomeExperienceActive && activation.isVisible && !checklistDismissed && (
+          <ActivationChecklist
+            steps={activation.steps}
+            completedCount={activation.completedCount}
+            totalCount={activation.totalCount}
+            progress={activation.progress}
+            canDismiss={activation.canDismiss}
+            onDismiss={() => {
+              activation.dismiss();
+              setChecklistDismissed(true);
+            }}
+            onStepClick={(step) => {
+              activation.handleStepClick(step);
+              navigate(step.href);
+            }}
+          />
+        )}
+
+        {/* Celebration card when all steps complete */}
+        {activation.showCelebration && (
+          <ActivationCelebration onDismiss={activation.dismissCelebration} />
+        )}
+
+        {/* Operational lead feed; quantitative performance lives in one region below. */}
+        {businessEnabled && isPublished && (realLeadsCount > 0 || pageData.niche === 'expert') && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <ViralReadinessCard pageData={pageData} compact />
+
+            {realLeadsCount > 0 && (
+              <Button 
+                size="lg" 
+                className="w-full h-16 rounded-card bg-primary text-primary-foreground font-bold text-lg shadow-lg group overflow-hidden relative"
+                onClick={onOpenActivity}
+              >
+                                <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
+                {t('dashboard.home.viewLeads', 'Смотреть заявки')}
+                <Badge className="ml-3 border-none bg-primary-foreground/20 text-primary-foreground tabular-nums">{realLeadsCount}</Badge>
+              </Button>
+            )}
+            
+            <IncomingWidget
+              pageId={pageData.id}
+              onOpenActivity={onOpenActivity}
+              onShare={onShare}
+            />
+          </div>
+        )}
+
+        {/* --- SUPPLEMENTARY WIDGETS --- */}
+        {isPublished && (
+          <div className="space-y-6">
+            {businessEnabled && !outcomeExperienceActive && (
+              <OperatorSummaryWidget
+                pageId={pageData?.id}
+                pageSlug={slug}
+                pageNiche={pageData?.niche}
+                pageUpdatedAt={pageData?.updatedAt}
+                onOpenActivity={onOpenActivity}
+                onOpenEditor={onOpenEditor}
+              />
+            )}
+            
+            {businessEnabled && <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <WalletOverviewWidget 
+                onViewFinance={() => navigate('/dashboard/finance')}
+                className="bg-card border-border/10 shadow-sm h-full"
+              />
+              
+              {kaspiWidgetEnabled && (
+                <KaspiQRWidget
+                  ownerId={pageData?.userId || ''}
+                  className="bg-card border-border/10 shadow-sm h-full"
+                />
+              )}
+            </div>}
+
+            {/* Performance Hub / Metrics */}
+            <div className="space-y-4 pt-2" data-testid="home-performance-region">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-base font-semibold text-foreground">
+                  {t('dashboard.home.performance', 'Эффективность')}
+                </h3>
+                <Button variant="ghost" size="sm" className="h-10 rounded-lg px-3 text-sm text-muted-foreground hover:text-foreground" onClick={onOpenInsights} aria-label={t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}>
+                  {t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}
+                </Button>
+              </div>
+              <MetricsGrid pageId={pageData?.id} />
+              {businessEnabled && <ConversionFunnelWidget pageId={pageData?.id} />}
+              <SourcesWidget className="mt-1" />
+            </div>
+          </div>
+        )}
+
         {/* Search Readiness Card */}
         {isPublished && pageData && (
           <SearchReadinessCard pageData={pageData} />
@@ -467,7 +467,7 @@ export const HomeScreen = memo(function HomeScreen({
 
         {/* Quick Actions Grid */}
         <div className="space-y-3">
-          <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
+          <h3 className="text-base font-semibold text-foreground px-1">
             {t('dashboard.home.quickActions', 'Быстрые действия')}
           </h3>
 
@@ -476,8 +476,8 @@ export const HomeScreen = memo(function HomeScreen({
             {!hasContent && (
               <ActionCard
                 icon={LayoutTemplate}
-                iconBg="bg-success/12"
-                iconColor="text-success"
+                iconBg="bg-muted"
+                iconColor="text-foreground"
                 title={t('dashboard.home.templates', 'Шаблоны')}
                 description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
                 onClick={onOpenTemplates}
@@ -490,8 +490,8 @@ export const HomeScreen = memo(function HomeScreen({
             {hasContent && onOpenVersions && (
               <ActionCard
                 icon={History}
-                iconBg="bg-info/12"
-                iconColor="text-info"
+                iconBg="bg-muted"
+                iconColor="text-foreground"
                 title={t('dashboard.home.versions', 'История')}
                 description={t('dashboard.home.versionsDesc', 'Версии страницы')}
                 onClick={onOpenVersions}
@@ -502,8 +502,8 @@ export const HomeScreen = memo(function HomeScreen({
 
             <ActionCard
               icon={Store}
-              iconBg="bg-primary/12"
-              iconColor="text-primary"
+              iconBg="bg-muted"
+              iconColor="text-foreground"
               title={t('dashboard.home.marketplace', 'Маркетплейс')}
               description={t('dashboard.home.marketplaceDesc', 'От сообщества')}
               onClick={onOpenMarketplace}
@@ -513,8 +513,8 @@ export const HomeScreen = memo(function HomeScreen({
 
             <ActionCard
               icon={Users}
-              iconBg="bg-primary/12"
-              iconColor="text-primary"
+              iconBg="bg-muted"
+              iconColor="text-foreground"
               title={t('dashboard.home.gallery', 'Галерея')}
               description={t('dashboard.home.galleryDesc', 'Вдохновление')}
               onClick={() => navigate('/gallery')}
@@ -525,8 +525,8 @@ export const HomeScreen = memo(function HomeScreen({
             {!isPremium && (
               <ActionCard
                 icon={Crown}
-                iconBg="bg-warning/12"
-                iconColor="text-warning"
+                iconBg="bg-muted"
+                iconColor="text-foreground"
                 title={t('dashboard.home.premium', 'Premium')}
                 description={t('dashboard.home.premiumDesc', 'Больше возможностей')}
                 onClick={() => navigate('/pricing')}

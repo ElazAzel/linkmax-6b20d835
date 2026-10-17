@@ -5,6 +5,7 @@
 
 import type { Block } from '@/types/page';
 import { logger } from '@/lib/utils/logger';
+import { openExternal } from '@/lib/blocks/safe-href';
 
 export type ButtonStyle = 'default' | 'rounded' | 'pill';
 export type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
@@ -61,8 +62,12 @@ export function getBackgroundStyle(background?: BackgroundConfig): React.CSSProp
 
   switch (background.type) {
     case 'gradient':
+      // Values saved by the old factory are already full gradients; wrapping
+      // them again made invalid CSS and the button lost its fill.
       return {
-        background: `linear-gradient(${background.gradientAngle || 135}deg, ${background.value})`,
+        background: /gradient\(/.test(background.value)
+          ? background.value
+          : `linear-gradient(${background.gradientAngle || 135}deg, ${background.value})`,
       };
     case 'image':
       return {
@@ -87,11 +92,7 @@ export function openUrlSafely(url: string, trackingCallback?: () => void): void 
   if (trackingCallback) {
     trackingCallback();
   }
-  // Small delay to allow tracking request to be sent
-  // Using setTimeout 0 puts this in the next event loop tick
-  setTimeout(() => {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }, 10);
+  openExternal(url);
 }
 
 /**
@@ -113,13 +114,8 @@ export function createBlockClickHandler(
       onClick();
     }
 
-    // Open URL after tracking
-    if (url) {
-      // Small delay to ensure tracking request is sent
-      setTimeout(() => {
-        window.open(url, '_blank', 'noopener,noreferrer');
-      }, 10);
-    }
+    // Open synchronously inside the tap so mobile popup blockers allow it
+    if (url) openExternal(url);
   };
 }
 

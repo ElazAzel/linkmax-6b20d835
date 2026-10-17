@@ -10,6 +10,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      // Top centre: at the bottom toasts covered the editor dock and the
+      // phone's bottom nav, and taps on "+ Блок" landed on a toast.
+      position="top-center"
+      visibleToasts={2}
       toastOptions={{
         classNames: {
           toast:

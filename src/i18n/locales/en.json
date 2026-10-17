@@ -189,7 +189,7 @@
     "clicks": "Clicks",
     "clicksShort": "cry.",
     "collaborations": "Collaborations",
-    "confirmDeleteTemplate": "Are you sure you want to delete template ",
+    "confirmDeleteTemplate": "Delete template “{{name}}”?",
     "conversionRate": "Conversion",
     "createTemplate": "Create Template",
     "created": "Created",
@@ -769,7 +769,7 @@
     "paymentTerms": "Payment Terms",
     "product": "Product",
     "rights": "All rights reserved.",
-    "copyright": "В© 2025 LinkMAX",
+    "copyright": "© 2025 LinkMAX",
     "blog": "Blog"
   },
   "seo": {
@@ -833,7 +833,7 @@
     "loginRequired": "Login to your account",
     "newPassword": "New password",
     "noAccount": "Don't have an account?",
-    "oauthError": "Authorization error",
+    "oauthError": "Sign-in error: {{error}}",
     "orContinueWith": "Or continue with",
     "password": "Password",
     "passwordHint": "At least 8 characters, letters and numbers",
@@ -843,7 +843,7 @@
     "referral": {
       "bonus": "Bonus",
       "invited": "You were invited by",
-      "success": "Referral code applied"
+      "success": "🎉 +{{days}} days of Premium for the referral code!"
     },
     "required": "Please sign in",
     "resetDescription": "Enter your email and we will send you a reset link.",
@@ -892,14 +892,16 @@
       "passwordLowercase": "Password must contain at least one lowercase letter",
       "passwordMin": "Password must be at least 8 characters",
       "passwordNumber": "Password must contain at least one number",
-      "passwordUppercase": "Password must contain at least one uppercase letter"
+      "passwordUppercase": "Password must contain at least one uppercase letter",
+      "passwordRequired": "Enter your password"
     },
     "welcomeBack": "Welcome back",
     "heroTitle": "Create your lnkmx.my page",
     "heroSubtitle": "AI builds your site in 2 minutes. Free forever.",
     "continueWithEmail": "Continue with Email",
     "moreOptions": "More sign-in options",
-    "createWithGoogle": "Create with Google"
+    "createWithGoogle": "Create with Google",
+    "invalidCredentials": "Wrong email or password"
   },
   "automations": {
     "startSequence": "Manage Sequences"
@@ -1169,7 +1171,7 @@
     },
     "form": "Form",
     "image": "Image",
-    "limitReached": "Block limit reached. Upgrade to Premium.",
+    "limitReached": "Limit of {{count}} blocks reached. Upgrade to Premium.",
     "link": "Link",
     "map": {
       "noAddress": "Please enter your address"
@@ -1182,7 +1184,8 @@
       "hit": "Hit",
       "newItem": "New service",
       "title": "Heading",
-      "titlePlaceholder": "My services"
+      "titlePlaceholder": "My services",
+      "orderMessage": "Hello! I'd like to book “{{name}}”"
     },
     "proOnly": "This block is only available in PRO",
     "product": "Product",
@@ -1203,7 +1206,8 @@
     },
     "subtitle": "Drag & drop. Works on any device.",
     "title": "28+ Smart blocks",
-    "desc": "From simple links to complex forms and booking systems."
+    "desc": "From simple links to complex forms and booking systems.",
+    "imageUnavailable": "Image failed to load"
   },
   "booking": {
     "addDetails": "Add email or comment",
@@ -1246,7 +1250,7 @@
     "step1": "Date",
     "step2": "Time",
     "success": "You have successfully registered!",
-    "timezoneHint": "(Local time)",
+    "timezoneHint": "Times follow the specialist's time zone ({{tz}}). Your time zone: {{userTz}}.",
     "title": "Sign up",
     "today": "Today",
     "tomorrow": "Tomorrow",
@@ -1517,7 +1521,12 @@
       "successMsg": "We will contact you soon",
       "error": "Submission error",
       "intentHeader": "Looks like you're interested in: {{intent}}"
-    }
+    },
+    "open": "Open chat",
+    "status": "Replies instantly",
+    "greeting": "Hello!",
+    "intro": "I answer questions about services, prices and booking using this page.",
+    "footer": "Answers based on this page · LinkMAX"
   },
   "cookies": {
     "accept": "Accept",
@@ -2355,7 +2364,9 @@
       "wide": "Full width",
       "tall": "Tall, half width",
       "large": "Large square",
-      "xl": "Full screen"
+      "xl": "Full screen",
+      "natural": "Original size",
+      "naturalShort": "Photo"
     }
   },
   "errors": {
@@ -2372,7 +2383,13 @@
     "subscription": "Subscription error",
     "tryAgain": "Try refreshing the page",
     "unauthorized": "Authorization required",
-    "updateFailed": "Update error"
+    "updateFailed": "Update error",
+    "unknown": "Something went wrong. Please try again.",
+    "auth": "Couldn't sign in. Check your details and try again.",
+    "network": "No connection. Check your internet.",
+    "validation": "Please check the details you entered.",
+    "rateLimit": "Too many attempts. Please wait a moment.",
+    "payment": "Payment failed. Please try again."
   },
   "event": {
     "addToCalendar": "Add to calendar",
@@ -3052,7 +3069,7 @@
     "pages": "pages",
     "popular": "Popular",
     "searchPlaceholder": "Search pages...",
-    "searchResults": "Filtering by ",
+    "searchResults": "Filtering by “{{search}}”",
     "seo": {
       "description": "Real user pages: templates, niches, ideas for your link in bio.",
       "imageAlt": "LinkMAX Gallery - Link in Bio Examples",
@@ -3456,7 +3473,7 @@
         "question": "Can I connect my domain?"
       },
       "q2": {
-        "answer": "The basic plan is free forever. Pro: 3 months - 4,350в‚ё/month, 6 months - 3,698в‚ё/month (-15%), 12 months - 3,045в‚ё/month (-30%). Payment online, refund within 14 days.",
+        "answer": "The basic plan is free forever. Pro: 3 months - 4,350₸/month, 6 months - 3,698₸/month (-15%), 12 months - 3,045₸/month (-30%). Payment online, refund within 14 days.",
         "question": "How much does it cost to use LinkMAX?"
       },
       "q3": {
@@ -3597,12 +3614,12 @@
       },
       "bonusTitle": "And also nice bonuses:",
       "cta": "Try Premium",
-      "price": "From 3,045 в‚ё/month when paid annually (~$6)",
+      "price": "From 3,045 ₸/month when paid annually (~$6)",
       "subtitle": "Not visual decorations, but tools for making money",
       "title": "Why pay for Premium"
     },
     "pricingLegacy": {
-      "annualPriceKzt": "36,540 в‚ё for 12 months",
+      "annualPriceKzt": "36,540 ₸ for 12 months",
       "annualPriceUsd": "$71/year",
       "bestValue": "Best price",
       "billedOnce": "one-time",
@@ -3615,8 +3632,8 @@
       "freeAction": "Start for free",
       "month": "months",
       "otherPlans": "Other options:",
-      "otherPlansSix": "6 months: 3,698 в‚ё/month (-15%)",
-      "otherPlansThree": "3 months: 4,350 в‚ё/month",
+      "otherPlansSix": "6 months: 3,698 ₸/month (-15%)",
+      "otherPlansThree": "3 months: 4,350 ₸/month",
       "pro": {
         "item1": "Unlimited blocks and templates",
         "item2": "5 AI generations/month",
@@ -3716,9 +3733,9 @@
       "badge": "Examples of use",
       "barber": {
         "desc": "Services, prices, online registration",
-        "link1": "вњ‚пёЏ Services",
-        "link2": "рџ“ЌAddress",
-        "link3": "рџ“± WhatsApp",
+        "link1": "✂️ Services",
+        "link2": "📍Address",
+        "link3": "📱 WhatsApp",
         "name": "BarberShop MAX",
         "role": "Barbershop"
       },
@@ -3731,34 +3748,34 @@
       "cta": "View all pages in gallery",
       "fitness": {
         "desc": "Training programs, online courses",
-        "link1": "рџЏ‹пёЏ Programs",
-        "link2": "рџ“№ Online course",
-        "link3": "вњ‰пёЏ Telegram",
+        "link1": "🏋️ Programs",
+        "link2": "📹 Online course",
+        "link3": "✉️ Telegram",
         "name": "Maria Fitness",
         "role": "Fitness trainer"
       },
       "musician": {
         "desc": "Music, events, booking",
-        "link1": "рџЋ§ Spotify",
-        "link2": "рџЋџпёЏ Events",
-        "link3": "рџ“ћ Booking",
+        "link1": "🎧 Spotify",
+        "link2": "🎟️ Events",
+        "link3": "📞 Booking",
         "name": "DJ Max",
         "role": "Musician"
       },
       "photographer": {
         "desc": "Portfolio, shooting prices, booking",
-        "link1": "рџЋЁ Portfolio",
-        "link2": "рџ’° Price list",
-        "link3": "рџ“… Sign up",
+        "link1": "🎨 Portfolio",
+        "link2": "💰 Price list",
+        "link3": "📅 Sign up",
         "name": "Alexey Photo",
         "role": "Photographer"
       },
       "primaryCta": "Create a page",
       "psychologist": {
         "desc": "Consultations, areas of work",
-        "link1": "рџ’¬ About therapy",
-        "link2": "рџ“‹ Sign up",
-        "link3": "рџ“љ Blog",
+        "link1": "💬 About therapy",
+        "link2": "📋 Sign up",
+        "link3": "📚 Blog",
         "name": "Anna Psychologist",
         "role": "Psychologist"
       },
@@ -3774,9 +3791,9 @@
         "bullet2": "FAQ and delivery terms",
         "bullet3": "Quick contact for order",
         "desc": "Catalog, delivery, promotions",
-        "link1": "рџ‘— Catalog",
-        "link2": "рџЏ·пёЏ Promotions",
-        "link3": "рџљљ Delivery",
+        "link1": "👗 Catalog",
+        "link2": "🏷️ Promotions",
+        "link3": "🚚 Delivery",
         "name": "Boutique Fashion",
         "role": "Clothing store",
         "title": "Store or catalog"
@@ -3896,7 +3913,7 @@
       "cta": {
         "badge": "Ready to launch?",
         "description": "Join thousands of creators, experts and small businesses growing with LinkMAX. No credit card.",
-        "note": "Forever Free Plan вЂў Cancel anytime вЂў 24/7 Support",
+        "note": "Forever Free Plan • Cancel anytime • 24/7 Support",
         "primary": "Start for free",
         "secondary": "View examples",
         "titlePrefix": "Create your micro-site",
@@ -4383,7 +4400,7 @@
     "comingSoon": "Payment will be available soon! Stay tuned.",
     "companyDetails": {
       "addressLine": "Almaty, st. Sholokhova, 20",
-      "nameLine": "ARchitecKZ вЂў BIN: 190540008684"
+      "nameLine": "ARchitecKZ • BIN: 190540008684"
     },
     "currentPlan": "Current",
     "identityAlreadyActive": "Identity plan is already active",
@@ -4524,7 +4541,7 @@
   },
   "reviews": {
     "artist": "The aesthetics are on another level. It doesn't",
-    "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI вЂ‹вЂ‹just gets it.",
+    "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it.",
     "crypto": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
     "salon": "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from."
   },
@@ -4621,7 +4638,7 @@
         "question": "Return conditions?"
       },
       "q2": {
-        "answer": "The basic plan is free forever. Pro - from 3,045 в‚ё/month when paid annually. 14 days for return.",
+        "answer": "The basic plan is free forever. Pro - from 3,045 ₸/month when paid annually. 14 days for return.",
         "question": "What is the price?"
       },
       "q3": {
@@ -5056,7 +5073,7 @@
     "start": "Start",
     "welcome": {
       "desc": "Let us show you the basics. It will only take a minute.",
-      "title": "Welcome to LinkMAX! рџ‘‹"
+      "title": "Welcome to LinkMAX! 👋"
     }
   },
   "operator": {
@@ -5105,7 +5122,7 @@
     "priceHint": "Minimum: 1 token. Recommended: 50-500 tokens.",
     "priceLabel": "Price (in Linkkon tokens)",
     "pricePlaceholder": "100",
-    "settingsDescription": "Restrict access to block content. Visitors will be able to unlock it for Linkkon tokens (1 token = 1 в‚ё).",
+    "settingsDescription": "Restrict access to block content. Visitors will be able to unlock it for Linkkon tokens (1 token = 1 ₸).",
     "title": "Paid content",
     "unlock": "Unblock",
     "unlockContent": "Unblocking paid content",
@@ -5153,7 +5170,7 @@
     "price": "Price",
     "serviceType": "Service type",
     "services": "Services",
-    "servicesHint": "The more detailed the services are described, the more accurately the AI вЂ‹вЂ‹assistant understands your business.",
+    "servicesHint": "The more detailed the services are described, the more accurately the AI assistant understands your business.",
     "training": "Training"
   },
   "product": {
@@ -5167,7 +5184,9 @@
     "purchaseDescription": "Покупка товара: {{name}}",
     "purchaseSuccess": "You have successfully purchased",
     "purchasing": "Purchase...",
-    "tapToView": "Read more →"
+    "tapToView": "Read more →",
+    "order": "Order",
+    "orderMessage": "Hello! I'd like to order “{{name}}”"
   },
   "profile": {
     "addBio": "Add a description",
@@ -5279,7 +5298,7 @@
     "additionalDetails": "Description (optional)",
     "completeDescription": "The page has been created and is ready to edit",
     "completeTitle": "Ready! 🎉",
-    "description": "Create a page quickly with the AI вЂ‹вЂ‹assistant",
+    "description": "Create a page quickly with the AI assistant",
     "detailsDescription": "AI personalizes the page",
     "detailsHint": "The more details, the better the result.",
     "detailsPlaceholder": "What are you doing? What services do you provide?",
@@ -5381,7 +5400,7 @@
       "pricing_education": "Schedule and prices",
       "pricing_freelancer": "Show your services and prices",
       "pricing_health": "Cost of services",
-      "product": "Sell вЂ‹вЂ‹products",
+      "product": "Sell products",
       "socials": "Show social networks",
       "socials_community": "Community social networks",
       "socials_creator": "Social media is important for creators",
@@ -5434,7 +5453,7 @@
   "scratch": {
     "hint": "Scratch the layer to reveal a surprise",
     "revealed": "🎉 Revealed!",
-    "scratchHere": "рџ‘† Scratch here"
+    "scratchHere": "👆 Scratch here"
   },
   "search": {
     "groups": {
@@ -5496,7 +5515,7 @@
     "bio": "Description",
     "chatbotContext": "AI chatbot context",
     "chatbotHelp": "Helps AI accurately answer visitors' questions",
-    "chatbotPlaceholder": "Add hidden context for the AI вЂ‹вЂ‹chatbot (prices, services, availability...)",
+    "chatbotPlaceholder": "Add hidden context for the AI chatbot (prices, services, availability...)",
     "column": "column",
     "columns": "speakers",
     "crmDesc": "Manage leads and applications",
@@ -5979,7 +5998,7 @@
     "searchAuthor": "According to the author...",
     "selectCategory": "Select category",
     "sellDesc": "Set your purchase price",
-    "sellTemplate": "Sell вЂ‹вЂ‹template",
+    "sellTemplate": "Sell template",
     "smartMatch": {
       "button": "Generate",
       "generating": "Generating...",
@@ -6062,7 +6081,31 @@
     "kazakhSteppeDesc": "Turquoise and gold",
     "paperInk": "Paper and ink",
     "paperInkDesc": "Editorial typography",
-    "buttonStyle": "Buttons and links"
+    "buttonStyle": "Buttons and links",
+    "warmPaper": "Warm paper",
+    "warmPaperDesc": "Cream background, soft tones",
+    "editorialMono": "Editorial mono",
+    "editorialMonoDesc": "Black-and-white magazine typography",
+    "cleanWhite": "Clean white",
+    "cleanWhiteDesc": "White background, clear structure",
+    "midnight": "Midnight",
+    "midnightDesc": "Deep dark background",
+    "noirGold": "Noir & gold",
+    "noirGoldDesc": "Dark with gold accents",
+    "sunsetBlaze": "Sunset blaze",
+    "sunsetBlazeDesc": "Warm orange and pink tones",
+    "oceanDeep": "Ocean deep",
+    "oceanDeepDesc": "Calm deep blues",
+    "forestMoss": "Forest moss",
+    "forestMossDesc": "Natural green shades",
+    "blushLavender": "Blush lavender",
+    "blushLavenderDesc": "Soft pink and lilac tones",
+    "terracottaSage": "Terracotta & sage",
+    "terracottaSageDesc": "Clay and herbal tones",
+    "neonMint": "Neon mint",
+    "neonMintDesc": "Dark background, bright mint",
+    "brutalistPop": "Brutalist pop",
+    "brutalistPopDesc": "Bold colors and thick borders"
   },
   "tier": {
     "blocksCount": "blocks",
@@ -6926,7 +6969,7 @@
         "addTitle": "Add Custom Field",
         "created": "Field created successfully",
         "deleteTitle": "Delete Field?",
-        "deleteWarning": "Are you sure you want to delete the field ",
+        "deleteWarning": "Delete the field “{{name}}”? Its data will no longer be shown but will stay in the database.",
         "deleted": "Field deleted successfully",
         "description": "Define custom fields to collect specific information for your contacts.",
         "editTitle": "Edit Custom Field",
@@ -7389,7 +7432,7 @@
         "cta": "Create page"
       },
       "footer": {
-        "copyright": "? {{year}} LinkMAX",
+        "copyright": "© {{year}} LinkMAX",
         "privacy": "Privacy",
         "terms": "Terms",
         "payments": "Payments"
@@ -7794,7 +7837,7 @@
     }
   },
   "selectAll": "Select all",
-  "selectDescription": "Select the languages вЂ‹вЂ‹your content will be translated into. English is required.",
+  "selectDescription": "Select the languages your content will be translated into. English is required.",
   "selectLanguages": "Select languages",
   "selectNone": "Deselect",
   "selected": "Selected",
@@ -8346,6 +8389,23 @@
       "success": "Copy saved to your templates",
       "error": "Could not save the copy",
       "authRedirect": "Sign in and the copy will be saved to your templates."
+    },
+    "analytics": {
+      "title": "Viral analytics",
+      "subtitle": "Short link, referral visit and clone events.",
+      "shares": "Shares",
+      "visits": "Referral visits",
+      "signups": "Sign-ups",
+      "clones": "Clones",
+      "kFactor": "K-factor"
     }
+  },
+  "publicPage": {
+    "contact": {
+      "call": "Call",
+      "region": "Quick contact",
+      "hide": "Hide"
+    },
+    "poweredBy": "Made with LinkMAX"
   }
 }

@@ -35,11 +35,12 @@ export const TilesBlock = memo(function TilesBlock({ block, onClick }: TilesBloc
         {caption && (
           <>
             <div aria-hidden className={cn('absolute inset-x-0 bottom-0 h-2/3', item.image ? 'bg-gradient-to-t from-black/70 via-black/25 to-transparent' : '')} />
+            {/* Clamp an inner span: clamping the padded box let a third line show in the padding */}
             <span className={cn(
-              'absolute inset-x-0 bottom-0 line-clamp-2 break-words p-3 text-left text-sm font-semibold leading-snug',
+              'absolute inset-x-0 bottom-0 p-3 text-left text-sm font-semibold leading-snug',
               item.image ? 'text-white' : 'text-foreground',
             )}>
-              {caption}
+              <span className="line-clamp-2 break-words">{caption}</span>
             </span>
           </>
         )}

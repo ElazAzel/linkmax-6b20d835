@@ -29,9 +29,11 @@ interface ChatbotWidgetProps {
   pageSlug: string;
   blocks: Block[];
   seo: { title: string; description: string };
+  /** The page shows its own contact bar on phones; the bubble would sit on top of it. */
+  hideOnMobile?: boolean;
 }
 
-export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: ChatbotWidgetProps) {
+export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo, hideOnMobile = false }: ChatbotWidgetProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ExpertEngineMessage[]>([]);
@@ -140,14 +142,15 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-6 right-6 z-50"
+            className={cn('fixed bottom-6 right-6 z-50', hideOnMobile && 'hidden sm:block')}
           >
             <Button
               onClick={() => setIsOpen(true)}
+              aria-label={t('chat.open', 'Открыть чат')}
               className="h-14 w-14 rounded-full shadow-[0_12px_32px_-8px_rgb(0_0_0/0.35)] bg-foreground text-background hover:bg-foreground/90 border border-white/10 transition-all hover:scale-110 active:scale-95"
               size="icon"
             >
-              <MessageCircle className="h-6 w-6 text-primary-foreground" />
+              <MessageCircle className="h-6 w-6 text-background" />
             </Button>
           </motion.div>
         )}
@@ -161,7 +164,7 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className={cn(
-              "fixed z-50 flex flex-col overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 bg-background/60 backdrop-blur-3xl transition-all duration-300",
+              "fixed z-50 flex flex-col overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-hairline bg-background transition-all duration-300",
               "inset-0 h-[100dvh] w-full rounded-none sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[400px] sm:h-[600px] sm:rounded-3xl"
             )}
           >
@@ -175,7 +178,7 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
                   <h3 className="font-bold text-sm tracking-tight">{t('chat.title', 'Ассистент эксперта')}</h3>
                   <div className="flex items-center gap-1.5">
                     <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">Online</span>
+                    <span className="text-[11px] text-muted-foreground font-medium">{t('chat.status', 'Отвечает сразу')}</span>
                   </div>
                 </div>
               </div>
@@ -199,8 +202,8 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
                     <MessageCircle className="h-8 w-8 text-primary/40" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground/80">Привет!</p>
-                    <p className="text-xs text-muted-foreground mt-1">Я ваш персональный ассистент на этой странице. Задайте любой вопрос об услугах или эксперте!</p>
+                    <p className="text-sm font-semibold text-foreground/80">{t('chat.greeting', 'Здравствуйте!')}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('chat.intro', 'Отвечу на вопросы об услугах, ценах и записи по информации с этой страницы.')}</p>
                   </div>
                 </div>
               )}
@@ -296,8 +299,8 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo }: Chatbot
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
-              <p className="text-[9px] text-center mt-3 text-muted-foreground/50 uppercase tracking-[0.2em] font-bold">
-                Powered by InkMAX DKE
+              <p className="text-[10px] text-center mt-3 text-muted-foreground/60">
+                {t('chat.footer', 'Ответы на основе страницы · LinkMAX')}
               </p>
             </div>
           </motion.div>

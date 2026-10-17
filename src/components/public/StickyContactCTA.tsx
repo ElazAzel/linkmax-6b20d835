@@ -14,13 +14,7 @@ import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import Send from 'lucide-react/dist/esm/icons/send';
 import X from 'lucide-react/dist/esm/icons/x';
 import type { Block } from '@/types/page';
-import { whatsappHref } from '@/lib/blocks/messenger-links';
-
-interface Contact {
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-}
+import { extractPageContacts, type ContactPlatform } from '@/lib/blocks/page-contacts';
 
 interface Props {
   blocks: Block[] | undefined;
@@ -29,44 +23,21 @@ interface Props {
 
 const DISMISS_KEY = 'lnkmx:sticky-cta-dismissed';
 
-function extractContacts(blocks: Block[] | undefined, language: string): Contact[] {
-  if (!blocks?.length) return [];
-  const out: Contact[] = [];
-  const seen = new Set<string>();
-  const push = (c: Contact) => {
-    if (seen.has(c.href)) return;
-    seen.add(c.href);
-    out.push(c);
-  };
-
-  for (const b of blocks) {
-    if (b.type === 'messenger') {
-      const list = (b as { messengers?: Array<{ platform: string; username: string; message?: unknown }> }).messengers ?? [];
-      for (const m of list) {
-        const u = (m.username || '').replace(/\s+/g, '').replace(/^@/, '');
-        if (!u) continue;
-        if (m.platform === 'whatsapp') {
-          const href = whatsappHref(u, m.message, language);
-          if (href) push({ label: 'WhatsApp', icon: MessageCircle, href });
-        } else if (m.platform === 'telegram') {
-          push({ label: 'Telegram', icon: Send, href: `https://t.me/${u}` });
-        }
-      }
-    }
-    if (b.type === 'button' || b.type === 'link') {
-      const url = (b as { url?: string }).url;
-      if (!url) continue;
-      if (url.startsWith('tel:')) push({ label: 'Позвонить', icon: Phone, href: url });
-      else if (url.includes('wa.me/') || url.includes('whatsapp.com')) push({ label: 'WhatsApp', icon: MessageCircle, href: url });
-      else if (url.includes('t.me/')) push({ label: 'Telegram', icon: Send, href: url });
-    }
-  }
-  return out.slice(0, 3);
-}
+const ICONS: Record<ContactPlatform, React.ComponentType<{ className?: string }>> = {
+  whatsapp: MessageCircle,
+  telegram: Send,
+  phone: Phone,
+};
 
 export const StickyContactCTA = memo(function StickyContactCTA({ blocks, pageId }: Props) {
-  const { i18n } = useTranslation();
-  const contacts = useMemo(() => extractContacts(blocks, i18n.language), [blocks, i18n.language]);
+  const { t, i18n } = useTranslation();
+  // Two at most: three labelled pills plus the close button overflow a phone.
+  const contacts = useMemo(() => extractPageContacts(blocks, i18n.language).slice(0, 2), [blocks, i18n.language]);
+  const labels: Record<ContactPlatform, string> = {
+    whatsapp: 'WhatsApp',
+    telegram: 'Telegram',
+    phone: t('publicPage.contact.call', 'Позвонить'),
+  };
   const [dismissed, setDismissed] = useState(false);
   const dismissKey = `${DISMISS_KEY}:${pageId ?? 'global'}`;
 
@@ -87,36 +58,36 @@ export const StickyContactCTA = memo(function StickyContactCTA({ blocks, pageId 
       className={cn(
         'sm:hidden fixed left-1/2 -translate-x-1/2 z-40',
         'bottom-[max(env(safe-area-inset-bottom,0),1rem)]',
-        'flex items-center gap-1 rounded-pill border border-hairline',
-        'bg-background/80 backdrop-blur-xl shadow-lift px-1.5 py-1.5',
+        'flex max-w-[calc(100vw-2rem)] items-center gap-1 rounded-pill border border-hairline',
+        'bg-background/90 backdrop-blur-xl shadow-lift p-1',
         'animate-in fade-in slide-in-from-bottom-2 duration-300',
       )}
       role="region"
-      aria-label="Quick contact"
+      aria-label={t('publicPage.contact.region', 'Быстрая связь')}
     >
       {contacts.map((c) => {
-        const Icon = c.icon;
+        const Icon = ICONS[c.platform];
         return (
           <a
-            key={c.href}
+            key={c.platform}
             href={c.href}
             target={c.href.startsWith('http') ? '_blank' : undefined}
             rel="noopener noreferrer"
             className={cn(
-              'inline-flex items-center gap-1.5 h-9 px-3 rounded-pill text-sm font-medium',
+              'inline-flex min-w-0 items-center gap-1.5 h-11 px-4 rounded-pill text-sm font-medium',
               'bg-foreground text-background hover:opacity-90 transition-opacity active:scale-95',
             )}
           >
-            <Icon className="h-4 w-4" />
-            <span>{c.label}</span>
+            <Icon className="h-4 w-4 shrink-0" />
+            <span className="truncate">{labels[c.platform]}</span>
           </a>
         );
       })}
       <button
         type="button"
         onClick={handleDismiss}
-        aria-label="Скрыть"
-        className="inline-flex items-center justify-center h-9 w-9 rounded-pill text-muted-foreground hover:text-foreground transition-colors"
+        aria-label={t('publicPage.contact.hide', 'Скрыть')}
+        className="inline-flex shrink-0 items-center justify-center h-11 w-11 rounded-pill text-muted-foreground hover:text-foreground transition-colors"
       >
         <X className="h-4 w-4" />
       </button>

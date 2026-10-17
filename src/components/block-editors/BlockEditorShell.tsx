@@ -21,6 +21,7 @@ import RectangleHorizontal from 'lucide-react/dist/esm/icons/rectangle-horizonta
 import RectangleVertical from 'lucide-react/dist/esm/icons/rectangle-vertical';
 import Square from 'lucide-react/dist/esm/icons/square';
 import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+import ImageIcon from 'lucide-react/dist/esm/icons/image';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -174,10 +175,16 @@ export const BlockSizeSelector = memo(function BlockSizeSelector({
 
     const allowedSizes = getManifestEntry(block.type)?.editing.allowedSizes;
     if (allowedSizes && allowedSizes.length === 1) return null;
+    // Images also offer "full": the photo at its own aspect ratio, not cropped to a tile.
+    const naturalSize = Boolean(allowedSizes?.includes('full'));
+    if (naturalSize) {
+        sizes.unshift({ value: 'full', icon: <ImageIcon className="h-4 w-4" />, short: t('editor.size.naturalShort', 'Фото'), label: t('editor.size.natural', 'По размеру фото') });
+    }
     const isActive = (value: string) => {
         // Handle legacy values
-        if (value === 'small') return !block.blockSize || block.blockSize === 'small' || block.blockSize === 'half';
-        if (value === 'wide') return block.blockSize === 'wide' || block.blockSize === 'full';
+        if (value === 'full') return !block.blockSize || block.blockSize === 'full';
+        if (value === 'small') return (!naturalSize && !block.blockSize) || block.blockSize === 'small' || block.blockSize === 'half';
+        if (value === 'wide') return block.blockSize === 'wide' || (!naturalSize && block.blockSize === 'full');
         return block.blockSize === value;
     };
 

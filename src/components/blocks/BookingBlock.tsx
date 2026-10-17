@@ -781,7 +781,8 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
               })}</span>
             </div>
           )}
-          {userTimezone && userTimezone !== block.timezone && (
+          {/* Only when the owner set a zone; an unset one used to show the box to everyone */}
+          {block.timezone && userTimezone && userTimezone !== block.timezone && (
              <motion.div 
                initial={{ opacity: 0, x: -10 }}
                animate={{ opacity: 1, x: 0 }}
@@ -995,7 +996,7 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
                   variants={{
                     show: { transition: { staggerChildren: 0.03 } }
                   }}
-                  className="grid grid-cols-3 gap-2.5 max-h-[220px] overflow-y-auto pr-3 custom-scrollbar p-1"
+                  className="grid grid-cols-3 gap-2.5 p-1"
                 >
                   {slots.map((slot, idx) => (
                     <motion.button
@@ -1047,7 +1048,7 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
                         </div>
                         <div className="min-w-0">
                           <p className="text-[9px] sm:text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1 sm:mb-1.5">{t('booking.selectedTime', 'Выбрано')}</p>
-                          <p className="text-sm sm:text-base font-black truncate leading-none">
+                          <p className="text-sm sm:text-base font-black leading-tight break-words">
                             {formatTime(selectedSlot.time)}
                             {selectedSlot.endTime && ` — ${formatTime(selectedSlot.endTime)}`}
                           </p>

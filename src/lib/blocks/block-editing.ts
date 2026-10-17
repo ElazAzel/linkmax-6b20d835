@@ -33,10 +33,11 @@ const TILE_SIZES: readonly BlockSizePreset[] = ['small', 'wide', 'tall', 'large'
 const FULL_WIDTH: readonly BlockSizePreset[] = ['full'];
 
 export function getBlockEditingConfig(type: BlockType): BlockEditingConfig {
-  const autoHeight = resolveBlockLayout({ type }).autoHeight;
+  // Ask about a tile size: an image is only auto-height at its default size.
+  const autoHeight = resolveBlockLayout({ type, blockSize: 'small' }).autoHeight;
   return {
     tools: ['appearance', 'text', 'font', ...(!autoHeight ? ['size' as const] : []), ...(imageTypes.has(type) ? ['image' as const] : []), ...(actionTypes.has(type) ? ['action' as const] : [])],
-    allowedSizes: autoHeight ? FULL_WIDTH : TILE_SIZES,
+    allowedSizes: autoHeight ? FULL_WIDTH : type === 'image' ? ['full', ...TILE_SIZES] : TILE_SIZES,
     validate: validation[type] ?? (() => null),
   };
 }

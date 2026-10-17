@@ -18,10 +18,21 @@ const AUTO_HEIGHT_TYPES = new Set([
   'booking', 'pricing', 'catalog', 'product', 'event', 'community',
   'custom_code', 'video', 'audio', 'carousel', 'testimonial', 'shoutout',
   'scratch', 'countdown', 'map', 'messenger', 'download', 'card', 'tiles',
+  'before_after', 'avatar',
 ]);
 
+/**
+ * An image at the default "full" size used to get one ~96px tile row and
+ * showed as a thin strip; it keeps its own aspect ratio instead. Explicit
+ * tile sizes (small, wide, tall, large) still crop into the grid.
+ */
+function isAutoHeight(block: { type: string; blockSize?: string }): boolean {
+  if (AUTO_HEIGHT_TYPES.has(block.type)) return true;
+  return block.type === 'image' && (!block.blockSize || block.blockSize === 'full');
+}
+
 export function resolveBlockLayout(block: { type: string; blockSize?: string }) {
-  const autoHeight = AUTO_HEIGHT_TYPES.has(block.type);
+  const autoHeight = isAutoHeight(block);
   const size = block.blockSize as BlockSizePreset | undefined;
   const dimensions = size && Object.hasOwn(BLOCK_SIZE_DIMENSIONS, size)
     ? BLOCK_SIZE_DIMENSIONS[size] : LINKMAX_UI_V2 ? BLOCK_SIZE_DIMENSIONS.small : BLOCK_SIZE_DIMENSIONS.full;
