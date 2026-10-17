@@ -78,7 +78,8 @@ export const getFontStyle = (font?: BlockFontFamily): CSSProperties => {
     case 'sans': return { fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' };
     case 'serif': return { fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif' };
     case 'mono': return { fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace' };
-    case 'display': return { fontFamily: 'ui-sans-serif, system-ui, sans-serif', fontWeight: 700, letterSpacing: '-0.025em' };
+    // The theme's heading font, so a display title matches the rest of the page.
+    case 'display': return { fontFamily: 'var(--lm-heading-font, var(--font-heading, ui-sans-serif, system-ui, sans-serif))', fontWeight: 700, letterSpacing: '-0.025em' };
     case 'rounded': return { fontFamily: '"SF Pro Rounded", ui-sans-serif, system-ui, sans-serif' };
     default: return {};
   }

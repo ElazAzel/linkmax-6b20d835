@@ -1,8 +1,6 @@
 import { memo, useMemo, useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Badge } from '@/components/ui/badge';
-import Crown from 'lucide-react/dist/esm/icons/crown';
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2';
 import Minimize2 from 'lucide-react/dist/esm/icons/minimize-2';
 import type { CustomCodeBlock as CustomCodeBlockType } from '@/types/page';
@@ -154,18 +152,15 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
     <div className={containerClass}>
       <div className="min-w-0 overflow-visible rounded-2xl">
         {showHeader && (
-          <div className="py-2 px-1 flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 px-4 pt-2 pb-1 sm:px-5">
             <h3 className="text-sm font-medium leading-snug break-words hyphens-auto min-w-0">{title}</h3>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="gap-1">
-                <Crown className="h-3 w-3" />
-                Premium
-              </Badge>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6"
+                className="h-10 w-10"
                 onClick={toggleFullscreen}
+                aria-label={isFullscreen ? t('actions.exitFullscreen', 'Свернуть') : t('actions.fullscreen', 'Во весь экран')}
               >
                 {isFullscreen ? (
                   <Minimize2 className="h-4 w-4" />

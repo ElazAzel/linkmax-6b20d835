@@ -1,3 +1,4 @@
+import { RenderContextProvider } from '@/contexts/RenderContext';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ProfileBlock } from '../ProfileBlock';
@@ -63,15 +64,15 @@ describe('Block Components', () => {
       expect(screen.getByText('Test Link')).toBeInTheDocument();
     });
 
-    it('opens URL on click', async () => {
-      vi.useFakeTimers();
-      render(<LinkBlock block={fixtures.mockLinkBlock} />);
-      const button = screen.getByRole('button');
-      fireEvent.click(button);
-      // Wait for setTimeout to complete
-      vi.advanceTimersByTime(20);
-      expect(window.open).toHaveBeenCalledWith('https://example.com', '_blank', 'noopener,noreferrer');
-      vi.useRealTimers();
+    it('is a real link to the URL and tracks the click', () => {
+      const onClick = vi.fn();
+      render(<LinkBlock block={fixtures.mockLinkBlock} onClick={onClick} />);
+      const link = screen.getByRole('link');
+      expect(link).toHaveAttribute('href', 'https://example.com');
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      fireEvent.click(link);
+      expect(onClick).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -83,7 +84,7 @@ describe('Block Components', () => {
 
     it('applies background style', () => {
       render(<ButtonBlock block={fixtures.mockButtonBlock} />);
-      const button = screen.getByRole('button');
+      const button = screen.getByRole('link');
       expect(button).toHaveStyle({ backgroundColor: '#3b82f6' });
     });
   });
@@ -96,14 +97,9 @@ describe('Block Components', () => {
       expect(screen.getByLabelText('Telegram')).toBeInTheDocument();
     });
 
-    it('opens platform URL on click', () => {
-      vi.useFakeTimers();
+    it('links each platform to its profile', () => {
       render(<SocialsBlock block={fixtures.mockSocialsBlock} />);
-      const instagramBtn = screen.getByLabelText('Instagram');
-      fireEvent.click(instagramBtn);
-      vi.advanceTimersByTime(15);
-      expect(window.open).toHaveBeenCalledWith('https://instagram.com/test', '_blank', 'noopener,noreferrer');
-      vi.useRealTimers();
+      expect(screen.getByLabelText('Instagram')).toHaveAttribute('href', 'https://instagram.com/test');
     });
   });
 
@@ -134,10 +130,16 @@ describe('Block Components', () => {
       expect(iframe).toHaveAttribute('src', expect.stringContaining('youtube.com/embed'));
     });
 
-    it('shows error for invalid URL', () => {
+    it('shows the owner an error for an invalid URL', () => {
       const invalidBlock = { ...fixtures.mockVideoBlock, url: 'invalid-url' };
-      render(<VideoBlock block={invalidBlock} />);
+      render(<RenderContextProvider value="editor"><VideoBlock block={invalidBlock} /></RenderContextProvider>);
       expect(screen.getByText('Неверный URL видео')).toBeInTheDocument();
+    });
+
+    it('hides an invalid video from visitors', () => {
+      const invalidBlock = { ...fixtures.mockVideoBlock, url: 'invalid-url' };
+      const { container } = render(<VideoBlock block={invalidBlock} />);
+      expect(container).toBeEmptyDOMElement();
     });
   });
 
@@ -183,7 +185,7 @@ describe('Block Components', () => {
       render(<TestimonialBlock block={fixtures.mockTestimonialBlock} />);
       expect(screen.getByText('Reviews')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('"Great service!"')).toBeInTheDocument();
+      expect(screen.getByText(/Great service!/)).toBeInTheDocument();
     });
 
     it('renders role when provided', () => {

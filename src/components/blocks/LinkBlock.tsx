@@ -11,7 +11,8 @@ import Globe from 'lucide-react/dist/esm/icons/globe';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
-import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/blocks/block-utils';
+import { getButtonClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
+import { externalLinkProps } from '@/lib/blocks/safe-href';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { extractDomain, getGoogleFaviconUrl, getDirectFaviconUrl } from '@/lib/favicon-utils';
 import { getBlockStyles, getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
@@ -63,7 +64,6 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   const FallbackIcon = isPhone ? Phone : isMail ? Mail
     : block.icon && iconMap[block.icon.toLowerCase()] ? iconMap[block.icon.toLowerCase()] : Link2;
 
-  const handleClick = createBlockClickHandler(block.url, onClick);
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   // tel:/mailto: have no site to take a favicon from (it used to show a globe)
   const shouldShowFavicon = !isPhone && !isMail && faviconSrc && !faviconError;
@@ -100,9 +100,8 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
       "flex w-full",
       block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'
     )}>
-      <button
-        type="button"
-        onClick={handleClick}
+      <a
+        {...externalLinkProps(block.url, onClick)}
         className={cn(
           "qb-card qb-card-hover w-full flex items-center justify-between gap-3 [border-radius:var(--lm-button-radius,var(--radius-card))]",
           "min-h-[56px] py-3 px-4 sm:px-5",
@@ -156,7 +155,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           style={blockStyleObj.color ? { color: blockStyleObj.color, opacity: 0.8 } : undefined}
         />
         )}
-      </button>
+      </a>
     </div>
   );
 });

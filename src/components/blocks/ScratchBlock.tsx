@@ -1,6 +1,5 @@
 import { memo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import Crown from 'lucide-react/dist/esm/icons/crown';
 import type { ScratchBlock as ScratchBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
@@ -86,7 +85,6 @@ export const ScratchBlock = memo(function ScratchBlock({ block }: ScratchBlockPr
       {title && (
         <div className="flex items-center gap-2 mb-4">
           <h3 className="font-semibold text-lg">{title}</h3>
-          <Crown className="h-4 w-4 text-primary" />
         </div>
       )}
       <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-border">

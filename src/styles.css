@@ -1452,7 +1452,9 @@
 
 /* ===== Phase 1: semantic typography scale (Composition / BlockVariant layer) ===== */
 .lm-display-scale {
-  font-size: clamp(2rem, 9vw, 4.25rem);
+  /* Capped: the page is a phone-width column even on desktop, where 9vw
+     made 68px headings that broke words in two. */
+  font-size: clamp(2rem, 9vw, 3rem);
   line-height: 0.98;
   letter-spacing: -0.03em;
   font-weight: 650;

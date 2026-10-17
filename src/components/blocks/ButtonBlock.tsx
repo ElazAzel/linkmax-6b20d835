@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
+import { getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
+import { externalLinkProps } from '@/lib/blocks/safe-href';
 import { getBlockStyles, getBlockInnerStyles } from '@/lib/blocks/block-styling';
 import { hasCustomBackground } from '@/lib/appearance/block-appearance';
 import type { ButtonBlock as ButtonBlockType } from '@/types/page';
@@ -14,7 +15,6 @@ interface ButtonBlockProps {
 
 export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }: ButtonBlockProps) {
   const { i18n } = useTranslation();
-  const handleClick = createBlockClickHandler(block.url, onClick);
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   const alignmentClass = block.alignment === 'left' ? 'justify-start' 
@@ -53,8 +53,8 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
 
   return (
     <div className={cn("flex w-full", alignmentClass)}>
-      <button
-        onClick={handleClick}
+      <a
+        {...externalLinkProps(block.url, onClick)}
         className={cn(
           widthClass,
           // Shape follows theme.buttonStyle (--lm-button-radius); an explicit
@@ -78,7 +78,7 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
           <div className="absolute inset-0 bg-black/30 pointer-events-none" />
         )}
         <span className={cn("relative z-10 line-clamp-2", textEffectClass)}>{title}</span>
-      </button>
+      </a>
     </div>
   );
 });

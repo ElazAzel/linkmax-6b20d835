@@ -144,10 +144,13 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
     );
   };
 
+  // Item cards sat flush against the block's own card (double border).
+  const pad = !block.blockStyle?.padding || block.blockStyle.padding === 'none';
+
   return (
-    <div className="w-full space-y-4">
+    <div className={cn('w-full space-y-4', pad && 'p-4 sm:p-5')}>
       {title && (
-        <h3 className="text-xl font-semibold text-center">{title}</h3>
+        <h3 className="text-lg font-semibold text-left">{title}</h3>
       )}
 
       {groupedItems.map((group, groupIndex) => (

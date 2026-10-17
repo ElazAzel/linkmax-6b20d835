@@ -6,7 +6,7 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_RADIUS, BLOCK_SHADOW } from '@/lib/appearance/block-appearance';
-import { canonicalSocialUrl, openExternal } from '@/lib/blocks/safe-href';
+import { canonicalSocialUrl, externalLinkProps } from '@/lib/blocks/safe-href';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
@@ -17,13 +17,6 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
   const { i18n } = useTranslation();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
-  const handleClick = (url: string) => {
-    // Track click first
-    if (onPlatformClick) {
-      onPlatformClick();
-    }
-    if (url) openExternal(canonicalSocialUrl(url));
-  };
 
   const iconStyle = block.iconStyle === 'brand' || block.iconStyle === 'outline' ? block.iconStyle : 'theme';
   const isList = block.layout === 'list';
@@ -78,10 +71,9 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
           const brandColor = iconStyle === 'brand' && !platform.customIconUrl ? getBrandColor(platformId) : null;
 
           return (
-            <button
-              type="button"
+            <a
               key={platform.id ?? index}
-              onClick={() => handleClick(url)}
+              {...externalLinkProps(url, onPlatformClick)}
               className={cn(
                 'group relative flex items-center transition-all duration-200 active:scale-95',
                 isList
@@ -109,7 +101,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
                 />
               </span>
               {isList ? <span className="min-w-0 truncate text-sm font-medium text-foreground">{label}</span> : null}
-            </button>
+            </a>
           );
         })}
       </div>

@@ -58,7 +58,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
       className={cn(
         "flex min-w-0 flex-col gap-3 overflow-visible",
         alignmentClass,
-        block.blockStyle?.padding && paddingMap[block.blockStyle.padding],
+        block.blockStyle?.padding ? paddingMap[block.blockStyle.padding] : "p-5",
         block.blockStyle?.margin && marginMap[block.blockStyle.margin],
       )}
     >

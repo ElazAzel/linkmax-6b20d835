@@ -20,7 +20,7 @@ import { extractEntityLinks } from '@/lib/seo/entity-linking';
 import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts as generateEnhancedKeyFacts } from '@/lib/seo/key-facts';
 import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
-import { canonicalSocialUrl } from '@/lib/blocks/safe-href';
+import { canonicalSocialUrl, getSafeHref } from '@/lib/blocks/safe-href';
 
 interface CrawlerFriendlyContentProps {
   blocks: Block[];
@@ -110,7 +110,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
           
           {/* sameAs links for entity linking */}
           {entityLinks.sameAs.map((url, i) => (
-            <link key={i} itemProp="sameAs" href={url} />
+            <link key={i} itemProp="sameAs" href={getSafeHref(url)} />
           ))}
         </header>
 
@@ -303,7 +303,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
             <ul>
               {linkBlocks.map(block => (
                 <li key={block.id}>
-                  <a href={block.url} rel="noopener noreferrer">
+                  <a href={getSafeHref(block.url)} rel="noopener noreferrer">
                     {getI18nText(block.title, language)}
                   </a>
                 </li>
@@ -319,7 +319,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
             <ul>
               {(socialsBlock.platforms || []).filter(p => p && p.url).map((platform, i) => (
                 <li key={i}>
-                  <a href={canonicalSocialUrl(platform.url)} rel="noopener noreferrer me" itemProp="sameAs">
+                  <a href={getSafeHref(canonicalSocialUrl(platform.url))} rel="noopener noreferrer me" itemProp="sameAs">
                     {getI18nText(platform.name as Parameters<typeof getI18nText>[0], language) || canonicalSocialUrl(platform.url)}
                   </a>
                 </li>

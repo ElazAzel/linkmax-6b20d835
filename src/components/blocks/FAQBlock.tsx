@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FAQBlock as FAQBlockType } from '@/types/page';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
 import { BlockShell, SectionHeader } from './shells/BlockShell';
@@ -25,6 +26,10 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
     );
   }
 
+  // The cell already pads the block when the owner chose a padding (older
+  // blocks were created with one); padding here as well doubled it to ~44px.
+  const pad = !block.blockStyle?.padding || block.blockStyle.padding === 'none';
+
   return (
     <div
       className="w-full"
@@ -33,9 +38,9 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
     >
-      {title && <SectionHeader className="px-5 pt-4 mb-1" icon={<HelpCircle className="h-4 w-4" />} title={title} />}
+      {title && <SectionHeader className={cn(pad && 'px-5 pt-4', 'mb-1')} icon={<HelpCircle className="h-4 w-4" />} title={title} />}
 
-      <Accordion type="single" collapsible className="w-full divide-y divide-border/60 px-5 py-1">
+      <Accordion type="single" collapsible className={cn("w-full divide-y divide-border/60", pad && "px-5 py-1")}>
         {block.items.map((item, index) => {
           const question = getI18nText(item.question, currentLang);
           const answer = getI18nText(item.answer, currentLang);

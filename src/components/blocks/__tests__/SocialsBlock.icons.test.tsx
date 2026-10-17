@@ -18,9 +18,9 @@ describe('SocialsBlock icons', () => {
       { id: '3', platform: 'whatsapp', url: 'https://wa.me/7701' },
     ])} />);
 
-    expect(pathOf(screen.getByRole('button', { name: 'Instagram' }))).toBe(BRAND_ICONS.instagram.path);
-    expect(pathOf(screen.getByRole('button', { name: 'Telegram' }))).toBe(BRAND_ICONS.telegram.path);
-    expect(pathOf(screen.getByRole('button', { name: 'WhatsApp' }))).toBe(BRAND_ICONS.whatsapp.path);
+    expect(pathOf(screen.getByRole('link', { name: 'Instagram' }))).toBe(BRAND_ICONS.instagram.path);
+    expect(pathOf(screen.getByRole('link', { name: 'Telegram' }))).toBe(BRAND_ICONS.telegram.path);
+    expect(pathOf(screen.getByRole('link', { name: 'WhatsApp' }))).toBe(BRAND_ICONS.whatsapp.path);
   });
 
   it('uses the owner icon image when set', () => {
@@ -37,7 +37,7 @@ describe('SocialsBlock icons', () => {
 
   it('brand style colours the icon; list layout shows names', () => {
     render(<SocialsBlock block={block([{ id: '1', url: 'https://t.me/a' }], { iconStyle: 'brand', layout: 'list' })} />);
-    const button = screen.getByRole('button', { name: 'Telegram' });
+    const button = screen.getByRole('link', { name: 'Telegram' });
     expect((button.querySelector('span') as HTMLElement).style.color).toBe('rgb(38, 165, 228)');
     expect(button).toHaveTextContent('Telegram');
   });

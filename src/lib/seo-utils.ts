@@ -7,6 +7,7 @@ import type { Block, FAQBlock, EventBlock, ProfileBlock, AvatarBlock, SocialsBlo
 import type { MultilingualString } from '@/lib/i18n-helpers';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
+import { canonicalSocialUrl, getSafeHref } from '@/lib/blocks/safe-href';
 
 // ============= Quality Gate =============
 
@@ -174,8 +175,9 @@ export function extractProfileFromBlocks(
   if (socialsBlock?.platforms) {
     result.sameAs = (socialsBlock.platforms || [])
       .filter(p => p != null && typeof p === 'object' && p.url)
-      .map(p => p.url)
-      .filter(Boolean);
+      // "instagram.com/x" typed without a scheme is a relative URL to crawlers.
+      .map(p => getSafeHref(canonicalSocialUrl(p.url)))
+      .filter((url): url is string => !!url);
   }
 
   // Determine if it's an organization based on content
