@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 import type { Block } from '@/types/page';
 import { messengerPhoneDigits, whatsappHref } from '@/lib/blocks/messenger-links';
+import { isBlockShownToVisitors } from '@/lib/blocks/block-visibility';
 
 export type ContactPlatform = 'whatsapp' | 'telegram' | 'phone';
 
@@ -21,6 +22,8 @@ const TG_USERNAME = /^(?:https?:\/\/)?t\.me\/([A-Za-z0-9_]{4,})\/?$/i;
  */
 export function extractPageContacts(blocks: Block[] | undefined, language: string): PageContact[] {
   if (!blocks?.length) return [];
+  // Same visibility as the page itself: a contact scheduled out is not offered.
+  blocks = blocks.filter((block) => isBlockShownToVisitors(block));
   const byPlatform = new Map<ContactPlatform, PageContact>();
   const add = (contact: PageContact | undefined) => {
     if (contact && !byPlatform.has(contact.platform)) byPlatform.set(contact.platform, contact);

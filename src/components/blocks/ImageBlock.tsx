@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import ImageOff from 'lucide-react/dist/esm/icons/image-off';
@@ -20,6 +20,8 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
   const { t, i18n } = useTranslation();
   const renderMode = useRenderContext();
   const [failed, setFailed] = useState(false);
+  // A corrected URL gets a fresh try (editing keeps the same component).
+  useEffect(() => setFailed(false), [block.url]);
   const alt = imageAltText(getI18nText(block.alt, i18n.language as SupportedLanguage), block.link);
   const caption = getI18nText(block.caption, i18n.language as SupportedLanguage);
 
