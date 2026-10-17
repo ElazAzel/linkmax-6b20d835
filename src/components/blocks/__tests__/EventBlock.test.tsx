@@ -102,7 +102,7 @@ describe('EventBlock', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  it('displays capacity when set', () => {
+  it('hides "0 / capacity" until someone registers', () => {
     render(
       <EventBlock 
         block={mockEventBlock} 
@@ -111,7 +111,7 @@ describe('EventBlock', () => {
       />
     );
     
-    // Should show available spots (100 - 0 registrations)
-    expect(screen.getByText(/100/)).toBeInTheDocument();
+    // "0 / 100 мест" works against the event, so the count waits for the first registration
+    expect(screen.queryByText(/\/ 100/)).not.toBeInTheDocument();
   });
 });

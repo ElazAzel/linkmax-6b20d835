@@ -1,3 +1,4 @@
+import { RenderContextProvider } from '@/contexts/RenderContext';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CardBlock } from '../CardBlock';
@@ -62,11 +63,24 @@ describe('TilesBlock', () => {
         { id: '3', title: 'Bad', url: 'javascript:alert(1)' },
       ],
     } as TilesBlockType;
-    const { container } = render(<TilesBlock block={block} />);
+    const { container } = render(<RenderContextProvider value="editor"><TilesBlock block={block} /></RenderContextProvider>);
     expect(screen.getByRole('heading', { name: 'Пресса' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /ELLE/ })).toHaveAttribute('href', 'https://elle.kz/a');
     expect(screen.getByText('Bazaar')).toBeInTheDocument();
     expect(container.querySelectorAll('a')).toHaveLength(1);
+  });
+
+  it('shows visitors only the tiles that have a picture', () => {
+    const block = {
+      id: 't2', type: 'tiles', columns: 2,
+      items: [
+        { id: '1', title: 'ELLE', image: 'https://cdn.example.com/1.jpg', url: '' },
+        { id: '2', title: 'Bazaar', image: '', url: '' },
+      ],
+    } as TilesBlockType;
+    render(<TilesBlock block={block} />);
+    expect(screen.getByText('ELLE')).toBeInTheDocument();
+    expect(screen.queryByText('Bazaar')).not.toBeInTheDocument();
   });
 });
 

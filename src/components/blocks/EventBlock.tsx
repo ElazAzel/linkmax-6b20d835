@@ -433,10 +433,9 @@ export const EventBlock = memo(function EventBlock({
   return (
     <>
       <Card className="overflow-hidden rounded-2xl border border-border/50 shadow-sm">
-        {block.coverUrl ? (
+        {/* No cover: no empty 160px gradient band. */}
+        {block.coverUrl && (
           <img src={block.coverUrl} alt={title} className="h-40 w-full object-cover" />
-        ) : (
-          <div className="h-40 w-full bg-gradient-to-br from-primary/15 via-background to-muted" />
         )}
         <div className="p-4 space-y-3">
           <div className="flex items-start justify-between gap-3">
@@ -466,7 +465,7 @@ export const EventBlock = memo(function EventBlock({
                 <span className="break-words">{block.locationValue}</span>
               </div>
             )}
-            {block.capacity && (
+            {block.capacity && registrationCount > 0 && (
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 <span>

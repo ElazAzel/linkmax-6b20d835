@@ -1,10 +1,9 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { VideoBlock as VideoBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
-import { hasCustomBlockContainer } from '@/lib/blocks/block-styling';
+import { useRenderContext } from '@/contexts/RenderContext';
 import { getVideoEmbedUrl, isVerticalVideo } from '@/lib/blocks/video-embed';
 
 interface VideoBlockProps {
@@ -12,11 +11,15 @@ interface VideoBlockProps {
   onClick?: () => void;
 }
 
-export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: VideoBlockProps) {
+// The grid cell is the card; the video sits in it edge to edge with the title
+// padded like other blocks (it used to draw a second bordered card inside, or
+// put the title flush on the cell edge when the block had any style).
+export const VideoBlock = memo(function VideoBlockComponent({ block }: VideoBlockProps) {
   const { t, i18n } = useTranslation();
+  const renderMode = useRenderContext();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const embedUrl = getVideoEmbedUrl(block.url, block.platform);
-  const isNaked = hasCustomBlockContainer(block.blockStyle);
+  const hasOwnPadding = !!block.blockStyle?.padding && block.blockStyle.padding !== 'none';
 
   const aspectRatioClass = {
     '16:9': 'aspect-video',
@@ -26,78 +29,39 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   }[isVerticalVideo(block.url) ? '9:16' : block.aspectRatio || '16:9'];
 
   if (!embedUrl) {
+    // Visitors never see a broken-link message; the owner does.
+    if (renderMode === 'live') return null;
     return (
-      <Card variant="solid" className="bg-card border-border shadow-sm rounded-xl">
-        <CardHeader className="p-3 sm:p-4">
-          <CardTitle className="text-sm text-destructive">
-            {t('blocks.video.invalidUrl', 'Неверный URL видео')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-3 sm:p-4 pt-0">
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            {t('blocks.video.checkUrl', 'Проверьте ссылку на видео и попробуйте снова.')}
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Naked mode: no card frame, no title bar background — the wrapper's
-  // custom styling is the visible frame.
-  if (isNaked) {
-    return (
-      <div
-        onClick={() => onClick?.()}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onClick?.();
-          }
-        }}
-        className="w-full"
-      >
-        {title && (
-          <div className="pb-2">
-            <h3 className="text-base sm:text-lg font-semibold truncate">{title}</h3>
-          </div>
-        )}
-        <div className={cn('relative w-full overflow-hidden', aspectRatioClass)} style={{ borderRadius: 'inherit' }}>
-          <iframe
-            src={embedUrl}
-            className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
-            allowFullScreen
-            title={title || 'Video'}
-          />
-        </div>
+      <div className="w-full p-4 sm:p-5">
+        <p className="text-sm font-medium text-destructive">
+          {t('blocks.video.invalidUrl', 'Неверный URL видео')}
+        </p>
+        <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
+          {t('blocks.video.checkUrl', 'Проверьте ссылку на видео и попробуйте снова.')}
+        </p>
       </div>
     );
   }
 
   return (
-    <Card
-      className="overflow-hidden qb-card border-hairline shadow-soft rounded-2xl"
-      onClick={() => onClick?.()}
-    >
+    <div className="w-full">
       {title && (
-        <CardHeader className="p-4 sm:p-5 pb-2">
-          <CardTitle className="text-base sm:text-lg font-semibold truncate text-foreground">{title}</CardTitle>
-        </CardHeader>
-      )}
-      <CardContent className="p-0">
-        <div className={cn("relative w-full bg-black/20", aspectRatioClass)}>
-          <iframe
-            src={embedUrl}
-            className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
-
-            allowFullScreen
-            title={title || 'Video'}
-          />
+        <div className={cn(hasOwnPadding ? 'pb-2' : 'px-4 pt-3 pb-2 sm:px-5')}>
+          <h3 className="truncate text-base font-semibold text-foreground sm:text-lg">{title}</h3>
         </div>
-      </CardContent>
-    </Card>
+      )}
+      <div
+        className={cn('relative w-full overflow-hidden bg-black/20', aspectRatioClass)}
+        style={title ? undefined : { borderRadius: 'inherit' }}
+      >
+        <iframe
+          src={embedUrl}
+          className="absolute inset-0 h-full w-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
+          allowFullScreen
+          title={title || 'Video'}
+        />
+      </div>
+    </div>
   );
 });

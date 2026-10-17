@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
+import { useRenderContext } from '@/contexts/RenderContext';
 
 interface ShoutoutBlockProps {
   /** Accepts full block object (manifest-driven) or legacy individual props */
@@ -28,6 +29,7 @@ interface UserInfo {
 
 export function ShoutoutBlock({ block, userId: legacyUserId, message: legacyMessage, style }: ShoutoutBlockProps) {
   const { t, i18n } = useTranslation();
+  const renderMode = useRenderContext();
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -74,6 +76,8 @@ export function ShoutoutBlock({ block, userId: legacyUserId, message: legacyMess
   }
 
   if (!user) {
+    // Visitors never see a lookup failure; the owner sees it to fix the link.
+    if (renderMode === 'live') return null;
     return (
       <Card 
         className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20"

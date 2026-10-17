@@ -62,6 +62,30 @@ export function openExternal(value: unknown): boolean {
   return true;
 }
 
+/**
+ * Props for a real <a> to an owner's link. Visitors can long-press, copy or
+ * open it in a new tab, and in-app browsers (Instagram, TikTok) follow it,
+ * where a button calling window.open could be swallowed. The tracking callback
+ * runs on click; navigation stays the browser's default.
+ */
+export function externalLinkProps(value: unknown, onTrack?: () => void): {
+  href?: string;
+  target?: '_blank';
+  rel?: string;
+  onClick: (event: { stopPropagation(): void }) => void;
+} {
+  const href = getSafeHref(value);
+  const onClick = (event: { stopPropagation(): void }) => {
+    event.stopPropagation();
+    onTrack?.();
+  };
+  if (!href) return { onClick };
+  const raw = String(value).trim();
+  const keepRaw = /^[a-z][a-z0-9+.-]*:/i.test(raw);
+  if (/^(mailto|tel):/i.test(href)) return { href: raw, onClick };
+  return { href: keepRaw ? raw : href, target: '_blank', rel: 'noopener noreferrer', onClick };
+}
+
 const URL_FIELDS = ['url', 'link', 'buyLink', 'fileUrl', 'telegramLink'] as const;
 const BARE_DOMAIN = /^(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,}(?:[/?#]\S*)?$/i;
 

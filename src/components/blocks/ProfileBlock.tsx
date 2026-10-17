@@ -348,11 +348,10 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
               <VerifiedBadge isVerified={isOwnerVerified} isPremium={isPremiumUser} size="sm" />
             )}
             {compact && showStatusRing && (
-              <span
-                className="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium text-white"
-                style={{ backgroundColor: statusRing.color }}
-              >
-                <span className={cn('h-1.5 w-1.5 rounded-full bg-white/90', statusRing.pulse && 'animate-pulse')} />
+              // Neutral chip with a coloured dot: white text on the status
+              // green was 2.3:1, below readable contrast.
+              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-muted/60 px-2 py-0.5 text-[11px] font-medium text-foreground">
+                <span className={cn('h-1.5 w-1.5 rounded-full', statusRing.pulse && 'animate-pulse')} style={{ backgroundColor: statusRing.color }} />
                 {t(`profile.statusRingLabel.${statusRing.value}`, statusRing.label)}
               </span>
             )}

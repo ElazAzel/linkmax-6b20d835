@@ -105,7 +105,10 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
       </div>
       {caption && (
         <p className={cn(
-          "text-xs sm:text-sm text-muted-foreground mt-2 sm:mt-4 break-words hyphens-auto",
+          "text-xs sm:text-sm text-muted-foreground mt-2 sm:mt-3 break-words hyphens-auto",
+          // The grid cell is the card; without its own padding the caption sat
+          // flush on the card edge (and was clipped in half-width tiles).
+          !(block.blockStyle?.padding && block.blockStyle.padding !== 'none') && 'px-4 pb-3 sm:px-5',
           block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'
         )}>
           {caption}

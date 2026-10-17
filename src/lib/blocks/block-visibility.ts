@@ -41,7 +41,7 @@ export function hasVisitorContent(block: Block): boolean {
     case 'pricing':
     case 'catalog': return list(b.items).length > 0;
     case 'carousel': return list(b.images).some((i) => hasText((i as { url?: unknown }).url));
-    case 'tiles': return list(b.items).length > 0;
+    case 'tiles': return list(b.items).some((i) => hasText((i as { image?: unknown }).image));
     case 'shoutout': return hasText(b.userId) || hasText(b.username);
     case 'custom_code': return hasText(b.html);
     case 'download': return hasText(b.fileUrl);

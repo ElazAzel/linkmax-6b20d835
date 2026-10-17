@@ -29,6 +29,10 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
     </div>
   );
 
+  // The cell already pads the block when the owner chose a padding (older
+  // blocks were created with one); padding here as well doubled it to ~44px.
+  const pad = !block.blockStyle?.padding || block.blockStyle.padding === 'none';
+
   return (
     <div
       className="w-full"
@@ -37,11 +41,11 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
     >
-      {title && <SectionHeader className="px-5 pt-4 mb-1" icon={<Quote className="h-4 w-4" />} title={title} />}
+      {title && <SectionHeader className={cn(pad && 'px-5 pt-4', 'mb-1')} icon={<Quote className="h-4 w-4" />} title={title} />}
 
       {/* One flat list inside the block's own card: every review is visible on
           any device (the old swipe row hid the rest behind a hidden scrollbar). */}
-      <ul className="divide-y divide-border/60 px-5 py-2">
+      <ul className={cn("divide-y divide-border/60", pad && "px-5 py-2")}>
         {block.testimonials?.filter(Boolean).map((testimonial, index) => {
           if (!testimonial) return null;
           const name = getI18nText(testimonial.name, currentLang) || '';
@@ -64,8 +68,8 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
                 {testimonial.rating ? renderStars(testimonial.rating) : null}
               </div>
               {text && (
-                <p className="mt-2.5 text-[15px] leading-relaxed text-foreground/85">
-                  "{text}"
+                <p className="mt-2.5 text-[15px] leading-relaxed text-foreground/85 [text-wrap:pretty]">
+                  {i18n.language === "en" ? `“${text}”` : `«${text}»`}
                 </p>
               )}
             </li>

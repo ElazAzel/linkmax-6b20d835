@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -7,6 +7,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import type { CarouselBlock as CarouselBlockType } from '@/types/page';
@@ -22,6 +23,16 @@ interface CarouselBlockProps {
 export const CarouselBlock = memo(function CarouselBlockComponent({ block, onClick }: CarouselBlockProps) {
   const { i18n, t } = useTranslation();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    onSelect();
+    api.on('select', onSelect);
+    return () => { api.off('select', onSelect); };
+  }, [api]);
 
   const autoplayPlugin = block.autoPlay
     ? Autoplay({ delay: block.interval || 3000, stopOnInteraction: true })
@@ -47,7 +58,8 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
   }
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl qb-card border-hairline shadow-soft">
+    // The grid cell is the card; a second bordered card inside it drew two frames.
+    <div className="w-full overflow-hidden" style={{ borderRadius: 'inherit' }}>
       {title && (
         <div className="p-4 sm:p-5 pb-0">
           <h3 className="font-semibold text-base sm:text-lg text-foreground truncate">{title}</h3>
@@ -59,6 +71,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
           loop: true,
         }}
         plugins={autoplayPlugin ? [autoplayPlugin] : undefined}
+        setApi={setApi}
         className="w-full"
       >
         <CarouselContent className="-ml-0">
@@ -94,12 +107,18 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
       </Carousel>
       {/* Dots indicator for mobile */}
       {block.images.length > 1 && (
-        <div className="flex justify-center gap-2 py-3">
+        <div className="flex justify-center gap-0.5 py-2">
           {block.images.map((_, idx) => (
-            <div
+            <button
+              type="button"
               key={idx}
-              className="w-2 h-2 rounded-full bg-primary/20 transition-all duration-300"
-            />
+              onClick={() => api?.scrollTo(idx)}
+              aria-label={t('blocks.carousel.goTo', 'Слайд {{n}}', { n: idx + 1 })}
+              aria-current={idx === current}
+              className="flex h-6 w-6 items-center justify-center"
+            >
+              <span className={idx === current ? 'h-2 w-5 rounded-full bg-foreground transition-all duration-300' : 'h-2 w-2 rounded-full bg-foreground/20 transition-all duration-300'} />
+            </button>
           ))}
         </div>
       )}

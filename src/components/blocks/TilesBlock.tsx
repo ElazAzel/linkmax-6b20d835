@@ -5,6 +5,7 @@ import type { TilesBlock as TilesBlockType, TileItem } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getSafeHref } from '@/lib/blocks/safe-href';
 import { cn } from '@/lib/utils/utils';
+import { useRenderContext } from '@/contexts/RenderContext';
 
 interface TilesBlockProps {
   block: TilesBlockType;
@@ -16,7 +17,10 @@ export const TilesBlock = memo(function TilesBlock({ block, onClick }: TilesBloc
   const { i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const title = getI18nText(block.title, lang);
-  const items = Array.isArray(block.items) ? block.items : [];
+  const renderMode = useRenderContext();
+  const allItems = Array.isArray(block.items) ? block.items : [];
+  // Visitors only get tiles with a picture; the owner sees placeholders to fill.
+  const items = renderMode === 'live' ? allItems.filter((item) => !!item.image) : allItems;
   const columns = block.columns === 3 ? 'grid-cols-3' : 'grid-cols-2';
   const aspect = block.aspect === 'portrait' ? 'aspect-[4/5]' : 'aspect-square';
 

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { cn } from '@/lib/utils/utils';
@@ -31,6 +31,13 @@ interface GridBlocksRendererProps {
  * be split heroes, editorial stacks, horizontal rails, etc. instead of a stack
  * of identical rounded cards.
  */
+const CARD_ONLY_STYLE_KEYS = new Set(['backgroundColor', 'backgroundImage', 'borderRadius', 'boxShadow', 'borderWidth', 'borderStyle', 'borderColor', 'padding']);
+
+function transparentCellStyle(style: CSSProperties | undefined): CSSProperties | undefined {
+  if (!style) return style;
+  return Object.fromEntries(Object.entries(style).filter(([key]) => !CARD_ONLY_STYLE_KEYS.has(key))) as CSSProperties;
+}
+
 export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   blocks,
   pageOwnerId,
@@ -114,7 +121,9 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             !isTransparent && appearance.className,
             variant?.className,
           )}
-          style={appearance.style}
+          // Transparent cells (separator, socials, …) keep text colour and font
+          // only; the card radius/shadow drew an empty shadowed pill around them.
+          style={isTransparent ? transparentCellStyle(appearance.style) : appearance.style}
         >
           {/* Ambient hover sheen */}
           {!isTransparent && !hasCustomBg && (
