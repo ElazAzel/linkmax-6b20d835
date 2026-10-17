@@ -40,7 +40,8 @@ export class FeatureUnavailableError extends Error {
  */
 const STORAGE_KEY = 'lnkmx:missing-schema';
 const TTL_MS = 24 * 60 * 60 * 1000;
-const missingFeatures = new Set<string>();
+// feature -> when it was reported missing; checked against TTL on every read.
+const missingFeatures = new Map<string, number>();
 let loaded = false;
 
 function readStored(): Record<string, number> {
@@ -56,25 +57,30 @@ function readStored(): Record<string, number> {
 function loadStored(): void {
   if (loaded) return;
   loaded = true;
-  const now = Date.now();
   for (const [feature, at] of Object.entries(readStored())) {
-    if (typeof at === 'number' && now - at < TTL_MS) missingFeatures.add(feature);
+    if (typeof at === 'number') missingFeatures.set(feature, at);
   }
 }
 
 export function isFeatureSchemaMissing(feature: string): boolean {
   loadStored();
-  return missingFeatures.has(feature);
+  const at = missingFeatures.get(feature);
+  if (at === undefined) return false;
+  if (Date.now() - at < TTL_MS) return true;
+  // Expired: try the feature again (a long-lived tab picks up the migration).
+  missingFeatures.delete(feature);
+  return false;
 }
 
 /** Remembers the feature as missing when `error` is a missing-schema error. */
 export function noteFeatureSchemaError(feature: string, error: unknown): void {
   if (!isMissingSchemaError(error)) return;
-  missingFeatures.add(feature);
+  const now = Date.now();
+  missingFeatures.set(feature, now);
   try {
     if (typeof window === 'undefined') return;
     const stored = readStored();
-    stored[feature] = Date.now();
+    stored[feature] = now;
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
   } catch {
     /* storage blocked: the in-memory flag still covers this session */
