@@ -1,7 +1,7 @@
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
-import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
+import { isFeatureSchemaMissing, noteFeatureSchemaError, resetFeatureSchemaState } from '@/lib/resilience/missing-schema';
 export {
   prepareClientRevenueEvent,
 } from '@/lib/posthog';
@@ -332,10 +332,12 @@ async function upsertCreatorHealthScore(
 
 /**
  * product_events / creator_* come from a migration that is not applied to
- * every database. Once the table is reported missing, stop writing for this
- * session — otherwise every dashboard action sent a request that failed.
+ * every database. Once the table is reported missing, stop writing (the flag
+ * survives reloads for a day) — otherwise every dashboard action sent a
+ * request that failed.
  */
-let productSchemaMissing = false;
+const PRODUCT_FEATURE = 'product_analytics';
+const productSchemaMissing = () => isFeatureSchemaMissing(PRODUCT_FEATURE);
 // Until the first insert answers, later events wait for it instead of
 // racing it: a burst of activation events otherwise produced one failing
 // request each before the flag was set.
@@ -344,17 +346,17 @@ let productSchemaProbe: Promise<void> | null = null;
 
 /** Test hook. */
 export function resetProductAnalyticsSchemaState() {
-  productSchemaMissing = false;
+  resetFeatureSchemaState();
   productSchemaConfirmed = false;
   productSchemaProbe = null;
 }
 
 async function trackProductEvent(input: TrackProductEventInput): Promise<void> {
-  if (productSchemaMissing) return;
+  if (productSchemaMissing()) return;
   if (!productSchemaConfirmed) {
     if (productSchemaProbe) {
       await productSchemaProbe;
-      if (productSchemaMissing) return;
+      if (productSchemaMissing()) return;
     } else {
       productSchemaProbe = writeProductEvent(input).finally(() => {
         productSchemaProbe = null;
@@ -381,7 +383,7 @@ async function writeProductEvent(input: TrackProductEventInput): Promise<void> {
       });
 
     if (error) {
-      if (isMissingSchemaError(error)) productSchemaMissing = true;
+      noteFeatureSchemaError(PRODUCT_FEATURE, error);
       logger.debug('Product analytics event insert failed', { data: error });
       return;
     }
