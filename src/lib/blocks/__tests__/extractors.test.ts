@@ -25,4 +25,18 @@ describe('deterministic input extractors', () => {
       url: 'https://instagram.com/studio_luna',
     });
   });
+
+  it('keeps fractional prices', () => {
+    expect(extractServicesPipeline('Consultation — 9.99 USD\nУкладка — 12,50 €')).toEqual([
+      expect.objectContaining({ title: 'Consultation', price: 9.99, currency: 'USD' }),
+      expect.objectContaining({ title: 'Укладка', price: 12.5, currency: 'EUR' }),
+    ]);
+  });
+
+  it('reads scheme-less TikTok links with @', () => {
+    expect(extractSocialsPipeline('instagram.com/brand, tiktok.com/@brand')).toEqual(expect.arrayContaining([
+      { platform: 'tiktok', url: 'https://tiktok.com/@brand' },
+      { platform: 'instagram', url: 'https://instagram.com/brand' },
+    ]));
+  });
 });

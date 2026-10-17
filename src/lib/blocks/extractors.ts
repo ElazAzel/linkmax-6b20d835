@@ -48,15 +48,16 @@ const QUANTITY_UNIT = /^(?:мин|минут|минуты|min|час|часа|ч
 export function extractPrice(text: string): { price: number; currency: string; remainder: string } {
     if (!text) return { price: 0, currency: '', remainder: '' };
 
-    const tokenRegex = /([$€₸₽])?\s*(\d{1,3}(?:[ \u00a0.,]\d{3})+|\d+)(?:[.,]\d{1,2})?\s*([a-zA-Zа-яА-ЯёЁ]+\.?|[$€₸₽])?/g;
+    const tokenRegex = /([$€₸₽])?\s*(\d{1,3}(?:[ \u00a0.,]\d{3})+|\d+)([.,]\d{1,2}(?!\d))?\s*([a-zA-Zа-яА-ЯёЁ]+\.?|[$€₸₽])?/g;
     type Candidate = { price: number; currency: string; match: string; hasCurrency: boolean };
     const candidates: Candidate[] = [];
     let m: RegExpExecArray | null;
     while ((m = tokenRegex.exec(text)) !== null) {
         const pre = m[1] ?? '';
-        const unit = (m[3] ?? '').replace(/\.$/, '');
+        const unit = (m[4] ?? '').replace(/\.$/, '');
         if (unit && QUANTITY_UNIT.test(unit) && !pre) continue;
-        const value = Number(m[2].replace(/[ \u00a0.,]/g, ''));
+        // "9.99" / "12,50": the fraction is its own group, thousands separators are dropped
+        const value = Number(m[2].replace(/[ \u00a0.,]/g, '')) + (m[3] ? Number(`0.${m[3].slice(1)}`) : 0);
         if (!Number.isFinite(value) || value <= 0) continue;
         const alias = CURRENCY_ALIASES.find(([re]) => re.test(pre) || (unit && re.test(unit)));
         // A trailing word that is not a currency stays in the remainder.
@@ -249,7 +250,7 @@ export function extractSocialsPipeline(text: string): ParsedSocial[] {
     for (const [shortcut, platform] of Object.entries(SOCIAL_PLATFORMS)) {
         if (results.find(r => r.platform === platform)) continue;
 
-        const domainRegex = new RegExp(`${shortcut}\\.com\\/([a-zA-Z0-9_.]+)`, 'gi');
+        const domainRegex = new RegExp(`${shortcut}\\.com\\/(@?[a-zA-Z0-9_.]+)`, 'gi');
         let domainMatch;
         while ((domainMatch = domainRegex.exec(text)) !== null) {
             const baseUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
