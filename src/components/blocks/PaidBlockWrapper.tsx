@@ -24,6 +24,10 @@ interface PaidBlockWrapperProps {
   pageOwnerId?: string;
   children: React.ReactNode;
   isPreview?: boolean;
+  /** Block is a server stub without content (visitor has no access yet). */
+  isLockedStub?: boolean;
+  pageId?: string;
+  renderFull?: (content: unknown) => React.ReactNode;
 }
 
 // Store unlocked blocks in session
@@ -35,12 +39,16 @@ const PaidBlockGate = memo(function PaidBlockGate({
   pageOwnerId,
   children,
   isPreview = false,
+  isLockedStub = false,
+  pageId,
+  renderFull,
 }: PaidBlockWrapperProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { balance, purchaseMarketplaceItem, refresh } = useTokens();
   const [unlocking, setUnlocking] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [fullContent, setFullContent] = useState<unknown>(null);
   const renderContext = useRenderContext();
   const isEditorMode = renderContext === 'editor';
 
@@ -84,6 +92,19 @@ const PaidBlockGate = memo(function PaidBlockGate({
     checkPurchase();
   }, [user, blockId, pageOwnerId, isPaidContent]);
 
+  // Locked stubs carry no content: load it from the server once access is granted
+  useEffect(() => {
+    if (!isLockedStub || !pageId || fullContent) return;
+    if (!(user?.id === pageOwnerId || isUnlocked)) return;
+    let cancelled = false;
+    void supabase
+      .rpc('get_paid_block_content' as never, { p_page_id: pageId, p_block_key: blockId } as never)
+      .then(({ data }) => {
+        if (!cancelled && data) setFullContent(data as unknown);
+      });
+    return () => { cancelled = true; };
+  }, [isLockedStub, pageId, blockId, user?.id, pageOwnerId, isUnlocked, fullContent]);
+
   // If not paid content or in editor mode, just render children
   if (!isPaidContent || price <= 0 || isEditorMode) {
     return <>{children}</>;
@@ -104,6 +125,14 @@ const PaidBlockGate = memo(function PaidBlockGate({
 
   // Owner always sees content
   if (user?.id === pageOwnerId || isUnlocked) {
+    if (isLockedStub) {
+      if (fullContent && renderFull) return <>{renderFull(fullContent)}</>;
+      return (
+        <div className="flex h-24 items-center justify-center">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        </div>
+      );
+    }
     return <>{children}</>;
   }
 
@@ -145,10 +174,8 @@ const PaidBlockGate = memo(function PaidBlockGate({
   // Show locked state
   return (
     <Card className="relative overflow-hidden border-2 border-dashed border-amber-500/50 bg-gradient-to-br from-amber-500/5 to-orange-500/5">
-      {/* Blurred preview */}
-      <div className="blur-lg opacity-30 pointer-events-none select-none">
-        {children}
-      </div>
+      {/* Placeholder: paid content is not sent to the browser until unlocked */}
+      <div className="h-48 pointer-events-none select-none" aria-hidden="true" />
 
       {/* Lock overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 bg-background/60 backdrop-blur-sm">
