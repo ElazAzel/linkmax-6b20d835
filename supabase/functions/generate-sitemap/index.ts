@@ -502,7 +502,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   <meta name="citation_author" content="${displayName}">
   <meta name="citation_publication_date" content="${citationDate}">
   <meta name="citation_online_date" content="${citationDate}">
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   <style>
     body{font-family:system-ui,-apple-system,sans-serif;max-width:700px;margin:0 auto;padding:24px;line-height:1.6;color:#111}
     h1{font-size:1.8rem;margin-bottom:.5rem}h2{margin-top:2rem;font-size:1.3rem;color:#333;border-bottom:1px solid #eee;padding-bottom:.5rem}
@@ -687,7 +687,7 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
   <meta name="robots" content="${robotsTag}">
   <link rel="canonical" href="${canonical}">
   <meta property="og:type" content="website"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(desc)}"><meta property="og:url" content="${canonical}">
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   <style>body{font-family:system-ui,sans-serif;max-width:700px;margin:0 auto;padding:24px;line-height:1.6;color:#111}.breadcrumb{font-size:.85rem;color:#666;margin-bottom:1rem}.breadcrumb a{color:#0f62fe;text-decoration:none}h1{font-size:1.6rem}.price{font-size:1.3rem;font-weight:700;color:#0f62fe;margin:1rem 0}footer{margin-top:3rem;padding-top:1rem;border-top:1px solid #eee;text-align:center;color:#888}</style>
 </head>
 <body>
@@ -790,7 +790,7 @@ async function handleEventSSR(supabase: SupabaseClient<any>, slug: string, event
   <meta name="robots" content="${robotsTag}">
   <link rel="canonical" href="${canonical}">
   <meta property="og:type" content="event"><meta property="og:title" content="${escapeHtml(eventTitle)}"><meta property="og:url" content="${canonical}">
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   <style>body{font-family:system-ui,sans-serif;max-width:700px;margin:0 auto;padding:24px;line-height:1.6;color:#111}.breadcrumb{font-size:.85rem;color:#666;margin-bottom:1rem}.breadcrumb a{color:#0f62fe;text-decoration:none}h1{font-size:1.6rem}.meta{color:#555;margin:.5rem 0}.price{font-size:1.2rem;font-weight:700;color:#0f62fe}footer{margin-top:3rem;padding-top:1rem;border-top:1px solid #eee;text-align:center;color:#888}</style>
 </head>
 <body>

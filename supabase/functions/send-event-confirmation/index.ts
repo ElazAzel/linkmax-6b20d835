@@ -326,7 +326,7 @@ const handler = async (req: Request): Promise<Response> => {
             console.error("Email send error:", emailError);
           } else {
             results.email = true;
-            console.log("Email sent to organizer:", ownerEmail);
+            console.log("Email sent to organizer for registration:", registrationId);
           }
         }
       } catch (emailError) {

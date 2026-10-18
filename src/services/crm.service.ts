@@ -119,7 +119,8 @@ export class CrmService {
         ...data.formData
       },
       // metadata is used in the 2025-12-06 schema
-      metadata: data.metadata || {},
+      // notify_nonce: one-time secret that only this caller knows, required to trigger the owner notification
+      metadata: { ...(data.metadata || {}), notify_nonce: crypto.randomUUID() },
       page_id: data.pageId || null,
       block_id: data.blockId || null,
     };
@@ -164,6 +165,7 @@ export class CrmService {
           type: 'new_chatbot_lead',
           recipientId: lead.user_id,
           leadId: lead.id,
+          notifyNonce: lead.metadata?.notify_nonce,
           data: {
             name: lead.name,
             phone: lead.phone || '—',

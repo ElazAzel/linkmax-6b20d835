@@ -102,7 +102,7 @@ export async function isEmailRegistered(eventId: string, email: string): Promise
     } as never);
 
   if (error) {
-    logger.error('Failed to check email registration', error, { context: 'events', data: { eventId, email } });
+    logger.error('Failed to check email registration', error, { context: 'events', data: { eventId } });
     return false;
   }
   return Boolean(data);

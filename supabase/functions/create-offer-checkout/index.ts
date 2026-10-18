@@ -84,11 +84,22 @@ serve(async (req) => {
       return createErrorResponse(`Currency ${currency} is not supported by RoboKassa checkout`, 422);
     }
 
+    // Only attach a zone that belongs to the offer's seller; never trust caller-supplied zoneId
+    let safeZoneId: string | null = null;
+    if (typeof zoneId === "string" && zoneId) {
+      const { data: zone } = await supabase
+        .from("zones").select("id, owner_user_id").eq("id", zoneId).maybeSingle();
+      if (!zone || zone.owner_user_id !== o.user_id) {
+        return createErrorResponse("Invalid zone", 400);
+      }
+      safeZoneId = zone.id;
+    }
+
     const { data: order, error: orderErr } = await supabase
       .from("orders")
       .insert({
         user_id: user?.id ?? null,
-        zone_id: zoneId,
+        zone_id: safeZoneId,
         amount: amountUnits,
         currency,
         provider: "robokassa",

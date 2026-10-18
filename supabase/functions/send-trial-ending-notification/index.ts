@@ -144,7 +144,7 @@ serve(async (req: Request): Promise<Response> => {
         console.log(`Trial email sent for user ${profile.id}`);
         emailsSent.push(authUser.email);
       } catch (emailError: any) {
-        console.error(`Failed to send email to ${authUser.email}:`, emailError);
+        console.error(`Failed to send trial email for user ${profile.id}:`, emailError instanceof Error ? emailError.message : 'unknown error');
         errors.push(`${authUser.email}: ${emailError.message}`);
       }
     }

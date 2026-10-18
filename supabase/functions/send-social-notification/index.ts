@@ -23,6 +23,7 @@ interface NotificationRequest {
   leadId?: string;
   subscriptionId?: string;
   subscriberEmail?: string;
+  notifyNonce?: string;
   data?: {
     days?: number;
     challengeTitle?: string;
@@ -55,6 +56,13 @@ serve(async (req: Request) => {
     if (!type || !recipientId || !ALLOWED.includes(type)) {
       return json({ success: false, error: 'missing_params' }, 400);
     }
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const optionalIds = [body.pageId, body.leadId, body.subscriptionId];
+    if (typeof recipientId !== 'string' || !UUID_RE.test(recipientId) ||
+        optionalIds.some((v) => v !== undefined && v !== null && (typeof v !== 'string' || !UUID_RE.test(v)))) {
+      return json({ success: false, error: 'invalid_params' }, 400);
+    }
+    const notifyNonce = typeof body.notifyNonce === 'string' && body.notifyNonce.length >= 32 ? body.notifyNonce : null;
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -127,15 +135,16 @@ serve(async (req: Request) => {
       }
       case 'friend_challenge_completed': {
         if (!callerId) return json({ success: false, error: 'unauthorized' }, 401);
-        const { data: friendship } = await supabase
-          .from('friendships')
-          .select('id')
-          .eq('status', 'accepted')
-          .or(
-            `and(user_id.eq.${callerId},friend_id.eq.${recipientId}),and(user_id.eq.${recipientId},friend_id.eq.${callerId})`
-          )
-          .limit(1)
-          .maybeSingle();
+        // Two bound-value queries instead of an interpolated OR filter
+        const { data: f1 } = await supabase
+          .from('friendships').select('id').eq('status', 'accepted')
+          .eq('user_id', callerId).eq('friend_id', recipientId)
+          .limit(1).maybeSingle();
+        const { data: f2 } = f1 ? { data: null } : await supabase
+          .from('friendships').select('id').eq('status', 'accepted')
+          .eq('user_id', recipientId).eq('friend_id', callerId)
+          .limit(1).maybeSingle();
+        const friendship = f1 ?? f2;
         if (!friendship) return json({ success: false, error: 'forbidden' }, 403);
         senderName = await profileName(callerId);
         break;
@@ -162,21 +171,19 @@ serve(async (req: Request) => {
         break;
       }
       case 'newsletter_subscribed': {
-        // Public visitors can subscribe, so authorization is based on the
-        // subscription row actually existing for this owner. Anonymous
-        // inserts cannot read back their own row (owner-only SELECT policy),
-        // so allow resolving it by page_id + email as well.
+        // Public visitors can subscribe; only the visitor who inserted the row
+        // knows its one-time notify_nonce, so nobody else can trigger this.
+        if (!notifyNonce) return json({ success: false, error: 'forbidden' }, 403);
         let query = supabase
           .from('newsletter_subscriptions')
           .select('id, owner_id, page_id')
-          .eq('owner_id', recipientId);
+          .eq('owner_id', recipientId)
+          .eq('notify_nonce', notifyNonce);
 
         if (body.subscriptionId) {
           query = query.eq('id', body.subscriptionId);
-        } else if (body.pageId && body.subscriberEmail) {
-          query = query
-            .eq('page_id', body.pageId)
-            .eq('email', body.subscriberEmail.trim().toLowerCase());
+        } else if (body.pageId) {
+          query = query.eq('page_id', body.pageId);
         } else {
           return json({ success: false, error: 'forbidden' }, 403);
         }
@@ -206,13 +213,15 @@ serve(async (req: Request) => {
         break;
       }
       case 'new_chatbot_lead': {
-        if (!body.leadId) return json({ success: false, error: 'forbidden' }, 403);
+        if (!body.leadId || !notifyNonce) return json({ success: false, error: 'forbidden' }, 403);
         const { data: lead } = await supabase
           .from('leads')
           .select('id, user_id, created_at, metadata')
           .eq('id', body.leadId)
+          .eq('user_id', recipientId)
+          .eq('metadata->>notify_nonce', notifyNonce)
           .maybeSingle();
-        if (!lead || lead.user_id !== recipientId) {
+        if (!lead) {
           return json({ success: false, error: 'forbidden' }, 403);
         }
         // Only a fresh lead, and only once: stops replaying old lead IDs to spam owners
