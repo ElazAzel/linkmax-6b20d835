@@ -62,7 +62,12 @@ const handler = async (req: Request): Promise<Response> => {
       .eq('id', body.bookingId)
       .maybeSingle();
 
-    if (bookingError || !booking) return json({ success: false, error: 'booking_not_found' }, 404);
+    // Same response for missing booking and missing credentials, so booking IDs can't be probed
+    const callerIsService = isServiceCaller(req, serviceKey);
+    const hasTokenShape = typeof body.accessToken === 'string' && /^[0-9a-f]{64}$/u.test(body.accessToken);
+    if (bookingError || !booking || (!callerIsService && !hasTokenShape)) {
+      return json({ success: false, error: 'not_allowed' }, 403);
+    }
 
     const { data: owner } = await supabase
       .from('user_profiles')

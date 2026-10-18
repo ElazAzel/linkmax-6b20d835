@@ -1667,6 +1667,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          notify_nonce: string | null
           owner_id: string
           owner_notified_at: string | null
           page_id: string | null
@@ -1679,6 +1680,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          notify_nonce?: string | null
           owner_id: string
           owner_notified_at?: string | null
           page_id?: string | null
@@ -1691,6 +1693,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          notify_nonce?: string | null
           owner_id?: string
           owner_notified_at?: string | null
           page_id?: string | null
@@ -5496,6 +5499,15 @@ export type Database = {
       }
     }
     Functions: {
+      _credit_tokens: {
+        Args: {
+          p_amount: number
+          p_description?: string
+          p_source: string
+          p_user_id: string
+        }
+        Returns: number
+      }
       accept_zone_invite: { Args: { p_token: string }; Returns: Json }
       add_linkkon_tokens: {
         Args: {
@@ -5549,36 +5561,22 @@ export type Database = {
         Args: { p_ticket_code: string; p_token: string }
         Returns: Json
       }
-      claim_daily_token_reward:
-        | {
-            Args: { p_action_type: string; p_amount: number; p_user_id: string }
-            Returns: Json
-          }
-        | {
-            Args: { p_action_type: string; p_amount: number; p_user_id: string }
-            Returns: Json
-          }
+      claim_daily_token_reward: {
+        Args: { p_action_type: string; p_amount: number; p_user_id: string }
+        Returns: Json
+      }
       claim_premium_gift: { Args: { p_gift_id: string }; Returns: Json }
       cleanup_external_api_cache: { Args: never; Returns: undefined }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
-      complete_daily_quest:
-        | {
-            Args: {
-              p_bonus_hours?: number
-              p_quest_key: string
-              p_user_id: string
-            }
-            Returns: Json
-          }
-        | {
-            Args: {
-              p_bonus_hours?: number
-              p_quest_key: string
-              p_tokens?: number
-              p_user_id: string
-            }
-            Returns: Json
-          }
+      complete_daily_quest: {
+        Args: {
+          p_bonus_hours?: number
+          p_quest_key: string
+          p_tokens?: number
+          p_user_id: string
+        }
+        Returns: Json
+      }
       complete_weekly_challenge: {
         Args: { p_challenge_id: string }
         Returns: Json

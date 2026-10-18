@@ -434,7 +434,21 @@ serve(async (req) => {
 
             if (bErr || !booking) throw new Error("Booking not found");
 
-            const finalStaffId = staff_id || booking.staff_id;
+            // A different staff calendar may only be used if it is the booking's own staff member
+            if (staff_id && booking.staff_id && staff_id !== booking.staff_id) {
+                return new Response(JSON.stringify({ error: "Forbidden" }), {
+                    status: 403,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
+            const finalStaffId = booking.staff_id || staff_id;
+            // Caller must be authorized for the booking itself (owner), not just for some staff calendar
+            if (!isTrustedServerCaller && (!user || (booking.owner_id !== user.id && !(booking.staff_id && staff_id === booking.staff_id)))) {
+                return new Response(JSON.stringify({ error: "Forbidden" }), {
+                    status: 403,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
             const authzErr = await assertAuthorizedForTarget({ owner_id: booking.owner_id, staff_id: finalStaffId });
             if (authzErr) return authzErr;
             const targetId = finalStaffId ? { staffId: finalStaffId } : { userId: booking.owner_id };

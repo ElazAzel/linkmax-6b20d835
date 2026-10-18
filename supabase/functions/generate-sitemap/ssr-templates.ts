@@ -307,7 +307,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
   <meta name="twitter:image" content="${DEFAULT_OG_IMAGE}">
   <meta name="twitter:site" content="@LinkMAX_app">
   <meta name="ai-summary" content="${escapeHtml(content.answerBlock)}">
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; margin: 0; color: #111; background: #fff; line-height: 1.6; }
     main { max-width: 800px; margin: 0 auto; padding: 32px 20px; }
@@ -458,7 +458,7 @@ export function buildGalleryHtml(lang: LanguageKey, baseUrl: string, items: Gall
   <meta name="twitter:description" content="${escapeHtml(content.description)}">
   <meta name="twitter:image" content="${DEFAULT_OG_IMAGE}">
   <meta name="ai-summary" content="${escapeHtml(content.answerBlock)}">
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; margin: 0; color: #111; background: #fff; line-height: 1.6; }
     main { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
@@ -650,7 +650,7 @@ export function buildMarketingPageHtml(lang: LanguageKey, pageKey: string): stri
   <meta name="twitter:description" content="${escapeHtml(content.description)}">
   <meta name="twitter:image" content="${DEFAULT_OG_IMAGE}">
   <meta name="twitter:site" content="@LinkMAX_app">
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; margin: 0; color: #111; background: #fff; line-height: 1.6; }
     main { max-width: 800px; margin: 0 auto; padding: 32px 20px; }

@@ -129,7 +129,7 @@ serve(async (req) => {
                 from: senderEmail,
                 to: sub.lead.email,
                 subject: template.subject.replace('{lead_name}', rawLeadName),
-                html: template.content_html
+                html: sanitizeEmailHtml(String(template.content_html ?? ''))
                   .replace(/\{lead_name\}/g, leadName)
               })
             });

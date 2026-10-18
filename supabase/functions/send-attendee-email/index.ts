@@ -414,7 +414,7 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { registrationId, eventId, language = 'ru', attendeeEmail } = (await req.json()) as AttendeeEmailRequest & { attendeeEmail?: string };
+    const { registrationId, eventId, language = 'ru', attendeeEmail, notifyToken } = (await req.json()) as AttendeeEmailRequest & { attendeeEmail?: string; notifyToken?: string };
 
     if (!registrationId || !eventId) {
       throw new Error("Missing required fields: registrationId, eventId");
@@ -437,7 +437,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Fetch registration with ticket
     const { data: registration, error: regError } = await supabase
       .from("event_registrations")
-      .select("id, event_id, attendee_name, attendee_email, status, event_tickets(ticket_code, status)")
+      .select("id, event_id, attendee_name, attendee_email, status, notify_token, event_tickets(ticket_code, status)")
       .eq("id", registrationId)
       .single();
 
@@ -460,9 +460,11 @@ const handler = async (req: Request): Promise<Response> => {
       isOrganizer = !!u?.user && u.user.id === eventData.owner_id;
     }
     if (!isOrganizer) {
+      const storedToken = (registration as { notify_token?: string | null }).notify_token;
       if (
         typeof attendeeEmail !== "string" ||
-        String(regData.attendee_email ?? "").trim().toLowerCase() !== attendeeEmail.trim().toLowerCase()
+        String(regData.attendee_email ?? "").trim().toLowerCase() !== attendeeEmail.trim().toLowerCase() ||
+        typeof notifyToken !== "string" || !storedToken || storedToken !== notifyToken
       ) {
         return new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } });
       }

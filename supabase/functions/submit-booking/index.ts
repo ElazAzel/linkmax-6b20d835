@@ -107,11 +107,11 @@ serve(async (req: Request) => {
     // 1. Get page owner
     const { data: pageData, error: pageError } = await supabase
       .from('pages')
-      .select('user_id')
+      .select('user_id, is_published')
       .eq('id', pageId)
       .single();
 
-    if (pageError || !pageData?.user_id) throw new Error('Page not found');
+    if (pageError || !pageData?.user_id || pageData.is_published !== true) throw new Error('Page not found');
 
     // 2. Check inbound limit
     const limitResult = await checkInboundLimit(supabase, pageData.user_id);
@@ -122,11 +122,12 @@ serve(async (req: Request) => {
       );
     }
 
-    // 2.1 Get block settings for GCal and Timezone
+    // 2.1 Get block settings for GCal and Timezone (block must belong to this page)
     const { data: block, error: blockError } = await supabase
       .from('blocks')
       .select('type, content')
       .eq('id', blockId)
+      .eq('page_id', pageId)
       .single();
 
     if (blockError || !block || block.type !== 'booking') {

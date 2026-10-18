@@ -43,6 +43,13 @@
       "when": 1791771242154,
       "tag": "0005_event_registration_notify_token",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792324657745,
+      "tag": "0006_security_tokens_zones_social",
+      "breakpoints": true
     }
   ]
 }
