@@ -188,3 +188,31 @@ serve(async (req) => {
     });
   }
 });
+
+// Allowlist sanitizer for user-authored email HTML: keeps basic formatting,
+// strips scripts, event handlers, styles-with-urls, forms and unsafe URLs.
+function sanitizeEmailHtml(html: string): string {
+  const ALLOWED = new Set(['p','br','b','strong','i','em','u','a','ul','ol','li','h1','h2','h3','h4','span','div','img','table','tr','td','th','tbody','thead','hr','blockquote']);
+  let out = html
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<(script|style|iframe|object|embed|form|svg|math|template|noscript)[\s\S]*?<\/\1\s*>/gi, '');
+  out = out.replace(/<\/?([a-zA-Z0-9]+)([^>]*)>/g, (full, tagRaw: string, attrs: string) => {
+    const tag = tagRaw.toLowerCase();
+    if (!ALLOWED.has(tag)) return '';
+    if (full.startsWith('</')) return `</${tag}>`;
+    const kept: string[] = [];
+    const re = /([a-zA-Z-]+)\s*=\s*("([^"]*)"|'([^']*)')/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(attrs))) {
+      const name = m[1].toLowerCase();
+      const value = (m[3] ?? m[4] ?? '').replace(/"/g, '&quot;');
+      if (name === 'href' || name === 'src') {
+        if (/^(https?:|mailto:)/i.test(value.trim())) kept.push(`${name}="${value}"`);
+      } else if (['alt', 'title', 'width', 'height', 'align'].includes(name)) {
+        kept.push(`${name}="${value}"`);
+      }
+    }
+    return `<${tag}${kept.length ? ' ' + kept.join(' ') : ''}>`;
+  });
+  return out;
+}
