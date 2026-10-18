@@ -5816,6 +5816,20 @@ export type Database = {
           version_id: string
         }[]
       }
+      get_paid_block_content: {
+        Args: { p_block_key: string; p_page_id: string }
+        Returns: Json
+      }
+      get_paid_block_stubs: {
+        Args: { p_page_id: string }
+        Returns: {
+          content: Json
+          deleted_at: string
+          id: string
+          page_id: string
+          position: number
+        }[]
+      }
       get_public_availability: {
         Args: {
           p_block_id: string
