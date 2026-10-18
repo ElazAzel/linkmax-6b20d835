@@ -171,6 +171,22 @@ function convertDbBlocksToBlocks(dbBlocks: DbBlock[]): Block[] {
 }
 
 /**
+ * Paid blocks are not readable publicly; add server-provided stubs
+ * (title + price only) so visitors still see the locked card.
+ */
+async function withPaidBlockStubs(pageId: string, blocks: DbBlock[]): Promise<DbBlock[]> {
+  try {
+    const { data } = await supabase.rpc('get_paid_block_stubs' as never, { p_page_id: pageId } as never);
+    const stubs = (data as unknown as DbBlock[] | null) || [];
+    if (!stubs.length) return blocks;
+    const have = new Set(blocks.map((b) => b.id));
+    return [...blocks, ...stubs.filter((s) => !have.has(s.id))];
+  } catch {
+    return blocks;
+  }
+}
+
+/**
  * Extract title from block (handles multilingual strings)
  */
 /**
@@ -457,7 +473,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
     // Increment view count (fire and forget)
     void supabase.rpc('increment_view_count', { page_slug: pg.slug });
 
-    const activeBlocks = (pg.blocks as unknown as DbBlock[] || []).filter((b: DbBlock) => !b.deleted_at);
+    const activeBlocks = await withPaidBlockStubs(pg.id, (pg.blocks as unknown as DbBlock[] || []).filter((b: DbBlock) => !b.deleted_at));
     const experiments = mapExperimentData(pg.experiments || []);
 
     const pageData: PageData = {
@@ -524,7 +540,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
     // Increment view count (fire and forget)
     void supabase.rpc('increment_view_count', { page_slug: pg.slug });
 
-    const activeBlocks = (pg.blocks as unknown as DbBlock[] || []).filter((b: DbBlock) => !b.deleted_at);
+    const activeBlocks = await withPaidBlockStubs(pg.id, (pg.blocks as unknown as DbBlock[] || []).filter((b: DbBlock) => !b.deleted_at));
     const experiments = mapExperimentData(pg.experiments || []);
 
     const pageData: PageData = {
