@@ -100,7 +100,7 @@ jobs:
           RELEASE_VERSION: ${{ inputs.version }}
         run: |
           mkdir -p release-artifacts
-          (cd dist && zip -qr "../release-artifacts/linkmax-web-v$RELEASE_VERSION.zip" .)
+          (cd .output && zip -qr "../release-artifacts/linkmax-web-v$RELEASE_VERSION.zip" .)
           npx --yes @cyclonedx/cyclonedx-npm@6.0.1 --output-file release-artifacts/bom.cdx.json
           (cd release-artifacts && sha256sum linkmax-web-*.zip bom.cdx.json > SHA256SUMS)
       - name: Attest web artifact provenance
