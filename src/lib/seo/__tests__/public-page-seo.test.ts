@@ -79,6 +79,30 @@ describe('public page SEO', () => {
     expect(buildMissingPageHead().meta).toContainEqual({ name: 'robots', content: 'noindex, follow' });
   });
 
+  it('shares an avatar-only page as a compact card with the author as tab icon', () => {
+    const head = buildPublicPageHead(page);
+    const meta = (key: string) => head.meta.find((m) => m.property === key || m.name === key)?.content;
+    expect(meta('og:image')).toBe('https://cdn.example.com/a.png');
+    expect(meta('twitter:card')).toBe('summary');
+    expect(meta('og:title')).toBe('Ильяс Азелханов');
+    expect(head.links).toContainEqual({ rel: 'icon', href: 'https://cdn.example.com/a.png' });
+  });
+
+  it('treats a custom page preview as a wide image', () => {
+    const head = buildPublicPageHead({ ...page, blocks: page.blocks.map((b) => (b.type === 'profile' ? { ...b, avatar: undefined } : b)), previewUrl: 'https://cdn.example.com/preview.jpg' } as typeof page);
+    const meta = (key: string) => head.meta.find((m) => m.property === key || m.name === key)?.content;
+    expect(meta('og:image')).toBe('https://cdn.example.com/preview.jpg');
+    expect(meta('twitter:card')).toBe('summary_large_image');
+  });
+
+  it('uses the large card when the profile has a cover', () => {
+    const withCover = { ...page, blocks: page.blocks.map((b) => (b.type === 'profile' ? { ...b, coverImage: 'https://cdn.example.com/cover.jpg' } : b)) };
+    const head = buildPublicPageHead(withCover as typeof page);
+    const meta = (key: string) => head.meta.find((m) => m.property === key || m.name === key)?.content;
+    expect(meta('og:image')).toBe('https://cdn.example.com/cover.jpg');
+    expect(meta('twitter:card')).toBe('summary_large_image');
+  });
+
   it('escapes script-breaking characters in JSON-LD', () => {
     expect(safeJsonLd('{"a":"</script><b>&"}')).toBe('{"a":"\\u003c/script\\u003e\\u003cb\\u003e\\u0026"}');
   });

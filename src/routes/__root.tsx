@@ -139,12 +139,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: "/fonts/global.css" },
-      { rel: "alternate", hrefLang: "ru", href: "https://lnkmx.my/?lang=ru" },
-      { rel: "alternate", hrefLang: "en", href: "https://lnkmx.my/?lang=en" },
-      { rel: "alternate", hrefLang: "kk", href: "https://lnkmx.my/?lang=kk" },
-      { rel: "alternate", hrefLang: "x-default", href: "https://lnkmx.my/" },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
-      { rel: "apple-touch-icon", href: "/favicon.png" },
+      // Profiles set their own icon (the author) and are single-language: the
+      // site-wide hreflang set points at the home page and must not leak there.
+      ...(matches.some((m) => (m.routeId as string) === "/$slug/")
+        ? []
+        : [
+            { rel: "alternate", hrefLang: "ru", href: "https://lnkmx.my/?lang=ru" },
+            { rel: "alternate", hrefLang: "en", href: "https://lnkmx.my/?lang=en" },
+            { rel: "alternate", hrefLang: "kk", href: "https://lnkmx.my/?lang=kk" },
+            { rel: "alternate", hrefLang: "x-default", href: "https://lnkmx.my/" },
+            { rel: "icon", type: "image/png", href: "/favicon.png" },
+            { rel: "apple-touch-icon", href: "/favicon.png" },
+          ]),
       { rel: "manifest", href: "/manifest.json" },
     ],
     styles: [{ children: CRITICAL_CSS }],

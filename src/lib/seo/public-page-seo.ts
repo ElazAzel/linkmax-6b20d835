@@ -27,6 +27,10 @@ export interface PublicPageSeo {
   geoSchemas: GEOSchemas;
   /** Full JSON-LD document (@graph) ready for a <script type="application/ld+json">. */
   jsonLd: string;
+  /** Wide images (cover, own SEO image) fill a large card; an avatar alone gets the compact square card. */
+  ogImageKind: 'wide' | 'avatar' | 'default';
+  /** Display name for share cards: the author, without the "| LinkMAX" suffix. */
+  shareTitle: string;
 }
 
 type PageRecordFallbacks = PageData & { title?: string; description?: string; avatar_url?: string; avatarUrl?: string; createdAt?: string };
@@ -124,12 +128,16 @@ export function computePublicPageSeo(
   meta.title = ownTitle || smartTitle || meta.title;
   if (!/linkmax/i.test(meta.title) && meta.title.length <= 58) meta.title = `${meta.title} | LinkMAX`;
   meta.description = clamp(ownDesc || smartDesc || toPlainText(meta.description), 170);
-  meta.ogImage = pickOgImage([
+  const wideImage = pickOgImage([
     page.seo?.image,
     (blocks.find((b) => b.type === 'profile') as { coverImage?: string } | undefined)?.coverImage,
-    profile.avatar,
     page.previewUrl,
-  ]) || `${getAppDomain()}/og-image.png`;
+  ]);
+  const avatarImage = wideImage ? undefined : pickOgImage([profile.avatar]);
+  const ogImageKind: PublicPageSeo['ogImageKind'] = wideImage ? 'wide' : avatarImage ? 'avatar' : 'default';
+  meta.ogImage = wideImage || avatarImage || `${getAppDomain()}/og-image.png`;
+  // The owner's own SEO title wins; otherwise the card is the author, not the keyword title.
+  const shareTitle = ownTitle || profile.name?.trim() || meta.title.replace(/\s*\|\s*LinkMAX$/i, '') || meta.title;
   // The DB flag decides indexability; the client heuristic must not noindex a page mid-hydration.
   meta.robots = page.isIndexable === false
     ? 'noindex, follow'
@@ -156,7 +164,7 @@ export function computePublicPageSeo(
   });
   const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': geoSchemas.graph });
 
-  return { profile, qualityGate, meta, answerBlock, geoSchemas, jsonLd };
+  return { profile, qualityGate, meta, answerBlock, geoSchemas, jsonLd, ogImageKind, shareTitle };
 }
 
 /** Escapes a JSON-LD payload so it cannot close its <script> element. */
@@ -170,7 +178,7 @@ const OG_LOCALE: Record<SeoLanguage, string> = { ru: 'ru_RU', en: 'en_US', kk: '
 export function buildPublicPageHead(pageData: PageData, options: { language?: SeoLanguage } = {}) {
   const language = options.language ?? 'ru';
   const seo = computePublicPageSeo(pageData, { language });
-  const { meta, profile, answerBlock } = seo;
+  const { meta, profile, answerBlock, ogImageKind, shareTitle } = seo;
   const imageAlt = profile.name ? `${profile.name} — LinkMAX` : 'LinkMAX';
   const isOrg = profile.type === 'Organization' || answerBlock.entityType !== 'Person';
   const updatedAt = pageData.updatedAt || undefined;
@@ -182,15 +190,15 @@ export function buildPublicPageHead(pageData: PageData, options: { language?: Se
     { name: 'googlebot', content: meta.robots },
     { name: 'author', content: profile.name || pageData.slug || 'LinkMAX' },
     { property: 'og:type', content: isOrg ? 'website' : 'profile' },
-    { property: 'og:title', content: meta.title },
+    { property: 'og:title', content: shareTitle },
     { property: 'og:description', content: meta.description },
     { property: 'og:url', content: meta.canonical },
     { property: 'og:site_name', content: 'LinkMAX' },
     { property: 'og:locale', content: OG_LOCALE[language] },
     { property: 'og:image', content: meta.ogImage || '' },
     { property: 'og:image:alt', content: imageAlt },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: meta.title },
+    { name: 'twitter:card', content: ogImageKind === 'avatar' ? 'summary' : 'summary_large_image' },
+    { name: 'twitter:title', content: shareTitle },
     { name: 'twitter:description', content: meta.description },
     { name: 'twitter:image', content: meta.ogImage || '' },
     { name: 'twitter:image:alt', content: imageAlt },
@@ -203,7 +211,10 @@ export function buildPublicPageHead(pageData: PageData, options: { language?: Se
     { rel: 'canonical', href: meta.canonical },
     { rel: 'alternate', type: 'text/markdown', href: `${meta.canonical}/llms.txt`, title: 'LLM-readable profile' },
   ];
-  if (pageData.favicon_url) links.push({ rel: 'icon', href: pageData.favicon_url });
+  if (ogImageKind === 'default') metaTags.push({ property: 'og:image:width', content: '1200' }, { property: 'og:image:height', content: '630' });
+  // The browser tab and home-screen icon show the author, not the LinkMAX logo.
+  const icon = pageData.favicon_url || pickOgImage([profile.avatar]) || '/favicon.png';
+  links.push({ rel: 'icon', href: icon }, { rel: 'apple-touch-icon', href: icon });
 
   return {
     meta: metaTags,

@@ -107,11 +107,70 @@ export function snapshotRowToPageData(row: SnapshotPageRow): PublicPageData {
   };
 }
 
+/**
+ * Server-side snapshot cache. Every crawler hit used to pay a full REST round
+ * trip to Supabase before the worker could render, which put first byte at
+ * several seconds; bots give up or index a half page. Successful snapshots are
+ * kept for SNAPSHOT_TTL_MS in the isolate's memory and, on Cloudflare, in the
+ * colo's Cache API so cold isolates share them. Browsers never use it.
+ */
+const SNAPSHOT_TTL_MS = 60_000;
+const memoryCache = new Map<string, { at: number; snapshot: PublicPageSnapshot }>();
+const MEMORY_CACHE_LIMIT = 200;
+
+type EdgeCache = { match(key: string): Promise<Response | undefined>; put(key: string, value: Response): Promise<void> };
+function edgeCache(): EdgeCache | undefined {
+  const store = (globalThis as { caches?: { default?: EdgeCache } }).caches;
+  return store?.default;
+}
+const edgeKey = (slug: string) => `https://snapshot.lnkmx.internal/v1/${encodeURIComponent(slug.toLowerCase())}`;
+
+async function readCachedSnapshot(slug: string): Promise<PublicPageSnapshot | undefined> {
+  const hit = memoryCache.get(slug);
+  if (hit && Date.now() - hit.at < SNAPSHOT_TTL_MS) return hit.snapshot;
+  try {
+    const cached = await edgeCache()?.match(edgeKey(slug));
+    if (!cached) return undefined;
+    const snapshot = (await cached.json()) as PublicPageSnapshot;
+    memoryCache.set(slug, { at: Date.now(), snapshot });
+    return snapshot;
+  } catch {
+    return undefined;
+  }
+}
+
+async function writeCachedSnapshot(slug: string, snapshot: PublicPageSnapshot): Promise<void> {
+  if (memoryCache.size >= MEMORY_CACHE_LIMIT) memoryCache.delete(memoryCache.keys().next().value as string);
+  memoryCache.set(slug, { at: Date.now(), snapshot });
+  try {
+    await edgeCache()?.put(edgeKey(slug), new Response(JSON.stringify(snapshot), {
+      headers: { 'content-type': 'application/json', 'cache-control': `max-age=${SNAPSHOT_TTL_MS / 1000}` },
+    }));
+  } catch {
+    // Cache API missing or full: the snapshot is still served.
+  }
+}
+
 export async function fetchPublicPageSnapshot(
   slug: string,
   options: { fetchImpl?: typeof fetch; timeoutMs?: number } = {},
 ): Promise<PublicPageSnapshot> {
   if (!SLUG_RE.test(slug)) return { status: 'missing' };
+  // Only the server caches: in the browser a just-published page must show at once.
+  const useCache = typeof window === 'undefined' && !options.fetchImpl;
+  if (useCache) {
+    const cached = await readCachedSnapshot(slug);
+    if (cached) return cached;
+  }
+  const snapshot = await fetchSnapshotFromRest(slug, options);
+  if (useCache && snapshot.status !== 'error') await writeCachedSnapshot(slug, snapshot);
+  return snapshot;
+}
+
+async function fetchSnapshotFromRest(
+  slug: string,
+  options: { fetchImpl?: typeof fetch; timeoutMs?: number },
+): Promise<PublicPageSnapshot> {
   const baseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
   const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
   if (!baseUrl || !key) return { status: 'error' };
