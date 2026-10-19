@@ -28,6 +28,9 @@ import { Route as RuRouteImport } from './routes/ru'
 import { Route as SaytVizitkaDlyaUslugRouteImport } from './routes/sayt-vizitka-dlya-uslug'
 import { Route as SeoLandingRouteImport } from './routes/seo-landing'
 import { Route as SitemapRouteImport } from './routes/sitemap'
+import { Route as SitemapEventsDotxmlRouteImport } from './routes/sitemap-events[.]xml'
+import { Route as SitemapExpertsDotxmlRouteImport } from './routes/sitemap-experts[.]xml'
+import { Route as SitemapProfilesDotxmlRouteImport } from './routes/sitemap-profiles[.]xml'
 import { Route as TaplinkAlternativeRouteImport } from './routes/taplink-alternative'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UzRouteImport } from './routes/uz'
@@ -196,6 +199,21 @@ const SeoLandingRoute = SeoLandingRouteImport.update({
 const SitemapRoute = SitemapRouteImport.update({
   id: '/sitemap',
   path: '/sitemap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapEventsDotxmlRoute = SitemapEventsDotxmlRouteImport.update({
+  id: '/sitemap-events.xml',
+  path: '/sitemap-events.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapExpertsDotxmlRoute = SitemapExpertsDotxmlRouteImport.update({
+  id: '/sitemap-experts.xml',
+  path: '/sitemap-experts.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapProfilesDotxmlRoute = SitemapProfilesDotxmlRouteImport.update({
+  id: '/sitemap-profiles.xml',
+  path: '/sitemap-profiles.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TaplinkAlternativeRoute = TaplinkAlternativeRouteImport.update({
@@ -598,6 +616,9 @@ export interface FileRoutesByFullPath {
   '/sayt-vizitka-dlya-uslug': typeof SaytVizitkaDlyaUslugRoute
   '/seo-landing': typeof SeoLandingRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap-events.xml': typeof SitemapEventsDotxmlRoute
+  '/sitemap-experts.xml': typeof SitemapExpertsDotxmlRoute
+  '/sitemap-profiles.xml': typeof SitemapProfilesDotxmlRoute
   '/taplink-alternative': typeof TaplinkAlternativeRoute
   '/terms': typeof TermsRoute
   '/uz': typeof UzRoute
@@ -693,6 +714,9 @@ export interface FileRoutesByTo {
   '/sayt-vizitka-dlya-uslug': typeof SaytVizitkaDlyaUslugRoute
   '/seo-landing': typeof SeoLandingRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap-events.xml': typeof SitemapEventsDotxmlRoute
+  '/sitemap-experts.xml': typeof SitemapExpertsDotxmlRoute
+  '/sitemap-profiles.xml': typeof SitemapProfilesDotxmlRoute
   '/taplink-alternative': typeof TaplinkAlternativeRoute
   '/terms': typeof TermsRoute
   '/uz': typeof UzRoute
@@ -789,6 +813,9 @@ export interface FileRoutesById {
   '/sayt-vizitka-dlya-uslug': typeof SaytVizitkaDlyaUslugRoute
   '/seo-landing': typeof SeoLandingRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap-events.xml': typeof SitemapEventsDotxmlRoute
+  '/sitemap-experts.xml': typeof SitemapExpertsDotxmlRoute
+  '/sitemap-profiles.xml': typeof SitemapProfilesDotxmlRoute
   '/taplink-alternative': typeof TaplinkAlternativeRoute
   '/terms': typeof TermsRoute
   '/uz': typeof UzRoute
@@ -886,6 +913,9 @@ export interface FileRouteTypes {
     | '/sayt-vizitka-dlya-uslug'
     | '/seo-landing'
     | '/sitemap'
+    | '/sitemap-events.xml'
+    | '/sitemap-experts.xml'
+    | '/sitemap-profiles.xml'
     | '/taplink-alternative'
     | '/terms'
     | '/uz'
@@ -981,6 +1011,9 @@ export interface FileRouteTypes {
     | '/sayt-vizitka-dlya-uslug'
     | '/seo-landing'
     | '/sitemap'
+    | '/sitemap-events.xml'
+    | '/sitemap-experts.xml'
+    | '/sitemap-profiles.xml'
     | '/taplink-alternative'
     | '/terms'
     | '/uz'
@@ -1076,6 +1109,9 @@ export interface FileRouteTypes {
     | '/sayt-vizitka-dlya-uslug'
     | '/seo-landing'
     | '/sitemap'
+    | '/sitemap-events.xml'
+    | '/sitemap-experts.xml'
+    | '/sitemap-profiles.xml'
     | '/taplink-alternative'
     | '/terms'
     | '/uz'
@@ -1172,6 +1208,9 @@ export interface RootRouteChildren {
   SaytVizitkaDlyaUslugRoute: typeof SaytVizitkaDlyaUslugRoute
   SeoLandingRoute: typeof SeoLandingRoute
   SitemapRoute: typeof SitemapRoute
+  SitemapEventsDotxmlRoute: typeof SitemapEventsDotxmlRoute
+  SitemapExpertsDotxmlRoute: typeof SitemapExpertsDotxmlRoute
+  SitemapProfilesDotxmlRoute: typeof SitemapProfilesDotxmlRoute
   TaplinkAlternativeRoute: typeof TaplinkAlternativeRoute
   TermsRoute: typeof TermsRoute
   UzRoute: typeof UzRoute
@@ -1381,6 +1420,27 @@ declare module '@tanstack/react-router' {
       path: '/sitemap'
       fullPath: '/sitemap'
       preLoaderRoute: typeof SitemapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-events.xml': {
+      id: '/sitemap-events.xml'
+      path: '/sitemap-events.xml'
+      fullPath: '/sitemap-events.xml'
+      preLoaderRoute: typeof SitemapEventsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-experts.xml': {
+      id: '/sitemap-experts.xml'
+      path: '/sitemap-experts.xml'
+      fullPath: '/sitemap-experts.xml'
+      preLoaderRoute: typeof SitemapExpertsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-profiles.xml': {
+      id: '/sitemap-profiles.xml'
+      path: '/sitemap-profiles.xml'
+      fullPath: '/sitemap-profiles.xml'
+      preLoaderRoute: typeof SitemapProfilesDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/taplink-alternative': {
@@ -1924,6 +1984,9 @@ const rootRouteChildren: RootRouteChildren = {
   SaytVizitkaDlyaUslugRoute: SaytVizitkaDlyaUslugRoute,
   SeoLandingRoute: SeoLandingRoute,
   SitemapRoute: SitemapRoute,
+  SitemapEventsDotxmlRoute: SitemapEventsDotxmlRoute,
+  SitemapExpertsDotxmlRoute: SitemapExpertsDotxmlRoute,
+  SitemapProfilesDotxmlRoute: SitemapProfilesDotxmlRoute,
   TaplinkAlternativeRoute: TaplinkAlternativeRoute,
   TermsRoute: TermsRoute,
   UzRoute: UzRoute,
