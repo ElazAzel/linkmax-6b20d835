@@ -84,8 +84,15 @@ describe('public page SEO', () => {
     const meta = (key: string) => head.meta.find((m) => m.property === key || m.name === key)?.content;
     expect(meta('og:image')).toBe('https://cdn.example.com/a.png');
     expect(meta('twitter:card')).toBe('summary');
-    expect(meta('og:title')).not.toMatch(/LinkMAX/);
+    expect(meta('og:title')).toBe('Ильяс Азелханов');
     expect(head.links).toContainEqual({ rel: 'icon', href: 'https://cdn.example.com/a.png' });
+  });
+
+  it('treats a custom page preview as a wide image', () => {
+    const head = buildPublicPageHead({ ...page, blocks: page.blocks.map((b) => (b.type === 'profile' ? { ...b, avatar: undefined } : b)), previewUrl: 'https://cdn.example.com/preview.jpg' } as typeof page);
+    const meta = (key: string) => head.meta.find((m) => m.property === key || m.name === key)?.content;
+    expect(meta('og:image')).toBe('https://cdn.example.com/preview.jpg');
+    expect(meta('twitter:card')).toBe('summary_large_image');
   });
 
   it('uses the large card when the profile has a cover', () => {

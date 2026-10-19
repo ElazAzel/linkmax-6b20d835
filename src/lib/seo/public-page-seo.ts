@@ -131,11 +131,13 @@ export function computePublicPageSeo(
   const wideImage = pickOgImage([
     page.seo?.image,
     (blocks.find((b) => b.type === 'profile') as { coverImage?: string } | undefined)?.coverImage,
+    page.previewUrl,
   ]);
-  const avatarImage = wideImage ? undefined : pickOgImage([profile.avatar, page.previewUrl]);
+  const avatarImage = wideImage ? undefined : pickOgImage([profile.avatar]);
   const ogImageKind: PublicPageSeo['ogImageKind'] = wideImage ? 'wide' : avatarImage ? 'avatar' : 'default';
   meta.ogImage = wideImage || avatarImage || `${getAppDomain()}/og-image.png`;
-  const shareTitle = meta.title.replace(/\s*\|\s*LinkMAX$/i, '') || meta.title;
+  // The owner's own SEO title wins; otherwise the card is the author, not the keyword title.
+  const shareTitle = ownTitle || profile.name?.trim() || meta.title.replace(/\s*\|\s*LinkMAX$/i, '') || meta.title;
   // The DB flag decides indexability; the client heuristic must not noindex a page mid-hydration.
   meta.robots = page.isIndexable === false
     ? 'noindex, follow'
