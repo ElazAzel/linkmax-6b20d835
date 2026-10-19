@@ -72,7 +72,8 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
         }}
         plugins={autoplayPlugin ? [autoplayPlugin] : undefined}
         setApi={setApi}
-        className="w-full"
+        // Slides are a rounded tile of their own; the dots sit below it.
+        className="w-full overflow-hidden rounded-2xl"
       >
         <CarouselContent className="-ml-0">
           {block.images.map((image, index) => {

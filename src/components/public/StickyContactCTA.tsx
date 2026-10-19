@@ -46,7 +46,35 @@ export const StickyContactCTA = memo(function StickyContactCTA({ blocks, pageId 
     if (value === '1') setDismissed(true);
   }, [dismissKey]);
 
-  if (!contacts.length || dismissed) return null;
+  // Shown once the visitor scrolls past the first screen, and hidden while the
+  // page's own contact block (messenger / socials) is on screen: it used to
+  // duplicate that block and sit over tiles from the very first frame.
+  const [scrolled, setScrolled] = useState(false);
+  const [contactBlockVisible, setContactBlockVisible] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    const targets = Array.from(document.querySelectorAll('[data-lm-cell][data-lm-type="messenger"], [data-lm-cell][data-lm-type="socials"]'));
+    let observer: IntersectionObserver | undefined;
+    if (targets.length && 'IntersectionObserver' in window) {
+      const visible = new Set<Element>();
+      observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target); else visible.delete(entry.target);
+        }
+        setContactBlockVisible(visible.size > 0);
+      });
+      targets.forEach((target) => observer!.observe(target));
+    }
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      observer?.disconnect();
+    };
+  }, [blocks]);
+
+  if (!contacts.length || dismissed || !scrolled || contactBlockVisible) return null;
 
   const handleDismiss = () => {
     setDismissed(true);

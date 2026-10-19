@@ -33,9 +33,11 @@ interface GridBlocksRendererProps {
  */
 const CARD_ONLY_STYLE_KEYS = new Set(['backgroundColor', 'backgroundImage', 'borderRadius', 'boxShadow', 'borderWidth', 'borderStyle', 'borderColor', 'padding']);
 
-function transparentCellStyle(style: CSSProperties | undefined): CSSProperties | undefined {
+function transparentCellStyle(style: CSSProperties | undefined, keepRadius = false): CSSProperties | undefined {
   if (!style) return style;
-  return Object.fromEntries(Object.entries(style).filter(([key]) => !CARD_ONLY_STYLE_KEYS.has(key))) as CSSProperties;
+  // Frameless media ("Во всю ширину") keep the tile radius so a photo is a
+  // rounded tile like the rest of the page, just without card padding.
+  return Object.fromEntries(Object.entries(style).filter(([key]) => !CARD_ONLY_STYLE_KEYS.has(key) || (keepRadius && key === 'borderRadius'))) as CSSProperties;
 }
 
 export const GridBlocksRenderer = memo(function GridBlocksRenderer({
@@ -113,7 +115,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
         <div
           className={cn(
             'group relative flex w-full min-w-0 min-h-0 transition-all duration-300',
-            !layout.autoHeight && 'overflow-hidden',
+            (!layout.autoHeight || variant?.naked || block.type === 'carousel') && 'overflow-hidden',
             !isTransparent && 'block-card',
             alignmentClass,
             !isTransparent && (hasCustomBg ? 'qb-card-hover' : 'qb-card qb-card-hover'),
@@ -123,7 +125,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
           )}
           // Transparent cells (separator, socials, …) keep text colour and font
           // only; the card radius/shadow drew an empty shadowed pill around them.
-          style={isTransparent ? transparentCellStyle(appearance.style) : appearance.style}
+          style={isTransparent ? transparentCellStyle(appearance.style, !!variant?.naked) : appearance.style}
         >
           {/* Ambient hover sheen */}
           {!isTransparent && !hasCustomBg && (

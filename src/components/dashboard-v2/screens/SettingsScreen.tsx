@@ -101,7 +101,10 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
     if (searchParams.get('highlight') === 'telegram') return 'highlight';
     return undefined;
   });
-  const [activeTab, setActiveTab] = useState<'page' | 'account'>(focusTelegram ? 'account' : 'page');
+  // No page yet: page settings would show a form for «Untitled Page» at
+  // «lnkmx.my/»; open the account tab and explain instead.
+  const hasPage = !!props.pageSlug;
+  const [activeTab, setActiveTab] = useState<'page' | 'account'>(focusTelegram || !hasPage ? 'account' : 'page');
 
   const {
     pageTitle,
@@ -169,6 +172,8 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
 
           {/* Page Settings Tab */}
           <TabsContent value="page" className="mt-0 space-y-6">
+            {hasPage ? (
+              <>
             <PageSettingsTab
               pageTitle={pageTitle}
               pageSlug={pageSlug}
@@ -209,6 +214,12 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               integrations={props.integrations}
               onUpdateIntegrations={props.onUpdateIntegrations}
             />
+              </>
+            ) : (
+              <p className="rounded-card border border-dashed border-border px-5 py-8 text-center text-sm text-muted-foreground">
+                {t('dashboard.settings.noPage', 'Сначала создайте страницу — здесь появятся её адрес, SEO и брендинг.')}
+              </p>
+            )}
           </TabsContent>
 
           {/* Account Settings Tab */}

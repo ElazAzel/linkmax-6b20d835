@@ -156,7 +156,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
             <div className="space-y-5">
               <div>
                 <h3 className="text-xl font-bold flex items-center gap-2">
-                  {t('landing.simplePricing.premium.title', 'Premium')}
+                  {t('landing.simplePricing.premium.title', 'PRO')}
                   <Crown className="h-5 w-5 text-primary" />
                 </h3>
                 <p className="text-muted-foreground text-sm mt-1">{t('landing.simplePricing.premium.subtitle', 'Всё для роста бизнеса')}</p>
@@ -202,7 +202,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                 onClick={() => navigate('/pricing')}
               >
                 <Crown className="mr-2 h-4 w-4" />
-                {t('landing.simplePricing.premium.cta', 'Получить Premium')}
+                {t('landing.simplePricing.premium.cta', 'Получить PRO')}
               </Button>
 
               <div className="space-y-2 pt-2">
