@@ -5544,6 +5544,7 @@ export type Database = {
         Args: { p_owner_id: string }
         Returns: number
       }
+      block_requires_payment: { Args: { p_content: Json }; Returns: boolean }
       can_manage_organization_pages: {
         Args: { p_org_id: string; p_user_id: string }
         Returns: boolean
