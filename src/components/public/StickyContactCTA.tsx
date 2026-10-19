@@ -56,7 +56,7 @@ export const StickyContactCTA = memo(function StickyContactCTA({ blocks, pageId 
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    const targets = Array.from(document.querySelectorAll('[data-lm-cell][data-lm-type="messenger"], [data-lm-cell][data-lm-type="socials"]'));
+    const targets = Array.from(document.querySelectorAll('[data-lm-cell][data-lm-type="messenger"], [data-lm-cell][data-lm-type="socials"], [data-lm-socials]'));
     let observer: IntersectionObserver | undefined;
     if (targets.length && 'IntersectionObserver' in window) {
       const visible = new Set<Element>();

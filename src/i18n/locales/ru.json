@@ -1679,7 +1679,8 @@
       "themeDark": "Тёмная",
       "businessTools": "Бизнес-инструменты",
       "businessToolsDesc": "Продажи, запись, CRM, финансы и команда. Выключено — кабинет остаётся простым конструктором страниц.",
-      "deviceAccounts": "Аккаунты на устройстве"
+      "deviceAccounts": "Аккаунты на устройстве",
+      "usernameHint": "Это и адрес основной страницы: lnkmx.my/{{username}}"
     },
     "activity": {
       "all": "Все",
@@ -1792,7 +1793,8 @@
       "title": "Главная",
       "versions": "История",
       "versionsDesc": "Версии страницы",
-      "views": "просмотров"
+      "views": "просмотров",
+      "last30Days": "за 30 дней"
     },
     "insights": {
       "addForm": "Добавьте форму заявки",
@@ -2091,7 +2093,8 @@
       "tokensDesc": "Баланс и история",
       "upgradeToPremium": "Перейти на PRO",
       "username": "Имя пользователя",
-      "verification": "Верификация"
+      "verification": "Верификация",
+      "noPage": "Сначала создайте страницу — здесь появятся её адрес, SEO и брендинг."
     },
     "settingsTabs": {
       "account": "Аккаунт",

@@ -1,6 +1,6 @@
 import type { Block } from '@/types/page';
 import { getVideoEmbedUrl } from '@/lib/blocks/video-embed';
-import { isDefaultTextContent } from '@/lib/blocks/block-defaults';
+import { withoutDefaultText } from '@/lib/blocks/block-defaults';
 
 /** Hidden by the owner's schedule (start/end dates). */
 export function isBlockScheduledNow(block: Block, now: Date = new Date()): boolean {
@@ -30,7 +30,7 @@ export function hasVisitorContent(block: Block): boolean {
   const b = block as unknown as Record<string, unknown>;
   switch (block.type) {
     // The untouched sample text of a new block is not published.
-    case 'text': return hasText(b.content) && !isDefaultTextContent(b.content);
+    case 'text': return hasText(withoutDefaultText(b.content));
     case 'link':
     case 'button': return hasText(b.url);
     case 'image': return hasText(b.url);

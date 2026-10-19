@@ -1679,7 +1679,8 @@
       "themeDark": "Dark",
       "businessTools": "Business tools",
       "businessToolsDesc": "Sales, booking, CRM, finance and team. Off keeps the cabinet a simple page builder.",
-      "deviceAccounts": "Accounts on this device"
+      "deviceAccounts": "Accounts on this device",
+      "usernameHint": "This is also your main page address: lnkmx.my/{{username}}"
     },
     "activity": {
       "all": "All",
@@ -1792,7 +1793,8 @@
       "title": "Overview",
       "versions": "Story",
       "versionsDesc": "Page versions",
-      "views": "views"
+      "views": "views",
+      "last30Days": "last 30 days"
     },
     "insights": {
       "addForm": "Add a grab form",
@@ -2091,7 +2093,8 @@
       "tokensDesc": "Balance and history",
       "upgradeToPremium": "Upgrade to Premium",
       "username": "Username",
-      "verification": "Verification"
+      "verification": "Verification",
+      "noPage": "Create a page first — its address, SEO and branding will appear here."
     },
     "settingsTabs": {
       "account": "Account",

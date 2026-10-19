@@ -5,6 +5,8 @@ import { parseRichText } from '@/lib/rich-text-parser';
 import { getBlockStyles, getBlockInnerStyles } from '@/lib/blocks/block-styling';
 import type { TextBlock as TextBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
+import { useRenderContext } from '@/contexts/RenderContext';
+import { withoutDefaultText } from '@/lib/blocks/block-defaults';
 
 interface TextBlockProps {
   block: TextBlockType;
@@ -12,7 +14,10 @@ interface TextBlockProps {
 
 export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockProps) {
   const { i18n } = useTranslation();
-  const content = getI18nText(block.content, i18n.language as SupportedLanguage);
+  const renderMode = useRenderContext();
+  // Visitors never get the sample text, also when only one language still has it.
+  const source = renderMode === 'live' ? withoutDefaultText(block.content) : block.content;
+  const content = getI18nText(source, i18n.language as SupportedLanguage);
   const parsedContent = parseRichText(content);
 
   const alignmentClass = block.alignment === 'center' ? 'text-center'
