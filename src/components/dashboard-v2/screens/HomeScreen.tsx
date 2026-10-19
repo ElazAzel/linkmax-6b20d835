@@ -467,8 +467,11 @@ export const HomeScreen = memo(function HomeScreen({
             {/* Performance Hub / Metrics */}
             <div className="space-y-4 pt-2" data-testid="home-performance-region">
               <div className="flex items-center justify-between px-1">
+                {/* The numbers are for 30 days; without the period they read as
+                    all-time totals and disagreed with the 7-day analytics. */}
                 <h3 className="text-base font-semibold text-foreground">
                   {t('dashboard.home.performance', 'Эффективность')}
+                  <span className="ml-2 text-sm font-normal text-muted-foreground">{t('dashboard.home.last30Days', 'за 30 дней')}</span>
                 </h3>
                 <Button variant="ghost" size="sm" className="h-10 rounded-lg px-3 text-sm text-muted-foreground hover:text-foreground" onClick={onOpenInsights} aria-label={t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}>
                   {t('dashboard.home.viewAllInsights', 'Открыть всю аналитику')}

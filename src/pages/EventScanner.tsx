@@ -512,7 +512,7 @@ export const EventScanner = memo(function EventScanner() {
             onClick={openPremiumPurchase}
           >
             <Crown className="h-5 w-5 mr-2" />
-            {t('crm.upgradeToPremium', 'Получить Premium')}
+            {t('crm.upgradeToPremium', 'Получить PRO')}
           </Button>
           <Button variant="ghost" className="mt-4" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-4 w-4 mr-2" />

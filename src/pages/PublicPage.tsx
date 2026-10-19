@@ -400,8 +400,9 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
           <AnalyticsProvider pageId={pageData?.id} enabled={!!slug}>
             <PageContactsProvider value={pageContacts}>
             <div>
-              {/* Language Switcher - Top Right */}
-              <div className="fixed top-4 right-4 z-50">
+              {/* Language switcher: top right of the page, scrolls away with it.
+                  As a fixed button it floated over blocks the whole time. */}
+              <div className="absolute top-4 right-4 z-50">
                 {enhancementsReady ? (
                   <Suspense fallback={<div className="h-9 w-9 rounded-lg bg-background/70 animate-pulse" />}>
                     <LanguageSwitcher />

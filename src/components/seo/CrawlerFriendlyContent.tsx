@@ -21,6 +21,7 @@ import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts as generateEnhancedKeyFacts } from '@/lib/seo/key-facts';
 import { extractAiCta, AI_CTA_LABELS } from '@/lib/seo/ai-cta-extractor';
 import { canonicalSocialUrl, getSafeHref } from '@/lib/blocks/safe-href';
+import { isDefaultTextContent, withoutDefaultText } from '@/lib/blocks/block-defaults';
 
 interface CrawlerFriendlyContentProps {
   blocks: Block[];
@@ -69,7 +70,8 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
   const linkBlocks = validBlocks.filter(b => b.type === 'link' || b.type === 'button') as any[];
 
   // Extract text blocks for content
-  const textBlocks = validBlocks.filter(b => b.type === 'text') as TextBlock[];
+  const textBlocks = (validBlocks.filter(b => b.type === 'text' && !isDefaultTextContent((b as TextBlock).content)) as TextBlock[])
+    .map(b => ({ ...b, content: withoutDefaultText(b.content) }) as TextBlock);
 
   // Extract socials
   const socialsBlock = validBlocks.find(b => b.type === 'socials') as SocialsBlock | undefined;

@@ -14,6 +14,7 @@ import type { CarouselBlock as CarouselBlockType } from '@/types/page';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
 import { openExternal } from '@/lib/blocks/safe-href';
+import { BLOCK_RADIUS } from '@/lib/appearance/block-appearance';
 
 interface CarouselBlockProps {
   block: CarouselBlockType;
@@ -72,7 +73,10 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
         }}
         plugins={autoplayPlugin ? [autoplayPlugin] : undefined}
         setApi={setApi}
-        className="w-full"
+        // Slides are a rounded tile of their own (16px, or the block's own
+        // radius when the owner set one); the dots sit below it.
+        className="w-full overflow-hidden"
+        style={{ borderRadius: block.blockStyle?.borderRadius ? BLOCK_RADIUS[block.blockStyle.borderRadius] : '16px' }}
       >
         <CarouselContent className="-ml-0">
           {block.images.map((image, index) => {

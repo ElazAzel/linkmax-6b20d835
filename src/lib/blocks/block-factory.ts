@@ -1,4 +1,5 @@
 import type { Block, BlockSizePreset } from '@/types/page';
+import { DEFAULT_TEXT_CONTENT } from '@/lib/blocks/block-defaults';
 import { createMultilingualString } from '@/lib/i18n-helpers';
 
 // Default size for new blocks
@@ -68,7 +69,7 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     id,
     type: 'text',
     blockSize: DEFAULT_BLOCK_SIZE,
-    content: 'Напишите что-нибудь интересное…',
+    content: DEFAULT_TEXT_CONTENT,
     style: 'paragraph',
     blockStyle: {
       padding: 'md',

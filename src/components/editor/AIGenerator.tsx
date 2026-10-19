@@ -231,7 +231,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
                 {!isPremium && (
                   <Button size="sm" variant="outline" onClick={openPremiumPurchase} className="w-full">
                     <Crown className="h-3 w-3 mr-1.5 text-amber-500" />
-                    {t('freemium.getPremium', 'Получить Premium')}
+                    {t('freemium.getPremium', 'Получить PRO')}
                   </Button>
                 )}
               </div>

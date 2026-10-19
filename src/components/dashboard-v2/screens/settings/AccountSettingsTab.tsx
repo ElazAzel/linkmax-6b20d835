@@ -229,8 +229,13 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                 <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground flex items-center gap-2 px-1">
                         <Link2 className="h-3 w-3" />
-                        {t('dashboard.accountSettings.username', 'Username')}
+                        {t('dashboard.accountSettings.username', 'Имя пользователя')}
                     </label>
+                    {/* It also renames the main page's address; say so, since
+                        Page settings has its own «Адрес страницы» field. */}
+                    <p className="px-1 text-xs text-muted-foreground">
+                        {t('dashboard.accountSettings.usernameHint', 'Это и адрес основной страницы: lnkmx.my/{{username}}', { username: usernameInput || 'имя' })}
+                    </p>
                     <div className="flex gap-2">
                         <Input
                             value={usernameInput}
@@ -240,7 +245,8 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         />
                         <Button
                             onClick={onUpdateUsername}
-                            disabled={usernameSaving}
+                            disabled={usernameSaving || !usernameInput.trim()}
+                            aria-label={t('common.save', 'Сохранить')}
                             className="h-12 px-6 rounded-xl bg-primary shadow-lg shadow-primary/25 hover:scale-105 active:scale-95 transition-all"
                         >
                             {usernameSaving ? '...' : <Check className="h-5 w-5" />}

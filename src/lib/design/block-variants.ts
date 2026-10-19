@@ -89,7 +89,10 @@ export const BLOCK_VARIANTS: BlockVariantDef[] = [
     labelFallback: 'Во всю ширину',
     appliesTo: ['image', 'video', 'carousel', 'gallery'],
     className: 'w-full',
-    stylePatch: { borderRadius: 'none', shadow: 'none', padding: 'none' },
+    // Full width of the column, no frame, slightly rounded (16px, like
+    // Korner's photo tiles): square corners inside the page gutter looked
+    // cheap, the 24px card radius too soft for a photo.
+    stylePatch: { borderRadius: 'md', shadow: 'none', padding: 'none' },
     naked: true,
   },
   {
