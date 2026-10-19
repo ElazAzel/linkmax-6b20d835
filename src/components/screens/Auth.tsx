@@ -347,7 +347,10 @@ export const Auth = memo(function Auth() {
     // password that would be accepted for a new account is tried as a signup.
     const strong = authSchema.safeParse({ email, password });
     if (!strong.success) {
-      wrongCredentials();
+      toast.error(strong.error.errors[0].message);
+      playError();
+      setIsLoading(false);
+      trackAuthEvent('auth_error', { method: 'email_access', stage: 'validation', error: 'password_strength' });
       return;
     }
 

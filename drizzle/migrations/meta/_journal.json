@@ -57,6 +57,13 @@
       "when": 1792326459964,
       "tag": "0007_paid_blocks_server_gating",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792380188378,
+      "tag": "0008_paid_blocks_positive_price",
+      "breakpoints": true
     }
   ]
 }
