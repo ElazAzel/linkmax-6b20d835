@@ -18,10 +18,10 @@ vi.mock('@/lib/blocks/block-manifest', () => ({
 vi.mock('@/lib/blocks/block-recommendations', () => ({ getRecommendedBlocks: () => [] }));
 
 describe('BlockInsertButton showcase blocks', () => {
-  it('hides card and tiles until the database migration flag is on', () => {
+  it('offers card and tiles in the primary insert group now that the migration is present', () => {
     render(<BlockInsertButton onInsert={vi.fn()} isOpen onOpenChange={vi.fn()} hideTrigger />);
     expect(screen.getByTestId('add-block-option-text')).toBeInTheDocument();
-    expect(screen.queryByTestId('add-block-option-card')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('add-block-option-tiles')).not.toBeInTheDocument();
+    expect(screen.getByTestId('add-block-option-card')).toBeInTheDocument();
+    expect(screen.getByTestId('add-block-option-tiles')).toBeInTheDocument();
   });
 });

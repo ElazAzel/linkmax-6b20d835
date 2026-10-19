@@ -21,6 +21,7 @@ import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Edit3 from 'lucide-react/dist/esm/icons/edit-3';
 import Filter from 'lucide-react/dist/esm/icons/filter';
+import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -29,6 +30,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DashboardHeader } from '../layout/DashboardHeader';
+import { LeadDetails } from '@/components/crm/LeadDetails';
+import { StageSettingsDialog } from '@/components/crm/StageSettingsDialog';
+import { useCrmStages } from '@/hooks/crm/useCrmStages';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
@@ -77,11 +81,14 @@ function getLeadTelegramHref(lead: Lead): string | null {
 
 export const LeadsScreen = memo(function LeadsScreen() {
     const { t } = useTranslation();
+    const { getStageLabel } = useCrmStages();
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
     const [filterSheetOpen, setFilterSheetOpen] = useState(false);
+    const [stageSettingsOpen, setStageSettingsOpen] = useState(false);
+    const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
     const [loadError, setLoadError] = useState(false);
 
     const fetchLeads = useCallback(async () => {
@@ -124,6 +131,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
             if (error) throw error;
             setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status: newStatus } : l));
+            setSelectedLead(prev => prev && prev.id === leadId ? { ...prev, status: newStatus } : prev);
 
             if (previousLead && previousLead.status !== newStatus) {
                 const pageId = getLeadPageId(previousLead);
@@ -132,7 +140,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 }
             }
 
-            toast.success(t('crm.status.' + newStatus));
+            toast.success(getStageLabel(newStatus));
         } catch (e) {
             console.error('Status update error', e);
             toast.error(t('dashboard.leads.updateError', 'Ошибка обновления'));
@@ -291,6 +299,17 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             variant="outline"
                             size="sm"
                             className="h-10 rounded-xl"
+                            onClick={() => setStageSettingsOpen(true)}
+                            data-testid="leads-open-stage-settings"
+                            aria-label={t('crm.stages.title', 'Стадии заявок')}
+                        >
+                            <SlidersHorizontal className="h-4 w-4 sm:mr-2" />
+                            <span className="hidden sm:inline">{t('crm.stages.button', 'Стадии')}</span>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-10 rounded-xl"
                             onClick={handleExport}
                             disabled={leads.length === 0}
                         >
@@ -343,7 +362,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                     >
                         <Filter className="h-4 w-4" />
                         {!PRIMARY_FILTERS.some(f => f.id === statusFilter) && (
-                            <span className="ml-2 text-xs font-semibold">{t(`crm.status.${statusFilter}`)}</span>
+                            <span className="ml-2 text-xs font-semibold">{getStageLabel(statusFilter as LeadStatus)}</span>
                         )}
                     </Button>
                 </div>
@@ -365,7 +384,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                         ? t('dashboard.leads.filterAll', 'Все')
                                         : s === 'active'
                                             ? t('dashboard.leads.filterActive', 'Активные')
-                                            : t(`crm.status.${s}`);
+                                            : getStageLabel(s as LeadStatus);
                                     const count = stats[s];
                                     return (
                                         <button
@@ -470,7 +489,9 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             return (
                                 <Card 
                                     key={lead.id} 
-                                    className="p-5 bg-card border border-border shadow-sm hover:bg-muted transition-all rounded-card active:scale-[0.98]"
+                                    data-testid={`lead-card-${lead.id}`}
+                                    onClick={() => setSelectedLead(lead)}
+                                    className="cursor-pointer p-5 bg-card border border-border shadow-sm hover:bg-muted transition-all rounded-card active:scale-[0.98]"
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="flex items-center gap-4">
@@ -491,22 +512,32 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                         {/* Status Dropdown */}
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Badge className={cn("cursor-pointer h-7 shrink-0 gap-1.5 rounded-full border-none px-2.5 text-xs font-medium", config.bg, config.text)}>
+                                                <Badge
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className={cn("cursor-pointer h-7 shrink-0 gap-1.5 rounded-full border-none px-2.5 text-xs font-medium", config.bg, config.text)}
+                                                >
                                                     <StatusIcon className="h-3.5 w-3.5 mr-2" />
-                                                    {t(`crm.status.${lead.status}`)}
+                                                    {getStageLabel(lead.status as LeadStatus)}
                                                 </Badge>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end" className="bg-card border border-border rounded-2xl min-w-[160px] p-2">
+                                            <DropdownMenuContent
+                                                align="end"
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="bg-card border border-border rounded-2xl min-w-[160px] p-2"
+                                            >
                                                 {(['new', 'contacted', 'qualified', 'converted', 'lost'] as LeadStatus[]).map(s => (
                                                     <DropdownMenuItem
                                                         key={s}
-                                                        onClick={() => updateLeadStatus(lead.id, s)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            updateLeadStatus(lead.id, s);
+                                                        }}
                                                         className={cn(
                                                             "rounded-xl py-2.5 px-3 text-xs font-bold transition-colors",
                                                             lead.status === s ? "bg-primary/10 text-primary font-bold" : "hover:bg-muted"
                                                         )}
                                                     >
-                                                        {t(`crm.status.${s}`)}
+                                                        {getStageLabel(s)}
                                                     </DropdownMenuItem>
                                                 ))}
                                             </DropdownMenuContent>
@@ -535,7 +566,8 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                     </div>
  
                                     {/* Quick Actions */}
-                                    <div className="flex items-center gap-2 pt-4 border-t border-border">
+                                    {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- stops card click when tapping quick actions */}
+                                    <div className="flex items-center gap-2 pt-4 border-t border-border" onClick={(e) => e.stopPropagation()}>
                                         {lead.phone && (
                                             <Button
                                                 variant="secondary"
@@ -585,6 +617,29 @@ export const LeadsScreen = memo(function LeadsScreen() {
                     )}
                 </div>
             </div>
+
+            {selectedLead && (
+                <LeadDetails
+                    lead={selectedLead}
+                    open={!!selectedLead}
+                    onOpenChange={(isOpen) => {
+                        if (!isOpen) setSelectedLead(null);
+                    }}
+                    onLeadUpdated={(leadId, updates) => {
+                        setLeads(prev => prev.map(l => l.id === leadId ? { ...l, ...updates } : l));
+                        setSelectedLead(prev => prev && prev.id === leadId ? { ...prev, ...updates } : prev);
+                    }}
+                    onLeadDeleted={(leadId) => {
+                        setLeads(prev => prev.filter(l => l.id !== leadId));
+                        setSelectedLead(null);
+                    }}
+                />
+            )}
+
+            <StageSettingsDialog
+                open={stageSettingsOpen}
+                onOpenChange={setStageSettingsOpen}
+            />
         </div>
     );
 });

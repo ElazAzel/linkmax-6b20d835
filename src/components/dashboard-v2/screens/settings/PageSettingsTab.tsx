@@ -25,6 +25,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { PremiumFeatureGate } from '@/components/billing/PremiumFeatureGate';
 import type { Niche } from '@/lib/niches';
@@ -328,453 +329,478 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 )}
             </Card>
 
-            {/* Domain / Slug */}
-            <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
-                    {t('dashboard.pageSettings.domain', 'Домен')}
-                </h3>
-                <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
-                    <div className="space-y-2">
-                        <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">
-                            <Link2 className="w-4 h-4 text-primary" />
-                            {t('dashboard.pageSettings.slug', 'URL страницы')}
-                        </Label>
-                        <div className="flex gap-2">
-                            <div className="flex-1 relative group">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-bold">
-                                    lnkmx.my/
-                                </span>
-                                <Input
-                                    value={slugInput}
-                                    onChange={(e) => { setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); setSlugError(null); }}
-                                    className="pl-[85px] h-12 rounded-xl bg-muted border-border focus:border-primary/50 transition-all font-medium"
-                                    placeholder={t('dashboard.pageSettings.yourPagePlaceholder', 'your-page')}
-                                />
-                            </div>
-                            <Button
-                                onClick={handleSaveSlug}
-                                disabled={slugSaving || slugInput === pageSlug || !onUpdateSlug}
-                                className="h-12 px-6 rounded-xl bg-primary shadow-lg shadow-primary/25 hover:scale-105 active:scale-95 transition-all"
-                            >
-                                {slugSaving ? '...' : <Check className="w-5 h-5" />}
-                            </Button>
-                        </div>
-                        {slugError && (
-                            <p className="text-sm text-destructive flex items-center gap-1 font-medium bg-destructive/5 p-2 rounded-lg border border-destructive/10">
-                                <AlertTriangle className="w-4 h-4" />
-                                {slugError}
-                            </p>
-                        )}
-                    </div>
-                </Card>
-            </div>
-
-            {/* Custom Domain (PRO) */}
-            <div className="space-y-2">
-                <div className="flex items-center gap-2 px-1">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">
-                        {t('dashboard.pageSettings.customDomain', 'Свой домен')}
-                    </h3>
-                    {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
-                </div>
-                <PremiumFeatureGate requiredTier="pro" outcomeKey="domain">
-                    <Card className="p-4 space-y-4">
+            {/* Accordion sections: Address open by default; Search, Design & Category, Integrations collapsed */}
+            <Accordion type="multiple" defaultValue={['address']} className="space-y-3" data-testid="page-settings-accordion">
+                <AccordionItem value="address" className="rounded-2xl border border-border bg-card px-4">
+                    <AccordionTrigger className="py-4 text-sm font-bold uppercase tracking-[0.06em] text-foreground hover:no-underline" data-testid="page-settings-section-address">
+                        {t('dashboard.pageSettings.sectionAddress', 'Адрес')}
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-1 pb-4">
+                        {/* Domain / Slug */}
                         <div className="space-y-2">
-                            <Label className="flex items-center gap-2">
-                                <Globe className="w-4 h-4" />
-                                {t('dashboard.pageSettings.yourDomain', 'Ваш домен')}
-                            </Label>
-                            <div className="flex gap-2">
-                                <Input
-                                    value={domainInput}
-                                    onChange={(e) => { setDomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9.-]/g, '')); setDomainError(null); }}
-                                    className="h-12 rounded-xl"
-                                    placeholder={t('dashboard.pageSettings.yourDomainExample', 'ivan.ru')}
-                                    disabled={!isPremium}
-                                />
-                                <Button
-                                    onClick={handleSaveDomain}
-                                    disabled={domainSaving || domainInput === customDomain || !onUpdateCustomDomain || !isPremium}
-                                    className="h-12 px-5 rounded-xl"
-                                >
-                                    {domainSaving ? '...' : <Check className="w-5 h-5" />}
-                                </Button>
-                            </div>
-                            {domainError && (
-                                <p className="text-sm text-destructive flex items-center gap-1">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    {domainError}
-                                </p>
-                            )}
-                            <p className="text-xs text-muted-foreground mt-2">
-                                {t('dashboard.pageSettings.domainHint', 'Добавьте CNAME запись в DNS указывающую на lnkmx.my')}
-                            </p>
-                            {isPremium && domainInput && (
-                                <div className="mt-3 bg-muted/50 rounded-lg p-3 border border-border">
-                                    <p className="text-xs font-medium mb-2">{t('dashboard.pageSettings.dnsConfig', 'DNS запись:')}</p>
-                                    <div className="grid grid-cols-3 gap-2 text-xs">
-                                        <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsType', 'Тип')}</div>
-                                        <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsName', 'Имя')}</div>
-                                        <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsValue', 'Значение')}</div>
-                                        <div className="font-mono bg-background px-2 py-1 rounded">CNAME</div>
-                                        <div className="font-mono bg-background px-2 py-1 rounded truncate">
-                                            {domainInput.split('.').length > 2 ? domainInput.split('.')[0] : '@'}
+                            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
+                                {t('dashboard.pageSettings.domain', 'Домен')}
+                            </h3>
+                            <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
+                                <div className="space-y-2">
+                                    <Label className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">
+                                        <Link2 className="w-4 h-4 text-primary" />
+                                        {t('dashboard.pageSettings.slug', 'URL страницы')}
+                                    </Label>
+                                    <div className="flex gap-2">
+                                        <div className="flex-1 relative group">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-bold">
+                                                lnkmx.my/
+                                            </span>
+                                            <Input
+                                                value={slugInput}
+                                                onChange={(e) => { setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); setSlugError(null); }}
+                                                className="pl-[85px] h-12 rounded-xl bg-muted border-border focus:border-primary/50 transition-all font-medium"
+                                                placeholder={t('dashboard.pageSettings.yourPagePlaceholder', 'your-page')}
+                                            />
                                         </div>
-                                        <div className="font-mono bg-background px-2 py-1 rounded">lnkmx.my</div>
+                                        <Button
+                                            onClick={handleSaveSlug}
+                                            disabled={slugSaving || slugInput === pageSlug || !onUpdateSlug}
+                                            className="h-12 px-6 rounded-xl bg-primary shadow-lg shadow-primary/25 hover:scale-105 active:scale-95 transition-all"
+                                        >
+                                            {slugSaving ? '...' : <Check className="w-5 h-5" />}
+                                        </Button>
                                     </div>
+                                    {slugError && (
+                                        <p className="text-sm text-destructive flex items-center gap-1 font-medium bg-destructive/5 p-2 rounded-lg border border-destructive/10">
+                                            <AlertTriangle className="w-4 h-4" />
+                                            {slugError}
+                                        </p>
+                                    )}
                                 </div>
-                            )}
+                            </Card>
                         </div>
-                    </Card>
-                </PremiumFeatureGate>
-            </div>
 
-            {/* SEO + Search Visibility (merged) */}
-            <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
-                    {t('dashboard.pageSettings.searchVisibility', 'Поисковая видимость')}
-                </h3>
-                <Card className="p-4 space-y-4">
-                    {/* SEO Score */}
-                    <SEOScoreBadge score={qualityScore} />
-
-                    {/* Google Preview */}
-                    <GooglePreview title={seoTitleInput || pageTitle} slug={pageSlug} description={seoDescInput} />
-
-                    {/* AI Bot readiness */}
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-info/12 border border-info/30 text-sm">
-                        <Bot className="h-4 w-4 text-info" />
-                        <span className="text-info text-xs">
-                            {t('seo.aiBotReady', 'JSON-LD и Answer Block генерируются автоматически для AI-ботов')}
-                        </span>
-                        <Check className="h-3.5 w-3.5 text-success ml-auto" />
-                    </div>
-
-                    {/* SEO Tips */}
-                    <SEOTips city={cityInput} profession={professionInput} seoTitle={seoTitleInput} seoDesc={seoDescInput} />
-
-                    {/* Meta Title */}
-                    <div className="space-y-2">
-                        <Label className="flex items-center gap-2">
-                            <Search className="w-4 h-4" />
-                            {t('dashboard.pageSettings.seoTitle', 'Meta Title')}
-                        </Label>
-                        <Input
-                            value={seoTitleInput}
-                            onChange={(e) => setSeoTitleInput(e.target.value)}
-                            onBlur={handleSaveSeo}
-                            placeholder={t('dashboard.pageSettings.seoTitlePlaceholder', 'Заголовок для поисковиков')}
-                            className="h-12 rounded-xl"
-                            maxLength={60}
-                        />
-                        <p className="text-xs text-muted-foreground text-right">{seoTitleInput.length}/60</p>
-                    </div>
-
-                    {/* Meta Description */}
-                    <div className="space-y-2">
-                        <Label>{t('dashboard.pageSettings.seoDescription', 'Meta Description')}</Label>
-                        <Textarea
-                            value={seoDescInput}
-                            onChange={(e) => setSeoDescInput(e.target.value)}
-                            onBlur={handleSaveSeo}
-                            placeholder={t('dashboard.pageSettings.seoDescPlaceholder', 'Краткое описание для поисковой выдачи')}
-                            className="rounded-xl resize-none"
-                            rows={3}
-                            maxLength={160}
-                        />
-                        <p className="text-xs text-muted-foreground text-right">{seoDescInput.length}/160</p>
-                    </div>
-
-                    {/* Indexing toggle */}
-                    <div className="flex items-center justify-between py-2">
-                        <div className="space-y-0.5">
-                            <Label className="flex items-center gap-2">
-                                <Eye className="w-4 h-4" />
-                                {t('dashboard.pageSettings.indexable', 'Индексация в поиске')}
-                            </Label>
-                            <p className="text-xs text-muted-foreground">
-                                {t('dashboard.pageSettings.indexableHint', 'Показывать страницу в Google и других поисковиках')}
-                            </p>
-                        </div>
-                        <Switch checked={isIndexable ?? true} onCheckedChange={handleToggleIndexable} />
-                    </div>
-
-                    {/* Entity Fields inline */}
-                    <div className="border-t pt-4 space-y-4">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em]">
-                            {t('dashboard.pageSettings.entityFields', 'Данные для поиска')}
-                        </p>
+                        {/* Custom Domain (PRO) */}
                         <div className="space-y-2">
-                            <Label>{t('dashboard.pageSettings.profession', 'Профессия / специализация')}</Label>
-                            <Input
-                                value={professionInput}
-                                onChange={(e) => setProfessionInput(e.target.value)}
-                                onBlur={handleSaveEntityFields}
-                                placeholder="Nail-мастер, фотограф, коуч..."
-                                className="h-12 rounded-xl"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>{t('dashboard.pageSettings.country', 'Страна')}</Label>
-                            <Select
-                                value={countryCodeInput || 'none'}
-                                onValueChange={(value: string) => {
-                                    const v = value === 'none' ? '' : value;
-                                    setCountryCodeInput(v);
-                                    if (onUpdateEntityFields) {
-                                        onUpdateEntityFields({ country_code: v });
-                                        toast.success(t('common.saved', 'Сохранено'));
-                                    }
-                                }}
-                            >
-                                <SelectTrigger className="h-12 rounded-xl">
-                                    <SelectValue placeholder={t('fields.selectCountry', 'Выберите страну')} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="none">{t('fields.notSpecified', 'Не указана')}</SelectItem>
-                                    {COUNTRY_OPTIONS.map((c) => (
-                                        <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label>{t('dashboard.pageSettings.city', 'Город')}</Label>
-                            <Input
-                                value={cityInput}
-                                onChange={(e) => setCityInput(e.target.value)}
-                                onBlur={handleSaveEntityFields}
-                                placeholder="Алматы, Астана, Москва..."
-                                className="h-12 rounded-xl"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>{t('dashboard.pageSettings.entityType', 'Тип профиля')}</Label>
-                            <Select
-                                value={entityTypeInput}
-                                onValueChange={(value: string) => {
-                                    setEntityTypeInput(value);
-                                    if (onUpdateEntityFields) {
-                                        onUpdateEntityFields({ entity_type: value });
-                                        toast.success(t('common.saved', 'Сохранено'));
-                                    }
-                                }}
-                            >
-                                <SelectTrigger className="h-12 rounded-xl">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="person">{t('dashboard.pageSettings.personalProfile', 'Личный профиль')}</SelectItem>
-                                    <SelectItem value="organization">{t('dashboard.pageSettings.organization', 'Организация')}</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label>{t('dashboard.pageSettings.publicEmail', 'Публичный email (необязательно)')}</Label>
-                            <Input
-                                value={contactEmailInput}
-                                onChange={(e) => setContactEmailInput(e.target.value)}
-                                onBlur={handleSaveEntityFields}
-                                placeholder="hello@example.com"
-                                className="h-12 rounded-xl"
-                                type="email"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>{t('dashboard.pageSettings.publicPhone', 'Публичный телефон (необязательно)')}</Label>
-                            <Input
-                                value={contactPhoneInput}
-                                onChange={(e) => setContactPhoneInput(e.target.value)}
-                                onBlur={handleSaveEntityFields}
-                                placeholder="+7 777 123 4567"
-                                className="h-12 rounded-xl"
-                                type="tel"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>WhatsApp ({t('common.optional', 'необязательно')})</Label>
-                            <Input
-                                value={contactWhatsappInput}
-                                onChange={(e) => setContactWhatsappInput(e.target.value)}
-                                onBlur={handleSaveEntityFields}
-                                placeholder="+7 777 123 4567"
-                                className="h-12 rounded-xl"
-                                type="tel"
-                            />
-                        </div>
-                    </div>
-                </Card>
-            </div>
-
-            {/* Category / Niche */}
-            <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
-                    {t('dashboard.pageSettings.category', 'Категория')}
-                </h3>
-                <Card className="p-4">
-                    <NicheSelector value={niche} onChange={handleNicheChange} />
-                </Card>
-            </div>
-
-            {/* AI Builder */}
-            <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
-                    {t('dashboard.pageSettings.aiBuilder', 'AI Builder')}
-                </h3>
-                <Card className="p-4">
-                    <button className="w-full flex items-center gap-4 text-left" onClick={onOpenAIBuilder}>
-                        <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center">
-                            <Sparkles className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                            <span className="font-medium">{t('dashboard.pageSettings.aiBuilderBtn', 'Заполнить страницу с AI')}</span>
-                            <p className="text-sm text-muted-foreground">
-                                {t('dashboard.pageSettings.aiBuilderDesc', 'AI создаст контент на основе шаблона')}
-                            </p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                    </button>
-                </Card>
-            </div>
-
-            {/* Branding */}
-            <div className="space-y-2">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
-                    {t('dashboard.pageSettings.branding', 'Брендинг')}
-                </h3>
-                <Card className="divide-y divide-border/50 overflow-hidden">
-                    <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenTheme}>
-                        <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center">
-                            <Palette className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                                <span className="font-medium">{t('dashboard.pageSettings.theme', 'Тема и цвета')}</span>
-                                {!isPremium && <Badge variant="secondary" className="text-xs">PRO</Badge>}
+                            <div className="flex items-center gap-2 px-1">
+                                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">
+                                    {t('dashboard.pageSettings.customDomain', 'Свой домен')}
+                                </h3>
+                                {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                             </div>
-                            <p className="text-sm text-muted-foreground">{t('dashboard.pageSettings.themeDesc', 'Настройка цветов и шрифтов')}</p>
+                            <PremiumFeatureGate requiredTier="pro" outcomeKey="domain">
+                                <Card className="p-4 space-y-4">
+                                    <div className="space-y-2">
+                                        <Label className="flex items-center gap-2">
+                                            <Globe className="w-4 h-4" />
+                                            {t('dashboard.pageSettings.yourDomain', 'Ваш домен')}
+                                        </Label>
+                                        <div className="flex gap-2">
+                                            <Input
+                                                value={domainInput}
+                                                onChange={(e) => { setDomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9.-]/g, '')); setDomainError(null); }}
+                                                className="h-12 rounded-xl"
+                                                placeholder={t('dashboard.pageSettings.yourDomainExample', 'ivan.ru')}
+                                                disabled={!isPremium}
+                                            />
+                                            <Button
+                                                onClick={handleSaveDomain}
+                                                disabled={domainSaving || domainInput === customDomain || !onUpdateCustomDomain || !isPremium}
+                                                className="h-12 px-5 rounded-xl"
+                                            >
+                                                {domainSaving ? '...' : <Check className="w-5 h-5" />}
+                                            </Button>
+                                        </div>
+                                        {domainError && (
+                                            <p className="text-sm text-destructive flex items-center gap-1">
+                                                <AlertTriangle className="w-4 h-4" />
+                                                {domainError}
+                                            </p>
+                                        )}
+                                        <p className="text-xs text-muted-foreground mt-2">
+                                            {t('dashboard.pageSettings.domainHint', 'Добавьте CNAME запись в DNS указывающую на lnkmx.my')}
+                                        </p>
+                                        {isPremium && domainInput && (
+                                            <div className="mt-3 bg-muted/50 rounded-lg p-3 border border-border">
+                                                <p className="text-xs font-medium mb-2">{t('dashboard.pageSettings.dnsConfig', 'DNS запись:')}</p>
+                                                <div className="grid grid-cols-3 gap-2 text-xs">
+                                                    <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsType', 'Тип')}</div>
+                                                    <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsName', 'Имя')}</div>
+                                                    <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsValue', 'Значение')}</div>
+                                                    <div className="font-mono bg-background px-2 py-1 rounded">CNAME</div>
+                                                    <div className="font-mono bg-background px-2 py-1 rounded truncate">
+                                                        {domainInput.split('.').length > 2 ? domainInput.split('.')[0] : '@'}
+                                                    </div>
+                                                    <div className="font-mono bg-background px-2 py-1 rounded">lnkmx.my</div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </Card>
+                            </PremiumFeatureGate>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                    </button>
-                    <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenTemplates}>
-                        <div className="h-11 w-11 rounded-2xl bg-success/12 flex items-center justify-center">
-                            <LayoutTemplate className="w-5 h-5 text-success" />
-                        </div>
-                        <div className="flex-1">
-                            <span className="font-medium">{t('dashboard.pageSettings.templates', 'Шаблоны')}</span>
-                            <p className="text-sm text-muted-foreground">{t('dashboard.pageSettings.templatesDesc', 'Готовые дизайны страниц')}</p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                    </button>
-                    <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenMarketplace}>
-                        <div className="h-11 w-11 rounded-2xl bg-primary/12 flex items-center justify-center">
-                            <Store className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                            <span className="font-medium">{t('dashboard.pageSettings.marketplace', 'Маркетплейс')}</span>
-                            <p className="text-sm text-muted-foreground">{t('dashboard.pageSettings.marketplaceDesc', 'Шаблоны от сообщества')}</p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                    </button>
-                </Card>
-            </div>
+                    </AccordionContent>
+                </AccordionItem>
 
-            {/* White-label (PRO) */}
-            <div className="space-y-2">
-                <div className="flex items-center gap-2 px-1">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">White-label</h3>
-                    {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
-                </div>
-                <PremiumFeatureGate requiredTier="pro" outcomeKey="design">
-                    <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
-                        <div className="space-y-2">
-                            <Label className="flex items-center gap-2">
-                                <Sparkles className="w-4 h-4 text-primary" />
-                                {t('dashboard.pageSettings.faviconUrl', 'Favicon URL')}
-                            </Label>
-                            <Input
-                                value={faviconInput}
-                                onChange={(e) => setFaviconInput(e.target.value)}
-                                onBlur={handleSaveBranding}
-                                placeholder="https://example.com/favicon.png"
-                                className="h-12 rounded-xl"
-                                disabled={!isPremium}
-                            />
-                            <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.faviconHint', 'PNG или ICO. Рекомендуемый размер 64x64.')}</p>
-                        </div>
-                        <div className="flex items-center justify-between py-2">
-                            <div className="space-y-1">
-                                <Label className="flex items-center gap-2 text-base">
-                                    <Crown className="w-4 h-4 text-warning" />
-                                    {t('freemium.watermarkEnabled', 'Убери логотип LinkMAX')}
+                <AccordionItem value="search" className="rounded-2xl border border-border bg-card px-4">
+                    <AccordionTrigger className="py-4 text-sm font-bold uppercase tracking-[0.06em] text-foreground hover:no-underline" data-testid="page-settings-section-search">
+                        {t('dashboard.pageSettings.sectionSearch', 'Поиск')}
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-1 pb-4">
+                        <Card className="p-4 space-y-4 border-0 shadow-none">
+                            {/* SEO Score */}
+                            <SEOScoreBadge score={qualityScore} />
+
+                            {/* Google Preview */}
+                            <GooglePreview title={seoTitleInput || pageTitle} slug={pageSlug} description={seoDescInput} />
+
+                            {/* AI Bot readiness */}
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-info/12 border border-info/30 text-sm">
+                                <Bot className="h-4 w-4 text-info" />
+                                <span className="text-info text-xs">
+                                    {t('seo.aiBotReady', 'JSON-LD и Answer Block генерируются автоматически для AI-ботов')}
+                                </span>
+                                <Check className="h-3.5 w-3.5 text-success ml-auto" />
+                            </div>
+
+                            {/* SEO Tips */}
+                            <SEOTips city={cityInput} profession={professionInput} seoTitle={seoTitleInput} seoDesc={seoDescInput} />
+
+                            {/* Meta Title */}
+                            <div className="space-y-2">
+                                <Label className="flex items-center gap-2">
+                                    <Search className="w-4 h-4" />
+                                    {t('dashboard.pageSettings.seoTitle', 'Meta Title')}
                                 </Label>
-                                <p className="text-sm text-muted-foreground leading-snug max-w-[250px]">
-                                    {t('freemium.watermarkDesc', 'Сделай страницу 100% своей')}
-                                </p>
+                                <Input
+                                    value={seoTitleInput}
+                                    onChange={(e) => setSeoTitleInput(e.target.value)}
+                                    onBlur={handleSaveSeo}
+                                    placeholder={t('dashboard.pageSettings.seoTitlePlaceholder', 'Заголовок для поисковиков')}
+                                    className="h-12 rounded-xl"
+                                    maxLength={60}
+                                />
+                                <p className="text-xs text-muted-foreground text-right">{seoTitleInput.length}/60</p>
                             </div>
-                            <Switch
-                                checked={hideBrandingInner}
-                                onCheckedChange={(checked) => {
-                                    setHideBrandingInner(checked);
-                                    if (onUpdateBranding) {
-                                        onUpdateBranding({ hideBranding: checked, faviconUrl: faviconInput || undefined });
-                                    }
-                                    toast.success(t('common.saved', 'Сохранено'));
-                                }}
-                                disabled={!isPremium}
-                            />
-                        </div>
-                    </Card>
-                </PremiumFeatureGate>
-            </div>
 
-            {/* Pixels & analytics — PublicPage loads them via TrackingScripts */}
-            {onUpdateIntegrations && (
-                <TrackingSettings integrations={integrations} onSave={onUpdateIntegrations} />
-            )}
+                            {/* Meta Description */}
+                            <div className="space-y-2">
+                                <Label>{t('dashboard.pageSettings.seoDescription', 'Meta Description')}</Label>
+                                <Textarea
+                                    value={seoDescInput}
+                                    onChange={(e) => setSeoDescInput(e.target.value)}
+                                    onBlur={handleSaveSeo}
+                                    placeholder={t('dashboard.pageSettings.seoDescPlaceholder', 'Краткое описание для поисковой выдачи')}
+                                    className="rounded-xl resize-none"
+                                    rows={3}
+                                    maxLength={160}
+                                />
+                                <p className="text-xs text-muted-foreground text-right">{seoDescInput.length}/160</p>
+                            </div>
 
-            {/* Webhooks (PRO) */}
-            <div className="space-y-2">
-                <div className="flex items-center gap-2 px-1">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">Webhooks</h3>
-                    {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
-                </div>
-                <PremiumFeatureGate requiredTier="pro" outcomeKey="generic">
-                    <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
+                            {/* Indexing toggle */}
+                            <div className="flex items-center justify-between py-2">
+                                <div className="space-y-0.5">
+                                    <Label className="flex items-center gap-2">
+                                        <Eye className="w-4 h-4" />
+                                        {t('dashboard.pageSettings.indexable', 'Индексация в поиске')}
+                                    </Label>
+                                    <p className="text-xs text-muted-foreground">
+                                        {t('dashboard.pageSettings.indexableHint', 'Показывать страницу в Google и других поисковиках')}
+                                    </p>
+                                </div>
+                                <Switch checked={isIndexable ?? true} onCheckedChange={handleToggleIndexable} />
+                            </div>
+
+                            {/* Entity Fields inline */}
+                            <div className="border-t pt-4 space-y-4">
+                                <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.06em]">
+                                    {t('dashboard.pageSettings.entityFields', 'Данные для поиска')}
+                                </p>
+                                <div className="space-y-2">
+                                    <Label>{t('dashboard.pageSettings.profession', 'Профессия / специализация')}</Label>
+                                    <Input
+                                        value={professionInput}
+                                        onChange={(e) => setProfessionInput(e.target.value)}
+                                        onBlur={handleSaveEntityFields}
+                                        placeholder="Nail-мастер, фотограф, коуч..."
+                                        className="h-12 rounded-xl"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>{t('dashboard.pageSettings.country', 'Страна')}</Label>
+                                    <Select
+                                        value={countryCodeInput || 'none'}
+                                        onValueChange={(value: string) => {
+                                            const v = value === 'none' ? '' : value;
+                                            setCountryCodeInput(v);
+                                            if (onUpdateEntityFields) {
+                                                onUpdateEntityFields({ country_code: v });
+                                                toast.success(t('common.saved', 'Сохранено'));
+                                            }
+                                        }}
+                                    >
+                                        <SelectTrigger className="h-12 rounded-xl">
+                                            <SelectValue placeholder={t('fields.selectCountry', 'Выберите страну')} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="none">{t('fields.notSpecified', 'Не указана')}</SelectItem>
+                                            {COUNTRY_OPTIONS.map((c) => (
+                                                <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>{t('dashboard.pageSettings.city', 'Город')}</Label>
+                                    <Input
+                                        value={cityInput}
+                                        onChange={(e) => setCityInput(e.target.value)}
+                                        onBlur={handleSaveEntityFields}
+                                        placeholder="Алматы, Астана, Москва..."
+                                        className="h-12 rounded-xl"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>{t('dashboard.pageSettings.entityType', 'Тип профиля')}</Label>
+                                    <Select
+                                        value={entityTypeInput}
+                                        onValueChange={(value: string) => {
+                                            setEntityTypeInput(value);
+                                            if (onUpdateEntityFields) {
+                                                onUpdateEntityFields({ entity_type: value });
+                                                toast.success(t('common.saved', 'Сохранено'));
+                                            }
+                                        }}
+                                    >
+                                        <SelectTrigger className="h-12 rounded-xl">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="person">{t('dashboard.pageSettings.personalProfile', 'Личный профиль')}</SelectItem>
+                                            <SelectItem value="organization">{t('dashboard.pageSettings.organization', 'Организация')}</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>{t('dashboard.pageSettings.publicEmail', 'Публичный email (необязательно)')}</Label>
+                                    <Input
+                                        value={contactEmailInput}
+                                        onChange={(e) => setContactEmailInput(e.target.value)}
+                                        onBlur={handleSaveEntityFields}
+                                        placeholder="hello@example.com"
+                                        className="h-12 rounded-xl"
+                                        type="email"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>{t('dashboard.pageSettings.publicPhone', 'Публичный телефон (необязательно)')}</Label>
+                                    <Input
+                                        value={contactPhoneInput}
+                                        onChange={(e) => setContactPhoneInput(e.target.value)}
+                                        onBlur={handleSaveEntityFields}
+                                        placeholder="+7 777 123 4567"
+                                        className="h-12 rounded-xl"
+                                        type="tel"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>WhatsApp ({t('common.optional', 'необязательно')})</Label>
+                                    <Input
+                                        value={contactWhatsappInput}
+                                        onChange={(e) => setContactWhatsappInput(e.target.value)}
+                                        onBlur={handleSaveEntityFields}
+                                        placeholder="+7 777 123 4567"
+                                        className="h-12 rounded-xl"
+                                        type="tel"
+                                    />
+                                </div>
+                            </div>
+                        </Card>
+                    </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="branding" className="rounded-2xl border border-border bg-card px-4">
+                    <AccordionTrigger className="py-4 text-sm font-bold uppercase tracking-[0.06em] text-foreground hover:no-underline" data-testid="page-settings-section-branding">
+                        {t('dashboard.pageSettings.branding', 'Оформление и категория')}
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-1 pb-4">
+                        {/* Category / Niche */}
                         <div className="space-y-2">
-                            <Label className="flex items-center gap-2">
-                                <Sparkles className="w-4 h-4 text-primary" />
-                                Webhook URL
-                            </Label>
-                            <Input
-                                value={webhookUrlInput}
-                                onChange={(e) => setWebhookUrlInput(e.target.value)}
-                                onBlur={handleSaveWebhooks}
-                                placeholder="https://your-server.com/webhook"
-                                className="h-12 rounded-xl"
-                                disabled={!isPremium}
-                            />
-                            <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.webhookHint', 'URL для POST запросов при новом лиде.')}</p>
+                            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
+                                {t('dashboard.pageSettings.category', 'Категория')}
+                            </h3>
+                            <Card className="p-4">
+                                <NicheSelector value={niche} onChange={handleNicheChange} />
+                            </Card>
                         </div>
+
+                        {/* AI Builder */}
                         <div className="space-y-2">
-                            <Label className="flex items-center gap-2">
-                                <Check className="w-4 h-4 text-success" />
-                                Webhook Secret ({t('common.optional', 'необязательно')})
-                            </Label>
-                            <Input
-                                value={webhookSecretInput}
-                                onChange={(e) => setWebhookSecretInput(e.target.value)}
-                                onBlur={handleSaveWebhooks}
-                                placeholder="your-secret-key"
-                                className="h-12 rounded-xl"
-                                disabled={!isPremium}
-                                type="password"
-                            />
-                            <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.webhookSecretHint', 'Секрет будет отправлен в заголовке X-LinkMAX-Secret.')}</p>
+                            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
+                                {t('dashboard.pageSettings.aiBuilder', 'AI Builder')}
+                            </h3>
+                            <Card className="p-4">
+                                <button className="w-full flex items-center gap-4 text-left" onClick={onOpenAIBuilder}>
+                                    <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center">
+                                        <Sparkles className="w-5 h-5 text-primary" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <span className="font-medium">{t('dashboard.pageSettings.aiBuilderBtn', 'Заполнить страницу с AI')}</span>
+                                        <p className="text-sm text-muted-foreground">
+                                            {t('dashboard.pageSettings.aiBuilderDesc', 'AI создаст контент на основе шаблона')}
+                                        </p>
+                                    </div>
+                                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                                </button>
+                            </Card>
                         </div>
-                    </Card>
-                </PremiumFeatureGate>
-            </div>
+
+                        {/* Branding */}
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em] px-1">
+                                {t('dashboard.pageSettings.branding', 'Брендинг')}
+                            </h3>
+                            <Card className="divide-y divide-border/50 overflow-hidden">
+                                <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenTheme}>
+                                    <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center">
+                                        <Palette className="w-5 h-5 text-primary" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-medium">{t('dashboard.pageSettings.theme', 'Тема и цвета')}</span>
+                                            {!isPremium && <Badge variant="secondary" className="text-xs">PRO</Badge>}
+                                        </div>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.pageSettings.themeDesc', 'Настройка цветов и шрифтов')}</p>
+                                    </div>
+                                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                                </button>
+                                <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenTemplates}>
+                                    <div className="h-11 w-11 rounded-2xl bg-success/12 flex items-center justify-center">
+                                        <LayoutTemplate className="w-5 h-5 text-success" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <span className="font-medium">{t('dashboard.pageSettings.templates', 'Шаблоны')}</span>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.pageSettings.templatesDesc', 'Готовые дизайны страниц')}</p>
+                                    </div>
+                                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                                </button>
+                                <button className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors" onClick={onOpenMarketplace}>
+                                    <div className="h-11 w-11 rounded-2xl bg-primary/12 flex items-center justify-center">
+                                        <Store className="w-5 h-5 text-primary" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <span className="font-medium">{t('dashboard.pageSettings.marketplace', 'Маркетплейс')}</span>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.pageSettings.marketplaceDesc', 'Шаблоны от сообщества')}</p>
+                                    </div>
+                                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                                </button>
+                            </Card>
+                        </div>
+
+                        {/* White-label (PRO) */}
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2 px-1">
+                                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">White-label</h3>
+                                {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
+                            </div>
+                            <PremiumFeatureGate requiredTier="pro" outcomeKey="design">
+                                <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
+                                    <div className="space-y-2">
+                                        <Label className="flex items-center gap-2">
+                                            <Sparkles className="w-4 h-4 text-primary" />
+                                            {t('dashboard.pageSettings.faviconUrl', 'Favicon URL')}
+                                        </Label>
+                                        <Input
+                                            value={faviconInput}
+                                            onChange={(e) => setFaviconInput(e.target.value)}
+                                            onBlur={handleSaveBranding}
+                                            placeholder="https://example.com/favicon.png"
+                                            className="h-12 rounded-xl"
+                                            disabled={!isPremium}
+                                        />
+                                        <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.faviconHint', 'PNG или ICO. Рекомендуемый размер 64x64.')}</p>
+                                    </div>
+                                    <div className="flex items-center justify-between py-2">
+                                        <div className="space-y-1">
+                                            <Label className="flex items-center gap-2 text-base">
+                                                <Crown className="w-4 h-4 text-warning" />
+                                                {t('freemium.watermarkEnabled', 'Убери логотип LinkMAX')}
+                                            </Label>
+                                            <p className="text-sm text-muted-foreground leading-snug max-w-[250px]">
+                                                {t('freemium.watermarkDesc', 'Сделай страницу 100% своей')}
+                                            </p>
+                                        </div>
+                                        <Switch
+                                            checked={hideBrandingInner}
+                                            onCheckedChange={(checked) => {
+                                                setHideBrandingInner(checked);
+                                                if (onUpdateBranding) {
+                                                    onUpdateBranding({ hideBranding: checked, faviconUrl: faviconInput || undefined });
+                                                }
+                                                toast.success(t('common.saved', 'Сохранено'));
+                                            }}
+                                            disabled={!isPremium}
+                                        />
+                                    </div>
+                                </Card>
+                            </PremiumFeatureGate>
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="integrations" className="rounded-2xl border border-border bg-card px-4">
+                    <AccordionTrigger className="py-4 text-sm font-bold uppercase tracking-[0.06em] text-foreground hover:no-underline" data-testid="page-settings-section-integrations">
+                        {t('dashboard.pageSettings.sectionIntegrations', 'Интеграции')}
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-1 pb-4">
+                        {/* Pixels & analytics — PublicPage loads them via TrackingScripts */}
+                        {onUpdateIntegrations && (
+                            <TrackingSettings integrations={integrations} onSave={onUpdateIntegrations} />
+                        )}
+
+                        {/* Webhooks (PRO) */}
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2 px-1">
+                                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-[0.06em]">Webhooks</h3>
+                                {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
+                            </div>
+                            <PremiumFeatureGate requiredTier="pro" outcomeKey="generic">
+                                <Card className="p-4 space-y-4 bg-card border border-border shadow-sm">
+                                    <div className="space-y-2">
+                                        <Label className="flex items-center gap-2">
+                                            <Sparkles className="w-4 h-4 text-primary" />
+                                            Webhook URL
+                                        </Label>
+                                        <Input
+                                            value={webhookUrlInput}
+                                            onChange={(e) => setWebhookUrlInput(e.target.value)}
+                                            onBlur={handleSaveWebhooks}
+                                            placeholder="https://your-server.com/webhook"
+                                            className="h-12 rounded-xl"
+                                            disabled={!isPremium}
+                                        />
+                                        <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.webhookHint', 'URL для POST запросов при новом лиде.')}</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label className="flex items-center gap-2">
+                                            <Check className="w-4 h-4 text-success" />
+                                            Webhook Secret ({t('common.optional', 'необязательно')})
+                                        </Label>
+                                        <Input
+                                            value={webhookSecretInput}
+                                            onChange={(e) => setWebhookSecretInput(e.target.value)}
+                                            onBlur={handleSaveWebhooks}
+                                            placeholder="your-secret-key"
+                                            className="h-12 rounded-xl"
+                                            disabled={!isPremium}
+                                            type="password"
+                                        />
+                                        <p className="text-xs text-muted-foreground">{t('dashboard.pageSettings.webhookSecretHint', 'Секрет будет отправлен в заголовке X-LinkMAX-Secret.')}</p>
+                                    </div>
+                                </Card>
+                            </PremiumFeatureGate>
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </div>
     );
 });

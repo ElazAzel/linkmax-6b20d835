@@ -254,7 +254,12 @@ function DashboardV2Inner() {
     return (!businessEnabled && isBusinessDashboardTab(tab) ? 'editor' : tab) as TabId;
   }, [searchParams, location.pathname, businessEnabled]);
 
-  const activationAction = searchParams.get('action');
+  const activationAction = useMemo(() => {
+    const rawAction = searchParams.get('action');
+    if (rawAction) return rawAction;
+    if (searchParams.get('tab') === 'add') return 'add-block';
+    return null;
+  }, [searchParams]);
 
   // UI State
   const [migrationKey, setMigrationKey] = useState(0);
@@ -420,9 +425,10 @@ function DashboardV2Inner() {
     }
 
     if (activationAction === 'add-block' && currentTab === 'editor') {
-      setCommandPaletteOpen(true);
+      window.dispatchEvent(new CustomEvent('editor:open-insert-sheet', { detail: {} }));
       const next = new URLSearchParams(searchParams);
       next.delete('action');
+      if (next.get('tab') === 'add') next.set('tab', 'editor');
       setSearchParams(next, { replace: true });
     }
   }, [activationAction, currentTab, searchParams, setSearchParams, setCommandPaletteOpen]);

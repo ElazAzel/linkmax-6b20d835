@@ -476,87 +476,70 @@ export const HomeScreen = memo(function HomeScreen({
               </div>
               <MetricsGrid pageId={pageData?.id} />
               {businessEnabled && <ConversionFunnelWidget pageId={pageData?.id} />}
-              <SourcesWidget className="mt-1" />
             </div>
           </div>
         )}
 
-        {/* Search Readiness Card */}
-        {isPublished && pageData && (
-          <SearchReadinessCard pageData={pageData} />
-        )}
+        {/* Quick Actions — shown only while setting up the page (before publish / content) */}
+        {(!isPublished || !hasContent) && (
+          <div className="space-y-3">
+            <h3 className="text-base font-semibold text-foreground px-1">
+              {t('dashboard.home.quickActions', 'Быстрые действия')}
+            </h3>
 
-        {/* Quick Actions Grid */}
-        <div className="space-y-3">
-          <h3 className="text-base font-semibold text-foreground px-1">
-            {t('dashboard.home.quickActions', 'Быстрые действия')}
-          </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {/* Show templates only for pages without content */}
+              {!hasContent && (
+                <ActionCard
+                  icon={LayoutTemplate}
+                  iconBg="bg-muted"
+                  iconColor="text-foreground"
+                  title={t('dashboard.home.templates', 'Шаблоны')}
+                  description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
+                  onClick={onOpenTemplates}
+                  gradient="from-success/12 to-success/12"
+                  border="border-success/20"
+                />
+              )}
 
-          <div className="grid grid-cols-2 gap-3">
-            {/* Show templates only for pages without content */}
-            {!hasContent && (
+              {/* Show version history for pages with content */}
+              {hasContent && onOpenVersions && (
+                <ActionCard
+                  icon={History}
+                  iconBg="bg-muted"
+                  iconColor="text-foreground"
+                  title={t('dashboard.home.versions', 'История')}
+                  description={t('dashboard.home.versionsDesc', 'Версии страницы')}
+                  onClick={onOpenVersions}
+                  gradient="from-info/12 to-info/12"
+                  border="border-info/20"
+                />
+              )}
+
               <ActionCard
-                icon={LayoutTemplate}
+                icon={Store}
                 iconBg="bg-muted"
                 iconColor="text-foreground"
-                title={t('dashboard.home.templates', 'Шаблоны')}
-                description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
-                onClick={onOpenTemplates}
-                gradient="from-success/12 to-success/12"
-                border="border-success/20"
+                title={t('dashboard.home.marketplace', 'Маркетплейс')}
+                description={t('dashboard.home.marketplaceDesc', 'От сообщества')}
+                onClick={onOpenMarketplace}
+                gradient="from-primary/12 to-primary/12"
+                border="border-primary/20"
               />
-            )}
 
-            {/* Show version history for pages with content */}
-            {hasContent && onOpenVersions && (
               <ActionCard
-                icon={History}
+                icon={Users}
                 iconBg="bg-muted"
                 iconColor="text-foreground"
-                title={t('dashboard.home.versions', 'История')}
-                description={t('dashboard.home.versionsDesc', 'Версии страницы')}
-                onClick={onOpenVersions}
-                gradient="from-info/12 to-info/12"
-                border="border-info/20"
+                title={t('dashboard.home.gallery', 'Галерея')}
+                description={t('dashboard.home.galleryDesc', 'Вдохновление')}
+                onClick={() => navigate('/gallery')}
+                gradient="from-primary/12 to-destructive/12"
+                border="border-primary/20"
               />
-            )}
-
-            <ActionCard
-              icon={Store}
-              iconBg="bg-muted"
-              iconColor="text-foreground"
-              title={t('dashboard.home.marketplace', 'Маркетплейс')}
-              description={t('dashboard.home.marketplaceDesc', 'От сообщества')}
-              onClick={onOpenMarketplace}
-              gradient="from-primary/12 to-primary/12"
-              border="border-primary/20"
-            />
-
-            <ActionCard
-              icon={Users}
-              iconBg="bg-muted"
-              iconColor="text-foreground"
-              title={t('dashboard.home.gallery', 'Галерея')}
-              description={t('dashboard.home.galleryDesc', 'Вдохновление')}
-              onClick={() => navigate('/gallery')}
-              gradient="from-primary/12 to-destructive/12"
-              border="border-primary/20"
-            />
-
-            {!isPremium && (
-              <ActionCard
-                icon={Crown}
-                iconBg="bg-muted"
-                iconColor="text-foreground"
-                title={t('dashboard.home.premium', 'Premium')}
-                description={t('dashboard.home.premiumDesc', 'Больше возможностей')}
-                onClick={() => navigate('/pricing')}
-                gradient="from-warning/12 to-warning/12"
-                border="border-warning/20"
-              />
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Lifecycle Nudge — data-driven contextual tip */}
         {!outcomeExperienceActive && <div data-testid="home-next-action-region">

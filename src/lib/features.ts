@@ -19,13 +19,12 @@ export const BUSINESS_BLOCK_TYPES: ReadonlySet<string> = new Set([
 ]);
 
 /**
- * Korner-style card/tiles blocks. Offered in the insert sheet only after the
- * blocks_type_check migration (20261016120000) is applied to the database:
- * before that a page containing them cannot be saved. Pages that already
- * have them keep rendering either way.
+ * Korner-style card/tiles blocks. Enabled by default now that the
+ * blocks_type_check migration (0009_korner_card_tiles_and_contact_utm) is in
+ * drizzle/migrations; can be explicitly disabled with VITE_LINKMAX_SHOWCASE_BLOCKS=false.
  */
 export const SHOWCASE_BLOCK_TYPES: ReadonlySet<string> = new Set(['card', 'tiles']);
-export const SHOWCASE_BLOCKS_ENABLED = import.meta.env.VITE_LINKMAX_SHOWCASE_BLOCKS === 'true';
+export const SHOWCASE_BLOCKS_ENABLED = import.meta.env.VITE_LINKMAX_SHOWCASE_BLOCKS !== 'false';
 
 /**
  * Dashboard tabs that belong to the business area. 'leads' is not one: the

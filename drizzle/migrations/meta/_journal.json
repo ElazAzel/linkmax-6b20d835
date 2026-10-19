@@ -64,6 +64,13 @@
       "when": 1792380188378,
       "tag": "0008_paid_blocks_positive_price",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792401000000,
+      "tag": "0009_korner_card_tiles_and_contact_utm",
+      "breakpoints": true
     }
   ]
 }
