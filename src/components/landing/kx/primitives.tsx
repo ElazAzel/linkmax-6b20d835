@@ -2,14 +2,16 @@ import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from 
 import { useTranslation } from 'react-i18next';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { supabase } from '@/platform/supabase/client';
+import { BrandMark } from '@/components/brand/BrandMark';
 import { slugWhileTyping, sanitizeSlug, validateSlug } from '@/lib/utils/slug';
 import { isReservedSlug } from '@/lib/routing/reserved-slugs';
 
 /** The wordmark from the logo: "lnkmx.my" with the orange dot. */
 export function KxMark({ className }: { className?: string }) {
   return (
-    <span className={`kx-mark ${className ?? ''}`} aria-label="LinkMAX">
-      lnkmx<i>.</i>my
+    <span className={`kx-mark inline-flex items-center gap-2.5 ${className ?? ''}`} aria-label="LinkMAX">
+      <BrandMark size={30} tile={false} className="shrink-0" />
+      <span aria-hidden="true">lnkmx<i>.</i>my</span>
     </span>
   );
 }
