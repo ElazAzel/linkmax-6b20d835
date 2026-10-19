@@ -14,6 +14,9 @@ import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import ArrowUpDown from 'lucide-react/dist/esm/icons/arrow-up-down';
 import Undo2 from 'lucide-react/dist/esm/icons/undo-2';
 import Redo2 from 'lucide-react/dist/esm/icons/redo-2';
 import History from 'lucide-react/dist/esm/icons/history';
@@ -644,6 +647,32 @@ export const EditorScreen = memo(function EditorScreen({
 
       <div className={cn('mt-4', isWide && 'grid grid-cols-[minmax(0,1fr)_380px] items-start gap-6')}>
       <div className="min-w-0">
+      {/* Desktop: one quiet toolbar above the phone frame. The floating dock
+          used to sit on top of the blocks and hide the bottom of the page. */}
+      {isWide && (
+        <div role="toolbar" aria-label={t('editor.dock.label', 'Действия редактора')}
+          className="mx-auto flex w-full max-w-[407px] items-center gap-2">
+          <Button type="button" size="sm" className="h-10 rounded-full px-4" onClick={triggerAddBlock} data-onboarding="add-block">
+            <Plus className="mr-1.5 h-4 w-4" strokeWidth={2.5} />
+            {t('editor.dock.add', 'Блок')}
+          </Button>
+          <Button type="button" size="sm" variant="outline" className="h-10 rounded-full px-3" onClick={onOpenTheme}>
+            <Palette className="mr-1.5 h-4 w-4" />
+            {t('editor.inspector.theme', 'Оформление')}
+          </Button>
+          {hasContent && (
+            <Button type="button" size="sm" variant={reordering ? 'secondary' : 'outline'} aria-pressed={reordering}
+              className="h-10 rounded-full px-3" onClick={handleToggleOrder}>
+              <ArrowUpDown className="mr-1.5 h-4 w-4" />
+              {reordering ? t('common.done', 'Готово') : t('pageV2.actions.order', 'Порядок')}
+            </Button>
+          )}
+          <Button type="button" size="sm" variant="ghost" className="ml-auto h-10 rounded-full px-3" onClick={onOpenAI}
+            aria-label={t('editor.aiAssistant', 'AI-помощник')} title={t('editor.aiAssistant', 'AI-помощник')}>
+            <Sparkles className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
       {/* Grid Editor */}
       <div
         className={cn(
@@ -651,7 +680,9 @@ export const EditorScreen = memo(function EditorScreen({
           !LINKMAX_UI_V2 && 'overflow-hidden border-y border-border/40 py-3 sm:rounded-2xl sm:border',
           // Desktop: the page is phone-width (as published), so frame it as a
           // phone screen instead of a thin strip in an empty column.
-          LINKMAX_UI_V2 && isWide && 'mx-auto w-full max-w-[407px] overflow-hidden rounded-[36px] border border-border/60 shadow-[0_24px_60px_-28px_rgb(0_0_0/0.35)]',
+          LINKMAX_UI_V2 && isWide && 'mx-auto mt-3 w-full max-w-[407px] overflow-hidden rounded-[36px] border border-border/60 shadow-[0_24px_60px_-28px_rgb(0_0_0/0.35)]',
+          // Phone: the canvas is the page itself — no card chrome around it.
+          LINKMAX_UI_V2 && !isWide && 'mt-0',
           themeScope.className,
         )}
         style={{ ...themeScope.style, ...themeBackgroundStyle }}
@@ -691,8 +722,6 @@ export const EditorScreen = memo(function EditorScreen({
         </div>
       </div>
 
-      {isWide && <SmartActionDock inline onAddBlock={triggerAddBlock} onCustomize={onOpenTheme}
-        onAIImprove={onOpenAI} hasContent={hasContent} onToggleOrder={handleToggleOrder} reordering={reordering} />}
 
       {/* Sprint 2: Section picker — append ready-made groups of blocks */}
       {!LINKMAX_UI_V2 && <div className="mx-4 mt-3 mb-2 flex justify-center">
