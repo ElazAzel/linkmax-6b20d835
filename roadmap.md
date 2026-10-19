@@ -1,5 +1,10 @@
 # Roadmap
 
+## Monitoring fixes (2026-10-19)
+- [ ] Report password strength errors after failed combined email sign-in, preserving legacy password sign-in.
+- [ ] Verify public block reads with the current deleted_at column; resolve outdated evidence without changes.
+- [ ] Align public paid-block visibility with positive prices; test anonymous access and paid-content protection.
+
 ## Open
 - [x] Deploy edge functions `track-analytics-event` and `robokassa` (was returning 404/401).
 - [x] Lifetime Pro for admin@lnkmx.my (`afc67c7e-660a-4cbe-ae00-517b752e30d3`) applied 2026-09-27 (`profiles.is_premium=true`, `premium_tier='pro'`, `premium_expires_at=NULL`).
