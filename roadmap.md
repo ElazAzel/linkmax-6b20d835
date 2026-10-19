@@ -1,9 +1,9 @@
 # Roadmap
 
 ## Monitoring fixes (2026-10-19)
-- [ ] Report password strength errors after failed combined email sign-in, preserving legacy password sign-in.
-- [ ] Verify public block reads with the current deleted_at column; resolve outdated evidence without changes.
-- [ ] Align public paid-block visibility with positive prices; test anonymous access and paid-content protection.
+- [x] Report password strength errors after failed combined email sign-in, preserving legacy password sign-in (interaction tests + real failed sign-in verified).
+- [x] Verify public block reads with the current deleted_at column; resolve outdated evidence without changes (anonymous HTTP 200 + rendered public page).
+- [x] Align public paid-block visibility with positive prices; test anonymous access and paid-content protection (SQL RLS regression test + live anonymous RPC checks; no paid blocks currently exist on live pages).
 
 ## Open
 - [x] Deploy edge functions `track-analytics-event` and `robokassa` (was returning 404/401).
