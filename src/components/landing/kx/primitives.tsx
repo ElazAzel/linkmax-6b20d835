@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { supabase } from '@/platform/supabase/client';
 import { slugWhileTyping, sanitizeSlug, validateSlug } from '@/lib/utils/slug';
+import { isReservedSlug } from '@/lib/routing/reserved-slugs';
 
 /** The wordmark from the logo: "lnkmx.my" with the orange dot. */
 export function KxMark({ className }: { className?: string }) {
@@ -83,20 +84,13 @@ export function Marquee({ items, direction = 'left', speed = 48 }: { items: stri
 
 type SlugState = 'empty' | 'invalid' | 'checking' | 'free' | 'taken';
 
-// First path segments the app owns; a page cannot take them.
-const RESERVED = new Set([
-  'auth', 'dashboard', 'admin', 'install', 'join', 'invites', 'pricing', 'gallery', 'customers', 'alternatives',
-  'experts', 'terms', 'privacy', 'payment-terms', 'sitemap', 'blog', 'for', 'dlya', 'api', 'app', 'www', 'help',
-  'support', 'login', 'signup', 'settings', 'ru', 'en', 'kk', 'uz', 'events', 'team', 'collab', 'booking', 'purchase',
-]);
-
 /** Debounced check against published pages; unpublished conflicts are caught at signup. */
 function useSlugState(slug: string): SlugState {
   const [state, setState] = useState<SlugState>('empty');
   useEffect(() => {
     if (!slug) { setState('empty'); return; }
     if (!validateSlug(slug).valid) { setState('invalid'); return; }
-    if (RESERVED.has(slug)) { setState('taken'); return; }
+    if (isReservedSlug(slug)) { setState('taken'); return; }
     setState('checking');
     let cancelled = false;
     const timer = window.setTimeout(async () => {
@@ -125,7 +119,8 @@ export function ClaimForm({ onSubmit, id, tone = 'dark' }: { onSubmit: (slug?: s
     free: t('landing.kx.claim.free', 'lnkmx.my/{{slug}} свободен. Забирай.', { slug }),
     taken: t('landing.kx.claim.taken', 'Этот адрес уже занят. Попробуй другой.'),
   };
-  const blocked = state === 'taken' || state === 'invalid';
+  // 'checking' blocks too: submitting mid-check would skip the availability result.
+  const blocked = state === 'taken' || state === 'invalid' || state === 'checking';
   return (
     <form
       onSubmit={(event) => {
@@ -149,7 +144,7 @@ export function ClaimForm({ onSubmit, id, tone = 'dark' }: { onSubmit: (slug?: s
           inputMode="url"
           aria-describedby={`${id}-hint`}
         />
-        <button type="submit" className={`kx-btn ${tone === 'accent' ? 'kx-btn-accent' : 'kx-btn-primary'}`} disabled={blocked} style={blocked ? { opacity: 0.5 } : undefined}>
+        <button type="submit" className={`kx-btn ${tone === 'accent' ? 'kx-btn-accent' : 'kx-btn-primary'}`} disabled={blocked} style={blocked && state !== 'checking' ? { opacity: 0.5 } : undefined}>
           {t('landing.kx.claim.cta', 'Забрать адрес')}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>

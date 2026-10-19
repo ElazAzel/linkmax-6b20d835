@@ -2,9 +2,31 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Menu from 'lucide-react/dist/esm/icons/menu';
 import X from 'lucide-react/dist/esm/icons/x';
+import { SUPPORTED_LANGUAGES } from '@/i18n/config';
 import { KxMark } from './primitives';
 
-const LANGS = ['ru', 'kk', 'en'] as const;
+/** Each language named in itself, so anyone finds their own. Static: server and browser must render the same text. */
+const NATIVE_NAMES: Record<string, string> = {
+  ru: 'Русский', en: 'English', kk: 'Қазақша', de: 'Deutsch', uk: 'Українська', uz: "O'zbekcha", be: 'Беларуская',
+  es: 'Español', fr: 'Français', it: 'Italiano', pt: 'Português', zh: '中文', tr: 'Türkçe', ja: '日本語', ko: '한국어', ar: 'العربية',
+};
+
+function LanguageSelect({ value, onChange, label, className }: { value: string; onChange: (code: string) => void; label: string; className?: string }) {
+  return (
+    <label className={`relative inline-flex ${className ?? ''}`}>
+      <span className="sr-only">{label}</span>
+      <span aria-hidden="true" className="pointer-events-none grid h-11 min-w-11 place-items-center rounded-full px-3 text-sm font-semibold uppercase">{value}</span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="absolute inset-0 cursor-pointer opacity-0"
+        aria-label={label}
+      >
+        {SUPPORTED_LANGUAGES.map((code) => <option key={code} value={code}>{NATIVE_NAMES[code] ?? code}</option>)}
+      </select>
+    </label>
+  );
+}
 
 interface Props {
   onLogin: () => void;
@@ -16,7 +38,6 @@ export function KxHeader({ onLogin, onSignup }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const lang = (i18n.language || 'ru').slice(0, 2);
-  const nextLang = LANGS[(LANGS.indexOf(lang as typeof LANGS[number]) + 1) % LANGS.length] ?? 'ru';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -36,7 +57,7 @@ export function KxHeader({ onLogin, onSignup }: Props) {
     { href: '#faq', label: t('landing.kx.nav.faq', 'Вопросы') },
   ];
 
-  const switchLang = () => void i18n.changeLanguage(nextLang);
+  const switchLang = (code: string) => void i18n.changeLanguage(code);
 
   return (
     <>
@@ -53,17 +74,13 @@ export function KxHeader({ onLogin, onSignup }: Props) {
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
-            <button type="button" onClick={switchLang} className="kx-btn kx-btn-ghost !h-11 !px-4 uppercase" aria-label={t('landing.kx.nav.language', 'Сменить язык')}>
-              {lang}
-            </button>
+            <LanguageSelect value={lang} onChange={switchLang} label={t('landing.kx.nav.language', 'Сменить язык')} className="rounded-full bg-[var(--kx-surface-2)] hover:bg-[#262626]" />
             <button type="button" onClick={onLogin} className="kx-btn kx-btn-ghost !h-11">{t('landing.kx.nav.login', 'Войти')}</button>
             <button type="button" onClick={onSignup} className="kx-btn kx-btn-primary !h-11">{t('landing.kx.nav.create', 'Создать страницу')}</button>
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
-            <button type="button" onClick={switchLang} className="h-11 w-11 rounded-full text-sm font-semibold uppercase text-[var(--kx-muted)]" aria-label={t('landing.kx.nav.language', 'Сменить язык')}>
-              {lang}
-            </button>
+            <LanguageSelect value={lang} onChange={switchLang} label={t('landing.kx.nav.language', 'Сменить язык')} className="text-[var(--kx-muted)]" />
             <button
               type="button"
               onClick={() => setOpen((value) => !value)}
