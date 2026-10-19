@@ -48,17 +48,17 @@ vi.mock('@/components/landing/SEOLandingHead', () => ({
   SEOLandingHead: () => <div data-testid="seo-head" />,
 }));
 
-vi.mock('@/components/landing/v3/HeroBentoOS', () => ({
-  HeroBentoOS: ({ onStart, onExamples }: { onStart: () => void; onExamples: () => void }) => (
+vi.mock('@/components/landing/kx/KxHero', () => ({
+  KxHero: ({ onStart }: { onStart: (slug?: string) => void }) => (
     <div>
-      <button onClick={onStart}>hero-start</button>
-      <button onClick={onExamples}>hero-examples</button>
+      <button onClick={() => onStart()}>hero-start</button>
+      <button onClick={() => onStart('aruzhan')}>hero-start-slug</button>
     </div>
   ),
 }));
 
-vi.mock('@/components/landing/v2/DynamicIslandNav', () => ({
-  DynamicIslandNav: ({ onLogin, onSignup }: { onLogin: () => void; onSignup: () => void }) => (
+vi.mock('@/components/landing/kx/KxHeader', () => ({
+  KxHeader: ({ onLogin, onSignup }: { onLogin: () => void; onSignup: () => void }) => (
     <div>
       <button onClick={onLogin}>nav-login</button>
       <button onClick={onSignup}>nav-signup</button>
@@ -66,13 +66,18 @@ vi.mock('@/components/landing/v2/DynamicIslandNav', () => ({
   ),
 }));
 
-vi.mock('@/components/landing/v3/LandingSections', () => ({
-  LandingSections: ({ onStart, onPricing }: { onStart: () => void; onPricing: () => void }) => (
+vi.mock('@/components/landing/kx/KxSections', () => ({
+  KxBuild: () => <div />,
+  KxSteps: () => <div />,
+  KxFaq: () => <div />,
+  KxFooter: () => <div />,
+  KxPricing: ({ onStart, onPricing }: { onStart: () => void; onPricing: () => void }) => (
     <div>
-      <button onClick={onStart}>revenue-start</button>
-      <button onClick={onPricing}>revenue-pricing</button>
+      <button onClick={onStart}>pricing-start</button>
+      <button onClick={onPricing}>pricing-all</button>
     </div>
   ),
+  KxCta: ({ onStart }: { onStart: (slug?: string) => void }) => <button onClick={() => onStart('dana')}>cta-start</button>,
 }));
 
 vi.mock('@/components/seo/SEOMetaEnhancer', () => ({ SEOMetaEnhancer: () => <div /> }));
@@ -100,16 +105,18 @@ describe('Index (Landing Page)', () => {
     observerRefs.length = 0;
   });
 
-  it('tracks signup and gallery CTA clicks with explicit event typing', () => {
+  it('sends the claimed address from hero and final CTA into signup', () => {
     render(<Index />);
 
     fireEvent.click(screen.getByText('hero-start'));
-    fireEvent.click(screen.getByText('hero-examples'));
+    fireEvent.click(screen.getByText('hero-start-slug'));
+    fireEvent.click(screen.getByText('cta-start'));
 
     expect(trackCtaClickMock).toHaveBeenCalledWith('signup', 'hero_cta');
-    expect(trackCtaClickMock).toHaveBeenCalledWith('gallery', 'hero_examples');
+    expect(trackCtaClickMock).toHaveBeenCalledWith('signup', 'final_cta');
     expect(navigateMock).toHaveBeenCalledWith('/auth');
-    expect(navigateMock).toHaveBeenCalledWith('/gallery');
+    expect(navigateMock).toHaveBeenCalledWith('/auth?mode=signup&from=landing&slug=aruzhan');
+    expect(navigateMock).toHaveBeenCalledWith('/auth?mode=signup&from=landing&slug=dana');
   });
 
   it('tracks login CTA separately from signup CTA', () => {
@@ -122,15 +129,14 @@ describe('Index (Landing Page)', () => {
     expect(trackCtaClickMock).toHaveBeenCalledWith('signup', 'nav_signup');
   });
 
-  it('connects the revenue journey and pricing actions to tracked routes', () => {
+  it('connects pricing actions to tracked routes', () => {
     render(<Index />);
 
-    fireEvent.click(screen.getByText('revenue-start'));
-    fireEvent.click(screen.getByText('revenue-pricing'));
+    fireEvent.click(screen.getByText('pricing-start'));
+    fireEvent.click(screen.getByText('pricing-all'));
 
-    expect(trackCtaClickMock).toHaveBeenCalledWith('signup', 'revenue_flow_cta');
-    expect(trackCtaClickMock).toHaveBeenCalledWith('pricing', 'revenue_pricing_cta');
-    expect(navigateMock).toHaveBeenCalledWith('/auth');
+    expect(trackCtaClickMock).toHaveBeenCalledWith('signup', 'pricing_free_cta');
+    expect(trackCtaClickMock).toHaveBeenCalledWith('pricing', 'landing_pricing_cta');
     expect(navigateMock).toHaveBeenCalledWith('/pricing');
   });
 

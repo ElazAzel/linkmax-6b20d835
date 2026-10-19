@@ -12,6 +12,8 @@ export const Route = createFileRoute("/")({
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: i18n.t('landing.revenue.seo.title') },
     { name: "twitter:description", content: i18n.t('landing.revenue.seo.description') },
+    { name: "theme-color", content: "#0a0a0a", media: "(prefers-color-scheme: light)" },
+    { name: "theme-color", content: "#0a0a0a", media: "(prefers-color-scheme: dark)" },
   ], links: [{ rel: "canonical", href: "https://lnkmx.my/" }] }),
   component: Index,
 });
