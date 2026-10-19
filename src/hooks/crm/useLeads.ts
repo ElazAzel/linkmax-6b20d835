@@ -274,10 +274,54 @@ export function useLeadInteractions(leadId: string | null) {
     }
   };
 
+  const updateInteraction = async (id: string, content: string) => {
+    if (!user || !leadId) return false;
+
+    try {
+      const { error } = await supabase
+        .from('lead_interactions')
+        .update({ content })
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setInteractions(prev => prev.map(item => (item.id === id ? { ...item, content } : item)));
+      return true;
+    } catch (error) {
+      logger.error('Error updating interaction', error, { context: 'useLeads', data: { leadId, id } });
+      toast.error(t('toasts.leads.interactionError', 'Не удалось обновить запись'));
+      return false;
+    }
+  };
+
+  const deleteInteraction = async (id: string) => {
+    if (!user || !leadId) return false;
+
+    try {
+      const { error } = await supabase
+        .from('lead_interactions')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setInteractions(prev => prev.filter(item => item.id !== id));
+      return true;
+    } catch (error) {
+      logger.error('Error deleting interaction', error, { context: 'useLeads', data: { leadId, id } });
+      toast.error(t('toasts.leads.interactionError', 'Не удалось удалить запись'));
+      return false;
+    }
+  };
+
   return {
     interactions,
     loading,
     addInteraction,
+    updateInteraction,
+    deleteInteraction,
     refreshInteractions: fetchInteractions,
   };
 }
