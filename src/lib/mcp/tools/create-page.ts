@@ -1,55 +1,58 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { databaseError, getAuthenticatedContext, isToolError, jsonResult } from "../utils";
+import { isDraft, loadDraft, saveDraft } from "../draft";
+import { applyOperations } from "../page-ops";
+import { publicUrl } from "../page-context";
+import { MCP_RESERVED_SLUGS } from "../reserved-slugs";
+import { databaseError, getAuthenticatedContext, isToolError, jsonResult, toolError } from "../utils";
 
 export default defineTool({
   name: "create_page",
   title: "Create a new LinkMAX page",
   description:
-    "Create a new link-in-bio page for the signed-in LinkMAX user. Returns the new page id, slug and default settings so the agent can immediately edit blocks and appearance.",
+    "Create a new page for the signed-in user with a profile block (name and bio) in its draft. Fill it with edit_page, then publish_page. Returns page id, slug and URL.",
   inputSchema: {
     slug: z
       .string()
       .trim()
-      .min(1)
-      .max(64)
+      .min(3)
+      .max(30)
+      .regex(/^[a-zA-Z0-9-]+$/, "Latin letters, digits and hyphens only.")
       .transform((value) => value.toLowerCase())
       .optional()
-      .describe("Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."),
-    title: z.string().trim().min(1).max(120).optional().describe("Page title shown in the header and SEO."),
-    description: z.string().trim().max(500).optional().describe("Short page description (SEO/bio)."),
+      .describe("Desired address lnkmx.my/{slug}. If taken, a suffix is added."),
+    name: z.string().trim().min(1).max(120).describe("Person or business name for the profile block."),
+    bio: z.string().trim().max(500).optional().describe("One or two sentences: who this is and how they help."),
   },
   annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
-  handler: async ({ slug, title, description }, ctx) => {
-    const authContext = getAuthenticatedContext(ctx);
-    if (isToolError(authContext)) return authContext;
+  handler: async ({ slug, name, bio }, ctx) => {
+    const auth = getAuthenticatedContext(ctx);
+    if (isToolError(auth)) return auth;
+    if (slug && MCP_RESERVED_SLUGS.has(slug)) {
+      return toolError("slug_reserved", `lnkmx.my/${slug} is used by LinkMAX itself. Pick another slug.`);
+    }
 
-    const { supabase } = authContext;
+    const { supabase } = auth;
     const { data, error } = await supabase.rpc("mcp_create_user_page", {
       p_slug: slug ?? null,
-      p_title: title ?? null,
-      p_description: description ?? null,
+      p_title: name,
+      p_description: bio ?? null,
     });
-    if (error) {
-      return databaseError("create_page");
+    if (error) return databaseError("create_page");
+    const row = (Array.isArray(data) ? data[0] : data) as { id: string; slug: string } | null;
+    if (!row) return databaseError("create_page.empty");
+
+    const draft = await loadDraft(supabase, row.id);
+    let profileReady = false;
+    if (isDraft(draft) && !draft.snapshot.blocks.some((b) => b.type === "profile")) {
+      const { snapshot } = applyOperations(draft.snapshot, [{ op: "add_block", block: { type: "profile", name, bio: bio ?? "" } }]);
+      profileReady = isDraft(await saveDraft(supabase, draft, snapshot));
     }
-    const row = Array.isArray(data) ? data[0] : data;
-    const settings = {
-      editable_fields: [
-        "title",
-        "description",
-        "avatar_url",
-        "theme_settings",
-        "seo_meta",
-        "is_published",
-        "niche",
-        "contact_email",
-        "contact_phone",
-        "contact_whatsapp",
-      ],
-      block_types: ["link", "text", "image", "video", "form", "event", "product", "profile", "social"],
-      public_url_pattern: "https://lnkmx.my/{slug}",
-    };
-    return jsonResult({ page: row, settings });
+
+    return jsonResult({
+      page: { id: row.id, slug: row.slug, url: publicUrl(row.slug), is_published: false },
+      profile_block_created: profileReady,
+      next: "Call get_block_catalog, add content with edit_page, check it with audit_page, then publish_page.",
+    });
   },
 });

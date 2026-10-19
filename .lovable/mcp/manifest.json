@@ -12,7 +12,7 @@
   "mcp": {
     "server": {
       "name": "linkmax-mcp",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "title": "LinkMAX MCP"
     },
     "tools": [
@@ -41,9 +41,64 @@
         "outputSchema": null
       },
       {
-        "name": "list_my_leads",
-        "title": "List my LinkMAX leads",
-        "description": "List recent leads captured by the signed-in LinkMAX user's pages. Returns contact fields and source page.",
+        "name": "create_page",
+        "title": "Create a new LinkMAX page",
+        "description": "Create a new page for the signed-in user with a profile block (name and bio) in its draft. Fill it with edit_page, then publish_page. Returns page id, slug and URL.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 30,
+              "pattern": "^[a-zA-Z0-9-]+$",
+              "description": "Desired address lnkmx.my/{slug}. If taken, a suffix is added."
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Person or business name for the profile block."
+            },
+            "bio": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "One or two sentences: who this is and how they help."
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_block_catalog",
+        "title": "Get the block catalog",
+        "description": "List the block types an agent can add to a LinkMAX page, with required fields, field formats, translatable text paths and a minimal example for each. Read this before filling a page with edit_page.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_page",
+        "title": "Get a page (draft)",
+        "description": "Return the current editable draft of one of the signed-in user's pages: page settings and every block with its id, type, size and content. Edits from edit_page land in this draft and go live with publish_page.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -52,18 +107,416 @@
         "inputSchema": {
           "type": "object",
           "properties": {
-            "limit": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 200,
-              "description": "Max leads to return. Default 50."
-            },
             "page_id": {
               "type": "string",
               "format": "uuid",
-              "description": "Optional page UUID stored in lead metadata to filter leads by page."
+              "description": "Page UUID from list_my_pages or create_page."
             }
           },
+          "required": [
+            "page_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "edit_page",
+        "title": "Edit a page draft",
+        "description": "Apply a batch of edits to a page draft atomically: set_page (SEO, city, indexing), add_block, update_block, remove_block, move_block. Nothing goes live until publish_page; the owner sees the changes in the LinkMAX editor. Returns the change list and warnings.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "operations": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "const": "set_page"
+                      },
+                      "fields": {
+                        "type": "object",
+                        "properties": {
+                          "seo_title": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 70
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "seo_description": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 170
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "seo_image": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 2000
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "is_indexable": {
+                            "type": "boolean"
+                          },
+                          "city": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 80
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "profession": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 80
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "niche": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 40
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "favicon_url": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 2000
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "op",
+                      "fields"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "const": "add_block"
+                      },
+                      "block": {
+                        "type": "object",
+                        "additionalProperties": {},
+                        "description": "Block fields including type; see get_block_catalog. id is generated."
+                      },
+                      "size": {
+                        "type": "string",
+                        "enum": [
+                          "small",
+                          "wide",
+                          "tall",
+                          "large"
+                        ]
+                      },
+                      "after_block_id": {
+                        "type": "string",
+                        "description": "Insert right after this block. Default: end of page."
+                      },
+                      "position": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "op",
+                      "block"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "const": "update_block"
+                      },
+                      "block_id": {
+                        "type": "string"
+                      },
+                      "changes": {
+                        "type": "object",
+                        "additionalProperties": {},
+                        "description": "Fields to set; null removes a field. Arrays are replaced whole."
+                      },
+                      "size": {
+                        "$ref": "#/properties/operations/items/anyOf/1/properties/size"
+                      }
+                    },
+                    "required": [
+                      "op",
+                      "block_id",
+                      "changes"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "const": "remove_block"
+                      },
+                      "block_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "op",
+                      "block_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "const": "move_block"
+                      },
+                      "block_id": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "op",
+                      "block_id",
+                      "position"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 60
+            }
+          },
+          "required": [
+            "page_id",
+            "operations"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "publish_page",
+        "title": "Publish a page",
+        "description": "Make the current draft of a page live at lnkmx.my/{slug}. Ask the owner before publishing: visitors see the result immediately. Requires a profile block.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "page_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_translation_gaps",
+        "title": "Find untranslated texts",
+        "description": "List every visitor-facing text on a page draft that is missing in the target languages, with its block id, path and source text. Translate them yourself, then save with apply_translations. Keep names, prices and links unchanged.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "languages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ru",
+                  "en",
+                  "kk",
+                  "de",
+                  "uk",
+                  "uz",
+                  "be",
+                  "es",
+                  "fr",
+                  "it",
+                  "pt",
+                  "zh",
+                  "tr",
+                  "ja",
+                  "ko",
+                  "ar"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 15,
+              "description": "Target languages, e.g. [\"en\", \"kk\"]."
+            },
+            "source_language": {
+              "$ref": "#/properties/languages/items",
+              "description": "Language the page is written in. Default ru."
+            }
+          },
+          "required": [
+            "page_id",
+            "languages"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "apply_translations",
+        "title": "Save translations",
+        "description": "Write translated texts into a page draft. Each entry names a block id and path from get_translation_gaps, the language and the translated text. Existing languages are kept; plain texts become multilingual. Publish with publish_page.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "source_language": {
+              "type": "string",
+              "enum": [
+                "ru",
+                "en",
+                "kk",
+                "de",
+                "uk",
+                "uz",
+                "be",
+                "es",
+                "fr",
+                "it",
+                "pt",
+                "zh",
+                "tr",
+                "ja",
+                "ko",
+                "ar"
+              ],
+              "description": "Language of the existing plain texts. Default ru."
+            },
+            "translations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "block_id": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "language": {
+                    "$ref": "#/properties/source_language"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000
+                  }
+                },
+                "required": [
+                  "block_id",
+                  "path",
+                  "language",
+                  "text"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 400
+            }
+          },
+          "required": [
+            "page_id",
+            "translations"
+          ],
           "additionalProperties": false,
           "$schema": "http://json-schema.org/draft-07/schema#"
         },
@@ -94,44 +547,9 @@
         "outputSchema": null
       },
       {
-        "name": "create_page",
-        "title": "Create a new LinkMAX page",
-        "description": "Create a new link-in-bio page for the signed-in LinkMAX user. Returns the new page id, slug and default settings so the agent can immediately edit blocks and appearance.",
-        "annotations": {
-          "readOnlyHint": false,
-          "idempotentHint": false,
-          "openWorldHint": false
-        },
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "slug": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 64,
-              "description": "Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."
-            },
-            "title": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 120,
-              "description": "Page title shown in the header and SEO."
-            },
-            "description": {
-              "type": "string",
-              "maxLength": 500,
-              "description": "Short page description (SEO/bio)."
-            }
-          },
-          "additionalProperties": false,
-          "$schema": "http://json-schema.org/draft-07/schema#"
-        },
-        "outputSchema": null
-      },
-      {
-        "name": "get_page_structure",
-        "title": "Get page structure and blocks",
-        "description": "Return the full block structure and current configuration of one of the signed-in user's LinkMAX pages, so an agent can review and edit it. Accepts either a page_id (uuid) or a slug.",
+        "name": "get_page_analytics",
+        "title": "Get page analytics",
+        "description": "Analytics for one page over the last N days: views, unique visitors, clicks, click-through, leads, change versus the previous period, per-block clicks and CTR, traffic sources, devices, countries and a daily series.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -142,328 +560,78 @@
           "properties": {
             "page_id": {
               "type": "string",
-              "format": "uuid",
-              "description": "Page UUID. Provide this OR slug."
+              "format": "uuid"
             },
-            "slug": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 120,
-              "description": "Page slug. Provide this OR page_id."
-            }
-          },
-          "additionalProperties": false,
-          "$schema": "http://json-schema.org/draft-07/schema#"
-        },
-        "outputSchema": null
-      },
-      {
-        "name": "create_block",
-        "title": "Create a LinkMAX block",
-        "description": "Create a block on one of the signed-in user's pages. The block is inserted at the requested position or appended to the end when position is omitted.",
-        "annotations": {
-          "readOnlyHint": false,
-          "idempotentHint": false,
-          "openWorldHint": false
-        },
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "page_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Page UUID owned by the signed-in user."
-            },
-            "type": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 64,
-              "description": "LinkMAX block type, for example link, text, image or form."
-            },
-            "title": {
-              "type": "string",
-              "maxLength": 200,
-              "description": "Optional block title."
-            },
-            "content": {
-              "description": "JSON content for the block."
-            },
-            "style": {
-              "type": "object",
-              "additionalProperties": {},
-              "description": "Optional JSON style configuration."
-            },
-            "position": {
+            "days": {
               "type": "integer",
-              "minimum": 0,
-              "maximum": 10000,
-              "description": "Zero-based position. Defaults to the end."
-            },
-            "is_premium": {
-              "type": "boolean",
-              "description": "Whether the block is marked premium."
-            },
-            "schedule": {
-              "description": "Optional JSON publication schedule."
-            }
-          },
-          "required": [
-            "page_id",
-            "type"
-          ],
-          "additionalProperties": false,
-          "$schema": "http://json-schema.org/draft-07/schema#"
-        },
-        "outputSchema": null
-      },
-      {
-        "name": "update_block",
-        "title": "Update a LinkMAX block",
-        "description": "Update the content, appearance, type or position of a block that belongs to one of the signed-in user's pages.",
-        "annotations": {
-          "readOnlyHint": false,
-          "idempotentHint": true,
-          "openWorldHint": false
-        },
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "block_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Block UUID."
-            },
-            "type": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 64
-            },
-            "title": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 200
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "content": {},
-            "style": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "additionalProperties": {}
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "position": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 10000
-            },
-            "is_premium": {
-              "type": "boolean"
-            },
-            "schedule": {
-              "anyOf": [
-                {},
-                {
-                  "type": "null"
-                }
-              ]
-            }
-          },
-          "required": [
-            "block_id"
-          ],
-          "additionalProperties": false,
-          "$schema": "http://json-schema.org/draft-07/schema#"
-        },
-        "outputSchema": null
-      },
-      {
-        "name": "update_page",
-        "title": "Update LinkMAX page settings",
-        "description": "Update the settings of one of the signed-in user's pages. Only explicitly supplied allowlisted fields are changed; ownership is checked before the update.",
-        "annotations": {
-          "readOnlyHint": false,
-          "idempotentHint": true,
-          "openWorldHint": false
-        },
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "page_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Page UUID owned by the signed-in user."
-            },
-            "title": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 120
-            },
-            "description": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 500
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "avatar_url": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "uri",
-                  "maxLength": 2048
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "avatar_style": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "additionalProperties": {}
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "theme_settings": {
-              "anyOf": [
-                {
-                  "$ref": "#/properties/avatar_style/anyOf/0"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "seo_meta": {
-              "anyOf": [
-                {
-                  "$ref": "#/properties/avatar_style/anyOf/0"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "is_published": {
-              "type": "boolean"
-            },
-            "niche": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 120
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "entity_type": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 80
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "contact_email": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "email",
-                  "maxLength": 320
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "contact_phone": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 40
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "contact_whatsapp": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 40
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "editor_mode": {
-              "type": "string",
-              "maxLength": 40
-            },
-            "grid_config": {
-              "anyOf": [
-                {
-                  "$ref": "#/properties/avatar_style/anyOf/0"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "integrations": {
-              "anyOf": [
-                {
-                  "$ref": "#/properties/avatar_style/anyOf/0"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "custom_domain": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 253
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "page_type": {
-              "type": "string",
-              "maxLength": 40
+              "minimum": 1,
+              "maximum": 180,
+              "description": "Window in days. Default 30."
             }
           },
           "required": [
             "page_id"
           ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "audit_page",
+        "title": "Review a page: strengths and weaknesses",
+        "description": "Review a page draft and its recent analytics: content, contact path, offer, SEO, languages, publishing and traffic. Returns a 0-100 score, strengths, weaknesses ranked by severity with the evidence and the edit that fixes each, and the next three steps.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 180,
+              "description": "Analytics window. Default 30."
+            }
+          },
+          "required": [
+            "page_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_leads",
+        "title": "List my LinkMAX leads",
+        "description": "List recent leads captured by the signed-in LinkMAX user's pages. Returns contact fields and source page.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Max leads to return. Default 50."
+            },
+            "page_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional page UUID stored in lead metadata to filter leads by page."
+            }
+          },
           "additionalProperties": false,
           "$schema": "http://json-schema.org/draft-07/schema#"
         },
