@@ -49,6 +49,8 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
     setIsSubmitting(true);
 
     try {
+      // One-time secret that lets only this visitor trigger the owner notification
+      const notifyNonce = crypto.randomUUID();
       // Save newsletter subscription using typed client
       const { data: subscriptionRow, error: subscriptionError } = await supabase
         .from('newsletter_subscriptions')
@@ -58,9 +60,10 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
           block_id: block.id,
           owner_id: pageOwnerId,
           status: 'active',
-        })
+          notify_nonce: notifyNonce,
+        } as never)
         .select('id')
-        .maybeSingle();
+        .maybeSingle<{ id: string }>();
 
       if (subscriptionError) {
         // Check if already subscribed (unique constraint violation)
@@ -106,6 +109,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block, pageOwnerI
             subscriptionId: subscriptionRow?.id ?? undefined,
             pageId: pageId,
             subscriberEmail: trimmedEmail,
+            notifyNonce,
           },
         });
       } catch (notifError) {

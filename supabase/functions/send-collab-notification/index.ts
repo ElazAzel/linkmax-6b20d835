@@ -103,12 +103,8 @@ serve(async (req) => {
     switch (type) {
       case 'request':
         text = `🤝 *Запрос на коллаборацию!*\n\n👤 *От:* ${requesterName}`;
-        {
-          // Use the stored request message, never request-body text; strip Markdown control chars
-          const stored = String((collab as { message?: string | null }).message ?? '').replace(/[*_`\[\]()~>#+=|{}]/g, '').slice(0, 300);
-          if (stored) text += `\n💬 *Сообщение:* ${stored}`;
-        }
-        text += `\n\nОткройте приложение, чтобы принять или отклонить.`;
+        // The requester's free-text message is never forwarded to Telegram; it is shown in the app.
+        text += `\n\nОткройте приложение, чтобы прочитать сообщение и принять или отклонить.`;
         break;
       case 'accepted':
         text = `✅ *Коллаборация принята!*\n\n👤 ${requesterName} принял(а) ваш запрос на коллаборацию.`;

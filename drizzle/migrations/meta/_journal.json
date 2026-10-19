@@ -43,6 +43,34 @@
       "when": 1791771242154,
       "tag": "0005_event_registration_notify_token",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792324657745,
+      "tag": "0006_security_tokens_zones_social",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792326459964,
+      "tag": "0007_paid_blocks_server_gating",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792380188378,
+      "tag": "0008_paid_blocks_positive_price",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792401000000,
+      "tag": "0009_korner_card_tiles_and_contact_utm",
+      "breakpoints": true
     }
   ]
 }

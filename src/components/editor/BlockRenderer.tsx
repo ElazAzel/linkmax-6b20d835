@@ -147,13 +147,28 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
     </Suspense>
   );
 
-  if (manifest.renderMode === 'trackable') {
+  const isLockedStub = (block as unknown as { __paidLocked?: boolean }).__paidLocked === true;
+
+  if (manifest.renderMode === 'trackable' || isLockedStub) {
     return (
       <PaidBlockWrapper
         blockId={block.id}
         blockStyle={block.blockStyle}
         pageOwnerId={pageOwnerId}
         isPreview={isPreview}
+        isLockedStub={isLockedStub}
+        pageId={pageId}
+        renderFull={(full) => (
+          <BlockRenderer
+            block={full as Block}
+            isPreview={isPreview}
+            pageOwnerId={pageOwnerId}
+            pageId={pageId}
+            isOwnerPremium={isOwnerPremium}
+            ownerTier={ownerTier}
+            containerStyled={containerStyled}
+          />
+        )}
       >
         <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
           <BlockErrorBoundary>

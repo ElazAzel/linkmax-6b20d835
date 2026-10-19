@@ -301,7 +301,7 @@ serve(async (req: Request) => {
   <meta name="twitter:image" content="${avatar}">
   
   <!-- JSON-LD -->
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   
   <style>
     body { font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }

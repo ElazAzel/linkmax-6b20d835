@@ -1,5 +1,10 @@
 # Roadmap
 
+## Monitoring fixes (2026-10-19)
+- [x] Report password strength errors after failed combined email sign-in, preserving legacy password sign-in (interaction tests + real failed sign-in verified).
+- [x] Verify public block reads with the current deleted_at column; resolve outdated evidence without changes (anonymous HTTP 200 + rendered public page).
+- [x] Align public paid-block visibility with positive prices; test anonymous access and paid-content protection (SQL RLS regression test + live anonymous RPC checks; no paid blocks currently exist on live pages).
+
 ## Open
 - [x] Deploy edge functions `track-analytics-event` and `robokassa` (was returning 404/401).
 - [x] Lifetime Pro for admin@lnkmx.my (`afc67c7e-660a-4cbe-ae00-517b752e30d3`) applied 2026-09-27 (`profiles.is_premium=true`, `premium_tier='pro'`, `premium_expires_at=NULL`).
@@ -27,7 +32,7 @@
 
 ## Micro-Business OS (план 2026-10-07)
 - [x] Шаг 1: аудит, docs/CURRENT_ARCHITECTURE, DOMAIN_MODEL, DECISIONS, MIGRATION_PLAN
-- [x] Шаг 2a: таблица contacts, склейка по телефону/почте, привязка заявок
+- [x] Шаг 2a: таблица contacts, склейка по телефону/почте, привязка заявок (включая проброс UTM из leads.metadata)
 - [x] Шаг 2b: привязка записей, регистраций, покупок к клиенту
-- [x] Шаг 3: история клиента в карточке заявки
-- [ ] Шаг 4: CRM Lite (стадии, заметки, задачи)
+- [x] Шаг 3: история клиента в карточке заявки (`LeadDetails` + `ContactTimeline` подключены в `LeadsScreen`)
+- [x] Шаг 4: CRM Lite (стадии Новые → Связались → Записан → Оплатил → Завершено с переименованием, заметки и задачи в карточке лида)

@@ -508,7 +508,7 @@ serve(async (req: Request) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const update: TelegramUpdate = await req.json();
-    console.log(`[Webhook] Update from ${update.message?.chat.id || update.callback_query?.from.id}:`, JSON.stringify(update));
+    console.log(`[Webhook] Update ${update.update_id ?? ''} type=${update.message ? 'message' : update.callback_query ? 'callback_query' : 'other'}`);
 
     // Handle callback queries (button clicks)
     if (update.callback_query) {

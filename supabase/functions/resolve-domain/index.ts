@@ -47,6 +47,7 @@ serve(async (req) => {
             .from('pages')
             .select('slug, id')
             .eq('id', domainData.page_id)
+            .eq('is_published', true)
             .single()
 
         if (pageError || !pageData) {

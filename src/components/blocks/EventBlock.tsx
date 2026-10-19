@@ -383,6 +383,7 @@ export const EventBlock = memo(function EventBlock({
             registrationId: registration.id,
             eventId: block.eventId,
             attendeeEmail: email.trim(),
+            notifyToken: registration?.notify_token,
             language: i18n.language,
           },
         }).catch(err => console.warn('Attendee email send failed:', err));

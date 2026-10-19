@@ -55,16 +55,28 @@ import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Copy from 'lucide-react/dist/esm/icons/copy';
 import Check from 'lucide-react/dist/esm/icons/check';
+import CheckSquare from 'lucide-react/dist/esm/icons/check-square';
+import Square from 'lucide-react/dist/esm/icons/square';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { generateSmartDraft } from '@/lib/chat/expert-engine';
 import { cn } from '@/lib/utils/utils';
 import { ContactTimeline } from './ContactTimeline';
+import { useCrmStages } from '@/hooks/crm/useCrmStages';
+import {
+  CRM_LITE_STAGE_ORDER,
+  encodeTaskInteraction,
+  parseTaskInteraction,
+  isTaskInteraction,
+} from '@/lib/crm/crm-lite';
 
 interface LeadDetailsProps {
   lead: Lead;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onLeadUpdated?: (leadId: string, updates: Partial<Lead>) => void;
+  onLeadDeleted?: (leadId: string) => void;
 }
 
 const statusColors: Record<LeadStatus, string> = {
@@ -101,28 +113,41 @@ const sourceIcons: Record<string, string> = {
   other: '📌',
 };
 
-export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
+export function LeadDetails({ lead, open, onOpenChange, onLeadUpdated, onLeadDeleted }: LeadDetailsProps) {
   const { t, i18n } = useTranslation();
   const { updateLead, deleteLead, saving } = useLeads();
-  const { interactions, loading: interactionsLoading, addInteraction } = useLeadInteractions(lead.id);
+  const {
+    interactions,
+    loading: interactionsLoading,
+    addInteraction,
+    updateInteraction,
+    deleteInteraction,
+  } = useLeadInteractions(lead.id);
+  const { getStageLabel } = useCrmStages();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const [status, setStatus] = useState<LeadStatus>(lead.status);
   const [notes, setNotes] = useState(lead.notes || '');
   const [newInteractionType, setNewInteractionType] = useState<InteractionType>('note');
   const [newInteractionContent, setNewInteractionContent] = useState('');
+  const [newTaskText, setNewTaskText] = useState('');
+  const [newTaskDue, setNewTaskDue] = useState('');
   const [hasChanges, setHasChanges] = useState(false);
   const [draft, setDraft] = useState<string | null>(null);
   const [draftCopied, setDraftCopied] = useState(false);
 
   const handleStatusChange = async (newStatus: LeadStatus) => {
     setStatus(newStatus);
-    await updateLead(lead.id, { status: newStatus });
+    const ok = await updateLead(lead.id, { status: newStatus });
+    if (ok) onLeadUpdated?.(lead.id, { status: newStatus });
   };
 
   const handleSaveNotes = async () => {
-    await updateLead(lead.id, { notes });
-    setHasChanges(false);
+    const ok = await updateLead(lead.id, { notes });
+    if (ok) {
+      setHasChanges(false);
+      onLeadUpdated?.(lead.id, { notes });
+    }
   };
 
   const handleAddInteraction = async () => {
@@ -130,6 +155,21 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
 
     await addInteraction(newInteractionType, newInteractionContent);
     setNewInteractionContent('');
+  };
+
+  const handleAddTask = async () => {
+    if (!newTaskText.trim()) return;
+    await addInteraction('note', encodeTaskInteraction(newTaskText, false, newTaskDue || undefined));
+    setNewTaskText('');
+    setNewTaskDue('');
+  };
+
+  const handleToggleTask = async (taskId: string, currentDone: boolean, text: string, dueDate?: string) => {
+    await updateInteraction(taskId, encodeTaskInteraction(text, !currentDone, dueDate));
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    await deleteInteraction(taskId);
   };
 
   const handleGenerateDraft = () => {
@@ -162,7 +202,8 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
   };
 
   const handleDelete = async () => {
-    await deleteLead(lead.id);
+    const ok = await deleteLead(lead.id);
+    if (ok) onLeadDeleted?.(lead.id);
     onOpenChange(false);
   };
 
@@ -170,8 +211,12 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
 
   const formatShortDate = (dateStr: string) => formatDateTime(dateStr, i18n.language);
 
-  const statuses: LeadStatus[] = ['new', 'contacted', 'qualified', 'converted', 'lost'];
+  const statuses: LeadStatus[] = [...CRM_LITE_STAGE_ORDER];
   const interactionTypes: InteractionType[] = ['note', 'call', 'email', 'message', 'meeting'];
+  const tasks = interactions
+    .map(i => parseTaskInteraction(i))
+    .filter((item): item is NonNullable<typeof item> => item !== null);
+  const regularInteractions = interactions.filter(i => !isTaskInteraction(i));
 
   const Content = (
     <div className="p-3 sm:p-4 space-y-4 sm:space-y-6">
@@ -373,20 +418,20 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
 
       {/* Status - Full width select */}
       <div>
-        <Label className="text-xs sm:text-sm">{t('crm.status.label', 'Status')}</Label>
+        <Label className="text-xs sm:text-sm">{t('crm.status.label', 'Стадия')}</Label>
         <Select value={status} onValueChange={handleStatusChange}>
-          <SelectTrigger className="mt-1 h-11">
+          <SelectTrigger className="mt-1 h-11" data-testid="lead-details-stage-trigger">
             <SelectValue>
               <Badge variant="outline" className={`${statusColors[status]} text-xs sm:text-xs`}>
-                {t(`crm.status.${status}`, status)}
+                {getStageLabel(status)}
               </Badge>
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {statuses.map(s => (
-              <SelectItem key={s} value={s}>
+              <SelectItem key={s} value={s} data-testid={`lead-details-stage-option-${s}`}>
                 <Badge variant="outline" className={`${statusColors[s]} text-xs sm:text-xs`}>
-                  {t(`crm.status.${s}`, s)}
+                  {getStageLabel(s)}
                 </Badge>
               </SelectItem>
             ))}
@@ -397,29 +442,110 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
       {/* Notes - Compact textarea */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <Label className="text-xs sm:text-sm">{t('crm.notes', 'Notes')}</Label>
+          <Label className="text-xs sm:text-sm">{t('crm.notes', 'Заметки')}</Label>
           {hasChanges && (
-            <Button size="sm" variant="ghost" onClick={handleSaveNotes} disabled={saving} className="h-10 px-4 text-xs bg-primary/5">
-              {t('editor.save', 'Save')}
+            <Button size="sm" variant="ghost" onClick={handleSaveNotes} disabled={saving} className="h-10 px-4 text-xs bg-primary/5" data-testid="lead-details-save-notes">
+              {t('editor.save', 'Сохранить')}
             </Button>
           )}
         </div>
         <Textarea
+          data-testid="lead-details-notes-input"
           value={notes}
           onChange={(e) => {
             setNotes(e.target.value);
             setHasChanges(true);
           }}
-          placeholder={t('crm.notesPlaceholder', 'Add notes...')}
+          placeholder={t('crm.notesPlaceholder', 'Добавьте заметку о клиенте...')}
           rows={2}
           className="text-sm resize-none"
         />
       </div>
 
+      {/* Tasks - CRM Lite Step 4 */}
+      <Card className="p-3 sm:p-4 space-y-3" data-testid="lead-details-tasks-card">
+        <div className="flex items-center justify-between">
+          <h4 className="font-medium text-xs sm:text-sm text-muted-foreground flex items-center gap-2">
+            <CheckSquare className="h-4 w-4" />
+            {t('crm.tasks.title', 'Задачи')} ({tasks.filter(task => !task.done).length})
+          </h4>
+        </div>
+        <div className="flex gap-2">
+          <Input
+            data-testid="lead-details-task-input"
+            value={newTaskText}
+            onChange={(e) => setNewTaskText(e.target.value)}
+            placeholder={t('crm.tasks.placeholder', 'Например: перезвонить завтра в 14:00')}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
+            className="h-10 text-sm bg-muted flex-1"
+          />
+          <Input
+            data-testid="lead-details-task-due"
+            type="date"
+            value={newTaskDue}
+            onChange={(e) => setNewTaskDue(e.target.value)}
+            className="h-10 w-36 text-xs bg-muted shrink-0"
+            aria-label={t('crm.tasks.dueDate', 'Срок')}
+          />
+          <Button
+            onClick={handleAddTask}
+            disabled={!newTaskText.trim()}
+            size="icon"
+            className="h-10 w-10 shrink-0"
+            data-testid="lead-details-task-add"
+            aria-label={t('crm.tasks.add', 'Добавить задачу')}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+        {tasks.length > 0 && (
+          <div className="space-y-1.5">
+            {tasks.map(task => (
+              <div
+                key={task.id}
+                data-testid={`lead-task-item-${task.id}`}
+                className="flex items-center justify-between gap-2 rounded-xl bg-muted/50 px-3 py-2 text-xs sm:text-sm"
+              >
+                <button
+                  type="button"
+                  onClick={() => handleToggleTask(task.id, task.done, task.text, task.dueDate)}
+                  className="flex items-center gap-2 text-left flex-1 min-w-0"
+                  data-testid={`lead-task-toggle-${task.id}`}
+                >
+                  {task.done ? (
+                    <CheckSquare className="h-4 w-4 text-success shrink-0" />
+                  ) : (
+                    <Square className="h-4 w-4 text-muted-foreground shrink-0" />
+                  )}
+                  <span className={cn('truncate', task.done && 'line-through text-muted-foreground')}>
+                    {task.text}
+                  </span>
+                </button>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {task.dueDate && (
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                      {task.dueDate}
+                    </Badge>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteTask(task.id)}
+                    className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                    aria-label={t('editor.delete', 'Удалить')}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
       {/* Add Interaction - Compact */}
       <Card className="p-3 sm:p-4">
         <h4 className="font-medium text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3">
-          {t('crm.addInteraction', 'Add Interaction')}
+          {t('crm.addInteraction', 'Добавить запись')}
         </h4>
         <div className="space-y-2 sm:space-y-3">
           {/* Interaction type buttons - Compact grid */}
@@ -440,7 +566,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
             <Input
               value={newInteractionContent}
               onChange={(e) => setNewInteractionContent(e.target.value)}
-              placeholder={t('crm.interactionPlaceholder', 'What happened?')}
+              placeholder={t('crm.interactionPlaceholder', 'Что обсудили?')}
               onKeyDown={(e) => e.key === 'Enter' && handleAddInteraction()}
               className="h-11 text-sm bg-muted"
             />
@@ -454,17 +580,17 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
       {/* Interactions History - Compact list */}
       <div>
         <h4 className="font-medium text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3">
-          {t('crm.history', 'History')} ({interactions.length})
+          {t('crm.history', 'Журнал общения')} ({regularInteractions.length})
         </h4>
         {interactionsLoading ? (
-          <p className="text-xs sm:text-sm text-muted-foreground">{t('messages.loading', 'Loading...')}</p>
-        ) : interactions.length === 0 ? (
+          <p className="text-xs sm:text-sm text-muted-foreground">{t('messages.loading', 'Загрузка...')}</p>
+        ) : regularInteractions.length === 0 ? (
           <p className="text-xs sm:text-sm text-muted-foreground">
-            {t('crm.noInteractions', 'No interactions yet')}
+            {t('crm.noInteractions', 'Записей пока нет')}
           </p>
         ) : (
           <div className="space-y-1.5 sm:space-y-2">
-            {interactions.map(interaction => (
+            {regularInteractions.map(interaction => (
               <Card key={interaction.id} className="p-2.5 sm:p-3">
                 <div className="flex items-start gap-2">
                   <div className="p-1 sm:p-1.5 rounded-full bg-accent shrink-0">

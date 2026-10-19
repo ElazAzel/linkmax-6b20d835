@@ -13,7 +13,7 @@
 
 ## Order
 1. Audit docs (done).
-2. `contacts` table + `upsert_contact` + backfill from leads (done), wire into submit-form / submit-booking / register_for_event / robokassa-webhook (open).
-3. Contact timeline RPC + UI in Inbox card (open).
-4. CRM Lite stages, notes, tasks (open).
+2. `contacts` table + `upsert_contact` + backfill from leads + triggers with UTM on leads, bookings, event_registrations, digital_purchases (done).
+3. Contact timeline RPC + UI in Inbox card (`LeadDetails` + `ContactTimeline` wired in `LeadsScreen` and `ActivityScreen`) (done).
+4. CRM Lite stages (Новые → Связались → Записан → Оплатил → Завершено + custom stage naming), notes, tasks (done).
 5–12. Services, booking, checkout, funnel analytics, event log, automations, AI tools, AI copilot — separate plans.
