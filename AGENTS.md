@@ -10,3 +10,4 @@
 - Public profiles (`/$slug/`) load a REST snapshot in the route loader and render SEO head + page content on the server (`src/lib/seo/public-page-*.ts`); `/{slug}/llms.txt` is its markdown twin. Why: AI crawlers do not run JS, so the first HTML must carry the profile and JSON-LD.
 - Business tools (sales blocks, CRM, finance, team, zones) are hidden unless `VITE_LINKMAX_BUSINESS=true` or Settings → «Бизнес-инструменты» is on (`src/lib/features.ts`); hide, never delete. Why: the cabinet stays a focused page builder.
 - `/dev/editor?slug=…` (dev builds only) mounts the real EditorScreen on an in-memory copy of a published page. Why: check the editor on a phone width without signing in; nothing is saved.
+- Public paid-block policies and stub queries share `block_requires_payment(content)`; only enabled blocks with positive prices are locked. Why: keep server visibility aligned with the visitor gate without leaking priced content.
