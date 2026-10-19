@@ -2,10 +2,9 @@ import { lazy, Suspense, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@/lib/router-compat';
 
-import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
-import { FAQSection } from '@/components/landing/v2/FAQSection';
-import { HeroBentoOS } from '@/components/landing/v3/HeroBentoOS';
-import { LandingSections } from '@/components/landing/v3/LandingSections';
+import { KxHeader } from '@/components/landing/kx/KxHeader';
+import { KxHero } from '@/components/landing/kx/KxHero';
+import { KxBuild, KxCta, KxFaq, KxFooter, KxPricing, KxSteps } from '@/components/landing/kx/KxSections';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLandingAnalytics';
@@ -84,50 +83,35 @@ export default function Index() {
         <AISearchOptimizer pageType={LANDING_PAGE_TYPE} entityName={seoImageAlt} entityCategory={LANDING_ENTITY_CATEGORY} />
       </Suspense>
 
-      <div style={{ fontFamily: "Onest, Inter, system-ui, sans-serif" }} className="landing-onest min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-        <DynamicIslandNav
+      <div className="kx min-h-screen">
+        <KxHeader
           onLogin={() => handleNav('/auth', 'login', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
         />
 
         <main>
           <div id="hero" ref={heroSectionRef}>
-            <HeroBentoOS
-              onStart={(desiredSlug) => handleCreatePage('hero_cta', 'signup', desiredSlug)}
-              onExamples={() => handleNav('/gallery', 'gallery', 'hero_examples')}
-            />
+            <KxHero onStart={(desiredSlug) => handleCreatePage('hero_cta', 'signup', desiredSlug)} />
           </div>
 
           <div ref={revenueSectionRef}>
-            <LandingSections
-              onStart={() => handleCreatePage('revenue_flow_cta')}
-              onPricing={() => handleNav('/pricing', 'pricing', 'revenue_pricing_cta')}
+            <KxBuild />
+            <KxSteps />
+            <KxPricing
+              onStart={() => handleCreatePage('pricing_free_cta')}
+              onPricing={() => handleNav('/pricing', 'pricing', 'landing_pricing_cta')}
             />
           </div>
 
           <div ref={faqSectionRef}>
-            <FAQSection />
+            <KxFaq />
           </div>
+
+          <KxCta onStart={(desiredSlug) => handleCreatePage('final_cta', 'signup', desiredSlug)} />
         </main>
 
-        <SimpleFooter />
+        <KxFooter />
       </div>
     </ScreenErrorBoundary>
-  );
-}
-
-function SimpleFooter() {
-  const { t } = useTranslation();
-  const year = new Date().getFullYear();
-
-  return (
-    <footer className="bg-background px-4 pb-8 pt-4 text-center text-xs text-muted-foreground sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-border pt-5">
-        <span>{t('landing.short.footer.copyright', '© {{year}} LinkMAX', { year })}</span>
-        <a href="/privacy" className="hover:text-foreground">{t('landing.short.footer.privacy', 'Privacy')}</a>
-        <a href="/terms" className="hover:text-foreground">{t('landing.short.footer.terms', 'Terms')}</a>
-        <a href="/payment-terms" className="hover:text-foreground">{t('landing.short.footer.payments', 'Payments')}</a>
-      </div>
-    </footer>
   );
 }

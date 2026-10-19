@@ -7450,8 +7450,8 @@
       },
       "seo": {
         "imageAlt": "LinkMAX — the client journey in one link",
-        "title": "LinkMAX — page, booking, payments and client workflow",
-        "description": "One link for service businesses: explain your offer, accept a booking or request, track payment and keep the next client action visible."
+        "title": "LinkMAX — your page in a couple of minutes",
+        "description": "One link instead of ten: business card, portfolio, online booking and payments right on the page. Free, no code. Claim a short lnkmx.my/you address."
       },
       "hero": {
         "eyebrow": "For independent professionals and service businesses",
@@ -7686,6 +7686,161 @@
       "gallery": {
         "title": "One link for any business",
         "sub": "Masters, tutors, consultants and studios build their page in one evening."
+      }
+    },
+    "kx": {
+      "nav": {
+        "examples": "Examples",
+        "pricing": "Pricing",
+        "faq": "FAQ",
+        "label": "Navigation",
+        "language": "Change language",
+        "login": "Log in",
+        "create": "Create a page",
+        "close": "Close menu",
+        "open": "Open menu"
+      },
+      "claim": {
+        "hint": "Free. No card. The address stays yours.",
+        "invalid": "Latin letters, digits and hyphens, 3 to 30 characters.",
+        "checking": "Checking…",
+        "free": "lnkmx.my/{{slug}} is free. Grab it.",
+        "taken": "This address is taken. Try another one.",
+        "label": "Short address of your page",
+        "placeholder": "yourname",
+        "cta": "Claim address"
+      },
+      "hero": {
+        "w1": "a bio page",
+        "w2": "a portfolio",
+        "w3": "a shop",
+        "w4": "a price list",
+        "w5": "a resume",
+        "w6": "a menu",
+        "w7": "a storefront",
+        "w8": "a tip jar",
+        "before": "Build",
+        "after": "in a couple of minutes",
+        "sub": "One link instead of ten. Show what you do, take requests and payments right on the page. Claim a short address while it's free."
+      },
+      "chips": {
+        "c1": "Business card",
+        "c2": "Portfolio",
+        "c3": "Online booking",
+        "c4": "Price list",
+        "c5": "Shop",
+        "c6": "Merch",
+        "c7": "Expert page",
+        "c8": "Podcast",
+        "c9": "Resume with cases",
+        "c10": "Donations",
+        "c11": "Cafe menu",
+        "c12": "Event tickets",
+        "c13": "Course",
+        "c14": "Link in bio",
+        "label": "What you can build"
+      },
+      "demo": {
+        "nailsRole": "Nails & brows · Almaty",
+        "book": "Book online",
+        "slots": "3 slots today",
+        "manicure": "Manicure",
+        "brows": "Brows",
+        "englishRole": "English for adults · online",
+        "trial": "Free trial lesson",
+        "trialNote": "30 minutes, no payment",
+        "ieltsPrice": "from 6,000 ₸",
+        "group": "Group",
+        "groupPrice": "4,500 ₸",
+        "quote": "“I finally stopped being afraid to speak”",
+        "photoRole": "Photographer · weddings & portraits",
+        "date": "Book a date",
+        "datePrice": "Shoots from 25,000 ₸",
+        "reviews": "Reviews",
+        "label": "Example page on LinkMAX",
+        "toastLead": "New request",
+        "toastLeadNote": "Aigerim · via WhatsApp",
+        "toastPay": "Booking payment"
+      },
+      "build": {
+        "title": "Not a link list. A whole site.",
+        "sub": "Blocks snap into a grid like a designer laid them out. Except the designer is you, and it takes one evening.",
+        "booking": "Online booking",
+        "bookingText": "Services, open slots and prepayment. You can't sell the same hour twice.",
+        "pay": "Payments",
+        "payText": "Card, prepayment, invoice. Money comes in while you sleep.",
+        "msg1": "Hi! Any slot on Friday?",
+        "msg2": "Request: manicure, Fri 13:00",
+        "msg3": "Paid 8,000 ₸",
+        "leads": "Requests in Telegram",
+        "leadsText": "Every request lands in your messenger and in the client card. Nothing gets lost in DMs.",
+        "gallery": "Portfolio",
+        "galleryText": "Photos, videos, cases. A two-column grid like Pinterest, only yours.",
+        "video": "Video",
+        "videoText": "YouTube and Vimeo: paste a link and the player appears.",
+        "stats": "Analytics",
+        "statsText": "How many came, what they tapped, where requests came from.",
+        "aiPrompt": "I'm a nail artist in Almaty",
+        "ai": "AI drafts it for you",
+        "aiText": "Describe yourself in one sentence: copy, services and structure appear in a minute. Then edit with your thumb.",
+        "seo": "Found in search and AI",
+        "seoText": "Google, Yandex and ChatGPT read the page right away. On PRO you can connect your own domain."
+      },
+      "steps": {
+        "s1": "Claim an address",
+        "s1Text": "lnkmx.my/your-name. Short and yours, before someone else takes it.",
+        "s2": "Tell about yourself",
+        "s2Text": "A few answers and AI builds the page. Change blocks, colors and fonts however you like.",
+        "s3": "Put it in your bio",
+        "s3Text": "Instagram, TikTok, Telegram, 2GIS. Then requests come in on their own.",
+        "title": "Three steps. Really."
+      },
+      "price": {
+        "f1": "Page and all blocks",
+        "f2": "Requests and mini-CRM",
+        "f3": "Payments, 7% fee",
+        "f4": "No watermark",
+        "p1": "1% fee instead of 7%",
+        "p2": "Your own domain",
+        "p3": "Advanced analytics",
+        "p4": "AI generations every month",
+        "title": "Free. For real.",
+        "sub": "You only pay when you earn through the page. PRO is there so you give away less.",
+        "freeName": "Start",
+        "freeCta": "Start for free",
+        "perMonth": "/mo billed yearly",
+        "proCta": "All plans"
+      },
+      "faq": {
+        "q1": "Is it really free?",
+        "a1": "Yes. The page, all blocks, requests and payments are free. We take 7% of sales made through the page. PRO lowers the fee to 1% and adds your own domain and analytics.",
+        "q2": "Do I need design or coding skills?",
+        "a2": "No. Answer a few questions and AI drafts the page. Then move blocks with your thumb, like stories.",
+        "q3": "What can I sell?",
+        "a3": "Services with booking, consultations, tickets, courses, guides and files. Payment right on the page, requests in Telegram.",
+        "q4": "Why a page if I have Instagram?",
+        "a4": "A social profile can't take bookings or payments, and the algorithm decides who sees you. Your page shows up in Google, Yandex and AI answers and stays yours even if the account gets blocked.",
+        "q5": "Is it safe?",
+        "a5": "Payments go through a payment provider; card details never reach us. Only you and your team see client requests and contacts.",
+        "q6": "Why not Taplink or Linktree?",
+        "a6": "Those are link lists. This is a site made of blocks with booking, payments, requests and CRM, and search engines and AI see it right away.",
+        "title": "Questions",
+        "sub": "Didn't find an answer? Write to us and we'll sort it out."
+      },
+      "cta": {
+        "title": "So, giving it a go?",
+        "sub": "In five minutes you'll have a page you're not ashamed to put in your bio."
+      },
+      "footer": {
+        "product": "Product",
+        "experts": "Expert directory",
+        "blog": "Blog",
+        "info": "Information",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "payments": "Payments & refunds",
+        "contact": "Contact",
+        "about": "A page builder for people who work for themselves: artists, experts, creators and small studios."
       }
     }
   },
