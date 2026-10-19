@@ -3,12 +3,12 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // <define:import.meta.env>
-var define_import_meta_env_default = { VITE_SUPABASE_PROJECT_ID: "pphdcfxucfndmwulpfwv", VITE_SUPABASE_PUBLISHABLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", VITE_SUPABASE_URL: "https://pphdcfxucfndmwulpfwv.supabase.co", VITE_PAYMENTS_CLIENT_TOKEN: "live_b0e4c30cfecad95eabfeeb4eaba", VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA", MODE: "production", BASE_URL: "/", DEV: false, PROD: true, SSR: false };
+var define_import_meta_env_default = { VITE_SUPABASE_PROJECT_ID: "pphdcfxucfndmwulpfwv", VITE_SUPABASE_URL: "https://pphdcfxucfndmwulpfwv.supabase.co", MODE: "production", BASE_URL: "/", DEV: false, PROD: true, SSR: false };
 
 // src/lib/mcp/index.ts
 import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.23.0";
 
-// src/lib/mcp/tools/create-block.ts
+// src/lib/mcp/tools/apply-translations.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.23.0";
 import { z } from "npm:zod@3.25.76";
 
@@ -64,8 +64,8 @@ function toolError(code, message) {
     isError: true
   };
 }
-function databaseError(operation) {
-  console.error(`LinkMAX MCP database operation failed: ${operation}`);
+function databaseError(operation2) {
+  console.error(`LinkMAX MCP database operation failed: ${operation2}`);
   return toolError("database_error", "LinkMAX could not complete the data request.");
 }
 function jsonResult(value) {
@@ -90,105 +90,1041 @@ function isToolError(value) {
   return "isError" in value;
 }
 
-// src/lib/mcp/tools/create-block.ts
-var create_block_default = defineTool({
-  name: "create_block",
-  title: "Create a LinkMAX block",
-  description: "Create a block on one of the signed-in user's pages. The block is inserted at the requested position or appended to the end when position is omitted.",
-  inputSchema: {
-    page_id: z.string().uuid().describe("Page UUID owned by the signed-in user."),
-    type: z.string().trim().min(1).max(64).describe("LinkMAX block type, for example link, text, image or form."),
-    title: z.string().trim().max(200).optional().describe("Optional block title."),
-    content: z.unknown().optional().describe("JSON content for the block."),
-    style: z.record(z.string(), z.unknown()).optional().describe("Optional JSON style configuration."),
-    position: z.number().int().min(0).max(1e4).optional().describe("Zero-based position. Defaults to the end."),
-    is_premium: z.boolean().optional().describe("Whether the block is marked premium."),
-    schedule: z.unknown().optional().describe("Optional JSON publication schedule.")
+// src/lib/mcp/draft.ts
+function draftFailure(error, operation2) {
+  const value = error;
+  const message = value?.message ?? "";
+  if (value?.code === "40001" || message.includes("draft_conflict")) {
+    return toolError("draft_conflict", "The page draft changed while you were editing (probably in the editor). Call get_page again and repeat the edit on the fresh draft.");
+  }
+  if (value?.code === "42501" || message.includes("draft_access_denied")) {
+    return toolError("not_found", "Page not found for this user.");
+  }
+  if (message.includes("draft_profile_required")) {
+    return toolError("profile_required", "Add a profile block (name and bio) with edit_page before publishing.");
+  }
+  if (["PGRST202", "42883", "42P01"].includes(value?.code ?? "")) {
+    return toolError("drafts_unavailable", "Page drafts are not deployed on this LinkMAX backend yet.");
+  }
+  console.error(`LinkMAX MCP draft operation failed: ${operation2}`, { code: value?.code ?? "unknown" });
+  return toolError("database_error", "LinkMAX could not complete the draft request.");
+}
+async function call(supabase, name, args) {
+  const { data, error } = await supabase.rpc(name, args);
+  if (error) return draftFailure(error, name);
+  if (!data || typeof data !== "object") return toolError("database_error", "LinkMAX returned an empty draft.");
+  const draft = data;
+  if (!draft.snapshot || !Array.isArray(draft.snapshot.blocks)) {
+    draft.snapshot = { ...draft.snapshot ?? {}, id: draft.page_id, blocks: [] };
+  }
+  return draft;
+}
+function isDraft(value) {
+  return "page_id" in value && "snapshot" in value;
+}
+function loadDraft(supabase, pageId) {
+  return call(supabase, "load_page_draft", { p_page_id: pageId });
+}
+function saveDraft(supabase, draft, snapshot) {
+  return call(supabase, "save_page_draft", {
+    p_page_id: draft.page_id,
+    p_snapshot: snapshot,
+    p_expected_revision: draft.revision,
+    p_base_published_revision: draft.base_published_revision,
+    p_chatbot_context: draft.chatbot_context ?? ""
+  });
+}
+function publishDraft(supabase, draft) {
+  return call(supabase, "publish_page_draft", {
+    p_page_id: draft.page_id,
+    p_expected_revision: draft.revision,
+    p_base_published_revision: draft.base_published_revision
+  });
+}
+function hasUnpublishedChanges(draft) {
+  return (draft.published_draft_revision ?? -1) !== draft.revision;
+}
+
+// src/lib/mcp/languages.ts
+var MCP_LANGUAGES = ["ru", "en", "kk", "de", "uk", "uz", "be", "es", "fr", "it", "pt", "zh", "tr", "ja", "ko", "ar"];
+var LANGUAGE_SET = new Set(MCP_LANGUAGES);
+function isMcpLanguage(value) {
+  return LANGUAGE_SET.has(value);
+}
+function isLocalizedText(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const entries = Object.entries(value);
+  return entries.length > 0 && entries.every(([key, v]) => isMcpLanguage(key) && (typeof v === "string" || v == null));
+}
+function textIn(value, lang, fallback = ["ru", "en"]) {
+  if (typeof value === "string") return value;
+  if (!isLocalizedText(value)) return "";
+  for (const code of [lang, ...fallback]) {
+    const text2 = value[code];
+    if (typeof text2 === "string" && text2.trim()) return text2;
+  }
+  return Object.values(value).find((v) => typeof v === "string" && v.trim()) ?? "";
+}
+
+// src/lib/mcp/page-context.ts
+var publicUrl = (slug) => `https://lnkmx.my/${slug}`;
+async function openPage(ctx, pageId) {
+  const auth2 = getAuthenticatedContext(ctx);
+  if (isToolError(auth2)) return auth2;
+  const { supabase, userId } = auth2;
+  const { data: page, error } = await supabase.from("pages").select("id, slug, is_published").eq("id", pageId).maybeSingle();
+  if (error) return databaseError("open_page");
+  if (!page) return toolError("not_found", "Page not found for this user. Call list_my_pages for your page ids.");
+  const draft = await loadDraft(supabase, pageId);
+  if (!isDraft(draft)) return draft;
+  return { supabase, userId, draft, page: { id: page.id, slug: page.slug, is_published: !!page.is_published } };
+}
+function isPageContext(value) {
+  return "draft" in value;
+}
+
+// src/lib/mcp/block-catalog.ts
+var TEXT = "text: string or {ru, en, kk, ...}";
+var BLOCK_CATALOG = [
+  {
+    type: "profile",
+    purpose: "Page header: photo, name, short bio. Exactly one per page, first. Publishing needs it.",
+    required: ["name"],
+    fields: { name: TEXT, bio: TEXT, avatar: "image URL", coverImage: "wide image URL (used for share previews)", verified: "boolean" },
+    translatable: ["name", "bio"],
+    default_size: "wide",
+    example: { type: "profile", name: "\u0410\u0439\u0433\u0435\u0440\u0438\u043C \u041D\u0443\u0440\u0442\u0430\u0435\u0432\u0430", bio: { ru: "\u041C\u0430\u043D\u0438\u043A\u044E\u0440 \u0438 \u0431\u0440\u043E\u0432\u0438 \u0432 \u0410\u043B\u043C\u0430\u0442\u044B", en: "Nails and brows in Almaty" } }
   },
-  annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
-  handler: async ({ page_id, type, title, content, style, position, is_premium, schedule }, ctx) => {
-    const authContext = getAuthenticatedContext(ctx);
-    if (isToolError(authContext)) return authContext;
-    const { supabase, userId } = authContext;
-    const { data: page, error: pageError } = await supabase.from("pages").select("id").eq("id", page_id).eq("user_id", userId).maybeSingle();
-    if (pageError) return databaseError("create_block.page");
-    if (!page) return toolError("not_found", "Page not found for this user.");
-    let nextPosition = position;
-    if (nextPosition === void 0) {
-      const { data: lastBlock, error: positionError } = await supabase.from("blocks").select("position").eq("page_id", page_id).order("position", { ascending: false }).limit(1).maybeSingle();
-      if (positionError) return databaseError("create_block.position");
-      nextPosition = (lastBlock?.position ?? -1) + 1;
+  {
+    type: "button",
+    purpose: "Main call to action (book, write, buy). Use 1-2 per page.",
+    required: ["title", "url"],
+    fields: { title: TEXT, url: "https://\u2026 or tel:/mailto:", width: "full | medium | small" },
+    translatable: ["title"],
+    default_size: "wide",
+    example: { type: "button", title: "\u0417\u0430\u043F\u0438\u0441\u0430\u0442\u044C\u0441\u044F", url: "https://wa.me/77001234567" }
+  },
+  {
+    type: "link",
+    purpose: "A secondary link with a title.",
+    required: ["title", "url"],
+    fields: { title: TEXT, url: "https://\u2026" },
+    translatable: ["title"],
+    default_size: "small",
+    example: { type: "link", title: "\u041F\u043E\u0440\u0442\u0444\u043E\u043B\u0438\u043E", url: "https://behance.net/name" }
+  },
+  {
+    type: "text",
+    purpose: "Heading or paragraph.",
+    required: ["content"],
+    fields: { content: TEXT, style: "heading | paragraph | quote", alignment: "left | center | right" },
+    translatable: ["content"],
+    default_size: "wide",
+    example: { type: "text", style: "heading", content: "\u0423\u0441\u043B\u0443\u0433\u0438" }
+  },
+  {
+    type: "card",
+    purpose: "Title, text, photo and one button: an offer, a case, a service.",
+    required: ["title"],
+    fields: { title: TEXT, text: TEXT, image: "image URL", imagePosition: "right | top", buttonText: TEXT, url: "https://\u2026" },
+    translatable: ["title", "text", "buttonText"],
+    default_size: "wide",
+    example: { type: "card", title: "\u041C\u0430\u043D\u0438\u043A\u044E\u0440 \u0441 \u043F\u043E\u043A\u0440\u044B\u0442\u0438\u0435\u043C", text: "1,5 \u0447\u0430\u0441\u0430, \u0441\u0442\u0435\u0440\u0438\u043B\u044C\u043D\u044B\u0435 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u044B", buttonText: "\u0417\u0430\u043F\u0438\u0441\u0430\u0442\u044C\u0441\u044F", url: "https://wa.me/77001234567" }
+  },
+  {
+    type: "image",
+    purpose: "One photo with optional caption and link.",
+    required: ["url", "alt"],
+    fields: { url: "image URL", alt: TEXT, caption: TEXT, link: "https://\u2026" },
+    translatable: ["alt", "caption"],
+    default_size: "small",
+    example: { type: "image", url: "https://\u2026/work.jpg", alt: "\u0420\u0430\u0431\u043E\u0442\u0430: \u0444\u0440\u0435\u043D\u0447" }
+  },
+  {
+    type: "carousel",
+    purpose: "Swipeable photos.",
+    required: ["images"],
+    fields: { title: TEXT, images: "array of {url, alt: text, link?}" },
+    translatable: ["title", "images[].alt"],
+    default_size: "wide",
+    example: { type: "carousel", images: [{ url: "https://\u2026/1.jpg", alt: "\u0420\u0430\u0431\u043E\u0442\u0430 1" }] }
+  },
+  {
+    type: "tiles",
+    purpose: "Grid of picture tiles, each a link with a caption.",
+    required: ["items"],
+    fields: { title: TEXT, items: "array of {title: text, image, url}", columns: "2 | 3" },
+    translatable: ["title", "items[].title"],
+    default_size: "wide",
+    example: { type: "tiles", items: [{ title: "\u041A\u0435\u0439\u0441 1", image: "https://\u2026/1.jpg", url: "https://\u2026" }] }
+  },
+  {
+    type: "video",
+    purpose: "YouTube or Vimeo video.",
+    required: ["url", "platform"],
+    fields: { title: TEXT, url: "video URL", platform: "youtube | vimeo" },
+    translatable: ["title"],
+    default_size: "wide",
+    example: { type: "video", url: "https://youtu.be/xxxx", platform: "youtube", title: "\u041E\u0431\u043E \u043C\u043D\u0435" }
+  },
+  {
+    type: "socials",
+    purpose: "Row of social network icons.",
+    required: ["platforms"],
+    fields: { title: TEXT, platforms: "array of {platform: instagram | telegram | tiktok | youtube | linkedin | facebook | x | threads | vk, url}" },
+    translatable: ["title"],
+    default_size: "wide",
+    example: { type: "socials", platforms: [{ platform: "instagram", url: "https://instagram.com/name" }] }
+  },
+  {
+    type: "messenger",
+    purpose: "Write-me buttons for WhatsApp / Telegram. The fastest way to get leads.",
+    required: ["messengers"],
+    fields: { title: TEXT, messengers: "array of {platform: whatsapp | telegram | viber, username: phone digits or @handle, message?: prefilled text}" },
+    translatable: ["title"],
+    default_size: "wide",
+    example: { type: "messenger", messengers: [{ platform: "whatsapp", username: "77001234567" }] }
+  },
+  {
+    type: "pricing",
+    purpose: "Price list of services.",
+    required: ["items"],
+    fields: { title: TEXT, currency: "KZT | RUB | USD | \u2026", items: "array of {name: text, description?: text, price: number, period?: text, duration?: minutes, priceType?: fixed | from | range}" },
+    translatable: ["title", "items[].name", "items[].description", "items[].period"],
+    default_size: "wide",
+    example: { type: "pricing", currency: "KZT", items: [{ name: "\u041C\u0430\u043D\u0438\u043A\u044E\u0440", price: 8e3, duration: 90 }] }
+  },
+  {
+    type: "product",
+    purpose: "One product with price and buy link.",
+    required: ["name", "price", "currency"],
+    fields: { name: TEXT, description: TEXT, price: "number", currency: "KZT | RUB | USD | \u2026", image: "image URL", buyLink: "https://\u2026", buttonText: TEXT },
+    translatable: ["name", "description", "buttonText"],
+    default_size: "small",
+    example: { type: "product", name: "\u0413\u0430\u0439\u0434 \u043F\u043E \u0443\u0445\u043E\u0434\u0443", description: "PDF, 20 \u0441\u0442\u0440\u0430\u043D\u0438\u0446", price: 3e3, currency: "KZT" }
+  },
+  {
+    type: "catalog",
+    purpose: "List or grid of items with prices.",
+    required: ["items"],
+    fields: { title: TEXT, currency: "KZT | \u2026", layout: "list | grid", items: "array of {name: text, description?: text, price?: number, image?}" },
+    translatable: ["title", "items[].name", "items[].description"],
+    default_size: "wide",
+    example: { type: "catalog", items: [{ name: "\u0421\u0432\u0435\u0447\u0430 \xAB\u041B\u0435\u0441\xBB", price: 6500 }] }
+  },
+  {
+    type: "faq",
+    purpose: "Questions and answers. Good for search engines and AI assistants.",
+    required: ["items"],
+    fields: { title: TEXT, items: "array of {question: text, answer: text}" },
+    translatable: ["title", "items[].question", "items[].answer"],
+    default_size: "wide",
+    example: { type: "faq", items: [{ question: "\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u0438\u0442\u0441\u044F \u043F\u0440\u043E\u0446\u0435\u0434\u0443\u0440\u0430?", answer: "\u041E\u043A\u043E\u043B\u043E \u043F\u043E\u043B\u0443\u0442\u043E\u0440\u0430 \u0447\u0430\u0441\u043E\u0432." }] }
+  },
+  {
+    type: "testimonial",
+    purpose: "Client reviews. Use only real reviews the owner provided.",
+    required: ["testimonials"],
+    fields: { title: TEXT, testimonials: "array of {name: text, text: text, role?: text, rating?: 1-5}" },
+    translatable: ["title", "testimonials[].name", "testimonials[].text", "testimonials[].role"],
+    default_size: "wide",
+    example: { type: "testimonial", testimonials: [{ name: "\u0414\u0430\u043D\u0430", text: "\u0414\u0435\u0440\u0436\u0438\u0442\u0441\u044F \u0442\u0440\u0438 \u043D\u0435\u0434\u0435\u043B\u0438!" }] }
+  },
+  {
+    type: "form",
+    purpose: "Lead form; submissions arrive as leads.",
+    required: ["title", "fields", "buttonText"],
+    fields: { title: TEXT, buttonText: TEXT, fields: "array of {name: text, type: text | email | phone | textarea, required: boolean, placeholder?: text}" },
+    translatable: ["title", "buttonText", "fields[].name", "fields[].placeholder"],
+    default_size: "wide",
+    example: { type: "form", title: "\u041E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u0437\u0430\u044F\u0432\u043A\u0443", buttonText: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C", fields: [{ name: "\u0418\u043C\u044F", type: "text", required: true }, { name: "\u0422\u0435\u043B\u0435\u0444\u043E\u043D", type: "phone", required: true }] }
+  },
+  {
+    type: "map",
+    purpose: "Address on a map.",
+    required: ["address"],
+    fields: { address: TEXT },
+    translatable: ["address"],
+    default_size: "wide",
+    example: { type: "map", address: "\u0410\u043B\u043C\u0430\u0442\u044B, \u0443\u043B. \u0410\u0431\u0430\u044F 10" }
+  },
+  {
+    type: "countdown",
+    purpose: "Timer to a date (launch, sale, event).",
+    required: ["targetDate"],
+    fields: { title: TEXT, targetDate: "ISO date", expiredText: TEXT },
+    translatable: ["title", "expiredText"],
+    default_size: "wide",
+    example: { type: "countdown", title: "\u0421\u0442\u0430\u0440\u0442 \u043A\u0443\u0440\u0441\u0430", targetDate: "2026-12-01T10:00:00+05:00" }
+  },
+  {
+    type: "separator",
+    purpose: "Visual divider between sections.",
+    required: [],
+    fields: { variant: "solid | dashed | dotted | gradient" },
+    translatable: [],
+    default_size: "wide",
+    example: { type: "separator" }
+  }
+];
+var BY_TYPE = new Map(BLOCK_CATALOG.map((entry) => [entry.type, entry]));
+function catalogEntry(type) {
+  return BY_TYPE.get(type);
+}
+var EXTRA_TRANSLATABLE = {
+  avatar: ["name", "subtitle"],
+  before_after: ["title", "beforeLabel", "afterLabel"],
+  newsletter: ["title", "description", "buttonText"],
+  download: ["title", "description", "buttonText"],
+  booking: ["title", "description"],
+  event: ["title", "description"],
+  scratch: ["title", "revealText"],
+  community: ["title", "description"]
+};
+function translatablePaths(type) {
+  return BY_TYPE.get(type)?.translatable ?? EXTRA_TRANSLATABLE[type] ?? ["title", "description"];
+}
+var BLOCK_SIZES = ["small", "wide", "tall", "large"];
+
+// src/lib/mcp/translations.ts
+function expandPath(block, path) {
+  const parts = path.split(".");
+  let current = [{ value: block, path: "" }];
+  for (const part of parts) {
+    const isList = part.endsWith("[]");
+    const key = isList ? part.slice(0, -2) : part;
+    const next = [];
+    for (const { value, path: prefix } of current) {
+      if (!value || typeof value !== "object" || Array.isArray(value)) continue;
+      const child = value[key];
+      const childPath = prefix ? `${prefix}.${key}` : key;
+      if (isList) {
+        if (Array.isArray(child)) child.forEach((item, i) => next.push({ value: item, path: `${childPath}[${i}]` }));
+      } else {
+        next.push({ value: child, path: childPath });
+      }
     }
-    const { data: block, error } = await supabase.from("blocks").insert({
-      page_id,
-      type,
-      title: title ?? null,
-      content: content ?? {},
-      style: style ?? null,
-      position: nextPosition,
-      is_premium: is_premium ?? false,
-      schedule: schedule ?? null
-    }).select("id, page_id, type, position, title, content, style, is_premium, click_count, schedule").single();
-    if (error) return databaseError("create_block");
-    return jsonResult({ block });
+    current = next;
+  }
+  return current.map((entry) => entry.path);
+}
+var SEGMENT = /^([A-Za-z_][\w]*)(?:\[(\d+)\])?$/;
+function parse(path) {
+  return path.split(".").map((segment) => {
+    const match = SEGMENT.exec(segment);
+    if (!match) throw new Error(`invalid path segment "${segment}"`);
+    return { key: match[1], index: match[2] === void 0 ? void 0 : Number(match[2]) };
+  });
+}
+function readPath(root, path) {
+  let value = root;
+  for (const { key, index } of parse(path)) {
+    if (!value || typeof value !== "object") return void 0;
+    value = value[key];
+    if (index !== void 0) value = Array.isArray(value) ? value[index] : void 0;
+  }
+  return value;
+}
+function writePath(root, path, value) {
+  const segments = parse(path);
+  const write = (node, depth) => {
+    const { key, index } = segments[depth];
+    const copy = { ...node && typeof node === "object" && !Array.isArray(node) ? node : {} };
+    const last = depth === segments.length - 1;
+    if (index === void 0) {
+      copy[key] = last ? value : write(copy[key], depth + 1);
+    } else {
+      const list = Array.isArray(copy[key]) ? [...copy[key]] : [];
+      if (index >= list.length) throw new Error(`index ${index} is out of range in "${path}"`);
+      list[index] = last ? value : write(list[index], depth + 1);
+      copy[key] = list;
+    }
+    return copy;
+  };
+  return write(root, 0);
+}
+function sourceText(value, sourceLanguage) {
+  if (typeof value === "string") return value;
+  if (isLocalizedText(value)) return value[sourceLanguage] || Object.values(value).find((v) => typeof v === "string" && v.trim()) || "";
+  return "";
+}
+function findTranslationGaps(snapshot, targets, sourceLanguage) {
+  const gaps = [];
+  for (const block of snapshot.blocks) {
+    const type = String(block.type ?? "");
+    const blockId = String(block.id ?? "");
+    for (const pattern of translatablePaths(type)) {
+      for (const path of expandPath(block, pattern)) {
+        const value = readPath(block, path);
+        const source = sourceText(value, sourceLanguage).trim();
+        if (!source) continue;
+        const missing = targets.filter((lang) => {
+          if (lang === sourceLanguage) return false;
+          if (typeof value === "string") return true;
+          const existing = isLocalizedText(value) ? value[lang] : void 0;
+          return !(typeof existing === "string" && existing.trim());
+        });
+        if (missing.length) gaps.push({ block_id: blockId, block_type: type, path, source, missing });
+      }
+    }
+  }
+  return gaps;
+}
+function applyTranslations(snapshot, entries, sourceLanguage) {
+  const blocks = snapshot.blocks.map((b) => ({ ...b }));
+  const rejected = [];
+  let applied = 0;
+  for (const entry of entries) {
+    if (!isMcpLanguage(entry.language)) {
+      rejected.push({ entry, reason: `unsupported language "${entry.language}"` });
+      continue;
+    }
+    const index = blocks.findIndex((b) => b.id === entry.block_id);
+    if (index < 0) {
+      rejected.push({ entry, reason: "block not found; call get_page for current ids" });
+      continue;
+    }
+    const block = blocks[index];
+    const allowed = translatablePaths(String(block.type ?? "")).some((pattern) => expandPath(block, pattern).includes(entry.path));
+    if (!allowed) {
+      rejected.push({ entry, reason: "path is not a visitor-facing text of this block; use paths from get_translation_gaps" });
+      continue;
+    }
+    const current = readPath(block, entry.path);
+    const base = typeof current === "string" ? { [sourceLanguage]: current } : isLocalizedText(current) ? { ...current } : {};
+    base[entry.language] = entry.text.trim();
+    try {
+      blocks[index] = writePath(block, entry.path, base);
+      applied += 1;
+    } catch (error) {
+      rejected.push({ entry, reason: error instanceof Error ? error.message : "could not write path" });
+    }
+  }
+  return { snapshot: { ...snapshot, blocks }, applied, rejected };
+}
+
+// src/lib/mcp/tools/apply-translations.ts
+var language = z.enum(MCP_LANGUAGES);
+var apply_translations_default = defineTool({
+  name: "apply_translations",
+  title: "Save translations",
+  description: "Write translated texts into a page draft. Each entry names a block id and path from get_translation_gaps, the language and the translated text. Existing languages are kept; plain texts become multilingual. Publish with publish_page.",
+  inputSchema: {
+    page_id: z.string().uuid(),
+    source_language: language.optional().describe("Language of the existing plain texts. Default ru."),
+    translations: z.array(z.object({
+      block_id: z.string(),
+      path: z.string().max(200),
+      language,
+      text: z.string().min(1).max(4e3)
+    })).min(1).max(400)
+  },
+  annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+  handler: async ({ page_id, source_language, translations }, ctx) => {
+    const opened = await openPage(ctx, page_id);
+    if (!isPageContext(opened)) return opened;
+    const result = applyTranslations(opened.draft.snapshot, translations, source_language ?? "ru");
+    if (result.applied === 0) {
+      return toolError("nothing_applied", `No translation matched the draft: ${result.rejected.slice(0, 3).map((r) => r.reason).join("; ")}`);
+    }
+    const saved = await saveDraft(opened.supabase, opened.draft, result.snapshot);
+    if (!isDraft(saved)) return saved;
+    return jsonResult({ saved: true, published: false, applied: result.applied, rejected: result.rejected, draft_revision: saved.revision });
+  }
+});
+
+// src/lib/mcp/tools/audit-page.ts
+import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z3 } from "npm:zod@3.25.76";
+
+// src/lib/mcp/audit.ts
+var WEIGHT = { high: 18, medium: 9, low: 4 };
+var CONTACT_URL = /(wa\.me|whatsapp|t\.me|telegram|tel:|mailto:|instagram\.com|viber)/i;
+var CLICKABLE = /* @__PURE__ */ new Set(["button", "link", "card", "messenger", "socials", "product", "tiles"]);
+function blocksOf(snapshot, type) {
+  return snapshot.blocks.filter((b) => b.type === type);
+}
+function languagesIn(snapshot) {
+  const found = /* @__PURE__ */ new Set();
+  const walk = (value) => {
+    if (isLocalizedText(value)) {
+      for (const [lang, text2] of Object.entries(value)) if (typeof text2 === "string" && text2.trim()) found.add(lang);
+      return;
+    }
+    if (Array.isArray(value)) value.forEach(walk);
+    else if (value && typeof value === "object") Object.values(value).forEach(walk);
+  };
+  walk(snapshot.blocks);
+  return [...found].sort();
+}
+function auditPage(input) {
+  const { snapshot, analytics } = input;
+  const strengths = [];
+  const weaknesses = [];
+  const weak = (f) => weaknesses.push(f);
+  const strong = (f) => strengths.push(f);
+  const blocks = snapshot.blocks;
+  const profile = blocksOf(snapshot, "profile")[0];
+  if (!profile) {
+    weak({ code: "no_profile", area: "content", severity: "high", message: "No profile block: visitors do not see who this is, and the page cannot be published.", fix: "edit_page add_block {type: profile, name, bio, avatar}" });
+  } else {
+    const name = textIn(profile.name, "ru");
+    const bio = textIn(profile.bio, "ru");
+    if (!name) weak({ code: "no_name", area: "content", severity: "high", message: "Profile has no name.", fix: "edit_page update_block profile {name}" });
+    if (bio.length < 40) weak({ code: "short_bio", area: "content", severity: "medium", message: `Bio is ${bio.length} characters; one clear sentence about who you help and how converts better (aim for 60-160).`, fix: "edit_page update_block profile {bio}" });
+    else strong({ code: "clear_bio", area: "content", message: "Profile explains who this is in a full sentence." });
+    if (!profile.avatar) weak({ code: "no_avatar", area: "content", severity: "medium", message: "No profile photo: pages with a face get more trust and clicks.", fix: "edit_page update_block profile {avatar: image URL}" });
+    if (profile.coverImage || snapshot.seo?.image) strong({ code: "share_image", area: "seo", message: "Has a wide image, so links shared in messengers show a large preview." });
+    else weak({ code: "no_share_image", area: "seo", severity: "low", message: "No cover or SEO image: shared links show only a small avatar card.", fix: "edit_page update_block profile {coverImage} or set_page {seo_image}" });
+  }
+  const contactBlocks = blocks.filter((b) => b.type === "messenger" || b.type === "form" || (b.type === "button" || b.type === "link") && typeof b.url === "string" && CONTACT_URL.test(b.url));
+  if (contactBlocks.length === 0) {
+    weak({ code: "no_contact", area: "conversion", severity: "high", message: "No way to contact the owner (no messenger, form or WhatsApp/Telegram button). Visitors leave without a lead.", fix: "edit_page add_block {type: messenger} near the top" });
+  } else {
+    strong({ code: "contact_path", area: "conversion", message: `Visitors can reach the owner directly (${contactBlocks.map((b) => b.type).join(", ")}).` });
+    const firstContact = blocks.indexOf(contactBlocks[0]);
+    if (firstContact > 4) weak({ code: "contact_too_low", area: "conversion", severity: "medium", message: `The first contact block is at position ${firstContact + 1}; on a phone it is below several screens.`, fix: "edit_page move_block to position 1-3" });
+  }
+  const ctas = blocks.filter((b) => b.type === "button" || b.type === "card" || b.type === "messenger");
+  if (ctas.length > 4) weak({ code: "too_many_ctas", area: "conversion", severity: "low", message: `${ctas.length} competing calls to action; one or two main actions convert better.`, fix: "edit_page remove_block or turn extras into links" });
+  if (blocks.length < 4) weak({ code: "thin_page", area: "content", severity: "medium", message: `Only ${blocks.length} blocks: not enough to show what is offered.`, fix: "edit_page add_block pricing / card / faq" });
+  if (blocks.length > 25) weak({ code: "long_page", area: "content", severity: "low", message: `${blocks.length} blocks: visitors rarely scroll that far on a phone.`, fix: "edit_page remove_block the weakest blocks (see get_page_analytics)" });
+  const offer = blocks.filter((b) => ["pricing", "product", "catalog", "card", "booking"].includes(String(b.type)));
+  if (offer.length) strong({ code: "clear_offer", area: "conversion", message: "Shows what is sold and, where given, for how much." });
+  else weak({ code: "no_offer", area: "conversion", severity: "medium", message: "No prices, services or products: visitors must ask before they know if it fits.", fix: "edit_page add_block {type: pricing} or card" });
+  if (blocksOf(snapshot, "faq").length) strong({ code: "faq", area: "seo", message: "FAQ answers objections and is quoted by search engines and AI assistants." });
+  else weak({ code: "no_faq", area: "seo", severity: "low", message: "No FAQ: 3-5 real questions help both visitors and AI search.", fix: "edit_page add_block {type: faq}" });
+  if (blocksOf(snapshot, "testimonial").length) strong({ code: "social_proof", area: "conversion", message: "Has client reviews." });
+  const incomplete = blocks.filter((b) => {
+    const entry = catalogEntry(String(b.type));
+    return entry?.required.some((key) => {
+      const v = b[key];
+      return v == null || v === "" || Array.isArray(v) && v.length === 0;
+    });
+  });
+  if (incomplete.length) weak({ code: "incomplete_blocks", area: "content", severity: "medium", message: `${incomplete.length} block(s) miss required content and are hidden from visitors: ${incomplete.map((b) => `${b.type} ${b.id}`).join(", ")}.`, fix: "edit_page update_block or remove_block" });
+  const noAlt = blocksOf(snapshot, "image").filter((b) => !textIn(b.alt, "ru"));
+  if (noAlt.length) weak({ code: "image_alt", area: "seo", severity: "low", message: `${noAlt.length} image(s) without alt text.`, fix: "edit_page update_block {alt}" });
+  const seo = snapshot.seo ?? {};
+  if (snapshot.isIndexable === false) weak({ code: "noindex", area: "seo", severity: "high", message: "The page is hidden from search engines.", fix: "edit_page set_page {is_indexable: true}" });
+  const description = seo.description || (profile ? textIn(profile.bio, "ru") : "");
+  if (description.length < 50) weak({ code: "seo_description", area: "seo", severity: "low", message: "Search snippet text is short; Google will make one up.", fix: "edit_page set_page {seo_description: 120-160 chars}" });
+  if (snapshot.city || snapshot.profession) strong({ code: "local_seo", area: "seo", message: "City/profession are set, which helps local search." });
+  else weak({ code: "no_city", area: "seo", severity: "low", message: "City and profession are empty; they power local search titles.", fix: "edit_page set_page {city, profession}" });
+  const languages = languagesIn(snapshot);
+  if (languages.length > 1) {
+    const gaps = findTranslationGaps(snapshot, languages, input.sourceLanguage ?? "ru");
+    if (gaps.length) weak({ code: "partial_translation", area: "languages", severity: "medium", message: `Page uses ${languages.join(", ")} but ${gaps.length} text(s) are missing in some of them; those visitors see mixed languages.`, fix: "get_translation_gaps then apply_translations" });
+    else strong({ code: "multilingual", area: "languages", message: `Fully translated: ${languages.join(", ")}.` });
+  }
+  if (!input.isPublished) weak({ code: "not_published", area: "publishing", severity: "high", message: "The page is not published; nobody can open it.", fix: "publish_page" });
+  else if (input.hasUnpublishedChanges) weak({ code: "unpublished_changes", area: "publishing", severity: "low", message: "The draft has changes that are not live yet.", fix: "publish_page" });
+  if (analytics) {
+    if (analytics.views === 0) {
+      weak({ code: "no_traffic", area: "traffic", severity: "medium", message: `No visits in ${analytics.window_days} days: the link is not where the audience is.`, fix: "Put the link in Instagram/Telegram/TikTok bio and 2GIS" });
+    } else {
+      if (analytics.click_through_percent >= 15) strong({ code: "good_ctr", area: "traffic", message: `${analytics.click_through_percent}% of visits end in a click.` });
+      else if (analytics.views >= 30 && analytics.click_through_percent < 5) weak({ code: "low_ctr", area: "traffic", severity: "high", message: `Only ${analytics.click_through_percent}% of ${analytics.views} visits click anything.`, fix: "Move the main action to the top and make it one clear button" });
+      const trend = analytics.change_vs_previous.views_percent;
+      if (trend !== null && trend <= -30) weak({ code: "falling_traffic", area: "traffic", severity: "medium", message: `Visits fell ${Math.abs(trend)}% versus the previous period.` });
+      if (trend !== null && trend >= 30) strong({ code: "growing_traffic", area: "traffic", message: `Visits grew ${trend}% versus the previous period.` });
+      const dead = analytics.blocks.filter((b) => CLICKABLE.has(b.type) && b.impressions >= 20 && b.clicks === 0);
+      if (dead.length) weak({ code: "dead_blocks", area: "traffic", severity: "low", message: `Seen but never clicked: ${dead.map((b) => `${b.label} (${b.block_id})`).join(", ")}.`, fix: "Rewrite, move or remove these blocks" });
+      const best = analytics.blocks.find((b) => b.clicks > 0);
+      if (best) strong({ code: "top_block", area: "traffic", message: `Most clicked: ${best.label} (${best.clicks} clicks).` });
+      if (analytics.views >= 100 && analytics.leads === 0) weak({ code: "no_leads", area: "conversion", severity: "medium", message: `${analytics.views} visits and no leads.`, fix: "Add a form or messenger block with a concrete offer" });
+    }
+  }
+  const order = { high: 0, medium: 1, low: 2 };
+  weaknesses.sort((a, b) => order[a.severity ?? "low"] - order[b.severity ?? "low"]);
+  const score = Math.max(0, Math.min(100, 100 - weaknesses.reduce((sum, w) => sum + WEIGHT[w.severity ?? "low"], 0)));
+  return {
+    score,
+    strengths,
+    weaknesses,
+    languages,
+    next_steps: weaknesses.slice(0, 3).map((w) => w.fix ?? w.message)
+  };
+}
+
+// src/lib/mcp/tools/get-page-analytics.ts
+import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z2 } from "npm:zod@3.25.76";
+
+// src/lib/mcp/page-analytics.ts
+function meta(row, ...keys) {
+  for (const key of keys) {
+    const value = row.metadata?.[key];
+    if (typeof value === "string" && value) return value;
+  }
+  return void 0;
+}
+var isImpression = (row) => row.metadata?.isBlockImpression === true || row.metadata?.isBlockImpression === "true";
+var isPageView = (row) => row.event_type === "view" && !isImpression(row);
+function percent(part, whole) {
+  return whole > 0 ? Math.round(part / whole * 1e3) / 10 : 0;
+}
+function change(current, previous) {
+  if (previous === 0) return current === 0 ? 0 : null;
+  return Math.round((current - previous) / previous * 1e3) / 10;
+}
+function top(map, limit) {
+  return [...map.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
+}
+function blockLabel(block) {
+  const c = block.content ?? {};
+  const raw = c.title ?? c.name ?? c.content ?? c.buttonText;
+  const text2 = textIn(raw, "ru").replace(/\s+/g, " ").trim();
+  return text2 ? text2.slice(0, 60) : block.type;
+}
+function summarizePageAnalytics(input) {
+  const { events, previous, blocks, days } = input;
+  const views = events.filter(isPageView);
+  const clicks = events.filter((e) => e.event_type === "click");
+  const visitors = new Set(views.map((e) => meta(e, "visitorId", "visitor_id")).filter(Boolean));
+  const perBlock = /* @__PURE__ */ new Map();
+  const stats = blocks.map((block) => {
+    const entry = { block_id: String(block.content?.id ?? block.id), type: block.type, label: blockLabel(block), clicks: 0, impressions: 0, ctr_percent: null };
+    perBlock.set(block.id, entry);
+    if (typeof block.content?.id === "string") perBlock.set(block.content.id, entry);
+    return entry;
+  });
+  for (const row of clicks) {
+    const ref = row.block_id ?? meta(row, "blockId", "block_id");
+    const entry = ref ? perBlock.get(ref) : void 0;
+    if (entry) entry.clicks += 1;
+  }
+  for (const row of events.filter(isImpression)) {
+    const ref = row.block_id ?? meta(row, "blockId", "block_id");
+    const entry = ref ? perBlock.get(ref) : void 0;
+    if (entry) entry.impressions += 1;
+  }
+  for (const entry of stats) entry.ctr_percent = entry.impressions > 0 ? percent(entry.clicks, entry.impressions) : null;
+  const sources = /* @__PURE__ */ new Map();
+  const devices = /* @__PURE__ */ new Map();
+  const countries = /* @__PURE__ */ new Map();
+  for (const row of views) {
+    const source = meta(row, "source", "referrer_source") ?? "direct";
+    sources.set(source, (sources.get(source) ?? 0) + 1);
+    const device = meta(row, "device", "device_type") ?? "unknown";
+    devices.set(device, (devices.get(device) ?? 0) + 1);
+    const country = meta(row, "countryName", "country_name", "country", "country_code") ?? "unknown";
+    countries.set(country, (countries.get(country) ?? 0) + 1);
+  }
+  const daily = /* @__PURE__ */ new Map();
+  for (let i = days - 1; i >= 0; i -= 1) {
+    daily.set(new Date(Date.now() - i * 864e5).toISOString().slice(0, 10), { views: 0, clicks: 0 });
+  }
+  for (const row of events) {
+    const day = daily.get(row.created_at.slice(0, 10));
+    if (!day) continue;
+    if (isPageView(row)) day.views += 1;
+    else if (row.event_type === "click") day.clicks += 1;
+  }
+  return {
+    window_days: days,
+    views: views.length,
+    unique_visitors: visitors.size,
+    clicks: clicks.length,
+    shares: events.filter((e) => e.event_type === "share").length,
+    leads: input.leads,
+    click_through_percent: percent(clicks.length, views.length),
+    lead_conversion_percent: percent(input.leads, visitors.size || views.length),
+    change_vs_previous: {
+      views_percent: change(views.length, previous.filter(isPageView).length),
+      clicks_percent: change(clicks.length, previous.filter((e) => e.event_type === "click").length)
+    },
+    blocks: stats.sort((a, b) => b.clicks - a.clicks),
+    sources: top(sources, 8).map(([source, count]) => ({ source, views: count })),
+    devices: Object.fromEntries(devices),
+    countries: top(countries, 8).map(([country, count]) => ({ country, views: count })),
+    daily: [...daily.entries()].map(([date, v]) => ({ date, ...v })),
+    sampled: input.sampled
+  };
+}
+
+// src/lib/mcp/tools/get-page-analytics.ts
+var EVENT_LIMIT = 2e4;
+async function loadPageAnalytics(supabase, userId, pageId, days) {
+  const now = Date.now();
+  const since = new Date(now - days * 864e5).toISOString();
+  const prevSince = new Date(now - 2 * days * 864e5).toISOString();
+  const columns = "event_type, block_id, metadata, created_at";
+  const [current, previous, blocks, leads] = await Promise.all([
+    supabase.from("analytics").select(columns, { count: "exact" }).eq("page_id", pageId).gte("created_at", since).limit(EVENT_LIMIT),
+    supabase.from("analytics").select("event_type, metadata").eq("page_id", pageId).gte("created_at", prevSince).lt("created_at", since).limit(EVENT_LIMIT),
+    supabase.from("blocks").select("id, type, content").eq("page_id", pageId).is("deleted_at", null),
+    supabase.from("leads").select("id", { count: "exact", head: true }).eq("user_id", userId).contains("metadata", { page_id: pageId }).gte("created_at", since)
+  ]);
+  if (current.error || previous.error || blocks.error) return null;
+  const rows = current.data ?? [];
+  return summarizePageAnalytics({
+    days,
+    events: rows,
+    previous: (previous.data ?? []).map((r) => ({ ...r, block_id: null, created_at: since })),
+    blocks: blocks.data ?? [],
+    leads: leads.error ? 0 : leads.count ?? 0,
+    sampled: (current.count ?? rows.length) > rows.length
+  });
+}
+var get_page_analytics_default = defineTool2({
+  name: "get_page_analytics",
+  title: "Get page analytics",
+  description: "Analytics for one page over the last N days: views, unique visitors, clicks, click-through, leads, change versus the previous period, per-block clicks and CTR, traffic sources, devices, countries and a daily series.",
+  inputSchema: {
+    page_id: z2.string().uuid(),
+    days: z2.number().int().min(1).max(180).optional().describe("Window in days. Default 30.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ page_id, days }, ctx) => {
+    const opened = await openPage(ctx, page_id);
+    if (!isPageContext(opened)) return opened;
+    const summary = await loadPageAnalytics(opened.supabase, opened.userId, page_id, days ?? 30);
+    if (!summary) return databaseError("get_page_analytics");
+    return jsonResult({ page: { id: page_id, slug: opened.page.slug }, ...summary });
+  }
+});
+
+// src/lib/mcp/tools/audit-page.ts
+var audit_page_default = defineTool3({
+  name: "audit_page",
+  title: "Review a page: strengths and weaknesses",
+  description: "Review a page draft and its recent analytics: content, contact path, offer, SEO, languages, publishing and traffic. Returns a 0-100 score, strengths, weaknesses ranked by severity with the evidence and the edit that fixes each, and the next three steps.",
+  inputSchema: {
+    page_id: z3.string().uuid(),
+    days: z3.number().int().min(1).max(180).optional().describe("Analytics window. Default 30.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ page_id, days }, ctx) => {
+    const opened = await openPage(ctx, page_id);
+    if (!isPageContext(opened)) return opened;
+    const analytics = await loadPageAnalytics(opened.supabase, opened.userId, page_id, days ?? 30);
+    const report = auditPage({
+      snapshot: opened.draft.snapshot,
+      isPublished: opened.page.is_published,
+      hasUnpublishedChanges: hasUnpublishedChanges(opened.draft),
+      analytics
+    });
+    return jsonResult({
+      page: { id: page_id, url: publicUrl(opened.page.slug) },
+      analytics_included: !!analytics,
+      ...report
+    });
   }
 });
 
 // src/lib/mcp/tools/create-page.ts
-import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z2 } from "npm:zod@3.25.76";
-var create_page_default = defineTool2({
+import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z4 } from "npm:zod@3.25.76";
+
+// src/lib/mcp/page-ops.ts
+var OperationError = class extends Error {
+  constructor(index, message) {
+    super(`Operation ${index + 1}: ${message}`);
+    this.index = index;
+    this.name = "OperationError";
+  }
+};
+var LOCKED_KEYS = /* @__PURE__ */ new Set(["id", "type"]);
+var URL_KEYS = /* @__PURE__ */ new Set(["url", "link", "buyLink", "avatar", "coverImage", "image", "imageUrl"]);
+var SAFE_URL = /^(https?:\/\/|mailto:|tel:)/i;
+function shortId() {
+  const cryptoApi = globalThis.crypto;
+  const raw = cryptoApi?.randomUUID?.() ?? `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+  return raw.replace(/-/g, "").slice(0, 10);
+}
+function withItemIds(block) {
+  const items = block.items;
+  if (!Array.isArray(items)) return block;
+  return {
+    ...block,
+    items: items.map(
+      (item, i) => item && typeof item === "object" && !Array.isArray(item) && !item.id ? { ...item, id: `${String(block.id)}-${i + 1}` } : item
+    )
+  };
+}
+function urlWarnings(block, label) {
+  const warnings = [];
+  for (const [key, value] of Object.entries(block)) {
+    if (URL_KEYS.has(key) && typeof value === "string" && value && !SAFE_URL.test(value)) {
+      warnings.push(`${label}: "${key}" should start with https://, tel: or mailto: (got "${value.slice(0, 60)}").`);
+    }
+  }
+  return warnings;
+}
+function indexOfBlock(blocks, id, opIndex) {
+  const index = blocks.findIndex((b) => b.id === id);
+  if (index < 0) throw new OperationError(opIndex, `block "${id}" is not on this page. Call get_page for current block ids.`);
+  return index;
+}
+function clampPosition(position, length) {
+  return Math.max(0, Math.min(Math.trunc(position), length));
+}
+function applyOperations(snapshot, operations) {
+  const next = { ...snapshot, blocks: snapshot.blocks.map((b) => ({ ...b })) };
+  const changes = [];
+  const warnings = [];
+  operations.forEach((operation2, i) => {
+    switch (operation2.op) {
+      case "set_page": {
+        const f = operation2.fields;
+        const seo = { ...next.seo ?? {} };
+        if (f.seo_title !== void 0) seo.title = f.seo_title ?? "";
+        if (f.seo_description !== void 0) seo.description = f.seo_description ?? "";
+        if (f.seo_image !== void 0) seo.image = f.seo_image ?? "";
+        if ("seo_title" in f || "seo_description" in f || "seo_image" in f) next.seo = seo;
+        if (f.is_indexable !== void 0) next.isIndexable = f.is_indexable;
+        for (const key of ["city", "profession", "niche", "favicon_url"]) {
+          if (f[key] !== void 0) next[key] = f[key];
+        }
+        if (f.seo_image && !SAFE_URL.test(f.seo_image)) warnings.push("set_page: seo_image should be an https:// image URL.");
+        changes.push(`page settings: ${Object.keys(f).join(", ") || "nothing"}`);
+        break;
+      }
+      case "add_block": {
+        const type = String(operation2.block.type ?? "");
+        const entry = catalogEntry(type);
+        if (!entry) {
+          throw new OperationError(i, `block type "${type}" cannot be created from MCP. Call get_block_catalog for the allowed types.`);
+        }
+        if (type === "profile" && next.blocks.some((b) => b.type === "profile")) {
+          throw new OperationError(i, "the page already has a profile block; change it with update_block.");
+        }
+        const missing = entry.required.filter((key) => {
+          const value = operation2.block[key];
+          return value == null || value === "" || Array.isArray(value) && value.length === 0;
+        });
+        if (missing.length) throw new OperationError(i, `${type} needs ${missing.join(", ")}.`);
+        const size2 = operation2.size ?? entry.default_size;
+        if (!BLOCK_SIZES.includes(size2)) throw new OperationError(i, `size must be one of ${BLOCK_SIZES.join(", ")}.`);
+        const id = `${type}-${shortId()}`;
+        const block = withItemIds({ ...operation2.block, id, type, blockSize: size2 });
+        let at = next.blocks.length;
+        if (type === "profile") at = 0;
+        else if (operation2.after_block_id) at = indexOfBlock(next.blocks, operation2.after_block_id, i) + 1;
+        else if (operation2.position !== void 0) at = clampPosition(operation2.position, next.blocks.length);
+        next.blocks.splice(at, 0, block);
+        warnings.push(...urlWarnings(block, `${type} ${id}`));
+        changes.push(`added ${type} ${id} at position ${at}`);
+        break;
+      }
+      case "update_block": {
+        const index = indexOfBlock(next.blocks, operation2.block_id, i);
+        const current = next.blocks[index];
+        const locked = Object.keys(operation2.changes).filter((key) => LOCKED_KEYS.has(key));
+        if (locked.length) throw new OperationError(i, `${locked.join(", ")} cannot change; remove the block and add a new one instead.`);
+        const updated = { ...current };
+        for (const [key, value] of Object.entries(operation2.changes)) {
+          if (value === null) delete updated[key];
+          else updated[key] = value;
+        }
+        if (operation2.size) {
+          if (!BLOCK_SIZES.includes(operation2.size)) throw new OperationError(i, `size must be one of ${BLOCK_SIZES.join(", ")}.`);
+          updated.blockSize = operation2.size;
+        }
+        next.blocks[index] = withItemIds(updated);
+        warnings.push(...urlWarnings(operation2.changes, `${String(current.type)} ${operation2.block_id}`));
+        changes.push(`updated ${String(current.type)} ${operation2.block_id}: ${[...Object.keys(operation2.changes), ...operation2.size ? ["size"] : []].join(", ")}`);
+        break;
+      }
+      case "remove_block": {
+        const index = indexOfBlock(next.blocks, operation2.block_id, i);
+        if (next.blocks[index].type === "profile") {
+          throw new OperationError(i, "the profile block cannot be removed: a page cannot be published without it.");
+        }
+        const [removed] = next.blocks.splice(index, 1);
+        changes.push(`removed ${String(removed.type)} ${operation2.block_id}`);
+        break;
+      }
+      case "move_block": {
+        const index = indexOfBlock(next.blocks, operation2.block_id, i);
+        const [block] = next.blocks.splice(index, 1);
+        const at = block.type === "profile" ? 0 : Math.max(clampPosition(operation2.position, next.blocks.length), next.blocks[0]?.type === "profile" ? 1 : 0);
+        next.blocks.splice(at, 0, block);
+        changes.push(`moved ${String(block.type)} ${operation2.block_id} to position ${at}`);
+        break;
+      }
+    }
+  });
+  return { snapshot: next, changes, warnings };
+}
+
+// src/lib/mcp/reserved-slugs.ts
+var MCP_RESERVED_SLUGS = /* @__PURE__ */ new Set([
+  "admin",
+  "alternatives",
+  "auth",
+  "blog",
+  "booking",
+  "collab",
+  "customers",
+  "dashboard",
+  "demo_nails",
+  "design-system",
+  "dev",
+  "dlya",
+  "en",
+  "events",
+  "experts",
+  "for",
+  "for-masters",
+  "from",
+  "gallery",
+  "goods",
+  "index",
+  "install",
+  "invites",
+  "join",
+  "kk",
+  "link-in-bio-ru",
+  "multilink",
+  "p",
+  "payment-terms",
+  "pricing",
+  "privacy",
+  "purchase",
+  "r",
+  "review",
+  "ru",
+  "s",
+  "sayt-vizitka-dlya-uslug",
+  "seo-landing",
+  "sitemap",
+  "taplink-alternative",
+  "team",
+  "terms",
+  "uz",
+  "vizitka-onlayn",
+  "api",
+  "app",
+  "www",
+  "help",
+  "support",
+  "login",
+  "signup",
+  "settings",
+  "lnkmx",
+  "linkmax"
+]);
+
+// src/lib/mcp/tools/create-page.ts
+var create_page_default = defineTool4({
   name: "create_page",
   title: "Create a new LinkMAX page",
-  description: "Create a new link-in-bio page for the signed-in LinkMAX user. Returns the new page id, slug and default settings so the agent can immediately edit blocks and appearance.",
+  description: "Create a new page for the signed-in user with a profile block (name and bio) in its draft. Fill it with edit_page, then publish_page. Returns page id, slug and URL.",
   inputSchema: {
-    slug: z2.string().trim().min(1).max(64).transform((value) => value.toLowerCase()).optional().describe("Desired URL slug (lowercase). If omitted or already taken, a unique slug is generated."),
-    title: z2.string().trim().min(1).max(120).optional().describe("Page title shown in the header and SEO."),
-    description: z2.string().trim().max(500).optional().describe("Short page description (SEO/bio).")
+    slug: z4.string().trim().min(3).max(30).regex(/^[a-zA-Z0-9-]+$/, "Latin letters, digits and hyphens only.").transform((value) => value.toLowerCase()).optional().describe("Desired address lnkmx.my/{slug}. If taken, a suffix is added."),
+    name: z4.string().trim().min(1).max(120).describe("Person or business name for the profile block."),
+    bio: z4.string().trim().max(500).optional().describe("One or two sentences: who this is and how they help.")
   },
   annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
-  handler: async ({ slug, title, description }, ctx) => {
-    const authContext = getAuthenticatedContext(ctx);
-    if (isToolError(authContext)) return authContext;
-    const { supabase } = authContext;
+  handler: async ({ slug, name, bio }, ctx) => {
+    const auth2 = getAuthenticatedContext(ctx);
+    if (isToolError(auth2)) return auth2;
+    if (slug && MCP_RESERVED_SLUGS.has(slug)) {
+      return toolError("slug_reserved", `lnkmx.my/${slug} is used by LinkMAX itself. Pick another slug.`);
+    }
+    const { supabase } = auth2;
     const { data, error } = await supabase.rpc("mcp_create_user_page", {
       p_slug: slug ?? null,
-      p_title: title ?? null,
-      p_description: description ?? null
+      p_title: name,
+      p_description: bio ?? null
     });
-    if (error) {
-      return databaseError("create_page");
-    }
+    if (error) return databaseError("create_page");
     const row = Array.isArray(data) ? data[0] : data;
-    const settings = {
-      editable_fields: [
-        "title",
-        "description",
-        "avatar_url",
-        "theme_settings",
-        "seo_meta",
-        "is_published",
-        "niche",
-        "contact_email",
-        "contact_phone",
-        "contact_whatsapp"
-      ],
-      block_types: ["link", "text", "image", "video", "form", "event", "product", "profile", "social"],
-      public_url_pattern: "https://lnkmx.my/{slug}"
-    };
-    return jsonResult({ page: row, settings });
+    if (!row) return databaseError("create_page.empty");
+    const draft = await loadDraft(supabase, row.id);
+    let profileReady = false;
+    if (isDraft(draft) && !draft.snapshot.blocks.some((b) => b.type === "profile")) {
+      const { snapshot } = applyOperations(draft.snapshot, [{ op: "add_block", block: { type: "profile", name, bio: bio ?? "" } }]);
+      profileReady = isDraft(await saveDraft(supabase, draft, snapshot));
+    }
+    return jsonResult({
+      page: { id: row.id, slug: row.slug, url: publicUrl(row.slug), is_published: false },
+      profile_block_created: profileReady,
+      next: "Call get_block_catalog, add content with edit_page, check it with audit_page, then publish_page."
+    });
+  }
+});
+
+// src/lib/mcp/tools/edit-page.ts
+import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z5 } from "npm:zod@3.25.76";
+var size = z5.enum(["small", "wide", "tall", "large"]);
+var text = z5.string().max(2e3);
+var operation = z5.discriminatedUnion("op", [
+  z5.object({
+    op: z5.literal("set_page"),
+    fields: z5.object({
+      seo_title: text.max(70).nullable().optional(),
+      seo_description: text.max(170).nullable().optional(),
+      seo_image: z5.string().max(2e3).nullable().optional(),
+      is_indexable: z5.boolean().optional(),
+      city: z5.string().max(80).nullable().optional(),
+      profession: z5.string().max(80).nullable().optional(),
+      niche: z5.string().max(40).nullable().optional(),
+      favicon_url: z5.string().max(2e3).nullable().optional()
+    })
+  }),
+  z5.object({
+    op: z5.literal("add_block"),
+    block: z5.record(z5.string(), z5.unknown()).describe("Block fields including type; see get_block_catalog. id is generated."),
+    size: size.optional(),
+    after_block_id: z5.string().optional().describe("Insert right after this block. Default: end of page."),
+    position: z5.number().int().min(0).optional()
+  }),
+  z5.object({
+    op: z5.literal("update_block"),
+    block_id: z5.string(),
+    changes: z5.record(z5.string(), z5.unknown()).describe("Fields to set; null removes a field. Arrays are replaced whole."),
+    size: size.optional()
+  }),
+  z5.object({ op: z5.literal("remove_block"), block_id: z5.string() }),
+  z5.object({ op: z5.literal("move_block"), block_id: z5.string(), position: z5.number().int().min(0) })
+]);
+var edit_page_default = defineTool5({
+  name: "edit_page",
+  title: "Edit a page draft",
+  description: "Apply a batch of edits to a page draft atomically: set_page (SEO, city, indexing), add_block, update_block, remove_block, move_block. Nothing goes live until publish_page; the owner sees the changes in the LinkMAX editor. Returns the change list and warnings.",
+  inputSchema: {
+    page_id: z5.string().uuid(),
+    operations: z5.array(operation).min(1).max(60)
+  },
+  annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+  handler: async ({ page_id, operations }, ctx) => {
+    const opened = await openPage(ctx, page_id);
+    if (!isPageContext(opened)) return opened;
+    const { supabase, draft, page } = opened;
+    let result;
+    try {
+      result = applyOperations(draft.snapshot, operations);
+    } catch (error) {
+      if (error instanceof OperationError) return toolError("invalid_operation", `${error.message} No changes were saved.`);
+      throw error;
+    }
+    const saved = await saveDraft(supabase, draft, result.snapshot);
+    if (!isDraft(saved)) return saved;
+    return jsonResult({
+      saved: true,
+      published: false,
+      draft_revision: saved.revision,
+      changes: result.changes,
+      warnings: result.warnings,
+      blocks: saved.snapshot.blocks.map((b, position) => ({ position, id: b.id, type: b.type })),
+      next: `Review in the editor or call publish_page to make it live at ${publicUrl(page.slug)}.`
+    });
   }
 });
 
 // src/lib/mcp/tools/get-analytics-summary.ts
-import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z3 } from "npm:zod@3.25.76";
-var get_analytics_summary_default = defineTool3({
+import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z6 } from "npm:zod@3.25.76";
+var get_analytics_summary_default = defineTool6({
   name: "get_analytics_summary",
   title: "Get analytics summary",
   description: "Return a lightweight analytics summary for the signed-in LinkMAX user: total events, unique visitors and top pages within the given number of days (default 30).",
   inputSchema: {
-    days: z3.number().int().min(1).max(365).optional().describe("Look-back window in days. Default 30.")
+    days: z6.number().int().min(1).max(365).optional().describe("Look-back window in days. Default 30.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ days }, ctx) => {
@@ -222,7 +1158,7 @@ var get_analytics_summary_default = defineTool3({
       byEventType.set(event.event_type, (byEventType.get(event.event_type) ?? 0) + 1);
       if (event.page_id) byPage.set(event.page_id, (byPage.get(event.page_id) ?? 0) + 1);
     }
-    const top = (pages ?? []).map((p) => ({ slug: p.slug, title: p.title, events: byPage.get(p.id) ?? 0, views_total: p.view_count ?? 0 })).sort((a, b) => b.events - a.events).slice(0, 10);
+    const top2 = (pages ?? []).map((p) => ({ slug: p.slug, title: p.title, events: byPage.get(p.id) ?? 0, views_total: p.view_count ?? 0 })).sort((a, b) => b.events - a.events).slice(0, 10);
     return jsonResult({
       window_days: windowDays,
       sampled: (eventCount ?? list.length) > list.length,
@@ -232,58 +1168,108 @@ var get_analytics_summary_default = defineTool3({
         unique_visitors: uniqueVisitors.size
       },
       events_by_type: Object.fromEntries(byEventType),
-      top_pages: top
+      top_pages: top2
     });
   }
 });
 
-// src/lib/mcp/tools/get-page-structure.ts
-import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z4 } from "npm:zod@3.25.76";
-var get_page_structure_default = defineTool4({
-  name: "get_page_structure",
-  title: "Get page structure and blocks",
-  description: "Return the full block structure and current configuration of one of the signed-in user's LinkMAX pages, so an agent can review and edit it. Accepts either a page_id (uuid) or a slug.",
+// src/lib/mcp/tools/get-block-catalog.ts
+import { defineTool as defineTool7 } from "npm:@lovable.dev/mcp-js@0.23.0";
+var get_block_catalog_default = defineTool7({
+  name: "get_block_catalog",
+  title: "Get the block catalog",
+  description: "List the block types an agent can add to a LinkMAX page, with required fields, field formats, translatable text paths and a minimal example for each. Read this before filling a page with edit_page.",
+  inputSchema: {},
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async () => jsonResult({
+    grid: "Pages are a 2-column grid. size: small = half width, wide = full width, tall = half width double height, large = full width double height.",
+    sizes: BLOCK_SIZES,
+    languages: MCP_LANGUAGES,
+    text_values: 'Any text field takes a plain string or an object like {"ru": "\u2026", "en": "\u2026", "kk": "\u2026"}.',
+    rules: [
+      "Exactly one profile block, always first; publishing requires it.",
+      "Put one clear contact action (messenger or button to WhatsApp/Telegram) in the first three blocks.",
+      "Use only facts, prices, reviews and links the owner gave you; never invent reviews or numbers.",
+      "Image fields need public https URLs; LinkMAX MCP cannot upload files."
+    ],
+    blocks: BLOCK_CATALOG
+  })
+});
+
+// src/lib/mcp/tools/get-page.ts
+import { defineTool as defineTool8 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z7 } from "npm:zod@3.25.76";
+var get_page_default = defineTool8({
+  name: "get_page",
+  title: "Get a page (draft)",
+  description: "Return the current editable draft of one of the signed-in user's pages: page settings and every block with its id, type, size and content. Edits from edit_page land in this draft and go live with publish_page.",
   inputSchema: {
-    page_id: z4.string().uuid().optional().describe("Page UUID. Provide this OR slug."),
-    slug: z4.string().trim().min(1).max(120).optional().describe("Page slug. Provide this OR page_id.")
+    page_id: z7.string().uuid().describe("Page UUID from list_my_pages or create_page.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async ({ page_id, slug }, ctx) => {
-    const authContext = getAuthenticatedContext(ctx);
-    if (isToolError(authContext)) return authContext;
-    if (!page_id && !slug) {
-      return toolError("invalid_input", "Provide page_id or slug.");
-    }
-    if (page_id && slug) {
-      return toolError("invalid_input", "Provide either page_id or slug, not both.");
-    }
-    const { supabase, userId } = authContext;
-    let pageQuery = supabase.from("pages").select(
-      "id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, niche, entity_type, contact_email, contact_phone, contact_whatsapp, editor_mode, grid_config, integrations, custom_domain, page_type, updated_at"
-    ).eq("user_id", userId).limit(1);
-    pageQuery = page_id ? pageQuery.eq("id", page_id) : pageQuery.eq("slug", slug);
-    const { data: pages, error: pageErr } = await pageQuery;
-    if (pageErr) return databaseError("get_page_structure.page");
-    const page = pages?.[0];
-    if (!page) return toolError("not_found", "Page not found for this user.");
-    const { data: blocks, error: blocksErr } = await supabase.from("blocks").select("id, type, position, title, content, style, is_premium, click_count, schedule").eq("page_id", page.id).order("position", { ascending: true });
-    if (blocksErr) return databaseError("get_page_structure.blocks");
-    const result = { page, blocks: blocks ?? [], block_count: (blocks ?? []).length };
-    return jsonResult(result);
+  handler: async ({ page_id }, ctx) => {
+    const opened = await openPage(ctx, page_id);
+    if (!isPageContext(opened)) return opened;
+    const { draft, page } = opened;
+    const s = draft.snapshot;
+    return jsonResult({
+      page: {
+        id: page.id,
+        slug: page.slug,
+        url: publicUrl(page.slug),
+        is_published: page.is_published,
+        has_unpublished_changes: hasUnpublishedChanges(draft),
+        draft_revision: draft.revision,
+        seo: s.seo ?? null,
+        is_indexable: s.isIndexable ?? true,
+        city: s.city ?? null,
+        profession: s.profession ?? null,
+        niche: s.niche ?? null
+      },
+      blocks: s.blocks.map((block, position) => ({ position, ...block }))
+    });
+  }
+});
+
+// src/lib/mcp/tools/get-translation-gaps.ts
+import { defineTool as defineTool9 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z8 } from "npm:zod@3.25.76";
+var language2 = z8.enum(MCP_LANGUAGES);
+var get_translation_gaps_default = defineTool9({
+  name: "get_translation_gaps",
+  title: "Find untranslated texts",
+  description: "List every visitor-facing text on a page draft that is missing in the target languages, with its block id, path and source text. Translate them yourself, then save with apply_translations. Keep names, prices and links unchanged.",
+  inputSchema: {
+    page_id: z8.string().uuid(),
+    languages: z8.array(language2).min(1).max(15).describe('Target languages, e.g. ["en", "kk"].'),
+    source_language: language2.optional().describe("Language the page is written in. Default ru.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ page_id, languages, source_language }, ctx) => {
+    const opened = await openPage(ctx, page_id);
+    if (!isPageContext(opened)) return opened;
+    const source = source_language ?? "ru";
+    const gaps = findTranslationGaps(opened.draft.snapshot, languages, source);
+    return jsonResult({
+      source_language: source,
+      languages,
+      missing_texts: gaps.reduce((sum, g) => sum + g.missing.length, 0),
+      gaps: gaps.slice(0, 300),
+      truncated: gaps.length > 300
+    });
   }
 });
 
 // src/lib/mcp/tools/list-my-leads.ts
-import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z5 } from "npm:zod@3.25.76";
-var list_my_leads_default = defineTool5({
+import { defineTool as defineTool10 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z9 } from "npm:zod@3.25.76";
+var list_my_leads_default = defineTool10({
   name: "list_my_leads",
   title: "List my LinkMAX leads",
   description: "List recent leads captured by the signed-in LinkMAX user's pages. Returns contact fields and source page.",
   inputSchema: {
-    limit: z5.number().int().min(1).max(200).optional().describe("Max leads to return. Default 50."),
-    page_id: z5.string().uuid().optional().describe("Optional page UUID stored in lead metadata to filter leads by page.")
+    limit: z9.number().int().min(1).max(200).optional().describe("Max leads to return. Default 50."),
+    page_id: z9.string().uuid().optional().describe("Optional page UUID stored in lead metadata to filter leads by page.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ limit, page_id }, ctx) => {
@@ -302,14 +1288,14 @@ var list_my_leads_default = defineTool5({
 });
 
 // src/lib/mcp/tools/list-my-pages.ts
-import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z6 } from "npm:zod@3.25.76";
-var list_my_pages_default = defineTool6({
+import { defineTool as defineTool11 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z10 } from "npm:zod@3.25.76";
+var list_my_pages_default = defineTool11({
   name: "list_my_pages",
   title: "List my LinkMAX pages",
   description: "List all link-in-bio pages that belong to the signed-in LinkMAX user. Returns slug, title, publish status, view count and update time.",
   inputSchema: {
-    limit: z6.number().int().min(1).max(100).optional().describe("Maximum number of pages to return. Defaults to 50.")
+    limit: z10.number().int().min(1).max(100).optional().describe("Maximum number of pages to return. Defaults to 50.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ limit }, ctx) => {
@@ -324,98 +1310,23 @@ var list_my_pages_default = defineTool6({
   }
 });
 
-// src/lib/mcp/tools/update-block.ts
-import { defineTool as defineTool7 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z7 } from "npm:zod@3.25.76";
-var update_block_default = defineTool7({
-  name: "update_block",
-  title: "Update a LinkMAX block",
-  description: "Update the content, appearance, type or position of a block that belongs to one of the signed-in user's pages.",
+// src/lib/mcp/tools/publish-page.ts
+import { defineTool as defineTool12 } from "npm:@lovable.dev/mcp-js@0.23.0";
+import { z as z11 } from "npm:zod@3.25.76";
+var publish_page_default = defineTool12({
+  name: "publish_page",
+  title: "Publish a page",
+  description: "Make the current draft of a page live at lnkmx.my/{slug}. Ask the owner before publishing: visitors see the result immediately. Requires a profile block.",
   inputSchema: {
-    block_id: z7.string().uuid().describe("Block UUID."),
-    type: z7.string().trim().min(1).max(64).optional(),
-    title: z7.string().trim().max(200).nullable().optional(),
-    content: z7.unknown().optional(),
-    style: z7.record(z7.string(), z7.unknown()).nullable().optional(),
-    position: z7.number().int().min(0).max(1e4).optional(),
-    is_premium: z7.boolean().optional(),
-    schedule: z7.unknown().nullable().optional()
+    page_id: z11.string().uuid()
   },
-  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
-  handler: async ({ block_id, type, title, content, style, position, is_premium, schedule }, ctx) => {
-    const authContext = getAuthenticatedContext(ctx);
-    if (isToolError(authContext)) return authContext;
-    const { supabase, userId } = authContext;
-    const { data: block, error: blockError } = await supabase.from("blocks").select("id, page_id").eq("id", block_id).maybeSingle();
-    if (blockError) return databaseError("update_block.lookup");
-    if (!block) return toolError("not_found", "Block not found.");
-    const { data: page, error: pageError } = await supabase.from("pages").select("id").eq("id", block.page_id).eq("user_id", userId).maybeSingle();
-    if (pageError) return databaseError("update_block.authorization");
-    if (!page) return toolError("not_found", "Block not found for this user.");
-    const updates = {};
-    if (type !== void 0) updates.type = type;
-    if (title !== void 0) updates.title = title;
-    if (content !== void 0) updates.content = content;
-    if (style !== void 0) updates.style = style;
-    if (position !== void 0) updates.position = position;
-    if (is_premium !== void 0) updates.is_premium = is_premium;
-    if (schedule !== void 0) updates.schedule = schedule;
-    if (Object.keys(updates).length === 0) {
-      return toolError("invalid_input", "Provide at least one block field to update.");
-    }
-    const { data: updatedBlock, error } = await supabase.from("blocks").update(updates).eq("id", block_id).select("id, page_id, type, position, title, content, style, is_premium, click_count, schedule").single();
-    if (error) return databaseError("update_block");
-    return jsonResult({ block: updatedBlock });
-  }
-});
-
-// src/lib/mcp/tools/update-page.ts
-import { defineTool as defineTool8 } from "npm:@lovable.dev/mcp-js@0.23.0";
-import { z as z8 } from "npm:zod@3.25.76";
-var jsonObject = z8.record(z8.string(), z8.unknown());
-var update_page_default = defineTool8({
-  name: "update_page",
-  title: "Update LinkMAX page settings",
-  description: "Update the settings of one of the signed-in user's pages. Only explicitly supplied allowlisted fields are changed; ownership is checked before the update.",
-  inputSchema: {
-    page_id: z8.string().uuid().describe("Page UUID owned by the signed-in user."),
-    title: z8.string().trim().min(1).max(120).optional(),
-    description: z8.string().trim().max(500).nullable().optional(),
-    avatar_url: z8.string().url().max(2048).nullable().optional(),
-    avatar_style: jsonObject.nullable().optional(),
-    theme_settings: jsonObject.nullable().optional(),
-    seo_meta: jsonObject.nullable().optional(),
-    is_published: z8.boolean().optional(),
-    niche: z8.string().trim().max(120).nullable().optional(),
-    entity_type: z8.string().trim().max(80).nullable().optional(),
-    contact_email: z8.string().email().max(320).nullable().optional(),
-    contact_phone: z8.string().trim().max(40).nullable().optional(),
-    contact_whatsapp: z8.string().trim().max(40).nullable().optional(),
-    editor_mode: z8.string().trim().max(40).optional(),
-    grid_config: jsonObject.nullable().optional(),
-    integrations: jsonObject.nullable().optional(),
-    custom_domain: z8.string().trim().max(253).nullable().optional(),
-    page_type: z8.string().trim().max(40).optional()
-  },
-  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
-  handler: async ({ page_id, ...fields }, ctx) => {
-    const authContext = getAuthenticatedContext(ctx);
-    if (isToolError(authContext)) return authContext;
-    const { supabase, userId } = authContext;
-    const { data: page, error: pageError } = await supabase.from("pages").select("id").eq("id", page_id).eq("user_id", userId).maybeSingle();
-    if (pageError) return databaseError("update_page.lookup");
-    if (!page) return toolError("not_found", "Page not found for this user.");
-    const updates = Object.fromEntries(
-      Object.entries(fields).filter(([, value]) => value !== void 0)
-    );
-    if (Object.keys(updates).length === 0) {
-      return toolError("invalid_input", "Provide at least one page field to update.");
-    }
-    const { data: updatedPage, error } = await supabase.from("pages").update(updates).eq("id", page_id).eq("user_id", userId).select(
-      "id, slug, title, description, avatar_url, avatar_style, theme_settings, seo_meta, is_published, niche, entity_type, contact_email, contact_phone, contact_whatsapp, editor_mode, grid_config, integrations, custom_domain, page_type, updated_at"
-    ).single();
-    if (error) return databaseError("update_page");
-    return jsonResult({ page: updatedPage });
+  annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+  handler: async ({ page_id }, ctx) => {
+    const opened = await openPage(ctx, page_id);
+    if (!isPageContext(opened)) return opened;
+    const published = await publishDraft(opened.supabase, opened.draft);
+    if (!isDraft(published)) return published;
+    return jsonResult({ published: true, url: publicUrl(published.slug ?? opened.page.slug), blocks: published.snapshot.blocks.length });
   }
 });
 
@@ -427,21 +1338,32 @@ var supabaseIssuer = supabaseUrl ? `${supabaseUrl}/auth/v1` : `https://${project
 var mcp_default = defineMcp({
   name: "linkmax-mcp",
   title: "LinkMAX MCP",
-  version: "0.2.0",
-  instructions: "Tools for LinkMAX \u2014 a link-in-bio and micro-business OS. Browse pages and leads, inspect page analytics and block structure, create pages and blocks, and update page or block settings. All tools operate only on the signed-in user's own data.",
+  version: "0.3.0",
+  instructions: [
+    "Tools for LinkMAX, a link-in-bio page builder. All tools operate only on the signed-in user's own data.",
+    "Workflow: list_my_pages or create_page -> get_block_catalog -> get_page -> edit_page (batch edits to a private draft) -> audit_page -> publish_page.",
+    "Edits land in the same draft the owner sees in the LinkMAX editor; nothing is live until publish_page, so ask the owner before publishing.",
+    "Translations: get_translation_gaps lists missing texts, you translate them, apply_translations stores them.",
+    "Analytics: get_analytics_summary for all pages, get_page_analytics for one page, audit_page for strengths and weaknesses with fixes.",
+    "Never invent reviews, prices or contacts; use only what the owner gave you."
+  ].join(" "),
   auth: auth.oauth.issuer({
     issuer: supabaseIssuer,
     acceptedAudiences: "authenticated"
   }),
   tools: [
     list_my_pages_default,
-    list_my_leads_default,
-    get_analytics_summary_default,
     create_page_default,
-    get_page_structure_default,
-    create_block_default,
-    update_block_default,
-    update_page_default
+    get_block_catalog_default,
+    get_page_default,
+    edit_page_default,
+    publish_page_default,
+    get_translation_gaps_default,
+    apply_translations_default,
+    get_analytics_summary_default,
+    get_page_analytics_default,
+    audit_page_default,
+    list_my_leads_default
   ]
 });
 
