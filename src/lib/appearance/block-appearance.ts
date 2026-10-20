@@ -181,6 +181,9 @@ export function resolveBlockCellAppearance(
   const style: Record<string, string> = {};
   const classes: string[] = [];
 
+  // Inner business cards share the grid cell's shape, including variant overrides.
+  style['--lm-block-surface-radius'] = bs.borderRadius ? BLOCK_RADIUS[bs.borderRadius] : 'var(--lm-block-radius, 24px)';
+
   if (!selfStyled) {
     if (bs.backgroundColor) style.backgroundColor = bs.backgroundColor;
     if (bs.backgroundGradient) style.backgroundImage = bs.backgroundGradient;

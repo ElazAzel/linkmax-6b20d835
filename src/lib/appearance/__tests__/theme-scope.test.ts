@@ -62,6 +62,14 @@ describe('getPageThemeScope', () => {
 });
 
 describe('resolveBlockCellAppearance', () => {
+  it.each(['product', 'event', 'booking', 'newsletter'] as const)('shares the resolved radius with the inner %s surface', (type) => {
+    const cell = resolveBlockCellAppearance({ type, blockStyle: { borderRadius: 'lg' } }, { borderRadius: 'md' });
+    expect(vars(cell.style)['--lm-block-surface-radius']).toBe('16px');
+    const square = resolveBlockCellAppearance({ type, blockStyle: { borderRadius: 'none' } });
+    expect(vars(square.style)['--lm-block-surface-radius']).toBe('0px');
+    expect(vars(resolveBlockCellAppearance({ type }).style)['--lm-block-surface-radius']).toBe('var(--lm-block-radius, 24px)');
+  });
+
   it('keeps separators free of card borders and shadows even with saved container styles', () => {
     const cell = resolveBlockCellAppearance({
       type: 'separator',

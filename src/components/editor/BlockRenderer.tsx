@@ -14,7 +14,7 @@ import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { BlockType } from '@/types/blocks/base';
 import { useRenderContext } from '@/contexts/RenderContext';
 import { isBlockScheduledNow } from '@/lib/blocks/block-visibility';
-import { SELF_STYLED_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
+import { BLOCK_RADIUS, SELF_STYLED_BLOCK_TYPES } from '@/lib/appearance/block-appearance';
 
 interface BlockRendererProps {
   block: Block;
@@ -118,7 +118,11 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   const { style: bsStyle, className: bsClass } = (isSelfStyled || containerStyled)
     ? { style: {} as React.CSSProperties, className: '' }
     : getBlockStyles(block.blockStyle);
-  const wrapperStyle = { ...animationStyle, ...bsStyle };
+  const wrapperStyle = {
+    ...animationStyle,
+    ...bsStyle,
+    ...(block.blockStyle?.borderRadius && { '--lm-block-surface-radius': BLOCK_RADIUS[block.blockStyle.borderRadius] }),
+  };
   const wrapperClass = cn(animationClass, bsClass);
   const RendererComponent = manifest.renderer;
 
@@ -170,7 +174,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
           />
         )}
       >
-        <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
+        <div className={wrapperClass} style={wrapperStyle} data-block-type={block.type} data-testid="block-renderer-wrapper">
           <BlockErrorBoundary>
             {inner}
           </BlockErrorBoundary>
@@ -182,7 +186,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   // Simple render mode
   return (
     <BlockErrorBoundary>
-      <div className={wrapperClass} style={wrapperStyle} data-testid="block-renderer-wrapper">
+      <div className={wrapperClass} style={wrapperStyle} data-block-type={block.type} data-testid="block-renderer-wrapper">
         {inner}
       </div>
     </BlockErrorBoundary>
