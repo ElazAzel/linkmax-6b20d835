@@ -26,11 +26,13 @@ import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { getBlockEditingConfig } from '@/lib/blocks/block-editing';
 import type { Block } from '@/types/page';
 import type { BlockFontFamily } from '@/types/blocks/base';
+import { cn } from '@/lib/utils/utils';
 
 type Tool = 'image' | 'text' | 'font' | 'appearance' | 'action' | 'content';
 interface Props {
   block: Block;
   title: string;
+  mobile?: boolean;
   editorBody: ReactNode;
   onChange: (patch: Partial<Block>) => void;
   onClose: () => void;
@@ -41,7 +43,7 @@ interface Props {
 }
 
 /** One inspector for pages of every age. Existing specialised fields stay in Advanced. */
-export function InspectorPanel({ block, title, editorBody, onChange, onClose, onDelete, onAddBelow, footer }: Props) {
+export function InspectorPanel({ block, title, mobile = false, editorBody, onChange, onClose, onDelete, onAddBelow, footer }: Props) {
   const { t } = useTranslation();
   const quick = ['image', 'link', 'button', 'text'].includes(block.type);
   // The first tab holds everything a block says and where it leads (title and
@@ -124,7 +126,7 @@ export function InspectorPanel({ block, title, editorBody, onChange, onClose, on
     {advanced ? <section aria-label={advancedLabel} className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">{editorBody}</section>
       : <Tabs value={active} onValueChange={value => setTool(value as Tool)} className="flex min-h-0 flex-1 flex-col">
         <TabsList aria-label={t('editor.inspector.toolsLabel')} className="w-full shrink-0 justify-start gap-1 overflow-x-auto rounded-none border-x-0 border-t-0 bg-card p-2">
-          {tools.map(item => { const Icon = icons[item]; return <TabsTrigger key={item} value={item} className="h-14 min-w-12 flex-1 flex-col gap-1 rounded-xl px-1 text-[10px] data-[state=active]:bg-accent data-[state=active]:text-primary"><Icon className="h-5 w-5" /><span>{labels[item]}</span></TabsTrigger>; })}
+          {tools.map(item => { const Icon = icons[item]; return <TabsTrigger key={item} value={item} className={cn('min-w-12 flex-1 gap-1 rounded-xl px-1 data-[state=active]:bg-accent data-[state=active]:text-primary', mobile ? 'h-11 flex-row text-xs' : 'h-14 flex-col text-[10px]')}><Icon className={mobile ? 'h-4 w-4 shrink-0' : 'h-5 w-5'} /><span>{labels[item]}</span></TabsTrigger>; })}
         </TabsList>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-5">
           {tools.map(item => <TabsContent key={item} value={item} className="mt-4 outline-none">{panel(item)}</TabsContent>)}

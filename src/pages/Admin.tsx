@@ -26,6 +26,7 @@ import Handshake from 'lucide-react/dist/esm/icons/handshake';
 import Banknote from 'lucide-react/dist/esm/icons/banknote';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Brain from 'lucide-react/dist/esm/icons/brain';
+import { useBusinessFeatures } from '@/lib/features';
 
 // Lazy load heavy tab components
 const AdminOverviewTab = lazy(() => import('@/components/admin/AdminOverviewTab').then(m => ({ default: m.AdminOverviewTab })));
@@ -65,6 +66,9 @@ export default function Admin() {
   const seoDescription = t('admin.seo.description', 'Admin tools for managing lnkmx.');
   const { isAdmin, loading, user } = useAdminAuth();
   const [selectedTab, setSelectedTab] = useState('overview');
+  const businessEnabled = useBusinessFeatures();
+  const businessTabs = ['tokens', 'partners', 'fintech'];
+  const activeTab = !businessEnabled && businessTabs.includes(selectedTab) ? 'overview' : selectedTab;
 
   useEffect(() => {
     if (!loading && !isAdmin) {
@@ -105,6 +109,12 @@ export default function Admin() {
     { value: 'broadcast', label: t('admin.broadcast', 'Рассылка'), icon: Megaphone },
     { value: 'seo', label: 'SEO', icon: Search },
   ];
+  const navigationGroups = [
+    { label: 'Страницы и контент', values: ['overview', 'pages', 'templates', 'users', 'seo'] },
+    { label: 'Аналитика', values: ['growth', 'analytics', 'detailed'], secondary: true },
+    { label: 'Управление', values: ['tiers', 'verification', 'broadcast'], secondary: true },
+    ...(businessEnabled ? [{ label: 'Бизнес-инструменты', values: businessTabs, secondary: true }] : []),
+  ];
 
   return (
     <ScreenErrorBoundary screenName="Admin">
@@ -135,6 +145,7 @@ export default function Admin() {
                 size="sm"
                 onClick={() => navigate('/admin/language-algorithms')}
                 className="h-8 px-2 md:px-3"
+                aria-label={t('admin.languageAlgorithms', 'Языки и алгоритмы')}
               >
                 <Brain className="h-4 w-4 md:mr-2" />
                 <span className="hidden md:inline">{t('admin.languageAlgorithms', 'Языки и алгоритмы')}</span>
@@ -144,6 +155,7 @@ export default function Admin() {
                 size="sm"
                 onClick={() => navigate('/admin/translations')}
                 className="h-8 px-2 md:px-3"
+                aria-label={t('admin.translations', 'Переводы')}
               >
                 <Languages className="h-4 w-4 md:mr-2" />
                 <span className="hidden md:inline">{t('admin.translations', 'Переводы')}</span>
@@ -151,7 +163,7 @@ export default function Admin() {
               <span className="text-xs md:text-sm text-muted-foreground hidden sm:block truncate max-w-[150px]">
                 {user?.email}
               </span>
-              <Button variant="outline" size="sm" onClick={handleSignOut} className="h-8 px-2 md:px-3">
+              <Button variant="outline" size="sm" onClick={handleSignOut} className="h-8 px-2 md:px-3" aria-label={t('admin.signOut')}>
                 <LogOut className="h-4 w-4 md:mr-2" />
                 <span className="hidden md:inline">{t('admin.signOut')}</span>
               </Button>
@@ -160,40 +172,43 @@ export default function Admin() {
         </header>
 
         <main className="container mx-auto px-2 md:px-4 py-3 md:py-6">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-            {/* Scrollable tabs for mobile */}
-            <div className="overflow-x-auto -mx-2 px-2 pb-2 mb-4 md:mb-6">
-              <TabsList className="inline-flex w-max md:w-auto bg-muted/50 p-1">
-                {tabs.map(tab => (
-                  <TabsTrigger
-                    key={tab.value}
-                    value={tab.value}
-                    className="text-xs md:text-sm px-2 md:px-3 py-1.5 md:py-2"
-                  >
-                    <tab.icon className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 md:mr-2" />
-                    <span className="hidden sm:inline">{tab.label}</span>
-                    <span className="sm:hidden">{tab.label.slice(0, 4)}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+          <Tabs value={activeTab} onValueChange={setSelectedTab}>
+            <div className="mb-5 space-y-3">
+              {navigationGroups.map(group => {
+                const links = (
+                  <TabsList aria-label={group.label} className="h-auto w-full flex flex-wrap justify-start gap-1 bg-muted/50 p-1">
+                    {tabs.filter(tab => group.values.includes(tab.value)).map(tab => (
+                      <TabsTrigger key={tab.value} value={tab.value} className="px-3 py-2 text-sm whitespace-normal">
+                        <tab.icon className="mr-2 h-4 w-4 shrink-0" />{tab.label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                );
+                return group.secondary ? (
+                  <details key={group.label} open={group.values.includes(activeTab) || undefined} className="rounded-xl border border-border/70 p-2">
+                    <summary className="cursor-pointer px-1 py-1 text-sm font-medium text-muted-foreground">{group.label}</summary>
+                    <div className="mt-2">{links}</div>
+                  </details>
+                ) : <div key={group.label}>{links}</div>;
+              })}
             </div>
 
             <Suspense fallback={<TabLoader />}>
-              <TabsContent value={selectedTab}>
-                {selectedTab === 'overview' && <AdminOverviewTab />}
-                {selectedTab === 'growth' && <AdminGrowthTab />}
-                {selectedTab === 'users' && <AdminUsersTab />}
-                {selectedTab === 'pages' && <AdminPagesTab />}
-                {selectedTab === 'tokens' && <AdminTokensTab />}
-                {selectedTab === 'analytics' && <AdminCharts />}
-                {selectedTab === 'detailed' && <AdminAnalyticsDashboard />}
-                {selectedTab === 'tiers' && <UserTierManager />}
-                {selectedTab === 'verification' && <AdminVerificationPanel />}
-                {selectedTab === 'partners' && <AdminPartnersTab />}
-                {selectedTab === 'templates' && <AdminTemplatesTab />}
-                {selectedTab === 'fintech' && <AdminFintechTab />}
-                {selectedTab === 'broadcast' && <AdminBroadcastTab />}
-                {selectedTab === 'seo' && <AdminSearchDiagnosticsTab />}
+              <TabsContent value={activeTab}>
+                {activeTab === 'overview' && <AdminOverviewTab />}
+                {activeTab === 'growth' && <AdminGrowthTab />}
+                {activeTab === 'users' && <AdminUsersTab />}
+                {activeTab === 'pages' && <AdminPagesTab />}
+                {activeTab === 'tokens' && <AdminTokensTab />}
+                {activeTab === 'analytics' && <AdminCharts />}
+                {activeTab === 'detailed' && <AdminAnalyticsDashboard />}
+                {activeTab === 'tiers' && <UserTierManager />}
+                {activeTab === 'verification' && <AdminVerificationPanel />}
+                {activeTab === 'partners' && <AdminPartnersTab />}
+                {activeTab === 'templates' && <AdminTemplatesTab />}
+                {activeTab === 'fintech' && <AdminFintechTab />}
+                {activeTab === 'broadcast' && <AdminBroadcastTab />}
+                {activeTab === 'seo' && <AdminSearchDiagnosticsTab />}
               </TabsContent>
             </Suspense>
           </Tabs>

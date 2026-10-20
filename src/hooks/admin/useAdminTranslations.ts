@@ -1,15 +1,13 @@
 import { useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import i18n from '@/i18n/config';
-import { applyTranslationsToI18n, upsertToDB } from '@/lib/i18n-db-backend';
+import i18n, { SUPPORTED_LANGUAGES, reloadLanguageResources } from '@/i18n/config';
+import { applyTranslationsToI18n, upsertToDB, unwrapTranslationPayload, mergeTranslationPayloads } from '@/lib/i18n-db-backend';
 import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 
-// Static fallbacks
-import ru from '@/i18n/locales/ru.json';
-import en from '@/i18n/locales/en.json';
-import kk from '@/i18n/locales/kk.json';
+// Only the admin query loads the full catalog; public pages stay lazy.
+const localeFiles = import.meta.glob('../../i18n/locales/*.json', { import: 'default' });
 
 type TranslationData = Record<string, unknown>;
 
@@ -45,39 +43,60 @@ export function setNestedValue(obj: TranslationData, key: string, value: string)
 export function useAdminTranslations(isAdmin: boolean) {
     const queryClient = useQueryClient();
 
-    const { data: dbTranslations, isLoading: loading } = useQuery({
+    const { data: resources, isLoading: loading, error, refetch, isFetching } = useQuery({
         queryKey: TRANSLATIONS_QUERY_KEY,
         queryFn: async () => {
-            // Use explicit casting as any to bypass lint errors for custom table not yet in generated types
-            const { data, error } = await (supabase.from('i18n_translations' as any) as any)
-                .select('lang_code, data');
-
-            if (error) throw error;
-
-            const result: Record<string, TranslationData> = {};
-            (data as any[])?.forEach(item => {
-                result[item.lang_code] = item.data;
-            });
-            return result;
+            const [canonical, legacy, bundledEntries] = await Promise.all([
+                (supabase.from('i18n_translations' as any) as any).select('lang_code, data'),
+                (supabase.from('languages' as any) as any).select('language_code, translations').eq('is_active', true),
+                Promise.all(SUPPORTED_LANGUAGES.map(async lang => {
+                    const load = localeFiles[`../../i18n/locales/${lang}.json`];
+                    return [lang, unwrapTranslationPayload(await load()) || {}] as const;
+                })),
+            ]);
+            if (canonical.error) throw canonical.error;
+            if (legacy.error && legacy.error.code !== 'PGRST205') throw legacy.error;
+            const remote: Record<string, TranslationData> = {};
+            for (const row of legacy.data || []) {
+                remote[row.language_code] = unwrapTranslationPayload(row.translations) || {};
+            }
+            for (const row of canonical.data || []) {
+                remote[row.lang_code] = unwrapTranslationPayload(row.data) || {};
+            }
+            return { bundled: Object.fromEntries(bundledEntries), remote };
         },
         enabled: isAdmin,
-        staleTime: 1000 * 60 * 5, // 5 minutes
+        staleTime: 60_000,
     });
 
     const translations = useMemo(() => {
-        return {
-            ru: JSON.parse(JSON.stringify(ru)),
-            en: JSON.parse(JSON.stringify(en)),
-            kk: JSON.parse(JSON.stringify(kk)),
-            ...(dbTranslations || {})
-        } as Record<string, TranslationData>;
-    }, [dbTranslations]);
+        const result: Record<string, TranslationData> = {};
+        for (const lang of new Set([...SUPPORTED_LANGUAGES, ...Object.keys(resources?.remote || {})])) {
+            result[lang] = mergeTranslationPayloads(resources?.bundled[lang] || {}, resources?.remote[lang] || {});
+        }
+        return result;
+    }, [resources]);
 
     const activeLanguages = useMemo(() => {
-        const baseLangs = ['en', 'ru', 'kk'];
-        const dbLangs = dbTranslations ? Object.keys(dbTranslations) : [];
-        return Array.from(new Set([...baseLangs, ...dbLangs]));
-    }, [dbTranslations]);
+        return Object.keys(translations);
+    }, [translations]);
+
+    const sourceStats = useMemo(() => Object.fromEntries(activeLanguages.map(lang => {
+        const remote = flattenObject(resources?.remote[lang] || {});
+        const bundled = flattenObject(resources?.bundled[lang] || {});
+        return [lang, {
+            saved: Boolean(resources?.remote[lang]),
+            storedFilled: Object.values(remote).filter(value => value.trim()).length,
+            storedEmpty: Object.values(remote).filter(value => !value.trim()).length,
+            fallbackFilled: Object.keys(bundled).filter(key => !remote[key]?.trim() && bundled[key]?.trim()).length,
+        }];
+    })), [activeLanguages, resources]);
+
+    const ensureWritable = () => {
+        if (!isAdmin || loading || error || !resources) {
+            throw new Error('Сначала загрузите сохранённые переводы из базы данных');
+        }
+    };
 
     const flattenedTranslations = useMemo(() => {
         const result: Record<string, Record<string, string>> = {};
@@ -93,12 +112,14 @@ export function useAdminTranslations(isAdmin: boolean) {
 
     const updateMutation = useMutation({
         mutationFn: async ({ lang, key, value }: { lang: string; key: string; value: string }) => {
-            const updatedLangData = JSON.parse(JSON.stringify(translations[lang] || {}));
+            ensureWritable();
+            const updatedLangData = JSON.parse(JSON.stringify(resources?.remote[lang] || {}));
             setNestedValue(updatedLangData, key, value);
             await upsertToDB(lang, updatedLangData);
             return { lang, data: updatedLangData };
         },
         onSuccess: async ({ lang, data }) => {
+            await reloadLanguageResources(lang);
             await applyTranslationsToI18n(i18n, lang, data);
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
             toast.success('Сохранено в БД');
@@ -111,28 +132,35 @@ export function useAdminTranslations(isAdmin: boolean) {
 
     const multiUpsertMutation = useMutation({
         mutationFn: async (payload: { lang: string; data: TranslationData }[]) => {
+            ensureWritable();
             for (const item of payload) {
                 await upsertToDB(item.lang, item.data);
             }
             return payload;
         },
         onSuccess: async (payload) => {
-            await Promise.all(payload.map((item) => applyTranslationsToI18n(i18n, item.lang, item.data)));
+            await Promise.all(payload.map(async (item) => {
+                await reloadLanguageResources(item.lang);
+                await applyTranslationsToI18n(i18n, item.lang, item.data);
+            }));
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
             toast.success('Данные успешно синхронизированы');
         },
         onError: (error) => {
             logger.error('Failed multi upsert', error);
             toast.error('Ошибка синхронизации');
-        }
+        },
+        // Earlier records may already have been saved when a later write fails.
+        onSettled: () => queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY }),
     });
 
     const deleteKeyMutation = useMutation({
         mutationFn: async (key: string) => {
+            ensureWritable();
             const updatedPayload: { lang: string; data: TranslationData }[] = [];
             const parts = key.split('.');
             for (const lang of activeLanguages) {
-                const langObj = JSON.parse(JSON.stringify(translations[lang] || {}));
+                const langObj = JSON.parse(JSON.stringify(resources?.remote[lang] || {}));
                 let current: any = langObj;
                 let found = true;
                 for (let i = 0; i < parts.length - 1; i++) {
@@ -151,14 +179,15 @@ export function useAdminTranslations(isAdmin: boolean) {
             return updatedPayload;
         },
         onSuccess: async (payload) => {
-            await Promise.all(payload.map((item) => applyTranslationsToI18n(i18n, item.lang, item.data)));
+            await Promise.all(payload.map((item) => reloadLanguageResources(item.lang)));
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
-            toast.success('Ключ удалён отовсюду');
+            toast.success('Переопределение удалено. Встроенный перевод сохранён');
         },
         onError: (error) => {
             logger.error('Failed to delete key', error);
             toast.error('Ошибка при удалении ключа');
-        }
+        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY }),
     });
 
     const allKeys = useMemo(() => {
@@ -186,8 +215,12 @@ export function useAdminTranslations(isAdmin: boolean) {
         translations,
         flattenedTranslations,
         activeLanguages,
+        sourceStats,
         allKeys,
         loading,
+        error,
+        refetch,
+        isFetching,
         saving: updateMutation.isPending || multiUpsertMutation.isPending || deleteKeyMutation.isPending,
         updateTranslation: updateMutation.mutateAsync,
         upsertFullTranslations: multiUpsertMutation.mutateAsync,

@@ -48,12 +48,15 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
+        if (uploading) return;
 
         const files = e.dataTransfer.files;
         if (files && files[0]) {
             const file = files[0];
             if (file.type === 'application/json' || file.name.endsWith('.json')) {
                 setSelectedFile(file);
+                setUploadedData(null);
+                setValidationResult(null);
 
                 // Try to extract language code from filename
                 const match = file.name.match(/^([a-z]{2})\.json$/i);
@@ -64,20 +67,22 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                 toast.error(t('pleaseSelectJsonFile'));
             }
         }
-    }, []);
+    }, [uploading, setValidationResult, t]);
 
     const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files && files[0]) {
             const file = files[0];
             setSelectedFile(file);
+            setUploadedData(null);
+            setValidationResult(null);
 
             const match = file.name.match(/^([a-z]{2})\.json$/i);
             if (match) {
                 setLanguageCode(match[1].toLowerCase());
             }
         }
-    }, []);
+    }, [setValidationResult]);
 
     const handleValidate = useCallback(async () => {
         if (!selectedFile || !languageCode) {
@@ -87,7 +92,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
 
         const result = await uploadLanguageFile(selectedFile, languageCode, false);
 
-        if (result) {
+        if (result?.validation.valid) {
             // Parse file to save data for later
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -153,7 +158,11 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                         <Label>{t('languageCode2Letters')}</Label>
                         <Input
                             value={languageCode}
-                            onChange={(e) => setLanguageCode(e.target.value.toLowerCase().slice(0, 2))}
+                            onChange={(e) => {
+                                setLanguageCode(e.target.value.toLowerCase().slice(0, 2));
+                                setUploadedData(null);
+                                setValidationResult(null);
+                            }}
                             placeholder="ru, en, kk, de..."
                             maxLength={2}
                             className="uppercase"
@@ -209,7 +218,11 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => setSelectedFile(null)}
+                                    onClick={() => {
+                                        setSelectedFile(null);
+                                        setUploadedData(null);
+                                        setValidationResult(null);
+                                    }}
                                     disabled={uploading}
                                 >
                                     {t('remove')}
@@ -334,7 +347,7 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                     )}
 
                     {validationResult && validationResult.valid && (
-                        <Button onClick={handleApply} disabled={uploading}>
+                        <Button onClick={handleApply} disabled={uploading || !uploadedData}>
                             {uploading ? (
                                 <>
                                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />

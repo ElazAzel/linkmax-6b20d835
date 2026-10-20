@@ -4,6 +4,7 @@ import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Play from 'lucide-react/dist/esm/icons/play';
 import { ClaimForm, KxMark, Reveal } from './primitives';
+import { DEMO_MEDIA } from '@/lib/demo-media';
 
 const v = (vars: Record<string, string | number>) => vars as CSSProperties;
 
@@ -63,8 +64,8 @@ export function KxBuild() {
 
           <Reveal className="kx-card" delay={0}>
             <div className="kx-shuffle flex gap-2" aria-hidden="true">
-              {['#ff6b00', '#3a3a3a', '#f4f4f1'].map((color, i) => (
-                <span key={color} className="h-16 flex-1 rounded-2xl" style={v({ background: color, '--d': `${i * 0.25}s`, '--r': `${(i - 1) * 4}deg` })} />
+              {[DEMO_MEDIA.wedding, DEMO_MEDIA.portrait, DEMO_MEDIA.nails].map((image, i) => (
+                <img key={image} src={image} alt="" width={120} height={160} loading="lazy" className="h-24 min-w-0 flex-1 rounded-2xl object-cover" style={v({ '--d': `${i * 0.25}s`, '--r': `${(i - 1) * 4}deg` })} />
               ))}
             </div>
             <div>

@@ -3,11 +3,11 @@
  *
  * Desktop (docked): a column to the right of the canvas; the page stays
  * visible and clickable, picking another block switches the inspector.
- * Phone (sheet): a non-modal bottom sheet; the selected block stays visible
- * above it. Changes reach the canvas right away; "Отменить изменения" returns
+ * Phone (sheet): a full-screen form with a fixed header and actions.
+ * Changes reach the canvas right away; "Отменить изменения" returns
  * the block to how it was when it was opened.
  */
-import { Suspense, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
@@ -31,7 +31,6 @@ import { InspectorPanel } from './InspectorPanel';
 
 import { useLiveBlockDraft } from '@/hooks/editor/useLiveBlockDraft';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
-import { cn } from '@/lib/utils/utils';
 import type { BlockType } from '@/types/blocks/base';
 import type { Block } from '@/types/page';
 import { withUrlSchemes } from '@/lib/blocks/safe-href';
@@ -80,12 +79,30 @@ function BlockInspectorSession({
   const { t } = useTranslation();
   const { draft, dirty, change, flush, discard, cancelPending } = useLiveBlockDraft(block, onUpdateBlock);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const sheetRef = useRef<HTMLElement>(null);
+  const blockId = block?.id;
 
-  // A new block starts in the compact sheet so it stays visible above it.
+  // Mobile browsers keep the layout viewport tall when the keyboard opens.
+  // Follow the visible viewport so the scroll area and Done remain reachable.
   useEffect(() => {
-    setExpanded(false);
-  }, [block?.id]);
+    if (mode !== 'sheet' || !blockId) return;
+    const viewport = window.visualViewport;
+    const syncViewport = () => {
+      if (!viewport || !sheetRef.current) return;
+      sheetRef.current.style.height = `${viewport.height}px`;
+      sheetRef.current.style.top = `${viewport.offsetTop}px`;
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    syncViewport();
+    viewport?.addEventListener('resize', syncViewport);
+    viewport?.addEventListener('scroll', syncViewport);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      viewport?.removeEventListener('resize', syncViewport);
+      viewport?.removeEventListener('scroll', syncViewport);
+    };
+  }, [mode, blockId]);
 
   useEffect(() => {
     if (!block) return;
@@ -182,7 +199,7 @@ function BlockInspectorSession({
   );
 
   const shell = (
-    <InspectorPanel block={shellBlock} title={t(manifest?.labelKey ?? `blockTypes.${block.type}`, block.type)}
+    <InspectorPanel block={shellBlock} mobile={mode === 'sheet'} title={t(manifest?.labelKey ?? `blockTypes.${block.type}`, block.type)}
       editorBody={editorBody} onChange={change} onClose={handleDone} footer={footer}
       // The profile header cannot be removed; offering Delete did nothing.
       onDelete={onDeleteBlock && block.type !== 'profile' ? () => setConfirmDelete(true) : undefined}
@@ -234,30 +251,13 @@ function BlockInspectorSession({
   return createPortal(
     <>
       <section
+        ref={sheetRef}
         data-editor-inspector
         role="dialog"
         aria-modal="false"
         aria-label={t('editor.inspector.title', 'Настройки блока')}
-        className={cn(
-          'fixed inset-x-0 bottom-0 z-[60] flex flex-col overflow-hidden rounded-t-sheet border-t border-border bg-card shadow-lg',
-          'pb-[env(safe-area-inset-bottom)] transition-[height] duration-200 ease-out motion-reduce:transition-none',
-          // Compact by default: at 76dvh only ~120px of the edited block showed
-          // above the sheet. The block is scrolled to the top on selection
-          // (GridEditor); the handle expands the sheet for long forms.
-          expanded ? 'h-[94dvh]' : 'h-[58dvh]',
-        )}
+        className="fixed inset-x-0 top-0 z-[60] flex h-dvh flex-col overflow-hidden overscroll-none bg-card pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-lg"
       >
-        <button
-          type="button"
-          onClick={() => setExpanded((value) => !value)}
-          className="flex h-11 w-full shrink-0 items-center justify-center text-muted-foreground"
-          aria-label={expanded
-            ? t('editor.inspector.collapse', 'Свернуть настройки')
-            : t('editor.inspector.expand', 'Развернуть настройки')}
-          aria-expanded={expanded}
-        >
-          <span className="h-1.5 w-10 rounded-full bg-border" aria-hidden="true" />
-        </button>
         <div className="min-h-0 flex-1">{shell}</div>
       </section>
       {deleteDialog}

@@ -29,6 +29,7 @@ import Blocks from 'lucide-react/dist/esm/icons/blocks';
 import Globe from 'lucide-react/dist/esm/icons/globe';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import { useBusinessFeatures } from '@/lib/features';
 
 interface StatCardProps {
   title: string;
@@ -86,6 +87,7 @@ function LoadingSkeleton() {
 }
 
 export function AdminOverviewTab() {
+  const businessEnabled = useBusinessFeatures();
   const { t, i18n } = useTranslation();
   const { data: stats, isLoading: statsLoading } = useAdminStats();
   const { data: recentEvents, isLoading: eventsLoading } = useAdminEvents();
@@ -126,7 +128,9 @@ export function AdminOverviewTab() {
   return (
     <div className="space-y-6">
       {/* System Actions */}
-      <Card>
+      <details className="rounded-xl border border-border p-3">
+        <summary className="cursor-pointer text-sm text-muted-foreground">{t('admin.systemActions', 'Системные действия')}</summary>
+      <Card className="mt-3 border-0 shadow-none">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium flex items-center gap-2">
             <RefreshCw className="h-4 w-4 text-primary" />
@@ -156,6 +160,7 @@ export function AdminOverviewTab() {
           </div>
         </CardContent>
       </Card>
+      </details>
 
       {/* User Stats */}
       <StatsSection title={t('admin.users')} icon={<Users className="h-5 w-5" />}>
@@ -173,11 +178,6 @@ export function AdminOverviewTab() {
           title={t('admin.activeTrials')}
           value={stats.activeTrials}
           icon={<Calendar className="h-5 w-5 text-blue-500" />}
-        />
-        <StatCard
-          title={t('admin.withStreak')}
-          value={stats.usersWithStreak}
-          icon={<Flame className="h-5 w-5 text-orange-500" />}
         />
       </StatsSection>
 
@@ -223,14 +223,14 @@ export function AdminOverviewTab() {
           icon={<Share2 className="h-5 w-5 text-pink-500" />}
         />
         <StatCard
-          title={t('admin.achievements')}
-          value={stats.totalAchievements}
-          icon={<Trophy className="h-5 w-5 text-yellow-500" />}
+          title="CTR"
+          value={stats.totalViews ? `${((stats.totalClicks / stats.totalViews) * 100).toFixed(1)}%` : '0%'}
+          icon={<TrendingUp className="h-5 w-5 text-teal-500" />}
         />
       </StatsSection>
 
       {/* Social & Community Stats */}
-      <StatsSection title={t('admin.socialSection')} icon={<UserPlus className="h-5 w-5" />}>
+      {businessEnabled && <StatsSection title={t('admin.socialSection')} icon={<UserPlus className="h-5 w-5" />}>
         <StatCard
           title={t('admin.friendships')}
           value={stats.totalFriendships}
@@ -254,10 +254,12 @@ export function AdminOverviewTab() {
           value={stats.totalShoutouts}
           icon={<MessageSquare className="h-5 w-5 text-rose-500" />}
         />
-      </StatsSection>
+      </StatsSection>}
 
       {/* Growth & Marketing Stats */}
-      <StatsSection title={t('admin.gamificationSection')} icon={<TrendingUp className="h-5 w-5" />}>
+      <details className="rounded-xl border border-border p-3">
+        <summary className="cursor-pointer text-sm text-muted-foreground">{t('admin.detailed')}</summary>
+      <div className="mt-4"><StatsSection title={t('admin.gamificationSection')} icon={<TrendingUp className="h-5 w-5" />}>
         <StatCard
           title={t('admin.referrals')}
           value={stats.totalReferrals}
@@ -269,16 +271,18 @@ export function AdminOverviewTab() {
           icon={<Target className="h-5 w-5 text-red-500" />}
         />
         <StatCard
-          title="CTR"
-          value={stats.totalPages ? `${((stats.publishedPages / stats.totalPages) * 100).toFixed(1)}%` : '0%'}
-          icon={<TrendingUp className="h-5 w-5 text-teal-500" />}
+          title={t('admin.achievements')}
+          value={stats.totalAchievements}
+          icon={<Trophy className="h-5 w-5 text-yellow-500" />}
         />
         <StatCard
           title={`${t('admin.totalBlocks')}/${t('admin.page')}`}
           value={stats.totalPages ? (stats.totalBlocks / stats.totalPages).toFixed(1) : '0'}
           icon={<Blocks className="h-5 w-5 text-slate-500" />}
         />
-      </StatsSection>
+        <StatCard title={t('admin.withStreak')} value={stats.usersWithStreak} icon={<Flame className="h-5 w-5 text-orange-500" />} />
+      </StatsSection></div>
+      </details>
 
       {/* Recent Activity */}
       <Card>

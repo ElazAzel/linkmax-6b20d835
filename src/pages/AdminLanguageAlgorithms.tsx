@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { getWritingAlgorithmStats, getWritingNiches } from '@/lib/intelligence/writing-algorithm';
+import { NICHES, getNicheLabel } from '@/lib/niches';
+import { HARDCODED_TEMPLATES } from '@/data/templates';
 import Languages from 'lucide-react/dist/esm/icons/languages';
 import Brain from 'lucide-react/dist/esm/icons/brain';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
@@ -69,6 +71,20 @@ export default function AdminLanguageAlgorithms() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('admin.pageBuilder.title', 'Конструктор страниц')}</CardTitle>
+                <CardDescription>{t('admin.pageBuilder.description', 'Локальная сборка из данных пользователя, композиций по нишам и шаблонов. Без запросов к AI-моделям и списания токенов.')}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="rounded-md border p-2"><p className="text-muted-foreground">{t('admin.pageBuilder.niches', 'Направлений')}</p><p className="font-semibold">{NICHES.length}</p></div>
+                  <div className="rounded-md border p-2"><p className="text-muted-foreground">{t('admin.templates', 'Шаблоны')}</p><p className="font-semibold">{HARDCODED_TEMPLATES.length}</p></div>
+                </div>
+                <div className="flex flex-wrap gap-2">{NICHES.slice(0, 6).map(niche => <Badge key={niche} variant="outline">{getNicheLabel(niche, t)}</Badge>)}<Badge variant="outline">+{NICHES.length - 6}</Badge></div>
+                <Button variant="outline" onClick={() => navigate('/gallery')}>{t('landing.kx.nav.examples', 'Примеры')}</Button>
+              </CardContent>
+            </Card>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

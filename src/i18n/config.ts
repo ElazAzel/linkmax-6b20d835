@@ -87,28 +87,33 @@ const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>
 // Track which lazy locales have been loaded
 const loadedLazyLocales = new Set<string>();
 const syncedDbLocales = new Set<string>();
+const pendingDbLocales = new Map<string, Promise<void>>();
 const remoteTranslationSyncConfigured = Boolean(
-  import.meta.env.VITE_ENABLE_REMOTE_TRANSLATIONS === 'true' &&
+  import.meta.env.VITE_ENABLE_REMOTE_TRANSLATIONS !== 'false' &&
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
 );
 
-function syncDbLocale(lang: string): void {
-  // Bundled locale files are the source of truth. Remote translations are an
-  // optional override and should not trigger a browser request when the app
+function syncDbLocale(lang: string): Promise<void> {
+  // Bundled locale files provide fallbacks. Saved admin translations override
+  // them and should not trigger a browser request when the app
   // is running without a configured Supabase publishable key (for example in
   // public previews and CI smoke tests).
-  if (!remoteTranslationSyncConfigured) return;
+  if (typeof window === 'undefined' || !remoteTranslationSyncConfigured || !remoteUpdatesReady) return Promise.resolve();
 
   const normalized = normalizeLanguage(lang);
-  if (syncedDbLocales.has(normalized)) return;
-  syncedDbLocales.add(normalized);
+  if (syncedDbLocales.has(normalized)) return Promise.resolve();
+  const pending = pendingDbLocales.get(normalized);
+  if (pending) return pending;
 
-  import('@/lib/i18n-db-backend')
+  const request = import('@/lib/i18n-db-backend')
     .then(({ syncI18nWithDB }) => syncI18nWithDB(i18n, normalized))
+    .then(() => { syncedDbLocales.add(normalized); })
     .catch((error) => {
       console.warn(`[i18n] Failed to sync DB locale: ${normalized}`, error);
-      syncedDbLocales.delete(normalized);
-    });
+    })
+    .finally(() => { pendingDbLocales.delete(normalized); });
+  pendingDbLocales.set(normalized, request);
+  return request;
 }
 
 /**
@@ -205,6 +210,7 @@ const preferredLanguage = normalizeLanguage(customLanguageDetector.lookup());
 // after hydration by applyPreferredLanguage(). Client-only roots (Telegram
 // Mini App) have no SSR payload and start in the preferred language.
 const hydratingSsr = typeof window !== 'undefined' && '$_TSR' in window;
+let remoteUpdatesReady = typeof window !== 'undefined' && !hydratingSsr;
 
 // Initialize i18n with no bundled resources — the detected locale is fetched
 // as a separate chunk and awaited via `i18nReady` before the app renders.
@@ -300,13 +306,12 @@ export const i18nReady: Promise<void> = i18nInitPromise
     if (typeof window === 'undefined') return;
     const activeLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language || detectedLang);
     _ric(() => {
+      if (!hydratingSsr) void syncDbLocale(activeLang);
       FALLBACK_WARMUP.filter((l) => l !== activeLang).forEach((l) => {
-        loadLazyLocale(l);
+        void loadLazyLocale(l).then(() => { if (!hydratingSsr) return syncDbLocale(l); });
       });
     });
   });
-
-syncDbLocale(detectedLang);
 
 /**
  * Switch a hydrated SSR page from the server language to the visitor's own.
@@ -314,8 +319,14 @@ syncDbLocale(detectedLang);
  * straight from Russian to the full target locale without missing keys.
  */
 export async function applyPreferredLanguage(): Promise<void> {
-  if (!hydratingSsr || preferredLanguage === SSR_LANGUAGE) return;
+  if (!hydratingSsr) return;
+  remoteUpdatesReady = true;
+  // Called from the root effect: remote overrides may now update the hydrated
+  // tree without changing the static text React expects during hydration.
+  void syncDbLocale(normalizeLanguage(i18n.language));
+  if (preferredLanguage === SSR_LANGUAGE) return;
   await loadLazyLocale(preferredLanguage);
+  await syncDbLocale(preferredLanguage);
   // Something else (a locale route, the switcher) already chose a language.
   if (normalizeLanguage(i18n.language) !== SSR_LANGUAGE) return;
   await i18n.changeLanguage(preferredLanguage);
@@ -328,7 +339,18 @@ export async function applyPreferredLanguage(): Promise<void> {
 export async function changeLanguageLoaded(lang: string): Promise<void> {
   const normalized = normalizeLanguage(lang);
   await loadLazyLocale(normalized);
+  await syncDbLocale(normalized);
   await i18n.changeLanguage(normalized);
+}
+
+/** Rebuild the locale after removing an override, including bundled fallbacks. */
+export async function reloadLanguageResources(lang: string): Promise<void> {
+  const normalized = normalizeLanguage(lang);
+  i18n.removeResourceBundle(normalized, 'translation');
+  loadedLazyLocales.delete(normalized);
+  syncedDbLocales.delete(normalized);
+  await loadLazyLocale(normalized);
+  await syncDbLocale(normalized);
 }
 
 
@@ -356,9 +378,8 @@ i18n.on('languageChanged', (lng) => {
 
   // Load lazy locale if switching to a non-primary language
   if (LAZY_LANGUAGES.includes(normalized as any)) {
-    loadLazyLocale(normalized);
+    void loadLazyLocale(normalized).then(() => syncDbLocale(normalized));
   }
-  syncDbLocale(normalized);
 
   if (process.env.NODE_ENV === 'development') {
     import('@/lib/utils/logger').then(({ logger }) => {

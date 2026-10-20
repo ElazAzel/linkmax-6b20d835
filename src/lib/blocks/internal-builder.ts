@@ -1,5 +1,7 @@
 import { createBlock } from './block-factory';
 import { generateBlockId } from './block-utils';
+import { applyArtDirection } from '@/lib/design/art-direction';
+import type { AlgorithmicTemplateBlock } from './algorithmic-templates';
 import type {
     Block,
     CatalogItem,
@@ -13,6 +15,9 @@ import type {
     ImageBlock,
     MapBlock,
     ButtonBlock,
+    ProfileBlock,
+    CarouselBlock,
+    LinkBlock,
 } from '@/types/page';
 import {
     extractServicesPipeline,
@@ -35,26 +40,23 @@ interface UserInfo {
 
 // ============== HYDRATION STRATEGIES ==============
 
-function hydrateProfileBlock(block: any, userInfo: UserInfo) {
+function hydrateProfileBlock(block: ProfileBlock, userInfo: UserInfo): string | undefined {
     if (userInfo.name) block.name = userInfo.name;
     // Extract CTA URL from bio before showing it
     const { url, remainder } = extractUrlFromText(userInfo.bio);
-    if (remainder) block.bio = remainder;
-    // Store extracted CTA inside block temp data so pipeline can process it later
-    if (url) block.__extractedCta = url;
+    block.bio = remainder || '';
+    // Return the CTA separately so no temporary fields reach persisted blocks.
+    return url || undefined;
 
 }
 
-function hydrateSocialsBlock(block: any, parsedSocials: any[], rawSocials: string) {
+function hydrateSocialsBlock(block: SocialsBlock, parsedSocials: ReturnType<typeof extractSocialsPipeline>) {
     if (parsedSocials.length > 0) {
-        block.platforms = parsedSocials.map((s: any, i: number) => ({
-            id: `soc-${Date.now()}-${i}`,
+        block.platforms = parsedSocials.map((s, i) => ({
+            id: `soc-${i + 1}`,
             platform: s.platform,
             url: s.url
         }));
-    } else if (rawSocials) {
-        // Fallback guess
-        block.platforms = [{ id: 'soc-1', platform: 'instagram', url: rawSocials }];
     }
 }
 
@@ -64,15 +66,16 @@ function hydrateSocialsBlock(block: any, parsedSocials: any[], rawSocials: strin
  * Recognizes the type of media from a URL and creates an appropriate block
  */
 function createSmartMediaBlock(url: string, title: string = 'Мои материалы'): Block {
-    const isYoutubeOrVimeo = url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
-    const isImage = url.match(/\.(jpeg|jpg|png|webp|gif)($|\?)/i);
+    const host = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+    const isYoutubeOrVimeo = ['youtube.com', 'm.youtube.com', 'youtu.be', 'vimeo.com', 'player.vimeo.com'].includes(host);
+    const isImage = /\.(jpeg|jpg|png|webp|gif|avif)($|\?)/i.test(url) || host === 'images.unsplash.com';
 
     if (isYoutubeOrVimeo) {
         const videoBlock = createBlock('video') as VideoBlock;
         videoBlock.title = title;
         videoBlock.url = url;
-        videoBlock.platform = url.includes('vimeo') ? 'vimeo' : 'youtube';
-                return videoBlock as Block;
+        videoBlock.platform = host.includes('vimeo') ? 'vimeo' : 'youtube';
+        return videoBlock as Block;
     }
 
     if (isImage) {
@@ -94,12 +97,12 @@ function createSmartMediaBlock(url: string, title: string = 'Мои матери
 }
 
 /**
- * Creates a feature list without a catalog block if there are no prices
+ * Creates a showcase list; quoted prices remain text when business tools are off.
  */
-function createFeatureListBlock(parsedServices: any[]): Block {
+function createFeatureListBlock(parsedServices: ReturnType<typeof extractServicesPipeline>): Block {
     const textBlock = createBlock('text') as TextBlock;
     textBlock.content = '## Чем я могу помочь\n' + parsedServices
-        .map((srv) => `- **${srv.title}**${srv.description ? ` — ${srv.description}` : ''}`)
+        .map((srv) => `- **${srv.title}**${srv.description ? ` — ${srv.description}` : ''}${srv.price > 0 ? ` · ${srv.price.toLocaleString('ru-RU')} ${srv.currency || 'KZT'}` : ''}`)
         .join('\n');
     textBlock.style = 'paragraph';
     return textBlock as Block;
@@ -121,20 +124,29 @@ const SERVICE_TITLE = 'Услуги и цены';
  * visitors and prompt the owner in the editor).
  */
 export function generateBlocksFromTemplate(
-    _templateBlocks: unknown[],
-    userInfo: UserInfo
+    templateBlocks: readonly AlgorithmicTemplateBlock[],
+    userInfo: UserInfo,
+    options: { now?: number; seed?: string; businessEnabled?: boolean } = {},
 ): Block[] {
     const blocks: Block[] = [];
-    const push = (block: Block) => blocks.push({ ...block, id: generateBlockId(block.type) } as Block);
+    const push = (block: Block) => blocks.push({
+        ...block,
+        id: options.now === undefined ? generateBlockId(block.type) : `smart-${block.type}-${options.now}-${blocks.length}`,
+        blockSize: 'wide',
+        blockStyle: { ...block.blockStyle, borderRadius: 'lg', animation: 'fade-in' },
+    } as Block);
 
     // Profile
-    const profile = createBlock('profile') as any;
+    const profile = createBlock('profile') as ProfileBlock;
     profile.avatar = '';
-    hydrateProfileBlock(profile, userInfo);
+    profile.verified = false;
+    profile.bio = '';
+    profile.coverGradient = 'light';
+    profile.avatarPosition = 'left';
+    profile.avatarShape = 'squircle';
+    const ctaUrl = hydrateProfileBlock(profile, userInfo);
     if (!userInfo.name?.trim()) profile.name = '';
     if (!profile.bio || profile.bio === 'Tell people about yourself') profile.bio = '';
-    const ctaUrl: string | undefined = profile.__extractedCta;
-    delete profile.__extractedCta;
     push(profile as Block);
 
     // Main link from the bio
@@ -158,14 +170,16 @@ export function generateBlocksFromTemplate(
     // Services
     const services = extractServicesPipeline(extractDiscount(userInfo.services).remainder || userInfo.services)
         .filter((s) => s.title || s.price > 0);
-    if (services.length > 0) {
-        if (services.some((s) => s.price > 0)) {
-            const sales = userInfo.goal === 'sales';
+    // Free-form gallery prompts populate both fields. Do not repeat an entire
+    // biography as a made-up service when it contains no actual priced offers.
+    if (services.length > 0 && (services.some((service) => service.price > 0) || userInfo.services.trim() !== userInfo.bio.trim())) {
+        if (services.some((s) => s.price > 0) && options.businessEnabled !== false) {
+            const sales = userInfo.goal === 'sales' || (!userInfo.goal && templateBlocks.some((block) => block.type === 'catalog'));
             const block = createBlock(sales ? 'catalog' : 'pricing') as CatalogBlock | PricingBlock;
             block.title = sales ? SERVICE_TITLE_SALES : SERVICE_TITLE;
             const currency = services.find((s) => s.currency)?.currency || 'KZT';
-            (block as any).currency = currency;
-            (block as any).items = services.map((srv, i) => ({
+            block.currency = currency as PricingBlock['currency'];
+            block.items = services.map((srv, i) => ({
                 id: `item-${i + 1}`,
                 name: srv.title || `Услуга ${i + 1}`,
                 description: srv.description,
@@ -185,12 +199,13 @@ export function generateBlocksFromTemplate(
     const messenger = createBlock('messenger') as MessengerBlock;
     messenger.title = userInfo.goal === 'leads' ? 'Записаться' : 'Связаться со мной';
     messenger.messengers = chats.length > 0
-        ? chats.map((c) => ({ platform: c.platform as 'whatsapp' | 'telegram', username: c.username }))
+        ? chats.map((c) => ({ platform: c.platform as MessengerBlock['messengers'][number]['platform'], username: c.username }))
         : [{ platform: 'whatsapp', username: '' }];
-    push(messenger as Block);
+    // Keep an editable contact prompt only when no other contact was supplied.
+    if (chats.length > 0 || (!contacts.length && !userInfo.socials.trim())) push(messenger as Block);
     const email = contacts.find((c) => c.platform === 'email');
     if (email) {
-        const link = createBlock('link') as any;
+        const link = createBlock('link') as LinkBlock;
         link.title = 'Написать на почту';
         link.url = `mailto:${email.username}`;
         push(link as Block);
@@ -201,7 +216,7 @@ export function generateBlocksFromTemplate(
     if (socials.length > 0) {
         const block = createBlock('socials') as SocialsBlock;
         block.title = '';
-        hydrateSocialsBlock(block, socials, userInfo.socials);
+        hydrateSocialsBlock(block, socials);
         push(block as Block);
     }
 
@@ -213,8 +228,37 @@ export function generateBlocksFromTemplate(
     }
 
     // Media
-    const urls = (userInfo.mediaLinks || '').split(/[\s,]+/).map((u) => u.trim()).filter((u) => /^https?:\/\//i.test(u));
-    urls.forEach((url, i) => push(createSmartMediaBlock(url, urls.length > 1 ? `Материал ${i + 1}` : 'Мои материалы')));
+    const urls = [...new Set((userInfo.mediaLinks || '').match(/https?:\/\/[^\s<>"']+/gi) || [])]
+        .map((url) => url.replace(/[),.;]+$/, ''))
+        .filter((url) => { try { return Boolean(new URL(url).hostname); } catch { return false; } });
+    const media = urls.map((url, i) => createSmartMediaBlock(url, urls.length > 1 ? `Материал ${i + 1}` : 'Мои материалы'));
+    const images = media.filter((block): block is ImageBlock => block.type === 'image');
+    if (images.length > 1) {
+        const gallery = createBlock('carousel') as CarouselBlock;
+        gallery.title = '';
+        gallery.images = images.map((image) => ({ url: image.url, alt: image.alt }));
+        gallery.autoPlay = false;
+        push(gallery as Block);
+    } else if (images.length === 1) push(images[0] as Block);
+    media.filter((block) => block.type !== 'image').forEach(push);
 
-    return blocks;
+    // Creator recipes introduce the work before services; service recipes keep
+    // offers first. Only supplied media participates, never sample stock work.
+    if (templateBlocks.findIndex((block) => block.type === 'image') === 1) {
+        const visual = blocks.filter((block) => ['image', 'carousel', 'video'].includes(block.type));
+        blocks.splice(0, blocks.length, blocks[0], ...visual, ...blocks.slice(1).filter((block) => !visual.includes(block)));
+    }
+    const recipeId = templateBlocks.find((block) => block.type === 'profile')?.overrides?.recipeId;
+    const directed = applyArtDirection(blocks, {
+        recipeId: typeof recipeId === 'string' ? recipeId : undefined,
+        seed: options.seed ?? userInfo.name,
+    }).blocks;
+    // Art direction generates ephemeral section IDs. Fixed-clock callers (tests,
+    // SSR previews) need the entire result, including section links, reproducible.
+    const sections = new Map<string, string>();
+    return directed.map((block) => {
+        if (options.now === undefined || !block.sectionId) return block;
+        if (!sections.has(block.sectionId)) sections.set(block.sectionId, `smart-section-${options.now}-${sections.size}`);
+        return { ...block, sectionId: sections.get(block.sectionId) };
+    });
 }

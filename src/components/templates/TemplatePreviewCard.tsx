@@ -1,186 +1,59 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils/utils';
-import type { Block } from '@/types/page';
-import Link2 from 'lucide-react/dist/esm/icons/link-2';
-import Image from 'lucide-react/dist/esm/icons/image';
-import Type from 'lucide-react/dist/esm/icons/type';
-import Video from 'lucide-react/dist/esm/icons/video';
-import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
-import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
-import User from 'lucide-react/dist/esm/icons/user';
-import Layers from 'lucide-react/dist/esm/icons/layers';
-import FormInput from 'lucide-react/dist/esm/icons/form-input';
-import Star from 'lucide-react/dist/esm/icons/star';
-import MapPin from 'lucide-react/dist/esm/icons/map-pin';
-import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
-import Clock from 'lucide-react/dist/esm/icons/clock';
-import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
-import File from 'lucide-react/dist/esm/icons/file';
-import Mail from 'lucide-react/dist/esm/icons/mail';
-import ListOrdered from 'lucide-react/dist/esm/icons/list-ordered';
-import Gift from 'lucide-react/dist/esm/icons/gift';
-import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
-import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
+import { getI18nText, type I18nText } from '@/lib/i18n-helpers';
 
+type PreviewBlock = Record<string, unknown> & { type: string };
 interface TemplatePreviewCardProps {
-  blocks: Block[] | unknown;
+  blocks: unknown;
   className?: string;
   showBlockCount?: boolean;
 }
 
-// Map block types to icons and colors
-const BLOCK_ICONS: Record<string, { icon: React.ElementType; color: string }> = {
-  profile: { icon: User, color: 'bg-blue-500' },
-  link: { icon: Link2, color: 'bg-sky-500' },
-  button: { icon: () => <span className="text-xs font-bold">▶</span>, color: 'bg-red-500' },
-  text: { icon: Type, color: 'bg-slate-500' },
-  image: { icon: Image, color: 'bg-emerald-500' },
-  video: { icon: Video, color: 'bg-rose-500' },
-  product: { icon: ShoppingBag, color: 'bg-amber-500' },
-  messenger: { icon: MessageCircle, color: 'bg-green-500' },
-  socials: { icon: () => <span className="text-xs">@</span>, color: 'bg-pink-500' },
-  carousel: { icon: Layers, color: 'bg-violet-500' },
-  form: { icon: FormInput, color: 'bg-purple-500' },
-  testimonial: { icon: Star, color: 'bg-yellow-500' },
-  map: { icon: MapPin, color: 'bg-green-600' },
-  faq: { icon: HelpCircle, color: 'bg-blue-400' },
-  countdown: { icon: Clock, color: 'bg-orange-400' },
-  pricing: { icon: DollarSign, color: 'bg-lime-500' },
-  download: { icon: File, color: 'bg-indigo-500' },
-  newsletter: { icon: Mail, color: 'bg-sky-500' },
-  catalog: { icon: ListOrdered, color: 'bg-teal-500' },
-  scratch: { icon: Gift, color: 'bg-red-400' },
-  shoutout: { icon: Megaphone, color: 'bg-orange-500' },
-  event: { icon: CalendarDays, color: 'bg-emerald-600' },
-  avatar: { icon: User, color: 'bg-cyan-500' },
-  separator: { icon: () => <span className="text-xs">—</span>, color: 'bg-gray-400' },
-};
+/** A miniature content preview: actual photos, headings and offers from the recipe. */
+export const TemplatePreviewCard = memo(function TemplatePreviewCard({ blocks, className, showBlockCount = true }: TemplatePreviewCardProps) {
+  const { i18n, t } = useTranslation();
+  const text = (value: unknown) => getI18nText(value as string | I18nText | undefined, i18n.language);
+  const list: PreviewBlock[] = Array.isArray(blocks)
+    ? blocks.filter((block) => block && typeof block === 'object').map((block) => ({ ...block, ...(block.overrides || {}) }))
+    : [];
+  const profile = list.find((block) => block.type === 'profile');
+  const content = list.filter((block) => block.type !== 'profile').slice(0, 5);
+  const thumbnail = (url: unknown, alt: string, extra = '') => typeof url === 'string' && url
+    ? <img src={url} alt={alt} loading="lazy" decoding="async" className={cn('h-full w-full object-cover', extra)} />
+    : null;
 
-/**
- * Visual preview card showing template blocks in a mini-layout format
- */
-export const TemplatePreviewCard = memo(function TemplatePreviewCard({
-  blocks,
-  className,
-  showBlockCount = true,
-}: TemplatePreviewCardProps) {
-  const blocksArray = useMemo(() => {
-    if (!blocks) return [];
-    return Array.isArray(blocks) ? blocks : [];
-  }, [blocks]);
-
-  const profileBlock = blocksArray.find((b: any) => b?.type === 'profile');
-  const contentBlocks = blocksArray.filter((b: any) => b?.type !== 'profile').slice(0, 8);
-  
-  // Group blocks into rows (max 2 per row for half-width, 1 for full-width)
-  const rows = useMemo(() => {
-    const result: Array<Array<any>> = [];
-    let currentRow: any[] = [];
-    let currentCols = 0;
-    
-    for (const block of contentBlocks) {
-      const isFullWidth = !block.blockSize?.includes('half');
-      const cols = isFullWidth ? 2 : 1;
-      
-      if (currentCols + cols > 2) {
-        if (currentRow.length > 0) result.push(currentRow);
-        currentRow = [block];
-        currentCols = cols;
-      } else {
-        currentRow.push(block);
-        currentCols += cols;
-      }
-      
-      if (currentCols === 2) {
-        result.push(currentRow);
-        currentRow = [];
-        currentCols = 0;
-      }
-    }
-    
-    if (currentRow.length > 0) result.push(currentRow);
-    return result.slice(0, 4); // Max 4 rows in preview
-  }, [contentBlocks]);
-
-  const getBlockVisual = (block: any) => {
-    const config = BLOCK_ICONS[block?.type] || BLOCK_ICONS.link;
-    const IconComponent = config.icon;
-    
-    return (
-      <div 
-        className={cn(
-          'rounded-sm flex items-center justify-center text-white',
-          config.color
-        )}
-        style={{ width: '100%', height: '100%', minHeight: '12px' }}
-      >
-        <IconComponent className="h-2 w-2 sm:h-2.5 sm:w-2.5" />
-      </div>
-    );
-  };
-
-  return (
-    <div className={cn(
-      'relative w-full h-full rounded-lg overflow-hidden',
-      'bg-gradient-to-br from-muted/50 to-muted',
-      className
-    )}>
-      {/* Mini phone frame */}
-      <div className="absolute inset-2 sm:inset-3 bg-background rounded-lg shadow-inner overflow-hidden flex flex-col">
-        {/* Profile area */}
-        {profileBlock && (
-          <div className="flex flex-col items-center pt-2 pb-1 sm:pt-3 sm:pb-2 border-b border-border/30">
-            {/* Mini avatar */}
-            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center">
-              <User className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-primary" />
-            </div>
-            {/* Name placeholder */}
-            <div className="w-12 sm:w-16 h-1.5 sm:h-2 bg-foreground/20 rounded-full mt-1" />
-            {/* Bio placeholder */}
-            <div className="w-16 sm:w-20 h-1 sm:h-1.5 bg-foreground/10 rounded-full mt-0.5" />
-          </div>
-        )}
-        
-        {/* Blocks grid */}
-        <div className="flex-1 p-1.5 sm:p-2 space-y-1 sm:space-y-1.5 overflow-hidden">
-          {rows.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex gap-1 sm:gap-1.5">
-              {row.map((block: any, blockIndex: number) => {
-                const isFullWidth = !block.blockSize?.includes('half');
-                return (
-                  <div 
-                    key={blockIndex}
-                    className={cn(
-                      'h-3 sm:h-4 rounded-sm overflow-hidden',
-                      isFullWidth ? 'w-full' : 'w-1/2'
-                    )}
-                  >
-                    {getBlockVisual(block)}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-          
-          {/* More blocks indicator */}
-          {blocksArray.length > 9 && (
-            <div className="text-center py-0.5">
-              <span className="text-[8px] sm:text-xs text-muted-foreground">
-                +{blocksArray.length - 9}
-              </span>
-            </div>
-          )}
+  return <div className={cn('relative h-full w-full overflow-hidden rounded-xl bg-stone-200 p-3 dark:bg-stone-900', className)}>
+    <div aria-hidden="true" className="mx-auto flex h-full max-w-[230px] flex-col overflow-hidden rounded-xl bg-background shadow-xl ring-1 ring-black/5">
+      {profile && <div className="relative shrink-0 overflow-hidden pb-2">
+        {typeof profile.coverImage === 'string' && profile.coverImage && <div className="h-12 overflow-hidden">{thumbnail(profile.coverImage, '')}</div>}
+        <div className="flex items-center gap-2 px-3 pt-2">
+          {typeof profile.avatar === 'string' && profile.avatar
+            ? <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full">{thumbnail(profile.avatar, '')}</div>
+            : <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">{text(profile.name).slice(0, 1)}</div>}
+          <div className="min-w-0"><p className="truncate text-[9px] font-semibold leading-tight">{text(profile.name)}</p><p className="mt-0.5 line-clamp-2 text-[7px] leading-tight text-muted-foreground">{text(profile.bio)}</p></div>
         </div>
+      </div>}
+      <div className="flex-1 space-y-1.5 overflow-hidden px-2 pb-2">
+        {content.map((block, index) => {
+          const items = (Array.isArray(block.items) ? block.items : []) as Record<string, unknown>[];
+          const images = (Array.isArray(block.images) ? block.images : []) as Record<string, unknown>[];
+          const title = text(block.title || block.name);
+          return <div key={index} className="overflow-hidden rounded-md border border-border/50">
+            {['image', 'carousel', 'tiles'].includes(block.type) ? <div className="grid h-16 grid-flow-col auto-cols-fr gap-0.5">
+              {(block.type === 'image' ? [{ url: block.url, alt: block.alt }] : block.type === 'tiles' ? items.map((item) => ({ url: item.image, alt: item.title })) : images).slice(0, 3)
+                .map((item, imageIndex) => <div key={imageIndex} className="overflow-hidden bg-muted">{thumbnail(item.url, '')}</div>)}
+            </div> : block.type === 'card' || block.type === 'product' ? <div className="flex min-h-9 items-center gap-2">
+              {Boolean(block.image) && <div className="h-12 w-14 shrink-0 overflow-hidden">{thumbnail(block.image, '')}</div>}
+              <div className="min-w-0 p-1.5"><p className="line-clamp-1 text-[8px] font-semibold">{title}</p><p className="line-clamp-2 text-[7px] text-muted-foreground">{text(block.text || block.description)}</p></div>
+            </div> : block.type === 'catalog' || block.type === 'pricing' ? <div className="space-y-1 p-2">
+              {items.slice(0, 2).map((item, itemIndex) => <div key={itemIndex} className="flex justify-between gap-2 text-[7px]"><span className="truncate">{text(item.name)}</span><span className="shrink-0 font-medium">{typeof item.price === 'number' ? item.price.toLocaleString(i18n.language) : ''} {text(item.currency || block.currency)}</span></div>)}
+            </div> : block.type === 'link' || block.type === 'button' || block.type === 'messenger' ? <div className="truncate bg-primary px-2 py-2 text-center text-[7px] font-medium text-primary-foreground">{title || t('profile.contact', 'Связаться')}</div>
+              : <div className="p-2 text-[7px] leading-relaxed text-foreground/80"><p className="line-clamp-3 whitespace-pre-line">{text(block.content || block.title).replace(/[#*_]/g, '')}</p></div>}
+          </div>;
+        })}
       </div>
-      
-      {/* Block count badge */}
-      {showBlockCount && blocksArray.length > 0 && (
-        <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">
-          <div className="bg-background/90 backdrop-blur-sm rounded-full px-1.5 py-0.5 text-[8px] sm:text-xs font-medium text-muted-foreground border border-border/50">
-            {blocksArray.length} блоков
-          </div>
-        </div>
-      )}
     </div>
-  );
+    {showBlockCount && list.length > 0 && <span className="absolute bottom-2 right-2 rounded-full border bg-background/90 px-2 py-0.5 text-[9px] text-muted-foreground">{list.length} {t('algorithmBuilder.blocksCreated', 'блоков')}</span>}
+  </div>;
 });

@@ -5,6 +5,7 @@ import {
     normalizeTranslationPayload,
     syncI18nWithDB,
     upsertToDB,
+    unwrapTranslationPayload,
 } from '../i18n-db-backend';
 import { supabase } from '@/platform/supabase/client';
 import i18next from 'i18next';
@@ -59,6 +60,25 @@ describe('i18n-db-backend', () => {
             const result = await fetchTranslationsFromDB('ru');
             expect(result).toBeNull();
         });
+
+        it('propagates failures to the synchronizer so the locale can be retried', async () => {
+            vi.mocked(supabase.from).mockReturnValue({
+                select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: 'offline' } }),
+            } as any);
+            await expect(syncI18nWithDB(i18next as any, 'ru')).rejects.toEqual({ message: 'offline' });
+        });
+
+        it('reads previously uploaded files from the legacy language table', async () => {
+            const query = (data: unknown) => ({
+                select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({ data, error: null }),
+            });
+            vi.mocked(supabase.from).mockReturnValueOnce(query(null) as any)
+                .mockReturnValueOnce(query({ translations: { common: { save: 'Existing upload' } } }) as any);
+            expect(await fetchTranslationsFromDB('en')).toEqual({ common: { save: 'Existing upload' } });
+            expect(supabase.from).toHaveBeenLastCalledWith('languages');
+        });
     });
 
     describe('upsertToDB', () => {
@@ -95,6 +115,10 @@ describe('i18n-db-backend', () => {
     });
 
     describe('normalizeTranslationPayload', () => {
+        it('unwraps admin keys without hiding intentionally empty values', () => {
+            expect(unwrapTranslationPayload({ translation: { common: { save: '' } }, common: { cancel: 'Cancel' } }))
+                .toEqual({ common: { save: '', cancel: 'Cancel' } });
+        });
         it('should merge legacy translation namespace with top-level keys', () => {
             const result = normalizeTranslationPayload({
                 translation: { common: { save: 'Save' }, oldOnly: 'old' },

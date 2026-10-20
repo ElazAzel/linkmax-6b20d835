@@ -7,12 +7,12 @@ type TranslationPayload = Record<string, unknown>;
 const isPlainObject = (value: unknown): value is TranslationPayload =>
     typeof value === 'object' && value !== null && !Array.isArray(value);
 
-function deepMerge(base: TranslationPayload, override: TranslationPayload): TranslationPayload {
+export function mergeTranslationPayloads(base: TranslationPayload, override: TranslationPayload): TranslationPayload {
     const out: TranslationPayload = { ...base };
     for (const [key, value] of Object.entries(override)) {
         const baseValue = out[key];
         if (isPlainObject(baseValue) && isPlainObject(value)) {
-            out[key] = deepMerge(baseValue, value);
+            out[key] = mergeTranslationPayloads(baseValue, value);
         } else {
             out[key] = value;
         }
@@ -54,16 +54,21 @@ function sanitizeTranslationPayload(value: unknown): unknown {
     return Object.keys(result).length > 0 ? result : undefined;
 }
 
-export function normalizeTranslationPayload(payload: unknown): TranslationPayload | null {
+export function unwrapTranslationPayload(payload: unknown): TranslationPayload | null {
     if (!isPlainObject(payload)) return null;
 
     const { translation, ...rest } = payload as TranslationPayload & {
         translation?: unknown;
     };
 
-    const merged = isPlainObject(translation)
-        ? deepMerge(translation, rest)
+    return isPlainObject(translation)
+        ? mergeTranslationPayloads(translation, rest)
         : rest;
+}
+
+export function normalizeTranslationPayload(payload: unknown): TranslationPayload | null {
+    const merged = unwrapTranslationPayload(payload);
+    if (!merged) return null;
     const sanitized = sanitizeTranslationPayload(merged);
     return isPlainObject(sanitized) ? sanitized : null;
 }
@@ -87,7 +92,7 @@ export async function applyTranslationsToI18n(
 /**
  * Fetches translations for a specific language from Supabase.
  */
-export async function fetchTranslationsFromDB(lng: string): Promise<any> {
+export async function fetchTranslationsFromDB(lng: string, throwOnError = false): Promise<unknown> {
     try {
         const { data, error } = await (supabase
             .from('i18n_translations' as any) as any)
@@ -102,12 +107,20 @@ export async function fetchTranslationsFromDB(lng: string): Promise<any> {
                 // files remain the source of truth when the remote table is unavailable.
                 logger.warn(`Unable to fetch optional translations for ${lng}`, { data: error });
             }
+            if (throwOnError) throw error;
             return null;
         }
 
-        return data?.data || null;
+        if (data?.data) return data.data;
+        // Earlier file uploads were stored in languages rather than the
+        // runtime table. Read them until an admin saves the canonical record.
+        const legacy = await (supabase.from('languages' as any) as any)
+            .select('translations').eq('language_code', lng).eq('is_active', true).maybeSingle();
+        if (legacy.error && legacy.error.code !== 'PGRST205' && throwOnError) throw legacy.error;
+        return legacy.data?.translations || null;
     } catch (err) {
         logger.warn(`Unable to fetch optional translations for ${lng}`, { data: err });
+        if (throwOnError) throw err;
         return null;
     }
 }
@@ -121,7 +134,7 @@ export async function syncI18nWithDB(i18nInstance: i18n, lng?: string) {
         : Array.from(new Set([i18nInstance.language, ...(i18nInstance.languages || [])].filter(Boolean)));
 
     for (const l of languagesToSync) {
-        const dbData = await fetchTranslationsFromDB(l);
+        const dbData = await fetchTranslationsFromDB(l, true);
         if (dbData) {
             await applyTranslationsToI18n(i18nInstance, l, dbData);
             logger.info(`Synced i18n ${l} from DB`);
