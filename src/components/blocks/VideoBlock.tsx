@@ -57,7 +57,9 @@ export const VideoBlock = memo(function VideoBlockComponent({ block }: VideoBloc
       )}
       <div
         className={cn('relative w-full overflow-hidden bg-black/20', aspectRatioClass)}
-        style={title ? undefined : { borderRadius: 'inherit' }}
+        style={title
+          ? { borderBottomLeftRadius: 'inherit', borderBottomRightRadius: 'inherit' }
+          : { borderRadius: 'inherit' }}
       >
         <iframe
           src={embedUrl}

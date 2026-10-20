@@ -149,8 +149,8 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
     : '';
 
   return (
-    <div className={containerClass}>
-      <div className="min-w-0 overflow-visible rounded-2xl">
+    <div className={containerClass} style={{ borderRadius: isFullscreen ? 0 : 'inherit' }}>
+      <div className="min-w-0 overflow-hidden rounded-[inherit]">
         {showHeader && (
           <div className="flex items-center justify-between gap-3 px-4 pt-2 pb-1 sm:px-5">
             <h3 className="text-sm font-medium leading-snug break-words hyphens-auto min-w-0">{title}</h3>

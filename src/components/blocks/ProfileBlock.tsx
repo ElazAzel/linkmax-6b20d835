@@ -204,7 +204,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   return (
     <div className={cn('relative flex min-w-0 flex-col overflow-visible', getPositionClass(), compact && 'lm-profile-compact')}>
       {hasCoverMedia && (
-        <div ref={coverRef} className={`relative w-full rounded-t-[var(--lm-block-radius,24px)] ${getCoverHeight()} overflow-hidden`}>
+        <div ref={coverRef} className={`relative w-full rounded-t-[var(--lm-block-surface-radius,var(--lm-block-radius,24px))] ${getCoverHeight()} overflow-hidden`}>
           {block.coverVideo ? (
             <video
               src={block.coverVideo}

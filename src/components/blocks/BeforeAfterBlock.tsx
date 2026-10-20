@@ -78,7 +78,7 @@ export const BeforeAfterBlock = React.memo(function BeforeAfterBlock({ block }: 
       
       <div 
         ref={containerRef}
-        className="relative w-full aspect-[4/3] rounded-xl overflow-hidden cursor-ew-resize select-none"
+        className="lm-block-surface relative w-full aspect-[4/3] overflow-hidden cursor-ew-resize select-none"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}

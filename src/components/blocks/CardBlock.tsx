@@ -29,7 +29,7 @@ export const CardBlock = memo(function CardBlock({ block, isPreview, onClick }: 
 
   const photo = (
     <div
-      className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-t-[var(--lm-block-radius,24px)] bg-muted"
+      className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-t-[var(--lm-block-surface-radius,var(--lm-block-radius,24px))] bg-muted"
     >
       {block.image ? (
         <img src={block.image} alt={title} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />

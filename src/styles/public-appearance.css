@@ -22,13 +22,10 @@
   gap: 16px;
 }
 .lm-auto-run { min-width: 0; }
-/* Business cards used fixed 12/16/32px corners inside a differently shaped cell.
-   Scope to the block's root surface so inputs, item cards and dialogs keep their shape. */
-[data-block-type]:is(
-  [data-block-type="product"], [data-block-type="catalog"], [data-block-type="pricing"],
-  [data-block-type="booking"], [data-block-type="event"], [data-block-type="community"],
-  [data-block-type="newsletter"], [data-block-type="shoutout"], [data-block-type="scratch"]
-) > div {
+/* Root surfaces and edge-to-edge media follow the resolved block radius.
+   Nested controls, avatars, item cards and portalled dialogs keep their shape. */
+.lm-block-surface,
+[data-block-type] > :is(div, a, blockquote) {
   border-radius: var(--lm-block-surface-radius, var(--lm-block-radius, 24px));
 }
 .lm-owned-surface[data-lm-type="image"] [data-testid="block-renderer-wrapper"] .qb-card,

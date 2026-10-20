@@ -193,6 +193,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {profileBlock && (
         <motion.div
           className="lm-profile-card w-full"
+          style={{ borderRadius: resolveBlockCellAppearance(profileBlock).style.borderRadius }}
           initial={noMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: noMotion ? 0 : 0.5, ease: 'easeOut' }}

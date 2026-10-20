@@ -121,6 +121,8 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   const wrapperStyle = {
     ...animationStyle,
     ...bsStyle,
+    // Give inherit a real radius even across the grid's layout-only wrappers.
+    borderRadius: bsStyle.borderRadius ?? 'var(--lm-block-surface-radius, var(--lm-block-radius, 24px))',
     ...(block.blockStyle?.borderRadius && { '--lm-block-surface-radius': BLOCK_RADIUS[block.blockStyle.borderRadius] }),
   };
   const wrapperClass = cn(animationClass, bsClass);

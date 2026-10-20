@@ -50,7 +50,7 @@ export const TilesBlock = memo(function TilesBlock({ block, onClick }: TilesBloc
         )}
       </>
     );
-    const className = cn('group relative block overflow-hidden rounded-[calc(var(--lm-block-radius,24px)-4px)] bg-card shadow-[0_1px_3px_rgb(0_0_0/0.08)]', aspect);
+    const className = cn('group relative block overflow-hidden rounded-[max(0px,calc(var(--lm-block-surface-radius,var(--lm-block-radius,24px))-4px))] bg-card shadow-[0_1px_3px_rgb(0_0_0/0.08)]', aspect);
     return href ? (
       <a key={item.id} href={href} target="_blank" rel="noopener noreferrer" onClick={onClick} className={cn(className, 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring')}>
         {inner}

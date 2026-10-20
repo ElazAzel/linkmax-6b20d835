@@ -45,7 +45,7 @@ export function MapBlock({ block }: MapBlockProps) {
       style={getAnimationStyle(block.blockStyle)}
     >
       <div className="w-full space-y-3">
-        <div className="w-full h-56 rounded-2xl overflow-hidden shadow-soft border border-hairline qb-card">
+        <div className="lm-block-surface w-full h-56 overflow-hidden shadow-soft border border-hairline qb-card">
           {embedUrl ? (
             <iframe
               width="100%"

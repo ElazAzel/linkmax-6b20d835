@@ -266,7 +266,7 @@ function SortableGridBlockItem({
   return (
     <div
       ref={setRefs}
-      style={style}
+      style={{ ...style, borderRadius: appearance.style.borderRadius }}
       data-block-id={block.id}
       data-lm-type={block.type}
       data-lm-auto={layout.autoHeight ? '' : undefined}
@@ -928,10 +928,10 @@ export const GridEditor = memo(function GridEditor({
       </div>}
       {/* Profile block — also gets data-editor-block for anti-blur */}
       {profileBlock && (
-        <div className="lm-profile-card relative isolate" data-onboarding="profile-block" data-editor-block>
-          <div className="relative scroll-mt-[84px]" data-block-id={profileBlock.id}>
+        <div className="lm-profile-card relative isolate" style={{ borderRadius: resolveBlockCellAppearance(profileBlock).style.borderRadius }} data-onboarding="profile-block" data-editor-block>
+          <div className="relative scroll-mt-[84px] rounded-[inherit]" data-block-id={profileBlock.id}>
             <div className="pointer-events-none"><BlockRenderer block={profileBlock} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} /></div>
-            <button type="button" className="absolute inset-0 rounded-card focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onEditBlock(profileBlock)} aria-label={t('common.edit')}>
+            <button type="button" className="absolute inset-0 rounded-[inherit] focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onEditBlock(profileBlock)} aria-label={t('common.edit')}>
               <span className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full bg-card shadow-sm"><Edit2 className="h-4 w-4" /></span>
             </button>
           </div>

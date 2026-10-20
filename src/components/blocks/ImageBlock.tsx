@@ -61,7 +61,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- role/tabIndex applied when interactive */}
       <div
         className={cn(
-          "relative group w-full",
+          "relative group w-full rounded-[inherit]",
           hasLink && 'cursor-pointer'
         )}
         onClick={hasLink ? handleClick : undefined}
@@ -70,7 +70,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
         tabIndex={hasLink ? 0 : undefined}
       >
         <div className={cn(
-          "relative overflow-hidden h-full w-full",
+          "lm-block-surface relative overflow-hidden h-full w-full",
           imageClass,
           hasLink && 'hover:shadow-lg transition-shadow duration-300'
         )}>
@@ -92,7 +92,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
               {/* Gradient overlay on hover */}
               <div className={cn(
                 "absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none",
-                'rounded-xl sm:rounded-2xl'
+                'rounded-[inherit]'
               )} />
 
               {/* External link icon */}

@@ -3,6 +3,7 @@ import { getPageThemeScope, toHslTriplet, isDarkColor, getDividerClass, getAppea
 import { resolveBlockCellAppearance, BLOCK_RADIUS } from '../block-appearance';
 import { getBlockStyles } from '@/lib/blocks/block-styling';
 import { getPageFontHrefs, primaryFamily } from '@/hooks/page/usePageFonts';
+import { ALL_BLOCK_TYPES } from '@/lib/blocks/block-registry';
 
 const vars = (style: unknown) => style as Record<string, string>;
 
@@ -62,7 +63,7 @@ describe('getPageThemeScope', () => {
 });
 
 describe('resolveBlockCellAppearance', () => {
-  it.each(['product', 'event', 'booking', 'newsletter'] as const)('shares the resolved radius with the inner %s surface', (type) => {
+  it.each(ALL_BLOCK_TYPES)('shares the resolved radius with the inner %s surface', (type) => {
     const cell = resolveBlockCellAppearance({ type, blockStyle: { borderRadius: 'lg' } }, { borderRadius: 'md' });
     expect(vars(cell.style)['--lm-block-surface-radius']).toBe('16px');
     const square = resolveBlockCellAppearance({ type, blockStyle: { borderRadius: 'none' } });
