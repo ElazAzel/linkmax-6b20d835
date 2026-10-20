@@ -17,6 +17,7 @@ import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import type { BlockStyle } from '@/types/page';
+import { BLOCK_RADIUS } from '@/lib/appearance/block-appearance';
 
 interface PaidBlockWrapperProps {
   blockId: string;
@@ -173,7 +174,10 @@ const PaidBlockGate = memo(function PaidBlockGate({
 
   // Show locked state
   return (
-    <Card className="relative overflow-hidden border-2 border-dashed border-amber-500/50 bg-gradient-to-br from-amber-500/5 to-orange-500/5">
+    <Card
+      className="lm-block-surface relative overflow-hidden border-2 border-dashed border-amber-500/50 bg-gradient-to-br from-amber-500/5 to-orange-500/5"
+      style={blockStyle?.borderRadius ? { borderRadius: BLOCK_RADIUS[blockStyle.borderRadius] } : undefined}
+    >
       {/* Placeholder: paid content is not sent to the browser until unlocked */}
       <div className="h-48 pointer-events-none select-none" aria-hidden="true" />
 

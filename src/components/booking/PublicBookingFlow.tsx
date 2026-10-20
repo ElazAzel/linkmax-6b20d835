@@ -213,11 +213,11 @@ export function PublicBookingFlow({
   };
 
   if (loadingContext) {
-    return <div className="rounded-2xl border p-6 text-center text-sm text-muted-foreground">{t('common.loading', 'Загрузка…')}</div>;
+    return <div className="lm-block-surface border p-6 text-center text-sm text-muted-foreground">{t('common.loading', 'Загрузка…')}</div>;
   }
 
   return (
-    <div className="w-full rounded-2xl border bg-card p-4 shadow-sm sm:p-6">
+    <div className="lm-block-surface w-full border bg-card p-4 shadow-sm sm:p-6">
       {state.step === 'service' && (
         <ServiceSelectionStep services={state.services} onSelect={(service) => dispatch({ type: 'SERVICE_SELECTED', service })} />
       )}

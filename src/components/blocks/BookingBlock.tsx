@@ -1276,7 +1276,7 @@ export const BookingBlock = memo(function BookingBlockComponent(props: BookingBl
 
   return (
     <div ref={bookingRootRef} data-selected-service-offering-id={linkedServiceId ?? undefined}>
-      <Suspense fallback={<div aria-busy="true" className="h-40 animate-pulse rounded-2xl border bg-muted/40" />}>
+      <Suspense fallback={<div aria-busy="true" className="lm-block-surface h-40 animate-pulse border bg-muted/40" />}>
         <PublicBookingFlow pageId={pageId} block={block} linkedServiceId={linkedServiceId} />
       </Suspense>
     </div>

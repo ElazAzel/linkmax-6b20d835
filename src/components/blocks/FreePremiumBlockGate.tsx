@@ -47,7 +47,7 @@ export const PremiumBlockOverlay = memo(function PremiumBlockOverlay({
     <div className={cn(
       "absolute inset-0 z-10 flex flex-col items-center justify-center p-6 text-center",
       "bg-gradient-to-t from-background/95 via-background/80 to-background/60",
-      "backdrop-blur-sm rounded-2xl",
+      "lm-block-surface backdrop-blur-sm",
       className
     )}>
       <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-4 shadow-xl shadow-amber-500/30">
