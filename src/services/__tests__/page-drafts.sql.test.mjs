@@ -52,6 +52,7 @@ before(async () => {
     create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
     create table storage.objects(bucket_id text,name text);`);
   await db.exec(preparePageV2CloudSql());
+  await db.exec(readFileSync(new URL('../../../supabase/migrations/20261016120000_korner_card_tiles.sql', import.meta.url),'utf8'));
 });
 after(async () => db.close());
 test('private saves enforce CAS and do not change public content', async () => {
@@ -163,4 +164,29 @@ test('soft-deleted content stays private while the owner retains recovery access
   assert.equal((await db.query('select id from blocks where id=$1',[removed])).rows.length,0);
   await as(owner);
   assert.equal((await db.query('select id from blocks where id=$1',[removed])).rows.length,1);
+});
+
+for (const type of ['card', 'tiles']) {
+  test(`${type} survives draft save, reload and publication with content intact`, async () => {
+    await as(owner);
+    const current = await call('load_page_draft', [page]);
+    const block = type === 'card'
+      ? { id: 'card-test', type, title: { ru: 'Talqy Like [2026]' }, text: { ru: 'Details' }, url: 'https://example.test/card' }
+      : { id: 'tiles-test', type, items: [{ id: 'tile-test', image: 'https://example.test/image.jpg', url: 'https://example.test/tile' }] };
+    const next = { ...current.snapshot, blocks: [...current.snapshot.blocks.filter(b => b.type !== type), block] };
+    const saved = await call('save_page_draft', [page, next, current.revision, current.base_published_revision, current.chatbot_context]);
+    const reloaded = await call('load_page_draft', [page]);
+    assert.deepEqual(reloaded.snapshot.blocks.find(b => b.id === block.id), block);
+    const published = await call('publish_page_draft', [page, saved.revision, saved.base_published_revision]);
+    assert.equal(published.base_published_revision, current.base_published_revision + 1);
+    await as(null, 'anon');
+    const result = await db.query('select content from blocks where page_id=$1 and type=$2 and deleted_at is null', [page, type]);
+    assert.equal(result.rows.length, 1);
+    assert.deepEqual(result.rows[0].content, block);
+  });
+}
+
+test('the block type constraint still rejects unknown types', async () => {
+  await db.exec('reset role');
+  await assert.rejects(db.query('insert into blocks(page_id,type,content) values($1,$2,$3)', [page, 'unsupported-type', {}]), /blocks_type_check/);
 });

@@ -71,6 +71,13 @@
       "when": 1792401000000,
       "tag": "0009_korner_card_tiles_and_contact_utm",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792475887063,
+      "tag": "0010_korner_card_tiles",
+      "breakpoints": true
     }
   ]
 }

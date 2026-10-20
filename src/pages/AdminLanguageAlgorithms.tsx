@@ -81,7 +81,7 @@ export default function AdminLanguageAlgorithms() {
                   <div className="rounded-md border p-2"><p className="text-muted-foreground">{t('admin.pageBuilder.niches', 'Направлений')}</p><p className="font-semibold">{NICHES.length}</p></div>
                   <div className="rounded-md border p-2"><p className="text-muted-foreground">{t('admin.templates', 'Шаблоны')}</p><p className="font-semibold">{HARDCODED_TEMPLATES.length}</p></div>
                 </div>
-                <div className="flex flex-wrap gap-2">{NICHES.slice(0, 6).map(niche => <Badge key={niche} variant="outline">{getNicheLabel(niche, t)}</Badge>)}<Badge variant="outline">+{NICHES.length - 6}</Badge></div>
+                <div className="flex flex-wrap gap-2">{NICHES.slice(0, 6).map(niche => <Badge key={niche} variant="outline">{getNicheLabel(niche, (key, fallback) => t(key, { defaultValue: fallback ?? key }))}</Badge>)}<Badge variant="outline">+{NICHES.length - 6}</Badge></div>
                 <Button variant="outline" onClick={() => navigate('/gallery')}>{t('landing.kx.nav.examples', 'Примеры')}</Button>
               </CardContent>
             </Card>
