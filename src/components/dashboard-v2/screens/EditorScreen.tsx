@@ -1,3 +1,4 @@
+import { PageThemeProvider } from '@/lib/appearance/page-theme-provider';
 /**
  * EditorScreen - Page editor with block management
  * Mobile-first design with GridEditor and block editing capabilities
@@ -674,6 +675,7 @@ export const EditorScreen = memo(function EditorScreen({
         </div>
       )}
       {/* Grid Editor */}
+      <PageThemeProvider scope={themeScope}>
       <div
         className={cn(
           'relative isolate mt-4 bg-background text-foreground',
@@ -723,6 +725,7 @@ export const EditorScreen = memo(function EditorScreen({
       </div>
 
 
+      </PageThemeProvider>
       {/* Sprint 2: Section picker — append ready-made groups of blocks */}
       {!LINKMAX_UI_V2 && <div className="mx-4 mt-3 mb-2 flex justify-center">
         <button

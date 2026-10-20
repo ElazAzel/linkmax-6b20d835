@@ -54,6 +54,11 @@ const mockEventBlock: EventBlockType = {
 };
 
 describe('EventBlock', () => {
+  it('displays the configured event timezone instead of the visitor timezone', () => {
+    render(<EventBlock block={{ ...mockEventBlock, startAt: '2026-10-20T13:00:00.000Z', timezone: 'Asia/Almaty' }} pageOwnerId="owner-123" pageId="page-123" />);
+    expect(screen.getByText('20 октября 2026, 18:00')).toHaveAttribute('dateTime', '2026-10-20T13:00:00.000Z');
+  });
+
   it('renders event title', () => {
     render(
       <EventBlock 

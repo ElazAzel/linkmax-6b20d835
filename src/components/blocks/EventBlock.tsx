@@ -12,6 +12,7 @@ import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
 import Download from 'lucide-react/dist/esm/icons/download';
 import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { useHydrated } from '@tanstack/react-router';
 import { ru, kk } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
@@ -67,7 +68,8 @@ export const EventBlock = memo(function EventBlock({
 
   const language = i18n.language as SupportedLanguage;
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
-  // The server formats in UTC; show the visitor's local time only after hydration.
+  // Explicit event timezones are deterministic on the server and in the browser.
+  // Legacy events without one use the visitor clock after hydration.
   const hydrated = useHydrated();
   const title = getI18nText(block.title, language);
   const description = getI18nText(block.description, language);
@@ -460,7 +462,9 @@ export const EventBlock = memo(function EventBlock({
                   <CalendarDays className="h-4 w-4" aria-hidden />
                 </span>
                 <time dateTime={block.startAt} className="min-w-0 break-words font-medium leading-relaxed text-foreground">
-                  {hydrated ? format(new Date(block.startAt), 'dd MMMM yyyy, HH:mm', { locale }) : null}
+                  {block.timezone
+                    ? formatInTimeZone(block.startAt, block.timezone, 'dd MMMM yyyy, HH:mm', { locale })
+                    : hydrated ? format(new Date(block.startAt), 'dd MMMM yyyy, HH:mm', { locale }) : null}
                 </time>
               </div>
             )}
@@ -488,8 +492,7 @@ export const EventBlock = memo(function EventBlock({
 
           <Button
             className={cn(
-              'h-auto min-h-11 w-fit max-w-full gap-2 whitespace-normal rounded-full px-5 py-2.5 text-left text-sm font-semibold transition-transform active:scale-[0.97]',
-              !registrationClosed && 'bg-foreground text-background hover:bg-foreground/90',
+              'h-auto min-h-11 w-fit max-w-full gap-2 whitespace-normal px-5 py-2.5 text-left text-sm font-semibold transition-transform active:scale-[0.97]',
             )}
             onClick={handleOpen}
             disabled={registrationClosed}
@@ -667,7 +670,7 @@ export const EventBlock = memo(function EventBlock({
 
                   <Button
                     type="submit"
-                    className="w-full rounded-xl"
+                    className="w-full"
                     disabled={isSubmitting || registrationClosed}
                   >
                     {isSubmitting ? t('event.submitting', 'Отправка...') : t('event.submit', 'Зарегистрироваться')}

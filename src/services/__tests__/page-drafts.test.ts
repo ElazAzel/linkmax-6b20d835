@@ -4,6 +4,11 @@ import type { PageData } from '@/types/page';
 const { rpc, from } = vi.hoisted(() => ({ rpc: vi.fn(), from: vi.fn() }));
 vi.mock('@/platform/supabase/client', () => ({ supabase: { rpc, from } }));
 describe('private draft transport', () => {
+  it.each(['42703', 'PGRST204', 'PGRST205'])('recognises incomplete migrations (%s) without a public write fallback', async code => {
+    rpc.mockResolvedValue({ data: null, error: { code, message: 'missing schema' } });
+    await expect(publishPageDraft('page', 3, 2)).rejects.toMatchObject({ kind: 'unavailable' });
+    expect(from).not.toHaveBeenCalled();
+  });
   it('never falls back to a public write when deployed RPC is missing', async () => {
     rpc.mockResolvedValue({ data: null, error: { code: 'PGRST202', message: 'not found' } });
     await expect(loadPageDraft('page')).rejects.toMatchObject({ kind: 'unavailable' });

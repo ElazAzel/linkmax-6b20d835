@@ -302,11 +302,14 @@ export function getPageThemeScope(theme?: Partial<PageTheme>): PageThemeScope {
   if (t.textColor && textTriplet) {
     style['--foreground'] = textTriplet;
     style['--card-foreground'] = textTriplet;
+    style['--popover-foreground'] = textTriplet;
     style.color = t.textColor;
   }
 
   if (t.buttonStyle) {
     style['--lm-button-radius'] = BUTTON_RADIUS[t.buttonStyle] ?? BUTTON_RADIUS.rounded;
+    style['--radius-control'] = style['--lm-button-radius'];
+    style['--button-radius-compact'] = style['--lm-button-radius'];
     if (t.buttonStyle === 'gradient') {
       const from = accent || 'hsl(var(--primary))';
       style['--lm-button-bg'] = `linear-gradient(135deg, ${from}, color-mix(in srgb, ${from} 55%, #7c3aed))`;

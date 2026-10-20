@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Input } from '@/components/ui/input';
+import { DateTimeInput } from '@/components/form-fields/DateTimeInput';
 import { Switch } from '@/components/ui/switch';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { createMultilingualString } from '@/lib/i18n-helpers';
@@ -11,12 +11,6 @@ import Settings from 'lucide-react/dist/esm/icons/settings';
 
 function CountdownBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
-
-  const formatDateForInput = (dateString?: string) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toISOString().slice(0, 16);
-  };
 
   return (
     <div className="space-y-4">
@@ -33,10 +27,9 @@ function CountdownBlockEditorComponent({ formData, onChange }: BaseBlockEditorPr
         />
 
         <EditorField label={t('blocks.countdown.targetDate', 'Дата и время')} required>
-          <Input
-            type="datetime-local"
-            value={formatDateForInput(formData.targetDate)}
-            onChange={(e) => onChange({ ...formData, targetDate: new Date(e.target.value).toISOString() })}
+          <DateTimeInput
+            value={formData.targetDate}
+            onValueChange={(value) => onChange({ ...formData, targetDate: value })}
             className="h-12 rounded-xl"
           />
         </EditorField>

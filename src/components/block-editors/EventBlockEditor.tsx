@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DateTimeInput } from '@/components/form-fields/DateTimeInput';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,21 +24,6 @@ import ListChecks from 'lucide-react/dist/esm/icons/list-checks';
 import Info from 'lucide-react/dist/esm/icons/info';
 import ImageIcon from 'lucide-react/dist/esm/icons/image';
 import type { EventFormField } from '@/types/page';
-
-const toLocalInputValue = (value?: string) => {
-  if (!value) return '';
-  try {
-    return new Date(value).toISOString().slice(0, 16);
-  } catch {
-    return '';
-  }
-};
-
-const fromLocalInputValue = (value: string) => {
-  if (!value) return '';
-  const date = new Date(value);
-  return date.toISOString();
-};
 
 function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
@@ -114,28 +100,28 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label>{t('eventBuilder.startAt', 'Начало')}</Label>
-              <Input
-                type="datetime-local"
-                value={toLocalInputValue(formData.startAt)}
-                onChange={(e) => onChange({ ...formData, startAt: fromLocalInputValue(e.target.value) })}
+              <DateTimeInput
+                timeZone={formData.timezone}
+                value={formData.startAt}
+                onValueChange={(value) => onChange({ ...formData, startAt: value })}
               />
             </div>
             <div>
               <Label>{t('eventBuilder.endAt', 'Окончание')}</Label>
-              <Input
-                type="datetime-local"
-                value={toLocalInputValue(formData.endAt)}
-                onChange={(e) => onChange({ ...formData, endAt: fromLocalInputValue(e.target.value) })}
+              <DateTimeInput
+                timeZone={formData.timezone}
+                value={formData.endAt}
+                onValueChange={(value) => onChange({ ...formData, endAt: value })}
               />
             </div>
           </div>
 
           <div>
             <Label>{t('eventBuilder.registrationClosesAt', 'Закрытие регистрации')}</Label>
-            <Input
-              type="datetime-local"
-              value={toLocalInputValue(formData.registrationClosesAt)}
-              onChange={(e) => onChange({ ...formData, registrationClosesAt: fromLocalInputValue(e.target.value) })}
+            <DateTimeInput
+              timeZone={formData.timezone}
+              value={formData.registrationClosesAt}
+              onValueChange={(value) => onChange({ ...formData, registrationClosesAt: value })}
             />
           </div>
 

@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
-import type { Database } from '@/platform/supabase/types';
+import { isFeatureSchemaMissing, noteFeatureSchemaError, isMissingSchemaError, resetFeatureSchemaState } from '@/lib/resilience/missing-schema';
 
 export interface WidgetTemplate {
     id: string;
@@ -19,17 +18,17 @@ export interface WidgetTemplate {
 // widget_templates may not be deployed. After the first "table missing"
 // answer we stop asking for the rest of the session; callers fall back to the
 // bundled templates when the list is empty.
-let widgetTemplatesMissing = false;
+const WIDGET_TEMPLATES_FEATURE = 'widget_templates';
 
 export function resetWidgetTemplatesSchemaState(): void {
-    widgetTemplatesMissing = false;
+    resetFeatureSchemaState();
 }
 
 export function useWidgetTemplates() {
     return useQuery({
         queryKey: ['widget_templates'],
         queryFn: async () => {
-            if (widgetTemplatesMissing) return [] as WidgetTemplate[];
+            if (isFeatureSchemaMissing(WIDGET_TEMPLATES_FEATURE)) return [] as WidgetTemplate[];
             const { data, error } = await (supabase
                 .from('widget_templates' as any)
                 .select('*')
@@ -37,7 +36,7 @@ export function useWidgetTemplates() {
 
             if (error) {
                 if (isMissingSchemaError(error)) {
-                    widgetTemplatesMissing = true;
+                    noteFeatureSchemaError(WIDGET_TEMPLATES_FEATURE, error);
                     return [] as WidgetTemplate[];
                 }
                 throw error;

@@ -1,3 +1,4 @@
+import { PageThemeProvider } from '@/lib/appearance/page-theme-provider';
 import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams } from '@/lib/router-compat';
@@ -308,6 +309,7 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
   const themeBackgroundStyle = getThemeBackgroundStyle(pageData?.theme);
 
   return (
+    <PageThemeProvider scope={themeScope}>
     <AnimatePresence mode="wait">
       {(loading || isTranslating) ? (
         <PublicPageSkeleton key="skeleton" />
@@ -530,5 +532,6 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
         </motion.div>
       )}
     </AnimatePresence>
+    </PageThemeProvider>
   );
 }

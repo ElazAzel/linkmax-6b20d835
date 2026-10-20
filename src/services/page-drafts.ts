@@ -1,6 +1,7 @@
 import { supabase } from '@/platform/supabase/client';
 import type { PageData } from '@/types/page';
 import type { Json } from '@/platform/supabase/types';
+import { isMissingSchemaError } from '@/lib/resilience/missing-schema';
 
 export interface PageDraft {
   page_id: string;
@@ -20,7 +21,7 @@ export function draftError(error: unknown): PageDraftError {
   if (error instanceof PageDraftError) return error;
   const value = error as { code?: string; message?: string };
   if (value?.code === '40001' || value?.message?.includes('draft_conflict')) return new PageDraftError('conflict', 'This draft changed in another tab. Reload the server draft before merging your local changes.');
-  if (['PGRST202', '42883', '42P01'].includes(value?.code ?? '')) return new PageDraftError('unavailable', 'Private drafts are not available on this backend yet. Your changes stay on this device. Ask the administrator to deploy the page drafts migration.');
+  if (isMissingSchemaError(error)) return new PageDraftError('unavailable', 'Private drafts are not available on this backend yet. Your changes stay on this device. Ask the administrator to deploy the page drafts migration.');
   if (value?.code === '42501') return new PageDraftError('access', 'You no longer have permission to edit this page.');
   return new PageDraftError('network', value?.message || 'Draft could not be saved. Your changes stay on this device; retry when connected.');
 }

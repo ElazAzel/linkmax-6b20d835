@@ -92,9 +92,10 @@ export async function createPageGrowthLink(pageId: string, campaign = 'launch-ki
 }
 
 export async function resolvePageGrowthLink(code: string): Promise<PageGrowthLink | null> {
-  if (!/^[a-zA-Z0-9_-]{8,64}$/.test(code)) return null;
+  if (!/^[a-zA-Z0-9_-]{8,64}$/.test(code) || growthSchemaMissing()) return null;
   const { data, error } = await supabase.rpc('resolve_page_growth_link' as any, { p_code: code });
   if (error || !data) {
+    noteGrowthError(error);
     logger.debug('Page growth link resolution failed', { data: error });
     return null;
   }
