@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Page publication repair (2026-10-20)
-- [ ] Diagnose publish_page_draft HTTP 400, repair the confirmed cause and verify save/reload/publication.
+- [x] Fixed publish_page_draft HTTP 400 caused by undeployed card/tiles block constraint migration; applied existing SQL unchanged. SQL suite 12/12 and transport tests 2/2 passed; authenticated editor save/reload/publish returned HTTP 200 and public card rendered. Temporary check page removed.
 
 ## Monitoring fixes (2026-10-19)
 - [x] Report password strength errors after failed combined email sign-in, preserving legacy password sign-in (interaction tests + real failed sign-in verified).
