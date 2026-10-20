@@ -10,10 +10,10 @@ import Users from 'lucide-react/dist/esm/icons/users';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
 import Download from 'lucide-react/dist/esm/icons/download';
+import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 import { format } from 'date-fns';
 import { useHydrated } from '@tanstack/react-router';
 import { ru, kk } from 'date-fns/locale';
-import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -34,6 +34,7 @@ import { downloadICS, getGoogleCalendarUrl, type CalendarEvent } from '@/lib/uti
 import { EventFormRenderer } from '@/components/event-forms/EventFormRenderer';
 import { trackLead, trackPurchase } from '@/lib/analytics';
 import { storage } from '@/lib/storage';
+import { cn } from '@/lib/utils/utils';
 
 import type { EventBlock as EventBlockType, EventFormField } from '@/types/page';
 
@@ -433,65 +434,77 @@ export const EventBlock = memo(function EventBlock({
 
   return (
     <>
-      <Card className="overflow-hidden rounded-2xl border border-border/50 shadow-sm">
-        {/* No cover: no empty 160px gradient band. */}
+      <div className="w-full overflow-hidden rounded-[inherit] text-left">
         {block.coverUrl && (
-          <img src={block.coverUrl} alt={title} className="h-40 w-full object-cover" />
+          <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+            <img src={block.coverUrl} alt={title} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+          </div>
         )}
-        <div className="p-4 space-y-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h3 className="text-lg font-semibold leading-snug break-words hyphens-auto">{title}</h3>
-              {description && <p className="text-sm text-muted-foreground leading-relaxed break-words hyphens-auto">{description}</p>}
-            </div>
-            <Badge variant="secondary" className="shrink-0">
+        <div className="flex min-w-0 flex-col gap-4 p-4 sm:p-5">
+          <div className="min-w-0 space-y-2">
+            <Badge variant="secondary" className="mb-1 w-fit gap-1.5 rounded-full border-0 bg-foreground/[0.06] px-2.5 py-1 text-[11px] font-medium text-foreground">
+              <Ticket className="h-3.5 w-3.5 shrink-0" aria-hidden />
               {block.isPaid && isOwnerPremium && block.price
                 ? `${block.price} ${getCurrencySymbol(block.currency || 'KZT')}`
                 : t('event.free', 'Free')}
             </Badge>
+            <h3 className="break-words text-lg font-bold leading-snug tracking-tight text-foreground [text-wrap:balance]">{title}</h3>
+            {description && <p className="whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground">{description}</p>}
           </div>
 
-          <div className="space-y-2 text-sm text-muted-foreground">
+          {(block.startAt || block.locationValue || (block.capacity && registrationCount > 0)) ? (
+          <div className="space-y-3 rounded-2xl bg-foreground/[0.04] p-3.5 text-sm">
             {block.startAt && (
-              <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4" />
-                <time dateTime={block.startAt} className="break-words">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-background text-foreground">
+                  <CalendarDays className="h-4 w-4" aria-hidden />
+                </span>
+                <time dateTime={block.startAt} className="min-w-0 break-words font-medium leading-relaxed text-foreground">
                   {hydrated ? format(new Date(block.startAt), 'dd MMMM yyyy, HH:mm', { locale }) : null}
                 </time>
               </div>
             )}
             {block.locationValue && (
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                <span className="break-words">{block.locationValue}</span>
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-background text-foreground">
+                  <MapPin className="h-4 w-4" aria-hidden />
+                </span>
+                <span className="min-w-0 break-words leading-relaxed text-muted-foreground">{block.locationValue}</span>
               </div>
             )}
             {block.capacity && registrationCount > 0 && (
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                <span>
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-background text-foreground">
+                  <Users className="h-4 w-4" aria-hidden />
+                </span>
+                <span className="min-w-0 break-words">
                   {registrationCount} / {block.capacity} {t('event.spots', 'мест')}
                   {isFull && <span className="ml-1 text-destructive">({t('event.full', 'мест нет')})</span>}
                 </span>
               </div>
             )}
           </div>
+          ) : null}
 
           <Button
-            className="w-full rounded-xl"
+            className={cn(
+              'h-auto min-h-11 w-fit max-w-full gap-2 whitespace-normal rounded-full px-5 py-2.5 text-left text-sm font-semibold transition-transform active:scale-[0.97]',
+              !registrationClosed && 'bg-foreground text-background hover:bg-foreground/90',
+            )}
             onClick={handleOpen}
             disabled={registrationClosed}
             variant={registrationClosed ? 'secondary' : 'default'}
           >
-            {isFull
+            <span className="min-w-0 break-words">{isFull
               ? t('event.noSpots', 'Мест нет')
               : registrationClosed
                 ? t('event.registrationClosed', 'Регистрация закрыта')
                 : (block.buttonText && getI18nText(block.buttonText, language)) || t('event.register', 'Зарегистрироваться')
-            }
+            }</span>
+            {!registrationClosed && <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden />}
           </Button>
         </div>
-      </Card>
+      </div>
 
       <Dialog open={isOpen} onOpenChange={(open) => (open ? setIsOpen(true) : handleClose())}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden">
