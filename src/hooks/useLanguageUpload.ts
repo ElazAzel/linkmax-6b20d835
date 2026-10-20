@@ -3,7 +3,7 @@ import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useAppError } from '@/hooks/useAppError';
 import { logger } from '@/lib/utils/logger';
-import i18n, { SUPPORTED_LANGUAGES } from '@/i18n/config';
+import i18n, { SUPPORTED_LANGUAGES, reloadLanguageResources } from '@/i18n/config';
 import { applyTranslationsToI18n, upsertToDB, unwrapTranslationPayload } from '@/lib/i18n-db-backend';
 import { validateTranslationUpload } from '@/lib/translation-validation';
 
@@ -142,6 +142,7 @@ export function useLanguageUpload() {
             if (result.validation.valid) {
                 if (applyImmediately) {
                     await upsertToDB(languageCode, translations);
+                    await reloadLanguageResources(languageCode);
                     await applyTranslationsToI18n(i18n, languageCode, translations);
                     result.applied = true;
                     toast.success(`Язык ${languageCode.toUpperCase()} успешно ${result.applied ? 'применён' : 'загружен'}`);
@@ -189,6 +190,7 @@ export function useLanguageUpload() {
             // Use the same canonical table as the inline translation editor.
             // RLS remains responsible for admin authorization on the write.
             await upsertToDB(languageCode, normalized);
+            await reloadLanguageResources(languageCode);
             await applyTranslationsToI18n(i18n, languageCode, normalized);
             toast.success(`Язык ${languageCode.toUpperCase()} применён`);
             return true;

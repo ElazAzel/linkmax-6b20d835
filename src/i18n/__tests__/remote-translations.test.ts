@@ -64,4 +64,13 @@ describe('remote locale configuration', () => {
     await changeLanguageLoaded('uz');
     expect(sync).not.toHaveBeenCalled();
   });
+
+  it('removes omitted remote overrides when rebuilding a replaced locale', async () => {
+    const { default: i18n, i18nReady, reloadLanguageResources } = await import('../config');
+    await i18nReady;
+    i18n.addResourceBundle('uz', 'translation', { removedUploadKey: 'Old uploaded text' }, true, true);
+    await reloadLanguageResources('uz');
+    expect(i18n.exists('removedUploadKey', { lng: 'uz', fallbackLng: false })).toBe(false);
+    expect(i18n.getResource('uz', 'translation', 'remotePriority')).toBe('Saved in admin');
+  });
 });

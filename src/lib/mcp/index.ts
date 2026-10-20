@@ -1,12 +1,16 @@
 import { auth, defineMcp } from "@lovable.dev/mcp-js";
-import createBlock from "./tools/create-block";
+import applyTranslations from "./tools/apply-translations";
+import auditPage from "./tools/audit-page";
 import createPage from "./tools/create-page";
+import editPage from "./tools/edit-page";
 import getAnalyticsSummary from "./tools/get-analytics-summary";
-import getPageStructure from "./tools/get-page-structure";
+import getBlockCatalog from "./tools/get-block-catalog";
+import getPage from "./tools/get-page";
+import getPageAnalytics from "./tools/get-page-analytics";
+import getTranslationGaps from "./tools/get-translation-gaps";
 import listMyLeads from "./tools/list-my-leads";
 import listMyPages from "./tools/list-my-pages";
-import updateBlock from "./tools/update-block";
-import updatePage from "./tools/update-page";
+import publishPage from "./tools/publish-page";
 
 // Vite inlines these values into the generated Supabase function. Prefer the
 // full URL when present, while retaining project-id compatibility with older
@@ -24,21 +28,31 @@ const supabaseIssuer = supabaseUrl
 export default defineMcp({
   name: "linkmax-mcp",
   title: "LinkMAX MCP",
-  version: "0.2.0",
-  instructions:
-    "Tools for LinkMAX — a link-in-bio and micro-business OS. Browse pages and leads, inspect page analytics and block structure, create pages and blocks, and update page or block settings. All tools operate only on the signed-in user's own data.",
+  version: "0.3.0",
+  instructions: [
+    "Tools for LinkMAX, a link-in-bio page builder. All tools operate only on the signed-in user's own data.",
+    "Workflow: list_my_pages or create_page -> get_block_catalog -> get_page -> edit_page (batch edits to a private draft) -> audit_page -> publish_page.",
+    "Edits land in the same draft the owner sees in the LinkMAX editor; nothing is live until publish_page, so ask the owner before publishing.",
+    "Translations: get_translation_gaps lists missing texts, you translate them, apply_translations stores them.",
+    "Analytics: get_analytics_summary for all pages, get_page_analytics for one page, audit_page for strengths and weaknesses with fixes.",
+    "Never invent reviews, prices or contacts; use only what the owner gave you.",
+  ].join(" "),
   auth: auth.oauth.issuer({
     issuer: supabaseIssuer,
     acceptedAudiences: "authenticated",
   }),
   tools: [
     listMyPages,
-    listMyLeads,
-    getAnalyticsSummary,
     createPage,
-    getPageStructure,
-    createBlock,
-    updateBlock,
-    updatePage,
+    getBlockCatalog,
+    getPage,
+    editPage,
+    publishPage,
+    getTranslationGaps,
+    applyTranslations,
+    getAnalyticsSummary,
+    getPageAnalytics,
+    auditPage,
+    listMyLeads,
   ],
 });

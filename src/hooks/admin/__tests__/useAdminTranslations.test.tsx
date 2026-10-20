@@ -18,6 +18,7 @@ vi.mock('@/lib/i18n-db-backend', async (importOriginal) => ({
 vi.mock('@/i18n/config', () => ({
     default: { language: 'ru' },
     SUPPORTED_LANGUAGES: ['en', 'ru', 'kk', 'uz'],
+    reloadLanguageResources: vi.fn(),
 }));
 
 vi.mock('@tanstack/react-query', () => ({

@@ -119,6 +119,7 @@ export function useAdminTranslations(isAdmin: boolean) {
             return { lang, data: updatedLangData };
         },
         onSuccess: async ({ lang, data }) => {
+            await reloadLanguageResources(lang);
             await applyTranslationsToI18n(i18n, lang, data);
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
             toast.success('Сохранено в БД');
@@ -138,7 +139,10 @@ export function useAdminTranslations(isAdmin: boolean) {
             return payload;
         },
         onSuccess: async (payload) => {
-            await Promise.all(payload.map((item) => applyTranslationsToI18n(i18n, item.lang, item.data)));
+            await Promise.all(payload.map(async (item) => {
+                await reloadLanguageResources(item.lang);
+                await applyTranslationsToI18n(i18n, item.lang, item.data);
+            }));
             queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
             toast.success('Данные успешно синхронизированы');
         },

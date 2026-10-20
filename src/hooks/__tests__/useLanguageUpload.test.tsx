@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useLanguageUpload } from '../useLanguageUpload';
 import { upsertToDB, applyTranslationsToI18n } from '@/lib/i18n-db-backend';
 import { toast } from 'sonner';
+import { reloadLanguageResources } from '@/i18n/config';
 
-vi.mock('@/i18n/config', () => ({ default: {}, SUPPORTED_LANGUAGES: ['ru', 'en', 'kk', 'uz'] }));
+vi.mock('@/i18n/config', () => ({ default: {}, SUPPORTED_LANGUAGES: ['ru', 'en', 'kk', 'uz'], reloadLanguageResources: vi.fn() }));
 vi.mock('@/platform/supabase/client', () => ({ supabase: { auth: { getSession: vi.fn().mockResolvedValue({ data: { session: { access_token: 'test' } } }) } } }));
 vi.mock('@/lib/i18n-db-backend', async importOriginal => ({
   ...await importOriginal<typeof import('@/lib/i18n-db-backend')>(),
@@ -24,6 +25,8 @@ describe('manual translation file application', () => {
     expect(applied).toBe(true);
     expect(upsertToDB).toHaveBeenCalledWith('uz', { common: { save: 'Existing manual text' } });
     expect(applyTranslationsToI18n).toHaveBeenCalled();
+    expect(reloadLanguageResources).toHaveBeenCalledWith('uz');
+    expect(vi.mocked(reloadLanguageResources).mock.invocationCallOrder[0]).toBeLessThan(vi.mocked(applyTranslationsToI18n).mock.invocationCallOrder[0]);
     expect(toast.success).toHaveBeenCalled();
   });
 
@@ -34,6 +37,7 @@ describe('manual translation file application', () => {
     await act(async () => { applied = await result.current.applyLanguage('uz', { common: { save: 'Manual text' } }); });
     expect(applied).toBe(false);
     expect(applyTranslationsToI18n).not.toHaveBeenCalled();
+    expect(reloadLanguageResources).not.toHaveBeenCalled();
     expect(toast.success).not.toHaveBeenCalled();
   });
 

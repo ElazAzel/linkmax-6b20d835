@@ -4,6 +4,17 @@ import { templateBlocksForFeatures } from '@/lib/blocks/template-features';
 import { BUSINESS_BLOCK_TYPES } from '@/lib/features';
 
 describe('fallback page templates', () => {
+  it('preserves quoted prices, zero prices and localized descriptions in showcase cards', () => {
+    const cards = templateBlocksForFeatures([
+      { type: 'product', overrides: { name: 'Service', description: { ru: 'Описание', en: 'Description' }, price: 5000, currency: 'KZT' } },
+      { type: 'pricing', overrides: { items: [{ name: 'Consultation', price: 0, currency: 'KZT' }] } },
+      { type: 'catalog', overrides: { items: [{ name: 'Print', description: 'A4', price: 20, currency: 'USD' }] } },
+    ], false);
+    expect(cards.map(card => card.overrides?.text)).toEqual([
+      { ru: 'Описание\n5000 KZT', en: 'Description\n5000 KZT' }, '0 KZT', 'A4\n20 USD',
+    ]);
+  });
+
   it('uses current data schemas instead of silently rendering factory examples', () => {
     for (const template of HARDCODED_TEMPLATES) {
       for (const definition of template.blocks) {
