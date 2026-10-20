@@ -169,7 +169,8 @@ test('soft-deleted content stays private while the owner retains recovery access
 for (const type of ['card', 'tiles']) {
   test(`${type} survives draft save, reload and publication with content intact`, async () => {
     await as(owner);
-    const current = await call('load_page_draft', [page]);
+    const loaded = await call('load_page_draft', [page]);
+    const current = await call('reload_page_draft', [page, loaded.revision, loaded.base_published_revision]);
     const block = type === 'card'
       ? { id: 'card-test', type, title: { ru: 'Talqy Like [2026]' }, text: { ru: 'Details' }, url: 'https://example.test/card' }
       : { id: 'tiles-test', type, items: [{ id: 'tile-test', image: 'https://example.test/image.jpg', url: 'https://example.test/tile' }] };
