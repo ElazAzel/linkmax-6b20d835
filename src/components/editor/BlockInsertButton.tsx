@@ -57,15 +57,15 @@ interface BlockInsertButtonProps {
 type BlockTier = 'free' | 'pro';
 
 /** The everyday blocks, shown first (about one screen on a phone). */
-const PRIMARY_BLOCK_TYPES = ['card', 'tiles', 'button', 'link', 'text', 'image', 'carousel', 'video', 'audio', 'download', 'socials', 'messenger', 'form', 'custom_code'] as const;
+const PRIMARY_BLOCK_TYPES = ['card', 'tiles', 'button', 'link', 'text', 'image', 'carousel', 'video', 'audio', 'download', 'socials', 'messenger', 'form', 'event', 'custom_code'] as const;
 
 // Derive block list from manifest (single source of truth)
-// Exclude 'profile' since it's auto-added and not insertable
+// Profile is auto-added; avatars remain supported on existing pages only.
 // Built lazily: isBlockPremium reads the manifest + promo window at call time.
 function buildManifestBlocks() {
   const coreOrder: string[] = ['button', 'image', 'video', 'audio', 'download', 'text', 'form', 'carousel'];
   return Object.values(BLOCK_MANIFEST)
-    .filter((entry) => entry.type !== 'profile')
+    .filter((entry) => entry.type !== 'profile' && entry.type !== 'avatar')
     .sort((a, b) => {
       const rank = (type: string) => coreOrder.includes(type) ? coreOrder.indexOf(type) : coreOrder.length;
       return rank(a.type) - rank(b.type);

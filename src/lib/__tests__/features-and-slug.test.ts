@@ -17,6 +17,8 @@ describe('business features flag', () => {
   it('classifies business blocks and tabs', () => {
     expect(BUSINESS_BLOCK_TYPES.has('booking')).toBe(true);
     expect(BUSINESS_BLOCK_TYPES.has('button')).toBe(false);
+    expect(BUSINESS_BLOCK_TYPES.has('event')).toBe(false);
+    expect(isBusinessDashboardTab('events')).toBe(false);
     expect(isBusinessDashboardTab('finance')).toBe(true);
     expect(isBusinessDashboardTab('zone-deals')).toBe(true);
     expect(isBusinessDashboardTab('editor')).toBe(false);

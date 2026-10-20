@@ -232,6 +232,7 @@ function SortableGridBlockItem({
   const typeLabel = manifest ? t(manifest.labelKey, block.type) : block.type;
 
   const selected = isSelected || isMultiSelected;
+  const showOutline = block.type !== 'separator';
 
   // Empty-hint detection (e.g. link without URL)
   const emptyHint = useMemo(() => getBlockEmptyHint(block), [block]);
@@ -277,14 +278,16 @@ function SortableGridBlockItem({
         !inComposition && !layout.autoHeight && 'lm-fixed-cell',
         !isFrameless && 'lm-owned-surface',
         // Quiet hover: 1px outline + soft lift, no background tint
-        !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
-        isDragging && 'opacity-50 ring-2 ring-primary/50 scale-[0.98] z-50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
+        showOutline && !selected && !isDragging && 'hover:ring-1 hover:ring-border/50 hover:shadow-[0_4px_14px_-6px_rgba(0,0,0,0.12)]',
+        isDragging && 'opacity-50 scale-[0.98] z-50',
+        showOutline && isDragging && 'ring-2 ring-primary/50 shadow-[0_8px_24px_-6px_hsl(var(--primary)/0.25)]',
         compositionItemClass,
         // P4: Selection ring
-        selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
-        isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
+        showOutline && selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
+        showOutline && isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
         // Recently-added: glowing ring + scale-in fade
-        isRecentlyAdded && !isDragging && 'ring-2 ring-primary/70 ring-offset-2 ring-offset-background animate-scale-in',
+        isRecentlyAdded && !isDragging && 'animate-scale-in',
+        showOutline && isRecentlyAdded && !isDragging && 'ring-2 ring-primary/70 ring-offset-2 ring-offset-background',
         // P5: Review mode dimming
         isDimmed && 'opacity-30 pointer-events-none',
       )}
@@ -448,7 +451,8 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
   return (
     <div
       className={cn(
-        'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-visible cursor-grabbing',
+        'relative overflow-visible cursor-grabbing',
+        block.type !== 'separator' && 'bg-card rounded-2xl border-2 border-primary shadow-xl',
         'w-full',
       )}
       style={layout.autoHeight ? undefined : { aspectRatio: `${layout.columns} / ${layout.rows}` }}

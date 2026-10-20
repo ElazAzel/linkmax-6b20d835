@@ -13,9 +13,9 @@ const CHANGE_EVENT = 'lm-business-features-change';
 
 export const BUSINESS_FEATURES_DEFAULT = import.meta.env.VITE_LINKMAX_BUSINESS === 'true';
 
-/** Block types offered in the insert sheet only when business features are on. */
+/** Block types offered only with business tools. Events are available to every page builder. */
 export const BUSINESS_BLOCK_TYPES: ReadonlySet<string> = new Set([
-  'product', 'catalog', 'pricing', 'booking', 'event', 'community', 'newsletter', 'shoutout', 'scratch',
+  'product', 'catalog', 'pricing', 'booking', 'community', 'newsletter', 'shoutout', 'scratch',
 ]);
 
 /**
@@ -28,11 +28,11 @@ export const SHOWCASE_BLOCKS_ENABLED = import.meta.env.VITE_LINKMAX_SHOWCASE_BLO
 
 /**
  * Dashboard tabs that belong to the business area. 'leads' is not one: the
- * form block is offered to everyone, so its submissions must be readable
- * without business tools.
+ * form and event blocks are offered to everyone, so their submissions and
+ * registrations must be readable without business tools.
  */
 export const BUSINESS_DASHBOARD_TABS: ReadonlySet<string> = new Set([
-  'business', 'clients', 'calendar', 'offers', 'activity', 'finance', 'monetize', 'events', 'team',
+  'business', 'clients', 'calendar', 'offers', 'activity', 'finance', 'monetize', 'team',
 ]);
 
 export function isBusinessFeaturesEnabled(): boolean {

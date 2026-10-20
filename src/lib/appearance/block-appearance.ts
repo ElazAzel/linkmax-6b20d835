@@ -144,8 +144,8 @@ export const BLOCK_HOVER_CLASS: Record<NonNullable<BlockStyle['hoverEffect']>, s
  * the user's container style. Their grid cell must not paint it again —
  * that produced a frame inside a frame.
  */
-// Product draws its own card; a cell card around it showed a frame in a frame.
-export const SELF_STYLED_BLOCK_TYPES = new Set(['button', 'link', 'text', 'product']);
+// Product draws its own card; separators draw only their line, never a container frame.
+export const SELF_STYLED_BLOCK_TYPES = new Set(['button', 'link', 'text', 'product', 'separator']);
 
 /** Blocks rendered without card chrome. */
 // Tiles are a bare grid of pictures, like Korner's tile sections.

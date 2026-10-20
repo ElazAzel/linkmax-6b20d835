@@ -62,6 +62,17 @@ describe('getPageThemeScope', () => {
 });
 
 describe('resolveBlockCellAppearance', () => {
+  it('keeps separators free of card borders and shadows even with saved container styles', () => {
+    const cell = resolveBlockCellAppearance({
+      type: 'separator',
+      blockStyle: { borderWidth: 'thick', borderColor: '#ff0000', shadow: 'lg', backgroundColor: '#ffffff', hoverEffect: 'glow' },
+    });
+    expect(cell.style.borderWidth).toBeUndefined();
+    expect(cell.style.boxShadow).toBeUndefined();
+    expect(cell.style.backgroundColor).toBeUndefined();
+    expect(cell.className).toBe('');
+  });
+
   it('uses the same radius table as BlockRenderer containers', () => {
     const cell = resolveBlockCellAppearance({ type: 'faq', blockStyle: { borderRadius: 'lg' } });
     const container = getBlockStyles({ borderRadius: 'lg' });
