@@ -274,7 +274,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
             {/* Avatar - NO animation, NO shadow - completely static */}
             <Avatar className={cn(compact ? 'h-20 w-20' : getAvatarSize(), 'bg-background')} style={avatarShapeStyle}>
               <AvatarImage src={block.avatar} alt={name} className="object-cover" />
-              <AvatarFallback className={cn('text-2xl font-semibold', compact ? 'bg-foreground text-background' : 'bg-primary text-primary-foreground')}>
+              <AvatarFallback className={cn('text-2xl font-semibold', compact ? 'bg-foreground text-background' : 'bg-primary text-primary-foreground')} style={{ borderRadius: 'inherit' }}>
                 {initials}
               </AvatarFallback>
             </Avatar>

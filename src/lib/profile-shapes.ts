@@ -32,11 +32,9 @@ export const AVATAR_SHAPES: { value: AvatarShape; label: string; isPro: boolean 
 export function getAvatarShapeStyle(shape: AvatarShape | undefined): React.CSSProperties {
   switch (shape) {
     case 'squircle':
-      // "iOS squircle" — superellipse
+      // Percentage radii scale with both the frame and the inner avatar.
+      // A CSS path() uses fixed pixel coordinates and clips smaller avatars.
       return {
-        clipPath:
-          "path('M 50,0 C 15,0 0,15 0,50 C 0,85 15,100 50,100 C 85,100 100,85 100,50 C 100,15 85,0 50,0 Z')",
-        // fallback for browsers ignoring the path — use border-radius
         borderRadius: '28%',
       };
     case 'hexagon':
@@ -46,8 +44,6 @@ export function getAvatarShapeStyle(shape: AvatarShape | undefined): React.CSSPr
       };
     case 'blob':
       return {
-        clipPath:
-          "path('M50 3 C72 3 97 18 97 46 C97 74 78 97 50 97 C22 97 3 72 3 47 C3 20 28 3 50 3 Z')",
         borderRadius: '42% 58% 63% 37% / 44% 41% 59% 56%',
       };
     case 'sticker':
