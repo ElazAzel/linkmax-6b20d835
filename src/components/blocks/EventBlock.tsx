@@ -31,6 +31,7 @@ import { supabase } from '@/platform/supabase/client';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { getEventRegistrationCount, isEmailRegistered } from '@/services/events';
+import { sendEventTicketEmail, type EventTicketEmailReceipt } from '@/services/event-ticket-email';
 import { downloadICS, getGoogleCalendarUrl, type CalendarEvent } from '@/lib/utils/calendar-utils';
 import { EventFormRenderer } from '@/components/event-forms/EventFormRenderer';
 import { trackLead, trackPurchase } from '@/lib/analytics';
@@ -65,6 +66,17 @@ export const EventBlock = memo(function EventBlock({
   const [ticketCode, setTicketCode] = useState<string | null>(null);
   const [registrationCount, setRegistrationCount] = useState<number>(0);
   const [eventError, setEventError] = useState<string | null>(null);
+  const [registrationReceipt, setRegistrationReceipt] = useState<EventTicketEmailReceipt | null>(null);
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
+  const deliverReceipt = async (receipt: EventTicketEmailReceipt) => {
+    setEmailStatus('sending');
+    try {
+      await sendEventTicketEmail(receipt);
+      setEmailStatus('sent');
+    } catch {
+      setEmailStatus('failed');
+    }
+  };
 
   const language = i18n.language as SupportedLanguage;
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
@@ -113,6 +125,8 @@ export const EventBlock = memo(function EventBlock({
   const handleClose = useCallback(() => {
     setIsOpen(false);
     setTicketCode(null);
+    setRegistrationReceipt(null);
+    setEmailStatus('idle');
     setEventError(null);
   }, []);
 
@@ -339,9 +353,7 @@ export const EventBlock = memo(function EventBlock({
       }
 
       if (registrationId) {
-        // Wait a moment for the trigger to create the ticket
-        await new Promise(r => setTimeout(r, 500));
-
+        // AFTER INSERT triggers complete before the registration request returns.
         const { data: ticket } = await supabase
           .from('event_tickets')
           .select('ticket_code')
@@ -380,16 +392,18 @@ export const EventBlock = memo(function EventBlock({
       }
 
       // Send confirmation email to attendee
-      if (registration?.id && block.eventId) {
-        supabase.functions.invoke('send-attendee-email', {
-          body: {
+      if (registration?.id && block.eventId && registration.notify_token) {
+        const receipt: EventTicketEmailReceipt = {
             registrationId: registration.id,
             eventId: block.eventId,
             attendeeEmail: email.trim(),
-            notifyToken: registration?.notify_token,
+            notifyToken: registration.notify_token,
             language: i18n.language,
-          },
-        }).catch(err => console.warn('Attendee email send failed:', err));
+        };
+        setRegistrationReceipt(receipt);
+        await deliverReceipt(receipt);
+      } else {
+        setEmailStatus('failed');
       }
     } catch (error: unknown) {
       console.error('Event registration error:', error);
@@ -519,20 +533,32 @@ export const EventBlock = memo(function EventBlock({
           </DialogHeader>
 
           <ScrollArea className="h-[70vh] pr-4">
-            {ticketCode ? (
+            {ticketCode || registrationReceipt ? (
               <div className="space-y-4 py-4">
                 <div className="flex items-center gap-2 text-primary">
                   <CheckCircle2 className="h-5 w-5" />
                   <span className="font-semibold">
-                    {t('event.successTitle', 'Регистрация подтверждена')}
+                    {block.settings?.requireApproval
+                      ? t('event.registrationPending', 'Заявка отправлена на рассмотрение')
+                      : t('event.successTitle', 'Регистрация подтверждена')}
                   </span>
                 </div>
-                <div className="rounded-xl border border-border/60 p-4 space-y-2">
+                {ticketCode && <div className="rounded-xl border border-border/60 p-4 space-y-2">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Ticket className="h-4 w-4" />
                     <span>{t('event.ticketCode', 'Код билета')}</span>
                   </div>
                   <div className="text-xl font-semibold">{ticketCode}</div>
+                </div>}
+                <div role="status" className="space-y-2 text-sm text-muted-foreground">
+                  {emailStatus === 'sending' && t('event.ticketEmailSending', 'Отправляем письмо…')}
+                  {emailStatus === 'sent' && t('event.ticketEmailSent', 'Письмо отправлено. Проверьте входящие и папку «Спам».')}
+                  {emailStatus === 'failed' && <>
+                    <p>{t('event.ticketEmailFailed', 'Регистрация сохранена, но письмо отправить не удалось.')}</p>
+                    {registrationReceipt && <Button variant="outline" size="sm" onClick={() => void deliverReceipt(registrationReceipt)}>
+                      {t('event.ticketEmailRetry', 'Отправить письмо ещё раз')}
+                    </Button>}
+                  </>}
                 </div>
 
                 {/* Add to Calendar */}

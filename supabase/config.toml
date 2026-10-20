@@ -56,7 +56,10 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.send-event-confirmation]
-verify_jwt = true
+verify_jwt = false # Guest registration proof is verified using notify_token in the handler.
+
+[functions.send-attendee-email]
+verify_jwt = false # Guest registration proof or authenticated organizer; no arbitrary recipients.
 
 # --- Cron / Scheduled (System) ---
 [functions.send-weekly-digest]

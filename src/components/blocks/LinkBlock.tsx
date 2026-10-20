@@ -14,7 +14,7 @@ import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { getButtonClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
 import { externalLinkProps } from '@/lib/blocks/safe-href';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { extractDomain, getGoogleFaviconUrl, getDirectFaviconUrl } from '@/lib/favicon-utils';
+import { extractDomain, getGoogleFaviconUrl } from '@/lib/favicon-utils';
 import { getBlockStyles, getBlockInnerStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
 import { cn } from '@/lib/utils/utils';
 import type { LinkBlock as LinkBlockType } from '@/types/page';
@@ -36,7 +36,6 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: LinkBlockProps) {
   const { i18n } = useTranslation();
   const [faviconError, setFaviconError] = useState(false);
-  const [faviconLoaded, setFaviconLoaded] = useState(false);
 
   const iconMode = block.iconMode || 'auto';
   const isManualMode = iconMode === 'manual';
@@ -55,8 +54,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
 
   useEffect(() => {
     setFaviconError(false);
-    setFaviconLoaded(false);
-  }, [block.url, block.faviconUrl, block.customIconUrl]);
+  }, [block.url, block.faviconUrl, block.customIconUrl, block.iconMode]);
 
   const isPhone = /^tel:/i.test(block.url || '');
   const isMail = /^mailto:/i.test(block.url || '');
@@ -68,17 +66,10 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   // tel:/mailto: have no site to take a favicon from (it used to show a globe)
   const shouldShowFavicon = !isPhone && !isMail && faviconSrc && !faviconError;
 
-  const handleFaviconError = () => {
-    if (!faviconError && domain && faviconSrc === getGoogleFaviconUrl(domain)) {
-      const directUrl = getDirectFaviconUrl(domain);
-      const img = new Image();
-      img.onload = () => setFaviconLoaded(true);
-      img.onerror = () => setFaviconError(true);
-      img.src = directUrl;
-    } else {
-      setFaviconError(true);
-    }
-  };
+  // A site's direct favicon may forbid cross-origin embedding (CORP).
+  // Keep the owner's selected image; failed images use the local icon instead
+  // of starting another remote request that never changed the rendered src.
+  const handleFaviconError = () => setFaviconError(true);
 
   // Check if we have a custom background from block.background
   const hasLegacyBackground = block.background && block.background.type && block.background.value;
@@ -120,13 +111,13 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           "flex items-center gap-3 min-w-0 flex-1",
           isImageBackground && 'relative z-10'
         )}>
+          <span className="flex h-6 w-6 shrink-0 items-center justify-center" data-testid="link-icon-slot">
           {shouldShowFavicon ? (
             <img
               src={faviconSrc}
               alt=""
               className="h-6 w-6 flex-shrink-0 rounded-md object-contain"
               onError={handleFaviconError}
-              onLoad={() => setFaviconLoaded(true)}
             />
           ) : (
             <FallbackIcon
@@ -134,6 +125,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
               style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined}
             />
           )}
+          </span>
           <span
             className={cn(
               "font-medium text-sm sm:text-base line-clamp-2 text-left tracking-tight",

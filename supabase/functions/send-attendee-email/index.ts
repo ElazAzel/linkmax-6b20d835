@@ -5,7 +5,7 @@
  */
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { deliverTicketEmail } from '../_shared/event-ticket-delivery.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -210,7 +210,7 @@ const translations: Record<string, {
   },
 };
 
-function formatDate(dateStr: string, lang: string): string {
+function formatDate(dateStr: string, lang: string, timeZone?: string | null): string {
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     weekday: 'long',
@@ -219,6 +219,7 @@ function formatDate(dateStr: string, lang: string): string {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: timeZone || undefined,
   };
   const locale = lang === 'ru' ? 'ru-RU' : lang === 'kk' ? 'kk-KZ' : 'en-US';
   return date.toLocaleDateString(locale, options);
@@ -284,7 +285,7 @@ function generateEmailHTML(
   const calendarLink = escHtml(calendarLinkRaw);
   const isConfirmed = registration.status === 'confirmed';
   const organizerName = owner?.display_name || owner?.username || 'Organizer';
-  const pageUrl = page?.slug ? `${baseUrl}/${page.slug}` : baseUrl;
+  const pageUrl = page?.slug ? `${baseUrl}/${encodeURIComponent(page.slug)}` : baseUrl;
   const qrCodeUrl = generateQRCodeDataUrl(ticketCode);
 
   return `
@@ -340,7 +341,7 @@ function generateEmailHTML(
                   <span style="font-size: 20px; margin-right: 12px;">📅</span>
                   <div>
                     <p style="margin: 0; font-size: 14px; color: #64748b;">${t.date}</p>
-                    <p style="margin: 4px 0 0 0; font-size: 16px; color: #1e293b; font-weight: 500;">${formatDate(event.start_at, lang)}</p>
+                    <p style="margin: 4px 0 0 0; font-size: 16px; color: #1e293b; font-weight: 500;">${formatDate(event.start_at, lang, event.timezone)}</p>
                   </div>
                 </div>
                 ` : ''}
@@ -409,7 +410,6 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const resend = new Resend(resendApiKey);
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -437,7 +437,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Fetch registration with ticket
     const { data: registration, error: regError } = await supabase
       .from("event_registrations")
-      .select("id, event_id, attendee_name, attendee_email, status, notify_token, event_tickets(ticket_code, status)")
+      .select("id, event_id, attendee_name, attendee_email, status, notify_token, created_at, attendee_email_sent_at, event_tickets(ticket_code, status)")
       .eq("id", registrationId)
       .single();
 
@@ -468,17 +468,16 @@ const handler = async (req: Request): Promise<Response> => {
       ) {
         return new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } });
       }
-      const { data: claimed } = await supabase
-        .from("event_registrations")
-        .update({ attendee_email_sent_at: new Date().toISOString() })
-        .eq("id", registrationId)
-        .is("attendee_email_sent_at", null)
-        .gte("created_at", new Date(Date.now() - 15 * 60 * 1000).toISOString())
-        .select("id")
-        .maybeSingle();
-      if (!claimed) {
+      if (registration.attendee_email_sent_at) {
+        return new Response(JSON.stringify({ success: true, alreadySent: true }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } });
+      }
+      if (new Date(registration.created_at).getTime() < Date.now() - 15 * 60 * 1000) {
         return new Response(JSON.stringify({ error: "already_sent_or_expired" }), { status: 409, headers: { "Content-Type": "application/json", ...corsHeaders } });
       }
+    }
+
+    if (regData.status === 'confirmed' && !regData.event_tickets?.some(ticket => ticket.status === 'valid')) {
+      throw new Error('ticket_not_ready');
     }
 
     // Fetch owner profile
@@ -497,12 +496,13 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Normalize language - fallback to English if not supported
     const supportedLangs = Object.keys(translations);
-    const lang = supportedLangs.includes(language) ? language : 'en';
+    const requestedLanguage = String(language).split('-')[0].toLowerCase();
+    const lang = supportedLangs.includes(requestedLanguage) ? requestedLanguage : 'en';
     const t = translations[lang];
     const eventTitle = eventData.title_i18n_json?.[lang] || eventData.title_i18n_json?.ru || eventData.title_i18n_json?.en || 'Event';
 
     // Base URL for links
-    const baseUrl = "https://linkmax.lovable.app";
+    const baseUrl = "https://lnkmx.my";
 
     const emailHTML = generateEmailHTML(
       eventData,
@@ -513,29 +513,28 @@ const handler = async (req: Request): Promise<Response> => {
       baseUrl
     );
 
-    // Send email via Resend. Domain verification may be pending — degrade
-    // gracefully so that event registration does not fail when the sender
-    // domain is not yet verified in Resend.
+    // Provider errors keep the registration intact and remain retryable.
     const fromAddress = Deno.env.get("RESEND_FROM_ADDRESS") || "LNKMX Events <admin@lnkmx.my>";
-    const { data: emailResult, error: emailError } = await resend.emails.send({
-      from: fromAddress,
-      to: [regData.attendee_email],
-      subject: `🎫 ${t.subject} — ${String(eventTitle).replace(/[\r\n<>]/g, ' ').slice(0, 150)}`,
-      html: emailHTML,
+    const emailId = await deliverTicketEmail({
+      apiKey: resendApiKey,
+      key: `event-ticket/${registrationId}/${regData.status}`,
+      message: {
+        from: fromAddress,
+        to: [regData.attendee_email],
+        subject: `🎫 ${regData.status === 'confirmed' ? t.subject : t.pending} — ${String(eventTitle).replace(/[\r\n<>]/g, ' ').slice(0, 150)}`,
+        html: emailHTML,
+      },
+      markAccepted: async () => {
+        const { error: markError } = await supabase.from('event_registrations')
+          .update({ attendee_email_sent_at: new Date().toISOString() })
+          .eq('id', registrationId);
+        if (markError) throw new Error('email_delivery_status_failed');
+      },
     });
-
-    if (emailError) {
-      console.error("Resend error (non-fatal):", emailError);
-      return new Response(
-        JSON.stringify({ success: false, warning: "email_send_failed", details: emailError.message }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
-
-    console.log("Email sent successfully:", emailResult?.id);
+    console.log("Email sent successfully:", emailId);
 
     return new Response(
-      JSON.stringify({ success: true, emailId: emailResult?.id }),
+      JSON.stringify({ success: true, emailId }),
       { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
 

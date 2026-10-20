@@ -26,7 +26,7 @@ import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert';
 import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
-import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
+import { ScannerCamera } from '@/lib/scanner-camera';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import {
@@ -59,12 +59,10 @@ export const EventCheckin = memo(function EventCheckin() {
   const [torchOn, setTorchOn] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [cameraReady, setCameraReady] = useState(false);
-  const [scanning, setScanning] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const controlsRef = useRef<IScannerControls | null>(null);
-  const readerRef = useRef<BrowserMultiFormatReader | null>(null);
+  const cameraRef = useRef<ScannerCamera | null>(null);
+  if (!cameraRef.current) cameraRef.current = new ScannerCamera();
   const isMountedRef = useRef(true);
   const processingRef = useRef(false);
 
@@ -161,128 +159,42 @@ export const EventCheckin = memo(function EventCheckin() {
     [token, recentScans, t],
   );
 
+  const processScanRef = useRef(processScan);
+  processScanRef.current = processScan;
+
   const stopCamera = useCallback(() => {
-    if (controlsRef.current) {
-      try {
-        controlsRef.current.stop();
-      } catch (e) {
-        logger.warn('[Checkin] Error stopping controls:', { data: e });
-      }
-      controlsRef.current = null;
-    }
-
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-    }
-
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-
-    setScanning(false);
+    cameraRef.current?.stop();
     setCameraReady(false);
     setTorchOn(false);
   }, []);
 
   const startCamera = useCallback(async () => {
-    stopCamera();
-
+    const video = videoRef.current;
+    if (!video || !isMountedRef.current) return;
+    setCameraError(null);
     try {
-      setCameraError(null);
-
-      if (!videoRef.current) {
-        setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
-        setManualMode(true);
-        return;
-      }
-
-      let stream: MediaStream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-          audio: false,
-        });
-      } catch (permError) {
-        if (permError instanceof DOMException) {
-          if (permError.name === 'NotAllowedError') {
-            setCameraError(
-              t('events.cameraPermissionDenied', 'Разрешите доступ к камере в настройках браузера'),
-            );
-          } else if (permError.name === 'NotFoundError') {
-            setCameraError(t('events.noCameraFound', 'Камера не найдена на устройстве'));
-          } else if (permError.name === 'NotReadableError') {
-            setCameraError(t('events.cameraInUse', 'Камера используется другим приложением'));
-          } else {
-            setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
-          }
-        } else {
-          setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
-        }
-        setManualMode(true);
-        return;
-      }
-
-      if (!isMountedRef.current) {
-        stream.getTracks().forEach((track) => track.stop());
-        return;
-      }
-
-      streamRef.current = stream;
-      videoRef.current.srcObject = stream;
-
-      await new Promise<void>((resolve) => {
-        const video = videoRef.current;
-        if (!video) {
-          resolve();
-          return;
-        }
-        const done = () => {
-          video.removeEventListener('loadedmetadata', done);
-          resolve();
-        };
-        video.addEventListener('loadedmetadata', done);
-        setTimeout(done, 3000);
-      });
-
-      try {
-        await videoRef.current.play();
-      } catch (playError) {
-        logger.warn('[Checkin] Video play error:', { data: { error: playError } });
-      }
-
-      if (!isMountedRef.current) {
-        stopCamera();
-        return;
-      }
-
-      setCameraReady(true);
-      setScanning(true);
-
-      if (!readerRef.current) {
-        readerRef.current = new BrowserMultiFormatReader();
-      }
-
-      controlsRef.current = await readerRef.current.decodeFromVideoElement(
-        videoRef.current,
-        (result) => {
-          if (result) {
-            processScan(result.getText());
-          }
-        },
-      );
+      const started = await cameraRef.current!.start(video, code => processScanRef.current(code));
+      if (started && isMountedRef.current) setCameraReady(true);
     } catch (error) {
-      logger.error('[Checkin] Camera error:', error);
-      setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
+      if (!isMountedRef.current) return;
+      logger.error('[EventCheckin] Camera error:', error);
+      const key = error instanceof DOMException ? error.name : '';
+      setCameraError(key === 'NotAllowedError'
+        ? t('events.cameraPermissionDenied', 'Разрешите доступ к камере в настройках браузера')
+        : key === 'NotFoundError'
+          ? t('events.noCameraFound', 'Камера не найдена на устройстве')
+          : key === 'NotReadableError'
+            ? t('events.cameraInUse', 'Камера используется другим приложением')
+            : t('events.cameraError', 'Не удалось запустить камеру'));
       setManualMode(true);
     }
-  }, [t, processScan, stopCamera]);
+  }, [t]);
 
   useEffect(() => stopCamera, [stopCamera]);
 
   const toggleTorch = useCallback(async () => {
-    if (!streamRef.current) return;
-    const track = streamRef.current.getVideoTracks()[0];
+    if (!cameraRef.current?.stream) return;
+    const track = cameraRef.current?.stream.getVideoTracks()[0];
     try {
       await track.applyConstraints({ advanced: [{ torch: !torchOn } as MediaTrackConstraintSet] });
       setTorchOn(!torchOn);
@@ -291,19 +203,14 @@ export const EventCheckin = memo(function EventCheckin() {
     }
   }, [torchOn, t]);
 
-  // Auto-start the camera once the link is validated
+  const scannerEventId = context?.event.id;
+
+  // The effect runs after the conditional video element mounts and owns its lifetime.
   useEffect(() => {
-    if (loading || invalidLink || !context || manualMode) return;
-
-    const timer = setTimeout(() => {
-      if (isMountedRef.current && !scanning) {
-        startCamera();
-      }
-    }, 400);
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, invalidLink, context, manualMode]);
+    if (loading || invalidLink || !scannerEventId || manualMode) return;
+    void startCamera();
+    return stopCamera;
+  }, [loading, invalidLink, scannerEventId, manualMode, startCamera, stopCamera]);
 
   if (loading) {
     return (
@@ -391,7 +298,7 @@ export const EventCheckin = memo(function EventCheckin() {
         <div className="flex-1 flex flex-col p-4 gap-4">
           {!manualMode ? (
             <div className="relative aspect-square max-w-sm mx-auto w-full rounded-2xl overflow-hidden bg-black">
-              <video ref={videoRef} className="w-full h-full object-cover" autoPlay playsInline muted />
+              <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
 
               {!cameraReady && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black">
@@ -476,7 +383,6 @@ export const EventCheckin = memo(function EventCheckin() {
                 onClick={() => {
                   setManualMode(false);
                   setCameraError(null);
-                  startCamera();
                 }}
               >
                 <Camera className="h-4 w-4 mr-2" />

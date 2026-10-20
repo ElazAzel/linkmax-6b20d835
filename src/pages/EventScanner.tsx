@@ -32,7 +32,7 @@ import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { logger } from '@/lib/utils/logger';
-import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
+import { ScannerCamera } from '@/lib/scanner-camera';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
 
 interface ScanResult {
@@ -59,7 +59,6 @@ export const EventScanner = memo(function EventScanner() {
 
   const [eventInfo, setEventInfo] = useState<EventInfo | null>(null);
   const [loading, setLoading] = useState(true);
-  const [scanning, setScanning] = useState(false);
   const [manualMode, setManualMode] = useState(false);
   const [manualCode, setManualCode] = useState('');
   const [processing, setProcessing] = useState(false);
@@ -69,9 +68,8 @@ export const EventScanner = memo(function EventScanner() {
   const [cameraReady, setCameraReady] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const controlsRef = useRef<IScannerControls | null>(null);
-  const readerRef = useRef<BrowserMultiFormatReader | null>(null);
+  const cameraRef = useRef<ScannerCamera | null>(null);
+  if (!cameraRef.current) cameraRef.current = new ScannerCamera();
   const isMountedRef = useRef(true);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
@@ -286,174 +284,41 @@ export const EventScanner = memo(function EventScanner() {
   }, [processing, recentScans, checkInTicket]);
 
   // Stop camera and cleanup
+  const processScanRef = useRef(processScan);
+  processScanRef.current = processScan;
+
   const stopCamera = useCallback(() => {
-    logger.debug('[Scanner] Stopping camera...');
-
-    if (controlsRef.current) {
-      try {
-        controlsRef.current.stop();
-      } catch (e) {
-        logger.warn('[Scanner] Error stopping controls:', { data: e });
-      }
-      controlsRef.current = null;
-    }
-
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => {
-        track.stop();
-      });
-      streamRef.current = null;
-    }
-
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-
-    setScanning(false);
+    cameraRef.current?.stop();
     setCameraReady(false);
     setTorchOn(false);
   }, []);
 
-  // Start camera with QR reader
   const startCamera = useCallback(async () => {
-    logger.debug('[Scanner] Starting camera...');
-
-    // Cleanup any existing camera first
-    stopCamera();
-
+    const video = videoRef.current;
+    if (!video || !isMountedRef.current) return;
+    setCameraError(null);
     try {
-      setCameraError(null);
-
-      // Check if we have a video element
-      if (!videoRef.current) {
-        logger.error('[Scanner] Video element not found');
-        setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
-        setManualMode(true);
-        return;
-      }
-
-      // Step 1: Request camera permission explicitly
-      logger.debug('[Scanner] Requesting camera permission...');
-      let stream: MediaStream;
-
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'environment',
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-          },
-          audio: false,
-        });
-      } catch (permError) {
-        logger.error('[Scanner] Permission error:', permError);
-
-        if (permError instanceof DOMException) {
-          if (permError.name === 'NotAllowedError') {
-            setCameraError(t('events.cameraPermissionDenied', 'Разрешите доступ к камере в настройках браузера'));
-          } else if (permError.name === 'NotFoundError') {
-            setCameraError(t('events.noCameraFound', 'Камера не найдена на устройстве'));
-          } else if (permError.name === 'NotReadableError') {
-            setCameraError(t('events.cameraInUse', 'Камера используется другим приложением'));
-          } else {
-            setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
-          }
-        } else {
-          setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
-        }
-
-        setManualMode(true);
-        return;
-      }
-
-      if (!isMountedRef.current) {
-        stream.getTracks().forEach(track => track.stop());
-        return;
-      }
-
-      logger.debug('[Scanner] Got camera stream, attaching to video...');
-      streamRef.current = stream;
-
-      // Step 2: Attach stream to video element
-      videoRef.current.srcObject = stream;
-
-      // Wait for video to be ready
-      await new Promise<void>((resolve, reject) => {
-        const video = videoRef.current!;
-
-        const onLoadedMetadata = () => {
-          video.removeEventListener('loadedmetadata', onLoadedMetadata);
-          video.removeEventListener('error', onError);
-          resolve();
-        };
-
-        const onError = (e: Event) => {
-          video.removeEventListener('loadedmetadata', onLoadedMetadata);
-          video.removeEventListener('error', onError);
-          reject(new Error('Video element error'));
-        };
-
-        video.addEventListener('loadedmetadata', onLoadedMetadata);
-        video.addEventListener('error', onError);
-
-        // Timeout fallback
-        setTimeout(() => {
-          video.removeEventListener('loadedmetadata', onLoadedMetadata);
-          video.removeEventListener('error', onError);
-          resolve(); // Continue anyway
-        }, 3000);
-      });
-
-      // Step 3: Play the video
-      logger.debug('[Scanner] Playing video...');
-      try {
-        await videoRef.current.play();
-      } catch (playError) {
-        logger.warn('[Scanner] Video play error (may be fine):', { data: { error: playError } });
-      }
-
-      if (!isMountedRef.current) {
-        stopCamera();
-        return;
-      }
-
-      setCameraReady(true);
-      setScanning(true);
-      logger.debug('[Scanner] Camera is ready and streaming');
-
-      // Step 4: Initialize QR code reader
-      logger.debug('[Scanner] Initializing QR reader...');
-      if (!readerRef.current) {
-        readerRef.current = new BrowserMultiFormatReader();
-      }
-
-      // Step 5: Start decoding from the video element
-      const controls = await readerRef.current.decodeFromVideoElement(
-        videoRef.current,
-        (result, error) => {
-          if (result) {
-            const code = result.getText();
-            logger.debug('[Scanner] QR Code detected:', { data: { code } });
-            processScan(code);
-          }
-          // Errors during scanning are normal (no QR in frame), ignore them
-        }
-      );
-
-      controlsRef.current = controls;
-      logger.debug('[Scanner] QR reader started successfully');
-
+      const started = await cameraRef.current!.start(video, code => processScanRef.current(code));
+      if (started && isMountedRef.current) setCameraReady(true);
     } catch (error) {
-      logger.error('[Scanner] Camera error:', error);
-      setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
+      if (!isMountedRef.current) return;
+      logger.error('[EventScanner] Camera error:', error);
+      const key = error instanceof DOMException ? error.name : '';
+      setCameraError(key === 'NotAllowedError'
+        ? t('events.cameraPermissionDenied', 'Разрешите доступ к камере в настройках браузера')
+        : key === 'NotFoundError'
+          ? t('events.noCameraFound', 'Камера не найдена на устройстве')
+          : key === 'NotReadableError'
+            ? t('events.cameraInUse', 'Камера используется другим приложением')
+            : t('events.cameraError', 'Не удалось запустить камеру'));
       setManualMode(true);
     }
-  }, [t, processScan, stopCamera]);
+  }, [t]);
 
   // Toggle torch
   const toggleTorch = useCallback(async () => {
-    if (streamRef.current) {
-      const track = streamRef.current.getVideoTracks()[0];
+    if (cameraRef.current?.stream) {
+      const track = cameraRef.current?.stream.getVideoTracks()[0];
       try {
         await track.applyConstraints({
           advanced: [{ torch: !torchOn } as MediaTrackConstraintSet]
@@ -480,21 +345,15 @@ export const EventScanner = memo(function EventScanner() {
     };
   }, [stopCamera]);
 
-  // Auto-start camera when conditions are met
+  const scannerEventId = eventInfo?.id;
+
+  // The effect runs after the conditional video element mounts and owns its lifetime.
   useEffect(() => {
-    if (!loading && !premiumLoading && isPremium && eventInfo && !manualMode) {
-      // Small delay to ensure DOM is ready
-      const timer = setTimeout(() => {
-        if (isMountedRef.current && !scanning) {
-          startCamera();
-        }
-      }, 500);
+    if (loading || premiumLoading || !isPremium || !scannerEventId || manualMode) return;
+    void startCamera();
+    return stopCamera;
+  }, [loading, premiumLoading, isPremium, scannerEventId, manualMode, startCamera, stopCamera]);
 
-      return () => clearTimeout(timer);
-    }
-  }, [loading, premiumLoading, isPremium, eventInfo, manualMode]);
-
-  // Premium gate
   if (!premiumLoading && !isPremium) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 bg-background">
@@ -653,7 +512,6 @@ export const EventScanner = memo(function EventScanner() {
                 onClick={() => {
                   setManualMode(false);
                   setCameraError(null);
-                  startCamera();
                 }}
               >
                 <Camera className="h-4 w-4 mr-2" />

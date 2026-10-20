@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'supabase/config.toml'
       - 'supabase/functions/**'
       - 'supabase/migrations/**'
   workflow_dispatch:
