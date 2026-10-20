@@ -6,6 +6,8 @@ import { fetchPublicPageSnapshot } from "@/lib/seo/public-page-snapshot";
 import { createBlock } from "@/lib/blocks/block-factory";
 import { createDefaultPageData } from "@/lib/constants";
 import { createTemplateBlock, HARDCODED_TEMPLATES } from "@/data/templates";
+import { templateBlocksForFeatures } from "@/lib/blocks/template-features";
+import { useBusinessFeatures } from "@/lib/features";
 import { useEditorStore } from "@/store/useEditorStore";
 import type { Block, PageData } from "@/types/page";
 
@@ -21,6 +23,7 @@ export const Route = createFileRoute("/dev/editor")({
 });
 
 function EditorPlayground() {
+  const businessEnabled = useBusinessFeatures();
   const [page, setPage] = useState<PageData | null>(null);
   const setEditingBlock = useEditorStore((s) => s.setEditingBlock);
   const setEditorOpen = useEditorStore((s) => s.setEditorOpen);
@@ -30,7 +33,8 @@ function EditorPlayground() {
     const template = HARDCODED_TEMPLATES.find((t) => t.id === params.get("template"));
     if (template) {
       // Offline fixture: a full page from a built-in template, no network.
-      const blocks = template.blocks.map((b) => createTemplateBlock(b.type, b.overrides));
+      const blocks = templateBlocksForFeatures(template.blocks, businessEnabled)
+        .map((b) => createTemplateBlock(b.type, b.overrides));
       setPage({ ...createDefaultPageData("playground"), blocks });
       return;
     }
@@ -38,7 +42,7 @@ function EditorPlayground() {
     void fetchPublicPageSnapshot(slug).then((snapshot) => {
       setPage(snapshot.status === "ok" ? snapshot.page : createDefaultPageData("playground"));
     });
-  }, []);
+  }, [businessEnabled]);
 
   const updateBlocks = useCallback((fn: (blocks: Block[]) => Block[]) => {
     setPage((prev) => (prev ? { ...prev, blocks: fn(prev.blocks) } : prev));

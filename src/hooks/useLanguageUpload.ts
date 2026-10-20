@@ -3,6 +3,9 @@ import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useAppError } from '@/hooks/useAppError';
 import { logger } from '@/lib/utils/logger';
+import i18n, { SUPPORTED_LANGUAGES } from '@/i18n/config';
+import { applyTranslationsToI18n, upsertToDB, unwrapTranslationPayload } from '@/lib/i18n-db-backend';
+import { validateTranslationUpload } from '@/lib/translation-validation';
 
 export interface ValidationError {
     key: string;
@@ -116,8 +119,12 @@ export function useLanguageUpload() {
         setValidationResult(null);
 
         try {
+            if (!SUPPORTED_LANGUAGES.includes(languageCode as typeof SUPPORTED_LANGUAGES[number])) {
+                throw new Error('Этот язык пока не поддерживается интерфейсом');
+            }
             // Parse JSON
-            const translations = await parseJSONFile(file);
+            const translations = unwrapTranslationPayload(await parseJSONFile(file));
+            if (!translations) throw new Error('Некорректный формат JSON');
 
             // Get current session
             const { data: { session } } = await supabase.auth.getSession();
@@ -127,33 +134,16 @@ export function useLanguageUpload() {
                 return null;
             }
 
-            // Call Edge Function
-            const response = await fetch(
-                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/language-upload`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${session.access_token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        languageCode,
-                        translations,
-                        action: applyImmediately ? 'apply' : 'validate',
-                    }),
-                }
-            );
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Ошибка загрузки');
-            }
-
-            const result: UploadResult = await response.json();
+            const reference = unwrapTranslationPayload((await import('@/i18n/locales/en.json')).default) || {};
+            const validation = validateTranslationUpload(translations, reference);
+            const result: UploadResult = { success: validation.valid, languageCode, validation, applied: false };
             setValidationResult(result.validation);
 
             if (result.validation.valid) {
                 if (applyImmediately) {
+                    await upsertToDB(languageCode, translations);
+                    await applyTranslationsToI18n(i18n, languageCode, translations);
+                    result.applied = true;
                     toast.success(`Язык ${languageCode.toUpperCase()} успешно ${result.applied ? 'применён' : 'загружен'}`);
                 } else {
                     toast.success('Валидация пройдена успешно');
@@ -171,7 +161,7 @@ export function useLanguageUpload() {
         } finally {
             setUploading(false);
         }
-    }, [parseJSONFile]);
+    }, [parseJSONFile, handleError]);
 
     // Apply validated language
     const applyLanguage = useCallback(async (
@@ -181,6 +171,9 @@ export function useLanguageUpload() {
         setUploading(true);
 
         try {
+            if (!SUPPORTED_LANGUAGES.includes(languageCode as typeof SUPPORTED_LANGUAGES[number])) {
+                throw new Error('Этот язык пока не поддерживается интерфейсом');
+            }
             const { data: { session } } = await supabase.auth.getSession();
 
             if (!session) {
@@ -188,36 +181,17 @@ export function useLanguageUpload() {
                 return false;
             }
 
-            const response = await fetch(
-                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/language-upload`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${session.access_token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        languageCode,
-                        translations,
-                        action: 'apply',
-                    }),
-                }
-            );
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Ошибка применения');
-            }
-
-            const result: UploadResult = await response.json();
-
-            if (result.applied) {
-                toast.success(`Язык ${languageCode.toUpperCase()} применён`);
-                await loadLanguages(); // Reload languages
-                return true;
-            }
-
-            return false;
+            const normalized = unwrapTranslationPayload(translations);
+            if (!normalized) throw new Error('Некорректный формат JSON');
+            const reference = unwrapTranslationPayload((await import('@/i18n/locales/en.json')).default) || {};
+            const validation = validateTranslationUpload(normalized, reference);
+            if (!validation.valid) throw new Error('Проверьте ошибки в файле переводов');
+            // Use the same canonical table as the inline translation editor.
+            // RLS remains responsible for admin authorization on the write.
+            await upsertToDB(languageCode, normalized);
+            await applyTranslationsToI18n(i18n, languageCode, normalized);
+            toast.success(`Язык ${languageCode.toUpperCase()} применён`);
+            return true;
 
         } catch (error) {
             logger.error('Apply error', error, { context: 'useLanguageUpload' });
@@ -226,7 +200,7 @@ export function useLanguageUpload() {
         } finally {
             setUploading(false);
         }
-    }, [loadLanguages]);
+    }, [handleError]);
 
     // Delete language
     const deleteLanguage = useCallback(async (languageCode: string): Promise<boolean> => {

@@ -36,6 +36,9 @@ import {
   createTemplateBlock
 } from '@/data/templates';
 import { buildSmartPage, inferSmartPageNiche } from '@/lib/onboarding/smart-page-builder';
+import { useBusinessFeatures } from '@/lib/features';
+import { TemplatePreviewCard } from '@/components/templates/TemplatePreviewCard';
+import { templateBlocksForFeatures } from '@/lib/blocks/template-features';
 
 const CATEGORIES: TemplateCategoryKey[] = TEMPLATE_CATEGORY_KEYS.filter((c) => c !== 'all');
 
@@ -51,6 +54,7 @@ export const TemplateGallery = memo(function TemplateGallery({
   onSelect,
 }: TemplateGalleryProps) {
   const { t } = useTranslation();
+  const businessEnabled = useBusinessFeatures();
   const [selectedCategory, setSelectedCategory] = useState<TemplateCategoryKey>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [personalizationOpen, setPersonalizationOpen] = useState(false);
@@ -83,6 +87,7 @@ export const TemplateGallery = memo(function TemplateGallery({
       const template = templates.find(t => t.id === bestTemplateId) || templates[0];
 
       const result = buildSmartPage({
+        businessEnabled,
         niche: inferSmartPageNiche(`${smartPrompt} ${template.category}`),
         goal: 'leads',
         userInfo: {
@@ -111,7 +116,7 @@ export const TemplateGallery = memo(function TemplateGallery({
 
   const handleSelect = (template: Template) => {
     // Generate blocks with full structure from block-factory + overrides
-    const fullBlocks = template.blocks.map((blockDef) =>
+    const fullBlocks = templateBlocksForFeatures(template.blocks, businessEnabled).map((blockDef) =>
       createTemplateBlock(blockDef.type, blockDef.overrides || {})
     );
     onSelect(fullBlocks);
@@ -123,7 +128,7 @@ export const TemplateGallery = memo(function TemplateGallery({
   };
 
   // Fetch templates from DB
-  const { data: dbTemplates, isLoading } = useTemplates();
+  const { data: dbTemplates } = useTemplates();
 
   // Use DB templates if available, otherwise fallback to hardcoded
   // This ensures the gallery is never empty during migration
@@ -135,7 +140,7 @@ export const TemplateGallery = memo(function TemplateGallery({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[85vh] p-0 overflow-hidden">
+      <DialogContent className="flex h-[92dvh] max-h-[92dvh] max-w-[95vw] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl">
         <DialogHeader className="p-3 sm:p-6 pb-0">
           <div className="flex items-center justify-between gap-2">
             <DialogTitle className="text-base sm:text-xl flex items-center gap-2">
@@ -232,7 +237,7 @@ export const TemplateGallery = memo(function TemplateGallery({
                 className="group relative flex flex-col overflow-hidden border-2 transition-all hover:border-primary/50 hover:shadow-lg dark:bg-zinc-900/50"
               >
                 <div className="relative aspect-[4/3] bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-4xl sm:text-5xl group-hover:scale-105 transition-transform duration-300">
-                  {template.preview}
+                  <TemplatePreviewCard blocks={templateBlocksForFeatures(template.blocks, businessEnabled).map((block) => ({ type: block.type, ...block.overrides }))} showBlockCount={false} />
                   {template.isPremium && (
                     <Badge className="absolute top-2 right-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-xs">
                       PREMIUM

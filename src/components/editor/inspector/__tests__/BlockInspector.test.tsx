@@ -23,6 +23,28 @@ describe('BlockInspector', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
+  it('fits the phone sheet to the visible viewport as the keyboard opens and restores page scrolling', () => {
+    const viewport = new EventTarget();
+    Object.assign(viewport, { height: 800, offsetTop: 0 });
+    vi.stubGlobal('visualViewport', viewport);
+    document.body.style.overflow = 'auto';
+    const { unmount } = render(<BlockInspector mode="sheet" block={button} onUpdateBlock={vi.fn()} onClose={vi.fn()} />);
+    try {
+      const sheet = screen.getByRole('dialog');
+      expect(sheet).toHaveStyle({ height: '800px', top: '0px' });
+      expect(document.body.style.overflow).toBe('hidden');
+      Object.assign(viewport, { height: 410, offsetTop: 26 });
+      act(() => { viewport.dispatchEvent(new Event('resize')); });
+      expect(sheet).toHaveStyle({ height: '410px', top: '26px' });
+      unmount();
+      expect(document.body.style.overflow).toBe('auto');
+    } finally {
+      unmount();
+      document.body.style.overflow = '';
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('opens the block editor and discards changes back to the opened state', async () => {
     vi.useFakeTimers();
     const onUpdateBlock = vi.fn();

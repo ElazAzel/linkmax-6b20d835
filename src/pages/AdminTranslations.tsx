@@ -38,6 +38,8 @@ import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
 import { useAdminTranslations, setNestedValue } from '@/hooks/admin/useAdminTranslations';
 import { handleKeyboardActivation } from '@/lib/utils/a11y';
+import { SUPPORTED_LANGUAGES } from '@/i18n/config';
+import { unwrapTranslationPayload } from '@/lib/i18n-db-backend';
 
 
 // DB translations are used primarily via useAdminTranslations hook
@@ -169,7 +171,12 @@ export const AdminTranslations = memo(function AdminTranslations() {
     translations,
     flattenedTranslations,
     activeLanguages,
+    sourceStats,
     allKeys,
+    loading: translationsLoading,
+    error: translationsError,
+    refetch,
+    isFetching,
     saving,
     updateTranslation,
     upsertFullTranslations,
@@ -186,7 +193,6 @@ export const AdminTranslations = memo(function AdminTranslations() {
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [deleteConfirmKey, setDeleteConfirmKey] = useState<string | null>(null);
   const [savingKey, setSavingKey] = useState<string | null>(null);
-  const [syncConfirmOpen, setSyncConfirmOpen] = useState(false);
   const [editValue, setEditValue] = useState('');
 
   // Dialogs
@@ -243,10 +249,6 @@ export const AdminTranslations = memo(function AdminTranslations() {
   }, [navigate]);
 
   // --- Dialog open/close ---
-
-  const handleOpenSyncConfirm = useCallback(() => {
-    setSyncConfirmOpen(true);
-  }, []);
 
   const handleCloseAddKey = useCallback(() => {
     setAddKeyOpen(false);
@@ -387,17 +389,6 @@ export const AdminTranslations = memo(function AdminTranslations() {
     }
   }, [deleteConfirmKey, deleteKey]);
 
-  // --- CRUD: Sync ---
-
-  const syncAllToDB = useCallback(async () => {
-    const payload = activeLanguages.map(lang => ({
-      lang,
-      data: translations[lang]
-    }));
-    await upsertFullTranslations(payload);
-    setSyncConfirmOpen(false);
-  }, [activeLanguages, translations, upsertFullTranslations]);
-
   // --- Editor helpers ---
 
   const handleStartEdit = useCallback((key: string, value: string) => {
@@ -476,7 +467,8 @@ export const AdminTranslations = memo(function AdminTranslations() {
 
     try {
       const text = await file.text();
-      const importedData = JSON.parse(text) as TranslationData;
+      const importedData = unwrapTranslationPayload(JSON.parse(text));
+      if (!importedData) throw new Error('JSON должен содержать объект переводов');
       const mergedData = mergeDeep(translations[selectedLang] || {}, importedData);
 
       await upsertFullTranslations([{ lang: selectedLang, data: mergedData }]);
@@ -490,21 +482,16 @@ export const AdminTranslations = memo(function AdminTranslations() {
     }
   }, [selectedLang, translations, upsertFullTranslations]);
 
-  // --- Reset ---
-
-  const resetToOriginal = useCallback(() => {
-    toast.info(t('resetNotRecommended'));
-  }, []);
-
   // --- Upload success ---
 
   const handleUploadSuccess = useCallback(() => {
+    void refetch();
     toast.success(t('languageUploadedAndApplied'));
-  }, []);
+  }, [refetch, t]);
 
   // Available languages to add
   const availableToAdd = useMemo(() => {
-    const filtered = ALL_LANGUAGES.filter(l => !activeLanguages.includes(l.code));
+    const filtered = ALL_LANGUAGES.filter(l => SUPPORTED_LANGUAGES.includes(l.code as typeof SUPPORTED_LANGUAGES[number]) && !activeLanguages.includes(l.code));
     if (!languageSearch.trim()) return filtered;
     const query = languageSearch.toLowerCase();
     return filtered.filter(l =>
@@ -702,7 +689,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
      handleStartEdit, handleStartEditKeyDown, handleCopyFromEn, handleDeleteKeyConfirm]
   );
 
-  if (loading) {
+  if (loading || translationsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -712,6 +699,18 @@ export const AdminTranslations = memo(function AdminTranslations() {
 
   if (!isAdmin) {
     return null;
+  }
+
+  if (translationsError) {
+    return (
+      <main className="container mx-auto max-w-xl px-4 py-12 space-y-4">
+        <Button variant="ghost" onClick={handleNavigateBack}><ArrowLeft className="mr-2 h-4 w-4" />{t('back', 'Назад')}</Button>
+        <div role="alert" className="rounded-xl border border-destructive bg-destructive/5 p-4 text-sm">
+          Не удалось загрузить сохранённые переводы. Изменения заблокированы, чтобы не перезаписать данные. Проверьте доступ к базе данных и повторите загрузку.
+        </div>
+        <Button onClick={() => void refetch()} disabled={isFetching}><RefreshCw className="mr-2 h-4 w-4" />{t('refresh', 'Обновить')}</Button>
+      </main>
+    );
   }
 
   return (
@@ -747,21 +746,20 @@ export const AdminTranslations = memo(function AdminTranslations() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleOpenSyncConfirm}
-                disabled={saving}
+                onClick={() => void refetch()}
+                disabled={saving || isFetching}
               >
-                {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Upload className="h-4 w-4 mr-1" />}
-                {t('syncToDB')}
-              </Button>
-              <Button variant="outline" size="sm" onClick={resetToOriginal} disabled={saving}>
                 <RefreshCw className="h-4 w-4 mr-1" />
-                {t('reset')}
+                {t('refresh', 'Обновить')}
               </Button>
             </div>
           </div>
         </header>
 
         <main className="container mx-auto px-4 py-6 space-y-6">
+          <p className="text-sm text-muted-foreground">
+              Сохранённые переводы загружены из базы данных. Для пустых и отсутствующих значений сайт использует встроенные локали. Изменения сохраняются при редактировании. Покрытие показывает заполненные ключи, качество перевода проверяется вручную.
+          </p>
           {/* Active Languages */}
           <Card>
             <CardHeader className="pb-3">
@@ -778,7 +776,7 @@ export const AdminTranslations = memo(function AdminTranslations() {
                 {/* Add Language Button */}
                 <Dialog open={addLanguageOpen} onOpenChange={setAddLanguageOpen}>
                   <DialogTrigger asChild>
-                    <Button variant="outline" className="h-auto py-2 px-3">
+                    <Button variant="outline" className="h-auto py-2 px-3" disabled={activeLanguages.length >= SUPPORTED_LANGUAGES.length}>
                       <Plus className="h-4 w-4 mr-1" />
                       {t('addLanguage')}
                     </Button>
@@ -985,6 +983,11 @@ export const AdminTranslations = memo(function AdminTranslations() {
                 </CardTitle>
                 <Badge variant="outline">{t('keysCount', { count: filteredKeys.length })}</Badge>
               </div>
+              <CardDescription>
+                {sourceStats[selectedLang]?.saved ? 'Есть сохранённая локаль в базе.' : 'В базе нет сохранённой локали; показан встроенный файл.'}{' '}
+                В базе: {sourceStats[selectedLang]?.storedFilled || 0} заполненных, {sourceStats[selectedLang]?.storedEmpty || 0} пустых значений.{' '}
+                Встроенный резерв: {sourceStats[selectedLang]?.fallbackFilled || 0} ключей.
+              </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[600px]">
@@ -1020,29 +1023,13 @@ export const AdminTranslations = memo(function AdminTranslations() {
           </Card>
         </main>
 
-        {/* Sync to DB confirmation */}
-        <AlertDialog open={syncConfirmOpen} onOpenChange={setSyncConfirmOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Синхронизировать с БД?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Все текущие переводы будут отправлены в базу данных. Существующие в БД данные будут перезаписаны.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Отмена</AlertDialogCancel>
-              <AlertDialogAction onClick={syncAllToDB}>Отправить</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
         {/* Delete key confirmation */}
         <AlertDialog open={deleteConfirmKey !== null} onOpenChange={handleCloseDeleteConfirm}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Удалить ключ?</AlertDialogTitle>
+              <AlertDialogTitle>Сбросить переопределение ключа?</AlertDialogTitle>
               <AlertDialogDescription>
-                Вы уверены, что хотите удалить ключ "<strong>{deleteConfirmKey}</strong>" изо всех языков? Это действие нельзя отменить.
+                Сохранённое значение «<strong>{deleteConfirmKey}</strong>» будет удалено из базы во всех языках. Если ключ есть во встроенных локалях, он останется доступен. Это действие нельзя отменить.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

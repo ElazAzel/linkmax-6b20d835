@@ -2,14 +2,19 @@ import type { Block } from '@/types/page';
 import type { Template, TemplateBlockDefinition } from '@/types/templates';
 export type { Template };
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
-import { type TemplateCategoryKey } from '@/lib/templateCategories';
+import { DEMO_MEDIA } from '@/lib/demo-media';
+import { applyArtDirection } from '@/lib/design/art-direction';
 
 
 
 // Helper to create template block with overrides
 export const createTemplateBlock = (type: string, overrides: Record<string, unknown> = {}): Block => {
-    const baseBlock = createBaseBlock(type);
-    return { ...baseBlock, ...overrides } as Block;
+    const baseBlock = createBaseBlock(type, type === 'profile' ? { avatar: '', verified: false } : {});
+    return { ...baseBlock, ...overrides, blockStyle: {
+        padding: type === 'image' || type === 'carousel' ? 'none' : 'md',
+        borderRadius: 'lg', animation: 'fade-in',
+        ...(overrides.blockStyle as object || {}),
+    } } as Block;
 };
 
 // Placeholder images from Unsplash (free to use)
@@ -32,7 +37,7 @@ export const PLACEHOLDER_IMAGES = {
     food: [
         'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=600&fit=crop',
         'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1482049016gy4e-1c99c8f0b46a?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=800&h=600&fit=crop',
     ],
     photo: [
         'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=600&fit=crop',
@@ -71,7 +76,7 @@ export const MATCH_KEYWORDS: Record<string, string> = {
     personal: 'personal', life: 'personal', me: 'personal', about: 'personal',
 };
 
-export const HARDCODED_TEMPLATES: Template[] = [
+const LEGACY_TEMPLATES: Template[] = [
     // ===== КРЕАТОРЫ =====
     {
         id: 'influencer',
@@ -506,3 +511,95 @@ export const HARDCODED_TEMPLATES: Template[] = [
         ],
     },
 ];
+
+/** Keep the existing copy while adapting recipes to the current block schema.
+ * Reviews and ticking sample dates are never copied into a new public page.
+ * Photography is bundled locally so previews also work without image services.
+ */
+const UNSUPPORTED_DEMO_CLAIM = /лучши|\bbest\s|үздік|awwwards|\baward|\bwinner|жеңімп|behance featured|сертифик|certif|master of sports|мастер спорта|спорт шебер|\bROI\b|\d[\d\s,.]*\+|\d+\s*(?:лет|года?|years?|жыл)|\d+\s*%|рейтинг|rating|tripadvisor|2gis|Stanford|INSEAD|Ex-Revolut|Работал с|Worked with|Жұмыс істеді|гарант|guarantee|кепіл|\d+\s*[kKmM]\b|миллион|millions/iu;
+
+/** Remove invented credentials from existing demo copy without adding translations. */
+function cleanDemoBio(value: unknown): unknown {
+    const clean = (copy: string) => copy.split('\n').map((line) => line.split(/(?<=\.)\s+/)
+        .filter((sentence) => !UNSUPPORTED_DEMO_CLAIM.test(sentence)).join(' ')).filter(Boolean).join('\n');
+    if (typeof value === 'string') return clean(value);
+    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value)
+        .map(([locale, copy]) => [locale, typeof copy === 'string' ? clean(copy) : copy]));
+    return value;
+}
+
+function refreshTemplate(template: Template): Template {
+    if (template.id === 'blank') return {
+        ...template,
+        blocks: template.blocks.map((block) => ({ ...block, overrides: { ...block.overrides, avatar: '', verified: false } })),
+    };
+    const media: Record<string, readonly string[]> = {
+        beauty: [DEMO_MEDIA.studio, DEMO_MEDIA.nails],
+        barber: [DEMO_MEDIA.studio, DEMO_MEDIA.portrait],
+        photographer: [DEMO_MEDIA.wedding, DEMO_MEDIA.portrait],
+        designer: [DEMO_MEDIA.study, DEMO_MEDIA.photographer],
+        chef: [DEMO_MEDIA.coffee],
+        restaurant: [DEMO_MEDIA.coffee, DEMO_MEDIA.studio],
+        teacher: [DEMO_MEDIA.study],
+        psychologist: [DEMO_MEDIA.studio],
+        wedding: [DEMO_MEDIA.wedding],
+        personal: [DEMO_MEDIA.portrait],
+        influencer: [DEMO_MEDIA.portrait, DEMO_MEDIA.coffee],
+        'portfolio-pro': [DEMO_MEDIA.study],
+    };
+    const photos = media[template.id] ?? [];
+    const avatar = template.id === 'beauty' ? DEMO_MEDIA.beautyPortrait
+        : template.id === 'teacher' ? DEMO_MEDIA.teacher
+        : template.id === 'photographer' ? DEMO_MEDIA.photographer : '';
+    let photoIndex = 0;
+    const blocks = template.blocks
+        .filter((block) => !['testimonial', 'countdown', 'separator'].includes(block.type))
+        .filter((block) => block.type !== 'video' || !String(block.overrides?.url).includes('dQw4w9WgXcQ'))
+        .map((block): TemplateBlockDefinition => {
+            const overrides = { ...block.overrides };
+            if (block.type === 'profile') Object.assign(overrides, {
+                bio: cleanDemoBio(overrides.bio),
+                avatar, verified: false, avatarPosition: 'left', avatarShape: 'squircle',
+                coverGradient: 'light', coverImage: photos[0] ?? '', coverHeight: 'large',
+            });
+            // Template identities are fictional. Do not send visitors to a
+            // guessed phone number, social account or third-party booking page.
+            if (block.type === 'messenger') overrides.messengers = [{ platform: 'whatsapp', username: '' }];
+            if (block.type === 'socials') overrides.platforms = [];
+            if (block.type === 'link' || block.type === 'button') overrides.url = 'https://example.com';
+            if (block.type === 'carousel' && photos.length) {
+                overrides.images = photos.map((url) => ({ url, alt: template.name }));
+                overrides.autoPlay = false;
+            }
+            if (block.type === 'pricing' && Array.isArray(overrides.plans)) {
+                overrides.items = overrides.plans.map((plan: Record<string, unknown>, index: number) => ({
+                    ...plan, id: `service-${index + 1}`, featured: Boolean(plan.isPopular),
+                }));
+                delete overrides.plans;
+            }
+            if (block.type === 'catalog' && Array.isArray(overrides.categories)) {
+                const categories = overrides.categories as Array<{ id?: string; name: unknown; items?: Record<string, unknown>[] }>;
+                overrides.items = categories.flatMap((category, index) => (category.items || []).map((item, itemIndex) => ({
+                    ...item, id: `item-${index}-${itemIndex}`, categoryId: category.id || `category-${index}`,
+                    image: photos.length ? photos[photoIndex++ % photos.length] : undefined,
+                })));
+                overrides.categories = categories.map((category, index) => ({ id: category.id || `category-${index}`, name: category.name }));
+                overrides.layout = 'grid';
+            }
+            if (block.type === 'product' && photos.length) overrides.image = photos[photoIndex++ % photos.length];
+            return { type: block.type, overrides: { ...overrides, blockSize: 'wide' } };
+        })
+        .filter((block) => block.type !== 'carousel' || (Array.isArray(block.overrides?.images) && block.overrides.images.length > 0));
+    if (photos.length && !blocks.some((block) => ['carousel', 'image', 'tiles'].includes(block.type))) {
+        blocks.splice(1, 0, { type: 'image', overrides: { url: photos[0], alt: template.name, blockSize: 'wide' } });
+    }
+    // Keep a clear path through a template instead of a long inventory of widgets.
+    const closing = blocks.filter((block) => ['messenger', 'socials', 'map'].includes(block.type));
+    const details = blocks.filter((block) => !closing.includes(block));
+    const composed = applyArtDirection([...details.slice(0, Math.max(1, 9 - closing.length)), ...closing].map((block, index) => ({
+        ...createTemplateBlock(block.type, block.overrides), id: `template-${template.id}-${index}`,
+    })), { seed: template.id });
+    return { ...template, blocks: composed.blocks.map(({ type, id: _id, ...overrides }) => ({ type, overrides })) };
+}
+
+export const HARDCODED_TEMPLATES: Template[] = LEGACY_TEMPLATES.map(refreshTemplate);

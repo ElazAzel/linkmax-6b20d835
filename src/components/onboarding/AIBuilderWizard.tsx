@@ -27,10 +27,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils/utils';
 import { getAlgorithmicTemplateForNiche } from '@/lib/blocks/algorithmic-templates';
-import { generateBlocksFromTemplate } from '@/lib/blocks/internal-builder';
+import { buildSmartPage } from '@/lib/onboarding/smart-page-builder';
 import { trackWizardCompleted, trackWizardNicheSelected, trackWizardStarted } from '@/lib/activation-events';
 import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type OnboardingGoal } from '@/lib/niches';
 import { storage } from '@/lib/storage';
+import { useBusinessFeatures } from '@/lib/features';
 import { trackCurrentUserProductEvent } from '@/services/product-analytics';
 import type { Block } from '@/types/page';
 
@@ -79,9 +80,10 @@ export function AIBuilderWizard({
   isOnboarding = false,
   initialNiche,
   pageId,
-  signupContext,
+  signupContext: _signupContext,
 }: AIBuilderWizardProps) {
   const { t } = useTranslation();
+  const businessEnabled = useBusinessFeatures();
   const [step, setStep] = useState<Step>(isOnboarding ? 'offer' : 'goal');
   const [entryStep, setEntryStep] = useState<'offer' | 'goal'>(isOnboarding ? 'offer' : 'goal');
   const [selectedGoal, setSelectedGoal] = useState<OnboardingGoal | null>(null);
@@ -91,6 +93,7 @@ export function AIBuilderWizard({
     name: '', bio: '', contacts: '', services: '', socials: '', mediaLinks: '',
   });
   const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
+  const [generatedProfile, setGeneratedProfile] = useState({ name: '', bio: '' });
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [generationError, setGenerationError] = useState<string | null>(null);
@@ -107,6 +110,7 @@ export function AIBuilderWizard({
     setSelectedNiche(initialNiche ?? null);
     setSelectedTemplate(null);
     setGeneratedBlocks([]);
+    setGeneratedProfile({ name: '', bio: '' });
     setRetryCount(0);
     setGenerationError(null);
     if (pageId && !startTrackedForOpenRef.current) {
@@ -147,9 +151,11 @@ export function AIBuilderWizard({
     await Promise.resolve();
 
     try {
-      const blocks = generateBlocksFromTemplate(selectedTemplate.blocks, userInfo);
+      const result = buildSmartPage({ niche: selectedNiche, goal: selectedGoal, userInfo, businessEnabled });
+      const blocks = result.blocks;
       if (blocks.length === 0) throw new Error('algorithm-produced-empty-page');
       setGeneratedBlocks(blocks);
+      setGeneratedProfile(result.profile);
       setStep('complete');
       if (pageId) {
         void trackCurrentUserProductEvent('page_generated', {
@@ -168,20 +174,20 @@ export function AIBuilderWizard({
       setGenerationError(t('algorithmBuilder.error', 'Не удалось собрать страницу. Проверьте введённые данные.'));
       setStep('description');
     }
-  }, [pageId, selectedGoal, selectedNiche, selectedTemplate, t, userInfo]);
+  }, [businessEnabled, pageId, selectedGoal, selectedNiche, selectedTemplate, t, userInfo]);
 
   const finishWizard = (options?: { publish?: boolean; nextAction?: 'connect_telegram' }) => {
     if (!selectedNiche) return;
     if (options?.publish) storage.set('wizard_wants_publish', 'true');
     if (options?.nextAction) storage.set('wizard_next_action', options.nextAction);
     if (pageId) trackWizardCompleted(pageId, selectedNiche);
-    onComplete({ name: userInfo.name, bio: userInfo.bio }, generatedBlocks, selectedNiche);
+    onComplete(generatedProfile, generatedBlocks, selectedNiche);
     toast.success(t('algorithmBuilder.success', 'Страница собрана по алгоритму'));
   };
 
   return (
     <Dialog open={open} onOpenChange={(value) => { if (!value) onClose(); }}>
-      <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[95vh] overflow-hidden p-0 gap-0 rounded-card border-0 bg-card">
+      <DialogContent className="flex max-h-[100dvh] w-screen max-w-none flex-col overflow-y-auto rounded-none border-0 bg-card p-0 gap-0 sm:max-h-[90dvh] sm:max-w-2xl sm:rounded-card">
         <DialogTitle className="sr-only">{t('algorithmBuilder.title', 'Конструктор страницы')}</DialogTitle>
         <DialogDescription className="sr-only">{t('algorithmBuilder.description', 'Создайте страницу по алгоритму')}</DialogDescription>
         <div className="px-6 pt-6">
@@ -204,7 +210,7 @@ export function AIBuilderWizard({
             <h2 className="mb-1 text-2xl font-bold">{t('aiBuilder.goals.title', 'Что должна делать страница?')}</h2>
             <p className="mb-6 text-sm text-muted-foreground">{t('aiBuilder.goals.subtitle', 'Алгоритм подберёт структуру под вашу задачу')}</p>
             <div className="grid grid-cols-1 gap-3 pb-4 sm:grid-cols-2">
-              {ONBOARDING_GOALS.map((goal) => (
+              {ONBOARDING_GOALS.filter((goal) => businessEnabled || goal === 'leads' || goal === 'brand').map((goal) => (
                 <button key={goal} onClick={() => handleSelectGoal(goal)} className="group flex items-center gap-4 rounded-3xl border-2 border-border/50 bg-card p-5 text-left transition-all hover:scale-[1.02] hover:border-primary/50">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-3xl">{GOAL_ICONS[goal]}</div>
                   <div><p className="text-lg font-bold leading-tight">{t(`aiBuilder.goals.${goal}`, goal)}</p><p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{t(`aiBuilder.goals.${goal}Desc`, '')}</p></div>

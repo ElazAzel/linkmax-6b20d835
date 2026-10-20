@@ -14,7 +14,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 VITE_APP_DOMAIN=https://your-domain.example
 ```
 
-An anon JWT is also accepted, but service-role JWTs and secret keys are rejected. Public pages do not require admin credentials. Optional public values are `VITE_SUPABASE_PROJECT_ID` and `VITE_ENABLE_REMOTE_TRANSLATIONS=true`. Only this allowlist is injected; changing the backend or origin requires rebuilding. Server secrets must never use a `VITE_` name. No Sentry upload token, provider token, or database password is needed for the app build. Standalone selects `VITE_RUNTIME_MODE=standalone`, disables Lovable error hooks, and omits the wrapper's preview assets proxy and runtime injection.
+An anon JWT is also accepted, but service-role JWTs and secret keys are rejected. Public pages do not require admin credentials. Optional public values are `VITE_SUPABASE_PROJECT_ID` and `VITE_ENABLE_REMOTE_TRANSLATIONS`. With Supabase configured, browser translations load saved admin overrides by default; set `VITE_ENABLE_REMOTE_TRANSLATIONS=false` to opt out. Bundled locales load first and remain the SSR and offline fallback. Only this allowlist is injected; changing the backend or origin requires rebuilding. Server secrets must never use a `VITE_` name. No Sentry upload token, provider token, or database password is needed for the app build. Standalone selects `VITE_RUNTIME_MODE=standalone`, disables Lovable error hooks, and omits the wrapper's preview assets proxy and runtime injection.
 
 Docker uses the committed Bun lock, builds on Node 24, and runs the self-contained Nitro output as the unprivileged `node` user:
 

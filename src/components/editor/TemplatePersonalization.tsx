@@ -18,6 +18,8 @@ import { toast } from 'sonner';
 import type { Block } from '@/types/page';
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import { buildSmartPage, inferSmartPageNiche } from '@/lib/onboarding/smart-page-builder';
+import { useBusinessFeatures } from '@/lib/features';
+import { templateBlocksForFeatures } from '@/lib/blocks/template-features';
 
 interface TemplatePersonalizationProps {
   open: boolean;
@@ -35,6 +37,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
   onApply,
 }: TemplatePersonalizationProps) {
   const { t } = useTranslation();
+  const businessEnabled = useBusinessFeatures();
   const [businessName, setBusinessName] = useState('');
   const [businessDescription, setBusinessDescription] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -50,6 +53,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
       const description = businessDescription.trim();
       const prompt = `${businessName} ${description} ${templateName}`;
       const result = buildSmartPage({
+        businessEnabled,
         niche: inferSmartPageNiche(prompt),
         goal: 'leads',
         userInfo: {
@@ -77,7 +81,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
   };
 
   const handleUseAsIs = () => {
-    const blocks: Block[] = templateBlocks.map((blockData, index) => {
+    const blocks: Block[] = templateBlocksForFeatures(templateBlocks, businessEnabled).map((blockData, index) => {
       const baseBlock = createBaseBlock(blockData.type);
       return {
         ...baseBlock,
