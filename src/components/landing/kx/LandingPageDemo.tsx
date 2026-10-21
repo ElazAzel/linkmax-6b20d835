@@ -42,7 +42,7 @@ function demoPages(t: TFunction) {
       id: 'photo', name: 'Timur Shot', avatar: DEMO_MEDIA.photographer,
       role: t('landing.kx.demo.photoRole', 'Фотограф · свадьбы и портреты'),
       cover: DEMO_MEDIA.wedding, theme: getThemePreset('graphite')!.theme,
-      feature: { id: 'demo-shoot', type: 'card', title: t('landing.kx.demo.date', 'Забронировать дату'),
+      feature: { id: 'demo-shoot', type: 'card', image: DEMO_MEDIA.portrait, title: t('landing.kx.demo.date', 'Забронировать дату'),
         text: t('landing.kx.demo.datePrice', 'Съёмка от 25 000 ₸'), buttonText: 'Instagram' } satisfies CardData,
       gallery: { id: 'demo-photo-gallery', type: 'tiles', columns: 2, aspect: 'portrait', items: [
         { id: 'wedding', image: DEMO_MEDIA.wedding }, { id: 'portrait', image: DEMO_MEDIA.portrait },
@@ -92,7 +92,7 @@ export function LandingPageDemo() {
   const blocks: Block[] = [
     { id: `demo-profile-${page.id}`, type: 'profile', name: page.name, bio: page.role,
       avatar: page.avatar, coverImage: page.cover, coverHeight: 'small',
-      coverPosition: { x: 50, y: page.id === 'photo' ? 20 : 50 } },
+      coverPosition: { x: 50, y: page.id === 'photo' ? 20 : page.id === 'education' ? 10 : 50 } },
     ...(page.id === 'photo' ? [{ id: 'demo-slides', type: 'carousel' as const,
       images: [{ url: DEMO_MEDIA.wedding, alt: page.role }, { url: DEMO_MEDIA.portrait, alt: page.role }],
       autoPlay: !reducedMotion && !interacted && !paused, interval: 3400, blockSize: 'full' as const }] : []),
