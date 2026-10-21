@@ -41,13 +41,13 @@ export function KxHero({ onStart }: Props) {
       {/* soft glow behind the headline, the only decoration on the page */}
       <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] max-w-[160vw] -translate-x-1/2 rounded-full opacity-40 blur-[120px]" style={{ background: 'radial-gradient(closest-side, rgb(255 107 0 / .55), transparent)' }} />
 
-      <div className="kx-wrap relative grid items-center gap-14 lg:grid-cols-[1.15fr_.85fr] lg:gap-10">
+      <div className="kx-wrap relative grid items-center gap-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)] lg:gap-10">
         <div>
           <h1 id="kx-hero-title" className="kx-display text-[40px] min-[400px]:text-[44px] sm:text-[64px] lg:text-[76px]">
             {t('landing.kx.hero.before', 'Собери')}{' '}
             <RotatingWord words={words} />
             <br />
-            <span className="sm:whitespace-nowrap">{t('landing.kx.hero.after', 'за пару минут')}</span>
+            <span>{t('landing.kx.hero.after', 'за пару минут')}</span>
           </h1>
           <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-[var(--kx-muted)] md:text-xl">
             {t('landing.kx.hero.sub', 'Одна ссылка вместо десяти. Покажи, что делаешь, принимай заявки и оплату прямо со страницы. Займи короткий адрес, пока он свободен.')}
