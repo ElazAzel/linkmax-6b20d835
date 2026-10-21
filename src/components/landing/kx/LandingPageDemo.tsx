@@ -8,7 +8,7 @@ import { getThemePreset } from '@/lib/appearance/presets';
 import { getDividerClass, getPageThemeScope, getThemeBackgroundStyle } from '@/lib/appearance/style-utils';
 import { usePageFonts } from '@/hooks/page/usePageFonts';
 import { RenderContextProvider } from '@/contexts/RenderContext';
-import { DEMO_MEDIA } from '@/lib/demo-media';
+import { LANDING_DEMO_MEDIA as DEMO_MEDIA } from '@/lib/demo-media';
 import type { Block, CardBlock as CardData, TilesBlock as TilesData } from '@/types/page';
 
 function demoPages(t: TFunction) {
@@ -91,7 +91,8 @@ export function LandingPageDemo() {
   usePageFonts(page.theme);
   const blocks: Block[] = [
     { id: `demo-profile-${page.id}`, type: 'profile', name: page.name, bio: page.role,
-      avatar: page.avatar, coverImage: page.cover, coverHeight: 'small' },
+      avatar: page.avatar, coverImage: page.cover, coverHeight: 'small',
+      coverPosition: { x: 50, y: page.id === 'photo' ? 20 : 50 } },
     ...(page.id === 'photo' ? [{ id: 'demo-slides', type: 'carousel' as const,
       images: [{ url: DEMO_MEDIA.wedding, alt: page.role }, { url: DEMO_MEDIA.portrait, alt: page.role }],
       autoPlay: !reducedMotion && !interacted && !paused, interval: 3400, blockSize: 'full' as const }] : []),

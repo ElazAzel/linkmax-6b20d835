@@ -4,7 +4,7 @@ import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Play from 'lucide-react/dist/esm/icons/play';
 import { ClaimForm, KxMark, Reveal } from './primitives';
-import { DEMO_MEDIA } from '@/lib/demo-media';
+import { LANDING_DEMO_MEDIA as DEMO_MEDIA } from '@/lib/demo-media';
 
 const v = (vars: Record<string, string | number>) => vars as CSSProperties;
 

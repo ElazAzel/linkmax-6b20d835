@@ -1,0 +1,101 @@
+[
+  {
+    "name": "beauty-portrait",
+    "file": "beauty-portrait.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic fashion editorial portrait for a fictional adult Kazakh nail artist, age 28, confident direct gaze, short dark blunt bob, sculptural silver earrings, black tailored top, shoulders and head centered with generous space around head so a circular avatar crop works. Seamless pale lavender studio backdrop, hard direct flash, crisp shadow, natural skin texture, restrained cherry red accent. Contemporary independent beauty magazine, bold charismatic personal brand, stylish but believable. One portrait only, square composition. No lettering, logos, watermark, collage, borders.",
+    "width": 480,
+    "height": 480,
+    "bytes": 12710
+  },
+  {
+    "name": "nails",
+    "file": "nails.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic high-fashion nail art editorial macro photograph, one elegant adult hand with five anatomically natural fingers casually resting on a polished curved chrome surface. Immaculate sculpted almond nails in deep cherry red with tiny mirror chrome accents, lavender backdrop, hard direct flash, rich specular highlights, real skin and cuticle texture, dramatic close cropping with some breathing room. Bold avant-garde independent nail artist campaign, premium and tactile, not stock spa imagery. Square photo suitable for rectangular crops. No text, logos, collage, watermarks.",
+    "width": 960,
+    "height": 960,
+    "bytes": 88448
+  },
+  {
+    "name": "studio",
+    "file": "studio.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic contemporary beauty editorial extreme close-up of an adult Central Asian woman's face, thick expertly groomed natural brows, sharp brown eyes, slick dark hair, dewy skin with real pores, subtle chrome silver eyeshadow and lilac highlight, direct confident gaze. Framing both eyes and brows in center, enough forehead and cheeks for a panoramic cover crop, square full image. Lavender studio backdrop with hard fashion flash, polished independent beauty magazine, striking sculptural light, realistic anatomy. No text, logos, collage, watermarks.",
+    "width": 960,
+    "height": 960,
+    "bytes": 122112
+  },
+  {
+    "name": "teacher",
+    "file": "teacher.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic editorial portrait of a fictional adult Kazakh female English tutor age 29, shoulder-length dark hair, cobalt blue shirt, subtle silver jewelry, looking into camera with an open confident smile, head and shoulders centered, generous headroom for circular avatar crop. Lime green studio backdrop, direct camera flash with crisp shadow, natural skin texture. Modern creative educator and confident city professional, bold personal brand, independent magazine energy. Square single photo, no text, no logos, no watermark, no collage.",
+    "width": 480,
+    "height": 480,
+    "bytes": 18420
+  },
+  {
+    "name": "study",
+    "file": "study.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic bold contemporary editorial still life about learning English, a large open unbranded notebook with clean unprinted pages, electric cobalt over-ear headphones resting beside it, chrome pen, small translucent lime glass, all on a saturated soft lime green desk. Artful diagonal arrangement, close cropped, directional direct flash creating graphic hard shadows, tactile paper and metal, energetic but minimal composition, real physical objects. Square image with central subject group readable in wide cover crop. No letters, no text, no screens, no logos, no collage, no watermark.",
+    "width": 960,
+    "height": 960,
+    "bytes": 69158
+  },
+  {
+    "name": "coffee",
+    "file": "coffee.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic candid editorial photograph of a lively English conversation meetup in a modern urban cafe, three adult Central Asian friends in their late 20s, two women and one man laughing naturally around a small table with ceramic espresso cups and a blank open notebook. Cobalt blue and soft lime accents in clothes and interior, tasteful contemporary concrete and chrome cafe, hard direct flash mixed with daylight, authentic unposed magazine photography with a little film grain. Mid shot faces centered, all people clothed, realistic hands. Square single photograph, no lettering, no logos, no collage, no watermark.",
+    "width": 960,
+    "height": 960,
+    "bytes": 134652
+  },
+  {
+    "name": "photographer",
+    "file": "photographer.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic striking editorial portrait of a fictional adult Kazakh male photographer age 32, dark short hair and faint stubble, black minimal t-shirt, holding a compact unbranded professional black camera near chest, looking straight into lens with a calm confident expression. Head and shoulders centered with headroom for circular avatar crop, warm gray concrete studio background, hard direct flash, deep charcoal shadows and subtle amber rim light, natural skin texture, contemporary independent culture magazine. Square single photo, no logos, no text, no collage, no watermark.",
+    "width": 480,
+    "height": 480,
+    "bytes": 19700
+  },
+  {
+    "name": "wedding",
+    "file": "wedding.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic rebellious fashion wedding editorial photograph, a stylish adult Central Asian bride in a sculptural minimal ivory dress and an adult Central Asian groom in an oversized black suit, candid mid-laugh walking side by side outside a brutalist concrete building at dusk. Direct flash freezes their movement, deep charcoal background, warm amber light spilling from a doorway, genuine fabric texture and cinematic film grain. Fashion-forward elopement, bold and intimate, no flowers, no conventional wedding decoration. Wide medium shot couple centered with ample negative space around them for both panoramic cover and portrait crops, square image. No text, logos, watermark, collage.",
+    "width": 960,
+    "height": 960,
+    "bytes": 87318
+  },
+  {
+    "name": "portrait",
+    "file": "portrait.webp",
+    "source": "OpenAI built-in Imagegen",
+    "generated": "2026-10-21",
+    "fictional": true,
+    "prompt": "Photorealistic cinematic fashion portrait for an independent photographer's portfolio. Adult Central Asian woman age 27 in a sculptural black jacket, windswept dark hair, confident profile turned slightly toward lens, standing before raw dark concrete. Hard direct flash and saturated amber side light, deep blacks, tactile skin and fabric, subtle analog grain, daring contemporary magazine editorial. Waist-up framing, strong centered composition, square photo suitable for portrait tile crop. No text, logos, collage, watermarks.",
+    "width": 960,
+    "height": 960,
+    "bytes": 100228
+  }
+]
