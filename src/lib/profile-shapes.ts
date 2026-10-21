@@ -121,17 +121,16 @@ export function getCoverPatternStyle(pattern: CoverPattern | undefined): React.C
   };
 }
 
-/** cover height including new xl option (only used when we detect the field). */
-export function coverHeightClass(h: string | undefined): string {
-  switch (h) {
-    case 'small':
-      return 'h-[120px]';
-    case 'large':
-      return 'h-[320px]';
-    case 'xl':
-      return 'h-[420px]';
-    case 'medium':
-    default:
-      return 'h-[200px]';
-  }
+const COVER_HEIGHTS = {
+  small: { className: 'h-[120px]', pixels: 120 },
+  medium: { className: 'h-[200px]', pixels: 200 },
+  large: { className: 'h-[320px]', pixels: 320 },
+  xl: { className: 'h-[420px]', pixels: 420 },
+};
+
+function coverHeight(h: string | undefined) {
+  return h === 'small' || h === 'large' || h === 'xl' ? COVER_HEIGHTS[h] : COVER_HEIGHTS.medium;
 }
+
+export function coverHeightClass(h: string | undefined): string { return coverHeight(h).className; }
+export function coverHeightPixels(h: string | undefined): number { return coverHeight(h).pixels; }

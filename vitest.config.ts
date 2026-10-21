@@ -17,6 +17,9 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, '**/*.sql.test.mjs'],
     testTimeout: 60000, // Increased testTimeout from 30000 to 60000
     setupFiles: ['./src/testing/setup.ts'],
+    // pnpm can retain a React 18 peer copy for these packages. Transform them
+    // through Vite so they share the React 19 instance used by the renderer.
+    server: { deps: { inline: [/framer-motion/, /zustand/, /use-sync-external-store/, /react-i18next/, /embla-carousel-react/] } },
     env: {
       VITE_SUPABASE_URL: envOr('VITE_SUPABASE_URL', 'http://127.0.0.1:54321'),
       VITE_SUPABASE_PUBLISHABLE_KEY: envOr('VITE_SUPABASE_PUBLISHABLE_KEY', 'test-publishable-key'),
@@ -53,6 +56,7 @@ export default defineConfig({
     },
   },
   resolve: {
+    dedupe: ['react', 'react-dom'],
     alias: {
       '@': path.resolve(__dirname, './src'),
     },

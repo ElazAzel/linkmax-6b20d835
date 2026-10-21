@@ -5196,6 +5196,8 @@
     "orderMessage": "Hello! I'd like to order “{{name}}”"
   },
   "profile": {
+    "coverPosition": "Cover position",
+    "coverPositionHint": "Drag the cover or use the sliders below.",
     "addBio": "Add a description",
     "addCover": "Add cover",
     "addName": "Add name",

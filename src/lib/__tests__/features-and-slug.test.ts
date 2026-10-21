@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { BUSINESS_BLOCK_TYPES, isBusinessDashboardTab, isBusinessFeaturesEnabled, setBusinessFeaturesEnabled } from '../features';
 import { sanitizeSlug, slugifyTitle, slugWhileTyping } from '../utils/slug';
 import { localizeValidationMessage } from '../blocks/validation-messages';
@@ -22,6 +22,21 @@ describe('business features flag', () => {
     expect(isBusinessDashboardTab('finance')).toBe(true);
     expect(isBusinessDashboardTab('zone-deals')).toBe(true);
     expect(isBusinessDashboardTab('editor')).toBe(false);
+  });
+
+  it('can switch business tools for this tab when storage is blocked', () => {
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Storage blocked'); });
+    const read = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('Storage blocked'); });
+    try {
+      setBusinessFeaturesEnabled(true);
+      expect(isBusinessFeaturesEnabled()).toBe(true);
+      setBusinessFeaturesEnabled(false);
+      expect(isBusinessFeaturesEnabled()).toBe(false);
+    } finally {
+      write.mockRestore();
+      read.mockRestore();
+      setBusinessFeaturesEnabled(false);
+    }
   });
 });
 

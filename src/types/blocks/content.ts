@@ -38,6 +38,7 @@ export interface ProfileBlock {
     avatarIcon?: string; // Lucide icon name
     nameAnimation?: NameAnimationType; // Name text animation
     coverImage?: string;
+    coverPosition?: { x?: number; y?: number };
     coverVideo?: string; // Premium: mp4/webm loop URL
     coverParallax?: boolean; // Premium: parallax scroll
     coverPattern?: CoverPatternType; // decorative SVG overlay pattern

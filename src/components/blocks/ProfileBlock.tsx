@@ -1,3 +1,4 @@
+import { getCoverPositionStyle } from '@/lib/appearance/cover-position';
 import { memo, useMemo, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -214,14 +215,14 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
               playsInline
               preload="metadata"
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
+              style={{ ...getCoverPositionStyle(block.coverPosition), transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
             />
           ) : (
             <img
               src={block.coverImage}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
+              style={{ ...getCoverPositionStyle(block.coverPosition), transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
             />
           )}
           {block.coverGradient && block.coverGradient !== 'none' && (

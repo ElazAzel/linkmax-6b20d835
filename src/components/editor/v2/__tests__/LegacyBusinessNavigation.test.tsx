@@ -18,12 +18,13 @@ describe('business tools in legacy navigation', () => {
     setBusinessFeaturesEnabled(false);
     const props = { activeTab: 'editor', onTabChange: vi.fn(), isPremium: true, onSignOut: vi.fn() };
     const { rerender } = render(<DashboardSidebar {...props} />);
-    for (const id of ['clients', 'calendar', 'offers', 'activity', 'events', 'finance', 'team', 'zone-deals']) {
+    for (const id of ['clients', 'calendar', 'offers', 'activity', 'finance', 'team', 'zone-deals']) {
       expect(screen.queryByTestId(id + '-tab')).not.toBeInTheDocument();
     }
     expect(screen.getByTestId('insights-tab')).toBeVisible();
     // Form submissions are not a business tool: the form block is offered to everyone.
     expect(screen.getByTestId('leads-tab')).toBeVisible();
+    expect(screen.getByTestId('events-tab')).toBeInTheDocument();
     expect(screen.getByTestId('settings-tab')).toBeVisible();
     setBusinessFeaturesEnabled(true);
     rerender(<DashboardSidebar {...props} />);
@@ -37,10 +38,11 @@ describe('business tools in legacy navigation', () => {
     expect(screen.queryByTestId('activity-tab')).not.toBeInTheDocument();
     expect(screen.getByTestId('insights-tab')).toBeVisible();
     fireEvent.click(screen.getByRole('button', { name: 'Меню' }));
-    for (const id of ['events', 'monetize', 'finance', 'team', 'zone-deals']) {
+    for (const id of ['monetize', 'finance', 'team', 'zone-deals']) {
       expect(screen.queryByTestId(id + '-tab')).not.toBeInTheDocument();
     }
     expect(screen.getByTestId('pages-tab')).toBeVisible();
+    expect(screen.getByTestId('events-tab')).toBeVisible();
     expect(screen.getByTestId('settings-tab')).toBeVisible();
   });
 });

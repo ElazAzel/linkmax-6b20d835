@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useDeferredValue, useCallback, memo } from 'react';
+import { useState, useMemo, useRef, useDeferredValue, useCallback, useEffect, memo } from 'react';
 import { useNavigate } from '@/lib/router-compat';
 import { useTranslation } from 'react-i18next';
 import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
@@ -166,6 +166,10 @@ export const AdminTranslations = memo(function AdminTranslations() {
   const seoTitle = t('adminTranslations.seo.title', 'lnkmx Admin Translations');
   const seoDescription = t('adminTranslations.seo.description', 'Internal translation management for lnkmx.');
   const { isAdmin, loading } = useAdminAuth();
+
+  useEffect(() => {
+    if (!loading && !isAdmin) navigate('/auth', { replace: true });
+  }, [loading, isAdmin, navigate]);
 
   const {
     translations,

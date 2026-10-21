@@ -19,6 +19,7 @@ import type { Block } from '@/types/page';
 import { TEMPLATE_CATEGORY_KEYS, type TemplateCategoryKey, getTemplateCategoryLabel } from '@/lib/templateCategories';
 import { createBlock } from '@/lib/blocks/block-factory';
 import { ScreenErrorBoundary } from '@/components/dashboard-v2/common/ScreenErrorBoundary';
+import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
 
 interface TemplateData {
     id?: string;
@@ -44,6 +45,19 @@ const DEFAULT_TEMPLATE: TemplateData = {
 };
 
 export default function AdminTemplateEditor() {
+    const { isAdmin, loading } = useAdminAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loading && !isAdmin) navigate('/auth', { replace: true });
+    }, [loading, isAdmin, navigate]);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+    if (!isAdmin) return null;
+    return <AdminTemplateEditorContent />;
+}
+
+function AdminTemplateEditorContent() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();

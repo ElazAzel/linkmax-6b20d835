@@ -1,3 +1,5 @@
+import { CoverPositionEditor } from '@/components/profile/CoverPositionEditor';
+import { getCoverPositionStyle } from '@/lib/appearance/cover-position';
 /**
  * ProfileEditorWizard - Step-by-step wizard for editing profile block
  * Steps: Name/Bio → Photo → Cover. The name used to come third, after a
@@ -235,7 +237,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
       >
         {formData.coverImage ? (
           <>
-            <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
+            <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" style={getCoverPositionStyle(formData.coverPosition)} />
             {formData.coverGradient && formData.coverGradient !== 'none' && (
               <div className={cn(
                 "absolute inset-0",
@@ -274,6 +276,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
         />
       </div>
 
+      {formData.coverImage && <CoverPositionEditor src={formData.coverImage} blockId={formData.id} value={formData.coverPosition} height={formData.coverHeight} onChange={coverPosition => onChange({ ...formData, coverPosition })} />}
       {/* Gradient selector */}
       {formData.coverImage && (
         <div className="space-y-3">

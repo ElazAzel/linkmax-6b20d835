@@ -1637,6 +1637,7 @@
   },
   "dashboard": {
     "accountSettings": {
+      "usernameHint": "Bu asosiy sahifa manzili ham: lnkmx.my/{{username}}",
       "account": "Hisob",
       "achievements": "Yutuqlar",
       "achievementsDesc": "Sizning taraqqiyotingiz",
@@ -1769,6 +1770,7 @@
       "live": "Jonli platforma"
     },
     "home": {
+      "last30Days": "oxirgi 30 kun",
       "blocks": "bloklar",
       "edit": "Tahrirlash",
       "gallery": "Galereya",
@@ -2066,6 +2068,7 @@
       "title": "Shaxsiy hisob LinkMAX"
     },
     "settings": {
+      "noPage": "Avval sahifa yarating — uning manzili, SEO va brendingi shu yerda paydo bo‘ladi.",
       "account": "Hisob",
       "achievements": "Yutuqlar",
       "achievementsDesc": "Sizning taraqqiyotingiz",
@@ -5193,6 +5196,8 @@
     "orderMessage": "Assalomu alaykum! «{{name}}» buyurtma bermoqchiman"
   },
   "profile": {
+    "coverPosition": "Muqova joylashuvi",
+    "coverPositionHint": "Muqovani suring yoki quyidagi slayderlardan foydalaning.",
     "addBio": "Tavsif qo'shing",
     "addCover": "Qopqoq qo'shing",
     "addName": "Ism qo'shing",

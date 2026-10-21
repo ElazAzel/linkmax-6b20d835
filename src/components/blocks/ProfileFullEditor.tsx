@@ -1,4 +1,7 @@
 'use client';
+import { CoverPositionEditor } from '@/components/profile/CoverPositionEditor';
+import { getCoverPositionStyle } from '@/lib/appearance/cover-position';
+
 import { useNavigate } from '@/lib/router-compat';
 
 import type { CoverHeight, CoverGradient, AvatarSize, ShadowStyle, AvatarPosition } from "@/types/profile-editor";
@@ -330,7 +333,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
               >
                 {formData.coverImage ? (
                   <>
-                    <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
+                    <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" style={getCoverPositionStyle(formData.coverPosition)} />
                     {formData.coverGradient && formData.coverGradient !== 'none' && (
                       <div className={cn(
                         "absolute inset-0",
@@ -366,6 +369,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                 </Button>
               )}
 
+              {formData.coverImage && <CoverPositionEditor src={formData.coverImage} blockId={block.id} value={formData.coverPosition} height={formData.coverHeight} onChange={coverPosition => setFormData(prev => ({ ...prev, coverPosition }))} />}
               {/* Cover Height */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">{t('profile.coverHeight', 'Высота')}</Label>
@@ -767,7 +771,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                   formData.coverImage ? '' : 'bg-muted'
                 )}>
                   {formData.coverImage && (
-                    <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" />
+                    <img src={formData.coverImage} alt="" role="presentation" className="w-full h-full object-cover" style={getCoverPositionStyle(formData.coverPosition)} />
                   )}
                 </div>
 

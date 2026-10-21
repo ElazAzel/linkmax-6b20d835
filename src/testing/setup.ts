@@ -75,11 +75,11 @@ Object.defineProperty(window, 'location', {
 });
 
 // Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
+global.ResizeObserver = vi.fn().mockImplementation(function () { return {
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
-}));
+}; });
 
 // Mock IntersectionObserver as a proper constructor
 class MockIntersectionObserver {

@@ -10,6 +10,7 @@ import { useSyncExternalStore } from 'react';
 
 const STORAGE_KEY = 'lm-business-features';
 const CHANGE_EVENT = 'lm-business-features-change';
+let tabOverride: boolean | undefined;
 
 export const BUSINESS_FEATURES_DEFAULT = import.meta.env.VITE_LINKMAX_BUSINESS === 'true';
 
@@ -37,6 +38,7 @@ export const BUSINESS_DASHBOARD_TABS: ReadonlySet<string> = new Set([
 
 export function isBusinessFeaturesEnabled(): boolean {
   if (BUSINESS_FEATURES_DEFAULT || typeof window === 'undefined') return BUSINESS_FEATURES_DEFAULT;
+  if (tabOverride !== undefined) return tabOverride;
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored === 'on') return true;
@@ -50,8 +52,10 @@ export function isBusinessFeaturesEnabled(): boolean {
 export function setBusinessFeaturesEnabled(enabled: boolean): void {
   try {
     window.localStorage.setItem(STORAGE_KEY, enabled ? 'on' : 'off');
+    tabOverride = undefined;
   } catch {
     // Storage blocked: the change lasts for this tab only.
+    tabOverride = enabled;
   }
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }

@@ -1,4 +1,8 @@
 'use client';
+import { CoverPositionEditor } from '@/components/profile/CoverPositionEditor';
+import { getCoverPositionStyle } from '@/lib/appearance/cover-position';
+import { coverHeightClass } from '@/lib/profile-shapes';
+
 import { useNavigate } from '@/lib/router-compat';
 
 import { memo, useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
@@ -351,15 +355,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
     }
   };
 
-  const getCoverHeight = () => {
-    const height = block.coverHeight || 'medium';
-    switch (height) {
-      case 'small': return 'h-[140px]';
-      case 'medium': return 'h-[240px]';
-      case 'large': return 'h-[360px]';
-      default: return 'h-[240px]';
-    }
-  };
+  const getCoverHeight = () => coverHeightClass(block.coverHeight);
 
   return (
     <div className={`relative flex flex-col ${getPositionClass()}`}>
@@ -398,6 +394,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
               src={block.coverImage}
               alt="Cover"
               className="w-full h-full object-cover cursor-pointer"
+              style={getCoverPositionStyle(block.coverPosition)}
               onClick={handleCoverClick}
             />
             {block.coverGradient !== 'none' && (
@@ -405,7 +402,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
             )}
 
             {/* Cover controls */}
-            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover/cover:opacity-100 transition-opacity z-10">
+            <div className="absolute top-2 right-2 flex gap-1 opacity-100 transition-opacity z-10">
               {/* Settings popover */}
               <Popover>
                 <PopoverTrigger asChild>
@@ -421,6 +418,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                 </PopoverTrigger>
                 <PopoverContent className="w-56" align="end" onClick={(e) => e.stopPropagation()}>
                   <div className="space-y-4">
+                    <CoverPositionEditor src={block.coverImage} blockId={block.id} value={block.coverPosition} height={block.coverHeight} onChange={coverPosition => onUpdate({ coverPosition })} />
                     <div className="space-y-2">
                       <Label className="text-xs">{t('profile.coverHeight', 'Height')}</Label>
                       <Select
@@ -488,7 +486,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
         )}
 
         {/* Upload overlay */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover/cover:opacity-100 transition-opacity pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-100 transition-opacity pointer-events-none">
           {isUploadingCover ? (
             <Loader2 className="h-10 w-10 text-white animate-spin" />
           ) : (
