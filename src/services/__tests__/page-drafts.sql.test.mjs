@@ -253,4 +253,16 @@ test('canonical nails address repair retains identity and bookings, syncs clean 
   assert.deepEqual((await db.query('select content from blocks where page_id=$1',[nails])).rows[0].content.serviceOfferingIds,['preserved-service']);
   await db.exec(sql);
   assert.equal((await db.query('select revision from page_drafts where page_id=$1',[nails])).rows[0].revision,next.revision);
+  await as(nailsOwner);
+  const loaded=await call('load_page_draft',[nails]);
+  const withPrices={...loaded.snapshot,blocks:[...loaded.snapshot.blocks,{id:'test-profile',type:'profile',name:'Demo'},{id:'old-prices',type:'pricing',currency:'KZT',items:[{name:'Original service',price:'3 000 ₸'}]}]};
+  const saved=await call('save_page_draft',[nails,withPrices,loaded.revision,loaded.base_published_revision,'']);
+  await call('publish_page_draft',[nails,saved.revision,saved.base_published_revision]);
+  await db.exec('reset role');
+  const pricesSql=readFileSync(new URL('../../../scripts/sql/repair-demo-nails-prices.sql',import.meta.url),'utf8');
+  await db.exec(pricesSql);
+  const fixed=(await db.query('select * from page_drafts where page_id=$1',[nails])).rows[0];
+  assert.equal(fixed.snapshot.blocks.find(b=>b.type==='pricing').items[0].price,3000);
+  await db.exec(pricesSql);
+  assert.equal((await db.query('select revision from page_drafts where page_id=$1',[nails])).rows[0].revision,fixed.revision);
 });

@@ -119,6 +119,7 @@ export function buildDemoRefresh(row) {
   blocks = blocks.map(block => {
     if (block.type === 'profile') return profile;
     if (block.type === 'product') return { ...block, image: block.image || photos[mediaIndex++ % photos.length], blockSize: 'half' };
+    if (block.type === 'pricing') return { ...block, items: block.items.map(item => ({ ...item, price: typeof item.price === 'string' && /^[\d\s]+\s*₸$/.test(item.price) ? Number(item.price.replace(/[^\d]/g, '')) : item.price })) };
     if (block.type === 'text') return { ...block, alignment: 'left', content: /отзыв|говорят.*клиент/i.test(text(block.content)) ? 'Примеры отзывов' : block.content, blockStyle: { padding: 'md', animation: 'fade-in' } };
     if (block.type === 'testimonial') return { ...block, title: 'Примеры отзывов', blockSize: 'full' };
     // Seeded identities are fictional. Do not route visitors to guessed people.
