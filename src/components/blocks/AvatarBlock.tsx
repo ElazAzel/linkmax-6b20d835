@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getFrameStyles, getShadowStyles, FRAME_CSS, isAnimatedFrame } from '@/lib/avatar-frame-utils';
+import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 
 interface AvatarBlockProps {
   block: AvatarBlockType;
@@ -35,6 +36,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
     rounded: 'rounded-xl',
     square: 'rounded-none',
   };
+  const avatarShape = LINKMAX_UI_V2 ? 'circle' : block.shape || 'circle';
 
   const initials = name
     .split(' ')
@@ -75,7 +77,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
           className={cn(
             "flex items-center justify-center",
             frameSizeClasses[block.size || 'medium'],
-            shapeClasses[block.shape || 'circle'],
+            shapeClasses[avatarShape],
           )}
           style={{
             ...getShadowStyles(block.shadow || 'none'),
@@ -86,7 +88,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
           <Avatar
             className={cn(
               sizeClasses[block.size || 'medium'],
-              shapeClasses[block.shape || 'circle'],
+              shapeClasses[avatarShape],
               "bg-background"
             )}
           >

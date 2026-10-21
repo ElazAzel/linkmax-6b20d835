@@ -559,7 +559,7 @@ function refreshTemplate(template: Template): Template {
             const overrides = { ...block.overrides };
             if (block.type === 'profile') Object.assign(overrides, {
                 bio: cleanDemoBio(overrides.bio),
-                avatar, verified: false, avatarPosition: 'left', avatarShape: 'squircle',
+                avatar, verified: false, avatarPosition: 'left', avatarShape: 'circle',
                 coverGradient: 'light', coverImage: photos[0] ?? '', coverHeight: 'large',
             });
             // Template identities are fictional. Do not send visitors to a

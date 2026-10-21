@@ -143,7 +143,7 @@ export function generateBlocksFromTemplate(
     profile.bio = '';
     profile.coverGradient = 'light';
     profile.avatarPosition = 'left';
-    profile.avatarShape = 'squircle';
+    profile.avatarShape = 'circle';
     const ctaUrl = hydrateProfileBlock(profile, userInfo);
     if (!userInfo.name?.trim()) profile.name = '';
     if (!profile.bio || profile.bio === 'Tell people about yourself') profile.bio = '';

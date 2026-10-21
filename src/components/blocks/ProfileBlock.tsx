@@ -189,7 +189,8 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
     };
   }, [block.coverParallax]);
 
-  const avatarShapeStyle = getAvatarShapeStyle(block.avatarShape || 'circle');
+  // The current header has one standard avatar silhouette, including legacy pages.
+  const avatarShapeStyle = getAvatarShapeStyle(LINKMAX_UI_V2 ? 'circle' : block.avatarShape || 'circle');
   const statusRing = getStatusRingConfig(block.statusRing);
   const showStatusRing = statusRing.value !== 'none';
   // Avoid double rings when a decorative frame is already drawn around the avatar

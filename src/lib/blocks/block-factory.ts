@@ -27,6 +27,7 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     coverGradient: 'none',
     coverHeight: 'medium',
     avatarSize: 'medium',
+    avatarShape: 'circle',
     shadowStyle: 'none',
     ...overrides,
   }),

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { preparePageV2CloudSql } from '../../../scripts/prepare-page-v2-cloud.mjs';
+import { buildDemoRefresh, buildRefreshSql } from '../../../scripts/lib/profile-refresh.mjs';
 
 // Real PostgreSQL execution, with a deliberately minimal Cloud surrogate schema.
 const db = new PGlite();
@@ -190,4 +191,44 @@ for (const type of ['card', 'tiles']) {
 test('the block type constraint still rejects unknown types', async () => {
   await db.exec('reset role');
   await assert.rejects(db.query('insert into blocks(page_id,type,content) values($1,$2,$3)', [page, 'unsupported-type', {}]), /blocks_type_check/);
+});
+
+test('code-based demo refresh preserves database block IDs, uses canonical publication and refuses stale or unrelated targets', async () => {
+  await db.exec('reset role');
+  const demoPage = '77777777-7777-4777-8777-777777777777';
+  const demoUser = '88888888-8888-4888-8888-888888888888';
+  const productId = '99999999-9999-4999-8999-999999999999';
+  await db.exec(`CREATE TABLE IF NOT EXISTS auth.users(id uuid PRIMARY KEY,email text);
+    INSERT INTO auth.users VALUES('${demoUser}','demoaccount7@gmail.com');
+    INSERT INTO pages(id,user_id,slug,title,niche,theme_settings,seo_meta,is_published) VALUES('${demoPage}','${demoUser}','english_pro','English Studio','education','{}','{}',true);
+    INSERT INTO blocks(id,page_id,type,position,content,style) VALUES('${productId}','${demoPage}','product',0,'{"type":"product","name":"IELTS","price":12000}','{}');`);
+  const p = (await db.query('select * from pages where id=$1',[demoPage])).rows[0];
+  const b = (await db.query('select * from blocks where page_id=$1',[demoPage])).rows;
+  const row = { slug: p.slug, page: p, blocks: b, draft: null };
+  const plan = buildDemoRefresh(row);
+  const otherBefore = (await db.query('select to_jsonb(p) as value from pages p where id=$1',[page])).rows[0].value;
+  const sql = buildRefreshSql([plan], 'profile-refresh-integration-test');
+  await db.exec(sql);
+  const active = (await db.query('select * from blocks where page_id=$1 and deleted_at is null',[demoPage])).rows;
+  assert.equal(active.find(block => block.type==='product').id, productId);
+  assert.equal(active.find(block => block.type==='profile').content.avatarShape,'circle');
+  assert.equal((await db.query('select published_revision from pages where id=$1',[demoPage])).rows[0].published_revision,p.published_revision+1);
+  assert.deepEqual((await db.query('select to_jsonb(p) as value from pages p where id=$1',[page])).rows[0].value,otherBefore);
+  await db.exec(sql);
+  assert.equal((await db.query('select count(*)::int as n from blocks where page_id=$1 and deleted_at is null',[demoPage])).rows[0].n,active.length);
+  await assert.rejects(db.exec(buildRefreshSql([{...plan,ownerEmail:'someone-else@example.test'}],'profile-refresh-wrong-owner')),/profile_refresh_not_seeded_demo/);
+  await db.exec('ROLLBACK');
+  await assert.rejects(db.exec(buildRefreshSql([plan],'profile-refresh-stale')),/profile_refresh_conflict/);
+  await db.exec('ROLLBACK');
+  const privateId = '66666666-6666-4666-8666-666666666666';
+  await db.query("insert into pages(id,user_id,slug,title,niche,theme_settings,seo_meta,is_published) values($1,$2,'english_pro','Private demo','education','{}','{}',false)",[privateId,demoUser]);
+  const privatePage = (await db.query('select * from pages where id=$1',[privateId])).rows[0];
+  const privatePlan = buildDemoRefresh({slug:privatePage.slug,page:privatePage,blocks:[],draft:null});
+  await db.exec(buildRefreshSql([privatePlan],'profile-refresh-unpublished'));
+  const afterPrivate = (await db.query('select * from pages where id=$1',[privateId])).rows[0];
+  assert.equal(afterPrivate.is_published,false);
+  assert.equal(afterPrivate.published_revision,privatePage.published_revision);
+  assert.equal((await db.query('select count(*)::int as n from blocks where page_id=$1',[privateId])).rows[0].n,0);
+  const savedPrivate = (await db.query('select snapshot from page_drafts where page_id=$1',[privateId])).rows[0].snapshot;
+  assert.equal(savedPrivate.blocks.find(b=>b.type==='profile').avatarShape,'circle');
 });

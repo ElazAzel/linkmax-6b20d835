@@ -268,24 +268,32 @@ Deno.serve(async (req) => {
 
         if (createError) {
           if (createError.message.includes('already been registered')) {
-            const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers()
-            const existingUser = existingUsers?.users?.find(u => u.email === email)
+            let existingUser
+            for (let page = 1; !existingUser; page++) {
+              const { data: existingUsers, error: listError } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 })
+              if (listError) throw listError
+              existingUser = existingUsers.users.find(u => u.email === email)
+              if (existingUsers.users.length < 1000) break
+            }
             if (!existingUser) {
               results.push({ email, status: 'error', error: 'User exists but cannot find ID' })
               continue
             }
             userId = existingUser.id
             
-            // Delete existing page and blocks
-            const { data: existingPage } = await supabaseAdmin
+            // Existing demo pages may have booking/service IDs and history.
+            // Refresh them with scripts/refresh-profile-pages.mjs, never delete them.
+            const { data: existingPage, error: existingPageError } = await supabaseAdmin
               .from('pages')
               .select('id')
               .eq('user_id', userId)
-              .single()
+              .limit(1)
+              .maybeSingle()
+            if (existingPageError) throw existingPageError
             
             if (existingPage) {
-              await supabaseAdmin.from('blocks').delete().eq('page_id', existingPage.id)
-              await supabaseAdmin.from('pages').delete().eq('id', existingPage.id)
+              results.push({ email, status: 'preserved' })
+              continue
             }
           } else {
             throw createError
@@ -358,7 +366,11 @@ Deno.serve(async (req) => {
         if (pageError) throw pageError
 
         // Create blocks from AI content or defaults
-        const blocks = aiContent?.blocks || account.defaultBlocks
+        const generatedBlocks = aiContent?.blocks || account.defaultBlocks
+        const generatedProfile = generatedBlocks.find((block: Record<string, unknown>) => block.type === 'profile') || {}
+        const blocks = [{ ...generatedProfile, type: 'profile', name: title, bio: description, avatar: avatarUrl,
+          avatarShape: 'circle', avatarFrame: 'default', verified: false },
+          ...generatedBlocks.filter((block: Record<string, unknown>) => block.type !== 'profile')]
         const blocksToInsert = blocks.map((block: Record<string, unknown>, position: number) => {
           return {
             page_id: pageData.id,
