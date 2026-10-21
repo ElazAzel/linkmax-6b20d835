@@ -62,7 +62,7 @@ export function standardizeAvatar(block) {
   return { ...block };
 }
 function accountFor(slug) {
-  return DEMO_ACCOUNTS.find(account => account.slug === (slug === 'demo_nails' ? 'anna_beauty' : slug));
+  return DEMO_ACCOUNTS.find(account => account.slug === (['demo_nails', 'demo-nails'].includes(slug) ? 'anna_beauty' : slug));
 }
 export function demoOwnerEmail(slug) {
   const account = accountFor(slug);

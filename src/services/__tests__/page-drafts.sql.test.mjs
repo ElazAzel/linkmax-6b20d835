@@ -232,3 +232,25 @@ test('code-based demo refresh preserves database block IDs, uses canonical publi
   const savedPrivate = (await db.query('select snapshot from page_drafts where page_id=$1',[privateId])).rows[0].snapshot;
   assert.equal(savedPrivate.blocks.find(b=>b.type==='profile').avatarShape,'circle');
 });
+
+test('canonical nails address repair retains identity and bookings, syncs clean drafts and repeats safely', async () => {
+  await db.exec('reset role');
+  const nails='3229befa-752c-4032-9eac-4e4f63e7ade0';
+  const nailsOwner='6a7bbf2e-0db9-49d3-9f17-32c15a764e63';
+  await db.query('insert into auth.users values($1,$2)',[nailsOwner,'demoaccount1@gmail.com']);
+  await db.query("insert into pages(id,user_id,slug) values($1,$2,'demo_nails')",[nails,nailsOwner]);
+  await db.query("insert into blocks(page_id,type,position,content) values($1,'booking',0,$2)",[nails,{type:'booking',serviceOfferingIds:['preserved-service']}]);
+  await as(nailsOwner);
+  const oldDraft=await call('load_page_draft',[nails]);
+  await db.exec('reset role');
+  const sql=readFileSync(new URL('../../../scripts/sql/repair-demo-nails-address.sql',import.meta.url),'utf8');
+  await db.exec(sql);
+  assert.equal((await db.query('select slug from pages where id=$1',[nails])).rows[0].slug,'demo-nails');
+  const next=(await db.query('select * from page_drafts where page_id=$1',[nails])).rows[0];
+  assert.equal(next.snapshot.slug,'demo-nails');
+  assert.equal(next.revision,oldDraft.revision+1);
+  assert.equal(next.revision,next.published_draft_revision);
+  assert.deepEqual((await db.query('select content from blocks where page_id=$1',[nails])).rows[0].content.serviceOfferingIds,['preserved-service']);
+  await db.exec(sql);
+  assert.equal((await db.query('select revision from page_drafts where page_id=$1',[nails])).rows[0].revision,next.revision);
+});

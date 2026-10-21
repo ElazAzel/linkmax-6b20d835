@@ -18,6 +18,7 @@ test('normalizing legacy avatars changes only the silhouette and retains source 
 
 test('demo targets must match the original seeded owner, including the renamed nails page', () => {
   assert.equal(demoOwnerEmail('demo_nails'), 'demoaccount1@gmail.com');
+  assert.equal(demoOwnerEmail('demo-nails'), 'demoaccount1@gmail.com');
   assert.equal(demoOwnerEmail('english_pro'), 'demoaccount7@gmail.com');
   assert.equal(demoOwnerEmail('elazart'), null);
   assert.throws(() => buildDemoRefresh({ ...row, slug: 'elazart', page: { ...row.page, slug: 'elazart' } }), /not a seeded demo/);
