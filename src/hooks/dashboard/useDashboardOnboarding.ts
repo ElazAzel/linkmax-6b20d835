@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Block } from '@/types/page';
+import type { Block, PageTheme } from '@/types/page';
 import { NICHES, type Niche } from '@/lib/niches';
 import { isBeautyRevenueKitNiche, type SignupNiche } from '@/pages/dashboard-onboarding';
 
@@ -47,7 +47,7 @@ interface UseDashboardOnboardingOptions {
   userId?: string | null;
   /** Current block count on the page */
   blockCount: number;
-  onNicheComplete: (profile: OnboardingProfile, blocks: Block[], niche: Niche) => void;
+  onNicheComplete: (profile: OnboardingProfile, blocks: Block[], niche: Niche, theme?: Partial<PageTheme>) => void;
 }
 
 function getScopedKey(userId: string | null | undefined, key: string): string {
@@ -165,8 +165,8 @@ export function useDashboardOnboarding({
   }, [userId]);
 
   const handleAIBuilderComplete = useCallback(
-    (profile: OnboardingProfile, blocks: Block[], niche: Niche) => {
-      onNicheComplete(profile, blocks, niche);
+    (profile: OnboardingProfile, blocks: Block[], niche: Niche, theme?: Partial<PageTheme>) => {
+      onNicheComplete(profile, blocks, niche, theme);
       setScopedValue(userId, STORAGE_KEYS.SMART_BUILDER_USED, 'true');
       setScopedValue(userId, STORAGE_KEYS.AI_BUILDER_USED, 'true');
       setScopedValue(userId, STORAGE_KEYS.NICHE_COMPLETED, 'true');

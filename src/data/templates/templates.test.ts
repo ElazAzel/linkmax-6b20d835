@@ -53,7 +53,7 @@ describe('fallback page templates', () => {
         }
         if (block.type === 'messenger') expect(block.overrides?.messengers).toEqual([{ platform: 'whatsapp', username: '' }]);
         if (block.type === 'socials') expect(block.overrides?.platforms).toEqual([]);
-        if (block.type === 'link' || block.type === 'button') expect(block.overrides?.url).toBe('https://example.com');
+        if (block.type === 'link' || block.type === 'button') expect(block.overrides?.url).toBe('https://lnkmx.my/auth');
       }
     }
     const barber = HARDCODED_TEMPLATES.find((template) => template.id === 'barber');

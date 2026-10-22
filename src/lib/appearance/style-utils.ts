@@ -296,7 +296,11 @@ export function getPageThemeScope(theme?: Partial<PageTheme>): PageThemeScope {
   }
 
   const background = t.backgroundColor;
-  const isDark = t.darkMode === true || isDarkColor(background) || isDarkColor(t.customBackground?.type === 'solid' ? t.customBackground.value : undefined);
+  // Existing preset/reset controls merge legacy fields. A palette from a
+  // previous design must not override newly chosen foreground/background.
+  const palette = t.colors?.canvas === background && t.colors?.text === t.textColor ? t.colors : undefined;
+  const stalePalette = Boolean(t.colors && !palette);
+  const isDark = (t.darkMode === true && !stalePalette) || isDarkColor(background) || isDarkColor(t.customBackground?.type === 'solid' ? t.customBackground.value : undefined);
 
   const textTriplet = toHslTriplet(t.textColor);
   if (t.textColor && textTriplet) {
@@ -316,6 +320,20 @@ export function getPageThemeScope(theme?: Partial<PageTheme>): PageThemeScope {
     }
   }
 
+  // New algorithmic themes carry a complete palette. Legacy themes retain their
+  // existing scoped defaults; only parseable colors become runtime CSS tokens.
+  if (palette) {
+    const bindings = {
+      '--background': palette.canvas, '--card': palette.surface, '--popover': palette.surface,
+      '--muted': palette.surface, '--foreground': palette.text, '--card-foreground': palette.text,
+      '--popover-foreground': palette.text, '--muted-foreground': palette.mutedText,
+      '--border': palette.border, '--input': palette.border,
+    };
+    for (const [token, color] of Object.entries(bindings)) {
+      const triplet = toHslTriplet(color);
+      if (triplet) style[token] = triplet;
+    }
+  }
   const className = [
     // Page base tokens (frozen): keeps a page identical in the app's editor
     // and on its public URL, whatever the LinkMAX interface theme is.

@@ -35,7 +35,8 @@ function EditorPlayground() {
       // Offline fixture: a full page from a built-in template, no network.
       const blocks = templateBlocksForFeatures(template.blocks, businessEnabled)
         .map((b) => createTemplateBlock(b.type, b.overrides));
-      setPage({ ...createDefaultPageData("playground"), blocks });
+      const initial = createDefaultPageData("playground");
+      setPage({ ...initial, blocks, theme: { ...initial.theme, ...template.theme } });
       return;
     }
     const slug = params.get("slug") || "elazart";

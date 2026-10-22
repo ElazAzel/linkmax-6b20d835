@@ -45,7 +45,7 @@ export const CardBlock = memo(function CardBlock({ block, isPreview, onClick }: 
   const wholeCardLink = !!href && !buttonText;
   const body = (
     <div className="flex w-full min-w-0 flex-col text-left">
-      {(block.image || isPreview) && photo}
+      {(block.image || (isPreview && !title && !text)) && photo}
       <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 p-4 sm:p-5">
         {title && <h3 className="break-words text-lg font-bold leading-snug tracking-tight text-foreground [text-wrap:balance]">{title}</h3>}
         {text && <p className="whitespace-pre-line break-words text-sm leading-relaxed text-muted-foreground">{text}</p>}

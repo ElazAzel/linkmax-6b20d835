@@ -924,6 +924,7 @@ function DashboardV2Inner() {
               isOpen={dashboard.aiState.aiGeneratorOpen}
               onClose={dashboard.aiState.closeAIGenerator}
               onResult={dashboard.aiState.handleAIResult}
+              onPageComplete={dashboard.onboardingState.handleAIBuilderComplete}
             />
           )}
 

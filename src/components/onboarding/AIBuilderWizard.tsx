@@ -33,7 +33,9 @@ import { NICHES, NICHE_ICONS, ONBOARDING_GOALS, GOAL_ICONS, type Niche, type Onb
 import { storage } from '@/lib/storage';
 import { useBusinessFeatures } from '@/lib/features';
 import { trackCurrentUserProductEvent } from '@/services/product-analytics';
-import type { Block } from '@/types/page';
+import type { Block, PageTheme } from '@/types/page';
+import type { BuilderStyle } from '@/lib/onboarding/smart-design';
+import { TemplatePreviewCard } from '@/components/templates/TemplatePreviewCard';
 
 interface AlgorithmicTemplate {
   id: string;
@@ -58,7 +60,7 @@ interface UserInfo {
 interface AIBuilderWizardProps {
   open: boolean;
   onClose: () => void;
-  onComplete: (profile: { name: string; bio: string }, blocks: Block[], niche: Niche) => void;
+  onComplete: (profile: { name: string; bio: string }, blocks: Block[], niche: Niche, theme?: Partial<PageTheme>) => void;
   isOnboarding?: boolean;
   initialNiche?: Niche;
   pageId?: string;
@@ -67,7 +69,6 @@ interface AIBuilderWizardProps {
 
 type Step = 'offer' | 'goal' | 'niche' | 'description' | 'generating' | 'complete';
 const STEPS: Step[] = ['goal', 'niche', 'description', 'generating', 'complete'];
-const MAX_REGENERATE_RETRIES = 2;
 
 function getStepProgress(step: Step): number {
   return Math.round(((STEPS.indexOf(step) + 1) / STEPS.length) * 100);
@@ -93,9 +94,10 @@ export function AIBuilderWizard({
     name: '', bio: '', contacts: '', services: '', socials: '', mediaLinks: '',
   });
   const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
+  const [generatedTheme, setGeneratedTheme] = useState<Partial<PageTheme>>({});
+  const [style, setStyle] = useState<BuilderStyle>('auto');
   const [generatedProfile, setGeneratedProfile] = useState({ name: '', bio: '' });
   const [showMoreDetails, setShowMoreDetails] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const startTrackedForOpenRef = useRef(false);
 
@@ -110,8 +112,9 @@ export function AIBuilderWizard({
     setSelectedNiche(initialNiche ?? null);
     setSelectedTemplate(null);
     setGeneratedBlocks([]);
+    setGeneratedTheme({});
+    setStyle('auto');
     setGeneratedProfile({ name: '', bio: '' });
-    setRetryCount(0);
     setGenerationError(null);
     if (pageId && !startTrackedForOpenRef.current) {
       trackWizardStarted(pageId);
@@ -151,11 +154,12 @@ export function AIBuilderWizard({
     await Promise.resolve();
 
     try {
-      const result = buildSmartPage({ niche: selectedNiche, goal: selectedGoal, userInfo, businessEnabled });
+      const result = buildSmartPage({ niche: selectedNiche, goal: selectedGoal, userInfo, businessEnabled, style });
       const blocks = result.blocks;
       if (blocks.length === 0) throw new Error('algorithm-produced-empty-page');
       setGeneratedBlocks(blocks);
       setGeneratedProfile(result.profile);
+      setGeneratedTheme(result.theme);
       setStep('complete');
       if (pageId) {
         void trackCurrentUserProductEvent('page_generated', {
@@ -174,14 +178,14 @@ export function AIBuilderWizard({
       setGenerationError(t('algorithmBuilder.error', 'Не удалось собрать страницу. Проверьте введённые данные.'));
       setStep('description');
     }
-  }, [businessEnabled, pageId, selectedGoal, selectedNiche, selectedTemplate, t, userInfo]);
+  }, [businessEnabled, pageId, selectedGoal, selectedNiche, selectedTemplate, t, userInfo, style]);
 
   const finishWizard = (options?: { publish?: boolean; nextAction?: 'connect_telegram' }) => {
     if (!selectedNiche) return;
     if (options?.publish) storage.set('wizard_wants_publish', 'true');
     if (options?.nextAction) storage.set('wizard_next_action', options.nextAction);
     if (pageId) trackWizardCompleted(pageId, selectedNiche);
-    onComplete(generatedProfile, generatedBlocks, selectedNiche);
+    onComplete(generatedProfile, generatedBlocks, selectedNiche, generatedTheme);
     toast.success(t('algorithmBuilder.success', 'Страница собрана по алгоритму'));
   };
 
@@ -248,6 +252,7 @@ export function AIBuilderWizard({
                   </CollapsibleContent>
                 </Collapsible>
               </div>
+              <div className="space-y-2"><Label>{t('algorithmBuilder.visualStyle', 'Характер страницы')}</Label><div className="grid grid-cols-2 gap-2">{([['auto', 'Под мою сферу'], ['bold', 'Тёмный и дерзкий'], ['editorial', 'Редакционный'], ['soft', 'Мягкий и яркий']] as const).map(([value, label]) => <Button key={value} type="button" variant={style === value ? 'default' : 'outline'} aria-pressed={style === value} onClick={() => setStyle(value)}>{label}</Button>)}</div></div>
               {generationError && <p className="text-sm text-destructive">{generationError}</p>}
               <Button disabled={!userInfo.name.trim()} onClick={() => void runGeneration()} className="h-16 w-full rounded-card text-xl font-bold"><Wand2 className="mr-3 h-6 w-6" />{t('algorithmBuilder.generate', 'Собрать страницу')}</Button>
               <p className="text-center text-xs text-muted-foreground">{t('algorithmBuilder.generatingDesc', 'Работает локальный алгоритм: без AI, ожидания внешнего сервиса и скрытых вызовов')}</p>
@@ -257,7 +262,7 @@ export function AIBuilderWizard({
 
         {step === 'generating' && <div className="flex flex-col items-center p-6 py-16 text-center"><div className="mb-8 flex h-40 w-full max-w-sm items-end justify-center rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 pb-4"><div className="flex flex-col items-center gap-3"><Wand2 className="h-8 w-8 animate-bounce text-primary" /><Loader2 className="h-5 w-5 animate-spin text-primary" /></div></div><h3 className="mb-3 text-2xl font-bold">{t('algorithmBuilder.generating', 'Собираем страницу по алгоритму…')}</h3><p className="text-muted-foreground">{t('algorithmBuilder.generatingDesc', 'Извлекаем данные, создаём блоки и выстраиваем порядок')}</p></div>}
 
-        {step === 'complete' && <div className="relative flex min-h-[400px] flex-col items-center justify-center overflow-hidden p-6 py-12 text-center"><div className="relative z-10 w-full max-w-sm"><div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success/12 ring-4 ring-success/20"><Check className="h-8 w-8 text-success" /></div><h2 className="mb-2 text-2xl font-bold">{t('algorithmBuilder.completeTitle', 'Страница готова')}</h2><p className="mb-2 text-muted-foreground">{t('algorithmBuilder.completeDesc', 'Блоки собраны. Перед публикацией их можно отредактировать.')}</p><p className="mb-6 text-xs font-semibold text-primary">{generatedBlocks.length} {t('algorithmBuilder.blocksCreated', 'блоков создано алгоритмом')}</p><Card className="mb-4 rounded-2xl border-border/50 bg-muted/60 p-3 text-left"><div className="flex items-start gap-3"><Send className="mt-1 h-4 w-4 text-info" /><p className="text-xs text-muted-foreground">{t('algorithmBuilder.nextStep', 'После сохранения вы сможете проверить страницу в preview и опубликовать её.')}</p></div></Card><div className="space-y-3"><Button size="lg" className="h-14 w-full rounded-2xl bg-success text-lg font-bold text-success-foreground hover:bg-success" onClick={() => finishWizard({ publish: true })}><Share2 className="mr-2 h-5 w-5" />{t('aiBuilder.complete.publishNow', 'Опубликовать сейчас')}</Button><Button variant="outline" className="h-12 w-full rounded-xl" onClick={() => finishWizard({ nextAction: 'connect_telegram' })}><Send className="mr-2 h-4 w-4" />{t('aiBuilder.telegramNext.cta', 'Подключить Telegram')}</Button><Button variant="ghost" className="h-12 w-full rounded-xl text-muted-foreground" onClick={() => finishWizard()}>{t('aiBuilder.complete.editFirst', 'Сначала отредактировать')}</Button>{retryCount < MAX_REGENERATE_RETRIES && <Button variant="outline" className="h-11 w-full rounded-xl text-sm" onClick={() => { setRetryCount((count) => count + 1); void runGeneration(); }}><RefreshCw className="mr-2 h-4 w-4" />{t('algorithmBuilder.regenerate', 'Пересобрать по алгоритму')}</Button>}</div></div></div>}
+        {step === 'complete' && <div className="relative flex min-h-[400px] flex-col items-center justify-center overflow-hidden p-6 py-12 text-center"><div className="relative z-10 w-full max-w-sm"><div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success/12 ring-4 ring-success/20"><Check className="h-8 w-8 text-success" /></div><h2 className="mb-2 text-2xl font-bold">{t('algorithmBuilder.completeTitle', 'Страница готова')}</h2><p className="mb-2 text-muted-foreground">{t('algorithmBuilder.completeDesc', 'Блоки собраны. Перед публикацией их можно отредактировать.')}</p><div className="mb-5 h-80 w-full"><TemplatePreviewCard blocks={generatedBlocks} theme={generatedTheme} /></div><p className="mb-6 text-xs font-semibold text-primary">{generatedBlocks.length} {t('algorithmBuilder.blocksCreated', 'блоков создано алгоритмом')}</p><Card className="mb-4 rounded-2xl border-border/50 bg-muted/60 p-3 text-left"><div className="flex items-start gap-3"><Send className="mt-1 h-4 w-4 text-info" /><p className="text-xs text-muted-foreground">{t('algorithmBuilder.nextStep', 'После сохранения вы сможете проверить страницу в preview и опубликовать её.')}</p></div></Card><div className="space-y-3"><Button size="lg" className="h-14 w-full rounded-2xl bg-success text-lg font-bold text-success-foreground hover:bg-success" onClick={() => finishWizard({ publish: true })}><Share2 className="mr-2 h-5 w-5" />{t('aiBuilder.complete.publishNow', 'Опубликовать сейчас')}</Button><Button variant="outline" className="h-12 w-full rounded-xl" onClick={() => finishWizard({ nextAction: 'connect_telegram' })}><Send className="mr-2 h-4 w-4" />{t('aiBuilder.telegramNext.cta', 'Подключить Telegram')}</Button><Button variant="ghost" className="h-12 w-full rounded-xl text-muted-foreground" onClick={() => finishWizard()}>{t('aiBuilder.complete.editFirst', 'Сначала отредактировать')}</Button>{<Button variant="outline" className="h-11 w-full rounded-xl text-sm" onClick={() => setStep('description')}><RefreshCw className="mr-2 h-4 w-4" />{t('algorithmBuilder.changeDesign', 'Изменить оформление')}</Button>}</div></div></div>}
       </DialogContent>
     </Dialog>
   );

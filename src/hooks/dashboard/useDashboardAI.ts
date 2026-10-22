@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import type { Block } from '@/types/page';
+import type { Block, PageTheme } from '@/types/page';
 import { createBlock } from '@/lib/blocks/block-factory';
 import logger from '@/lib/utils/logger';
 import { storage } from '@/lib/storage';
@@ -25,6 +25,8 @@ interface AIBlockPlatform {
 }
 
 interface AIBuilderResult {
+  generationMode?: 'algorithmic';
+  theme?: Partial<PageTheme>;
   profile?: {
     name: string;
     bio: string;
@@ -36,6 +38,8 @@ interface UseDashboardAIOptions {
   onUpdateProfile: (updates: { name: string; bio: string }) => void;
   onAddBlock: (block: Block) => void;
   onReplaceBlocks?: (blocks: Block[]) => void;
+  onApplyTheme?: (theme: Partial<PageTheme>) => void;
+  onApplyPage?: (blocks: Block[], theme?: Partial<PageTheme>) => void;
   onQuestComplete?: (questKey: string) => void;
   onClaimAIToken?: () => Promise<boolean>;
 }
@@ -114,7 +118,7 @@ function createBlockFromAI(blockData: AIBlockData, index: number): Block | null 
 /**
  * Hook to manage AI generator state and handlers
  */
-export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, onQuestComplete, onClaimAIToken }: UseDashboardAIOptions) {
+export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, onApplyTheme, onApplyPage, onQuestComplete, onClaimAIToken }: UseDashboardAIOptions) {
   const { t } = useTranslation();
   const [aiGeneratorOpen, setAiGeneratorOpen] = useState(false);
   const [aiGeneratorType, setAiGeneratorType] = useState<AIGeneratorType>('ai-builder');
@@ -145,6 +149,14 @@ export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, o
 
   const handleAIResult = useCallback(
     (result: AIBuilderResult) => {
+      if (result.generationMode === 'algorithmic') {
+        const blocks = result.blocks as unknown as Block[];
+        if (onApplyPage) { onApplyPage(blocks, result.theme); return; }
+        if (onReplaceBlocks) onReplaceBlocks(blocks);
+        else blocks.forEach(onAddBlock);
+        if (result.theme) onApplyTheme?.(result.theme);
+        return;
+      }
 
       // ... inside hook
       // Mark AI as used for achievements
@@ -192,7 +204,7 @@ export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, o
         }
       }
     },
-    [aiGeneratorType, onUpdateProfile, onAddBlock, onReplaceBlocks, onQuestComplete, onClaimAIToken, t]
+    [aiGeneratorType, onUpdateProfile, onAddBlock, onReplaceBlocks, onApplyTheme, onApplyPage, onQuestComplete, onClaimAIToken, t]
   );
 
   return {

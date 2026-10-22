@@ -15,7 +15,7 @@ import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import type { Block } from '@/types/page';
+import type { Block, PageTheme } from '@/types/page';
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import { buildSmartPage, inferSmartPageNiche } from '@/lib/onboarding/smart-page-builder';
 import { useBusinessFeatures } from '@/lib/features';
@@ -26,7 +26,8 @@ interface TemplatePersonalizationProps {
   onClose: () => void;
   templateBlocks: Array<{ type: string; overrides?: Record<string, unknown> }>;
   templateName: string;
-  onApply: (blocks: Block[], profile?: { name: string; bio: string }) => void;
+  templateTheme?: Partial<PageTheme>;
+  onApply: (blocks: Block[], profile?: { name: string; bio: string }, theme?: Partial<PageTheme>) => void;
 }
 
 export const TemplatePersonalization = memo(function TemplatePersonalization({
@@ -34,6 +35,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
   onClose,
   templateBlocks,
   templateName,
+  templateTheme,
   onApply,
 }: TemplatePersonalizationProps) {
   const { t } = useTranslation();
@@ -67,9 +69,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
         },
       });
 
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      onApply(result.blocks, result.profile);
+      onApply(result.blocks, result.profile, templateTheme || result.theme);
       toast.success(t('templates.personalized', 'Шаблон персонализирован!'));
       onClose();
     } catch (error) {
@@ -89,7 +89,7 @@ export const TemplatePersonalization = memo(function TemplatePersonalization({
         id: `${blockData.type}-${Date.now()}-${index}`,
       } as Block;
     });
-    onApply(blocks);
+    onApply(blocks, undefined, templateTheme);
     onClose();
   };
 

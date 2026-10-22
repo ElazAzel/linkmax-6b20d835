@@ -5,6 +5,9 @@ import { generateBlocksFromTemplate } from '@/lib/blocks/internal-builder';
 import { getAlgorithmicTemplateForNiche } from '@/lib/blocks/algorithmic-templates';
 import type { Block } from '@/types/page';
 import type { Niche, OnboardingGoal } from '@/lib/niches';
+import { resolveSmartDesign, type BuilderStyle, type SmartPageTheme } from './smart-design';
+import { extractServicesPipeline, extractDiscount } from '@/lib/blocks/extractors';
+import { applyArtDirection } from '@/lib/design/art-direction';
 
 export interface SmartBuilderUserInfo {
   name: string;
@@ -25,13 +28,29 @@ export interface SmartPageBuilderInput {
   goal?: OnboardingGoal | null;
   now?: number;
   businessEnabled?: boolean;
+  style?: BuilderStyle;
 }
 
 type RevenueMode = 'appointment' | 'lead' | 'commerce' | 'event' | 'brand';
 
+/** Keep the owner's portrait and database identity when applying a new design. */
+export function preserveBuilderIdentity(blocks: Block[], previous: Block[], keepText = false): Block[] {
+  const old = previous.find(block => block.type === 'profile');
+  if (old?.type !== 'profile') return blocks;
+  return blocks.map(block => block.type === 'profile' ? {
+    ...block, id: old.id, avatar: old.avatar || block.avatar,
+    name: keepText ? old.name || block.name : block.name,
+    bio: keepText ? old.bio || block.bio : block.bio,
+    coverImage: keepText || block.coverImage?.startsWith('/builder/covers/') ? old.coverImage || block.coverImage : block.coverImage || old.coverImage,
+    coverVideo: keepText || block.coverImage?.startsWith('/builder/covers/') || !block.coverImage
+      ? old.coverVideo || block.coverVideo : undefined,
+  } : block);
+}
+
 export interface SmartPageBuilderResult {
   profile: { name: string; bio: string };
   blocks: Block[];
+  theme: SmartPageTheme;
   diagnostics: { revenueMode: RevenueMode; qualityScore: number; appliedRules: string[] };
 }
 
@@ -74,16 +93,43 @@ export function buildSmartPage(input: SmartPageBuilderInput): SmartPageBuilderRe
     services: input.userInfo.services || input.userInfo.expertOffer || '',
     goal: input.goal ?? input.userInfo.goal,
   };
-  const blocks = generateBlocksFromTemplate(getAlgorithmicTemplateForNiche(input.niche), userInfo, {
+  let blocks = generateBlocksFromTemplate(getAlgorithmicTemplateForNiche(input.niche), userInfo, {
     now: input.now,
     businessEnabled: input.businessEnabled ?? false,
     seed: `${input.niche}:${userInfo.name}`,
   });
+  const design = resolveSmartDesign(input.niche, input.style);
+  const images = blocks.flatMap(block => block.type === 'image' ? [block.url] : block.type === 'carousel' ? block.images.map(image => image.url) : []);
+  const services = extractServicesPipeline(extractDiscount(userInfo.services).remainder || userInfo.services);
+  const summary = blocks.findIndex(block => block.type === 'text' && typeof block.content === 'string' && block.content.startsWith('## Чем я могу помочь'));
+  if (summary >= 0 && services.length) {
+    const cards: Block[] = services.map((service, index) => ({
+      id: `${blocks[summary].id}-offer-${index}`, type: 'card', title: service.title,
+      text: [service.description, service.price > 0 ? `${service.price.toLocaleString('ru-RU')} ${service.currency || 'KZT'}` : ''].filter(Boolean).join('\n'),
+      image: images.length ? images[index % images.length] : undefined, imagePosition: 'top',
+      blockSize: 'wide', blockStyle: { padding: 'md', borderRadius: 'lg', animation: 'fade-in' },
+    }));
+    blocks.splice(summary, 1, ...cards);
+  }
+  blocks = blocks.map(block => block.type === 'profile' ? {
+    ...block, avatarShape: 'circle', avatarFrame: 'default', shadowStyle: 'none', nameAnimation: 'none',
+    coverImage: images[0] || design.cover, coverHeight: 'large', coverGradient: 'none',
+    coverPosition: { x: 50, y: 40 }, blockStyle: { padding: 'none', borderRadius: 'lg', animation: 'none' },
+  } : block);
+  blocks = applyArtDirection(blocks, { recipeId: design.recipeId, preserveExisting: false }).blocks;
+  if (input.now !== undefined) {
+    const sections = new Map<string, string>();
+    blocks = blocks.map(block => {
+      if (!block.sectionId) return block;
+      if (!sections.has(block.sectionId)) sections.set(block.sectionId, `smart-section-${input.now}-${sections.size}`);
+      return { ...block, sectionId: sections.get(block.sectionId) };
+    });
+  }
   const profile = blocks.find((block) => block.type === 'profile');
   const facts = [
     Boolean(userInfo.name),
     Boolean(userInfo.bio),
-    blocks.some((block) => ['pricing', 'catalog', 'text'].includes(block.type)),
+    blocks.some((block) => ['pricing', 'catalog', 'text', 'card'].includes(block.type)),
     blocks.some((block) => ['image', 'carousel', 'video'].includes(block.type)),
     blocks.some((block) => block.type === 'socials' || block.type === 'link' ||
       (block.type === 'messenger' && block.messengers.some((contact) => Boolean(contact.username)))),
@@ -91,6 +137,7 @@ export function buildSmartPage(input: SmartPageBuilderInput): SmartPageBuilderRe
   return {
     profile: { name: userInfo.name, bio: profile?.type === 'profile' ? String(profile.bio) : userInfo.bio },
     blocks,
+    theme: design.theme,
     diagnostics: {
       revenueMode: revenueMode(input.niche, userInfo.goal),
       qualityScore: facts.filter(Boolean).length * 20,

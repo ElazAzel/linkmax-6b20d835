@@ -1,5 +1,5 @@
 import { useNavigate } from '@/lib/router-compat';
-import { useCallback, useEffect, useRef, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,7 @@ import { storage } from '@/lib/storage';
 
 import type { Block, PageData, PageTheme } from '@/types/page';
 import type { Niche } from '@/lib/niches';
+import { preserveBuilderIdentity } from '@/lib/onboarding/smart-page-builder';
 import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
 
 interface UseDashboardOptions {
@@ -146,6 +147,11 @@ export function useDashboard(options?: UseDashboardOptions) {
     onUpdateProfile: handleUpdateProfile,
     onAddBlock: cloudState.addBlock,
     onReplaceBlocks: cloudState.replaceBlocks,
+    onApplyTheme: (theme) => { if (cloudState.pageData) cloudState.updatePageDataPartial({ theme: { ...cloudState.pageData.theme, ...theme } }); },
+    onApplyPage: (blocks, theme) => {
+      if (!cloudState.pageData) return;
+      cloudState.updatePageDataPartial({ blocks: preserveBuilderIdentity(blocks, cloudState.pageData.blocks), theme: { ...cloudState.pageData.theme, ...theme } });
+    },
   });
 
   // Username state
@@ -165,11 +171,13 @@ export function useDashboard(options?: UseDashboardOptions) {
 
   // Onboarding state
   const handleNicheComplete = useCallback(
-    (profile: { name: string; bio: string }, blocks: Block[], niche: Niche) => {
-      handleUpdateProfile(profile);
-      // Profile is updated above; only append revenue/contact/content blocks.
-      blocks.filter((block) => block.type !== 'profile').forEach((block) => {
-        cloudState.addBlock(block);
+    (profile: { name: string; bio: string }, blocks: Block[], niche: Niche, theme?: Partial<PageTheme>) => {
+      const existing = cloudState.pageData;
+      if (!existing) return;
+      const header = preserveBuilderIdentity(blocks, existing.blocks).find(block => block.type === 'profile');
+      cloudState.updatePageDataPartial({
+        blocks: [...(header ? [header] : []), ...existing.blocks.filter(b => b.type !== 'profile'), ...blocks.filter(b => b.type !== 'profile')],
+        theme: { ...existing.theme, ...theme },
       });
       cloudState.updateNiche(niche);
 
@@ -193,7 +201,7 @@ export function useDashboard(options?: UseDashboardOptions) {
         }, 1200);
       }
     },
-    [handleUpdateProfile, cloudState, navigate, t]
+    [cloudState, navigate, t]
   );
 
   const onboardingState = useDashboardOnboarding({
@@ -205,11 +213,9 @@ export function useDashboard(options?: UseDashboardOptions) {
   });
 
   // Handle apply template
-  const handleApplyTemplate = useCallback((blocks: Block[], theme?: Partial<PageTheme>) => {
-    cloudState.replaceBlocks(blocks);
-    if (theme && cloudState.pageData) {
-      cloudState.updatePageDataPartial({ theme: { ...cloudState.pageData.theme, ...theme } });
-    }
+  const handleApplyTemplate = useCallback((blocks: Block[], theme?: Partial<PageTheme>, profile?: { name: string; bio: string }) => {
+    if (!cloudState.pageData) return;
+    cloudState.updatePageDataPartial({ blocks: preserveBuilderIdentity(blocks, cloudState.pageData.blocks, !profile), theme: { ...cloudState.pageData.theme, ...theme } });
     toast.success(t('dashboard.templateApplied', 'Template applied!'));
   }, [cloudState, t]);
 

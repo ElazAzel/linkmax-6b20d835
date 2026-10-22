@@ -19,7 +19,7 @@ describe('shared token-free page builder', () => {
         const result = buildSmartPage({ niche, userInfo, now: 123 });
         expect(result.blocks[0]).toMatchObject({ type: 'profile', name: userInfo.name, avatar: '', verified: false });
         expect(result.blocks.every((block) => !BUSINESS_BLOCK_TYPES.has(block.type))).toBe(true);
-        expect(result.blocks.find((block) => block.type === 'text')).toMatchObject({ content: expect.stringContaining('8 000 KZT') });
+        expect(result.blocks.find((block) => block.type === 'card')).toMatchObject({ title: 'Маникюр', text: expect.stringContaining('8 000 KZT') });
         expect(result.blocks.find((block) => block.type === 'carousel')).toMatchObject({ images: [{ url: 'https://example.com/work.jpg', alt: 'Материал 1' }, { url: 'https://example.com/detail.gif', alt: 'Материал 2' }], autoPlay: false });
         expect(new Set(result.blocks.map((block) => block.id)).size).toBe(result.blocks.length);
       }

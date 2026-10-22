@@ -16,7 +16,7 @@ import Store from 'lucide-react/dist/esm/icons/store';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { useTranslation } from 'react-i18next';
-import type { Block } from '@/types/page';
+import type { Block, PageTheme } from '@/types/page';
 import { TemplatePersonalization } from './TemplatePersonalization';
 import { TemplateMarketplace } from './TemplateMarketplace';
 import { toast } from 'sonner';
@@ -45,7 +45,7 @@ const CATEGORIES: TemplateCategoryKey[] = TEMPLATE_CATEGORY_KEYS.filter((c) => c
 interface TemplateGalleryProps {
   open: boolean;
   onClose: () => void;
-  onSelect: (blocks: Block[]) => void;
+  onSelect: (blocks: Block[], theme?: Partial<PageTheme>, profile?: { name: string; bio: string }) => void;
 }
 
 export const TemplateGallery = memo(function TemplateGallery({
@@ -102,7 +102,7 @@ export const TemplateGallery = memo(function TemplateGallery({
       });
       const finalBlocks = result.blocks;
 
-      onSelect(finalBlocks);
+      onSelect(finalBlocks, result.theme, result.profile);
       onClose();
       toast.success(t('templates.generated', 'Template generated successfully!'));
 
@@ -119,7 +119,7 @@ export const TemplateGallery = memo(function TemplateGallery({
     const fullBlocks = templateBlocksForFeatures(template.blocks, businessEnabled).map((blockDef) =>
       createTemplateBlock(blockDef.type, blockDef.overrides || {})
     );
-    onSelect(fullBlocks);
+    onSelect(fullBlocks, template.theme);
     setCopiedId(template.id);
     setTimeout(() => {
       setCopiedId(null);
@@ -132,7 +132,7 @@ export const TemplateGallery = memo(function TemplateGallery({
 
   // Use DB templates if available, otherwise fallback to hardcoded
   // This ensures the gallery is never empty during migration
-  const templates = (dbTemplates && dbTemplates.length > 0) ? dbTemplates : HARDCODED_TEMPLATES;
+  const templates = [...HARDCODED_TEMPLATES, ...(dbTemplates || []).filter(remote => !HARDCODED_TEMPLATES.some(local => local.id === remote.id || local.name.trim().toLowerCase() === remote.name.trim().toLowerCase()))];
 
   const filteredTemplates = selectedCategory === 'all'
     ? templates
@@ -237,7 +237,7 @@ export const TemplateGallery = memo(function TemplateGallery({
                 className="group relative flex flex-col overflow-hidden border-2 transition-all hover:border-primary/50 hover:shadow-lg dark:bg-zinc-900/50"
               >
                 <div className="relative aspect-[4/3] bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-4xl sm:text-5xl group-hover:scale-105 transition-transform duration-300">
-                  <TemplatePreviewCard blocks={templateBlocksForFeatures(template.blocks, businessEnabled).map((block) => ({ type: block.type, ...block.overrides }))} showBlockCount={false} />
+                  <TemplatePreviewCard theme={template.theme} blocks={templateBlocksForFeatures(template.blocks, businessEnabled).map((block) => ({ type: block.type, ...block.overrides }))} showBlockCount={false} />
                   {template.isPremium && (
                     <Badge className="absolute top-2 right-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-xs">
                       PREMIUM
@@ -291,8 +291,9 @@ export const TemplateGallery = memo(function TemplateGallery({
               overrides: block.overrides ?? {},
             })) || []}
             templateName={selectedTemplate.name || ''}
-            onApply={(blocks) => {
-              onSelect(blocks);
+            templateTheme={selectedTemplate.theme}
+            onApply={(blocks, profile, theme) => {
+              onSelect(blocks, theme, profile);
               onClose();
             }}
           />

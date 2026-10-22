@@ -7,15 +7,13 @@ import { Textarea } from '@/components/ui/textarea';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
-import Crown from 'lucide-react/dist/esm/icons/crown';
-import Lock from 'lucide-react/dist/esm/icons/lock';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
-import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { humanizeDeep, humanizeText } from '@/lib/text/humanizer-ru';
-import type { Block } from '@/types/page';
+import { AIBuilderWizard } from '@/components/onboarding/AIBuilderWizard';
+import type { Block, PageTheme } from '@/types/page';
+import type { Niche } from '@/lib/niches';
 
 interface AIGeneratorProps {
   type: 'magic-title' | 'sales-copy' | 'seo' | 'ai-builder';
@@ -23,11 +21,17 @@ interface AIGeneratorProps {
   onClose: () => void;
   onResult: (result: any) => void;
   currentData?: Record<string, unknown>;
+  onPageComplete?: (profile: { name: string; bio: string }, blocks: Block[], niche: Niche, theme?: Partial<PageTheme>) => void;
 }
 
-export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AIGeneratorProps) {
+export function AIGenerator({ type, isOpen, onClose, onResult, currentData, onPageComplete }: AIGeneratorProps) {
+  if (type === 'ai-builder') return <AIBuilderWizard open={isOpen} onClose={onClose}
+    onComplete={(profile, blocks, niche, theme) => { if (onPageComplete) onPageComplete(profile, blocks, niche, theme); else onResult({ profile, blocks, niche, theme, generationMode: 'algorithmic' }); onClose(); }} />;
+  return <RemoteContentGenerator type={type} isOpen={isOpen} onClose={onClose} onResult={onResult} currentData={currentData} />;
+}
+
+function RemoteContentGenerator({ type, isOpen, onClose, onResult, currentData }: Omit<AIGeneratorProps, 'type'> & { type: Exclude<AIGeneratorProps['type'], 'ai-builder'> }) {
   const { t } = useTranslation();
-  const { canUseAIPageGeneration, getRemainingAIPageGenerations, incrementAIPageGeneration, isPremium, limits } = useFreemiumLimits();
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     url: '',
@@ -40,17 +44,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
     description: '',
   });
 
-  const isPageGeneration = type === 'ai-builder';
-  const canGenerate = !isPageGeneration || canUseAIPageGeneration();
-  const remainingGenerations = getRemainingAIPageGenerations();
-
   const handleGenerate = async () => {
-    // Check AI page generation limit for ai-builder
-    if (isPageGeneration && !canGenerate) {
-      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
-      return;
-    }
-
     setLoading(true);
     try {
       const requestBody: Record<string, unknown> = { type };
@@ -86,14 +80,6 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
           };
           break;
 
-        case 'ai-builder':
-          if (!input.description) {
-            toast.error(t('toasts.ai.describePage'));
-            setLoading(false);
-            return;
-          }
-          requestBody.input = { description: input.description };
-          break;
       }
 
       const { data, error } = await supabase.functions.invoke('ai-content-generator', {
@@ -104,11 +90,6 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
         console.error('AI generation error:', error);
         toast.error(t('toasts.ai.generationError'));
         return;
-      }
-
-      // Increment usage counter for page generation
-      if (isPageGeneration) {
-        incrementAIPageGeneration();
       }
 
       toast.success(t('toasts.ai.generated'));
@@ -213,54 +194,6 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
           </div>
         );
 
-      case 'ai-builder':
-        return (
-          <div className="space-y-3">
-            {!canGenerate && (
-              <div className="p-4 rounded-xl bg-violet-500/5 border border-violet-500/20 text-sm">
-                <div className="flex items-center gap-2 text-violet-600 font-bold mb-2">
-                  <Lock className="h-4 w-4" />
-                  {t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')}
-                </div>
-                <p className="text-muted-foreground text-sm mb-3">
-                  {isPremium
-                    ? t('freemium.moreAIGenerations', '10 генераций в месяц с PRO')
-                    : t('freemium.aiLimitDesc', 'С PRO-тарифом наш AI генерирует десятки продающих заголовков и описаний, чтобы увеличить клики.')
-                  }
-                </p>
-                {!isPremium && (
-                  <Button size="sm" variant="outline" onClick={openPremiumPurchase} className="w-full">
-                    <Crown className="h-3 w-3 mr-1.5 text-amber-500" />
-                    {t('freemium.getPremium', 'Получить PRO')}
-                  </Button>
-                )}
-              </div>
-            )}
-            {canGenerate && !isPremium && (
-              <div className="p-2 rounded-lg bg-muted/50 text-xs text-muted-foreground flex items-center gap-2">
-                <Sparkles className="h-3 w-3" />
-                {t('freemium.aiGenerationsRemaining', 'Осталось генераций: {{count}}/{{total}}', {
-                  count: remainingGenerations,
-                  total: limits.maxAIPageGenerationsPerMonth
-                })}
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="description">{t('ai.describePage', 'Describe Your Page')}</Label>
-              <Textarea
-                id="description"
-                placeholder={t('ai.describePagePlaceholder', "I'm a fitness coach offering online training programs, workout plans, and nutrition guides. I want to showcase my services and link to my social media.")}
-                value={input.description}
-                rows={5}
-                onChange={(e) => setInput({ ...input, description: e.target.value })}
-                disabled={!canGenerate}
-              />
-              <p className="text-xs text-muted-foreground">
-                {t('ai.describePageHint', 'Describe your page and AI will create a complete layout with suggested blocks')}
-              </p>
-            </div>
-          </div>
-        );
     }
   };
 
@@ -269,7 +202,6 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
       case 'magic-title': return t('ai.titleMagic', 'Generate Magic Title');
       case 'sales-copy': return t('ai.titleSales', 'Generate Sales Copy');
       case 'seo': return t('ai.titleSeo', 'Generate SEO Meta Tags');
-      case 'ai-builder': return t('ai.titleBuilder', 'AI Page Builder');
     }
   };
 
@@ -278,7 +210,6 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
       case 'magic-title': return t('ai.descMagic', 'Let AI create a catchy, clickable title for your link');
       case 'sales-copy': return t('ai.descSales', 'Generate compelling product descriptions that drive sales');
       case 'seo': return t('ai.descSeo', 'Optimize your page for search engines with AI-generated meta tags');
-      case 'ai-builder': return t('ai.descBuilder', 'Build your entire page layout with AI assistance');
     }
   };
 
@@ -308,7 +239,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
           </Button>
           <Button
             onClick={handleGenerate}
-            disabled={loading || (isPageGeneration && !canGenerate)}
+            disabled={loading}
             className="w-full sm:w-auto"
           >
             {loading ? (

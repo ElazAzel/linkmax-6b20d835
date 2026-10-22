@@ -2,8 +2,10 @@ import type { Block } from '@/types/page';
 import type { Template, TemplateBlockDefinition } from '@/types/templates';
 export type { Template };
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
-import { DEMO_MEDIA } from '@/lib/demo-media';
+import { LANDING_DEMO_MEDIA as DEMO_MEDIA } from '@/lib/demo-media';
 import { applyArtDirection } from '@/lib/design/art-direction';
+import { resolveSmartDesign } from '@/lib/onboarding/smart-design';
+import type { Niche } from '@/lib/niches';
 
 
 
@@ -533,6 +535,8 @@ function refreshTemplate(template: Template): Template {
         ...template,
         blocks: template.blocks.map((block) => ({ ...block, overrides: { ...block.overrides, avatar: '', verified: false } })),
     };
+    const niches: Record<string, Niche> = { influencer: 'fashion', musician: 'music', designer: 'art', streamer: 'tech', barber: 'beauty', photographer: 'art', beauty: 'beauty', fitness: 'fitness', chef: 'food', shop: 'fashion', realestate: 'realestate', wedding: 'events', psychologist: 'health', teacher: 'education', marketer: 'business', lawyer: 'expert', agency: 'tech', restaurant: 'food', 'portfolio-pro': 'art', personal: 'other' };
+    const design = resolveSmartDesign(niches[template.id] || 'other');
     const media: Record<string, readonly string[]> = {
         beauty: [DEMO_MEDIA.studio, DEMO_MEDIA.nails],
         barber: [DEMO_MEDIA.studio, DEMO_MEDIA.portrait],
@@ -546,8 +550,16 @@ function refreshTemplate(template: Template): Template {
         personal: [DEMO_MEDIA.portrait],
         influencer: [DEMO_MEDIA.portrait, DEMO_MEDIA.coffee],
         'portfolio-pro': [DEMO_MEDIA.study],
+        fitness: [DEMO_MEDIA.portrait, DEMO_MEDIA.studio],
+        musician: [DEMO_MEDIA.portrait, DEMO_MEDIA.photographer],
+        streamer: [DEMO_MEDIA.study, DEMO_MEDIA.portrait],
+        shop: [DEMO_MEDIA.portrait, DEMO_MEDIA.studio],
+        realestate: [DEMO_MEDIA.studio, DEMO_MEDIA.study],
+        marketer: [DEMO_MEDIA.study, DEMO_MEDIA.coffee],
+        lawyer: [DEMO_MEDIA.study, DEMO_MEDIA.studio],
+        agency: [DEMO_MEDIA.study, DEMO_MEDIA.photographer],
     };
-    const photos = media[template.id] ?? [];
+    const photos = media[template.id] ?? [DEMO_MEDIA.studio, DEMO_MEDIA.study];
     const avatar = template.id === 'beauty' ? DEMO_MEDIA.beautyPortrait
         : template.id === 'teacher' ? DEMO_MEDIA.teacher
         : template.id === 'photographer' ? DEMO_MEDIA.photographer : '';
@@ -560,13 +572,17 @@ function refreshTemplate(template: Template): Template {
             if (block.type === 'profile') Object.assign(overrides, {
                 bio: cleanDemoBio(overrides.bio),
                 avatar, verified: false, avatarPosition: 'left', avatarShape: 'circle',
-                coverGradient: 'light', coverImage: photos[0] ?? '', coverHeight: 'large',
+                coverGradient: 'none', coverImage: photos[0], coverHeight: 'large',
+                avatarFrame: 'default', shadowStyle: 'none', nameAnimation: 'none',
+                badges: [{ id: 'example', kind: 'custom', label: 'Демо-шаблон' }],
             });
             // Template identities are fictional. Do not send visitors to a
             // guessed phone number, social account or third-party booking page.
             if (block.type === 'messenger') overrides.messengers = [{ platform: 'whatsapp', username: '' }];
             if (block.type === 'socials') overrides.platforms = [];
-            if (block.type === 'link' || block.type === 'button') overrides.url = 'https://example.com';
+            if (block.type === 'link' || block.type === 'button') Object.assign(overrides, { url: 'https://lnkmx.my/auth', title: { ru: 'Создать такую страницу', en: 'Create a page like this', kk: 'Осындай бет жасау' } });
+            if (block.type === 'text') overrides.alignment = 'left';
+            if (block.type === 'image') overrides.url = photos[photoIndex++ % photos.length];
             if (block.type === 'carousel' && photos.length) {
                 overrides.images = photos.map((url) => ({ url, alt: template.name }));
                 overrides.autoPlay = false;
@@ -587,19 +603,21 @@ function refreshTemplate(template: Template): Template {
                 overrides.layout = 'grid';
             }
             if (block.type === 'product' && photos.length) overrides.image = photos[photoIndex++ % photos.length];
+            if (block.type === 'catalog' && Array.isArray(overrides.items)) overrides.items = overrides.items.map((item: Record<string, unknown>) => ({ ...item, image: item.image || photos[photoIndex++ % photos.length] }));
             return { type: block.type, overrides: { ...overrides, blockSize: 'wide' } };
         })
         .filter((block) => block.type !== 'carousel' || (Array.isArray(block.overrides?.images) && block.overrides.images.length > 0));
     if (photos.length && !blocks.some((block) => ['carousel', 'image', 'tiles'].includes(block.type))) {
         blocks.splice(1, 0, { type: 'image', overrides: { url: photos[0], alt: template.name, blockSize: 'wide' } });
     }
+    if (blocks.length < 4) blocks.push({ type: 'card', overrides: { title: { ru: 'Идея. Детали. Результат.', en: 'Idea. Details. Result.', kk: 'Идея. Егжей-тегжей. Нәтиже.' }, text: { ru: 'Здесь начинается знакомство с вашим проектом. Добавьте свои работы, расскажите о подходе и пригласите к разговору.', en: 'Introduce your project, share your work and invite people to get in touch.', kk: 'Жобаңызды таныстырып, жұмыстарыңызбен бөлісіңіз.' }, image: photos[photos.length - 1], imagePosition: 'top', blockSize: 'wide' } });
     // Keep a clear path through a template instead of a long inventory of widgets.
     const closing = blocks.filter((block) => ['messenger', 'socials', 'map'].includes(block.type));
     const details = blocks.filter((block) => !closing.includes(block));
     const composed = applyArtDirection([...details.slice(0, Math.max(1, 9 - closing.length)), ...closing].map((block, index) => ({
         ...createTemplateBlock(block.type, block.overrides), id: `template-${template.id}-${index}`,
-    })), { seed: template.id });
-    return { ...template, blocks: composed.blocks.map(({ type, id: _id, ...overrides }) => ({ type, overrides })) };
+    })), { recipeId: design.recipeId, seed: template.id });
+    return { ...template, theme: design.theme, blocks: composed.blocks.map(({ type, id: _id, ...overrides }) => ({ type, overrides })) };
 }
 
 export const HARDCODED_TEMPLATES: Template[] = LEGACY_TEMPLATES.map(refreshTemplate);

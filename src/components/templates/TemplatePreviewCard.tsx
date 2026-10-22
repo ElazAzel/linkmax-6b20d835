@@ -2,28 +2,32 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils/utils';
 import { getI18nText, type I18nText } from '@/lib/i18n-helpers';
+import type { PageTheme } from '@/types/page';
+import { getPageThemeScope } from '@/lib/appearance/style-utils';
 
 type PreviewBlock = Record<string, unknown> & { type: string };
 interface TemplatePreviewCardProps {
   blocks: unknown;
   className?: string;
   showBlockCount?: boolean;
+  theme?: Partial<PageTheme>;
 }
 
 /** A miniature content preview: actual photos, headings and offers from the recipe. */
-export const TemplatePreviewCard = memo(function TemplatePreviewCard({ blocks, className, showBlockCount = true }: TemplatePreviewCardProps) {
+export const TemplatePreviewCard = memo(function TemplatePreviewCard({ blocks, theme, className, showBlockCount = true }: TemplatePreviewCardProps) {
   const { i18n, t } = useTranslation();
   const text = (value: unknown) => getI18nText(value as string | I18nText | undefined, i18n.language);
   const list: PreviewBlock[] = Array.isArray(blocks)
     ? blocks.filter((block) => block && typeof block === 'object').map((block) => ({ ...block, ...(block.overrides || {}) }))
     : [];
   const profile = list.find((block) => block.type === 'profile');
+  const scope = getPageThemeScope(theme);
   const content = list.filter((block) => block.type !== 'profile').slice(0, 5);
   const thumbnail = (url: unknown, alt: string, extra = '') => typeof url === 'string' && url
     ? <img src={url} alt={alt} loading="lazy" decoding="async" className={cn('h-full w-full object-cover', extra)} />
     : null;
 
-  return <div className={cn('relative h-full w-full overflow-hidden rounded-xl bg-stone-200 p-3 dark:bg-stone-900', className)}>
+  return <div style={theme ? { ...scope.style, backgroundColor: theme.backgroundColor, color: theme.textColor } : undefined} className={cn('relative h-full w-full overflow-hidden rounded-xl bg-stone-200 p-3 dark:bg-stone-900', theme && scope.className, className)}>
     <div aria-hidden="true" className="mx-auto flex h-full max-w-[230px] flex-col overflow-hidden rounded-xl bg-background shadow-xl ring-1 ring-black/5">
       {profile && <div className="relative shrink-0 overflow-hidden pb-2">
         {typeof profile.coverImage === 'string' && profile.coverImage && <div className="h-12 overflow-hidden">{thumbnail(profile.coverImage, '')}</div>}

@@ -66,6 +66,14 @@ export function sanitizeTheme(theme: unknown): Partial<PageTheme> | null {
   for (const field of COLOR_FIELDS) {
     if (isSafeCssValue(candidate[field])) sanitized[field] = candidate[field];
   }
+  if (candidate.colors && typeof candidate.colors === 'object' && !Array.isArray(candidate.colors)) {
+    const palette = candidate.colors as Record<string, unknown>;
+    const colors: NonNullable<PageTheme['colors']> = {};
+    for (const key of ['canvas', 'surface', 'text', 'mutedText', 'primary', 'primaryText', 'secondary', 'border', 'focus'] as const) {
+      if (isSafeCssValue(palette[key]) && /^(?:#[0-9a-f]{3}(?:[0-9a-f]{3})?|(?:rgb|hsl)a?\([\d\s.,%/+-]+\))$/i.test(palette[key])) colors[key] = palette[key];
+    }
+    if (Object.keys(colors).length) sanitized.colors = colors;
+  }
   if (candidate.buttonStyle === 'default' || candidate.buttonStyle === 'rounded' || candidate.buttonStyle === 'pill' || candidate.buttonStyle === 'gradient') sanitized.buttonStyle = candidate.buttonStyle;
   if (candidate.fontFamily === 'sans' || candidate.fontFamily === 'serif' || candidate.fontFamily === 'mono') sanitized.fontFamily = candidate.fontFamily;
   if (candidate.iconStyle === 'rounded' || candidate.iconStyle === 'square' || candidate.iconStyle === 'duotone') sanitized.iconStyle = candidate.iconStyle;

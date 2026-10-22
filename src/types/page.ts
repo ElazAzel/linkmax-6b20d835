@@ -46,6 +46,11 @@ export interface PageTheme {
   blockHover?: BlockHover;
   divider?: DividerStyle;
   themePreset?: string;
+  /** Explicit palette, shared by public pages, the editor and template previews. */
+  colors?: {
+    canvas?: string; surface?: string; text?: string; mutedText?: string;
+    primary?: string; primaryText?: string; secondary?: string; border?: string; focus?: string;
+  };
 }
 
 export interface PageMetrics {

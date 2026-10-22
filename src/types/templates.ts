@@ -1,4 +1,5 @@
 import { type TemplateCategoryKey } from '@/lib/templateCategories';
+import type { SmartPageTheme } from '@/lib/onboarding/smart-design';
 
 export interface TemplateBlockDefinition {
     type: string;
@@ -13,4 +14,5 @@ export interface Template {
     preview: string;
     isPremium?: boolean;
     blocks: TemplateBlockDefinition[];
+    theme?: SmartPageTheme;
 }
