@@ -9,6 +9,7 @@ export const Route = createFileRoute("/")({
     { property: "og:title", content: i18n.t('landing.revenue.seo.title') },
     { property: "og:description", content: i18n.t('landing.revenue.seo.description') },
     { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://lnkmx.my/" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: i18n.t('landing.revenue.seo.title') },
     { name: "twitter:description", content: i18n.t('landing.revenue.seo.description') },

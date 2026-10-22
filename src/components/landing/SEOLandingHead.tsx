@@ -21,7 +21,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
 
     // New positioning: Micro-Business OS - page builder + CRM + analytics
     const title = t(
-      'seo.landing.title',
+      'landing.revenue.seo.title',
       isRussian
         ? 'LinkMAX — страницы, CRM и аналитика для микробизнеса'
         : isKazakh
@@ -59,7 +59,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
 
     // Clear meta description: OS + page builder + CRM + analytics
     const description = t(
-      'seo.landing.description',
+      'landing.revenue.seo.description',
       isRussian
         ? 'Конструктор страниц для услуг: сайт-визитка, онлайн-запись, оплата, заявки в Telegram и мини-CRM. Запустите витрину и обработку клиентов в одном месте.'
         : isKazakh

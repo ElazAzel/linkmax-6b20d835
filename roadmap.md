@@ -1,5 +1,9 @@
 # Roadmap
 
+## SEO findings (2026-10-22)
+- [x] Verified /for-masters HTTP 200, visible descriptive H1 and beauty-specific explanatory content, workflow and FAQ; stale content finding already addressed by current page.
+- [x] Clarified homepage search title and description in ru/en/kk/uz; shared metadata keys prevent browser overwrite; verified pre-rendered and browser titles/descriptions and self-canonicals on all four pages; 41 existing tests passed. Live changes require publication.
+
 ## Page publication repair (2026-10-20)
 - [x] Fixed publish_page_draft HTTP 400 caused by undeployed card/tiles block constraint migration; applied existing SQL unchanged. SQL suite 12/12 and transport tests 2/2 passed; authenticated editor save/reload/publish returned HTTP 200 and public card rendered. Temporary check page removed.
 
