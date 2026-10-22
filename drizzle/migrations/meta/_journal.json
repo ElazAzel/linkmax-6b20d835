@@ -78,6 +78,13 @@
       "when": 1792475887063,
       "tag": "0010_korner_card_tiles",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792642994288,
+      "tag": "0011_security_selected_fixes_oct22",
+      "breakpoints": true
     }
   ]
 }

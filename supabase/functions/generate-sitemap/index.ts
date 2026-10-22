@@ -11,6 +11,7 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { withoutPaidBlocks } from '../_shared/paid-blocks.ts';
 import {
   buildMetaDescription,
   collectTextSnippets,
@@ -348,7 +349,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
     .eq('page_id', page.id)
     .order('position');
 
-  const blocks = (blocksData || []) as BlockData[];
+  const blocks = withoutPaidBlocks(blocksData as BlockData[] | null);
 
   // Extract content from blocks
   const links: { url: string; title: string }[] = [];
@@ -584,7 +585,7 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
 
   // Collect all pricing items
   const pricingItems: Array<Record<string, unknown>> = [];
-  for (const block of (blocksData || [])) {
+  for (const block of withoutPaidBlocks(blocksData)) {
     const items = (block.content as Record<string, unknown>)?.items;
     if (Array.isArray(items)) {
       for (const item of items) pricingItems.push(item as Record<string, unknown>);

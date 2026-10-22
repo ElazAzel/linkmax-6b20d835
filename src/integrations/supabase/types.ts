@@ -5607,6 +5607,10 @@ export type Database = {
         Args: { p_slug: string; p_title: string; p_user_id: string }
         Returns: Json
       }
+      create_user_page_unchecked: {
+        Args: { p_slug: string; p_title: string; p_user_id: string }
+        Returns: Json
+      }
       create_zone: {
         Args: {
           p_name: string
