@@ -1,5 +1,9 @@
 # Roadmap
 
+## SEO findings (2026-10-22)
+- [ ] Verify /for-masters visible main heading and specific explanatory content against the stale content finding.
+- [ ] Clarify homepage search title and description in ru/en/kk/uz; align pre-rendered and browser metadata and verify the result.
+
 ## Page publication repair (2026-10-20)
 - [x] Fixed publish_page_draft HTTP 400 caused by undeployed card/tiles block constraint migration; applied existing SQL unchanged. SQL suite 12/12 and transport tests 2/2 passed; authenticated editor save/reload/publish returned HTTP 200 and public card rendered. Temporary check page removed.
 
