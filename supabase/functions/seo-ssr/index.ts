@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { withoutPaidBlocks } from '../_shared/paid-blocks.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -155,11 +156,12 @@ serve(async (req: Request) => {
     }
 
     // Fetch blocks for content
-    const { data: blocks } = await supabase
+    const { data: rawBlocks } = await supabase
       .from('blocks')
       .select('type, title, content, position')
       .eq('page_id', page.id)
       .order('position');
+    const blocks = withoutPaidBlocks(rawBlocks);
 
     // Build SEO-optimized content
     const displayName = escapeHtml(page.title || '@' + slug);

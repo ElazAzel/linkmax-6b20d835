@@ -6,6 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Only the plans the app actually sells may be looked up.
+const ALLOWED_PRICE_IDS = new Set(['pro_monthly', 'pro_yearly']);
+
 async function resolvePaddlePrice(priceId: string, environment: PaddleEnv): Promise<string> {
   const response = await gatewayFetch(environment, `/prices?external_id=${encodeURIComponent(priceId)}`);
   const data = await response.json();
@@ -27,7 +30,7 @@ Deno.serve(async (req) => {
       });
     }
     const { priceId, environment } = await req.json();
-    if (typeof priceId !== 'string' || !/^[a-zA-Z0-9_-]{1,100}$/.test(priceId)) {
+    if (typeof priceId !== 'string' || !ALLOWED_PRICE_IDS.has(priceId)) {
       return new Response(JSON.stringify({ error: 'priceId is required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

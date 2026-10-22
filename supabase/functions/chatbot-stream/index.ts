@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { withoutPaidBlocks } from '../_shared/paid-blocks.ts';
 import { HUMANIZER_RU_PROMPT } from '../_shared/humanizer-ru.ts';
 
 const corsHeaders = {
@@ -160,11 +161,12 @@ serve(async (req) => {
     }
 
     // Fetch blocks
-    const { data: blocks } = await supabase
+    const { data: rawBlocks } = await supabase
       .from('blocks')
       .select('*')
       .eq('page_id', page.id)
       .order('position');
+    const blocks = withoutPaidBlocks(rawBlocks);
 
     // The AI assistant only runs for pages whose owner added a chatbot block.
     const hasChatbot = (blocks ?? []).some((b: { type?: string }) => typeof b.type === 'string' && b.type.toLowerCase().includes('chat'));
