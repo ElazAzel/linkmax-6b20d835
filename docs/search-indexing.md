@@ -15,6 +15,8 @@ python scripts/verify-indexing.py --output tmp/indexing-production.json
 
 The script follows declared same-origin sitemaps, checks only sitemap URL locations (not image locations), fetches every page without JavaScript and checks status, canonical, title, description, H1, indexability and JSON-LD. It also probes missing pages and private routes. It never submits URLs to a search engine.
 
+Empty event sitemaps are not advertised: Google rejects a urlset without a url entry. The event sitemap endpoint remains available and can be submitted when it contains published, indexable events. Public event pages remain crawlable and publication notifications use the existing IndexNow pipeline. The verifier rejects advertised empty sitemaps.
+
 Search Console inspection on 22 October 2026 showed that `https://lnkmx.my/elazart` was absent from the index after its 14 September crawl: no user canonical was detected and Google selected the homepage. This is historical crawl evidence, not the state of the current HTML. Live inspection returned a Google service error twice; neither attempt is evidence of a successful indexing request. Search Console listed only `/sitemap.xml`, last processed successfully on 18 October with 82 discovered pages.
 
 Valid HTML, structured data, llms.txt and sitemap submission improve discovery and interpretation; search engines independently decide whether and when to index, rank or cite a page.

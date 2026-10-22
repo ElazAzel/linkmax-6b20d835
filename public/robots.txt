@@ -37,4 +37,3 @@ Disallow: /.lovable/
 Sitemap: https://lnkmx.my/sitemap.xml
 Sitemap: https://lnkmx.my/sitemap-profiles.xml
 Sitemap: https://lnkmx.my/sitemap-experts.xml
-Sitemap: https://lnkmx.my/sitemap-events.xml

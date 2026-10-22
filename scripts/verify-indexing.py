@@ -107,6 +107,8 @@ def main():
             if root.tag.endswith('sitemapindex'):
                 queue.extend(locations)
             elif root.tag.endswith('urlset'):
+                if not locations:
+                    raise ValueError('Empty sitemap must not be advertised until it contains public URLs')
                 urls.update(locations)
             else:
                 raise ValueError('Not a sitemap document')
