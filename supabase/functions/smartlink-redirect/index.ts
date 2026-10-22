@@ -2,6 +2,7 @@
 // Resolves /s/:slug -> target_url, atomically increments click_count,
 // writes a canonical `link_click` event into `analytics` (metadata.event).
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { isSafeRedirectTarget } from '../_shared/safe-redirect.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -58,6 +59,12 @@ Deno.serve(async (req) => {
     }
 
     const row = Array.isArray(data) ? data[0] : data;
+    if (!isSafeRedirectTarget(row.target_url)) {
+      return new Response(JSON.stringify({ error: 'blocked destination' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
     const finalUrl = appendUtm(row.target_url, row);
 
     // canonical link_click event (legacy event_type = 'click')
