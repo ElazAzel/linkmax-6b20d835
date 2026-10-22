@@ -1,73 +1,40 @@
 User-agent: *
 Allow: /
 Content-Signal: ai-train=no, search=yes, ai-input=yes
+Disallow: /dashboard$
 Disallow: /dashboard/
+Disallow: /dashboard-v2$
 Disallow: /dashboard-v2/
+Disallow: /admin$
 Disallow: /admin/
+Disallow: /auth$
 Disallow: /auth/
+Disallow: /editor$
 Disallow: /editor/
+Disallow: /dev$
+Disallow: /dev/
+Disallow: /crm$
 Disallow: /crm/
+Disallow: /settings$
 Disallow: /settings/
+Disallow: /install$
 Disallow: /install/
+Disallow: /team$
 Disallow: /team/
+Disallow: /join$
+Disallow: /join/
+Disallow: /invites$
+Disallow: /invites/
+Disallow: /purchase$
+Disallow: /purchase/
+Disallow: /booking/manage/
+Disallow: /events/checkin/
 Disallow: /review/request/
+Disallow: /.lovable/
 
-# Explicitly allow discovery pathways
-Allow: /experts
-Allow: /gallery
-Allow: /для-бьюти-мастеров
-Allow: /для-репетиторов
-Allow: /for/
-Allow: /llms.txt
-Allow: /llms-full.txt
-Allow: /llms-en.txt
-Allow: /sitemap.xml
-
-# AI Crawlers - welcome
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-# Emerging AI Bots
-User-agent: Grok
-Allow: /
-
-User-agent: DeepSeek
-Allow: /
-
-User-agent: QwenBot
-Allow: /
-
+# Public profiles and markdown are crawlable, including by OAI-SearchBot.
+# Search access is independent of model training permissions.
 Sitemap: https://lnkmx.my/sitemap.xml
 Sitemap: https://lnkmx.my/sitemap-profiles.xml
 Sitemap: https://lnkmx.my/sitemap-experts.xml
 Sitemap: https://lnkmx.my/sitemap-events.xml
-
-# Host
-Host: lnkmx.my

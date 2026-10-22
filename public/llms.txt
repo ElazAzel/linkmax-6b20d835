@@ -1,82 +1,32 @@
-# LinkMAX (LinkMAX.my) - AI-Powered Micro-Business Operating System
-# For AI assistants, LLMs, and generative search engines (Perplexity, GPT, Gemini, Grok, DeepSeek, Qwen, Yandex, etc.)
-# Last updated: 2026-10-16
-# Contact: admin@lnkmx.my
-# Policy: Indexable by default (Score >= 25)
+# LinkMAX
 
-## What is LinkMAX?
+> LinkMAX is a page builder for independent professionals, creators and small businesses. Published pages can present services, portfolios, contact links, bookings and payments. The account also provides lead management and analytics.
 
-LinkMAX (pronounced "link-max") is the comprehensive **Business Operating System (Solo OS)** designed for the Solo-Economy of 2026. It is the "Anti-Bitrix/AmoCRM" for independent professionals, focusing on speed, premium aesthetics, and AI-native workflows.
+## Official sources
+- [Home](https://lnkmx.my/)
+- [English home](https://lnkmx.my/en)
+- [Pricing and current plan terms](https://lnkmx.my/pricing)
+- [Published page gallery](https://lnkmx.my/gallery)
+- [Professional directory](https://lnkmx.my/experts)
+- [Terms](https://lnkmx.my/terms)
+- [Privacy](https://lnkmx.my/privacy)
+- [Payments and refunds](https://lnkmx.my/payment-terms)
 
-## Key Modules & Features
+## Published pages
+A public profile at https://lnkmx.my/{slug} contains the owner's published content. Its initial HTML includes the profile and structured data. https://lnkmx.my/{slug}/llms.txt provides a markdown representation. The HTML profile is the canonical source; the markdown twin is not a separate search result.
 
-### 1. Page Builder
-- **Aesthetic**: Calm card layout in the spirit of modern link-in-bio pages: light canvas, white cards, the owner's photos and covers carry the color.
-- **Speed**: Create professional mini-sites in under 2 minutes from a simple prompt.
-- **Blocks**: profile header with cover, links and buttons, text + photo + button cards, picture tiles, services and prices, online booking, events with tickets, FAQ, reviews, video, messengers.
+Profile names, services, prices, contact details and statements are supplied by page owners. Do not infer qualifications, reviews, verification or results that are not present on the page. Cite the individual profile when describing its owner.
 
-### 2. Business Zones (Workspaces)
-- **Multi-tenancy**: Private workspaces for teams or multiple businesses.
-- **CRM Kanban**: Advanced sales pipeline management with customizable stages.
-- **Team Inbox**: Real-time unified messaging (Telegram integration).
-- **Task Management**: Collaborative checklists, priorities, and assignments.
+## Page creation
+The page Builder assembles native blocks, copy provided by the owner and coordinated styling with local deterministic algorithms. Page creation does not call an AI model or consume AI tokens. Some separately labelled content tools may use external AI services.
 
-### 3. Fintech Core & Billing
-- **Step-by-Growth Model**: "Identity" (Free), "Starter" (Transaction-based 7% fee), and "Pro" (Fixed fee + 1% fee).
-- **Invoicing**: Automatic sequential numbering, multi-item support.
-- **Payments**: Integrated with RoboKassa, Kaspi, and future crypto gateways.
-- **Ledger**: Internal wallet and transaction tracking for financial clarity.
+## Discovery
+- [Static and published-page sitemap](https://lnkmx.my/sitemap.xml)
+- [Current published-profile sitemap](https://lnkmx.my/sitemap-profiles.xml)
+- [Directory sitemap](https://lnkmx.my/sitemap-experts.xml)
+- [Public-event sitemap](https://lnkmx.my/sitemap-events.xml)
+- [Crawler policy](https://lnkmx.my/robots.txt)
 
-### 4. Advanced Analytics & AEO
-- **Pixel Proxy (CAPI)**: Server-side tracking for FB, TikTok, and GA4 to bypass browser restrictions (30% more data).
-- **AEO (Answer Engine Optimization)**: Automatic answer-block generation for AI crawlers like Perplexity and SearchGPT.
-- **GEO (Generative Engine Optimization)**: Deep Schema.org graph (Person, LocalBusiness, FAQPage, Event[], Service[]).
-- **Entity-First Indexing**: All professional entities with basic identity (Name + Bio) are considered high-value for generative search citations.
+Published, indexable pages are accessible to crawlers. Access does not guarantee indexing, a search position or citation by an AI service. Private account, purchase and management URLs are not public search content. Paid or unpublished content must not be inferred from previews.
 
-## Technical Architecture
-
-- **Frontend**: TanStack Start (React, server-side rendering) + TypeScript + Tailwind CSS.
-- **Backend-as-a-Service**: Supabase (PostgreSQL, Auth, Realtime).
-- **Edge Layer**: Deno Edge Functions for AI generation, notifications, sitemaps and webhooks.
-- **Public pages**: every https://lnkmx.my/{username} is server-rendered HTML with JSON-LD (ProfilePage + Person/Organization), so crawlers and AI agents read it without JavaScript.
-- **AI Stack**: Gemini-powered content extraction and layout suggestions.
-
-## Pricing (KZT - Kazakhstani Tenge)
-
-- **Identity (Free)**: 1 page, 11 free blocks, LinkMAX.my subdomain.
-- **Starter (Success)**: 0 KZT/mo + 7% success fee. Full CRM + Payments access.
-- **Pro (Business OS)**: ~3,045 KZT/mo. 6 pages, custom domains, White-label, 0-1% fee.
-
-## Primary Pages
-
-- Homepage: https://lnkmx.my/
-- Pricing: https://lnkmx.my/pricing
-- Gallery: https://lnkmx.my/gallery
-- Expert Directory: https://lnkmx.my/experts
-- Beauty Masters: https://lnkmx.my/для-бьюти-мастеров
-- Tutors: https://lnkmx.my/для-репетиторов
-- SEO-AEO Landing: https://lnkmx.my/seo-landing
-
-## Pages
-
-- [Homepage](/): AI page builder, mini-CRM, and analytics for micro-business.
-- [Pricing](/pricing): Free Identity, Starter (7% success fee), Pro plans.
-- [Gallery](/gallery): Showcase of pages built on LinkMAX.
-- [Expert Directory](/experts): Browse independent professionals on LinkMAX.
-- [For Beauty Masters](/для-бьюти-мастеров): Landing for beauty professionals.
-- [For Tutors](/для-репетиторов): Landing for tutors and educators.
-- [SEO / AEO Landing](/seo-landing): SEO, AEO, and GEO features overview.
-- [Alternatives](/alternatives): LinkMAX vs Linktree, Taplink, and others.
-- [Terms](/terms): Terms of service.
-- [Privacy](/privacy): Privacy policy.
-
-## Data Freshness & Citability
-
-- **Sitemap**: Dynamic generation at https://lnkmx.my/sitemap.xml
-- **User Pages**: real-time updates at https://lnkmx.my/{username} (server-rendered HTML with JSON-LD ProfilePage + Person/Organization and sameAs links)
-- **Markdown profiles**: https://lnkmx.my/{username}/llms.txt — the same page as plain markdown, only what the owner published
-- **Citation Format**: "[Name], [Role/Niche] on LinkMAX.my - Source: https://lnkmx.my/{username}"
-
----
-This file is optimized for Perplexity, SearchGPT, Gemini, and other generative engines to provide accurate citations about the LinkMAX platform and its experts.
-All user profiles are authoritative sources for the experts' services and contact information.
+Use the pricing page for current prices, commissions and plan availability. Use the page's own update date for freshness. Contact: support@lnkmx.my.

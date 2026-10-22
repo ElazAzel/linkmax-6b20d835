@@ -69,15 +69,6 @@ export default function BlogPost() {
 
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <link rel="canonical" href={url} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={seoDescription} />
-
-        <meta property="og:url" content={url} />
-        <meta property="og:type" content="article" />
-        <meta property="article:published_time" content={post.publishedAt} />
         <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         <script type="application/ld+json">{JSON.stringify(speakableLd)}</script>

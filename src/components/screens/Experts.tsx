@@ -43,6 +43,7 @@ import {
   findHubNiche,
   pickLang,
 } from '@/lib/seo/expert-hubs';
+import type { ExpertDirectorySnapshot } from '@/lib/seo/directory-seo';
 
 // Normalized niche tags with i18n
 const NICHE_TAGS = [
@@ -60,7 +61,7 @@ const NICHE_TAGS = [
   { slug: 'other', label: { ru: 'Другое', en: 'Other', kk: 'Басқа' } },
 ];
 
-export const Experts = memo(function Experts() {
+export const Experts = memo(function Experts({ initialData }: { initialData?: ExpertDirectorySnapshot }) {
   const params = useParams();
   const tag = params?.tag as string | undefined;
   const citySlug = params?.city as string | undefined;
@@ -76,6 +77,7 @@ export const Experts = memo(function Experts() {
   const normalizedSearchTerm = normalizeExpertDirectoryFilter(searchTerm)?.toLocaleLowerCase(language) ?? '';
 
   const { data: experts = [], isLoading } = useQuery({
+    initialData: initialData?.experts,
     queryKey: ['experts', tag, citySlug, cityFilter, verifiedOnly],
     queryFn: async () => {
       const cities = hubCity ? hubCity.aliases : [cityFilter];
@@ -93,7 +95,8 @@ export const Experts = memo(function Experts() {
 
   // For city hubs with few local pages, show the niche nationwide as a helpful fallback
   const { data: fallbackExperts = [] } = useQuery({
-    queryKey: ['experts-fallback', tag],
+    initialData: hubCity && initialData && initialData.experts.length < 3 ? initialData.fallbackExperts : undefined,
+    queryKey: ['experts-fallback', tag, citySlug],
     queryFn: () => fetchExpertDirectoryProfiles({ tag, verifiedOnly: false, limit: 12 }),
     enabled: !!hubCity && !isLoading && experts.length < 3,
     staleTime: 5 * 60 * 1000,

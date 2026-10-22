@@ -28,6 +28,7 @@ export interface HubCity {
 }
 
 export const HUB_NICHES: HubNiche[] = [
+  { slug: 'services', hub: false, label: { ru: 'Услуги', en: 'Services', kk: 'Қызметтер' }, who: { ru: 'Мастера и специалисты по услугам', en: 'Service professionals', kk: 'Қызмет көрсету мамандары' }, intro: { ru: 'Частные мастера и сервисные компании: описание услуг, цены и прямые контакты для записи.', en: 'Independent professionals and service businesses: service details, prices and direct booking contacts.' }, services: { ru: ['бытовые услуги', 'ремонт', 'обслуживание'], en: ['local services', 'repair', 'maintenance'] } },
   {
     slug: 'beauty', hub: true,
     label: { ru: 'Красота', en: 'Beauty', kk: 'Сұлулық' },

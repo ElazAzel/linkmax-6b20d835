@@ -5,6 +5,7 @@
  */
 import type { Block, GridConfig, PageData, PageTheme } from '@/types/page';
 import { ensureBlockIds } from '@/lib/blocks/block-ids';
+import type { ServiceSlugsMap } from './service-resolver';
 
 /** PageData plus the page-record fields SEO falls back to. */
 export type PublicPageData = PageData & {
@@ -12,6 +13,7 @@ export type PublicPageData = PageData & {
   description?: string;
   avatar_url?: string;
   createdAt?: string;
+  serviceSlugs?: ServiceSlugsMap | null;
 };
 
 export type PublicPageSnapshot =
@@ -49,6 +51,7 @@ interface SnapshotPageRow {
   city: string | null;
   profession: string | null;
   entity_type: string | null;
+  service_slugs?: ServiceSlugsMap | null;
   blocks: SnapshotBlockRow[] | null;
 }
 
@@ -56,7 +59,7 @@ const PAGE_COLUMNS = [
   'id', 'user_id', 'slug', 'title', 'description', 'avatar_url', 'theme_settings', 'seo_meta',
   'is_published', 'is_indexable', 'created_at', 'updated_at', 'grid_config', 'niche', 'preview_url',
   'integrations', 'favicon_url', 'hide_branding', 'organization_id', 'custom_domain', 'city',
-  'profession', 'entity_type', 'blocks(position,deleted_at,content)',
+  'profession', 'entity_type', 'service_slugs', 'blocks(position,deleted_at,content)',
 ].join(',');
 
 /** Slugs are user-chosen; anything outside this shape cannot be a page. */
@@ -104,6 +107,7 @@ export function snapshotRowToPageData(row: SnapshotPageRow): PublicPageData {
     city: row.city || undefined,
     profession: row.profession || undefined,
     entity_type: row.entity_type === 'organization' ? 'organization' : 'person',
+    serviceSlugs: row.service_slugs,
   };
 }
 

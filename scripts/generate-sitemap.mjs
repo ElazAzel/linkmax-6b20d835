@@ -12,14 +12,14 @@
  * Google Search Console (which requires a same-domain sitemap) this file is
  * authoritative.
  */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { loadEnv } from 'vite';
 
 const BASE_URL = 'https://lnkmx.my';
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://hpnycvncipdxmvqfuulf.supabase.co';
-const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY
-  || process.env.VITE_SUPABASE_ANON_KEY
-  || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaGRjZnh1Y2ZuZG13dWxwZnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMTgwMDcsImV4cCI6MjA3OTc5NDAwN30.u5O_XrdvtjHaZjsAkVZyoYbNQIBKx9xfVxRFuUi2WbA';
+const publicEnv = { ...loadEnv('production', process.cwd(), 'VITE_'), ...process.env };
+const SUPABASE_URL = publicEnv.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = publicEnv.VITE_SUPABASE_PUBLISHABLE_KEY || publicEnv.VITE_SUPABASE_ANON_KEY;
 
 const QUALITY_THRESHOLD = 25;
 const LANGS = ['ru', 'en', 'kk', 'uz'];
@@ -72,8 +72,6 @@ const STATIC_PAGES = [
   { loc: '/pricing', changefreq: 'monthly', priority: '0.9' },
   { loc: '/demo-nails', changefreq: 'weekly', priority: '0.8' },
   { loc: '/alternatives', changefreq: 'monthly', priority: '0.8' },
-  { loc: '/for-masters', changefreq: 'monthly', priority: '0.7' },
-  { loc: '/seo-landing', changefreq: 'monthly', priority: '0.7' },
   { loc: '/customers', changefreq: 'monthly', priority: '0.7' },
   { loc: '/blog', changefreq: 'weekly', priority: '0.8' },
   { loc: '/terms', changefreq: 'yearly', priority: '0.3' },
@@ -83,25 +81,8 @@ const STATIC_PAGES = [
 ];
 
 const KEYWORD_LANDINGS = ['taplink-alternative', 'sayt-vizitka-dlya-uslug', 'multilink', 'link-in-bio-ru', 'vizitka-onlayn'];
-// Existing /dlya/ landings + 50 audience-targeted SEO landings (2026-06).
-const NICHE_LANDINGS = [
-  // 50 audience-targeted programmatic landings (2026-06). Stale slugs
-  // (designer, nutritionist, yoga-teacher, personal-trainer, nail-master)
-  // were removed 2026-07-01. Beauty niches (lash-master, brow-master,
-  // hair-stylist, makeup-artist, cosmetologist) removed 2026-07-02 —
-  // scanner flags them as route mismatches because pre-rendered HTML
-  // does not carry niche-specific content.
-  'massage-therapist',
-  'tattoo-artist', 'barber',
-  'business-coach', 'life-coach', 'career-coach', 'financial-advisor', 'nutrition-coach',
-  'relationship-coach', 'mindfulness-coach',
-  'english-tutor', 'math-tutor', 'music-teacher', 'art-teacher', 'online-school', 'course-creator',
-  'wedding-photographer', 'videographer', 'illustrator', 'dj', 'musician', 'blogger', 'event-planner',
-  'realtor', 'lawyer', 'notary', 'accountant', 'translator', 'copywriter',
-  'smm-manager', 'marketer', 'consultant',
-  'cleaning-service', 'handyman', 'car-detailing', 'florist', 'catering', 'chef',
-  'dog-trainer', 'interior-designer', 'tour-guide',
-];
+// Use only implemented content, including each landing's real canonical path.
+const NICHE_LANDINGS = [...readFileSync(resolve('src/lib/niche-landing-data.ts'), 'utf8').matchAll(/canonicalPath: '([^']+)'/g)].map(match => match[1]);
 
 
 // Kept in sync with src/lib/blog-posts.ts (BLOG_POSTS export). Every slug
@@ -167,10 +148,15 @@ function buildUrlEntry({ loc, lastmod, changefreq, priority, hreflang }) {
 }
 
 async function fetchIndexablePages() {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    console.warn('[sitemap] Public backend is not configured; profile discovery remains available through sitemap-profiles.xml.');
+    return [];
+  }
   const url = `${SUPABASE_URL}/rest/v1/pages?select=slug,updated_at,is_indexable,quality_score,is_published&is_published=eq.true&quality_score=gte.${QUALITY_THRESHOLD}&order=updated_at.desc.nullslast&limit=10000`;
   try {
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) {
       const status = `${res.status}${res.statusText ? ` ${res.statusText}` : ''}`;
@@ -199,7 +185,7 @@ function pickLastmod(row, today) {
     .filter(Boolean)
     .map((d) => new Date(d).getTime())
     .filter((t) => Number.isFinite(t));
-  if (!candidates.length) return today;
+  if (!candidates.length) return undefined;
   return new Date(Math.max(...candidates)).toISOString().slice(0, 10);
 }
 
@@ -209,10 +195,10 @@ async function main() {
   const pages = await fetchIndexablePages();
 
   const entries = uniqueEntries([
-    ...STATIC_PAGES.map((p) => ({ ...p, lastmod: p.lastmod || today })),
-    ...KEYWORD_LANDINGS.map((s) => ({ loc: `/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.85' })),
-    ...NICHE_LANDINGS.map((s) => ({ loc: `/dlya/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.75' })),
-    ...BLOG_POSTS.map((s) => ({ loc: `/blog/${s}`, lastmod: today, changefreq: 'monthly', priority: '0.7' })),
+    ...STATIC_PAGES,
+    ...KEYWORD_LANDINGS.map((s) => ({ loc: `/${s}`, changefreq: 'monthly', priority: '0.85' })),
+    ...NICHE_LANDINGS.map((s) => ({ loc: s, changefreq: 'monthly', priority: '0.75' })),
+    ...BLOG_POSTS.map((s) => ({ loc: `/blog/${s}`, changefreq: 'monthly', priority: '0.7' })),
     ...pages.map((p) => {
       const slug = normalizeSlug(p.slug);
       return {

@@ -42,9 +42,6 @@ export default function SitemapPage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-12 space-y-12">
       <Helmet>
-        <title>Карта сайта LinkMAX</title>
-        <meta name="description" content="Все разделы LinkMAX: статьи о Link in Bio, сайтах-визитках, Telegram, CRM и онлайн-записи, страницы для профессий и каталог специалистов." />
-        <link rel="canonical" href={`${BASE}/sitemap`} />
       </Helmet>
       <h1 className="text-3xl font-bold tracking-tight">Карта сайта</h1>
 

@@ -372,7 +372,7 @@ export async function fetchExpertDirectoryProfiles(
     .from('pages')
     .select(EXPERT_DIRECTORY_PAGE_SELECT)
     .eq('is_published', true)
-    .eq('is_indexable', true);
+    .or('is_indexable.is.null,is_indexable.eq.true');
 
   if (tag) {
     query = query.eq('niche', tag);

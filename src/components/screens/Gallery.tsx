@@ -22,6 +22,7 @@ import { Leaderboard } from '@/components/gallery/Leaderboard';
 import { TopReferrers } from '@/components/gallery/TopReferrers';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useGallery } from '@/hooks/social/useGallery';
+import type { GalleryPage } from '@/services/gallery';
 import { GalleryPageCard } from '@/components/gallery/GalleryPageCard';
 import { NICHES } from '@/lib/niches';
 import { cn } from '@/lib/utils/utils';
@@ -37,11 +38,11 @@ type SortMode = 'popular' | 'recent' | 'views';
 
 const stripDecorativeEmoji = (label: string) => label.replace(/^[^\p{L}\p{N}]+/u, '');
 
-export const Gallery = memo(function Gallery() {
+export const Gallery = memo(function Gallery({ initialPages }: { initialPages?: GalleryPage[] }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { pages, loading, likePage, cities } = useGallery();
+  const { pages, loading, likePage, cities } = useGallery(initialPages);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNiche, setSelectedNiche] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'gallery' | 'leaderboard'>('gallery');
@@ -50,9 +51,7 @@ export const Gallery = memo(function Gallery() {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
 
   const nicheLabel = selectedNiche ? t(`niches.${selectedNiche}`, selectedNiche) : null;
-  const canonical = selectedNiche
-    ? `${getAppDomain()}/gallery?niche=${selectedNiche}`
-    : `${getAppDomain()}/gallery`;
+  const canonical = `${getAppDomain()}/gallery`;
   const seoTitle = selectedNiche
     ? t('gallery.seo.nicheTitle', { niche: nicheLabel, defaultValue: `lnkmx Gallery — ${nicheLabel}` })
     : t('gallery.seo.title', 'lnkmx Gallery — Link in Bio Examples & Templates');
@@ -158,6 +157,7 @@ export const Gallery = memo(function Gallery() {
         description={seoDescription}
         canonical={canonical}
         currentLanguage={i18n.language}
+        indexable={!searchParams.get('niche') && !searchParams.get('q') && !searchParams.get('city')}
         ogImage={`${getAppDomain()}/og-gallery.jpg`}
         alternates={[
           { hreflang: 'ru', href: `${canonical}${canonical.includes('?') ? '&' : '?'}lang=ru` },

@@ -5,6 +5,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { storage } from '@/lib/storage';
+import { requestLanguage } from '@/lib/seo/site-policy';
 
 // No locale JSON is eagerly imported — every locale (including ru/en/kk) is
 // code-split and fetched on demand. This keeps ~1MB of translation JSON out of
@@ -119,7 +120,7 @@ function syncDbLocale(lang: string): Promise<void> {
 /**
  * Load a lazy locale on demand and add it to i18n
  */
-async function loadLazyLocale(lang: string): Promise<void> {
+export async function loadLazyLocale(lang: string): Promise<void> {
   const normalized = normalizeLanguage(lang);
   if (loadedLazyLocales.has(normalized)) return;
   const importer = lazyLocaleImporters[normalized];
@@ -129,12 +130,13 @@ async function loadLazyLocale(lang: string): Promise<void> {
     const data = await importer();
     const merged = mergeNamespaces(data);
     if (['ru', 'kk', 'en', 'uz'].includes(normalized)) {
-      const [{ officeResources }, { officeOffersResources }] = await Promise.all([
-        import('./office-resources'), import('./office-offers'),
+      const [{ officeResources }, { officeOffersResources }, { searchCopy }] = await Promise.all([
+        import('./office-resources'), import('./office-offers'), import('./search-copy'),
       ]);
       const locale = normalized as keyof typeof officeResources;
       merged.translation = deepMerge(merged.translation,
         deepMerge(officeResources[locale], officeOffersResources[locale]));
+      merged.translation = deepMerge(merged.translation, searchCopy[locale]);
     }
     i18n.addResourceBundle(normalized, 'translation', merged.translation, true, true);
     loadedLazyLocales.add(normalized);
@@ -219,7 +221,7 @@ const i18nInitPromise = i18n
   .use(initReactI18next)
   .init({
     resources: {},
-    lng: hydratingSsr ? SSR_LANGUAGE : undefined,
+    lng: hydratingSsr ? requestLanguage(window.location.pathname, window.location.search) : undefined,
     partialBundledLanguages: true,
     // Synchronous init: the async default schedules setTimeout at module load,
     // which Cloudflare Workers forbid in global scope.

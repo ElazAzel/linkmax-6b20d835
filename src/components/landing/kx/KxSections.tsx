@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getLandingFaq } from '@/lib/seo/landing-head';
 import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Play from 'lucide-react/dist/esm/icons/play';
@@ -209,14 +210,7 @@ export function KxPricing({ onStart, onPricing }: { onStart: () => void; onPrici
 
 export function useKxFaq() {
   const { t } = useTranslation();
-  return [
-    { q: t('landing.kx.faq.q1', 'Это правда бесплатно?'), a: t('landing.kx.faq.a1', 'Да. Страница, все блоки, заявки и приём оплат бесплатны. С продаж через страницу берём 7%. PRO снижает комиссию до 1% и добавляет свой домен и аналитику.') },
-    { q: t('landing.kx.faq.q2', 'Нужно уметь в дизайн или код?'), a: t('landing.kx.faq.a2', 'Нет. Отвечаешь на пару вопросов, AI собирает черновик. Дальше двигаешь блоки пальцем, как сторис.') },
-    { q: t('landing.kx.faq.q3', 'Что можно продавать?'), a: t('landing.kx.faq.a3', 'Услуги с записью, консультации, билеты, курсы, гайды и файлы. Оплата прямо со страницы, заявки в Telegram.') },
-    { q: t('landing.kx.faq.q4', 'Зачем страница, если есть Instagram?'), a: t('landing.kx.faq.a4', 'Профиль в соцсети не принимает запись и оплату, а кто тебя увидит, решает алгоритм. Страница находится в Google, Яндексе и ответах нейросетей и остаётся твоей, даже если аккаунт заблокируют.') },
-    { q: t('landing.kx.faq.q5', 'Это безопасно?'), a: t('landing.kx.faq.a5', 'Оплата проходит через платёжного провайдера, данные карт к нам не попадают. Заявки и контакты клиентов видишь только ты и твоя команда.') },
-    { q: t('landing.kx.faq.q6', 'Чем лучше Taplink и Linktree?'), a: t('landing.kx.faq.a6', 'Там список ссылок. Здесь сайт из блоков с записью, оплатой, заявками и CRM, и он сразу виден поисковикам и нейросетям.') },
-  ];
+  return getLandingFaq(t);
 }
 
 export function KxFaq() {

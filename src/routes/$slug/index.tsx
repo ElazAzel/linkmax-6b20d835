@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import PublicPage from "@/pages/PublicPage";
 import { fetchPublicPageSnapshot } from "@/lib/seo/public-page-snapshot";
 import { buildMissingPageHead, buildPublicPageHead, normalizeSeoLanguage } from "@/lib/seo/public-page-seo";
@@ -7,7 +7,12 @@ import { PublicProfileHeadSync } from "@/components/seo/PublicProfileHeadSync";
 // The loader runs during SSR, so crawlers (including AI bots that never run JS)
 // get the profile, canonical URL and JSON-LD in the first HTML response.
 export const Route = createFileRoute("/$slug/")({
-  loader: ({ params }) => fetchPublicPageSnapshot(params.slug),
+  loader: async ({ params }) => {
+    const snapshot = await fetchPublicPageSnapshot(params.slug);
+    if (snapshot.status === 'missing') throw notFound();
+    if (snapshot.status === 'error') throw new Error('Public profile temporarily unavailable');
+    return snapshot;
+  },
   staleTime: 60_000,
   // Lets a CDN answer crawlers from cache and refresh in the background
   // instead of rendering the profile from scratch on every bot hit.

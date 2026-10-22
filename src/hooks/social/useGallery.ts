@@ -13,16 +13,16 @@ import {
 } from '@/services/gallery';
 import type { Niche } from '@/lib/niches';
 
-export function useGallery() {
+export function useGallery(initialPages?: GalleryPage[]) {
   const { t } = useTranslation();
-  const [pages, setPages] = useState<GalleryPage[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [pages, setPages] = useState<GalleryPage[]>(initialPages ?? []);
+  const [loading, setLoading] = useState(!initialPages);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [nicheCounts, setNicheCounts] = useState<Record<string, number>>({});
 
   const fetchPages = useCallback(async () => {
-    setLoading(true);
+    if (!initialPages) setLoading(true);
     try {
       const [pagesData, countsData] = await Promise.all([
         getGalleryPages(selectedNiche, selectedCity),
@@ -36,7 +36,7 @@ export function useGallery() {
     } finally {
       setLoading(false);
     }
-  }, [selectedNiche, selectedCity]);
+  }, [selectedNiche, selectedCity, initialPages]);
 
   useEffect(() => {
     fetchPages();

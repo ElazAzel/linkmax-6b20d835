@@ -17,4 +17,11 @@ describe('withPageHeader', () => {
     expect(withPageHeader(withProfile, { seo: { title: 'Y' } })).toBe(withProfile);
     expect(withPageHeader([text], { seo: { title: ' ' } })).toEqual([text]);
   });
+
+  it('uses legacy record identity when SEO fields or the profile name are empty', () => {
+    expect(withPageHeader([text], { title: 'Аружан', slug: 'aruzhan', description: 'Мастер' })[0]).toMatchObject({ name: 'Аружан', bio: 'Мастер' });
+    const blank = { id: 'pr', type: 'profile', name: '' } as unknown as Block;
+    expect(withPageHeader([blank], { title: 'Аружан' })[0]).toMatchObject({ name: 'Аружан' });
+    expect(blank).toMatchObject({ name: '' });
+  });
 });

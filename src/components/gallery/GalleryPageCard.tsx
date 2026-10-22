@@ -12,6 +12,7 @@ import type { GalleryPage } from '@/services/gallery';
 import { PagePreview } from './PagePreview';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
 import { useState } from 'react';
+import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 // Unified interface supporting both old and new usage
 interface GalleryPageCardProps {
@@ -138,7 +139,7 @@ export function GalleryPageCard({
           </Avatar>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="font-bold text-sm truncate">{page.title || t('gallery.untitled', 'Untitled')}</span>
+              <a href={getPublicPageUrl(page.slug)} className="font-bold text-sm truncate hover:underline focus-visible:underline" onClick={event => event.stopPropagation()}>{page.title || t('gallery.untitled', 'Untitled')}</a>
               {featured && (
                 <Badge variant="default" className="bg-primary/90 text-xs h-4 px-1">
                   ⭐

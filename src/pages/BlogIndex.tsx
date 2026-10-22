@@ -29,13 +29,6 @@ export default function BlogIndex() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
       <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={`${BASE}/blog`} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={`${BASE}/blog`} />
-        <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(itemListLd)}</script>
       </Helmet>
 

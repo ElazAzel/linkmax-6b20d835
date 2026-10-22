@@ -22,11 +22,12 @@ export interface GalleryPage {
 export type LeaderboardPeriod = 'week' | 'month' | 'all';
 
 // Fetch all published pages for gallery with premium and popular pages first
-export async function getGalleryPages(niche?: Niche | null, city?: string | null): Promise<GalleryPage[]> {
+export async function getGalleryPages(niche?: Niche | null, city?: string | null, options: { throwOnError?: boolean } = {}): Promise<GalleryPage[]> {
   let query = supabase
     .from('pages')
     .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche, user_id, city')
-    .eq('is_published', true);
+    .eq('is_published', true)
+    .or('is_indexable.is.null,is_indexable.eq.true');
 
   if (niche) {
     query = query.eq('niche', niche);
@@ -41,6 +42,7 @@ export async function getGalleryPages(niche?: Niche | null, city?: string | null
     .limit(100);
 
   if (error) {
+    if (options.throwOnError) throw error;
     logger.error('Error fetching gallery pages', error, { context: 'gallery' });
     return [];
   }

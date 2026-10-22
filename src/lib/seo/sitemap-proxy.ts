@@ -12,9 +12,12 @@ export async function proxySitemap(name: ProxiedSitemap): Promise<Response> {
   try {
     const upstream = await fetch(`${baseUrl}/functions/v1/generate-sitemap/${name}.xml`, {
       headers: key ? { apikey: key, authorization: `Bearer ${key}` } : undefined,
+      signal: AbortSignal.timeout(6000),
     });
     if (!upstream.ok) return new Response('Sitemap unavailable\n', { status: 503, headers: { 'retry-after': '600' } });
-    return new Response(await upstream.text(), {
+    const xml = await upstream.text();
+    if (!/<(?:urlset|sitemapindex)\b/.test(xml)) return new Response('Sitemap unavailable\n', { status: 503, headers: { 'retry-after': '600' } });
+    return new Response(xml, {
       headers: {
         'content-type': 'application/xml; charset=utf-8',
         'cache-control': 'public, max-age=900, s-maxage=3600',
