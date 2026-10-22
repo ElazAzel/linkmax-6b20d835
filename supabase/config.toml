@@ -213,8 +213,6 @@ verify_jwt = true # Internal: custom domain verification (authenticated)
 [functions.send-email]
 verify_jwt = true # Internal: transactional email sending
 
-[functions.send-attendee-email]
-verify_jwt = true # Internal: event attendee email
 
 [functions.send-zone-notification]
 verify_jwt = true # Internal: zone notification
