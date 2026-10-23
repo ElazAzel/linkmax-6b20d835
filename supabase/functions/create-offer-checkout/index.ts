@@ -56,7 +56,7 @@ serve(async (req) => {
     if (!offerId || typeof offerId !== "string") {
       return createErrorResponse("Missing offerId", 400);
     }
-    const qty = Math.max(1, Math.min(999, Number(quantity) || 1));
+    const qty = Math.max(1, Math.min(999, Math.floor(Number(quantity)) || 1));
 
     const { data: offer, error: offerErr } = await supabase
       .from("offers")

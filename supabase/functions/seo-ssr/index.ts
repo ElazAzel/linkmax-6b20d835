@@ -98,7 +98,8 @@ serve(async (req: Request) => {
   try {
     const url = new URL(req.url);
     const slug = url.searchParams.get('slug');
-    const lang = url.searchParams.get('lang') || 'ru';
+    const rawLang = (url.searchParams.get('lang') || 'ru').toLowerCase();
+    const lang = ['ru', 'en', 'kk', 'uz'].includes(rawLang) ? rawLang : 'ru';
 
     console.log('[render-page] slug=', slug, 'lang=', lang);
 

@@ -20,6 +20,11 @@ export default defineConfig({
     ssr: {
       noExternal: ["react-helmet-async"],
     },
+    // Pre-bundle late-discovered deps so the optimizer never re-bundles mid-session
+    // (that reload leaves two React copies and crashes with resolveDispatcher().use).
+    optimizeDeps: {
+      include: ["invariant", "react-fast-compare", "shallowequal"],
+    },
     plugins: [
       // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
       ...(sentryEnabled
